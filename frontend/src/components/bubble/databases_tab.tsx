@@ -31,7 +31,10 @@ import {
   mdiShieldOutline, mdiSwapHorizontal, mdiRobotOutline, mdiAtomVariant, mdiRocketLaunchOutline,
   mdiGold, mdiChartLine, mdiChevronDown, mdiChevronUp,
   mdiHistory, mdiPlusCircleOutline, mdiPencilOutline, mdiBookPlusOutline,
+  mdiMagnify, mdiClose, mdiChevronRight, mdiCloseCircle,
 } from '@mdi/js';
+import { createPortal } from 'react-dom';
+import { marked } from 'marked';
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie,
 } from 'recharts';
@@ -39,6 +42,7 @@ import { databasesService } from '../../services/databases_service';
 import type {
   CanonResult, GuidesResult, CatalanResult, PolicyAreasResult, PolicyArea,
   BeresolMonitorsResult, BeresolMonitorDetail, KbChangelogResult, KbChangelogEntry,
+  GuideListResult, GuideSummary, GuideDetail,
 } from '../../services/databases_service';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import './databases_tab.css';
@@ -55,7 +59,8 @@ const DD_ICON: Record<string, string> = {
   'mdi-mountain': mdiTerrain,
 };
 
-const slugify = (s: string) => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+// (slugify removed: category tiles used it to build an anchor into the static
+// guides/index.html. They now filter the in-page guide list instead.)
 
 // Per-monitor icon (Beresol Monitors). Falls back to the radar glyph.
 const MON_ICON: Record<string, string> = {
@@ -133,6 +138,7 @@ export function DatabasesTab() {
   const [sub, setSub] = useState<Sub>('canon');
   const [canon, setCanon] = useState<CanonResult | null>(null);
   const [guides, setGuides] = useState<GuidesResult | null>(null);
+  const [guideList, setGuideList] = useState<GuideListResult | null>(null);
   const [changelog, setChangelog] = useState<KbChangelogResult | null>(null);
   const [catalan, setCatalan] = useState<CatalanResult | null>(null);
   const [pa, setPa] = useState<PolicyAreasResult | null>(null);
@@ -146,6 +152,7 @@ export function DatabasesTab() {
   useEffect(() => { if (sub === 'canon' && !canon) databasesService.canon().then(setCanon).catch(() => {}); }, [sub, canon]);
   useEffect(() => { if (sub === 'guides' && !guides) databasesService.guides().then(setGuides).catch(() => {}); }, [sub, guides]);
   useEffect(() => { if (sub === 'guides' && !changelog) databasesService.kbChangelog().then(setChangelog).catch(() => {}); }, [sub, changelog]);
+  useEffect(() => { if (sub === 'guides' && !guideList) databasesService.guidesList().then(setGuideList).catch(() => {}); }, [sub, guideList]);
   useEffect(() => { if (sub === 'catalan' && !catalan) databasesService.catalan().then(setCatalan).catch(() => {}); }, [sub, catalan]);
   useEffect(() => {
     if (sub !== 'policy') return;
@@ -181,7 +188,7 @@ export function DatabasesTab() {
         <motion.div key={sub} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           {sub === 'canon' && <CanonLibrary data={canon} t={t} lang={i18n.language} />}
           {sub === 'deep' && <DeepDives t={t} lang={i18n.language} />}
-          {sub === 'guides' && <KnowledgeGuides data={guides} changelog={changelog} t={t} />}
+          {sub === 'guides' && <KnowledgeGuides data={guides} list={guideList} changelog={changelog} t={t} />}
           {sub === 'catalan' && <CatalanLibrary data={catalan} t={t} />}
           {sub === 'policy' && <PolicyAreas pa={pa} mine={paMine} setMine={setPaMine} sel={selArea} setSel={setSelArea} t={t} />}
           {sub === 'partners' && <BeresolMonitors t={t} />}
@@ -295,7 +302,19 @@ const CHANGELOG_ACTION_META: Record<string, { icon: string; color: string; label
   deep_dive: { icon: mdiPlusCircleOutline,  color: '#db2777', label: 'Deep dive' },
 };
 
-function WhatsNew({ entries, t }: { entries: KbChangelogEntry[]; t: any }) {
+/**
+ * `knownSlugs` is what makes an entry openable. Every entry names a guide in
+ * `entry.guide`, but the feed also carries `canon` and `deep_dive` items whose
+ * slug is not a guide file. Only entries whose slug resolves to a real guide
+ * become buttons; the rest stay plain text rather than pretending to lead
+ * somewhere.
+ */
+function WhatsNew({ entries, knownSlugs, onOpen, t }: {
+  entries: KbChangelogEntry[];
+  knownSlugs: Set<string>;
+  onOpen: (slug: string) => void;
+  t: any;
+}) {
   if (!entries || entries.length === 0) return null;
   return (
     <div className="db-whatsnew">
@@ -308,9 +327,9 @@ function WhatsNew({ entries, t }: { entries: KbChangelogEntry[]; t: any }) {
       <ol className="db-whatsnew__list">
         {entries.map((e, i) => {
           const meta = CHANGELOG_ACTION_META[e.action] || CHANGELOG_ACTION_META.updated;
-          return (
-            <motion.li key={`${e.date}-${e.guide}-${i}`} className="db-whatsnew__item"
-              custom={i} variants={cardVariants} initial="hidden" animate="show">
+          const openable = knownSlugs.has(e.guide);
+          const body = (
+            <>
               <span className="db-whatsnew__badge" style={{ background: meta.color }}>
                 <Icon path={meta.icon} size={0.62} />
               </span>
@@ -324,6 +343,20 @@ function WhatsNew({ entries, t }: { entries: KbChangelogEntry[]; t: any }) {
                 </div>
                 <p className="db-whatsnew__summary">{e.summary}</p>
               </div>
+              {openable && (
+                <Icon path={mdiChevronRight} size={0.8} className="db-whatsnew__go" />
+              )}
+            </>
+          );
+          return (
+            <motion.li key={`${e.date}-${e.guide}-${i}`}
+              className={`db-whatsnew__item${openable ? ' db-whatsnew__item--clickable' : ''}`}
+              custom={i} variants={cardVariants} initial="hidden" animate="show">
+              {openable ? (
+                <button type="button" className="db-whatsnew__hit" onClick={() => onOpen(e.guide)}>
+                  {body}
+                </button>
+              ) : body}
             </motion.li>
           );
         })}
@@ -332,8 +365,109 @@ function WhatsNew({ entries, t }: { entries: KbChangelogEntry[]; t: any }) {
   );
 }
 
-function KnowledgeGuides({ data, changelog, t }: { data: GuidesResult | null; changelog: KbChangelogResult | null; t: any }) {
+/**
+ * Reader for one guide.
+ *
+ * Guides are authored as markdown. Handing a reader a .md file, or bouncing
+ * them to a static index, is not reading — so the markdown is rendered to HTML
+ * here and shown in place. `marked` runs with `gfm` for tables and with raw
+ * HTML passthrough left off: the guides are first-party markdown and have no
+ * reason to inject markup.
+ *
+ * Portalled to document.body: the MEUB shell is an AnimatedPage whose
+ * transform would otherwise become the containing block for a fixed overlay.
+ */
+function GuideReader({ guide, loading, onClose, t }: {
+  guide: GuideDetail | null;
+  loading: boolean;
+  onClose: () => void;
+  t: any;
+}) {
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onEsc);
+    return () => document.removeEventListener('keydown', onEsc);
+  }, [onClose]);
+
+  const html = useMemo(() => {
+    if (!guide?.markdown) return '';
+    try {
+      return marked.parse(guide.markdown, { gfm: true, breaks: false, async: false }) as string;
+    } catch {
+      return '';
+    }
+  }, [guide?.markdown]);
+
+  return createPortal(
+    <div className="db-reader" role="dialog" aria-modal="true" aria-label={guide?.title || 'Guide'}>
+      <div className="db-reader__overlay" onClick={onClose} />
+      <div className="db-reader__panel">
+        <header className="db-reader__head">
+          <div className="db-reader__headtext">
+            <h3>{guide?.title || t('db.loading', 'Loading...')}</h3>
+            {guide && (
+              <p className="db-reader__meta">
+                <span>{guide.category}</span>
+                {guide.updated && <span>{t('db.updatedOn', 'updated')} {guide.updated}</span>}
+                {guide.procedure_ref && <span>{guide.procedure_ref}</span>}
+              </p>
+            )}
+          </div>
+          <button type="button" className="db-reader__close" onClick={onClose}
+            aria-label={t('common.close', 'Close')}>
+            <Icon path={mdiClose} size={1} />
+          </button>
+        </header>
+        <div className="db-reader__body">
+          {loading || !guide
+            ? <div className="db-loading">{t('db.loading', 'Loading...')}</div>
+            /* First-party markdown rendered by marked; no user input reaches this. */
+            : <article className="db-reader__md" dangerouslySetInnerHTML={{ __html: html }} />}
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function KnowledgeGuides({ data, list, changelog, t }: {
+  data: GuidesResult | null;
+  list: GuideListResult | null;
+  changelog: KbChangelogResult | null;
+  t: any;
+}) {
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
+  const [detail, setDetail] = useState<GuideDetail | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+
+  useEffect(() => {
+    if (!openSlug) { setDetail(null); return; }
+    setDetailLoading(true);
+    databasesService.guideDetail(openSlug)
+      .then(setDetail)
+      .catch(() => setDetail(null))
+      .finally(() => setDetailLoading(false));
+  }, [openSlug]);
+
+  // Filtering happens client-side: the whole list is one small payload, so a
+  // keystroke should not cost a round trip.
+  const guides: GuideSummary[] = list?.guides || [];
+  const knownSlugs = useMemo(() => new Set(guides.map((g) => g.slug)), [guides]);
+  const shown = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return guides.filter((g) => {
+      if (category && g.category !== category) return false;
+      if (!needle) return true;
+      return g.title.toLowerCase().includes(needle)
+        || g.summary.toLowerCase().includes(needle)
+        || (g.procedure_ref || '').toLowerCase().includes(needle);
+    });
+  }, [guides, query, category]);
+
   if (!data) return <div className="db-loading">{t('db.loading', 'Loading...')}</div>;
+
   return (
     <div className="db-section">
       <LibHero
@@ -346,23 +480,115 @@ function KnowledgeGuides({ data, changelog, t }: { data: GuidesResult | null; ch
         ]}
         cta={{ label: t('db.openGuides', 'Browse all guides'), url: data.url }}
       />
-      {changelog && <WhatsNew entries={changelog.entries} t={t} />}
+      {changelog && (
+        <WhatsNew
+          entries={changelog.entries}
+          knownSlugs={knownSlugs}
+          onOpen={setOpenSlug}
+          t={t}
+        />
+      )}
+
+      {/* Category tiles now filter the list below instead of sending the
+          reader off to a static page they have to come back from. */}
       <div className="db-guide-grid">
-        {data.categories.map((cat, i) => (
-          <motion.a key={cat.title} className="db-guide-card" href={`${data.url}#${slugify(cat.title)}`} target="_blank" rel="noopener noreferrer"
-            custom={i} variants={cardVariants} initial="hidden" animate="show" whileHover={{ y: -4, boxShadow: '0 10px 24px rgba(15,23,42,0.10)' }}>
-            <span className="db-guide-card__icon" style={{ background: cat.color }}>
-              <span className={`mdi ${cat.icon}`} aria-hidden="true" />
-            </span>
-            <div className="db-guide-card__body">
-              <h4>{cat.title}</h4>
-              <span className="db-guide-card__count" style={{ color: cat.color }}>
-                <CountUp to={cat.count} /> {cat.count === 1 ? t('db.guideOne', 'guide') : t('db.guidesKpi', 'guides')}
+        {data.categories.map((cat, i) => {
+          const active = category === cat.title;
+          return (
+            <motion.button key={cat.title} type="button"
+              className={`db-guide-card${active ? ' db-guide-card--active' : ''}`}
+              onClick={() => setCategory(active ? null : cat.title)}
+              aria-pressed={active}
+              custom={i} variants={cardVariants} initial="hidden" animate="show"
+              whileHover={{ y: -4, boxShadow: '0 10px 24px rgba(15,23,42,0.10)' }}>
+              <span className="db-guide-card__icon" style={{ background: cat.color }}>
+                <span className={`mdi ${cat.icon}`} aria-hidden="true" />
               </span>
-            </div>
-          </motion.a>
-        ))}
+              <div className="db-guide-card__body">
+                <h4>{cat.title}</h4>
+                <span className="db-guide-card__count" style={{ color: cat.color }}>
+                  <CountUp to={cat.count} /> {cat.count === 1 ? t('db.guideOne', 'guide') : t('db.guidesKpi', 'guides')}
+                </span>
+              </div>
+            </motion.button>
+          );
+        })}
       </div>
+
+      {/* The library itself: every guide, searchable and openable. */}
+      <div className="db-guidelist">
+        <div className="db-guidelist__bar">
+          <div className="db-guidelist__search">
+            <Icon path={mdiMagnify} size={0.8} />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t('db.searchGuides', 'Search guides by title, topic or procedure...') as string}
+              aria-label={t('db.searchGuides', 'Search guides by title, topic or procedure...') as string}
+            />
+          </div>
+          {(category || query) && (
+            <button type="button" className="db-guidelist__clear"
+              onClick={() => { setCategory(null); setQuery(''); }}>
+              <Icon path={mdiCloseCircle} size={0.7} />
+              {t('db.clearFilters', 'Clear')}
+            </button>
+          )}
+          <span className="db-guidelist__count">
+            {shown.length} {shown.length === 1 ? t('db.guideOne', 'guide') : t('db.guidesKpi', 'guides')}
+            {category ? ` · ${category}` : ''}
+          </span>
+        </div>
+
+        {!list ? (
+          <div className="db-loading">{t('db.loading', 'Loading...')}</div>
+        ) : shown.length === 0 ? (
+          /* Search and category combine, so picking a category with 93 guides
+             while a stale search is active shows nothing. Say which filters are
+             responsible and offer to drop them, rather than an unexplained
+             empty list. */
+          <div className="db-guidelist__empty">
+            <p>
+              {query && category
+                ? t('db.noGuidesBoth', {
+                    query, category,
+                    defaultValue: 'No guide in {{category}} matches "{{query}}".',
+                  })
+                : query
+                  ? t('db.noGuidesQuery', { query, defaultValue: 'No guide matches "{{query}}".' })
+                  : t('db.noGuidesCategory', { category, defaultValue: 'No guide in {{category}} yet.' })}
+            </p>
+            <button type="button" className="db-guidelist__clear" onClick={() => { setCategory(null); setQuery(''); }}>
+              <Icon path={mdiCloseCircle} size={0.7} />
+              {t('db.showAllGuides', 'Show all guides')}
+            </button>
+          </div>
+        ) : (
+          <ul className="db-guidelist__items">
+            {shown.map((g) => (
+              <li key={g.slug}>
+                <button type="button" className="db-guideitem" onClick={() => setOpenSlug(g.slug)}>
+                  <span className="db-guideitem__body">
+                    <span className="db-guideitem__title">{g.title}</span>
+                    {g.summary && <span className="db-guideitem__summary">{g.summary}</span>}
+                    <span className="db-guideitem__meta">
+                      <span className="db-guideitem__pill">{g.category}</span>
+                      {g.procedure_ref && <span className="db-guideitem__pill">{g.procedure_ref}</span>}
+                      {g.updated && <span className="db-guideitem__when">{g.updated}</span>}
+                    </span>
+                  </span>
+                  <Icon path={mdiChevronRight} size={0.8} className="db-guideitem__go" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {openSlug && (
+        <GuideReader guide={detail} loading={detailLoading} onClose={() => setOpenSlug(null)} t={t} />
+      )}
     </div>
   );
 }

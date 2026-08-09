@@ -15,7 +15,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -278,6 +278,228 @@ def guides(current_user: User = Depends(get_current_user)):
         "categories": categories,
         "url": "/guides/index.html",
     }
+
+
+class GuideSummary(BaseModel):
+    slug: str
+    title: str
+    category: str
+    summary: str
+    procedure_ref: Optional[str] = None
+    status: Optional[str] = None
+    chars: int
+    updated: Optional[str] = None
+
+
+class GuideListResult(BaseModel):
+    count: int
+    guides: List[GuideSummary]
+
+
+class GuideDetail(BaseModel):
+    slug: str
+    title: str
+    category: str
+    markdown: str
+    chars: int
+    updated: Optional[str] = None
+    procedure_ref: Optional[str] = None
+    status: Optional[str] = None
+
+
+def _guide_index() -> List[dict]:
+    """Every knowledge guide, read from the markdown files themselves.
+
+    The /guides endpoint above derives its category counts by regex-scraping the
+    published guides/index.html. That is fine for a headline number but cannot
+    name a single guide, which is why the library was browsable only as category
+    tiles that bounced the reader out to a static page.
+
+    This reads the source of truth instead: the .md files. Categorisation reuses
+    scripts/generate_guides_html.py so a guide lands in the same category here
+    as it does on the published index; there is one rule, not two.
+    """
+    if not _GUIDES.is_dir():
+        return []
+    try:
+        from scripts.generate_guides_html import (
+            categorise_guide,
+            extract_guide_metadata,
+        )
+    except Exception as exc:  # pragma: no cover - keeps the tab alive
+        logger.warning("[databases] guide metadata helpers unavailable: %s", exc)
+        return []
+
+    out: List[dict] = []
+    for path in sorted(_GUIDES.glob("*.md")):
+        try:
+            content = path.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        try:
+            meta = extract_guide_metadata(path.stem, content)
+            category = meta.get("category") or categorise_guide(
+                path.stem, meta.get("title", ""), content
+            )
+        except Exception:
+            meta, category = {"title": path.stem}, "Institutional"
+
+        out.append({
+            "slug": path.stem,
+            "title": _guide_title(path.stem, content, meta.get("title")),
+            "category": category,
+            "summary": _guide_summary(content),
+            "procedure_ref": meta.get("procedure_ref") or None,
+            "status": meta.get("status") or None,
+            "chars": len(content),
+            "updated": _mtime_iso(path),
+        })
+    return out
+
+
+def _guide_title(slug: str, content: str, extracted: Optional[str]) -> str:
+    """The guide's real title, whichever shape the file uses.
+
+    Most guides open with a single H1. Two do not, and the shared extractor
+    reads line 1 blindly: one file starting at '## QUICK FACTS' surfaced in the
+    library as a guide literally called "#QUICK FACTS", and one using YAML
+    frontmatter fell back to a title-cased slug. Both are now read properly,
+    and anything else degrades to a humanised slug rather than markup.
+    """
+    first = content.split("\n", 1)[0].strip()
+    if first.startswith("# "):
+        return first[2:].strip()
+
+    if first == "---":                                  # YAML frontmatter
+        for line in content.split("\n")[1:40]:
+            if line.strip() == "---":
+                break
+            m = re.match(r"\s*title:\s*(.+?)\s*$", line)
+            if m:
+                return m.group(1).strip().strip('"').strip("'")
+
+    if extracted and not extracted.lstrip().startswith("#"):
+        return extracted
+    return slug.replace("_", " ").replace("-", " ").strip().title()
+
+
+def _guide_summary(content: str, limit: int = 220) -> str:
+    """One plain-sentence gist, taken from the first QUICK FACTS bullet.
+
+    Guides open with a '# Title' then a '## QUICK FACTS' list, so the first
+    bullet is the most newsworthy line about the file. Markdown emphasis and
+    links are stripped: this is a card subtitle, not a document.
+    """
+    first = ""
+    in_qf = False
+    for line in content.split("\n"):
+        if "QUICK FACTS" in line:
+            in_qf = True
+            continue
+        if in_qf and line.startswith("##"):
+            break
+        stripped = line.strip()
+        if in_qf and stripped.startswith("- "):
+            first = stripped[2:]
+            break
+    if not first:
+        # No QUICK FACTS block: fall back to the first real paragraph.
+        for line in content.split("\n"):
+            stripped = line.strip()
+            if stripped and not stripped.startswith("#"):
+                first = stripped
+                break
+
+    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", first)   # links -> label
+    text = re.sub(r"[*_`]+", "", text)                       # emphasis
+    text = re.sub(r"https?://\S+", "", text)                 # bare urls
+    text = re.sub(r"\s{2,}", " ", text).strip()
+    return text[:limit].rstrip() + ("..." if len(text) > limit else "")
+
+
+def _mtime_iso(path: Path) -> Optional[str]:
+    try:
+        from datetime import datetime, timezone
+        return datetime.fromtimestamp(
+            path.stat().st_mtime, tz=timezone.utc
+        ).date().isoformat()
+    except Exception:
+        return None
+
+
+@router.get("/guides/list", response_model=GuideListResult,
+            summary="Every knowledge guide, browsable",
+            description=(
+                "**What it does**\n\n"
+                "Lists all of Brubru's knowledge guides individually, with the "
+                "category each belongs to, a one-line gist and the date it was "
+                "last revised. The companion `/guides` endpoint returns only "
+                "counts per category.\n\n"
+                "**When to use it**\n\n"
+                "The Knowledge Guides library in My EU Bubble > Brubru "
+                "Databases, to let a reader search and open a single guide "
+                "instead of being sent to a static index page.\n\n"
+                "**Input**\n\n"
+                "Authentication via Bearer JWT. Optional `category` to filter "
+                "and `q` to match against title and summary.\n\n"
+                "**Try it**\n\n"
+                "`GET /api/databases/guides/list?q=packaging`\n\n"
+                "**You get back**\n\n"
+                "`count` and `guides`, each with `slug`, `title`, `category`, "
+                "`summary`, `chars`, `updated` and, where the guide names one, "
+                "`procedure_ref` and `status`. Read one with "
+                "`/guides/{slug}`."
+            ))
+def guides_list(
+    category: Optional[str] = Query(None, description="Exact category name"),
+    q: Optional[str] = Query(None, description="Match title or summary"),
+    current_user: User = Depends(get_current_user),
+):
+    items = _guide_index()
+    if category:
+        items = [g for g in items if g["category"] == category]
+    if q:
+        needle = q.strip().lower()
+        items = [
+            g for g in items
+            if needle in g["title"].lower() or needle in g["summary"].lower()
+        ]
+    items.sort(key=lambda g: g["title"].lower())
+    return {"count": len(items), "guides": items}
+
+
+@router.get("/guides/{slug}", response_model=GuideDetail,
+            summary="Read one knowledge guide",
+            description=(
+                "**What it does**\n\n"
+                "Returns a single knowledge guide's full markdown, so it can be "
+                "rendered and read inside the product rather than downloaded as "
+                "a file.\n\n"
+                "**When to use it**\n\n"
+                "When a reader opens a guide from the Knowledge Guides "
+                "library.\n\n"
+                "**Input**\n\n"
+                "Authentication via Bearer JWT. `slug` is the guide's file name "
+                "without the .md extension, as returned by `/guides/list`.\n\n"
+                "**Try it**\n\n"
+                "`GET /api/databases/guides/28th_regime_innovation_act`\n\n"
+                "**You get back**\n\n"
+                "`slug`, `title`, `category`, `markdown`, `chars`, `updated`, "
+                "and `procedure_ref` / `status` where the guide names them. "
+                "404 if no guide has that slug."
+            ))
+def guide_detail(slug: str, current_user: User = Depends(get_current_user)):
+    # Resolve against the known slugs rather than building a path from user
+    # input, so a crafted slug cannot walk out of the guides directory.
+    entry = next((g for g in _guide_index() if g["slug"] == slug), None)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Guide not found")
+    try:
+        markdown = (_GUIDES / f"{slug}.md").read_text(encoding="utf-8")
+    except Exception as exc:
+        logger.warning("[databases] guide %s unreadable: %s", slug, exc)
+        raise HTTPException(status_code=404, detail="Guide not found")
+    return {**entry, "markdown": markdown}
 
 
 class KbChangelogEntry(BaseModel):

@@ -56,6 +56,28 @@ export interface GuidesResult {
   url: string;
 }
 
+/** One knowledge guide as it appears in the library list. */
+export interface GuideSummary {
+  slug: string;
+  title: string;
+  category: string;
+  summary: string;
+  procedure_ref?: string | null;
+  status?: string | null;
+  chars: number;
+  updated?: string | null;
+}
+
+export interface GuideListResult {
+  count: number;
+  guides: GuideSummary[];
+}
+
+/** One guide with its full markdown, for reading in place. */
+export interface GuideDetail extends GuideSummary {
+  markdown: string;
+}
+
 export interface KbChangelogEntry {
   date: string;
   action: 'added' | 'updated' | 'canon' | 'deep_dive';
@@ -145,6 +167,19 @@ export const databasesService = {
   },
   guides: async (): Promise<GuidesResult> => {
     const r = await axios.get(`${API_BASE}/guides`, { headers: authHeaders() });
+    return r.data;
+  },
+  /** Every guide individually, so the library can be searched and opened. */
+  guidesList: async (): Promise<GuideListResult> => {
+    const r = await axios.get(`${API_BASE}/guides/list`, { headers: authHeaders() });
+    return r.data;
+  },
+  /** One guide's full markdown, for reading in place. */
+  guideDetail: async (slug: string): Promise<GuideDetail> => {
+    const r = await axios.get(
+      `${API_BASE}/guides/${encodeURIComponent(slug)}`,
+      { headers: authHeaders() },
+    );
     return r.data;
   },
   kbChangelog: async (limit = 20): Promise<KbChangelogResult> => {
