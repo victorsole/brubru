@@ -3420,7 +3420,9 @@
     "viewOnEurlex": "Ver en EUR-Lex",
     "analysing": "Analizando...",
     "aiAnalyze": "Analizar este expediente con IA",
-    "analyzeFailed": "No se ha podido analizar el expediente. Inténtelo de nuevo."
+    "analyzeFailed": "No se ha podido analizar el expediente. Inténtelo de nuevo.",
+    "acrossBrubru": "Este expediente en Brubru",
+    "meetings": "Reuniones sobre este expediente"
   },
   "stagePipeline": {
     "withdrawn": "Retirado",

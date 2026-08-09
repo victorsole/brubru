@@ -12,6 +12,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import {
   mdiChevronLeft,
@@ -977,12 +978,17 @@ let _calendarFiltersResetForSession = false;
 
 export const EUCalendarTab = () => {
   const { t } = useTranslation();
-  const { viewMode, isLoading, fetchEvents, clearFilters } = useEUCalendar();
+  const { viewMode, isLoading, fetchEvents, clearFilters, goToDate } = useEUCalendar();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const jumpTo = searchParams.get('date');
 
   useEffect(() => {
     // Wait for auth to hydrate from localStorage before fetching.
     if (!isAuthenticated) return;
+    // A pending ?date= jump does its own fetch for the target day. Fetching
+    // the default month here as well would resolve second and replace it.
+    if (jumpTo) return;
     if (!_calendarFiltersResetForSession) {
       _calendarFiltersResetForSession = true;
       // clearFilters() already triggers fetchEvents internally.
@@ -990,7 +996,23 @@ export const EUCalendarTab = () => {
     } else {
       fetchEvents();
     }
-  }, [fetchEvents, clearFilters, isAuthenticated]);
+  }, [fetchEvents, clearFilters, isAuthenticated, jumpTo]);
+
+  // A ?date= deep link (from a file's meeting list) opens that day. The
+  // parameter is consumed once so that later navigation inside the calendar
+  // is not yanked back to it.
+  useEffect(() => {
+    if (!jumpTo || !isAuthenticated) return;
+    const target = new Date(`${jumpTo}T12:00:00`);
+    if (Number.isNaN(target.getTime())) return;
+    _calendarFiltersResetForSession = true;
+    // goToDate already switches to the day view and refetches; calling
+    // setViewMode as well fires a second, racing fetch pinned to today.
+    goToDate(target);
+    const next = new URLSearchParams(searchParams);
+    next.delete('date');
+    setSearchParams(next, { replace: true });
+  }, [jumpTo, isAuthenticated]);
 
   const renderView = () => {
     if (isLoading) {

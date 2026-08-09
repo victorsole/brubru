@@ -2529,7 +2529,9 @@
     "viewOnEurlex": "Bekijk op EUR-Lex",
     "analysing": "Bezig met analyseren...",
     "aiAnalyze": "Dit dossier met AI analyseren",
-    "analyzeFailed": "Kan het dossier niet analyseren. Probeer het opnieuw."
+    "analyzeFailed": "Kan het dossier niet analyseren. Probeer het opnieuw.",
+    "acrossBrubru": "Dit dossier in Brubru",
+    "meetings": "Vergaderingen over dit dossier"
   },
   "stagePipeline": {
     "withdrawn": "Ingetrokken",

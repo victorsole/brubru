@@ -46,6 +46,17 @@ import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+interface FileMeeting {
+  id: string;
+  title: string;
+  start_date: string;
+  start_time?: string;
+  institution?: string;
+  ep_committee_code?: string;
+  source_url?: string;
+  agenda_url?: string;
+}
+
 interface Amendment {
   id: string;
   element_type: string;
@@ -56,7 +67,7 @@ interface Amendment {
 }
 
 export const LegislativeFileDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const {
     selectedFile,
@@ -91,6 +102,46 @@ export const LegislativeFileDetail = () => {
     }
   };
 
+  // Meetings on this file. Committee-agenda events carry the procedure
+  // references of the items on their agenda, so a dossier's diary is a real
+  // query: 223 procedures have at least one scheduled or past meeting.
+  const [meetings, setMeetings] = useState<FileMeeting[]>([]);
+
+  const fetchMeetings = async (procedureRef: string) => {
+    // A year back and two years forward: far enough to catch the whole of a
+    // normal file's committee cycle, near enough that the list stays a diary
+    // rather than an archive.
+    const from = new Date();
+    from.setFullYear(from.getFullYear() - 1);
+    const to = new Date();
+    to.setFullYear(to.getFullYear() + 2);
+    try {
+      const response = await axios.get(`${API_BASE}/api/eu-calendar/events`, {
+        params: {
+          date_from: from.toISOString().slice(0, 10),
+          date_to: to.toISOString().slice(0, 10),
+          procedure: procedureRef,
+          limit: 25,
+        },
+      });
+      // Upcoming first (soonest at the top), then past meetings most-recent
+      // first. The next date is the thing a user is looking for.
+      const today = new Date(new Date().toDateString()).getTime();
+      const rows: FileMeeting[] = response.data.events || [];
+      rows.sort((a, b) => {
+        const ta = new Date(a.start_date).getTime();
+        const tb = new Date(b.start_date).getTime();
+        const aFuture = ta >= today;
+        const bFuture = tb >= today;
+        if (aFuture !== bFuture) return aFuture ? -1 : 1;
+        return aFuture ? ta - tb : tb - ta;
+      });
+      setMeetings(rows);
+    } catch {
+      setMeetings([]);
+    }
+  };
+
   // Fetch key players, timeline, and amendments when file is selected
   useEffect(() => {
     if (selectedFile?.id) {
@@ -99,6 +150,16 @@ export const LegislativeFileDetail = () => {
       fetchAmendments(selectedFile.id);
     }
   }, [selectedFile?.id]);
+
+  // Keyed on the procedure reference, not the file id: the detail arrives in
+  // two stages and the reference is absent from the first one, so an effect
+  // watching only the id would never see it.
+  useEffect(() => {
+    setMeetings([]);
+    if (selectedFile?.oeil_procedure_ref) {
+      fetchMeetings(selectedFile.oeil_procedure_ref);
+    }
+  }, [selectedFile?.oeil_procedure_ref]);
 
   // Collapsible sections state
   const [isActorsExpanded, setIsActorsExpanded] = useState(true);
@@ -327,10 +388,12 @@ export const LegislativeFileDetail = () => {
                 amendments or the forecast for the file in front of them had to
                 go back to the sidebar, open the right tab and find it again.
                 Only surfaces that can actually receive a file are offered:
-                Amendments takes ?procedure=, Predictions and Position Analysis
-                take ?ref=. Votes, Parliamentary Questions, Transcripts and the
-                Calendar accept no file parameter yet, so they are deliberately
-                absent rather than linked to an unfiltered list. */}
+                Votes and Amendments take ?procedure=, Predictions and Position
+                Analysis take ?ref=. The Calendar is answered inline below
+                instead, because its views are month-bound and a filtered jump
+                would land on an empty month. Transcripts carry no usable
+                procedure reference (1 row of 492), so there is nothing to link
+                to and it is deliberately absent. */}
             {selectedFile.oeil_procedure_ref && (
               <div className="legislative-file-detail__section">
                 <h3 className="legislative-file-detail__section-title">
@@ -356,6 +419,40 @@ export const LegislativeFileDetail = () => {
                       <Icon path={mdiArrowRight} size={0.6} />
                     </button>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Meetings on this file */}
+            {meetings.length > 0 && (
+              <div className="legislative-file-detail__section">
+                <h3 className="legislative-file-detail__section-title">
+                  {t('fileDetail.meetings', 'Meetings on this file')}
+                </h3>
+                <div className="legislative-file-detail__meetings">
+                  {meetings.map((meeting) => {
+                    const when = new Date(meeting.start_date);
+                    const isUpcoming = when >= new Date(new Date().toDateString());
+                    return (
+                      <button
+                        key={meeting.id}
+                        type="button"
+                        className={`legislative-file-detail__meeting${isUpcoming ? ' legislative-file-detail__meeting--upcoming' : ''}`}
+                        onClick={() => {
+                          closeFileDetail();
+                          navigate(`/my-eu-bubble?tab=eu_calendar&date=${meeting.start_date.slice(0, 10)}`);
+                        }}
+                      >
+                        <span className="legislative-file-detail__meeting-date">
+                          {when.toLocaleDateString(i18n.language, { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                        <span className="legislative-file-detail__meeting-title">
+                          {meeting.title}
+                        </span>
+                        <Icon path={mdiArrowRight} size={0.6} />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
