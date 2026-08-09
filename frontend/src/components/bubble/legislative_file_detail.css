@@ -725,3 +725,37 @@
   text-decoration: none;
 }
 .legislative-file-detail__train-source:hover { text-decoration: underline; }
+
+/* "This file across Brubru": the modal is reachable from four tabs, so it is
+   where a file's other surfaces should be one click away. */
+.legislative-file-detail__crosslinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.legislative-file-detail__crosslink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #0570a8;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.legislative-file-detail__crosslink:hover,
+.legislative-file-detail__crosslink:focus-visible {
+  background: rgba(6, 147, 227, 0.08);
+  border-color: #0693e3;
+}
+
+.legislative-file-detail__crosslink:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 1px;
+}

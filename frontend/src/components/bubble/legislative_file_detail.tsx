@@ -28,6 +28,7 @@ import {
   mdiPencilOutline,
   mdiPlus,
   mdiBookOpenPageVariantOutline,
+  mdiArrowRight,
 } from '@mdi/js';
 import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
@@ -317,6 +318,46 @@ export const LegislativeFileDetail = () => {
                 } : undefined}
               />
             </div>
+
+            {/* This file, across the rest of My EU Bubble.
+                The modal is the one screen reachable from Overview, My Tracked
+                Files, Amendments and the Legislative Train, which makes it the
+                natural crossroads for a file. It linked out to OEIL six times
+                and into Brubru almost not at all, so a reader who wanted the
+                amendments or the forecast for the file in front of them had to
+                go back to the sidebar, open the right tab and find it again.
+                Only surfaces that can actually receive a file are offered:
+                Amendments takes ?procedure=, Predictions and Position Analysis
+                take ?ref=. Votes, Parliamentary Questions, Transcripts and the
+                Calendar accept no file parameter yet, so they are deliberately
+                absent rather than linked to an unfiltered list. */}
+            {selectedFile.oeil_procedure_ref && (
+              <div className="legislative-file-detail__section">
+                <h3 className="legislative-file-detail__section-title">
+                  {t('fileDetail.acrossBrubru', 'This file across Brubru')}
+                </h3>
+                <div className="legislative-file-detail__crosslinks">
+                  {([
+                    ['amendments', `tab=amendments&procedure=`, t('bubble.amendments', 'Amendments')],
+                    ['predictions', `tab=predictions&ref=`, t('bubble.tabs.predictions', 'Predictions')],
+                    ['position_analysis', `tab=position_analysis&ref=`, t('bubble.tabs.positionAnalysis', 'Position Analysis')],
+                  ] as [string, string, string][]).map(([key, qs, label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className="legislative-file-detail__crosslink"
+                      onClick={() => {
+                        closeFileDetail();
+                        navigate(`/my-eu-bubble?${qs}${encodeURIComponent(selectedFile.oeil_procedure_ref!)}`);
+                      }}
+                    >
+                      {label}
+                      <Icon path={mdiArrowRight} size={0.6} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Status */}
             <div className="legislative-file-detail__section">
