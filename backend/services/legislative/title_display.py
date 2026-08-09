@@ -60,11 +60,19 @@ def split_celex_prefix(title: str) -> tuple[str, Optional[str]]:
 # enough to sit on one line. Everything after it is the subject clause, which
 # routinely runs several hundred characters, so it stays in `title` (tooltip)
 # and in the file modal rather than on the card.
+#
+# The qualifier is repeated, not optional-once: EU instruments routinely stack
+# two ("Council Implementing Decision", "Commission Delegated Regulation"). An
+# earlier single-qualifier version matched none of those, so every implementing
+# and delegated act fell through to the clip-at-70-characters path and the
+# briefing card read "Council Implementing Decision (EU) 2026/1923 of 30 July
+# 2026 amending...". The treaty marker also has to admit CFSP, which names a
+# large share of Council decisions.
 _INSTRUMENT = re.compile(
     r"^(Corrigendum to\s+)?"
-    r"((?:Commission|Council|European\s+Parliament|Delegated|Implementing)?\s*"
+    r"((?:(?:Commission|Council|European\s+Parliament|Delegated|Implementing)\s+)*"
     r"(?:Regulation|Directive|Decision|Recommendation|Opinion|Resolution))\s*"
-    r"\((EU|EC|EEC|Euratom)(?:,\s*Euratom)?\)\s*(?:No\s*)?([\d/]+)",
+    r"\(((?:EU|EC|EEC|Euratom|CFSP|CE)(?:,\s*Euratom)?)\)\s*(?:No\s*)?([\d/]+)",
     re.IGNORECASE,
 )
 

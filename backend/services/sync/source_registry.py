@@ -51,6 +51,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("lobby_meetings",    "Lobby Meetings",            "warm", "scripts/sync_mep_lobby_meetings.py",    ("--procedures", "20", "--profiles", "10"), timeout=1200, stale_after_hours=14),
     SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      timeout=900,  stale_after_hours=14),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
+    # Names files that arrived without a readable one. Unlike the feeds above
+    # this ingests nothing: it fills legislative_carriages.short_title for rows
+    # still NULL, so a new act stops being shown as "Council Implementing
+    # Decision (EU) 2026/1923 of 30 July 2026 amending...". Idempotent, so once
+    # the backlog is cleared each run is a no-op that only picks up new
+    # arrivals. --limit and --sleep keep one run inside the timeout and under
+    # the model provider's rate limit, which answers a 429 by sleeping ~60s
+    # rather than falling through.
+    SourceSpec("carriage_short_titles","File names (AI)",         "warm", "scripts/backfill_carriage_short_titles.py", ("--limit", "40", "--sleep", "4"), timeout=900, stale_after_hours=48),
 ]
 # fmt: on
 
