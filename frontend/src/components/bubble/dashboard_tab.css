@@ -347,6 +347,14 @@
   transition: opacity 0.15s, transform 0.15s; box-shadow: 0 12px 28px rgba(15,23,42,0.25); z-index: 6; pointer-events: none;
 }
 .ov-tip:hover .ov-tip__pop, .ov-tip:focus .ov-tip__pop, .ov-tip:focus-within .ov-tip__pop { opacity: 1; visibility: visible; transform: translateY(0); }
+.ov-navcard {
+  /* Now an <a>, so it needs the anchor defaults reset: globals.css gives links
+     a blue colour and an underline on hover. */
+  color: inherit;
+  text-decoration: none;
+}
+.ov-navcard:hover { color: inherit; text-decoration: none; }
+.ov-navcard:focus-visible { outline: 2px solid #0693e3; outline-offset: 2px; }
 .ov-navcard { display: flex; align-items: center; gap: 0.6rem; background: #fff; border: 1px solid #e8edf3; border-radius: 12px; padding: 0.7rem 0.85rem; font: inherit; cursor: pointer; text-align: left; transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s; }
 .ov-navcard:hover { box-shadow: 0 8px 20px rgba(15,23,42,0.1); transform: translateY(-2px); border-color: #c7d2e8; }
 .ov-navcard__icon { color: #0693e3; flex-shrink: 0; }

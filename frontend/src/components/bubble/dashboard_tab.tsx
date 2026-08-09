@@ -18,6 +18,7 @@ import {
   mdiCommentQuestionOutline, mdiCalendarCollapseHorizontal, mdiHandshakeOutline, mdiScaleBalance,
   mdiCrystalBall, mdiBookshelf, mdiFlaskOutline, mdiGraphOutline, mdiBullseyeArrow,
   mdiArrowRight, mdiCreation, mdiInformationOutline,
+  mdiBriefcaseSearchOutline, mdiRobotOutline, mdiApi,
 } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import { useProactive } from '../../hooks/use_proactive';
@@ -70,8 +71,47 @@ const NAV_GROUPS: { titleKey: string; fallback: string; descKey: string; descFal
     { tab: 'research_evidence', labelKey: 'bubble.research_evidence', fallback: 'Research & Evidence', icon: mdiFlaskOutline },
     { tab: 'stakeholder_mapping', labelKey: 'bubble.stakeholder_mapping', fallback: 'Stakeholder Mapping', icon: mdiGraphOutline },
     { tab: 'strategy_docs', labelKey: 'bubble.strategy_docs', fallback: 'Strategy Docs', icon: mdiBullseyeArrow },
+    { tab: 'tender_docs', labelKey: 'bubble.tender_docs', fallback: 'Tender Docs', icon: mdiBriefcaseSearchOutline },
   ] },
 ];
+
+/** The other Brubru products, so the front door introduces the whole tool. */
+const OTHER_PRODUCTS: { route: string; labelKey: string; fallback: string; icon: string }[] = [
+  { route: '/amendator',   labelKey: 'bubble.feat.amendator',   fallback: 'Amendator',     icon: mdiFileEdit },
+  { route: '/chat',        labelKey: 'bubble.feat.chat',        fallback: 'Chat',          icon: mdiRobotOutline },
+  { route: '/eulawcomply', labelKey: 'bubble.feat.eulawcomply', fallback: 'EU Law Comply', icon: mdiScaleBalance },
+  { route: '/tenderator',  labelKey: 'bubble.feat.tenderator',  fallback: 'Tenderator',    icon: mdiBriefcaseSearchOutline },
+  { route: '/api',         labelKey: 'bubble.feat.api',         fallback: 'API',           icon: mdiApi },
+];
+
+/**
+ * A real anchor, not a button.
+ *
+ * Every Explore card was a <button> calling navigate(), so nothing on the
+ * front door could be cmd-clicked, middle-clicked or opened in a new tab, and
+ * "copy link" was impossible. A policy professional comparing a file across
+ * Votes, Questions and Lobby Meetings wants those side by side. Plain clicks
+ * still route through the SPA; modified clicks get native browser behaviour.
+ */
+function NavCard({ href, icon, label, navigate }: {
+  href: string; icon: string; label: string; navigate: (to: string) => void;
+}) {
+  return (
+    <a
+      className="ov-navcard"
+      href={href}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        navigate(href);
+      }}
+    >
+      <Icon path={icon} size={0.95} className="ov-navcard__icon" />
+      <span className="ov-navcard__label">{label}</span>
+      <Icon path={mdiArrowRight} size={0.6} className="ov-navcard__go" />
+    </a>
+  );
+}
 
 export const DashboardTab = () => {
   const { t } = useTranslation();
@@ -178,15 +218,33 @@ export const DashboardTab = () => {
             </h4>
             <div className="ov-navgrid">
               {g.items.map((it) => (
-                <button key={it.tab} className="ov-navcard" onClick={() => navigate(`/my-eu-bubble?tab=${it.tab}`)}>
-                  <Icon path={it.icon} size={0.95} className="ov-navcard__icon" />
-                  <span className="ov-navcard__label">{t(it.labelKey, it.fallback)}</span>
-                  <Icon path={mdiArrowRight} size={0.6} className="ov-navcard__go" />
-                </button>
+                <NavCard key={it.tab} href={`/my-eu-bubble?tab=${it.tab}`}
+                  icon={it.icon} label={t(it.labelKey, it.fallback)} navigate={navigate} />
               ))}
             </div>
           </div>
         ))}
+
+        {/* The rest of Brubru. Overview listed only My EU Bubble's own
+            sub-features, so the front door never mentioned the Amendator, Chat,
+            EU Law Comply, the Tenderator or the API: a reader could work here
+            for weeks without learning they exist. The sidebar carries them at
+            the very bottom, below 25 items. */}
+        <div className="ov-navgroup">
+          <h4 className="ov-navgroup__title">
+            {t('bubble.sections.other', 'Other Brubru Features')}
+            <span className="ov-tip" tabIndex={0} aria-label={t('bubble.overview.desc_other', 'The rest of Brubru: draft amendments, ask the assistant, check compliance, find funding, or use the API.')}>
+              <Icon path={mdiInformationOutline} size={0.6} />
+              <span className="ov-tip__pop">{t('bubble.overview.desc_other', 'The rest of Brubru: draft amendments, ask the assistant, check compliance, find funding, or use the API.')}</span>
+            </span>
+          </h4>
+          <div className="ov-navgrid">
+            {OTHER_PRODUCTS.map((p) => (
+              <NavCard key={p.route} href={p.route} icon={p.icon}
+                label={t(p.labelKey, p.fallback)} navigate={navigate} />
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );
