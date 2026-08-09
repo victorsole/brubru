@@ -3420,7 +3420,9 @@
     "viewOnEurlex": "Vedi su EUR-Lex",
     "analysing": "Analisi in corso...",
     "aiAnalyze": "Analizza questo fascicolo con l'IA",
-    "analyzeFailed": "Impossibile analizzare il fascicolo. Riprova."
+    "analyzeFailed": "Impossibile analizzare il fascicolo. Riprova.",
+    "acrossBrubru": "Questo dossier in Brubru",
+    "meetings": "Riunioni su questo dossier"
   },
   "stagePipeline": {
     "withdrawn": "Ritirato",

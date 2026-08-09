@@ -3420,7 +3420,9 @@
     "viewOnEurlex": "Veure a EUR-Lex",
     "analysing": "S'està analitzant...",
     "aiAnalyze": "Analitza aquest expedient amb IA",
-    "analyzeFailed": "No s'ha pogut analitzar l'expedient. Torneu-ho a provar."
+    "analyzeFailed": "No s'ha pogut analitzar l'expedient. Torneu-ho a provar.",
+    "acrossBrubru": "Aquest expedient a Brubru",
+    "meetings": "Reunions sobre aquest expedient"
   },
   "stagePipeline": {
     "withdrawn": "Retirat",

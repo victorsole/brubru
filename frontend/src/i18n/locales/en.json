@@ -3420,7 +3420,9 @@
     "viewOnEurlex": "View on EUR-Lex",
     "analysing": "Analysing...",
     "aiAnalyze": "AI Analyse This File",
-    "analyzeFailed": "Failed to analyse file. Please try again."
+    "analyzeFailed": "Failed to analyse file. Please try again.",
+    "acrossBrubru": "This file across Brubru",
+    "meetings": "Meetings on this file"
   },
   "stagePipeline": {
     "withdrawn": "Withdrawn",

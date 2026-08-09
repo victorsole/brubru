@@ -759,3 +759,62 @@
   outline: 2px solid #0693e3;
   outline-offset: 1px;
 }
+
+/* Meetings on this file — the dossier's diary, sourced from committee agendas. */
+.legislative-file-detail__meetings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.legislative-file-detail__meeting {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.legislative-file-detail__meeting:hover {
+  border-color: var(--color-accent-blue, #0693e3);
+  background: #f8fbff;
+}
+
+.legislative-file-detail__meeting--upcoming {
+  border-left: 3px solid var(--color-accent-blue, #0693e3);
+}
+
+.legislative-file-detail__meeting-date {
+  flex-shrink: 0;
+  min-width: 6.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.legislative-file-detail__meeting-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .legislative-file-detail__meeting {
+    flex-wrap: wrap;
+  }
+
+  .legislative-file-detail__meeting-title {
+    white-space: normal;
+  }
+}

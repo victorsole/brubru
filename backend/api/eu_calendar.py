@@ -158,6 +158,7 @@ def list_events(
     commission_dg: Optional[str] = Query(None, description="Commission DG code(s), comma-separated"),
     council_configuration: Optional[str] = Query(None, description="Council configuration code(s), comma-separated"),
     policy_area: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only events on this OEIL procedure reference, e.g. 2025/0409(COD)"),
     organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
     my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
     archived: bool = Query(False, description="False = hide events the user archived (default); True = only archived"),
@@ -206,6 +207,11 @@ def list_events(
         query = query.filter(EUCalendarEvent.council_configuration.in_(cfgs))
     if policy_area:
         query = query.filter(EUCalendarEvent.policy_areas.any(policy_area))
+    # One dossier's diary. Committee-agenda events carry the procedure
+    # references of the items on the agenda, which is what makes "when is my
+    # file discussed" answerable: 223 dossiers have at least one event.
+    if procedure:
+        query = query.filter(EUCalendarEvent.procedure_refs.any(procedure.strip()))
     if organiser:
         query = query.filter(EUCalendarEvent.organiser.ilike(f"%{organiser}%"))
     if search:
@@ -243,6 +249,7 @@ def get_events_in_range(
     commission_dg: Optional[str] = Query(None, description="Commission DG code(s), comma-separated"),
     council_configuration: Optional[str] = Query(None, description="Council configuration code(s), comma-separated"),
     policy_area: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only events on this OEIL procedure reference, e.g. 2025/0409(COD)"),
     event_type: Optional[str] = Query(None, description="Event type(s), comma-separated"),
     organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
     my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
@@ -290,6 +297,8 @@ def get_events_in_range(
     if council_configuration:
         cfgs = [c.strip() for c in council_configuration.split(",")]
         query = query.filter(EUCalendarEvent.council_configuration.in_(cfgs))
+    if procedure:
+        query = query.filter(EUCalendarEvent.procedure_refs.any(procedure.strip()))
     if policy_area:
         areas = [a.strip() for a in policy_area.split(",")]
         query = query.filter(
