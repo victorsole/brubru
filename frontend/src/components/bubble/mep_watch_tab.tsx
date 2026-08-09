@@ -4,6 +4,7 @@
  * questions and open their EP profile.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -60,6 +61,11 @@ export function MepWatchTab() {
       </button>
 
       <div className="mepw-tab__controls">
+        <ExportButton
+          path="/api/mep-watch"
+          params={{ my_interests: myInterests, search: search || undefined }}
+          limit={120}
+        />
         <div className="mepw-tab__toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('bubble.mepw.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('bubble.mepw.all', 'All')}</button>

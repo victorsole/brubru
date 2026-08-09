@@ -3,6 +3,7 @@
  * user's topics: configuration meetings + outcomes/press, PI-filtered.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -83,6 +84,11 @@ export function CouncilWatchTab() {
 
       {view === 'activity' && (<>
       <div className="cwatch-tab__controls">
+        <ExportButton
+          path="/api/council-watch"
+          params={{ my_interests: myInterests, kind, search: search || undefined }}
+          limit={200}
+        />
         <div className="cwatch-tab__toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('bubble.cwatch.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('bubble.cwatch.all', 'All')}</button>
