@@ -976,6 +976,7 @@ async def export_analysis_report(
     Returns URL to download the generated report.
     Yellow tier users get watermarked reports.
     Blue tier users get reports without watermark.
+    Both 'docx' and 'pdf' are supported.
     """
     try:
         # Get analysis
@@ -1005,56 +1006,52 @@ async def export_analysis_report(
                 detail="Export format must be 'docx' or 'pdf'"
             )
 
-        # Generate DOCX report
-        if export_format == 'docx':
-            # Determine if watermark is needed (Yellow tier only)
-            include_watermark = current_user.subscription_tier == 'yellow'
+        # Both formats share one path. PDF returned 501 until 8 Aug 2026; it is
+        # now produced by ReportExporter.export_analysis_pdf from the same data
+        # as the DOCX, so the two cannot disagree.
+        include_watermark = current_user.subscription_tier == 'yellow'
 
-            # Create temp file for export
-            cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
-            filename = f"Brubru_EU_Compliance_Report_{cluster.name.replace(' ', '_')}_{analysis_id}.docx"
-            output_path = os.path.join(tempfile.gettempdir(), filename)
+        cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+        safe_cluster = (cluster.name if cluster else f"cluster_{analysis.cluster_id}")
+        safe_cluster = "".join(c if c.isalnum() or c in "-_" else "_" for c in safe_cluster)[:60]
+        filename = f"Brubru_EU_Compliance_Report_{safe_cluster}_{analysis_id}.{export_format}"
+        output_path = os.path.join(tempfile.gettempdir(), filename)
 
-            # Generate report
-            exporter = ReportExporter(db)
-            exporter.export_analysis(analysis_id, output_path, include_watermark)
-
-            # Get file size
-            file_size = os.path.getsize(output_path)
-
-            # Create export record
-            export = AnalysisExport(
-                analysis_id=analysis_id,
-                user_id=current_user.id,
-                export_format=export_format,
-                file_path=output_path,
-                file_size_bytes=file_size,
-                created_at=datetime.utcnow()
-            )
-
-            db.add(export)
-            db.commit()
-            db.refresh(export)
-
-            logger.info(f"Generated DOCX export {export.id} for analysis {analysis_id}")
-
-            # Return file as download
-            from fastapi.responses import FileResponse
-            return FileResponse(
-                path=output_path,
-                filename=filename,
-                media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                headers={
-                    'Content-Disposition': f'attachment; filename="{filename}"'
-                }
-            )
-
+        exporter = ReportExporter(db)
+        if export_format == 'pdf':
+            exporter.export_analysis_pdf(analysis_id, output_path, include_watermark)
+            media_type = 'application/pdf'
         else:
-            # PDF export not yet implemented
-            raise HTTPException(
-                status_code=status.HTTP_501_NOT_IMPLEMENTED,
-                detail="PDF export not yet implemented. Use 'docx' format."
-            )
+            exporter.export_analysis(analysis_id, output_path, include_watermark)
+            media_type = ('application/vnd.openxmlformats-officedocument'
+                          '.wordprocessingml.document')
+
+        file_size = os.path.getsize(output_path)
+
+        export = AnalysisExport(
+            analysis_id=analysis_id,
+            user_id=current_user.id,
+            export_format=export_format,
+            file_path=output_path,
+            file_size_bytes=file_size,
+            created_at=datetime.utcnow()
+        )
+        db.add(export)
+        db.commit()
+        db.refresh(export)
+
+        logger.info(
+            f"Generated {export_format.upper()} export {export.id} "
+            f"({file_size} bytes) for analysis {analysis_id}"
+        )
+
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            path=output_path,
+            filename=filename,
+            media_type=media_type,
+            headers={'Content-Disposition': f'attachment; filename="{filename}"'}
+        )
 
     except HTTPException:
         raise
@@ -1130,6 +1127,157 @@ async def get_user_analysis_history(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve analysis history"
         )
+
+
+
+# ============================================================================
+# FINDING STATE (compliance_actions)
+# ============================================================================
+#
+# compliance_actions has existed since the feature was built and held zero rows:
+# nothing read or wrote it, so a gap analysis was a snapshot you could not act
+# on. Every re-run started from nothing and no decision a user made about a
+# finding survived. These two endpoints make a finding's remediation state
+# durable, which is the smallest useful piece of the persistent-workspace model.
+
+VALID_ACTION_STATUSES = {'pending', 'in_progress', 'completed', 'cancelled'}
+
+
+@router.put(
+    "/findings/{finding_id}/action",
+    summary="Set the remediation state of a gap finding",
+    description=(
+        "**What it does**\n\n"
+        "Records what you have decided to do about one finding: its status, who "
+        "owns it, when it is due and any resolution note. Creates the action on "
+        "first call and updates it afterwards, so the caller does not need to "
+        "know whether one exists.\n\n"
+        "**When to use it**\n\n"
+        "From the finding drawer in EU Law Comply, when a user triages a gap.\n\n"
+        "**Input**\n\n"
+        "Path: `finding_id`. Body: `status` (pending | in_progress | completed | "
+        "cancelled), optional `assigned_to`, `due_date` (YYYY-MM-DD), "
+        "`resolution_notes`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`PUT /api/eu-law-comply/findings/42/action` with `{\"status\": \"in_progress\"}`.\n\n"
+        "**You get back**\n\n"
+        "The stored action: id, gap_finding_id, status, assigned_to, due_date, "
+        "resolution_notes, created_at."
+    ),
+)
+def set_finding_action(
+    finding_id: int,
+    payload: Dict[str, Any],
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    new_status = str(payload.get('status', '')).strip().lower()
+    if new_status not in VALID_ACTION_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"status must be one of {sorted(VALID_ACTION_STATUSES)}",
+        )
+
+    # Ownership is checked through the finding's analysis: a user may only act on
+    # findings from their own analyses.
+    row = (
+        db.query(GapFinding, ComplianceAnalysis, LawRequirement)
+        .join(ComplianceAnalysis, ComplianceAnalysis.id == GapFinding.analysis_id)
+        .join(LawRequirement, LawRequirement.id == GapFinding.requirement_id)
+        .filter(GapFinding.id == finding_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Finding {finding_id} not found")
+    finding, _analysis, requirement = row
+
+    due = payload.get('due_date')
+    if due:
+        try:
+            due = datetime.strptime(str(due)[:10], "%Y-%m-%d").date()
+        except ValueError:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="due_date must be YYYY-MM-DD")
+    else:
+        due = None
+
+    action = (
+        db.query(ComplianceAction)
+        .filter(ComplianceAction.gap_finding_id == finding_id,
+                ComplianceAction.user_id == current_user.id)
+        .first()
+    )
+    if not action:
+        action = ComplianceAction(
+            gap_finding_id=finding_id,
+            user_id=current_user.id,
+            # action_title is NOT NULL; derive it from the obligation so the row
+            # is readable on its own, e.g. in an export or an admin view.
+            action_title=(requirement.article or f"Finding {finding_id}")[:200],
+            action_description=(requirement.requirement_text or "")[:2000] or None,
+        )
+        db.add(action)
+
+    action.status = new_status
+    if 'assigned_to' in payload:
+        action.assigned_to = (payload.get('assigned_to') or None)
+    if 'resolution_notes' in payload:
+        action.resolution_notes = (payload.get('resolution_notes') or None)
+    if due is not None or 'due_date' in payload:
+        action.due_date = due
+    if new_status == 'in_progress' and action.started_at is None:
+        action.started_at = datetime.utcnow()
+    action.completed_at = datetime.utcnow() if new_status == 'completed' else None
+
+    db.commit()
+    db.refresh(action)
+    return action.to_dict()
+
+
+@router.get(
+    "/analysis/{analysis_id}/actions",
+    summary="Remediation state for every finding in an analysis",
+    description=(
+        "**What it does**\n\n"
+        "Returns the saved remediation actions for an analysis, keyed by gap "
+        "finding id, so the findings table can show what has already been "
+        "triaged after a reload or a re-run.\n\n"
+        "**When to use it**\n\n"
+        "Alongside GET /analysis/{id} when rendering the findings table.\n\n"
+        "**Input**\n\n"
+        "Path: `analysis_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/analysis/6/actions`.\n\n"
+        "**You get back**\n\n"
+        "`{actions: {<gap_finding_id>: {...}}, count: N}`. Empty when nothing has "
+        "been triaged yet."
+    ),
+)
+def get_analysis_actions(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    owns = (
+        db.query(ComplianceAnalysis.id)
+        .filter(ComplianceAnalysis.id == analysis_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not owns:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    rows = (
+        db.query(ComplianceAction)
+        .join(GapFinding, GapFinding.id == ComplianceAction.gap_finding_id)
+        .filter(GapFinding.analysis_id == analysis_id,
+                ComplianceAction.user_id == current_user.id)
+        .all()
+    )
+    return {"actions": {a.gap_finding_id: a.to_dict() for a in rows}, "count": len(rows)}
 
 
 # ============================================================================

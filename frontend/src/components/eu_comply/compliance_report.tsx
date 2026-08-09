@@ -165,6 +165,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
       <FindingsTable
         findings={analysis.gap_findings || []}
         onAskChatbot={onAskChatbot}
+        analysisId={analysis.id}
       />
 
       {/* Export Button */}

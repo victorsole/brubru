@@ -430,3 +430,67 @@
   .findings-table__search input[type="text"] { min-width: 0; width: 100%; }
   .finding-drawer { width: 100vw; }
 }
+
+/* ---- remediation state (compliance_actions) ---- */
+.findings-table__action {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 0.12rem 0.45rem;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.action-pending      { background: #f1f3f6; color: #55607a; }
+.action-in_progress  { background: #eef1fb; color: #3b3183; }
+.action-completed    { background: #e7f6ef; color: #1f7a52; }
+.action-cancelled    { background: #f6f1f1; color: #8a6a6a; }
+
+.finding-drawer__triage {
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid #e6eaf0;
+  background: #fafbfd;
+}
+
+.finding-drawer__triage h4 {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  margin: 0 0 0.5rem;
+}
+
+.finding-drawer__triage-buttons {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.finding-drawer__triage-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid #dde3ed;
+  background: #fff;
+  color: #55607a;
+  border-radius: 18px;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: capitalize;
+}
+
+.finding-drawer__triage-btn:hover { border-color: #b9c3d6; }
+
+.finding-drawer__triage-btn.is-active {
+  background: #3b3183;
+  border-color: #3b3183;
+  color: #fff;
+}
+
+.finding-drawer__triage-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.76rem;
+  color: #8a93a3;
+  line-height: 1.5;
+}

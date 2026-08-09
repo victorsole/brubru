@@ -16,7 +16,6 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from pgvector.sqlalchemy import Vector
 from core.database import Base
 
 
@@ -226,34 +225,11 @@ class ComplianceAction(Base):
         }
 
 
-class RequirementEmbedding(Base):
-    """
-    Requirement Vector Embedding
 
-    Stores vector embeddings for semantic search of requirements.
-    Uses OpenAI text-embedding-3-large (1536 dimensions).
-    """
-
-    __tablename__ = "requirement_embeddings"
-
-    id = Column(Integer, primary_key=True, index=True)
-    requirement_id = Column(Integer, ForeignKey('law_requirements.id', ondelete='CASCADE'), nullable=False)
-
-    # Embedding
-    embedding = Column(Vector(1536))  # OpenAI text-embedding-3-large
-    embedding_model = Column(String(100))
-
-    # Text that was embedded
-    embedded_text = Column(Text, nullable=False)
-
-    created_at = Column(TIMESTAMP, server_default=func.now())
-
-    __table_args__ = (
-        UniqueConstraint('requirement_id', 'embedding_model', name='unique_requirement_embedding'),
-    )
-
-    def __repr__(self):
-        return f"<RequirementEmbedding(requirement_id={self.requirement_id}, model={self.embedding_model})>"
+# RequirementEmbedding was removed on 8 Aug 2026 (migration 206). The table had
+# no reader and no writer: VectorSearchService's similarly-named attributes are
+# disk-cached numpy arrays, and the gap analyser now retrieves with TF-IDF
+# rather than embeddings. pgvector stays imported nowhere in this module.
 
 
 class AnalysisExport(Base):

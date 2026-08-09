@@ -1,0 +1,21 @@
+-- 206: drop requirement_embeddings.
+--
+-- The table has no reader and no writer. Verified by grep across the whole
+-- backend: the only references are its own SQLAlchemy model in
+-- models/compliance.py and the CREATE in scripts/create_compliance_tables.py.
+--
+-- It looked live because VectorSearchService has attributes named
+-- `requirement_embeddings` -- but those are numpy arrays cached to disk
+-- (np.load / np.save), nothing to do with this table. And the gap analyser
+-- stopped using vector search entirely on 8 Aug 2026: it now builds a TF-IDF
+-- index per analysis, because the OpenAI embedding calls it depended on were
+-- failing on an exhausted balance and silently degrading retrieval to
+-- "first five chunks of the document".
+--
+-- Row count at drop time: 0. Nothing is lost.
+--
+-- If semantic search over requirements is wanted later, reintroduce it as a
+-- deliberate design with a funded (or local) embedding provider rather than
+-- inheriting this scaffolding.
+
+DROP TABLE IF EXISTS public.requirement_embeddings;

@@ -17,11 +17,28 @@
 //      text says so in the cell; it does not render an empty quote box that
 //      reads as "checked and clean".
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import type { GapFinding } from '../../pages/eu_comply_page';
+import { useAuth } from '../../hooks/use_auth';
 import './findings_table.css';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+/** Persistent remediation state for a finding (compliance_actions). */
+export interface FindingAction {
+  id: number;
+  gap_finding_id: number;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  assigned_to?: string | null;
+  due_date?: string | null;
+  resolution_notes?: string | null;
+}
+
+const ACTION_STATUSES: FindingAction['status'][] = [
+  'pending', 'in_progress', 'completed', 'cancelled',
+];
 
 // Below this the model's own confidence is low enough that the verdict should
 // be reviewed by a human rather than acted on. Mirrors the escalation-trigger
@@ -35,6 +52,8 @@ type SortKey = 'priority' | 'criticality' | 'status' | 'deadline' | 'confidence'
 interface FindingsTableProps {
   findings: GapFinding[];
   onAskChatbot: (finding: GapFinding) => void;
+  /** Analysis id, used to load and persist per-finding remediation state. */
+  analysisId?: number;
 }
 
 const CRITICALITY_RANK: Record<string, number> = {
@@ -59,7 +78,7 @@ const statusIcon = (status: string): string => {
   }
 };
 
-export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) => {
+export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTableProps) => {
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('attention');
   const [criticalityFilter, setCriticalityFilter] = useState<string>('all');
@@ -67,6 +86,57 @@ export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) =>
   const [sortKey, setSortKey] = useState<SortKey>('priority');
   const [sortAsc, setSortAsc] = useState(true);
   const [selected, setSelected] = useState<GapFinding | null>(null);
+  const [actions, setActions] = useState<Record<number, FindingAction>>({});
+
+  // Remediation state lives in compliance_actions, so it survives a reload and
+  // a re-run of the analysis. Without this the table is a snapshot you cannot
+  // act on.
+  useEffect(() => {
+    if (!analysisId) return;
+    const token = useAuth.getState().token;
+    if (!token) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch(
+          `${API_BASE_URL}/api/eu-law-comply/analysis/${analysisId}/actions`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!cancelled) setActions(d.actions || {});
+      } catch { /* silent: the column just stays empty */ }
+    })();
+    return () => { cancelled = true; };
+  }, [analysisId]);
+
+  const saveAction = async (findingId: number, next: FindingAction['status']) => {
+    const token = useAuth.getState().token;
+    if (!token) return;
+    // Optimistic: the control should not feel laggy on a 300ms round trip.
+    const previous = actions[findingId];
+    setActions((a) => ({ ...a, [findingId]: { ...(a[findingId] || {} as FindingAction), gap_finding_id: findingId, status: next } }));
+    try {
+      const r = await fetch(
+        `${API_BASE_URL}/api/eu-law-comply/findings/${findingId}/action`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: next }),
+        },
+      );
+      if (!r.ok) throw new Error(String(r.status));
+      const saved = await r.json();
+      setActions((a) => ({ ...a, [findingId]: saved }));
+    } catch {
+      // Roll back rather than leave the UI claiming a state the server rejected.
+      setActions((a) => {
+        const copy = { ...a };
+        if (previous) copy[findingId] = previous; else delete copy[findingId];
+        return copy;
+      });
+    }
+  };
 
   const counts = useMemo(() => {
     const c = { met: 0, partial: 0, gap: 0, not_applicable: 0, lowConfidence: 0 };
@@ -243,6 +313,7 @@ export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) =>
                 </button>
               </th>
               <th className="col-evidence">{t('comply.report.evidenceFound')}</th>
+              <th className="col-action">{t('comply.report.action', 'Action')}</th>
             </tr>
           </thead>
           <tbody>
@@ -292,6 +363,13 @@ export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) =>
                       </span>
                     )}
                   </td>
+                  <td className="col-action">
+                    {actions[f.id]
+                      ? <span className={`findings-table__action action-${actions[f.id].status}`}>
+                          {t(`comply.report.action_${actions[f.id].status}`, actions[f.id].status.replace('_', ' '))}
+                        </span>
+                      : <span className="findings-table__muted">—</span>}
+                  </td>
                   <td className="col-evidence">
                     {f.evidence_text ? (
                       <span className="findings-table__cited">
@@ -325,6 +403,8 @@ export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) =>
       {selected && createPortal(
         <FindingDrawer
           finding={selected}
+          action={actions[selected.id]}
+          onSetAction={analysisId ? (st) => saveAction(selected.id, st) : undefined}
           onClose={() => setSelected(null)}
           onAskChatbot={onAskChatbot}
         />,
@@ -336,6 +416,8 @@ export const FindingsTable = ({ findings, onAskChatbot }: FindingsTableProps) =>
 
 interface FindingDrawerProps {
   finding: GapFinding;
+  action?: FindingAction;
+  onSetAction?: (status: FindingAction['status']) => void;
   onClose: () => void;
   onAskChatbot: (f: GapFinding) => void;
 }
@@ -343,7 +425,7 @@ interface FindingDrawerProps {
 // Portalled to document.body: this page is wrapped in an AnimatedPage whose
 // framer-motion transform creates a containing block, so a position:fixed
 // overlay rendered inside it scopes to that box instead of the viewport.
-const FindingDrawer = ({ finding, onClose, onAskChatbot }: FindingDrawerProps) => {
+const FindingDrawer = ({ finding, action, onSetAction, onClose, onAskChatbot }: FindingDrawerProps) => {
   const { t } = useTranslation();
   const low = finding.confidence_score != null && finding.confidence_score < LOW_CONFIDENCE_PCT;
 
@@ -433,6 +515,29 @@ const FindingDrawer = ({ finding, onClose, onAskChatbot }: FindingDrawerProps) =
             </section>
           )}
         </div>
+
+        {onSetAction && (
+          <div className="finding-drawer__triage">
+            <h4>{t('comply.report.remediation', 'Remediation')}</h4>
+            <div className="finding-drawer__triage-buttons" role="group">
+              {ACTION_STATUSES.map((st) => (
+                <button
+                  key={st}
+                  type="button"
+                  className={`finding-drawer__triage-btn action-${st}${action?.status === st ? ' is-active' : ''}`}
+                  onClick={() => onSetAction(st)}
+                  aria-pressed={action?.status === st}
+                >
+                  {t(`comply.report.action_${st}`, st.replace('_', ' '))}
+                </button>
+              ))}
+            </div>
+            <p className="finding-drawer__triage-note">
+              {t('comply.report.remediationNote',
+                'Saved against this finding, so it survives a reload and a re-run of the analysis.')}
+            </p>
+          </div>
+        )}
 
         <footer className="finding-drawer__foot">
           <button className="finding-drawer__ask" onClick={() => onAskChatbot(finding)}>
