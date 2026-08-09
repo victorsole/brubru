@@ -10,9 +10,10 @@
  * Data: /api/ep-votes/{committee,plenary,detail/{id},procedure/{ref},my-committees,stats}
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { MeubHeader } from './meub_header';
 import {
@@ -20,6 +21,7 @@ import {
   mdiOpenInNew, mdiSwapHorizontal, mdiCheckCircle, mdiCloseCircle, mdiScaleBalance,
   mdiBankOutline, mdiInformationOutline, mdiImageFilterCenterFocus,
   mdiClipboardListOutline, mdiFilePdfBox, mdiAccountVoice, mdiCalendarOutline,
+  mdiFilterOutline,
 } from '@mdi/js';
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
@@ -607,11 +609,19 @@ const VotingListCard = ({ vl }: { vl: VotingList }) => {
 
 export const VotesTab = () => {
   const { t } = useTranslation();
+  // ?procedure=<oeil ref> shows one dossier's votes. The file modal hands the
+  // reference over so "how did this file vote" is one click from the file,
+  // instead of opening Votes and searching a list of hundreds by hand.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [procedure, setProcedure] = useState<string | null>(
+    () => searchParams.get('procedure'),
+  );
   const [level, setLevel] = useState<Level>('committee');
   const [mode, setMode] = useState<LensMode>('all');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'margin' | 'dissent'>('date');
   const [data, setData] = useState<ListResponse | null>(null);
+  const [dataLevel, setDataLevel] = useState<Level | null>(null);
   const [vlData, setVlData] = useState<VotingListResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<Vote | null>(null);
@@ -625,10 +635,16 @@ export const VotesTab = () => {
 
   useEffect(() => {
     setLoading(true);
+    // Clear first: the auto-level step below judges "did this level have any
+    // votes", and stale results from the previous level made it skip a level
+    // that did have them.
+    setData(null);
+    setDataLevel(null);
     const params = new URLSearchParams();
     if (mode === 'pi') params.set('my_interests', 'true');
     if (mode === 'files') params.set('my_files', 'true');
     if (search.trim()) params.set('search', search.trim());
+    if (procedure) params.set('procedure', procedure);
     if (isVL) {
       axios.get<VotingListResponse>(`${API_BASE}/ep-votes/voting-lists?${params.toString()}`, authCfg())
         .then((r) => setVlData(r.data))
@@ -637,11 +653,25 @@ export const VotesTab = () => {
     } else {
       params.set('sort_by', sortBy);
       axios.get<ListResponse>(`${API_BASE}/ep-votes/${level}?${params.toString()}`, authCfg())
-        .then((r) => setData(r.data))
-        .catch(() => setData({ items: [], total: 0, my_committees: [], pi_active: false }))
+        .then((r) => { setData(r.data); setDataLevel(level); })
+        .catch(() => { setData({ items: [], total: 0, my_committees: [], pi_active: false }); setDataLevel(level); })
         .finally(() => setLoading(false));
     }
-  }, [level, mode, search, sortBy, isVL]);
+  }, [level, mode, search, sortBy, isVL, procedure]);
+
+  // A dossier is rarely voted at every level, and the tab opens on Committee.
+  // Arriving from a file therefore showed "no votes" while its plenary votes
+  // sat one tab away. Step through the levels once until one has results.
+  const autoLevel = useRef(false);
+  useEffect(() => { autoLevel.current = false; }, [procedure]);
+  useEffect(() => {
+    if (!procedure || loading || autoLevel.current) return;
+    if (!data || dataLevel !== level) return;            // this level's result not in yet
+    if (data.total > 0) { autoLevel.current = true; return; }
+    const order: Level[] = ['committee', 'plenary', 'council'];
+    const next = order[order.indexOf(level) + 1];
+    if (next) setLevel(next); else autoLevel.current = true;
+  }, [procedure, loading, data, dataLevel, level]);
 
   const items = data?.items || [];
   const vlItems = vlData?.items || [];
@@ -664,6 +694,31 @@ export const VotesTab = () => {
           </div>
         )}
       />
+
+      {/* Arriving from a file, the list is filtered to that dossier. Say so and
+          offer the way back, so a filtered list is never mistaken for an empty
+          or broken one. */}
+      {procedure && (
+        <div className="votes-tab__filepill">
+          <Icon path={mdiFilterOutline} size={0.75} />
+          <span>
+            {t('votes.filteredToFile', 'Showing votes on')}{' '}
+            <strong>{data?.items?.[0]?.title || t('votes.thisFile', 'this file')}</strong>
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              setProcedure(null);
+              const next = new URLSearchParams(searchParams);
+              next.delete('procedure');
+              setSearchParams(next, { replace: true });
+            }}
+          >
+            <Icon path={mdiClose} size={0.6} />
+            {t('votes.showAllVotes', 'Show all votes')}
+          </button>
+        </div>
+      )}
 
       <div className="votes-tab__tabs" role="tablist">
         <button role="tab" aria-selected={level === 'committee'}

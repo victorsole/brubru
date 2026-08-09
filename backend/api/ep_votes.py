@@ -110,7 +110,7 @@ def _sort(items: List[dict], sort_by: str) -> List[dict]:
 
 # ---- list endpoints -------------------------------------------------------
 
-def _list(level, db, user, my_interests, committees, search, sort_by, limit, offset, my_files=False):
+def _list(level, db, user, my_interests, committees, search, sort_by, limit, offset, my_files=False, procedure=None):
     my_committees = _user_committees(user)
     both = _procedures_with_both_levels(db)
     tracked = tracked_anchors(db, str(user.id)) if user else {}
@@ -135,6 +135,13 @@ def _list(level, db, user, my_interests, committees, search, sort_by, limit, off
 
     if search:
         q = q.filter(EpVote.title.ilike(f"%{search}%"))
+
+    # One dossier's votes. `search` matches the title only, so a procedure
+    # reference typed into it returned nothing; the file modal needs to hand a
+    # dossier over and land on its votes. 98% of votes carry a procedure_ref,
+    # so this filter is worth offering.
+    if procedure:
+        q = q.filter(EpVote.procedure_ref == procedure.strip())
 
     total = q.count()
     rows = q.all()  # bounded set; sort/paginate in Python for margin/dissent keys
@@ -168,6 +175,7 @@ async def list_committee(
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only votes on this OEIL procedure reference, e.g. 2025/0102(COD)"),
     sort_by: str = Query("date"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -175,7 +183,7 @@ async def list_committee(
     db: Session = Depends(get_db),
 ):
     try:
-        return _list("committee", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files)
+        return _list("committee", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files, procedure)
     except Exception as e:
         logger.exception(f"committee votes list failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to list committee votes")
@@ -195,6 +203,7 @@ async def list_plenary(
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only votes on this OEIL procedure reference, e.g. 2025/0102(COD)"),
     sort_by: str = Query("date"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -202,7 +211,7 @@ async def list_plenary(
     db: Session = Depends(get_db),
 ):
     try:
-        return _list("plenary", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files)
+        return _list("plenary", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files, procedure)
     except Exception as e:
         logger.exception(f"plenary votes list failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to list plenary votes")
@@ -215,7 +224,8 @@ async def list_plenary(
                 "per-member-state breakdown and the qualified-majority figures.\n\n"
                 "**When to use it**\nThe 'Council results' tab of MEUB Votes.\n\n"
                 "**Input**\n`config=GAC,FAC` to filter by Council configuration; "
-                "`search`; `sort_by` in date|margin|dissent|title.\n\n"
+                "`search`; `procedure` to show one dossier's votes; "
+                "`sort_by` in date|margin|dissent|title.\n\n"
                 "**You get back**\nVote cards: outcome, for/against/abstentions by "
                 "member state, qualified-majority %, and a link to the source sheet. "
                 "The per-country breakdown is auto-read from the Council's image-only "
@@ -223,6 +233,7 @@ async def list_plenary(
 def list_council(
     config: Optional[str] = Query(None, description="Council configuration codes, e.g. GAC,FAC"),
     search: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only votes on this OEIL procedure reference, e.g. 2025/0102(COD)"),
     sort_by: str = Query("date"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -237,6 +248,8 @@ def list_council(
                 q = q.filter(EpVote.committee_code.in_(codes))
         if search:
             q = q.filter(EpVote.title.ilike(f"%{search}%"))
+        if procedure:
+            q = q.filter(EpVote.procedure_ref == procedure.strip())
         total = q.count()
         rows = q.all()
         items = [_vote_summary(v, [], both) for v in rows]
@@ -289,6 +302,7 @@ async def list_voting_lists(
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    procedure: Optional[str] = Query(None, description="Only votes on this OEIL procedure reference, e.g. 2025/0102(COD)"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     current_user: Optional[User] = Depends(get_current_user_optional),

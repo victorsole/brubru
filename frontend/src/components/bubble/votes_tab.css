@@ -260,3 +260,34 @@
 .votes-votinglist-attach__list a:hover {
   text-decoration: underline;
 }
+
+/* Shown when Votes was opened from a file: the list is filtered to that
+   dossier, which must be visible or a short list reads as a broken one. */
+.votes-tab__filepill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.85rem;
+  background: rgba(6, 147, 227, 0.08);
+  border: 1px solid rgba(6, 147, 227, 0.35);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #0f172a;
+}
+.votes-tab__filepill strong { font-variant-numeric: tabular-nums; }
+.votes-tab__filepill button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.78rem;
+  color: #475569;
+  cursor: pointer;
+}
+.votes-tab__filepill button:hover { background: #f8fafc; color: #0f172a; }

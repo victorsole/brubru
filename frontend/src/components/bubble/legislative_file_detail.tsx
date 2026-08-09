@@ -338,6 +338,7 @@ export const LegislativeFileDetail = () => {
                 </h3>
                 <div className="legislative-file-detail__crosslinks">
                   {([
+                    ['votes', `tab=votes&procedure=`, t('bubble.tabs.votes', 'Votes')],
                     ['amendments', `tab=amendments&procedure=`, t('bubble.amendments', 'Amendments')],
                     ['predictions', `tab=predictions&ref=`, t('bubble.tabs.predictions', 'Predictions')],
                     ['position_analysis', `tab=position_analysis&ref=`, t('bubble.tabs.positionAnalysis', 'Position Analysis')],
