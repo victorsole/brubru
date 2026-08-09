@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from core.config import settings
+from core.log_redaction import install_secret_redaction
 from core.database import init_db
 from services.rss.rss_scheduler import start_scheduler, stop_scheduler
 from services.email_scheduler import start_email_scheduler, stop_email_scheduler
@@ -50,6 +51,9 @@ async def lifespan(app: FastAPI):
     Runs on startup and shutdown.
     """
     # Startup
+    # Install first: everything logged after this point is scrubbed, and the
+    # handlers only exist once the server has configured logging.
+    install_secret_redaction()
     print("[START] Starting Brubru backend...")
     print(f"[INFO] Environment: {settings.ENVIRONMENT}")
 

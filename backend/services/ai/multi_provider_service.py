@@ -264,7 +264,8 @@ class _OpenAICompatibleProvider(AIProvider):
     _NAME: str = ""
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None,
-                 extra_body: Optional[Dict[str, Any]] = None):
+                 extra_body: Optional[Dict[str, Any]] = None,
+                 default_headers: Optional[Dict[str, str]] = None):
         self.api_key = api_key
         self.model = model or self.MODEL
         self.extra_body = extra_body or {}
@@ -283,6 +284,7 @@ class _OpenAICompatibleProvider(AIProvider):
                 base_url=self.BASE_URL,
                 max_retries=0,
                 timeout=PROVIDER_TIMEOUT_S,
+                default_headers=default_headers or None,
             )
             if self.api_key else None
         )
@@ -326,9 +328,21 @@ class _OpenAICompatibleProvider(AIProvider):
         choice = response.choices[0]
         content = (choice.message.content or "").strip()
         # Reasoning-model recovery: some open models leave content empty and put
-        # the answer in reasoning_content, or wrap thinking in <think>...</think>.
+        # the answer in a reasoning field, or wrap thinking in <think>...</think>.
+        #
+        # The field name is NOT consistent across OpenAI-compatible vendors:
+        #   - `reasoning_content` — DeepSeek-style (the original case handled here)
+        #   - `reasoning`         — Cerebras AND OpenRouter both use this
+        # Only `reasoning_content` was checked until 28 July 2026, so a Cerebras
+        # or OpenRouter reply with empty content raised "returned empty content"
+        # and burned a provider slot. Measured on Kimi K3 via OpenRouter: 4 of 6
+        # production-shaped calls returned content=None with the answer in
+        # `reasoning`. Check both names.
         if not content:
-            content = (getattr(choice.message, "reasoning_content", None) or "").strip()
+            for attr in ("reasoning_content", "reasoning"):
+                content = (getattr(choice.message, attr, None) or "").strip()
+                if content:
+                    break
         content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
         tokens = response.usage.total_tokens if response.usage else 0
 
@@ -355,6 +369,15 @@ class _OpenAICompatibleProvider(AIProvider):
         (llama-3.3-70b-versatile) is non-thinking, so the stream is clean;
         thinking models (qwen3-32b, gpt-oss) interleave reasoning we drop, with
         a cheap inline <think>...</think> suppressor as a safety net.
+
+        DELIBERATE ASYMMETRY WITH generate(): generate() falls back to the
+        `reasoning` / `reasoning_content` fields when `content` is empty, but
+        this method must NOT. Streaming those deltas would render the model's
+        raw chain-of-thought straight into the user's chat window (measured
+        28 July 2026: nemotron-3-super and Kimi K3 both emit "We need to
+        answer..." preambles). A model that streams only reasoning therefore
+        yields nothing here and correctly falls through to the next provider.
+        Do not "fix" this by mirroring the generate() recovery.
         """
         if not self.is_available:
             raise RuntimeError(f"{self._NAME} provider not configured")
@@ -472,6 +495,78 @@ class NvidiaProvider(_OpenAICompatibleProvider):
         )
 
 
+class OpenRouterProvider(_OpenAICompatibleProvider):
+    """OpenRouter — BATCH / EVALUATION provider. NOT part of the chat chain.
+
+    One key fronts ~341 models behind an OpenAI-compatible API, so it costs no
+    new dependency. It is constructed only on explicit request (see
+    `get_openrouter_provider()`); `MultiProviderService` never appends it to the
+    chat fallback list.
+
+    Benchmarked 28 July 2026 against Brubru's real ~17K-token production prompt
+    (6-test suite: KB fidelity, anti-hallucination, Catalan, British English,
+    strict JSON, amendment drafting):
+
+        nvidia/nemotron-3-super-120b-a12b:free   6/6   9.1s median
+        nvidia/nemotron-3-ultra-550b-a55b:free   6/6  22.7s median (best Catalan)
+        openai/gpt-oss-20b:free                  5/6  32.1s median
+        inclusionai/ling-3.0-flash:free          4/6   4.1s median
+        google/gemma-4-31b-it:free               0/6  (100% rate-limited)
+        -- for comparison --
+        cerebras gpt-oss-120b (chat primary)     6/6   1.5s median
+
+    Why it must stay OUT of Chat:
+      - Free tier is 50 requests/DAY (`X-RateLimit-Limit: 50`). A 10-request
+        burst at production prompt size returned 0/10. $10 of credits lifts this
+        to 1,000/day, still below chat volume.
+      - Paid models reject prompts above a credit-derived ceiling: Kimi K3
+        returned HTTP 402 "Prompt tokens limit exceeded: 17134 > 13264".
+      - Cerebras is both faster (1.5s) and free.
+
+    Where it earns its place: latency-insensitive batch jobs, and grading
+    Brubru's own answers with a model family that is NOT already in the chat
+    chain (an independent second opinion for /audit-queries and /training).
+
+    Note on reasoning models: OpenRouter returns the answer in `reasoning` with
+    `content: null` for some models (measured on Kimi K3, 4 of 6 calls). The
+    base class handles both field names since 28 July 2026.
+    """
+
+    BASE_URL = "https://openrouter.ai/api/v1"
+    MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+    _NAME = "OpenRouter"
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        super().__init__(
+            api_key=api_key or getattr(settings, 'OPENROUTER_API_KEY', None),
+            model=model or getattr(settings, 'OPENROUTER_MODEL', None) or self.MODEL,
+            # OpenRouter attributes usage to the referring app via these headers.
+            default_headers={
+                "HTTP-Referer": getattr(settings, 'OPENROUTER_SITE_URL', '') or '',
+                "X-Title": getattr(settings, 'OPENROUTER_APP_NAME', 'Brubru') or 'Brubru',
+            },
+        )
+
+
+def get_openrouter_provider(model: Optional[str] = None) -> Optional[OpenRouterProvider]:
+    """Explicit opt-in accessor for the batch/eval provider.
+
+    Returns None when no key is configured, so callers can degrade quietly.
+    Deliberately a standalone factory rather than a slot in
+    `MultiProviderService.providers`: nothing should reach OpenRouter by simply
+    falling through the chat chain (50 free requests/day would be exhausted by
+    a single burst of user traffic, and paid models bill per call).
+
+    Usage:
+        p = get_openrouter_provider()                      # settings default
+        p = get_openrouter_provider("moonshotai/kimi-k3")  # explicit override
+        if p:
+            resp = await p.generate(system_prompt, messages)
+    """
+    provider = OpenRouterProvider(model=model)
+    return provider if provider.is_available else None
+
+
 class GeminiProvider(AIProvider):
     """Google Gemini provider (fallback 3)"""
 
@@ -559,9 +654,13 @@ class GeminiProvider(AIProvider):
         if not self.is_available:
             raise RuntimeError("Gemini provider not configured")
 
+        # The key goes in a header, never the query string. httpx logs the
+        # full request URL at INFO, so `?key=<secret>` put the live Gemini key
+        # into every backend log line -- and therefore into Railway's log
+        # retention. Google accepts x-goog-api-key as an equivalent.
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{self.MODEL}:streamGenerateContent?alt=sse&key={self.api_key}"
+            f"{self.MODEL}:streamGenerateContent?alt=sse"
         )
         payload = {
             "contents": [{"parts": [{"text": self._flatten(system_prompt, messages)}]}],
@@ -571,7 +670,9 @@ class GeminiProvider(AIProvider):
         import httpx
         self._last_stream_tokens = 0
         async with httpx.AsyncClient(timeout=self.TIMEOUT_S) as http_client:
-            async with http_client.stream("POST", url, json=payload) as resp:
+            async with http_client.stream(
+                "POST", url, json=payload, headers={"x-goog-api-key": self.api_key}
+            ) as resp:
                 if resp.status_code != 200:
                     body = (await resp.aread())[:200]
                     raise RuntimeError(f"Gemini stream {resp.status_code}: {body!r}")
@@ -606,7 +707,7 @@ class GeminiProvider(AIProvider):
 
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{self.MODEL}:generateContent?key={self.api_key}"
+            f"{self.MODEL}:generateContent"
         )
         payload = {
             "contents": [{"parts": [{"text": self._flatten(system_prompt, messages)}]}],
@@ -615,7 +716,9 @@ class GeminiProvider(AIProvider):
 
         import httpx
         async with httpx.AsyncClient(timeout=self.TIMEOUT_S) as http_client:
-            resp = await http_client.post(url, json=payload)
+            resp = await http_client.post(
+                url, json=payload, headers={"x-goog-api-key": self.api_key}
+            )
         if resp.status_code != 200:
             # 429 / quota / other -> raise so the chain falls through to the next provider
             raise RuntimeError(f"Gemini REST {resp.status_code}: {resp.text[:200]}")
