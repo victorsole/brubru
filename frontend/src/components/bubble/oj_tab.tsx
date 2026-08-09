@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -218,6 +219,20 @@ export const OJTab = () => {
 
       <div className="oj-controls">
         <LensToggle mode={mode} onChange={setMode} hasPi={hasPi} hasFiles={!!data?.has_tracked_files} />
+        <ExportButton
+          path="/api/oj/entries"
+          params={{
+            date: activeDate || undefined,
+            series: series || undefined,
+            my_interests: mode === 'pi' ? 'true' : undefined,
+            my_files: mode === 'files' ? 'true' : undefined,
+            institution: institution || undefined,
+            theme: theme || undefined,
+            search: search.trim() || undefined,
+            lang: uiLang !== 'en' ? uiLang : undefined,
+          }}
+          limit={200}
+        />
         <div className="oj-segmented">
           <button className={series === '' ? 'is-active' : ''} onClick={() => setSeries('')}>{t('oj.bothSeries', 'L + C')}</button>
           <button className={series === 'L' ? 'is-active' : ''} onClick={() => setSeries('L')}>L</button>

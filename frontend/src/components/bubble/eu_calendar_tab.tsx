@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +42,7 @@ import { ArchiveToggle, ArchiveButton } from './archive_controls';
 import { archiveService } from '../../services/archive_service';
 import { toast } from '../shared/feedback_host';
 import {
+  buildEventQuery,
   useEUCalendar,
   groupEventsByDate,
   PHASE1_INSTITUTIONS,
@@ -407,6 +409,27 @@ function CalendarFilters() {
             ))}
           </select>
         </label>
+
+        <ExportButton
+          path="/api/eu-calendar/events"
+          params={(() => {
+            const q = buildEventQuery(useEUCalendar.getState());
+            return {
+              date_from: q.dateFrom,
+              date_to: q.dateTo,
+              institution: q.instFilter,
+              policy_area: q.paFilter,
+              event_type: q.etFilter,
+              committee_code: q.cmFilter,
+              commission_dg: q.dgFilter,
+              council_configuration: q.cfgFilter,
+              organiser: q.orgFilter,
+              my_interests: q.myInterests ? 'true' : undefined,
+              archived: q.showArchived ? 'true' : undefined,
+            };
+          })()}
+          limit={500}
+        />
 
         {hasFilters && (
           <button className="eu-calendar-tab__clear-filters" onClick={clearFilters}>

@@ -10,6 +10,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -206,6 +207,11 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
 
       {/* Filters */}
       <div className="ec-consultations-tab__filters">
+        <ExportButton
+          path="/api/consultations"
+          params={{ search: searchQuery || undefined }}
+          limit={200}
+        />
         {/* Policy-Interest lens (My interests | All) — shared across MEUB */}
         <div className="ec-consultations-tab__pi-toggle" role="tablist">
           <button

@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -306,6 +307,19 @@ export const NewsTab = () => {
             ))}
           </select>
         )}
+        <ExportButton
+          path={stakeholders ? '/api/eu-news/stakeholders' : '/api/eu-news/items'}
+          params={{
+            my_interests: mode === 'pi' ? 'true' : undefined,
+            my_files: mode === 'files' && !stakeholders ? 'true' : undefined,
+            institution: institution || undefined,
+            commission_dg: dg && !stakeholders ? dg : undefined,
+            item_type: itemType && !stakeholders ? itemType : undefined,
+            search: search.trim() || undefined,
+            lang: stakeholders ? uiLang : undefined,
+          }}
+          limit={200}
+        />
         <div className="news-search">
           <Icon path={mdiMagnify} size={0.8} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
