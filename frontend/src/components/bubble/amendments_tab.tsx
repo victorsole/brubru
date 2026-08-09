@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import Icon from '@mdi/react';
 import {
   mdiFileDocumentOutline,
@@ -28,11 +29,65 @@ import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
 import { MEPAmendmentsTab } from './mep_amendments_tab';
 import { MEPComparativeTab } from './mep_comparative_tab';
+import { LegislativeFileDetail } from './legislative_file_detail';
 import { plainLanguageTypeKey } from '../../utils/procedure_type';
 import { MeubHeader } from './meub_header';
 import './amendments_tab.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+
+/**
+ * The CELEX an amendment was drafted against.
+ *
+ * `document_id` is stored as "eurlex-<celex>" for anything loaded from
+ * EUR-Lex; otherwise the tracked file carries the CELEX list. Needed to hand
+ * the amendment back to the Amendator, which hydrates a law from
+ * ?celex=<celex> and scrolls to ?amendmentId=<id>.
+ */
+const celexOf = (amendment: Amendment, trackedFile: TrackedFile | null): string | null => {
+  const fromDoc = amendment.document_id?.startsWith('eurlex-')
+    ? amendment.document_id.slice('eurlex-'.length)
+    : null;
+  return fromDoc || trackedFile?.celex_numbers?.[0] || null;
+};
+
+/**
+ * The action that was missing from every amendment card: a way back into the
+ * Amendator to keep working on it. The cards carried only a status dropdown,
+ * so a drafted amendment could be re-labelled but never reopened.
+ *
+ * The Amendator hydrates a law from ?celex= and scrolls to ?amendmentId=.
+ * Where no CELEX can be resolved there is nothing to hydrate, so the card
+ * says so instead of offering a button that would land on an empty editor.
+ */
+function AmendmentOpen({ amendment, trackedFile, navigate, t }: {
+  amendment: Amendment;
+  trackedFile: TrackedFile | null;
+  navigate: (to: string) => void;
+  t: TFunction;
+}) {
+  const celex = celexOf(amendment, trackedFile);
+  if (!celex) {
+    return (
+      <span className="amendments-tab__open-note">
+        {t('amendmentsTab.noSourceLaw', 'Source law unknown')}
+      </span>
+    );
+  }
+  return (
+    <button
+      type="button"
+      className="amendments-tab__open-btn"
+      onClick={() => navigate(
+        `/amendator?celex=${encodeURIComponent(celex)}&amendmentId=${encodeURIComponent(amendment.id)}`,
+      )}
+      title={t('amendmentsTab.openInAmendator', 'Open in the Amendator')}
+    >
+      <Icon path={mdiFileEdit} size={0.7} />
+      {t('amendmentsTab.openInAmendator', 'Open in the Amendator')}
+    </button>
+  );
+}
 
 interface Amendment {
   id: string;
@@ -368,18 +423,24 @@ export const AmendmentsTab = () => {
                             {group.amendments.length} amendment{group.amendments.length !== 1 ? 's' : ''}
                           </span>
                         </div>
-                        <h3
-                          className="amendments-tab__group-title"
-                          onClick={() => fetchFileDetail(group.trackedFile!.file_id)}
-                        >
-                          <Icon path={mdiFileDocumentOutline} size={0.9} />
-                          {group.trackedFile.title}
+                        <h3 className="amendments-tab__group-title">
+                          <button
+                            type="button"
+                            className="amendments-tab__group-title-btn"
+                            onClick={() => fetchFileDetail(group.trackedFile!.file_id)}
+                          >
+                            <Icon path={mdiFileDocumentOutline} size={0.9} />
+                            {group.trackedFile.title}
+                          </button>
                         </h3>
                       </div>
                       <div className="amendments-tab__group-actions">
                         <button
                           className="amendments-tab__group-action-btn"
-                          onClick={() => navigate('/amendator')}
+                          onClick={() => {
+                            const celex = group.trackedFile?.celex_numbers?.[0];
+                            navigate(celex ? `/amendator?celex=${encodeURIComponent(celex)}` : '/amendator');
+                          }}
                           title={t('amendmentsTab.draftMore')}
                         >
                           <Icon path={mdiPencilOutline} size={0.7} />
@@ -459,6 +520,12 @@ export const AmendmentsTab = () => {
                           <option value="rejected">{t('amendmentsTab.statusRejected')}</option>
                           <option value="withdrawn">{t('amendmentsTab.statusWithdrawn')}</option>
                         </select>
+                        <AmendmentOpen
+                          amendment={amendment}
+                          trackedFile={group.trackedFile}
+                          navigate={navigate}
+                          t={t}
+                        />
                       </div>
                     </div>
                   ))}
@@ -541,6 +608,12 @@ export const AmendmentsTab = () => {
                       <option value="rejected">{t('amendmentsTab.statusRejected')}</option>
                       <option value="withdrawn">{t('amendmentsTab.statusWithdrawn')}</option>
                     </select>
+                    <AmendmentOpen
+                      amendment={amendment}
+                      trackedFile={null}
+                      navigate={navigate}
+                      t={t}
+                    />
                   </div>
                 </div>
               );
@@ -550,6 +623,11 @@ export const AmendmentsTab = () => {
       </div>
       </>
       )}
+
+      {/* The group title calls fetchFileDetail, which sets `selectedFile` in the
+          legislative-trains store. Without this mount nothing rendered, so that
+          click did nothing at all. */}
+      <LegislativeFileDetail />
     </div>
   );
 };

@@ -630,3 +630,65 @@
   padding: 0.1rem 0.45rem;
   border-radius: 999px;
 }
+
+/* ---- Opening an amendment ----
+   The cards previously carried only a status dropdown: a drafted amendment
+   could be re-labelled but never reopened. These style the way back into the
+   Amendator, and the group title that opens the file modal. */
+
+.amendments-tab__open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #0570a8;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.amendments-tab__open-btn:hover,
+.amendments-tab__open-btn:focus-visible {
+  background: rgba(6, 147, 227, 0.08);
+  border-color: #0693e3;
+}
+
+.amendments-tab__open-btn:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 1px;
+}
+
+/* Shown instead of the button when no source law can be resolved, so the card
+   explains itself rather than offering a dead action. */
+.amendments-tab__open-note {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* The group title was a bare <h3> with an onClick: not focusable, no cursor,
+   unreachable by keyboard. */
+.amendments-tab__group-title-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.amendments-tab__group-title-btn:hover { color: #0570a8; }
+
+.amendments-tab__group-title-btn:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

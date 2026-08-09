@@ -30,6 +30,18 @@
 
 .lobby-bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
 .lobby-bars li { display: grid; grid-template-columns: 1fr 90px 28px; align-items: center; gap: 0.5rem; }
+/* The organisation rows open that organisation's footprint, so the whole row is
+   the target. The grid moves onto the button; the li just holds it. */
+.lobby-bars li:has(> .lobby-bars__hit) { display: block; }
+.lobby-bars__hit {
+  display: grid; grid-template-columns: 1fr 90px 28px; align-items: center; gap: 0.5rem;
+  width: 100%; padding: 0.2rem 0.3rem; margin: 0 -0.3rem;
+  background: none; border: 0; border-radius: 6px; font: inherit; text-align: left; cursor: pointer;
+  transition: background 0.15s ease;
+}
+.lobby-bars__hit:hover, .lobby-bars__hit:focus-visible { background: rgba(99, 102, 241, 0.08); }
+.lobby-bars__hit:focus-visible { outline: 2px solid #6366f1; outline-offset: -2px; }
+.lobby-bars__hit:hover .lobby-bars__label { color: #4338ca; }
 .lobby-bars__label { font-size: 0.78rem; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lobby-bars__track { background: #eef2f7; border-radius: 999px; height: 8px; overflow: hidden; }
 .lobby-bars__fill { display: block; height: 100%; background: #6366f1; border-radius: 999px; }

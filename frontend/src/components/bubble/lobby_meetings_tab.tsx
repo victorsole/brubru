@@ -207,11 +207,22 @@ export function LobbyMeetingsTab() {
               <section className="lobby-module">
                 <h4><Icon path={mdiOfficeBuildingOutline} size={0.7} /> {t('bubble.lobby.topOrgs', 'Top organisations')}</h4>
                 <ul className="lobby-bars">
+                  {/* The obvious gesture on "AmCham EU, 58 meetings" is to ask
+                      which 58. openOrg already opens exactly that footprint and
+                      was reachable only via the ?org= deep link from Position
+                      Analysis, so these rows sat inert on top of a feature that
+                      already existed. */}
                   {stats.top_organisations.map((o) => (
                     <li key={o.organisation} title={o.organisation}>
-                      <span className="lobby-bars__label">{o.organisation}</span>
-                      <span className="lobby-bars__track"><span className="lobby-bars__fill" style={{ width: `${(o.count / maxOrg) * 100}%` }} /></span>
-                      <span className="lobby-bars__val">{o.count}</span>
+                      <button
+                        type="button"
+                        className="lobby-bars__hit"
+                        onClick={() => openOrg(o.organisation)}
+                      >
+                        <span className="lobby-bars__label">{o.organisation}</span>
+                        <span className="lobby-bars__track"><span className="lobby-bars__fill" style={{ width: `${(o.count / maxOrg) * 100}%` }} /></span>
+                        <span className="lobby-bars__val">{o.count}</span>
+                      </button>
                     </li>
                   ))}
                   {stats.top_organisations.length === 0 && <li className="lobby-bars__empty">{t('bubble.lobby.noData', 'No data')}</li>}
