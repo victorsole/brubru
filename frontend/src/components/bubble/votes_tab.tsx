@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -741,6 +742,17 @@ export const VotesTab = () => {
       </div>
 
       <div className="votes-tab__controls">
+        <ExportButton
+          path={isVL ? '/api/ep-votes/voting-lists' : `/api/ep-votes/${level}`}
+          params={{
+            my_interests: mode === 'pi' ? 'true' : undefined,
+            my_files: mode === 'files' ? 'true' : undefined,
+            search: search.trim() || undefined,
+            procedure: procedure || undefined,
+            sort_by: isVL ? undefined : sortBy,
+          }}
+          limit={200}
+        />
         <LensToggle mode={mode} onChange={setMode} hasPi={hasPi} hasFiles={!!active?.has_tracked_files} />
         <div className="votes-search">
           <Icon path={mdiMagnify} size={0.8} />

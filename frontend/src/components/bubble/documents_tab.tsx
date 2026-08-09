@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState, useRef, useMemo } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { chatReturnParams } from '../../utils/chat_return';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
@@ -768,6 +769,11 @@ export const DocumentsTab = () => {
 
       {/* Filters */}
       <div className="documents-tab__filters">
+        <ExportButton
+          path="/api/documents"
+          params={{ search: searchQuery || undefined }}
+          limit={200}
+        />
         <div className="documents-tab__filter-group">
           <label>{t('documentsTab.type')}</label>
           <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>

@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -882,6 +883,9 @@ export const MyTrackedFilesTab = () => {
         )}
         aside={
           <div className="my-tracked-files-tab__header-actions">
+            {activeTab === 'legislative' && (
+              <ExportButton path="/api/legislative-train/tracked" limit={200} />
+            )}
             <button
               className="my-tracked-files-tab__btn my-tracked-files-tab__btn--icon"
               onClick={handleRefresh}

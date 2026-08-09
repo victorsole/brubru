@@ -12,6 +12,7 @@
  * 6 languages, no em-dashes. Shares the Brubru Databases stylesheet.
  */
 import { useEffect, useState } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -163,6 +164,9 @@ function ResearchCard({ src, i, t }: { src: ResearchSource; i: number; t: any })
         {open && src.has_feed && (
           <motion.div className="db-res-feed" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
             {loadingFeed && <ListSkeleton count={5} />}
+            {!loadingFeed && items && items.length > 0 && (
+              <ExportButton path={`/api/databases/research-feed/${src.id}`} limit={200} />
+            )}
             {items && items.length === 0 && !loadingFeed && (
               <div className="db-note"><Icon path={mdiInformationOutline} size={0.7} /><span>{t('db.noDocs', 'No recent documents to show. Use the portal link above.')}</span></div>
             )}

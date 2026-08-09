@@ -126,6 +126,53 @@ function getDateRange(viewMode: ViewMode, currentDate: Date): { dateFrom: string
   };
 }
 
+export interface EventQuery {
+  dateFrom: string; dateTo: string;
+  instFilter?: string; paFilter?: string; etFilter?: string;
+  cmFilter?: string; dgFilter?: string; cfgFilter?: string; orgFilter?: string;
+  myInterests: boolean; showArchived: boolean;
+}
+
+/**
+ * The query the calendar is currently showing: date range from the view, plus
+ * the cascading filters, with "department" resolved to whichever column it
+ * means for the chosen institution. Exported so the Excel download asks the
+ * same question the grid asked rather than reimplementing this mapping.
+ */
+export function buildEventQuery(state: {
+  viewMode: ViewMode; currentDate: Date;
+  selectedInstitution: string; selectedDepartment: string;
+  selectedPolicyArea: string; selectedEventType: string;
+  myInterests: boolean; showArchived: boolean;
+}): EventQuery {
+  const { dateFrom, dateTo } = getDateRange(state.viewMode, state.currentDate);
+  let etFilter = state.selectedEventType || undefined;
+  let cmFilter: string | undefined;
+  let dgFilter: string | undefined;
+  let cfgFilter: string | undefined;
+  let orgFilter: string | undefined;
+  if (state.selectedDepartment) {
+    if (state.selectedInstitution === 'EP') {
+      // EP values are type-prefixed: committee:AGRI | organiser:Renew Europe | eventtype:plenary_session
+      const idx = state.selectedDepartment.indexOf(':');
+      const kind = idx >= 0 ? state.selectedDepartment.slice(0, idx) : 'committee';
+      const val = idx >= 0 ? state.selectedDepartment.slice(idx + 1) : state.selectedDepartment;
+      if (kind === 'committee') cmFilter = val;
+      else if (kind === 'organiser') orgFilter = val;
+      else if (kind === 'eventtype') etFilter = val;
+    } else if (state.selectedInstitution === 'COMMISSION') dgFilter = state.selectedDepartment;
+    else if (state.selectedInstitution === 'COUNCIL') cfgFilter = state.selectedDepartment;
+  }
+  return {
+    dateFrom, dateTo,
+    instFilter: state.selectedInstitution || undefined,
+    paFilter: state.selectedPolicyArea || undefined,
+    etFilter, cmFilter, dgFilter, cfgFilter, orgFilter,
+    myInterests: state.myInterests, showArchived: state.showArchived,
+  };
+}
+
+
 function formatDateISO(d: Date): string {
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -164,33 +211,12 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const { viewMode, currentDate, selectedInstitution, selectedDepartment, selectedPolicyArea, selectedEventType, myInterests } = get();
-      const { dateFrom, dateTo } = getDateRange(viewMode, currentDate);
-
-      const instFilter = selectedInstitution || undefined;
-      const paFilter = selectedPolicyArea || undefined;
-      let etFilter = selectedEventType || undefined;
-      // The dependent "department" maps to a different column per institution.
-      let cmFilter: string | undefined;
-      let dgFilter: string | undefined;
-      let cfgFilter: string | undefined;
-      let orgFilter: string | undefined;
-      if (selectedDepartment) {
-        if (selectedInstitution === 'EP') {
-          // EP values are type-prefixed: committee:AGRI | organiser:Renew Europe | eventtype:plenary_session
-          const idx = selectedDepartment.indexOf(':');
-          const kind = idx >= 0 ? selectedDepartment.slice(0, idx) : 'committee';
-          const val = idx >= 0 ? selectedDepartment.slice(idx + 1) : selectedDepartment;
-          if (kind === 'committee') cmFilter = val;
-          else if (kind === 'organiser') orgFilter = val;
-          else if (kind === 'eventtype') etFilter = val;
-        } else if (selectedInstitution === 'COMMISSION') dgFilter = selectedDepartment;
-        else if (selectedInstitution === 'COUNCIL') cfgFilter = selectedDepartment;
-      }
+      const q = buildEventQuery(get());
+      const { dateFrom, dateTo, instFilter, paFilter, etFilter, cmFilter, dgFilter, cfgFilter, orgFilter } = q;
 
       const response = await euCalendarService.getEventsInRange(
-        dateFrom, dateTo, instFilter, paFilter, cmFilter, myInterests, dgFilter, cfgFilter, etFilter, orgFilter,
-        get().showArchived,
+        dateFrom, dateTo, instFilter, paFilter, cmFilter, q.myInterests, dgFilter, cfgFilter, etFilter, orgFilter,
+        q.showArchived,
       );
 
       set({

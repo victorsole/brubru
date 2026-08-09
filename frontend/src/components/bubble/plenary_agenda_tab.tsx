@@ -3,6 +3,7 @@
  * dossiers plenary recently adopted on the user's interests, PI-filtered.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +47,7 @@ export function PlenaryAgendaTab() {
       />
 
       <div className="plen-tab__controls">
+        <ExportButton path="/api/plenary-agenda" limit={200} />
         <div className="plen-tab__toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('bubble.plen.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('bubble.plen.all', 'All')}</button>
