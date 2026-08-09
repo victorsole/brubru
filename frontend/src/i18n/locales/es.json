@@ -147,7 +147,11 @@
       "chipAgriFisheries": "Agricultura y pesca"
     },
     "backToBubble": "Volver a My EU Bubble",
-    "backToNamed": "Volver a {{name}}"
+    "backToNamed": "Volver a {{name}}",
+    "openInBubble": "Abrir en My EU Bubble",
+    "openFileInBubble": "Abrir este expediente en My EU Bubble",
+    "openVotesForFile": "Ver cómo se votó",
+    "openCommitteeCalendar": "Qué tiene previsto {{code}}"
   },
   "docs": {
     "title": "Documentos",

@@ -305,15 +305,36 @@ export const MyTrackedFilesTab = () => {
     if (fileParam && openedFileRef.current !== fileParam) {
       openedFileRef.current = fileParam;
       fetchFileDetail(fileParam);
+      return;
+    }
+    // Chat knows a file by its procedure reference, not by our internal id,
+    // so ?procedure= resolves the one to the other and opens the same modal.
+    // /carriages?search= already matches a procedure reference exactly.
+    const procParam = searchParams.get('procedure');
+    if (procParam && openedFileRef.current !== procParam) {
+      openedFileRef.current = procParam;
+      axios
+        .get(`${API_BASE}/api/legislative-train/carriages`, {
+          params: { search: procParam, limit: 5 },
+        })
+        .then((r) => {
+          const rows = r.data?.carriages || r.data?.items || [];
+          const hit = rows.find(
+            (c: { oeil_procedure_ref?: string }) => c.oeil_procedure_ref === procParam,
+          ) || rows[0];
+          if (hit?.id) fetchFileDetail(hit.id);
+        })
+        .catch(() => { /* the tab still renders; only the auto-open is lost */ });
     }
   }, [searchParams]);
 
   useEffect(() => {
     // Modal was closed (selectedFile cleared) but the URL still carries ?file=
     // from a deep-link we already consumed -> clean it so it can't auto-reopen.
-    if (!selectedFile && openedFileRef.current && searchParams.get('file')) {
+    if (!selectedFile && openedFileRef.current && (searchParams.get('file') || searchParams.get('procedure'))) {
       const next = new URLSearchParams(searchParams);
       next.delete('file');
+      next.delete('procedure');
       setSearchParams(next, { replace: true });
       openedFileRef.current = null;
     }

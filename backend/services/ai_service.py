@@ -1627,16 +1627,20 @@ class AIService:
                 label = str(doc_type).replace("_", " ").title()
                 yield json.dumps({"type": "status", "message": f"Preparing to draft your {label.lower()}..."})
 
-            # Emit detected entities for pre-users (used by smart suggestions)
-            if is_pre_user:
-                yield json.dumps({
-                    "type": "entities",
-                    "mep_names": entities.mep_names[:3],
-                    "committee_codes": entities.committee_codes[:3],
-                    "procedure_references": entities.procedure_references[:3],
-                    "celex_numbers": entities.celex_numbers[:3],
-                    "policy_areas": entities.policy_areas[:3],
-                })
+            # The identifiers this answer is about: procedure references, CELEX
+            # numbers, committees. Emitted for everyone, not just pre-users.
+            # This was scoped to the pre-user smart-suggestion experiment, which
+            # meant subscribers -- the only people who have a My EU Bubble to
+            # open these in -- received nothing, and their suggestions fell back
+            # to the generic "walk me through this" line.
+            yield json.dumps({
+                "type": "entities",
+                "mep_names": entities.mep_names[:3],
+                "committee_codes": entities.committee_codes[:3],
+                "procedure_references": entities.procedure_references[:3],
+                "celex_numbers": entities.celex_numbers[:3],
+                "policy_areas": entities.policy_areas[:3],
+            })
 
         # Build context (the slow part: 2-5s)
         # Use an asyncio.Queue to emit progress status during context building

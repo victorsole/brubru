@@ -147,7 +147,11 @@
       "chipAgriFisheries": "Landbouw en visserij"
     },
     "backToBubble": "Terug naar My EU Bubble",
-    "backToNamed": "Terug naar {{name}}"
+    "backToNamed": "Terug naar {{name}}",
+    "openInBubble": "Openen in My EU Bubble",
+    "openFileInBubble": "Open dit dossier in My EU Bubble",
+    "openVotesForFile": "Bekijk hoe er is gestemd",
+    "openCommitteeCalendar": "Wat {{code}} op de agenda heeft"
   },
   "docs": {
     "title": "Documenten",
