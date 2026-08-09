@@ -32,7 +32,7 @@ import {
   mdiShieldOutline, mdiSwapHorizontal, mdiRobotOutline, mdiAtomVariant, mdiRocketLaunchOutline,
   mdiGold, mdiChartLine, mdiChevronDown, mdiChevronUp,
   mdiHistory, mdiPlusCircleOutline, mdiPencilOutline, mdiBookPlusOutline,
-  mdiMagnify, mdiClose, mdiChevronRight, mdiCloseCircle,
+  mdiMagnify, mdiClose, mdiChevronRight, mdiCloseCircle, mdiDumbbell,
 } from '@mdi/js';
 import { createPortal } from 'react-dom';
 import { marked } from 'marked';
@@ -68,6 +68,18 @@ const MON_ICON: Record<string, string> = {
   defence: mdiShieldOutline, cmu: mdiBankOutline, tariff: mdiSwapHorizontal,
   ai: mdiRobotOutline, quantum: mdiAtomVariant, startup: mdiRocketLaunchOutline,
   gold: mdiGold, markets: mdiChartLine,
+};
+
+// A ninth card in the Beresol Monitors grid: Massimino's Fitness Intelligence.
+// A sibling product, not a Beresol monitor, so it lives here rather than in the
+// /beresol-monitors payload, which must keep mirroring the Beresol API exactly.
+const EXTRA_MONITOR = {
+  slug: 'massimino-fitness-intelligence',
+  title: 'Fitness Intelligence',
+  description:
+    'European fitness industry data: gym penetration rates, market sizes and '
+    + 'growth trends across Europe.',
+  url: 'https://massimino.fitness/fitness-intelligence',
 };
 
 const fmtDate = (iso?: string) => {
@@ -825,10 +837,17 @@ function BeresolMonitors({ t }: { t: any }) {
         icon={mdiRadar}
         title={t('db.beresolTitle', 'Beresol Monitors')}
         subtitle={res.description || t('db.beresolDesc2', 'Beresol’s policy-intelligence monitors, live from the Beresol Monitor API.')}
-        kpis={[{ value: res.count || res.monitors.length, label: t('db.beresolKpi', 'live monitors') }]}
+        /* +1: the grid shows the Beresol monitors plus the Fitness Intelligence card. */
+        kpis={[{ value: (res.count || res.monitors.length) + 1, label: t('db.beresolKpi', 'live monitors') }]}
         cta={{ label: t('db.openBeresol', 'Open Beresol'), url: res.source_url || 'https://beresol.eu' }}
       />
       <div className="db-monitor-grid">
+        {/* Massimino's Fitness Intelligence sits alongside the Beresol monitors
+            as a ninth card. It is a sibling product rather than a Beresol
+            monitor, so it is added here and not to /beresol-monitors, which
+            mirrors the Beresol API and should keep reporting exactly what that
+            API returns. It has no in-app digest, so the card opens the
+            dashboard directly and says so. */}
         {res.monitors.map((m, i) => (
           <motion.button key={m.monitor} type="button" className={`db-monitor-card${sel === m.monitor ? ' is-active' : ''}`}
             custom={i} variants={cardVariants} initial="hidden" animate="show" whileHover={{ y: -4, boxShadow: '0 12px 28px rgba(15,23,42,0.12)' }}
@@ -842,6 +861,27 @@ function BeresolMonitors({ t }: { t: any }) {
             </span>
           </motion.button>
         ))}
+
+        <motion.a
+          key={EXTRA_MONITOR.slug}
+          className="db-monitor-card"
+          href={EXTRA_MONITOR.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          custom={res.monitors.length}
+          variants={cardVariants}
+          initial="hidden"
+          animate="show"
+          whileHover={{ y: -4, boxShadow: '0 12px 28px rgba(15,23,42,0.12)' }}
+        >
+          <span className="db-monitor-card__icon"><Icon path={mdiDumbbell} size={0.95} /></span>
+          <h4>{t('db.monitorFitnessTitle', EXTRA_MONITOR.title)}</h4>
+          <p>{t('db.monitorFitnessDesc', EXTRA_MONITOR.description)}</p>
+          <span className="db-monitor-card__more">
+            {t('db.openDashboard', 'Open dashboard')}
+            <Icon path={mdiOpenInNew} size={0.6} />
+          </span>
+        </motion.a>
       </div>
 
       <AnimatePresence mode="wait">
