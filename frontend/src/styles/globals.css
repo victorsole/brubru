@@ -351,12 +351,16 @@ button {
  * the feedback form and all of the admin panel, where the main CTA read as
  * plain text 45px wide.
  *
- * These are the base definitions, unscoped. `.landing .btn` keeps a higher
- * specificity, so the landing page is unchanged, and the modifiers already
- * defined elsewhere (.btn--oauth*, .btn--danger, .btn--icon) still win where
- * they are more specific.
+ * The base sits in `:where()`, at zero specificity. That matters: written as
+ * a plain `.btn` it tied with `.btn--oauth-linkedin` (both 0,1,0) and, loading
+ * later, its `background: transparent` won and flattened the solid blue
+ * LinkedIn button on the login page. At zero specificity every modifier wins,
+ * wherever it is defined and in whatever order.
+ *
+ * The modifiers below stay at normal specificity so they beat the base, while
+ * `.landing .btn` (0,2,0) still beats them and leaves the landing untouched.
  */
-.btn {
+:where(.btn) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -377,7 +381,7 @@ button {
     transform var(--transition-fast);
 }
 
-.btn:disabled {
+:where(.btn):disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
