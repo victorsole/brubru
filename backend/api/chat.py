@@ -144,8 +144,21 @@ class CitationsResponse(BaseModel):
 
 # Database helper functions (sync, run via executor)
 
-def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None, pre_user_id: Optional[str] = None) -> tuple:
-    """Get existing chat or create new one. Returns (chat_id_str, messages_list)."""
+def _get_or_create_chat(
+    chat_id_str: str,
+    user_id: Optional[str] = None,
+    pre_user_id: Optional[str] = None,
+    is_probe: bool = False,
+) -> tuple:
+    """Get existing chat or create new one. Returns (chat_id_str, messages_list).
+
+    `is_probe` marks a chat as our own synthetic traffic (deploy verification,
+    query audits, link checks) so usage analysis can exclude it structurally.
+    Until 9 Aug 2026 probes were identified by pattern-matching `pre_user_id`
+    for non-UUID slugs, which missed any probe run that sent no identifier at
+    all -- a burst of 20 audit queries in 9 minutes on 7 Aug was counted as 20
+    genuine anonymous users. Set it with the `X-Brubru-Probe: 1` request header.
+    """
     db = SessionLocal()
     try:
         # Try to find existing chat by ID
@@ -175,13 +188,30 @@ def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None, pre_use
         elif pre_user_id:
             chat_user_id = uuid_mod.uuid5(uuid_mod.NAMESPACE_URL, f"preuser:{pre_user_id}")
         else:
-            chat_user_id = uuid_mod.uuid4()
+            # Neither identifier supplied. This used to mint a throwaway uuid4()
+            # into user_id and leave pre_user_id NULL, producing a chat that
+            # belongs to nobody: it cannot join `users` (so it reads as
+            # anonymous) and it cannot join `pre_user_events` (so the funnel
+            # never sees the question). 51 of 60 anonymous chats in the 30 days
+            # to 9 Aug 2026 were orphaned this way -- 49 anonymous messages
+            # surfaced as 4 recorded `query_1` events, making activation look
+            # roughly 12x worse than it was.
+            #
+            # Mint a real pre_user_id instead and persist it, so the row is
+            # self-consistent and joinable.
+            pre_user_id = str(uuid_mod.uuid4())
+            chat_user_id = uuid_mod.uuid5(uuid_mod.NAMESPACE_URL, f"preuser:{pre_user_id}")
+            logger.info(
+                "chat created with no user_id and no pre_user_id; minted "
+                "pre_user_id=%s so the session stays attributable", pre_user_id
+            )
 
         new_chat = Chat(
             user_id=chat_user_id,
             pre_user_id=pre_user_id,
             title=None,
             message_count=0,
+            chat_metadata={"is_probe": True} if is_probe else None,
         )
         db.add(new_chat)
         db.commit()
@@ -433,11 +463,14 @@ async def send_message(
     request: ChatMessageRequest,
     background_tasks: BackgroundTasks,
     authorization: Optional[str] = Header(None),
+    x_brubru_probe: Optional[str] = Header(None, alias="X-Brubru-Probe"),
 ):
     """
     Send message and get AI response with EU context.
     """
     start_time = datetime.now()
+    # See stream_message: our own verification traffic self-identifies.
+    is_probe = str(x_brubru_probe or "").lower() in {"1", "true", "yes"}
 
     # AUTHORISATION: derive user_id from the JWT only. The body's `user_id`
     # field is logged for forensics (a mismatch is an attack signal) but never
@@ -457,11 +490,13 @@ async def send_message(
 
         if request.chat_id:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, request.chat_id, request.user_id, request.pre_user_id
+                None, _get_or_create_chat, request.chat_id, request.user_id,
+                request.pre_user_id, is_probe
             )
         else:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id, request.pre_user_id
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id,
+                request.pre_user_id, is_probe
             )
 
         # Build conversation history
@@ -564,11 +599,15 @@ async def send_message(
 async def stream_message(
     request: ChatMessageRequest,
     authorization: Optional[str] = Header(None),
+    x_brubru_probe: Optional[str] = Header(None, alias="X-Brubru-Probe"),
 ):
     """
     Stream AI response.
     """
     try:
+        # Our own verification traffic self-identifies so it can be excluded
+        # from user analytics structurally rather than by guessing at id shapes.
+        is_probe = str(x_brubru_probe or "").lower() in {"1", "true", "yes"}
         # AUTHORISATION: see /message — JWT is the only authoritative source.
         jwt_user_id = _extract_user_id_from_jwt(authorization)
         if request.user_id and request.user_id != jwt_user_id:
@@ -582,11 +621,13 @@ async def stream_message(
 
         if request.chat_id:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, request.chat_id, request.user_id, request.pre_user_id
+                None, _get_or_create_chat, request.chat_id, request.user_id,
+                request.pre_user_id, is_probe
             )
         else:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id, request.pre_user_id
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id,
+                request.pre_user_id, is_probe
             )
 
         history = [

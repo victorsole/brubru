@@ -57,6 +57,7 @@ from services.billing.api_meter import (
     record_usage,
     refund,
     sandbox_consume,
+    set_event_status,
 )
 from services.mcp.tools import (
     TOOLS,
@@ -358,6 +359,7 @@ async def _dispatch_tools_call(
         if not is_sandbox and not is_admin and usage_evt is not None:
             refund(db, api_key.user_id, cost)
             mark_event_refunded(db, usage_evt.id)
+        _stamp_status(db, usage_evt, 400)
         return _err(
             req_id,
             -32602,
@@ -369,6 +371,7 @@ async def _dispatch_tools_call(
         if not is_sandbox and not is_admin and usage_evt is not None:
             refund(db, api_key.user_id, cost)
             mark_event_refunded(db, usage_evt.id)
+        _stamp_status(db, usage_evt, 500)
         return _err(
             req_id,
             _ERR_TOOL_HANDLER_FAILED,
@@ -376,7 +379,26 @@ async def _dispatch_tools_call(
             data={"tool": tool.name, "exception_type": type(exc).__name__},
         )
 
+    _stamp_status(db, usage_evt, 200)
     return _ok(req_id, _tool_text_result(payload))
+
+
+def _stamp_status(db, usage_evt, status_code: int) -> None:
+    """Record the semantic outcome of an MCP tool call on its ledger row.
+
+    JSON-RPC answers HTTP 200 whatever happens, and BillingRefundMiddleware
+    only watches /api/v1 and /api/v2, so MCP calls would otherwise keep the NULL
+    status that record_usage() writes before the handler runs. We stamp the
+    JSON-RPC outcome instead of the transport status: 200 served, 400 bad
+    arguments, 500 handler crash. Admin calls skip metering entirely and have no
+    row to stamp.
+    """
+    if usage_evt is None:
+        return
+    try:
+        set_event_status(db, usage_evt.id, status_code)
+    except Exception as exc:  # noqa: BLE001 -- telemetry must never break a call
+        logger.error(f"[mcp] status stamp failed for event {usage_evt.id}: {exc}")
 
 
 # ---------------------------------------------------------------------------

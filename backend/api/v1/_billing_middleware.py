@@ -30,7 +30,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from core.database import SessionLocal
-from services.billing.api_meter import mark_event_refunded, refund
+from services.billing.api_meter import mark_event_refunded, refund, set_event_status
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,25 @@ class BillingRefundMiddleware(BaseHTTPMiddleware):
         user_id_str = getattr(request.state, "billing_user_id", None)
         is_sandbox = getattr(request.state, "billing_is_sandbox", False)
 
-        if event_id is None or cost_micro is None or user_id_str is None:
+        if event_id is None:
+            return response
+
+        # Stamp the outcome onto the ledger row for EVERY metered call, before
+        # any of the refund early-returns below. The debit runs before the
+        # handler, so record_usage() writes status_code=NULL and this is the
+        # only point that knows the answer. Until 9 Aug 2026 nothing filled it
+        # in, so 4xx and 5xx were indistinguishable from success in every usage
+        # report -- the API looked flawless because its errors were unrecorded.
+        # Never let this break a response the client already has.
+        _db = SessionLocal()
+        try:
+            set_event_status(_db, int(event_id), response.status_code)
+        except Exception as exc:
+            logger.error(f"[billing] status stamp failed for event {event_id}: {exc}")
+        finally:
+            _db.close()
+
+        if cost_micro is None or user_id_str is None:
             return response
 
         # Sandbox keys are not refunded — sandbox pool counter advances

@@ -182,6 +182,25 @@ def record_usage(
     return evt
 
 
+def set_event_status(db: Session, event_id: int, status_code: int) -> None:
+    """Stamp the final HTTP status onto an already-recorded usage event.
+
+    The debit -- and therefore the ledger row -- happens BEFORE the route
+    handler runs, so `record_usage` cannot know the outcome and writes NULL.
+    Nothing used to fill it in afterwards, so every one of the 620 calls in the
+    30 days to 9 Aug 2026 carried a NULL status and the API's error rate read as
+    a clean zero. That zero was an artefact of not looking.
+
+    Called by BillingRefundMiddleware, which is the only place that sees both
+    the event id and the final response.
+    """
+    db.execute(
+        text("UPDATE public.api_usage_events SET status_code = :sc WHERE id = :eid"),
+        {"sc": int(status_code), "eid": event_id},
+    )
+    db.commit()
+
+
 def mark_event_refunded(db: Session, event_id: int) -> None:
     db.execute(
         text("UPDATE public.api_usage_events SET refunded = TRUE WHERE id = :eid"),

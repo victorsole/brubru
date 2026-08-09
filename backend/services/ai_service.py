@@ -1911,7 +1911,41 @@ class AIService:
             except Exception as e:
                 logger.warning(f"Action routing failed in stream (non-critical): {e}")
 
-        logger.info(f"Streamed response in {(datetime.now() - start_time).total_seconds():.2f}s")
+        total_ms = (datetime.now() - start_time).total_seconds() * 1000
+
+        # Analytics. This ran only in chat(), which no real user reaches --
+        # /api/chat/stream is the only live path (see
+        # memory/feedback_chat_stream_is_the_only_real_path). The consequence
+        # was that chat_analytics stopped describing reality: 28 rows for 169
+        # answers in the 30 days to 9 Aug 2026, so provider mix, latency and
+        # citation counts were quietly reporting on dead code.
+        #
+        # Reuses the `telemetry` dict already collected above rather than
+        # introducing a second provider-reporting mechanism. Fired as a task so
+        # it never delays the final SSE frame, and wrapped so a telemetry
+        # failure can never break an answer the user already has.
+        try:
+            asyncio.create_task(
+                self._log_analytics(
+                    user_id=user_id,
+                    provider=telemetry.get("provider", "") or "unknown",
+                    model=telemetry.get("model", "") or self.model,
+                    tokens_used=telemetry.get("tokens_used", 0) or 0,
+                    response_time_ms=total_ms,
+                    search_time_ms=round(context_ms, 1),
+                    had_knowledge_gap=False,
+                    knowledge_gap_type=None,
+                    source_tiers_used=self._extract_source_tiers(stream_citations),
+                    citation_count=len(stream_citations),
+                    context_sources_count=len(stream_citations),
+                    query_length=len(user_message),
+                    response_length=len("".join(streamed_parts)),
+                )
+            )
+        except Exception as e:
+            logger.warning(f"Analytics logging failed in stream (non-critical): {e}")
+
+        logger.info(f"Streamed response in {total_ms / 1000:.2f}s")
 
     _policy_taxonomy_cache: Optional[dict] = None
 
