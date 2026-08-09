@@ -13,6 +13,7 @@
  * Data: /api/lobby-meetings.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useSearchParams } from 'react-router-dom';
@@ -172,6 +173,13 @@ export function LobbyMeetingsTab() {
 
       {/* Shared controls */}
       <div className="lobby-tab__controls">
+        {(view === 'commission' || view === 'parliament') && (
+          <ExportButton
+            path={view === 'parliament' ? '/api/lobby-meetings/parliament' : '/api/lobby-meetings'}
+            params={{ my_interests: myInterests, search: search || undefined }}
+            limit={200}
+          />
+        )}
         <div className="lobby-tab__toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('bubble.lobby.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('bubble.lobby.all', 'All')}</button>

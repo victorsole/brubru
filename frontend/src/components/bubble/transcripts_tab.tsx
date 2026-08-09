@@ -6,6 +6,7 @@
  * Surfaces the existing committee transcription pipeline; no ASR in the client.
  */
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
@@ -171,6 +172,11 @@ export function TranscriptsTab() {
 
       {/* Filters - apply to both Suggested and the catalog below */}
       <div className="transcripts-tab__controls">
+        <ExportButton
+          path="/api/transcripts"
+          params={{ my_interests: myInterests, institution: institution || undefined, search: search || undefined }}
+          limit={200}
+        />
         <div className="transcripts-tab__toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('bubble.transcripts.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('bubble.transcripts.all', 'All')}</button>

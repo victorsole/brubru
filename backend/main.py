@@ -155,6 +155,11 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    # The frontend is served from SiteGround and the API from Railway, so the
+    # download button can only read these if they are explicitly exposed.
+    # X-Export-Rows tells the user how many rows they actually got (exports are
+    # capped per endpoint); Content-Disposition carries the filename.
+    expose_headers=["X-Export-Rows", "Content-Disposition"],
 )
 
 # Billing refund middleware (Phase B — refunds 5xx debits on /api/v1/*).

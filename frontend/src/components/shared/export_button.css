@@ -1,0 +1,55 @@
+/* Download control shared by every My EU Bubble sub-tab. Sits beside the tab's
+   filters, so it reads as "download this view" rather than a separate report. */
+
+.export-button__wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid #d7dde3;
+  border-radius: 8px;
+  background: #fff;
+  color: #24303c;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.export-button:hover:not(:disabled),
+.export-button:focus-visible:not(:disabled) {
+  border-color: #1d7044;          /* the green Excel users expect */
+  color: #1d7044;
+  background: #f5fbf7;
+}
+
+.export-button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.export-button__note {
+  font-size: 0.76rem;
+  color: #5b6672;
+}
+
+.export-button__note--error {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #a4402a;
+}
+
+@media (max-width: 767px) {
+  .export-button__note {
+    flex-basis: 100%;
+  }
+}

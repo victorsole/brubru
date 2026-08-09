@@ -5313,5 +5313,12 @@
     "finish": "Voltooien",
     "closeAria": "Rondleiding sluiten",
     "progressOf": "{{current}} van {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Download wat je ziet als Excel-bestand",
+    "done": "{{n}} rijen gedownload",
+    "doneCapped": "De eerste {{n}} rijen gedownload",
+    "failed": "Hier valt nog niets te exporteren"
   }
 }

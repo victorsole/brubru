@@ -5313,5 +5313,12 @@
     "finish": "Finish",
     "closeAria": "Close tour",
     "progressOf": "{{current}} of {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Download what you are seeing as an Excel file",
+    "done": "Downloaded {{n}} rows",
+    "doneCapped": "Downloaded the first {{n}} rows",
+    "failed": "Nothing to export here yet"
   }
 }

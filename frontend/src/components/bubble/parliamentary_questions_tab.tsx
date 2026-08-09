@@ -7,6 +7,7 @@
  * institution it targets, awaiting/answered status, and an AI "why this matters".
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -96,6 +97,17 @@ export function ParliamentaryQuestionsTab() {
 
       {/* Controls */}
       <div className="parlq-tab__controls">
+        <ExportButton
+          path="/api/parliamentary-questions"
+          params={{
+            my_interests: mode === 'pi',
+            my_files: mode === 'files' ? 'true' : undefined,
+            question_type: questionType || undefined,
+            answered: answered === '' ? undefined : answered,
+            search: search || undefined,
+          }}
+          limit={200}
+        />
         <LensToggle mode={mode} onChange={setMode} hasPi hasFiles={hasTracked} />
         <select className="parlq-tab__select" value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
           <option value="">{t('bubble.parlq.allTypes', 'All types')}</option>

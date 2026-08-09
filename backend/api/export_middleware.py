@@ -10,6 +10,7 @@ normal traffic. See services/export_tabular.py for the flatten/serialise rules.
 from __future__ import annotations
 
 import json
+from datetime import date
 
 import anyio
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -59,11 +60,12 @@ class TabularExportMiddleware(BaseHTTPMiddleware):
         # pattern behind the prod 502 freezes). If it fails (an un-encodable value),
         # degrade gracefully to the JSON body rather than a 500.
         try:
-            data = await anyio.to_thread.run_sync(serialize, records, fmt)
+            data = await anyio.to_thread.run_sync(serialize, records, fmt, request.url.path)
         except Exception:
             return Response(content=body, status_code=200, media_type="application/json",
                             headers=passthrough_headers)
-        fname = (request.url.path.strip("/").split("/")[-1] or "export").replace(".", "_")
+        stem = (request.url.path.strip("/").split("/")[-1] or "export").replace(".", "_")
+        fname = f"brubru_{stem}_{date.today().isoformat()}_{len(records)}-rows"
         passthrough_headers["Content-Disposition"] = f'attachment; filename="{fname}.{fmt}"'
         passthrough_headers["X-Export-Rows"] = str(len(records))
         return Response(content=data, status_code=200, media_type=CONTENT_TYPES[fmt],

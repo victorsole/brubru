@@ -5313,5 +5313,12 @@
     "finish": "Finalizar",
     "closeAria": "Cerrar la visita",
     "progressOf": "{{current}} de {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Descargar lo que estás viendo como archivo de Excel",
+    "done": "Descargadas {{n}} filas",
+    "doneCapped": "Descargadas las primeras {{n}} filas",
+    "failed": "Aquí todavía no hay nada que exportar"
   }
 }

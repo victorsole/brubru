@@ -5313,5 +5313,12 @@
     "finish": "Terminer",
     "closeAria": "Fermer la visite",
     "progressOf": "{{current}} sur {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Télécharger ce que vous voyez au format Excel",
+    "done": "{{n}} lignes téléchargées",
+    "doneCapped": "Les {{n}} premières lignes téléchargées",
+    "failed": "Rien à exporter ici pour l'instant"
   }
 }

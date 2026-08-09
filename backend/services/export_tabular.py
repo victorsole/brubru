@@ -72,6 +72,17 @@ def extract_records(body: Any) -> Optional[list[dict]]:
             arr = body.get(key)
             if isinstance(arr, list):
                 return [r for r in arr if isinstance(r, dict)]
+        # Endpoints that name their own envelope (`carriages`, `events`,
+        # `tracked_files`, `dates`, ...) were silently passed through as JSON.
+        # Fall back to the longest list of objects rather than maintaining a
+        # list of every key any endpoint might invent.
+        candidates = {
+            k: v for k, v in body.items()
+            if isinstance(v, list) and v and all(isinstance(r, dict) for r in v)
+        }
+        if candidates:
+            best = max(candidates, key=lambda k: len(candidates[k]))
+            return candidates[best]
         feats = body.get("features")           # GeoJSON FeatureCollection
         if isinstance(feats, list):
             out = []
@@ -84,9 +95,13 @@ def extract_records(body: Any) -> Optional[list[dict]]:
     return None
 
 
-def to_csv(records: list[dict]) -> bytes:
+def to_csv(records: list[dict], path: str | None = None) -> bytes:
     rows = [flatten(r) for r in records]
-    cols = _columns(rows)
+    spec = columns_for(path)
+    if spec:
+        cols, rows = _curate(rows, spec)
+    else:
+        cols = _columns(rows)
     buf = io.StringIO()
     w = csv.DictWriter(buf, fieldnames=cols, extrasaction="ignore")
     w.writeheader()
@@ -100,10 +115,14 @@ def _xlsx_cell(v: Any) -> Any:
     return _ILLEGAL_XLSX.sub("", c) if isinstance(c, str) else c
 
 
-def to_xlsx(records: list[dict]) -> bytes:
+def to_xlsx(records: list[dict], path: str | None = None) -> bytes:
     from openpyxl import Workbook
     rows = [flatten(r) for r in records]
-    cols = _columns(rows)
+    spec = columns_for(path)
+    if spec:
+        cols, rows = _curate(rows, spec)
+    else:
+        cols = _columns(rows)
     wb = Workbook(write_only=True)              # streaming writer, low memory
     ws = wb.create_sheet("data")
     ws.append([_xlsx_cell(c) for c in cols])
@@ -120,5 +139,162 @@ CONTENT_TYPES = {
 }
 
 
-def serialize(records: list[dict], fmt: str) -> bytes:
-    return to_csv(records) if fmt == "csv" else to_xlsx(records)
+# ---------------------------------------------------------------------------
+# Curated columns for the My EU Bubble downloads
+# ---------------------------------------------------------------------------
+# The module contract above is auto-flatten-everything, and the Data API's 934
+# endpoints depend on it: an API customer wants every field, uncurated. These
+# maps are an OPT-IN OVERLAY for the handful of paths behind MEUB's download
+# button, where the audience is a policy officer opening the file in Excel
+# rather than a developer parsing it.
+#
+# A mapped path emits ONLY these columns, in this order, with these headers.
+# That is the point -- it drops internal plumbing (`matches_tracked`,
+# `search_vector`, ids) that means nothing in a spreadsheet. Any path without
+# an entry keeps the uncurated behaviour untouched.
+#
+# Longest matching prefix wins, so "/api/ep-votes/plenary" can differ from
+# "/api/ep-votes".
+COLUMN_MAPS: dict[str, list[tuple[str, str]]] = {
+    "/api/parliamentary-questions": [
+        ("reference", "Reference"),
+        ("type", "Type"),
+        ("subject", "Subject"),
+        ("submitted_date", "Submitted"),
+        ("answered_date", "Answered"),
+        ("meps", "MEPs"),
+        ("answering_institution", "Answering institution"),
+        ("answering_commissioner", "Commissioner"),
+        ("related_celex", "Related law (CELEX)"),
+        ("url", "Link"),
+    ],
+    "/api/ep-votes": [
+        ("title", "File"),
+        ("procedure_ref", "Procedure"),
+        ("vote_date", "Date"),
+        ("committee", "Committee"),
+        ("result", "Result"),
+        ("votes_for", "For"),
+        ("votes_against", "Against"),
+        ("votes_abstain", "Abstentions"),
+        ("url", "Link"),
+    ],
+    "/api/lobby-meetings": [
+        ("meeting_date", "Date"),
+        ("organisation_met", "Organisation"),
+        ("org_category", "Organisation type"),
+        ("org_country", "Country"),
+        ("host_name", "Met with"),
+        ("host_role", "Role"),
+        ("host_dg_name|host_dg", "DG"),
+        ("host_cabinet", "Cabinet"),
+        ("subject", "Subject"),
+        ("representatives", "Representatives"),
+        ("location", "Location"),
+        ("transparency_register_id", "Transparency Register ID"),
+        ("source_url", "Link"),
+    ],
+    "/api/eu-calendar/events": [
+        ("start_date", "Date"),
+        ("start_time", "Time"),
+        ("title", "Event"),
+        ("institution", "Institution"),
+        ("event_type", "Type"),
+        ("ep_committee_code", "Committee"),
+        ("council_configuration", "Council configuration"),
+        ("location", "Location"),
+        ("procedure_refs", "Procedures"),
+        ("source_url", "Link"),
+    ],
+    "/api/legislative-train/carriages": [
+        ("short_title|title", "File"),
+        ("oeil_procedure_ref", "Procedure"),
+        ("current_status", "Status"),
+        ("committee", "Committee"),
+        ("rapporteur", "Rapporteur"),
+        ("days_in_current_status", "Days in status"),
+        ("is_blocked", "Blocked"),
+        ("policy_areas", "Policy areas"),
+    ],
+    "/api/consultations": [
+        ("short_title|title", "Consultation"),
+        ("status", "Status"),
+        ("consultation_type", "Type"),
+        ("start_date", "Opens"),
+        ("end_date", "Deadline"),
+        ("days_remaining", "Days left"),
+        ("dg_name|dg_responsible", "Directorate-General"),
+        ("policy_areas", "Policy areas"),
+        ("feedback_count", "Feedback received"),
+        ("portal_url", "Link"),
+    ],
+    "/api/transcripts": [
+        ("meeting_date", "Date"),
+        ("title", "Meeting"),
+        ("institution", "Institution"),
+        ("committee_code", "Committee"),
+        ("status", "Status"),
+        ("language", "Language"),
+        ("duration_minutes", "Minutes"),
+        ("word_count", "Words"),
+        ("procedure_refs", "Procedures"),
+    ],
+    "/api/council-watch": [
+        ("date", "Date"),
+        ("title", "Item"),
+        ("kind", "Type"),
+        ("institution", "Institution"),
+        ("configuration", "Council configuration"),
+        ("summary", "Summary"),
+        ("url", "Link"),
+    ],
+    "/api/mep-watch": [
+        ("name", "MEP"),
+        ("question_count", "Questions"),
+        ("latest_date", "Latest question"),
+        ("sample_subjects", "Recent subjects"),
+        ("profile_url", "Profile"),
+    ],
+}
+
+
+def columns_for(path: str | None) -> Optional[list[tuple[str, str]]]:
+    """Curated (field, header) pairs for an API path, longest prefix wins."""
+    if not path:
+        return None
+    best: Optional[str] = None
+    for prefix in COLUMN_MAPS:
+        if path.startswith(prefix) and (best is None or len(prefix) > len(best)):
+            best = prefix
+    return COLUMN_MAPS[best] if best else None
+
+
+def _pick(row: dict, field: str) -> Any:
+    """Value for a field spec; "a|b" takes the first candidate with a value."""
+    for cand in field.split("|"):
+        v = row.get(cand)
+        if v not in (None, ""):
+            return v
+    return ""
+
+
+def _curate(rows: list[dict], spec: list[tuple[str, str]]) -> tuple[list[str], list[dict]]:
+    """Reduce flattened rows to the mapped fields, renamed and reordered.
+
+    A mapped field absent from every row is dropped rather than emitted as a
+    blank column, so a sheet never advertises data the endpoint does not return.
+    A spec may list fallbacks as "short_title|title": the AI-written short name
+    is the better column heading, but it is still being backfilled, so a file
+    without one must show its full title rather than an empty first cell.
+    """
+    present = [
+        (f, h) for f, h in spec
+        if any(any(c in r for c in f.split("|")) for r in rows)
+    ]
+    headers = [h for _, h in present]
+    out = [{h: _pick(r, f) for f, h in present} for r in rows]
+    return headers, out
+
+
+def serialize(records: list[dict], fmt: str, path: str | None = None) -> bytes:
+    return to_csv(records, path) if fmt == "csv" else to_xlsx(records, path)

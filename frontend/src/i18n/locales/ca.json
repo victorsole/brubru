@@ -5313,5 +5313,12 @@
     "finish": "Finalitza",
     "closeAria": "Tanca la visita",
     "progressOf": "{{current}} de {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Descarrega el que estàs veient com a fitxer d'Excel",
+    "done": "Descarregades {{n}} files",
+    "doneCapped": "Descarregades les primeres {{n}} files",
+    "failed": "Aquí encara no hi ha res per exportar"
   }
 }
