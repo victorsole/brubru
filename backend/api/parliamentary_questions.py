@@ -96,6 +96,37 @@ def _apply_pi(query, user: User):
     return query.filter(or_(*clauses)), True
 
 
+def _tracked_file_names(db, tracked_procs) -> List[str]:
+    """Distinctive names of the user's tracked files, for keyword matching.
+
+    Prefers legislative_carriages.short_title (the readable name, e.g. "Critical
+    Medicines Act") and falls back to the official title. Names shorter than 12
+    characters or of fewer than two words are dropped: they are too generic to
+    match on and would pull in unrelated questions.
+    """
+    if not tracked_procs:
+        return []
+    try:
+        rows = db.execute(
+            text(
+                """
+                SELECT COALESCE(NULLIF(short_title, ''), title) AS name
+                FROM legislative_carriages
+                WHERE oeil_procedure_ref = ANY(:refs)
+                """
+            ),
+            {"refs": sorted(tracked_procs)},
+        ).all()
+    except Exception as exc:  # pragma: no cover - lens degrades, list still shows
+        logger.warning("[parlq] tracked file names unavailable: %s", exc)
+        return []
+    names = []
+    for (name,) in rows:
+        n = (name or "").strip()
+        if len(n) >= 12 and len(n.split()) >= 2:
+            names.append(n[:120])
+    return names
+
 def _clean_question_text(raw: Optional[str]) -> Optional[str]:
     """Strip the doceo boilerplate from a stored question dump, leaving just the
     body. The header (Question for written answer / reference / 'to the' /
@@ -200,6 +231,20 @@ def list_questions(
         conds = []
         if tracked_procs:
             conds.append(ParliamentaryQuestion.procedure_ref.in_(list(tracked_procs)))
+            # EP question records do not cite the dossier they concern: every
+            # stored procedure_ref is the question's own reference and only 9 of
+            # 5,674 questions mention an OEIL reference anywhere in their text,
+            # so the clause above matches nothing on real data and this lens
+            # returned an empty list for every user who clicked it.
+            #
+            # Match the way the PI lens already does, on words rather than
+            # identifiers: a question naming one of the user's tracked files is
+            # about that file. Only distinctive names are used, so a file called
+            # "Situation in Cuba" cannot drag in every question mentioning Cuba.
+            for name in _tracked_file_names(db, tracked_procs):
+                like = f"%{name}%"
+                conds.append(ParliamentaryQuestion.subject.ilike(like))
+                conds.append(ParliamentaryQuestion.text_question.ilike(like))
         if tracked_celex:
             cx = sorted(tracked_celex)
             arr = ", ".join(f":rc_{i}" for i in range(len(cx)))
