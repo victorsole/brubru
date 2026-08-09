@@ -11,9 +11,12 @@ Process:
 5. Create action plan with priorities and recommendations
 """
 
+import asyncio
 import json
 import logging
 import math
+import os
+import random
 import re
 from typing import List, Dict, Optional
 from datetime import datetime
@@ -110,9 +113,29 @@ class GapAnalyzer:
     Analyzes compliance gaps using hybrid semantic + LLM approach.
     """
     
+    # Tunable without a redeploy. Chosen by measurement, not intuition: the
+    # same 38-requirement cluster and document, timed end to end, gave
+    #   sequential  ~125s, 37/38 findings (one lost to an unretried 429)
+    #   concurrency 2   176s, 38/38
+    #   concurrency 4   226s, 38/38
+    #   concurrency 8    95s, 38/38
+    # Higher concurrency provokes more 429s but the retries absorb them in
+    # parallel, so wall-clock falls even as the warning count rises. Coverage
+    # is full from 2 upwards; the retry, not the concurrency, is what fixed
+    # the dropped requirement.
+    DEFAULT_CONCURRENCY = 8
+    DEFAULT_MAX_ATTEMPTS = 3
+    DEFAULT_RETRY_BASE_DELAY = 2.0
+
     def __init__(self, db: Session):
         self.db = db
         self.doc_processor = DocumentProcessor()
+        self.concurrency = int(os.environ.get("COMPLY_ANALYSIS_CONCURRENCY",
+                                              self.DEFAULT_CONCURRENCY))
+        self.max_attempts = int(os.environ.get("COMPLY_ANALYSIS_MAX_ATTEMPTS",
+                                               self.DEFAULT_MAX_ATTEMPTS))
+        self.retry_base_delay = float(os.environ.get("COMPLY_ANALYSIS_RETRY_DELAY",
+                                                     self.DEFAULT_RETRY_BASE_DELAY))
         self._chunks: List[str] = []
         self._idf: Dict[str, float] = {}
         self._doc_vectors: List[Dict[str, float]] = []
@@ -164,20 +187,48 @@ class GapAnalyzer:
             requirements_na = 0
             analysis_errors = 0
 
-            # Analyze each requirement
-            for requirement in requirements:
-                try:
-                    finding = await self._analyze_requirement(
-                        requirement, all_chunks, analysis_id
-                    )
-                except GapAnalysisUnavailable:
-                    # Do not invent a verdict. Count it and carry on so one bad
-                    # response does not lose the whole run.
+            # Analyse requirements with bounded concurrency and backoff.
+            #
+            # Strictly sequential at full speed exhausted every free provider in
+            # turn: a single 38-requirement run produced Cerebras 429 (requests
+            # per minute), Gemini 429, Groq 429 on its 12k tokens-per-minute
+            # ceiling and NVIDIA 503. Each requirement burns several provider
+            # calls because the chain fails over on the first refusal, so the
+            # rate of *provider* calls is a multiple of the requirement rate.
+            #
+            # Two changes: a semaphore so a few requirements are in flight at
+            # once (throughput without a thundering herd), and a retry with
+            # exponential backoff around the whole chain so a momentary 429
+            # waits rather than consuming the next provider's budget too.
+            sem = asyncio.Semaphore(self.concurrency)
+
+            async def analyse_one(requirement):
+                async with sem:
+                    delay = self.retry_base_delay
+                    for attempt in range(self.max_attempts):
+                        try:
+                            return requirement, await self._analyze_requirement(
+                                requirement, all_chunks, analysis_id
+                            ), None
+                        except GapAnalysisUnavailable as exc:
+                            if attempt == self.max_attempts - 1:
+                                return requirement, None, exc
+                            # Jitter so retries from parallel workers do not
+                            # land on the provider in lockstep.
+                            await asyncio.sleep(delay + random.uniform(0, delay / 2))
+                            delay *= 2
+                    return requirement, None, None
+
+            results = await asyncio.gather(*(analyse_one(r) for r in requirements))
+
+            # DB writes stay on this coroutine: the Session is not safe to use
+            # from several tasks at once.
+            for requirement, finding, error in results:
+                if error is not None or finding is None:
                     analysis_errors += 1
                     continue
                 self.db.add(finding)
 
-                # Update counts
                 if finding.status == 'met':
                     requirements_met += 1
                 elif finding.status == 'partial':
