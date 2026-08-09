@@ -1,7 +1,10 @@
 // frontend/src/pages/main_page.tsx
 import { useState, useEffect, useCallback } from 'react';
+import { readChatReturn } from '../utils/chat_return';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import Icon from '@mdi/react';
+import { mdiArrowLeft } from '@mdi/js';
 import { Sidebar } from '../components/shared/sidebar';
 import { ChatInterface } from '../components/chat/chat_interface';
 import { DocumentUpload } from '../components/chat/document_upload';
@@ -76,6 +79,9 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
   const [searchParams] = useSearchParams();
   const state = location.state as { initialQuestion?: string; source?: string; findingId?: number } | null;
   const queryParam = searchParams.get('q');
+  // Where the user came from, when they arrived via an "Ask Brubru" button.
+  // Validated against an allowlist because it comes off the query string.
+  const chatReturn = readChatReturn(searchParams);
   const [uploadedDocumentIds, setUploadedDocumentIds] = useState<string[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
@@ -194,6 +200,14 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
       </Sidebar>
 
       <main className={`main-page__main ${isSidebarOpen ? 'main-page__main--sidebar-open' : ''}`}>
+        {chatReturn && (
+          <Link className="main-page__return" to={chatReturn.href}>
+            <Icon path={mdiArrowLeft} size={0.7} />
+            {chatReturn.label
+              ? t('chat.backToNamed', { name: chatReturn.label, defaultValue: `Back to ${chatReturn.label}` })
+              : t('chat.backToBubble', 'Back to My EU Bubble')}
+          </Link>
+        )}
         {isAuthenticated && <ProactiveOpener surface="chat" />}
         <ChatInterface
           initialQuestion={queryParam || state?.initialQuestion}

@@ -11,8 +11,9 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { chatReturnParams } from '../../utils/chat_return';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiRobotOutline, mdiClose, mdiSend, mdiCreation } from '@mdi/js';
@@ -26,6 +27,7 @@ interface MeubAskLauncherProps {
 }
 
 export const MeubAskLauncher = ({ tabLabel }: MeubAskLauncherProps) => {
+  const routerLocation = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -61,7 +63,10 @@ export const MeubAskLauncher = ({ tabLabel }: MeubAskLauncherProps) => {
     const text = (query || '').trim();
     if (!text) return;
     setOpen(false);
-    navigate(`/chat?q=${encodeURIComponent(text)}&autofire=1`);
+    const params = new URLSearchParams({ q: text, autofire: '1' });
+    Object.entries(chatReturnParams(`${routerLocation.pathname}${routerLocation.search}`, tabLabel))
+      .forEach(([k, v]) => params.set(k, v));
+    navigate(`/chat?${params.toString()}`);
   };
 
   const suggestions = [

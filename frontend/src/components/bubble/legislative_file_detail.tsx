@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { chatReturnParams } from '../../utils/chat_return';
 import { RowSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -297,13 +298,18 @@ export const LegislativeFileDetail = () => {
               type="button"
               className="legislative-file-modal__ask"
               onClick={() => {
+                const shortName = selectedFile.short_title || selectedFile.title;
                 const ref = selectedFile.oeil_procedure_ref
                   ? ` (${selectedFile.oeil_procedure_ref})` : '';
                 const q = t('fileDetail.askPrompt', {
                   title: selectedFile.title, ref,
                   defaultValue: `Tell me about ${selectedFile.title}${ref}: where it stands, who is driving it, and what I should do.`,
                 });
-                navigate(`/chat?q=${encodeURIComponent(q)}&autofire=1`);
+                const params = new URLSearchParams({ q, autofire: '1' });
+                // Come back to this file, not to the default tab.
+                const back = `/my-eu-bubble?tab=my_files&file=${selectedFile.id}`;
+                Object.entries(chatReturnParams(back, shortName)).forEach(([k, v]) => params.set(k, v));
+                navigate(`/chat?${params.toString()}`);
               }}
               title={t('fileDetail.askTitle', 'Ask Brubru about this file')}
             >

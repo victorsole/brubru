@@ -7,6 +7,7 @@
  * (3) an "Explore" navigator that jumps to every MEUB filter. No "Latest Updates".
  */
 import { useEffect, useState } from 'react';
+import { chatReturnParams } from '../../utils/chat_return';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -154,8 +155,20 @@ export const DashboardTab = () => {
   };
 
   const openHook = (hook: PolicyHook) => {
-    const q = hook.suggested_query || hook.label;
-    navigate(`/chat?q=${encodeURIComponent(q)}`);
+    // Every other route into Chat sends the question; this one only prefilled
+    // it, so a complete prompt sat in the box waiting for an Enter nobody
+    // asked for. Autofire is withheld only for what it must be: the label
+    // fallback, which is a headline rather than a question, and stubs ending
+    // in a colon that expect the user to finish the sentence.
+    // See isStubBriefing() in shared/proactive_opener.tsx.
+    const suggested = (hook.suggested_query || '').trim();
+    const isSendable = suggested !== '' && !suggested.endsWith(':');
+    const q = isSendable ? suggested : hook.label;
+    const params = new URLSearchParams({ q });
+    if (isSendable) params.set('autofire', '1');
+    Object.entries(chatReturnParams('/my-eu-bubble?tab=dashboard', t('bubble.tabs.overview', 'Overview')))
+      .forEach(([k, v]) => params.set(k, v));
+    navigate(`/chat?${params.toString()}`);
   };
 
   return (
