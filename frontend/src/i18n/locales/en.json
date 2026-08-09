@@ -147,7 +147,11 @@
       "chipAgriFisheries": "Agriculture and Fisheries"
     },
     "backToBubble": "Back to My EU Bubble",
-    "backToNamed": "Back to {{name}}"
+    "backToNamed": "Back to {{name}}",
+    "openInBubble": "Open in My EU Bubble",
+    "openFileInBubble": "Open this file in My EU Bubble",
+    "openVotesForFile": "See how it voted",
+    "openCommitteeCalendar": "What {{code}} has coming up"
   },
   "docs": {
     "title": "Documents",

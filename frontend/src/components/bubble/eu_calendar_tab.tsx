@@ -978,17 +978,18 @@ let _calendarFiltersResetForSession = false;
 
 export const EUCalendarTab = () => {
   const { t } = useTranslation();
-  const { viewMode, isLoading, fetchEvents, clearFilters, goToDate } = useEUCalendar();
+  const { viewMode, isLoading, fetchEvents, clearFilters, goToDate, setInstitution, setDepartment } = useEUCalendar();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const [searchParams, setSearchParams] = useSearchParams();
   const jumpTo = searchParams.get('date');
+  const committeeParam = searchParams.get('committee');
 
   useEffect(() => {
     // Wait for auth to hydrate from localStorage before fetching.
     if (!isAuthenticated) return;
     // A pending ?date= jump does its own fetch for the target day. Fetching
     // the default month here as well would resolve second and replace it.
-    if (jumpTo) return;
+    if (jumpTo || committeeParam) return;
     if (!_calendarFiltersResetForSession) {
       _calendarFiltersResetForSession = true;
       // clearFilters() already triggers fetchEvents internally.
@@ -996,7 +997,20 @@ export const EUCalendarTab = () => {
     } else {
       fetchEvents();
     }
-  }, [fetchEvents, clearFilters, isAuthenticated, jumpTo]);
+  }, [fetchEvents, clearFilters, isAuthenticated, jumpTo, committeeParam]);
+
+  useEffect(() => {
+    if (!committeeParam || !isAuthenticated) return;
+    const code = committeeParam.trim().toUpperCase();
+    if (!/^[A-Z]{4,6}$/.test(code)) return;
+    _calendarFiltersResetForSession = true;
+    // EP department values are type-prefixed in this store.
+    setInstitution('EP');
+    setDepartment(`committee:${code}`);
+    const next = new URLSearchParams(searchParams);
+    next.delete('committee');
+    setSearchParams(next, { replace: true });
+  }, [committeeParam, isAuthenticated]);
 
   // A ?date= deep link (from a file's meeting list) opens that day. The
   // parameter is consumed once so that later navigation inside the calendar

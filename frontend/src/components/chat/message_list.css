@@ -706,3 +706,58 @@
 .message-list__feedback {
   flex-wrap: wrap;
 }
+
+/* Links out of Chat and into My EU Bubble, built from the identifiers the
+   backend detected in the answer. Deliberately styled apart from the smart
+   suggestions above them: those continue the conversation, these leave it. */
+.message-list__meub-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eef0f2;
+}
+
+.message-list__meub-links-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #8a94a0;
+  margin-right: 0.2rem;
+}
+
+.message-list__meub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d7dde3;
+  border-radius: 999px;
+  background: #fff;
+  color: #24303c;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.message-list__meub-link:hover,
+.message-list__meub-link:focus-visible {
+  border-color: var(--color-accent-blue, #0693e3);
+  color: var(--color-accent-blue, #0693e3);
+  background: #f7fbff;
+}
+
+@media (max-width: 767px) {
+  .message-list__meub-links {
+    gap: 0.35rem;
+  }
+
+  .message-list__meub-link {
+    font-size: 0.76rem;
+    max-width: 100%;
+  }
+}

@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { marked } from 'marked';
 import Icon from '@mdi/react';
-import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdiClose } from '@mdi/js';
+import { Link } from 'react-router-dom';
+import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdiClose, mdiArrowTopRight } from '@mdi/js';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import type { Message, Citation, DetectedEntities, ChatAction } from './chat_interface';
@@ -72,6 +73,41 @@ const extractFollowUps = (content: string): { cleanContent: string; followUps: s
 // (deep-links) and from regex-scraped follow-ups (model prose).
 // Takes the component's `t` so suggestions render in the UI language.
 type TranslateFn = (key: string, defaultValue: string, options?: Record<string, unknown>) => string;
+
+/**
+ * The backend detects the procedure references, CELEX numbers and committees
+ * an answer is about, and until now every one of them was spent on another
+ * chat question. These are the same identifiers My EU Bubble is organised
+ * around, so they can also be a way out: open the dossier, see how it voted,
+ * check who lobbied on it.
+ */
+const meubLinksFor = (
+  entities: DetectedEntities | null | undefined,
+  t: TranslateFn,
+): { label: string; href: string }[] => {
+  if (!entities) return [];
+  const links: { label: string; href: string }[] = [];
+  const ref = entities.procedure_references?.[0];
+  if (ref) {
+    const enc = encodeURIComponent(ref);
+    links.push({
+      label: t('chat.openFileInBubble', 'Open this file in My EU Bubble'),
+      href: `/my-eu-bubble?tab=my_files&procedure=${enc}`,
+    });
+    links.push({
+      label: t('chat.openVotesForFile', 'See how it voted'),
+      href: `/my-eu-bubble?tab=votes&procedure=${enc}`,
+    });
+  }
+  const cmt = entities.committee_codes?.[0];
+  if (cmt && links.length < 3) {
+    links.push({
+      label: t('chat.openCommitteeCalendar', 'What {{code}} has coming up', { code: cmt }),
+      href: `/my-eu-bubble?tab=eu_calendar&committee=${encodeURIComponent(cmt)}`,
+    });
+  }
+  return links.slice(0, 3);
+};
 
 const generateSmartSuggestions = (
   entities: DetectedEntities | null | undefined,
@@ -405,6 +441,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 // already detected for this answer.
                 const showSmartSuggestions = !!isLastAssistant && !message.isStreaming;
                 const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities, t) : [];
+                const meubLinks = showSmartSuggestions ? meubLinksFor(detectedEntities, t) : [];
                 return (
                   <>
                     {renderContentWithCitations(cleanContent, message.citations)}
@@ -431,6 +468,19 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                         onActionClick={onActionClick}
                         isPreUser={!!abVariant}
                       />
+                    )}
+                    {meubLinks.length > 0 && (
+                      <div className="message-list__meub-links">
+                        <span className="message-list__meub-links-label">
+                          {t('chat.openInBubble', 'Open in My EU Bubble')}
+                        </span>
+                        {meubLinks.map((link) => (
+                          <Link key={link.href} to={link.href} className="message-list__meub-link">
+                            {link.label}
+                            <Icon path={mdiArrowTopRight} size={0.55} />
+                          </Link>
+                        ))}
+                      </div>
                     )}
                     {smartSuggestions.length > 0 && onSmartSuggestionClick && (
                       <div className="message-list__smart-suggestions">
