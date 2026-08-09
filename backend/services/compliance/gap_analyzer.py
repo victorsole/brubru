@@ -430,11 +430,28 @@ COMPANY DOCUMENTATION:
 {context}
 
 TASK:
-Determine if the requirement is:
+FIRST decide who this requirement binds. EU legal texts mix obligations on
+companies with obligations on Member States, national authorities, producer
+responsibility organisations, online platform providers and other third
+parties. A duty addressed to someone other than this company is
+not_applicable, no matter how much the company documentation fails to mention
+it. So is a duty whose scope thresholds exclude this company, and one whose
+implementing act has not been adopted yet.
+
+Read the requirement's grammatical subject. "Member States shall...",
+"Providers of online platforms shall...", "Producer responsibility
+organisations shall..." are NOT obligations on the company unless the company
+is itself that actor. Selling through a marketplace does not make a company an
+online platform provider.
+
+THEN, only for requirements that do bind this company, decide:
 - met: Fully compliant
-- partial: Partially compliant (some elements missing)
-- gap: Not compliant (major gaps)
-- not_applicable: Requirement doesn't apply
+- partial: Some elements in place, others missing or incomplete
+- gap: Not compliant
+- not_applicable: The requirement does not bind this company, or its scope
+  thresholds exclude it, or it is not yet in force for it
+
+Absence of evidence about a duty the company does not owe is not a gap.
 
 Provide:
 1. Status (met/partial/gap/not_applicable)
