@@ -17,8 +17,9 @@
  * Anthropic. No em-dashes. Libraries auto-update from their canonical sources
  * (canon manifest, deep_dive_map, the regenerated guides index, the Catalan dirs).
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MeubHeader } from './meub_header';
 import Icon from '@mdi/react';
@@ -132,10 +133,36 @@ function LibHero({ icon, title, subtitle, kpis, cta }: {
   );
 }
 
+const SUBS: Sub[] = ['canon', 'deep', 'guides', 'catalan', 'policy', 'partners'];
+
 export function DatabasesTab() {
   const { t, i18n } = useTranslation();
   const isCa = i18n.language?.startsWith('ca');
-  const [sub, setSub] = useState<Sub>('canon');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // The library you are looking at belongs in the URL. Without this, the five
+  // libraries were unreachable except by clicking, so none of them could be
+  // linked to, bookmarked or shared: every link to "Brubru Databases" landed
+  // on EU Canon. `?db=guides` now opens the Knowledge Guides library directly.
+  const [sub, setSub] = useState<Sub>(() => {
+    const raw = searchParams.get('db');
+    return (raw && (SUBS as string[]).includes(raw)) ? raw as Sub : 'canon';
+  });
+
+  const selectSub = (next: Sub) => {
+    setSub(next);
+    const params = new URLSearchParams(searchParams);
+    if (next === 'canon') params.delete('db'); else params.set('db', next);
+    setSearchParams(params, { replace: true });
+  };
+
+  // Follow the URL when it changes underneath us (back button, a deep link
+  // arriving while the tab is already open).
+  useEffect(() => {
+    const raw = searchParams.get('db');
+    const next: Sub = (raw && (SUBS as string[]).includes(raw)) ? raw as Sub : 'canon';
+    setSub((cur) => (cur === next ? cur : next));
+  }, [searchParams]);
   const [canon, setCanon] = useState<CanonResult | null>(null);
   const [guides, setGuides] = useState<GuidesResult | null>(null);
   const [guideList, setGuideList] = useState<GuideListResult | null>(null);
@@ -146,7 +173,7 @@ export function DatabasesTab() {
   const [selArea, setSelArea] = useState<string | null>(null);
 
   // If the user leaves Catalan while on the Catalan tab, fall back to EU Canon.
-  useEffect(() => { if (!isCa && sub === 'catalan') setSub('canon'); }, [isCa, sub]);
+  useEffect(() => { if (!isCa && sub === 'catalan') selectSub('canon'); }, [isCa, sub]);
 
   // Lazy-load each library when its tab is first opened.
   useEffect(() => { if (sub === 'canon' && !canon) databasesService.canon().then(setCanon).catch(() => {}); }, [sub, canon]);
@@ -178,7 +205,7 @@ export function DatabasesTab() {
 
       <div className="db-subtabs" role="tablist">
         {tabs.map(([id, icon, label]) => (
-          <button key={id} role="tab" aria-selected={sub === id} className={sub === id ? 'is-active' : ''} onClick={() => setSub(id)}>
+          <button key={id} role="tab" aria-selected={sub === id} className={sub === id ? 'is-active' : ''} onClick={() => selectSub(id)}>
             <Icon path={icon} size={0.7} /> {label}
           </button>
         ))}
@@ -377,26 +404,72 @@ function WhatsNew({ entries, knownSlugs, onOpen, t }: {
  * Portalled to document.body: the MEUB shell is an AnimatedPage whose
  * transform would otherwise become the containing block for a fixed overlay.
  */
-function GuideReader({ guide, loading, onClose, t }: {
+/**
+ * Guides cross-reference each other in a "Related Brubru guides" section, as
+ * bullets naming a file: "`ecodesign_digital_product_passport.md`: the ESPR
+ * and the Digital Product Passport". Rendered literally that is a dead end —
+ * a file name the reader cannot open and would not recognise.
+ *
+ * Each reference is rewritten to a link carrying the slug, labelled with the
+ * guide's real title where we know it. References to guides that do not exist
+ * (the corpus has a couple) are left as plain text: no link that goes nowhere.
+ */
+const RELATED_SECTION = /(##+\s*Related Brubru guides\s*\n)([\s\S]*?)(?=\n##|\s*$)/i;
+const RELATED_LINE = /^(\s*[-*]\s*)`?([a-z0-9_]+?)(?:\.md)?`?\s*:\s*(.*)$/;
+
+function linkRelatedGuides(markdown: string, titles: Map<string, string>): string {
+  return markdown.replace(RELATED_SECTION, (_all, heading: string, body: string) => {
+    const rewritten = body.split('\n').map((line) => {
+      const m = line.match(RELATED_LINE);
+      if (!m) return line;
+      const [, bullet, slug, rest] = m;
+      const title = titles.get(slug);
+      if (!title) return `${bullet}${rest}`;   // no such guide: keep the prose, drop the file name
+      return `${bullet}[${title}](#guide:${slug}): ${rest}`;
+    }).join('\n');
+    return heading + rewritten;
+  });
+}
+
+function GuideReader({ guide, loading, titles, onOpenGuide, onClose, t }: {
   guide: GuideDetail | null;
   loading: boolean;
+  titles: Map<string, string>;
+  onOpenGuide: (slug: string) => void;
   onClose: () => void;
   t: any;
 }) {
+  const bodyRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onEsc);
     return () => document.removeEventListener('keydown', onEsc);
   }, [onClose]);
 
+  // Opening a related guide swaps the content in place, so send the reader
+  // back to the top rather than leaving them mid-way down the previous one.
+  useEffect(() => { bodyRef.current?.scrollTo({ top: 0 }); }, [guide?.slug]);
+
   const html = useMemo(() => {
     if (!guide?.markdown) return '';
     try {
-      return marked.parse(guide.markdown, { gfm: true, breaks: false, async: false }) as string;
+      const md = linkRelatedGuides(guide.markdown, titles);
+      return marked.parse(md, { gfm: true, breaks: false, async: false }) as string;
     } catch {
       return '';
     }
-  }, [guide?.markdown]);
+  }, [guide?.markdown, titles]);
+
+  // Delegated: the markdown is injected as HTML, so the cross-reference links
+  // have no React handlers of their own.
+  const onBodyClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (e.target as HTMLElement).closest('a');
+    const href = anchor?.getAttribute('href') || '';
+    if (!href.startsWith('#guide:')) return;
+    e.preventDefault();
+    onOpenGuide(href.slice('#guide:'.length));
+  };
 
   return createPortal(
     <div className="db-reader" role="dialog" aria-modal="true" aria-label={guide?.title || 'Guide'}>
@@ -418,7 +491,7 @@ function GuideReader({ guide, loading, onClose, t }: {
             <Icon path={mdiClose} size={1} />
           </button>
         </header>
-        <div className="db-reader__body">
+        <div className="db-reader__body" ref={bodyRef} onClick={onBodyClick}>
           {loading || !guide
             ? <div className="db-loading">{t('db.loading', 'Loading...')}</div>
             /* First-party markdown rendered by marked; no user input reaches this. */
@@ -455,6 +528,12 @@ function KnowledgeGuides({ data, list, changelog, t }: {
   // keystroke should not cost a round trip.
   const guides: GuideSummary[] = list?.guides || [];
   const knownSlugs = useMemo(() => new Set(guides.map((g) => g.slug)), [guides]);
+  // slug -> real title, so a cross-reference reads as the guide's name rather
+  // than its file name.
+  const titlesBySlug = useMemo(
+    () => new Map(guides.map((g) => [g.slug, g.title])),
+    [guides],
+  );
   const shown = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return guides.filter((g) => {
@@ -587,7 +666,14 @@ function KnowledgeGuides({ data, list, changelog, t }: {
       </div>
 
       {openSlug && (
-        <GuideReader guide={detail} loading={detailLoading} onClose={() => setOpenSlug(null)} t={t} />
+        <GuideReader
+          guide={detail}
+          loading={detailLoading}
+          titles={titlesBySlug}
+          onOpenGuide={setOpenSlug}
+          onClose={() => setOpenSlug(null)}
+          t={t}
+        />
       )}
     </div>
   );
