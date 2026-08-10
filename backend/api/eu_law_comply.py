@@ -1060,6 +1060,11 @@ async def get_analysis_results(
                 'priority': finding.priority,
                 'estimated_effort': finding.estimated_effort,
                 'criticality': requirement.criticality,
+                # Who the obligation binds. A finding on "Member States shall
+                # bring into force the laws necessary..." is not_applicable to a
+                # company, and without this the reader sees an unexplained N/A.
+                # The cluster preview already showed it; the results did not.
+                'addressee': (requirement.extra_metadata or {}).get('addressee') or 'economic_operator',
                 'deadline_date': requirement.deadline.isoformat() if requirement.deadline else None,
                 'deadline_text': None  # TODO: Add deadline_text to LawRequirement model
             })
@@ -1077,6 +1082,11 @@ async def get_analysis_results(
             'requirements_partial': analysis.requirements_partial,
             'requirements_gap': analysis.requirements_gap,
             'compliance_score': float(analysis.compliance_score) if analysis.compliance_score is not None else None,
+            # Migration 209 gave a run a durable home and a record of the
+            # documents it was actually performed against. Both were persisted
+            # but neither was serialised, so no client could reach them.
+            'workspace_id': analysis.workspace_id,
+            'document_uuids': [str(u) for u in (analysis.document_uuids or [])],
             'gap_findings': findings,
             'created_at': analysis.started_at.isoformat() if analysis.started_at else None,
             'completed_at': analysis.completed_at.isoformat() if analysis.completed_at else None

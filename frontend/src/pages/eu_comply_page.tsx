@@ -65,6 +65,9 @@ export interface GapFinding {
   deadline_date?: string;
   deadline_text?: string;
   criticality: string;
+  /** Who the obligation binds. Anything other than 'economic_operator'
+   *  explains a not_applicable verdict that would otherwise look arbitrary. */
+  addressee?: string;
 }
 
 type ViewState = 'select' | 'upload' | 'results';

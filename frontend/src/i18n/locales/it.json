@@ -2751,11 +2751,12 @@
       "noEvidence": "Nulla trovato nei vostri documenti",
       "noEvidenceLong": "Nessun passaggio dei documenti caricati affronta questo obbligo.",
       "citedInDoc": "Citato nel documento",
-      "lowConfidence": "Bassa affidabilità, verificare manualmente",
+      "lowConfidence": "Bassa affidabilità, da verificare manualmente",
       "lowConfidenceExplain": "L'analisi non era sicura di questo esito. Consideratelo un invito a verificare voi stessi il testo originale, non una conclusione.",
       "lowConfidenceNote": "{{count}} risultato(i) sono inclusi perché l'analisi era sicura per meno del {{pct}}%, non perché sia stata rilevata una lacuna. Verificateli voi stessi.",
       "remediation": "Rimedio",
-      "remediationNote": "Salvato su questo obbligo, quindi resta dopo un ricaricamento e una nuova esecuzione dell'analisi."
+      "remediationNote": "Salvato su questo obbligo, quindi resta dopo un ricaricamento e una nuova esecuzione dell'analisi.",
+      "bindsLabel": "Vincola"
     },
     "plan": {
       "title": "Piano d'azione",
@@ -2801,6 +2802,15 @@
       "cascadeTitle": "Che cosa discende da queste norme",
       "cascadeBinding": "{{count}} atti delegati e di esecuzione contengono il dettaglio operativo.",
       "cascadeGuidance": "{{count}} comunicazioni e linee guida della Commissione spiegano come conformarsi. Non creano obblighi."
+    },
+    "addressee": {
+      "member_state": "Stati membri",
+      "commission": "Commissione",
+      "pro": "Organizzazione di responsabilità del produttore",
+      "online_platform": "Piattaforma online",
+      "fulfilment_service": "Servizio di logistica",
+      "national_authority": "Autorità nazionale",
+      "notified_body": "Organismo notificato"
     }
   },
   "featurePreview": {

@@ -1860,11 +1860,12 @@
       "noEvidence": "Niets gevonden in uw documenten",
       "noEvidenceLong": "Geen enkele passage in de documenten die u hebt geüpload gaat over deze verplichting.",
       "citedInDoc": "Geciteerd in document",
-      "lowConfidence": "Lage zekerheid, controleer handmatig",
+      "lowConfidence": "Lage betrouwbaarheid, handmatig controleren",
       "lowConfidenceExplain": "De analyse was niet zeker van dit oordeel. Beschouw het als aanleiding om de brontekst zelf te controleren, niet als een conclusie.",
       "lowConfidenceNote": "{{count}} bevinding(en) zijn opgenomen omdat de analyse voor minder dan {{pct}}% zeker was, niet omdat er een tekortkoming is gevonden. Controleer deze zelf.",
       "remediation": "Herstel",
-      "remediationNote": "Opgeslagen bij deze verplichting, zodat het een herlaadbeurt en een nieuwe analyse overleeft."
+      "remediationNote": "Opgeslagen bij deze verplichting, zodat het een herlaadbeurt en een nieuwe analyse overleeft.",
+      "bindsLabel": "Bindt"
     },
     "plan": {
       "title": "Actieplan",
@@ -1910,6 +1911,15 @@
       "cascadeTitle": "Wat uit deze wetten voortvloeit",
       "cascadeBinding": "{{count}} gedelegeerde en uitvoeringshandelingen bevatten de operationele details.",
       "cascadeGuidance": "{{count}} mededelingen en richtsnoeren van de Commissie leggen uit hoe u kunt voldoen. Deze scheppen geen verplichtingen."
+    },
+    "addressee": {
+      "member_state": "Lidstaten",
+      "commission": "Commissie",
+      "pro": "Producentenverantwoordelijkheidsorganisatie",
+      "online_platform": "Onlineplatform",
+      "fulfilment_service": "Fulfilmentdienstverlener",
+      "national_authority": "Nationale autoriteit",
+      "notified_body": "Aangemelde instantie"
     }
   },
   "featurePreview": {

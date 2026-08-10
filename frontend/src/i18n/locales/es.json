@@ -1860,11 +1860,12 @@
       "noEvidence": "No se encontró nada en sus documentos",
       "noEvidenceLong": "Ningún pasaje de los documentos que ha subido aborda esta obligación.",
       "citedInDoc": "Citado en el documento",
-      "lowConfidence": "Confianza baja, revise manualmente",
+      "lowConfidence": "Confianza baja, revíselo manualmente",
       "lowConfidenceExplain": "El análisis no tuvo confianza en este veredicto. Trátelo como un aviso para comprobar usted mismo el texto original, no como una conclusión.",
       "lowConfidenceNote": "{{count}} hallazgo(s) se incluyen porque el análisis tuvo menos del {{pct}}% de confianza, no porque se detectara una brecha. Revíselos usted mismo.",
       "remediation": "Subsanación",
-      "remediationNote": "Se guarda en esta obligación, por lo que se mantiene al recargar y al volver a ejecutar el análisis."
+      "remediationNote": "Se guarda en esta obligación, por lo que se mantiene al recargar y al volver a ejecutar el análisis.",
+      "bindsLabel": "Obliga a"
     },
     "plan": {
       "title": "Plan de acción",
@@ -1910,6 +1911,15 @@
       "cascadeTitle": "Qué se deriva de estas normas",
       "cascadeBinding": "{{count}} actos delegados y de ejecución contienen el detalle operativo.",
       "cascadeGuidance": "{{count}} comunicaciones y directrices de la Comisión explican cómo cumplir. No crean obligaciones."
+    },
+    "addressee": {
+      "member_state": "Estados miembros",
+      "commission": "Comisión",
+      "pro": "Organización de responsabilidad del productor",
+      "online_platform": "Plataforma en línea",
+      "fulfilment_service": "Servicio logístico",
+      "national_authority": "Autoridad nacional",
+      "notified_body": "Organismo notificado"
     }
   },
   "tenderator": {

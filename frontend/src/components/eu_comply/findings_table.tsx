@@ -69,6 +69,22 @@ const STATUS_RANK: Record<string, number> = {
   met: 3,
 };
 
+// Obligations that bind someone other than the company reading the report.
+// Shown next to the article so a not_applicable verdict reads as a fact about
+// the law rather than as the analyser giving up.
+const ADDRESSEE_LABEL: Record<string, string> = {
+  member_state: 'Member States',
+  commission: 'Commission',
+  pro: 'Producer responsibility organisation',
+  online_platform: 'Online platform',
+  fulfilment_service: 'Fulfilment service',
+  national_authority: 'National authority',
+  notified_body: 'Notified body',
+};
+
+/** An empty cell. Not an em-dash: none appear in user-facing surfaces. */
+const Empty = () => <span className="findings-table__muted" aria-hidden="true">&ndash;</span>;
+
 const statusIcon = (status: string): string => {
   switch (status) {
     case 'met': return 'mdi-check-circle';
@@ -339,6 +355,14 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
                   <td className="col-article"><code>{f.article_number}</code></td>
                   <td className="col-obligation">
                     <span className="findings-table__obligation">{f.requirement_text}</span>
+                    {f.addressee && f.addressee !== 'economic_operator' && (
+                      <span className="findings-table__addressee">
+                        <span className="mdi mdi-account-tie-outline"></span>
+                        {t('comply.report.bindsLabel', 'Binds')}{' '}
+                        {t(`comply.addressee.${f.addressee}`,
+                           ADDRESSEE_LABEL[f.addressee] || f.addressee)}
+                      </span>
+                    )}
                   </td>
                   <td className="col-crit">
                     <span className={`findings-table__crit criticality-${f.criticality}`}>
@@ -348,18 +372,18 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
                   <td className="col-deadline">
                     {f.deadline_date
                       ? new Date(f.deadline_date).toLocaleDateString()
-                      : <span className="findings-table__muted">—</span>}
+                      : <Empty />}
                   </td>
                   <td className="col-conf">
                     {f.confidence_score == null ? (
-                      <span className="findings-table__muted">—</span>
+                      <Empty />
                     ) : (
                       <span className={`findings-table__conf${low ? ' is-low' : ''}`}>
                         <span className="findings-table__conf-bar">
                           <span style={{ width: `${Math.min(100, Math.max(0, f.confidence_score))}%` }} />
                         </span>
                         {Math.round(f.confidence_score)}%
-                        {low && <span className="mdi mdi-flag-outline" title={t('comply.report.lowConfidence', 'Low confidence — review manually') as string}></span>}
+                        {low && <span className="mdi mdi-flag-outline" title={t('comply.report.lowConfidence', 'Low confidence, review manually') as string}></span>}
                       </span>
                     )}
                   </td>
@@ -368,7 +392,7 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
                       ? <span className={`findings-table__action action-${actions[f.id].status}`}>
                           {t(`comply.report.action_${actions[f.id].status}`, actions[f.id].status.replace('_', ' '))}
                         </span>
-                      : <span className="findings-table__muted">—</span>}
+                      : <Empty />}
                   </td>
                   <td className="col-evidence">
                     {f.evidence_text ? (

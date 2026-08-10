@@ -186,6 +186,26 @@
   line-height: 1.45;
 }
 
+/* Who the obligation binds, when it is not the reader. Sits under the
+   obligation text so a not_applicable row explains itself. */
+.findings-table__addressee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid #d9c9a3;
+  border-radius: 999px;
+  background: #fdf8ec;
+  color: #7a6222;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.findings-table__addressee .mdi { font-size: 0.85rem; }
+
 .findings-table__status {
   display: inline-flex;
   align-items: center;

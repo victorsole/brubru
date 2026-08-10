@@ -1864,7 +1864,8 @@
       "lowConfidenceExplain": "The analysis was not confident about this verdict. Treat it as a prompt to check the source text yourself, not as a conclusion.",
       "lowConfidenceNote": "{{count}} finding(s) are included because the analysis was under {{pct}}% confident, not because a gap was found. Review these yourself.",
       "remediation": "Remediation",
-      "remediationNote": "Saved against this obligation, so it survives a reload and a re-run of the analysis."
+      "remediationNote": "Saved against this obligation, so it survives a reload and a re-run of the analysis.",
+      "bindsLabel": "Binds"
     },
     "plan": {
       "title": "Action Plan",
@@ -1910,6 +1911,15 @@
       "cascadeTitle": "What hangs off these laws",
       "cascadeBinding": "{{count}} delegated and implementing acts carry the operative detail.",
       "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations."
+    },
+    "addressee": {
+      "member_state": "Member States",
+      "commission": "Commission",
+      "pro": "Producer responsibility organisation",
+      "online_platform": "Online platform",
+      "fulfilment_service": "Fulfilment service",
+      "national_authority": "National authority",
+      "notified_body": "Notified body"
     }
   },
   "tenderator": {

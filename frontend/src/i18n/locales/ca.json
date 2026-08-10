@@ -1864,7 +1864,8 @@
       "lowConfidenceExplain": "L'anàlisi no tenia confiança en aquest veredicte. Tracteu-ho com un avís per comprovar vosaltres mateixos el text original, no com una conclusió.",
       "lowConfidenceNote": "{{count}} troballa(es) s'inclouen perquè l'anàlisi tenia menys del {{pct}}% de confiança, no perquè s'hagi detectat cap mancança. Reviseu-les vosaltres mateixos.",
       "remediation": "Esmena",
-      "remediationNote": "Es desa en aquesta obligació, de manera que es manté en recarregar i en tornar a executar l'anàlisi."
+      "remediationNote": "Es desa en aquesta obligació, de manera que es manté en recarregar i en tornar a executar l'anàlisi.",
+      "bindsLabel": "Obliga"
     },
     "plan": {
       "title": "Pla d'acció",
@@ -1910,6 +1911,15 @@
       "cascadeTitle": "Què es deriva d'aquestes normes",
       "cascadeBinding": "{{count}} actes delegats i d'execució contenen el detall operatiu.",
       "cascadeGuidance": "{{count}} comunicacions i directrius de la Comissió expliquen com complir. No creen obligacions."
+    },
+    "addressee": {
+      "member_state": "Estats membres",
+      "commission": "Comissió",
+      "pro": "Organització de responsabilitat del productor",
+      "online_platform": "Plataforma en línia",
+      "fulfilment_service": "Servei logístic",
+      "national_authority": "Autoritat nacional",
+      "notified_body": "Organisme notificat"
     }
   },
   "tenderator": {

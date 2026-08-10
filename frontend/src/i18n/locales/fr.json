@@ -1864,7 +1864,8 @@
       "lowConfidenceExplain": "L'analyse n'était pas sûre de ce verdict. Considérez-le comme une invitation à vérifier vous-même le texte source, non comme une conclusion.",
       "lowConfidenceNote": "{{count}} constat(s) sont inclus parce que l'analyse était sûre à moins de {{pct}}%, et non parce qu'un écart a été détecté. Vérifiez-les vous-même.",
       "remediation": "Mise en conformité",
-      "remediationNote": "Enregistré sur cette obligation, ce qui le préserve après un rechargement et une nouvelle exécution de l'analyse."
+      "remediationNote": "Enregistré sur cette obligation, ce qui le préserve après un rechargement et une nouvelle exécution de l'analyse.",
+      "bindsLabel": "Contraint"
     },
     "plan": {
       "title": "Plan d'action",
@@ -1910,6 +1911,15 @@
       "cascadeTitle": "Ce qui découle de ces textes",
       "cascadeBinding": "{{count}} actes délégués et d'exécution portent le détail opérationnel.",
       "cascadeGuidance": "{{count}} communications et lignes directrices de la Commission expliquent comment se conformer. Elles ne créent pas d'obligations."
+    },
+    "addressee": {
+      "member_state": "États membres",
+      "commission": "Commission",
+      "pro": "Organisation de responsabilité des producteurs",
+      "online_platform": "Plateforme en ligne",
+      "fulfilment_service": "Service d'exécution des commandes",
+      "national_authority": "Autorité nationale",
+      "notified_body": "Organisme notifié"
     }
   },
   "tenderator": {
