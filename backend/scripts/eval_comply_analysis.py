@@ -54,7 +54,28 @@ from core.database import SessionLocal
 from models.eu_law import LawRequirement
 from services.compliance.gap_analyzer import GapAnalyzer, GapAnalysisUnavailable
 
-GOLD = Path(__file__).parent.parent / "data" / "eval" / "comply_gold_set.json"
+# One gold set per package. Accuracy over a single package's obligations is the
+# number that matters: a blended figure across packages hides which regime the
+# analyser is weak on, and deepening a package is only meaningful if its own
+# score moves. Filenames are NNN_slug.json where NNN is the cluster id.
+GOLD_DIR = Path(__file__).parent.parent / "data" / "eval" / "packages"
+
+
+def gold_path(cluster_id: int | None) -> Path:
+    """The gold set for a package, or the only one present if unambiguous."""
+    available = sorted(GOLD_DIR.glob("*.json"))
+    if not available:
+        raise SystemExit(f"no gold sets in {GOLD_DIR}")
+    if cluster_id is None:
+        if len(available) > 1:
+            names = "\n  ".join(f"--cluster {p.name.split('_')[0].lstrip('0')}  {p.name}"
+                                 for p in available)
+            raise SystemExit(f"{len(available)} gold sets present, pick one:\n  {names}")
+        return available[0]
+    for p in available:
+        if p.name.split("_")[0].lstrip("0") == str(cluster_id):
+            return p
+    raise SystemExit(f"no gold set for cluster {cluster_id} in {GOLD_DIR}")
 EVAL_DIR = Path(__file__).parent.parent / "data" / "eval"
 
 # "Needs action" is the decision a user actually takes off the back of a
@@ -82,7 +103,10 @@ async def run_case(analyzer, requirement, chunks, runs):
 
 
 async def main_async(args):
-    gold = json.loads(GOLD.read_text())
+    path = gold_path(args.cluster)
+    gold = json.loads(path.read_text())
+    print(f"gold set: {path.name}  (cluster {gold.get('cluster_id')}, "
+          f"{len(gold['cases'])} cases)\n")
     cases = gold["cases"]
     if args.case:
         cases = [c for c in cases if c["requirement_id"] == args.case]
@@ -265,6 +289,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", type=int, default=3,
                     help="repeats per case; >1 measures stability")
+    ap.add_argument("--cluster", type=int,
+                    help="which package's gold set to evaluate")
     ap.add_argument("--case", type=int, help="evaluate a single requirement id")
     ap.add_argument("--json-out", help="write machine-readable results here")
     args = ap.parse_args()
