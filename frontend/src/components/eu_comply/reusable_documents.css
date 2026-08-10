@@ -1,0 +1,111 @@
+/* "Re-use what you checked last time" -- sits directly above the dropzone on a
+   package that has been run before. Renders nothing on a first run. */
+
+.reuse-docs {
+  background: #fbfcff;
+  border: 1px solid #e6eaf0;
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.reuse-docs__head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+}
+
+.reuse-docs__head > .mdi { font-size: 1.15rem; color: #6b7280; }
+
+.reuse-docs__heading {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #2c3446;
+  flex: 1;
+}
+
+.reuse-docs__count {
+  font-size: 0.78rem;
+  color: #55607a;
+  background: #f2f5fa;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+.reuse-docs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.reuse-docs__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  border: 1px solid #e6eaf0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.reuse-docs__item:hover { border-color: #b9c3d6; }
+
+.reuse-docs__item.is-selected {
+  border-color: #3b3183;
+  background: #f7f6ff;
+}
+
+.reuse-docs__item:focus-within { outline: 2px solid #6c5ce7; outline-offset: 2px; }
+
+/* The global stylesheet styles bare inputs, so pin the box explicitly rather
+   than inherit a width from a form rule written for text fields. */
+.reuse-docs__checkbox {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin: 0;
+  accent-color: #3b3183;
+  cursor: pointer;
+}
+
+.reuse-docs__icon { font-size: 1.1rem; color: #6b7280; }
+
+.reuse-docs__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.reuse-docs__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2c3446;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reuse-docs__detail {
+  font-size: 0.74rem;
+  color: #8a93a6;
+}
+
+.reuse-docs__hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.76rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+@media (max-width: 767px) {
+  .reuse-docs { padding: 0.75rem 0.85rem 0.8rem; }
+  .reuse-docs__name { white-space: normal; }
+}

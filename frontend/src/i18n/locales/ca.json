@@ -1921,6 +1921,45 @@
       "national_authority": "Autoritat nacional",
       "notified_body": "Organisme notificat",
       "eu_agency": "Agència o oficina de la UE"
+    },
+    "workspaces": {
+      "heading": "Continueu on ho vau deixar",
+      "package": "paquet",
+      "packages": "paquets",
+      "run": "anàlisi",
+      "runs": "anàlisis",
+      "openActions": "per resoldre",
+      "lastRun": "Última comprovació",
+      "today": "avui",
+      "yesterday": "ahir",
+      "daysAgo": "dies enrere",
+      "openFailed": "No s'ha pogut obrir aquest paquet. Seleccioneu-lo a la llista de sota."
+    },
+    "reuse": {
+      "heading": "Reutilitzeu el que ja vau comprovar",
+      "selected": "seleccionats",
+      "available": "disponible",
+      "availablePlural": "disponibles",
+      "characters": "caràcters",
+      "lastUsed": "últim ús",
+      "runs": "anàlisis",
+      "hint": "Els documents seleccionats es tornen a comprovar tal com són. També podeu afegir fitxers nous a sota."
+    },
+    "diff": {
+      "heading": "Què ha canviat des de l'última comprovació",
+      "points": "pts",
+      "improved": "millorats",
+      "regressed": "empitjorats",
+      "reclassified": "reclassificats",
+      "noChange": "cap canvi",
+      "comparedWith": "Comparat amb la vostra anàlisi del",
+      "earlier": "una data anterior",
+      "unchanged": "sense canvis",
+      "newRequirements": "no comprovats la vegada anterior",
+      "improvedHeading": "Millorats",
+      "regressedHeading": "Han empitjorat",
+      "reclassifiedHeading": "Reclassificats",
+      "reclassifiedNote": "Han passat a \"no aplicable\" o n'han sortit. És un canvi sobre si l'obligació us vincula, no un avenç en el compliment."
     }
   },
   "tenderator": {

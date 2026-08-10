@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func, case, text
 from typing import Any, Dict, List, Optional
 from datetime import datetime
+import hashlib
 import logging
 import tempfile
 import os
@@ -868,7 +869,14 @@ async def get_law_by_celex(
 @router.post("/analyze")
 async def create_compliance_analysis(
     cluster_id: int = Form(...),
-    documents: List[UploadFile] = File(...),
+    documents: Optional[List[UploadFile]] = File(None),
+    # UUIDs of user_documents from an earlier run of this package, comma
+    # separated. Migration 209 started storing the extracted text of every
+    # upload, but nothing could read it back, so each run began at an empty
+    # dropzone even though last month's policy was sitting in the database.
+    # Either source is enough on its own, and they can be combined: re-use the
+    # policy, add the new annex.
+    reuse_document_ids: Optional[str] = Form(None),
     analysis_name: Optional[str] = Form(None),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db),
@@ -903,11 +911,18 @@ async def create_compliance_analysis(
                 detail=f"Cluster {cluster_id} not found"
             )
 
-        # Validate documents
-        if not documents or len(documents) == 0:
+        # FastAPI hands back a single empty UploadFile when a multipart field is
+        # declared but sent blank, so filter those out before counting.
+        documents = [d for d in (documents or []) if d and d.filename]
+
+        reuse_ids: List[str] = [
+            s.strip() for s in (reuse_document_ids or '').split(',') if s.strip()
+        ]
+
+        if not documents and not reuse_ids:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="At least one document must be uploaded"
+                detail="Upload at least one document, or re-use one from an earlier run"
             )
 
         # Check file types
@@ -953,6 +968,45 @@ async def create_compliance_analysis(
                     detail=f"Failed to save document: {uploaded_file.filename}"
                 )
 
+        # Re-used documents: write the stored extracted text back out as .txt so
+        # the analyser reads them by exactly the same path as a fresh upload.
+        # Ownership is enforced in the query, so a guessed UUID belonging to
+        # another user simply does not resolve.
+        reused_uuids = []
+        if reuse_ids:
+            stored = (
+                db.query(UserDocument)
+                .filter(UserDocument.id.in_(reuse_ids),
+                        UserDocument.user_id == current_user.id)
+                .all()
+            )
+            found = {str(d.id) for d in stored}
+            missing = [i for i in reuse_ids if i not in found]
+            if missing:
+                logger.warning(
+                    f"Re-use requested for {len(missing)} document(s) that do not "
+                    f"belong to user {current_user.id} or no longer exist: {missing}"
+                )
+            for d in stored:
+                if not (d.content or '').strip():
+                    # An empty stored document would silently weaken the run:
+                    # every requirement would come back a gap for lack of
+                    # evidence. Skip it and say so rather than analyse nothing.
+                    logger.warning(f"Re-used document {d.id} has no extracted text; skipping")
+                    continue
+                with tempfile.NamedTemporaryFile(
+                        delete=False, suffix='.txt', mode='w', encoding='utf-8') as tmp:
+                    tmp.write(d.content)
+                    document_paths.append(tmp.name)
+                reused_uuids.append(d.id)
+
+            if not document_paths:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="None of the selected documents could be re-used. "
+                           "Upload the document again.",
+                )
+
         # One durable workspace per (user, cluster). Runs, uploads and
         # remediation state all hang off it, so a second analysis of the same
         # package continues the first rather than starting from nothing.
@@ -976,7 +1030,11 @@ async def create_compliance_analysis(
         # reads, rather than the original blob.
         from services.compliance.document_processor import DocumentProcessor
         processor = DocumentProcessor()
-        document_uuids = []
+        # Re-used documents are already stored, so they are recorded on this run
+        # without being written again. Fresh uploads occupy the FIRST len(documents)
+        # entries of document_paths (the save loop runs before the re-use block),
+        # so zip pairs them correctly and stops before the re-used tail.
+        document_uuids = list(reused_uuids)
         for path, uploaded in zip(document_paths, documents):
             # SAVEPOINT per document. A plain try/except is not enough: a failed
             # flush poisons the whole Session, so the analysis INSERT that
@@ -1382,6 +1440,101 @@ def list_workspaces(
         "latest_score": float(r["latest_score"]) if r["latest_score"] is not None else None,
         "open_actions": r["open_actions"],
     } for r in rows], "count": len(rows)}
+
+
+@router.get(
+    "/clusters/{cluster_id}/documents",
+    summary="Documents you can re-use for this package",
+    description=(
+        "**What it does**\n\n"
+        "Lists the documents you have already analysed against this compliance "
+        "package, so a repeat check can re-use them instead of asking you to "
+        "find and upload the same policy again.\n\n"
+        "**When to use it**\n\n"
+        "When opening a package you have run before. Offer the stored documents "
+        "alongside the upload control; the user can re-use, add, or do both.\n\n"
+        "**Input**\n\n"
+        "`cluster_id` in the path. Bearer JWT. Only your own documents are ever "
+        "returned.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/clusters/58/documents`.\n\n"
+        "**You get back**\n\n"
+        "`documents`: a list of `{id, title, filename, characters, last_used_at, "
+        "used_in_runs}`, newest first, and `count`. Pass the ids you want to "
+        "`POST /analyze` as `reuse_document_ids`, comma separated."
+    ),
+)
+async def list_reusable_documents(
+    cluster_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Documents already analysed against this package by this user.
+
+    Sourced from compliance_analyses.document_uuids rather than from
+    user_documents at large: the point is "what did I check this package
+    against last time", not "everything I have ever uploaded anywhere".
+    """
+    runs = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.user_id == current_user.id,
+                ComplianceAnalysis.cluster_id == cluster_id,
+                ComplianceAnalysis.document_uuids.isnot(None))
+        .order_by(ComplianceAnalysis.started_at.desc())
+        .all()
+    )
+
+    # Preserve most-recent-first order, and count how many runs used each doc.
+    order: List[str] = []
+    used_in: Dict[str, int] = {}
+    last_used: Dict[str, Optional[datetime]] = {}
+    for run in runs:
+        for uid in (run.document_uuids or []):
+            key = str(uid)
+            if key not in used_in:
+                order.append(key)
+                last_used[key] = run.started_at
+            used_in[key] = used_in.get(key, 0) + 1
+
+    if not order:
+        return {"documents": [], "count": 0}
+
+    docs = {
+        str(d.id): d
+        for d in db.query(UserDocument)
+                   .filter(UserDocument.id.in_(order),
+                           UserDocument.user_id == current_user.id)
+                   .all()
+    }
+
+    # Collapse byte-identical documents. Uploading the same policy on three
+    # occasions writes three user_documents rows, and offering the user three
+    # indistinguishable choices is worse than offering none: there is no way to
+    # tell them apart and no reason to prefer one. Keyed on a hash of the
+    # extracted text, so this is exact rather than a guess at the filename.
+    # The most recently used row wins and carries the combined run count.
+    out = []
+    seen: Dict[str, int] = {}          # content hash -> index in `out`
+    for key in order:
+        d = docs.get(key)
+        if not d:
+            continue      # deleted since; simply not offered
+        digest = hashlib.sha256((d.content or '').encode('utf-8')).hexdigest()
+        if digest in seen:
+            existing = out[seen[digest]]
+            existing["used_in_runs"] += used_in[key]
+            existing["duplicate_copies"] += 1
+            continue
+        seen[digest] = len(out)
+        out.append({
+            "id": str(d.id),
+            "title": d.title,
+            "filename": d.original_filename,
+            "characters": len(d.content or ''),
+            "last_used_at": last_used[key].isoformat() if last_used.get(key) else None,
+            "used_in_runs": used_in[key],
+            "duplicate_copies": 0,
+        })
+    return {"documents": out, "count": len(out)}
 
 
 @router.get(

@@ -1921,6 +1921,45 @@
       "national_authority": "National authority",
       "notified_body": "Notified body",
       "eu_agency": "EU agency or office"
+    },
+    "workspaces": {
+      "heading": "Pick up where you left off",
+      "package": "package",
+      "packages": "packages",
+      "run": "run",
+      "runs": "runs",
+      "openActions": "to fix",
+      "lastRun": "Last checked",
+      "today": "today",
+      "yesterday": "yesterday",
+      "daysAgo": "days ago",
+      "openFailed": "Could not open that package. Please pick it from the list below."
+    },
+    "reuse": {
+      "heading": "Re-use what you checked last time",
+      "selected": "selected",
+      "available": "available",
+      "availablePlural": "available",
+      "characters": "characters",
+      "lastUsed": "last used",
+      "runs": "runs",
+      "hint": "Selected documents are checked again as they are. You can also add new files below."
+    },
+    "diff": {
+      "heading": "What changed since your last check",
+      "points": "pts",
+      "improved": "improved",
+      "regressed": "slipped",
+      "reclassified": "reclassified",
+      "noChange": "nothing changed",
+      "comparedWith": "Compared with your run of",
+      "earlier": "an earlier date",
+      "unchanged": "unchanged",
+      "newRequirements": "not checked last time",
+      "improvedHeading": "Improved",
+      "regressedHeading": "Slipped back",
+      "reclassifiedHeading": "Reclassified",
+      "reclassifiedNote": "These moved to or from \"not applicable\". That is a change in whether the obligation binds you, not progress on it."
     }
   },
   "tenderator": {

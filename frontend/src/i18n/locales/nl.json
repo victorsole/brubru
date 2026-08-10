@@ -1921,6 +1921,45 @@
       "national_authority": "Nationale autoriteit",
       "notified_body": "Aangemelde instantie",
       "eu_agency": "EU-agentschap of -bureau"
+    },
+    "workspaces": {
+      "heading": "Ga verder waar u gebleven was",
+      "package": "pakket",
+      "packages": "pakketten",
+      "run": "analyse",
+      "runs": "analyses",
+      "openActions": "op te lossen",
+      "lastRun": "Laatst gecontroleerd",
+      "today": "vandaag",
+      "yesterday": "gisteren",
+      "daysAgo": "dagen geleden",
+      "openFailed": "Dit pakket kon niet worden geopend. Kies het uit de lijst hieronder."
+    },
+    "reuse": {
+      "heading": "Hergebruik wat u eerder hebt gecontroleerd",
+      "selected": "geselecteerd",
+      "available": "beschikbaar",
+      "availablePlural": "beschikbaar",
+      "characters": "tekens",
+      "lastUsed": "laatst gebruikt",
+      "runs": "analyses",
+      "hint": "Geselecteerde documenten worden opnieuw ongewijzigd gecontroleerd. U kunt hieronder ook nieuwe bestanden toevoegen."
+    },
+    "diff": {
+      "heading": "Wat er is veranderd sinds uw vorige controle",
+      "points": "ptn",
+      "improved": "verbeterd",
+      "regressed": "achteruitgegaan",
+      "reclassified": "geherclassificeerd",
+      "noChange": "niets veranderd",
+      "comparedWith": "Vergeleken met uw analyse van",
+      "earlier": "een eerdere datum",
+      "unchanged": "ongewijzigd",
+      "newRequirements": "vorige keer niet gecontroleerd",
+      "improvedHeading": "Verbeterd",
+      "regressedHeading": "Achteruitgegaan",
+      "reclassifiedHeading": "Geherclassificeerd",
+      "reclassifiedNote": "Deze zijn naar of van \"niet van toepassing\" verschoven. Dat verandert of de verplichting u bindt, het is geen vooruitgang in de naleving."
     }
   },
   "featurePreview": {

@@ -2813,6 +2813,45 @@
       "national_authority": "Autorità nazionale",
       "notified_body": "Organismo notificato",
       "eu_agency": "Agenzia o ufficio dell'UE"
+    },
+    "workspaces": {
+      "heading": "Riprenda da dove aveva lasciato",
+      "package": "pacchetto",
+      "packages": "pacchetti",
+      "run": "analisi",
+      "runs": "analisi",
+      "openActions": "da risolvere",
+      "lastRun": "Ultima verifica",
+      "today": "oggi",
+      "yesterday": "ieri",
+      "daysAgo": "giorni fa",
+      "openFailed": "Non è stato possibile aprire il pacchetto. Lo selezioni dall'elenco qui sotto."
+    },
+    "reuse": {
+      "heading": "Riutilizzi quanto ha già verificato",
+      "selected": "selezionati",
+      "available": "disponibile",
+      "availablePlural": "disponibili",
+      "characters": "caratteri",
+      "lastUsed": "ultimo utilizzo",
+      "runs": "analisi",
+      "hint": "I documenti selezionati vengono verificati di nuovo così come sono. Può anche aggiungere nuovi file qui sotto."
+    },
+    "diff": {
+      "heading": "Che cosa è cambiato dall'ultima verifica",
+      "points": "pt",
+      "improved": "migliorati",
+      "regressed": "peggiorati",
+      "reclassified": "riclassificati",
+      "noChange": "nessun cambiamento",
+      "comparedWith": "Confrontato con la sua analisi del",
+      "earlier": "una data precedente",
+      "unchanged": "invariati",
+      "newRequirements": "non verificati la volta scorsa",
+      "improvedHeading": "Migliorati",
+      "regressedHeading": "Peggiorati",
+      "reclassifiedHeading": "Riclassificati",
+      "reclassifiedNote": "Sono passati a \"non applicabile\" o ne sono usciti. È un cambiamento su se l'obbligo la vincola, non un progresso nel rispettarlo."
     }
   },
   "featurePreview": {

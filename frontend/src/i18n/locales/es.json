@@ -1921,6 +1921,45 @@
       "national_authority": "Autoridad nacional",
       "notified_body": "Organismo notificado",
       "eu_agency": "Agencia u oficina de la UE"
+    },
+    "workspaces": {
+      "heading": "Continúe donde lo dejó",
+      "package": "paquete",
+      "packages": "paquetes",
+      "run": "análisis",
+      "runs": "análisis",
+      "openActions": "por resolver",
+      "lastRun": "Última comprobación",
+      "today": "hoy",
+      "yesterday": "ayer",
+      "daysAgo": "días atrás",
+      "openFailed": "No se ha podido abrir ese paquete. Selecciónelo en la lista siguiente."
+    },
+    "reuse": {
+      "heading": "Reutilice lo que ya comprobó",
+      "selected": "seleccionados",
+      "available": "disponible",
+      "availablePlural": "disponibles",
+      "characters": "caracteres",
+      "lastUsed": "último uso",
+      "runs": "análisis",
+      "hint": "Los documentos seleccionados se vuelven a comprobar tal cual. También puede añadir archivos nuevos abajo."
+    },
+    "diff": {
+      "heading": "Qué ha cambiado desde su última comprobación",
+      "points": "pts",
+      "improved": "mejorados",
+      "regressed": "empeorados",
+      "reclassified": "reclasificados",
+      "noChange": "sin cambios",
+      "comparedWith": "Comparado con su análisis del",
+      "earlier": "una fecha anterior",
+      "unchanged": "sin cambios",
+      "newRequirements": "no comprobados la vez anterior",
+      "improvedHeading": "Mejorados",
+      "regressedHeading": "Han empeorado",
+      "reclassifiedHeading": "Reclasificados",
+      "reclassifiedNote": "Han pasado a \"no aplicable\" o han salido de esa categoría. Es un cambio sobre si la obligación le vincula, no un avance en su cumplimiento."
     }
   },
   "tenderator": {

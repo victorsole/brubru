@@ -1921,6 +1921,45 @@
       "national_authority": "Autorité nationale",
       "notified_body": "Organisme notifié",
       "eu_agency": "Agence ou office de l'UE"
+    },
+    "workspaces": {
+      "heading": "Reprenez où vous en étiez",
+      "package": "paquet",
+      "packages": "paquets",
+      "run": "analyse",
+      "runs": "analyses",
+      "openActions": "à traiter",
+      "lastRun": "Dernière vérification",
+      "today": "aujourd'hui",
+      "yesterday": "hier",
+      "daysAgo": "jours",
+      "openFailed": "Impossible d'ouvrir ce paquet. Veuillez le choisir dans la liste ci-dessous."
+    },
+    "reuse": {
+      "heading": "Réutilisez ce que vous avez déjà vérifié",
+      "selected": "sélectionnés",
+      "available": "disponible",
+      "availablePlural": "disponibles",
+      "characters": "caractères",
+      "lastUsed": "dernière utilisation",
+      "runs": "analyses",
+      "hint": "Les documents sélectionnés sont vérifiés à nouveau tels quels. Vous pouvez aussi ajouter de nouveaux fichiers ci-dessous."
+    },
+    "diff": {
+      "heading": "Ce qui a changé depuis votre dernière vérification",
+      "points": "pts",
+      "improved": "améliorés",
+      "regressed": "en recul",
+      "reclassified": "reclassés",
+      "noChange": "aucun changement",
+      "comparedWith": "Comparé à votre analyse du",
+      "earlier": "une date antérieure",
+      "unchanged": "inchangés",
+      "newRequirements": "non vérifiés la dernière fois",
+      "improvedHeading": "Améliorés",
+      "regressedHeading": "En recul",
+      "reclassifiedHeading": "Reclassés",
+      "reclassifiedNote": "Ces obligations sont passées vers ou depuis \"non applicable\". Cela change le fait qu'elles vous lient, ce n'est pas un progrès dans leur mise en oeuvre."
     }
   },
   "tenderator": {

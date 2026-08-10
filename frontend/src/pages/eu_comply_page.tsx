@@ -8,6 +8,9 @@ import { ComplianceReport } from '../components/eu_comply/compliance_report';
 import { ActionPlanTimeline } from '../components/eu_comply/action_plan_timeline';
 import { UsageHistory } from '../components/eu_comply/usage_history';
 import { ClusterRequirementsPreview } from '../components/eu_comply/cluster_requirements_preview';
+import { WorkspaceList } from '../components/eu_comply/workspace_list';
+import { ReusableDocuments } from '../components/eu_comply/reusable_documents';
+import { RunDiff } from '../components/eu_comply/run_diff';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import { ComplianceMaturity } from '../components/shared/compliance_maturity';
 import { useAuth } from '../hooks/use_auth';
@@ -99,6 +102,10 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
   const [selectedCluster, setSelectedCluster] = useState<LawCluster | null>(null);
   const [analysisResult, setAnalysisResult] = useState<ComplianceAnalysis | null>(null);
   const [uploadedDocuments, setUploadedDocuments] = useState<File[]>([]);
+  // Documents from an earlier run of this package, selected for re-use. Kept
+  // separate from uploadedDocuments because they are already stored server-side
+  // and travel as ids, not as file bodies.
+  const [reuseIds, setReuseIds] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -136,7 +143,24 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
     setViewState('upload');
     setAnalysisResult(null);
     setUploadedDocuments([]);
+    setReuseIds([]);
     setUploadError(null);
+  };
+
+  /** Open a package straight from the workspace list, which only knows its id. */
+  const handleOpenWorkspace = async (clusterId: number) => {
+    setUploadError(null);
+    try {
+      const r = await fetch(`${API_BASE_URL}/api/eu-law-comply/clusters/${clusterId}`, {
+        headers: { Authorization: `Bearer ${useAuth.getState().token}` },
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      handleClusterSelect(await r.json());
+    } catch {
+      // Leave the user on the catalogue rather than in a half-open package.
+      setUploadError(t('comply.workspaces.openFailed',
+        'Could not open that package. Please pick it from the list below.'));
+    }
   };
 
   // Append rather than replace, and drop anything the backend would reject with
@@ -168,7 +192,9 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
   };
 
   const handleAnalyzeCompliance = async () => {
-    if (!selectedCluster || uploadedDocuments.length === 0) {
+    // Either source is enough on its own: a fresh upload, a document re-used
+    // from a previous run, or both together.
+    if (!selectedCluster || (uploadedDocuments.length === 0 && reuseIds.length === 0)) {
       return;
     }
 
@@ -181,6 +207,9 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       uploadedDocuments.forEach(file => {
         formData.append('documents', file);
       });
+      if (reuseIds.length > 0) {
+        formData.append('reuse_document_ids', reuseIds.join(','));
+      }
 
       // Call backend API
       const response = await fetch(`${API_BASE_URL}/api/eu-law-comply/analyze`, {
@@ -246,6 +275,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
     setSelectedCluster(null);
     setAnalysisResult(null);
     setUploadedDocuments([]);
+    setReuseIds([]);
     setUploadError(null);
   };
 
@@ -354,6 +384,10 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
         {viewState === 'select' && <ComplianceMaturity collapsible />}
 
         {/* Main Content */}
+        {/* Returning users first: the packages already worked on, with their
+            latest score and open actions. Renders nothing on a first visit. */}
+        {viewState === 'select' && <WorkspaceList onOpen={handleOpenWorkspace} />}
+
         {viewState === 'select' && (
           <LawBrowser onSelectCluster={handleClusterSelect} />
         )}
@@ -405,6 +439,15 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
             <ClusterRequirementsPreview
               clusterId={selectedCluster.id}
               requirementCount={selectedCluster.requirement_count}
+            />
+
+            {/* Documents this package was checked against before. Re-checking
+                after remediation is the point of a durable workspace, and until
+                now it asked the user to find the same file again. */}
+            <ReusableDocuments
+              clusterId={selectedCluster.id}
+              selected={reuseIds}
+              onChange={setReuseIds}
             />
 
             {/* Drag-and-drop zone. This was a raw <input type="file">, which is
@@ -475,19 +518,22 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
 
             <div className="comply-actionbar">
               <div className="comply-actionbar__summary">
-                {uploadedDocuments.length === 0
+                {uploadedDocuments.length + reuseIds.length === 0
                   ? t('comply.actionbarEmpty', 'Add at least one document to run the analysis')
                   : t('comply.actionbarReady', {
                       defaultValue:
                         '{{docs}} document(s) will be checked against {{reqs}} requirements',
-                      docs: uploadedDocuments.length,
+                      // Re-used documents count towards the total: the summary
+                      // has to match what the run will actually read, or the
+                      // action bar says "0 documents" on a re-use-only run.
+                      docs: uploadedDocuments.length + reuseIds.length,
                       reqs: selectedCluster.requirement_count,
                     })}
               </div>
               <button
                 className="eu-comply-page__analyze-button"
                 onClick={handleAnalyzeCompliance}
-                disabled={uploadedDocuments.length === 0 || isAnalyzing}
+                disabled={(uploadedDocuments.length === 0 && reuseIds.length === 0) || isAnalyzing}
               >
                 {isAnalyzing ? (
                   <>
@@ -525,6 +571,11 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               <span className="mdi mdi-arrow-left"></span>
               {t('comply.uploadMoreDocs')}
             </button>
+
+            {/* What moved since the last check. A score on its own has no
+                direction; this says whether the remediation work landed.
+                Renders nothing when there is no earlier run to compare. */}
+            <RunDiff analysisId={analysisResult.id} />
 
             <ComplianceReport
               analysis={analysisResult}
