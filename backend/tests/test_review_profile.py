@@ -133,6 +133,29 @@ def test_clean_drops_empties_and_null_words():
         assert clean_extracted(p, {"substance": value}) is None, value
 
 
+def test_clean_drops_prose_non_answers():
+    """A model asked for a field it cannot find answers in prose, not with null.
+
+    All of these came out of the first production run of a profiled package and
+    belong in an empty cell rather than in the table as though they were data.
+    """
+    p = prof(*CORE, extracted("applies_from"))
+    for value in ["none stated", "Not explicitly stated in the requirement text",
+                  "no specific date stated", "No date stated", "not specified",
+                  "Not mentioned in the text", "none provided", "not applicable"]:
+        assert clean_extracted(p, {"applies_from": value}) is None, value
+
+
+def test_clean_keeps_real_values_that_start_like_a_non_answer():
+    """The trap in the rule above: real content can open with None or Not."""
+    p = prof(*CORE, extracted("applies_from"))
+    for value in ["19 July 2026", "QR code", "0.1% by weight",
+                  "None of the substances listed exceed the threshold",
+                  "Not later than 12 months after entry into force",
+                  "from the date of placing on the market"]:
+        assert clean_extracted(p, {"applies_from": value}) == {"applies_from": value}, value
+
+
 def test_clean_rejects_structures_and_truncates():
     p = prof(*CORE, extracted("substance"))
     assert clean_extracted(p, {"substance": {"nested": 1}}) is None

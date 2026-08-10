@@ -175,6 +175,24 @@ def build_extraction_prompt(profile: Optional[Dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+# A model asked for a field it cannot find answers in prose rather than with
+# null, however plainly the prompt asks. Observed in the first production run of
+# a profiled package: "none stated", "Not explicitly stated in the requirement
+# text", "no specific date stated". Every one of those belongs in an empty cell,
+# not in the table as though it were data.
+_NON_ANSWER_RE = re.compile(
+    r"^(n/?a|null|none|unknown|unspecified|not applicable"
+    r"|(no|none|not)\b[^.]{0,60}\b(stated|specified|given|mentioned|provided|available|date|value)"
+    r"|not\s+(explicitly\s+)?(stated|specified|mentioned|given|provided|determinable)"
+    r"[^.]{0,60})$",
+    re.IGNORECASE,
+)
+
+
+def _is_non_answer(text: str) -> bool:
+    return bool(_NON_ANSWER_RE.match(text.strip().rstrip(".")))
+
+
 def clean_extracted(profile: Optional[Dict[str, Any]],
                     raw: Any) -> Optional[Dict[str, Any]]:
     """Keep only declared keys, coerce to short strings, drop empties.
@@ -196,7 +214,7 @@ def clean_extracted(profile: Optional[Dict[str, Any]],
         if isinstance(value, (dict, list)):
             continue
         text = str(value).strip()
-        if not text or text.lower() in {"null", "none", "n/a", "unknown", "not stated"}:
+        if not text or _is_non_answer(text):
             continue
         out[key] = text[:MAX_EXTRACTED_CHARS]
     return out or None
