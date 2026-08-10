@@ -56,14 +56,40 @@ MONTHS = {m: i + 1 for i, m in enumerate(
      "August", "September", "October", "November", "December"])}
 
 # Ordered: first match wins, so the most specific actor is checked first.
+#
+# The second pass (10 Aug 2026) widened these after an audit found 140
+# requirements still tagged 'economic_operator' while plainly binding someone
+# else. The first pass only recognised one phrasing per actor, and EU drafting
+# uses several: "Each Member State shall", "The Member States shall", a named
+# agency as bare subject ("EBA shall establish..."), or the definite article
+# alone ("The Office shall be tasked with..."). Every one of those was being
+# put to a company as a compliance obligation, which is how a FinTech startup
+# got measured against "ECB shall calculate the baseline amount of a sanction".
+#
+# Checked against the corpus before widening: there is no requirement opening
+# "The Board", so `the (agency|office)` cannot capture a company's own board or
+# office. "The authority responsible for..." is a national body either way.
 ADDRESSEE_PATTERNS = [
-    ("member_state",       r"^\s*member states\b"),
+    ("member_state",       r"^\s*(each |the )?member states?\b"),
+    # "Commission" without the article must be followed by an auxiliary before
+    # it counts as the institution. Two traps in the corpus otherwise:
+    # "Commission Regulation (EC) No 1275/2008 ... should no longer apply",
+    # which is a citation, and "Commission independent annual audits at own
+    # expense ...", where commission is a VERB and the duty is the company's.
+    # Mis-tagging that second one would excuse a real audit obligation.
     ("commission",         r"^\s*the commission\b"),
+    ("commission",         r"^\s*commission (services|shall|must|should|may|is|are|has|have|will)\b"),
     ("pro",                r"^\s*producer responsibility organisations?\b"),
     ("online_platform",    r"^\s*providers of online platforms\b"),
     ("fulfilment_service", r"^\s*fulfilment service providers\b"),
-    ("national_authority", r"^\s*(competent (national )?authorities|national competent authorities)\b"),
-    ("notified_body",      r"^\s*notified bodies\b"),
+    # Named EU agencies as a bare subject. Kept as an explicit list rather than
+    # a catch-all acronym rule so a company acronym can never be swept up.
+    ("eu_agency",          r"^\s*(esma|eba|eiopa|ecb|ema|efsa|echa|easa|acer|enisa|eu-osha|"
+                           r"eurojust|europol|frontex|cedefop|eea|efca|emsa|era|eu-lisa)\b"),
+    ("eu_agency",          r"^\s*the (agency|office|centre)\b"),
+    ("national_authority", r"^\s*(the )?((competent|supervisory|regulatory) (national )?authorit(y|ies)|"
+                           r"national competent authorit(y|ies)|authority responsible)\b"),
+    ("notified_body",      r"^\s*(the )?notified bod(y|ies)\b"),
 ]
 
 # A date only counts as a deadline when something marks it as one.

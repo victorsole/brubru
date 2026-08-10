@@ -1919,7 +1919,8 @@
       "online_platform": "Onlineplatform",
       "fulfilment_service": "Fulfilmentdienstverlener",
       "national_authority": "Nationale autoriteit",
-      "notified_body": "Aangemelde instantie"
+      "notified_body": "Aangemelde instantie",
+      "eu_agency": "EU-agentschap of -bureau"
     }
   },
   "featurePreview": {
@@ -4941,7 +4942,8 @@
         "ftProjects": "F&T-gefinancierde projecten",
         "agencyProcurement": "Agentschapsopdracht"
       },
-      "askBrubruLabel": "Vraag het Brubru"
+      "askBrubruLabel": "Vraag het Brubru",
+      "backToDashboard": "Terug naar dashboard"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Zoeken op titel, organisatie, programma...",

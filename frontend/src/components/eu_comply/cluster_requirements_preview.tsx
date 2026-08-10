@@ -41,6 +41,7 @@ const ADDRESSEE_LABEL: Record<string, string> = {
   fulfilment_service: 'Fulfilment service providers',
   national_authority: 'Competent national authorities',
   notified_body: 'Notified bodies',
+  eu_agency: 'EU agencies and offices',
 };
 
 const addresseeOf = (r: PreviewRequirement): string =>

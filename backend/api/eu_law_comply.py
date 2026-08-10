@@ -84,9 +84,27 @@ async def run_compliance_analysis_task(
     try:
         logger.info(f"Starting background analysis for analysis_id={analysis_id}")
 
-        # Get requirements for this cluster
+        # Get the BINDING requirements for this cluster.
+        #
+        # extra_metadata.interpretive marks rows that explain the law rather
+        # than impose a duty: recitals, penalty ceilings, application dates,
+        # classification thresholds a company is nowhere near, and support
+        # measures such as regulatory sandboxes. 306 rows carry the flag and
+        # until now nothing read it, so a penalties article was put to the
+        # model as an obligation and came back a "gap" -- telling a company it
+        # had failed to comply with the size of its own potential fine.
+        #
+        # They stay in the corpus and in the cluster preview, where the context
+        # is worth reading. They are simply not scored.
+        # COALESCE rather than a bare `!=`: the column is declared JSON, so a
+        # missing key yields SQL NULL, and `NULL != 'true'` is NULL, not true.
+        # Without the coalesce this filter would drop every requirement that
+        # has no extra_metadata at all, which is most of the corpus.
         requirements = db.query(LawRequirement).filter(
-            LawRequirement.cluster_id == cluster_id
+            LawRequirement.cluster_id == cluster_id,
+            func.coalesce(
+                LawRequirement.extra_metadata['interpretive'].as_string(), ''
+            ) != 'true',
         ).all()
 
         if not requirements:

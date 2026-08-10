@@ -1919,7 +1919,8 @@
       "online_platform": "Online platform",
       "fulfilment_service": "Fulfilment service",
       "national_authority": "National authority",
-      "notified_body": "Notified body"
+      "notified_body": "Notified body",
+      "eu_agency": "EU agency or office"
     }
   },
   "tenderator": {
@@ -2756,7 +2757,8 @@
         "ftProjects": "F&T funded projects",
         "agencyProcurement": "Agency procurement"
       },
-      "askBrubruLabel": "Ask Brubru"
+      "askBrubruLabel": "Ask Brubru",
+      "backToDashboard": "Back to dashboard"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Search by title, organisation, programme...",

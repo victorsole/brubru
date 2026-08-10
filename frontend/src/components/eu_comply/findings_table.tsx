@@ -80,6 +80,7 @@ const ADDRESSEE_LABEL: Record<string, string> = {
   fulfilment_service: 'Fulfilment service',
   national_authority: 'National authority',
   notified_body: 'Notified body',
+  eu_agency: 'EU agency or office',
 };
 
 /** An empty cell. Not an em-dash: none appear in user-facing surfaces. */

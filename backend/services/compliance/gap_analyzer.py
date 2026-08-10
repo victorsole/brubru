@@ -104,6 +104,8 @@ ADDRESSEE_LABELS = {
     'fulfilment_service': 'FULFILMENT SERVICE PROVIDERS, not this company',
     'national_authority': 'COMPETENT NATIONAL AUTHORITIES, not this company',
     'notified_body': 'NOTIFIED BODIES, not this company',
+    'eu_agency': 'AN EU AGENCY OR OFFICE (ESMA, EBA, the AI Office and the '
+                 'like), not this company',
 }
 
 

@@ -1771,7 +1771,8 @@
         "ftProjects": "Progetti finanziati F&T",
         "agencyProcurement": "Appalti agenzia"
       },
-      "askBrubruLabel": "Chiedi a Brubru"
+      "askBrubruLabel": "Chiedi a Brubru",
+      "backToDashboard": "Torna alla dashboard"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Cerca per titolo, organizzazione, programma...",
@@ -2810,7 +2811,8 @@
       "online_platform": "Piattaforma online",
       "fulfilment_service": "Servizio di logistica",
       "national_authority": "Autorità nazionale",
-      "notified_body": "Organismo notificato"
+      "notified_body": "Organismo notificato",
+      "eu_agency": "Agenzia o ufficio dell'UE"
     }
   },
   "featurePreview": {

@@ -1919,7 +1919,8 @@
       "online_platform": "Plateforme en ligne",
       "fulfilment_service": "Service d'exécution des commandes",
       "national_authority": "Autorité nationale",
-      "notified_body": "Organisme notifié"
+      "notified_body": "Organisme notifié",
+      "eu_agency": "Agence ou office de l'UE"
     }
   },
   "tenderator": {
@@ -2756,7 +2757,8 @@
         "ftProjects": "Projets financés F&T",
         "agencyProcurement": "Marchés d'agences"
       },
-      "askBrubruLabel": "Demander à Brubru"
+      "askBrubruLabel": "Demander à Brubru",
+      "backToDashboard": "Retour au tableau de bord"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Rechercher par titre, organisation, programme...",
