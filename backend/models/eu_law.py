@@ -139,6 +139,9 @@ class LawCluster(Base):
     # leaving it and its requirements intact, so it can be curated and published
     # one at a time. Direct access by id still resolves (migration 210).
     is_published = Column(Boolean, nullable=False, server_default="true")
+    # Optional shape for this package's review table (migration 211). Null means
+    # the default eight columns; see services/compliance/review_profile.py.
+    review_profile = Column(JSON)
 
     created_at = Column(TIMESTAMP, server_default=func.now())
 

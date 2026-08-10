@@ -166,6 +166,9 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
         findings={analysis.gap_findings || []}
         onAskChatbot={onAskChatbot}
         analysisId={analysis.id}
+        // The table this package declared, so the report shows the columns the
+        // analysis was actually performed against.
+        reviewProfile={analysis.review_profile}
       />
 
       {/* Export Button */}

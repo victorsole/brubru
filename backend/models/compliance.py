@@ -166,6 +166,9 @@ class GapFinding(Base):
     # Semantic matching details
     similarity_score = Column(DECIMAL(5, 4))
     matched_chunks = Column(ARRAY(Text))
+    # Values for the package's declared `extracted` review columns, keyed by
+    # column id (migration 211). Null for the default review table.
+    extra_fields = Column(JSON)
 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())

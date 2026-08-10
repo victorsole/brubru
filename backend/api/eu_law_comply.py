@@ -1231,7 +1231,18 @@ async def get_analysis_results(
                 'policy_area': cluster.policy_area
             },
             'status': analysis.status,
+            # Owned by the update_compliance_score trigger: how many of the
+            # findings turned out to APPLY. Not the same as how many were
+            # checked, which is why coverage is reported alongside it rather
+            # than left for the reader to infer from a shorter list.
             'total_requirements': analysis.total_requirements,
+            'coverage': {
+                'selected': (analysis.analysis_params or {}).get('requirements_selected'),
+                'analysed': (analysis.analysis_params or {}).get('requirements_analysed'),
+                'failed': (analysis.analysis_params or {}).get('failed_requirements', 0),
+                'not_applicable': sum(1 for f in findings if f['status'] == 'not_applicable'),
+                'partial_run': bool((analysis.analysis_params or {}).get('partial')),
+            },
             'requirements_met': analysis.requirements_met,
             'requirements_partial': analysis.requirements_partial,
             'requirements_gap': analysis.requirements_gap,

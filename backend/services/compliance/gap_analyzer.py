@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session
 from models.eu_law import LawRequirement
 from models.compliance import ComplianceAnalysis, GapFinding
 from .document_processor import DocumentProcessor
+from .review_profile import build_extraction_prompt, clean_extracted
 
 logger = logging.getLogger(__name__)
 
@@ -145,8 +146,12 @@ class GapAnalyzer:
     DEFAULT_MAX_ATTEMPTS = 3
     DEFAULT_RETRY_BASE_DELAY = 2.0
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, review_profile: Optional[Dict] = None):
         self.db = db
+        # The package's declared review table, or None for the default columns.
+        # Only the `extracted` columns matter here: they add a block to the
+        # prompt and a value to each finding.
+        self.review_profile = review_profile
         self.doc_processor = DocumentProcessor()
         self.concurrency = int(os.environ.get("COMPLY_ANALYSIS_CONCURRENCY",
                                               self.DEFAULT_CONCURRENCY))
@@ -274,36 +279,51 @@ class GapAnalyzer:
                 self.db.commit()
                 return
 
-            # Calculate compliance score (met + 0.5*partial) / (total - na)
+            # The score itself is the trigger's to compute; these counts are
+            # kept only for the log line below. Verified identical before
+            # removing the local formula: (met + 0.5*partial)/applicable*100 and
+            # the trigger's (met*100 + partial*50)/applicable agree exactly.
             total_applicable = requirements_met + requirements_partial + requirements_gap
-            if total_applicable > 0:
-                compliance_score = (requirements_met + 0.5 * requirements_partial) / total_applicable * 100
-            else:
-                compliance_score = 100.0
 
-            # Update analysis with statistics
-            analysis.total_requirements = len(requirements)
-            analysis.requirements_met = requirements_met
-            analysis.requirements_partial = requirements_partial
-            analysis.requirements_gap = requirements_gap
-            analysis.compliance_score = compliance_score
+            # total_requirements, requirements_met/partial/gap and
+            # compliance_score are owned by the `update_compliance_score`
+            # trigger on gap_findings (migrations/create_compliance_tables.sql),
+            # which recomputes all four from the findings after every insert.
+            #
+            # This code used to set them too, and lost: within one commit the
+            # analysis UPDATE flushes before the findings INSERTs, so the
+            # trigger overwrote it. The two also disagreed on what
+            # total_requirements means -- this counted every requirement
+            # CHECKED, the trigger counts those that turned out APPLICABLE, so
+            # a run of 38 requirements with 6 not_applicable reported 20.
+            # The score formulas happen to be identical, so nothing
+            # user-visible was ever wrong, but two authorities for one number
+            # is how that stops being true.
+            #
+            # The trigger keeps the numbers correct even if findings are later
+            # added or removed, which this code cannot, so it wins. What only
+            # this code knows -- how many requirements were checked and how many
+            # the model failed on -- goes to analysis_params below.
             analysis.status = 'completed'
             analysis.completed_at = datetime.utcnow()
-            if analysis_errors:
-                # Partial run: surfaced so the score is read in context rather
-                # than as a verdict over the full requirement set.
-                analysis.analysis_params = {
-                    'partial': True,
-                    'failed_requirements': analysis_errors,
-                    'analysed_requirements': len(requirements) - analysis_errors,
-                }
+            # Coverage, always. The trigger's counts describe the findings that
+            # exist; only this knows how many requirements the run set out to
+            # check and how many the model never answered. Recorded even on a
+            # clean run so the denominator is never inferred.
+            analysis.analysis_params = {
+                **(analysis.analysis_params or {}),
+                'requirements_selected': len(requirements),
+                'requirements_analysed': len(requirements) - analysis_errors,
+                'failed_requirements': analysis_errors,
+                'partial': bool(analysis_errors),
+            }
 
             self.db.commit()
 
             logger.info(
                 f"Compliance analysis {analysis_id} completed: "
                 f"{requirements_met} met, {requirements_partial} partial, "
-                f"{requirements_gap} gaps, score={compliance_score:.1f}%"
+                f"{requirements_gap} gaps over {total_applicable} applicable"
             )
             
         except Exception as e:
@@ -361,7 +381,12 @@ class GapAnalyzer:
             priority=self._calculate_priority(requirement, llm_result['status']),
             estimated_effort=llm_result.get('estimated_effort', 'moderate'),
             similarity_score=llm_result.get('similarity_score'),
-            matched_chunks=relevant_chunks[:3]  # Store top 3 matches
+            matched_chunks=relevant_chunks[:3],  # Store top 3 matches
+            # Declared columns only, coerced to short strings, empties dropped.
+            # An unrecognised key never reaches the table and a profile change
+            # cannot leave stale keys behind on old findings.
+            extra_fields=clean_extracted(self.review_profile,
+                                         llm_result.get('extra_fields')),
         )
         
         return finding
@@ -450,6 +475,12 @@ class GapAnalyzer:
             'this company (an economic operator)',
         )
         
+        # A package can declare extra columns for its review table; each one
+        # adds a field the model must read out of the obligation. Empty string
+        # for the 57 packages that use the default table, so their prompt is
+        # byte-for-byte what it was.
+        extraction_block = build_extraction_prompt(self.review_profile)
+
         prompt = f"""Analyze if this legal requirement is met based on the company documents provided.
 
 REQUIREMENT:
@@ -504,7 +535,7 @@ Respond in JSON:
   "gap_description": "what's missing",
   "recommendation": "specific steps to take",
   "estimated_effort": "quick|moderate|significant"
-}}"""
+}}{extraction_block}"""
 
         # Runs on the shared free open-model chain, not OpenAI. The previous
         # implementation called gpt-4o-mini directly; when the OpenAI balance

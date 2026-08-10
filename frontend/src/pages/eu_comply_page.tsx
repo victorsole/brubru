@@ -40,6 +40,13 @@ export interface ComplianceAnalysis {
   gap_findings: GapFinding[];
   created_at: string;
   completed_at?: string;
+  /** The review table this package declared, if any. */
+  review_profile?: { columns: { id: string; kind: 'builtin' | 'extracted'; label?: string }[] } | null;
+  /** How many requirements were selected, analysed and failed on this run. */
+  coverage?: {
+    selected?: number; analysed?: number; failed?: number;
+    not_applicable?: number; partial_run?: boolean;
+  };
 }
 
 export interface GapFinding {
@@ -61,6 +68,9 @@ export interface GapFinding {
   /** Who the obligation binds. Anything other than 'economic_operator'
    *  explains a not_applicable verdict that would otherwise look arbitrary. */
   addressee?: string;
+  /** Values for the package's declared `extracted` review columns, keyed by
+   *  column id. Empty for a package using the default table. */
+  extra_fields?: Record<string, string>;
 }
 
 type ViewState = 'select' | 'upload' | 'results';
