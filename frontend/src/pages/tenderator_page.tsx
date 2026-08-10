@@ -400,7 +400,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
                 onClick={handleBackToFeed}
               >
                 <span className="mdi mdi-arrow-left"></span>
-                Back to dashboard
+                {t('tenderator.dashboard.backToDashboard')}
               </button>
               <TenderCalendar
                 onSelectTender={handleSelectTender}
@@ -419,7 +419,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
                   onClick={handleBackToFeed}
                 >
                   <span className="mdi mdi-arrow-left"></span>
-                  Back to dashboard
+                  {t('tenderator.dashboard.backToDashboard')}
                 </button>
               )}
               <TenderProfileSetup

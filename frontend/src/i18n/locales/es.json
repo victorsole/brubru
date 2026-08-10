@@ -1919,7 +1919,8 @@
       "online_platform": "Plataforma en línea",
       "fulfilment_service": "Servicio logístico",
       "national_authority": "Autoridad nacional",
-      "notified_body": "Organismo notificado"
+      "notified_body": "Organismo notificado",
+      "eu_agency": "Agencia u oficina de la UE"
     }
   },
   "tenderator": {
@@ -2756,7 +2757,8 @@
         "ftProjects": "Proyectos financiados F&T",
         "agencyProcurement": "Contratación de agencia"
       },
-      "askBrubruLabel": "Pregunta a Brubru"
+      "askBrubruLabel": "Pregunta a Brubru",
+      "backToDashboard": "Volver al panel"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Buscar por título, organización, programa...",

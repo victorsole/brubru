@@ -776,6 +776,14 @@ async def cron_sync_weekly(
     _verify_cron_secret(authorization)
     results = {}
 
+    # ft_participants, derived from the participant payload already stored on
+    # ft_funded_projects. Weekly because its source (funded projects) moves
+    # slowly, and the whole pass is a re-read of data we hold: no network.
+    results["ft_participants"] = await _run_script_async(
+        "ft_participants",
+        "scripts/derive_ft_participants.py",
+        ["--apply"], timeout=1800,
+    )
     results["fta"] = await _run_script_async("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
     results["trade_defence"] = await _run_script_async("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
     results["gi"] = await _run_script_async("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
