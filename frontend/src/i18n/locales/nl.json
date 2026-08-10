@@ -1905,7 +1905,8 @@
       "error": "De lijst met verplichtingen kon niet worden geladen.",
       "empty": "Dit pakket heeft nog geen geregistreerde verplichtingen.",
       "withDeadline": "{{count}} met een vaste termijn",
-      "intro": "Dit zijn de verplichtingen waaraan uw documenten worden getoetst. Er wordt niets geüpload totdat u de analyse start."
+      "intro": "Dit zijn de verplichtingen waaraan uw documenten worden getoetst. Er wordt niets geüpload totdat u de analyse start.",
+      "boundElsewhere": "{{count}} daarvan binden een andere actor, zoals de lidstaten, en worden ter context getoond in plaats van tegen u beoordeeld."
     }
   },
   "featurePreview": {

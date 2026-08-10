@@ -190,3 +190,16 @@
   .cluster-preview__deadline-note { margin-left: 0; }
   .cluster-preview__celex { margin-left: 0; }
 }
+
+/* Obligations that bind someone other than the company reading the report. */
+.cluster-preview__addressee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #55607a;
+  background: #f1f3f6;
+  border-radius: 4px;
+  padding: 0.08rem 0.35rem;
+}

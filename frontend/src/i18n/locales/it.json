@@ -2796,7 +2796,8 @@
       "error": "Non è stato possibile caricare l'elenco degli obblighi.",
       "empty": "Questo pacchetto non ha ancora obblighi registrati.",
       "withDeadline": "{{count}} con una scadenza datata",
-      "intro": "Questi sono gli obblighi rispetto ai quali saranno verificati i vostri documenti. Nulla viene caricato finché non scegliete di eseguire l'analisi."
+      "intro": "Questi sono gli obblighi rispetto ai quali saranno verificati i vostri documenti. Nulla viene caricato finché non scegliete di eseguire l'analisi.",
+      "boundElsewhere": "{{count}} di questi vincolano un altro soggetto, come gli Stati membri, e sono mostrati come contesto anziché valutati a vostro carico."
     }
   },
   "featurePreview": {

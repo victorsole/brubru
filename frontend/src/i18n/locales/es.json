@@ -1905,7 +1905,8 @@
       "error": "No se pudo cargar la lista de obligaciones.",
       "empty": "Este paquete aún no tiene obligaciones registradas.",
       "withDeadline": "{{count}} con fecha límite",
-      "intro": "Estas son las obligaciones con las que se contrastarán sus documentos. No se sube nada hasta que usted decida ejecutar el análisis."
+      "intro": "Estas son las obligaciones con las que se contrastarán sus documentos. No se sube nada hasta que usted decida ejecutar el análisis.",
+      "boundElsewhere": "{{count}} de ellas obligan a otro actor, como los Estados miembros, y se muestran como contexto en lugar de puntuarse en su contra."
     }
   },
   "tenderator": {

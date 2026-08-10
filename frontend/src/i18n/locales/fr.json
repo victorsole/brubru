@@ -1905,7 +1905,8 @@
       "error": "Impossible de charger la liste des obligations.",
       "empty": "Ce paquet ne comporte encore aucune obligation enregistrée.",
       "withDeadline": "{{count}} avec une échéance datée",
-      "intro": "Voici les obligations au regard desquelles vos documents seront vérifiés. Rien n'est téléversé tant que vous ne lancez pas l'analyse."
+      "intro": "Voici les obligations au regard desquelles vos documents seront vérifiés. Rien n'est téléversé tant que vous ne lancez pas l'analyse.",
+      "boundElsewhere": "{{count}} d'entre elles lient un autre acteur, tels que les États membres, et sont affichées à titre de contexte plutôt qu'évaluées à votre encontre."
     }
   },
   "tenderator": {

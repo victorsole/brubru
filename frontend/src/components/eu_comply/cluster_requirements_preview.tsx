@@ -26,7 +26,25 @@ interface PreviewRequirement {
   law_celex: string;
   law_title: string;
   deadline: string | null;
+  extra_metadata?: { addressee?: string } | null;
 }
+
+// Who the obligation binds, tagged on the requirement row by
+// scripts/enrich_requirement_metadata.py. Worth surfacing: a package of 38
+// obligations where 3 bind Member States is a different proposition from one
+// where all 38 bind you, and the old UI could not tell the difference.
+const ADDRESSEE_LABEL: Record<string, string> = {
+  member_state: 'Member States',
+  commission: 'European Commission',
+  pro: 'Producer responsibility organisations',
+  online_platform: 'Online platform providers',
+  fulfilment_service: 'Fulfilment service providers',
+  national_authority: 'Competent national authorities',
+  notified_body: 'Notified bodies',
+};
+
+const addresseeOf = (r: PreviewRequirement): string =>
+  r.extra_metadata?.addressee || 'economic_operator';
 
 interface Props {
   clusterId: number;
@@ -91,6 +109,10 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
   );
 
   const withDeadline = useMemo(() => items.filter((i) => i.deadline).length, [items]);
+  const bindElsewhere = useMemo(
+    () => items.filter((i) => addresseeOf(i) !== 'economic_operator').length,
+    [items],
+  );
 
   return (
     <section className={`cluster-preview${open ? ' is-open' : ''}`}>
@@ -128,6 +150,11 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
               <p className="cluster-preview__intro">
                 {t('comply.preview.intro',
                   'These are the obligations your documents will be measured against. Nothing is uploaded until you choose to run the analysis.')}
+                {bindElsewhere > 0 && ' ' + t('comply.preview.boundElsewhere', {
+                  defaultValue:
+                    '{{count}} of them bind another actor, such as Member States, and are shown for context rather than scored against you.',
+                  count: bindElsewhere,
+                })}
               </p>
 
               <div className="cluster-preview__filters" role="group">
@@ -167,6 +194,12 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
                         <span className="cluster-preview__deadline">
                           <span className="mdi mdi-calendar-clock"></span>
                           {new Date(r.deadline).toLocaleDateString()}
+                        </span>
+                      )}
+                      {addresseeOf(r) !== 'economic_operator' && (
+                        <span className="cluster-preview__addressee">
+                          <span className="mdi mdi-account-arrow-right-outline"></span>
+                          {ADDRESSEE_LABEL[addresseeOf(r)] || addresseeOf(r)}
                         </span>
                       )}
                       <span className="cluster-preview__celex">{r.law_celex}</span>

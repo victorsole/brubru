@@ -90,6 +90,22 @@ def _parse_json_object(raw: str) -> Optional[dict]:
 # Mirrors the valid_gap_status CHECK constraint on gap_findings.status.
 VALID_GAP_STATUSES = {'met', 'partial', 'gap', 'not_applicable'}
 
+# Rendered into the prompt so the model is told the addressee rather than
+# having to infer it. Anything not addressed to the company under analysis is
+# not_applicable however little the documentation says about it.
+ADDRESSEE_LABELS = {
+    'economic_operator': 'this company (an economic operator)',
+    'member_state': 'MEMBER STATES, not this company',
+    'commission': 'THE EUROPEAN COMMISSION, not this company',
+    'pro': 'PRODUCER RESPONSIBILITY ORGANISATIONS, not this company '
+           '(unless the company is itself one)',
+    'online_platform': 'PROVIDERS OF ONLINE PLATFORMS, not this company '
+                       '(selling on a marketplace does not make a company one)',
+    'fulfilment_service': 'FULFILMENT SERVICE PROVIDERS, not this company',
+    'national_authority': 'COMPETENT NATIONAL AUTHORITIES, not this company',
+    'notified_body': 'NOTIFIED BODIES, not this company',
+}
+
 
 def _normalise_confidence(value) -> Optional[float]:
     """Coerce an LLM confidence to a 0-100 float, or None if unusable.
@@ -417,6 +433,20 @@ class GapAnalyzer:
         Returns status, evidence, gaps, and recommendations.
         """
         context = '\n\n---\n\n'.join(relevant_chunks)
+
+        # Who the obligation binds, parsed deterministically from the
+        # requirement's grammatical subject and stored on the row by
+        # scripts/enrich_requirement_metadata.py. Asking the model to infer this
+        # from the text alone was the single largest error source in the gold
+        # set: 5 of 6 not_applicable cases came back as gap or partial, so the
+        # report told a company it was failing to transpose a directive into
+        # national law. Stating it is cheaper and more reliable than prompting
+        # for it.
+        meta = requirement.extra_metadata or {}
+        addressee_label = ADDRESSEE_LABELS.get(
+            meta.get('addressee', 'economic_operator'),
+            'this company (an economic operator)',
+        )
         
         prompt = f"""Analyze if this legal requirement is met based on the company documents provided.
 
@@ -425,6 +455,7 @@ Article: {requirement.article}
 Text: {requirement.requirement_text}
 Criticality: {requirement.criticality}
 Applies to: {requirement.applicable_entity or 'General'}
+Obligation is addressed to: {addressee_label}
 
 COMPANY DOCUMENTATION:
 {context}
