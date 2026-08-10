@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import { LensToggle, type LensMode } from '../bubble/lens_toggle';
+import { ExportButton } from '../shared/export_button';
 import './unified_opportunity_feed.css';
 import type { SourceFilter } from './tenderator_dashboard';
 import { uiDateLocale } from '../../i18n/config';
@@ -178,30 +179,38 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
+  // ONE description of what the feed is showing, read by the grid and by the
+  // spreadsheet alike. Building the download's params separately is precisely
+  // the drift this feature exists to avoid: the file would quietly stop being
+  // the list the user is looking at.
+  const buildFeedQuery = useCallback((): Record<string, string | undefined> => ({
+    source,
+    match_source: source === 'matches' && matchSubSource !== 'all' ? matchSubSource : undefined,
+    q: searchQuery.trim() || undefined,
+    programme: programme || undefined,
+    eic_programme: eicProgramme || undefined,
+    body: body && source === 'agency' ? body : undefined,
+    lang: feedLang,
+    client_filter: clientFilter ? 'true' : undefined,
+    // Only send when OFF — the backend default is true.
+    personalised: personalised ? undefined : 'false',
+    external_action: externalAction ? 'true' : undefined,
+    beneficiary_country: beneficiaryCountry || undefined,
+    framework_only: frameworkOnly ? 'true' : undefined,
+  }), [source, matchSubSource, searchQuery, programme, eicProgramme, body, feedLang,
+       clientFilter, personalised, externalAction, beneficiaryCountry, frameworkOnly]);
+
+  const exportParams = buildFeedQuery();
+
   const fetchFeed = useCallback(async () => {
     if (!token) return;
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({
-        source,
-        limit: '20',
-        page: String(page),
+      const params = new URLSearchParams({ limit: '20', page: String(page) });
+      Object.entries(buildFeedQuery()).forEach(([k, v]) => {
+        if (v !== undefined && v !== '') params.set(k, v);
       });
-      if (source === 'matches' && matchSubSource && matchSubSource !== 'all') {
-        params.set('match_source', matchSubSource);
-      }
-      if (searchQuery.trim()) params.set('q', searchQuery.trim());
-      if (programme) params.set('programme', programme);
-      if (eicProgramme) params.set('eic_programme', eicProgramme);
-      if (body && source === 'agency') params.set('body', body);
-      params.set('lang', feedLang);
-      if (clientFilter) params.set('client_filter', 'true');
-      // Only send when OFF — backend default is true.
-      if (!personalised) params.set('personalised', 'false');
-      if (externalAction) params.set('external_action', 'true');
-      if (beneficiaryCountry) params.set('beneficiary_country', beneficiaryCountry);
-      if (frameworkOnly) params.set('framework_only', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -224,7 +233,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, eicProgramme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry, frameworkOnly]);
+  }, [token, page, buildFeedQuery, t]);
 
   useEffect(() => {
     setPage(1);
@@ -297,8 +306,17 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       )}
 
       {/* Client-pursuits filter toggle (Layer 2) — only useful for users
-          with a configured private guide; harmless if no filter is set. */}
+          with a configured private guide; harmless if no filter is set.
+          The Excel download sits on the same row: it re-issues exactly the
+          query below with format=xlsx, so the sheet is the list on screen
+          rather than a second, drifting definition of it. */}
       <div className="tenderator-feed__client-filter">
+        <ExportButton
+          path="/api/tenders/unified-feed"
+          params={exportParams}
+          limit={100}
+          className="tenderator-feed__export"
+        />
         <label className="tenderator-feed__client-filter-toggle">
           <input
             type="checkbox"

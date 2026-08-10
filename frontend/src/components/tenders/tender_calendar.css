@@ -676,3 +676,17 @@
     display: none;
   }
 }
+
+/* The download joins the month/list toggle group. It is not a view mode, so it
+   sits outside the grey pill: a small left margin separates the two ideas. */
+.tender-calendar__export {
+  margin-left: 0.5rem;
+}
+@media (max-width: 767px) {
+  .tender-calendar__view-toggle {
+    flex-wrap: wrap;
+  }
+  .tender-calendar__export {
+    margin-left: 0;
+  }
+}

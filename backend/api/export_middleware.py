@@ -51,7 +51,16 @@ class TabularExportMiddleware(BaseHTTPMiddleware):
             records = extract_records(json.loads(body))
         except Exception:
             records = None
-        if records is None:
+        # `not records` rather than `records is None`: an endpoint with an empty
+        # list under a recognised envelope key ("items", "data", "records")
+        # returned [], which serialised to a workbook containing no header row
+        # and no data row. Excel refuses to open that. Endpoints that name their
+        # own envelope already declined here, because the longest-list fallback
+        # only considers non-empty lists -- so whether an empty result gave you
+        # a broken download or an honest "nothing to export here yet" came down
+        # to which key the endpoint happened to use. Now it is always the
+        # latter: the JSON passes through, and the caller reports it.
+        if not records:
             return Response(content=body, status_code=200, media_type="application/json",
                             headers=passthrough_headers)
 

@@ -300,6 +300,71 @@ COLUMN_MAPS: dict[str, list[tuple[str, str]]] = {
         ("sample_subjects", "Recent subjects"),
         ("profile_url", "Profile"),
     ],
+    # --- Tenderator -------------------------------------------------------
+    # The feed normalises six sources (TED, F&T proposals, F&T tenders, F&T
+    # funded projects, agency procurement, FTS awards) onto one shape, so one
+    # map covers every chip. `match_score` only appears in the "your matches"
+    # view; _curate drops a column absent from every row, so the sheet does not
+    # carry an empty "Match" for the other views.
+    "/api/tenders/unified-feed": [
+        ("title", "Opportunity"),
+        ("source", "Source"),
+        ("external_id", "Reference"),
+        ("programme", "Programme"),
+        ("organisation", "Organisation"),
+        ("country", "Country"),
+        ("deadline", "Deadline"),
+        ("budget", "Budget"),
+        ("currency", "Currency"),
+        ("status", "Status"),
+        ("match_score", "Match score"),
+        ("published_at", "Published"),
+        ("translated_from", "Translated from"),
+        ("description", "Description"),
+        ("source_url", "Link"),
+    ],
+    "/api/tenders/calendar-deadlines": [
+        ("deadline", "Deadline"),
+        ("title", "Opportunity"),
+        ("source", "Source"),
+        ("ref", "Reference"),
+        ("programme", "Programme"),
+        ("country", "Country"),
+        ("budget", "Budget"),
+        ("currency", "Currency"),
+        ("source_url", "Link"),
+    ],
+    "/api/tenders/pipeline": [
+        ("title", "Opportunity"),
+        ("status", "Stage"),
+        ("next_step", "Next step"),
+        ("next_step_due", "Next step due"),
+        ("pm_assignee", "Owner"),
+        ("deadline", "Deadline"),
+        ("budget", "Budget"),
+        ("currency", "Currency"),
+        ("organisation", "Organisation"),
+        ("country", "Country"),
+        ("programme", "Programme"),
+        ("source", "Source"),
+        ("notes", "Notes"),
+        ("source_url", "Link"),
+    ],
+    "/api/tenders/matches": [
+        ("tender.title", "Tender"),
+        ("tender.publication_number", "Reference"),
+        ("match_score", "Match score"),
+        ("tender.buyer_country", "Country"),
+        ("tender.official_name", "Contracting authority"),
+        ("tender.submission_deadline", "Deadline"),
+        ("tender.estimated_value", "Value"),
+        ("tender.procedure_type", "Procedure"),
+        ("tender.cpv_main", "CPV"),
+        ("match_details", "Why it matched"),
+        ("is_saved", "Saved"),
+        ("is_applied", "Applied"),
+        ("tender.ted_url", "Link"),
+    ],
 }
 
 

@@ -324,3 +324,10 @@
     font-size: 0.84rem;
   }
 }
+
+/* Download sits under the board's count line rather than beside the heading:
+   the header is a stacked block, not a flex row, so floating it right would
+   collide with the description text at narrow widths. */
+.pipeline-view__export {
+  margin-top: 0.6rem;
+}

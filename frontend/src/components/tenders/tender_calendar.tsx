@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/tender_calendar.tsx
 import { useState, useEffect, useMemo } from 'react';
+import { ExportButton } from '../shared/export_button';
 import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
@@ -7,6 +8,10 @@ import './tender_calendar.css';
 import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+// How far ahead the calendar looks. Named so the grid and the Excel
+// download cannot disagree about the window they are describing.
+const CALENDAR_MONTHS_AHEAD = 6;
 
 interface TenderCalendarProps {
   onSelectTender: (tender: Tender, match?: TenderMatch) => void;
@@ -29,7 +34,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
     const fetchDeadlines = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${API_URL}/api/tenders/calendar-deadlines?months_ahead=6`, {
+        const res = await fetch(`${API_URL}/api/tenders/calendar-deadlines?months_ahead=${CALENDAR_MONTHS_AHEAD}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -266,6 +271,12 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
             <span className="mdi mdi-format-list-bulleted"></span>
             {t('tenderator.calendar.listView')}
           </button>
+          <ExportButton
+            path="/api/tenders/calendar-deadlines"
+            params={{ months_ahead: CALENDAR_MONTHS_AHEAD, only_open: true }}
+            limit={500}
+            className="tender-calendar__export"
+          />
         </div>
       </div>
 

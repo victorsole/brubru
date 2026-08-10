@@ -435,3 +435,18 @@
   text-decoration: underline;
   margin-left: 0.2rem;
 }
+
+/* Excel download, sharing the pursuits-filter strip. margin-left:auto pushes
+   it to the trailing edge; the strip already wraps, so at 375px the button
+   drops onto its own line instead of squeezing the checkbox label. */
+.tenderator-feed__export {
+  margin-left: auto;
+}
+@media (max-width: 480px) {
+  .tenderator-feed__client-filter {
+    flex-wrap: wrap;
+  }
+  .tenderator-feed__export {
+    margin-left: 0;
+  }
+}

@@ -8,6 +8,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../hooks/use_auth';
 import { useTranslation } from 'react-i18next';
+import { ExportButton } from '../shared/export_button';
 import './pipeline_view.css';
 import { uiDateLocale } from '../../i18n/config';
 
@@ -190,6 +191,9 @@ export const PipelineView = () => {
           {' '}
           {t('tenderator.pipelineView.headerDescription')}
         </p>
+        {/* The whole pipeline, as a sheet. No filters to mirror: this view
+            always shows every stage, so the file is every stage too. */}
+        <ExportButton path="/api/tenders/pipeline" limit={200} className="pipeline-view__export" />
       </header>
 
       <div className="pipeline-view__board">
