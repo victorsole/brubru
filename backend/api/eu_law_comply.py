@@ -6,7 +6,7 @@ Handles compliance checking, gap analysis, and requirement extraction for EU law
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func, case
+from sqlalchemy import and_, or_, func, case, text
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 import logging
@@ -449,6 +449,85 @@ async def get_cluster_requirements(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve requirements"
         )
+
+
+
+@router.get(
+    "/clusters/{cluster_id}/cascade",
+    summary="Delegated acts, implementing acts and Commission guidance for a package",
+    description=(
+        "**What it does**\n\n"
+        "Returns everything that hangs off the laws in a compliance package: the "
+        "delegated and implementing acts that carry the operative detail, and the "
+        "Commission notices and guidelines that explain how to comply. Grouped by "
+        "kind, because the first two create obligations and the third does not.\n\n"
+        "**When to use it**\n\n"
+        "Alongside GET /clusters/{id}/requirements when showing a user what a "
+        "package actually covers before they upload anything.\n\n"
+        "**Input**\n\n"
+        "Path: `cluster_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/clusters/58/cascade`.\n\n"
+        "**You get back**\n\n"
+        "`binding` (delegated + implementing) and `guidance` lists, each with "
+        "celex, title, parent_celex, status and a EUR-Lex link, plus counts. "
+        "Empty lists where nothing has been discovered: never padded."
+    ),
+)
+def get_cluster_cascade(
+    cluster_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.subscription_tier not in ['yellow', 'blue']:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="EU Law Comply is available for Yellow and Blue tier users only",
+        )
+    cluster = db.query(LawCluster).filter(LawCluster.id == cluster_id).first()
+    if not cluster:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Cluster {cluster_id} not found")
+
+    # secondary_acts is keyed on the PARENT's CELEX, so join through the
+    # cluster's laws rather than through any procedure reference.
+    rows = db.execute(text("""
+        SELECT s.celex, s.title, s.parent_celex, s.act_type::text AS act_type,
+               s.status::text AS status, s.source_url, s.publication_date
+          FROM secondary_acts s
+         WHERE s.parent_celex IN (
+                 SELECT l.celex FROM cluster_laws cl
+                   JOIN eu_laws l ON l.id = cl.law_id
+                  WHERE cl.cluster_id = :cid AND l.celex IS NOT NULL)
+           AND s.celex IS NOT NULL
+         ORDER BY s.act_type, s.publication_date DESC NULLS LAST, s.celex
+    """), {"cid": cluster_id}).mappings().all()
+
+    binding, guidance = [], []
+    for r in rows:
+        item = {
+            "celex": r["celex"],
+            "title": r["title"],
+            "parent_celex": r["parent_celex"],
+            "act_type": r["act_type"],
+            "status": r["status"],
+            "url": r["source_url"] or
+                  f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r['celex']}",
+            "publication_date": r["publication_date"].isoformat() if r["publication_date"] else None,
+        }
+        (guidance if r["act_type"] == "guidance" else binding).append(item)
+
+    return {
+        "cluster_id": cluster_id,
+        "cluster_name": cluster.name,
+        "binding": binding,
+        "guidance": guidance,
+        "counts": {
+            "delegated": sum(1 for i in binding if i["act_type"] == "delegated"),
+            "implementing": sum(1 for i in binding if i["act_type"] == "implementing"),
+            "guidance": len(guidance),
+        },
+    }
 
 
 # ============================================================================

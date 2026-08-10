@@ -1906,7 +1906,10 @@
       "empty": "This package has no obligations recorded yet.",
       "withDeadline": "{{count}} with a dated deadline",
       "intro": "These are the obligations your documents will be measured against. Nothing is uploaded until you choose to run the analysis.",
-      "boundElsewhere": "{{count}} of them bind another actor, such as Member States, and are shown for context rather than scored against you."
+      "boundElsewhere": "{{count}} of them bind another actor, such as Member States, and are shown for context rather than scored against you.",
+      "cascadeTitle": "What hangs off these laws",
+      "cascadeBinding": "{{count}} delegated and implementing acts carry the operative detail.",
+      "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations."
     }
   },
   "tenderator": {

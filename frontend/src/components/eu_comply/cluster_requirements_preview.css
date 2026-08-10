@@ -203,3 +203,49 @@
   border-radius: 4px;
   padding: 0.08rem 0.35rem;
 }
+
+/* The regulatory cascade: what hangs off the package's laws. */
+.cluster-preview__cascade {
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  background: #f8faff;
+  border: 1px solid #e6eaf0;
+  border-radius: 10px;
+}
+
+.cluster-preview__cascade h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  margin: 0 0 0.5rem;
+}
+
+.cluster-preview__cascade-lead {
+  font-size: 0.82rem;
+  color: #55607a;
+  margin: 0.55rem 0 0.35rem;
+  line-height: 1.5;
+}
+
+.cluster-preview__cascade ul { list-style: none; margin: 0; padding: 0; }
+
+.cluster-preview__cascade li {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 0.2rem 0;
+}
+
+.cluster-preview__cascade a { color: #3b3183; text-decoration: none; }
+.cluster-preview__cascade a:hover { text-decoration: underline; }
+
+.cluster-preview__cascade code {
+  font-size: 0.73rem;
+  background: #eef1fb;
+  border-radius: 4px;
+  padding: 0.06rem 0.3rem;
+  margin-right: 0.25rem;
+}

@@ -1906,7 +1906,10 @@
       "empty": "Aquest paquet encara no té obligacions registrades.",
       "withDeadline": "{{count}} amb data límit",
       "intro": "Aquestes són les obligacions amb què es contrastaran els vostres documents. No es puja res fins que decidiu executar l'anàlisi.",
-      "boundElsewhere": "{{count}} d'aquestes obliguen un altre actor, com ara els estats membres, i es mostren com a context en comptes de puntuar-se en contra vostra."
+      "boundElsewhere": "{{count}} d'aquestes obliguen un altre actor, com ara els estats membres, i es mostren com a context en comptes de puntuar-se en contra vostra.",
+      "cascadeTitle": "Què es deriva d'aquestes normes",
+      "cascadeBinding": "{{count}} actes delegats i d'execució contenen el detall operatiu.",
+      "cascadeGuidance": "{{count}} comunicacions i directrius de la Comissió expliquen com complir. No creen obligacions."
     }
   },
   "tenderator": {

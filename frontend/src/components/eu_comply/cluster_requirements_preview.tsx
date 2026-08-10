@@ -46,6 +46,20 @@ const ADDRESSEE_LABEL: Record<string, string> = {
 const addresseeOf = (r: PreviewRequirement): string =>
   r.extra_metadata?.addressee || 'economic_operator';
 
+interface CascadeItem {
+  celex: string;
+  title: string;
+  parent_celex: string;
+  act_type: 'delegated' | 'implementing' | 'guidance';
+  url: string;
+}
+
+interface Cascade {
+  binding: CascadeItem[];
+  guidance: CascadeItem[];
+  counts: { delegated: number; implementing: number; guidance: number };
+}
+
 interface Props {
   clusterId: number;
   requirementCount: number;
@@ -68,6 +82,7 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
   // thrown away, and the guard then blocked any retry: the list never
   // appeared. Depend only on what genuinely identifies the request.
   const fetchedFor = useRef<number | null>(null);
+  const [cascade, setCascade] = useState<Cascade | null>(null);
 
   useEffect(() => {
     if (!open || fetchedFor.current === clusterId) return;
@@ -85,6 +100,16 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
         if (!r.ok) throw new Error(String(r.status));
         const d = await r.json();
         if (!cancelled) setItems(Array.isArray(d) ? d : []);
+
+        // The acts that hang off this package: delegated and implementing
+        // regulations carrying the operative detail, and Commission guidance
+        // on applying it. Fetched alongside, and simply absent if none has
+        // been discovered -- never padded to look fuller than it is.
+        const cr = await fetch(
+          `${API_BASE_URL}/api/eu-law-comply/clusters/${clusterId}/cascade`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        if (cr.ok && !cancelled) setCascade(await cr.json());
       } catch {
         if (!cancelled) {
           setError(t('comply.preview.error', 'Could not load the obligation list.'));
@@ -208,6 +233,55 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
                   </li>
                 ))}
               </ul>
+
+              {cascade && (cascade.binding.length > 0 || cascade.guidance.length > 0) && (
+                <div className="cluster-preview__cascade">
+                  <h4>
+                    <span className="mdi mdi-file-tree-outline"></span>
+                    {t('comply.preview.cascadeTitle', 'What hangs off these laws')}
+                  </h4>
+                  {cascade.binding.length > 0 && (
+                    <>
+                      <p className="cluster-preview__cascade-lead">
+                        {t('comply.preview.cascadeBinding', {
+                          defaultValue:
+                            '{{count}} delegated and implementing acts carry the operative detail.',
+                          count: cascade.binding.length,
+                        })}
+                      </p>
+                      <ul>
+                        {cascade.binding.slice(0, 5).map((a) => (
+                          <li key={a.celex}>
+                            <a href={a.url} target="_blank" rel="noopener noreferrer">
+                              <code>{a.celex}</code> {a.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  {cascade.guidance.length > 0 && (
+                    <>
+                      <p className="cluster-preview__cascade-lead">
+                        {t('comply.preview.cascadeGuidance', {
+                          defaultValue:
+                            '{{count}} Commission notices and guidelines explain how to comply. These do not create obligations.',
+                          count: cascade.guidance.length,
+                        })}
+                      </p>
+                      <ul>
+                        {cascade.guidance.slice(0, 5).map((a) => (
+                          <li key={a.celex}>
+                            <a href={a.url} target="_blank" rel="noopener noreferrer">
+                              <code>{a.celex}</code> {a.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              )}
 
               {filtered.length > visible && (
                 <button

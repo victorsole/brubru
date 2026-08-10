@@ -2797,7 +2797,10 @@
       "empty": "Questo pacchetto non ha ancora obblighi registrati.",
       "withDeadline": "{{count}} con una scadenza datata",
       "intro": "Questi sono gli obblighi rispetto ai quali saranno verificati i vostri documenti. Nulla viene caricato finché non scegliete di eseguire l'analisi.",
-      "boundElsewhere": "{{count}} di questi vincolano un altro soggetto, come gli Stati membri, e sono mostrati come contesto anziché valutati a vostro carico."
+      "boundElsewhere": "{{count}} di questi vincolano un altro soggetto, come gli Stati membri, e sono mostrati come contesto anziché valutati a vostro carico.",
+      "cascadeTitle": "Che cosa discende da queste norme",
+      "cascadeBinding": "{{count}} atti delegati e di esecuzione contengono il dettaglio operativo.",
+      "cascadeGuidance": "{{count}} comunicazioni e linee guida della Commissione spiegano come conformarsi. Non creano obblighi."
     }
   },
   "featurePreview": {
