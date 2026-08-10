@@ -21,19 +21,45 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
 from models.tender import Tender, TenderProfile, TenderMatch
+from .country_codes import normalise_country
 
 logger = logging.getLogger(__name__)
 
 
 class MatchWeight(Enum):
-    """Configurable weights for match scoring criteria."""
+    """Configurable weights for match scoring criteria.
+
+    Rebalanced 10 Aug 2026 towards what the contract is ABOUT and away from
+    how convenient it is to bid on.
+
+    Under the old split (country .20, value .20, keyword .05) an agri-food
+    profile scored a gas-boiler tender at 63/100, comfortably past the 35
+    threshold: country 1.0x.20 + value 1.0x.20 + deadline 1.0x.10 + SME
+    .7x.10 + procedure .9x.05 + keyword .3x.05 + CPV 0.0x.30. Every
+    logistics dimension was perfect and the two dimensions that encode
+    "is this my sector" contributed .015 between them. That is the
+    "my top matches are gas boilers, public lighting and IT security"
+    report from 19 May 2026.
+
+    Country and value are now worth half what they were, keyword four times.
+    They still sum to 1.0.
+    """
     CPV_MATCH = 0.30          # Sector/CPV code overlap
-    COUNTRY_MATCH = 0.20      # Geographic match
-    VALUE_MATCH = 0.20        # Value range compatibility
+    KEYWORD_MATCH = 0.20      # Keyword overlap
+    COUNTRY_MATCH = 0.10      # Geographic match
+    VALUE_MATCH = 0.10        # Value range compatibility
     DEADLINE_MATCH = 0.10     # Deadline feasibility
     SME_SCORE = 0.10          # SME suitability score
-    KEYWORD_MATCH = 0.05      # Keyword overlap
-    PROCEDURE_MATCH = 0.05    # Procedure type preference
+    PROCEDURE_MATCH = 0.10    # Procedure type preference
+
+
+# A tender in the wrong sector is not a match however convenient the deadline
+# is, so relevance gates rather than merely contributing. When the profile and
+# the tender both carry enough information to judge sector fit and the best
+# available content signal comes in under this, the match is dropped outright.
+# Applies only when a content signal EXISTS: a tender with no CPV and no
+# description is unjudged, not rejected.
+CONTENT_RELEVANCE_FLOOR = 0.2
 
 
 @dataclass
@@ -258,20 +284,37 @@ class TenderMatcher:
         barriers = []
         opportunities = []
 
-        # HARD FILTER: If user selected specific countries, only show those
-        # (regardless of eu_wide setting - specific selections take priority)
-        if profile.countries_of_interest and tender.buyer_country:
-            if tender.buyer_country not in profile.countries_of_interest:
-                # Return zero-score result to exclude this tender
-                return MatchResult(
-                    tender_id=tender.id,
-                    profile_id=profile.id,
-                    user_id=str(profile.user_id),
-                    total_score=0.0,
-                    score_breakdown={},
-                    match_details="Country not in preferred list",
-                    barriers=["Country not in your selected countries"],
-                    opportunities=[]
+        def _excluded(reason: str, barrier: str) -> MatchResult:
+            return MatchResult(
+                tender_id=tender.id,
+                profile_id=profile.id,
+                user_id=str(profile.user_id),
+                total_score=0.0,
+                score_breakdown={},
+                match_details=reason,
+                barriers=[barrier],
+                opportunities=[],
+            )
+
+        # HARD FILTER: a country the user did not pick, for a user who also
+        # said they are NOT open to the EU at large.
+        #
+        # This used to fire regardless of eu_wide, which made the flag dead:
+        # _score_country_match has a considered answer for "in my list" (1.0)
+        # versus "elsewhere in the EU, and I said I'm open to that" (0.3), and
+        # the hard filter returned before it could ever be consulted. A user
+        # who ticked eu_wide and listed Belgium saw Belgium only.
+        #
+        # Compare normalised, so a profile saved with "be" or "BEL" still
+        # matches a notice stored as "BE".
+        if profile.countries_of_interest and tender.buyer_country and not profile.eu_wide:
+            wanted = {
+                c for c in (normalise_country(x) for x in profile.countries_of_interest) if c
+            }
+            if wanted and normalise_country(tender.buyer_country) not in wanted:
+                return _excluded(
+                    "Country not in preferred list",
+                    "Country not in your selected countries",
                 )
 
         # Each scorer returns Optional[float]:
@@ -323,7 +366,21 @@ class TenderMatcher:
         if scores["keyword_match"] is not None and scores["keyword_match"] >= 0.5:
             opportunities.append("Keywords match your expertise areas")
 
-        # 7. Procedure Match (5%)
+        # RELEVANCE GATE: both content dimensions have been scored by now. If
+        # at least one produced a real signal and the strongest of them is
+        # still under the floor, this contract is not in the user's sector and
+        # no amount of deadline comfort should surface it.
+        content_signals = [
+            s for s in (scores.get("cpv_match"), scores.get("keyword_match"))
+            if s is not None
+        ]
+        if content_signals and max(content_signals) < CONTENT_RELEVANCE_FLOOR:
+            return _excluded(
+                "Outside your sector: no CPV or keyword overlap",
+                "Neither the CPV codes nor your keywords match this contract",
+            )
+
+        # 7. Procedure Match (10%)
         scores["procedure_match"] = self._score_procedure_match(tender, profile)
         if tender.procedure_type == "open":
             opportunities.append("Open procedure - accessible to all bidders")
@@ -514,7 +571,12 @@ class TenderMatcher:
                 matches += 1
 
         if matches == 0:
-            return 0.3  # No matches
+            # 0.0, not 0.3. The profile listed keywords and the tender text
+            # contains none of them: that is evidence against a match, not a
+            # small amount of evidence for one. At 0.3 this dimension nudged
+            # every irrelevant tender upwards and sat above the relevance
+            # floor, so the gate could never fire on keywords alone.
+            return 0.0
 
         return min(1.0, 0.5 + (matches / len(profile.keywords)) * 0.5)
 
@@ -548,7 +610,16 @@ class TenderMatcher:
         """Generate human-readable match summary."""
         parts = []
 
-        # Overall assessment
+        # Overall assessment. `scores` has had its None entries stripped by the
+        # caller, so it is empty for a tender that produced no signal on any
+        # dimension -- no CPV, no country, no value, no deadline, no SME score,
+        # no keywords, no procedure type. That divided by zero and took the
+        # whole match run down with it.
+        if not scores:
+            return (
+                "Not enough information in this notice to assess fit. "
+                "Open the original notice for the full text."
+            )
         avg_score = sum(scores.values()) / len(scores) * 100
         if avg_score >= 70:
             parts.append("Strong match for your profile.")

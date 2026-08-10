@@ -50,6 +50,13 @@ router = APIRouter(
     responses={404: {"description": "Not found"}}
 )
 
+# The economy_items rows that count as a funding opportunity from a
+# decentralised EU body. Defined once because four call sites read it -- the
+# unified feed, the "your matches" agency bucket, the /bodies catalogue and the
+# dashboard KPI -- and they had drifted: the KPI omitted 'framework', so the
+# headline count contradicted the list rendered directly beneath it.
+_AGENCY_FUNDING_ITEM_TYPES = ("tender", "grant", "eoi_call", "startup_funding", "framework")
+
 
 # ============================================================================
 # Dependencies
@@ -2004,7 +2011,7 @@ def get_unified_feed(
 
     # economy_items funding item_types — populated by services/scrapers/agency_procurement.py
     # via the register_resource pattern in api/v2/funding/agency_procurement.py.
-    _AGENCY_ITEM_TYPES = ("tender", "grant", "eoi_call", "startup_funding", "framework")
+    _AGENCY_ITEM_TYPES = _AGENCY_FUNDING_ITEM_TYPES
     # Map body_code → display acronym for the organisation slot. Anything not
     # listed falls back to body_code.upper(); add new entries when new agency
     # folders are registered.
@@ -3124,7 +3131,7 @@ async def get_bodies(
                 "GROUP BY body_code "
                 "ORDER BY open_count DESC NULLS LAST, total DESC"
             ),
-            {"types": ["tender", "grant", "eoi_call", "startup_funding", "framework"], "now": now},
+            {"types": list(_AGENCY_FUNDING_ITEM_TYPES), "now": now},
         ).fetchall()
     except Exception as exc:
         logger.warning("get_bodies failed: %s", exc)
@@ -3217,13 +3224,17 @@ async def get_dashboard_stats(
     # Agency procurement (economy_items) — same store the public
     # /api/v2/funding/{agency}-* endpoints serve. Open = deadline in the future
     # or unknown.
+    # `framework` belongs here. The unified feed's _AGENCY_ITEM_TYPES and the
+    # /bodies catalogue both count it, so leaving it out made the headline
+    # disagree with the list underneath: the Framework-contracts lens surfaced
+    # 11 open FWCs that the "open opportunities" KPI said did not exist.
     agency_open = _safe(lambda: db.execute(
         text(
             "SELECT count(*) FROM economy_items "
             "WHERE item_type = ANY(:types) "
             "  AND (document_date > :now OR document_date IS NULL)"
         ),
-        {"types": ["tender", "grant", "eoi_call", "startup_funding"], "now": now},
+        {"types": list(_AGENCY_FUNDING_ITEM_TYPES), "now": now},
     ).scalar() or 0)
 
     open_opportunities = ted_open + ft_proposals_open + ft_tenders_open + agency_open
