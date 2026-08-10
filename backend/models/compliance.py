@@ -77,6 +77,13 @@ class ComplianceAnalysis(Base):
     document_ids = Column(ARRAY(Integer))
     # The uploads this run was actually performed against.
     document_uuids = Column(ARRAY(UUID(as_uuid=True)))
+    # Evidence seal (migration 212): what this run examined, hashed, and
+    # optionally Ed25519-signed. Written once at completion.
+    manifest = Column(JSON)
+    manifest_sha256 = Column(String(64))
+    manifest_signature = Column(Text)
+    manifest_key_id = Column(String(64))
+    sealed_at = Column(TIMESTAMP(timezone=True))
 
     # Status
     status = Column(String(50), nullable=False, default='processing', index=True)

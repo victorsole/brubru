@@ -30,6 +30,9 @@ from api.auth import get_current_user
 from services.compliance import GapAnalyzer
 from services.compliance.report_exporter import ReportExporter
 from services.compliance.review_profile import validate_profile
+from services.compliance.evidence_manifest import (
+    build_manifest, public_key_b64, seal, verify as verify_manifest,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -152,6 +155,17 @@ async def run_compliance_analysis_task(
         await analyzer.analyze_compliance(analysis_id, requirements, document_paths)
 
         logger.info(f"Compliance analysis {analysis_id} completed successfully")
+
+        # Seal the run. Evidence has to be created at the moment of the run: a
+        # manifest built on demand later would attest whatever the data happens
+        # to look like when someone asks, which is the opposite of the point.
+        # Never fails the analysis -- a run that produced findings but could not
+        # be sealed is still a valid run, it simply cannot be verified later.
+        try:
+            _seal_analysis(db, analysis_id)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Could not seal analysis {analysis_id}: "
+                           f"{type(exc).__name__}: {exc}")
 
     except Exception as e:
         logger.error(f"Background analysis failed for {analysis_id}: {str(e)}")
@@ -894,6 +908,45 @@ async def get_law_by_celex(
 # ANALYSIS ENDPOINTS
 # ============================================================================
 
+def _seal_analysis(db: Session, analysis_id: int) -> Optional[str]:
+    """Build and store the evidence manifest for a completed run.
+
+    Returns the digest, or None if the run is not in a sealable state. Only
+    completed runs are sealed: sealing a failed or partial-by-error run would
+    attest a verdict set nobody should rely on.
+    """
+    analysis = db.query(ComplianceAnalysis).filter(
+        ComplianceAnalysis.id == analysis_id).first()
+    if not analysis or analysis.status != 'completed':
+        return None
+
+    cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+    findings_with_reqs = (
+        db.query(GapFinding, LawRequirement)
+        .join(LawRequirement, GapFinding.requirement_id == LawRequirement.id)
+        .filter(GapFinding.analysis_id == analysis_id)
+        .all()
+    )
+    documents = []
+    if analysis.document_uuids:
+        documents = (db.query(UserDocument)
+                     .filter(UserDocument.id.in_(list(analysis.document_uuids)))
+                     .all())
+
+    body = build_manifest(analysis, cluster, findings_with_reqs, documents)
+    sealed = seal(body)
+
+    analysis.manifest = sealed["manifest"]
+    analysis.manifest_sha256 = sealed["manifest_sha256"]
+    analysis.manifest_signature = sealed["signature"]
+    analysis.manifest_key_id = sealed["key_id"]
+    analysis.sealed_at = datetime.utcnow()
+    db.commit()
+    logger.info(f"Sealed analysis {analysis_id}: {sealed['manifest_sha256'][:16]}... "
+                f"signed={sealed['signed']}")
+    return sealed["manifest_sha256"]
+
+
 @router.post("/analyze")
 async def create_compliance_analysis(
     cluster_id: int = Form(...),
@@ -1446,6 +1499,63 @@ async def get_user_analysis_history(
 # ============================================================================
 # WORKSPACES (durable per user + cluster) AND RUN DIFFING
 # ============================================================================
+
+@router.get(
+    "/analysis/{analysis_id}/verify",
+    summary="Prove a compliance check has not changed since it ran",
+    description=(
+        "**What it does**\n\n"
+        "Re-reads the run from the database and compares it against the seal "
+        "written when it completed: the documents examined, the obligations "
+        "checked, and the verdict recorded for each. Reports which part changed "
+        "if any did.\n\n"
+        "**When to use it**\n\n"
+        "Before relying on a past report, and whenever a third party asks you to "
+        "show that a compliance check is the one you say it is.\n\n"
+        "**Input**\n\n`analysis_id` in the path. Bearer JWT. Only your own runs.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/analysis/26/verify`.\n\n"
+        "**You get back**\n\n"
+        "`verified` true or false, `checks` with `documents_unchanged`, "
+        "`obligations_unchanged` and `verdicts_unchanged`, the `manifest_sha256`, "
+        "and whether a signature is present and valid. This proves INTEGRITY, "
+        "not correctness: it shows the findings are the ones produced that day, "
+        "not that they were right."
+    ),
+)
+async def verify_analysis(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Compare a sealed run against the current state of the database."""
+    analysis = db.query(ComplianceAnalysis).filter(
+        and_(ComplianceAnalysis.id == analysis_id,
+             ComplianceAnalysis.user_id == current_user.id)
+    ).first()
+    if not analysis:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+    findings_with_reqs = (
+        db.query(GapFinding, LawRequirement)
+        .join(LawRequirement, GapFinding.requirement_id == LawRequirement.id)
+        .filter(GapFinding.analysis_id == analysis_id)
+        .all()
+    )
+    documents = []
+    if analysis.document_uuids:
+        documents = (db.query(UserDocument)
+                     .filter(UserDocument.id.in_(list(analysis.document_uuids)))
+                     .all())
+
+    rebuilt = build_manifest(analysis, cluster, findings_with_reqs, documents)
+    result = verify_manifest(analysis.manifest, analysis.manifest_sha256,
+                             analysis.manifest_signature, rebuilt)
+    result["analysis_id"] = analysis_id
+    result["public_key"] = public_key_b64()
+    return result
+
 
 @router.get(
     "/workspaces",
