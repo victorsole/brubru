@@ -74,3 +74,25 @@ async def get_current_user_dev(
         )
 
     return user
+
+
+async def require_blue_tier_dev(
+    user: User = Depends(get_current_user_dev),
+) -> User:
+    """Blue tier, with the same development-mode fallback as get_current_user_dev.
+
+    Everything under /api/tenders gates on Blue, but Tender Docs (tender_files,
+    tender_templates, generate_tender_section) shipped on get_current_user_dev,
+    which only asks whether you are logged in. That left the funding-application
+    co-writer, the most expensive thing in the product to serve, reachable by any
+    registered account including one on a free trial.
+
+    Mirrors tenderator.require_blue_tier: 'blue' or 'admin'. The dev fallback
+    user is created with subscription_tier='blue', so a local run is unaffected.
+    """
+    if user.subscription_tier not in ("blue", "admin"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Tender Docs requires a Professional subscription",
+        )
+    return user

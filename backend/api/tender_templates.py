@@ -1,5 +1,5 @@
 """
-Tender Templates API  exposes the JSON funding templates that drive
+Tender Templates API — exposes the JSON funding templates that drive
 Tender Docs section structure + AI co-writer prompts.
 
 Endpoints under /api/tender-templates:
@@ -8,42 +8,37 @@ Endpoints under /api/tender-templates:
 - GET /programmes              list distinct programmes with counts
 
 Templates live at backend/knowledge_base/funding_templates/*.json. They are
-shipped in git; not user-editable. Cached in process for the request lifecycle.
+shipped in git; not user-editable. Loading, locale fallback and caching all live
+in services/funding_template_loader.py.
 
-Shipped 16 Jun 2026 with Tender Docs v1.
+Shipped 16 Jun 2026 with Tender Docs v1. Locale support added 10 Aug 2026.
 """
 from __future__ import annotations
 
-import json
 import logging
-from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import Optional
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends, Query
+
+from api.auth_optional import require_blue_tier_dev
+from models.user import User
+from services.funding_template_loader import (
+    SUPPORTED_LANGS,
+    load_all,
+    load_template,
+    normalise_lang,
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/tender-templates", tags=["Tender Docs"])
 
-_TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "knowledge_base" / "funding_templates"
-_TEMPLATE_CACHE: Dict[str, Dict[str, Any]] = {}
-
-
-def _load_all() -> List[Dict[str, Any]]:
-    """Load every *.json under funding_templates/ (skip _schema.md)."""
-    out: List[Dict[str, Any]] = []
-    for p in sorted(_TEMPLATES_DIR.glob("*.json")):
-        try:
-            if p.stem in _TEMPLATE_CACHE:
-                out.append(_TEMPLATE_CACHE[p.stem])
-                continue
-            with p.open() as fh:
-                data = json.load(fh)
-            _TEMPLATE_CACHE[p.stem] = data
-            out.append(data)
-        except Exception as e:
-            logger.warning("Failed to load tender template %s: %s", p.name, e)
-    return out
+_LANG_DESC = (
+    "Render the template in one of Brubru's six languages "
+    f"({', '.join(SUPPORTED_LANGS)}). Falls back to English key by key, so a "
+    "partially translated template returns translated headings with English "
+    "prompts rather than failing."
+)
 
 
 @router.get(
@@ -54,14 +49,23 @@ def _load_all() -> List[Dict[str, Any]]:
         "optionally filtered by programme.\n\n"
         "**When to use it**\nIn the 'Start a Tender Doc' wizard, after the user "
         "picks a programme.\n\n"
-        "**You get back**\nA list of summaries  id, name, programme, "
-        "sub_instrument, stage, scaffold_version, deadline. Detail is at /{id}."
+        "**Input**\n`programme` to filter, `lang` to pick a language.\n\n"
+        "**Try it**\n`GET /api/tender-templates/?programme=EIC&lang=fr`\n\n"
+        "**You get back**\nA list of summaries: id, name, programme, "
+        "sub_instrument, stage, scaffold_version, deadline, plus the languages "
+        "each template is available in. Detail is at /{id}."
     ),
 )
-async def list_templates(programme: Optional[str] = None):
-    all_templates = _load_all()
+async def list_templates(
+    programme: Optional[str] = None,
+    lang: Optional[str] = Query(None, description=_LANG_DESC),
+):
+    all_templates = load_all(lang)
     if programme:
-        all_templates = [t for t in all_templates if (t.get("programme") or "").lower() == programme.lower()]
+        all_templates = [
+            t for t in all_templates
+            if (t.get("programme") or "").lower() == programme.lower()
+        ]
     summaries = []
     for t in all_templates:
         # Pick a representative deadline from the template if present
@@ -83,8 +87,11 @@ async def list_templates(programme: Optional[str] = None):
             "deadline": deadline,
             "official_template_url": t.get("official_template_url"),
             "note": t.get("note"),
+            "lang": t.get("lang"),
+            "available_locales": t.get("available_locales", ["en"]),
+            "is_translated": t.get("is_translated", False),
         })
-    return {"templates": summaries, "count": len(summaries)}
+    return {"templates": summaries, "count": len(summaries), "lang": normalise_lang(lang)}
 
 
 @router.get(
@@ -92,9 +99,8 @@ async def list_templates(programme: Optional[str] = None):
     summary="List distinct programmes with template counts",
 )
 async def list_programmes():
-    all_templates = _load_all()
-    counts: Dict[str, int] = {}
-    for t in all_templates:
+    counts: dict[str, int] = {}
+    for t in load_all():
         prog = t.get("programme") or "Unknown"
         counts[prog] = counts.get(prog, 0) + 1
     return {
@@ -107,17 +113,30 @@ async def list_programmes():
 @router.get(
     "/{template_id}",
     summary="Get a Tender Template by id",
+    description=(
+        "**What it does**\nReturns one funding template in full: every section, "
+        "sub-section, page budget, evaluation criterion, official reference "
+        "document and AI prompt seed.\n\n"
+        "**When to use it**\nWhen the wizard or the editor opens a template.\n\n"
+        "**Input**\nThe template id from `GET /api/tender-templates/`, plus an "
+        "optional `lang`.\n\n"
+        "**Try it**\n`GET /api/tender-templates/eic-accelerator-stage-2?lang=es`\n\n"
+        "**You get back**\nThe full template document, plus `lang`, "
+        "`available_locales` and `is_translated` so the interface can say which "
+        "language the user is actually reading. Professional subscription "
+        "required: the section structure and prompt seeds are the substance of "
+        "Tender Docs, unlike the catalogue listing which stays open."
+    ),
 )
-async def get_template(template_id: str):
-    path = _TEMPLATES_DIR / f"{template_id}.json"
-    if not path.exists():
+async def get_template(
+    template_id: str,
+    lang: Optional[str] = Query(None, description=_LANG_DESC),
+    current_user: User = Depends(require_blue_tier_dev),
+):
+    document = load_template(template_id, lang)
+    if document is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Funding template '{template_id}' not found",
         )
-    if template_id in _TEMPLATE_CACHE:
-        return _TEMPLATE_CACHE[template_id]
-    with path.open() as fh:
-        data = json.load(fh)
-    _TEMPLATE_CACHE[template_id] = data
-    return data
+    return document

@@ -15,6 +15,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { currentApiLang } from '../../utils/brubru_lang';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_docs_tab.css';
 
@@ -158,7 +159,7 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack, subtitle 
  try {
  const [filesRes, tplRes] = await Promise.all([
  fetch(`${API_URL}/api/tender-files/`, { headers: { Authorization: `Bearer ${token}` } }),
- fetch(`${API_URL}/api/tender-templates/`, { headers: { Authorization: `Bearer ${token}` } }),
+ fetch(`${API_URL}/api/tender-templates/?lang=${currentApiLang()}`, { headers: { Authorization: `Bearer ${token}` } }),
  ]);
  const filesData = filesRes.ok ? await filesRes.json() : [];
  const tplData = tplRes.ok ? await tplRes.json() : { templates: [] };

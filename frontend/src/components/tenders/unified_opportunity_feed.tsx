@@ -12,6 +12,7 @@ import { LensToggle, type LensMode } from '../bubble/lens_toggle';
 import './unified_opportunity_feed.css';
 import type { SourceFilter } from './tenderator_dashboard';
 import { uiDateLocale } from '../../i18n/config';
+import { currentApiLang } from '../../utils/brubru_lang';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -126,11 +127,10 @@ const formatDeadline = (iso: string | null, t: any): string => {
 
 export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', eicProgramme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, lensModeOverride = null, onLensModeChange, onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
-  const { t, i18n } = useTranslation();
-  // Brubru's 6 — falls back to 'en' for any other UI locale.
-  const _BRUBRU_LANGS = ['en', 'es', 'ca', 'fr', 'it', 'nl'];
-  const uiLang = (i18n.language || 'en').slice(0, 2).toLowerCase();
-  const feedLang = _BRUBRU_LANGS.includes(uiLang) ? uiLang : 'en';
+  const { t } = useTranslation();
+  // Brubru's 6 — falls back to 'en' for any other UI locale. Shared helper so
+  // the Tender Docs calls and this feed cannot disagree about the language.
+  const feedLang = currentApiLang();
   const [items, setItems] = useState<UnifiedOpportunity[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

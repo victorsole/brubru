@@ -6,7 +6,8 @@ Single endpoint POST /api/generate/tender-section:
    - looks up that section's official prompts from the template JSON
    - assembles a section-aware system prompt (Excellence/Impact/Implementation
      framing; mandatory generative-AI disclosure note when required)
-   - runs through MultiProviderService (Cerebras → Gemini → ...)
+   - runs through MultiProviderService (Cerebras → Gemini → Groq → NVIDIA →
+     Mistral → OpenAI; no Anthropic, removed 6 Aug 2026)
    - returns markdown sized to the section's page_budget
    - appends a `disclosure` field listing the providers used so the caller
      can update tender_file.extra.ai_disclosure for the export footer
@@ -15,23 +16,35 @@ Shipped 16 Jun 2026 with Tender Docs v1.
 """
 from __future__ import annotations
 
-import json
 import logging
-from pathlib import Path
 from typing import List, Optional, Dict, Any
 
 from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel, Field
 
-from api.auth_optional import get_current_user_dev as get_current_user
+from api.auth_optional import require_blue_tier_dev as get_current_user
 from models.user import User
 from services.ai.multi_provider_service import get_multi_provider_service
+from services.funding_template_loader import (
+    SUPPORTED_LANGS,
+    load_template,
+    normalise_lang,
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/generate", tags=["Tender Docs"])
 
-_TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "knowledge_base" / "funding_templates"
+# What to call each language IN that language, so the instruction reads as a
+# native instruction rather than an English label the model has to translate.
+_LANG_NAMES = {
+    "en": "English (British spelling: analyse, colour, organisation)",
+    "es": "Spanish (español)",
+    "ca": "Catalan (català, with correct accents and the interpunct: Brussel·les)",
+    "fr": "French (français)",
+    "it": "Italian (italiano)",
+    "nl": "Dutch (Nederlands)",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -48,6 +61,14 @@ class TenderSectionRequest(BaseModel):
     prior_sections: Optional[Dict[str, str]] = Field(None, description="Map of section_id -> markdown the user already drafted, for narrative coherence")
     user_intent: Optional[str] = Field(None, description="Free-text user steering for this section")
     max_words: Optional[int] = Field(None, description="Override the page_budget-derived word target")
+    lang: Optional[str] = Field(
+        None,
+        description=(
+            "Language to draft in, one of Brubru's six "
+            f"({', '.join(SUPPORTED_LANGS)}). Defaults to English. The provider "
+            "chain is multilingual; it just has to be told."
+        ),
+    )
 
 
 class TenderSectionResponse(BaseModel):
@@ -65,12 +86,11 @@ class TenderSectionResponse(BaseModel):
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _load_template(template_id: str) -> Dict[str, Any]:
-    p = _TEMPLATES_DIR / f"{template_id}.json"
-    if not p.exists():
+def _load_template(template_id: str, lang: Optional[str] = None) -> Dict[str, Any]:
+    data = load_template(template_id, lang)
+    if data is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Template '{template_id}' not found")
-    with p.open() as fh:
-        return json.load(fh)
+    return data
 
 
 def _find_section(template: Dict[str, Any], section_id: str) -> Optional[Dict[str, Any]]:
@@ -137,10 +157,21 @@ def _build_system_prompt(template: Dict[str, Any], section: Dict[str, Any], req:
     if req.user_intent:
         user_steer = f"\n\nUser steering for this section: {req.user_intent.strip()[:1500]}"
 
+    # The chain (Cerebras, Gemini, Groq, NVIDIA, Mistral, OpenAI) is
+    # multilingual, but nothing was telling it which language to use, so a
+    # French user working through a French interface got an English draft.
+    lang_code = normalise_lang(req.lang)
+    lang_line = (
+        f"Write in {_LANG_NAMES.get(lang_code, _LANG_NAMES['en'])}. "
+        "Keep official EU programme names, instrument names and identifiers in "
+        "their original form; translate the surrounding prose.\n"
+    )
+
     sys = (
         f"You are Brubru, an EU funding application co-writer.\n"
         f"You are drafting section '{section.get('label', section.get('id'))}' of a {programme} {name} application.\n"
         f"The section addresses the {criterion} criterion.\n"
+        + lang_line +
         f"Word target: approximately {word_target} words. Hard cap: {int(word_target * 1.3)} words.\n"
         f"Output: clean markdown ONLY for this section. NO heading at the top (the heading is already in the doc skeleton).\n"
         f"Tone: precise, evaluator-facing, no marketing fluff. Use bullet points where the official template uses them.\n"
@@ -173,7 +204,8 @@ def _build_system_prompt(template: Dict[str, Any], section: Dict[str, Any], req:
         "assembles a section-aware system prompt (criterion + prompts + "
         "funding-mode conditional + org context + prior-sections context), "
         "runs it through the open-model chain (Cerebras → Gemini → NVIDIA → "
-        "Mistral → Groq → Anthropic → OpenAI), and returns markdown.\n\n"
+        "Mistral → Groq → OpenAI), and returns markdown in the requested "
+        "language.\n\n"
         "**When to use it**\n"
         "Per-section 'Draft with AI' button in the TenderFileEditor.\n\n"
         "**Input**\n"
@@ -189,7 +221,7 @@ async def generate_tender_section(
     payload: TenderSectionRequest,
     current_user: User = Depends(get_current_user),
 ):
-    template = _load_template(payload.template_id)
+    template = _load_template(payload.template_id, payload.lang)
     section = _find_section(template, payload.section_id)
     if not section:
         raise HTTPException(

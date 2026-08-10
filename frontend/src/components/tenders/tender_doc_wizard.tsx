@@ -11,6 +11,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { currentApiLang } from '../../utils/brubru_lang';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_doc_wizard.css';
 
@@ -123,7 +124,7 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  (async () => {
  if (!token) return;
  try {
- const r = await fetch(`${API_URL}/api/tender-templates/`, { headers: { Authorization: `Bearer ${token}` } });
+ const r = await fetch(`${API_URL}/api/tender-templates/?lang=${currentApiLang()}`, { headers: { Authorization: `Bearer ${token}` } });
  const d = r.ok ? await r.json() : { templates: [] };
  if (!cancelled) setTemplates(d.templates || []);
  } catch (e) {
@@ -140,7 +141,7 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  if (!selectedTemplateId || !token) { setTemplateDetail(null); return; }
  setLoadingDetail(true);
  try {
- const r = await fetch(`${API_URL}/api/tender-templates/${selectedTemplateId}`, { headers: { Authorization: `Bearer ${token}` } });
+ const r = await fetch(`${API_URL}/api/tender-templates/${selectedTemplateId}?lang=${currentApiLang()}`, { headers: { Authorization: `Bearer ${token}` } });
  const d = r.ok ? await r.json() : null;
  if (!cancelled && d) {
  setTemplateDetail(d);

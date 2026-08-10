@@ -18,45 +18,43 @@ Shipped 16 Jun 2026 with Tender Docs v1.
 """
 from __future__ import annotations
 
-import json
 import logging
-from pathlib import Path
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from api.auth_optional import get_current_user_dev as get_current_user
+from api.auth_optional import require_blue_tier_dev as get_current_user
 from models.user import User
 from models.tender_file import TenderFile
 from models.user_document import UserDocument
+from services.funding_template_loader import SUPPORTED_LANGS, load_template
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/tender-files", tags=["Tender Docs"])
 
-# Templates live next to KB guides; loaded on-demand + cached.
-_TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "knowledge_base" / "funding_templates"
-_TEMPLATE_CACHE: Dict[str, Dict[str, Any]] = {}
+_LANG_DESC = (
+    f"Language for the embedded template ({', '.join(SUPPORTED_LANGS)}). "
+    "Falls back to English key by key."
+)
 
+def _load_template(template_id: str, lang: Optional[str] = None) -> Dict[str, Any]:
+    """Load a template by id in the caller's language, English as fallback.
 
-def _load_template(template_id: str) -> Dict[str, Any]:
-    """Load a template JSON by id. Caches in-process."""
-    if template_id in _TEMPLATE_CACHE:
-        return _TEMPLATE_CACHE[template_id]
-    path = _TEMPLATES_DIR / f"{template_id}.json"
-    if not path.exists():
+    Loading, locale overlay and caching live in the shared loader; this router
+    only turns a missing template into a 404.
+    """
+    data = load_template(template_id, lang)
+    if data is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Funding template '{template_id}' not found",
         )
-    with path.open() as fh:
-        data = json.load(fh)
-    _TEMPLATE_CACHE[template_id] = data
     return data
 
 
@@ -229,6 +227,7 @@ def _embed_documents(db: Session, tender_file: TenderFile) -> List[Dict[str, Any
 )
 async def create_tender_file(
     payload: TenderFileCreate,
+    lang: Optional[str] = Query(None, description=_LANG_DESC),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -239,7 +238,9 @@ async def create_tender_file(
             detail=f"funding_mode must be one of {sorted(VALID_FUNDING_MODES)}",
         )
 
-    template = _load_template(payload.template_id)
+    # The seeded skeleton's headings come from the template, so the language
+    # chosen here is the language the user's draft starts life in.
+    template = _load_template(payload.template_id, lang)
 
     tf = TenderFile(
         user_id=current_user.id,
@@ -324,6 +325,7 @@ def list_tender_files(
 )
 async def get_tender_file(
     file_id: UUID,
+    lang: Optional[str] = Query(None, description=_LANG_DESC),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -332,7 +334,7 @@ async def get_tender_file(
     ).first()
     if not tf:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tender file not found")
-    template = _load_template(tf.template_id)
+    template = _load_template(tf.template_id, lang)
     response = TenderFileResponse(**tf.to_dict())
     response.documents = _embed_documents(db, tf)
     response.template = template

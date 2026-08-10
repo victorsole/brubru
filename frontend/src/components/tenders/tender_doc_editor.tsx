@@ -14,6 +14,7 @@
  */
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { currentApiLang } from '../../utils/brubru_lang';
 import { useAuth } from '../../hooks/use_auth';
 import { marked } from 'marked';
 import './tender_doc_editor.css';
@@ -152,7 +153,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  setLoading(true);
  setError(null);
  try {
- const r = await fetch(`${API_URL}/api/tender-files/${fileId}`, { headers: { Authorization: `Bearer ${token}` } });
+ const r = await fetch(`${API_URL}/api/tender-files/${fileId}?lang=${currentApiLang()}`, { headers: { Authorization: `Bearer ${token}` } });
  if (!r.ok) throw new Error(`HTTP ${r.status}`);
  const d = await r.json();
  setData(d);
@@ -269,6 +270,10 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  const body: Record<string, unknown> = {
  template_id: data.template_id,
  section_id: sectionId,
+ // Draft in the language the user is reading the application in.
+ // The provider chain is multilingual; without this it defaults to
+ // English and a French user gets an English draft in a French UI.
+ lang: currentApiLang(),
  };
  if (data.funding_mode) body.funding_mode = data.funding_mode;
  if (data.topic_id) body.topic_id = data.topic_id;
