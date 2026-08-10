@@ -1933,7 +1933,8 @@
       "boundElsewhere": "{{count}} of them bind another actor, such as Member States, and are shown for context rather than scored against you.",
       "cascadeTitle": "What hangs off these laws",
       "cascadeBinding": "{{count}} delegated and implementing acts carry the operative detail.",
-      "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations."
+      "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations.",
+      "contextOnly": "context, not scored"
     },
     "addressee": {
       "member_state": "Member States",

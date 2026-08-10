@@ -1933,7 +1933,8 @@
       "boundElsewhere": "{{count}} de ellas obligan a otro actor, como los Estados miembros, y se muestran como contexto en lugar de puntuarse en su contra.",
       "cascadeTitle": "Qué se deriva de estas normas",
       "cascadeBinding": "{{count}} actos delegados y de ejecución contienen el detalle operativo.",
-      "cascadeGuidance": "{{count}} comunicaciones y directrices de la Comisión explican cómo cumplir. No crean obligaciones."
+      "cascadeGuidance": "{{count}} comunicaciones y directrices de la Comisión explican cómo cumplir. No crean obligaciones.",
+      "contextOnly": "contexto, no puntuado"
     },
     "addressee": {
       "member_state": "Estados miembros",

@@ -40,6 +40,16 @@ router = APIRouter(prefix="/eu-law-comply", tags=["eu-law-comply"])
 # exact inverse of what a compliance user needs. Always order by this expression, never
 # by the raw column. The vocabulary is normalised to these three values by
 # scripts/normalise_requirement_criticality.py; anything unrecognised sorts last.
+# A requirement is BINDING unless it is flagged interpretive: recitals, penalty
+# ceilings, application dates and classification thresholds explain the regime
+# rather than impose a duty, and api/eu_law_comply.py excludes them from every
+# analysis. Every user-facing count must use this same filter, or the catalogue
+# promises 22 checks and the run performs 19.
+IS_BINDING_REQUIREMENT = func.coalesce(
+    LawRequirement.extra_metadata['interpretive'].as_string(), ''
+) != 'true'
+
+
 CRITICALITY_ORDER = case(
     (LawRequirement.criticality == 'critical', 0),
     (LawRequirement.criticality == 'important', 1),
@@ -251,7 +261,7 @@ def list_clusters(
         )
         requirement_counts = dict(
             db.query(LawRequirement.cluster_id, func.count(LawRequirement.id))
-            .filter(LawRequirement.cluster_id.isnot(None))
+            .filter(LawRequirement.cluster_id.isnot(None), IS_BINDING_REQUIREMENT)
             .group_by(LawRequirement.cluster_id)
             .all()
         )
@@ -330,7 +340,8 @@ def clusters_for_me(
         out = []
         for c in clusters:
             law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
-            req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+            req_count = db.query(func.count(LawRequirement.id)).filter(
+                LawRequirement.cluster_id == c.id, IS_BINDING_REQUIREMENT).scalar()
             out.append({
                 'id': c.id, 'name': c.name, 'description': c.description,
                 'applicability': c.applicability, 'policy_area': c.policy_area,
@@ -402,7 +413,8 @@ async def get_cluster_details(
             LawRequirement.criticality,
             func.count(LawRequirement.id)
         ).filter(
-            LawRequirement.cluster_id == cluster_id
+            LawRequirement.cluster_id == cluster_id,
+            IS_BINDING_REQUIREMENT,
         ).group_by(
             LawRequirement.criticality
         ).all()
@@ -2194,7 +2206,8 @@ def resolve_clusters_by_topic(
     out = []
     for c in clusters:
         law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
-        req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+        req_count = db.query(func.count(LawRequirement.id)).filter(
+            LawRequirement.cluster_id == c.id, IS_BINDING_REQUIREMENT).scalar()
         # Which template targets resolved to this cluster's policy_area
         matched_targets = [t for t, pas in target_to_actual.items() if (c.policy_area or "") in pas]
         match_reason = sorted({r for t in matched_targets for r in reasons.get(t, [])})

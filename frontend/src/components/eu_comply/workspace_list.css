@@ -63,10 +63,15 @@
 
 .workspace-card:focus-visible { outline: 2px solid #6c5ce7; outline-offset: 2px; }
 
+/* Reserve both lines whether or not the name needs them. Package names run from
+   "MiCA" to "Textiles: EPR, Ecodesign and Digital Product Passport (DPP-TEX)",
+   so without a fixed height the score row and the footer sat at a different
+   height on every card in the row and the strip read as ragged. */
 .workspace-card__name {
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.35;
+  min-height: calc(0.92rem * 1.35 * 2);
   color: #2c3446;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -74,6 +79,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Push the footer to the bottom so the arrow and date line up across the row. */
+.workspace-card__metrics { margin-top: auto; }
 
 .workspace-card__metrics {
   display: flex;

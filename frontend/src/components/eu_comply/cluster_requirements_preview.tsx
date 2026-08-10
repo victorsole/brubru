@@ -26,7 +26,7 @@ interface PreviewRequirement {
   law_celex: string;
   law_title: string;
   deadline: string | null;
-  extra_metadata?: { addressee?: string } | null;
+  extra_metadata?: { addressee?: string; interpretive?: string } | null;
 }
 
 // Who the obligation binds, tagged on the requirement row by
@@ -46,6 +46,14 @@ const ADDRESSEE_LABEL: Record<string, string> = {
 
 const addresseeOf = (r: PreviewRequirement): string =>
   r.extra_metadata?.addressee || 'economic_operator';
+
+// Interpretive rows explain the regime rather than impose a duty: penalty
+// ceilings, application dates, compute thresholds, the sandbox offer. They are
+// worth reading and are deliberately NOT scored, so the preview keeps them and
+// labels them. Without the label the list would promise more checks than the
+// analysis performs.
+const isContextOnly = (r: PreviewRequirement): boolean =>
+  r.extra_metadata?.interpretive === 'true';
 
 interface CascadeItem {
   celex: string;
@@ -210,9 +218,18 @@ export const ClusterRequirementsPreview = ({ clusterId, requirementCount }: Prop
 
               <ul className="cluster-preview__list">
                 {filtered.slice(0, visible).map((r) => (
-                  <li key={r.id} className="cluster-preview__item">
+                  <li
+                    key={r.id}
+                    className={`cluster-preview__item${isContextOnly(r) ? ' is-context' : ''}`}
+                  >
                     <div className="cluster-preview__item-head">
                       <code>{r.article_number}</code>
+                      {isContextOnly(r) && (
+                        <span className="cluster-preview__context-tag">
+                          <span className="mdi mdi-information-outline"></span>
+                          {t('comply.preview.contextOnly', 'context, not scored')}
+                        </span>
+                      )}
                       <span className={`cluster-preview__crit criticality-${r.criticality}`}>
                         {r.criticality}
                       </span>

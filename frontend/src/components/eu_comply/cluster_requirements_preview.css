@@ -249,3 +249,23 @@
   padding: 0.06rem 0.3rem;
   margin-right: 0.25rem;
 }
+
+/* Interpretive rows: kept in the list because the context is worth reading,
+   marked because they are not scored. Without the mark the preview would
+   promise more checks than the analysis performs. */
+.cluster-preview__item.is-context { opacity: 0.78; }
+
+.cluster-preview__context-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  background: #f2f5fa;
+  color: #55607a;
+  white-space: nowrap;
+}
+
+.cluster-preview__context-tag .mdi { font-size: 0.8rem; }

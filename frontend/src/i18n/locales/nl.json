@@ -1933,7 +1933,8 @@
       "boundElsewhere": "{{count}} daarvan binden een andere actor, zoals de lidstaten, en worden ter context getoond in plaats van tegen u beoordeeld.",
       "cascadeTitle": "Wat uit deze wetten voortvloeit",
       "cascadeBinding": "{{count}} gedelegeerde en uitvoeringshandelingen bevatten de operationele details.",
-      "cascadeGuidance": "{{count}} mededelingen en richtsnoeren van de Commissie leggen uit hoe u kunt voldoen. Deze scheppen geen verplichtingen."
+      "cascadeGuidance": "{{count}} mededelingen en richtsnoeren van de Commissie leggen uit hoe u kunt voldoen. Deze scheppen geen verplichtingen.",
+      "contextOnly": "context, niet beoordeeld"
     },
     "addressee": {
       "member_state": "Lidstaten",

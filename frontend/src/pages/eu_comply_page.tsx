@@ -18,16 +18,6 @@ import './eu_comply_page.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// EU Parliament background images
-const BACKGROUND_IMAGES = [
-  '/assets/backgrounds/eu_flag_wind.jpg',
-  '/assets/backgrounds/eu_flags_building.jpg',
-  '/assets/backgrounds/european_parliament_esplanade_brussels.jpg',
-  '/assets/backgrounds/european_parliament_hemicycle_brussels.jpg',
-  '/assets/backgrounds/european_parliament_square_strasbourg.jpg',
-  '/assets/backgrounds/european_parliament_strasbourg.jpg',
-];
-
 export interface LawCluster {
   id: number;
   name: string;
@@ -114,7 +104,6 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
   // "No compliance analyses yet" -- an empty column beside the actual product.
   // The header toggle opens it, and that state is remembered per session.
   const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState('');
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if mobile on mount and resize
@@ -131,12 +120,6 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       setIsHistorySidebarOpen(false);
     }
   }, [isMobile]);
-
-  // Select random background on mount
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * BACKGROUND_IMAGES.length);
-    setBackgroundImage(BACKGROUND_IMAGES[randomIndex]);
-  }, []);
 
   const handleClusterSelect = (cluster: LawCluster) => {
     setSelectedCluster(cluster);
@@ -330,18 +313,6 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
 
   return (
     <div className={`eu-comply-page ${isSidebarOpen ? '' : 'sidebar-closed'}`}>
-      {/* Background Image with Rotation */}
-      {backgroundImage && (
-        <>
-          <img
-            className="eu-comply-page__background-image"
-            src={backgroundImage}
-            alt="EU Parliament"
-          />
-          <div className="eu-comply-page__background-overlay"></div>
-        </>
-      )}
-
       {/* The layout grid is `1fr 350px`. When the history sidebar is closed the
           second column still reserved 350px, leaving a dead strip beside the
           content. Collapse to a single column unless the sidebar is showing. */}

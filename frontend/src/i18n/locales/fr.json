@@ -1933,7 +1933,8 @@
       "boundElsewhere": "{{count}} d'entre elles lient un autre acteur, tels que les États membres, et sont affichées à titre de contexte plutôt qu'évaluées à votre encontre.",
       "cascadeTitle": "Ce qui découle de ces textes",
       "cascadeBinding": "{{count}} actes délégués et d'exécution portent le détail opérationnel.",
-      "cascadeGuidance": "{{count}} communications et lignes directrices de la Commission expliquent comment se conformer. Elles ne créent pas d'obligations."
+      "cascadeGuidance": "{{count}} communications et lignes directrices de la Commission expliquent comment se conformer. Elles ne créent pas d'obligations.",
+      "contextOnly": "contexte, non noté"
     },
     "addressee": {
       "member_state": "États membres",

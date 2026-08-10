@@ -104,6 +104,17 @@ export const WorkspaceList = ({ onOpen }: WorkspaceListProps) => {
             type="button"
             className="workspace-card"
             onClick={() => onOpen(w.cluster_id)}
+            /* The card's content is spans, so the accessibility tree read this
+               as an unlabelled "button". Name it explicitly. */
+            aria-label={`${w.name}. ${
+              w.latest_score != null
+                ? `${Math.round(w.latest_score)}%, `
+                : ''
+            }${w.run_count} ${
+              w.run_count === 1
+                ? t('comply.workspaces.run', 'run')
+                : t('comply.workspaces.runs', 'runs')
+            }`}
           >
             <span className="workspace-card__name">{w.name}</span>
 

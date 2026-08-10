@@ -1933,7 +1933,8 @@
       "boundElsewhere": "{{count}} d'aquestes obliguen un altre actor, com ara els estats membres, i es mostren com a context en comptes de puntuar-se en contra vostra.",
       "cascadeTitle": "Què es deriva d'aquestes normes",
       "cascadeBinding": "{{count}} actes delegats i d'execució contenen el detall operatiu.",
-      "cascadeGuidance": "{{count}} comunicacions i directrius de la Comissió expliquen com complir. No creen obligacions."
+      "cascadeGuidance": "{{count}} comunicacions i directrius de la Comissió expliquen com complir. No creen obligacions.",
+      "contextOnly": "context, no puntuat"
     },
     "addressee": {
       "member_state": "Estats membres",

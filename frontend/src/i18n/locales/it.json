@@ -2825,7 +2825,8 @@
       "boundElsewhere": "{{count}} di questi vincolano un altro soggetto, come gli Stati membri, e sono mostrati come contesto anziché valutati a vostro carico.",
       "cascadeTitle": "Che cosa discende da queste norme",
       "cascadeBinding": "{{count}} atti delegati e di esecuzione contengono il dettaglio operativo.",
-      "cascadeGuidance": "{{count}} comunicazioni e linee guida della Commissione spiegano come conformarsi. Non creano obblighi."
+      "cascadeGuidance": "{{count}} comunicazioni e linee guida della Commissione spiegano come conformarsi. Non creano obblighi.",
+      "contextOnly": "contesto, non valutato"
     },
     "addressee": {
       "member_state": "Stati membri",
