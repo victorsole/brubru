@@ -38,6 +38,8 @@ interface AuthState {
   /** Admin session stashed while impersonating another user (admin panel feature) */
   adminBackup: { user: User; token: string } | null;
   login: (email: string, password: string) => Promise<void>;
+  /** Redeem a password reset token and sign in with the new password. */
+  resetPassword: (token: string, password: string) => Promise<void>;
   signup: (data: any) => Promise<void>;
   logout: () => void;
   loginWithGoogle: (credentialResponse: any, claimToken?: string) => Promise<void>;
@@ -84,6 +86,17 @@ export const useAuth = create<AuthState>()(
 
         // Store previous login for welcome-back greeting
         sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
+        set({ token: access_token, user, isAuthenticated: true });
+        applyUserLanguage(user?.language);
+      },
+
+      resetPassword: async (token: string, password: string) => {
+        const response = await axios.post(`${API_URL}/api/auth/reset-password`, { token, password });
+        const { access_token, user } = response.data;
+
+        // No welcome-back greeting here: previous_last_login is deliberately
+        // null on this path, since the reset itself is the login event.
+        sessionStorage.setItem('brubru_previous_login', '');
         set({ token: access_token, user, isAuthenticated: true });
         applyUserLanguage(user?.language);
       },

@@ -1416,7 +1416,9 @@
       "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
       "passwordTooShort": "Le mot de passe doit comporter au moins 8 caractères",
       "passwordNeedsDigit": "Le mot de passe doit contenir au moins un chiffre",
-      "passwordNeedsUppercase": "Le mot de passe doit contenir au moins une majuscule"
+      "passwordNeedsUppercase": "Le mot de passe doit contenir au moins une majuscule",
+      "resetRequestFailed": "Impossible d'envoyer le lien. Veuillez réessayer.",
+      "resetFailed": "Impossible d'enregistrer le nouveau mot de passe. Veuillez réessayer."
     },
     "linkedin": {
       "invalidState": "Paramètre d'état non valide",
@@ -1426,7 +1428,28 @@
       "windowClose": "Cette fenêtre se fermera automatiquement...",
       "authenticating": "Authentification avec LinkedIn...",
       "pleaseWait": "Veuillez patienter..."
-    }
+    },
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "backToLogin": "Retour à la connexion",
+    "forgotTitle": "Réinitialiser votre mot de passe",
+    "forgotSubtitle": "Nous vous enverrons un lien par e-mail pour en choisir un nouveau",
+    "forgotSubmit": "Envoyer le lien",
+    "forgotSending": "Envoi en cours...",
+    "forgotSent": "Si cette adresse correspond à un compte Brubru, le lien est en route. Il expire dans une heure.",
+    "forgotSentHint": "Pensez à vérifier vos courriers indésirables. Si vous vous êtes inscrit avec Google ou LinkedIn, utilisez ce bouton sur la page de connexion.",
+    "resetTitle": "Choisir un nouveau mot de passe",
+    "resetSubtitle": "Choisissez-en un que vous n'avez jamais utilisé",
+    "resetChecking": "Vérification du lien...",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "resetSubmit": "Enregistrer et se connecter",
+    "resetSaving": "Enregistrement...",
+    "resetRequestNew": "Demander un nouveau lien",
+    "resetExpired": "Ce lien a expiré. Les liens sont valables une heure.",
+    "resetAlreadyUsed": "Ce lien a déjà été utilisé. Demandez-en un nouveau si nécessaire.",
+    "resetNotFound": "Ce lien n'est pas valable. Il a peut-être été remplacé par un plus récent."
   },
   "cookies": {
     "message": "Nous utilisons des cookies pour vous offrir la meilleure expérience sur Brubru. Les cookies essentiels sont nécessaires au bon fonctionnement du site. En cliquant sur « Accepter », vous consentez à notre utilisation des cookies."

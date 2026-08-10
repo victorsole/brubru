@@ -1416,7 +1416,9 @@
       "passwordsDoNotMatch": "Wachtwoorden komen niet overeen",
       "passwordTooShort": "Wachtwoord moet minstens 8 tekens lang zijn",
       "passwordNeedsDigit": "Wachtwoord moet minstens één cijfer bevatten",
-      "passwordNeedsUppercase": "Wachtwoord moet minstens één hoofdletter bevatten"
+      "passwordNeedsUppercase": "Wachtwoord moet minstens één hoofdletter bevatten",
+      "resetRequestFailed": "De link kon niet worden verstuurd. Probeer het opnieuw.",
+      "resetFailed": "Het nieuwe wachtwoord kon niet worden opgeslagen. Probeer het opnieuw."
     },
     "linkedin": {
       "invalidState": "Ongeldige statusparameter",
@@ -1426,7 +1428,28 @@
       "windowClose": "Dit venster wordt automatisch gesloten...",
       "authenticating": "Authenticeren met LinkedIn...",
       "pleaseWait": "Even geduld..."
-    }
+    },
+    "showPassword": "Wachtwoord tonen",
+    "hidePassword": "Wachtwoord verbergen",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "backToLogin": "Terug naar inloggen",
+    "forgotTitle": "Wachtwoord opnieuw instellen",
+    "forgotSubtitle": "We mailen je een link om een nieuw wachtwoord te kiezen",
+    "forgotSubmit": "Stuur de link",
+    "forgotSending": "Versturen...",
+    "forgotSent": "Als dat adres een Brubru-account heeft, is de link onderweg. Hij verloopt over een uur.",
+    "forgotSentHint": "Kijk ook in je spammap. Ben je met Google of LinkedIn geregistreerd? Gebruik dan die knop op de inlogpagina.",
+    "resetTitle": "Kies een nieuw wachtwoord",
+    "resetSubtitle": "Kies er een die je nog niet eerder hebt gebruikt",
+    "resetChecking": "De link wordt gecontroleerd...",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmNewPassword": "Bevestig het nieuwe wachtwoord",
+    "resetSubmit": "Opslaan en inloggen",
+    "resetSaving": "Opslaan...",
+    "resetRequestNew": "Vraag een nieuwe link aan",
+    "resetExpired": "Deze link is verlopen. Links zijn een uur geldig.",
+    "resetAlreadyUsed": "Deze link is al gebruikt. Vraag een nieuwe aan als je hem nog nodig hebt.",
+    "resetNotFound": "Deze link is niet geldig. Mogelijk is hij vervangen door een nieuwere."
   },
   "cookies": {
     "message": "We gebruiken cookies om u de beste ervaring op Brubru te bieden. Essentiële cookies zijn nodig voor het functioneren van de site. Door op \"Accepteren\" te klikken, stemt u in met ons gebruik van cookies."

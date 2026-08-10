@@ -16,6 +16,8 @@ import './i18n/config'; // Initialize i18n
 import { LandingPage } from './pages/landing_page';
 import { LoginPage } from './pages/login_page';
 import { SignupPage } from './pages/signup_page';
+import { ForgotPasswordPage } from './pages/forgot_password_page';
+import { ResetPasswordPage } from './pages/reset_password_page';
 import { LinkedInCallback } from './pages/linkedin_callback';
 import { ClaimPage } from './pages/claim_page';
 import { MainPage } from './pages/main_page';
@@ -73,6 +75,18 @@ export const App = () => {
           <Route path="/signup" element={isAuthenticated ? <Navigate to="/my-eu-bubble" /> : (
             <AnimatedPage>
               <SignupPage />
+            </AnimatedPage>
+          )} />
+          {/* Password reset (migration 211). Both are public: a signed-in user
+              who lands here is redirected home, same as /login. */}
+          <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/my-eu-bubble" /> : (
+            <AnimatedPage>
+              <ForgotPasswordPage />
+            </AnimatedPage>
+          )} />
+          <Route path="/reset-password" element={(
+            <AnimatedPage>
+              <ResetPasswordPage />
             </AnimatedPage>
           )} />
           <Route path="/auth/linkedin/callback" element={(

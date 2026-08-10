@@ -5,6 +5,7 @@ SQLAlchemy models for Brubru application.
 """
 
 from .user import User
+from .password_reset_token import PasswordResetToken
 from .api_key import ApiKey
 from .api_billing import ApiUsageEvent, ApiTopupEvent, ApiSandboxPool
 from .institutional_publication import InstitutionalPublication
@@ -56,6 +57,7 @@ from .eu_calendar import (
 
 __all__ = [
     "User",
+    "PasswordResetToken",
     "RSSFeed",
     "RSSEntry",
     "UserFeedSubscription",

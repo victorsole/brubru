@@ -1416,7 +1416,9 @@
       "passwordsDoNotMatch": "Les contrasenyes no coincideixen",
       "passwordTooShort": "La contrasenya ha de tenir almenys 8 caràcters",
       "passwordNeedsDigit": "La contrasenya ha de contenir almenys un dígit",
-      "passwordNeedsUppercase": "La contrasenya ha de contenir almenys una lletra majúscula"
+      "passwordNeedsUppercase": "La contrasenya ha de contenir almenys una lletra majúscula",
+      "resetRequestFailed": "No s'ha pogut enviar l'enllaç. Torna-ho a provar.",
+      "resetFailed": "No s'ha pogut desar la contrasenya nova. Torna-ho a provar."
     },
     "linkedin": {
       "invalidState": "Paràmetre d'estat no vàlid",
@@ -1426,7 +1428,28 @@
       "windowClose": "Aquesta finestra es tancarà automàticament...",
       "authenticating": "S'està autenticant amb LinkedIn...",
       "pleaseWait": "Espera un moment..."
-    }
+    },
+    "showPassword": "Mostra la contrasenya",
+    "hidePassword": "Amaga la contrasenya",
+    "forgotPassword": "Has oblidat la contrasenya?",
+    "backToLogin": "Torna a l'accés",
+    "forgotTitle": "Restableix la contrasenya",
+    "forgotSubtitle": "T'enviarem un enllaç per correu per triar-ne una de nova",
+    "forgotSubmit": "Envia l'enllaç",
+    "forgotSending": "S'està enviant...",
+    "forgotSent": "Si aquesta adreça té un compte de Brubru, l'enllaç ja és en camí. Caduca d'aquí a una hora.",
+    "forgotSentHint": "Recorda mirar la carpeta de correu brossa. Si et vas registrar amb Google o LinkedIn, fes servir aquell botó a la pàgina d'accés.",
+    "resetTitle": "Tria una contrasenya nova",
+    "resetSubtitle": "Tria'n una que no hagis fet servir abans",
+    "resetChecking": "S'està comprovant l'enllaç...",
+    "newPassword": "Contrasenya nova",
+    "confirmNewPassword": "Confirma la contrasenya nova",
+    "resetSubmit": "Desa i entra",
+    "resetSaving": "S'està desant...",
+    "resetRequestNew": "Demana un enllaç nou",
+    "resetExpired": "Aquest enllaç ha caducat. Els enllaços són vàlids durant una hora.",
+    "resetAlreadyUsed": "Aquest enllaç ja s'ha fet servir. Demana'n un de nou si encara el necessites.",
+    "resetNotFound": "Aquest enllaç no és vàlid. Pot ser que un de més recent l'hagi substituït."
   },
   "cookies": {
     "message": "Fem servir galetes per garantir-te la millor experiència a Brubru. Les galetes essencials són necessàries perquè el lloc funcioni. En fer clic a \"Accepta\", consents l'ús de galetes."

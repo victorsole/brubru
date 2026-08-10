@@ -12,6 +12,7 @@ export const LoginPage = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -92,15 +93,31 @@ export const LoginPage = () => {
 
           <div className="auth-page__field">
             <label htmlFor="password">{t('auth.password')}</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              disabled={loading}
-            />
+            <div className="auth-page__password-wrap">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                disabled={loading}
+              />
+              <button
+                type="button"
+                className="auth-page__password-toggle"
+                onClick={() => setShowPassword((v) => !v)}
+                disabled={loading}
+                aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                aria-pressed={showPassword}
+                title={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+              >
+                <span className={`mdi ${showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}`} aria-hidden="true"></span>
+              </button>
+            </div>
+            <div className="auth-page__field-aside">
+              <Link to="/forgot-password">{t('auth.forgotPassword')}</Link>
+            </div>
           </div>
 
           <button

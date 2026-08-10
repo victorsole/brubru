@@ -1416,7 +1416,9 @@
       "passwordsDoNotMatch": "Passwords do not match",
       "passwordTooShort": "Password must be at least 8 characters",
       "passwordNeedsDigit": "Password must contain at least one digit",
-      "passwordNeedsUppercase": "Password must contain at least one uppercase letter"
+      "passwordNeedsUppercase": "Password must contain at least one uppercase letter",
+      "resetRequestFailed": "Could not send the reset link. Please try again.",
+      "resetFailed": "Could not save the new password. Please try again."
     },
     "linkedin": {
       "invalidState": "Invalid state parameter",
@@ -1426,7 +1428,28 @@
       "windowClose": "This window will close automatically...",
       "authenticating": "Authenticating with LinkedIn...",
       "pleaseWait": "Please wait..."
-    }
+    },
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "forgotPassword": "Forgot your password?",
+    "backToLogin": "Back to log in",
+    "forgotTitle": "Reset your password",
+    "forgotSubtitle": "We will email you a link to choose a new one",
+    "forgotSubmit": "Send reset link",
+    "forgotSending": "Sending...",
+    "forgotSent": "If that address has a Brubru account, a reset link is on its way. It expires in one hour.",
+    "forgotSentHint": "Remember to check your spam folder. If you signed up with Google or LinkedIn, use that button on the log in page instead.",
+    "resetTitle": "Choose a new password",
+    "resetSubtitle": "Pick something you have not used before",
+    "resetChecking": "Checking your link...",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "resetSubmit": "Save and log in",
+    "resetSaving": "Saving...",
+    "resetRequestNew": "Request a new link",
+    "resetExpired": "This link has expired. Reset links are valid for one hour.",
+    "resetAlreadyUsed": "This link has already been used. Request a new one if you still need it.",
+    "resetNotFound": "This reset link is not valid. It may have been replaced by a newer one."
   },
   "cookies": {
     "message": "We use cookies to ensure you get the best experience on Brubru. Essential cookies are required for the site to function. By clicking \"Accept\", you consent to our use of cookies."

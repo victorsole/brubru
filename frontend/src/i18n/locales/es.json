@@ -1416,7 +1416,9 @@
       "passwordsDoNotMatch": "Las contraseñas no coinciden",
       "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
       "passwordNeedsDigit": "La contraseña debe contener al menos un dígito",
-      "passwordNeedsUppercase": "La contraseña debe contener al menos una letra mayúscula"
+      "passwordNeedsUppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "resetRequestFailed": "No se ha podido enviar el enlace. Inténtalo de nuevo.",
+      "resetFailed": "No se ha podido guardar la contraseña nueva. Inténtalo de nuevo."
     },
     "linkedin": {
       "invalidState": "Parámetro de estado no válido",
@@ -1426,7 +1428,28 @@
       "windowClose": "Esta ventana se cerrará automáticamente...",
       "authenticating": "Autenticando con LinkedIn...",
       "pleaseWait": "Espera un momento..."
-    }
+    },
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "forgotPassword": "¿Has olvidado la contraseña?",
+    "backToLogin": "Volver al acceso",
+    "forgotTitle": "Restablece tu contraseña",
+    "forgotSubtitle": "Te enviaremos un enlace por correo para elegir una nueva",
+    "forgotSubmit": "Enviar enlace",
+    "forgotSending": "Enviando...",
+    "forgotSent": "Si esa dirección tiene una cuenta de Brubru, el enlace ya está en camino. Caduca en una hora.",
+    "forgotSentHint": "Recuerda mirar la carpeta de spam. Si te registraste con Google o LinkedIn, usa ese botón en la página de acceso.",
+    "resetTitle": "Elige una contraseña nueva",
+    "resetSubtitle": "Escoge una que no hayas usado antes",
+    "resetChecking": "Comprobando el enlace...",
+    "newPassword": "Contraseña nueva",
+    "confirmNewPassword": "Confirma la contraseña nueva",
+    "resetSubmit": "Guardar y entrar",
+    "resetSaving": "Guardando...",
+    "resetRequestNew": "Pedir un enlace nuevo",
+    "resetExpired": "Este enlace ha caducado. Los enlaces son válidos durante una hora.",
+    "resetAlreadyUsed": "Este enlace ya se ha usado. Pide uno nuevo si aún lo necesitas.",
+    "resetNotFound": "Este enlace no es válido. Es posible que otro más reciente lo haya sustituido."
   },
   "cookies": {
     "message": "Usamos cookies para ofrecerte la mejor experiencia en Brubru. Las cookies esenciales son necesarias para el funcionamiento del sitio. Al hacer clic en \"Aceptar\", consientes el uso de cookies."

@@ -75,6 +75,39 @@ class ClaimPasswordRequest(BaseModel):
         return v
 
 
+class ForgotPasswordRequest(BaseModel):
+    """Ask for a reset link. Answered identically whether or not the email exists."""
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    """Redeem a reset token and set a new password."""
+    token: str = Field(..., min_length=16, max_length=128)
+    password: str = Field(..., min_length=8, max_length=100)
+
+    @field_validator('password')
+    @classmethod
+    def password_strength(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Password must contain at least one digit')
+        if not any(char.isupper() for char in v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        return v
+
+
+class MessageResponse(BaseModel):
+    """Generic acknowledgement that deliberately carries no account detail."""
+    message: str
+
+
+class ResetTokenCheckResponse(BaseModel):
+    """Whether a reset link is still good, so the page can say so before asking for a password."""
+    valid: bool
+    reason: Optional[str] = None  # expired | already_used | not_found
+
+
 class ClaimInfoResponse(BaseModel):
     """Public-safe info shown on the /claim/<token> landing page."""
     valid: bool
