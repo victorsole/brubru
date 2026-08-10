@@ -135,6 +135,10 @@ class LawCluster(Base):
     # The ?startup_focused= filter previously used `id > 11`, which silently
     # reclassified every cluster seeded after id 21 as a startup package.
     is_startup_focused = Column(Boolean, nullable=False, server_default="false")
+    # False hides the package from browse, search and the For-you lens while
+    # leaving it and its requirements intact, so it can be curated and published
+    # one at a time. Direct access by id still resolves (migration 210).
+    is_published = Column(Boolean, nullable=False, server_default="true")
 
     created_at = Column(TIMESTAMP, server_default=func.now())
 

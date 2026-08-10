@@ -129,17 +129,52 @@ async def run_compliance_analysis_task(
     except Exception as e:
         logger.error(f"Background analysis failed for {analysis_id}: {str(e)}")
 
-        # Mark analysis as failed
-        try:
-            analysis = db.query(ComplianceAnalysis).filter(
-                ComplianceAnalysis.id == analysis_id
-            ).first()
-            if analysis:
-                analysis.status = 'failed'
-                analysis.completed_at = datetime.utcnow()
-                db.commit()
-        except:
-            pass
+        # Mark the run failed, and be stubborn about it. The previous version
+        # reused `db` and swallowed any secondary error with a bare except, so
+        # when the original failure was a dropped database connection the status
+        # write failed too and the run sat in 'processing' forever -- a poll loop
+        # with no terminal state, indistinguishable from a slow analysis.
+        #
+        # Two attempts: roll back the poisoned session and retry on it, then fall
+        # back to a completely fresh session. A run whose status cannot be
+        # written is logged at error level, never passed over in silence.
+        marked = False
+        for attempt, session in enumerate(('rolled-back', 'fresh')):
+            fresh = None
+            try:
+                if session == 'rolled-back':
+                    db.rollback()
+                    target = db
+                else:
+                    fresh = SessionLocal()
+                    target = fresh
+                analysis = target.query(ComplianceAnalysis).filter(
+                    ComplianceAnalysis.id == analysis_id
+                ).first()
+                if analysis:
+                    analysis.status = 'failed'
+                    analysis.completed_at = datetime.utcnow()
+                    analysis.analysis_params = {
+                        **(analysis.analysis_params or {}),
+                        'failure': str(e)[:500],
+                    }
+                    target.commit()
+                marked = True
+                break
+            except Exception as inner:
+                logger.warning(
+                    f"Could not mark analysis {analysis_id} failed via the "
+                    f"{session} session: {type(inner).__name__}: {inner}"
+                )
+            finally:
+                if fresh is not None:
+                    fresh.close()
+        if not marked:
+            logger.error(
+                f"Analysis {analysis_id} is stuck in 'processing': the run failed "
+                f"and neither session could record it. A client polling this id "
+                f"will never see a terminal state."
+            )
 
     finally:
         db.close()
@@ -187,7 +222,9 @@ def list_clusters(
                 detail="EU Law Comply is available for Yellow and Blue tier users only"
             )
 
-        query = db.query(LawCluster)
+        # Unpublished packages never appear in the catalogue. They still resolve
+        # by id, so an analysis someone already ran keeps working (migration 210).
+        query = db.query(LawCluster).filter(LawCluster.is_published.is_(True))
 
         # Filter on the explicit flag (migration 205), never on the id. This was
         # `LawCluster.id > 11`, hardcoded when clusters 12-21 happened to be the
@@ -284,7 +321,10 @@ def clusters_for_me(
         ids = soft_ids | hard_cluster_ids
         if not ids:
             return {"clusters": []}
-        clusters = db.query(LawCluster).filter(LawCluster.id.in_(ids)).order_by(LawCluster.id).all()
+        clusters = (db.query(LawCluster)
+                    .filter(LawCluster.id.in_(ids),
+                            LawCluster.is_published.is_(True))
+                    .order_by(LawCluster.id).all())
 
         out = []
         for c in clusters:
@@ -1993,7 +2033,7 @@ def resolve_clusters_by_topic(
     or_clauses = [func.lower(LawCluster.policy_area) == pa.lower() for pa in resolved_policy_areas]
     clusters = (
         db.query(LawCluster)
-        .filter(or_(*or_clauses))
+        .filter(or_(*or_clauses), LawCluster.is_published.is_(True))
         .order_by(LawCluster.id)
         .all()
     )
