@@ -19,7 +19,7 @@ import logging
 import re
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime, timedelta
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -58,6 +58,13 @@ class TenderContextData:
     statistics: Optional[Dict[str, Any]]
     checklist_info: Optional[Dict[str, Any]]
     formatted_context: str
+    # EU funding calls (ft_calls_for_proposals) and decentralised-agency
+    # procurement (economy_items). Both were invisible to Chat: this provider
+    # only ever read the `tenders` table, so a question about an open EIC
+    # Accelerator call retrieved nothing while the call sat in the database and
+    # rendered on the Tenderator two clicks away.
+    funding_calls: List[Dict[str, Any]] = field(default_factory=list)
+    agency_opportunities: List[Dict[str, Any]] = field(default_factory=list)
 
 
 # Intent patterns for tender-related queries
@@ -94,6 +101,25 @@ TENDER_INTENT_PATTERNS = {
         r'bid\s+(?:preparation|documents?|checklist)',
         r'tender\s+requirements?',
         r'how\s+(?:to|do\s+i)\s+(?:apply|bid)',
+    ],
+    # EU grant funding, which is not procurement and did not share its
+    # vocabulary. "What EIC Accelerator funding is open for startups" matched
+    # none of the patterns above, so the provider never ran and Chat answered
+    # about open calls with no rows in front of it. These patterns are what
+    # route a funding question to the ft_calls_for_proposals lookup.
+    'funding': [
+        r'\b(?:calls?|call)\s+for\s+proposals?',
+        r'\bfunding\s+(?:call|opportunit|programme|program|scheme|window)',
+        r'\b(?:is|are)\s+there\s+(?:any\s+)?(?:eu\s+)?funding',
+        r'\bfunding\s+for\b',
+        r'\b(?:grant|grants)\b.*\b(?:open|available|apply|deadline|call)',
+        r'\b(?:open|available|upcoming)\b.*\b(?:grant|grants|funding|call)',
+        r'\bapply\s+for\s+(?:eu\s+)?(?:funding|a\s+grant|grants)',
+        r'\b(?:eic|eit|horizon|erasmus|life|cerv|interreg|cef)\b.*'
+        r'\b(?:call|funding|grant|deadline|cut-?off|apply|open)',
+        r'\b(?:accelerator|pathfinder|transition|seal\s+of\s+excellence)\b',
+        r'\bwork\s+programme\b.*\b(?:call|budget|topic)',
+        r'\btopic\s+id\b',
     ],
     'compare': [
         r'compare\s+tenders?',
@@ -204,9 +230,27 @@ class TenderContextProvider:
         """
         query_lower = query.lower()
 
-        # Check for tender-related keywords first
+        # Check for tender-related keywords first. This gate runs BEFORE the
+        # pattern table, so vocabulary missing here makes the patterns
+        # unreachable no matter how well they are written -- which is why
+        # "what EIC Accelerator funding is open for startups" retrieved nothing:
+        # EU grant funding is not procurement and shares none of its words.
         tender_keywords = ['tender', 'procurement', 'bid', 'contract', 'espd', 'tenderator', 'cpv']
-        has_tender_keyword = any(kw in query_lower for kw in tender_keywords)
+        funding_phrases = [
+            'call for proposal', 'calls for proposal', 'funding', 'grant',
+            'seal of excellence', 'work programme', 'work program', 'topic id',
+            'co-financing', 'cofinancing', 'subsidy', 'subsidies',
+            'horizon europe', 'erasmus+', 'creative europe', 'digital europe',
+        ]
+        # Short, ambiguous tokens need a word boundary: a bare "eic" substring
+        # also matches "deicing", and "life" matches "lifetime".
+        funding_tokens = r'\b(?:eic|eit|cordis|sedia|ipa|ndici|interreg|cef|cerv|life|amif|isf|eu4health)\b'
+
+        has_tender_keyword = (
+            any(kw in query_lower for kw in tender_keywords)
+            or any(kw in query_lower for kw in funding_phrases)
+            or re.search(funding_tokens, query_lower) is not None
+        )
 
         if not has_tender_keyword:
             return TenderIntent(
@@ -238,19 +282,24 @@ class TenderContextProvider:
             detected_type = 'explain'
             max_confidence = 0.95
 
-        # Extract countries
+        # Extract countries and sectors on WORD BOUNDARIES, not substrings.
+        # SECTOR_MAPPINGS contains 'it' (IT services, CPV 72), and a plain
+        # substring test finds it inside "with", "security", "digital" and
+        # "monitoring" -- so "help me with tenders" was classified as an IT
+        # query and searched CPV 72. Two-letter keys make this certain rather
+        # than unlucky.
+        def _mentions(term: str) -> bool:
+            return re.search(rf"\b{re.escape(term)}\b", query_lower) is not None
+
         countries = []
         for country_name, code in COUNTRY_MAPPINGS.items():
-            if country_name in query_lower:
-                if code not in countries:
-                    countries.append(code)
+            if _mentions(country_name) and code not in countries:
+                countries.append(code)
 
-        # Extract sectors/CPV categories
         cpv_sectors = []
         for sector_keyword, cpv_prefix in SECTOR_MAPPINGS.items():
-            if sector_keyword in query_lower:
-                if cpv_prefix not in cpv_sectors:
-                    cpv_sectors.append(cpv_prefix)
+            if _mentions(sector_keyword) and cpv_prefix not in cpv_sectors:
+                cpv_sectors.append(cpv_prefix)
 
         # Extract value range (simple patterns)
         value_range = None
@@ -267,12 +316,16 @@ class TenderContextProvider:
             except ValueError:
                 pass
 
-        # Extract search query (remaining meaningful words)
+        # Extract search query (remaining meaningful words). 'funding' needs one
+        # too: it is what grounds the ft_calls_for_proposals lookup, and without
+        # it every funding question would retrieve the same undifferentiated
+        # first-N open calls regardless of what was asked.
         search_query = None
-        if detected_type == 'search':
-            # Remove intent keywords and extract what they're searching for
+        if detected_type in ('search', 'funding'):
             search_query = re.sub(
-                r'(find|search|show|tenders?|for|me|in|about|procurement|contracts?)',
+                r'\b(find|search|show|tenders?|for|me|in|about|procurement|contracts?|'
+                r'what|which|are|there|is|open|available|the|any|can|i|apply|to|do|how|'
+                r'call|calls|proposals?|funding|grants?|deadline)\b',
                 '',
                 query_lower
             ).strip()
@@ -341,9 +394,12 @@ class TenderContextProvider:
                             'tender': self._format_tender(tender)
                         })
 
-                # Get user profile
+                # Get user profile. users.id is a UUID, so int(user_id) raised
+                # ValueError on every call; the outer except swallowed it and
+                # the profile was silently never loaded, which is why Chat never
+                # knew what sector the user was in.
                 profile = db.query(TenderProfile).filter(
-                    TenderProfile.user_id == int(user_id)
+                    TenderProfile.user_id == user_id
                 ).first()
                 if profile:
                     user_profile = self._format_profile(profile)
@@ -375,6 +431,21 @@ class TenderContextProvider:
         except Exception as e:
             logger.error(f"Failed to fetch tender context: {e}")
 
+        # EU funding calls + agency procurement. Outside the try above on
+        # purpose: a failure in the TED branch used to take the whole context
+        # down with it, and these two have their own fail-soft handling.
+        # Only look when the question is actually about funding or is specific
+        # enough to search on. Without this, a bare "help me with tenders" pulled
+        # three unrelated open calls into the prompt: budget spent on noise, and
+        # an invitation for the model to answer with whatever happened to be
+        # nearest the top.
+        keywords = self._context_keywords(intent)
+        wants_funding = intent.intent_type in ('funding', 'search', 'match') or bool(keywords)
+        funding_calls = self._fetch_funding_calls(db, keywords, limit) if wants_funding else []
+        agency_opportunities = (
+            self._fetch_agency_opportunities(db, keywords, limit) if wants_funding else []
+        )
+
         # Format context for AI
         formatted_context = self._format_context_for_ai(
             intent=intent,
@@ -382,7 +453,9 @@ class TenderContextProvider:
             user_matches=user_matches,
             user_profile=user_profile,
             statistics=statistics,
-            checklist_info=checklist_info
+            checklist_info=checklist_info,
+            funding_calls=funding_calls,
+            agency_opportunities=agency_opportunities,
         )
 
         return TenderContextData(
@@ -392,8 +465,108 @@ class TenderContextProvider:
             user_profile=user_profile,
             statistics=statistics,
             checklist_info=checklist_info,
-            formatted_context=formatted_context
+            formatted_context=formatted_context,
+            funding_calls=funding_calls,
+            agency_opportunities=agency_opportunities,
         )
+
+    def _fetch_funding_calls(self, db, keywords: List[str], limit: int) -> List[Dict[str, Any]]:
+        """Open EU funding calls matching the query, from ft_calls_for_proposals.
+
+        This is the table behind the Tenderator's "Calls for proposals" chip and
+        the EIC lens. Chat could not see it at all, which is the retrieval gap
+        that turns into invented answers: asked about an open Accelerator cut-off
+        the model had no rows to ground on.
+        """
+        from sqlalchemy import text as _sql
+        params: Dict[str, Any] = {"lim": limit}
+        where = ["is_test = FALSE", "(deadline IS NULL OR deadline >= now())"]
+        if keywords:
+            ors = []
+            for i, kw in enumerate(keywords[:6]):
+                ors.append(f"(title ILIKE :kw{i} OR description ILIKE :kw{i} OR topic_id ILIKE :kw{i})")
+                params[f"kw{i}"] = f"%{kw}%"
+            where.append("(" + " OR ".join(ors) + ")")
+        try:
+            rows = db.execute(_sql(
+                "SELECT topic_id, title, description, status, deadline, "
+                "       indicative_budget, budget_currency, framework_programme, source_url "
+                "FROM ft_calls_for_proposals "
+                f"WHERE {' AND '.join(where)} "
+                "ORDER BY deadline ASC NULLS LAST LIMIT :lim"
+            ), params).fetchall()
+        except Exception as exc:
+            logger.warning("funding-call context fetch failed: %s", exc)
+            db.rollback()
+            return []
+        return [
+            {
+                "topic_id": r.topic_id,
+                "title": r.title,
+                "description": (r.description or "")[:300] or None,
+                "status": r.status,
+                "deadline": r.deadline.isoformat() if r.deadline else None,
+                "budget": float(r.indicative_budget) if r.indicative_budget else None,
+                "currency": r.budget_currency or "EUR",
+                "programme": r.framework_programme,
+                "source_url": r.source_url,
+            }
+            for r in rows
+        ]
+
+    def _fetch_agency_opportunities(self, db, keywords: List[str], limit: int) -> List[Dict[str, Any]]:
+        """Open procurement run by decentralised EU bodies (economy_items)."""
+        from sqlalchemy import text as _sql
+        params: Dict[str, Any] = {
+            "lim": limit,
+            "types": ["tender", "grant", "eoi_call", "startup_funding", "framework"],
+        }
+        where = ["item_type = ANY(:types)", "(document_date IS NULL OR document_date >= now())"]
+        if keywords:
+            ors = []
+            for i, kw in enumerate(keywords[:6]):
+                ors.append(f"(title ILIKE :akw{i} OR summary ILIKE :akw{i} OR body_code ILIKE :akw{i})")
+                params[f"akw{i}"] = f"%{kw}%"
+            where.append("(" + " OR ".join(ors) + ")")
+        try:
+            rows = db.execute(_sql(
+                "SELECT body_code, item_type, title, summary, document_date, public_url "
+                "FROM economy_items "
+                f"WHERE {' AND '.join(where)} "
+                "ORDER BY document_date ASC NULLS LAST LIMIT :lim"
+            ), params).fetchall()
+        except Exception as exc:
+            logger.warning("agency-opportunity context fetch failed: %s", exc)
+            db.rollback()
+            return []
+        return [
+            {
+                "body": (r.body_code or "").upper(),
+                "kind": r.item_type,
+                "title": r.title,
+                "summary": (r.summary or "")[:300] or None,
+                "deadline": r.document_date.isoformat() if r.document_date else None,
+                "source_url": r.public_url,
+            }
+            for r in rows
+        ]
+
+    @staticmethod
+    def _context_keywords(intent: TenderIntent) -> List[str]:
+        """Search terms to ground the funding lookups on."""
+        words: List[str] = []
+        if intent.search_query:
+            words += [w for w in re.split(r"[^\w-]+", intent.search_query) if len(w) > 3]
+        if intent.cpv_sectors:
+            words += list(intent.cpv_sectors)
+        # De-duplicate, preserve order.
+        seen, out = set(), []
+        for w in words:
+            key = w.lower()
+            if key not in seen:
+                seen.add(key)
+                out.append(w)
+        return out
 
     def _format_tender(self, tender: Tender) -> Dict[str, Any]:
         """Format tender for context"""
@@ -542,7 +715,9 @@ class TenderContextProvider:
         user_matches: List[Dict[str, Any]],
         user_profile: Optional[Dict[str, Any]],
         statistics: Optional[Dict[str, Any]],
-        checklist_info: Optional[Dict[str, Any]]
+        checklist_info: Optional[Dict[str, Any]],
+        funding_calls: Optional[List[Dict[str, Any]]] = None,
+        agency_opportunities: Optional[List[Dict[str, Any]]] = None,
     ) -> str:
         """Format tender context for AI consumption"""
         sections = []
@@ -612,6 +787,50 @@ class TenderContextProvider:
                 if tender.get('description'):
                     sections.append(f"   Description: {tender['description'][:200]}...")
                 sections.append(f"   TED URL: {tender['ted_url']}")
+
+        # EU funding calls (F&T portal). Emitted whenever the question was about
+        # funding, INCLUDING when nothing matched: a block that says "nothing on
+        # file" is what stops the model filling the silence with a plausible
+        # topic id and a plausible cut-off date. Omitted entirely for questions
+        # that were never about funding, so the prompt budget goes elsewhere.
+        asked_about_funding = intent.intent_type in ('funding', 'search', 'match')
+        if funding_calls or asked_about_funding:
+            sections.append("\nEU FUNDING CALLS ON FILE (Funding & Tenders Portal):")
+        if funding_calls:
+            for i, call in enumerate(funding_calls, 1):
+                sections.append(f"\n{i}. {(call['title'] or '')[:120]}")
+                sections.append(f"   Topic ID: {call.get('topic_id') or 'Not stated'}")
+                sections.append(f"   Programme period: {call.get('programme') or 'Not stated'}")
+                sections.append(f"   Status: {call.get('status') or 'Not stated'}")
+                sections.append(f"   Deadline: {call.get('deadline') or 'Not stated'}")
+                if call.get("budget"):
+                    sections.append(f"   Indicative budget: {call['currency']} {call['budget']:,.0f}")
+                if call.get("source_url"):
+                    sections.append(f"   Call page: {call['source_url']}")
+        elif asked_about_funding:
+            sections.append(
+                "- None on file matching this question. Say so plainly. Do NOT "
+                "invent a topic ID, a cut-off date or a budget: send the user to "
+                "the Tenderator (https://brubru.beresol.eu/tenderator) or to the "
+                "Funding and Tenders Portal instead."
+            )
+
+        # Decentralised-agency procurement.
+        if agency_opportunities or asked_about_funding:
+            sections.append("\nEU AGENCY PROCUREMENT ON FILE:")
+        if agency_opportunities:
+            for i, item in enumerate(agency_opportunities, 1):
+                sections.append(f"\n{i}. {(item['title'] or '')[:120]}")
+                sections.append(f"   Body: {item.get('body') or 'Not stated'}")
+                sections.append(f"   Kind: {item.get('kind') or 'Not stated'}")
+                sections.append(f"   Deadline: {item.get('deadline') or 'Not stated'}")
+                if item.get("source_url"):
+                    sections.append(f"   Notice: {item['source_url']}")
+        else:
+            sections.append(
+                "- None on file matching this question. Say so plainly rather "
+                "than describing a notice that is not listed here."
+            )
 
         # Checklist info
         if checklist_info:
