@@ -1,0 +1,305 @@
+id: 14
+name: Mobility & Transport Startup Compliance
+policy_area: Transport
+description: 'Compliance for mobility startups: alternative fuels, autonomous vehicles, shared
+  mobility'
+applicability: Mobility startups, EV charging networks, micromobility, autonomous vehicle
+  developers, ride-sharing platforms
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 32007H0078
+  title: 'Commission recommendation of 22 December 2006 on safe and efficient in-vehicle information
+    and communication systems: update of the European Statement of Principles on human machine
+    interface (2007/78/EC)'
+- celex: 32013L0028
+  title: Commission Directive 2013/28/EU of 17 May 2013 amending Annex II to Directive 2000/53/EC
+    of the European Parliament and of the Council on end-of-life vehicles (Text with EEA relevance)
+- celex: 32018R0732
+  title: Commission Implementing Regulation (EU) 2018/732 of 17 May 2018 on a common methodology
+    for alternative fuels unit price comparison in accordance with Directive 2014/94/EU of
+    the European Parliament and of the Council (Text with EEA relevance)
+- celex: 32018R1832
+  title: Commission Regulation (EU) 2018/1832 of 5 November 2018 amending Directive 2007/46/EC
+    of the European Parliament and of the Council, Commission Regulation (EC) No 692/2008
+    and Commission Regulation (EU) 2017/1151 for the purpose of improving the emission type
+    approval tests and procedures for light passenger and commercial vehicles, including those
+    for in-service conformity and real-driving emissions and introducing devices for monitoring
+    the consumption of fuel and electric energy (Text with EEA relevance)
+- celex: 32020D1714
+  title: Commission Implementing Decision (EU) 2020/1714 of 16 November 2020 amending Implementing
+    Decision (EU) 2019/1119 as regards the testing methodology for certain not-off vehicle
+    charging hybrid electric passenger cars and to take into account the use of alternative
+    fuels and Implementing Decision (EU) 2020/1339 as regards rear position lamps (Text with
+    EEA relevance)
+- celex: 32020R1637
+  title: Council Decision (EU) 2020/1637 of 3 November 2020 on the position to be taken on
+    behalf of the European Union in the World Forum for Harmonisation of Vehicle Regulations
+    of the United Nations Economic Commission for Europe as regards the proposals for modifications
+    to UN Regulations Nos 0, 13, 16, 17, 44, 55, 83, 93, 94, 95, 100, 115, 137, 144, 151,
+    152 and 153, as regards the proposals for modifications to Global Technical Regulations
+    Nos 7, 15 and 18, as regards the proposal for amendments to Mutual Resolution M.R.3, as
+    regards the proposals for two new UN Regulations in relation to reversing motion and moving
+    off information systems, and as regards the proposal for a new Global Technical Regulation
+    on the determination of electric vehicle power
+- celex: 32023R1804
+  title: Regulation (EU) 2023/1804 of the European Parliament and of the Council of 13 September
+    2023 on the deployment of alternative fuels infrastructure, and repealing Directive 2014/94/EU
+    (Text with EEA relevance)
+- celex: 32023R2502
+  title: Commission Delegated Regulation (EU) 2023/2502 of 7 September 2023 amending Regulation
+    (EU) 2019/631 of the European Parliament and of the Council as regards the adjustment
+    of the mass values of new passenger cars and new light commercial vehiclesText with EEA
+    relevance.
+- celex: 32024R2754
+  title: Commission Implementing Regulation (EU) 2024/2754 of 29 October 2024 imposing a definitive
+    countervailing duty on imports of new battery electric vehicles designed for the transport
+    of persons originating in the People’s Republic of China
+- celex: 32025R0655
+  title: Commission Implementing Regulation (EU) 2025/655 of 2 April 2025 laying down rules
+    for the application of Regulation (EU) 2023/1804 of the European Parliament and of the
+    Council as regards specifications and procedures relating to the availability and accessibility
+    of data on alternative fuels infrastructure
+requirements:
+- article: Article 1
+  law_celex: 32018R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Must use the common methodology for alternative fuels unit price comparison
+    as set out in the Annex, based on prices expressed as amounts of applicable currency per
+    100 km
+- article: Article 2
+  law_celex: 32018R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital (5)
+  law_celex: 32018R0732
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Must use the value of fuel consumption provided in the certificate of
+    conformity of the vehicles for calculating the fuel prices
+- article: Recital (7)
+  law_celex: 32018R0732
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Must take into account the average price of the relevant fuel per conventional
+    unit over maximum the last calendar quarter prior to the time of calculation
+- article: Article 1
+  law_celex: 32020R1637
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union representatives
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be taken on the Union's behalf in the 182nd session of
+    the UNECE World Forum for Harmonisation of Vehicle Regulations shall be to vote in favour
+    of the proposals for modifications to UN Regulations Nos 0, 13, 16, 17, 44, 55, 83, 93,
+    94, 95, 100, 115, 137, 144, 151, 152 and 153, proposals for modifications to Global Technical
+    Regulations Nos 7, 15 and 18, proposal for amendments to Mutual Resolution M.R.3, proposals
+    for two new UN Regulations in relation to reversing motion and moving off information
+    systems, and proposal for a new Global Technical Regulation on the determination of electric
+    vehicle power
+- article: Article 2
+  law_celex: 32020R1637
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 4(2a)
+  law_celex: 32020D1714
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: approval authorities
+  deadline: null
+  interpretive: null
+  requirement_text: 'Where the innovative technology is fitted in a bi-fuel or flex-fuel vehicle,
+    the approval authority shall record the CO2 savings as follows: (a) for a bi-fuel vehicle
+    using petrol and gaseous fuels, the CO2 savings with regard to LPG or CNG fuels; (b) for
+    a flex-fuel vehicle using petrol and E85, the CO2 savings with regard to petrol.'
+- article: Article 5(1)
+  law_celex: 32020D1714
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: type approval authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Until 24 March 2021, a manufacturer may apply for certification of the
+    CO2 savings by the type approval authority pursuant to this Decision in its version of
+    28 June 2019. Where that is the case, the eco-innovation code No 28 shall be entered into
+    the type approval documentation.
+- article: Article 5(2)
+  law_celex: 32020D1714
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: type approval authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where the manufacturer applies for certification of the CO2 savings by
+    the type approval authority pursuant to this Decision without making reference to its
+    version of 28 June 2019, the eco-innovation code No 37 shall be entered into the type
+    approval documentation.
+- article: Article 1(1)(a)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators of publicly accessible recharging points and refuelling points
+    for alternative fuels, o...
+  deadline: null
+  interpretive: null
+  requirement_text: Shall ensure the availability of the data types referred to in Article
+    20(2) of Regulation (EU) 2023/1804 in accordance with the specifications for the format
+    of data types for publicly accessible recharging points and refuelling points, including
+    the descriptions, provided in the tables in the Annex to this Regulation
+- article: Article 1(1)(b)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators of publicly accessible recharging points and refuelling points
+    for alternative fuels, o...
+  deadline: null
+  interpretive: null
+  requirement_text: Shall ensure the availability of data types in accordance with the relevant
+    data model for alternative fuels data provided in DATEX II format, including at least
+    CEN/TS 16157-10:2022 in addition to the specifications referred to in point (a)
+- article: Article 1(2)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data types referred to in Article 20(2) of Regulation (EU) 2023/1804
+  deadline: null
+  interpretive: null
+  requirement_text: Shall be made available in accordance with the specifications for the
+    format set out in the Annex to this Regulation
+- article: Article 2(a)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators of publicly accessible recharging points and refuelling points
+    for alternative fuels, o...
+  deadline: null
+  interpretive: null
+  requirement_text: Shall ensure the availability of static data that is updated when a change
+    occurs and, in any event, no later than twenty-four hours after the change occurred
+- article: Article 2(b)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators of publicly accessible recharging points and refuelling points
+    for alternative fuels, o...
+  deadline: null
+  interpretive: null
+  requirement_text: Shall ensure the availability of dynamic data that is updated when a change
+    occurs and, in any event, no later than one minute after the change occurred
+- article: Article 3(1)(a)
+  law_celex: 32025R0655
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators of publicly accessible recharging points and refuelling points
+    for alternative fuels, o...
+  deadline: null
+  interpretive: null
+  requirement_text: 'Shall comply with completeness requirements: All data types referred
+    to in Article 20(2) of Regulation (EU) 2023/1804 shall be made available'
+- article: Recommendation 1
+  law_celex: 32007H0078
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European vehicle manufacturing and supply industries, which design and/or
+    provide and/or fit in-v...
+  deadline: null
+  interpretive: null
+  requirement_text: Should comply with the attached updated European Statement of Principles
+    and should enter into a voluntary agreement on this matter within a period of nine months
+    from the publication of this Recommendation
+- article: Recommendation 2
+  law_celex: 32007H0078
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Professional organisations related to transport (e.g. transport companies,
+    vehicle rental companies)
+  deadline: null
+  interpretive: null
+  requirement_text: Should commit to these principles within the same time frame
+- article: Recommendation 3
+  law_celex: 32007H0078
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Should monitor activities linked to HMI, disseminate the updated version
+    of the statement of principles towards all relevant stakeholders, encourage them to adhere
+    to these Principles
+- article: Recommendation 3
+  law_celex: 32007H0078
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Should perform a continuous evaluation and monitoring of the impact of
+    the European Statement of Principles of 2006 and report to the Commission about the dissemination
+    activities carried out as well as the results of the application of the 2006 Principles
+    within a period of 18 months from their publication
+- article: Article 2(1)
+  law_celex: 32013L0028
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall bring into force the laws, regulations and administrative
+    provisions necessary to comply with this Directive at the latest within three months of
+    its publication in the Official Journal of the European Union
+- article: Article 2(1)
+  law_celex: 32013L0028
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall forthwith communicate to the Commission the text of
+    those provisions
+- article: Article 2(1)
+  law_celex: 32013L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those provisions, they shall contain a reference
+    to this Directive or be accompanied by such a reference on the occasion of their official
+    publication
+- article: Article 2(1)
+  law_celex: 32013L0028
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine how such reference is to be made
+- article: Article 2(2)
+  law_celex: 32013L0028
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    provisions of national law which they adopt in the field covered by this Directive

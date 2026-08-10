@@ -1,0 +1,201 @@
+id: 26
+name: Animal Health Law (Reg 2016/429)
+policy_area: Food Safety
+description: Regulation (EU) 2016/429 (the Animal Health Law) is the single EU framework regulation
+  for transmissible animal diseases. Adopted 9 March 2016 under Articles 43(2), 114 and 168(4)(b)
+  TFEU; entered into force 20 April 2016; applies from 21 April 2021. It replaced around 40
+  prior acts. It names five diseases directly (foot-and-mouth, classical swine fever, African
+  swine fever, highly pathogenic avian influenza, African horse sickness), sorts listed diseases
+  into five management categories (A immediate eradication, B compulsory eradication, C optional
+  eradication, D movement restrictions, E surveillance), and covers responsibilities and biosecurity,
+  notification and surveillance, eradication programmes, disease-free status, contingency
+  plans and vaccine banks, disease control measures and restricted zones, registration and
+  approval of establishments, identification and traceability, movements within the Union
+  and TRACES certification, entry from third countries, non-commercial pet movements (max
+  five pets, EU pet passport), and emergency measures.
+applicability: Livestock and aquaculture operators, transporters, assembly operators, germinal
+  product establishments, hatcheries, veterinarians and aquatic animal health professionals,
+  pet keepers and travellers with pets, importers of animals and products of animal origin,
+  Member State competent veterinary authorities, reference laboratories, and the wider food
+  chain. Covers kept and wild animals, germinal products, products of animal origin, and animal
+  by-products.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32016R0429
+  title: Regulation (EU) 2016/429 of the European Parliament and of the Council of 9 March
+    2016 on transmissible animal diseases and amending and repealing certain acts in the area
+    of animal health (Animal Health Law) (Text with EEA relevance)
+requirements:
+- article: Article 10 (operator responsibilities)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / animal keepers
+  deadline: null
+  interpretive: null
+  requirement_text: Operators are primarily responsible for the health of their kept animals,
+    the prudent and responsible use of veterinary medicines, minimising disease spread, and
+    good animal husbandry, and must apply appropriate biosecurity measures (physical and management)
+    proportionate to the species, production type and risks.
+- article: Article 11 (animal health knowledge)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / animal professionals
+  deadline: null
+  interpretive: null
+  requirement_text: Operators and animal professionals must have adequate knowledge of animal
+    diseases (including zoonoses), biosecurity principles, the animal-health / animal-welfare
+    / human-health interaction, good husbandry, and antimicrobial resistance.
+- article: Article 18 (notification of disease)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / vets / keepers
+  deadline: null
+  interpretive: null
+  requirement_text: Operators and other relevant persons must immediately notify the competent
+    authority on suspicion or detection of a notifiable listed disease, and notify a veterinarian
+    of abnormal mortalities or other signs of serious disease for further investigation.
+- article: Article 24 (operators' surveillance)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / animal keepers
+  deadline: null
+  interpretive: null
+  requirement_text: Operators must observe the health and behaviour of their animals, watch
+    for changes in production parameters, and look for abnormal mortalities and other signs
+    of serious disease, to detect listed and emerging diseases.
+- article: Article 25 (animal health visits)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / establishments
+  deadline: null
+  interpretive: null
+  requirement_text: Operators must ensure their establishments receive animal health visits
+    from a veterinarian at frequencies proportionate to the risk, for disease prevention and
+    early detection of listed or emerging diseases.
+- article: Article 84 (registration of establishments)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / establishments
+  deadline: null
+  interpretive: null
+  requirement_text: Operators of establishments keeping terrestrial animals or handling germinal
+    products must register with the competent authority before commencing activity, providing
+    details of location, species, numbers and establishment type; the authority assigns a
+    unique registration number (Article 93).
+- article: Article 94 (approval of establishments)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / establishments
+  deadline: null
+  interpretive: null
+  requirement_text: 'Higher-risk establishments must obtain prior approval before operating:
+    assembly operations for ungulates and poultry moved between Member States, germinal product
+    establishments, hatcheries, and certain poultry establishments. Approval follows an on-site
+    visit (Articles 96 to 99).'
+- article: Articles 102 to 105 (record-keeping)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / transporters
+  deadline: null
+  interpretive: null
+  requirement_text: Operators of registered or approved establishments, germinal product establishments,
+    transporters and assembly operators must keep records (species, numbers, movements, mortality,
+    biosecurity, treatments) and retain them for a minimum period set by the competent authority,
+    not less than three years.
+- article: Articles 112 to 115 (identification)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / animal keepers
+  deadline: null
+  interpretive: null
+  requirement_text: 'Operators must identify and register kept animals per species: bovine
+    animals by individual physical identification plus an identification document; ovine and
+    caprine by physical means plus movement document; equine by a unique code plus a single
+    lifetime identification document; porcine at establishment level. Data go to the national
+    computer database (Article 109).'
+- article: Articles 124 to 126 (movements in Union)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / transporters
+  deadline: null
+  interpretive: null
+  requirement_text: Operators may only move kept terrestrial animals within and between Member
+    States if the animals come from registered or approved establishments, meet identification
+    and registration requirements, show no disease symptoms, and are not subject to movement
+    restrictions or located in a restricted zone.
+- article: Article 143 (animal health certificate)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: operators / official vets
+  deadline: null
+  interpretive: null
+  requirement_text: Operators may only move ungulates, poultry and certain other animals to
+    another Member State if accompanied by an animal health certificate issued and signed
+    by an official veterinarian of the Member State of origin; otherwise a self-declaration
+    document is required (Article 151).
+- article: Articles 152 to 153 (movement notification)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Operators must notify the competent authority in advance of certified
+    cross-border movements; the authority notifies the Member State of destination, wherever
+    possible through the TRACES integrated computerised veterinary system.
+- article: Article 229 (entry into the Union)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importers / EU operators
+  deadline: null
+  interpretive: null
+  requirement_text: Animals, germinal products and products of animal origin may enter the
+    Union only from a listed third country or territory, from approved establishments where
+    required, meeting animal health requirements as stringent as intra-Union rules, and accompanied
+    by an animal health certificate (Article 237).
+- article: Article 246 (pet movements)
+  law_celex: 32016R0429
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: pet keepers / travellers
+  deadline: null
+  interpretive: null
+  requirement_text: A maximum of five pet animals of the Annex I Part A species (dogs, cats,
+    ferrets) may travel in a single non-commercial movement, with an exception for competitions
+    and exhibitions (animals over six months old, registered). Pets must be identified, meet
+    preventive measures (rabies vaccination) and carry an identification document (the EU
+    pet passport) (Articles 247 to 250).
+- article: Article 257 (emergency measures)
+  law_celex: 32016R0429
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: On an outbreak of a listed or emerging disease or a hazard posing a serious
+    risk, the competent authority must immediately take emergency disease-control measures
+    (movement restrictions, quarantine, surveillance, traceability and control measures) and
+    inform the Commission and other Member States.
+- article: Article 268 (penalties)
+  law_celex: 32016R0429
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: '2022-04-22'
+  interpretive: null
+  requirement_text: Member States must lay down effective, proportionate and dissuasive penalties
+    for infringements of the Regulation and take all measures necessary to ensure they are
+    implemented (notified to the Commission by 22 April 2022).

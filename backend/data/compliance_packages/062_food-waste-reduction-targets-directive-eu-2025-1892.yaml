@@ -1,0 +1,56 @@
+id: 62
+name: Food Waste Reduction Targets (Directive (EU) 2025/1892)
+policy_area: Food Safety
+description: 'Binding food waste reduction targets and prevention measures introduced into
+  Directive 2008/98/EC by Directive (EU) 2025/1892: a 10 % reduction in processing and manufacturing
+  and a 30 % per capita reduction in retail, restaurants, food services and households by
+  31 December 2030 against a 2021-2023 baseline.'
+applicability: Food processors and manufacturers, retailers, restaurants and food service
+  operators, and the Member State authorities coordinating food waste prevention.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32025L1892
+  title: Directive (EU) 2025/1892 of the European Parliament and of the Council of 10 September
+    2025 amending Directive 2008/98/EC on waste (Text with EEA relevance)
+requirements:
+- article: Article 9a(4)
+  law_celex: 32025L1892
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States, food processors, retailers, food service
+  deadline: '2030-12-31'
+  interpretive: null
+  requirement_text: Member States shall take the necessary and appropriate measures to achieve,
+    by 31 December 2030, a reduction of food waste generated in processing and manufacturing
+    of 10 per cent, and a reduction of food waste per capita generated jointly in retail and
+    other distribution of food, in restaurants and food services and in households of 30 per
+    cent, in both cases compared with the annual average generated between 2021 and 2023.
+- article: Article 9a(1)
+  law_celex: 32025L1892
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States, food business operators, retailers, food banks
+  deadline: null
+  interpretive: null
+  requirement_text: 'Member States shall take measures to prevent food waste along the entire
+    food supply chain including at least: behavioural change interventions and awareness campaigns;
+    identifying and addressing inefficiencies in the supply chain while ensuring fair distribution
+    of costs and benefits; encouraging food donation and other redistribution for human consumption,
+    prioritising human use over animal feed and non-food reprocessing; supporting training,
+    skills and access to funding particularly for SMEs and social economy entities; and encouraging
+    innovation and technological solutions. Member States shall, after consulting food banks,
+    take measures where appropriate so that operators with a significant role in food waste
+    propose donation agreements at a reasonable cost.'
+- article: Article 29a
+  law_celex: 32025L1892
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States, national competent authorities
+  deadline: '2026-01-17'
+  interpretive: null
+  requirement_text: Member States shall designate the competent authorities responsible for
+    coordinating food waste prevention measures and inform the Commission by 17 January 2026.
+    Member States shall evaluate and adapt their food waste prevention programmes with a view
+    to attaining the Article 9a(4) targets and communicate them to the Commission by 17 October
+    2027.

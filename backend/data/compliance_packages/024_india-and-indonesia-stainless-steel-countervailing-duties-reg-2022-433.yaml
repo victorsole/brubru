@@ -1,0 +1,201 @@
+id: 24
+name: India and Indonesia Stainless Steel Countervailing Duties (Reg 2022/433)
+policy_area: Trade and Economic Security
+description: 'Commission Implementing Regulation (EU) 2022/433 imposing definitive countervailing
+  duties on imports of stainless steel cold-rolled flat products (SSCR) originating in India
+  and Indonesia. Adopted 15 March 2022 under Articles 15 and 24(1) of the Basic Anti-Subsidy
+  Regulation (Reg 2016/1037). Investigation initiated 17 February 2021 on a complaint by EUROFER.
+  Definitive countervailing duties: India Jindal Stainless / Jindal Stainless Hisar 4.3 %,
+  Chromeni Steels and all other Indian 7.5 %; Indonesia IRNC Group 21.4 %, Jindal Stainless
+  Indonesia 0 % (de minimis), non-sampled cooperating 13.5 %, all other Indonesian 20.5 %.
+  Combined CVD + anti-dumping reaches 42.8 % (Chromeni). The dominant Indonesian subsidy was
+  nickel ore for less than adequate remuneration, supported by cross-border Chinese financing
+  channelled through the Morowali Industrial Park and attributed to the Government of Indonesia
+  (the GFF doctrine). The regulation also amends Reg (EU) 2021/2012 (the parallel anti-dumping
+  regulation on the same product).'
+applicability: 'EU importers of stainless steel cold-rolled flat products, EU customs authorities,
+  Indian exporting producers (Jindal Group, Chromeni Steels), Indonesian exporting producers
+  (IRNC Group / Tsingshan-linked, Jindal Stainless Indonesia), EU stainless steel producers
+  and EUROFER, downstream SSCR users in automotive, white goods, construction and process
+  industries. Product scope: flat-rolled stainless steel, not further worked than cold-rolled,
+  under 19 CN codes in headings 7219 and 7220.'
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32022R0433
+  title: Commission Implementing Regulation (EU) 2022/433 of 15 March 2022 imposing definitive
+    countervailing duties on imports of stainless steel cold-rolled flat products originating
+    in India and Indonesia and amending Implementing Regulation (EU) 2021/2012 imposing a
+    definitive anti-dumping duty and definitively collecting the provisional duty imposed
+    on imports of stainless steel cold-rolled flat products originating in India and Indonesia
+requirements:
+- article: Article 1(1)
+  law_celex: 32022R0433
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: Importers shall pay a definitive countervailing duty on imports of flat-rolled
+    products of stainless steel, not further worked than cold-rolled (SSCR), originating in
+    India and Indonesia. The product is covered by 19 CN codes in headings 7219 and 7220.
+    The duty is expressed as an ad valorem rate on the net, free-at-Union-frontier price before
+    duty.
+- article: Article 1(2) - India
+  law_celex: 32022R0433
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India
+  deadline: null
+  interpretive: null
+  requirement_text: 'Indian producer rates: Jindal Stainless Limited 4.3% (TARIC C654); Jindal
+    Stainless Hisar Limited 4.3% (C655); Chromeni Steels Private Limited 7.5% (C656); all
+    other Indian companies 7.5% (C999).'
+- article: Article 1(2) - Indonesia
+  law_celex: 32022R0433
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: 'Indonesian producer rates: PT. Indonesia Ruipu Nickel and Chrome Alloy
+    (IRNC) 21.4% (TARIC C657); PT. Jindal Stainless Indonesia 0% (C658, subsidy margin below
+    de minimis); non-sampled cooperating company 13.5% (see Annex 2); all other Indonesian
+    companies 20.5% (C999).'
+- article: Article 1(3)
+  law_celex: 32022R0433
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: To benefit from an individual producer duty rate (rather than the 'all
+    other companies' default), the importer shall present to Member State customs authorities
+    a valid commercial invoice bearing a dated and signed declaration by an official of the
+    issuing entity, identifying the producer, its address and TARIC additional code, and certifying
+    that the invoice information is complete and correct. Without that invoice, the all-other-companies
+    rate applies.
+- article: Article 1(4)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: Unless otherwise specified, the provisions in force concerning customs
+    duties apply. Standard Union Customs Code (Reg (EU) 952/2013) rules on origin, customs
+    value, customs procedures and TARIC integration apply alongside this Regulation.
+- article: Article 1(5)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: Where the countervailing duty has been subtracted from the anti-dumping
+    duty for certain exporting producers, refund requests under Article 21 of Regulation (EU)
+    2016/1037 shall also trigger an assessment of the dumping margin for that exporting producer
+    prevailing during the refund investigation period.
+- article: Article 2 (amends Reg 2021/2012)
+  law_celex: 32022R0433
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: 'The parallel anti-dumping duties (Reg (EU) 2021/2012) are amended and
+    run in parallel with the countervailing duties. Anti-dumping rates after avoiding double
+    counting of export subsidies (Article 24(1)): India Jindal entities 10.0%, Chromeni and
+    all other Indian 35.3%; Indonesia IRNC 9.3%, Jindal Indonesia 20.2%, other cooperating
+    and all other Indonesian 19.3%. Combined countervailing + anti-dumping reaches 42.8% for
+    Chromeni.'
+- article: Article 2(2) (anti-dumping uplift safeguard)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: Should the definitive countervailing duties imposed by Article 1 be modified
+    or removed, the anti-dumping duties in Reg (EU) 2021/2012 shall be increased by the same
+    proportion, limited to the actual dumping margin or injury margin per company, from the
+    entry into force of this Regulation. This prevents a gap in protection if the CVD is later
+    changed.
+- article: Article 3 (steel safeguard interaction)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia / customs authority
+  deadline: null
+  interpretive: null
+  requirement_text: SSCR is covered by the EU steel safeguard (Reg (EU) 2019/159, prolonged
+    to 30 June 2024). Where the above-quota safeguard tariff applies and exceeds the combined
+    countervailing and anti-dumping duty, only the safeguard duty is collected and collection
+    of the AD/CVD is suspended for the safeguard period. Where it is lower, the safeguard
+    duty is collected plus the difference up to the higher of the AD/CVD.
+- article: Article 4 (entry into force)
+  law_celex: 32022R0433
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: all EU operators / Member State authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The Regulation entered into force on the day following its publication
+    in the Official Journal (OJ L 88, 15 March 2022). It is binding in its entirety and directly
+    applicable in all Member States; no national transposition is required.
+- article: Article 14(5) Basic Regulation (de minimis)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importer of SSCR produced by Jindal Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: PT. Jindal Stainless Indonesia received a 0% duty because its subsidy
+    margin (0.02%) was below the de minimis threshold of Article 14(5) of the Basic Regulation.
+    Imports of SSCR produced by Jindal Indonesia (TARIC C658) are therefore not subject to
+    countervailing duty, though they remain subject to the parallel anti-dumping duty (20.2%).
+- article: Special monitoring clause (recitals 1070-1076)
+  law_celex: 32022R0433
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Indian / Indonesian exporting producer / EU related importer
+  deadline: null
+  interpretive: null
+  requirement_text: Should exports by a company benefiting from a lower individual rate increase
+    significantly in volume after the measures, this may be treated as a change in the pattern
+    of trade and trigger an anti-circumvention investigation under Article 23 of the Basic
+    Regulation. Customs authorities must apply usual checks in addition to the commercial
+    invoice.
+- article: Article 18 Basic Regulation (expiry review)
+  law_celex: 32022R0433
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EU industry / European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Definitive countervailing duties expire 5 years after entry into force
+    unless an expiry review is initiated before expiry on a duly substantiated request by
+    or on behalf of the EU industry. The Commission publishes a notice of impending expiry
+    in the Official Journal in the last year of the duty period.
+- article: Article 19 Basic Regulation (interim review)
+  law_celex: 32022R0433
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: interested party (importer / exporter / EU producer / GOI / GOID)
+  deadline: null
+  interpretive: null
+  requirement_text: An interim review of the duties may be requested by any interested party
+    showing a change of circumstances of a lasting nature (e.g. termination of a subsidy programme
+    such as the nickel-ore export restrictions, or new subsidy-rate evidence). Interim reviews
+    may result in repeal, modification or maintenance of the duties.
+- article: Article 21 Basic Regulation (refunds)
+  law_celex: 32022R0433
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: importer of SSCR from India or Indonesia
+  deadline: null
+  interpretive: null
+  requirement_text: An importer may apply for refund of duties paid where it can demonstrate
+    that the subsidy rate applicable to the actual producer of its imports has been eliminated
+    or reduced. Applications shall be submitted within six months of the date on which the
+    amount of duty was duly determined.

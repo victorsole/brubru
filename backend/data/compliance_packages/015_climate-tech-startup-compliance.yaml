@@ -1,0 +1,625 @@
+id: 15
+name: Climate Tech Startup Compliance
+policy_area: Climate Action
+description: Carbon markets, emissions trading, and CBAM compliance for climate startups
+applicability: Climate tech startups, carbon credit platforms, emission reduction technology,
+  green hydrogen, CCUS
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 32005L0381
+  title: Commission Decision of 4 May 2005 establishing a questionnaire for reporting on the
+    application of Directive 2003/87/EC of the European Parliament and of the Council establishing
+    a scheme for greenhouse gas emission allowance trading within the Community and amending
+    Council Directive 96/61/EC (notified under document number C(2005) 1359) (Text with EEA
+    relevance) (2005/381/EC)
+- celex: 32008L0101
+  title: Directive 2008/101/EC of the European Parliament and of the Council of 19 November
+    2008 amending Directive 2003/87/EC so as to include aviation activities in the scheme
+    for greenhouse gas emission allowance trading within the Community (Text with EEA relevance)
+- celex: 32013D0529
+  title: Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013
+    on accounting rules on greenhouse gas emissions and removals resulting from activities
+    relating to land use, land-use change and forestry and on information concerning actions
+    relating to those activities
+- celex: 32014D0224
+  title: Commission Implementing Decision of 16 April 2014 on the transfer of assigned amount
+    units to the Party to the Kyoto Protocol holding account in the registry of Finland (notified
+    under document C(2014) 2475) (2014/224/EU)
+- celex: 32015L1814
+  title: Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October
+    2015 concerning the establishment and operation of a market stability reserve for the
+    Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with
+    EEA relevance)
+- celex: 32015R2251
+  title: Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or
+    amending the average specific emission of CO2 and specific emissions targets for manufacturers
+    of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of
+    the European Parliament and of the Council (notified under document C(2015) 8348) (Only
+    the Dutch, English, French, German, Italian, and Swedish texts are authentic)
+- celex: 32016D1841
+  title: Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf of
+    the European Union, of the Paris Agreement adopted under the United Nations Framework
+    Convention on Climate Change
+- celex: 32016L0775
+  title: Commission Implementing Decision (EU) 2016/775 of 18 May 2016 on the benchmark to
+    allocate greenhouse gas emission allowances free of charge to aircraft operators pursuant
+    to Article 3f(5) of Directive 2003/87/EC of the European Parliament and of the Council
+    (Text with EEA relevance)
+- celex: 32020D1722
+  title: Commission Decision (EU) 2020/1722 of 16 November 2020 on the Union-wide quantity
+    of allowances to be issued under the EU Emissions Trading System for 2021 (notified under
+    document C(2020)7704) (Text with EEA relevance)
+- celex: 32020R0022
+  title: Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes
+    I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as
+    regards the monitoring of CO2 emissions from new light commercial vehicles type-approved
+    in a multi-stage process (Text with EEA relevance)
+- celex: 32020R1044
+  title: Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation
+    (EU) 2018/1999 of the European Parliament and of the Council with regard to values for
+    global warming potentials and the inventory guidelines and with regard to the Union inventory
+    system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)
+- celex: 32021D0927
+  title: Commission Implementing Decision (EU) 2021/927 of 31 May 2021 determining the uniform
+    cross-sectoral correction factor for the adjustment of free allocations of emission allowances
+    for the period 2021 to 2025 (notified under document C(2021) 3745) (Text with EEA relevance)
+- celex: 32021R0781
+  title: Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication
+    of a list indicating certain CO2 emissions values per manufacturer as well as average
+    specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference
+    CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of
+    the Council for the reporting period of the year 2019 (notified under document C(2021)
+    3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic)
+    (Text with EEA relevance)
+- celex: 32022D1660
+  title: Council Decision (EU) 2022/1660 of 20 September 2022 on the position to be taken,
+    on behalf of the European Union, within the Joint Committee established by the Agreement
+    between the European Union and the Swiss Confederation on the linking of their greenhouse
+    gas emissions trading systems, as regards the amendment of Annexes III and IV to the Agreement
+    (Text with EEA relevance)
+- celex: 32023D0852
+  title: Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April
+    2023 amending Decision (EU) 2015/1814 as regards the number of allowances to be placed
+    in the market stability reserve for the Union greenhouse gas emission trading system until
+    2030 (Text with EEA relevance)
+- celex: null
+  title: Commission Decision of 15 December 2020 instructing the central administrator to
+    enter changes into the international credit entitlement tables in the European Union Transaction
+    Log
+requirements:
+- article: Article 1
+  law_celex: 32005L0381
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall use the questionnaire set out in the Annex for the
+    purpose of drawing up the annual report to be submitted to the Commission pursuant to
+    Article 21(1) of Directive 2003/87/EC
+- article: Article 2
+  law_celex: 32005L0381
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2005-01-01'
+  interpretive: null
+  requirement_text: The first report shall cover the four-month period from 1 January 2005
+    to 30 April 2005
+- article: Article 2
+  law_celex: 32005L0381
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Subsequent reports shall be submitted to the Commission by 30 June each
+    year and shall cover the preceding calendar year from 1 January to 31 December commencing
+    with the calendar year 2005
+- article: Article 1
+  law_celex: 32020D1722
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: For 2021, the Union-wide quantity of allowances referred to in Article
+    9 of Directive 2003/87/EC amounts to 1571583007
+- article: Article 1
+  law_celex: 32021D0927
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: For each year in the allocation period 2021 to 2025, the uniform cross-sectoral
+    correction factor for the adjustment of free allocations of emission allowances in accordance
+    with Article 10a(5) and 10a(5a) of Directive 2003/87/EC shall be 100%
+- article: Recital 15
+  law_celex: 32008L0101
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: aircraft operators
+  deadline: null
+  interpretive: true
+  requirement_text: Aircraft operators shall be responsible for complying with the obligations
+    imposed by this Directive, including the obligation to prepare a monitoring plan and to
+    monitor and report emissions in accordance with that plan
+- article: Recital 15
+  law_celex: 32008L0101
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: aircraft owners
+  deadline: null
+  interpretive: true
+  requirement_text: If the identity of the aircraft operator is not known, the owner of the
+    aircraft should be regarded as the aircraft operator unless it proves which other person
+    was the aircraft operator
+- article: Recital 16
+  law_celex: 32008L0101
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: aircraft operators
+  deadline: null
+  interpretive: true
+  requirement_text: Emissions from all flights arriving at and departing from Community aerodromes
+    should be included
+- article: Article 1
+  law_celex: 32022D1660
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union representatives
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be taken, on behalf of the Union, during the fifth meeting
+    of the Joint Committee, or earlier by means of the written procedure pursuant to Article
+    8(4) of the Rules of Procedure of the Joint Committee, shall be based on the draft Decision
+    of the Joint Committee attached to this Decision.
+- article: Article 8(5) of Regulation (EC) No 443/2009
+  law_celex: 32015R2251
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission is required to confirm each year the average specific emissions
+    of CO2 and the specific emissions target for each manufacturer of passenger cars in the
+    Union as well as for each pool of manufacturers formed in accordance with Article 7(1)
+    of that Regulation
+- article: Article 8(2) of Regulation (EC) No 443/2009
+  law_celex: 32015R2251
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must submit data to the Commission by the time limit of
+    28 February
+- article: Article 8(4) of Regulation (EC) No 443/2009
+  law_celex: 32015R2251
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall publish the provisional data and notify manufacturers
+    of the provisional calculations of their average specific emissions of CO2 and their specific
+    emissions targets
+- article: Article 8(5) of Regulation (EC) No 443/2009
+  law_celex: 32015R2251
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers of passenger cars
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers must verify the data and notify the Commission of any errors
+    within 3 months of receipt of the notification
+- article: Article 9 of Regulation (EC) No 443/2009
+  law_celex: 32015R2251
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers of passenger cars
+  deadline: null
+  interpretive: null
+  requirement_text: Where the average emissions exceed the specific emissions target, an excess
+    emission premium are to be imposed unless the manufacturer concerned benefits from an
+    exemption or is a member of a compliant pool
+- article: Article 1(1)
+  law_celex: 32016L0775
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: aircraft operators
+  deadline: '2013-01-01'
+  interpretive: null
+  requirement_text: The benchmark to be used to allocate allowances free of charge to aircraft
+    operators pursuant to Article 3f of Directive 2003/87/EC for the period from 1 January
+    2013 to 31 December 2020 shall be 0,000642186914222035 allowances per tonne-kilometre
+    per year.
+- article: Article 1(2)
+  law_celex: 32016L0775
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: aircraft operators
+  deadline: '2014-01-01'
+  interpretive: null
+  requirement_text: The benchmark to be used to allocate allowances free of charge to aircraft
+    operators pursuant to Article 3f of Directive 2003/87/EC for the purpose of Article 5
+    of the Implementing Decision 2014/389/EU for the period from 1 January 2014 to 31 December
+    2020 shall be 0,000642186914222035 allowances per tonne-kilometre per year.
+- article: Article 2
+  law_celex: 32016L0775
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: aircraft operators
+  deadline: null
+  interpretive: null
+  requirement_text: Calculations relating to a number of allowances to be allocated in accordance
+    with the benchmarks set out in Article 1 shall be rounded down to the nearest allowance.
+- article: Article 1(1)
+  law_celex: 32014D0224
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Central Administrator of the Union registry
+  deadline: null
+  interpretive: null
+  requirement_text: The Central Administrator of the Union registry shall transfer as soon
+    as possible and before the end of the true up period for the first commitment period under
+    the Kyoto Protocol a total quantity which shall not exceed 10 million (10000000) of assigned
+    amount units to the Party to the Kyoto Protocol holding account in the registry of Finland.
+- article: Article 1(2)
+  law_celex: 32014D0224
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Central Administrator of the Union registry
+  deadline: null
+  interpretive: null
+  requirement_text: The transfer shall be made subject to the availability of assigned amount
+    units in the Union registry and when the commitment regarding Croatia as set out in the
+    Protocol on certain arrangements concerning a possible one-off transfer of assigned amount
+    units issued under the Kyoto Protocol to the United Nations Framework Convention on Climate
+    Change to the Republic of Croatia, as well as the related compensation to the Treaty concerning
+    the accession of the Republic of Croatia to the European Union has been settled or resolved.
+- article: Article 1
+  law_celex: 32021R0781
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The average specific CO2 emissions per manufacturer for the reporting
+    period of the year 2019 are indicated in the second column of the table of Annex I
+- article: Article 2
+  law_celex: 32021R0781
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The zero- and low-emission factor per manufacturer for the reporting period
+    of the year 2019 is indicated in the third column of the table of Annex I
+- article: Article 3
+  law_celex: 32021R0781
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The CO2 emission reduction trajectory and the emission credits per manufacturer
+    for the reporting period of the year 2019 are indicated in the fourth and fifth column
+    respectively of the table of Annex I
+- article: Article 6
+  law_celex: 32021R0781
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: specified manufacturers (DAIMLER TRUCK AG, DAF NV, Ford Otomotiv Sanayi
+    AS, Iveco Magirus-AG, IVE...
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision is addressed to the specified manufacturers
+- article: Article 1(1)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: '2019-01-01'
+  interpretive: null
+  requirement_text: A market stability reserve shall be established in 2018 and the placing
+    of allowances in the reserve shall operate from 1 January 2019
+- article: Article 1(2)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States and Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The quantity of 900 million allowances deducted from auctioning volumes
+    during the period 2014-2016 shall not be added to the volumes to be auctioned in 2019
+    and 2020 but shall instead be placed in the reserve
+- article: Article 1(3)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States and Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Allowances not allocated to installations pursuant to Article 10a(7) of
+    Directive 2003/87/EC and allowances not allocated to installations because of the application
+    of Article 10a(19) and (20) of that Directive shall be placed in the reserve in 2020
+- article: Article 1(3)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall review Directive 2003/87/EC in relation to those
+    unallocated allowances and, if appropriate, submit a proposal to the European Parliament
+    and to the Council
+- article: Article 1(4)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall publish the total number of allowances in circulation
+    each year, by 15 May of the subsequent year
+- article: Recital (6)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission and Member States
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission and the Member States should, without undue delay following
+    the publication of the total number of allowances in circulation by the Commission by
+    15 May of a given year, ensure that the auction calendars of the common auction platform
+    and, where applicable, of opt-out auction platforms are adjusted
+- article: Recital (9)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should review Directive 2003/87/EC, in particular Article
+    10a thereof, and submit a proposal for the revision of that Directive within six months
+    of the adoption of this Decision
+- article: Recital (10)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should monitor the functioning of the reserve in the context
+    of its annual carbon market report
+- article: Recital (10)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should, within three years of the date of operation of
+    the reserve and periodically thereafter, review the functioning of the reserve in the
+    light of the experience gained from its application
+- article: Article 1
+  law_celex: 32023D0852
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union institutions implementing the EU ETS market stability
+    reserve
+  deadline: null
+  interpretive: null
+  requirement_text: Until 31 December 2030, the percentages and the 100 million allowances
+    referred to in Article 1(5) first and second sentences shall be doubled for determining
+    the number of allowances to be placed in the market stability reserve
+- article: Article 2
+  law_celex: 32023D0852
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the twentieth day following that
+    of its publication in the Official Journal
+- article: Recital 4
+  law_celex: 32013D0529
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States shall implement accounting rules and provide information
+    on their LULUCF actions
+- article: Recital 9
+  law_celex: 32013D0529
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States shall prepare and maintain their accounts ensuring the accuracy,
+    completeness, consistency, comparability and transparency of relevant information used
+    in estimating emissions and removals from the LULUCF sector in line with guidance provided
+    in relevant IPCC Guidelines
+- article: Recital 8
+  law_celex: 32013D0529
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States shall apply accounting rules on a mandatory basis to the
+    activities of afforestation, reforestation, deforestation and forest management, as well
+    as to the activities of grazing land management and cropland management
+- article: Recital 12
+  law_celex: 32013D0529
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States shall carry out appropriate technical corrections to include
+    the impact of recalculations in the accounting for forest management if improvements to
+    methodologies or data relating to the establishment of the reference level become available
+- article: Article 1
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation applies to the reports submitted by the Member States
+    containing data required for the year 2021 onwards
+- article: Article 2
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states and the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Member States and the Commission shall use the global warming potentials
+    listed in Annex I to this Regulation for the purpose of determining and reporting greenhouse
+    gas inventories data pursuant to paragraphs 3, 4 and 5 of Article 26 of Regulation (EU)
+    2018/1999
+- article: Article 3
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states and the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Member States and the Commission shall determine greenhouse gas inventories
+    referred to in paragraphs 3, 4 and 5 of Article 26 of Regulation (EU) 2018/1999 in accordance
+    with the 2006 Intergovernmental Panel on Climate Change (IPCC) Guidelines for National
+    Greenhouse Gas Inventories and the modalities, procedures and guidelines for the transparency
+    framework for action and support referred to in Article 13 of the Paris Agreement set
+    out in the Annex to Decision 18/CMA.1
+- article: Article 4(1)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: commission
+  applicable_entity: the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall manage, maintain and seek to continuously improve
+    the Union greenhouse gas inventory system based on quality assurance and quality control
+    programme objectives
+- article: Article 4(4)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure the quality of activity data, emission factors
+    and other parameters used for their national greenhouse gas inventory
+- article: Article 5(1)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: commission
+  applicable_entity: the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission estimates for completing the inventory data submitted by
+    a Member State as referred to in Article 37(5) of Regulation (EU) 2018/1999 shall be based
+    on specified methodologies and data
+- article: Article 2
+  law_celex: 32016D1841
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall designate the person(s) empowered to
+    deposit, on behalf of the Union, the instrument of ratification with the Secretary-General
+    of the United Nations, in accordance with Article 20, paragraph 1, of the Paris Agreement,
+    together with the Declaration of Competence.
+- article: Article 3(1)
+  law_celex: 32016D1841
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall endeavour to take the necessary steps with a view
+    to depositing instruments of ratification simultaneously with the Union or as soon as
+    possible thereafter.
+- article: Article 3(2)
+  law_celex: 32016D1841
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall inform the Commission of their decisions on ratification
+    of the Paris Agreement or, according to the circumstances, of the probable date of completion
+    of the necessary procedures.
+- article: Article 1
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annexes I and III to Regulation (EU) 2019/631 are amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the seventh day following that
+    of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital (5)
+  law_celex: 32020R0022
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: base vehicle manufacturers
+  deadline: null
+  interpretive: true
+  requirement_text: The base vehicle manufacturer should report the input values used for
+    the interpolation method as well as the resulting CO2 emissions and mass of incomplete
+    base vehicles to the Commission
+- article: Recital (5)
+  law_celex: 32020R0022
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States should continue to report to the Commission the specific
+    emissions of CO2 and mass in running order of the completed vehicles
+- article: Recital (6)
+  law_celex: 32020R0022
+  criticality: recommended
+  addressee: commission
+  applicable_entity: european commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should continuously assess the representativeness of the
+    monitoring CO2 emissions of the base vehicle and inform the manufacturers of any divergences
+    found
+- article: Sole Article
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: central administrator
+  deadline: null
+  interpretive: null
+  requirement_text: The central administrator shall enter the changes into the international
+    credit entitlement tables in the European Union Transaction Log

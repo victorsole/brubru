@@ -1,0 +1,202 @@
+id: 47
+name: Nimes Airport State Aid Decision (Decision (EU) 2016/633)
+policy_area: Competition
+description: The Commission examined public funding to the managers of Nimes airport and the
+  airport-services and marketing agreements with Ryanair and Airport Marketing Services. Using
+  the market-economy operator test and an incremental-profitability analysis, it found unlawful
+  aid in several agreements and ordered recovery, assessing airport operating aid under the
+  Aviation Guidelines.
+applicability: Regional airport operators and chambers of commerce; airlines signing marketing
+  and airport-services agreements.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32016D0633
+  title: Commission Decision (EU) 2016/633 of 23 July 2014 on State aid SA.33961 (2012/C)
+    (ex 2012/NN) implemented by France in favour of Nîmes-Uzès-Le Vigan Chamber of Commerce
+    and Industry, Veolia Transport Aéroport de Nîmes, Ryanair Limited and Airport Marketing
+    Services Limited (notified under document C(2014) 5078) (Only the French text is authentic)
+    (Text with EEA relevance)
+requirements:
+- article: Article 1 / recitals 453-498
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Airport operator, public authority granting airport concession
+  deadline: null
+  interpretive: null
+  requirement_text: Before signing any airport services agreement or marketing services agreement
+    with an airline, the airport operator must conduct a documented ex-ante incremental profitability
+    analysis demonstrating that the net present value of incremental revenues (aeronautical
+    charges plus non-aeronautical single-till income) exceeds incremental costs (operating
+    costs, marketing payments and financial incentives) over the full contract term.
+- article: Article 1 / recitals 310-329
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Airport operator, airline, airline marketing subsidiary
+  deadline: null
+  interpretive: null
+  requirement_text: Where an airport services agreement and a marketing services agreement
+    are concluded simultaneously with the same airline or its subsidiary, both agreements
+    must be assessed as a single economic transaction for State aid purposes. The combined
+    net incremental revenue must exceed the combined incremental costs including marketing
+    payments.
+- article: Article 1 / recitals 352-375
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Airport operator
+  deadline: null
+  interpretive: null
+  requirement_text: Only concrete, pre-quantified economic benefits identified at the time
+    of signing may be included in the incremental profitability analysis. Speculative benefits
+    extending beyond the agreement term — including brand value, tourist multiplier effects,
+    network externalities and route renewal probabilities — must be excluded unless specifically
+    quantified in contemporary documents.
+- article: Article 1 / recitals 256-273
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Chamber of commerce, local authority airport operator, public authority
+  deadline: null
+  interpretive: null
+  requirement_text: A public body that constitutes part of the public administration (such
+    as a chamber of commerce and industry with supervisory powers, elected management and
+    public service functions) must treat all decisions regarding commercial agreements as
+    imputable to the state for State aid purposes. The standard Stardust Marine imputation
+    test does not apply; all decisions are presumed imputable.
+- article: Article 1 / recitals 275-300
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Private airport management company, conceding public authority (SMAN/EPCI)
+  deadline: null
+  interpretive: null
+  requirement_text: A private company managing an airport under a public service delegation
+    is subject to State aid rules where the conceding authority sets a traffic-development
+    objective, provides a deficit-covering flat-rate contribution, and structures the contractual
+    framework under which the operator deals with airlines. In such cases the airline agreements
+    are imputable to the state and financed by state resources.
+- article: Article 1 / recitals 511-531 (2005 Guidelines, poi
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Airport operator, Member State, airline beneficiary
+  deadline: null
+  interpretive: null
+  requirement_text: 'Start-up aid to airlines for new routes must be: (a) strictly degressive
+    over a maximum of three years; (b) linked to net traffic development on the new route;
+    (c) conditional on a credible business plan showing the route can become viable without
+    aid; (d) awarded through a transparent, non-discriminatory tender open to all airlines.
+    Aid that maintains existing routes, lacks degressiveness, or is awarded without a tender
+    is incompatible.'
+- article: Article 1 / recitals 477-498
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Airport operator, airline
+  deadline: null
+  interpretive: null
+  requirement_text: Additional marketing payments demanded by an airline as a condition for
+    maintaining existing routes (rather than opening new routes) do not qualify as start-up
+    aid. They constitute operating aid to the airline, cannot be justified under the 2005
+    or 2014 Aviation Guidelines, and are presumptively incompatible with the internal market.
+- article: Article 2 / recitals 608-683 (2014 Aviation Guidel
+  law_celex: 32016D0633
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Member State, airport operating body, local authority grantor
+  deadline: null
+  interpretive: null
+  requirement_text: 'Operating aid to airports handling under 700,000 passengers per year
+    may qualify for compatibility under Article 107(3)(c) TFEU if it: (a) serves a well-defined
+    objective of common interest (local connectivity, tourism, employment); (b) is necessary
+    because the airport cannot cover operating costs; (c) is proportionate and limited to
+    the minimum funding gap; (d) does not overcompensate; and (e) has limited distortive effects
+    on trade. All five criteria must be demonstrated simultaneously.'
+- article: Recitals 32-45, 565-570
+  law_celex: 32016D0633
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Airport operator, Member State, competent national authority
+  deadline: null
+  interpretive: true
+  requirement_text: 'Payments from public funds for sovereign airport tasks — aircraft rescue
+    and firefighting, security screening, border control, wildlife hazard prevention and environmental
+    monitoring — do not constitute State aid provided the financing system: (a) covers only
+    the non-economic public service function; (b) applies non-discriminatorily to all airports;
+    and (c) prevents overcompensation through ex-ante budgeting and ex-post control mechanisms.'
+- article: 'Articles 4-6 / recitals 685-699 / Regulation (EC) '
+  law_celex: 32016D0633
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member State, airline beneficiary, airline marketing subsidiary
+  deadline: null
+  interpretive: null
+  requirement_text: Where incompatible State aid has been granted to an airline through below-cost
+    airport agreements, the Member State must recover the full amount of the aid from the
+    airline (and any marketing subsidiary) plus compound interest from the date the aid was
+    placed at the beneficiary's disposal. Recovery must be completed within four months of
+    notification of the decision. No insolvency, legitimate expectation or other grounds can
+    release the airline from the recovery obligation.
+- article: Recitals 340-351
+  law_celex: 32016D0633
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Airport operator
+  deadline: null
+  interpretive: true
+  requirement_text: The incremental profitability analysis must be performed on a single-till
+    basis, allocating all incremental non-aeronautical commercial revenue (retail, parking,
+    food and beverage, advertising) to the revenue side of the assessment for each airline
+    relationship. A dual-till approach that excludes commercial revenue is not appropriate
+    for the MEO test.
+- article: Recitals 502-509
+  law_celex: 32016D0633
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Airport operator, Member State, airline
+  deadline: null
+  interpretive: true
+  requirement_text: The EU air transport market has been fully liberalised since January 1993.
+    Any financial advantage granted to one airline at a publicly funded airport that reduces
+    its costs relative to competing carriers constitutes a distortion of competition and affects
+    intra-EU trade, satisfying the final two limbs of Article 107(1) TFEU. A small market
+    share or low passenger volumes do not eliminate the trade effect.
+- article: Recitals 575-600
+  law_celex: 32016D0633
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State, regional authority, airport operator
+  deadline: null
+  interpretive: true
+  requirement_text: An airport does not provide a service of general economic interest (SGEI)
+    exempt from State aid rules where it is located in a territory accessible by alternative
+    transport infrastructure — including a high-speed rail connection and a nearby larger
+    airport within 50 minutes by road. SGEI designation requires genuine geographical or connectivity
+    isolation that the alternative infrastructure does not resolve.
+- article: Article 1 / recitals 393-414
+  law_celex: 32016D0633
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Airport operator
+  deadline: null
+  interpretive: null
+  requirement_text: The load factor assumption used in an incremental profitability analysis
+    must reflect realistic, documented historical or contractual performance rather than optimistic
+    projections. Where agreements include marketing services specifically designed to increase
+    passenger volumes, a higher load factor (such as 85%) may be used for post-marketing periods,
+    but this must be justified by contemporaneous evidence and applied consistently.
+- article: Article 3 / recitals 617-683
+  law_celex: 32016D0633
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Local authority, public authority granting public service delegation
+  deadline: null
+  interpretive: null
+  requirement_text: Where a public authority increases the operating contribution to an airport
+    management company through successive amendments to a public service delegation, each
+    amendment constitutes a new measure and must be reassessed independently for State aid
+    purposes. An amendment increasing the subsidy must demonstrate that it does not result
+    in overcompensation above the verified operating funding gap.

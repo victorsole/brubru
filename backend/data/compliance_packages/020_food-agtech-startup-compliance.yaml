@@ -1,0 +1,2642 @@
+id: 20
+name: Food & AgTech Startup Compliance
+policy_area: Food Safety
+description: Food safety, novel foods, and agricultural technology compliance
+applicability: FoodTech startups, AgTech innovators, alternative proteins, vertical farming,
+  food delivery platforms
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 31998L0028
+  title: Commission Directive 98/28/EC of 29 April 1998 granting a derogation from certain
+    provisions of Directive 93/43/EEC on the hygiene of foodstuffs as regards the transport
+    by sea of bulk raw sugar (Text with EEA relevance)
+- celex: 32004R1935
+  title: Regulation (EC) No 1935/2004 of the European Parliament and of the Council of 27
+    October 2004 on materials and articles intended to come into contact with food and repealing
+    Directives 80/590/EEC and 89/109/EEC
+- celex: 32005L0487
+  title: Commission Decision of 4 July 2005 concerning the non-inclusion of triazamate in
+    Annex I to Council Directive 91/414/EEC and the withdrawal of authorisations for plant
+    protection products containing that substance (notified under document number C(2005)
+    1960) (Text with EEA relevance) (2005/487/EC)
+- celex: 32006L0966
+  title: Commission Decision of 18 December 2006 concerning the non-inclusion of alachlor
+    in Annex I to Council Directive 91/414/EEC and the withdrawal of authorisations for plant
+    protection products containing this active substance (notified under document number C(2006)
+    6567) (Text with EEA relevance) (2006/966/EC)
+- celex: 32006R0058
+  title: Commission Decision of 24 January 2006 authorising the placing on the market of rye
+    bread with added phytosterols/phytostanols as novel foods or novel food ingredients pursuant
+    to Regulation (EC) No 258/97 of the European Parliament and of the Council (notified under
+    document number C(2006) 42) (Only the Finnish and Swedish texts are authentic) (Text with
+    EEA relevance) (2006/58/EC)
+- celex: 32006R0059
+  title: Commission Decision of 24 January 2006 authorising the placing on the market of rye
+    bread with added phytosterols/phytostanols as novel foods or novel food ingredients under
+    Regulation (EC) No 258/97 of the European Parliament and of the Council (notified under
+    document number C(2006) 115) (Only the Finnish and Swedish texts are authentic) (Text
+    with EEA relevance) (2006/59/EC)
+- celex: 32007L0355
+  title: Commission Decision of 21 May 2007 concerning the non-inclusion of carbaryl in Annex
+    I to Council Directive 91/414/EEC and the withdrawal of authorisations for plant protection
+    products containing that substance (notified under document number C(2007) 2093) (Text
+    with EEA relevance) (2007/355/EC)
+- celex: 32007L0615
+  title: Commission Decision of 20 September 2007 concerning the non-inclusion of benfuracarb
+    in Annex I to Council Directive 91/414/EEC and the withdrawal of authorisations for plant
+    protection products containing that substance (notified under document number C(2007)
+    4285) (Text with EEA relevance) (2007/615/EC)
+- celex: 32007R1243
+  title: Commission Regulation (EC) No 1243/2007 of 24 October 2007 amending Annex III to
+    Regulation (EC) No 853/2004 of the European Parliament and the Council laying down specific
+    hygiene rules for food of animal origin (Text with EEA relevance)
+- celex: 32008L0296
+  title: Commission Decision of 4 April 2008 concerning the non-inclusion of azocyclotin,
+    cyhexatin and thidiazuron in Annex I to Council Directive 91/414/EEC and the withdrawal
+    of authorisations for plant protection products containing those active substances (notified
+    under document number C(2008) 1187) (Text with EEA relevance) (2008/296/EC)
+- celex: 32008L0768
+  title: Commission Decision of 30 September 2008 concerning the non-inclusion of Beauveria
+    brongniartii and potassium permanganate in Annex I to Council Directive 91/414/EEC and
+    the withdrawal of authorisations for plant protection products containing these substances
+    (notified under document number C(2008) 5106) (Text with EEA relevance) (2008/768/EC)
+- celex: 32008R0202
+  title: Commission Regulation (EC) No 202/2008 of 4 March 2008 amending Regulation (EC) No
+    178/2002 of the European Parliament and of the Council as regards the number and names
+    of the Scientific Panels of the European Food Safety Authority (Text with EEA relevance)
+- celex: 32008R0575
+  title: Commission Decision of 27 June 2008 authorising the placing on the market of Baobab
+    dried fruit pulp as a novel food ingredient under Regulation (EC) No 258/97 of the European
+    Parliament and of the Council (notified under document number C(2008) 3046) (Only the
+    English text is authentic) (2008/575/EC)
+- celex: 32009L0617
+  title: Commission Decision of 17 August 2009 concerning the non-inclusion of paraffin oil
+    CAS 64742-54-7 in Annex I to Council Directive 91/414/EEC and the withdrawal of authorisations
+    for plant protection products containing that substance (notified under document C(2009)
+    6305) (Text with EEA relevance) (2009/617/EC)
+- celex: 32011R0762
+  title: Commission Implementing Decision of 24 November 2011 authorising the placing on the
+    market of yeast beta-glucans as a novel food ingredient under Regulation (EC) No 258/97
+    of the European Parliament and of the Council (notified under document C(2011) 8527) (Only
+    the English text is authentic) (2011/762/EU)
+- celex: 32012R0288
+  title: Commission Implementing Decision of 1 June 2012 authorising the placing on the market
+    of Gamma-Cyclodextrin as a novel food ingredient under Regulation (EC) No 258/97 of the
+    European Parliament and of the Council (notified under document C(2012) 3496) (Only the
+    German text is authentic) (2012/288/EU)
+- celex: 32013R0767
+  title: Commission Implementing Regulation (EU) No 767/2013 of 8 August 2013 withdrawing
+    the approval of the active substance bitertanol, in accordance with Regulation (EC) No
+    1107/2009 of the European Parliament and of the Council concerning the placing of plant
+    protection products on the market, and amending Commission Implementing Regulation (EU)
+    No 540/2011 (Text with EEA relevance)
+- celex: 32013R0818
+  title: Commission Regulation (EU) No 818/2013 of 28 August 2013 amending Annex III to Regulation
+    (EC) No 1333/2008 of the European Parliament and of the Council as regards the use of
+    Sucrose esters of fatty acids (E 473) in flavourings for water based clear flavoured drinks
+    (Text with EEA relevance)
+- celex: 32013R1165
+  title: Commission Implementing Regulation (EU) No 1165/2013 of 18 November 2013 approving
+    the active substance orange oil, in accordance with Regulation (EC) No 1107/2009 of the
+    European Parliament and of the Council concerning the placing of plant protection products
+    on the market, and amending the Annex to Commission Implementing Regulation (EU) No 540/2011
+    (Text with EEA relevance)
+- celex: 32014H0661
+  title: Commission Recommendation of 10 September 2014 on the monitoring of the presence
+    of 2 and 3-monochloropropane-1,2-diol (2 and 3-MCPD), 2- and 3-MCPD fatty acid esters
+    and glycidyl fatty acid esters in food (Text with EEA relevance) (2014/661/EU)
+- celex: 32014R0200
+  title: Commission Implementing Regulation (EU) No 200/2014 of 3 March 2014 amending the
+    Annex to Regulation (EU) No 37/2010 on pharmacologically active substances and their classification
+    regarding maximum residue limits in foodstuffs of animal origin, as regards the substance
+    triptorelin acetate (Text with EEA relevance)
+- celex: 32014R0891
+  title: Commission Implementing Regulation (EU) No 891/2014 of 14 August 2014 approving the
+    active substance aminopyralid, in accordance with Regulation (EC) No 1107/2009 of the
+    European Parliament and of the Council concerning the placing of plant protection products
+    on the market, and amending the Annex to Commission Implementing Regulation (EU) No 540/2011
+    (Text with EEA relevance)
+- celex: 32015H1381
+  title: Commission Recommendation (EU) 2015/1381 of 10 August 2015 on the monitoring of arsenic
+    in food
+- celex: 32015R1192
+  title: Commission Implementing Regulation (EU) 2015/1192 of 20 July 2015 approving the active
+    substance terpenoid blend QRD 460, in accordance with Regulation (EC) No 1107/2009 of
+    the European Parliament and of the Council concerning the placing of plant protection
+    products on the market, and amending the Annex to Commission Implementing Regulation (EU)
+    No 540/2011 (Text with EEA relevance)
+- celex: 32015R1475
+  title: Commission Regulation (EU) 2015/1475 of 27 August 2015 amending Regulation (EU) No
+    284/2013 as regards the transitional measures applying to procedures concerning plant
+    protection products (Text with EEA relevance)
+- celex: 32016R0177
+  title: Commission Implementing Regulation (EU) 2016/177 of 10 February 2016 approving the
+    active substance benzovindiflupyr, as a candidate for substitution, in accordance with
+    Regulation (EC) No 1107/2009 of the European Parliament and of the Council concerning
+    the placing of plant protection products on the market, and amending the Annex to Implementing
+    Regulation (EU) No 540/2011 (Text with EEA relevance)
+- celex: 32016R0452
+  title: Commission Regulation (EU) 2016/452 of 29 March 2016 amending Annexes II and III
+    to Regulation (EC) No 396/2005 of the European Parliament and of the Council as regards
+    maximum residue levels for captan, propiconazole and spiroxamine in or on certain products
+    (Text with EEA relevance)
+- celex: 32016R0871
+  title: Commission Implementing Regulation (EU) 2016/871 of 1 June 2016 concerning the non-renewal
+    of approval of the active substance amitrole, in accordance with Regulation (EC) No 1107/2009
+    of the European Parliament and of the Council concerning the placing of plant protection
+    products on the market, and amending Commission Implementing Regulation (EU) No 540/2011
+    (Text with EEA relevance)
+- celex: 32016R1190
+  title: Commission Implementing Decision (EU) 2016/1190 of 19 July 2016 authorising the placing
+    on the market of trans-resveratrol as a novel food ingredient under Regulation (EC) No
+    258/97 of the European Parliament and of the Council (notified under document C(2016)
+    4567) (Only the English text is authentic)
+- celex: 32017R0241
+  title: Commission Implementing Regulation (EU) 2017/241 of 10 February 2017 concerning the
+    non-approval of Origanum vulgare L. essential oil as a basic substance in accordance with
+    Regulation (EC) No 1107/2009 of the European Parliament and of the Council concerning
+    the placing of plant protection products on the market (Text with EEA relevance)
+- celex: 32017R0781
+  title: Commission Implementing Regulation (EU) 2017/781 of 5 May 2017 withdrawing the approval
+    of the active substance methyl nonyl ketone, in accordance with Regulation (EC) No 1107/2009
+    of the European Parliament and of the Council concerning the placing of plant protection
+    products on the market, and amending Commission Implementing Regulation (EU) No 540/2011
+    (Text with EEA relevance)
+- celex: 32017R2355
+  title: Commission Implementing Decision (EU) 2017/2355 of 14 December 2017 authorising the
+    placing on the market of UV-treated mushrooms as a novel food under Regulation (EC) No
+    258/97 of the European Parliament and of the Council (notified under document C(2017)
+    8474) (Only the English text is authentic)
+- celex: 32017R2375
+  title: Commission Implementing Decision (EU) 2017/2375 of 15 December 2017 authorising the
+    placing on the market of N-acetyl-D-neuraminic acid as a novel food ingredient under Regulation
+    (EC) No 258/97 of the European Parliament and of the Council (notified under document
+    C(2017) 8431) (Only the English text is authentic)
+- celex: 32017R2469
+  title: Commission Implementing Regulation (EU) 2017/2469 of 20 December 2017 laying down
+    administrative and scientific requirements for applications referred to in Article 10
+    of Regulation (EU) 2015/2283 of the European Parliament and of the Council on novel foods
+    (Text with EEA relevance)
+- celex: 32018R0113
+  title: Commission Implementing Regulation (EU) 2018/113 of 24 January 2018 renewing the
+    approval of the active substance acetamiprid in accordance with Regulation (EC) No 1107/2009
+    of the European Parliament and of the Council concerning the placing of plant protection
+    products on the market, and amending the Annex to Commission Implementing Regulation (EU)
+    No 540/2011 (Text with EEA relevance)
+- celex: 32018R0627
+  title: Commission Regulation (EU) 2018/627 of 20 April 2018 correcting certain language
+    versions of Regulation (EC) No 1333/2008 of the European Parliament and of the Council
+    on food additives (Text with EEA relevance)
+- celex: 32018R1555
+  title: Commission Regulation (EU) 2018/1555 of 17 October 2018 refusing to authorise certain
+    health claims made on foods and referring to the reduction of disease risk (Text with
+    EEA relevance)
+- celex: 32018R1558
+  title: Commission Implementing Regulation (EU) 2018/1558 of 17 October 2018 concerning the
+    authorisation of a new use of the preparation of Lactobacillus acidophilus (CECT 4529)
+    as a feed additive for cats and dogs (holder of the authorisation Centro Sperimentale
+    del Latte) (Text with EEA relevance)
+- celex: 32019R0108
+  title: Commission Implementing Regulation (EU) 2019/108 of 24 January 2019 authorising the
+    change of specifications of the novel food ingredient lipid extract from Antarctic Krill
+    (Euphausia superba) under Regulation (EU) 2015/2283 of the European Parliament and of
+    the Council and amending Commission Implementing Regulation (EU) 2017/2470 (Text with
+    EEA relevance)
+- celex: 32019R0151
+  title: Commission Implementing Regulation (EU) 2019/151 of 30 January 2019 renewing the
+    approval of the active substance Clonostachys rosea strain J1446 as a low-risk active
+    substance in accordance with Regulation (EC) No 1107/2009 of the European Parliament and
+    of the Council concerning the placing of plant protection products on the market, and
+    amending the Annex to Commission Implementing Regulation (EU) No 540/2011 (Text with EEA
+    relevance)
+- celex: 32019R0988
+  title: Commission Regulation (EU) 2019/988 of 17 June 2019 correcting the French language
+    version of Regulation (EU) No 10/2011 on plastic materials and articles intended to come
+    into contact with food (Text with EEA relevance)
+- celex: 32020R0017
+  title: Commission Implementing Regulation (EU) 2020/17 of 10 January 2020 concerning the
+    non-renewal of the approval of the active substance chlorpyrifos-methyl, in accordance
+    with Regulation (EC) No 1107/2009 of the European Parliament and of the Council concerning
+    the placing of plant protection products on the market, and amending the Annex to Commission
+    Implementing Regulation (EU) No 540/2011 (Text with EEA relevance)
+- celex: 32020R0153
+  title: Commission Implementing Decision (EU) 2020/153 of 3 February 2020 prohibiting Lithuania
+    to repeat granting authorisations under Article 53(1) of Regulation (EC) No 1107/2009
+    for the plant protection products containing the active substance thiamethoxam for use
+    on spring rape against Phyllotreta spp. and/or Psylliodes spp. (notified under document
+    C(2020) 464) (Only the Lithuanian text is authentic) (Text with EEA relevance)
+- celex: 32020R0443
+  title: Commission Implementing Regulation (EU) 2020/443 of 25 March 2020 authorising the
+    change of the specifications of the novel food spermidine-rich wheat germ extract (Triticum
+    aestivum) under Regulation (EU) 2015/2283 of the European Parliament and of the Council
+    and amending Commission Implementing Regulation (EU) 2017/2470 (Text with EEA relevance)
+- celex: 32020R0646
+  title: Commission Implementing Regulation (EU) 2020/646 of 13 May 2020 approving the active
+    substance Lavandulyl senecioate as a low-risk substance in accordance with Regulation
+    (EC) No 1107/2009 of the European Parliament and of the Council concerning the placing
+    of plant protection products on the market, and amending Commission Implementing Regulation
+    (EU) No 540/2011 (Text with EEA relevance)
+- celex: 32020R1003
+  title: Commission Implementing Regulation (EU) 2020/1003 of 9 July 2020 renewing the approval
+    of the active substances Phlebiopsis gigantea strains VRA 1835, VRA 1984 and FOC PG 410.3
+    as low-risk substances in accordance with Regulation (EC) No 1107/2009 of the European
+    Parliament and of the Council concerning the placing of plant protection products on the
+    market, and amending the Annex to Commission Implementing Regulation (EU) No 540/2011
+    (Text with EEA relevance)
+- celex: 32020R1276
+  title: Commission Implementing Regulation (EU) 2020/1276 of 11 September 2020 concerning
+    the non-renewal of the approval of the active substance bromoxynil, in accordance with
+    Regulation (EC) No 1107/2009 of the European Parliament and of the Council concerning
+    the placing of plant protection products on the market, and amending the Annex to Commission
+    Implementing Regulation (EU) No 540/2011 (Text with EEA relevance)
+- celex: 32020R1280
+  title: Commission Implementing Regulation (EU) 2020/1280 of 14 September 2020 concerning
+    the non-renewal of the approval of the active substance benalaxyl, in accordance with
+    Regulation (EC) No 1107/2009 of the European Parliament and of the Council concerning
+    the placing of plant protection products on the market, and amending the Annex to Commission
+    Implementing Regulation (EU) No 540/2011 (Text with EEA relevance)
+- celex: 32021R0079
+  title: Commission Implementing Regulation (EU) 2021/79 of 27 January 2021 concerning the
+    non-approval of the active substance topramezone, in accordance with Regulation (EC) No
+    1107/2009 of the European Parliament and of the Council concerning the placing of plant
+    protection products on the market (Text with EEA relevance)
+- celex: 32022R0043
+  title: Commission Implementing Regulation (EU) 2022/43 of 13 January 2022 renewing the approval
+    of the active substance flumioxazin in accordance with Regulation (EC) No 1107/2009 of
+    the European Parliament and of the Council concerning the placing of plant protection
+    products on the market, and amending the Annexes to Commission Implementing Regulation
+    (EU) No 540/2011 and to Implementing Regulation (EU) 2015/408 (Text with EEA relevance)
+- celex: 32022R0078
+  title: Commission Regulation (EU) 2022/78 of 19 January 2022 amending Annexes II and III
+    to Regulation (EC) No 396/2005 of the European Parliament and of the Council as regards
+    maximum residue levels for dazomet, hexythiazox, metam and methylisothiocyanate in or
+    on certain products (Text with EEA relevance)
+- celex: 32022R0860
+  title: Commission Regulation (EU) 2022/860 of 1 June 2022 amending Annex III to Regulation
+    (EC) No 1925/2006 of the European Parliament and of the Council as regards monacolins
+    from red yeast rice (Text with EEA relevance)
+- celex: 32022R1381
+  title: Commission Implementing Regulation (EU) 2022/1381 of 8 August 2022 amending Implementing
+    Regulation (EU) 2017/2470 as regards the conditions of use of the novel food galacto-oligosaccharide
+    (Text with EEA relevance)
+- celex: 32022R2535
+  title: Commission Implementing Regulation (EU) 2022/2535 of 21 December 2022 authorising
+    the placing on the market of the freeze-dried powder form of Antrodia camphorata mycelia
+    as a novel food and amending Implementing Regulation (EU) 2017/2470 (Text with EEA relevance)
+- celex: 32023R0200
+  title: Commission Implementing Regulation (EU) 2023/200 of 30 January 2023 concerning the
+    non-approval of lemon essential oil (Citrus limon essential oil) as a basic substance
+    in accordance with Regulation (EC) No 1107/2009 of the European Parliament and of the
+    Council concerning the placing of plant protection products on the market (Text with EEA
+    relevance)
+- celex: 32023R0574
+  title: Commission Implementing Regulation (EU) 2023/574 of 13 March 2023 setting out detailed
+    rules for the identification of unacceptable co-formulants in plant protection products
+    in accordance with Regulation (EC) No 1107/2009 of the European Parliament and of the
+    Council (Text with EEA relevance)
+- celex: 32023R0938
+  title: Commission Implementing Regulation (EU) 2023/938 of 10 May 2023 amending Implementing
+    Regulation (EU) 2017/2470 as regards the conditions of use of the novel food Yarrowia
+    lipolytica yeast biomass (Text with EEA relevance)
+- celex: 32024R2507
+  title: Commission Implementing Regulation (EU) 2024/2507 of 26 September 2024 amending and
+    correcting Implementing Regulation (EU) 2020/1201 as regards measures to prevent the introduction
+    into and spread within the Union of Xylella fastidiosa (Wells et al.) and amending Implementing
+    Regulation (EU) 2020/1770 as regards the list of plant species not exempted from the traceability
+    code requirement for plant passports
+- celex: 32025R0097
+  title: Commission Implementing Regulation (EU) 2025/97 of 21 January 2025 amending Implementing
+    Regulation (EU) 2017/2470 as regards the conditions of use and the specifications of the
+    novel food isomalto-oligosaccharide (Text with EEA relevance)
+- celex: 32025R0651
+  title: Commission Regulation (EU) 2025/651 of 2 April 2025 amending Regulation (EC) No 1333/2008
+    as regards the use of mono- and diglycerides of fatty acids (E 471) and carnauba wax (E
+    903) as glazing agents on certain fresh fruit and cassavas and of lecithins (E 322) and
+    fatty acids (E 570) as carriers in glazing agents on cassavas (Text with EEA relevance)
+- celex: 32025R90362
+  title: Corrigendum to Commission Implementing Regulation (EU) 2025/167 of 30 January 2025
+    authorising the placing on the market of glucosyl hesperidin as a novel food and amending
+    Implementing Regulation (EU) 2017/2470 (Official Journal of the European Union L, 2025/167,
+    31 January 2025)
+- celex: null
+  title: Council Decision of 21 February 2023 appointing four representatives of Member States
+    as members and alternate members of the Management Board of the European Food Safety Authority
+requirements:
+- article: Article 1
+  law_celex: 32014R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Regulation (EU) No 37/2010 is amended as set out in the Annex
+    to this Regulation
+- article: Article 2
+  law_celex: 32014R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32014R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Point 1
+  law_celex: 32015H1381
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Perform during the years 2016, 2017 and 2018 monitoring on the presence
+    of arsenic in food, including a wide variety of foodstuffs reflecting consumption habits
+    such as cereal grains, cereal based products, fruit and vegetable juices, drinking water,
+    coffee, dry tea leaves, beer, fish and sea food, vegetables, algae products, milk, dairy
+    products, food intended for infants and young children, food for special medical purposes
+    and food supplements
+- article: Point 2
+  law_celex: 32015H1381
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Follow the sampling procedures as laid down in Commission Regulation (EC)
+    No 333/2007 to ensure that the samples are representative for the sampled lot
+- article: Point 3
+  law_celex: 32015H1381
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Carry out the analysis of arsenic, preferably by determining the content
+    of inorganic and total arsenic and, if possible, other relevant arsenic species in accordance
+    with Annex III to Regulation (EC) No 882/2004 using a method of analysis that has been
+    proven to generate reliable results
+- article: Point 4
+  law_celex: 32015H1381
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Provide on a regular basis to EFSA the monitoring data expressed on whole
+    weight basis with the information and in the electronic reporting format as set out by
+    EFSA for compilation into one database
+- article: Article 1
+  law_celex: 32016R0452
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annexes II and III to Regulation (EC) No 396/2005 are amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32016R0452
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2016-10-19'
+  interpretive: null
+  requirement_text: Regulation (EC) No 396/2005 as it stood before being amended by this Regulation
+    shall continue to apply to products which were produced before 19 October 2016
+- article: Article 3
+  law_celex: 32016R0452
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32016R0452
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2016-10-19'
+  interpretive: null
+  requirement_text: It shall apply from 19 October 2016
+- article: Article 3
+  law_celex: 32016R0452
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32007R1243
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex III to Regulation (EC) No 853/2004 is amended in accordance with
+    the Annex to this Regulation
+- article: Article 2
+  law_celex: 32007R1243
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the 20th day following its publication
+    in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32007R1243
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32018R1558
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Centro Sperimentale del Latte (authorisation holder) and feed additive
+    users
+  deadline: null
+  interpretive: null
+  requirement_text: The preparation specified in the Annex, belonging to the additive category
+    zootechnical additives and to the functional group gut flora stabilisers, is authorised
+    as an additive in animal nutrition subject to the conditions laid down in the Annex.
+- article: Article 2
+  law_celex: 32018R1558
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states and all applicable parties
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union.
+- article: Article 2
+  law_celex: 32018R1558
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States.
+- article: Article 2
+  law_celex: 32018R0627
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32022R0078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annexes II and III to Regulation (EC) No 396/2005 are amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32022R0078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2022-08-09'
+  interpretive: null
+  requirement_text: Regulation (EC) No 396/2005 as it stood before being amended by this Regulation
+    shall continue to apply to products which were produced in the Union or imported into
+    the Union before 9 August 2022
+- article: Article 3
+  law_celex: 32022R0078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32022R0078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2022-08-09'
+  interpretive: null
+  requirement_text: It shall apply from 9 August 2022
+- article: Article 3
+  law_celex: 32022R0078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32018R1555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The health claims listed in the Annex to this Regulation shall not be
+    included in the Union list of permitted claims
+- article: Article 2
+  law_celex: 32018R1555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32018R1555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 8(2)
+  law_celex: 32022R0860
+  criticality: important
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission may initiate a procedure to include a substance or an ingredient
+    containing a substance other than a vitamin or a mineral in Annex III to that Regulation
+    listing the substances whose use in foods is prohibited, restricted or under Union scrutiny,
+    if that substance is associated with a potential risk to consumers
+- article: Article 4(5) of Implementing Regulation (EU) No...
+  law_celex: 32022R0860
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Following publication by the Authority of its opinion on monacolins from
+    red yeast rice, the Commission received comments from interested parties on the scientific
+    risk assessment
+- article: Point 1
+  law_celex: 32014H0661
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States and feed and food business operators
+  deadline: null
+  interpretive: null
+  requirement_text: Member States should, with the active involvement of feed and food business
+    operators, perform monitoring for the presence of 2 and 3-MCPD, 2 and 3-MCPD fatty acid
+    esters and glycidyl fatty acid esters in food, particularly in vegetable oils and fats,
+    foods for infants and young children, fine bakery wares, canned meat and fish, potato/cereal-based
+    snacks, and vegetable oil containing foods
+- article: Point 2
+  law_celex: 32014H0661
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States should follow the sampling procedures laid down in Part
+    B of the Annex to Commission Regulation (EC) No 333/2007 to ensure that samples are representative
+    for the sampled lot
+- article: Point 3
+  law_celex: 32014H0661
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Laboratories performing analysis
+  deadline: null
+  interpretive: null
+  requirement_text: The Limit of Quantification (LOQ) should not be higher than 100 μg/kg
+    for the analysis of MCPD and glycidol bound to fatty acid esters in edible oils and fats,
+    and should meet specified LOQ requirements for other foods based on fat content
+- article: Point 4
+  law_celex: 32014H0661
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: Laboratories should have quality control procedures in place to avoid
+    the transformation of glycidyl esters into MCPD esters and vice versa during analysis,
+    and should report specified measurands separately (2-MCPD, 3-MCPD, 2-MCPD esters, 3-MCPD
+    esters, glycidyl esters)
+- article: Point 5
+  law_celex: 32014H0661
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States should ensure that analytical results are provided on a
+    regular basis (every six months) to EFSA in the EFSA data submission format in line with
+    EFSA's Guidance on Standard Sample Description and additional specific reporting requirements
+- article: Article 3(1)
+  law_celex: 32004R1935
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers of food contact materials and articles
+  deadline: null
+  interpretive: null
+  requirement_text: Materials and articles must be manufactured in compliance with good manufacturing
+    practice so that, under normal or foreseeable conditions of use, they do not transfer
+    their constituents to food in quantities which could endanger human health or bring about
+    an unacceptable change in the composition of the food or bring about a deterioration in
+    the organoleptic characteristics thereof.
+- article: Article 4(1)
+  law_celex: 32004R1935
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers of active and intelligent food contact materials
+  deadline: null
+  interpretive: null
+  requirement_text: Active and intelligent materials and articles shall not be designed to
+    release or absorb substances into or from food, except for active materials and articles
+    which are designed to extend the shelf life or maintain or improve the condition of food,
+    provided they do not change the composition or organoleptic characteristics of the food
+    in a way that could mislead the consumer.
+- article: Article 15(1)
+  law_celex: 32004R1935
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: business operators placing food contact materials on the market
+  deadline: null
+  interpretive: null
+  requirement_text: Materials and articles intended to come into contact with food shall be
+    accompanied by a written declaration that they comply with the rules applicable to them.
+- article: Article 16(1)
+  law_celex: 32004R1935
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: manufacturers and suppliers of food contact materials
+  deadline: null
+  interpretive: null
+  requirement_text: Materials and articles intended to come into contact with food may be
+    labelled with the symbol set out in Annex II.
+- article: Article 17(1)
+  law_celex: 32004R1935
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: business operators
+  deadline: null
+  interpretive: null
+  requirement_text: Business operators shall ensure the traceability of materials and articles
+    intended to come into contact with food at all stages.
+- article: Article 17(2)
+  law_celex: 32004R1935
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: business operators
+  deadline: null
+  interpretive: null
+  requirement_text: Business operators shall be able to identify any business from which they
+    have been supplied with materials and articles intended to come into contact with food
+    and any business to which they have supplied materials and articles intended to come into
+    contact with food.
+- article: Article 1
+  law_celex: 32025R0651
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex II to Regulation (EC) No 1333/2008 is amended in accordance with
+    the Annex I to this Regulation
+- article: Article 2
+  law_celex: 32025R0651
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex III to Regulation (EC) No 1333/2008 is amended in accordance with
+    the Annex II to this Regulation
+- article: Article 3
+  law_celex: 32025R0651
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32025R0651
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32013R0818
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex III to Regulation (EC) No 1333/2008 is amended in accordance with
+    the Annex to this Regulation
+- article: Article 2
+  law_celex: 32013R0818
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32013R0818
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 2(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport of raw sugar by sea
+  deadline: null
+  interpretive: null
+  requirement_text: Prior to loading the raw sugar, the receptacle and/or container/tanker
+    shall be effectively cleaned to remove residues of the previous cargo and other soiling
+    and inspected to establish that such residues have been removed effectively
+- article: Article 2(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport of raw sugar by sea
+  deadline: null
+  interpretive: null
+  requirement_text: The immediate previous cargo prior to the raw sugar shall not have been
+    a bulk liquid
+- article: Article 3(1)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport of raw sugar by sea
+  deadline: null
+  interpretive: null
+  requirement_text: The food business operator responsible for the transport of the raw sugar
+    by sea shall keep documentary evidence, accurately describing in detail the immediate
+    previous cargo carried in the receptacle and/or container/tanker concerned, and the type
+    and effectiveness of the cleaning process applied prior to the transport of the raw sugar
+- article: Article 3(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators and refineries
+  deadline: null
+  interpretive: null
+  requirement_text: The documentary evidence shall accompany the consignment during all stages
+    of transport to the refinery and a copy shall be retained by the refinery
+- article: Article 3(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport of raw sugar by sea
+  deadline: null
+  interpretive: null
+  requirement_text: The documentary evidence shall be marked in a clearly visible and indelible
+    fashion, in one or more Community languages, 'This product must be refined before being
+    used for human consumption'
+- article: Article 3(3)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport and/or refining of
+    raw sugar
+  deadline: null
+  interpretive: null
+  requirement_text: On request, the food business operator responsible for the transport of
+    the raw sugar and/or the refining process shall provide the competent official food control
+    authorities with the documentary evidence referred to in paragraphs 1 and 2
+- article: Article 4(1)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for refining
+  deadline: null
+  interpretive: null
+  requirement_text: Raw sugar which has been transported by sea in receptacles and/or containers/tankers
+    which are not exclusively reserved for the transport of foodstuffs shall be subjected
+    to a full and effective refining process before being considered suitable for use as food
+    or as a food ingredient
+- article: Article 4(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators responsible for transport and refining
+  deadline: null
+  interpretive: null
+  requirement_text: The food business operators responsible for the transport and refining
+    process shall consider the cleaning process undertaken prior to loading of the raw sugar
+    to be critical to the safety and wholesomeness of the refined sugar within the meaning
+    of Article 3(2) of Directive 93/43/EEC taking into account the nature of the previous
+    cargo carried in the receptacle and/or container/tanker
+- article: Article 5(1)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall bring into force the laws, regulations or administrative
+    provisions necessary to comply with this Directive on 1 August 1998
+- article: Article 5(1)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: They shall immediately inform the Commission thereof
+- article: Article 5(2)
+  law_celex: 31998L0028
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt these provisions, they shall contain a reference
+    to this Directive or shall be accompanied by such reference at the time of official publication
+- article: Article 2
+  law_celex: 32019R0988
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union legal system
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32019R0988
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32020R0646
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The active substance Lavandulyl senecioate, as specified in Annex I, is
+    approved subject to the conditions laid down in that Annex
+- article: Article 2
+  law_celex: 32020R0646
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Implementing Regulation (EU) No 540/2011 is amended in accordance with
+    Annex II to this Regulation
+- article: Article 3
+  law_celex: 32020R0646
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32020R0646
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32016R1190
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DSM Nutritional Products Ltd and food supplement manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Trans-resveratrol may be placed on the market in the Union as a novel
+    food ingredient to be used in food supplements in capsule or tablet form intended for
+    adult population only with a maximum dose of 150 mg per day
+- article: Article 2(1)
+  law_celex: 32016R1190
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food supplement manufacturers using trans-resveratrol
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of trans-resveratrol authorised by this Decision on the
+    labelling of the foodstuffs containing it shall be 'trans-resveratrol'
+- article: Article 2(2)
+  law_celex: 32016R1190
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food supplement manufacturers using trans-resveratrol
+  deadline: null
+  interpretive: null
+  requirement_text: The labelling of food supplements containing trans-resveratrol shall bear
+    a statement that people using medicines should only consume the product under medical
+    supervision
+- article: Article 1(1)
+  law_celex: 32022R2535
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The freeze-dried powder form of Antrodia camphorata mycelia shall be included
+    in the Union list of novel foods set out in Implementing Regulation (EU) 2017/2470
+- article: Article 1(2)
+  law_celex: 32022R2535
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) 2017/2470 is amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32022R2535
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital (8)
+  law_celex: 32022R2535
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: A clear designation of the novel food and a labelling requirement should
+    be laid down for food supplements containing freeze-dried powder form of Antrodia camphorata
+    mycelia, in order to ensure that those food supplements are not consumed by children and
+    adolescents of less than 14 years of age
+- article: Article 26 of Regulation (EU) 2015/2283
+  law_celex: 32025R90362
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators, subsequent applicants
+  deadline: null
+  interpretive: null
+  requirement_text: During the period of data protection, the novel food glucosyl hesperidin
+    is authorised for placing on the market within the Union only by Nagase Viita Co., Ltd,
+    unless a subsequent applicant obtains authorisation for the novel food without reference
+    to the proprietary scientific evidence or scientific data protected in accordance with
+    Article 26 of Regulation (EU) 2015/2283 or with the agreement of Nagase Viita Co., Ltd
+- article: Article 1
+  law_celex: 32017R2375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Glycom A/S and other market operators
+  deadline: null
+  interpretive: null
+  requirement_text: N-acetyl-D-neuraminic acid as specified in Annex I may be placed on the
+    Union market as a novel food ingredient for the uses defined and at the maximum levels
+    established in Annex II
+- article: Article 2(1)
+  law_celex: 32017R2375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of N-acetyl-D-neuraminic acid authorised by this Decision
+    on the labelling of the foodstuffs shall be 'N-acetyl-D-neuraminic acid'
+- article: Article 2(2)
+  law_celex: 32017R2375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food supplement manufacturers and distributors
+  deadline: null
+  interpretive: null
+  requirement_text: Food supplements containing N-acetyl-D-neuraminic acid shall be labelled
+    in line with the presentation requirements applied under Regulation (EU) No 1169/2011
+    with a statement that the food supplement should not be given to infants, young children
+    and children under 10 years of age where they consume breast milk or other foods with
+    added N-acetyl-D-neuraminic acid within the same twenty four hour period
+- article: Article 2
+  law_celex: 32016R0871
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing amitrole as active substance
+- article: Article 3
+  law_celex: 32016R0871
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall be as short as possible and shall expire on 30 September
+    2017 at the latest
+- article: Article 1
+  law_celex: 32015R1192
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The active substance terpenoid blend QRD 460 is approved subject to the
+    conditions laid down in Annex I
+- article: Article 2
+  law_celex: 32015R1192
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) No 540/2011 is amended in accordance
+    with Annex II to this Regulation
+- article: Article 3
+  law_celex: 32015R1192
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32015R1192
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32008L0768
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The active substances listed in Annex I to this Decision shall not be
+    included as active substances in Annex I to Directive 91/414/EEC
+- article: Article 2(a)
+  law_celex: 32008L0768
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2009-03-30'
+  interpretive: null
+  requirement_text: Member States shall ensure that authorisations for plant protection products
+    containing the active substances listed in Annex I are withdrawn by 30 March 2009
+- article: Article 2(b)
+  law_celex: 32008L0768
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that no authorisations for plant protection
+    products containing these active substances are granted or renewed from the date of publication
+    of this Decision
+- article: Article 3
+  law_celex: 32008L0768
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2010-03-30'
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with Article
+    4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire not later
+    than 30 March 2010
+- article: Article 1
+  law_celex: 32008L0296
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Azocyclotin, cyhexatin and thidiazuron shall not be included in Annex
+    I to Directive 91/414/EEC
+- article: Article 2(a)
+  law_celex: 32008L0296
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that authorisations for plant protection products
+    containing azocyclotin, cyhexatin and thidiazuron are withdrawn
+- article: Article 2(b)
+  law_celex: 32008L0296
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that no authorisations for plant protection
+    products containing azocyclotin, cyhexatin and thidiazuron are granted or renewed under
+    the derogation provided for in Article 8(2) of Directive 91/414/EEC
+- article: Article 3
+  law_celex: 32008L0296
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2009-10-04'
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with Article
+    4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire not later
+    than 4 October 2009
+- article: Article 3(1)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: 'An application shall be submitted electronically to the Commission and
+    shall consist of: (a) a cover letter; (b) a technical dossier; (c) a summary of the dossier.'
+- article: Article 3(2)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The cover letter referred to in paragraph 1(a) shall be drafted in accordance
+    with the template provided in Annex I.
+- article: Article 3(3)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: 'The technical dossier referred to in paragraph 1(b) shall contain: (a)
+    the administrative data as provided for in Article 4; (b) the scientific data as provided
+    for in Article 5.'
+- article: Article 3(5)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The summary of the dossier shall set out the reasons why the use of the
+    novel food complies with the conditions laid down in Article 7 of Regulation (EU) 2015/2283.
+- article: Article 4
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: 'The application shall include the following administrative data: (a)
+    the name(s) of the manufacturer(s) of the novel food, if different than the applicant''s,
+    address and contact details; (b) the name, address and contact details of the person responsible
+    for the dossier authorised to communicate on behalf of the applicant with the Commission;
+    (c) the date of submission of the dossier; (d) a table of contents of the dossier; (e)
+    a detailed list of documents annexed to the dossier, including references to titles, volumes
+    and pages; (f) a list of the parts of the dossier to be treated as confidential and verifiable
+    justification; (g) information and explanations substantiating the existence of the applicant''s
+    right of reference to the proprietary scientific evidence.'
+- article: Article 5(2)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization involving engineered nanomaterials
+  deadline: null
+  interpretive: null
+  requirement_text: Where the application for the authorisation of a novel food involves the
+    use of engineered nanomaterials, the applicant shall provide detection and characterisation
+    test methods in compliance with the requirements of Article 10(4) of that Regulation.
+- article: Article 5(3)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant shall provide a copy of the documentation on the procedure
+    and strategy followed when gathering the data.
+- article: Article 5(4)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant shall provide a description of the safety evaluation strategy
+    and the corresponding toxicological testing strategy and shall justify the inclusion or
+    exclusion of specific studies or information.
+- article: Article 5(5)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant shall provide on request the raw data for the individual
+    studies, published and unpublished, undertaken by the applicant, or on their behalf, to
+    support their application.
+- article: Article 5(6)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: Where it cannot be excluded that a novel food intended for a particular
+    group of the population would be also consumed by other groups of the population the safety
+    data provided shall also cover those groups.
+- article: Article 5(7)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: For each biological or toxicological study, the applicant shall clarify
+    whether the test material conforms to the proposed or existing specification. Where the
+    test material differs from that specification, the applicant shall demonstrate the relevance
+    of those data to the novel food under consideration.
+- article: Article 5(7)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: Toxicological studies shall be conducted in facilities which comply with
+    the requirements of Directive 2004/10/EC or, if they are carried out outside the territory
+    of the Union, they shall follow the OECD Principles of Good Laboratory Practice. The applicant
+    shall provide evidence of compliance with those requirements and shall justify any deviation
+    from the standard protocols.
+- article: Article 5(8)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicants for novel food authorization
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant shall propose an overall conclusion on the safety of the
+    proposed uses of the novel food. The overall evaluation of potential risk to human health
+    shall be made in the context of known or likely human exposure.
+- article: Article 6(1)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: On receipt of an application the Commission shall without delay verify
+    whether the application falls within the scope of Regulation (EU) 2015/2283 and whether
+    the application fulfils the requirements set out in Article 10(2) of that Regulation.
+- article: Article 6(2)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Food Safety Authority
+  deadline: null
+  interpretive: null
+  requirement_text: The Authority shall provide the Commission with its views on whether the
+    application fulfils the relevant requirements set out in Article 10(2) of Regulation (EU)
+    2015/2283 within a period of 30 working days.
+- article: Article 6(5)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall inform the applicant, the Member States and the Authority
+    whether the application is considered valid or not. If the application is not considered
+    valid, the Commission shall indicate the reasons why it is not valid.
+- article: Article 7(1)
+  law_celex: 32017R2469
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Food Safety Authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'The opinion of the Authority shall include the following information:
+    (a) the identity of the novel food; (b) the assessment of the production process; (c)
+    compositional data.'
+- article: Article 1
+  law_celex: 32021R0079
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all entities involved in placing plant protection products on the market
+  deadline: null
+  interpretive: null
+  requirement_text: The active substance topramezone is not approved and shall not be placed
+    on the market or used in plant protection products
+- article: Article 2
+  law_celex: 32021R0079
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32021R0079
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 2
+  law_celex: 32012R0288
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food manufacturers using γ-Cyclodextrin
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of γ-Cyclodextrin authorised by this Decision on the labelling
+    of the foodstuffs containing it shall be 'Gamma-Cyclodextrin' or 'γ-Cyclodextrin'
+- article: Article 2
+  law_celex: 32008R0202
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 3
+  law_celex: 32020R1280
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: '2021-04-05'
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing benalaxyl as an active substance by 5 April 2021
+- article: Article 4
+  law_celex: 32020R1280
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: '2021-10-05'
+  interpretive: null
+  requirement_text: Any grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall expire by 5 October 2021
+- article: Recital 15
+  law_celex: 32020R1280
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: true
+  requirement_text: For plant protection products containing benalaxyl, where Member States
+    grant any grace period in accordance with Article 46 of Regulation (EC) No 1107/2009,
+    that period should not exceed 12 months from the date of entry into force of this Regulation
+- article: Article 1
+  law_celex: 32020R1003
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The approval of the active substances Phlebiopsis gigantea strains VRA
+    1835, VRA 1984 and FOC PG 410.3, as specified in Annex I, is renewed subject to the conditions
+    laid down in that Annex.
+- article: Article 2
+  law_celex: 32020R1003
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) No 540/2011 is amended in accordance
+    with Annex II to this Regulation.
+- article: Article 3
+  law_celex: 32020R1003
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union.
+- article: Article 3
+  law_celex: 32020R1003
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: '2020-09-01'
+  interpretive: null
+  requirement_text: It shall apply from 1 September 2020.
+- article: Article 3
+  law_celex: 32020R1003
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States.
+- article: Article 1
+  law_celex: 32023R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all entities seeking to use lemon essential oil as a basic substance
+    in plant protection products
+  deadline: null
+  interpretive: null
+  requirement_text: The substance lemon essential oil (Citrus limon essential oil) is not
+    approved as a basic substance
+- article: Article 2
+  law_celex: 32023R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32023R0200
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32022R1381
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) 2017/2470 is amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32022R1381
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32022R1381
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32019R0108
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The entry in the Union list of authorised novel foods referring to the
+    novel food Antarctic Krill oil from Euphausia superba shall be amended as specified in
+    the Annex to this Regulation
+- article: Article 2
+  law_celex: 32019R0108
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) 2017/2470 is amended in accordance
+    with the Annex to this Regulation
+- article: Article 3
+  law_celex: 32019R0108
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32019R0108
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32006R0058
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Pharmaconsult Oy
+  deadline: null
+  interpretive: null
+  requirement_text: Foods and food ingredients as described in Annex I with added phytosterols/phytostanols
+    as specified in Annex II may be placed on the market in the Community
+- article: Article 2
+  law_celex: 32006R0058
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Pharmaconsult Oy
+  deadline: null
+  interpretive: null
+  requirement_text: The products shall be presented in such a manner that they can be easily
+    divided into portions that contain either maximum 3 g (in case of one portion per day)
+    or maximum 1 g (in case of three portions per day) of added phytosterols/phytostanols
+- article: Article 3
+  law_celex: 32017R0781
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing methyl nonyl ketone as an active substance
+- article: Article 4
+  law_celex: 32017R0781
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: A grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall be as short as possible and shall expire on 26 August
+    2018
+- article: Article 2
+  law_celex: 32017R2355
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators placing UV-treated mushrooms on the market
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of mushrooms (Agaricus bisporus) being UV-treated to increase
+    the level of vitamin D2 authorised by this Decision shall be 'UV-treated mushrooms (Agaricus
+    bisporus)'
+- article: Recital 5 (referencing Regulation (EU) No 1169/...
+  law_celex: 32017R2355
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators placing UV-treated mushrooms on the market
+  deadline: null
+  interpretive: true
+  requirement_text: The name of the food shall include or be accompanied by particulars as
+    to the specific treatment that a food has undergone where omission of such information
+    could mislead the consumers
+- article: Article 2(1)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2014-10-31'
+  interpretive: null
+  requirement_text: Member States shall in accordance with Regulation (EC) No 1107/2009, where
+    necessary, amend or withdraw existing authorisations for plant protection products containing
+    orange oil as an active substance by 31 October 2014
+- article: Article 2(1)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: By that date they shall in particular verify that the conditions in Annex
+    I to this Regulation are met, with the exception of those identified in the column on
+    specific provisions of that Annex
+- article: Article 2(1)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall verify that the holder of the authorisation has, or
+    has access to, a dossier satisfying the requirements of Annex II to Directive 91/414/EEC
+- article: Article 2(2)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall re-evaluate the product in accordance with the uniform
+    principles, as referred to in Article 29(6) of Regulation (EC) No 1107/2009, on the basis
+    of a dossier satisfying the requirements of Annex III to Directive 91/414/EEC
+- article: Article 2(2)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine whether the product satisfies the conditions
+    set out in Article 29(1) of Regulation (EC) No 1107/2009
+- article: Article 2(2)(a)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2015-10-31'
+  interpretive: null
+  requirement_text: In the case of a product containing orange oil as the only active substance,
+    where necessary, amend or withdraw the authorisation by 31 October 2015 at the latest
+- article: Article 2(2)(b)
+  law_celex: 32013R1165
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2015-10-31'
+  interpretive: null
+  requirement_text: In the case of a product containing orange oil as one of several active
+    substances, where necessary, amend or withdraw the authorisation by 31 October 2015 or
+    by the date fixed for such an amendment or withdrawal in the respective act or acts which
+    added the relevant substance or substances to Annex I to Directive 91/414/EEC or approved
+    that substance or those substances, whichever is the latest
+- article: Article 3
+  law_celex: 32020R1276
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2021-03-14'
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing bromoxynil as an active substance by 14 March 2021
+- article: Article 4
+  law_celex: 32020R1276
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2021-09-14'
+  interpretive: null
+  requirement_text: Any grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall expire by 14 September 2021
+- article: Recital (17)
+  law_celex: 32020R1276
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: For plant protection products containing bromoxynil where Member States
+    grant any grace period in accordance with Article 46 of Regulation (EC) No 1107/2009,
+    that period should not exceed 12 months from the date of entry into force of this Regulation
+- article: Article 1
+  law_celex: 32006L0966
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Alachlor shall not be included as active substance in Annex I to Directive
+    91/414/EEC
+- article: Article 2(a)
+  law_celex: 32006L0966
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Authorisations for plant protection products containing alachlor are withdrawn
+- article: Article 2(b)
+  law_celex: 32006L0966
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: No authorisations for plant protection products containing alachlor are
+    granted or renewed under the derogation provided for in Article 8(2) of Directive 91/414/EEC
+- article: Article 3
+  law_celex: 32006L0966
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2008-06-18'
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with the provisions
+    of Article 4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire
+    not later than 18 June 2008
+- article: Article 1
+  law_celex: 32007L0615
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Benfuracarb shall not be included as active substance in Annex I to Directive
+    91/414/EEC
+- article: Article 2(a)
+  law_celex: 32007L0615
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2008-03-20'
+  interpretive: null
+  requirement_text: authorisations for plant protection products containing benfuracarb are
+    withdrawn by 20 March 2008
+- article: Article 2(b)
+  law_celex: 32007L0615
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: no authorisations for plant protection products containing benfuracarb
+    are granted or renewed from the date of publication of this Decision
+- article: Article 3
+  law_celex: 32007L0615
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with the provisions
+    of Article 4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire
+    on 20 March 2009 at the latest
+- article: Article 4
+  law_celex: 32013R0767
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing bitertanol as active substance
+- article: Article 5
+  law_celex: 32013R0767
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall be as short as possible and shall expire 12 months
+    after withdrawal of the respective authorisation at the latest
+- article: Article 1
+  law_celex: 32020R0153
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: Lithuania may not repeat the granting of authorisation under Article 53(1)
+    of Regulation (EC) No 1107/2009 for plant protection products containing the active substance
+    thiamethoxam for use on spring rape against the pests Phyllotreta spp. or Psylliodes spp.
+- article: Article 1
+  law_celex: 32017R0241
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all entities seeking to use Origanum vulgare L. essential oil as basic
+    substance
+  deadline: null
+  interpretive: null
+  requirement_text: The substance Origanum vulgare L. essential oil is not approved as basic
+    substance
+- article: Article 2
+  law_celex: 32017R0241
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32007L0355
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Carbaryl shall not be included as an active substance in Annex I to Directive
+    91/414/EEC
+- article: Article 2(a)
+  law_celex: 32007L0355
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2007-11-21'
+  interpretive: null
+  requirement_text: Member States shall ensure that authorisations for plant protection products
+    containing carbaryl are withdrawn by 21 November 2007
+- article: Article 2(b)
+  law_celex: 32007L0355
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that no authorisations for plant protection
+    products containing carbaryl are granted or renewed from the date of publication of this
+    Decision
+- article: Article 3
+  law_celex: 32007L0355
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with the provisions
+    of Article 4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire
+    21 November 2008 at the latest
+- article: Article 1
+  law_celex: 32020R0443
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The entry in the Union list of authorised novel foods referring to the
+    novel food spermidine-rich wheat germ extract (Triticum aestivum), is amended as specified
+    in the Annex to this Regulation
+- article: Article 2
+  law_celex: 32020R0443
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32020R0443
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 2(1)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall in accordance with Regulation (EC) No 1107/2009, where
+    necessary, amend or withdraw existing authorisations for plant protection products containing
+    aminopyralid as an active substance
+- article: Article 2(1)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall verify that the conditions in Annex I to this Regulation
+    are met, with the exception of those identified in the column on specific provisions of
+    that Annex
+- article: Article 2(1)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall verify that the holder of the authorisation has, or
+    has access to, a dossier satisfying the requirements of Annex II to Directive 91/414/EEC
+    in accordance with the conditions of Article 13(1) to (4) of that Directive and Article
+    62 of Regulation (EC) No 1107/2009
+- article: Article 2(2)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall re-evaluate the product in accordance with the uniform
+    principles, as referred to in Article 29(6) of Regulation (EC) No 1107/2009, on the basis
+    of a dossier satisfying the requirements of Annex III to Directive 91/414/EEC and taking
+    into account the column on specific provisions of Annex I to this Regulation
+- article: Article 2(2)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine whether the product satisfies the conditions
+    set out in Article 29(1) of Regulation (EC) No 1107/2009
+- article: Article 2(2)(a)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of a product containing aminopyralid as the only active substance,
+    Member States shall where necessary, amend or withdraw the authorisation
+- article: Article 2(2)(b)
+  law_celex: 32014R0891
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of a product containing aminopyralid as one of several active
+    substances, Member States shall where necessary, amend or withdraw the authorisation
+- article: Article 1
+  law_celex: 32015R1475
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation (EU) No 545/2011 shall continue to apply as regards procedures
+    concerning the renewal of authorisations of plant protection product pursuant to Article
+    43(2) of Regulation (EC) No 1107/2009, following the renewal of an active substance carried
+    out pursuant to Regulation (EU) No 1141/2010
+- article: Article 2
+  law_celex: 32015R1475
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32015R1475
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32006R0059
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Oy Karl Fazer Ab
+  deadline: null
+  interpretive: null
+  requirement_text: Foods and food ingredients as described in Annex I with added phytosterols/phytostanols
+    as specified in Annex II may be placed on the market in the Community
+- article: Article 2
+  law_celex: 32006R0059
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Oy Karl Fazer Ab
+  deadline: null
+  interpretive: null
+  requirement_text: The products shall be presented in such a manner that they can easily
+    be divided into portions that contain either a maximum of 3 g (in case of one portion
+    per day) or a maximum of 1 g (in case of three portions per day) of added phytosterols/phytostanols
+- article: Article 2(1)
+  law_celex: 32005L0487
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2006-01-04'
+  interpretive: null
+  requirement_text: Member States shall ensure that authorisations for plant protection products
+    containing triazamate are withdrawn by 4 January 2006
+- article: Article 2(2)
+  law_celex: 32005L0487
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that no authorisations for plant protection
+    products containing triazamate are granted or renewed from the date of publication
+- article: Article 3
+  law_celex: 32005L0487
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States under Article 4(6) of Directive
+    91/414/EEC, for the disposal, storage, placing on the market and use of existing stocks
+    shall be as short as possible and shall expire on 4 January 2007 at the latest
+- article: Article 1
+  law_celex: 32022R0043
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The approval of the active substance flumioxazin is renewed as set out
+    in Annex I
+- article: Article 2
+  law_celex: 32022R0043
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) No 540/2011 is amended in accordance
+    with Annex II to this Regulation
+- article: Article 3
+  law_celex: 32022R0043
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The entry for flumioxazine is deleted from the Annex to Implementing Regulation
+    (EU) 2015/408
+- article: Article 4
+  law_celex: 32022R0043
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 4
+  law_celex: 32022R0043
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital 18
+  law_celex: 32022R0043
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Applicant
+  deadline: null
+  interpretive: true
+  requirement_text: The applicant should provide an updated assessment, in accordance with
+    point 2.2(b) of Annex II to Regulation (EC) No 1107/2009 concerning the criteria laid
+    down in points 3.6.5 and 3.8.2 of Annex II to that Regulation
+- article: Article 1
+  law_celex: 32025R0097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BioNeutra North America Inc.
+  deadline: null
+  interpretive: null
+  requirement_text: Only the applicant BioNeutra North America Inc. shall be authorised to
+    place its isomalto-oligosaccharide on the market within the Union during a period of 5
+    years from the entry into force of this Regulation
+- article: Recital 7
+  law_celex: 32025R0097
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: consumers
+  deadline: null
+  interpretive: true
+  requirement_text: Food supplements containing isomalto-oligosaccharide shall not be consumed
+    if other foods with added isomalto-oligosaccharide are consumed on the same day
+- article: Recital 7
+  law_celex: 32025R0097
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: The maximum intake level of isomalto-oligosaccharide in food supplements
+    shall not exceed 10 g/day
+- article: Recital 19
+  law_celex: 32025R0097
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: Food supplements containing isomalto-oligosaccharide must be labelled
+    to inform consumers that they should only be consumed by the general population over 10
+    years of age
+- article: Recital 19
+  law_celex: 32025R0097
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: Products containing isomalto-oligosaccharide must be labelled to inform
+    consumers that the novel food is a source of glucose
+- article: Recital 11
+  law_celex: 32025R0097
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: The specifications of isomalto-oligosaccharide for the proposed new conditions
+    of use must include microbiological parameters
+- article: Article 3
+  law_celex: 32018R0113
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: regulation itself
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32018R0113
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: regulation itself
+  deadline: '2018-03-01'
+  interpretive: null
+  requirement_text: It shall apply from 1 March 2018
+- article: Article 3
+  law_celex: 32018R0113
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 1
+  law_celex: 32023R0938
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Regulation (EU) 2017/2470 is amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32023R0938
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32023R0938
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital 9
+  law_celex: 32023R0938
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: Inform consumers through an appropriate label that the meal replacements
+    for weight control containing Yarrowia lipolytica yeast biomass should only be consumed
+    by persons above 18 years of age
+- article: Recital 9
+  law_celex: 32023R0938
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: food business operators
+  deadline: null
+  interpretive: true
+  requirement_text: Inform consumers through an appropriate label that meal replacements for
+    weight control containing Yarrowia lipolytica yeast biomass should not be used if food
+    supplements with added Yarrowia lipolytica yeast biomass are consumed on the same day
+- article: Article 2
+  law_celex: 32008R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: food business operators using Baobab dried fruit pulp as ingredient
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of the novel food ingredient authorised by this Decision
+    on the labelling of the foodstuff containing it shall be 'Baobab fruit pulp'
+- article: Article 3
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 3
+  law_celex: 32019R0151
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32019R0151
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2019-04-01'
+  interpretive: null
+  requirement_text: It shall apply from 1 April 2019
+- article: Article 3
+  law_celex: 32019R0151
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 2
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annual surveys must cover other plant species in addition to host plants
+    in case of suspicion of infection
+- article: Article 2
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Surveys must include the possibility to survey the presence of the specified
+    pest in vectors
+- article: Article 2
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When the specified pest is detected in a vector, surveys must be intensified
+    around the finding of the infected vector to detect plants infected with the specified
+    pest
+- article: Article 2
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Where ecoclimatic conditions prevent establishment of the specified pest
+    in open air, surveys must be carried out only in relevant locations where host plants
+    may pose risk for spread to Union territory
+- article: Article 4(1)
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: A demarcated area must only be established when presence of the specified
+    pest is officially confirmed in plants
+- article: Article 5(4)
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annual surveys must be carried out for 1 year consisting in collection
+    of samples for testing using molecular tests with minimum confidence level and design
+    prevalence
+- article: Article 7(1)
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Plants that have tested negative for presence of specified pests do not
+    have to be removed
+- article: Article 8
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Appropriate phytosanitary treatments must be applied prior to and during
+    removal of plants, particularly during flight season of vectors
+- article: Article 9
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must ensure that wood from removed plants is free
+    from leaves and branches to prevent spread of specified pest
+- article: Article 10
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Specified plants not found infected in demarcated area in last 2 years
+    must be included in scope of annual surveys
+- article: Article 14
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Appropriate phytosanitary treatments must be applied prior to and during
+    removal of plants, particularly during flight season of vectors
+- article: Article 16
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must ensure that wood from removed plants is free
+    from leaves and branches to prevent spread of specified pest
+- article: Article 18
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: plant operators
+  deadline: null
+  interpretive: null
+  requirement_text: Plants moved from infected zones must fulfill requirements of Article
+    18 to be consistent with planting rules
+- article: Article 19
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: plant operators
+  deadline: null
+  interpretive: null
+  requirement_text: Movement of specified plants is allowed when grown in authorized site
+    for at least 1 year (reduced from 3 years)
+- article: Article 23
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: plant operators
+  deadline: null
+  interpretive: null
+  requirement_text: Plants grown in demarcated areas must fulfill requirements of Article
+    18 for infected zones
+- article: Article 24(1)
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: At least the last inspection of two required inspections must involve
+    sampling and testing
+- article: Article 25(2), Article 28, Article 29
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Lavandula angustifolia, Lavandula x intermedia, Lavandula latifolia, Lavandula
+    stoechas and Salvia rosmarinus must be included in list of plants with specific requirements
+    due to high risk of pest spread
+- article: Buffer zone requirements
+  law_celex: 32024R2507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: professional operators
+  deadline: null
+  interpretive: null
+  requirement_text: Plant passports of plants moved within buffer zones or from buffer zone
+    to infected zone must have indication 'Buffer zone – XYLEFA'
+- article: Article 3
+  law_celex: 32020R0017
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall withdraw authorisations for plant protection products
+    containing chlorpyrifos-methyl as an active substance
+- article: Article 4
+  law_celex: 32020R0017
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any grace period granted by Member States in accordance with Article 46
+    of Regulation (EC) No 1107/2009 shall expire
+- article: Article 1
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states, applicants for plant protection product authorization
+  deadline: null
+  interpretive: null
+  requirement_text: This Implementing Regulation applies to applications for authorisation
+    of plant protection products, including for their amendment or renewal, submitted on or
+    after 3 April 2023
+- article: Article 3(1)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When assessing applications for authorisation of plant protection products,
+    Member States shall verify whether co-formulants contained in plant protection products
+    could be considered an unacceptable co-formulant based on the criteria set out in the
+    Annex
+- article: Article 3(2)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member State shall carry out an independent, objective and transparent
+    assessment, in the light of current scientific and technical knowledge, on the basis of
+    the information submitted in an application dossier for the authorisation of a plant protection
+    product in accordance with Regulation (EC) No 1107/2009 and including, where appropriate,
+    the information submitted in accordance with Title II of Regulation (EC) No 1907/2006
+- article: Article 3(3)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Following the verification provided for in paragraph 1, the Member State
+    shall notify the other Member States, the Commission and the Authority where it considers
+    that the co-formulant used or meant to be used in a plant protection product could meet
+    one or more of the criteria set out in the Annex to this Regulation and therefore be an
+    unacceptable co-formulant
+- article: Article 3(3)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Following the verification provided for in paragraph 1, the Member State
+    shall notify the other Member States, the Commission and the Authority where it considers
+    that in the light of new scientific and technical knowledge, the entry of a co-formulant
+    in the list of Annex III to Regulation (EC) No 1107/2009 should be amended
+- article: Article 3(3)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Following the verification provided for in paragraph 1, the Member State
+    shall notify the other Member States, the Commission and the Authority where it considers
+    that in the light of new scientific and technical knowledge, the entry of a co-formulant
+    in the list of Annex III to Regulation (EC) No 1107/2009 should be deleted
+- article: Article 4(1)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: A notification pursuant to Article 3(3) shall be accompanied by a co-formulant
+    report
+- article: Article 4(2)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The co-formulant report shall contain the chemical identity of the co-formulant
+    for a substance as specified in Section 2 of Annex VI to Regulation (EC) No 1907/2006
+    and for a preparation as specified for mixtures in Article 18(3) to Regulation (EC) No
+    1272/2008
+- article: Article 4(2)
+  law_celex: 32023R0574
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The co-formulant report shall contain the criteria set out in the Annex
+    which the notifying Member State considers to be met
+- article: Article 1
+  law_celex: 32011R0762
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Biothera Incorporated and food operators
+  deadline: null
+  interpretive: null
+  requirement_text: Yeast (Saccharomyces cerevisiae) beta-glucans as specified in Annex I
+    may be placed on the market in the Union as a novel food ingredient for the uses defined
+    and at the maximum levels established in Annex II
+- article: Article 1
+  law_celex: 32011R0762
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Biothera Incorporated and food operators
+  deadline: null
+  interpretive: null
+  requirement_text: Market placement must be without prejudice to the provisions of Directive
+    2002/46/EC, Regulation (EC) No 1925/2006 and Directive 2009/39/EC
+- article: Article 2
+  law_celex: 32011R0762
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Food operators using yeast beta-glucans
+  deadline: null
+  interpretive: null
+  requirement_text: The designation of yeast (Saccharomyces cerevisiae) beta-glucans authorised
+    by this Decision for the labelling of the foodstuffs containing it shall be 'yeast (Saccharomyces
+    cerevisiae) beta-glucans'
+- article: Article 1
+  law_celex: 32009L0617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Paraffin oil CAS 64742-54-7 shall not be included as active substance
+    in Annex I to Directive 91/414/EEC
+- article: Article 2(a)
+  law_celex: 32009L0617
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that authorisations for plant protection products
+    containing paraffin oil CAS 64742-54-7 are withdrawn
+- article: Article 2(b)
+  law_celex: 32009L0617
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that no authorisations for plant protection
+    products containing paraffin oil CAS 64742-54-7 are granted or renewed
+- article: Article 3
+  law_celex: 32009L0617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Any period of grace granted by Member States in accordance with the provisions
+    of Article 4(6) of Directive 91/414/EEC, shall be as short as possible and shall expire
+    on 17 February 2011 at the latest
+- article: Article 3
+  law_celex: 32016R0177
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 3
+  law_celex: 32016R0177
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States

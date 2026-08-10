@@ -1,0 +1,294 @@
+id: 59
+name: CSRD - Corporate Sustainability Reporting Directive
+policy_area: Economic and Financial Affairs
+description: 'Directive (EU) 2022/2464 amending Directive 2013/34/EU, Directive 2004/109/EC,
+  Directive 2006/43/EC and Regulation (EU) No 537/2014 as regards corporate sustainability
+  reporting. Replaces the earlier Non-Financial Reporting Directive 2014/95/EU. Requires large
+  undertakings, listed SMEs (except micro), and large third-country undertakings operating
+  in the Union to disclose standardised sustainability information as a dedicated section
+  of the management report, prepared under mandatory European Sustainability Reporting Standards
+  (ESRS) adopted by Commission delegated act, assured by an independent third party (limited
+  assurance from year 1, potentially reasonable assurance from 2028), and digitally tagged
+  in ESEF format. Codifies the double materiality principle: reporting covers both impacts
+  of the undertaking on people and planet and impacts of sustainability matters on the undertaking.
+  Content covers business model + transition plan compatible with 1.5 degrees Celsius / climate
+  neutrality by 2050, absolute GHG reduction targets for 2030 and 2050, governance and incentives,
+  due diligence, principal risks, and indicators covering the whole value chain with a 3-year
+  grace period. First set of 12 ESRS (2 cross-cutting + 5 environmental + 4 social + 1 governance)
+  adopted by Commission Delegated Regulation (EU) 2023/2772 on 31 July 2023. Sector-specific
+  ESRS deferred to 30 June 2026. Phased application by wave: Wave 1 (former NFRD PIEs above
+  500 employees) FY2024, Wave 2 (all other large undertakings) FY2025 shifted to FY2027 by
+  Directive (EU) 2025/794, Wave 3 (listed SMEs) FY2026 shifted to FY2028, Wave 4 (third-country
+  undertakings with EU turnover above 150 million euros) FY2028. Transposition deadline 6
+  July 2024.'
+applicability: Every large undertaking in the Union meeting 2 of 3 thresholds (balance sheet
+  above 25 million euros, net turnover above 50 million euros, more than 250 employees); every
+  small or medium-sized undertaking except micro whose transferable securities are admitted
+  to trading on an EU regulated market; every parent undertaking of a large group; every credit
+  institution and insurance undertaking meeting the size thresholds regardless of legal form;
+  every third-country undertaking generating more than 150 million euros of net turnover in
+  the Union in each of the last two consecutive financial years and having at least one EU
+  subsidiary that is a large or listed undertaking or one EU branch with net turnover above
+  40 million euros. Approximately 50,000 undertakings originally, expected to fall to roughly
+  7,000 if the substantive Omnibus I proposal (raising the employee threshold to 1,000) is
+  adopted. Assurance market open to statutory auditors by default and to independent assurance
+  services providers where Member States open it. Enforced by national competent authorities
+  under Directive 2004/109/EC for listed issuers and under national company law for others;
+  sanctions must be effective, proportionate and dissuasive.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32022L2464
+  title: Directive (EU) 2022/2464 of the European Parliament and of the Council of 14 December
+    2022 amending Regulation (EU) No 537/2014, Directive 2004/109/EC, Directive 2006/43/EC
+    and Directive 2013/34/EU, as regards corporate sustainability reporting (Text with EEA
+    relevance)
+requirements:
+- article: Art 19a(1)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: large undertakings and listed SMEs (except micro)
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: 'Include sustainability information in the management report as a clearly
+    identifiable dedicated section. The information must cover both the undertaking''s impacts
+    on sustainability matters (impact materiality) AND how sustainability matters affect the
+    undertaking''s development, performance and position (financial materiality). The double
+    materiality principle is mandatory: an undertaking must consider each perspective on its
+    own and disclose information material from either or both.'
+- article: Art 19a(2)(a)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: 'Disclose the business model and strategy including: resilience to sustainability
+    risks; sustainability opportunities; the transition plan (including implementing actions
+    and financial/investment plans) to make the business model and strategy compatible with
+    the 1.5 degrees Celsius target of the Paris Agreement and the 2050 climate neutrality
+    objective of Regulation (EU) 2021/1119 (European Climate Law); exposure to coal-, oil-
+    and gas-related activities where relevant; how the strategy takes account of stakeholders''
+    interests and impacts on sustainability.'
+- article: Art 19a(2)(b)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Disclose time-bound sustainability targets set by the undertaking, including
+    at minimum ABSOLUTE greenhouse-gas emission reduction targets for 2030 AND 2050. Report
+    progress made towards achieving those targets and state whether the environmental targets
+    are based on conclusive scientific evidence (IPCC + European Scientific Advisory Board
+    on Climate Change).
+- article: Art 19a(2)(c)-(e)
+  law_celex: 32022L2464
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Disclose the role of administrative, management and supervisory bodies
+    with regard to sustainability matters and their expertise/skills; the undertaking's sustainability
+    policies; the existence of incentive schemes linked to sustainability matters offered
+    to members of those bodies.
+- article: Art 19a(2)(f)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Disclose the due diligence process implemented for sustainability matters;
+    the principal actual or potential adverse impacts connected with the undertaking's own
+    operations AND value chain (including products, services, business relationships and supply
+    chain); actions taken to identify and monitor those impacts; and actions taken to prevent,
+    mitigate, remediate or bring an end to actual or potential adverse impacts, together with
+    the result of such actions.
+- article: Art 19a(2)(g)-(h)
+  law_celex: 32022L2464
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Disclose the principal risks to the undertaking related to sustainability
+    matters, including its principal dependencies on those matters, and how it manages those
+    risks. Disclose indicators relevant to the qualitative and quantitative disclosures in
+    points (a) to (g). Report the process used to identify the information reported.
+- article: Art 19a(3)
+  law_celex: 32022L2464
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: reporting undertakings with value chains
+  deadline: '2027-12-31'
+  interpretive: null
+  requirement_text: Where applicable, sustainability information must contain information
+    about the undertaking's own operations AND its value chain (products, services, business
+    relationships, supply chain). For the first three years of application, where not all
+    necessary value-chain information is available, explain the efforts made, the reasons
+    for gaps, and the plan to obtain that information in future. After year 3, the grace period
+    ends.
+- article: Art 19a(4)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: 'Report sustainability information IN ACCORDANCE WITH the European Sustainability
+    Reporting Standards (ESRS) adopted by the Commission under Article 29b. First set adopted
+    by Delegated Regulation (EU) 2023/2772 (12 standards: ESRS 1, ESRS 2, E1-E5, S1-S4, G1).
+    Sector-specific ESRS due 30 June 2026. Non-compliance with the ESRS is a breach of the
+    reporting obligation itself.'
+- article: Art 19a(5)
+  law_celex: 32022L2464
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: reporting undertakings with workers' representation
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Inform workers' representatives at the appropriate level of the sustainability
+    information and the means of obtaining and verifying it, and discuss it with them. The
+    workers' representatives' opinion must be communicated, where applicable, to the administrative,
+    management or supervisory bodies.
+- article: Art 29a
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: parent undertakings of large groups
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Parent undertakings of a large group must prepare CONSOLIDATED sustainability
+    reporting at group level covering the parent and its subsidiaries. Subsidiary undertakings
+    whose information is included in a parent's consolidated report are exempted from single-undertaking
+    Article 19a reporting, subject to publicity conditions (name and registered office of
+    parent; weblinks to consolidated report; exemption statement). Large listed subsidiaries
+    are NOT exempted.
+- article: Art 29b
+  law_celex: 32022L2464
+  criticality: important
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: '2023-07-31'
+  interpretive: null
+  requirement_text: The Commission adopts European Sustainability Reporting Standards (ESRS)
+    by delegated acts, based on technical advice from EFRAG, after consulting the Member State
+    Expert Group on Sustainable Finance, the Accounting Regulatory Committee, ESMA/EBA/EIOPA
+    (2-month opinion), EEA, FRA, ECB, CEAOB and the Platform on Sustainable Finance. First
+    set adopted 31 July 2023 by Delegated Regulation (EU) 2023/2772.
+- article: Art 29d
+  law_celex: 32022L2464
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: reporting undertakings
+  deadline: '2027-12-31'
+  interpretive: null
+  requirement_text: Prepare the management report (including the sustainability section) in
+    the single electronic reporting format (ESEF) laid down in Commission Delegated Regulation
+    (EU) 2019/815. Mark up (tag) sustainability information according to the digital sustainability
+    taxonomy to be adopted by the Commission by delegated act. Applies from financial years
+    starting on or after 1 January 2026 (Article 5(2), point (14) derogation).
+- article: Art 34 (assurance)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: reporting undertakings and their statutory auditors
+  deadline: '2025-12-31'
+  interpretive: null
+  requirement_text: Obtain an assurance opinion on sustainability reporting. LIMITED ASSURANCE
+    is required from the first year of application. The Commission may adopt limited-assurance
+    standards by 1 October 2026 and reasonable-assurance standards by 1 October 2028 by delegated
+    act, in which case reasonable assurance may become mandatory. Assurance is performed by
+    the statutory auditor by default, or by an independent assurance services provider (IASP)
+    accredited under Regulation (EC) No 765/2008 where the Member State opens the market to
+    IASPs.
+- article: Art 40a-40d
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU subsidiary/branch of large third-country undertakings
+  deadline: '2028-12-31'
+  interpretive: null
+  requirement_text: Third-country undertakings with net EU turnover above 150 million euros
+    in each of the last two consecutive financial years, and having at least one EU subsidiary
+    that is a large or listed undertaking (except micro) or an EU branch with net turnover
+    above 40 million euros, must publish a sustainability report through that subsidiary or
+    branch. Report standards to be adopted by delegated act by 30 June 2024. Applies from
+    financial years starting on or after 1 January 2028 (Wave 4).
+- article: Art 5(1)
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States (national legislator)
+  deadline: '2024-07-06'
+  interpretive: null
+  requirement_text: Member States must bring into force the laws, regulations and administrative
+    provisions necessary to comply with Articles 1 to 3 of the Directive by 6 July 2024, and
+    immediately communicate the text to the Commission. Failure to transpose triggers Commission
+    infringement proceedings (Article 258 TFEU) - opened for multiple Member States in autumn
+    2024.
+- article: Art 5(2)(a) Wave 1
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: large PIEs above 500 employees (former NFRD scope)
+  deadline: '2024-01-01'
+  interpretive: null
+  requirement_text: 'Wave 1: financial years starting on or after 1 January 2024. Applies
+    to large undertakings that are public-interest entities exceeding an average of 500 employees
+    during the financial year, and to PIEs that are parent undertakings of a large group on
+    a consolidated basis exceeding 500 employees. First reports published in 2025. This wave
+    is UNCHANGED by Directive (EU) 2025/794 (Stop-the-clock).'
+- article: Art 5(2)(b) Wave 2
+  law_celex: 32022L2464
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: large non-PIE undertakings meeting 2 of 3 size thresholds
+  deadline: '2027-01-01'
+  interpretive: null
+  requirement_text: 'Wave 2 (original): financial years starting on or after 1 January 2025.
+    Applies to all other large undertakings and to parent undertakings of a large group. POSTPONED
+    BY TWO YEARS by Directive (EU) 2025/794 (Stop-the-clock) to financial years starting on
+    or after 1 January 2027, first reports in 2028.'
+- article: Art 5(2)(c) Wave 3
+  law_celex: 32022L2464
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: listed SMEs (except micro) + captive (re)insurers
+  deadline: '2028-01-01'
+  interpretive: null
+  requirement_text: 'Wave 3 (original): financial years starting on or after 1 January 2026.
+    Applies to listed SMEs (except micro), small non-complex credit institutions, and captive
+    (re)insurance undertakings meeting the size criteria. POSTPONED BY TWO YEARS by Directive
+    (EU) 2025/794 to financial years starting on or after 1 January 2028. Listed SMEs may
+    additionally opt out with a management-report explanation for financial years starting
+    before 1 January 2028.'
+- article: Art 20
+  law_celex: 32022L2464
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: listed undertakings within CSRD scope
+  deadline: '2024-12-31'
+  interpretive: null
+  requirement_text: Corporate governance statement (in the management report) must describe
+    the diversity policy applied to administrative, management and supervisory bodies with
+    regard to gender AND other aspects (age, disabilities, educational and professional background),
+    the objectives of that policy, how it has been implemented, and the results. If no policy
+    is applied, explain why. Undertakings reporting under Article 19a may present this alongside
+    sustainability information with a cross-reference.
+- article: Art 51 (Dir 2013/34)
+  law_celex: 32022L2464
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States (national legislator + supervisory authorities)
+  deadline: '2024-07-06'
+  interpretive: null
+  requirement_text: Member States must lay down effective, proportionate and dissuasive SANCTIONS
+    for infringements of the national provisions adopted pursuant to CSRD (Article 51 of Directive
+    2013/34/EU as amended). Sanctions must apply to failures to publish sustainability information,
+    failures to comply with ESRS, missing assurance opinions, and false declarations. Enforcement
+    lies with national competent authorities under Directive 2004/109/EC for listed issuers
+    and under national company law for others.

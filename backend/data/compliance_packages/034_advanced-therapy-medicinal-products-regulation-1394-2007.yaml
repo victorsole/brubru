@@ -1,0 +1,171 @@
+id: 34
+name: Advanced Therapy Medicinal Products (Regulation 1394/2007)
+policy_area: Health
+description: The lex specialis for gene therapy, somatic cell therapy and tissue-engineered
+  products, with the Committee for Advanced Therapies (CAT) and the hospital exemption.
+applicability: Developers and manufacturers of ATMPs, the EMA Committee for Advanced Therapies,
+  hospitals using the exemption.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32007R1394
+  title: Regulation (EC) No 1394/2007 of the European Parliament and of the Council on advanced
+    therapy medicinal products
+requirements:
+- article: '2'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of advanced therapy medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers must classify products as gene therapy medicinal products,
+    somatic cell therapy medicinal products, or tissue-engineered products based on the type
+    of engineered cells or tissues they contain and their intended therapeutic function.
+- article: '3'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cell and tissue suppliers, manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Donation, procurement and testing of human cells and tissues must comply
+    with Directive 2004/23/EC standards on tissue and cells safety and quality.
+- article: '4'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of advanced therapy medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers must apply Good Manufacturing Practice (GMP) guidelines
+    as tailored specifically for advanced therapy medicinal products in the technical guidance.
+- article: '5'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Sponsors and investigators conducting clinical trials
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers must follow Good Clinical Practice (GCP) guidelines as adapted
+    for advanced therapy medicinal products when conducting clinical trials.
+- article: '8'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Applicants seeking ATMP marketing authorisation, EMA
+  deadline: null
+  interpretive: null
+  requirement_text: All ATMP marketing authorisation applications must be evaluated by the
+    Committee for Advanced Therapies (CAT), which drafts a scientific opinion that the CHMP
+    then ratifies for final approval.
+- article: '12'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers of autologous advanced therapy products
+  deadline: null
+  interpretive: null
+  requirement_text: Product labelling and documentation for autologous ATMPs must specify
+    'For autologous use only' and include a unique patient identifier to track the product
+    to the individual recipient.
+- article: '14'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must implement a risk-management system
+    to monitor efficacy and adverse reactions throughout the product's lifecycle, with specified
+    follow-up data collection.
+- article: '15'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must maintain full traceability data linking
+    each product to the donor and each dose to the patient recipient for a minimum of 30 years
+    after the product's expiry date.
+- article: '16'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: SMEs and other applicants seeking scientific advice from EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Small and medium enterprises receive a 90 per cent reduction in scientific-advice
+    fees, and other applicants receive a 65 per cent reduction, to lower the cost of pre-submission
+    guidance.
+- article: '17'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Applicants requesting ATMP classification advice
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA Committee for Advanced Therapies must provide a classification
+    recommendation on whether a product qualifies as an ATMP within 60 days of a formal request.
+- article: '18'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Small and medium enterprises developing advanced therapies
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA shall grant SMEs a certificate confirming that the quality and
+    non-clinical data of their product comply with ATMP standards, provided certain conditions
+    are met.
+- article: '19'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Hospitals and SMEs applying for ATMP marketing authorisation
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation fees are reduced by 50 per cent for hospital-based
+    activities and SMEs demonstrating a particular public-health interest in their ATMP.
+- article: 20-21
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The Committee for Advanced Therapies must be established within the EMA
+    with multidisciplinary membership including experts in gene therapy, cell therapy, tissue
+    engineering, medical devices, surgery, pharmacovigilance, ethics, and representatives
+    of patients and clinicians.
+- article: '27'
+  law_celex: 32007R1394
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All ATMP applicants
+  deadline: null
+  interpretive: null
+  requirement_text: All advanced therapy medicinal products are subject to the centralised
+    procedure for marketing authorisation, which is mandatory and cannot be replaced by mutual
+    recognition or decentralised procedures.
+- article: '28'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Hospital pharmacies and clinicians in EU Member States
+  deadline: null
+  interpretive: null
+  requirement_text: ATMPs prepared on a non-routine basis to specified quality standards and
+    used within a single Member State in a hospital under a doctor's exclusive professional
+    responsibility may be exempted from this Regulation, provided they meet equivalent national
+    traceability and pharmacovigilance standards.
+- article: '29'
+  law_celex: 32007R1394
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Existing ATMP manufacturers and marketing authorisation holders
+  deadline: '2011-12-30'
+  interpretive: null
+  requirement_text: Non-tissue-engineered ATMPs already on the market must comply with this
+    Regulation by 30 December 2011; tissue-engineered products must comply by 30 December
+    2012.

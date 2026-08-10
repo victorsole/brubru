@@ -1,0 +1,278 @@
+id: 3
+name: Digital Markets Act Package
+policy_area: Digital Policy and Digital Economy
+description: Digital Markets Act establishing rules for digital gatekeepers
+applicability: Large digital platforms designated as gatekeepers, core platform services
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32022R1925
+  title: Regulation (EU) 2022/1925 of the European Parliament and of the Council of 14 September
+    2022 on contestable and fair markets in the digital sector (Digital Markets Act)
+- celex: 32023R0814
+  title: Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements
+    for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925
+    of the European Parliament and of the Council (Text with EEA relevance)
+requirements:
+- article: Article 2(1)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings providing core platform services
+  deadline: null
+  interpretive: null
+  requirement_text: Notifications pursuant to Article 3(3), first subparagraph, of Regulation
+    (EU) 2022/1925 shall contain all the information, including documents, indicated in the
+    form set out in Annex I to this Regulation.
+- article: Article 2(2)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings providing core platform services
+  deadline: null
+  interpretive: null
+  requirement_text: Submissions of information following a Commission request for information
+    referred to in Article 3(3), second subparagraph, of Regulation (EU) 2022/1925 shall contain
+    all the information, including documents, set out in the Commission's request.
+- article: Article 2(3)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notifying undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: If the notifying undertaking wishes to submit substantiated arguments
+    to demonstrate that it does not satisfy the requirements of Article 3(1) of Regulation
+    (EU) 2022/1925, it shall provide such arguments in an annex to its notification. A separate
+    annex shall be submitted for each distinct core platform service.
+- article: Article 2(3)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notifying undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: The notifying undertaking shall clearly identify to which of the three
+    cumulative requirements set out in Article 3(1) of Regulation (EU) 2022/1925 its arguments
+    relate and, for each argument, shall explain why the relevant core platform service exceptionally
+    does not satisfy that requirement.
+- article: Article 2(4)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: The information submitted to the Commission shall be correct, complete
+    and not misleading. It shall be presented in a clear, well-structured and intelligible
+    manner.
+- article: Article 2(6)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: Notifications and submissions shall be drafted in one of the official
+    languages of the Union. Any annexes shall be submitted in their original language and,
+    where their original language is not one of the official languages of the Union, they
+    shall be accompanied by a faithful translation into the language of the procedure.
+- article: Article 2(7)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: The notifications and submissions shall be accompanied by written proof
+    that the persons submitting them are authorised to act on behalf of the undertaking concerned.
+- article: Article 2(9)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall, without undue delay, acknowledge in writing to the
+    undertaking concerned or its representatives receipt of notifications or submissions.
+- article: Article 3(1)
+  law_celex: 32023R0814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Where the information contained in a notification or in a submission is
+    incomplete in any material respect, the Commission shall inform the undertaking concerned
+    or its representatives in writing without undue delay.
+- article: Art 5(2)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Do not process, combine or cross-use end users' personal data across core
+    platform services or with data from third-party services for online advertising or other
+    purposes, unless the end user has given freely given, specific, informed and unambiguous
+    GDPR-standard consent. Do not prompt for consent more than once per year for the same
+    purpose after a refusal or withdrawal.
+- article: Art 5(3)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating online intermediation services
+  deadline: null
+  interpretive: null
+  requirement_text: Do not impose parity obligations (most-favoured-nation clauses) that prevent
+    business users of your online intermediation services from offering their products or
+    services at different prices or conditions through third-party platforms or their own
+    direct sales channels.
+- article: Art 5(4)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Allow business users to communicate, promote offers (including at different
+    conditions), and conclude contracts with end users they have acquired through your core
+    platform service, free of charge, regardless of whether those interactions happen through
+    your platform.
+- article: Art 5(5)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating app stores or operating systems
+  deadline: null
+  interpretive: null
+  requirement_text: Allow end users to access and use content, subscriptions, features and
+    other items they have purchased from a business user outside your platform, through software
+    applications running on your core platform service.
+- article: Art 5(7)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Do not require end users to use your identification service, web browser
+    engine, payment service, or in-app payment system, and do not require business users to
+    use, offer, or interoperate with those services, as a condition for providing services
+    through your core platform service.
+- article: Art 5(8)
+  law_celex: 32022R1925
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Do not require business users or end users to subscribe to, or register
+    with, any other core platform service of the gatekeeper as a condition for accessing,
+    signing up for, or using a designated core platform service.
+- article: Art 5(9)-(10)
+  law_celex: 32022R1925
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers providing online advertising services
+  deadline: null
+  interpretive: null
+  requirement_text: Provide advertisers and publishers, free of charge and upon request, with
+    daily transparency data on prices paid and received for each advertisement, fees, deductions,
+    surcharges, and the metrics used to calculate each figure. Where one party withholds consent,
+    provide daily average remuneration data instead.
+- article: Art 6(2)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Do not use, in competition with business users, any non-publicly available
+    data generated or provided by those business users (including aggregated or non-aggregated
+    click, search, view and voice data, and their customers' data) in the context of using
+    your core platform service.
+- article: Art 6(3)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating operating systems, virtual assistants
+    or web browsers
+  deadline: null
+  interpretive: null
+  requirement_text: Allow and technically enable end users to easily uninstall any pre-installed
+    software applications on your operating system (except those essential to OS functioning),
+    and to change default settings for search engines, virtual assistants and web browsers
+    via a choice screen presented at first use.
+- article: Art 6(4)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating operating systems
+  deadline: null
+  interpretive: null
+  requirement_text: Allow and technically enable the installation and effective use of third-party
+    software applications and app stores on your operating system, and allow them to be accessed
+    by means other than your core platform service. Allow third-party apps to prompt users
+    to set them as default and enable that change easily.
+- article: Art 6(5)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Do not treat your own products or services more favourably than comparable
+    third-party products in ranking, indexing, crawling or any other form of relative prominence.
+    Apply transparent, fair and non-discriminatory conditions to all ranking.
+- article: Art 6(7)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating operating systems or virtual assistants
+  deadline: null
+  interpretive: null
+  requirement_text: Provide third-party service and hardware providers, free of charge, with
+    effective interoperability with the same operating system, hardware and software features
+    (including near-field communication, secure elements, authentication mechanisms) that
+    are available to your own complementary services and hardware.
+- article: Art 6(9)-(10)
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: Provide end users and authorised third parties with free, effective, continuous
+    and real-time portability of data they have provided or generated on your core platform
+    service, including tools to facilitate portability. Provide business users and their authorised
+    processors with free, continuous, real-time access to aggregated and non-aggregated data
+    generated in the context of their use of your core platform service (personal data requires
+    end-user opt-in).
+- article: Art 7
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers operating number-independent interpersonal communications
+    services
+  deadline: null
+  interpretive: null
+  requirement_text: 'Make the basic functionalities of your designated number-independent
+    interpersonal communications service interoperable with requesting third-party providers:
+    text messaging and file sharing between individuals (from designation); group messaging
+    and file sharing (within 2 years); voice and video calls, individual and group (within
+    4 years). Publish a reference offer within 6 months of designation; comply with a reasonable
+    interoperability request within 3 months of receipt. Maintain end-to-end encryption across
+    interoperable communications.'
+- article: Art 11, 14, 15, 28
+  law_celex: 32022R1925
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Designated gatekeepers
+  deadline: null
+  interpretive: null
+  requirement_text: 'Within 6 months of designation: submit a compliance report to the Commission
+    (updated annually) and an independently audited description of consumer-profiling techniques.
+    Notify the Commission before implementing any merger or acquisition involving a digital-sector
+    business. Establish an independent compliance function with a dedicated compliance officer
+    reporting directly to the management body.'

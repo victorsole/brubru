@@ -1,0 +1,166 @@
+id: 33
+name: Clinical Trials Regulation (Regulation 536/2014)
+policy_area: Health
+description: The single EU framework for authorising and supervising clinical trials through
+  the Clinical Trials Information System (CTIS), with a coordinated assessment procedure.
+applicability: Clinical-trial sponsors, investigators, Member State authorities and ethics
+  committees, CROs.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32014R0536
+  title: Regulation (EU) No 536/2014 of the European Parliament and of the Council on clinical
+    trials on medicinal products for human use
+requirements:
+- article: Art 4-8 (Authorisation)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Trial sponsors (commercial and non-commercial)
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsors must submit a single application dossier through the EU Clinical
+    Trials Information System (CTIS) portal for all participating Member States. The reporting
+    Member State leads a joint Part I scientific assessment and a separate Part II national/ethical
+    assessment, both due within 45 days of validation.
+- article: Art 29-33 (Informed Consent)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clinical trial investigators and sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: Investigators must obtain written, dated, and layperson-understandable
+    informed consent from trial subjects before inclusion. Special consent regimes apply for
+    minors, incapacitated subjects, pregnant or breastfeeding women, and emergency situations.
+- article: Art 41-43 (Safety Reporting)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Investigators, trial sponsors, and EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Investigators must report any serious adverse event (SAE) to the sponsor
+    within 24 hours. The sponsor must report suspected unexpected serious adverse reactions
+    (SUSARs) to the EMA via EudraVigilance within 7 days for fatal/life-threatening cases
+    or 15 days for others, plus an annual safety report.
+- article: Art 6 (Assessment Timeline)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Reporting Member State, Ethics Committees
+  deadline: null
+  interpretive: null
+  requirement_text: 'Part I scientific assessment comprises three sequential phases: initial
+    assessment (26 days), coordinated review (12 days), and consolidation (7 days). ATMP or
+    biotech trials receive an additional 50-day expert consultation window.'
+- article: Art 37 (Results Publication)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: Trial sponsors must submit a summary of trial results within 1 year of
+    trial completion and a layperson summary, both of which are published in the public EU
+    database regardless of outcome. The clinical study report must be submitted within 30
+    days of the related marketing authorisation.
+- article: Art 25-26 (Application Dossier)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: The application dossier must comply with Annexes I and II and include
+    WHO trial registry pre-registration. Language may be determined by Member States but English
+    is generally required for multi-country trials.
+- article: Art 52 (Serious Breaches)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Trial sponsors, Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsors must notify the Member State of serious breaches of the Regulation
+    or good clinical practice (GCP) within 7 days, and the Member State must notify other
+    participants within a further 7 days.
+- article: Art 54 (Urgent Safety Measures)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Sponsors, investigators, Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsors, investigators or Member States may take urgent safety measures
+    to protect trial subjects at any time without waiting for authorisation; notification
+    of urgent safety measures must be made within 7 days.
+- article: Art 58 (Master File Retention)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: Trial sponsors must keep the clinical trial master file archived for at
+    least 25 years, ensuring all trial records and safety data remain accessible for regulatory
+    review and subject follow-up.
+- article: Art 60-68 (GCP and Conduct)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Sponsors, investigators, contract research organisations
+  deadline: null
+  interpretive: null
+  requirement_text: All clinical trials must be conducted in compliance with good clinical
+    practice (GCP) as defined by the ICH guidelines. Monitoring, data integrity, investigator
+    competence, and investigator's brochure updates are mandatory requirements.
+- article: Art 74 (Non-EU Sponsor)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Non-EU commercial and non-commercial trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: A non-EU sponsor must either appoint an EU legal representative or at
+    least a contact person in the Union who is formally designated and has liability for the
+    trial.
+- article: Art 8(9) (Authorisation Expiry)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: A clinical trial authorisation automatically expires if no subject has
+    been included within 2 years unless an extension is granted by the Member State.
+- article: Art 31-32 (Incapacitated/Minor Subjects)
+  law_celex: 32014R0536
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Investigators, sponsors, legal representatives
+  deadline: null
+  interpretive: null
+  requirement_text: For incapacitated subjects, informed consent must be provided by a legal
+    representative and the subject must assent where possible. For minors, parental or guardian
+    consent is required along with the minor's assent as appropriate.
+- article: Art 14 (Adding Member State)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors, reporting Member State
+  deadline: null
+  interpretive: null
+  requirement_text: When a sponsor adds a new Member State to an approved trial, the reporting
+    Member State must validate the addition within 10 days and the total assessment period
+    is 52 days.
+- article: Art 76 (Damage Compensation)
+  law_celex: 32014R0536
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Trial sponsors
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsors must maintain insurance or equivalent financial guarantee covering
+    compensation for damage caused to trial subjects, with lighter provisions permitted for
+    low-intervention trials.

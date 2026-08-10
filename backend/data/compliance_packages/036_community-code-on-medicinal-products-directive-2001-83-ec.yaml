@@ -1,0 +1,172 @@
+id: 36
+name: Community Code on Medicinal Products (Directive 2001/83/EC)
+policy_area: Health
+description: The consolidated Community code governing national, mutual-recognition and decentralised
+  authorisation, manufacturing, labelling, classification, distribution, advertising and pharmacovigilance
+  of human medicines.
+applicability: All human-medicine marketing authorisation holders, manufacturers, wholesalers
+  and national competent authorities.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32001L0083
+  title: Directive 2001/83/EC of the European Parliament and of the Council on the Community
+    code relating to medicinal products for human use
+requirements:
+- article: Art 6
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All suppliers and manufacturers of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: No medicinal product for human use may be placed on the market unless
+    a marketing authorisation has been granted. This applies to all industrially produced
+    medicines outside the centralised EMA route.
+- article: Art 10 (as amended by Dir 2004/27)
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders, generic and biosimilar applicants
+  deadline: null
+  interpretive: null
+  requirement_text: Regulatory data protection is provided for 8 years, with an additional
+    2-year market exclusivity (total 10 years), plus a possible 1-year extension for new therapeutic
+    indications. Generic and abridged applications must comply with this regime.
+- article: Art 24 (as amended by Dir 2004/27)
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Competent authorities granting and renewing marketing authorisations
+  deadline: null
+  interpretive: null
+  requirement_text: A marketing authorisation is valid for 5 years and is renewable for unlimited
+    periods thereafter on the basis of a reassessment of the benefit-risk balance.
+- article: Art 40
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: No medicinal product may be manufactured without a manufacturing authorisation
+    granted by the competent authority, to be issued within 90 days of application.
+- article: Art 46-47
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: All manufacturing must be conducted in compliance with Good Manufacturing
+    Practice (GMP) principles as detailed in the directive to ensure quality, safety and consistency
+    of products.
+- article: Art 49-51
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: A Qualified Person (QP) with specified academic and professional qualifications
+    must be appointed at each manufacturing facility to oversee batch release and certification
+    for quality compliance.
+- article: Art 54, 59, 63
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers and marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Outer packaging and package leaflets must contain mandated particulars
+    in an official language of the Member State, including full composition, dosage, contraindications,
+    adverse reactions, storage, and manufacturer details.
+- article: Art 77
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Wholesalers of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Wholesale distribution of medicinal products is subject to a specific
+    authorisation requirement and is a regulated activity separate from manufacturing and
+    pharmacy dispensing.
+- article: Art 84
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Wholesalers and distributors of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: All wholesale distribution must comply with Good Distribution Practice
+    (GDP) standards as specified in the directive to maintain product integrity and traceability.
+- article: Art 87-88
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders and promotional agents
+  deadline: null
+  interpretive: null
+  requirement_text: Advertising of prescription-only or unauthorised medicinal products to
+    the public is prohibited. No advertisement may be made except those complying with the
+    specified rules on content and warnings.
+- article: Art 94, 96
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Sales representatives and marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Any inducements or gifts offered in connection with medicinal products
+    must be inexpensive and relevant to the promotion of the product. Free samples of prescription
+    medicines are limited and subject to specific conditions.
+- article: Art 103-104
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: The marketing authorisation holder must appoint a qualified person responsible
+    for pharmacovigilance and must report all serious adverse reactions to the competent authority
+    within 15 days of awareness.
+- article: Art 102, 105
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Competent authorities and the EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must establish systems for pharmacovigilance and cooperate
+    with the EMA's pharmacovigilance network to detect and evaluate safety signals for all
+    medicinal products on the market.
+- article: Art 114
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Competent authorities and manufacturers of vaccines and blood products
+  deadline: null
+  interpretive: null
+  requirement_text: Official batch release is mandatory for vaccines and blood products and
+    must be completed by the national competent authority within 60 days of application to
+    ensure safety before distribution.
+- article: Art 116-118
+  law_celex: 32001L0083
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: A marketing authorisation may be suspended, revoked or withdrawn if the
+    product fails to meet quality/safety standards, efficacy claims become unsupported, or
+    the benefit-risk balance becomes unfavourable.
+- article: Art 127
+  law_celex: 32001L0083
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers and exporters of medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers exporting medicinal products to third countries outside
+    the EU must obtain a WHO-scheme export certificate from the competent authority confirming
+    that the product is authorised in the exporting Member State.

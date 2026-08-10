@@ -1,0 +1,179 @@
+id: 31
+name: EMA and Centralised Authorisation (Regulation 726/2004)
+policy_area: Health
+description: The regulation that created the European Medicines Agency and the centralised
+  marketing-authorisation procedure for medicinal products in the EU.
+applicability: Marketing authorisation holders and applicants using the centralised procedure,
+  the EMA, biotech and innovative-medicine developers.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32004R0726
+  title: Regulation (EC) No 726/2004 laying down Union procedures for the authorisation and
+    supervision of medicinal products for human and veterinary use and establishing a European
+    Medicines Agency
+requirements:
+- article: Article 2 (applicant establishment)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation applicants and holders
+  deadline: null
+  interpretive: null
+  requirement_text: A marketing authorisation holder must be established within the Community.
+    This is a mandatory prerequisite for participation in the centralised procedure.
+- article: Article 3 (mandatory products)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers of biotech, orphan, ATMP and specified therapeutic-area
+    medicines
+  deadline: null
+  interpretive: null
+  requirement_text: Products listed in the Annex may only be placed on the market via the
+    centralised procedure. Biotech products, orphan medicines, ATMPs, and new active substances
+    for cancer, AIDS, neurodegenerative disorders, diabetes, auto-immune and viral diseases
+    are mandatorily routed through this pathway.
+- article: Article 6(3) (CHMP review timeline)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EMA scientific committee; competent applicants must meet data submission
+    standards
+  deadline: null
+  interpretive: null
+  requirement_text: The Committee for Medicinal Products for Human Use (CHMP) must deliver
+    a scientific opinion within 210 days of a valid application. The scientific analysis must
+    be carried out within at least 80 days of that period.
+- article: Article 9(2) (re-examination of opinion)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: marketing authorisation applicants
+  deadline: null
+  interpretive: null
+  requirement_text: An applicant may request re-examination of a CHMP opinion by notifying
+    within 15 days, submitting grounds within 60 days. The Committee must re-examine and provide
+    a revised opinion within 60 days.
+- article: Article 10 (Commission decision)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission prepares a draft decision within 15 days of the CHMP opinion.
+    Member States have 22 days to comment before a final decision is issued. The Commission
+    is not bound by the opinion but must provide a reasoned decision.
+- article: Article 13 (EU-wide validity and EPAR)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders; EMA publishing EPAR publicly
+  deadline: null
+  interpretive: null
+  requirement_text: A single marketing authorisation decision is valid throughout the Community
+    and EEA. A European Public Assessment Report (EPAR) must be published, which contains
+    the scientific assessment and recommendations that formed the basis for the authorisation.
+- article: Article 14(1)-(3) (validity and renewal)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: A marketing authorisation is valid for 5 years and may be renewed once,
+    following a risk-benefit re-evaluation. After renewal, the authorisation becomes unlimited.
+    This applies to all centrally authorised products.
+- article: Article 14(4)-(5) (sunset clause)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: An authorisation lapses if the product is not placed on the market within
+    3 years of authorisation, or is absent from the market for 3 consecutive years. These
+    are automatic loss-of-rights triggers.
+- article: Article 14(7) (conditional authorisation)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: applicants for medicines addressing unmet medical needs
+  deadline: null
+  interpretive: null
+  requirement_text: A conditional marketing authorisation may be granted for 1 year (renewable)
+    when the applicant cannot provide complete data on efficacy or safety due to compelling
+    reasons, provided the benefit outweighs the uncertainty.
+- article: Article 14(11) (data and market protection)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders; manufacturers of innovative medicines
+  deadline: null
+  interpretive: null
+  requirement_text: A marketing authorisation holder receives 8 years of data protection and
+    10 years of marketing protection. An additional 1-year extension applies if, within the
+    first 8 years, a new significant therapeutic indication is approved. This is the '8+2+1
+    formula'.
+- article: Article 23 (pharmacovigilance qualified person)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Every marketing authorisation holder must appoint and maintain a qualified
+    person responsible for pharmacovigilance, resident within the Community. This person is
+    the legal contact for adverse-reaction reporting and safety monitoring.
+- article: Article 24-25 (adverse-reaction reporting)
+  law_celex: 32004R0726
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders and qualified persons
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must report suspected adverse reactions
+    within 15 days to the EMA. Periodic Safety Update Reports (PSURs) must be submitted every
+    6 months initially, then annually and 3-yearly as appropriate.
+- article: Article 27 (EudraVigilance and cooperation)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA maintains EudraVigilance, a European database of adverse reactions.
+    Marketing authorisation holders must ensure their safety data feeds this system. The EMA
+    cooperates with the WHO on safety surveillance.
+- article: Article 56 (EMA components and committees)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA comprises the Committee for Medicinal Products for Human Use (CHMP),
+    Committee for Veterinary Medicinal Products (CVMP), Committee for Orphan Medicinal Products
+    (COMP), Committee on Herbal Medicinal Products (HMPC), a Secretariat and an Executive
+    Director.
+- article: Article 63 (declarations of interest)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EMA committee members
+  deadline: null
+  interpretive: null
+  requirement_text: Members of EMA scientific committees must declare any financial or professional
+    interests that could affect their independence. A member with a significant interest in
+    an application must withdraw from the evaluation.
+- article: Article 84 (penalties on holders)
+  law_celex: 32004R0726
+  criticality: important
+  addressee: commission
+  applicable_entity: marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission may impose financial penalties on a marketing authorisation
+    holder who violates the terms of the authorisation. Penalties are proportionate and take
+    into account the nature and gravity of the infringement.
