@@ -55,7 +55,7 @@ from models.eu_law import LawRequirement
 from services.compliance.gap_analyzer import GapAnalyzer, GapAnalysisUnavailable
 
 GOLD = Path(__file__).parent.parent / "data" / "eval" / "comply_gold_set.json"
-DOC = Path(__file__).parent.parent / "data" / "eval" / "nordvik_textiles_policy.txt"
+EVAL_DIR = Path(__file__).parent.parent / "data" / "eval"
 
 # "Needs action" is the decision a user actually takes off the back of a
 # verdict. Confusing met with not_applicable is untidy; confusing gap with met
@@ -92,9 +92,15 @@ async def main_async(args):
 
     db = SessionLocal()
     analyzer = GapAnalyzer(db)
-    text = DOC.read_text()
-    chunks = analyzer.doc_processor._chunk_text(text)
-    analyzer._build_index(chunks)
+
+    # One index per document. The analyser holds a single index at a time, so
+    # each case is scored against the index for ITS document -- mixing two
+    # companies' text into one index would let evidence leak between them and
+    # quietly invent compliance.
+    doc_chunks = {}
+    for name, filename in gold["documents"].items():
+        text = (EVAL_DIR / filename).read_text()
+        doc_chunks[name] = analyzer.doc_processor._chunk_text(text)
 
     ids = [c["requirement_id"] for c in cases]
     reqs = {r.id: r for r in db.query(LawRequirement).filter(LawRequirement.id.in_(ids)).all()}
@@ -104,20 +110,31 @@ async def main_async(args):
 
     print(f"EU Law Comply gap-analyser evaluation")
     print(f"  gold set {gold['version']}  |  {len(cases)} cases  |  {args.runs} run(s) each")
-    print(f"  document: {DOC.name}  ({len(chunks)} chunks)")
+    for name, filename in gold["documents"].items():
+        n_cases = sum(1 for c in cases if c.get("document") == name)
+        print(f"  document {name:<9} {filename:<34} {len(doc_chunks[name])} chunks, {n_cases} cases")
     print(f"  concurrency={analyzer.concurrency} retries={analyzer.max_attempts}\n")
 
     t0 = time.time()
     sem = asyncio.Semaphore(analyzer.concurrency)
 
-    async def one(case):
+    async def one(case, chunks):
         async with sem:
             r = reqs.get(case["requirement_id"])
             if r is None:
                 return case, []
             return case, await run_case(analyzer, r, chunks, args.runs)
 
-    results = await asyncio.gather(*(one(c) for c in cases))
+    # Group by document so the index is built once per document rather than
+    # per case, and never while another document's cases are in flight.
+    results = []
+    for doc_name in gold["documents"]:
+        doc_cases = [c for c in cases if c.get("document") == doc_name]
+        if not doc_cases:
+            continue
+        chunks = doc_chunks[doc_name]
+        analyzer._build_index(chunks)
+        results.extend(await asyncio.gather(*(one(c, chunks) for c in doc_cases)))
     elapsed = time.time() - t0
 
     rows = []
@@ -161,6 +178,7 @@ async def main_async(args):
             "expected": expected, "observed": statuses, "modal": modal,
             "stable": stable, "exact": exact, "action": action,
             "difficulty": case["difficulty"],
+            "document": case.get("document", "?"),
             "agreement": modal_n / len(statuses),
             "valid_runs": len(statuses),
             "failed_runs": n_failed,
@@ -195,6 +213,12 @@ async def main_async(args):
     print(f"  needs-action match      {action}/{n}  {100*action/n:5.1f}%  {_bar(100*action/n)}")
     for diff, d in sorted(by_difficulty.items()):
         print(f"    {diff:<9} exact {d['exact']}/{d['n']}   action {d['action']}/{d['n']}")
+    by_doc = defaultdict(lambda: {"exact": 0, "action": 0, "n": 0})
+    for r in rows:
+        d = by_doc[r["document"]]
+        d["n"] += 1; d["exact"] += int(r["exact"]); d["action"] += int(r["action"])
+    for doc, d in sorted(by_doc.items()):
+        print(f"    {doc:<9} exact {d['exact']}/{d['n']}   action {d['action']}/{d['n']}")
     print(f"  --- baseline: always answer '{majority_label}' ---")
     print(f"  exact {base_exact:5.1f}%   needs-action {base_action:5.1f}%")
     lift = 100*exact/n - base_exact

@@ -2788,7 +2788,16 @@
     "unsupportedFiles": "{{count}} file ignorati. È possibile analizzare solo PDF, DOCX e TXT.",
     "actionbarEmpty": "Aggiungete almeno un documento per eseguire l'analisi",
     "actionbarReady": "{{docs}} documento(i) saranno confrontati con {{reqs}} requisiti",
-    "analysingNote": "Verifica di {{reqs}} requisiti uno per uno. I pacchetti di grandi dimensioni possono richiedere alcuni minuti; potete lasciare questa pagina e riaprire l'analisi dalla cronologia."
+    "analysingNote": "Verifica di {{reqs}} requisiti uno per uno. I pacchetti di grandi dimensioni possono richiedere alcuni minuti; potete lasciare questa pagina e riaprire l'analisi dalla cronologia.",
+    "preview": {
+      "title": "Vedete che cosa sarà verificato",
+      "count": "{{count}} obblighi",
+      "loading": "Caricamento degli obblighi",
+      "error": "Non è stato possibile caricare l'elenco degli obblighi.",
+      "empty": "Questo pacchetto non ha ancora obblighi registrati.",
+      "withDeadline": "{{count}} con una scadenza datata",
+      "intro": "Questi sono gli obblighi rispetto ai quali saranno verificati i vostri documenti. Nulla viene caricato finché non scegliete di eseguire l'analisi."
+    }
   },
   "featurePreview": {
     "alreadyHaveAccount": "Hai già un account?",

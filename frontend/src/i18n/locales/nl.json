@@ -1897,7 +1897,16 @@
     "unsupportedFiles": "{{count}} bestand(en) overgeslagen. Alleen PDF, DOCX en TXT kunnen worden geanalyseerd.",
     "actionbarEmpty": "Voeg ten minste één document toe om de analyse uit te voeren",
     "actionbarReady": "{{docs}} document(en) worden getoetst aan {{reqs}} vereisten",
-    "analysingNote": "Bezig met het toetsen van {{reqs}} vereisten, één voor één. Grote pakketten kunnen enkele minuten duren; u kunt deze pagina verlaten en de analyse later openen vanuit uw geschiedenis."
+    "analysingNote": "Bezig met het toetsen van {{reqs}} vereisten, één voor één. Grote pakketten kunnen enkele minuten duren; u kunt deze pagina verlaten en de analyse later openen vanuit uw geschiedenis.",
+    "preview": {
+      "title": "Bekijk wat er wordt getoetst",
+      "count": "{{count}} verplichtingen",
+      "loading": "Verplichtingen laden",
+      "error": "De lijst met verplichtingen kon niet worden geladen.",
+      "empty": "Dit pakket heeft nog geen geregistreerde verplichtingen.",
+      "withDeadline": "{{count}} met een vaste termijn",
+      "intro": "Dit zijn de verplichtingen waaraan uw documenten worden getoetst. Er wordt niets geüpload totdat u de analyse start."
+    }
   },
   "featurePreview": {
     "alreadyHaveAccount": "Heeft u al een account?",

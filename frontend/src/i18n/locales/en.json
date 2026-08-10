@@ -1897,7 +1897,16 @@
     "unsupportedFiles": "{{count}} file(s) skipped. Only PDF, DOCX and TXT can be analysed.",
     "actionbarEmpty": "Add at least one document to run the analysis",
     "actionbarReady": "{{docs}} document(s) will be checked against {{reqs}} requirements",
-    "analysingNote": "Checking {{reqs}} requirements one by one. Large packages can take several minutes; you can leave this page and reopen the analysis from your history."
+    "analysingNote": "Checking {{reqs}} requirements one by one. Large packages can take several minutes; you can leave this page and reopen the analysis from your history.",
+    "preview": {
+      "title": "See what will be checked",
+      "count": "{{count}} obligations",
+      "loading": "Loading obligations",
+      "error": "Could not load the obligation list.",
+      "empty": "This package has no obligations recorded yet.",
+      "withDeadline": "{{count}} with a dated deadline",
+      "intro": "These are the obligations your documents will be measured against. Nothing is uploaded until you choose to run the analysis."
+    }
   },
   "tenderator": {
     "title": "Tenderator",

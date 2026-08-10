@@ -7,6 +7,7 @@ import { LawBrowser } from '../components/eu_comply/law_browser';
 import { ComplianceReport } from '../components/eu_comply/compliance_report';
 import { ActionPlanTimeline } from '../components/eu_comply/action_plan_timeline';
 import { UsageHistory } from '../components/eu_comply/usage_history';
+import { ClusterRequirementsPreview } from '../components/eu_comply/cluster_requirements_preview';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import { ComplianceMaturity } from '../components/shared/compliance_maturity';
 import { useAuth } from '../hooks/use_auth';
@@ -395,6 +396,13 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
                 </details>
               )}
             </div>
+
+            {/* Let the user see the obligations BEFORE handing over internal
+                documents. The endpoint existed and was called by nothing. */}
+            <ClusterRequirementsPreview
+              clusterId={selectedCluster.id}
+              requirementCount={selectedCluster.requirement_count}
+            />
 
             {/* Drag-and-drop zone. This was a raw <input type="file">, which is
                 unstyleable across browsers and read as an unfinished form. */}

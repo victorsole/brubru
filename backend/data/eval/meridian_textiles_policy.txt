@@ -1,0 +1,127 @@
+MERIDIAN APPAREL GROUP NV
+EU PRODUCT COMPLIANCE AND CIRCULARITY MANUAL
+Version 11.0 — approved by the Board 14 January 2026
+Scope: all apparel, clothing accessories and footwear placed on the EU market
+
+1. SCOPE AND ORGANISATION
+
+Meridian Apparel Group NV is a large enterprise within the meaning of Directive
+2013/34/EU, with 4,120 employees and consolidated turnover of EUR 1.16 billion. We design
+and sell knitted and woven apparel (CN chapters 61 and 62), leather goods (CN 4203),
+headgear (CN 6504 and 6505) and footwear (CN 6403 and 6404). We sell through 610 own
+stores, our webshop, and third-party online marketplaces in all 27 Member States.
+Accountability sits with the Group Director of Product Compliance, who reports to the
+Chief Executive and presents to the Audit Committee quarterly.
+
+2. EXTENDED PRODUCER RESPONSIBILITY
+
+We are registered in the national register of producers of textile, textile-related and
+footwear products in every Member State in which we make Annex IVc products available on
+the market. Registration numbers for all 27 registers are held in our regulatory register
+and reconciled quarterly against our sales ledger; a market may not be opened by Commercial
+until registration is confirmed.
+
+In each of those Member States we have entrusted an authorised producer responsibility
+organisation to discharge our extended producer responsibility obligations on our behalf,
+under written contract. We report tonnage placed on the market to each organisation
+quarterly, split by Annex IVc category and by CN heading, derived from finished-goods
+weights captured at SKU level in our ERP.
+
+For each Member State in which we sell by distance contract without being established, we
+have appointed an authorised representative by written mandate, and the mandate is filed
+with the competent national authority. The current list covers eleven Member States and is
+reviewed whenever a new distance-selling market is opened.
+
+Our financial contributions are calculated on weight and quantity and are eco-modulated.
+We apply the modulation criteria published by each producer responsibility organisation,
+covering durability, repairability, recycled fibre content and the presence of substances
+of concern, and we hold the supporting technical file for each modulated SKU.
+
+We cover the costs of separate collection of used and waste products, of transport to
+sorting, of sorting operations, and of the awareness campaigns run by our producer
+responsibility organisations, in accordance with the cost-coverage scope agreed with each
+organisation.
+
+3. UNSOLD STOCK
+
+We do not destroy unsold consumer apparel, clothing accessories or footwear. Since 1 January
+2026 the destruction of these products has been prohibited by Group policy irrespective of
+volume, ahead of the statutory date, and the prohibition is enforced by a system control:
+no disposal movement can be booked in the warehouse management system for a CN code within
+chapters 61 or 62, or headings 4203, 6504, 6505 or 6401 to 6405, without a derogation case
+number issued by Legal.
+
+Where a derogation is relied upon, the applicable ground under Commission Delegated
+Regulation (EU) 2026/296 is recorded in the case file, together with the evidence required
+by Article 3 of that Regulation. Case files are retained in electronic form for five years
+from the date of destruction and can be produced to a competent authority within 30 days of
+a request. In 2025 we relied on derogations 41 times, in every case for products found to
+be dangerous or non-compliant following laboratory testing, and the corresponding test
+reports naming the non-compliant substance and the applicable Union law are held with each
+case.
+
+Before any product may be destroyed on a ground other than safety, non-compliance or an
+intellectual property infringement, it must first be offered for donation. Our process
+offers the stock directly to at least three social economy entities established in the
+Union and, in parallel, lists it on a publicly accessible donation page of our corporate
+website for a minimum of eight weeks. Only if no acceptance is received within that window
+may the case proceed, and the offer records are retained with the case file.
+
+We disclose annually, on our corporate website, the number and total weight of unsold
+consumer products discarded in the previous financial year, the reasons for discarding
+them, the derogation relied on where applicable, the proportion delivered to each waste
+treatment operation, and the measures taken and planned to prevent destruction. The
+disclosure follows the format set out in Annex I to Commission Implementing Regulation (EU)
+2026/2, is presented per Combined Nomenclature category at four-digit level for the
+headings listed in Annex II to that Regulation, and is cross-referenced from the
+sustainability statement in our management report.
+
+We retain the information and documentation demonstrating the delivery and reception of
+discarded unsold consumer products, including the statements provided by our waste
+treatment operators, for five years following the disclosure.
+
+4. PRODUCT INFORMATION, IDENTIFIERS AND THE DIGITAL PRODUCT PASSPORT
+
+Every product carries a data carrier linked to a persistent unique product identifier.
+Identifiers are issued at item level, and each item identifier is linked to its batch
+identifier and to its model identifier in our product information management system, so
+that a passport can be resolved at whichever granularity a delegated act requires.
+
+Meridian Apparel Group NV is registered as a verified economic operator. Our identity and
+establishment were evidenced by a qualified electronic seal supported by a qualified
+certificate issued by a qualified trust service provider under Regulation (EU) No 910/2014.
+The seal is held by Group Legal and renewed on a calendared cycle.
+
+For every product group for which a digital product passport is required, we register the
+passport in the Commission registry before the product is placed on the market, at the
+granularity specified in the applicable delegated act, and where several instruments apply
+we register at the most granular level required by any of them. We generate and archive the
+proof of registration for each passport version, and we treat the accuracy, completeness
+and currency of the registered data as an owner obligation of the Group Director of Product
+Compliance. Where a service provider acts in the registry on our behalf, that provider is
+itself verified and our responsibility for compliance is unchanged.
+
+5. SEPARATE COLLECTION, SORTING AND SHIPMENTS
+
+We operate take-back in all 610 stores. Collected products pass to sorting operators
+contracted through our producer responsibility organisations. We receive quarterly reporting
+from each operator broken down between preparing for re-use, recycling, other recovery and
+disposal, and we audit two operators per year against that reporting.
+
+Shipments arranged on a professional basis of used products assessed as fit for re-use are
+accompanied by a copy of the invoice and the contract stating that the products are
+destined for and fit for re-use, together with a declaration of fitness for re-use signed
+by the assessing operator.
+
+6. KNOWN GAPS AND WORK IN PROGRESS
+
+Two matters are open and are reported to the Audit Committee each quarter.
+
+First, our take-back bins currently accept only Meridian-branded products in 94 of the 610
+stores, because those stores operate under a franchise agreement that has not yet been
+amended. Collection systems are required to accept products regardless of brand.
+Renegotiation is scheduled to conclude in Q4 2026.
+
+Second, we do not yet publish the annual figures required of producer responsibility
+organisations on their own websites, because two of the organisations we use have not
+published theirs; we have written to both and are tracking the matter.

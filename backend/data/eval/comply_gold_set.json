@@ -1,9 +1,13 @@
 {
-  "_comment": "Gold set for the EU Law Comply gap analyser. Each case pairs one requirement with one company document and the verdict a competent compliance reviewer would give. Labels are derived from VERBATIM statements in the document (quoted in `evidence_in_document`), not from anything the model produced -- otherwise the set would just encode the model's current behaviour. `difficulty` separates cases where the document states the position outright from ones needing judgement, so accuracy can be reported on each. Built 9 Aug 2026 against cluster 58 (DPP-TEX) and docs/eval/nordvik_textiles_policy.txt.",
-  "version": "1.0",
+  "_comment": "Gold set for the EU Law Comply gap analyser. Each case pairs one requirement with one company document and the verdict a competent compliance reviewer would give. Labels are derived from VERBATIM statements in the document (quoted in `evidence_in_document`), not from anything the model produced -- otherwise the set would just encode the model's current behaviour. `difficulty` separates cases where the document states the position outright from ones needing judgement. v2 adds a SECOND company, Meridian, with a mature compliance programme: v1 was 10/20 'gap' and had a single 'met' case, so it measured 'does it find problems' far better than 'does it recognise compliance', and a model that simply distrusted every document would have scored well.",
+  "version": "2.0",
   "cluster_id": 58,
-  "document": "textile_policy.txt",
-  "statuses": ["met", "partial", "gap", "not_applicable"],
+  "statuses": [
+    "met",
+    "partial",
+    "gap",
+    "not_applicable"
+  ],
   "cases": [
     {
       "requirement_id": 4248,
@@ -11,7 +15,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "In 2025 we destroyed 41,200 units, principally damaged returns and items withdrawn for safety reasons.",
-      "rationale": "Large enterprise (1,340 staff, EUR 310m turnover) destroying unsold apparel and footwear. The prohibition binds it from 19 July 2026 with no phase-in."
+      "rationale": "Large enterprise (1,340 staff, EUR 310m turnover) destroying unsold apparel and footwear. The prohibition binds it from 19 July 2026 with no phase-in.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4250,
@@ -19,7 +24,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We do not currently publish figures on discarded unsold products.",
-      "rationale": "Explicit non-compliance with the annual disclosure duty; the sustainability report does not break down units, weight, reasons or treatment split."
+      "rationale": "Explicit non-compliance with the annual disclosure duty; the sustainability report does not break down units, weight, reasons or treatment split.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4170,
@@ -27,7 +33,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We have not yet appointed authorised representatives in the Member States where we sell by distance contract but are not established.",
-      "rationale": "States the obligation and states it is unmet. Scoping work planned is not appointment."
+      "rationale": "States the obligation and states it is unmet. Scoping work planned is not appointment.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4175,
@@ -35,7 +42,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We do not currently apply eco-modulation criteria such as durability, recyclability, or recycled content.",
-      "rationale": "Fees are on total weight only. The PRO not having published schedules explains the gap, it does not close it."
+      "rationale": "Fees are on total weight only. The PRO not having published schedules explains the gap, it does not close it.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4259,
@@ -43,7 +51,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We do not operate a formal donation-offer step before destruction. Charity donation is attempted informally by the warehouse team where time allows.",
-      "rationale": "The derogation requires an offer to three social economy entities or eight weeks on the website. Informal best-effort satisfies neither."
+      "rationale": "The derogation requires an offer to three social economy entities or eight weeks on the website. Informal best-effort satisfies neither.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4261,
@@ -51,7 +60,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We have not obtained a qualified electronic seal or qualified electronic signature under Regulation (EU) No 910/2014.",
-      "rationale": "Verified-economic-operator status is a precondition for registering a DPP and is explicitly absent."
+      "rationale": "Verified-economic-operator status is a precondition for registering a DPP and is explicitly absent.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4262,
@@ -59,7 +69,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "No data carrier standard has been selected and we have not registered any product in any Commission registry.",
-      "rationale": "No registration has taken place."
+      "rationale": "No registration has taken place.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4263,
@@ -67,7 +78,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "Data is held at style (model) level; we do not currently generate batch-level or item-level identifiers, and our QR codes resolve to a marketing URL rather than to a persistent unique product identifier.",
-      "rationale": "Model-only identifiers cannot satisfy a batch or item granularity requirement, and the identifier is not persistent."
+      "rationale": "Model-only identifiers cannot satisfy a batch or item granularity requirement, and the identifier is not persistent.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4182,
@@ -75,7 +87,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "We do not currently include a declaration of fitness for reuse.",
-      "rationale": "Invoice and transport document are present but the required declaration is explicitly absent."
+      "rationale": "Invoice and transport document are present but the required declaration is explicitly absent.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4254,
@@ -83,7 +96,8 @@
       "expected": "gap",
       "difficulty": "clear",
       "evidence_in_document": "does not break down units or weight of unsold goods discarded, nor the reasons for discarding, nor the split across waste treatment operations.",
-      "rationale": "The Annex I format is not used at all."
+      "rationale": "The Annex I format is not used at all.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4257,
@@ -91,7 +105,8 @@
       "expected": "met",
       "difficulty": "clear",
       "evidence_in_document": "Compliance documentation is retained for five years in our document management system.",
-      "rationale": "Matches the five-year retention duty for delivery and reception documentation."
+      "rationale": "Matches the five-year retention duty for delivery and reception documentation.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4173,
@@ -99,7 +114,8 @@
       "expected": "partial",
       "difficulty": "clear",
       "evidence_in_document": "We are registered as a producer in the national producer register in Sweden and in the Netherlands... Registration in France, Germany, Spain and Italy is in progress.",
-      "rationale": "Registration is required in every Member State of supply. Two done, four outstanding: partially compliant, not compliant."
+      "rationale": "Registration is required in every Member State of supply. Two done, four outstanding: partially compliant, not compliant.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4174,
@@ -107,7 +123,8 @@
       "expected": "partial",
       "difficulty": "clear",
       "evidence_in_document": "we pay annual fees to the producer responsibility organisation in both markets",
-      "rationale": "A PRO is entrusted in the two registered markets only, mirroring the registration gap elsewhere."
+      "rationale": "A PRO is entrusted in the two registered markets only, mirroring the registration gap elsewhere.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4260,
@@ -115,7 +132,8 @@
       "expected": "partial",
       "difficulty": "nuanced",
       "evidence_in_document": "retained for five years... with the exception of Brand Protection case files noted above [retained for three years]",
-      "rationale": "General retention meets the five-year rule, but the IP-derogation files that Article 3 specifically covers are kept for three. Meets the rule in general and fails it exactly where it bites."
+      "rationale": "General retention meets the five-year rule, but the IP-derogation files that Article 3 specifically covers are kept for three. Meets the rule in general and fails it exactly where it bites.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4185,
@@ -123,7 +141,8 @@
       "expected": "not_applicable",
       "difficulty": "clear",
       "evidence_in_document": "employing 1,340 staff with an annual turnover of EUR 310 million",
-      "rationale": "The provision defers application for enterprises under 10 staff and EUR 2m. Nordvik is far outside that."
+      "rationale": "The provision defers application for enterprises under 10 staff and EUR 2m. Nordvik is far outside that.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4189,
@@ -131,7 +150,8 @@
       "expected": "not_applicable",
       "difficulty": "clear",
       "evidence_in_document": "(no corresponding company obligation)",
-      "rationale": "Transposition duty addressed to Member States, not to an economic operator."
+      "rationale": "Transposition duty addressed to Member States, not to an economic operator.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4168,
@@ -139,7 +159,8 @@
       "expected": "not_applicable",
       "difficulty": "clear",
       "evidence_in_document": "(no corresponding company obligation)",
-      "rationale": "'Member States shall ensure that EPR schemes are established' binds Member States."
+      "rationale": "'Member States shall ensure that EPR schemes are established' binds Member States.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4183,
@@ -147,7 +168,8 @@
       "expected": "not_applicable",
       "difficulty": "clear",
       "evidence_in_document": "(no corresponding company obligation)",
-      "rationale": "Compositional survey of municipal waste is a Member State duty."
+      "rationale": "Compositional survey of municipal waste is a Member State duty.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4178,
@@ -155,7 +177,8 @@
       "expected": "not_applicable",
       "difficulty": "nuanced",
       "evidence_in_document": "sells through our own retail network, our webshop, and third-party online marketplaces",
-      "rationale": "The duty binds providers of online platforms. Nordvik sells ON marketplaces but does not operate one, so it is the counterparty, not the addressee. A reviewer could argue 'gap' by conflating the roles, which is exactly why this is marked nuanced."
+      "rationale": "The duty binds providers of online platforms. Nordvik sells ON marketplaces but does not operate one, so it is the counterparty, not the addressee. A reviewer could argue 'gap' by conflating the roles, which is exactly why this is marked nuanced.",
+      "document": "nordvik"
     },
     {
       "requirement_id": 4252,
@@ -163,7 +186,210 @@
       "expected": "not_applicable",
       "difficulty": "nuanced",
       "evidence_in_document": "We have begun a Digital Product Passport readiness project with an external consortium.",
-      "rationale": "The requirement text says outright that no textile delegated act has been adopted, so there is nothing to comply with yet. Scored as not_applicable; 'met' would also be defensible for a firm already preparing, which is why this is nuanced."
+      "rationale": "The requirement text says outright that no textile delegated act has been adopted, so there is nothing to comply with yet. Scored as not_applicable; 'met' would also be defensible for a firm already preparing, which is why this is nuanced.",
+      "document": "nordvik"
+    },
+    {
+      "requirement_id": 4173,
+      "document": "meridian",
+      "article": "WFD Article 22b",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We are registered in the national register of producers ... in every Member State in which we make Annex IVc products available on the market.",
+      "rationale": "Registration in every market of supply, reconciled quarterly, with a control preventing market opening before registration."
+    },
+    {
+      "requirement_id": 4174,
+      "document": "meridian",
+      "article": "WFD Article 22c(1)-(4)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "In each of those Member States we have entrusted an authorised producer responsibility organisation ... under written contract.",
+      "rationale": "A PRO is entrusted in every market, by written contract, with quarterly tonnage reporting."
+    },
+    {
+      "requirement_id": 4170,
+      "document": "meridian",
+      "article": "WFD Article 22a(3)-(4)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "we have appointed an authorised representative by written mandate, and the mandate is filed with the competent national authority.",
+      "rationale": "Written mandate, filed with the authority, covering every distance-selling market where not established."
+    },
+    {
+      "requirement_id": 4175,
+      "document": "meridian",
+      "article": "WFD Article 22c(5)-(6)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "Our financial contributions are calculated on weight and quantity and are eco-modulated.",
+      "rationale": "Weight and quantity basis plus modulation on durability, repairability, recycled content and substances of concern, with a technical file per SKU."
+    },
+    {
+      "requirement_id": 4171,
+      "document": "meridian",
+      "article": "WFD Article 22a(8)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We cover the costs of separate collection of used and waste products, of transport to sorting, of sorting operations, and of the awareness campaigns.",
+      "rationale": "The four cost heads the Article lists are each covered under an agreed scope."
+    },
+    {
+      "requirement_id": 4248,
+      "document": "meridian",
+      "article": "ESPR Article 25(1), Annex VII",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We do not destroy unsold consumer apparel, clothing accessories or footwear ... enforced by a system control.",
+      "rationale": "Prohibition adopted ahead of the statutory date and enforced by a hard control on the CN codes in Annex VII."
+    },
+    {
+      "requirement_id": 4250,
+      "document": "meridian",
+      "article": "ESPR Article 24(1)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We disclose annually, on our corporate website, the number and total weight of unsold consumer products discarded ... the measures taken and planned to prevent destruction.",
+      "rationale": "Every element the Article enumerates is disclosed annually."
+    },
+    {
+      "requirement_id": 4254,
+      "document": "meridian",
+      "article": "IR 2026/2 Article 2(1), Annex I",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "The disclosure follows the format set out in Annex I to Commission Implementing Regulation (EU) 2026/2",
+      "rationale": "The prescribed format is used, and cross-referenced from the management report."
+    },
+    {
+      "requirement_id": 4256,
+      "document": "meridian",
+      "article": "IR 2026/2 Article 3, Annex II",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "is presented per Combined Nomenclature category at four-digit level for the headings listed in Annex II to that Regulation",
+      "rationale": "Four-digit delimitation applied to exactly the Annex II headings."
+    },
+    {
+      "requirement_id": 4257,
+      "document": "meridian",
+      "article": "IR 2026/2 Article 4",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We retain the information and documentation demonstrating the delivery and reception of discarded unsold consumer products ... for five years following the disclosure.",
+      "rationale": "Five-year retention including waste treatment operator statements."
+    },
+    {
+      "requirement_id": 4258,
+      "document": "meridian",
+      "article": "DR 2026/296 Article 2",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "the applicable ground under Commission Delegated Regulation (EU) 2026/296 is recorded in the case file, together with the evidence required by Article 3",
+      "rationale": "Destruction only on a recorded Article 2 ground with the Article 3 evidence; the 41 cases cited are all safety or non-compliance grounds."
+    },
+    {
+      "requirement_id": 4259,
+      "document": "meridian",
+      "article": "DR 2026/296 Article 2(h)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "offers the stock directly to at least three social economy entities established in the Union and, in parallel, lists it on a publicly accessible donation page ... for a minimum of eight weeks.",
+      "rationale": "Both limbs of the donation route are satisfied, and offer records are retained."
+    },
+    {
+      "requirement_id": 4260,
+      "document": "meridian",
+      "article": "DR 2026/296 Article 3",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "Case files are retained in electronic form for five years from the date of destruction and can be produced to a competent authority within 30 days of a request.",
+      "rationale": "Five years, electronic, 30-day production: the three elements the Article requires."
+    },
+    {
+      "requirement_id": 4261,
+      "document": "meridian",
+      "article": "IR 2026/1778 Article 4",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "Our identity and establishment were evidenced by a qualified electronic seal supported by a qualified certificate issued by a qualified trust service provider under Regulation (EU) No 910/2014.",
+      "rationale": "Exactly the route Article 4 prescribes for a legal person established in the Union."
+    },
+    {
+      "requirement_id": 4262,
+      "document": "meridian",
+      "article": "IR 2026/1778 Article 8(1)-(2)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "we register the passport in the Commission registry before the product is placed on the market, at the granularity specified in the applicable delegated act",
+      "rationale": "Registration by the operator placing the product on the market, at the prescribed granularity."
+    },
+    {
+      "requirement_id": 4263,
+      "document": "meridian",
+      "article": "IR 2026/1778 Article 8(3)-(5)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "Identifiers are issued at item level, and each item identifier is linked to its batch identifier and to its model identifier",
+      "rationale": "Item-level identifiers with batch and model linkage, and registration at the most granular level required."
+    },
+    {
+      "requirement_id": 4264,
+      "document": "meridian",
+      "article": "IR 2026/1778 Article 9",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "We generate and archive the proof of registration for each passport version",
+      "rationale": "Proof of registration generated and retained per version."
+    },
+    {
+      "requirement_id": 4265,
+      "document": "meridian",
+      "article": "IR 2026/1778 Article 19",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "we treat the accuracy, completeness and currency of the registered data as an owner obligation ... our responsibility for compliance is unchanged.",
+      "rationale": "Accuracy and currency owned by a named role, and responsibility retained where a third party acts in the registry."
+    },
+    {
+      "requirement_id": 4182,
+      "document": "meridian",
+      "article": "WFD Article 22d(8)-(9)",
+      "expected": "met",
+      "difficulty": "clear",
+      "evidence_in_document": "accompanied by a copy of the invoice and the contract stating that the products are destined for and fit for re-use, together with a declaration of fitness for re-use",
+      "rationale": "Invoice, contract and the declaration the Article requires."
+    },
+    {
+      "requirement_id": 4176,
+      "document": "meridian",
+      "article": "WFD Article 22c(8)-(9)",
+      "expected": "partial",
+      "difficulty": "clear",
+      "evidence_in_document": "our take-back bins currently accept only Meridian-branded products in 94 of the 610 stores",
+      "rationale": "Collection must accept products regardless of brand. Compliant in 516 stores, non-compliant in 94, and the company says so itself."
+    },
+    {
+      "requirement_id": 4184,
+      "document": "meridian",
+      "article": "WFD Article 22c(18), (20)",
+      "expected": "gap",
+      "difficulty": "nuanced",
+      "evidence_in_document": "we do not yet publish the annual figures required of producer responsibility organisations on their own websites",
+      "rationale": "The publication duty sits on the PRO. Meridian names it as an open gap, but a strict reading makes it not_applicable to the producer. Marked nuanced for that reason."
+    },
+    {
+      "requirement_id": 4185,
+      "document": "meridian",
+      "article": "WFD Article 41 as amended",
+      "expected": "not_applicable",
+      "difficulty": "clear",
+      "evidence_in_document": "4,120 employees and consolidated turnover of EUR 1.16 billion",
+      "rationale": "The micro-enterprise deferral cannot apply at this size."
     }
-  ]
+  ],
+  "documents": {
+    "nordvik": "nordvik_textiles_policy.txt",
+    "meridian": "meridian_textiles_policy.txt"
+  }
 }

@@ -1897,7 +1897,16 @@
     "unsupportedFiles": "{{count}} fitxer(s) omès(os). Només es poden analitzar PDF, DOCX i TXT.",
     "actionbarEmpty": "Afegiu com a mínim un document per executar l'anàlisi",
     "actionbarReady": "{{docs}} document(s) es contrastaran amb {{reqs}} requisits",
-    "analysingNote": "S'estan comprovant {{reqs}} requisits un per un. Els paquets grans poden trigar uns quants minuts; podeu sortir d'aquesta pàgina i tornar a obrir l'anàlisi des del vostre historial."
+    "analysingNote": "S'estan comprovant {{reqs}} requisits un per un. Els paquets grans poden trigar uns quants minuts; podeu sortir d'aquesta pàgina i tornar a obrir l'anàlisi des del vostre historial.",
+    "preview": {
+      "title": "Vegeu què es comprovarà",
+      "count": "{{count}} obligacions",
+      "loading": "S'estan carregant les obligacions",
+      "error": "No s'ha pogut carregar la llista d'obligacions.",
+      "empty": "Aquest paquet encara no té obligacions registrades.",
+      "withDeadline": "{{count}} amb data límit",
+      "intro": "Aquestes són les obligacions amb què es contrastaran els vostres documents. No es puja res fins que decidiu executar l'anàlisi."
+    }
   },
   "tenderator": {
     "title": "Tenderator",

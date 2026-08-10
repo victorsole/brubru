@@ -1897,7 +1897,16 @@
     "unsupportedFiles": "{{count}} fichier(s) ignoré(s). Seuls les PDF, DOCX et TXT peuvent être analysés.",
     "actionbarEmpty": "Ajoutez au moins un document pour lancer l'analyse",
     "actionbarReady": "{{docs}} document(s) seront vérifiés au regard de {{reqs}} exigences",
-    "analysingNote": "Vérification de {{reqs}} exigences une par une. Les paquets volumineux peuvent prendre plusieurs minutes; vous pouvez quitter cette page et rouvrir l'analyse depuis votre historique."
+    "analysingNote": "Vérification de {{reqs}} exigences une par une. Les paquets volumineux peuvent prendre plusieurs minutes; vous pouvez quitter cette page et rouvrir l'analyse depuis votre historique.",
+    "preview": {
+      "title": "Voir ce qui sera vérifié",
+      "count": "{{count}} obligations",
+      "loading": "Chargement des obligations",
+      "error": "Impossible de charger la liste des obligations.",
+      "empty": "Ce paquet ne comporte encore aucune obligation enregistrée.",
+      "withDeadline": "{{count}} avec une échéance datée",
+      "intro": "Voici les obligations au regard desquelles vos documents seront vérifiés. Rien n'est téléversé tant que vous ne lancez pas l'analyse."
+    }
   },
   "tenderator": {
     "title": "Tenderator",

@@ -1897,7 +1897,16 @@
     "unsupportedFiles": "{{count}} archivo(s) omitido(s). Solo se pueden analizar PDF, DOCX y TXT.",
     "actionbarEmpty": "Añada al menos un documento para ejecutar el análisis",
     "actionbarReady": "{{docs}} documento(s) se contrastarán con {{reqs}} requisitos",
-    "analysingNote": "Comprobando {{reqs}} requisitos uno a uno. Los paquetes grandes pueden tardar varios minutos; puede salir de esta página y volver a abrir el análisis desde su historial."
+    "analysingNote": "Comprobando {{reqs}} requisitos uno a uno. Los paquetes grandes pueden tardar varios minutos; puede salir de esta página y volver a abrir el análisis desde su historial.",
+    "preview": {
+      "title": "Vea qué se comprobará",
+      "count": "{{count}} obligaciones",
+      "loading": "Cargando obligaciones",
+      "error": "No se pudo cargar la lista de obligaciones.",
+      "empty": "Este paquete aún no tiene obligaciones registradas.",
+      "withDeadline": "{{count}} con fecha límite",
+      "intro": "Estas son las obligaciones con las que se contrastarán sus documentos. No se sube nada hasta que usted decida ejecutar el análisis."
+    }
   },
   "tenderator": {
     "title": "Tenderator",
