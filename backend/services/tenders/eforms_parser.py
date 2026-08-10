@@ -782,6 +782,17 @@ class EFormsParser:
             "raw_root_tag": root.tag,
         }
 
+        # Legacy TED declares a DEFAULT namespace
+        # (xmlns="http://publications.europa.eu/resource/schema/ted/R2.0.9/publication"),
+        # so ElementTree reports every tag as "{ns}DOC_ID" and every one of the
+        # ~40 `.//TAG` lookups below silently found nothing. The whole legacy
+        # branch returned notice_type, form_type and the empty containers, which
+        # is why it looked like it ran. (The child-tag walk in
+        # _find_legacy_form_section splits on '}' precisely because of this, so
+        # half the file already knew.) Strip the namespaces once here rather than
+        # namespace-qualifying forty call sites.
+        root = self._strip_namespaces(root)
+
         # Detect form type from XML structure
         form_type = self._detect_legacy_form_type(xml_content)
         result["form_type"] = form_type
@@ -847,6 +858,24 @@ class EFormsParser:
             if pattern in xml_content:
                 return form_type
         return "unknown"
+
+    @staticmethod
+    def _strip_namespaces(root: ET.Element) -> ET.Element:
+        """Return a copy of the tree with every tag reduced to its local name.
+
+        Operates on a deep copy so the caller's tree is untouched: parse() hands
+        the same root to other extractors that DO expect qualified names.
+        """
+        import copy
+
+        clone = copy.deepcopy(root)
+        for element in clone.iter():
+            if isinstance(element.tag, str) and "}" in element.tag:
+                element.tag = element.tag.split("}", 1)[1]
+            for key in list(element.attrib):
+                if "}" in key:
+                    element.attrib[key.split("}", 1)[1]] = element.attrib.pop(key)
+        return clone
 
     def _find_legacy_form_section(self, root: ET.Element) -> Optional[ET.Element]:
         """Find the main form section in legacy TED XML"""

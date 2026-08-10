@@ -149,7 +149,7 @@ def mock_db_session():
 @pytest.fixture
 def sample_rss_feed_model():
     """Sample RSSFeed model instance"""
-    from backend.models.rss_feed import RSSFeed
+    from models.rss_feed import RSSFeed
     from uuid import uuid4
 
     feed = RSSFeed(
@@ -166,7 +166,7 @@ def sample_rss_feed_model():
 @pytest.fixture
 def sample_rss_entry_model():
     """Sample RSSEntry model instance"""
-    from backend.models.rss_entry import RSSEntry
+    from models.rss_entry import RSSEntry
     from uuid import uuid4
 
     entry = RSSEntry(

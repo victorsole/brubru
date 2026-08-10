@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, MagicMock
 from uuid import uuid4
 
-from backend.services.tenders.tender_service import TenderService
-from backend.models.tender import Tender, TenderProfile, TenderMatch
+from services.tenders.tender_service import TenderService
+from models.tender import Tender, TenderProfile, TenderMatch
 
 
 # ============================================================================
@@ -44,10 +44,10 @@ def sample_tender():
         id=1,
         publication_number="1776-2025",
         title="IT Services for Cloud Infrastructure",
-        buyer_name="European Commission",
+        official_name="European Commission",   # model column is official_name; buyer_name never existed
         buyer_country="BE",
         estimated_value=500000.0,
-        currency="EUR",
+        estimated_value_currency="EUR",   # model column carries the estimated_value_ prefix
         cpv_main="72000000",
         procedure_type="open",
         status="open",
@@ -328,8 +328,10 @@ class TestSMEScore:
         )
 
         assert result is not None
-        assert 'score' in result
-        assert 0 <= result['score'] <= 100
+        # The key is sme_suitability_score; there has never been a 'score'.
+        assert 'sme_suitability_score' in result
+        assert 0 <= result['sme_suitability_score'] <= 100
+        assert 'score_breakdown' in result
 
     def test_get_sme_score_with_turnover(self, tender_service, mock_db, sample_tender):
         """Test SME score with annual turnover"""
@@ -345,7 +347,7 @@ class TestSMEScore:
         )
 
         assert result is not None
-        assert 'score' in result
+        assert 'sme_suitability_score' in result
 
     def test_get_sme_score_tender_not_found(self, tender_service, mock_db):
         """Test SME score for non-existent tender"""

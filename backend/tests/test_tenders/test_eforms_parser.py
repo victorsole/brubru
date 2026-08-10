@@ -7,7 +7,7 @@ Tests for parsing EU procurement notices in both eForms and legacy TED XML forma
 import pytest
 from datetime import datetime
 
-from backend.services.tenders.eforms_parser import EFormsParser
+from services.tenders.eforms_parser import EFormsParser
 
 
 # ============================================================================

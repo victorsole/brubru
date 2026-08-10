@@ -254,6 +254,15 @@ class SMEScorer:
             except ValueError:
                 return 0.5, None, "Invalid deadline format"
 
+        # A deadline can arrive either tz-aware (read back from the TIMESTAMPTZ
+        # column, or parsed from eForms, which carries an offset) or tz-naive
+        # (built with datetime.now(), or any caller that did not think about
+        # it). Subtracting the two raises TypeError and takes the whole score
+        # down. Treat a naive deadline as UTC, which is what every other naive
+        # datetime in this codebase means.
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=timezone.utc)
+
         days_until = (deadline - datetime.now(timezone.utc)).days
 
         if days_until < 0:

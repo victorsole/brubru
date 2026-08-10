@@ -7,24 +7,32 @@ Part of Tenderator Phase 9: Testing
 
 import pytest
 from datetime import datetime, timedelta
+from uuid import UUID
 from unittest.mock import Mock, patch, AsyncMock
 from fastapi.testclient import TestClient
 from fastapi import HTTPException
 
 # Import models and schemas
-from backend.models.tender import Tender, TenderProfile, TenderMatch
-from backend.models.user import User
+from models.tender import Tender, TenderProfile, TenderMatch
+from models.user import User
 
 
 # ============================================================================
 # Test Fixtures
 # ============================================================================
 
+# users.id is a UUID column and the response schemas validate it as one, so
+# these fixtures used to fail validation with "UUID input should be a string,
+# bytes or UUID object" on every endpoint that serialises a user-owned row.
+SAMPLE_USER_ID = UUID("11111111-1111-4111-8111-111111111111")
+SAMPLE_FREE_USER_ID = UUID("22222222-2222-4222-8222-222222222222")
+
+
 @pytest.fixture
 def sample_user():
     """Sample user for testing"""
     user = Mock(spec=User)
-    user.id = 1
+    user.id = SAMPLE_USER_ID
     user.email = "test@example.com"
     user.subscription_tier = "blue"
     return user
@@ -34,7 +42,7 @@ def sample_user():
 def sample_free_user():
     """Sample user without Blue tier"""
     user = Mock(spec=User)
-    user.id = 2
+    user.id = SAMPLE_FREE_USER_ID
     user.email = "free@example.com"
     user.subscription_tier = "free"
     return user
@@ -42,24 +50,36 @@ def sample_free_user():
 
 @pytest.fixture
 def sample_tender():
-    """Sample tender for testing"""
-    tender = Mock(spec=Tender)
-    tender.id = 1
-    tender.publication_number = "1776-2025"
-    tender.title = "IT Services Tender"
-    tender.buyer_name = "European Commission"
-    tender.buyer_country = "BE"
-    tender.estimated_value = 500000.0
-    tender.currency = "EUR"
-    tender.cpv_main = "72000000"
-    tender.cpv_additional = ["72100000", "72200000"]
-    tender.procedure_type = "open"
-    tender.status = "open"
-    tender.submission_deadline = datetime.now() + timedelta(days=30)
-    tender.publication_date = datetime.now() - timedelta(days=5)
-    tender.description = "Cloud migration services"
-    tender.sme_suitability_score = 75.0
-    return tender
+    """Sample tender for testing.
+
+    A real Tender, not Mock(spec=Tender). A Mock auto-creates an attribute for
+    every field the response schema asks for, and each one arrives as a Mock
+    object rather than a string or None -- so TenderDetail.model_validate
+    reported 27 validation errors for fields the fixture never mentioned. A
+    real instance leaves them None, which the schema accepts.
+    """
+    return Tender(
+        id=1,
+        publication_number="1776-2025",
+        title="IT Services Tender",
+        official_name="European Commission",
+        buyer_country="BE",
+        estimated_value=500000.0,
+        estimated_value_currency="EUR",
+        cpv_main="72000000",
+        cpv_codes=["72100000", "72200000"],
+        procedure_type="open",
+        status="open",
+        submission_deadline=datetime.now() + timedelta(days=30),
+        publication_date=datetime.now() - timedelta(days=5),
+        description="Cloud migration services",
+        sme_suitability_score=75.0,
+        # Column defaults only apply on INSERT, and these are non-Optional
+        # booleans on the response schema, so an unsaved instance must set them.
+        has_lots=False,
+        is_framework=False,
+        is_joint_procurement=False,
+    )
 
 
 @pytest.fixture
@@ -67,7 +87,7 @@ def sample_profile():
     """Sample tender profile for testing"""
     profile = Mock(spec=TenderProfile)
     profile.id = 1
-    profile.user_id = 1
+    profile.user_id = SAMPLE_USER_ID
     profile.company_name = "Test Company"
     profile.company_size = "small"
     profile.annual_turnover = 2000000.0
@@ -76,7 +96,27 @@ def sample_profile():
     profile.countries_of_interest = ["BE", "FR", "DE"]
     profile.max_tender_value = 1000000.0
     profile.min_deadline_days = 14
-    profile.procedure_preferences = ["open", "restricted"]
+    profile.preferred_procedures = ["open", "restricted"]   # model column
+    profile.years_in_business = 6
+    profile.cpv_codes = ["72000000"]
+    profile.sectors_description = "Cloud and data services"
+    profile.nuts_regions = ["BE10"]
+    profile.eu_wide = True
+    profile.min_tender_value = 50000.0
+    profile.preferred_currency = "EUR"
+    profile.exclude_frameworks = False
+    profile.exclude_joint_procurement = False
+    profile.keywords = ["cloud", "migration"]
+    profile.excluded_keywords = []
+    profile.certifications = ["ISO 27001"]
+    profile.past_contract_value = 750000.0
+    profile.references_count = 4
+    profile.notification_frequency = "weekly"
+    profile.notification_email = True
+    profile.notification_in_app = True
+    profile.max_matches_per_digest = 10
+    profile.is_active = True
+    profile.last_matched_at = None
     profile.created_at = datetime.now()
     profile.updated_at = datetime.now()
     return profile
@@ -88,10 +128,13 @@ def sample_match(sample_tender):
     match = Mock(spec=TenderMatch)
     match.id = 1
     match.tender_id = sample_tender.id
-    match.user_id = 1
+    match.user_id = SAMPLE_USER_ID
     match.match_score = 85.5
-    match.match_reasons = ["Matching CPV sector", "Country match", "Value within range"]
-    match.match_details = {"cpv_match": 40, "country_match": 25, "value_match": 20.5}
+    # match_reasons is the JSONB score breakdown; match_details is the
+    # human-readable sentence. The fixture had the two swapped, which is why
+    # both failed validation in opposite directions.
+    match.match_reasons = {"cpv_match": 0.4, "country_match": 0.25, "value_match": 0.2}
+    match.match_details = "Strong match for your profile. Deadline: 30 days remaining."
     match.is_viewed = False
     match.is_saved = False
     match.is_dismissed = False
@@ -114,7 +157,7 @@ class TestBlueTierAccess:
     @pytest.mark.asyncio
     async def test_require_blue_tier_allows_blue_user(self, sample_user):
         """Test that Blue tier users are allowed"""
-        from backend.api.tenderator import require_blue_tier
+        from api.tenderator import require_blue_tier
 
         result = await require_blue_tier(sample_user)
         assert result == sample_user
@@ -122,7 +165,7 @@ class TestBlueTierAccess:
     @pytest.mark.asyncio
     async def test_require_blue_tier_blocks_free_user(self, sample_free_user):
         """Test that free users are blocked"""
-        from backend.api.tenderator import require_blue_tier
+        from api.tenderator import require_blue_tier
 
         with pytest.raises(HTTPException) as exc_info:
             await require_blue_tier(sample_free_user)
@@ -133,7 +176,7 @@ class TestBlueTierAccess:
     @pytest.mark.asyncio
     async def test_require_blue_tier_allows_admin(self):
         """Test that admin users are allowed"""
-        from backend.api.tenderator import require_blue_tier
+        from api.tenderator import require_blue_tier
 
         admin_user = Mock(spec=User)
         admin_user.subscription_tier = "admin"
@@ -152,7 +195,7 @@ class TestSearchEndpoint:
     @pytest.mark.asyncio
     async def test_search_tenders_basic(self, sample_tender):
         """Test basic tender search"""
-        from backend.api.tenderator import search_tenders
+        from api.tenderator import search_tenders
 
         mock_db = Mock()
         mock_query = Mock()
@@ -160,13 +203,21 @@ class TestSearchEndpoint:
         mock_query.count.return_value = 1
         mock_db.query.return_value = mock_query
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.search_tenders.return_value = [sample_tender]
 
+            # Every parameter spelled out: calling the endpoint function
+            # directly skips FastAPI's resolution, so an omitted argument
+            # arrives as the Query(...) object itself and blows up on the
+            # first `.split(",")` or arithmetic inside the handler.
             result = await search_tenders(
                 query="IT services",
-                db=mock_db
+                countries=None, cpv_codes=None, min_value=None, max_value=None,
+                procedure_type=None, status="open", sme_friendly=False,
+                sort_by="publication_date", sort_order="desc",
+                page=1, page_size=20,
+                db=mock_db,
             )
 
             assert result.total >= 0
@@ -175,7 +226,7 @@ class TestSearchEndpoint:
     @pytest.mark.asyncio
     async def test_search_tenders_with_filters(self, sample_tender):
         """Test tender search with filters"""
-        from backend.api.tenderator import search_tenders
+        from api.tenderator import search_tenders
 
         mock_db = Mock()
         mock_query = Mock()
@@ -183,7 +234,7 @@ class TestSearchEndpoint:
         mock_query.count.return_value = 1
         mock_db.query.return_value = mock_query
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.search_tenders.return_value = [sample_tender]
 
@@ -193,7 +244,10 @@ class TestSearchEndpoint:
                 cpv_codes="72",
                 min_value=100000,
                 max_value=1000000,
-                db=mock_db
+                procedure_type=None, status="open", sme_friendly=False,
+                sort_by="publication_date", sort_order="desc",
+                page=1, page_size=20,
+                db=mock_db,
             )
 
             assert result is not None
@@ -209,15 +263,16 @@ class TestTenderDetailEndpoint:
     @pytest.mark.asyncio
     async def test_get_tender_found(self, sample_tender):
         """Test getting existing tender"""
-        from backend.api.tenderator import get_tender
+        from api.tenderator import get_tender
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.get_tender.return_value = sample_tender
 
             result = await get_tender(
                 tender_id=1,
-                service=mock_service
+                fetch_xml=False,
+                service=mock_service,
             )
 
             assert result is not None
@@ -225,9 +280,9 @@ class TestTenderDetailEndpoint:
     @pytest.mark.asyncio
     async def test_get_tender_not_found(self):
         """Test getting non-existent tender"""
-        from backend.api.tenderator import get_tender
+        from api.tenderator import get_tender
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.get_tender.return_value = None
 
@@ -250,7 +305,7 @@ class TestProfileEndpoints:
     @pytest.mark.asyncio
     async def test_get_profile(self, sample_user, sample_profile):
         """Test getting user profile"""
-        from backend.api.tenderator import get_my_profile
+        from api.tenderator import get_my_profile
 
         mock_db = Mock()
         mock_query = Mock()
@@ -268,7 +323,7 @@ class TestProfileEndpoints:
     @pytest.mark.asyncio
     async def test_get_profile_not_found(self, sample_user):
         """Test getting non-existent profile"""
-        from backend.api.tenderator import get_my_profile
+        from api.tenderator import get_my_profile
 
         mock_db = Mock()
         mock_query = Mock()
@@ -295,7 +350,7 @@ class TestMatchEndpoints:
     @pytest.mark.asyncio
     async def test_get_matches(self, sample_user, sample_match, sample_tender):
         """Test getting user matches"""
-        from backend.api.tenderator import get_my_matches
+        from api.tenderator import get_my_matches
 
         mock_db = Mock()
         mock_query = Mock()
@@ -303,15 +358,17 @@ class TestMatchEndpoints:
         mock_query.count.return_value = 1
         mock_db.query.return_value = mock_query
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.get_user_matches.return_value = [sample_match]
             mock_service.get_tender.return_value = sample_tender
 
             result = await get_my_matches(
+                include_dismissed=False, saved_only=False, min_score=None,
+                page=1, page_size=20,
                 current_user=sample_user,
                 service=mock_service,
-                db=mock_db
+                db=mock_db,
             )
 
             assert result is not None
@@ -319,9 +376,9 @@ class TestMatchEndpoints:
     @pytest.mark.asyncio
     async def test_save_match(self, sample_user, sample_match):
         """Test saving a match"""
-        from backend.api.tenderator import save_match
+        from api.tenderator import save_match
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             sample_match.is_saved = True
             mock_service.save_match.return_value = sample_match
@@ -337,9 +394,9 @@ class TestMatchEndpoints:
     @pytest.mark.asyncio
     async def test_dismiss_match(self, sample_user, sample_match):
         """Test dismissing a match"""
-        from backend.api.tenderator import dismiss_match
+        from api.tenderator import dismiss_match
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             sample_match.is_dismissed = True
             mock_service.dismiss_match.return_value = sample_match
@@ -363,7 +420,7 @@ class TestStatisticsEndpoints:
     @pytest.mark.asyncio
     async def test_get_global_statistics(self):
         """Test getting global tender statistics"""
-        from backend.api.tenderator import get_statistics
+        from api.tenderator import get_statistics
         from sqlalchemy import func
 
         mock_db = Mock()
@@ -375,14 +432,16 @@ class TestStatisticsEndpoints:
         mock_query.all.return_value = [("BE", 100), ("FR", 80)]
         mock_db.query.return_value = mock_query
 
-        result = await get_statistics(db=mock_db)
+        # Sync `def` endpoint, deliberately: it does sync-ORM work, and an
+        # async handler doing that blocks the single worker's event loop.
+        result = get_statistics(db=mock_db)
 
         assert result is not None
 
     @pytest.mark.asyncio
     async def test_get_user_statistics(self, sample_user):
         """Test getting user-specific statistics"""
-        from backend.api.tenderator import get_my_statistics
+        from api.tenderator import get_my_statistics
         from sqlalchemy import func
 
         mock_db = Mock()
@@ -392,9 +451,9 @@ class TestStatisticsEndpoints:
         mock_query.scalar.return_value = 75.5
         mock_db.query.return_value = mock_query
 
-        result = await get_my_statistics(
+        result = get_my_statistics(          # sync `def`, see above
             current_user=sample_user,
-            db=mock_db
+            db=mock_db,
         )
 
         assert result is not None
@@ -410,9 +469,9 @@ class TestSMEScoreEndpoint:
     @pytest.mark.asyncio
     async def test_get_sme_score(self, sample_tender):
         """Test getting SME suitability score"""
-        from backend.api.tenderator import get_sme_score
+        from api.tenderator import get_sme_score
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.get_sme_score_for_tender.return_value = {
                 'score': 75,
@@ -437,9 +496,9 @@ class TestSMEScoreEndpoint:
     @pytest.mark.asyncio
     async def test_get_sme_score_tender_not_found(self):
         """Test SME score for non-existent tender"""
-        from backend.api.tenderator import get_sme_score
+        from api.tenderator import get_sme_score
 
-        with patch('backend.api.tenderator.TenderService') as MockService:
+        with patch('api.tenderator.TenderService') as MockService:
             mock_service = MockService.return_value
             mock_service.get_sme_score_for_tender.return_value = None
 
@@ -463,7 +522,7 @@ class TestHealthCheck:
     @pytest.mark.asyncio
     async def test_health_check(self):
         """Test health check returns healthy status"""
-        from backend.api.tenderator import health_check
+        from api.tenderator import health_check
 
         result = await health_check()
 

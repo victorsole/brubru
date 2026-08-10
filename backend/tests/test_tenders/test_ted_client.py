@@ -9,7 +9,7 @@ from datetime import date, timedelta
 from unittest.mock import AsyncMock, Mock, patch
 import httpx
 
-from backend.services.tenders.ted_client import (
+from services.tenders.ted_client import (
     TEDClient,
     NoticeType,
     ProcedureType,
@@ -32,16 +32,20 @@ def mock_response():
     """Mock HTTP response"""
     response = Mock(spec=httpx.Response)
     response.status_code = 200
+    # TED API v3 returns totalNoticeCount, not "total"; the client reads that
+    # key. The old fixture used the pre-v3 shape, so every assertion about
+    # pagination was checking a number the client had defaulted to 0.
     response.json.return_value = {
         "notices": [
             {
-                "id": "1776-2025",
-                "title": "Test Tender",
-                "country": "BE",
-                "cpv": ["72000000"]
+                "ND": "1776-2025",
+                "publication-number": "1776-2025",
+                "TI": {"eng": "Test Tender"},
+                "CY": ["BEL"],
+                "PC": ["72000000"],
             }
         ],
-        "total": 1
+        "totalNoticeCount": 1
     }
     return response
 
@@ -95,90 +99,88 @@ class TestTEDClientInit:
 # ============================================================================
 
 class TestSearchQueryBuilding:
-    """Tests for search query parameter building"""
+    """Tests for search query building.
+
+    These assert the TED API v3 contract: a POST to notices/search carrying a
+    JSON body whose "query" is an expert-search string. They previously patched
+    `get` and asserted on `params["q"]`, which is the pre-v3 GET contract the
+    client stopped using -- so the patch never intercepted anything, the real
+    POST escaped to api.ted.europa.eu, and the assertions failed on a 400 from
+    the live service. That is also why this file took minutes to run.
+    """
+
+    @staticmethod
+    def _query_from(mock_post) -> str:
+        """The expert-search string the client sent."""
+        body = mock_post.call_args.kwargs.get("json") or mock_post.call_args.args[1]
+        return body["query"]
 
     @pytest.mark.asyncio
     async def test_search_with_text_query(self, ted_client, mock_response):
-        """Test search with text query"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        """Free-text goes in as FT="..."."""
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             await ted_client.search_notices(query="software development")
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'FT="software development"' in params.get('q', '')
+            assert 'FT="software development"' in self._query_from(mock_post)
 
     @pytest.mark.asyncio
     async def test_search_with_cpv_codes(self, ted_client, mock_response):
-        """Test search with CPV codes"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        """Every CPV code appears, OR-ed together."""
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             await ted_client.search_notices(cpv_codes=["72000000", "48000000"])
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'PC="72000000"' in params.get('q', '')
-            assert 'PC="48000000"' in params.get('q', '')
+            query = self._query_from(mock_post)
+            assert 'PC="72000000"' in query
+            assert 'PC="48000000"' in query
 
     @pytest.mark.asyncio
-    async def test_search_with_countries(self, ted_client, mock_response):
-        """Test search with country filter"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+    async def test_search_converts_countries_to_alpha3(self, ted_client, mock_response):
+        """TED v3 expects ISO alpha-3, so BE/FR must go out as BEL/FRA."""
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             await ted_client.search_notices(countries=["BE", "FR"])
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'CY="BE"' in params.get('q', '')
-            assert 'CY="FR"' in params.get('q', '')
+            query = self._query_from(mock_post)
+            assert "CY=BEL" in query
+            assert "CY=FRA" in query
 
     @pytest.mark.asyncio
     async def test_search_with_procedure_types(self, ted_client, mock_response):
-        """Test search with procedure type filter"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             await ted_client.search_notices(
                 procedure_types=[ProcedureType.OPEN, ProcedureType.RESTRICTED]
             )
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'PR="open"' in params.get('q', '')
-            assert 'PR="restricted"' in params.get('q', '')
+            query = self._query_from(mock_post)
+            assert 'PR="open"' in query
+            assert 'PR="restricted"' in query
 
     @pytest.mark.asyncio
-    async def test_search_with_notice_types(self, ted_client, mock_response):
-        """Test search with notice type filter"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
+    async def test_notice_type_filter_is_not_applied(self, ted_client, mock_response):
+        """notice_types is accepted but deliberately NOT sent.
 
-            await ted_client.search_notices(
-                notice_types=[NoticeType.COMPETITION]
-            )
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'TD="cn-standard"' in params.get('q', '')
+        The TD filter values changed in v3 and the old ones ("cn-standard")
+        return no results, so ted_client comments the filter out and narrows by
+        procedure type instead. This test pins that down: it used to assert
+        TD="cn-standard" WAS in the query, describing behaviour the client had
+        already abandoned. If someone re-enables the filter, this fails and
+        they will find the explanation here.
+        """
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
+            await ted_client.search_notices(notice_types=[NoticeType.COMPETITION])
+            assert "TD=" not in self._query_from(mock_post)
 
     @pytest.mark.asyncio
     async def test_search_with_date_range(self, ted_client, mock_response):
-        """Test search with date range filter"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             await ted_client.search_notices(
                 publication_date_from=date(2024, 1, 1),
                 publication_date_to=date(2024, 12, 31)
             )
-
-            call_args = mock_get.call_args
-            params = call_args.kwargs.get('params') or call_args.args[1]
-            assert 'PD>=20240101' in params.get('q', '')
-            assert 'PD<=20241231' in params.get('q', '')
+            query = self._query_from(mock_post)
+            assert "PD>=20240101" in query
+            assert "PD<=20241231" in query
 
 
 # ============================================================================
@@ -190,28 +192,22 @@ class TestSearchResponse:
 
     @pytest.mark.asyncio
     async def test_search_returns_notices(self, ted_client, mock_response):
-        """Test that search returns notices"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             result = await ted_client.search_notices()
-
             assert "notices" in result
             assert len(result["notices"]) == 1
-            assert result["notices"][0]["id"] == "1776-2025"
+            assert result["notices"][0]["ND"] == "1776-2025"
 
     @pytest.mark.asyncio
     async def test_search_returns_pagination(self, ted_client, mock_response):
-        """Test that search returns pagination info"""
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = mock_response
-
+        with patch.object(ted_client, 'post', new_callable=AsyncMock) as mock_post:
+            mock_post.return_value = mock_response
             result = await ted_client.search_notices(page=1, page_size=20)
-
             assert result["page"] == 1
             assert result["page_size"] == 20
-            assert "total" in result
-            assert "total_pages" in result
+            assert result["total"] == 1          # read from totalNoticeCount
+            assert result["total_pages"] == 1
 
 
 # ============================================================================
@@ -265,7 +261,15 @@ class TestNoticeRetrieval:
 
     @pytest.mark.asyncio
     async def test_get_notice(self, ted_client, sample_notice_response):
-        """Test getting a single notice"""
+        """Test getting a single notice.
+
+        get_notice needs an API key: without one it logs and returns None
+        before issuing a request. The old test never set one, so it was
+        asserting on None -- and its sibling test_get_notice_not_found passed
+        for the same wrong reason, returning None because there was no key
+        rather than because of the 404 it claimed to exercise.
+        """
+        ted_client.ted_api_key = "test-key"
         mock_response = Mock(spec=httpx.Response)
         mock_response.json.return_value = sample_notice_response
 
@@ -275,11 +279,23 @@ class TestNoticeRetrieval:
             result = await ted_client.get_notice("1776-2025")
 
             assert result["id"] == "1776-2025"
-            mock_get.assert_called_once_with("notices/1776-2025")
+            mock_get.assert_called_once_with(
+                "notices/1776-2025",
+                headers={"Authorization": "Bearer test-key"},
+            )
+
+    @pytest.mark.asyncio
+    async def test_get_notice_without_api_key_returns_none(self, ted_client):
+        """No key configured means no request is made at all."""
+        ted_client.ted_api_key = None
+        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
+            assert await ted_client.get_notice("1776-2025") is None
+            mock_get.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_get_notice_not_found(self, ted_client):
-        """Test getting non-existent notice returns None"""
+        """A 404 from the API returns None."""
+        ted_client.ted_api_key = "test-key"
         with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
             mock_get.side_effect = httpx.HTTPStatusError(
                 "Not Found",
@@ -293,14 +309,25 @@ class TestNoticeRetrieval:
 
     @pytest.mark.asyncio
     async def test_get_notice_xml(self, ted_client):
-        """Test getting notice XML content"""
+        """XML comes from the public TED website, not the authenticated API.
+
+        get_notice_xml calls self.client.get() against
+        ted.europa.eu/en/notice/<pub>/xml -- a different host and a different
+        client from the API wrapper's own get(). Patching the wrapper meant the
+        real request went out to the live site on every run.
+        """
         mock_response = Mock(spec=httpx.Response)
         mock_response.text = "<ContractNotice>...</ContractNotice>"
+        mock_response.raise_for_status = Mock(return_value=None)
 
-        with patch.object(ted_client, 'get', new_callable=AsyncMock) as mock_get:
+        with patch.object(ted_client.client, 'get', new_callable=AsyncMock) as mock_get:
             mock_get.return_value = mock_response
 
             result = await ted_client.get_notice_xml("1776-2025")
+
+            assert mock_get.call_args.args[0] == (
+                "https://ted.europa.eu/en/notice/1776-2025/xml"
+            )
 
             assert result == "<ContractNotice>...</ContractNotice>"
 

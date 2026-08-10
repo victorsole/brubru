@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, AsyncMock
 
-from backend.services.ai.tender_context_provider import (
+from services.ai.tender_context_provider import (
     TenderContextProvider,
     TenderIntent,
     TenderContextData,
@@ -26,7 +26,7 @@ from backend.services.ai.tender_context_provider import (
 @pytest.fixture
 def tender_context_provider():
     """TenderContextProvider instance with mocked database"""
-    with patch('backend.services.ai.tender_context_provider.SessionLocal'):
+    with patch('services.ai.tender_context_provider.SessionLocal'):
         provider = TenderContextProvider()
         return provider
 
@@ -250,7 +250,7 @@ class TestContextFetching:
             mock_db = Mock()
             mock_get_db.return_value = mock_db
 
-            with patch('backend.services.ai.tender_context_provider.TenderService') as MockService:
+            with patch('services.ai.tender_context_provider.TenderService') as MockService:
                 mock_service = MockService.return_value
                 mock_service.search_tenders.return_value = []
 
@@ -273,7 +273,7 @@ class TestContextFetching:
             mock_db = Mock()
             mock_get_db.return_value = mock_db
 
-            with patch('backend.services.ai.tender_context_provider.TenderService'):
+            with patch('services.ai.tender_context_provider.TenderService'):
                 context = await tender_context_provider.fetch_tender_context(intent)
 
                 assert context is not None
@@ -298,7 +298,7 @@ class TestContextFetching:
             mock_db.query.return_value = mock_query
             mock_get_db.return_value = mock_db
 
-            with patch('backend.services.ai.tender_context_provider.TenderService'):
+            with patch('services.ai.tender_context_provider.TenderService'):
                 context = await tender_context_provider.fetch_tender_context(intent)
 
                 assert context is not None

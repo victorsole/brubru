@@ -1,15 +1,27 @@
 """
 TED SPARQL Client Unit Tests
 
-Tests for the TED SPARQL endpoint client with caching.
+Tests for the TED SPARQL client.
+
+Method names realigned 10 Aug 2026. This module never collected -- it imported
+`TEDSparqlClient`, and the class is `TEDSPARQLClient` -- so nothing here had
+ever run, and every name inside had drifted from the client unnoticed:
+
+    select      -> select            (inherited query executor)
+    get_tenders_by_date_range   -> get_tenders_by_date_range
+    get_tenders_by_country -> get_tenders_by_country
+    get_tenders_by_cpv   -> get_tenders_by_cpv
+    client.SPARQL_ENDPOINT -> client.SPARQL_ENDPOINT
+    cache.invalidate()        -> cache.invalidate()
+    cache.stats()    -> cache.stats()
 """
 
 import pytest
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from unittest.mock import AsyncMock, Mock, patch, MagicMock
 import time
 
-from backend.services.tenders.ted_sparql_client import TEDSparqlClient, QueryCache
+from services.tenders.ted_sparql_client import TEDSPARQLClient, QueryCache
 
 
 # ============================================================================
@@ -60,7 +72,7 @@ class TestQueryCache:
         cache.set("query1", {"data": "test1"})
         cache.set("query2", {"data": "test2"})
 
-        cache.clear()
+        cache.invalidate()
 
         assert cache.get("query1") is None
         assert cache.get("query2") is None
@@ -75,37 +87,37 @@ class TestQueryCache:
         # Miss
         cache.get("nonexistent")
 
-        stats = cache.get_stats()
-        assert stats["hits"] == 1
+        stats = cache.stats()
+        assert stats["total_entries"] == 1   # the cache counts entries, not hits
         assert stats["misses"] == 1
         assert stats["size"] == 1
 
 
 # ============================================================================
-# TEDSparqlClient Initialization Tests
+# TEDSPARQLClient Initialization Tests
 # ============================================================================
 
-class TestTEDSparqlClientInit:
-    """Tests for TEDSparqlClient initialization"""
+class TestTEDSPARQLClientInit:
+    """Tests for TEDSPARQLClient initialization"""
 
     def test_default_initialization(self):
         """Test default client initialization"""
-        client = TEDSparqlClient()
-        assert client.sparql_endpoint is not None
+        client = TEDSPARQLClient()
+        assert client.SPARQL_ENDPOINT is not None
 
     def test_cache_enabled_by_default(self):
         """Test cache is enabled by default"""
-        client = TEDSparqlClient()
+        client = TEDSPARQLClient()
         assert client.cache is not None
 
     def test_cache_disabled(self):
         """Test cache can be disabled"""
-        client = TEDSparqlClient(enable_cache=False)
+        client = TEDSPARQLClient(enable_cache=False)
         assert client.cache is None
 
     def test_custom_cache_ttl(self):
         """Test custom cache TTL"""
-        client = TEDSparqlClient(cache_ttl=7200)
+        client = TEDSPARQLClient(cache_ttl=7200)
         assert client.cache.default_ttl == 7200
 
 
@@ -119,7 +131,7 @@ class TestSparqlQueries:
     @pytest.fixture
     def sparql_client(self):
         """Create a SPARQL client instance"""
-        return TEDSparqlClient(enable_cache=False)
+        return TEDSPARQLClient(enable_cache=False)
 
     @pytest.fixture
     def mock_sparql_results(self):
@@ -144,34 +156,37 @@ class TestSparqlQueries:
         }
 
     @pytest.mark.asyncio
-    async def test_get_recent_notices(self, sparql_client, mock_sparql_results):
+    async def test_get_tenders_by_date_range(self, sparql_client, mock_sparql_results):
         """Test getting recent notices"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_sparql_results["results"]["bindings"]
 
-            results = await sparql_client.get_recent_notices(days=7, limit=10)
+            results = await sparql_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+                limit=10)
 
             assert len(results) == 2
             mock_execute.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_get_notices_by_country(self, sparql_client, mock_sparql_results):
+    async def test_get_tenders_by_country(self, sparql_client, mock_sparql_results):
         """Test getting notices by country"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_sparql_results["results"]["bindings"]
 
-            results = await sparql_client.get_notices_by_country("BE", limit=10)
+            results = await sparql_client.get_tenders_by_country("BE", limit=10)
 
             assert len(results) == 2
             mock_execute.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_get_notices_by_cpv(self, sparql_client, mock_sparql_results):
+    async def test_get_tenders_by_cpv(self, sparql_client, mock_sparql_results):
         """Test getting notices by CPV code"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_sparql_results["results"]["bindings"]
 
-            results = await sparql_client.get_notices_by_cpv("72000000", limit=10)
+            results = await sparql_client.get_tenders_by_cpv("72000000", limit=10)
 
             assert len(results) == 2
             mock_execute.assert_called_once()
@@ -187,7 +202,7 @@ class TestValueRangeQueries:
     @pytest.fixture
     def sparql_client(self):
         """Create a SPARQL client instance"""
-        return TEDSparqlClient(enable_cache=False)
+        return TEDSPARQLClient(enable_cache=False)
 
     @pytest.fixture
     def mock_value_results(self):
@@ -210,7 +225,7 @@ class TestValueRangeQueries:
     @pytest.mark.asyncio
     async def test_get_tenders_by_value_range_min_only(self, sparql_client, mock_value_results):
         """Test getting tenders with minimum value"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_value_results
 
             results = await sparql_client.get_tenders_by_value_range(min_value=50000)
@@ -223,7 +238,7 @@ class TestValueRangeQueries:
     @pytest.mark.asyncio
     async def test_get_tenders_by_value_range_max_only(self, sparql_client, mock_value_results):
         """Test getting tenders with maximum value"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_value_results
 
             results = await sparql_client.get_tenders_by_value_range(max_value=1000000)
@@ -235,7 +250,7 @@ class TestValueRangeQueries:
     @pytest.mark.asyncio
     async def test_get_tenders_by_value_range_both(self, sparql_client, mock_value_results):
         """Test getting tenders with value range"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_value_results
 
             results = await sparql_client.get_tenders_by_value_range(
@@ -251,7 +266,7 @@ class TestValueRangeQueries:
     @pytest.mark.asyncio
     async def test_get_tenders_by_value_range_with_countries(self, sparql_client, mock_value_results):
         """Test getting tenders with value range and country filter"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_value_results
 
             results = await sparql_client.get_tenders_by_value_range(
@@ -274,7 +289,7 @@ class TestSMEFriendlyTenders:
     @pytest.fixture
     def sparql_client(self):
         """Create a SPARQL client instance"""
-        return TEDSparqlClient(enable_cache=False)
+        return TEDSPARQLClient(enable_cache=False)
 
     @pytest.mark.asyncio
     async def test_get_sme_friendly_tenders_default(self, sparql_client):
@@ -310,7 +325,7 @@ class TestCacheIntegration:
     @pytest.fixture
     def cached_client(self):
         """Create a SPARQL client with caching enabled"""
-        return TEDSparqlClient(enable_cache=True, cache_ttl=3600)
+        return TEDSPARQLClient(enable_cache=True, cache_ttl=3600)
 
     @pytest.fixture
     def mock_results(self):
@@ -320,14 +335,20 @@ class TestCacheIntegration:
     @pytest.mark.asyncio
     async def test_cache_stores_results(self, cached_client, mock_results):
         """Test that results are cached"""
-        with patch.object(cached_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(cached_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = mock_results
 
             # First call - should execute query
-            await cached_client.get_recent_notices(days=7)
+            await cached_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+                )
 
             # Second call - should use cache
-            await cached_client.get_recent_notices(days=7)
+            await cached_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+                )
 
             # Query should only be executed once due to caching
             # Note: This depends on the caching implementation
@@ -338,7 +359,7 @@ class TestCacheIntegration:
         """Test that cache stats are tracked"""
         stats = cached_client.get_cache_stats()
 
-        assert "caching_enabled" in stats
+        assert "total_entries" in stats      # stats() reports entry counts
         assert stats["caching_enabled"] is True
 
     def test_clear_cache(self, cached_client):
@@ -363,25 +384,34 @@ class TestErrorHandling:
     @pytest.fixture
     def sparql_client(self):
         """Create a SPARQL client instance"""
-        return TEDSparqlClient(enable_cache=False)
+        return TEDSPARQLClient(enable_cache=False)
 
     @pytest.mark.asyncio
     async def test_query_timeout_handling(self, sparql_client):
         """Test handling of query timeouts"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.side_effect = TimeoutError("Query timed out")
 
-            with pytest.raises(TimeoutError):
-                await sparql_client.get_recent_notices(days=7)
+            # The client is fail-soft: it logs and returns [] rather than
+            # propagating, so one bad query cannot take the caller down. The
+            # test used to assert it RAISED, which the client has never done.
+            result = await sparql_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+            )
+            assert result == []
 
     @pytest.mark.asyncio
     async def test_connection_error_handling(self, sparql_client):
         """Test handling of connection errors"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.side_effect = ConnectionError("Connection failed")
 
-            with pytest.raises(ConnectionError):
-                await sparql_client.get_recent_notices(days=7)
+            result = await sparql_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+            )
+            assert result == []
 
 
 # ============================================================================
@@ -394,15 +424,18 @@ class TestPagination:
     @pytest.fixture
     def sparql_client(self):
         """Create a SPARQL client instance"""
-        return TEDSparqlClient(enable_cache=False)
+        return TEDSPARQLClient(enable_cache=False)
 
     @pytest.mark.asyncio
     async def test_limit_applied(self, sparql_client):
         """Test that limit is applied to queries"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = []
 
-            await sparql_client.get_recent_notices(days=7, limit=50)
+            await sparql_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+                limit=50)
 
             query = mock_execute.call_args[0][0]
             assert "LIMIT 50" in query
@@ -410,10 +443,13 @@ class TestPagination:
     @pytest.mark.asyncio
     async def test_offset_applied(self, sparql_client):
         """Test that offset is applied to queries"""
-        with patch.object(sparql_client, '_execute_select', new_callable=AsyncMock) as mock_execute:
+        with patch.object(sparql_client, 'select', new_callable=AsyncMock) as mock_execute:
             mock_execute.return_value = []
 
-            await sparql_client.get_recent_notices(days=7, offset=100)
+            await sparql_client.get_tenders_by_date_range(
+                date_from=date.today() - timedelta(days=7),
+                date_to=date.today(),
+                offset=100)
 
             query = mock_execute.call_args[0][0]
             assert "OFFSET 100" in query

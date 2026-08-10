@@ -96,7 +96,12 @@ TENDER_INTENT_PATTERNS = {
     ],
     'checklist': [
         r'documents?\s+(?:needed|required)\s+(?:for|to)',
-        r'what\s+(?:documents?|do\s+i\s+need)\s+(?:for|to)',
+        # "what documents do I need for this tender" put "do i need" between
+        # "documents" and "for", so the old alternation could never match it:
+        # it required (documents|do i need) to be followed IMMEDIATELY by
+        # for/to. Split into two patterns that each describe one phrasing.
+        r'what\s+documents?\s+(?:do\s+i\s+)?(?:need|require)',
+        r'what\s+do\s+i\s+need\s+(?:for|to)',
         r'espd\s+(?:checklist|requirements?|documents?)',
         r'bid\s+(?:preparation|documents?|checklist)',
         r'tender\s+requirements?',
@@ -246,10 +251,18 @@ class TenderContextProvider:
         # also matches "deicing", and "life" matches "lifetime".
         funding_tokens = r'\b(?:eic|eit|cordis|sedia|ipa|ndici|interreg|cef|cerv|life|amif|isf|eu4health)\b'
 
+        # A TED publication number is itself a tender keyword. It was only
+        # looked for AFTER this gate, so "Details for 123/2024" -- which
+        # contains no procurement vocabulary at all -- was rejected outright and
+        # the extraction below never ran. Three digits minimum and a plausible
+        # year, so ordinary dates like "10/2024" do not qualify.
+        pub_match = re.search(r'\b(\d{3,6})[-/]((?:19|20)\d{2})\b', query)
+
         has_tender_keyword = (
             any(kw in query_lower for kw in tender_keywords)
             or any(kw in query_lower for kw in funding_phrases)
             or re.search(funding_tokens, query_lower) is not None
+            or pub_match is not None
         )
 
         if not has_tender_keyword:
@@ -259,24 +272,46 @@ class TenderContextProvider:
                 confidence=0.0
             )
 
-        # Detect intent type
+        # Detect intent type.
+        #
+        # Confidence used to be len(pattern)/100, which ranks by how verbosely a
+        # regex happens to be written rather than by how much of the question it
+        # explains. "New tenders for me this week" lost to a search pattern
+        # because that pattern's SOURCE was longer, not because it fitted
+        # better. Score on the span matched in the QUERY, and break ties by
+        # specificity: an explicit ask ("my matched tenders", "what documents do
+        # I need") beats the generic search and help catch-alls.
+        _INTENT_PRIORITY = {
+            'explain': 6, 'checklist': 5, 'match': 4,
+            'funding': 3, 'compare': 2, 'search': 1, 'help': 0,
+        }
         detected_type = 'help'  # Default
         max_confidence = 0.0
+        best_rank = (-1.0, -1)   # (matched span, priority)
 
         for intent_type, patterns in TENDER_INTENT_PATTERNS.items():
             for pattern in patterns:
-                if re.search(pattern, query_lower):
-                    # Calculate confidence based on pattern specificity
-                    pattern_len = len(pattern)
-                    confidence = min(0.95, 0.5 + (pattern_len / 100))
+                found = re.search(pattern, query_lower)
+                if not found:
+                    continue
+                span = len(found.group(0))
+                rank = (float(span), _INTENT_PRIORITY.get(intent_type, 0))
+                if rank > best_rank:
+                    best_rank = rank
+                    detected_type = intent_type
+                    # A longer, more specific hit is a more confident read, but
+                    # never certainty: 0.95 stays reserved for an explicit
+                    # publication number below.
+                    max_confidence = min(0.9, 0.55 + span / 60)
 
-                    if confidence > max_confidence:
-                        max_confidence = confidence
-                        detected_type = intent_type
+        # A query that cleared the keyword gate is a tender query even when no
+        # pattern describes it; it just lands on 'help'. Reporting 0.0 for
+        # something we accepted is a contradiction the caller cannot act on.
+        if max_confidence == 0.0:
+            max_confidence = 0.5
 
-        # Extract publication number if present
+        # Extract publication number if present (matched above, before the gate)
         publication_number = None
-        pub_match = re.search(r'(\d{1,6})[-/](\d{4})', query)
         if pub_match:
             publication_number = f"{pub_match.group(1)}-{pub_match.group(2)}"
             detected_type = 'explain'
@@ -495,24 +530,29 @@ class TenderContextProvider:
                 f"WHERE {' AND '.join(where)} "
                 "ORDER BY deadline ASC NULLS LAST LIMIT :lim"
             ), params).fetchall()
-        except Exception as exc:
-            logger.warning("funding-call context fetch failed: %s", exc)
-            db.rollback()
-            return []
-        return [
-            {
-                "topic_id": r.topic_id,
+            return [
+                {
+                    "topic_id": r.topic_id,
                 "title": r.title,
                 "description": (r.description or "")[:300] or None,
                 "status": r.status,
                 "deadline": r.deadline.isoformat() if r.deadline else None,
                 "budget": float(r.indicative_budget) if r.indicative_budget else None,
                 "currency": r.budget_currency or "EUR",
-                "programme": r.framework_programme,
-                "source_url": r.source_url,
-            }
-            for r in rows
-        ]
+                    "programme": r.framework_programme,
+                    "source_url": r.source_url,
+                }
+                for r in rows
+            ]
+        except Exception as exc:
+            # Fail soft: the caller renders a "none on file" block, which is a
+            # safe answer. Raising here would take the whole chat turn down.
+            logger.warning("funding-call context fetch failed: %s", exc)
+            try:
+                db.rollback()
+            except Exception:
+                pass
+            return []
 
     def _fetch_agency_opportunities(self, db, keywords: List[str], limit: int) -> List[Dict[str, Any]]:
         """Open procurement run by decentralised EU bodies (economy_items)."""
@@ -535,21 +575,24 @@ class TenderContextProvider:
                 f"WHERE {' AND '.join(where)} "
                 "ORDER BY document_date ASC NULLS LAST LIMIT :lim"
             ), params).fetchall()
-        except Exception as exc:
-            logger.warning("agency-opportunity context fetch failed: %s", exc)
-            db.rollback()
-            return []
-        return [
-            {
-                "body": (r.body_code or "").upper(),
+            return [
+                {
+                    "body": (r.body_code or "").upper(),
                 "kind": r.item_type,
                 "title": r.title,
                 "summary": (r.summary or "")[:300] or None,
-                "deadline": r.document_date.isoformat() if r.document_date else None,
-                "source_url": r.public_url,
-            }
-            for r in rows
-        ]
+                    "deadline": r.document_date.isoformat() if r.document_date else None,
+                    "source_url": r.public_url,
+                }
+                for r in rows
+            ]
+        except Exception as exc:
+            logger.warning("agency-opportunity context fetch failed: %s", exc)
+            try:
+                db.rollback()
+            except Exception:
+                pass
+            return []
 
     @staticmethod
     def _context_keywords(intent: TenderIntent) -> List[str]:

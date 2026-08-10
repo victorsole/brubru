@@ -35,6 +35,11 @@ class QueryCache:
         """
         self._cache: Dict[str, Dict[str, Any]] = {}
         self.default_ttl = default_ttl
+        # Hit/miss counters. stats() reported how many entries the cache held
+        # but never whether anything was READ from it, which is the only number
+        # that says whether caching is earning its keep.
+        self._hits = 0
+        self._misses = 0
 
     def _make_key(self, query: str) -> str:
         """Generate cache key from query string."""
@@ -47,10 +52,12 @@ class QueryCache:
             entry = self._cache[key]
             if datetime.utcnow() < entry["expires_at"]:
                 logger.debug(f"Cache hit for query key {key[:8]}...")
+                self._hits += 1
                 return entry["data"]
             else:
                 # Expired, remove it
                 del self._cache[key]
+        self._misses += 1
         return None
 
     def set(self, query: str, data: Any, ttl: Optional[int] = None) -> None:
@@ -72,16 +79,23 @@ class QueryCache:
                 del self._cache[key]
         else:
             self._cache.clear()
+            self._hits = 0
+            self._misses = 0
             logger.info("SPARQL cache cleared")
 
     def stats(self) -> Dict[str, Any]:
         """Get cache statistics."""
         now = datetime.utcnow()
         valid_entries = sum(1 for e in self._cache.values() if now < e["expires_at"])
+        lookups = self._hits + self._misses
         return {
             "total_entries": len(self._cache),
+            "size": len(self._cache),          # alias, reads better at a glance
             "valid_entries": valid_entries,
-            "expired_entries": len(self._cache) - valid_entries
+            "expired_entries": len(self._cache) - valid_entries,
+            "hits": self._hits,
+            "misses": self._misses,
+            "hit_rate": round(self._hits / lookups, 3) if lookups else None,
         }
 
 
@@ -172,10 +186,21 @@ class TEDSPARQLClient(BaseSPARQLClient):
             self.cache.invalidate()
 
     def get_cache_stats(self) -> Dict[str, Any]:
-        """Get cache statistics."""
+        """Get cache statistics.
+
+        `caching_enabled` is always present. It used to appear ONLY in the
+        disabled case, so the two return shapes had no key in common and a
+        caller could not tell "caching is off" from "caching is on and empty"
+        without checking which keys existed.
+        """
         if self.cache:
-            return self.cache.stats()
-        return {"caching_enabled": False}
+            return {"caching_enabled": True, **self.cache.stats()}
+        return {
+            "caching_enabled": False,
+            "total_entries": 0,
+            "valid_entries": 0,
+            "expired_entries": 0,
+        }
 
     async def __aenter__(self):
         """Async context manager entry"""
