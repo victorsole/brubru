@@ -21,7 +21,8 @@ from models.eu_law import LawCluster, EULaw, LawRequirement, ClusterLaw
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.tracked_lens import tracked_anchors
 from models.compliance import (
-    ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction
+    ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction,
+    ComplianceWorkspace,
 )
 from models.user_document import UserDocument
 from api.auth import get_current_user
@@ -894,13 +895,65 @@ async def create_compliance_analysis(
                     detail=f"Failed to save document: {uploaded_file.filename}"
                 )
 
+        # One durable workspace per (user, cluster). Runs, uploads and
+        # remediation state all hang off it, so a second analysis of the same
+        # package continues the first rather than starting from nothing.
+        workspace = (
+            db.query(ComplianceWorkspace)
+            .filter(ComplianceWorkspace.user_id == current_user.id,
+                    ComplianceWorkspace.cluster_id == cluster_id)
+            .first()
+        )
+        if not workspace:
+            workspace = ComplianceWorkspace(
+                user_id=current_user.id, cluster_id=cluster_id, name=cluster.name)
+            db.add(workspace)
+            db.flush()
+
+        # Persist the uploads. They used to live only in /tmp: read once,
+        # deleted, and `document_ids` was ARRAY(Integer) against a UUID primary
+        # key so nothing was ever recorded. A run was therefore unreproducible
+        # and unauditable -- you could not answer "what did we actually check?"
+        # a week later. Store the EXTRACTED TEXT, which is what the analyser
+        # reads, rather than the original blob.
+        from services.compliance.document_processor import DocumentProcessor
+        processor = DocumentProcessor()
+        document_uuids = []
+        for path, uploaded in zip(document_paths, documents):
+            # SAVEPOINT per document. A plain try/except is not enough: a failed
+            # flush poisons the whole Session, so the analysis INSERT that
+            # follows fails too and the entire run dies over a provenance
+            # record. Found exactly that way -- document_type 'compliance_upload'
+            # violated the user_documents CHECK constraint, which permits only
+            # amendment / analysis / strategy / note / uploaded, and took the
+            # run with it.
+            try:
+                with db.begin_nested():
+                    extracted = processor.process_document(path)
+                    doc = UserDocument(
+                        user_id=current_user.id,
+                        document_type='uploaded',
+                        title=(uploaded.filename or 'Uploaded document')[:500],
+                        content=extracted.get('text') or '',
+                        original_filename=(uploaded.filename or None),
+                        include_in_ai_context=False,
+                    )
+                    db.add(doc)
+                    db.flush()
+                document_uuids.append(doc.id)
+            except Exception as exc:  # noqa: BLE001
+                # The document is still analysed from /tmp; we simply cannot
+                # store it. Never fail the run over provenance.
+                logger.warning(f"Could not persist upload {uploaded.filename}: {exc}")
+
         # Create analysis in processing state
         analysis = ComplianceAnalysis(
             user_id=current_user.id,
             cluster_id=cluster_id,
+            workspace_id=workspace.id,
             analysis_name=analysis_name or f"{cluster.name} Analysis",
             status='processing',
-            document_ids=document_ids if document_ids else None,
+            document_uuids=document_uuids or None,
             started_at=datetime.utcnow()
         )
 
@@ -1207,6 +1260,184 @@ async def get_user_analysis_history(
             detail="Failed to retrieve analysis history"
         )
 
+
+
+
+# ============================================================================
+# WORKSPACES (durable per user + cluster) AND RUN DIFFING
+# ============================================================================
+
+@router.get(
+    "/workspaces",
+    summary="Your compliance workspaces",
+    description=(
+        "**What it does**\n\n"
+        "Lists the compliance packages you have worked on, with the number of "
+        "runs, the latest score, when it last ran, and how many obligations you "
+        "have triaged. This is the durable object: a second analysis of the same "
+        "package continues the first rather than starting over.\n\n"
+        "**When to use it**\n\n"
+        "The landing view of EU Law Comply for a returning user.\n\n"
+        "**Input**\n\nBearer JWT. No parameters.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/workspaces`.\n\n"
+        "**You get back**\n\n"
+        "`workspaces` sorted by most recent activity, each with cluster_id, "
+        "name, run_count, last_run_at, latest_score, open_actions. Empty list "
+        "for a new user."
+    ),
+)
+def list_workspaces(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    rows = db.execute(text("""
+        SELECT w.id, w.cluster_id, w.name, w.created_at,
+               (SELECT count(*) FROM compliance_analyses a WHERE a.workspace_id = w.id) AS run_count,
+               (SELECT max(a.started_at) FROM compliance_analyses a WHERE a.workspace_id = w.id) AS last_run_at,
+               (SELECT a.compliance_score FROM compliance_analyses a
+                 WHERE a.workspace_id = w.id AND a.status = 'completed'
+                 ORDER BY a.started_at DESC LIMIT 1) AS latest_score,
+               (SELECT count(*) FROM compliance_actions ca
+                 WHERE ca.user_id = w.user_id AND ca.cluster_id = w.cluster_id
+                   AND ca.status IN ('pending','in_progress')) AS open_actions
+          FROM compliance_workspaces w
+         WHERE w.user_id = :uid
+         ORDER BY last_run_at DESC NULLS LAST, w.created_at DESC
+    """), {"uid": str(current_user.id)}).mappings().all()
+
+    return {"workspaces": [{
+        "id": r["id"],
+        "cluster_id": r["cluster_id"],
+        "name": r["name"],
+        "run_count": r["run_count"],
+        "last_run_at": r["last_run_at"].isoformat() if r["last_run_at"] else None,
+        "latest_score": float(r["latest_score"]) if r["latest_score"] is not None else None,
+        "open_actions": r["open_actions"],
+    } for r in rows], "count": len(rows)}
+
+
+@router.get(
+    "/analysis/{analysis_id}/diff",
+    summary="What changed since the previous run of this package",
+    description=(
+        "**What it does**\n\n"
+        "Compares a completed analysis against the previous completed run in the "
+        "same workspace, obligation by obligation, and reports what improved, "
+        "what regressed and what is unchanged. This is what makes re-running "
+        "worth doing.\n\n"
+        "**When to use it**\n\n"
+        "After a re-run against an updated document set.\n\n"
+        "**Input**\n\nPath: `analysis_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/analysis/8/diff`.\n\n"
+        "**You get back**\n\n"
+        "`improved`, `regressed`, `reclassified` and `unchanged` counts plus the "
+        "per-obligation detail, and `score_delta`. Movement into or out of "
+        "not_applicable is reported as reclassified, not as an improvement: "
+        "nothing was remediated, the scope was reassessed. When there is no earlier "
+        "run, `comparable: false` and an explanation, never a fabricated "
+        "baseline."
+    ),
+)
+def get_analysis_diff(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    current = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.id == analysis_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not current:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    previous = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.user_id == current_user.id,
+                ComplianceAnalysis.cluster_id == current.cluster_id,
+                ComplianceAnalysis.id != current.id,
+                ComplianceAnalysis.status == 'completed',
+                ComplianceAnalysis.started_at < current.started_at)
+        .order_by(ComplianceAnalysis.started_at.desc())
+        .first()
+    )
+    if not previous:
+        return {
+            "comparable": False,
+            "reason": "This is the first completed run of this package, so there is "
+                      "nothing to compare it against.",
+            "analysis_id": analysis_id,
+        }
+
+    def findings_by_requirement(aid):
+        rows = (
+            db.query(GapFinding.requirement_id, GapFinding.status,
+                     LawRequirement.article, LawRequirement.requirement_text)
+            .join(LawRequirement, LawRequirement.id == GapFinding.requirement_id)
+            .filter(GapFinding.analysis_id == aid)
+            .all()
+        )
+        return {r[0]: {"status": r[1], "article": r[2], "text": r[3]} for r in rows}
+
+    now_map, then_map = findings_by_requirement(current.id), findings_by_requirement(previous.id)
+
+    # gap < partial < met is a compliance scale. not_applicable is NOT on it:
+    # it says the obligation does not bind this company at all. Ranking it
+    # between partial and met made "partial -> not_applicable" read as an
+    # improvement, which flatters the report -- nothing was remediated, the
+    # scope was reassessed. Transitions into or out of not_applicable are
+    # reported separately as reclassified.
+    RANK = {"gap": 0, "partial": 1, "met": 2}
+    improved, regressed, reclassified, unchanged = [], [], [], 0
+    for req_id, now in now_map.items():
+        then = then_map.get(req_id)
+        if not then:
+            continue                      # not analysed last time: not a change
+        if then["status"] == now["status"]:
+            unchanged += 1
+            continue
+        entry = {
+            "requirement_id": req_id,
+            "article": now["article"],
+            "requirement_text": (now["text"] or "")[:300],
+            "from": then["status"],
+            "to": now["status"],
+        }
+        a, b = RANK.get(then["status"]), RANK.get(now["status"])
+        if a is None or b is None:
+            reclassified.append(entry)
+        elif b > a:
+            improved.append(entry)
+        else:
+            regressed.append(entry)
+
+    delta = None
+    if current.compliance_score is not None and previous.compliance_score is not None:
+        delta = round(float(current.compliance_score) - float(previous.compliance_score), 2)
+
+    return {
+        "comparable": True,
+        "analysis_id": current.id,
+        "compared_with": {
+            "analysis_id": previous.id,
+            "ran_at": previous.started_at.isoformat() if previous.started_at else None,
+            "score": float(previous.compliance_score) if previous.compliance_score is not None else None,
+        },
+        "score_delta": delta,
+        "counts": {
+            "improved": len(improved),
+            "regressed": len(regressed),
+            "reclassified": len(reclassified),
+            "unchanged": unchanged,
+            "not_in_previous_run": (len(now_map) - len(improved) - len(regressed)
+                                    - len(reclassified) - unchanged),
+        },
+        "improved": improved,
+        "regressed": regressed,
+        "reclassified": reclassified,
+    }
 
 
 # ============================================================================

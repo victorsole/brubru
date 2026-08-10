@@ -19,6 +19,39 @@ from sqlalchemy.orm import relationship
 from core.database import Base
 
 
+class ComplianceWorkspace(Base):
+    """A durable compliance workspace: one per (user, cluster).
+
+    The unit of work used to be a disposable analysis -- documents to /tmp,
+    read once, deleted, nothing accumulating and so no reason to return. This
+    is the object runs, uploads and remediation state hang off (migration 209).
+    """
+
+    __tablename__ = "compliance_workspaces"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id', ondelete='CASCADE'),
+                     nullable=False, index=True)
+    cluster_id = Column(Integer, ForeignKey('law_clusters.id', ondelete='CASCADE'),
+                        nullable=False)
+    name = Column(String(200))
+    created_at = Column(TIMESTAMP, server_default=func.now())
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        UniqueConstraint('user_id', 'cluster_id', name='uniq_workspace_user_cluster'),
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'cluster_id': self.cluster_id,
+            'name': self.name,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
 class ComplianceAnalysis(Base):
     """
     Compliance Analysis Session
@@ -35,7 +68,15 @@ class ComplianceAnalysis(Base):
 
     # Analysis details
     analysis_name = Column(String(200))
-    document_ids = Column(ARRAY(Integer))  # References user_documents.id
+    workspace_id = Column(Integer, ForeignKey('compliance_workspaces.id', ondelete='SET NULL'),
+                          index=True)
+    # DEAD. Declared ARRAY(Integer) against user_documents.id, which is a UUID,
+    # so it could never be populated and is NULL on every row. Superseded by
+    # document_uuids (migration 209); left in place rather than dropped so no
+    # unseen reader breaks.
+    document_ids = Column(ARRAY(Integer))
+    # The uploads this run was actually performed against.
+    document_uuids = Column(ARRAY(UUID(as_uuid=True)))
 
     # Status
     status = Column(String(50), nullable=False, default='processing', index=True)
