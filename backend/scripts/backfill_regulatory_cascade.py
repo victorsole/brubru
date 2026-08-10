@@ -181,6 +181,10 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, help="only the first N cluster laws")
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--cache", default="/tmp/cascade_discovery.json",
+                    help="reuse a previous discovery pass instead of re-querying")
+    ap.add_argument("--refresh", action="store_true",
+                    help="ignore the cache and re-query the API")
     args = ap.parse_args()
     apply = args.apply and not args.dry_run
 
@@ -193,24 +197,45 @@ def main():
     laws = cur.fetchall()
     if args.limit:
         laws = laws[:args.limit]
-    print(f"Phase A: relationships for {len(laws)} cluster laws "
-          f"({args.workers} workers)")
+    cache_path = Path(args.cache)
+    cached = None
+    if cache_path.exists() and not args.refresh:
+        try:
+            cached = json.loads(cache_path.read_text())
+            if len(cached.get("laws_scanned", [])) != len(laws):
+                cached = None      # different law set, discovery is not reusable
+        except Exception:
+            cached = None
 
-    t0 = time.time()
-    children = {}
-    with ThreadPoolExecutor(max_workers=args.workers) as ex:
-        for law, kids in zip(laws, ex.map(
-                lambda r: fetch_relationships(r["celex"], key), laws)):
-            if kids:
-                children[law["celex"]] = kids
-    n_pairs = sum(len(v) for v in children.values())
-    print(f"  {len(children)} laws returned children, {n_pairs} parent-child pairs "
-          f"({time.time()-t0:.0f}s)")
+    if cached:
+        children = cached["children"]
+        titles = cached["titles"]
+        print(f"Phases A+B: reusing cached discovery from {args.cache} "
+              f"({len(children)} laws with children, {len(titles)} titles). "
+              f"Pass --refresh to re-query.")
+    else:
+        print(f"Phase A: relationships for {len(laws)} cluster laws "
+              f"({args.workers} workers)")
+        t0 = time.time()
+        children = {}
+        with ThreadPoolExecutor(max_workers=args.workers) as ex:
+            for law, kids in zip(laws, ex.map(
+                    lambda r: fetch_relationships(r["celex"], key), laws)):
+                if kids:
+                    children[law["celex"]] = kids
+        n_pairs = sum(len(v) for v in children.values())
+        print(f"  {len(children)} laws returned children, {n_pairs} parent-child pairs "
+              f"({time.time()-t0:.0f}s)")
 
-    all_children = {c for v in children.values() for c in v}
-    print(f"\nPhase B: titles for {len(all_children)} distinct acts")
-    titles = fetch_titles(all_children)
-    print(f"  resolved {len(titles)}/{len(all_children)}")
+        all_children = {c for v in children.values() for c in v}
+        print(f"\nPhase B: titles for {len(all_children)} distinct acts")
+        titles = fetch_titles(all_children)
+        print(f"  resolved {len(titles)}/{len(all_children)}")
+        # Discovery costs ~6 minutes of API time; cache it so classification
+        # can be re-tuned without paying for it again.
+        cache_path.write_text(json.dumps({
+            "laws_scanned": [r["celex"] for r in laws],
+            "children": children, "titles": titles}))
 
     print("\nPhase C: classification")
     kept, excluded = [], Counter()
@@ -232,9 +257,22 @@ def main():
     for p, c, t, at, st in kept[:6]:
         print(f"    {p} -> {c} [{at}] {(t or '')[:66]}")
 
-    cur.execute("SELECT celex, parent_celex FROM secondary_acts WHERE celex IS NOT NULL")
-    existing = {(r["celex"], r["parent_celex"]) for r in cur.fetchall()}
-    new = [k for k in kept if (k[1], k[0]) not in existing]
+    # secondary_acts.reference is UNIQUE, so the table holds ONE row per act
+    # regardless of how many parents it derives from -- and derived acts
+    # routinely cite several. Deduping on (celex, parent_celex), as the first
+    # version did, therefore passed rows the database then rejected:
+    # "duplicate key value violates unique constraint secondary_acts_reference_key".
+    # Dedupe on the reference, both against what is stored and within this
+    # batch, and keep the first parent seen.
+    cur.execute("SELECT reference FROM secondary_acts")
+    existing = {r["reference"] for r in cur.fetchall()}
+    new, seen = [], set()
+    for k in kept:
+        ref = k[1]
+        if ref in existing or ref in seen:
+            continue
+        seen.add(ref)
+        new.append(k)
     print(f"\n  already recorded: {len(kept)-len(new)}   to insert: {len(new)}")
 
     if not apply:
@@ -248,7 +286,8 @@ def main():
             """INSERT INTO secondary_acts
                    (id, act_type, reference, title, parent_celex, status, celex,
                     source_url, first_seen, last_updated, description)
-               VALUES (gen_random_uuid(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+               VALUES (gen_random_uuid(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+               ON CONFLICT (reference) DO NOTHING""",
             (act_type, child, (title or child)[:2000], parent, status, child,
              f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{child}",
              now, now,
