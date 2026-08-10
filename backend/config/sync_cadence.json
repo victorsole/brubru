@@ -421,7 +421,7 @@
       "source": "Funding & Tenders Portal (tenders track) — SEDIA search API returns CFT (Call for Tenders) rows alongside topic-call rows",
       "script": "scripts/ingest_funding_sedia.py (CFT rows ingest into funding_opportunities) + scripts/backfill_tenders_description.py (TED notices into tenders)",
       "tier": "daily",
-      "notes": "ft_calls_for_tenders table has no dedicated writer (the 386 frozen rows are a 31 Dec 2025 one-off seed). CFT rows from SEDIA (e.g. EIC Corporate Partnership Programme 4.0) currently land in funding_opportunities with topic_id ending in '-CN'. Follow-up: split into ft_calls_for_tenders with the CFT-specific schema (contractType, awardMethod, cftDocuments)."
+      "notes": "Resolved 10 Aug 2026. ingest_funding_sedia.py --write-ft now routes on the '-CN' identifier suffix: calls for tenders go to ft_calls_for_tenders, calls for proposals to ft_calls_for_proposals. Before that the CFT rows landed in funding_opportunities only, ft_calls_for_tenders held nothing but a 31 Dec 2025 seed in which every row had closed, and the Tenderator's 'Calls for tenders' chip could only ever render an empty list."
     },
     {
       "path_prefix": "/api/v1/funded-projects",

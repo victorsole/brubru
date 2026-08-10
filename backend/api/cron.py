@@ -585,10 +585,14 @@ async def cron_sync_daily(
     # — Horizon, EIC, EIE, CEF, Digital Europe, Erasmus+, CREA, CERV, EU4Health.
     # Pulled from SEDIA search API; idempotent upsert on topic_id / call_id.
     # Closes the 33-day ingest gap surfaced 30 June 2026 (last batch 27 May).
+    # --write-ft is load-bearing. Without it this writes funding_opportunities
+    # ONLY, and the Tenderator's unified feed reads ft_calls_for_proposals --
+    # so the daily job refreshed a table no Tenderator surface queries while
+    # the one it does query sat untouched since 15 Jun 2026.
     results["ft_funding_opportunities"] = await _run_script_async(
         "ft_funding_opportunities",
         "scripts/ingest_funding_sedia.py",
-        ["--apply", "--limit", "500"], timeout=900,
+        ["--apply", "--limit", "500", "--write-ft"], timeout=900,
     )
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang

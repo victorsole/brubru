@@ -40,6 +40,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import sys
 import time
@@ -71,6 +72,23 @@ STATUS_MAP = {
 
 
 def get_env(key: str) -> str:
+    """Config value from the real environment first, then a local .env file.
+
+    The os.environ branch is the whole point. This function used to read the
+    repo-root .env and nothing else, and Railway has no .env file -- config
+    arrives as environment variables. So under cron every script using this
+    helper got "" for DATABASE_URL, printed "[FATAL] DATABASE_URL missing" and
+    exited 1, which _run_script logged as a failure and moved past. The three
+    SEDIA-backed daily jobs (this one, ingest_ft_news_events,
+    ingest_ft_programme_calls) had therefore never written a row in production:
+    funding_opportunities stopped at 29 Jun 2026 and the ftportal news/events
+    rows at 14 Jun, both dates of the last manual run from a laptop.
+
+    Local .env stays as the fallback so the scripts still run from a checkout.
+    """
+    from_environ = os.environ.get(key)
+    if from_environ:
+        return from_environ.strip()
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():
@@ -210,9 +228,78 @@ def upsert(cur, row: Dict[str, Any]) -> None:
             type_of_action = EXCLUDED.type_of_action,
             deadline = EXCLUDED.deadline,
             keywords = EXCLUDED.keywords,
+            -- scraped_at on the conflict path too, so "when did we last SEE
+            -- this call" is answerable. Without it scraped_at only ever
+            -- recorded a topic's first sighting, so the table looked frozen
+            -- whether the job was healthy or dead and there was no way to
+            -- tell the two apart from the data.
+            scraped_at = NOW(),
             last_updated = NOW()
         """,
         row,
+    )
+
+
+def is_call_for_tenders(row: Dict[str, Any]) -> bool:
+    """True when a SEDIA row is a call for TENDERS, not a call for proposals.
+
+    SEDIA returns both through the same search index. Calls for tenders carry a
+    UUID identifier suffixed "-CN" (contract notice) rather than a programme
+    topic id like HORIZON-EIC-2026-ACCELERATOR-01. That suffix is the only
+    reliable discriminator in the payload.
+    """
+    return str(row.get("topic_id") or "").endswith("-CN")
+
+
+def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
+    """Write a SEDIA call-for-tenders row into ft_calls_for_tenders.
+
+    This table is what the Tenderator's "Calls for tenders" chip reads, and it
+    had no writer at all: its 386 rows were a one-off seed from 31 Dec 2025 and
+    every one had closed, so the chip could only ever render an empty list. The
+    calls themselves were arriving on every run and being filed into
+    ft_calls_for_proposals, which is the wrong table and the wrong shape.
+    """
+    payload = {
+        "tender_reference": row["topic_id"],
+        "title": row.get("title") or row["topic_id"],
+        "description": row.get("description"),
+        "status": row.get("status"),
+        "deadline": row.get("deadline"),
+        "contracting_authority": row.get("programme"),
+        "contract_type": row.get("type_of_action"),
+        "estimated_value": row.get("indicative_budget"),
+        "value_currency": row.get("budget_currency"),
+        # source_url is NOT NULL; the portal URL is always derivable.
+        "source_url": row.get("source_url") or "",
+        "documents_url": row.get("documents_url"),
+        "published_at": row.get("published_at"),
+    }
+    cur.execute(
+        """
+        INSERT INTO ft_calls_for_tenders
+            (tender_reference, title, description, status, deadline,
+             contracting_authority, contract_type, estimated_value,
+             value_currency, source_url, documents_url, published_at,
+             is_test, scraped_at, last_updated)
+        VALUES (%(tender_reference)s, %(title)s, %(description)s, %(status)s,
+                %(deadline)s, %(contracting_authority)s, %(contract_type)s,
+                %(estimated_value)s, %(value_currency)s, %(source_url)s,
+                %(documents_url)s, %(published_at)s, FALSE, NOW(), NOW())
+        ON CONFLICT (tender_reference) DO UPDATE SET
+            title = EXCLUDED.title,
+            description = EXCLUDED.description,
+            status = EXCLUDED.status,
+            deadline = EXCLUDED.deadline,
+            contracting_authority = EXCLUDED.contracting_authority,
+            contract_type = EXCLUDED.contract_type,
+            estimated_value = EXCLUDED.estimated_value,
+            value_currency = EXCLUDED.value_currency,
+            documents_url = EXCLUDED.documents_url,
+            scraped_at = NOW(),
+            last_updated = NOW()
+        """,
+        payload,
     )
 
 
@@ -246,6 +333,12 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             type_of_action = EXCLUDED.type_of_action,
             deadline = EXCLUDED.deadline,
             keywords = EXCLUDED.keywords,
+            -- scraped_at on the conflict path too, so "when did we last SEE
+            -- this call" is answerable. Without it scraped_at only ever
+            -- recorded a topic's first sighting, so the table looked frozen
+            -- whether the job was healthy or dead and there was no way to
+            -- tell the two apart from the data.
+            scraped_at = NOW(),
             last_updated = NOW()
         """,
         payload,
@@ -348,7 +441,14 @@ def main():
                     try:
                         upsert(cur, row)
                         if args.write_ft:
-                            upsert_ft_calls(cur, row)
+                            # Calls for tenders and calls for proposals arrive
+                            # through one SEDIA index but are different things
+                            # to a bidder, and the Tenderator reads them from
+                            # different tables. Route on the -CN suffix.
+                            if is_call_for_tenders(row):
+                                upsert_ft_tenders(cur, row)
+                            else:
+                                upsert_ft_calls(cur, row)
                         rows_written += 1
                     except Exception as exc:  # noqa: BLE001
                         print(f"    [DB ERR] {exc}")
