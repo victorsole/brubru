@@ -12,6 +12,7 @@ import uuid
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -85,7 +86,17 @@ def register_v1_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def _validation_exc_handler(request: Request, exc: RequestValidationError):
         if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
-            return JSONResponse(status_code=422, content={"detail": exc.errors()})
+            # exc.errors() carries the offending INPUT, and on a multipart
+            # endpoint that input is an UploadFile, which json cannot encode.
+            # The handler then raised inside itself and the caller got an opaque
+            # 500 with no field named, on every validation error of every
+            # file-upload route in the legacy app. Drop the input; the location
+            # and the message are what a caller can act on.
+            safe = [
+                {k: v for k, v in err.items() if k not in ("input", "ctx")}
+                for err in exc.errors()
+            ]
+            return JSONResponse(status_code=422, content={"detail": jsonable_encoder(safe)})
         rid = _request_id(request)
         first = exc.errors()[0] if exc.errors() else {}
         field = ".".join(str(p) for p in first.get("loc", []) if p not in ("query", "body", "path"))

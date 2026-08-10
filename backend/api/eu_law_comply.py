@@ -29,6 +29,7 @@ from models.user_document import UserDocument
 from api.auth import get_current_user
 from services.compliance import GapAnalyzer
 from services.compliance.report_exporter import ReportExporter
+from services.compliance.review_profile import validate_profile
 
 logger = logging.getLogger(__name__)
 
@@ -131,8 +132,23 @@ async def run_compliance_analysis_task(
 
         logger.info(f"Found {len(requirements)} requirements to check")
 
+        # The package's declared review table, if it has one. Only the
+        # `extracted` columns reach the analyser: each adds a field the model
+        # must read out of the obligation and store on the finding.
+        cluster_row = db.query(LawCluster).filter(LawCluster.id == cluster_id).first()
+        profile = cluster_row.review_profile if cluster_row else None
+        problems = validate_profile(profile)
+        if problems:
+            # A malformed profile must not silently reshape a run. Fall back to
+            # the default table and say so, rather than asking the model for
+            # fields nobody can render.
+            logger.warning(
+                f"Cluster {cluster_id} has an invalid review_profile, using the "
+                f"default columns instead: {problems}")
+            profile = None
+
         # Run gap analysis
-        analyzer = GapAnalyzer(db)
+        analyzer = GapAnalyzer(db, review_profile=profile)
         await analyzer.analyze_compliance(analysis_id, requirements, document_paths)
 
         logger.info(f"Compliance analysis {analysis_id} completed successfully")
@@ -881,7 +897,14 @@ async def get_law_by_celex(
 @router.post("/analyze")
 async def create_compliance_analysis(
     cluster_id: int = Form(...),
-    documents: Optional[List[UploadFile]] = File(None),
+    # `List[UploadFile] = File(default=[])`, NOT `Optional[List[UploadFile]] =
+    # File(None)`. The Optional form made the field nullable in the generated
+    # pydantic model, and a multipart body carrying one file then failed
+    # validation with "Input should be a valid list" -- so making uploads
+    # optional for the re-use feature broke the ordinary single-file upload,
+    # which is the main action of the whole product. An empty default keeps the
+    # field a list that may be empty.
+    documents: List[UploadFile] = File(default=[]),
     # UUIDs of user_documents from an earlier run of this package, comma
     # separated. Migration 209 started storing the extracted text of every
     # upload, but nothing could read it back, so each run began at an empty
@@ -1194,7 +1217,10 @@ async def get_analysis_results(
                 # The cluster preview already showed it; the results did not.
                 'addressee': (requirement.extra_metadata or {}).get('addressee') or 'economic_operator',
                 'deadline_date': requirement.deadline.isoformat() if requirement.deadline else None,
-                'deadline_text': None  # TODO: Add deadline_text to LawRequirement model
+                'deadline_text': None,  # TODO: Add deadline_text to LawRequirement model
+                # Values for the package's declared extracted columns, keyed by
+                # column id. Empty for the default review table.
+                'extra_fields': finding.extra_fields or {},
             })
 
         return {
@@ -1213,6 +1239,11 @@ async def get_analysis_results(
             # Migration 209 gave a run a durable home and a record of the
             # documents it was actually performed against. Both were persisted
             # but neither was serialised, so no client could reach them.
+            # The review table this package declared, so the client renders the
+            # columns the analysis was actually performed against rather than
+            # assuming the default eight.
+            'review_profile': (cluster.review_profile
+                               if cluster and cluster.review_profile else None),
             'workspace_id': analysis.workspace_id,
             'document_uuids': [str(u) for u in (analysis.document_uuids or [])],
             'gap_findings': findings,
