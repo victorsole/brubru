@@ -254,6 +254,7 @@ class TEDClient(BaseAPIClient):
         countries: Optional[List[str]] = None,
         max_value: float = 5_000_000,  # €5M default SME threshold
         min_deadline_days: int = 30,
+        published_since_days: Optional[int] = None,
         page: int = 1,
         page_size: int = 100
     ) -> Dict[str, Any]:
@@ -264,13 +265,20 @@ class TEDClient(BaseAPIClient):
         - Open procedures only (most accessible)
         - Value under threshold
         - Deadline at least N days away
-        - Exclude framework agreements
+        - Published within the last N days, when `published_since_days` is set
 
         Args:
             cpv_codes: Sector CPV codes
             countries: Target countries
             max_value: Maximum contract value in EUR
             min_deadline_days: Minimum days until deadline
+            published_since_days: Only notices published in the last N days.
+                Without it this method filters on deadline alone, so every run
+                returns the same still-open backlog (sorted by soonest
+                deadline) and a scheduled job re-reads notices it already has.
+                A daily ingest wants the publication window; an ad-hoc "what
+                can I still bid on" search wants the deadline sort. Both are
+                reachable, the caller picks.
             page: Page number
             page_size: Results per page
 
@@ -278,6 +286,11 @@ class TEDClient(BaseAPIClient):
             Search results with SME-friendly notices
         """
         deadline_from = date.today() + timedelta(days=min_deadline_days)
+        publication_date_from = (
+            date.today() - timedelta(days=published_since_days)
+            if published_since_days
+            else None
+        )
 
         return await self.search_notices(
             cpv_codes=cpv_codes,
@@ -285,9 +298,12 @@ class TEDClient(BaseAPIClient):
             procedure_types=[ProcedureType.OPEN],  # Most accessible for SMEs
             notice_types=[NoticeType.COMPETITION],  # Active tenders only
             deadline_from=deadline_from,
+            publication_date_from=publication_date_from,
             max_value=max_value,
-            sort_by=SortField.DEADLINE,
-            sort_order="asc",  # Soonest deadlines first
+            # Newest first when we are sweeping a publication window, soonest
+            # deadline first when we are not.
+            sort_by=SortField.PUBLICATION_DATE if publication_date_from else SortField.DEADLINE,
+            sort_order="desc" if publication_date_from else "asc",
             page=page,
             page_size=page_size
         )

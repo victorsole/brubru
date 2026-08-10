@@ -30,9 +30,26 @@ from .ted_client import TEDClient, NoticeType, ProcedureType
 from .ted_sparql_client import TEDSPARQLClient
 from .eforms_parser import EFormsParser
 from .sme_scorer import SMEScorer, SMEProfile, SMECategory
+from .country_codes import normalise_country
 from models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
 
 logger = logging.getLogger(__name__)
+
+# Fields `fetch_and_parse_xml` is allowed to overwrite from a re-parse. The
+# parser returns title="" for many Contract Award Notice variants whose real
+# title lives at cac:ProcurementProject/cbc:Name, and an empty string passing an
+# `is not None` check silently zeroes the search-result title that was already
+# there. Same whitelist as scripts/backfill_tender_xml_fields.py, which learned
+# this the hard way on tenders 312 and 313 (15 Jun 2026).
+_XML_SAFE_FIELDS = {
+    "procedure_type", "cpv_codes", "cpv_main", "nuts_codes",
+    "contract_nature", "estimated_value", "estimated_value_currency",
+    "contract_duration_months", "award_criteria_type", "award_criteria",
+    "selection_criteria", "exclusion_grounds", "minimum_requirements",
+    "has_lots", "lot_count", "lots", "documents_url", "submission_url",
+    "is_framework", "xml_content", "raw_json", "form_type",
+    "notice_subtype", "notice_id", "submission_deadline", "buyer_country",
+}
 
 
 class TenderService:
@@ -279,7 +296,10 @@ class TenderService:
             notice_id=notice_data.get("noticeId"),
             title=notice_data.get("title", ""),
             official_name=notice_data.get("buyerName") or notice_data.get("official_name"),
-            buyer_country=notice_data.get("countryCode") or notice_data.get("buyer_country"),
+            buyer_country=(
+                normalise_country(notice_data.get("countryCode"))
+                or normalise_country(notice_data.get("buyer_country"))
+            ),
             procedure_type=notice_data.get("procedureType"),
             cpv_main=notice_data.get("cpvCode"),
             publication_date=self._parse_date(notice_data.get("publicationDate")),
@@ -291,10 +311,13 @@ class TenderService:
             updated_at=datetime.utcnow()
         )
 
-        # Calculate SME suitability score
+        # Calculate SME suitability score. `sme_score_breakdown` is NOT a column
+        # on Tender; assigning it set a plain Python attribute that SQLAlchemy
+        # discarded at commit, so the breakdown was computed and thrown away on
+        # every insert. The mapped column is `sme_analysis` (JSONB).
         sme_analysis = self._calculate_sme_score(notice_data)
         tender.sme_suitability_score = sme_analysis.get("sme_suitability_score")
-        tender.sme_score_breakdown = sme_analysis.get("score_breakdown")
+        tender.sme_analysis = sme_analysis
 
         return tender
 
@@ -305,6 +328,15 @@ class TenderService:
 
         if notice_data.get("deadline"):
             tender.submission_deadline = self._parse_date(notice_data["deadline"])
+
+        # Only fill a country we do not already have, and only a valid one.
+        if not tender.buyer_country:
+            fresh_country = (
+                normalise_country(notice_data.get("countryCode"))
+                or normalise_country(notice_data.get("buyer_country"))
+            )
+            if fresh_country:
+                tender.buyer_country = fresh_country
 
         tender.updated_at = datetime.utcnow()
         tender.last_synced_at = datetime.utcnow()
@@ -337,10 +369,22 @@ class TenderService:
                 tender = Tender(publication_number=publication_number)
                 self.db.add(tender)
 
-            # Update with parsed data
+            # Update with parsed data, whitelist-only. `value is not None` lets
+            # an empty string through, and the parser returns title="" for many
+            # award-notice variants, so the old loop wiped good titles on every
+            # ?fetch_xml=true call. Title and description are handled below and
+            # only ever filled, never overwritten.
             for key, value in tender_data.items():
-                if value is not None and hasattr(tender, key):
-                    setattr(tender, key, value)
+                if key not in _XML_SAFE_FIELDS or value is None:
+                    continue
+                if isinstance(value, (str, list, dict)) and len(value) == 0:
+                    continue
+                setattr(tender, key, value)
+
+            for soft_field in ("title", "description"):
+                fresh = (tender_data.get(soft_field) or "").strip()
+                if fresh and not (getattr(tender, soft_field, None) or "").strip():
+                    setattr(tender, soft_field, fresh)
 
             tender.ted_url = self._build_ted_url(publication_number)
             tender.updated_at = datetime.utcnow()
@@ -787,7 +831,7 @@ class TenderService:
 
             analysis = self.sme_scorer.get_sme_analysis(tender_data)
             tender.sme_suitability_score = analysis.get("sme_suitability_score")
-            tender.sme_score_breakdown = analysis.get("score_breakdown")
+            tender.sme_analysis = analysis          # see _create_tender
             tender.updated_at = datetime.utcnow()
             scored_count += 1
 

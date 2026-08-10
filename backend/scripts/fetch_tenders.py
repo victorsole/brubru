@@ -26,23 +26,27 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# backend/ on the path, then bare imports. This is the convention every script
+# the cron actually runs uses (sync_eu_calendar, sync_consultations,
+# auto_archive_old_items). The `backend.`-prefixed form this file used could not
+# import at all: models/__init__ imports models/user, which does
+# `from core.database import Base`, and a bare `core` needs backend/ on the
+# path. That ImportError is why the TED fetch was never scheduled.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from backend.core.database import SessionLocal, engine
-from backend.models.tender import Tender, TenderFetchJob
-from backend.services.tenders.ted_client import TEDClient
-from backend.services.tenders.eforms_parser import EFormsParser
-from backend.services.tenders.sme_scorer import SMEScorer
+from core.database import SessionLocal  # noqa: E402
+from models.tender import Tender, TenderFetchJob  # noqa: E402
+from services.tenders.ted_client import TEDClient  # noqa: E402
+from services.tenders.eforms_parser import EFormsParser  # noqa: E402
+from services.tenders.sme_scorer import SMEScorer  # noqa: E402
+from services.tenders.country_codes import normalise_country  # noqa: E402
 
-# Configure logging
+# Stream only. A FileHandler here wrote tender_fetch.log into whatever the cwd
+# was, which under cron is backend/ -- a log file nobody reads, in the repo.
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('tender_fetch.log')
-    ]
+    handlers=[logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
@@ -143,6 +147,10 @@ class TenderFetcher:
                         countries=countries,
                         max_value=self.max_value,
                         min_deadline_days=self.min_deadline_days,
+                        # `days_back` used to reach only the fetch-job record,
+                        # never the query, so every run swept the same open
+                        # backlog regardless of what the caller asked for.
+                        published_since_days=days_back,
                         page=page,
                         page_size=50  # Reduced page size to avoid rate limits
                     )
@@ -303,14 +311,12 @@ class TenderFetcher:
         else:
             title = str(ti) if ti else ""
 
-        # CY is an array of 3-letter country codes - convert to 2-letter
+        # CY is an array of 3-letter country codes. The old reverse lookup fell
+        # back to `country_3[:2]`, which turns an unmapped "CZE" into "CZ" by
+        # luck and an unmapped anything-else into two characters of nonsense
+        # bound for a varchar(2) column the matcher hard-filters on.
         cy = notice.get("CY", [])
-        country_3 = cy[0] if cy else None
-        # Reverse lookup: 3-letter to 2-letter
-        country_2 = None
-        if country_3:
-            from services.tenders.ted_client import COUNTRY_CODE_MAP
-            country_2 = next((k for k, v in COUNTRY_CODE_MAP.items() if v == country_3), country_3[:2] if len(country_3) == 3 else country_3)
+        country_2 = normalise_country(cy[0] if cy else None)
 
         # AU (buyer name) is multilingual
         au = notice.get("AU", {})
@@ -327,14 +333,20 @@ class TenderFetcher:
             title=parsed_data.get("title") or title or "",
             description=parsed_data.get("description"),
             official_name=parsed_data.get("official_name") or official_name,
-            buyer_country=parsed_data.get("buyer_country") or country_2,
+            buyer_country=normalise_country(parsed_data.get("buyer_country")) or country_2,
             procedure_type=parsed_data.get("procedure_type") or notice.get("PR") or notice.get("procedureType"),
             legal_basis=parsed_data.get("legal_basis"),
             cpv_codes=parsed_data.get("cpv_codes"),
             cpv_main=parsed_data.get("cpv_main") or cpv_main,
             nuts_codes=parsed_data.get("nuts_codes"),
             contract_nature=parsed_data.get("contract_nature"),
-            estimated_value=parsed_data.get("estimated_value") or self._extract_value(notice.get("TW")),
+            # Value comes from the XML only. `TW` was used as a fallback here,
+            # but in TED v3 TW is the buyer's TOWN, returned as a multilingual
+            # dict of place names ({"mul": ["Marburg"]}). It happens to yield
+            # None today because the values are lists, so nothing wrong was
+            # stored -- but a town whose name parses as a number would land in
+            # estimated_value, which the matcher scores on.
+            estimated_value=parsed_data.get("estimated_value"),
             estimated_value_currency=parsed_data.get("currency", "EUR"),
             publication_date=self._parse_date(notice.get("PD") or notice.get("publicationDate")),
             submission_deadline=parsed_data.get("submission_deadline") or self._parse_date(notice.get("DD") or notice.get("deadline")),
@@ -354,7 +366,9 @@ class TenderFetcher:
         # Calculate SME suitability score
         sme_analysis = self._calculate_sme_score(tender, parsed_data)
         tender.sme_suitability_score = sme_analysis.get("sme_suitability_score")
-        tender.sme_score_breakdown = sme_analysis.get("score_breakdown")
+        # `sme_score_breakdown` is not a mapped column; the breakdown was being
+        # computed and dropped at commit. `sme_analysis` (JSONB) is the column.
+        tender.sme_analysis = sme_analysis
 
         return tender
 

@@ -237,9 +237,9 @@
     {
       "path_prefix": "/api/v1/tenders",
       "source": "TED (Tenders Electronic Daily, ted.europa.eu)",
-      "script": "scripts/backfill_tenders_description.py",
+      "script": "scripts/fetch_tenders.py --days 2 --max-results 400 (ingest) + scripts/backfill_tenders_description.py (enrich) + scripts/repair_tender_country.py (country repair)",
       "tier": "daily",
-      "notes": "TED publishes daily by definition."
+      "notes": "TED publishes daily by definition. Before 10 Aug 2026 only the description backfill ran here, which is pure compute over stored XML and can never add a row -- the table went un-ingested from 3 Jan to 10 Aug 2026. fetch_tenders.py is the actual ingest against api.ted.europa.eu/v3."
     },
     {
       "path_prefix": "/api/v1/discover/cellar",

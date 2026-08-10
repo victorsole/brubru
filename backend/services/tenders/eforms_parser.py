@@ -26,6 +26,62 @@ from datetime import datetime, date
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+from .country_codes import normalise_country
+
+logger_module = logging.getLogger(__name__)
+
+# eForms writes a UTC offset onto the DATE as well as the time:
+#   <cbc:EndDate>2026-08-31+02:00</cbc:EndDate>
+#   <cbc:EndTime>10:00:00+02:00</cbc:EndTime>
+# Concatenating them gives "2026-08-31+02:00T10:00:00+02:00", which is not ISO
+# 8601 and which `datetime.fromisoformat` rejects. The old code did exactly that
+# inside a `try/except ValueError: pass`, so every eForms deadline was silently
+# dropped -- 109 of 150 notices in an 7 Aug 2026 sample arrived with no
+# submission_deadline, which removes them from the calendar, from closing-soon
+# and from the default "hide passed deadlines" feed filter.
+_DATE_OFFSET = re.compile(r"(?:Z|[+-]\d{2}:\d{2})$")
+
+
+def _json_safe(value: Any) -> Any:
+    """Recursively convert a parsed dict into something JSONB accepts."""
+    if isinstance(value, dict):
+        return {k: _json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(v) for v in value]
+    if isinstance(value, (datetime, date)):
+        return value.isoformat()
+    return value
+
+
+def _combine_eforms_datetime(date_text: str, time_text: Optional[str]) -> Optional[datetime]:
+    """Build one datetime from an eForms date + optional time.
+
+    The offset is carried by whichever part still has one, preferring the time's
+    (they agree in practice). A date with no usable time falls back to end of
+    day, which is how a procurement deadline reads when only a date is given.
+    """
+    if not date_text:
+        return None
+    raw_date = date_text.strip()
+    date_part = _DATE_OFFSET.sub("", raw_date)
+    date_offset = raw_date[len(date_part):]
+
+    raw_time = (time_text or "").strip()
+    if raw_time:
+        time_part = raw_time
+        if not _DATE_OFFSET.search(time_part) and date_offset:
+            time_part = f"{time_part}{date_offset}"
+    else:
+        time_part = f"23:59:59{date_offset}"
+
+    try:
+        return datetime.fromisoformat(f"{date_part}T{time_part}".replace("Z", "+00:00"))
+    except ValueError:
+        logger_module.warning(
+            "eForms deadline not parseable: date=%r time=%r", date_text, time_text
+        )
+        return None
+
 logger = logging.getLogger(__name__)
 
 
@@ -236,10 +292,14 @@ class EFormsParser:
                 if org_name is not None:
                     buyer["official_name"] = org_name.text.strip()
 
-                # Country
+                # Country. eForms carries the ISO alpha-3 here ("CZE"), and
+                # `tenders.buyer_country` is varchar(2), so the raw value is a
+                # DataError rather than a country. Normalise to alpha-2; an
+                # unrecognised code becomes None so the caller can fall back
+                # instead of storing something wrong.
                 country = party.find(".//cac:Country/cbc:IdentificationCode", EFORMS_NS)
-                if country is not None:
-                    buyer["buyer_country"] = country.text.strip()
+                if country is not None and country.text:
+                    buyer["buyer_country"] = normalise_country(country.text)
 
                 # Address
                 address = party.find(".//cac:PostalAddress", EFORMS_NS)
@@ -349,12 +409,10 @@ class EFormsParser:
 
         # Combine date and time
         if "submission_deadline_date" in result:
-            time_part = result.get("submission_deadline_time", "23:59:59")
-            try:
-                dt_str = f"{result['submission_deadline_date']}T{time_part}"
-                result["submission_deadline"] = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
-            except ValueError:
-                pass
+            result["submission_deadline"] = _combine_eforms_datetime(
+                result["submission_deadline_date"],
+                result.get("submission_deadline_time"),
+            )
 
         # Contract duration — tolerant of fractional values (e.g. "1.5" years).
         duration = root.find(".//cac:ProcurementProject/cac:PlannedPeriod/cbc:DurationMeasure", EFORMS_NS)
@@ -697,7 +755,12 @@ class EFormsParser:
             "submission_url": parsed.get("submission_url"),
             "is_framework": parsed.get("is_framework", False),
             "xml_content": xml_content,
-            "raw_json": parsed,
+            # `raw_json` is a JSONB column and `parsed` now carries real
+            # datetime objects (the submission deadline), which psycopg cannot
+            # serialise -- the whole row update raises TypeError. Stringify the
+            # non-JSON scalars rather than dropping them: raw_json exists so a
+            # later reader can see what the parser saw.
+            "raw_json": _json_safe(parsed),
         }
 
     def _parse_legacy(self, root: ET.Element, xml_content: str) -> Dict[str, Any]:
@@ -850,10 +913,12 @@ class EFormsParser:
             if postal_code is not None and postal_code.text:
                 result["buyer_postal_code"] = postal_code.text.strip()
 
-            # Country
+            # Country. The legacy R2.0.9 schema puts an alpha-2 in @VALUE, but
+            # run it through the same normaliser so both schemas produce one
+            # validated shape and neither can store a language code.
             country = buyer.find(".//COUNTRY")
             if country is not None:
-                country_code = country.get("VALUE")
+                country_code = normalise_country(country.get("VALUE"))
                 if country_code:
                     result["buyer_country"] = country_code
 

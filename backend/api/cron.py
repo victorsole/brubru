@@ -551,7 +551,29 @@ async def cron_sync_daily(
     results["eesc"] = await _run_script_async("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
     results["cor"] = await _run_script_async("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
     results["euagenda"] = await _run_script_async("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
+    # TED (tenders). This is the INGEST -- it fetches notices published in the
+    # last 2 days from api.ted.europa.eu and inserts the new ones. Until 10 Aug
+    # 2026 the only job named "tenders" here was the description backfill below,
+    # which is pure compute over XML already in the table: it can enrich rows but
+    # can never add one. The result was 386 rows whose newest arrival was 3 Jan
+    # 2026, so a Blue-tier user opened the Tenderator on a seven-month-old feed.
+    # 2 days rather than 1 covers a missed run without re-reading a week.
+    results["tenders_fetch"] = await _run_script_async(
+        "tenders_fetch",
+        "scripts/fetch_tenders.py",
+        ["--days", "2", "--max-results", "400"], timeout=1500,
+    )
+    # Enrichment pass over whatever is now in the table, including what the
+    # fetch just added.
     results["tenders"] = await _run_script_async("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
+    # Repair any country the ingest could not resolve from the search payload,
+    # reading each row's own stored XML. Cheap and idempotent: rows with a valid
+    # country are skipped without touching the network.
+    results["tenders_country_repair"] = await _run_script_async(
+        "tenders_country_repair",
+        "scripts/repair_tender_country.py",
+        ["--apply"], timeout=300,
+    )
     # Per-programme F&T grant calls (economy_items, item_type='grant') backing
     # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id
     # prefix; idempotent upsert on (body_code, item_type, public_url).

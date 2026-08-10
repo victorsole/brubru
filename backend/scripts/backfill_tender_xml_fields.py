@@ -57,6 +57,11 @@ SAFE_FIELDS = {
     "has_lots", "lot_count", "lots", "documents_url", "submission_url",
     "is_framework", "xml_content", "raw_json", "form_type",
     "notice_subtype", "notice_id", "submission_deadline",
+    # Added 10 Aug 2026: the parser now returns a validated alpha-2 here
+    # (it used to return the raw eForms alpha-3, three characters into a
+    # varchar(2) column), so re-parsing can repair the rows the TED SPARQL
+    # loader filled with language codes.
+    "buyer_country",
 }
 
 
