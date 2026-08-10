@@ -34,6 +34,12 @@ from playwright.sync_api import sync_playwright
 
 from ingest_funding_sedia import get_env
 
+# backend/ on the path so the shared country normaliser is importable from a
+# scripts/-relative run (same convention as the other cron scripts).
+from pathlib import Path as _Path  # noqa: E402
+sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from services.tenders.country_codes import normalise_country  # noqa: E402
+
 PORTAL = ("https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/"
           "opportunities/projects-results?order=DESC&pageNumber=1&pageSize=50&sortBy=es_SortDate")
 PROJECT_URL = ("https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/"
@@ -109,6 +115,78 @@ def _date(v) -> Optional[dt.datetime]:
         return None
 
 
+def _coordinator(participants: Any) -> Dict[str, Optional[str]]:
+    """Pull the coordinator's name, PIC and country out of SEDIA's participants.
+
+    SEDIA returns `participants` as a JSON STRING holding an array of
+    participant objects, not as structured data:
+
+        '[{"role":"coordinator","pic":910827867,
+           "legalName":"INSTITUTO NACIONAL DE ESTADISTICA",
+           "postalAddress":{...,"countryCode":{"abbreviation":"ES"}}}, ...]'
+
+    This used to be stored with `str(coordinator)[:300]`, which put the raw
+    JSON into a column called coordinator_name and cut it 300 characters in,
+    mid-string. All 28,125 rows carrying it are EXACTLY 300 characters long and
+    none is parseable. Two consequences that reached users: the Tenderator had
+    to grow `_clean_coordinator` to stop the feed rendering JSON at people, and
+    ft_participants could only be rebuilt by regex-scraping the surviving head
+    of each string.
+
+    Returns the fields we actually want. Anything unreadable comes back None
+    rather than as a blob.
+    """
+    out: Dict[str, Optional[str]] = {"name": None, "pic": None, "country": None}
+    if not participants:
+        return out
+
+    # Unwrap ONLY the SEDIA wrapper: a list whose single element is the JSON
+    # string. A list of participant DICTS must survive intact, or taking [0]
+    # here picks whichever participant SEDIA happened to list first and the
+    # role preference below never gets to choose the coordinator.
+    candidate = participants
+    if isinstance(candidate, list) and candidate and isinstance(candidate[0], str):
+        candidate = candidate[0]
+    if isinstance(candidate, str):
+        text_value = candidate.strip()
+        if text_value.startswith("[") or text_value.startswith("{"):
+            try:
+                candidate = json.loads(text_value)
+            except (ValueError, TypeError):
+                # Not parseable (e.g. an already-truncated legacy value). A
+                # plain name is still worth keeping; a JSON fragment is not.
+                return {"name": None, "pic": None, "country": None}
+        else:
+            return {"name": text_value[:500] or None, "pic": None, "country": None}
+
+    entries = candidate if isinstance(candidate, list) else [candidate]
+    entries = [e for e in entries if isinstance(e, dict)]
+    if not entries:
+        return out
+
+    # Prefer the entry that says it coordinates; fall back to the first.
+    chosen = next(
+        (e for e in entries if str(e.get("role", "")).lower() == "coordinator"),
+        entries[0],
+    )
+
+    name = chosen.get("legalName") or chosen.get("shortName")
+    out["name"] = str(name).strip()[:500] if name else None
+    pic = chosen.get("pic")
+    out["pic"] = str(pic).strip() if pic else None
+
+    postal = chosen.get("postalAddress")
+    country_raw = chosen.get("country")
+    if not country_raw and isinstance(postal, dict):
+        code = postal.get("countryCode")
+        if isinstance(code, dict):
+            country_raw = code.get("abbreviation")
+        elif code:
+            country_raw = code
+    out["country"] = normalise_country(country_raw)
+    return out
+
+
 def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     md = result.get("metadata") or {}
     pid = _first(md.get("projectId")) or _first(md.get("identifier")) or result.get("reference")
@@ -117,17 +195,19 @@ def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return None
     programme = (_first(md.get("programAbbreviation")) or _first(md.get("programmes"))
                  or _first(md.get("frameworkProgramme")))
-    participants = md.get("participants") or []
-    if not isinstance(participants, list):
-        participants = [participants]
-    coordinator = participants[0] if participants else None
+    coordinator = _coordinator(md.get("participants"))
     return {
         "project_id": str(pid),
         "project_acronym": _first(md.get("acronym")),
         "title": title,
         "objective": _first(md.get("objective")),
         "framework_programme": str(programme) if programme else "NON-H2020",
-        "coordinator_name": str(coordinator)[:300] if coordinator else None,
+        "coordinator_name": coordinator["name"],
+        "coordinator_country": coordinator["country"],
+        # The PIC is the F&T Portal's stable key for an organisation and the
+        # join to ft_participants. It used to survive only inside the truncated
+        # blob; migration 212 gives it a column.
+        "coordinator_pic": coordinator["pic"],
         "status": _first(md.get("status")),
         "start_date": _date(md.get("startDate")),
         "end_date": _date(md.get("endDate")),
@@ -141,16 +221,23 @@ def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 UPSERT = """
 INSERT INTO ft_funded_projects
     (project_id, project_acronym, title, objective, framework_programme,
-     coordinator_name, status, start_date, end_date, eu_contribution, total_cost,
+     coordinator_name, coordinator_country, coordinator_pic, status, start_date, end_date,
+     eu_contribution, total_cost,
      cost_currency, source_url, is_test, published_at, scraped_at, last_updated)
 VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s,
-        %(framework_programme)s, %(coordinator_name)s, %(status)s, %(start_date)s,
+        %(framework_programme)s, %(coordinator_name)s, %(coordinator_country)s,
+        %(coordinator_pic)s, %(status)s, %(start_date)s,
         %(end_date)s, %(eu_contribution)s, %(total_cost)s, 'EUR', %(source_url)s,
         false, %(published_at)s, NOW(), NOW())
 ON CONFLICT (project_id) DO UPDATE SET
     title=EXCLUDED.title, objective=EXCLUDED.objective,
     framework_programme=EXCLUDED.framework_programme, status=EXCLUDED.status,
     eu_contribution=EXCLUDED.eu_contribution, total_cost=EXCLUDED.total_cost,
+    -- Only overwrite the coordinator when the new read actually has one, so a
+    -- re-run that hits a sparse payload cannot blank a name we already hold.
+    coordinator_name=COALESCE(EXCLUDED.coordinator_name, ft_funded_projects.coordinator_name),
+    coordinator_country=COALESCE(EXCLUDED.coordinator_country, ft_funded_projects.coordinator_country),
+    coordinator_pic=COALESCE(EXCLUDED.coordinator_pic, ft_funded_projects.coordinator_pic),
     last_updated=NOW()
 """
 

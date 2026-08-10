@@ -151,14 +151,25 @@ def main() -> int:
 
     db = SessionLocal()
     try:
+        # Two sources, in order of preference.
+        #
+        # 1. The structured columns. Since the ingest fix (10 Aug 2026)
+        #    coordinator_pic / coordinator_name / coordinator_country hold clean
+        #    values, which is what this should have read from all along.
+        # 2. The legacy JSON fragment, for any row not yet re-ingested. That
+        #    path is why this script exists and stays until the last fragment is
+        #    gone; it costs nothing when there are none.
         sql = (
-            "SELECT coordinator_name, coordinator_country FROM ft_funded_projects "
-            "WHERE is_test = FALSE AND (coordinator_name LIKE '[{%' OR coordinator_name LIKE '{%')"
+            "SELECT coordinator_pic, coordinator_name, coordinator_country "
+            "FROM ft_funded_projects "
+            "WHERE is_test = FALSE AND ("
+            "  coordinator_pic IS NOT NULL "
+            "  OR coordinator_name LIKE '[{%' OR coordinator_name LIKE '{%')"
         )
         if args.limit:
             sql += f" LIMIT {int(args.limit)}"
         rows = db.execute(text(sql)).fetchall()
-        print(f"[source] {len(rows)} project rows carry participant JSON")
+        print(f"[source] {len(rows)} project rows name a coordinator")
 
         # pic -> merged record. project_count is how many funded projects this
         # organisation appears on, which is the number the drawer wants.
@@ -166,6 +177,26 @@ def main() -> int:
         counts: Dict[str, int] = defaultdict(int)
 
         for row in rows:
+            # Structured path: the columns already say who coordinated.
+            if getattr(row, "coordinator_pic", None) and row.coordinator_name:
+                pic = str(row.coordinator_pic).strip()
+                counts[pic] += 1
+                record = by_pic.setdefault(pic, {
+                    "pic": pic,
+                    "legal_name": row.coordinator_name.strip(),
+                    "short_name": None,
+                    "country": normalise_country(row.coordinator_country),
+                    "org_type": None,
+                    "vat": None,
+                    "address": None,
+                    "website": None,
+                    "source_url": PORTAL_ORG,
+                })
+                if not record["country"]:
+                    record["country"] = normalise_country(row.coordinator_country)
+                continue
+
+            # Legacy path: recover what survived the truncation.
             for entry in participants_in(row.coordinator_name):
                 pic = str(entry["pic"]).strip()
                 if not pic:
