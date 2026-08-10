@@ -2738,7 +2738,25 @@
       "errorExport": "Impossibile esportare il rapporto. Riprova.",
       "criticalityCritical": "critico",
       "criticalityImportant": "importante",
-      "criticalityRecommended": "raccomandato"
+      "criticalityRecommended": "raccomandato",
+      "status": "Stato",
+      "article": "Articolo",
+      "obligation": "Obbligo",
+      "criticality": "Criticità",
+      "action": "Azione",
+      "allCriticalities": "Tutte le criticità",
+      "searchFindings": "Cerca obblighi",
+      "needsAttention": "Richiede attenzione",
+      "nothingToReview": "Nulla richiede la vostra attenzione in questa analisi.",
+      "noEvidence": "Nulla trovato nei vostri documenti",
+      "noEvidenceLong": "Nessun passaggio dei documenti caricati affronta questo obbligo.",
+      "citedInDoc": "Citato nel documento",
+      "lowConfidence": "Bassa affidabilità, da verificare manualmente",
+      "lowConfidenceExplain": "L'analisi non era sicura di questo esito. Consideratelo un invito a verificare voi stessi il testo originale, non una conclusione.",
+      "lowConfidenceNote": "{{count}} risultato(i) sono inclusi perché l'analisi era sicura per meno del {{pct}}%, non perché sia stata rilevata una lacuna. Verificateli voi stessi.",
+      "remediation": "Rimedio",
+      "remediationNote": "Salvato su questo obbligo, quindi resta dopo un ricaricamento e una nuova esecuzione dell'analisi.",
+      "bindsLabel": "Vincola"
     },
     "plan": {
       "title": "Piano d'azione",
@@ -2763,6 +2781,36 @@
       "mediumDesc": "Conformità standard; pianifica l'implementazione",
       "lowDesc": "Lacune minori; gestiscile appena possibile",
       "optionalDesc": "Buone pratiche raccomandate"
+    },
+    "dropzoneTitle": "Trascinate qui i vostri documenti di policy",
+    "dropzoneBrowse": "oppure fate clic per sfogliare",
+    "dropzoneFormats": "PDF, DOCX o TXT",
+    "removeFile": "Rimuovi {{name}}",
+    "unsupportedFiles": "{{count}} file ignorati. È possibile analizzare solo PDF, DOCX e TXT.",
+    "actionbarEmpty": "Aggiungete almeno un documento per eseguire l'analisi",
+    "actionbarReady": "{{docs}} documento(i) saranno confrontati con {{reqs}} requisiti",
+    "analysingNote": "Verifica di {{reqs}} requisiti uno per uno. I pacchetti di grandi dimensioni possono richiedere alcuni minuti; potete lasciare questa pagina e riaprire l'analisi dalla cronologia.",
+    "preview": {
+      "title": "Vedete che cosa sarà verificato",
+      "count": "{{count}} obblighi",
+      "loading": "Caricamento degli obblighi",
+      "error": "Non è stato possibile caricare l'elenco degli obblighi.",
+      "empty": "Questo pacchetto non ha ancora obblighi registrati.",
+      "withDeadline": "{{count}} con una scadenza datata",
+      "intro": "Questi sono gli obblighi rispetto ai quali saranno verificati i vostri documenti. Nulla viene caricato finché non scegliete di eseguire l'analisi.",
+      "boundElsewhere": "{{count}} di questi vincolano un altro soggetto, come gli Stati membri, e sono mostrati come contesto anziché valutati a vostro carico.",
+      "cascadeTitle": "Che cosa discende da queste norme",
+      "cascadeBinding": "{{count}} atti delegati e di esecuzione contengono il dettaglio operativo.",
+      "cascadeGuidance": "{{count}} comunicazioni e linee guida della Commissione spiegano come conformarsi. Non creano obblighi."
+    },
+    "addressee": {
+      "member_state": "Stati membri",
+      "commission": "Commissione",
+      "pro": "Organizzazione di responsabilità del produttore",
+      "online_platform": "Piattaforma online",
+      "fulfilment_service": "Servizio di logistica",
+      "national_authority": "Autorità nazionale",
+      "notified_body": "Organismo notificato"
     }
   },
   "featurePreview": {

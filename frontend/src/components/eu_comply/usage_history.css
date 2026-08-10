@@ -264,11 +264,17 @@
 }
 
 .usage-history__met {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
   color: #22543d;
   font-weight: 600;
 }
 
 .usage-history__gap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
   color: #742a2a;
   font-weight: 600;
 }

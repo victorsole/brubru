@@ -202,8 +202,14 @@ export const UsageHistory = ({
                   </div>
                   {analysis.total_requirements && (
                     <div className="usage-history__breakdown">
-                      <span className="usage-history__met">✓ {analysis.requirements_met || 0}</span>
-                      <span className="usage-history__gap">✗ {analysis.requirements_gap || 0}</span>
+                      <span className="usage-history__met">
+                        <span className="mdi mdi-check" aria-hidden="true"></span>
+                        {analysis.requirements_met || 0}
+                      </span>
+                      <span className="usage-history__gap">
+                        <span className="mdi mdi-close" aria-hidden="true"></span>
+                        {analysis.requirements_gap || 0}
+                      </span>
                       <span className="usage-history__total">/ {analysis.total_requirements}</span>
                     </div>
                   )}

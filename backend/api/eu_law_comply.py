@@ -6,7 +6,7 @@ Handles compliance checking, gap analysis, and requirement extraction for EU law
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func, case
+from sqlalchemy import and_, or_, func, case, text
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 import logging
@@ -21,7 +21,8 @@ from models.eu_law import LawCluster, EULaw, LawRequirement, ClusterLaw
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.tracked_lens import tracked_anchors
 from models.compliance import (
-    ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction
+    ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction,
+    ComplianceWorkspace,
 )
 from models.user_document import UserDocument
 from api.auth import get_current_user
@@ -124,6 +125,20 @@ async def run_compliance_analysis_task(
 
     finally:
         db.close()
+        # The uploads were written with NamedTemporaryFile(delete=False) so they
+        # would survive until the background task read them. Nothing deleted
+        # them afterwards, so every analysis left its documents behind in the
+        # system temp directory -- user-uploaded compliance material, kept
+        # indefinitely on the container. Clean up here: this is the last point
+        # that holds the paths, and it runs on the success and failure paths
+        # alike.
+        for path in document_paths or []:
+            try:
+                os.unlink(path)
+            except FileNotFoundError:
+                pass
+            except OSError as exc:
+                logger.warning(f"Could not remove temp upload {path}: {exc}")
 
 
 # ============================================================================
@@ -141,7 +156,7 @@ def list_clusters(
     List all law clusters.
 
     Query Parameters:
-    - startup_focused: Filter for startup packages (IDs 12-21) if True
+    - startup_focused: Filter on the startup-oriented compliance packages
     - policy_area: Filter by policy area
 
     Returns list of clusters with law count and requirement count.
@@ -156,12 +171,12 @@ def list_clusters(
 
         query = db.query(LawCluster)
 
-        # Filter by startup-focused
+        # Filter on the explicit flag (migration 205), never on the id. This was
+        # `LawCluster.id > 11`, hardcoded when clusters 12-21 happened to be the
+        # ten startup packages; every cluster seeded afterwards (ids 22-62) fell
+        # on the wrong side of it, so this returned 51 "startup packages".
         if startup_focused is not None:
-            if startup_focused:
-                query = query.filter(LawCluster.id > 11)  # Startup packages: 12-21
-            else:
-                query = query.filter(LawCluster.id <= 11)  # General packages: 1-11
+            query = query.filter(LawCluster.is_startup_focused.is_(bool(startup_focused)))
 
         # Filter by policy area
         if policy_area:
@@ -437,6 +452,85 @@ async def get_cluster_requirements(
         )
 
 
+
+@router.get(
+    "/clusters/{cluster_id}/cascade",
+    summary="Delegated acts, implementing acts and Commission guidance for a package",
+    description=(
+        "**What it does**\n\n"
+        "Returns everything that hangs off the laws in a compliance package: the "
+        "delegated and implementing acts that carry the operative detail, and the "
+        "Commission notices and guidelines that explain how to comply. Grouped by "
+        "kind, because the first two create obligations and the third does not.\n\n"
+        "**When to use it**\n\n"
+        "Alongside GET /clusters/{id}/requirements when showing a user what a "
+        "package actually covers before they upload anything.\n\n"
+        "**Input**\n\n"
+        "Path: `cluster_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/clusters/58/cascade`.\n\n"
+        "**You get back**\n\n"
+        "`binding` (delegated + implementing) and `guidance` lists, each with "
+        "celex, title, parent_celex, status and a EUR-Lex link, plus counts. "
+        "Empty lists where nothing has been discovered: never padded."
+    ),
+)
+def get_cluster_cascade(
+    cluster_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.subscription_tier not in ['yellow', 'blue']:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="EU Law Comply is available for Yellow and Blue tier users only",
+        )
+    cluster = db.query(LawCluster).filter(LawCluster.id == cluster_id).first()
+    if not cluster:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Cluster {cluster_id} not found")
+
+    # secondary_acts is keyed on the PARENT's CELEX, so join through the
+    # cluster's laws rather than through any procedure reference.
+    rows = db.execute(text("""
+        SELECT s.celex, s.title, s.parent_celex, s.act_type::text AS act_type,
+               s.status::text AS status, s.source_url, s.publication_date
+          FROM secondary_acts s
+         WHERE s.parent_celex IN (
+                 SELECT l.celex FROM cluster_laws cl
+                   JOIN eu_laws l ON l.id = cl.law_id
+                  WHERE cl.cluster_id = :cid AND l.celex IS NOT NULL)
+           AND s.celex IS NOT NULL
+         ORDER BY s.act_type, s.publication_date DESC NULLS LAST, s.celex
+    """), {"cid": cluster_id}).mappings().all()
+
+    binding, guidance = [], []
+    for r in rows:
+        item = {
+            "celex": r["celex"],
+            "title": r["title"],
+            "parent_celex": r["parent_celex"],
+            "act_type": r["act_type"],
+            "status": r["status"],
+            "url": r["source_url"] or
+                  f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r['celex']}",
+            "publication_date": r["publication_date"].isoformat() if r["publication_date"] else None,
+        }
+        (guidance if r["act_type"] == "guidance" else binding).append(item)
+
+    return {
+        "cluster_id": cluster_id,
+        "cluster_name": cluster.name,
+        "binding": binding,
+        "guidance": guidance,
+        "counts": {
+            "delegated": sum(1 for i in binding if i["act_type"] == "delegated"),
+            "implementing": sum(1 for i in binding if i["act_type"] == "implementing"),
+            "guidance": len(guidance),
+        },
+    }
+
+
 # ============================================================================
 # CLUSTER SUGGESTION ENDPOINT
 # ============================================================================
@@ -598,6 +692,48 @@ async def search_laws(
         )
 
 
+# NOTE ON ORDER: /laws/stats MUST stay above /laws/{celex}. FastAPI matches routes in
+# registration order, so with {celex} first, GET /laws/stats bound to that route with
+# celex="stats" and returned 404 -- the stats endpoint was unreachable in production.
+# Any new literal /laws/<word> route goes above the {celex} one too.
+@router.get("/laws/stats")
+async def get_law_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get statistics about the EU law database.
+
+    Returns counts by policy area, document type, and year.
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        if current_user.subscription_tier not in ['yellow', 'blue']:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="EU Law Comply is available for Yellow and Blue tier users only"
+            )
+
+        search_service = EULawSearchService(db)
+
+        return {
+            'total_laws': db.query(EULaw).count(),
+            'by_policy_area': search_service.get_policy_area_stats(),
+            'by_doc_type': search_service.get_doc_type_stats(),
+            'by_year': search_service.get_year_stats(year_from=2015),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting law stats: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve statistics"
+        )
+
+
 @router.get("/laws/{celex}")
 async def get_law_by_celex(
     celex: str,
@@ -664,44 +800,6 @@ async def get_law_by_celex(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve law"
-        )
-
-
-@router.get("/laws/stats")
-async def get_law_stats(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Get statistics about the EU law database.
-
-    Returns counts by policy area, document type, and year.
-    """
-    from services.eu_law_search import EULawSearchService
-
-    try:
-        if current_user.subscription_tier not in ['yellow', 'blue']:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="EU Law Comply is available for Yellow and Blue tier users only"
-            )
-
-        search_service = EULawSearchService(db)
-
-        return {
-            'total_laws': db.query(EULaw).count(),
-            'by_policy_area': search_service.get_policy_area_stats(),
-            'by_doc_type': search_service.get_doc_type_stats(),
-            'by_year': search_service.get_year_stats(year_from=2015),
-        }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting law stats: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve statistics"
         )
 
 
@@ -797,13 +895,65 @@ async def create_compliance_analysis(
                     detail=f"Failed to save document: {uploaded_file.filename}"
                 )
 
+        # One durable workspace per (user, cluster). Runs, uploads and
+        # remediation state all hang off it, so a second analysis of the same
+        # package continues the first rather than starting from nothing.
+        workspace = (
+            db.query(ComplianceWorkspace)
+            .filter(ComplianceWorkspace.user_id == current_user.id,
+                    ComplianceWorkspace.cluster_id == cluster_id)
+            .first()
+        )
+        if not workspace:
+            workspace = ComplianceWorkspace(
+                user_id=current_user.id, cluster_id=cluster_id, name=cluster.name)
+            db.add(workspace)
+            db.flush()
+
+        # Persist the uploads. They used to live only in /tmp: read once,
+        # deleted, and `document_ids` was ARRAY(Integer) against a UUID primary
+        # key so nothing was ever recorded. A run was therefore unreproducible
+        # and unauditable -- you could not answer "what did we actually check?"
+        # a week later. Store the EXTRACTED TEXT, which is what the analyser
+        # reads, rather than the original blob.
+        from services.compliance.document_processor import DocumentProcessor
+        processor = DocumentProcessor()
+        document_uuids = []
+        for path, uploaded in zip(document_paths, documents):
+            # SAVEPOINT per document. A plain try/except is not enough: a failed
+            # flush poisons the whole Session, so the analysis INSERT that
+            # follows fails too and the entire run dies over a provenance
+            # record. Found exactly that way -- document_type 'compliance_upload'
+            # violated the user_documents CHECK constraint, which permits only
+            # amendment / analysis / strategy / note / uploaded, and took the
+            # run with it.
+            try:
+                with db.begin_nested():
+                    extracted = processor.process_document(path)
+                    doc = UserDocument(
+                        user_id=current_user.id,
+                        document_type='uploaded',
+                        title=(uploaded.filename or 'Uploaded document')[:500],
+                        content=extracted.get('text') or '',
+                        original_filename=(uploaded.filename or None),
+                        include_in_ai_context=False,
+                    )
+                    db.add(doc)
+                    db.flush()
+                document_uuids.append(doc.id)
+            except Exception as exc:  # noqa: BLE001
+                # The document is still analysed from /tmp; we simply cannot
+                # store it. Never fail the run over provenance.
+                logger.warning(f"Could not persist upload {uploaded.filename}: {exc}")
+
         # Create analysis in processing state
         analysis = ComplianceAnalysis(
             user_id=current_user.id,
             cluster_id=cluster_id,
+            workspace_id=workspace.id,
             analysis_name=analysis_name or f"{cluster.name} Analysis",
             status='processing',
-            document_ids=document_ids if document_ids else None,
+            document_uuids=document_uuids or None,
             started_at=datetime.utcnow()
         )
 
@@ -910,6 +1060,11 @@ async def get_analysis_results(
                 'priority': finding.priority,
                 'estimated_effort': finding.estimated_effort,
                 'criticality': requirement.criticality,
+                # Who the obligation binds. A finding on "Member States shall
+                # bring into force the laws necessary..." is not_applicable to a
+                # company, and without this the reader sees an unexplained N/A.
+                # The cluster preview already showed it; the results did not.
+                'addressee': (requirement.extra_metadata or {}).get('addressee') or 'economic_operator',
                 'deadline_date': requirement.deadline.isoformat() if requirement.deadline else None,
                 'deadline_text': None  # TODO: Add deadline_text to LawRequirement model
             })
@@ -927,6 +1082,11 @@ async def get_analysis_results(
             'requirements_partial': analysis.requirements_partial,
             'requirements_gap': analysis.requirements_gap,
             'compliance_score': float(analysis.compliance_score) if analysis.compliance_score is not None else None,
+            # Migration 209 gave a run a durable home and a record of the
+            # documents it was actually performed against. Both were persisted
+            # but neither was serialised, so no client could reach them.
+            'workspace_id': analysis.workspace_id,
+            'document_uuids': [str(u) for u in (analysis.document_uuids or [])],
             'gap_findings': findings,
             'created_at': analysis.started_at.isoformat() if analysis.started_at else None,
             'completed_at': analysis.completed_at.isoformat() if analysis.completed_at else None
@@ -958,6 +1118,7 @@ async def export_analysis_report(
     Returns URL to download the generated report.
     Yellow tier users get watermarked reports.
     Blue tier users get reports without watermark.
+    Both 'docx' and 'pdf' are supported.
     """
     try:
         # Get analysis
@@ -987,56 +1148,52 @@ async def export_analysis_report(
                 detail="Export format must be 'docx' or 'pdf'"
             )
 
-        # Generate DOCX report
-        if export_format == 'docx':
-            # Determine if watermark is needed (Yellow tier only)
-            include_watermark = current_user.subscription_tier == 'yellow'
+        # Both formats share one path. PDF returned 501 until 8 Aug 2026; it is
+        # now produced by ReportExporter.export_analysis_pdf from the same data
+        # as the DOCX, so the two cannot disagree.
+        include_watermark = current_user.subscription_tier == 'yellow'
 
-            # Create temp file for export
-            cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
-            filename = f"Brubru_EU_Compliance_Report_{cluster.name.replace(' ', '_')}_{analysis_id}.docx"
-            output_path = os.path.join(tempfile.gettempdir(), filename)
+        cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+        safe_cluster = (cluster.name if cluster else f"cluster_{analysis.cluster_id}")
+        safe_cluster = "".join(c if c.isalnum() or c in "-_" else "_" for c in safe_cluster)[:60]
+        filename = f"Brubru_EU_Compliance_Report_{safe_cluster}_{analysis_id}.{export_format}"
+        output_path = os.path.join(tempfile.gettempdir(), filename)
 
-            # Generate report
-            exporter = ReportExporter(db)
-            exporter.export_analysis(analysis_id, output_path, include_watermark)
-
-            # Get file size
-            file_size = os.path.getsize(output_path)
-
-            # Create export record
-            export = AnalysisExport(
-                analysis_id=analysis_id,
-                user_id=current_user.id,
-                export_format=export_format,
-                file_path=output_path,
-                file_size_bytes=file_size,
-                created_at=datetime.utcnow()
-            )
-
-            db.add(export)
-            db.commit()
-            db.refresh(export)
-
-            logger.info(f"Generated DOCX export {export.id} for analysis {analysis_id}")
-
-            # Return file as download
-            from fastapi.responses import FileResponse
-            return FileResponse(
-                path=output_path,
-                filename=filename,
-                media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                headers={
-                    'Content-Disposition': f'attachment; filename="{filename}"'
-                }
-            )
-
+        exporter = ReportExporter(db)
+        if export_format == 'pdf':
+            exporter.export_analysis_pdf(analysis_id, output_path, include_watermark)
+            media_type = 'application/pdf'
         else:
-            # PDF export not yet implemented
-            raise HTTPException(
-                status_code=status.HTTP_501_NOT_IMPLEMENTED,
-                detail="PDF export not yet implemented. Use 'docx' format."
-            )
+            exporter.export_analysis(analysis_id, output_path, include_watermark)
+            media_type = ('application/vnd.openxmlformats-officedocument'
+                          '.wordprocessingml.document')
+
+        file_size = os.path.getsize(output_path)
+
+        export = AnalysisExport(
+            analysis_id=analysis_id,
+            user_id=current_user.id,
+            export_format=export_format,
+            file_path=output_path,
+            file_size_bytes=file_size,
+            created_at=datetime.utcnow()
+        )
+        db.add(export)
+        db.commit()
+        db.refresh(export)
+
+        logger.info(
+            f"Generated {export_format.upper()} export {export.id} "
+            f"({file_size} bytes) for analysis {analysis_id}"
+        )
+
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            path=output_path,
+            filename=filename,
+            media_type=media_type,
+            headers={'Content-Disposition': f'attachment; filename="{filename}"'}
+        )
 
     except HTTPException:
         raise
@@ -1112,6 +1269,351 @@ async def get_user_analysis_history(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve analysis history"
         )
+
+
+
+
+# ============================================================================
+# WORKSPACES (durable per user + cluster) AND RUN DIFFING
+# ============================================================================
+
+@router.get(
+    "/workspaces",
+    summary="Your compliance workspaces",
+    description=(
+        "**What it does**\n\n"
+        "Lists the compliance packages you have worked on, with the number of "
+        "runs, the latest score, when it last ran, and how many obligations you "
+        "have triaged. This is the durable object: a second analysis of the same "
+        "package continues the first rather than starting over.\n\n"
+        "**When to use it**\n\n"
+        "The landing view of EU Law Comply for a returning user.\n\n"
+        "**Input**\n\nBearer JWT. No parameters.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/workspaces`.\n\n"
+        "**You get back**\n\n"
+        "`workspaces` sorted by most recent activity, each with cluster_id, "
+        "name, run_count, last_run_at, latest_score, open_actions. Empty list "
+        "for a new user."
+    ),
+)
+def list_workspaces(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    rows = db.execute(text("""
+        SELECT w.id, w.cluster_id, w.name, w.created_at,
+               (SELECT count(*) FROM compliance_analyses a WHERE a.workspace_id = w.id) AS run_count,
+               (SELECT max(a.started_at) FROM compliance_analyses a WHERE a.workspace_id = w.id) AS last_run_at,
+               (SELECT a.compliance_score FROM compliance_analyses a
+                 WHERE a.workspace_id = w.id AND a.status = 'completed'
+                 ORDER BY a.started_at DESC LIMIT 1) AS latest_score,
+               (SELECT count(*) FROM compliance_actions ca
+                 WHERE ca.user_id = w.user_id AND ca.cluster_id = w.cluster_id
+                   AND ca.status IN ('pending','in_progress')) AS open_actions
+          FROM compliance_workspaces w
+         WHERE w.user_id = :uid
+         ORDER BY last_run_at DESC NULLS LAST, w.created_at DESC
+    """), {"uid": str(current_user.id)}).mappings().all()
+
+    return {"workspaces": [{
+        "id": r["id"],
+        "cluster_id": r["cluster_id"],
+        "name": r["name"],
+        "run_count": r["run_count"],
+        "last_run_at": r["last_run_at"].isoformat() if r["last_run_at"] else None,
+        "latest_score": float(r["latest_score"]) if r["latest_score"] is not None else None,
+        "open_actions": r["open_actions"],
+    } for r in rows], "count": len(rows)}
+
+
+@router.get(
+    "/analysis/{analysis_id}/diff",
+    summary="What changed since the previous run of this package",
+    description=(
+        "**What it does**\n\n"
+        "Compares a completed analysis against the previous completed run in the "
+        "same workspace, obligation by obligation, and reports what improved, "
+        "what regressed and what is unchanged. This is what makes re-running "
+        "worth doing.\n\n"
+        "**When to use it**\n\n"
+        "After a re-run against an updated document set.\n\n"
+        "**Input**\n\nPath: `analysis_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/analysis/8/diff`.\n\n"
+        "**You get back**\n\n"
+        "`improved`, `regressed`, `reclassified` and `unchanged` counts plus the "
+        "per-obligation detail, and `score_delta`. Movement into or out of "
+        "not_applicable is reported as reclassified, not as an improvement: "
+        "nothing was remediated, the scope was reassessed. When there is no earlier "
+        "run, `comparable: false` and an explanation, never a fabricated "
+        "baseline."
+    ),
+)
+def get_analysis_diff(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    current = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.id == analysis_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not current:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    previous = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.user_id == current_user.id,
+                ComplianceAnalysis.cluster_id == current.cluster_id,
+                ComplianceAnalysis.id != current.id,
+                ComplianceAnalysis.status == 'completed',
+                ComplianceAnalysis.started_at < current.started_at)
+        .order_by(ComplianceAnalysis.started_at.desc())
+        .first()
+    )
+    if not previous:
+        return {
+            "comparable": False,
+            "reason": "This is the first completed run of this package, so there is "
+                      "nothing to compare it against.",
+            "analysis_id": analysis_id,
+        }
+
+    def findings_by_requirement(aid):
+        rows = (
+            db.query(GapFinding.requirement_id, GapFinding.status,
+                     LawRequirement.article, LawRequirement.requirement_text)
+            .join(LawRequirement, LawRequirement.id == GapFinding.requirement_id)
+            .filter(GapFinding.analysis_id == aid)
+            .all()
+        )
+        return {r[0]: {"status": r[1], "article": r[2], "text": r[3]} for r in rows}
+
+    now_map, then_map = findings_by_requirement(current.id), findings_by_requirement(previous.id)
+
+    # gap < partial < met is a compliance scale. not_applicable is NOT on it:
+    # it says the obligation does not bind this company at all. Ranking it
+    # between partial and met made "partial -> not_applicable" read as an
+    # improvement, which flatters the report -- nothing was remediated, the
+    # scope was reassessed. Transitions into or out of not_applicable are
+    # reported separately as reclassified.
+    RANK = {"gap": 0, "partial": 1, "met": 2}
+    improved, regressed, reclassified, unchanged = [], [], [], 0
+    for req_id, now in now_map.items():
+        then = then_map.get(req_id)
+        if not then:
+            continue                      # not analysed last time: not a change
+        if then["status"] == now["status"]:
+            unchanged += 1
+            continue
+        entry = {
+            "requirement_id": req_id,
+            "article": now["article"],
+            "requirement_text": (now["text"] or "")[:300],
+            "from": then["status"],
+            "to": now["status"],
+        }
+        a, b = RANK.get(then["status"]), RANK.get(now["status"])
+        if a is None or b is None:
+            reclassified.append(entry)
+        elif b > a:
+            improved.append(entry)
+        else:
+            regressed.append(entry)
+
+    delta = None
+    if current.compliance_score is not None and previous.compliance_score is not None:
+        delta = round(float(current.compliance_score) - float(previous.compliance_score), 2)
+
+    return {
+        "comparable": True,
+        "analysis_id": current.id,
+        "compared_with": {
+            "analysis_id": previous.id,
+            "ran_at": previous.started_at.isoformat() if previous.started_at else None,
+            "score": float(previous.compliance_score) if previous.compliance_score is not None else None,
+        },
+        "score_delta": delta,
+        "counts": {
+            "improved": len(improved),
+            "regressed": len(regressed),
+            "reclassified": len(reclassified),
+            "unchanged": unchanged,
+            "not_in_previous_run": (len(now_map) - len(improved) - len(regressed)
+                                    - len(reclassified) - unchanged),
+        },
+        "improved": improved,
+        "regressed": regressed,
+        "reclassified": reclassified,
+    }
+
+
+# ============================================================================
+# FINDING STATE (compliance_actions)
+# ============================================================================
+#
+# compliance_actions has existed since the feature was built and held zero rows:
+# nothing read or wrote it, so a gap analysis was a snapshot you could not act
+# on. Every re-run started from nothing and no decision a user made about a
+# finding survived. These two endpoints make a finding's remediation state
+# durable, which is the smallest useful piece of the persistent-workspace model.
+
+VALID_ACTION_STATUSES = {'pending', 'in_progress', 'completed', 'cancelled'}
+
+
+@router.put(
+    "/findings/{finding_id}/action",
+    summary="Set the remediation state of a gap finding",
+    description=(
+        "**What it does**\n\n"
+        "Records what you have decided to do about one finding: its status, who "
+        "owns it, when it is due and any resolution note. Creates the action on "
+        "first call and updates it afterwards, so the caller does not need to "
+        "know whether one exists.\n\n"
+        "**When to use it**\n\n"
+        "From the finding drawer in EU Law Comply, when a user triages a gap.\n\n"
+        "**Input**\n\n"
+        "Path: `finding_id`. Body: `status` (pending | in_progress | completed | "
+        "cancelled), optional `assigned_to`, `due_date` (YYYY-MM-DD), "
+        "`resolution_notes`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`PUT /api/eu-law-comply/findings/42/action` with `{\"status\": \"in_progress\"}`.\n\n"
+        "**You get back**\n\n"
+        "The stored action: id, gap_finding_id, status, assigned_to, due_date, "
+        "resolution_notes, created_at."
+    ),
+)
+def set_finding_action(
+    finding_id: int,
+    payload: Dict[str, Any],
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    new_status = str(payload.get('status', '')).strip().lower()
+    if new_status not in VALID_ACTION_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"status must be one of {sorted(VALID_ACTION_STATUSES)}",
+        )
+
+    # Ownership is checked through the finding's analysis: a user may only act on
+    # findings from their own analyses.
+    row = (
+        db.query(GapFinding, ComplianceAnalysis, LawRequirement)
+        .join(ComplianceAnalysis, ComplianceAnalysis.id == GapFinding.analysis_id)
+        .join(LawRequirement, LawRequirement.id == GapFinding.requirement_id)
+        .filter(GapFinding.id == finding_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Finding {finding_id} not found")
+    finding, _analysis, requirement = row
+
+    due = payload.get('due_date')
+    if due:
+        try:
+            due = datetime.strptime(str(due)[:10], "%Y-%m-%d").date()
+        except ValueError:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="due_date must be YYYY-MM-DD")
+    else:
+        due = None
+
+    # Look the action up by the OBLIGATION, not the finding. gap_findings are
+    # recreated on every analysis run, so keying on finding_id meant triage
+    # entered against one run was invisible to the next -- it survived a reload
+    # but not a re-run, which is the case that matters. See migration 207.
+    action = (
+        db.query(ComplianceAction)
+        .filter(ComplianceAction.user_id == current_user.id,
+                ComplianceAction.cluster_id == _analysis.cluster_id,
+                ComplianceAction.requirement_id == requirement.id)
+        .first()
+    )
+    if not action:
+        action = ComplianceAction(
+            user_id=current_user.id,
+            requirement_id=requirement.id,
+            cluster_id=_analysis.cluster_id,
+            gap_finding_id=finding_id,
+            # action_title is NOT NULL; derive it from the obligation so the row
+            # is readable on its own, e.g. in an export or an admin view.
+            action_title=(requirement.article or f"Requirement {requirement.id}")[:200],
+            action_description=(requirement.requirement_text or "")[:2000] or None,
+        )
+        db.add(action)
+    else:
+        # Re-point at the finding it was last touched from.
+        action.gap_finding_id = finding_id
+
+    action.status = new_status
+    if 'assigned_to' in payload:
+        action.assigned_to = (payload.get('assigned_to') or None)
+    if 'resolution_notes' in payload:
+        action.resolution_notes = (payload.get('resolution_notes') or None)
+    if due is not None or 'due_date' in payload:
+        action.due_date = due
+    if new_status == 'in_progress' and action.started_at is None:
+        action.started_at = datetime.utcnow()
+    action.completed_at = datetime.utcnow() if new_status == 'completed' else None
+
+    db.commit()
+    db.refresh(action)
+    return action.to_dict()
+
+
+@router.get(
+    "/analysis/{analysis_id}/actions",
+    summary="Remediation state for every finding in an analysis",
+    description=(
+        "**What it does**\n\n"
+        "Returns the saved remediation actions for an analysis, keyed by gap "
+        "finding id, so the findings table can show what has already been "
+        "triaged after a reload or a re-run.\n\n"
+        "**When to use it**\n\n"
+        "Alongside GET /analysis/{id} when rendering the findings table.\n\n"
+        "**Input**\n\n"
+        "Path: `analysis_id`. Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/analysis/6/actions`.\n\n"
+        "**You get back**\n\n"
+        "`{actions: {<gap_finding_id>: {...}}, count: N}`. Empty when nothing has "
+        "been triaged yet."
+    ),
+)
+def get_analysis_actions(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    owns = (
+        db.query(ComplianceAnalysis.id)
+        .filter(ComplianceAnalysis.id == analysis_id,
+                ComplianceAnalysis.user_id == current_user.id)
+        .first()
+    )
+    if not owns:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    # Join actions to THIS run's findings through requirement_id, so state
+    # entered against an earlier run of the same cluster still shows up. Keying
+    # the response on gap_finding_id keeps the frontend contract unchanged.
+    rows = (
+        db.query(ComplianceAction, GapFinding.id)
+        .join(GapFinding, GapFinding.requirement_id == ComplianceAction.requirement_id)
+        .filter(GapFinding.analysis_id == analysis_id,
+                ComplianceAction.user_id == current_user.id)
+        .all()
+    )
+    actions = {}
+    for action, finding_id in rows:
+        actions[finding_id] = action.to_dict()
+    return {"actions": actions, "count": len(actions)}
 
 
 # ============================================================================

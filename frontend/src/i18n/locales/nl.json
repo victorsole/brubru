@@ -1847,7 +1847,25 @@
       "errorExport": "Rapport kon niet worden geëxporteerd. Probeer opnieuw.",
       "criticalityCritical": "kritiek",
       "criticalityImportant": "belangrijk",
-      "criticalityRecommended": "aanbevolen"
+      "criticalityRecommended": "aanbevolen",
+      "status": "Status",
+      "article": "Artikel",
+      "obligation": "Verplichting",
+      "criticality": "Kritikaliteit",
+      "action": "Actie",
+      "allCriticalities": "Alle kritikaliteiten",
+      "searchFindings": "Zoek verplichtingen",
+      "needsAttention": "Vraagt om aandacht",
+      "nothingToReview": "Niets vraagt om uw aandacht in deze analyse.",
+      "noEvidence": "Niets gevonden in uw documenten",
+      "noEvidenceLong": "Geen enkele passage in de documenten die u hebt geüpload gaat over deze verplichting.",
+      "citedInDoc": "Geciteerd in document",
+      "lowConfidence": "Lage betrouwbaarheid, handmatig controleren",
+      "lowConfidenceExplain": "De analyse was niet zeker van dit oordeel. Beschouw het als aanleiding om de brontekst zelf te controleren, niet als een conclusie.",
+      "lowConfidenceNote": "{{count}} bevinding(en) zijn opgenomen omdat de analyse voor minder dan {{pct}}% zeker was, niet omdat er een tekortkoming is gevonden. Controleer deze zelf.",
+      "remediation": "Herstel",
+      "remediationNote": "Opgeslagen bij deze verplichting, zodat het een herlaadbeurt en een nieuwe analyse overleeft.",
+      "bindsLabel": "Bindt"
     },
     "plan": {
       "title": "Actieplan",
@@ -1872,6 +1890,36 @@
       "mediumDesc": "Standaardnaleving; plan de implementatie",
       "lowDesc": "Kleine hiaten; pak ze aan wanneer mogelijk",
       "optionalDesc": "Aanbevolen best practices"
+    },
+    "dropzoneTitle": "Sleep uw beleidsdocumenten hierheen",
+    "dropzoneBrowse": "of klik om te bladeren",
+    "dropzoneFormats": "PDF, DOCX of TXT",
+    "removeFile": "{{name}} verwijderen",
+    "unsupportedFiles": "{{count}} bestand(en) overgeslagen. Alleen PDF, DOCX en TXT kunnen worden geanalyseerd.",
+    "actionbarEmpty": "Voeg ten minste één document toe om de analyse uit te voeren",
+    "actionbarReady": "{{docs}} document(en) worden getoetst aan {{reqs}} vereisten",
+    "analysingNote": "Bezig met het toetsen van {{reqs}} vereisten, één voor één. Grote pakketten kunnen enkele minuten duren; u kunt deze pagina verlaten en de analyse later openen vanuit uw geschiedenis.",
+    "preview": {
+      "title": "Bekijk wat er wordt getoetst",
+      "count": "{{count}} verplichtingen",
+      "loading": "Verplichtingen laden",
+      "error": "De lijst met verplichtingen kon niet worden geladen.",
+      "empty": "Dit pakket heeft nog geen geregistreerde verplichtingen.",
+      "withDeadline": "{{count}} met een vaste termijn",
+      "intro": "Dit zijn de verplichtingen waaraan uw documenten worden getoetst. Er wordt niets geüpload totdat u de analyse start.",
+      "boundElsewhere": "{{count}} daarvan binden een andere actor, zoals de lidstaten, en worden ter context getoond in plaats van tegen u beoordeeld.",
+      "cascadeTitle": "Wat uit deze wetten voortvloeit",
+      "cascadeBinding": "{{count}} gedelegeerde en uitvoeringshandelingen bevatten de operationele details.",
+      "cascadeGuidance": "{{count}} mededelingen en richtsnoeren van de Commissie leggen uit hoe u kunt voldoen. Deze scheppen geen verplichtingen."
+    },
+    "addressee": {
+      "member_state": "Lidstaten",
+      "commission": "Commissie",
+      "pro": "Producentenverantwoordelijkheidsorganisatie",
+      "online_platform": "Onlineplatform",
+      "fulfilment_service": "Fulfilmentdienstverlener",
+      "national_authority": "Nationale autoriteit",
+      "notified_body": "Aangemelde instantie"
     }
   },
   "featurePreview": {
