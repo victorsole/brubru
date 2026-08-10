@@ -87,8 +87,16 @@ ADDRESSEE_PATTERNS = [
     ("eu_agency",          r"^\s*(esma|eba|eiopa|ecb|ema|efsa|echa|easa|acer|enisa|eu-osha|"
                            r"eurojust|europol|frontex|cedefop|eea|efca|emsa|era|eu-lisa)\b"),
     ("eu_agency",          r"^\s*the (agency|office|centre)\b"),
-    ("national_authority", r"^\s*(the )?((competent|supervisory|regulatory) (national )?authorit(y|ies)|"
-                           r"national competent authorit(y|ies)|authority responsible)\b"),
+    # Any run of the qualifying adjectives, in any order, then "authority".
+    # The earlier single-adjective form missed "the competent supervisory
+    # authority", which is the GDPR's standard phrase, so eight Articles about
+    # accrediting monitoring bodies and running the consistency mechanism were
+    # put to a SaaS company as its own compliance obligations.
+    ("national_authority", r"^\s*(the )?((competent|supervisory|regulatory|national|relevant)\s+)+"
+                           r"authorit(y|ies)\b"),
+    ("national_authority", r"^\s*(the )?authority responsible\b"),
+    ("data_protection_authority", r"^\s*(the )?(european data protection board|"
+                                  r"data protection authorit(y|ies))\b"),
     ("notified_body",      r"^\s*(the )?notified bod(y|ies)\b"),
 ]
 
