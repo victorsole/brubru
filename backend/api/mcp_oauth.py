@@ -134,10 +134,10 @@ def resolve_oauth_access_token(db, token: str):
 # claude.ai probes both the bare path and the /api/mcp-suffixed path.
 # ---------------------------------------------------------------------------
 
-def _protected_resource_metadata(request: Request) -> dict:
+def _protected_resource_metadata(request: Request, resource_path: str = "/api/mcp") -> dict:
     base = _base_url(request)
     return {
-        "resource": f"{base}/api/mcp",
+        "resource": f"{base}{resource_path}",
         "authorization_servers": [base],
         "scopes_supported": [SCOPE],
         "bearer_methods_supported": ["header"],
@@ -166,8 +166,21 @@ async def protected_resource_metadata(request: Request):
     return JSONResponse(_protected_resource_metadata(request))
 
 
+@router.get("/.well-known/oauth-protected-resource/api/mcp/dpp", include_in_schema=False)
+async def protected_resource_metadata_dpp(request: Request):
+    """Discovery for the scoped "Brubru DPP" server.
+
+    ChatGPT probes this path with the MCP URL's path appended. Without it the
+    client either fails discovery or authorises against /api/mcp, which is a
+    different resource, and the token it gets back would be bound to the wrong
+    audience. Same authorization server, different protected resource.
+    """
+    return JSONResponse(_protected_resource_metadata(request, "/api/mcp/dpp"))
+
+
 @router.get("/.well-known/oauth-authorization-server", include_in_schema=False)
 @router.get("/.well-known/oauth-authorization-server/api/mcp", include_in_schema=False)
+@router.get("/.well-known/oauth-authorization-server/api/mcp/dpp", include_in_schema=False)
 async def authorization_server_metadata(request: Request):
     return JSONResponse(_authorization_server_metadata(request))
 

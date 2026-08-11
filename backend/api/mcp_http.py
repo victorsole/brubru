@@ -39,7 +39,8 @@ import json
 import logging
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Tuple
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import anyio
 
@@ -72,7 +73,7 @@ logger = logging.getLogger(__name__)
 
 # /api/mcp keeps the public surface under the existing /api/* prefix so vite
 # proxies it the same way as REST endpoints and Stripe webhooks already work.
-router = APIRouter(prefix="/api/mcp", tags=["mcp-http"])
+# `router` is built at the bottom of this module by make_mcp_router().
 
 # JSON-RPC application error codes (-32000 to -32099 are app-defined).
 _ERR_AUTH_MISSING = -32001
@@ -98,6 +99,47 @@ SERVER_INFO = {
     "version": "1.0.0",
 }
 PROTOCOL_VERSION = "2024-11-05"  # MCP spec version we implement
+
+
+# ---------------------------------------------------------------------------
+# Profiles — one transport, several named MCP servers
+# ---------------------------------------------------------------------------
+# A profile is everything that differs between one mounted MCP and another:
+# the name the host displays, the tool subset, and the instructions block.
+# Everything else (auth, billing, the JSON-RPC envelope and above all the
+# `initialize` handshake) stays shared, because that handshake is the piece
+# that once broke the claude.ai connector by carrying a single extra field.
+# Duplicating it per client MCP would mean duplicating that landmine.
+@dataclass(frozen=True)
+class McpProfile:
+    server_info: Dict[str, str]
+    list_tools: Callable[[], List[Dict[str, Any]]]
+    find_tool: Callable[[str], Optional[McpTool]]
+    tool_count: Callable[[], int]
+    instructions: Callable[[str], str]
+
+
+def _default_instructions(coverage: str) -> str:
+    return (
+        "Brubru is EU policy intelligence for any AI assistant. For almost any "
+        "question, call the single tool `ask_brubru` with the user's question — "
+        "it returns the matching policy guides, the relevant EU laws (with CELEX "
+        "and EUR-Lex links), and live procedure status in one call. The other "
+        "tools (calendar events, EPRS, raw law/guide search) are advanced and "
+        "rarely needed.\n\n"
+        f"Live coverage: {coverage}.\n\n"
+        "Each call is metered in euros against your Brubru API balance; mint a "
+        "key and top up at https://brubru.beresol.eu/api."
+    )
+
+
+DEFAULT_PROFILE = McpProfile(
+    server_info=SERVER_INFO,
+    list_tools=lambda: list_tools_for_mcp(),
+    find_tool=lambda name: find_tool(name),
+    tool_count=lambda: len(TOOLS),
+    instructions=_default_instructions,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -208,7 +250,8 @@ def _tool_text_result(payload: Dict[str, Any]) -> Dict[str, Any]:
 # Method dispatch
 # ---------------------------------------------------------------------------
 
-def _dispatch_initialize(req_id: Any, params: Dict[str, Any]) -> Dict[str, Any]:
+def _dispatch_initialize(req_id: Any, params: Dict[str, Any],
+                         profile: "McpProfile") -> Dict[str, Any]:
     """Capability handshake.
 
     Per MCP spec the server should respond with the highest mutually-supported
@@ -242,27 +285,17 @@ def _dispatch_initialize(req_id: Any, params: Dict[str, Any]) -> Dict[str, Any]:
         req_id,
         {
             "protocolVersion": protocol,
-            "serverInfo": SERVER_INFO,
+            "serverInfo": profile.server_info,
             "capabilities": {
                 "tools": {"listChanged": False},
             },
-            "instructions": (
-                "Brubru is EU policy intelligence for any AI assistant. For almost any "
-                "question, call the single tool `ask_brubru` with the user's question — "
-                "it returns the matching policy guides, the relevant EU laws (with CELEX "
-                "and EUR-Lex links), and live procedure status in one call. The other "
-                "tools (calendar events, EPRS, raw law/guide search) are advanced and "
-                "rarely needed.\n\n"
-                f"Live coverage: {coverage}.\n\n"
-                "Each call is metered in euros against your Brubru API balance; mint a "
-                "key and top up at https://brubru.beresol.eu/api."
-            ),
+            "instructions": profile.instructions(coverage),
         },
     )
 
 
-def _dispatch_tools_list(req_id: Any) -> Dict[str, Any]:
-    return _ok(req_id, {"tools": list_tools_for_mcp()})
+def _dispatch_tools_list(req_id: Any, profile: "McpProfile") -> Dict[str, Any]:
+    return _ok(req_id, {"tools": profile.list_tools()})
 
 
 async def _dispatch_tools_call(
@@ -274,13 +307,15 @@ async def _dispatch_tools_call(
     client_ip: Optional[str],
     request_id: str,
     caller_key: Optional[str] = None,
+    profile: "McpProfile" = None,
 ) -> Dict[str, Any]:
     tool_name = params.get("name") if params else None
     arguments = params.get("arguments") if params else None
     if not isinstance(tool_name, str) or not tool_name:
         return _err(req_id, -32602, "tools/call requires `name` (string).")
 
-    tool: Optional[McpTool] = find_tool(tool_name)
+    _find = (profile.find_tool if profile is not None else find_tool)
+    tool: Optional[McpTool] = _find(tool_name)
     if tool is None:
         return _err(req_id, _ERR_TOOL_NOT_FOUND, f"Unknown tool: {tool_name!r}.")
 
@@ -413,20 +448,13 @@ class JsonRpcEnvelope(BaseModel):
     params: Any = None
 
 
-@router.post(
-    "",
-    include_in_schema=True,
-    summary="Brubru MCP — JSON-RPC 2.0 HTTP transport",
-    description=(
-        "Public Model Context Protocol endpoint. Speak JSON-RPC 2.0; "
-        "see /mcp on brubru.beresol.eu for client install instructions."
-    ),
-)
-async def mcp_endpoint(
+async def _handle_mcp(
     request: Request,
-    authorization: Optional[str] = Header(default=None, alias="Authorization"),
-    x_api_key: Optional[str] = Header(default=None, alias="X-API-Key"),
+    authorization: Optional[str],
+    x_api_key: Optional[str],
+    profile: "McpProfile",
 ):
+    """The whole JSON-RPC lifecycle, shared by every mounted MCP server."""
     # Parse JSON body manually so we can return JSON-RPC parse errors with a
     # proper id rather than letting FastAPI's 422 surface.
     try:
@@ -453,7 +481,7 @@ async def mcp_endpoint(
 
     # ---- initialize is free; no auth required for the handshake ----------
     if method == "initialize":
-        return _dispatch_initialize(req_id, params if isinstance(params, dict) else {})
+        return _dispatch_initialize(req_id, params if isinstance(params, dict) else {}, profile)
 
     # ---- All other methods require auth ----------------------------------
     # Query-string fallback for hosts that only accept a URL (claude.ai web
@@ -482,7 +510,7 @@ async def mcp_endpoint(
             return _err(req_id, code, msg)
 
         if method == "tools/list":
-            return _dispatch_tools_list(req_id)
+            return _dispatch_tools_list(req_id, profile)
 
         if method == "tools/call":
             client_ip = request.client.host if request.client else None
@@ -495,6 +523,7 @@ async def mcp_endpoint(
                 client_ip,
                 request_id=str(uuid.uuid4()),
                 caller_key=plaintext,
+                profile=profile,
             )
 
         return _err(req_id, -32601, f"Method not found: {method!r}")
@@ -507,19 +536,102 @@ async def mcp_endpoint(
 # Common in browsers, Stripe-style health checkers, etc.
 # ---------------------------------------------------------------------------
 
-@router.get(
-    "",
-    include_in_schema=True,
-    summary="MCP probe — confirms the endpoint exists (no auth)",
-)
-async def mcp_probe():
+async def _handle_probe(profile: "McpProfile"):
     return {
-        "service": SERVER_INFO["name"],
-        "version": SERVER_INFO["version"],
+        "service": profile.server_info["name"],
+        "version": profile.server_info["version"],
         "protocol": "Model Context Protocol",
         "protocolVersion": PROTOCOL_VERSION,
         "transport": "HTTP / JSON-RPC 2.0 (POST this URL)",
-        "tools_available": len(TOOLS),
+        "tools_available": profile.tool_count(),
         "auth": "Authorization: Bearer <key> | X-API-Key: <key> | ?key=<key>",
         "docs": "https://brubru.beresol.eu/mcp",
     }
+
+
+# ---------------------------------------------------------------------------
+# Factory — mount one MCP server per profile
+# ---------------------------------------------------------------------------
+
+def make_mcp_router(*, prefix: str, profile: "McpProfile", tag: str) -> APIRouter:
+    """Build an APIRouter exposing `profile` as an MCP server at `prefix`.
+
+    Every mounted server shares _handle_mcp, so auth, billing, the JSON-RPC
+    envelope and the `initialize` handshake exist once. Only the displayed name,
+    the tool subset and the instructions differ.
+    """
+    r = APIRouter(prefix=prefix, tags=[tag])
+    name = profile.server_info["name"]
+
+    @r.post(
+        "",
+        include_in_schema=True,
+        summary=f"{name} MCP: JSON-RPC 2.0 HTTP transport",
+        description=(
+            f"Model Context Protocol endpoint for {name}. Speak JSON-RPC 2.0; "
+            "see /mcp on brubru.beresol.eu for client install instructions."
+        ),
+    )
+    async def _post(  # noqa: ANN202
+        request: Request,
+        authorization: Optional[str] = Header(default=None, alias="Authorization"),
+        x_api_key: Optional[str] = Header(default=None, alias="X-API-Key"),
+    ):
+        return await _handle_mcp(request, authorization, x_api_key, profile)
+
+    @r.get(
+        "",
+        include_in_schema=True,
+        summary=f"{name} MCP probe: confirms the endpoint exists (no auth)",
+    )
+    async def _get():  # noqa: ANN202
+        return await _handle_probe(profile)
+
+    return r
+
+
+# The original, full-surface Brubru MCP. Mounted by main.py as before.
+router = make_mcp_router(prefix="/api/mcp", profile=DEFAULT_PROFILE, tag="mcp-http")
+
+
+# ---------------------------------------------------------------------------
+# Brubru DPP — the first per-client, on-demand MCP (Terraqui / LIFE DPP-TEX)
+# ---------------------------------------------------------------------------
+
+def _dpp_instructions(coverage: str) -> str:  # noqa: ARG001 - global coverage is wrong here
+    from services.mcp.dpp_tools import DPP_TOOLS
+
+    return (
+        "Brubru DPP is a focused EU regulatory server for the Digital Product "
+        "Passport. For almost any question call `ask_dpp` with the user's question: "
+        "it searches the acts, the sector timetable, the registry, the harmonised "
+        "standards, the battery data points and the live consultations at once.\n\n"
+        "It covers: the EU acts that create passport obligations (with their FULL "
+        "legal text, not summaries), when each product sector's passport becomes "
+        "mandatory, how registration in the central registry works, the six "
+        "harmonised EN standards, the 71 battery passport data points, textile "
+        "extended producer responsibility, the ecodesign consultations including "
+        "the apparel-textiles delegated act, and the Ecodesign Forum.\n\n"
+        "The only hard deadline in force is 18 February 2027 for certain large "
+        "batteries; textiles follow in Q3-Q4 2027 on the Commission's indicative "
+        "timetable. For EU policy beyond the passport, use the main Brubru server.\n\n"
+        f"{len(DPP_TOOLS)} tools. Each call is metered in euros against your Brubru "
+        "API balance."
+    )
+
+
+def _dpp_profile() -> "McpProfile":
+    from services.mcp.dpp_tools import DPP_TOOLS, find_dpp_tool, list_dpp_tools_for_mcp
+
+    return McpProfile(
+        server_info={"name": "Brubru DPP", "version": "1.0.0"},
+        list_tools=list_dpp_tools_for_mcp,
+        find_tool=find_dpp_tool,
+        tool_count=lambda: len(DPP_TOOLS),
+        instructions=_dpp_instructions,
+    )
+
+
+# Mounted at /api/mcp/dpp. FastAPI matches the more specific path first, so this
+# does not shadow (or get shadowed by) the full-surface server at /api/mcp.
+dpp_router = make_mcp_router(prefix="/api/mcp/dpp", profile=_dpp_profile(), tag="mcp-dpp")
