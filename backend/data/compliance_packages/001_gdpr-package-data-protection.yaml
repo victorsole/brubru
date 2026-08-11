@@ -1,0 +1,4275 @@
+id: 1
+name: GDPR Package (Data Protection)
+policy_area: Digital Policy and Digital Economy
+description: General Data Protection Regulation and implementing acts covering personal data
+  protection in the EU
+applicability: Companies processing personal data of EU residents, public authorities, data
+  processors
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32016L0680
+  title: Directive (EU) 2016/680 of the European Parliament and of the Council of 27 April
+    2016 on the protection of natural persons with regard to the processing of personal data
+    by competent authorities for the purposes of the prevention, investigation, detection
+    or prosecution of criminal offences or the execution of criminal penalties, and on the
+    free movement of such data, and repealing Council Framework Decision 2008/977/JHA
+- celex: 32016R0679
+  title: Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April
+    2016 on the protection of natural persons with regard to the processing of personal data
+    and on the free movement of such data, and repealing Directive 95/46/EC (General Data
+    Protection Regulation) (Text with EEA relevance)
+- celex: 32018D1927
+  title: Commission Decision (EU) 2018/1927 of 5 December 2018 laying down internal rules
+    concerning the processing of personal data by the European Commission in the field of
+    competition in relation to the provision of information to data subjects and the restriction
+    of certain rights
+- celex: 32018R1725
+  title: Decision of the High Representative of the Union for Foreign Affairs and Security
+    Policy of 1 October 2019 on implementing rules relating to the protection of personal
+    data by the European External Action Service and the application of Regulation (EU) 2018/1725
+    of the European Parliament and of the Council
+- celex: 32018R1962
+  title: Commission Decision (EU) 2018/1962 of 11 December 2018 laying down internal rules
+    concerning the processing of personal data by the European Anti-Fraud Office (OLAF) in
+    relation to the provision of information to data subjects and the restriction of certain
+    of their rights in accordance with Article 25 of Regulation (EU) 2018/1725 of the European
+    Parliament and of the Council
+- celex: 32019D0165
+  title: Commission Decision (EU) 2019/165 of 1 February 2019 laying down internal rules concerning
+    the provision of information to data subjects and the restriction of certain of their
+    data protection rights by the Commission in the context of administrative inquiries, pre-disciplinary,
+    disciplinary and suspension proceedings
+- celex: 32019D1862
+  title: Commission Decision (EU) 2019/1862 of 6 November 2019 laying down internal rules
+    in relation to the provision of information to data subjects and the restrictions of certain
+    of their rights in the context of the processing of personal data by the Commission in
+    the Union system to prevent, deter and eliminate illegal, unreported and unregulated fishing
+- celex: 32019R0493
+  title: Regulation (EU, Euratom) 2019/493 of the European Parliament and of the Council of
+    25 March 2019 amending Regulation (EU, Euratom) No 1141/2014 as regards a verification
+    procedure related to infringements of rules on the protection of personal data in the
+    context of elections to the European Parliament
+- celex: 32020D0005
+  title: Management Board Decision No 5/2020 of 21 October 2020 on internal rules concerning
+    restrictions of certain data-subject rights in relation to the processing of personal
+    data in the framework of activities carried out by the European Union Aviation Safety
+    Agency
+- celex: 32020R0969
+  title: Commission Decision (EU) 2020/969 of 3 July 2020 laying down implementing rules concerning
+    the Data Protection Officer, restrictions of data subjects’ rights and the application
+    of Regulation (EU) 2018/1725 of the European Parliament and of the Council, and repealing
+    Commission Decision 2008/597/EC
+- celex: 32020R1502
+  title: Commission Decision (EU) 2020/1502 of 15 October 2020 laying down internal rules
+    concerning the provision of information to data subjects and the restriction of certain
+    of their rights in the context of the processing of personal data by the Commission in
+    the cooperation mechanism established by Regulation (EU) 2019/452 of the European Parliament
+    and of the Council
+- celex: 32021D0893
+  title: Decision of the Steering Committee of the Research Executive Agency (REA) on internal
+    rules concerning restrictions of certain rights of data subjects in relation to the processing
+    of personal data in the framework of activities carried out by the Agency
+- celex: 32021D1049
+  title: Decision of the Management Board on internal rules concerning restrictions of certain
+    rights of data subjects in relation to the processing of personal data in the framework
+    of activities carried out by the European Environment Agency
+- celex: 32021D2243
+  title: Commission Decision (EU) 2021/2243 of 15 December 2021 laying down internal rules
+    concerning the provision of information to data subjects and the restriction of certain
+    of their rights in the context of the processing of personal data for the purposes of
+    the security of information and communication systems of the Commission
+- celex: 32022D0004
+  title: Decision No 4/2022 of the Bureau of the Committee of the Regions of 25 January 2022
+    laying down internal rules concerning restrictions of certain rights of data subjects
+    in relation to the processing of personal data in the context of activities and procedures
+    carried out by the Committee of the Regions
+- celex: 32022D0020
+  title: Decision No 20/2022 of the ELA Management Board of 24 November 2022 on internal rules
+    concerning restrictions of certain data subject rights in relation to the processing of
+    personal data in the framework of activities carried out by the European Labour Authority
+- celex: 32022L0211
+  title: Directive (EU) 2022/211 of the European Parliament and of the Council of 16 February
+    2022 amending Council Framework Decision 2002/465/JHA, as regards its alignment with Union
+    rules on the protection of personal data
+- celex: 32022R0121
+  title: Commission Decision (EU) 2022/121 of 27 January 2022 laying down internal rules concerning
+    the provision of information to data subjects and the restriction of certain of their
+    rights in the context of processing of personal data for the purposes of handling requests
+    and complaints under the Staff Regulations
+- celex: 32022R0991
+  title: Regulation (EU) 2022/991 of the European Parliament and of the Council of 8 June
+    2022 amending Regulation (EU) 2016/794, as regards Europol’s cooperation with private
+    parties, the processing of personal data by Europol in support of criminal investigations,
+    and Europol’s role in research and innovation
+- celex: 32022R1409
+  title: Commission Implementing Regulation (EU) 2022/1409 of 18 August 2022 concerning the
+    detailed rules on the conditions for the operation of the web service and data protection
+    and security rules applicable to the web service, as well as measures for the development
+    and technical implementation of the web service and repealing Implementing Regulation
+    (EU) 2021/1224
+- celex: 32023D0368
+  title: Council Decision (EU) 2023/368 of 14 February 2023 on the conclusion of the Agreement
+    between the European Union, of the one part, and New Zealand, of the other part, on the
+    exchange of personal data between the European Union Agency for Law Enforcement Cooperation
+    (Europol) and the authorities of New Zealand competent for fighting serious crime and
+    terrorism
+- celex: 32023D1012
+  title: Council Decision (EU) 2023/1012 of 15 May 2023 authorising the opening of negotiations
+    with the Republic of Peru for an agreement between the European Union and the Republic
+    of Peru on the exchange of personal data between the European Union Agency for Law Enforcement
+    Cooperation (Europol) and the Peruvian authorities competent for fighting serious crime
+    and terrorism
+- celex: 32023D1585
+  title: Decision No 253 of the Management Board of the European Union Agency for Railways
+    on internal rules concerning restrictions of certain data- subject rights in relation
+    to the processing of personal data in the framework of activities carried out by the European
+    Union Agency for Railways [2023/1585]
+- celex: 32023L2123
+  title: Directive (EU) 2023/2123 of the European Parliament and of the Council of 4 October
+    2023 amending Council Decision 2005/671/JHA as regards its alignment with Union rules
+    on the protection of personal data
+- celex: 32025D1747
+  title: Decision of the Management Board of the European Centre for Disease Prevention and
+    Control of 27 March 2025 on internal rules concerning restrictions of certain rights of
+    data subjects in relation to processing of personal data in the framework of the functioning
+    of the European Centre for Disease Prevention and Control (ECDC)
+- celex: null
+  title: Decision No 20-W-3 of the Administrative Board of the European Fisheries Control
+    Agency of 22 April 2020 laying down internal rules concerning the restriction of certain
+    rights of data subjects in relation to the processing of personal data in the framework
+    of activities carried out by the European Fisheries Control Agency
+- celex: null
+  title: Rules of Procedure on the Processing and Protection of Personal Data at Eurojust
+- celex: null
+  title: EESC Decision No 160/21 A laying down internal rules concerning restrictions of certain
+    rights of data subjects in relation to the processing of personal data in the framework
+    of activities carried out by the European Economic and Social Committee
+- celex: null
+  title: Decision SC (2020) 26 of the INEA Steering Committee of 14 October 2020 on internal
+    rules concerning restrictions of certain rights of data subjects in relation to the processing
+    of personal data in the framework of activities carried out by the Innovation and Networks
+    Executive Agency
+- celex: null
+  title: Decision No 2021-096 Rev 1 of the Management Board of the European Union Agency for
+    the Operational Management of Large-Scale IT Systems in the Area of Freedom, Security
+    and Justice of 16 April 2021 on internal rules concerning restrictions of certain rights
+    of data subjects in relation to the processing of personal data in the framework of the
+    functioning of the European Union Agency for the Operational Management of the Large-Scale
+    IT Systems in the Area of Freedom, Security and Justice
+- celex: null
+  title: Decision of the Governing Board of the Clean Sky 2 Joint Undertaking of 28 April
+    2020 laying down internal rules concerning restrictions of certain rights of data subjects
+    in relation to processing of personal data in the framework of the functioning of the
+    Clean Sky 2 Joint Undertaking
+- celex: null
+  title: College Decision 2020-04 of 15 July 2020 on internal rules concerning restrictions
+    of certain data subject rights in relation to the processing of personal data in the framework
+    of activities carried out by Eurojust
+- celex: null
+  title: Decision of the Management Board of the European Insurance and Occupational Pensions
+    Authority of 23 May 2019 on internal rules concerning restrictions of certain rights of
+    data subjects in relation to processing of personal data in the framework of the functioning
+    of EIOPA
+- celex: null
+  title: Decision of the Governing Board of Fusion for Energy of 9 December 2019 on internal
+    rules concerning restrictions of certain rights of data subjects in relation to processing
+    of personal data in the framework of the functioning of fusion for energy
+- celex: null
+  title: Decision of the Management Board of the Agency for Support for BEREC (BEREC Office)
+    of 10 September 2019 laying down internal rules concerning restrictions of certain rights
+    of data subjects in relation to the processing of personal data in the framework of activities
+    carried out by the BEREC Office
+- celex: null
+  title: European Data Protection Supervisor Decision of 2 April 2019 on internal rules concerning
+    restrictions of certain rights of data subjects in relation to the processing of personal
+    data in the framework of activities carried out by the European Data Protection Supervisor
+- celex: null
+  title: Decision of the Management Board of the European Centre for the Development of Vocational
+    Training (Cedefop) of 6 May 2020 adopting internal rules concerning restrictions of certain
+    rights of data subjects in relation to the processing of personal data in the framework
+    of the functioning of Cedefop
+- celex: null
+  title: Decision of the Administrative Board of the European Maritime Safety Agency of 6
+    April 2020 on internal rules concerning restrictions of certain rights of data subjects
+    in relation to processing of personal data in the framework of the functioning of EMSA
+- celex: null
+  title: Decision of the Governing Board of the Bio-Based Industries Joint Undertaking of
+    26 March 2020 laying down internal rules concerning restrictions of certain rights of
+    data subjects in relation to processing of personal data in the framework of the functioning
+    of the BBI JU
+- celex: null
+  title: Management Board Decision 28/2022 of 4 April 2022 on internal rules concerning restrictions
+    of certain data subject rights in relation to the processing of personal data in the framework
+    of activities carried out by the European Border and Coast Guard Agency
+- celex: null
+  title: Decision of the European Data Protection Supervisor (EDPS) of 14 October 2022 amending
+    the Rules of Procedure of the EDPS of 15 May 2020
+- celex: null
+  title: Decision of the Single Resolution Board of 18 September 2019 on internal rules concerning
+    restrictions of certain rights of data subjects in relation to processing of personal
+    data in the framework of administrative inquiries/disciplinary proceedings/investigations/other
+    carried out by the Single Resolution Board (SRB/ES/2019/32)
+- celex: null
+  title: Decision of the Steering Committee on internal rules concerning restrictions of certain
+    rights of data subjects in relation to the processing of personal data in the framework
+    of activities carried out by the Education, Audiovisual and Culture Executive Agency
+- celex: null
+  title: Decision of the Management Board of the European Medicines Agency of 12 June 2019
+    on internal rules concerning restrictions of certain rights of data subjects in relation
+    to processing of personal data in the framework of the functioning of the Agency
+- celex: null
+  title: Decision of the Steering Committee of the European Health and Digital Executive Agency
+    on internal rules concerning restrictions of certain rights of data subjects in relation
+    to the processing of personal data in the framework of activities carried out by the Agency
+- celex: null
+  title: Decision of the European Data Protection Supervisor of 15 May 2020 adopting the Rules
+    of Procedure of the EDPS
+- celex: null
+  title: European Investment Bank Decision of 6 February 2019 laying down internal rules concerning
+    the processing of personal data by the Fraud Investigations Division within the Inspectorate
+    General and the Office of the Chief Compliance Officer of the European Investment Bank
+    in relation to the provision of information to data subjects and the restriction of certain
+    of their rights
+requirements:
+- article: Article 1(2)(b)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Each Member State shall ensure that personal data are processed pursuant
+    to paragraph 3 of this Article only for the purposes of the prevention, investigation,
+    detection or prosecution of terrorist offences and other criminal offences for which Europol
+    is competent, as listed in Annex I of Regulation (EU) 2016/794
+- article: Article 1(2)(c)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The categories of personal data to be transmitted to Europol for the purposes
+    referred to in paragraph 3a shall remain limited to those referred to in Section B, point
+    2, of Annex II to Regulation (EU) 2016/794
+- article: Article 1(2)(d)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The categories of personal data that may be exchanged between Member States
+    for the purposes referred to in the first subparagraph shall remain limited to those referred
+    to in Section B, point 2, of Annex II to Regulation (EU) 2016/794
+- article: Article 2(1)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2025-11-01'
+  interpretive: null
+  requirement_text: Member States shall bring into force the laws, regulations and administrative
+    provisions necessary to comply with this Directive by 1 November 2025
+- article: Article 2(1)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: They shall immediately inform the Commission thereof
+- article: Article 2(1)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those measures, they shall contain a reference
+    to this Directive or shall be accompanied by such a reference on the occasion of their
+    official publication
+- article: Article 2(2)
+  law_celex: 32023L2123
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    measures of national law which they adopt in the field covered by this Directive
+- article: Article 1(1)
+  law_celex: 32019D0165
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Commission must follow rules to inform data subjects of the processing
+    of their data in accordance with Articles 14, 15 and 16 of Regulation (EU) 2018/1725 when
+    conducting administrative inquiries, pre-disciplinary, disciplinary and suspension proceedings
+- article: Article 2(1)
+  law_celex: 32019D0165
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Commission shall consider whether any exceptions laid down in Regulation
+    (EU) 2018/1725 apply when exercising duties with respect to data subjects' rights
+- article: Recital 10
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should inform all individuals of its activities involving processing
+    of their personal data and of their rights, in a transparent and coherent manner, by means
+    of data protection notices published on the Commission's website
+- article: Recital 10
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should individually inform, in an appropriate format, the data
+    subjects involved in an administrative inquiry or in pre-disciplinary, disciplinary or
+    suspension proceedings
+- article: Recital 13
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should handle all restrictions in a transparent manner and
+    register each application of restrictions in the corresponding record system
+- article: Recital 15
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should regularly review the restrictions imposed in order to
+    ensure that the data subject's rights to be informed are restricted only as long as such
+    restrictions are necessary
+- article: Recital 16
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: true
+  requirement_text: Controller should assess on a case-by-case basis whether the communication
+    of the restriction would compromise its purpose when other rights of data subjects are
+    restricted
+- article: Recital 17
+  law_celex: 32019D0165
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer of the European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Data Protection Officer of the European Commission should carry out an
+    independent review of the application of restrictions, with a view to ensuring compliance
+    with this Decision
+- article: Article 6(5)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Director of the Authority for European political parties and European
+    political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: The Director of the Authority shall exercise the powers conferred on the
+    appointing authority by the Staff Regulations and the powers conferred on the authority
+    empowered to conclude contracts of employment by the Conditions of Employment of Other
+    Servants
+- article: Article 6(5)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Authority staff
+  deadline: null
+  interpretive: null
+  requirement_text: The selection of staff shall not result in a conflict of interests between
+    their duties at the Authority and any other official duties, and they shall refrain from
+    any act which is incompatible with the nature of their duties
+- article: Article 10a(1)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: No European political party or European political foundation shall deliberately
+    influence, or attempt to influence, the outcome of elections to the European Parliament
+    by taking advantage of an infringement by a natural or legal person of the applicable
+    rules on the protection of personal data
+- article: Article 10a(2)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Authority for European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: The Authority shall refer matters to the committee of independent eminent
+    persons when informed of a decision of a national supervisory authority finding infringement
+    of data protection rules linked to political activities in the context of European Parliament
+    elections
+- article: Article 10a(3)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Authority for European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: The Authority shall request the opinion without undue delay, and no later
+    than 1 month after being informed of the decision of the national supervisory authority
+- article: Article 10a(3)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Authority for European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: The Authority shall set a short, reasonable deadline for the committee
+    to give its opinion
+- article: Article 10a(3)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Committee of independent eminent persons
+  deadline: null
+  interpretive: null
+  requirement_text: The committee shall comply with the deadline set by the Authority
+- article: Article 10a(4)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Authority for European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: The decision of the Authority shall be duly reasoned, in particular with
+    regard to the committee's opinion, and shall be published expeditiously
+- article: Article 11(3)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: National supervisory authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The national supervisory authority shall cooperate with the committee
+    in accordance with applicable law
+- article: Article 18(2)
+  law_celex: 32019R0493
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European political parties and European political foundations
+  deadline: null
+  interpretive: null
+  requirement_text: European political parties and foundations must remain registered in the
+    Register and may not be the subject of sanctions from the date of application until the
+    end of the financial year or action covered by the contribution or grant
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Division of IG/IN
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant data controller must follow rules to inform data subjects
+    of the processing of their data in accordance with Articles 14, 15 and 16 of Regulation
+    (EU) 2018/1725
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Division of IG/IN
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data must be stored in a secured electronic and physical environment,
+    which prevents unlawful access or transfer of data to persons who do not have a need to
+    know
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Division of IG/IN
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data processed must be retained for at least five years and up
+    to 10 years after the closure of the investigation
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Division of IG/IN
+  deadline: null
+  interpretive: null
+  requirement_text: Data related to unsubstantiated cases shall be retained for up to five
+    years maximum
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Division of IG/IN
+  deadline: null
+  interpretive: null
+  requirement_text: Longer periods than specified must be subject to agreement of the DPO
+    for exceptional and duly justified cases
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: IG/IN (Fraud Investigations Division)
+  deadline: null
+  interpretive: null
+  requirement_text: IG/IN shall consider whether any of the exceptions laid down in the Regulation
+    apply when exercising duties with respect to data subjects' rights
+- article: Recital (7)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: relevant data controller
+  deadline: null
+  interpretive: true
+  requirement_text: The relevant data controller should inform all individuals of its activities
+    involving processing of their personal data and of their rights in a transparent and coherent
+    manner in the form of data protection notices published on the EIB website and the EIB
+    Intranet, as well as individually inform data subjects relevant to its activities
+- article: Recital (11)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: IG/IN and OCCO
+  deadline: null
+  interpretive: true
+  requirement_text: IG/IN and OCCO should handle all restrictions in a transparent manner
+    and register each application of restrictions in the corresponding record system
+- article: Recital (12)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: relevant data controller
+  deadline: null
+  interpretive: true
+  requirement_text: The relevant data controller should regularly review its position to ensure
+    that the data subject's right to be informed is restricted only as long as the reasons
+    for the deferral last
+- article: Recital (13)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: controller
+  deadline: null
+  interpretive: true
+  requirement_text: The controller should assess on a case-by-case basis whether the communication
+    of the restriction would compromise its purpose when a restriction of other data subjects'
+    rights is applied
+- article: Article 11
+  law_celex: 32018R1962
+  criticality: important
+  addressee: eu_agency
+  applicable_entity: European Anti-Fraud Office (OLAF)
+  deadline: null
+  interpretive: null
+  requirement_text: The Office should inform all individuals of its activities involving processing
+    of their personal data and of their rights in a transparent and coherent manner in the
+    form of the data protection notices published on the Office's website, as well as to individually
+    inform data subjects relevant to the investigation – persons concerned, witnesses and
+    informants – in the appropriate format.
+- article: Article 17
+  law_celex: 32018R1962
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Commission services and executive agencies
+  deadline: null
+  interpretive: null
+  requirement_text: All Commission services and executing agencies processing personal data
+    subject to their duty to inform the Office under Article 8(1) of Regulation (EU, Euratom)
+    No 883/2013 or where such personal data are processed by the Office in the performance
+    of its tasks should apply the rules set out in this Decision with a view to protecting
+    the processing operations carried out by the Office.
+- article: Article 17
+  law_celex: 32018R1962
+  criticality: important
+  addressee: commission
+  applicable_entity: Commission services and executive agencies
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission services and executive agencies concerned should therefore
+    consult the Office on the relevant grounds for the restrictions and their necessity and
+    proportionality in order to ensure their coherent application.
+- article: Article 18
+  law_celex: 32018R1962
+  criticality: important
+  addressee: eu_agency
+  applicable_entity: European Anti-Fraud Office (OLAF), Commission services and executive
+    agencies
+  deadline: null
+  interpretive: null
+  requirement_text: The Office – and, where relevant, Commission services and executive agencies
+    – should handle all restrictions in a transparent manner and register each application
+    of restrictions in the corresponding record system.
+- article: Article 19
+  law_celex: 32018R1962
+  criticality: important
+  addressee: eu_agency
+  applicable_entity: European Anti-Fraud Office (OLAF)
+  deadline: null
+  interpretive: null
+  requirement_text: The Office should regularly review its position where the data subject's
+    right to be informed in accordance with Articles 16 and 38 of Regulation (EU) 2018/1725
+    is restricted only as long as the reasons for the deferral last.
+- article: General
+  law_celex: 32016L0680
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Companies processing personal data of EU residents, public authorities,
+    data processors
+  deadline: null
+  interpretive: null
+  requirement_text: Comply with Directive (EU) 2016/680 of the European Parliament and of
+    the Council of 27 April 2016 on the protection of natural persons with regard to the processing
+    of personal data by competent authorities for the purposes of the prevention, investigation,
+    detection or prosecution of criminal offences or the execution of criminal penalties,
+    and on the free movement of such data, and repealing Council Framework Decision 2008/977/JHA
+- article: Article 3(1)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Secretary-General of the EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The Secretary-General of the EEAS shall designate the DPO from the EEAS
+    staff, in accordance with Article 43 of the Regulation, and register him or her with the
+    European Data Protection Supervisor (EDPS).
+- article: Article 3(2)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data protection officer
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall have a sound knowledge of the EEAS services, their structure,
+    information systems, administrative rules and procedures. The DPO shall have expertise
+    in data protection, sound judgement and the ability to maintain an impartial and objective
+    stance in accordance with the Staff Regulations.
+- article: Article 3(3)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data protection officer
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall be designated for a term of five years and shall be eligible
+    for reappointment.
+- article: Article 3(6)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO contact details shall be published on the EEAS intranet and on
+    the EEAS external website and communicated to the EDPS.
+- article: Article 4(1)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The EEAS shall not issue any instructions to the DPO with regard to the
+    exercise of his or her tasks.
+- article: Article 4(2)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall not be dismissed or penalised for performing his or her
+    tasks.
+- article: Article 4(3)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall be informed of all contacts with external parties concerning
+    the application of the Regulation and this Decision, in particular, of any interaction
+    with the EDPS and the members of the DPO network in EU institutions, bodies, offices and
+    agencies.
+- article: Article 5
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data protection officer
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall be consulted on all issues which relate to the protection
+    of personal data.
+- article: Article 5(g)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data protection officer
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall keep a central register of processing activities carried
+    out by the EEAS based on the records prepared by the data controllers in accordance with
+    Article 31 of the Regulation and making the register publicly available.
+- article: Article 7(1)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall be provided with adequate staff and resources necessary
+    to carry out the tasks referred to in Article 5 of this Decision.
+- article: Article 7(2)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS staff, data controllers, processors
+  deadline: null
+  interpretive: null
+  requirement_text: All EEAS staff shall support the DPO in carrying out the tasks referred
+    to in Article 5 of this Decision, in particular the data controllers and processors shall
+    provide requested information about data processing activities, access to personal data
+    and prepare draft replies to the requests of the data subjects exercising their right
+    of access, modification and deletion received by the DPO but related to the processing
+    activities for which the data controller is responsible.
+- article: Article 7(5)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall have appropriate premises where the security and confidentiality
+    of information, including personal data, can be guaranteed and where adequate storage
+    and archiving of data and documents can be ensured.
+- article: Article 7(6)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The DPO shall have at their disposal an electronic tool which can (i)
+    manage the records of personal data processing activities in accordance with Article 31
+    of the Regulation and (ii) store data protection notices, data breach notifications, data
+    protection impact assessments, data subject requests and records of data transfers.
+- article: Article 7(7)
+  law_celex: 32018R1725
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EEAS
+  deadline: null
+  interpretive: null
+  requirement_text: The EEAS shall support the DPO in maintaining and expanding their expert
+    knowledge, among others, by facilitating participation in inter-institutional or external
+    training courses, conferences or events related to data protection and in meetings and
+    trainings organised by the EDPS and the DPO Network of EU institutions, bodies, offices
+    and agencies.
+- article: Article 1
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall act in accordance with the provisions of Regulation (EU)
+    2018/1725, any other relevant Union legal act and this Decision, and follow the strategic
+    priorities which the European Data Protection Supervisor may set out.
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall act in the public's interest as an expert as well as an
+    independent, reliable, proactive and authoritative body in the field of privacy and personal
+    data protection.
+- article: Article 3(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall act in accordance with the EDPS Ethics Framework.
+- article: Article 4(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall periodically publish its strategic priorities and an Annual
+    Report.
+- article: Article 4(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS, as a data controller, shall lead by example in respecting the
+    applicable law on the protection of personal data.
+- article: Article 4(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall engage openly and transparently with the media and stakeholders
+    and explain its activities to the public in a clear language.
+- article: Article 5(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall use state-of-the-art administrative and technical means
+    to maximise the efficiency and effectiveness in carrying out its tasks, including internal
+    communication and appropriate delegation of tasks.
+- article: Article 5(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall implement appropriate mechanisms and tools to ensure the
+    highest level of quality management, such as internal control standards, a risk management
+    process and the annual activity report.
+- article: Article 6
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall promote cooperation among data protection supervisory authorities
+    as well as with any other public authority whose activities may have an impact on privacy
+    and personal data protection.
+- article: Article 7
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: null
+  requirement_text: The European Data Protection Supervisor shall decide the strategic priorities
+    of the EDPS and adopt the policy documents corresponding to the tasks and powers of the
+    EDPS.
+- article: Article 8
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: null
+  requirement_text: The European Data Protection Supervisor shall determine the organisational
+    structure of the EDPS secretariat.
+- article: Article 10(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: null
+  requirement_text: The Management Meeting shall be chaired by the European Data Protection
+    Supervisor, or in cases he or she is unable to attend the meeting, by the Director.
+- article: Article 10(3)
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: As a rule, the Management Meeting shall take place once per week.
+- article: Article 10(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Director
+  deadline: null
+  interpretive: null
+  requirement_text: The Director shall ensure the proper functioning of the secretariat of
+    the Management Meeting.
+- article: Article 9(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Director
+  deadline: null
+  interpretive: null
+  requirement_text: The Director shall be the reporting officer for the Data Protection Officer,
+    the Local Security Officer, the Local Information Security Officer, the Transparency Officer,
+    the Legal Service Officer, the Ethics Officer and the Internal Control Coordinator for
+    the tasks relating to these functions.
+- article: Article 9(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Director
+  deadline: null
+  interpretive: null
+  requirement_text: The Director shall assist the European Data Protection Supervisor to ensure
+    consistency and overall coordination of the EDPS and on any other tasks delegated to him
+    or her by the European Data Protection Supervisor.
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency must restrict the application of rights in Articles 14 to 21,
+    35 and 36, as well as Article 4 of Regulation (EU) 2018/1725 only pursuant to Article
+    25 and under the conditions laid down in this Decision
+- article: Article 1(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision must apply to processing operations for administrative inquiries,
+    disciplinary proceedings, OLAF cases, whistleblowing cases, harassment procedures, complaints,
+    internal audits, DPO investigations, and IT security investigations
+- article: Article 1(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision must apply to assistance and cooperation activities provided
+    to other Union institutions, bodies, offices and agencies, competent authorities of Member
+    States and international organisations
+- article: Recital 13
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must monitor regularly (about every six months) that the conditions
+    which justify a particular restriction still exist
+- article: Recital 13
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must lift the restriction when the conditions that justify
+    the restriction no longer apply
+- article: Recital 14
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must consult the Data Protection Officer at the moment of deferral
+    of information or when other restriction of data subjects' right is applied
+- article: Recital 14
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must consult the Data Protection Officer on the occasion of
+    the assessment of the conditions as to whether the restriction is still justified
+- article: Recital 6
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must consult other institutions, bodies, offices, agencies,
+    authorities or organisations on the relevant grounds for imposing restrictions and on
+    the necessity and proportionality of the restrictions when providing assistance and cooperation
+- article: Recital 11
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency must regularly review its position to ensure that the data
+    subject's right to be informed is restricted only as long as the reasons for the deferral
+    last
+- article: Article 10(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Management Meeting
+  deadline: null
+  interpretive: null
+  requirement_text: The Management Meeting shall ensure strategic oversight of the work of
+    the EDPS and shall comprise the European Data Protection Supervisor, the Head of the EDPS
+    Secretariat, the senior and middle managers, as well as other officials that contribute
+    to strategic oversight as determined by the European Data Protection Supervisor
+- article: Article 10(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Management Meeting
+  deadline: null
+  interpretive: null
+  requirement_text: Where the Management Meeting concerns issues relating to human resources,
+    budget, finance or administrative matters relevant for the EDPB or the EDPB secretariat,
+    it shall also comprise the Head of the EDPB secretariat
+- article: Article 10(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Management Meeting
+  deadline: null
+  interpretive: null
+  requirement_text: The Management Meeting shall be chaired by the European Data Protection
+    Supervisor, or in cases he or she is unable to attend the meeting, by the Head of EDPS
+    Secretariat
+- article: Article 10(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of Secretariat
+  deadline: null
+  interpretive: null
+  requirement_text: The Head of Secretariat shall ensure the proper functioning of the secretariat
+    of the Management Meeting
+- article: Article 10(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Management Meeting
+  deadline: null
+  interpretive: null
+  requirement_text: The meetings shall not be public and discussions shall be confidential
+- article: Article 11(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Head of the EDPS Secretariat
+  deadline: null
+  interpretive: null
+  requirement_text: Where the European Data Protection Supervisor is prevented from exercising
+    his or her functions or the post is vacant, the Head of the EDPS Secretariat shall perform
+    tasks and duties of the European Data Protection Supervisor which are necessary and urgent
+    to ensure business continuity
+- article: Article 16(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS shall declare inadmissible and not handle complaints lodged more
+    than two years after the complainant became aware of the alleged breach, except in duly
+    justified and exceptional circumstances
+- article: Article 20(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: In response to requests from the Commission pursuant to Article 42(1)
+    of the Regulation, the EDPS shall issue an opinion where the request concerns a proposal
+    for a legislative act or a recommendation or proposal to the Council pursuant to Article
+    218 TFEU
+- article: Article 20(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: Where the request concerns a draft delegated act or implementing act,
+    the EDPS shall issue formal comments
+- article: Article 28(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The Staff Committee shall be consulted on draft decisions relating to
+    the implementation of the Staff Regulations and the Conditions of Employment
+- article: Article 28(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The Staff Committee shall be informed of any question related to the execution
+    of its tasks
+- article: Article 33(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: The decisions of the EDPS shall be authenticated by the apposition of
+    the signature by the European Data Protection Supervisor or the Head of the EDPS Secretariat
+    as provided for in this Decision
+- article: Article 2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EDPS
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force 20 days following its publication
+    in the Official Journal of the European Union
+- article: Article 1(2)
+  law_celex: 32021D1049
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Environment Agency Executive Director
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency, as the controller, is represented by its Executive Director,
+    who may delegate the controller role within the Agency to reflect the operational responsibilities
+    for specific personal data processing operations
+- article: Recital (15)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should apply restrictions only when they respect the essence
+    of fundamental rights and freedoms, are strictly necessary and are a proportionate measure
+    in a democratic society
+- article: Recital (15)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should give reasons explaining the justification for those
+    restrictions
+- article: Recital (16)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: In application of the principle of accountability, the Agency should keep
+    a record of its application of restrictions
+- article: Recital (17)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: When processing personal data exchanged with other organisations in the
+    context of its tasks, the Agency and those organisations should consult each other on
+    potential grounds for imposing restrictions and the necessity and proportionality of those
+    restrictions, unless this would jeopardise the activities of the Agency
+- article: Recital (18)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Environment Agency as controller
+  deadline: null
+  interpretive: true
+  requirement_text: Article 25(6) of the Regulation obliges the controller to inform data
+    subjects of the principal reasons on which the application of the restriction is based
+    and of their right to lodge a complaint with the EDPS
+- article: Recital (19)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should assess on a case-by-case basis whether the communication
+    of the restriction would cancel its effect
+- article: Recital (20)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Environment Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should lift the restriction as soon as the conditions that
+    justify the restriction no longer apply and assess those conditions on a regular basis
+- article: Recital (21)
+  law_celex: 32021D1049
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Environment Agency Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be consulted in due time of any restrictions that may be
+    applied and verify their compliance with this Decision
+- article: Article 1
+  law_celex: 32022L0211
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities processing personal data in joint investigation
+    teams
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data included in information used for purposes referred to in
+    Article 1(10) first subparagraph, points (b), (c) and (d) of Framework Decision 2002/465/JHA
+    shall only be processed in accordance with Directive (EU) 2016/680, and in particular
+    Article 4(2) and Article 9(1) and (3) thereof
+- article: Article 2(1)
+  law_celex: 32022L0211
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2023-03-11'
+  interpretive: null
+  requirement_text: Member States shall bring into force the laws, regulations and administrative
+    provisions necessary to comply with this Directive by 11 March 2023
+- article: Article 2(1)
+  law_celex: 32022L0211
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall immediately inform the Commission when they bring
+    into force the laws, regulations and administrative provisions necessary to comply with
+    this Directive
+- article: Article 2(1)
+  law_celex: 32022L0211
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt measures to comply with this Directive, they
+    shall contain a reference to this Directive or shall be accompanied by such reference
+    on the occasion of their official publication
+- article: Article 2(2)
+  law_celex: 32022L0211
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the measures
+    of national law which they adopt in the field covered by this Directive
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: Where Cedefop performs its duties with respect to the data subject's rights
+    under Regulation (EU) 2018/1725, it shall consider whether any of the exemptions laid
+    down in that Regulation apply
+- article: Article 2(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and only accessible
+    to authorised staff
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored in a secure IT application according
+    to Cedefop's security standards, as well as in specific electronic folders accessible
+    only to authorised staff. Appropriate levels of access shall be granted individually
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: The IT environment of Cedefop shall be accessible via a single sign-on
+    system and connected automatically to the user's ID and password. E-records shall be held
+    securely to safeguard the confidentiality and privacy of the data therein
+- article: Article 2(1)(d)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all persons having access to the data
+  deadline: null
+  interpretive: null
+  requirement_text: All persons having access to the data shall be bound by the obligation
+    of confidentiality
+- article: Article 2(1)(e)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: external service provider
+  deadline: null
+  interpretive: null
+  requirement_text: The external service provider storing the medical files shall be bound
+    by contractual clauses regarding confidentiality and processing of personal data
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by means of
+    data protection notices or records published on the website and intranet of Cedefop
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data referred to in Article 1(3)
+    of this Decision shall be no longer than necessary and appropriate for the purposes for
+    which the data are processed. It shall in any event not be longer than the retention period
+    specified in the data protection notices or records
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: Where Cedefop considers applying a restriction, the risk to the rights
+    and freedoms of the data subject shall be weighed, in particular against the risk to the
+    rights and freedoms of other data subjects and the risk of undermining the effectiveness
+    of Cedefop's investigations or procedures
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Cedefop
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall only be applied by Cedefop on the basis of one or
+    more of the grounds listed in points (a) to (i) of Article 25(1) of Regulation (EU) 2018/1725
+- article: Recital 4
+  law_celex: 32022R0991
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Europol should be provided with adequate human and financial resources
+    to support its additional tasks
+- article: Recital 9
+  law_celex: 32022R0991
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: A periodic reporting mechanism should be put in place in order to ensure
+    that Member States and Europol are informed about the outcome of the verification and
+    analysis of data and about whether the information has been entered in SIS
+- article: Recital 9
+  law_celex: 32022R0991
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Europol Management Board
+  deadline: null
+  interpretive: true
+  requirement_text: The Management Board should specify the criteria on the basis of which
+    it should be possible for Europol to issue proposals for the entry of information alerts
+    in SIS
+- article: Recital 12
+  law_celex: 32022R0991
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: Europol
+  deadline: null
+  interpretive: true
+  requirement_text: Europol should take all necessary measures to avoid conflicts of interest
+- article: Recital 12
+  law_celex: 32022R0991
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Europol
+  deadline: null
+  interpretive: true
+  requirement_text: Where Europol assists the Commission in identifying key research themes
+    and in drawing up and implementing a Union framework programme, Europol should not receive
+    funding from that programme
+- article: Article 1(1)
+  law_celex: 32022D0020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: null
+  requirement_text: Must lay down rules relating to the conditions under which the ELA may
+    restrict the application of Articles 4, 14 to 22, 35 and 36, pursuant to Article 25 of
+    the Regulation
+- article: Article 2(1)
+  law_celex: 32022D0020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: null
+  requirement_text: May restrict the application of Articles 14 to 22, 35 and 36, and Article
+    4 thereof only under specific conditions when conducting administrative inquiries, pre-disciplinary,
+    disciplinary or suspension proceedings, and when notifying cases to OLAF
+- article: Recital 17
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: true
+  requirement_text: Should apply restrictions only when they respect the essence of fundamental
+    rights and freedoms, are strictly necessary and are a proportionate measure in a democratic
+    society
+- article: Recital 17
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: true
+  requirement_text: Should give reasons explaining the justification for those restrictions
+- article: Recital 18
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: true
+  requirement_text: Should keep a record of its application of restrictions in application
+    of the principle of accountability
+- article: Recital 19
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA) and other organisations
+  deadline: null
+  interpretive: true
+  requirement_text: Should consult each other on potential grounds for imposing restrictions
+    and the necessity and proportionality of those restrictions when processing personal data
+    exchanged with other organisations, unless this would jeopardise the activities of the
+    ELA
+- article: Article 25(6) of Regulation 2018/1725
+  law_celex: 32022D0020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: null
+  requirement_text: Must inform data subjects of the principal reasons on which the application
+    of the restriction is based and of their right to lodge a complaint with the EDPS
+- article: Recital 22
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA)
+  deadline: null
+  interpretive: true
+  requirement_text: Should lift the restriction as soon as the conditions that justify the
+    restriction no longer apply, and assess those conditions on a regular basis
+- article: Recital 23
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Labour Authority (ELA) Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: ELA DPO should be consulted in due time of any restrictions that may be
+    applied and verify their compliance with this Decision
+- article: Recital 3
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ELA staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are under an obligation to report potentially illegal activities,
+    including fraud and corruption, which are detrimental to the interests of the Union
+- article: Recital 3
+  law_celex: 32022D0020
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ELA staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Article 25(6)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: null
+  requirement_text: The controller must inform data subjects of the principal reasons on which
+    the application of the restriction is based and of their right to lodge a complaint with
+    the EDPS
+- article: Article 25(8)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: null
+  requirement_text: The EDPS may defer, omit or deny the provision of information on the reasons
+    for the application of a restriction to the data subject if this would in any way cancel
+    the effect of the restriction
+- article: Recital 24
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: true
+  requirement_text: The EDPS should apply restrictions only when they respect the essence
+    of the fundamental rights and freedoms, and are strictly necessary and a proportionate
+    measure in a democratic society
+- article: Recital 24
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: true
+  requirement_text: The EDPS should give justifications explaining the grounds for those restrictions
+- article: Recital 25
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: true
+  requirement_text: Based on the principle of accountability, the EDPS should keep a record
+    of the application of the restrictions
+- article: Recital 28
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: true
+  requirement_text: The EDPS should assess on a case-by-case basis whether the communication
+    of the restriction would cancel its effect
+- article: Recital 29
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Data Protection Supervisor
+  deadline: null
+  interpretive: true
+  requirement_text: The EDPS should lift the restriction as soon as the conditions that justify
+    the restriction no longer apply, and assess those conditions on a regular basis
+- article: Recital 30
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be informed in due time of any restrictions being applied
+    and verify compliance with this Decision
+- article: Article 2(1)
+  law_celex: 32022D0004
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: null
+  requirement_text: Before applying any restrictions pursuant to Article 3(1), data controllers
+    shall consider whether any of the exceptions or derogations laid down in the Regulation
+    apply, notably those pursuant to Articles 15(4), 16(5), 19(3), 25(3) and (4), and 35(3)
+    EUDPR.
+- article: Article 2(2)
+  law_celex: 32022D0004
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: null
+  requirement_text: The application of derogations shall be subject to appropriate safeguards
+    in accordance with Article 13 EUDPR and Article 6 of this Decision.
+- article: Recital (8)
+  law_celex: 32022D0004
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: true
+  requirement_text: Data controllers should apply restrictions only when the latter respect
+    the essence of fundamental rights and freedoms, are strictly necessary and are a proportionate
+    measure in a democratic society.
+- article: Recital (9)
+  law_celex: 32022D0004
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: true
+  requirement_text: Data controllers should give reasons explaining the justification for
+    those restrictions and should keep a record of their application of restrictions to data
+    subjects' rights.
+- article: Recital (10)
+  law_celex: 32022D0004
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: data controllers
+  deadline: null
+  interpretive: true
+  requirement_text: Data controllers should lift a restriction as soon as the conditions that
+    justified the restriction no longer apply. They should regularly assess those conditions.
+- article: Recital (11)
+  law_celex: 32022D0004
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: data protection officer
+  deadline: null
+  interpretive: true
+  requirement_text: To guarantee the utmost protection of data subjects' rights and freedoms,
+    the DPO should be consulted in due time on any restrictions that may be applied and should
+    verify their compliance with this Decision.
+- article: Article 1(5)
+  law_celex: 32022D0004
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Committee of the Regions
+  deadline: null
+  interpretive: null
+  requirement_text: For the purpose of each processing, restriction and deferral, omission
+    or denial of information, the data controller responsible shall be determined in accordance
+    with the Committee's relevant internal decisions, procedures and implementing rules.
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall respect the essence of the fundamental rights and
+    freedoms and be necessary and proportionate in a democratic society
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: A necessity and proportionality test shall be carried out on a case-by-case
+    basis before restrictions are applied
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: Restrictions shall be limited to what is strictly necessary to achieve
+    the set objectives taking into account the risks to the rights and freedoms of the data
+    subjects
+- article: Article 2(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: The BEREC Office shall file, for accountability purposes, a record describing
+    the reasons for the restrictions applied, which grounds among those listed in paragraph
+    1 apply and the outcome of the necessity and proportionality test
+- article: Article 2(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: Those records shall be part of an ad hoc register, which shall made available
+    on request to the EDPS
+- article: Article 2(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: null
+  requirement_text: A report on the application of Article 25 of the Regulation shall be made
+    available periodically
+- article: Recital (16)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be informed in due time of any restrictions being applied
+    and verify compliance with this Decision
+- article: Recital (15)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: BEREC Office
+  deadline: null
+  interpretive: true
+  requirement_text: The BEREC Office should lift the restriction as soon as the conditions
+    that justify the restriction no longer apply, and assess those conditions on a regular
+    basis
+- article: Article 25(1)
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must restrict the application of Articles 14 to 22 and
+    35, as well as Article 4 of Regulation (EU) 2018/1725, when necessary to reconcile data
+    subjects' rights with investigation and enforcement activities needs
+- article: Articles 14, 15 and 16
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must inform all individuals of its activities involving
+    processing of their personal data and of their rights in a transparent and coherent manner
+    in the form of data protection notices published on the Commission's website
+- article: Article 25
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must consult relevant services, institutions, bodies, offices,
+    agencies, and authorities on the relevant grounds for imposing restrictions and the necessity
+    and proportionality of the restrictions when restricting data subjects' rights to protect
+    processing operations of other Union institutions or Member States' authorities
+- article: General data protection obligation
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data must be stored in a secured electronic environment to prevent
+    unlawful access or transfer of data to persons who do not have a need to know
+- article: Data retention requirement
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data must be retained for the time necessary for the investigation,
+    for assessing the need to initiate new investigative activities, during the administrative
+    procedure, and throughout any subsequent judicial review proceedings, and the administrative
+    retention period that follows the definitive closure of the file
+- article: Article 8(1) Charter and Article 16(1) Treaty
+  law_celex: 32018D1927
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must respect the rights of natural persons in relation
+    to the processing of personal data while carrying out its tasks
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: null
+  requirement_text: eu-LISA may restrict the application of Articles 4, 14 to 22, 35 and 36,
+    pursuant to Article 25 of the Regulation (EU) 2018/1725 in the context of specified procedures
+- article: Article 2(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: null
+  requirement_text: eu-LISA may restrict the application of Articles 14 to 22, 35 and 36,
+    and Article 4 when conducting administrative inquiries, pre-disciplinary, disciplinary
+    or suspension proceedings under Article 86 and Annex IX of the Staff Regulations
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: null
+  requirement_text: eu-LISA may restrict data subject rights when ensuring that eu-LISA staff
+    members may report facts confidentially where they believe there are serious irregularities
+- article: Recital (23)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: true
+  requirement_text: The Data Protection Officer (DPO) of eu-LISA should be consulted in due
+    time of any restrictions that may be applied and verify their compliance with this Decision
+- article: Recital (18)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: true
+  requirement_text: eu-LISA should keep a record of its application of restrictions
+- article: Recital (20)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: true
+  requirement_text: eu-LISA must inform data subjects of the principal reasons on which the
+    application of the restriction is based and of their right to lodge a complaint with the
+    EDPS
+- article: Recital (22)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: eu-LISA
+  deadline: null
+  interpretive: true
+  requirement_text: eu-LISA should lift the restriction as soon as the conditions that justify
+    the restriction no longer apply, and assess those conditions on a regular basis
+- article: Article 1(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Rules shall apply to the processing of personal data wholly or partly
+    by automated means, and to the processing other than by automated means of personal data
+    which form part of a filing system or are intended to form part of a filing system
+- article: Article 1(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Rules of procedure shall apply to all personal data processed by Eurojust,
+    including those personal data contained in information drawn up or received by it and
+    in its possession
+- article: Article 4
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National members
+  deadline: null
+  interpretive: null
+  requirement_text: National members receiving operational personal data from competent national
+    authorities shall comply with specific processing conditions imposed by those in accordance
+    with Article 9(3) and (4) of Directive (EU) 2016/680
+- article: Article 4
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National members
+  deadline: null
+  interpretive: null
+  requirement_text: National members shall inform those national authorities of any specific
+    conditions imposed by EU applicable law to them which apply to any operational personal
+    data the National members provide to the national authorities where appropriate
+- article: Article 5
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member
+  deadline: null
+  interpretive: null
+  requirement_text: National Member shall instruct, after consultation with the national authorities,
+    to correct the information without delay and inform the respective Member State or a Union
+    institution, body, office or agency from whom the information was received
+- article: Article 6
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurojust postholders
+  deadline: null
+  interpretive: null
+  requirement_text: All Eurojust postholders shall be adequately informed about the Eurojust
+    security policy
+- article: Article 6
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurojust postholders
+  deadline: null
+  interpretive: null
+  requirement_text: All Eurojust postholders shall be required to use the technical and organisational
+    measures put at their disposal, including following the required training
+- article: Article 7(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: National Member(s) concerned shall provide a copy of the request to the
+    Data Protection Officer for its registration
+- article: Article 7(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: The National Member(s) concerned shall consult the competent authorities
+    of the Member States on the decision to be taken in response to a request
+- article: Article 7(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: The National Member(s) concerned shall take into account the information
+    provided by the Data Protection Officer and, when appropriate, reconsider the initial
+    decision
+- article: Article 7(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: The legal and factual reasons on which the decision is taken by the National
+    Member(s) shall be documented in the Temporary Work File concerning the request in the
+    Case Management System
+- article: Article 7(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: The legal and factual reasons shall be made available to the EDPS on request
+- article: Article 7(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: null
+  requirement_text: The Data Protection Officer shall communicate the decision taken by the
+    National Member(s) concerned on behalf of Eurojust to the data subject
+- article: Article 7(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: null
+  requirement_text: The Data Protection Officer shall inform the data subject of the possibility
+    to lodge a complaint with the EDPS if he or she is not satisfied with the decision or
+    to seek a judicial remedy before the Court of Justice
+- article: Article 7(6)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Eurojust shall inform this authority of a decision communicated by the
+    Data Protection Officer to the data subject
+- article: Article 8
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Eurojust shall put in place appropriate technical measures to ensure that,
+    in the cases where Eurojust rectifies, restricts or erases personal data following a request,
+    a list of the suppliers and recipients of these data is automatically produced
+- article: Article 9(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: The case management system shall ensure that the authorised users under
+    the profile of that national desk under the responsibility of the National Member have
+    access to the relevant parts of the file but that they can not modify the data introduced
+    by the original author
+- article: Article 9(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: The case management system shall ensure that only operational personal
+    data referred in paragraph 1(a) to (i), (k) and (m) and (2) of Annex II of the Eurojust
+    Regulation can be recorded by the National Member concerned, who has opened a temporary
+    work file, in the index
+- article: Article 9(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: After three months the draft temporary work file should either be converted
+    into a temporary work file in the case management system or shall be automatically deleted
+    by the system
+- article: Article 9(6)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member(s)
+  deadline: null
+  interpretive: null
+  requirement_text: The National Member(s) concerned shall ensure that the information contained
+    in the index is sufficient to comply with the tasks of Eurojust as defined in Article
+    2 of the Eurojust Regulation
+- article: Article 10(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: The case management system shall ensure that such data cannot be included
+    in the index referred to in Article 23(1) and 23(4) of the Eurojust Regulation
+- article: Article 10(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: The case management system shall not record this information unless the
+    national members concerned decide otherwise
+- article: Article 10(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National members
+  deadline: null
+  interpretive: null
+  requirement_text: The decision to process such data shall be documented
+- article: Article 11(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Case management system
+  deadline: null
+  interpretive: null
+  requirement_text: The case management system shall not record this information unless the
+    national members concerned decide otherwise
+- article: Article 11(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National members
+  deadline: null
+  interpretive: null
+  requirement_text: The decision to process such data shall be documented
+- article: Article 12(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Member
+  deadline: null
+  interpretive: null
+  requirement_text: Each National Member of Eurojust shall document and inform the Data Protection
+    Officer regarding the access policy he or she has authorised in line with Article 34 of
+    the Eurojust Regulation within his or her national desk regarding operational personal
+    data
+- article: Article 12(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Members
+  deadline: null
+  interpretive: null
+  requirement_text: National Members shall ensure that appropriate organisational arrangements
+    are made and complied with within their desks and that proper use is made of the technical
+    and organisational measures, including following the required training, put at their disposal
+    by Eurojust
+- article: Article 1(2)
+  law_celex: 32023D1012
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations shall be conducted on the basis of the negotiating directives
+    of the Council set out in the addendum to this Decision
+- article: Article 3(1)
+  law_celex: 32023D1012
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations referred to in Article 1 shall be conducted in consultation
+    with the Law Enforcement Working Party – Police (LEWP-Police), subject to any guidance
+    which the Council may subsequently issue to the Commission
+- article: Article 3(2)
+  law_celex: 32023D1012
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall report to the Council on both the conduct and the
+    outcome of the negotiations on a regular basis and whenever requested by the Council,
+    and shall forward the relevant documents to it as early as possible in order to allow
+    the members of the Council reasonable time to prepare themselves properly for the forthcoming
+    negotiations
+- article: Article 3(2)
+  law_celex: 32023D1012
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Where appropriate, or where requested by the Council, the Commission shall
+    produce a written report
+- article: Article 25(1)
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall conduct analyses to identify fishing vessels engaged
+    in IUU fishing
+- article: Article 31-33
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall follow procedures to identify non-cooperating third
+    countries in fighting IUU fishing
+- article: Article 51
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission and Member States shall communicate and exchange information
+    to facilitate the enforcement of Regulation (EC) No 1005/2008
+- article: Article 339 TFEU
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must respect rules of confidentiality and professional
+    secrecy
+- article: Regulation (EU) 2018/1725
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must respect the rights of natural persons in relation
+    to the processing of personal data
+- article: Article 15(2), 17(8), 21(3), 39(4)
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Competent national authorities must be notified to the Commission
+- article: Data Retention Requirements
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data must be stored in a secured electronic or physical environment
+    to prevent unlawful access or transfer
+- article: Common Retention List
+  law_celex: 32019D1862
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data must be retained according to the administrative retention
+    periods established in the Common retention list
+- article: Article 1(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Fisheries Control Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Where the Agency performs its duties with respect to data subject's rights
+    under Regulation (EU) 2018/1725, it shall consider whether any of the exceptions laid
+    down in that Regulation apply.
+- article: Article 2(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Fisheries Control Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency shall put in place the following safeguards to prevent
+- article: Article 13(3) of Regulation (EU) 2017/2226
+  law_celex: 32022R1409
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: carriers
+  deadline: null
+  interpretive: null
+  requirement_text: Carriers must use the web service to verify whether third-country nationals
+    holding a short-stay visa issued for one or two entries have already used the number of
+    entries authorised by their visa
+- article: Article 45c(1) and (2) of Regulation (EC) No 76...
+  law_celex: 32022R1409
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: air carriers, sea carriers, international carriers transporting groups
+    overland by coach
+  deadline: null
+  interpretive: null
+  requirement_text: Air carriers, sea carriers and international carriers transporting groups
+    overland by coach must use the carrier gateway to verify whether third-country nationals
+    subject to a short-stay visa, airport transit visa or who are required to hold a long-stay
+    visa or a residence permit are in possession of a valid short-stay visa, an airport transit
+    visa, a long-stay visa or a residence permit
+- article: Recital (7)
+  law_celex: 32022R1409
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: carriers
+  deadline: null
+  interpretive: true
+  requirement_text: Carriers should access the web service through an authentication scheme
+    and be able to dispatch and receive messages in a format to be determined by eu-LISA
+- article: Recital (10)
+  law_celex: 32022R1409
+  criticality: recommended
+  addressee: commission
+  applicable_entity: the Commission, eu-LISA, Member States
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission, eu-LISA and the Member States should endeavour to inform
+    all known carriers of how and when they can register
+- article: Recital (11)
+  law_celex: 32022R1409
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: authenticated carriers
+  deadline: null
+  interpretive: true
+  requirement_text: Authenticated carriers should only give access to the web service to duly
+    authorised staff
+- article: Recital (13)
+  law_celex: 32022R1409
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: carriers
+  deadline: null
+  interpretive: true
+  requirement_text: Queries should be introduced at the earliest 48 hours prior to the scheduled
+    time of departure
+- article: Article 1
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall inform all individuals of its activities involving
+    the processing of their personal data and of their rights in a transparent and coherent
+    manner in the form of the data protection notices published on the Commission's website
+- article: Article 1
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Where relevant, the Commission shall adduce additional safeguards to ensure
+    that the data subjects are informed individually in an appropriate format
+- article: Article 2
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission services
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data shall be retained by the services of the Commission in charge
+    of the screening activity for as long as it is necessary for the screening of foreign
+    direct investments by Member States and for ensuring the functioning of the cooperation
+    mechanism
+- article: Article 2
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Personal data shall be stored in a secured electronic environment to prevent
+    unlawful access or transfer of data to persons outside the Commission
+- article: Article 3
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction, applied on the basis of this Decision, shall be necessary
+    and proportionate taking into account the risks to the rights and freedoms of data subjects
+- article: Article 4
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall handle all restrictions in a transparent manner and
+    register each application in the corresponding record system
+- article: Article 5
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall regularly review the restrictions imposed in order
+    to ensure that the data subject's rights to be informed are restricted only as long as
+    such restrictions are necessary
+- article: Article 6
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission (as controller)
+  deadline: null
+  interpretive: null
+  requirement_text: Where other rights of data subjects are restricted, the controller shall
+    assess on a case-by-case basis whether the communication of the restriction would compromise
+    its purpose
+- article: Article 7
+  law_celex: 32020R1502
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer of the Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Data Protection Officer of the Commission shall carry out an independent
+    review of the application of restrictions, with a view to ensuring compliance with this
+    Decision
+- article: Article 22a and 22b of the Staff Regulations an...
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC staff members
+  deadline: null
+  interpretive: null
+  requirement_text: EESC staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Article 22a and 22b of the Staff Regulations an...
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC staff members
+  deadline: null
+  interpretive: null
+  requirement_text: Staff members are also obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Article 25 of the Regulation
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC
+  deadline: null
+  interpretive: null
+  requirement_text: Unless restrictions are provided for in a legal act adopted on the basis
+    of the Treaties, it is necessary to adopt internal rules under which the EESC is entitled
+    to restrict those rights
+- article: Regulation (EU) 2018/1725
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC
+  deadline: null
+  interpretive: null
+  requirement_text: Under the Regulation, the EESC is therefore obliged to provide information
+    to data subjects on those processing activities and to respect their rights as data subjects
+- article: General principle
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC
+  deadline: null
+  interpretive: null
+  requirement_text: The EESC should apply restrictions only when they respect the essence
+    of fundamental rights and freedoms, are strictly necessary and are a proportionate measure
+    in a democratic society
+- article: General principle
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EESC
+  deadline: null
+  interpretive: null
+  requirement_text: The EESC's decision to impose such restrictions should be reasoned
+- article: Principle of accountability
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EESC
+  deadline: null
+  interpretive: null
+  requirement_text: In keeping with the principle of accountability, the EESC should keep
+    a record of its application of restrictions
+- article: General cooperation requirement
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EESC and cooperating organisations
+  deadline: null
+  interpretive: null
+  requirement_text: When processing personal data exchanged with other organisations in the
+    context of its tasks, the EESC and those organisations should consult each other on potential
+    grounds for imposing restrictions and on the necessity and proportionality of those restrictions
+- article: Article 25(1) and (5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Innovation and Networks Executive Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Restrictions on data subject rights shall be based on internal rules to
+    be adopted at the highest level of management of the Agency and subject to publication
+    in the Official Journal of the European Union, where they are not based on legal acts
+    adopted on the basis of the Treaties
+- article: Recital 3
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Agency staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Recital 3
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are also obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Recital 14
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Innovation and Networks Executive Agency
+  deadline: null
+  interpretive: true
+  requirement_text: Under the Regulation, the Agency is therefore obliged to provide information
+    to data subjects on those processing activities and to respect their rights as data subjects
+- article: Article 2
+  law_celex: 32023D0368
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall, on behalf of the Union, give the notification
+    provided for in Article 27 of the Agreement
+- article: Article 2
+  law_celex: 32023D0368
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: General Secretariat of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The date of entry into force of the Agreement will be published in the
+    Official Journal of the European Union by the General Secretariat of the Council
+- article: Article 3
+  law_celex: 32023D0368
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be taken on behalf of the Union on the modifications of
+    Annexes II, III, and IV to the Agreement shall be approved by the Commission after consultation
+    with the Council
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Where the CS2JU performs its duties with respect to data subject's rights
+    under Regulation (EU) 2018/1725, it shall consider whether any of the derogations laid
+    down in Article 25(3) and (4) of that Regulation apply
+- article: Article 2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website and/or the intranet of
+    the CS2JU
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: The CS2U shall put in place the following safeguards aimed at preventing
+    abuse or unlawful access or transfer of personal data
+- article: Article 3(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and only accessible
+    to authorized staff
+- article: Article 3(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored in a secure IT application according
+    to the CS2JU's security standards, as well as in specific electronic folders accessible
+    only to authorised staff. Appropriate levels of access shall be granted individually
+- article: Article 3(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: The database shall be password-protected under a single sign-on system
+    and connected automatically to the user's ID and password. Replacing users is strictly
+    prohibited. E-records shall be held securely to safeguard the confidentiality and privacy
+    of the data therein
+- article: Article 3(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data referred to in Article 1(3)
+    shall be no longer than necessary and appropriate for the purposes for which the data
+    are processed. It shall in any event not be longer than the retention period specified
+    in the data protection notices, privacy statements or records referred to in Article 6
+- article: Article 3(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Where the CS2JU considers to apply a restriction, the risk to the rights
+    and freedoms of the data subject shall be weighed, in particular, against the risk to
+    the rights and freedoms of other data subjects and the risk of cancelling the effect of
+    the CS2JU's investigations or procedures for example by destroying evidence
+- article: Article 4(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Clean Sky 2 Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall only be applied by the CS2JU to safeguard the national
+    security, public security or defence of the Member States; the prevention, investigation,
+    detection and prosecution of criminal offences or the execution of criminal penalties;
+    other important objectives of general public interest; the internal security of Union
+    institutions and bodies; the prevention, investigation, detection and prosecution of breaches
+    of ethics for regulated professions; or a monitoring, inspection or regulatory function
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Eurojust must lay down rules relating to the conditions under which it
+    may restrict the application of Articles 4, 14 to 22, 35 and 36, pursuant to Article 25
+    of the Regulation
+- article: Article 2(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: null
+  requirement_text: Eurojust may restrict the application of Articles 14 to 22, 35 and 36,
+    and Article 4 thereof in so far as its provisions correspond to the rights and obligations
+    provided for in Articles 14 to 20 when conducting administrative inquiries, pre-disciplinary,
+    disciplinary or suspension proceedings
+- article: Recital (2)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: Eurojust staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Eurojust staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Recital (2)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Eurojust staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are also obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Recital (11)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: true
+  requirement_text: Under the Regulation, Eurojust is therefore obliged to provide information
+    to data subjects on those processing activities and to respect their rights as data subjects
+- article: Recital (16)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: true
+  requirement_text: Eurojust should apply restrictions only when they respect the essence
+    of fundamental rights and freedoms, are strictly necessary and are a proportionate measure
+    in a democratic society
+- article: Recital (16)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: true
+  requirement_text: Eurojust should give reasons explaining the justification for those restrictions
+- article: Recital (17)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: true
+  requirement_text: In application of the principle of accountability, Eurojust should keep
+    a record of its application of restrictions
+- article: Recital (18)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Eurojust and other organisations
+  deadline: null
+  interpretive: true
+  requirement_text: When processing personal data exchanged with other organisations in the
+    context of its tasks, Eurojust and those organisations should consult each other on potential
+    grounds for imposing restrictions and the necessity and proportionality of those restrictions
+- article: Recital (21)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: Eurojust
+  deadline: null
+  interpretive: true
+  requirement_text: Eurojust should lift the restriction as soon as the conditions that justify
+    the restriction no longer apply, and assess those conditions on a regular basis
+- article: Recital (22)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Eurojust (regarding DPO consultation)
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be consulted in due time of any restrictions that may be
+    applied and verify their compliance with this Decision
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: EIOPA shall consider whether any of the exemptions laid down in Regulation
+    (EU) 2018/1725 apply when performing its duties with respect to data subject's rights
+- article: Article 2(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and only accessible
+    to authorized staff
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored in a secure IT application according
+    to EIOPA's security standards, as well as in specific electronic folders accessible only
+    to authorised staff with appropriate levels of access granted individually
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: The database shall be password-protected under a single sign-on system
+    and connected automatically to the user's ID and password
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA staff
+  deadline: null
+  interpretive: null
+  requirement_text: Replacing users is strictly prohibited
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: E-records shall be held securely to safeguard the confidentiality and
+    privacy of the data therein
+- article: Article 2(1)(d)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA staff with data access
+  deadline: null
+  interpretive: null
+  requirement_text: All persons having access to the data are bound by the obligation of confidentiality
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website and/or the intranet of
+    EIOPA
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data shall be no longer than necessary
+    and appropriate for the purposes for which the data are processed
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period shall in any event not be longer than the retention
+    period specified in the data protection notices, privacy statements or records
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EIOPA
+  deadline: null
+  interpretive: null
+  requirement_text: Where EIOPA considers to apply a restriction, the risk to the rights and
+    freedoms of the data subject shall be weighed against the risk to the rights and freedoms
+    of other data subjects and the risk of cancelling the effect of EIOPA's investigations
+    or procedures
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: Where Fusion for Energy performs its duties with respect to data subject's
+    rights under Regulation (EU) 2018/1725, it shall consider whether any of the exemptions
+    laid down in that Regulation apply
+- article: Article 2(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and only accessible
+    to authorised staff
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored in a secure IT application according
+    to Fusion for Energy's security standards, as well as in specific electronic folders accessible
+    only to authorised staff. Appropriate levels of access shall be granted individually
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: The database shall be password-protected under a single sign-on system
+    and connected automatically to the user's ID and password. Replacing users is strictly
+    prohibited. E-records shall be held securely to safeguard the confidentiality and privacy
+    of the data therein
+- article: Article 2(1)(d)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All persons having access to data at Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: All persons having access to the data are bound by the obligation of confidentiality
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website
+- article: Recital 14
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Fusion for Energy
+  deadline: null
+  interpretive: true
+  requirement_text: Fusion for Energy should periodically monitor that the conditions that
+    justify the restriction still exist and lift the restriction when those conditions no
+    longer apply
+- article: Recital 15
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Controller (Fusion for Energy)
+  deadline: null
+  interpretive: true
+  requirement_text: The Controller should inform the Data Protection Officer (DPO) at the
+    moment of deferral of information or when other restrictions of data subject rights are
+    applied, and during the revisions
+- article: Article 1(1)
+  law_celex: 32020R0969
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Commission must apply rules and procedures for the application of Regulation
+    (EU) 2018/1725 and implementing rules concerning the Data Protection Officer
+- article: Recital 3
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission services
+  deadline: null
+  interpretive: true
+  requirement_text: Commission services must ensure internal arrangements are in place to
+    determine their respective responsibilities under Regulation (EU) 2018/1725, including
+    responsibilities vis-à-vis data subjects, notification to EDPS and record keeping, when
+    jointly carrying out processing operations
+- article: Recital 4
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Commission services
+  deadline: null
+  interpretive: true
+  requirement_text: Each Commission service should appoint a Data Protection Coordinator (DPC)
+- article: Recital 4
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Coordinators
+  deadline: null
+  interpretive: true
+  requirement_text: DPC should participate in the network of data protection coordinators
+    to ensure coherent implementation and interpretation of Regulation (EU) 2018/1725
+- article: Recital 5
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: DPO should issue additional guidance on the function of the DPC
+- article: Recital 6
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Personal data must be retained for five years after DPO activities are
+    closed in accordance with the Common Commission-Level Retention List
+- article: Recital 10
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should inform all individuals of the monitoring, investigative,
+    auditing or consultative tasks of the DPO that involve processing of their personal data
+    and of their rights pursuant to Regulation (EU) 2018/1725
+- article: Recital 10
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should inform individuals in a transparent and coherent manner
+    through data protection notices published on Commission website and inform each data subject
+    concerned by DPO activities
+- article: Recital 15
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: DPO should consult other Commission services, Union institutions or bodies
+    on relevant grounds for restrictions and their necessity and proportionality
+- article: Recital 16
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission services
+  deadline: null
+  interpretive: true
+  requirement_text: Commission services processing personal data processed by the DPO should
+    apply the rules set out in this Decision and consult the DPO on relevant grounds for restrictions
+    and their necessity and proportionality
+- article: Recital 17
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer and Commission services
+  deadline: null
+  interpretive: true
+  requirement_text: DPO and other Commission services should handle all restrictions in a
+    transparent manner and register each application of restrictions in the corresponding
+    record system
+- article: Recital 18
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Commission should regularly review its position regarding restrictions
+    to ensure data subject's right to be informed is restricted only as long as reasons for
+    deferral last
+- article: Recital 19
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: DPO should assess on a case-by-case basis whether communication of restriction
+    would compromise its purpose
+- article: Recital 20
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: DPO should carry out independent review of application of restrictions
+    by other Commission services to ensure compliance with this Decision
+- article: Recital 21
+  law_celex: 32020R0969
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Any restriction applied must be necessary and proportionate taking into
+    account risks to rights and freedoms of data subjects
+- article: Article 1(1)
+  law_celex: 32021D2243
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must follow rules to inform data subjects of the processing
+    of their personal data in accordance with Articles 14, 15 and 16 of Regulation (EU) 2018/1725
+    when carrying out its tasks pursuant to Decision (EU, Euratom) 2017/46
+- article: Article 2(1)
+  law_celex: 32021D2243
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Where the Commission exercises its duties with respect to data subjects'
+    rights under Regulation (EU) 2018/1725, it shall consider whether restrictions apply
+- article: Recital 10
+  law_celex: 32021D2243
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should inform all individuals of the activities that involve
+    processing their personal data and that affect their rights in a transparent and coherent
+    manner by publishing a data protection notice on the Commission's website
+- article: Recital 10
+  law_celex: 32021D2243
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Where relevant, the Commission should apply additional safeguards to inform
+    data subjects individually in an appropriate format
+- article: Recital 16
+  law_celex: 32021D2243
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should handle all restrictions in a transparent manner
+    and register each application of restrictions in the corresponding record system
+- article: Recital 17
+  law_celex: 32021D2243
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should regularly review the restrictions imposed in order
+    to ensure that the data subject's rights to be informed in accordance with Articles 16
+    and 35 of Regulation (EU) 2018/1725 are restricted only as long as such restrictions are
+    necessary
+- article: Recital 19
+  law_celex: 32021D2243
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission's Data Protection Officer should carry out an independent
+    review of the application of restrictions, with a view to ensuring compliance with this
+    Decision
+- article: Article 1(4)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: Where ECDC performs its duties with respect to data subject's rights under
+    Regulation (EU) 2018/1725, it shall consider whether any of the exemptions laid down in
+    that Regulation apply
+- article: Article 2(1)(a)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and be accessible only
+    to authorised staff
+- article: Article 2(1)(b)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored securely inside IT applications according
+    to ECDC's security standards, as well as in specific electronic folders and be accessible
+    only to authorised staff. Appropriate levels of access shall be granted individually
+- article: Article 2(1)(c)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: The database shall be password-protected and be accessible only to authorised
+    users. E-records shall be held securely to safeguard the confidentiality and privacy of
+    the data therein
+- article: Article 2(2)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website and/or the intranet of
+    ECDC
+- article: Article 2(3)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data referred to in Article 1(3)
+    shall be no longer than necessary and appropriate for the purposes for which the data
+    are processed. It shall in any event not be longer than the retention period specified
+    in the data protection notices, privacy statements or records
+- article: Article 2(4)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: Where ECDC considers to apply a restriction, the risk to the rights and
+    freedoms of the data subject shall be weighed, in particular, against the risk to the
+    rights and freedoms of other data subjects and the risk of cancelling the effect of ECDC's
+    investigations or procedures
+- article: Article 3(1)
+  law_celex: 32025D1747
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ECDC
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall only be applied by ECDC to safeguard the prevention,
+    investigation, detection and prosecution of criminal offences, including the safeguarding
+    against and the prevention of threats to public security; the internal security of Union
+    institutions and bodies; the prevention, investigation, detection and prosecution of breaches
+    of ethics for regulated professions; a monitoring, inspection or regulatory function connected
+    to the exercise of official authority; the protection of the data subject or the rights
+    and freedoms of others
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Where the Agency performs its duties with respect to data subject's rights
+    under Regulation (EU) 2018/1725, it shall consider whether any of the exemptions laid
+    down in that Regulation apply
+- article: Article 2(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website and/or the intranet of
+    the Agency
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data referred to in Article 1(3)
+    shall be no longer than necessary and appropriate for the purposes for which the data
+    are processed
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: It shall in any event not be longer than the retention period specified
+    in the data protection notices, privacy statements or records referred to in Article 5(1)
+- article: Article 2a(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and or safe(s) and
+    only accessible to authorised staff
+- article: Article 2a(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be stored in a secure IT application according
+    to the Agency's security standards, as well as in specific electronic folders accessible
+    only to authorised staff
+- article: Article 2a(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Appropriate levels of access shall be granted individually
+- article: Article 2a(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The database(s) shall be password-protected under a single sign-on system
+    and connected automatically to the user's ID and password
+- article: Article 2a(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Staff with database access
+  deadline: null
+  interpretive: null
+  requirement_text: Accessing databases and data on behalf of the other user/identity is strictly
+    prohibited
+- article: Article 2a(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Maritime Safety Agency
+  deadline: null
+  interpretive: null
+  requirement_text: E-records shall be held securely to safeguard the confidentiality and
+    privacy of the data therein
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Where the BBI JU performs its duties with respect to data subject's rights
+    under Regulation (EU) 2018/1725, it shall consider whether any of the exemptions laid
+    down in that Regulation apply
+- article: Article 2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection notices or records published on the website and/or the intranet of
+    the BBI JU
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: 'The BBI JU shall put in place safeguards aimed at preventing abuse or
+    unlawful access or transfer of personal data including: secured paper documents, secure
+    IT applications, password-protected databases, and confidentiality obligations for all
+    persons having access'
+- article: Article 3(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data shall be no longer than necessary
+    and appropriate for the purposes for which the data are processed and shall in any event
+    not be longer than the retention period specified in the data protection notices, privacy
+    statements or records
+- article: Article 3(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Where the BBI JU considers to apply a restriction, the risk to the rights
+    and freedoms of the data subject shall be weighed against the risk to the rights and freedoms
+    of other data subjects and the risk of cancelling the effect of investigations
+- article: Article 4(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bio-Based Industries Joint Undertaking
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall only be applied by the BBI JU to safeguard specific
+    objectives including national security, criminal investigations, public interest, internal
+    security, ethics breaches, and regulatory functions
+- article: Recital 2
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are under an obligation to report potentially illegal activities,
+    including fraud and corruption, which are detrimental to the interests of the Union
+- article: Recital 2
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Recital 7
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Participants in Frontex activities
+  deadline: null
+  interpretive: true
+  requirement_text: Participants in Frontex activities are under the obligation to report
+    serious incidents in accordance with Article 38(3)(h) of the EBCG Regulation
+- article: Recital 12
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: Under the Regulation, the Agency is obliged to provide information to
+    data subjects on those processing activities and to respect their rights as data subjects
+- article: Recital 18
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency shall provide indirect access to the relevant medical information
+    through the Agency's medical advisor or an external medical provider for the relevant
+    medical information and advice
+- article: Recital 19
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should give reasons explaining the justification for those
+    restrictions
+- article: Recital 20
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: In application of the principle of accountability, the Agency should keep
+    records
+- article: Article 1(1)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict the application of Articles 4, 14 to 22, 35 and 36,
+    pursuant to Article 25 of the Regulation under the conditions laid down in this Decision
+- article: Article 2(1)(a)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict data subject rights when conducting administrative inquiries,
+    pre-disciplinary, disciplinary or suspension proceedings under Article 86 and Annex IX
+    of the Staff Regulations and when notifying cases to OLAF
+- article: Article 2(1)(b)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict data subject rights when ensuring that EASA staff members
+    may report facts confidentially where they believe there are serious irregularities
+- article: Article 2(1)(c)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict data subject rights when ensuring that EASA staff members
+    are able to report to confidential counsellors in the context of a harassment procedure
+- article: Article 2(1)(d)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict data subject rights when conducting investigations into
+    potential breaches of security rules for European Union classified information (EUCI)
+- article: Article 2(1)(e)
+  law_celex: 32020D0005
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: null
+  requirement_text: EASA may restrict data subject rights when conducting internal audits
+    in relation to activities or departments of EASA
+- article: Recital (20)
+  law_celex: 32020D0005
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: true
+  requirement_text: EASA should apply restrictions only when they respect the essence of fundamental
+    rights and freedoms, are strictly necessary and are a proportionate measure in a democratic
+    society
+- article: Recital (20)
+  law_celex: 32020D0005
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: true
+  requirement_text: EASA should give reasons explaining the justification for those restrictions
+- article: Recital (21)
+  law_celex: 32020D0005
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: true
+  requirement_text: EASA should keep a record of its application of restrictions
+- article: Recital (25)
+  law_celex: 32020D0005
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: EASA
+  deadline: null
+  interpretive: true
+  requirement_text: EASA should lift the restriction as soon as the conditions that justify
+    the restriction no longer apply, and assess those conditions on a regular basis
+- article: Recital (26)
+  law_celex: 32020D0005
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be consulted in due time of any restrictions that may be
+    applied and verify their compliance with this Decision
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The SRB may restrict the application of the rights enshrined in Articles
+    14 to 21, 35, as well as Article 4 of Regulation (EU) 2018/1725, following Article 25
+    of the Regulation (EU) 2018/1725, under the conditions laid down in this Decision
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The personal data collected shall be stored and retained in accordance
+    with the SRB rules on retention of documents. The retention period shall respect the principle
+    of retention no longer than necessary for the fulfilment of the purpose of the processing
+    operation
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: 'Any restriction shall only be applied to safeguard: the prevention, investigation,
+    detection and prosecution of criminal offences or the execution of criminal penalties;
+    the internal security of Union institutions and bodies; the protection of judicial proceedings;
+    the prevention, investigation, detection and prosecution of breaches of ethics for regulated
+    professions; the protection of the data subject or the rights and freedoms of others'
+- article: Article 3(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall be necessary and proportionate in a democratic society
+    and respect the essence of the fundamental rights and freedoms
+- article: Article 3(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: A necessity and proportionality test shall be carried out based on the
+    present internal rules. It shall be documented through an internal assessment note by
+    the controller of the specific processing operation for accountability purposes on a case
+    by case basis
+- article: Article 3(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: Restrictions shall be duly monitored and a periodical revision shall be
+    done every six months
+- article: Article 3(5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: Restrictions shall be lifted as soon as the circumstances that justify
+    them no longer apply
+- article: Article 4(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The SRB shall, throughout any restriction procedure and without undue
+    delay, inform the Data Protection Officer of the SRB whenever it restricts the application
+    of data subjects' rights in accordance with this Decision. It shall provide access to
+    the record and the assessment of the necessity and proportionality of the restriction
+- article: Article 4(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The SRB shall inform the DPO in writing about the outcome of the requested
+    review and when the restriction has been lifted
+- article: Article 5(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The SRB shall include in the data protection notices published on its
+    intranet informing data subjects of their rights in the framework of a given procedure,
+    information relating to the potential restriction of these rights. The information shall
+    cover which rights may be restricted, the reasons and the potential duration
+- article: Article 5(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: The SRB shall inform individually data subjects on their rights concerning
+    present or future restrictions without undue delay and in a written form
+- article: Article 5(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed on the principal reasons on which the
+    application of a restriction is based and of their right to lodge a complaint before the
+    European Data Protection Supervisor
+- article: Article 6(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Single Resolution Board (SRB)
+  deadline: null
+  interpretive: null
+  requirement_text: Where data subjects request access to their personal data processed in
+    the context of one or more specific cases or to a particular processing operation, the
+    SRB shall limit its assessment of the request to such personal data only
+- article: Article 25(1) and (5)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Education, Audiovisual and Culture Executive Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Restrictions on data subject rights shall be based on internal rules to
+    be adopted at the highest level of management of the Agency and subject to publication
+    in the Official Journal of the European Union, where they are not based on legal acts
+    adopted on the basis of the Treaties
+- article: Staff Regulations
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: null
+  requirement_text: Agency staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Staff Regulations
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: null
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Regulation (EU) 2018/1725
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Education, Audiovisual and Culture Executive Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency is obliged to provide information to data subjects on those
+    processing activities and to respect their rights as data subjects
+- article: Article 22c
+  law_celex: 32022R0121
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must put in place a procedure for the handling of complaints
+    made by officials concerning the way in which they are treated after or as a consequence
+    of having reported a serious irregularity pursuant to Articles 22a and 22b of the Staff
+    Regulations
+- article: Article 24
+  law_celex: 32022R0121
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must assist officials in proceedings against persons perpetrating
+    threats, insulting or defamatory acts or utterances, or attacks to person or property
+    to which he or a member of their family is subjected by reason of his position or duties
+- article: Recital 6
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Personal data must be stored in a secured physical and electronic environment,
+    to prevent unlawful access or transfer of data to persons who do not have a need to know
+- article: Recital 6
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: After the end of the processing, the data must be retained in accordance
+    with the applicable Commission rules
+- article: Recital 15
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission shall inform all individuals of its activities involving
+    the processing of their personal data and of their rights, in a transparent and coherent
+    manner, by means of a data protection notice published on the Commission's website
+- article: Recital 15
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Where relevant, the Commission shall individually inform, by appropriate
+    means, the data subjects involved in a request or complaint, that is to say, the requestors
+    and complainants, persons concerned and witnesses
+- article: Recital 16
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission shall handle all restrictions in a transparent manner and
+    register each application of restrictions in the corresponding record system
+- article: Recital 17
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission shall, within one month, draw up a record describing the
+    reasons for any restriction applied to Article 16 of Regulation (EU) 2018/1725
+- article: Recital 17
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The record shall include a case-by-case assessment of the necessity and
+    proportionality of the restriction
+- article: Recital 19
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission shall regularly review the restrictions imposed in order
+    to ensure that the data subject's rights to be informed in accordance with Articles 16
+    and 35 of Regulation (EU) 2018/1725 are restricted only as long as such restrictions are
+    necessary
+- article: Recital 13
+  law_celex: 32022R0121
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission must ensure that requests and complaints under the Staff
+    Regulations are handled confidentially
+- article: Recital (3)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Agency staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Recital (3)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Recital (14)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Health and Digital Executive Agency
+  deadline: null
+  interpretive: true
+  requirement_text: Under the Regulation, the Agency is obliged to provide information to
+    data subjects on those processing activities and to respect their rights as data subjects
+- article: Recital (16)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Health and Digital Executive Agency
+  deadline: null
+  interpretive: true
+  requirement_text: Internal rules shall be adopted at the highest level of management of
+    the Agency and subject to publication in the Official Journal of the European Union, where
+    they are not based on legal acts adopted on the basis of the Treaties
+- article: Recital (25)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Health and Digital Executive Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The personal data are stored securely in an electronic environment compliant
+    with Commission Decision (EU, Euratom) 2017/46 or on paper, preventing unlawful access
+    or transfer of data to persons who do not have a need to know
+- article: Recital (25)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Health and Digital Executive Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The personal data processed are retained for no longer than necessary
+    and appropriate for the purposes for which the data are processed for the period specified
+    in the data protection notices and records of the Agency
+- article: Article 25(1) and (5)
+  law_celex: 32021D0893
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: Research Executive Agency (REA)
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency shall adopt internal rules at the highest level of management
+    to restrict the application of Articles 14 to 22, 35 and 36, as well as Article 4 of the
+    Regulation, subject to publication in the Official Journal of the European Union where
+    they are not based on legal acts adopted on the basis of the Treaties
+- article: Staff Regulations
+  law_celex: 32021D0893
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: null
+  requirement_text: Agency staff members are under an obligation to report potentially illegal
+    activities, including fraud and corruption, which are detrimental to the interests of
+    the Union
+- article: Staff Regulations
+  law_celex: 32021D0893
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: null
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Article 14
+  law_celex: 32021D0893
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Research Executive Agency (REA)
+  deadline: null
+  interpretive: null
+  requirement_text: Under the Regulation, the Agency is obliged to provide information to
+    data subjects on those processing activities
+- article: General
+  law_celex: 32021D0893
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Research Executive Agency (REA)
+  deadline: null
+  interpretive: null
+  requirement_text: Under the Regulation, the Agency is obliged to respect data subjects'
+    rights
+- article: Article 37(1)(c)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data controllers and processors
+  deadline: null
+  interpretive: null
+  requirement_text: Must designate a data protection officer where the core activities of
+    the controller or the processor consist of processing on a large scale of special categories
+    of data pursuant to Article 9 or personal data relating to criminal convictions and offences
+    referred to in Article 10
+- article: Article 41(3)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall submit the draft requirements for accreditation of a body to the
+    Board pursuant to the consistency mechanism referred to in Article 63
+- article: Article 41(5)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall revoke the accreditation of a body if the requirements for accreditation
+    are not, or are no longer, met or where actions taken by the body infringe this Regulation
+- article: Article 42(7)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: certification bodies and competent supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall withdraw certification by the certification bodies or by the competent
+    supervisory authority where the criteria for the certification are not or are no longer
+    met
+- article: Article 43(6)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall make public the requirements and criteria in an easily accessible
+    form
+- article: Article 43(6)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: supervisory authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Shall transmit those requirements and criteria to the Board
+- article: Article 57(1)(p)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Must draft and publish the requirements for accreditation of a body for
+    monitoring codes of conduct pursuant to Article 41 and of a certification body pursuant
+    to Article 43
+- article: Article 64(6)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall not adopt its draft decision within the period referred to in paragraph
+    3
+- article: Article 64(7)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent supervisory authority
+  deadline: null
+  interpretive: null
+  requirement_text: Shall take utmost account of the opinion of the Board and shall, within
+    two weeks after receiving the opinion, communicate to the Chair of the Board by electronic
+    means whether it will maintain or amend its draft decision
+- article: Article 69(2)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: the Board
+  deadline: null
+  interpretive: null
+  requirement_text: Shall neither seek nor take instructions from anybody in the performance
+    of its tasks or the exercise of its powers
+- article: Article 1(2)
+  law_celex: 32023D1585
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency, as controller, is represented by its Executive Director
+- article: Article 2(1)
+  law_celex: 32023D1585
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: null
+  requirement_text: The Agency may restrict the application of Articles 14 to 22, 35 and 36,
+    and Article 4 of the Regulation in so far as its provisions correspond to the rights and
+    obligations provided for in Articles 14 to 20
+- article: Recital (16)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should apply restrictions only when they respect the essence
+    of fundamental rights and freedoms, are strictly necessary and are a proportionate measure
+    in a democratic society
+- article: Recital (16)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should give reasons explaining the justification for those
+    restrictions
+- article: Recital (17)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should keep a record of its application of restrictions
+- article: Recital (18)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways and cooperating organisations
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency and those organisations should consult each other on potential
+    grounds for imposing restrictions and the necessity and proportionality of those restrictions
+- article: Article 25(6) of Regulation 2018/1725
+  law_celex: 32023D1585
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: null
+  requirement_text: The controller must inform data subjects of the principal reasons on which
+    the application of the restriction is based and of their right to lodge a complaint with
+    the EDPS
+- article: Recital (21)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Union Agency for Railways
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should lift the restriction as soon as the conditions that
+    justify the restriction no longer apply, and assess those conditions on a regular basis
+- article: Recital (22)
+  law_celex: 32023D1585
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Union Agency for Railways Data Protection Officer
+  deadline: null
+  interpretive: true
+  requirement_text: The DPO should be consulted in due time of any restrictions that may be
+    applied and verify their compliance with this Decision
+- article: Art 6
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: 'Identify and document a valid legal basis before processing any personal
+    data. Processing is lawful only if at least one of the six bases applies: consent, contract,
+    legal obligation, vital interests, public task, or legitimate interests.'
+- article: Arts 13-14
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: Provide data subjects with clear, concise, transparent privacy information
+    at the point of data collection (or within one month if data is obtained indirectly),
+    covering the controller's identity, purposes, legal basis, recipients, retention periods
+    and data-subject rights.
+- article: Art 5
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: 'Ensure personal data is processed in accordance with the seven principles:
+    lawfulness, fairness and transparency; purpose limitation; data minimisation; accuracy;
+    storage limitation; integrity and confidentiality; and accountability.'
+- article: Art 9
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers processing special category data
+  deadline: null
+  interpretive: null
+  requirement_text: Obtain explicit consent or identify another specific exception listed
+    in Article 9(2) before processing special categories of personal data (health, genetic,
+    biometric, racial/ethnic origin, political opinions, religious/philosophical beliefs,
+    trade union membership, sex life or sexual orientation data).
+- article: Arts 15-22
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: Implement processes to respond to data-subject rights requests (access,
+    rectification, erasure, restriction, portability, objection, automated decision-making)
+    within one month of receipt, free of charge, with a two-month extension available for
+    complex or numerous requests.
+- article: Art 32
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers and processors
+  deadline: null
+  interpretive: null
+  requirement_text: Implement appropriate technical and organisational security measures proportionate
+    to the risk, including (where applicable) pseudonymisation and encryption, ongoing resilience
+    of systems, timely restoration of data availability, and regular testing and evaluation
+    of security effectiveness.
+- article: Art 33
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers
+  deadline: null
+  interpretive: null
+  requirement_text: Notify the competent supervisory authority of a personal data breach without
+    undue delay and, where feasible, not later than 72 hours after becoming aware of it, unless
+    the breach is unlikely to result in a risk to the rights and freedoms of natural persons.
+- article: Art 34
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers
+  deadline: null
+  interpretive: null
+  requirement_text: Communicate a personal data breach to affected data subjects without undue
+    delay in plain language where the breach is likely to result in a high risk to their rights
+    and freedoms, unless technical safeguards (e.g. encryption) render the data unintelligible.
+- article: Art 35
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers
+  deadline: null
+  interpretive: null
+  requirement_text: Carry out a Data Protection Impact Assessment prior to processing that
+    is likely to result in a high risk to the rights and freedoms of natural persons, in particular
+    when using new technologies, processing special categories at large scale, or systematically
+    monitoring publicly accessible areas.
+- article: Art 37
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Qualifying controllers and processors
+  deadline: null
+  interpretive: null
+  requirement_text: 'Designate a Data Protection Officer where required: for all public authorities
+    (except courts acting in their judicial capacity), for organisations whose core activities
+    require large-scale regular and systematic monitoring of data subjects, and for those
+    whose core activities involve large-scale processing of special categories or criminal
+    conviction data.'
+- article: Art 25
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers
+  deadline: null
+  interpretive: null
+  requirement_text: 'Implement data protection by design and by default: integrate data protection
+    principles (especially data minimisation) into processing systems from the outset, and
+    ensure that by default only the personal data necessary for each specific purpose is processed.'
+- article: Art 28
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers engaging processors
+  deadline: null
+  interpretive: null
+  requirement_text: Execute a written data processing agreement with every processor before
+    that processor handles personal data on behalf of the controller. The agreement must specify
+    the scope, nature, purpose and duration of processing, the controller's instructions,
+    security obligations, sub-processor rules and data return/deletion obligations.
+- article: Art 30
+  law_celex: 32016R0679
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Controllers and processors (subject to SME exemption)
+  deadline: null
+  interpretive: null
+  requirement_text: Maintain written records of processing activities, including the name
+    and contact details of the controller and DPO, purposes, categories of data subjects and
+    personal data, recipients, international transfers, envisaged erasure time limits, and
+    a general description of security measures. Organisations with fewer than 250 employees
+    are exempt unless processing is not occasional, likely to result in a risk, or involves
+    special categories.
+- article: Arts 44-49
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers and processors transferring data outside the EEA
+  deadline: null
+  interpretive: null
+  requirement_text: 'Ensure a valid transfer mechanism is in place before transferring personal
+    data to a third country or international organisation: an adequacy decision, standard
+    contractual clauses, binding corporate rules, or another safeguard listed in Article 46.
+    Document the mechanism in the records of processing activities.'
+- article: Arts 7-8
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers relying on consent as a legal basis
+  deadline: null
+  interpretive: null
+  requirement_text: Where consent is the chosen legal basis, ensure it is freely given, specific,
+    informed and unambiguous; obtain it via a clear affirmative act; make withdrawal as easy
+    as giving it; do not condition a service on consent to unnecessary processing; and for
+    information society services directed at children under 16 (or a lower age set by the
+    Member State, no lower than 13), obtain and verify parental consent.
+- article: Art 27
+  law_celex: 32016R0679
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Non-EU controllers and processors subject to Article 3(2)
+  deadline: null
+  interpretive: null
+  requirement_text: Designate in writing an EU-based representative where a controller or
+    processor not established in the Union is subject to Article 3(2) and the processing is
+    not occasional, involves large-scale special-category data, or is likely to result in
+    a risk to the rights and freedoms of natural persons.

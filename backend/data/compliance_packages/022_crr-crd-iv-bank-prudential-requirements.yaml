@@ -1,0 +1,212 @@
+id: 22
+name: CRR / CRD IV - Bank Prudential Requirements
+policy_area: Economic and Financial Affairs
+description: Capital Requirements Regulation (575/2013) and twin Directive 2013/36/EU (CRD
+  IV) - the EU Single Rulebook implementation of Basel III for credit institutions and investment
+  firms. Covers own funds (CET1/AT1/T2), capital ratios (4.5% / 6% / 8%), credit risk Standardised
+  + IRB approaches, market risk, operational risk, CVA, large exposures (25% limit), liquidity
+  (LCR 100% / NSFR), leverage ratio (3% binding under CRR II), Pillar 3 disclosure, and the
+  SME Supporting Factor (0.7619). Amended by CRR II (Regulation (EU) 2019/876) and CRR III
+  (Regulation (EU) 2024/1623, Basel IV).
+applicability: EU-authorised credit institutions and investment firms (CRR Article 4(1)(3));
+  consolidated supervision of banking groups (CRR Title II of Part One); financial holding
+  companies and mixed financial holding companies. Investment firms partially carved out by
+  IFR/IFD (Regulation (EU) 2019/2033 + Directive (EU) 2019/2034).
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32013R0575
+  title: Regulation (EU) No 575/2013 of the European Parliament and of the Council of 26 June
+    2013 on prudential requirements for credit institutions and investment firms and amending
+    Regulation (EU) No 648/2012 (Text with EEA relevance)
+requirements:
+- article: Article 92(1)(a)
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall at all times maintain a Common Equity Tier 1 (CET1)
+    capital ratio of at least 4.5% of the total risk exposure amount (RWAs).
+- article: Article 92(1)(b)
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall at all times maintain a Tier 1 capital ratio of at
+    least 6% of the total risk exposure amount.
+- article: Article 92(1)(c)
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall at all times maintain a total capital ratio of at least
+    8% of the total risk exposure amount. Total capital = Tier 1 (CET1 + AT1) + Tier 2.
+- article: Article 93
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: The own funds of an institution may not fall below the amount of initial
+    capital required at the time of authorisation under CRD IV (EUR 5 million for credit institutions).
+- article: Article 99(1)
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall report own funds and capital adequacy (COREP) to competent
+    authorities at least on a semi-annual basis using uniform EBA reporting formats.
+- article: Article 178
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: An obligor is in default when (a) the institution considers it unlikely
+    to pay its credit obligations in full without recourse to realising security, OR (b) the
+    obligor is past due more than 90 days on a material credit obligation. Member State CAs
+    may set 180 days for residential mortgage, SME commercial real estate retail, and public
+    sector entity exposures.
+- article: Article 395(1)
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: An institution shall not incur an exposure (after CRM) to a client or
+    group of connected clients exceeding 25% of its eligible capital. Where the client is
+    an institution (or institution-including group), the limit is the higher of 25% eligible
+    capital or EUR 150 million, capped at 100% of eligible capital.
+- article: Article 394
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall report each large exposure (≥ 10% of eligible capital,
+    per Article 392) to competent authorities at least semi-annually, including the top 20
+    largest consolidated exposures, top 10 to institutions, and top 10 to unregulated financial
+    entities.
+- article: Article 405
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm acting as securitisation investor
+  deadline: null
+  interpretive: null
+  requirement_text: An institution may be exposed to a securitisation only if the originator,
+    sponsor, or original lender retains a material net economic interest of at least 5% on
+    an ongoing basis. Retention must be in one of five qualifying forms (vertical 5% slice,
+    originator's interest, random 5% selection, first-loss tranche, first-loss per exposure)
+    and cannot be hedged or sold.
+- article: Article 406
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm acting as securitisation investor
+  deadline: null
+  interpretive: null
+  requirement_text: Before becoming exposed to a securitisation, institutions must demonstrate
+    comprehensive understanding through formal due-diligence policies covering retention disclosure,
+    position risk characteristics, underlying exposures' risk, originator/sponsor reputation,
+    methodologies, valuation of collateral, structural features, and ongoing performance monitoring
+    (30/60/90 days past due, default rates, LTV distributions).
+- article: Article 412(1)
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution
+  deadline: '2018-01-01'
+  interpretive: null
+  requirement_text: Institutions shall hold a stock of liquid assets covering net liquidity
+    outflows under a 30-day stressed scenario (Liquidity Coverage Requirement / LCR). Phased
+    in 60%-70%-80%-100% from 2015 to 2018; binding 100% LCR from 1 January 2018 (as specified
+    by Commission Delegated Regulation 2015/61).
+- article: Article 413(1)
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall ensure that long-term obligations are met with a diversity
+    of stable funding instruments under both normal and stressed conditions (NSFR principle).
+    Binding 100% Net Stable Funding Ratio introduced by CRR II (Regulation (EU) 2019/876).
+- article: Article 429
+  law_celex: 32013R0575
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: '2021-06-28'
+  interpretive: null
+  requirement_text: Institutions shall calculate a leverage ratio as Tier 1 capital divided
+    by total exposure measure (assets + off-balance items + derivatives + SFTs), with no credit
+    risk mitigation, collateral, or netting reductions. Made binding at 3% by CRR II from
+    28 June 2021.
+- article: Article 431
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall publicly disclose the Pillar 3 information laid down
+    in Articles 435-455, adopt a formal disclosure policy, and assess whether disclosures
+    convey the institution's risk profile comprehensively to market participants.
+- article: Article 433
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Pillar 3 disclosures shall be published at least annually, in conjunction
+    with the financial statements. Institutions shall assess the need for more frequent disclosure
+    of items prone to rapid change (own funds, capital requirements, leverage, risk exposure).
+- article: Article 450
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: 'Institutions shall publicly disclose remuneration policy and practices
+    for identified staff whose professional activities have a material impact on the risk
+    profile, including: decision-making process, pay-performance link, fixed-to-variable ratios
+    (capped per CRD IV Article 94(1)(g)), aggregate quantitative data by senior management
+    and material risk-takers, and the number of individuals remunerated EUR 1 million or more
+    broken down into EUR 500,000 / EUR 1 million bands.'
+- article: Article 451
+  law_celex: 32013R0575
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm
+  deadline: null
+  interpretive: null
+  requirement_text: Institutions shall disclose the leverage ratio calculated under Article
+    429, a breakdown of the total exposure measure, reconciliation with published financial
+    statements, the processes used to manage risk of excessive leverage, and the factors that
+    impacted the leverage ratio during the reporting period.
+- article: Article 501
+  law_celex: 32013R0575
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: credit institution / investment firm with SME exposures
+  deadline: null
+  interpretive: null
+  requirement_text: For SME exposures (retail, corporate, or real-estate-secured) where total
+    exposure to the obligor or group of connected clients does not exceed EUR 1.5 million,
+    institutions shall multiply the calculated capital requirement by the SME Supporting Factor
+    of 0.7619 (effective ~23.81% capital reduction).

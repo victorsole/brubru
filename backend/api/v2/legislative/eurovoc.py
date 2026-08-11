@@ -386,3 +386,117 @@ async def taxonomy_concept(
     items = [_tx_item(r, lang) for r in chain]
     return build_envelope(items, len(items), 1, len(items) or 1,
                           op_core_title="EuroVoc concept path", op_core_type="Thesaurus")
+
+
+# ============================================================
+# EuroVocCat -> Catalan acquis marriage (catalan_law_eurovoc)
+# ============================================================
+
+class CatalanActConcept(BaseModel):
+    notation: str
+    concept_uri: str
+    public_url: str
+    label_ca: Optional[str] = None
+    label_en: Optional[str] = None
+    concept_type: str
+    relation: str = Field(description="'gold' (act's own EuroVoc) or 'inherited' (from parent act)")
+
+
+class CatalanLinkedAct(BaseModel):
+    celex: str
+    title_ca: Optional[str] = None
+    url: Optional[str] = None
+    category: Optional[str] = None
+    relation: str
+
+
+@router.get(
+    "/catalan/law/{celex}/concepts",
+    response_model=PaginatedResponse[CatalanActConcept],
+    summary="EuroVocCat subjects for one Catalan-translated act (what the law is about, in Catalan)",
+    description="""**What it does**
+Returns the EuroVoc subject concepts attached to one act of the Catalan legislation library (brubru.beresol.eu/legislacio-ue-catala), with their Catalan (EuroVocCat) labels.
+
+**When to use it**
+To render subject tags on a translated act page, so a Catalan reader sees what topics the law covers.
+
+**Input**
+`celex` — the act's CELEX (e.g. `32016R0679`). Annex acts return their parent act's subjects (`relation='inherited'`).
+
+**Try it**
+`GET /api/v2/legislative/eurovoc/catalan/law/32016R0679/concepts`
+
+**You get back**
+A `PaginatedResponse[CatalanActConcept]`: each subject's `notation`, `concept_uri` (stable, links back to EUR-Lex EuroVoc), Catalan `label_ca`, `label_en`, and `relation`.""",
+)
+async def catalan_law_concepts(
+    request: Request,
+    celex: str = Path(..., description="Act CELEX, e.g. 32016R0679"),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[CatalanActConcept]:
+    rows = db.execute(_sql(
+        "SELECT c.notation, c.concept_uri, c.concept_type, c.labels->>'ca' AS ca, "
+        "c.labels->>'en' AS en, l.relation "
+        "FROM catalan_law_eurovoc l JOIN eurovoc_concepts c ON c.concept_uri = l.concept_uri "
+        "WHERE l.celex = :celex ORDER BY c.notation"), {"celex": celex}).mappings().all()
+    items = [CatalanActConcept(
+        notation=r["notation"], concept_uri=r["concept_uri"], public_url=r["concept_uri"],
+        label_ca=r["ca"], label_en=r["en"], concept_type=r["concept_type"], relation=r["relation"],
+    ) for r in rows]
+    return build_envelope(items, len(items), 1, len(items) or 1,
+                          op_core_title="EuroVocCat subjects", op_core_type="Thesaurus")
+
+
+@router.get(
+    "/catalan/concept/{notation}/acts",
+    response_model=PaginatedResponse[CatalanLinkedAct],
+    summary="Catalan-translated acts under one EuroVocCat subject (find laws by topic)",
+    description="""**What it does**
+Lists the acts in the Catalan legislation library classified under a EuroVoc subject. Accepts a descriptor, a microthesaurus (rolls up its descriptors) or a domain (rolls up the whole branch).
+
+**When to use it**
+Power a subject navigator over the Catalan acquis: pick a EuroVocCat topic, get the translated laws about it.
+
+**Input**
+`notation` — a EuroVoc notation (descriptor `1764`, microthesaurus `2826`, or domain `28`). Pagination via `page`/`limit`.
+
+**Try it**
+`GET /api/v2/legislative/eurovoc/catalan/concept/2826/acts`
+
+**You get back**
+A `PaginatedResponse[CatalanLinkedAct]`: each act's `celex`, Catalan title `title_ca`, `url` (live page), `category`, and `relation`.""",
+)
+async def catalan_concept_acts(
+    request: Request,
+    notation: str = Path(..., description="EuroVoc notation (descriptor/MT/domain), e.g. 2826"),
+    limit: int = Query(50, ge=1, le=200), page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[CatalanLinkedAct]:
+    concept = db.execute(_sql(
+        "SELECT concept_uri, concept_type FROM eurovoc_concepts WHERE notation = :n LIMIT 1"),
+        {"n": notation}).mappings().first()
+    if not concept:
+        raise HTTPException(status_code=404, detail={"reason_code": "not_found", "notation": notation})
+    ctype = concept["concept_type"]
+    if ctype == "descriptor":
+        filt = "l.notation = :n"
+    elif ctype == "microthesaurus":
+        filt = ("l.concept_uri IN (SELECT concept_uri FROM eurovoc_concepts "
+                "WHERE microthesaurus_uri = :uri)")
+    else:  # domain
+        filt = ("l.concept_uri IN (SELECT concept_uri FROM eurovoc_concepts WHERE domain_uri = :uri)")
+    params = {"n": notation, "uri": concept["concept_uri"]}
+    total = db.execute(_sql(
+        f"SELECT count(DISTINCT l.celex) FROM catalan_law_eurovoc l WHERE {filt}"), params).scalar() or 0
+    off = (page - 1) * limit
+    rows = db.execute(_sql(
+        "SELECT DISTINCT t.celex, t.title_ca, t.siteground_url AS url, t.category, "
+        "min(l.relation) AS relation "
+        f"FROM catalan_law_eurovoc l JOIN catalan_translations t ON t.celex = l.celex WHERE {filt} "
+        "GROUP BY t.celex, t.title_ca, t.siteground_url, t.category "
+        "ORDER BY t.title_ca LIMIT :lim OFFSET :off"),
+        {**params, "lim": limit, "off": off}).mappings().all()
+    items = [CatalanLinkedAct(celex=r["celex"], title_ca=r["title_ca"], url=r["url"],
+                              category=r["category"], relation=r["relation"]) for r in rows]
+    return build_envelope(items, total, page, limit,
+                          op_core_title="Catalan acts by EuroVocCat subject", op_core_type="Dataset")

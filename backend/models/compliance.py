@@ -16,8 +16,40 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from pgvector.sqlalchemy import Vector
 from core.database import Base
+
+
+class ComplianceWorkspace(Base):
+    """A durable compliance workspace: one per (user, cluster).
+
+    The unit of work used to be a disposable analysis -- documents to /tmp,
+    read once, deleted, nothing accumulating and so no reason to return. This
+    is the object runs, uploads and remediation state hang off (migration 209).
+    """
+
+    __tablename__ = "compliance_workspaces"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id', ondelete='CASCADE'),
+                     nullable=False, index=True)
+    cluster_id = Column(Integer, ForeignKey('law_clusters.id', ondelete='CASCADE'),
+                        nullable=False)
+    name = Column(String(200))
+    created_at = Column(TIMESTAMP, server_default=func.now())
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        UniqueConstraint('user_id', 'cluster_id', name='uniq_workspace_user_cluster'),
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'cluster_id': self.cluster_id,
+            'name': self.name,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
 
 
 class ComplianceAnalysis(Base):
@@ -36,7 +68,22 @@ class ComplianceAnalysis(Base):
 
     # Analysis details
     analysis_name = Column(String(200))
-    document_ids = Column(ARRAY(Integer))  # References user_documents.id
+    workspace_id = Column(Integer, ForeignKey('compliance_workspaces.id', ondelete='SET NULL'),
+                          index=True)
+    # DEAD. Declared ARRAY(Integer) against user_documents.id, which is a UUID,
+    # so it could never be populated and is NULL on every row. Superseded by
+    # document_uuids (migration 209); left in place rather than dropped so no
+    # unseen reader breaks.
+    document_ids = Column(ARRAY(Integer))
+    # The uploads this run was actually performed against.
+    document_uuids = Column(ARRAY(UUID(as_uuid=True)))
+    # Evidence seal (migration 212): what this run examined, hashed, and
+    # optionally Ed25519-signed. Written once at completion.
+    manifest = Column(JSON)
+    manifest_sha256 = Column(String(64))
+    manifest_signature = Column(Text)
+    manifest_key_id = Column(String(64))
+    sealed_at = Column(TIMESTAMP(timezone=True))
 
     # Status
     status = Column(String(50), nullable=False, default='processing', index=True)
@@ -126,6 +173,9 @@ class GapFinding(Base):
     # Semantic matching details
     similarity_score = Column(DECIMAL(5, 4))
     matched_chunks = Column(ARRAY(Text))
+    # Values for the package's declared `extracted` review columns, keyed by
+    # column id (migration 211). Null for the default review table.
+    extra_fields = Column(JSON)
 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
@@ -176,8 +226,17 @@ class ComplianceAction(Base):
     __tablename__ = "compliance_actions"
 
     id = Column(Integer, primary_key=True, index=True)
+    # Pointer at the most recent finding this action was touched from. Useful
+    # for tracing, never for identity: gap_findings are recreated on every
+    # analysis run, so keying triage state here loses it the moment the user
+    # re-runs the analysis (migration 207).
     gap_finding_id = Column(Integer, ForeignKey('gap_findings.id', ondelete='CASCADE'), nullable=False, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+
+    # The durable identity: one action per obligation, per user, per package.
+    # This is what a re-run looks the state up by.
+    requirement_id = Column(Integer, ForeignKey('law_requirements.id', ondelete='CASCADE'), index=True)
+    cluster_id = Column(Integer, ForeignKey('law_clusters.id', ondelete='CASCADE'))
 
     # Action details
     action_title = Column(String(200), nullable=False)
@@ -216,6 +275,7 @@ class ComplianceAction(Base):
         return {
             'id': self.id,
             'gap_finding_id': self.gap_finding_id,
+            'requirement_id': self.requirement_id,
             'action_title': self.action_title,
             'action_description': self.action_description,
             'status': self.status,
@@ -226,34 +286,11 @@ class ComplianceAction(Base):
         }
 
 
-class RequirementEmbedding(Base):
-    """
-    Requirement Vector Embedding
 
-    Stores vector embeddings for semantic search of requirements.
-    Uses OpenAI text-embedding-3-large (1536 dimensions).
-    """
-
-    __tablename__ = "requirement_embeddings"
-
-    id = Column(Integer, primary_key=True, index=True)
-    requirement_id = Column(Integer, ForeignKey('law_requirements.id', ondelete='CASCADE'), nullable=False)
-
-    # Embedding
-    embedding = Column(Vector(1536))  # OpenAI text-embedding-3-large
-    embedding_model = Column(String(100))
-
-    # Text that was embedded
-    embedded_text = Column(Text, nullable=False)
-
-    created_at = Column(TIMESTAMP, server_default=func.now())
-
-    __table_args__ = (
-        UniqueConstraint('requirement_id', 'embedding_model', name='unique_requirement_embedding'),
-    )
-
-    def __repr__(self):
-        return f"<RequirementEmbedding(requirement_id={self.requirement_id}, model={self.embedding_model})>"
+# RequirementEmbedding was removed on 8 Aug 2026 (migration 206). The table had
+# no reader and no writer: VectorSearchService's similarly-named attributes are
+# disk-cached numpy arrays, and the gap analyser now retrieves with TF-IDF
+# rather than embeddings. pgvector stays imported nowhere in this module.
 
 
 class AnalysisExport(Base):

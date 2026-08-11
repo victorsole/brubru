@@ -692,6 +692,44 @@ GLOSSARY_CORRECTIONS = [
     ("Mentre que:", "Atenent que:"),
     ("mentre que:", "atenent que:"),
     ("MENTRE QUE:", "ATENENT QUE:"),
+    # Instrument name: a Regulation is a "Reglament", never a "Regulació"
+    # (28 July 2026 — observed in live chat output, not only in translations).
+    # DELIBERATELY NARROW: bare "regulació" is correct Catalan for regulating in
+    # the abstract sense ("la regulació del mercat digital"), so only the forms
+    # carrying the instrument marker are corrected. Never add a bare
+    # ("Regulació", "Reglament") entry -- it would corrupt ordinary prose.
+    ("Regulació (UE)", "Reglament (UE)"),
+    ("Regulació (CE)", "Reglament (CE)"),
+    ("Regulació (CEE)", "Reglament (CEE)"),
+    ("Regulació (Euratom)", "Reglament (Euratom)"),
+    ("Regulació (UE, Euratom)", "Reglament (UE, Euratom)"),
+    ("REGULACIÓ (UE)", "REGLAMENT (UE)"),
+    ("REGULACIÓ (CE)", "REGLAMENT (CE)"),
+    ("Regulació d'execució", "Reglament d'execució"),
+    ("Regulació delegada", "Reglament delegat"),
+    # Instrument names WITHOUT the (UE)/(CE) marker — hero titles, nav links and
+    # table cells render "the X Regulation" as a bare name. Still a Reglament.
+    # Each entry names a concrete EU instrument, so none can collide with the
+    # abstract sense ("la regulació del mercat digital"). Keep it that way: only
+    # add a phrase here when it is unambiguously the title of an act.
+    ("Regulació de productes medicinals orfes", "Reglament de productes medicinals orfes"),
+    ("Regulació de medicaments orfes", "Reglament de medicaments orfes"),
+    ("Regulació de medicaments pediàtrics", "Reglament de medicaments pediàtrics"),
+    ("Regulació d'assaigs clínics", "Reglament d'assaigs clínics"),
+    ("Regulació d'Assaigs Clínics", "Reglament d'Assaigs Clínics"),
+    ("Regulació d'assajos clínics", "Reglament d'assajos clínics"),
+    ("Regulació d'Assajos Clínics", "Reglament d'Assajos Clínics"),
+    ("Regulació de tarifes", "Reglament de tarifes"),
+    ("Regulació ATMP", "Reglament ATMP"),
+    # Standalone parenthetical instrument label, as used to mark which
+    # co-rapporteur carries the Regulation vs the Directive:
+    # "Dolors Montserrat (Directiva) i Tiemo Wölken (Regulació)".
+    ("(Regulació)", "(Reglament)"),
+    # Spanish leakage of the same instrument name (Softcatala and LLM engines
+    # both drift to Castilian on legal boilerplate).
+    ("Reglamento (UE)", "Reglament (UE)"),
+    ("Reglamento (CE)", "Reglament (CE)"),
+    ("REGLAMENTO (UE)", "REGLAMENT (UE)"),
 ]
 
 SOFTCATALA_MODEL_URL = "https://www.softcatala.org/pub/softcatala/opennmt/models/2022-11-22/eng-cat-2024-09-24.zip"

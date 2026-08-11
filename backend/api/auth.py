@@ -4,26 +4,33 @@ Authentication API Endpoints
 Handles user registration, login, OAuth, and token management.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from sqlalchemy import text
+from sqlalchemy import func, text
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 import httpx
 import hashlib
+import logging
+import secrets
 import json as _json
 
 from core.database import get_db
 from core.config import settings
 from models.user import User
+from models.password_reset_token import PasswordResetToken
 from schemas.auth_schemas import (
     UserCreate, UserLogin, UserResponse, Token, UserUpdate,
     GoogleAuthRequest, LinkedInAuthRequest, LinkedInCallbackRequest,
     ClaimPasswordRequest, ClaimInfoResponse,
+    ForgotPasswordRequest, ResetPasswordRequest, MessageResponse,
+    ResetTokenCheckResponse,
 )
 from services.outreach import auto_link_user_if_match
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -108,8 +115,15 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify password against hash"""
+def verify_password(plain_password: str, hashed_password: str | None) -> bool:
+    """Verify password against hash.
+
+    hashed_password is None for OAuth-only accounts, which have no password to
+    check. passlib raises on a None hash, so guard it here: the caller wants a
+    failed verification, not a 500.
+    """
+    if not hashed_password:
+        return False
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -517,6 +531,203 @@ async def claim_with_password(
         "access_token": access_token,
         "token_type": "bearer",
         "user": dormant,
+        "previous_last_login": None,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Password reset (migration 211). Entry point is the login page's
+# "I forgot my password" link.
+#
+# Two rules govern the shape of these endpoints:
+#   1. No account enumeration. /forgot-password answers identically whether or
+#      not the address has an account, so the endpoint cannot be used to test
+#      whether someone is a Brubru user.
+#   2. The raw token exists only in the email. We persist sha256(token).
+# ---------------------------------------------------------------------------
+
+RESET_TOKEN_TTL = timedelta(hours=1)
+RESET_REQUESTS_PER_HOUR = 5
+
+# Deliberately says nothing about whether the address is known to us.
+GENERIC_RESET_MESSAGE = (
+    "If that address has a Brubru account, a reset link is on its way. "
+    "It expires in one hour. Remember to check your spam folder."
+)
+
+
+def _hash_reset_token(raw_token: str) -> str:
+    """sha256 hex of the raw token. What we store, never the token itself."""
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
+
+
+def _lookup_reset_token(db: Session, raw_token: str) -> tuple[PasswordResetToken | None, str | None]:
+    """Return (token_row, error_reason). token_row is None if not redeemable."""
+    row = (
+        db.query(PasswordResetToken)
+        .filter(PasswordResetToken.token_hash == _hash_reset_token(raw_token))
+        .first()
+    )
+    if row is None:
+        return None, "not_found"
+    if row.used_at is not None:
+        return None, "already_used"
+    if not row.is_redeemable:
+        return None, "expired"
+    return row, None
+
+
+@router.post("/forgot-password", response_model=MessageResponse)
+async def forgot_password(
+    body: ForgotPasswordRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Send a password reset link.
+
+    Always returns the same 200 body. A caller cannot tell from the response
+    whether the address has an account, whether it is OAuth-only, or whether it
+    hit the rate limit.
+    """
+    # Recovery flows should be forgiving about case, so match case-insensitively
+    # and then send to the address as stored.
+    email = body.email.strip().lower()
+    user = db.query(User).filter(func.lower(User.email) == email).first()
+
+    if user is None or not user.is_active:
+        return MessageResponse(message=GENERIC_RESET_MESSAGE)
+
+    # A pre-provisioned row that nobody has claimed yet is not an account, it is
+    # an invitation (migration 148). It has an email and no password, so without
+    # this guard it would fall through to the normal reset path below and let a
+    # reset stand in for the single-use claim token, leaving claimed_at NULL and
+    # the claim token still live on an account that now has a password. Dormant
+    # rows are reachable only through /claim/<token>.
+    if user.pre_provisioned_at is not None and user.claimed_at is None:
+        logger.info("[AUTH] Password reset ignored for unclaimed dormant row %s", user.id)
+        return MessageResponse(message=GENERIC_RESET_MESSAGE)
+
+    from services.email_service import (
+        get_email_service,
+        build_password_reset_email,
+        build_oauth_only_reset_email,
+    )
+
+    email_service = get_email_service()
+
+    # OAuth-only accounts have no password to reset. Tell them in the email
+    # rather than in the API response, so the endpoint stays non-enumerable.
+    if not user.password_hash and user.oauth_provider:
+        content = build_oauth_only_reset_email(user, user.oauth_provider)
+        try:
+            email_service.send(to=user.email, subject=content["subject"], html_body=content["html_body"])
+        except Exception:
+            logger.exception("[AUTH] Failed to send OAuth-only reset notice to user %s", user.id)
+        return MessageResponse(message=GENERIC_RESET_MESSAGE)
+
+    # Rate limit: cheap count over the index we already need for invalidation.
+    window_start = datetime.now(timezone.utc) - timedelta(hours=1)
+    recent = (
+        db.query(func.count(PasswordResetToken.id))
+        .filter(
+            PasswordResetToken.user_id == user.id,
+            PasswordResetToken.created_at >= window_start,
+        )
+        .scalar()
+    ) or 0
+    if recent >= RESET_REQUESTS_PER_HOUR:
+        logger.warning("[AUTH] Password reset rate limit hit for user %s", user.id)
+        return MessageResponse(message=GENERIC_RESET_MESSAGE)
+
+    # Requesting a new link retires any outstanding ones, so only the newest
+    # email in the inbox works.
+    (
+        db.query(PasswordResetToken)
+        .filter(
+            PasswordResetToken.user_id == user.id,
+            PasswordResetToken.used_at.is_(None),
+        )
+        .update({PasswordResetToken.used_at: datetime.now(timezone.utc)}, synchronize_session=False)
+    )
+
+    raw_token = secrets.token_urlsafe(32)
+    db.add(
+        PasswordResetToken(
+            user_id=user.id,
+            token_hash=_hash_reset_token(raw_token),
+            expires_at=datetime.now(timezone.utc) + RESET_TOKEN_TTL,
+            request_ip=(request.client.host if request.client else None),
+        )
+    )
+    db.commit()
+
+    reset_url = f"{settings.APP_URL.rstrip('/')}/reset-password?token={raw_token}"
+    content = build_password_reset_email(user, reset_url)
+    try:
+        email_service.send(to=user.email, subject=content["subject"], html_body=content["html_body"])
+    except Exception:
+        # The token is already issued; surfacing the failure would leak that the
+        # account exists. Log loudly instead.
+        logger.exception("[AUTH] Failed to send password reset email to user %s", user.id)
+
+    return MessageResponse(message=GENERIC_RESET_MESSAGE)
+
+
+@router.get("/reset-password/{token}", response_model=ResetTokenCheckResponse)
+async def check_reset_token(token: str, db: Session = Depends(get_db)):
+    """Report whether a reset link is still good.
+
+    Lets the page say "this link has expired" before asking for a new password,
+    instead of failing after the user has typed one.
+    """
+    row, reason = _lookup_reset_token(db, token)
+    if row is None:
+        return ResetTokenCheckResponse(valid=False, reason=reason)
+    return ResetTokenCheckResponse(valid=True)
+
+
+@router.post("/reset-password", response_model=Token)
+async def reset_password(
+    body: ResetPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    """Redeem a reset token, set the new password, and sign the user in."""
+    row, reason = _lookup_reset_token(db, body.token)
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE if reason in ("expired", "already_used")
+            else status.HTTP_404_NOT_FOUND,
+            detail=f"This reset link is no longer valid ({reason}). Request a new one.",
+        )
+
+    user = db.query(User).filter(User.id == row.user_id).first()
+    if user is None or not user.is_active:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Account unavailable")
+
+    now = datetime.now(timezone.utc)
+    user.password_hash = get_password_hash(body.password)
+    # A user who set a password this way has demonstrably received mail there.
+    user.is_verified = True
+    user.last_login = datetime.utcnow()
+    row.used_at = now
+
+    # Burn every other outstanding token for this user, not just the redeemed one.
+    (
+        db.query(PasswordResetToken)
+        .filter(
+            PasswordResetToken.user_id == user.id,
+            PasswordResetToken.used_at.is_(None),
+        )
+        .update({PasswordResetToken.used_at: now}, synchronize_session=False)
+    )
+    db.commit()
+    db.refresh(user)
+
+    access_token = create_access_token(data={"sub": str(user.id), "email": user.email})
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user,
         "previous_last_login": None,
     }
 

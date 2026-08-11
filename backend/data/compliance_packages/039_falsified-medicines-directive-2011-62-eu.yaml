@@ -1,0 +1,154 @@
+id: 39
+name: Falsified Medicines (Directive 2011/62/EU)
+policy_area: Health
+description: The safety-features regime (unique identifier and anti-tampering device verified
+  through the EMVS), plus active-substance and broker controls, against falsified medicines.
+applicability: Manufacturers, wholesale distributors, brokers, pharmacies, active-substance
+  suppliers, the EMVO/EMVS.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32011L0062
+  title: Directive 2011/62/EU of the European Parliament and of the Council of 8 June 2011
+    amending Directive 2001/83/EC on the Community code relating to medicinal products for
+    human use, as regards the prevention of the entry into the legal supply chain of falsified
+    medicinal products (Text with EEA relevance)
+requirements:
+- article: Art 1 (54a)
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders, pharmacy distributors, dispensing pharmacies
+  deadline: null
+  interpretive: null
+  requirement_text: Every prescription medicine pack must carry a unique identifier in 2D
+    Data Matrix barcode format and an anti-tampering device. The unique identifier and anti-tampering
+    device must be verified at the point of dispensing through the European Medicines Verification
+    System (EMVS).
+- article: Art 46b
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: API importers, manufacturers, medicinal product manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Active substances (APIs) imported from outside the EU must have written
+    confirmation from the exporting country's competent authority confirming GMP equivalence.
+    Alternatively, the API must originate from a country on the Commission's equivalence list
+    (Art 111b).
+- article: Art 52a, 60-day
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: API importers, manufacturers, distributors
+  deadline: null
+  interpretive: null
+  requirement_text: Importers, manufacturers and distributors of active substances must register
+    with the competent authority with a 60-day pre-notification requirement before commencing
+    operations.
+- article: Art 46 (amended)
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must audit their active substance suppliers
+    to verify GMP compliance and the integrity of supply chains.
+- article: Art 85b
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Medicinal product brokers
+  deadline: null
+  interpretive: null
+  requirement_text: Brokers of medicinal products must be registered with the competent authority.
+    Brokering activities are regulated and subject to Good Distribution Practice (GDP) requirements.
+- article: Art 85c
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Online pharmacies, distance-sale operators
+  deadline: null
+  interpretive: null
+  requirement_text: Distance sales of medicinal products (including online pharmacies) must
+    comply with conditions for legal cross-border sale and display a common EU logo recognisable
+    Union-wide that links to the national authority's official list of authorised online pharmacies.
+- article: Art 1 (33)
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All manufacturers, distributors, competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: A falsified medicinal product is defined as one with false representation
+    of identity, source or history. The definition explicitly excludes unintentional quality
+    defects and intellectual property infringements.
+- article: Art 117a
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders, national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: A rapid alert and recall system must be established to prevent suspect
+    products from reaching patients. For serious risks, a rapid alert must be issued to all
+    Member States with public announcements within 24 hours.
+- article: Art 111 (amended)
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: Manufacturers, wholesalers, API producers, national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must conduct risk-based inspections, including unannounced
+    inspections, of manufacturers, wholesalers and active substance premises in the EU and
+    third countries. GMP/GDP certificates must be maintained in a public EU database.
+- article: Art 118a
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All market participants, national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Penalties for manufacture, distribution, brokering, import, export or
+    distance-sale of falsified medicines must be effective, proportionate and dissuasive.
+- article: Art 85d
+  law_celex: 32011L0062
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: National competent authorities, European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Member States and the European Medicines Agency must maintain and operate
+    information websites about online pharmacy safety. Public awareness campaigns must be
+    conducted to educate patients about authentic medicines.
+- article: Art 1 (3a, 3b)
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: API manufacturers, excipient suppliers, medicinal product manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Active substances must be precisely defined and made to GMP standards.
+    Excipients must undergo formalised GMP risk assessment to ensure supply chain integrity.
+- article: Art 2(1)
+  law_celex: 32011L0062
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: '2013-01-02'
+  interpretive: null
+  requirement_text: Member States must transpose the Directive into national law by 2 January
+    2013. Safety feature provisions became applicable from 9 February 2019 under Commission
+    Delegated Regulation (EU) 2016/161.
+- article: Art 1 (17a)
+  law_celex: 32011L0062
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Medicinal product brokers
+  deadline: null
+  interpretive: null
+  requirement_text: Brokering is defined as regulatory activity subject to registration and
+    control. Brokers must be registered with competent authorities and comply with Good Distribution
+    Practice requirements.

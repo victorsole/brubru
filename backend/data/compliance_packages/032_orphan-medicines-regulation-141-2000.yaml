@@ -1,0 +1,172 @@
+id: 32
+name: Orphan Medicines (Regulation 141/2000)
+policy_area: Health
+description: 'The EU incentive framework for medicines treating rare conditions: orphan designation,
+  protocol assistance, fee reductions and ten-year market exclusivity.'
+applicability: Sponsors developing medicines for rare diseases, the EMA Committee for Orphan
+  Medicinal Products (COMP).
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32000R0141
+  title: Regulation (EC) No 141/2000 of the European Parliament and of the Council on orphan
+    medicinal products
+requirements:
+- article: Art 3(1)(a)
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: sponsor; applicant for orphan designation
+  deadline: null
+  interpretive: null
+  requirement_text: A medicinal product may be designated as orphan if it is intended for
+    treatment of a condition affecting not more than 5 in 10,000 persons in the Community.
+    The rare-disease condition must meet this prevalence threshold or satisfy the alternative
+    route based on insufficient-return grounds for life-threatening or seriously debilitating
+    conditions.
+- article: Art 2 (Definitions)
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: sponsor; applicant
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsor must be established in the Community. Medicinal product is defined
+    per Dir 65/65/EEC. The Agency is the European Agency for the Evaluation of Medicinal Products
+    (EMEA).
+- article: Art 4
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EMA; Commission; Member States
+  deadline: null
+  interpretive: null
+  requirement_text: A Committee for Orphan Medicinal Products (COMP) is set up within the
+    Agency. COMP composition includes one member per Member State, 3 Commission-nominated
+    patient-organisation representatives, and 3 Commission-nominated members on Agency recommendation,
+    serving 3-year renewable terms.
+- article: Art 5(1)-(2)
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: sponsor; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsor applies for designation at any development stage before marketing
+    authorisation application. Agency must validate the application and prepare a summary
+    report within a specified timeframe.
+- article: Art 5(5)
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: COMP; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: COMP shall issue its opinion on the application within 90 days of receipt
+    of a valid application. The opinion may be adopted by consensus or by a 2/3 majority vote.
+- article: Art 5(7)-(8)
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: sponsor; Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsor may appeal a negative COMP opinion within 90 days. The Commission
+    shall take a decision on the COMP opinion within 30 days and enter designated products
+    in the Community Register of Orphan Medicinal Products.
+- article: Art 5 (Register)
+  law_celex: 32000R0141
+  criticality: important
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission maintains a Community Register of Orphan Medicinal Products,
+    which is publicly accessible. Designated products are entered upon Commission decision.
+- article: Art 6
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: sponsor; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsors are entitled to protocol assistance from the Agency. The Agency
+    shall provide scientific advice on tests and trials needed to establish quality, safety,
+    and efficacy of the orphan medicinal product.
+- article: Art 7
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: sponsor; EMA; Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Orphan medicinal products may be authorised via the centralised procedure
+    without justifying eligibility. Fee waivers are funded by special Community contribution
+    to the Agency.
+- article: Art 8(1)
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission; Member States; regulatory authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Community and Member States shall not accept or grant a marketing authorisation
+    for a similar medicinal product for the same therapeutic indication for 10 years from
+    the grant of authorisation to the designated product.
+- article: Art 8(2)
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Commission; Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Market exclusivity may be reduced to 6 years if, at the end of year 5,
+    the criteria for orphan designation are no longer met, such as when the product becomes
+    sufficiently profitable.
+- article: Art 8(3)-(4)
+  law_celex: 32000R0141
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Commission; product holder
+  deadline: null
+  interpretive: null
+  requirement_text: Derogations to market exclusivity include cases where holder consents,
+    cannot supply sufficient quantities, or a second product is clinically superior in safety
+    or efficacy. Commission shall define 'similar medicinal product' and 'clinical superiority'.
+- article: Art 5 (Annual report)
+  law_celex: 32000R0141
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: sponsor; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: Sponsor must submit an annual development report on progress towards marketing
+    authorisation and any significant changes to the product or sponsorship.
+- article: Art 9
+  law_celex: 32000R0141
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States; Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall notify the Commission of any incentive measures they
+    provide to orphan medicinal product sponsors. Commission shall publish and periodically
+    update an inventory of such incentives.
+- article: Art 4(3) (COMP Chair)
+  law_celex: 32000R0141
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: COMP; EMA
+  deadline: null
+  interpretive: null
+  requirement_text: COMP shall elect its Chair for a 3-year term, renewable once. The Agency
+    provides secretariat support to COMP.
+- article: Art 3(2); Art 11
+  law_celex: 32000R0141
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all entities; Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation enters into force on the date of publication and applies from
+    adoption of implementing Regulations (Reg 847/2000 for criteria and definitions).

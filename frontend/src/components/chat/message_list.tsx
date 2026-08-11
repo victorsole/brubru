@@ -77,11 +77,19 @@ type TranslateFn = (key: string, defaultValue: string, options?: Record<string, 
 /**
  * The backend detects the procedure references, CELEX numbers and committees
  * an answer is about, and until now every one of them was spent on another
- * chat question. These are the same identifiers My EU Bubble is organised
- * around, so they can also be a way out: open the dossier, see how it voted,
- * check who lobbied on it.
+ * chat question. These are the same identifiers the rest of Brubru is
+ * organised around, so they can also be a way out: open the dossier, see how
+ * it voted, check who lobbied on it, start amending it.
+ *
+ * Only routes that actually READ the parameter belong here. /amendator honours
+ * ?celex= (it fetches the act from EUR-Lex and loads it into the editor), and
+ * My EU Bubble honours ?tab= with ?procedure= / ?committee=. EU Law Comply,
+ * Tenderator and the API page read no search params at all, so a link into
+ * them would land on an unfiltered page -- precisely the dead end this strip
+ * exists to remove -- and they are deliberately absent until their pages can
+ * honour one.
  */
-const meubLinksFor = (
+const productLinksFor = (
   entities: DetectedEntities | null | undefined,
   t: TranslateFn,
 ): { label: string; href: string }[] => {
@@ -99,14 +107,25 @@ const meubLinksFor = (
       href: `/my-eu-bubble?tab=votes&procedure=${enc}`,
     });
   }
+  // An answer about an adopted act is one click from amending it. The
+  // Amendator has accepted ?celex= all along; Chat simply never offered it,
+  // so the single most actionable thing a policy professional can do with a
+  // law we just explained was the one route they had to find themselves.
+  const celex = entities.celex_numbers?.[0];
+  if (celex) {
+    links.push({
+      label: t('chat.openInAmendator', 'Amend this act in the Amendator'),
+      href: `/amendator?celex=${encodeURIComponent(celex)}`,
+    });
+  }
   const cmt = entities.committee_codes?.[0];
-  if (cmt && links.length < 3) {
+  if (cmt) {
     links.push({
       label: t('chat.openCommitteeCalendar', 'What {{code}} has coming up', { code: cmt }),
       href: `/my-eu-bubble?tab=eu_calendar&committee=${encodeURIComponent(cmt)}`,
     });
   }
-  return links.slice(0, 3);
+  return links.slice(0, 4);
 };
 
 const generateSmartSuggestions = (
@@ -441,7 +460,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 // already detected for this answer.
                 const showSmartSuggestions = !!isLastAssistant && !message.isStreaming;
                 const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities, t) : [];
-                const meubLinks = showSmartSuggestions ? meubLinksFor(detectedEntities, t) : [];
+                const productLinks = showSmartSuggestions ? productLinksFor(detectedEntities, t) : [];
                 return (
                   <>
                     {renderContentWithCitations(cleanContent, message.citations)}
@@ -469,12 +488,15 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                         isPreUser={!!abVariant}
                       />
                     )}
-                    {meubLinks.length > 0 && (
+                    {productLinks.length > 0 && (
                       <div className="message-list__meub-links">
                         <span className="message-list__meub-links-label">
-                          {t('chat.openInBubble', 'Open in My EU Bubble')}
+                          {/* Not "Open in My EU Bubble" any more: the strip now
+                              also opens the Amendator, which is a product of
+                              its own and not one of the Bubble's sub-tabs. */}
+                          {t('chat.openInBrubru', 'Take this further')}
                         </span>
-                        {meubLinks.map((link) => (
+                        {productLinks.map((link) => (
                           <Link key={link.href} to={link.href} className="message-list__meub-link">
                             {link.label}
                             <Icon path={mdiArrowTopRight} size={0.55} />

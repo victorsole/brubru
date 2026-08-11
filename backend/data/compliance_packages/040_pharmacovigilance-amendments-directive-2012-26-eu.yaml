@@ -1,0 +1,134 @@
+id: 40
+name: Pharmacovigilance Amendments (Directive 2012/26/EU)
+policy_area: Health
+description: The post-Mediator follow-up that made the urgent Union procedure trigger automatically
+  and forced disclosure of safety-driven withdrawals, including in third countries.
+applicability: Marketing authorisation holders, national competent authorities, the PRAC.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32012L0026
+  title: Directive 2012/26/EU of the European Parliament and of the Council of 25 October
+    2012 amending Directive 2001/83/EC as regards pharmacovigilance (Text with EEA relevance)
+requirements:
+- article: Art 123(2), 2a, 2b, 2c
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing Authorisation Holders (MAHs)
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must notify Member States and the EMA
+    of reasons for suspending marketing, withdrawing a product, requesting revocation, or
+    not renewing authorisation, including safety-related withdrawals in third countries. This
+    notification must declare whether the action is based on safety grounds under Art 116/117(1).
+- article: Art 107i(1)/(1a)
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency (EMA), PRAC
+  deadline: null
+  interpretive: null
+  requirement_text: The urgent Union procedure must be initiated automatically when a suspension,
+    revocation, non-renewal or supply ban is considered on safety grounds, or when a new contraindication,
+    dose reduction or indication restriction is needed. The PRAC must issue a recommendation
+    when action is based on pharmacovigilance data.
+- article: Art 31, 34
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States, European Commission, EMA
+  deadline: null
+  interpretive: null
+  requirement_text: The Normal Procedure applies to Union-interest quality, safety or efficacy
+    referrals. The Urgent Union Procedure applies to pharmacovigilance-data-driven urgency
+    cases. Member States and the Commission may take immediate interim measures (suspend the
+    MA or prohibit use) pending the Union decision.
+- article: Art 123(4)
+  law_celex: 32012L0026
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency (EMA)
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA must publish an annual public list of medicines refused, revoked,
+    suspended, supply-prohibited or withdrawn from the market, including the reasons for each
+    action.
+- article: Art 1 (12 amendments to Dir 2001/83/EC)
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All Member States, EMA, MAHs
+  deadline: null
+  interpretive: null
+  requirement_text: Directive amending the Community Code on human medicinal products to strengthen
+    pharmacovigilance procedures. All amendments apply from the date of application, 28 October
+    2013, following a transposition deadline of 28 October 2013.
+- article: Art 2
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: member_state
+  applicable_entity: All Member States
+  deadline: '2013-10-28'
+  interpretive: null
+  requirement_text: Member States must adopt and publish the laws, regulations and administrative
+    provisions necessary to comply with this directive by 28 October 2013. They apply these
+    measures from the same date.
+- article: Art 3
+  law_celex: 32012L0026
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All EU institutions and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The directive enters into force on the twentieth day following its publication
+    in the Official Journal (20 November 2012).
+- article: Art 116/117(1) (referenced in amendments)
+  law_celex: 32012L0026
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing Authorisation Holders, EMA, Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Safety grounds are defined as concerns relating to the quality, safety
+    or efficacy of a medicinal product. Withdrawals and other actions taken on safety grounds
+    must be reported and trigger mandatory EU procedures.
+- article: Art 63
+  law_celex: 32012L0026
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Marketing Authorisation Holders
+  deadline: null
+  interpretive: null
+  requirement_text: Minor labelling and package-leaflet language wording changes are incorporated
+    as part of the overall pharmacovigilance amendments to the Community Code.
+- article: Art 85a
+  law_celex: 32012L0026
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Wholesale Distributors
+  deadline: null
+  interpretive: null
+  requirement_text: Clarification of the requirements for wholesale distribution of medicinal
+    products to third countries, ensuring consistency with pharmacovigilance notification
+    obligations.
+- article: Art 123(2) (disclosure mechanism)
+  law_celex: 32012L0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency (EMA), Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The EMA must forward all safety-related withdrawal and suspension notifications
+    from Member States to all other Member States, ensuring transparency and coordinated EU-wide
+    awareness of safety-driven actions.
+- article: Title IX of Dir 2001/83/EC (consolidated)
+  law_celex: 32012L0026
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All Member States, EMA, MAHs
+  deadline: null
+  interpretive: null
+  requirement_text: This directive operates as part of the consolidated Title IX together
+    with Directive 2010/84/EU and Regulation 1235/2010, forming the integrated EU pharmacovigilance
+    framework that must be applied and enforced consistently.

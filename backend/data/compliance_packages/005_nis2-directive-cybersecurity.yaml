@@ -1,0 +1,503 @@
+id: 5
+name: NIS2 Directive (Cybersecurity)
+policy_area: Digital Policy and Digital Economy
+description: Network and Information Security Directive establishing cybersecurity requirements
+applicability: Essential and important entities, digital infrastructure operators
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32005D0752
+  title: Commission Decision of 24 October 2005 establishing an expert group on electronic
+    commerce (2005/752/EC)
+- celex: 32021R0887
+  title: Regulation (EU) 2021/887 of the European Parliament and of the Council of 20 May
+    2021 establishing the European Cybersecurity Industrial, Technology and Research Competence
+    Centre and the Network of National Coordination Centres
+- celex: 32022L2555
+  title: Directive (EU) 2022/2555 of the European Parliament and of the Council of 14 December
+    2022 on measures for a high common level of cybersecurity across the Union (NIS2 Directive)
+- celex: 32023D0273
+  title: Council Decision (EU) 2023/273 of 30 January 2023 on the position to be adopted,
+    on behalf of the European Union, within the EEA Joint Committee concerning an amendment
+    to Protocol 31 to the EEA Agreement, on cooperation in specific fields outside the four
+    freedoms (Cybersecurity Centre) (Text with EEA relevance)
+- celex: 32023R1484
+  title: Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the
+    technical items of the data set, establishing the technical formats for transmission of
+    information and specifying the arrangements and content of the quality reports on the
+    organisation of a sample survey in the use of information and communication technologies
+    domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament
+    and of the Council (Text with EEA relevance)
+- celex: 32024R2690
+  title: Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down
+    rules for the application of Directive (EU) 2022/2555 as regards technical and methodological
+    requirements of cybersecurity risk-management measures and further specification of the
+    cases in which an incident is considered to be significant with regard to DNS service
+    providers, TLD name registries, cloud computing service providers, data centre service
+    providers, content delivery network providers, managed service providers, managed security
+    service providers, providers of online market places, of online search engines and of
+    social networking services platforms, and trust service providers (Text with EEA relevance)
+requirements:
+- article: Whereas (4)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: Due account should be taken of the divergent risk exposure of relevant
+    entities, such as the criticality of the relevant entity, the risks to which it is exposed,
+    the relevant entity's size and structure as well as the likelihood of occurrence of incidents
+    and their severity, including their societal and economic impact, when complying with
+    the technical and methodological requirements of cybersecurity risk-management measures
+    set out in the Annex to this Regulation.
+- article: Whereas (6)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: Where a relevant entity considers it not appropriate, not applicable or
+    not feasible for the relevant entity to apply certain technical and methodological requirements
+    as provided for in the Annex to this Regulation, the relevant entity should in a comprehensible
+    manner document its reasoning to that effect.
+- article: Whereas (9)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should establish a policy on the security of network
+    and information systems as well as topic-specific policies, such as policies on access
+    control, which should be coherent with the policy on the security of network and information
+    systems.
+- article: Whereas (9)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The policy on the security of network and information systems should be
+    the highest-level document setting out the relevant entities' overall approach to their
+    security of network and information systems and should be approved by the management bodies
+    of the relevant entities.
+- article: Whereas (9)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The topic-specific policies should be approved by an appropriate level
+    of management.
+- article: Whereas (11)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should establish and maintain an appropriate risk
+    management framework.
+- article: Whereas (11)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should establish, implement and monitor a risk treatment
+    plan.
+- article: Whereas (11)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should take the appropriate risk treatment measures.
+- article: Whereas (12)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should monitor their network and information systems
+    and should take actions to evaluate events, near misses and incidents.
+- article: Whereas (14)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should establish a supply chain security policy
+    which governs their relations with their direct suppliers and service providers.
+- article: Whereas (14)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: These entities should specify in the contracts with their direct suppliers
+    or service providers adequate security clauses, for example by requiring, where appropriate,
+    cybersecurity risk-management measures according to Article 21(2) of Directive (EU) 2022/2555
+    or other similar legal requirements.
+- article: Whereas (15)
+  law_celex: 32024R2690
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre servic...
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entities should regularly carry out security tests based
+    on a dedicated policy and procedures to verify whether the cybersecurity risk-management
+    measures are implemented and function properly.
+- article: Article 1
+  law_celex: 32023D0273
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union (when acting within the EEA Joint Committee)
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be adopted, on behalf of the Union, within the EEA Joint
+    Committee on the proposed amendment to Protocol 31 to the EEA Agreement, on cooperation
+    in specific fields outside the four freedoms, shall be based on the draft Decision of
+    the EEA Joint Committee attached to this Decision.
+- article: Article 4(2)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: For the variables listed in the Annex that concern the households, information
+    shall be collected for private households with at least one member aged 16 to 74 residing
+    in the territory of the Member State.
+- article: Article 4(3)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: For the variables listed in the Annex that concern the individuals, information
+    shall be collected for individuals aged 16 to 74 residing in the territory of the Member
+    State.
+- article: Article 4(5)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The data collection for the use of information and communication technologies
+    domain shall be carried out for a sample of private households or a sample of persons
+    belonging to private households as observation units.
+- article: Article 7(1)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Imputation, modelling or weighting shall be applied to the data where
+    information is missing, invalid or inconsistent.
+- article: Article 8(1)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2024-10-05'
+  interpretive: null
+  requirement_text: Member States shall transmit the final data to the Commission (Eurostat)
+    by 5 October 2024.
+- article: Article 8(2)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The data shall be transmitted in the form of microdata files, including
+    appropriate weights. The data shall be fully checked and validated, using the statistical
+    data and metadata exchange standard through the Single Entry Point before the transmission.
+- article: Article 8(2)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: That data shall comply with the validation rules in accordance with the
+    specification of variables based on the coding and filters as set out in the Annex.
+- article: Article 8(3)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2025-01-05'
+  interpretive: null
+  requirement_text: Member States shall provide the metadata to the Commission (Eurostat)
+    in the standard metadata structure defined by the Commission (Eurostat) by 5 January 2025.
+    They shall provide it through the Single Entry Point.
+- article: Article 9(1)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall transmit to the Commission (Eurostat) an annual quality
+    report on the use of information and communication technologies domain.
+- article: Article 9(2)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The annual quality report shall be compliant with the most recent European
+    Statistical System (ESS) standards and shall contain quality-related data and metadata
+    and information on the accuracy and reliability of the survey.
+- article: Article 9(3)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2025-01-05'
+  interpretive: null
+  requirement_text: The annual quality report shall be transmitted to the Commission (Eurostat)
+    in accordance with the technical standards established by the Commission (Eurostat), by
+    5 January 2025.
+- article: Article 9(4)
+  law_celex: 32023R1484
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The annual quality report shall be submitted through the Single Entry
+    Point.
+- article: Article 3(1)
+  law_celex: 32005D0752
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Members of the group should be national contact points appointed under
+    Article 19(2) of the Directive on electronic commerce (one member per Member State) and
+    representatives of the Commission
+- article: Article 4
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: european commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Group shall be chaired by a representative of the Commission
+- article: Article 4
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: expert group on electronic commerce
+  deadline: null
+  interpretive: null
+  requirement_text: The expert group on electronic commerce shall adopt agreed rules of procedure
+    on the basis of a model adopted by the Commission
+- article: Article 5
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: expert group on electronic commerce
+  deadline: null
+  interpretive: null
+  requirement_text: The Group and the sub-groups shall normally meet at the Commission premises,
+    in the form and according to the timetable determined by the Commission
+- article: Article 5
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: european commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Secretariat of the Group shall be provided by the Commission
+- article: Article 6
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: european commission
+  deadline: null
+  interpretive: null
+  requirement_text: Travel and subsistence expenses incurred by members, observers and experts,
+    in connection with the activities of the Group, shall be reimbursed by the Commission
+    in accordance with the provisions in force within the Commission
+- article: Art 3(3)-(4)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: '2025-04-17'
+  interpretive: null
+  requirement_text: Essential and important entities must submit registration information
+    (name, address, contact details, sector, IP ranges) to competent authorities by 17 April
+    2025 and notify any changes within two weeks of the change.
+- article: Art 27(2)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Specified digital service providers (essential and important)
+  deadline: '2025-01-17'
+  interpretive: null
+  requirement_text: DNS service providers, TLD name registries, cloud computing service providers,
+    data centre service providers, content delivery network providers, managed service providers,
+    managed security service providers, and online marketplace / search engine / social networking
+    platform providers must register with the competent authority by 17 January 2025 for inclusion
+    in the ENISA registry.
+- article: Art 20(1)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: The management body of the entity must formally approve the cybersecurity
+    risk-management measures adopted pursuant to Article 21, oversee their implementation,
+    and may be held personally liable for infringements.
+- article: Art 20(2)
+  law_celex: 32022L2555
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Members of the management body must follow cybersecurity training sufficient
+    to enable them to identify risks and assess cybersecurity risk-management practices and
+    their impact on the entity's services.
+- article: Art 21(2)(a)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must establish and maintain documented policies on risk analysis
+    and information system security as part of an all-hazards cybersecurity risk-management
+    framework.
+- article: Art 21(2)(b)-(c)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must have operational incident handling procedures and business
+    continuity arrangements, including backup management and disaster recovery, to ensure
+    service continuity after an incident.
+- article: Art 21(2)(d)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must implement supply-chain security measures addressing security
+    in their relationships with direct suppliers and service providers, including assessment
+    of those parties' vulnerabilities, cybersecurity quality and secure development procedures.
+- article: Art 21(2)(e)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must address security in the acquisition, development and maintenance
+    of network and information systems, including vulnerability handling and disclosure practices.
+- article: Art 21(2)(f)-(g)
+  law_celex: 32022L2555
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must establish policies and procedures to assess the effectiveness
+    of their cybersecurity measures and must implement basic cyber hygiene practices and cybersecurity
+    training for staff.
+- article: Art 21(2)(h)-(i)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must have policies and procedures on the use of cryptography
+    and, where appropriate, encryption, and must implement human resources security, access
+    control policies and asset management.
+- article: Art 21(2)(j)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must use multi-factor authentication or continuous authentication
+    solutions, and secured voice, video and text communications and secured emergency communication
+    systems where appropriate.
+- article: Art 23(4)(a)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Upon becoming aware of a significant incident, entities must submit an
+    early warning to the CSIRT or competent authority within 24 hours, indicating any suspected
+    malicious cause or potential cross-border impact.
+- article: Art 23(4)(b)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must submit a full incident notification within 72 hours of becoming
+    aware of a significant incident, including an initial assessment of severity and impact
+    and, where available, indicators of compromise.
+- article: Art 23(4)(d)
+  law_celex: 32022L2555
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: Entities must submit a final incident report no later than one month after
+    the incident notification, covering the detailed description, type of threat or root cause,
+    mitigation measures applied and ongoing, and cross-border impact where applicable.
+- article: Art 21(3) / Art 22
+  law_celex: 32022L2555
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Essential and important entities
+  deadline: null
+  interpretive: null
+  requirement_text: When determining supply-chain security measures, entities must take into
+    account the results of the EU-level coordinated security risk assessments of critical
+    ICT supply chains carried out by the Cooperation Group under Article 22.

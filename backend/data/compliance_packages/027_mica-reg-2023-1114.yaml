@@ -1,0 +1,195 @@
+id: 27
+name: MiCA (Reg 2023/1114)
+policy_area: Economic and Financial Affairs
+description: Regulation (EU) 2023/1114 (MiCA, Markets in Crypto-Assets) is the EU first comprehensive
+  framework for crypto-assets not already regulated as financial instruments. Adopted 31 May
+  2023 under Article 114 TFEU; applies from 30 December 2024, with the stablecoin Titles III
+  and IV (asset-referenced tokens and e-money tokens) from 30 June 2024. It classifies crypto-assets
+  into three types (e-money tokens, asset-referenced tokens, and other/utility tokens), requires
+  a crypto-asset white paper, licenses crypto-asset service providers (CASPs) across ten services
+  with EU-wide passporting, imposes reserve, redemption and own-funds rules on stablecoin
+  issuers, prohibits crypto market abuse, and gives EBA direct supervision of significant
+  tokens and ESMA a public register. Also amends the EBA and ESMA regulations, the CRD and
+  the Whistleblower Directive.
+applicability: Crypto-asset issuers, offerors and persons seeking admission to trading; stablecoin
+  issuers (asset-referenced and e-money tokens); crypto-asset service providers (exchanges,
+  custodians, brokers, trading platforms, advisers, portfolio managers); credit institutions
+  and electronic money institutions issuing tokens; national competent authorities, EBA and
+  ESMA; and retail and professional holders of crypto-assets in the Union.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32023R1114
+  title: Regulation (EU) 2023/1114 of the European Parliament and of the Council of 31 May
+    2023 on markets in crypto-assets, and amending Regulations (EU) No 1093/2010 and (EU)
+    No 1095/2010 and Directives 2013/36/EU and (EU) 2019/1937
+requirements:
+- article: Title II (crypto-asset white paper)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: crypto-asset offerors
+  deadline: null
+  interpretive: null
+  requirement_text: Offerors and persons seeking admission to trading of crypto-assets other
+    than asset-referenced or e-money tokens must draw up, notify to the competent authority
+    and publish a crypto-asset white paper with mandatory, fair, clear and not-misleading
+    disclosures (issuer, project, offer, rights, technology, risks, and the environmental
+    impact of the consensus mechanism).
+- article: Title II (white-paper exemptions)
+  law_celex: 32023R1114
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: crypto-asset offerors
+  deadline: null
+  interpretive: null
+  requirement_text: No white paper is required for offers to fewer than 150 persons per Member
+    State, offers to qualified investors only, or offers with total consideration not exceeding
+    EUR 1 000 000 over 12 months, nor for free crypto-assets, mining rewards or limited-network
+    utility tokens.
+- article: Title II (right of withdrawal)
+  law_celex: 32023R1114
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: offerors / retail holders
+  deadline: null
+  interpretive: null
+  requirement_text: Retail holders acquiring Title II crypto-assets directly from the offeror
+    or a placing CASP have a 14-day right of withdrawal, except where the crypto-assets are
+    already admitted to trading.
+- article: Title III (ART authorisation)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: asset-referenced token issuers
+  deadline: null
+  interpretive: null
+  requirement_text: Issuers of asset-referenced tokens must have a registered office in the
+    Union and be authorised by the competent authority (with the white paper approved), after
+    consultation of EBA, ESMA and the ECB (and the relevant national central bank for non-euro
+    currencies, whose opinion can be binding). Not required below EUR 5 000 000 or for qualified-investor-only
+    offers.
+- article: Title III (reserve of assets)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: asset-referenced token issuers
+  deadline: null
+  interpretive: null
+  requirement_text: ART issuers must constitute and maintain a reserve of assets that is segregated
+    from own assets, composed of secure low-risk assets, held in custody, and matching the
+    value of tokens in circulation; profits and losses on the reserve are borne by the issuer.
+- article: Title III/IV (redemption, no interest)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ART / EMT issuers
+  deadline: null
+  interpretive: null
+  requirement_text: Holders of asset-referenced and e-money tokens have a permanent right
+    of redemption at any time (e-money tokens at par value in the referenced currency). Issuers
+    and CASPs must not grant interest to holders related to the holding period.
+- article: Title IV (EMT issuer status)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: e-money token issuers
+  deadline: null
+  interpretive: null
+  requirement_text: E-money tokens may be issued only by a credit institution authorised under
+    Directive 2013/36/EU or an electronic money institution authorised under Directive 2009/110/EC;
+    the issuer must draw up and notify a crypto-asset white paper.
+- article: Significant tokens (EBA supervision)
+  law_celex: 32023R1114
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: significant token issuers
+  deadline: null
+  interpretive: null
+  requirement_text: Asset-referenced and e-money tokens meeting significance thresholds (large
+    customer base, high market capitalisation or large transaction volumes) face stricter
+    requirements (higher own funds, interoperability, liquidity management) and are supervised
+    directly by EBA, which sets up a college of supervisors.
+- article: ART means of exchange threshold
+  law_celex: 32023R1114
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: asset-referenced token issuers
+  deadline: null
+  interpretive: null
+  requirement_text: An asset-referenced token used widely as a means of exchange (over 1 million
+    transactions and EUR 200 000 000 per day in a single currency area) triggers a duty on
+    the issuer to reduce the level of activity.
+- article: Title V (CASP authorisation)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: crypto-asset service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Crypto-asset service providers must be authorised, be legal persons with
+    a registered office and place of effective management in the Union, and have at least
+    one director resident in the Union. One authorisation is valid Union-wide (passporting).
+- article: Title V (the ten crypto-asset services)
+  law_celex: 32023R1114
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: crypto-asset service providers
+  deadline: null
+  interpretive: null
+  requirement_text: 'Authorisation covers ten services: custody and administration; operation
+    of a trading platform; exchange of crypto-assets for funds; exchange for other crypto-assets;
+    execution of orders; placing; reception and transmission of orders; advice; portfolio
+    management; and transfer services.'
+- article: Title V (CASP conduct + prudential)
+  law_celex: 32023R1114
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: crypto-asset service providers
+  deadline: null
+  interpretive: null
+  requirement_text: CASPs must act honestly, fairly, professionally and in clients' best interests;
+    safeguard client crypto-assets and funds (custodians liable for ICT losses); meet prudential
+    own-funds requirements; have fit-and-proper management; and operate conflict-of-interest
+    and complaints procedures.
+- article: Title VI (market abuse)
+  law_celex: 32023R1114
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: issuers / CASPs
+  deadline: null
+  interpretive: null
+  requirement_text: Insider dealing, unlawful disclosure of inside information and market
+    manipulation are prohibited for crypto-assets admitted to trading; issuers and CASPs must
+    have systems to detect and report suspected market abuse.
+- article: Title VII (ESMA register)
+  law_celex: 32023R1114
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA establishes and maintains a public register of crypto-asset white
+    papers, issuers of asset-referenced tokens, issuers of e-money tokens and crypto-asset
+    service providers.
+- article: Article 143 (transitional regime)
+  law_celex: 32023R1114
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: CASPs / ART issuers
+  deadline: '2024-06-30'
+  interpretive: null
+  requirement_text: CASPs operating lawfully under national law before 30 December 2024 may
+    continue until 1 July 2026 or until authorised or refused (Member States may shorten or
+    disapply this grandfathering). ART issuers operating before 30 June 2024 may continue
+    if they apply for authorisation before 30 July 2024.
+- article: Article 149 (application dates)
+  law_celex: 32023R1114
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: all crypto market participants
+  deadline: '2024-06-30'
+  interpretive: null
+  requirement_text: MiCA entered into force on 29 June 2023. Titles III and IV (asset-referenced
+    and e-money tokens) apply from 30 June 2024; the remainder, including the CASP regime,
+    applies from 30 December 2024.

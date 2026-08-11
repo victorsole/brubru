@@ -1,0 +1,201 @@
+id: 45
+name: Apple State Aid Decision (Decision (EU) 2017/1283)
+policy_area: Competition
+description: The Commission found that two Irish tax rulings allocated almost all of Apple's
+  sales profits to stateless head offices with no real activity, leaving the Irish branches
+  under-taxed, a selective advantage and unlawful State aid of up to about EUR 13 billion.
+  The General Court annulled the decision in 2020 but the Court of Justice set that aside
+  in 2024 and confirmed the Commission, so Ireland must recover the aid.
+applicability: Multinational groups allocating profit to branches; tax authorities issuing
+  advance rulings.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32017D1283
+  title: Commission Decision (EU) 2017/1283 of 30 August 2016 on State aid SA.38373 (2014/C)
+    (ex 2014/NN) (ex 2014/CP) implemented by Ireland to Apple (notified under document C(2017)
+    5605) (Only the English text is authentic) (Text with EEA relevance)
+requirements:
+- article: Recitals 264-320 (primary line)
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational group with non-resident entity holding IP rights
+  deadline: null
+  interpretive: true
+  requirement_text: The head office of a non-resident company must have genuine economic substance
+    — real employees performing active management functions — before branch profits can be
+    allocated to it. A head office that is a registered address with a paper board and no
+    staff cannot be recognised as the beneficial owner of intellectual property licences or
+    other assets for tax-allocation purposes.
+- article: Recitals 281-293 (board minutes analysis)
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational group; tax counsel advising on ruling applications
+  deadline: null
+  interpretive: true
+  requirement_text: Board minutes and corporate records must demonstrate substantive business
+    decisions — strategic approvals, investment choices, IP management acts — made at the
+    level of the entity claimed to be the entrepreneur. Records that contain only dividend
+    approvals, account sign-offs and power-of-attorney grants do not support a claim that
+    the board exercises active control over valuable assets.
+- article: Recitals 325-360 (subsidiary line, tested party)
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Tax authority granting advance rulings; multinational tax departments
+  deadline: null
+  interpretive: true
+  requirement_text: In a one-sided transfer-pricing or profit-allocation analysis, the tested
+    party must be the genuinely less complex entity. An Irish branch employing hundreds of
+    staff and performing distribution, warranty management and after-sales support is not
+    the less complex party and may not be used as the tested party when the comparator entity
+    performs no functions at all.
+- article: Recitals 335-345 (profit level indicator for distr
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational distributor operating through a branch
+  deadline: null
+  interpretive: true
+  requirement_text: For a distribution branch that bears significant risks (inventory, credit,
+    warranty) and whose sales grow materially over the ruling period, operating costs are
+    an inappropriate profit level indicator. Sales turnover or total costs must be considered
+    as alternatives; the choice must be documented with contemporaneous benchmarking evidence.
+- article: Recitals 346-360 (profit level indicator for manuf
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational manufacturer operating through a branch
+  deadline: null
+  interpretive: true
+  requirement_text: For a manufacturing branch that owns inventory and bears production risk,
+    total costs (including cost of goods sold) are the appropriate profit level indicator.
+    Using operating costs alone systematically understates the taxable base when material
+    costs are significant.
+- article: Recitals 249-258 (arm's length as Article 107(1) b
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EU Member States issuing advance tax rulings; multinational groups in
+    all Member States
+  deadline: null
+  interpretive: true
+  requirement_text: The arm's length principle is a mandatory benchmark under EU State aid
+    law (Article 107(1) TFEU) regardless of whether a Member State has codified transfer-pricing
+    rules in its national corporate-tax statute. Tax rulings that produce outcomes departing
+    from a market-based approximation are subject to State aid review independently of OECD
+    guideline compliance.
+- article: Recitals 305, 319 (IP follows significant people f
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational group with centralised IP holding vehicles or Cost Sharing
+    Agreements
+  deadline: null
+  interpretive: true
+  requirement_text: 'Under the Authorised OECD Approach, the economic ownership of intangibles,
+    and the profits attributable to them, must follow the entity that performs the significant
+    people functions: active management of development, enhancement, maintenance, protection
+    and exploitation of the asset. Formal legal title in a costless entity is insufficient.'
+- article: Recitals 59-67 (ruling requests without documentat
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Tax authorities issuing advance rulings; multinational groups applying
+    for rulings
+  deadline: null
+  interpretive: true
+  requirement_text: Every advance tax ruling application concerning transfer pricing or profit
+    allocation must be supported by a contemporaneous functional analysis and transfer-pricing
+    study. Rulings granted on the basis of unsubstantiated narrative representations are vulnerable
+    to challenge on the grounds that revenue authorities lacked an objective basis for the
+    methodology endorsed.
+- article: Recitals 221-222 (distortion and effect on trade)
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States' tax administrations; multinationals with EU-wide operations
+  deadline: null
+  interpretive: true
+  requirement_text: Tax rulings that produce selective advantages for large integrated multinationals
+    operating across EU markets are presumed to distort competition and affect intra-Union
+    trade. The size of the undertaking, the multi-market scope of operations and the scale
+    of the advantage are all relevant factors; no minimum quantitative threshold applies.
+- article: Article 16, Regulation (EU) 2015/1589 (recovery an
+  law_celex: 32017D1283
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Aid beneficiary; Member State executing recovery
+  deadline: null
+  interpretive: null
+  requirement_text: Unlawful State aid must be recovered with compound interest running from
+    the date on which the beneficiary received the advantage. Recovery covers the full gap
+    between the tax actually paid under the contested ruling and the tax that should have
+    been paid under the ordinary rules of the tax system. There is no upper cap on the recoverable
+    amount beyond the aid actually granted.
+- article: Article 17, Regulation (EU) 2015/1589 (10-year lim
+  law_celex: 32017D1283
+  criticality: important
+  addressee: commission
+  applicable_entity: Member States; multinational groups assessing legacy ruling exposure
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission's power to require recovery is limited to aid granted in
+    the 10 years before the first measure interrupting the limitation period (in practice,
+    the first formal information request). Fiscal benefits granted before that window are
+    not recoverable even if the ruling was granted earlier. Multinationals and tax authorities
+    should be aware that a ruling in force for many years may generate recoverable exposure
+    for only the most recent decade.
+- article: Recitals 419-422 (no compatibility ground; operati
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States designing tax incentive regimes; multinationals assessing
+    compatibility risk
+  deadline: null
+  interpretive: true
+  requirement_text: Operating aid that relieves a company of costs it would normally have
+    borne (including normal tax liabilities) cannot be justified under any of the Article
+    107(3) TFEU derogations. Invoking regional development, employment or innovation objectives
+    does not render a tax measure that systematically under-taxes a multinational's profits
+    compatible with the internal market.
+- article: Recitals 59-66 (ruling duration and absence of rev
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Tax authorities issuing advance rulings; multinational groups managing
+    ruling portfolios
+  deadline: null
+  interpretive: true
+  requirement_text: Advance pricing arrangements and tax rulings should be time-limited and
+    contain material-change trigger clauses. A ruling issued in 1991 and allowed to remain
+    in force unreviewed until 2007, during which the beneficiary's sales grew dramatically,
+    cannot reliably approximate arm's length outcomes and exposes both the tax authority and
+    the taxpayer to a finding of illegal State aid.
+- article: Recitals 227-242 (reference system)
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States designing or defending tax ruling programmes
+  deadline: null
+  interpretive: true
+  requirement_text: When assessing whether a measure confers a selective advantage, the relevant
+    reference system is the general framework of the corporate tax rules applicable to all
+    companies in the jurisdiction, including non-resident companies taxed on branch profits.
+    A special ruling regime cannot constitute its own self-contained reference system if the
+    underlying tax rules apply broadly.
+- article: Recitals 60, 62 (non-residency structure and state
+  law_celex: 32017D1283
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Multinational groups considering non-residency structures within the
+    EU
+  deadline: null
+  interpretive: true
+  requirement_text: Structures in which a company is incorporated in one Member State but
+    treated as tax-resident nowhere attract elevated scrutiny under EU State aid rules. When
+    the tax benefit arises specifically from the non-resident status and the associated unlimited
+    income is allocated to an entity with no presence, the structure is at high risk of being
+    characterised as a measure granting a selective advantage.

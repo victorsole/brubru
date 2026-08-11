@@ -1,0 +1,895 @@
+id: 16
+name: CleanTech Startup Funding & Compliance
+policy_area: Climate Action
+description: Green Deal compliance and funding opportunities for CleanTech startups
+applicability: CleanTech startups, renewable energy, energy efficiency, green hydrogen, sustainable
+  materials
+is_startup_focused: true
+is_published: false
+laws:
+- celex: 32013D0529
+  title: Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013
+    on accounting rules on greenhouse gas emissions and removals resulting from activities
+    relating to land use, land-use change and forestry and on information concerning actions
+    relating to those activities
+- celex: 32014D0224
+  title: Commission Implementing Decision of 16 April 2014 on the transfer of assigned amount
+    units to the Party to the Kyoto Protocol holding account in the registry of Finland (notified
+    under document C(2014) 2475) (2014/224/EU)
+- celex: 32015L1814
+  title: Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October
+    2015 concerning the establishment and operation of a market stability reserve for the
+    Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with
+    EEA relevance)
+- celex: 32016D1841
+  title: Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf of
+    the European Union, of the Paris Agreement adopted under the United Nations Framework
+    Convention on Climate Change
+- celex: 32019R0856
+  title: Commission Delegated Regulation (EU) 2019/856 of 26 February 2019 supplementing Directive
+    2003/87/EC of the European Parliament and of the Council with regard to the operation
+    of the Innovation Fund (Text with EEA relevance)
+- celex: 32020R0022
+  title: Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes
+    I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as
+    regards the monitoring of CO2 emissions from new light commercial vehicles type-approved
+    in a multi-stage process (Text with EEA relevance)
+- celex: 32020R1044
+  title: Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation
+    (EU) 2018/1999 of the European Parliament and of the Council with regard to values for
+    global warming potentials and the inventory guidelines and with regard to the Union inventory
+    system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)
+- celex: 32020R1294
+  title: Commission Implementing Regulation (EU) 2020/1294 of 15 September 2020 on the Union
+    renewable energy financing mechanism (Text with EEA relevance)
+- celex: 32021D1129
+  title: Commission Implementing Decision (EU) 2021/1129 of 5 July 2021 setting out the annual
+    breakdown of available allocations under the Just Transition Fund per Member State (notified
+    under document C(2021) 4872)
+- celex: 32021R0781
+  title: Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication
+    of a list indicating certain CO2 emissions values per manufacturer as well as average
+    specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference
+    CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of
+    the Council for the reporting period of the year 2019 (notified under document C(2021)
+    3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic)
+    (Text with EEA relevance)
+- celex: 32021R1119
+  title: Regulation (EU) 2021/1119 of the European Parliament and of the Council of 30 June
+    2021 establishing the framework for achieving climate neutrality and amending Regulations
+    (EC) No 401/2009 and (EU) 2018/1999 (European Climate Law)
+- celex: 32021R1204
+  title: Commission Delegated Regulation (EU) 2021/1204 of 10 May 2021 amending Delegated
+    Regulation (EU) 2019/856 as regards the application and selection procedures under the
+    Innovation Fund
+- celex: 32022R0342
+  title: Commission Delegated Regulation (EU) 2022/342 of 21 December 2021 supplementing Regulation
+    (EU) 2021/1153 of the European Parliament and of the Council with regard to the specific
+    selection criteria and the details of the process for selecting cross-border projects
+    in the field of renewable energy
+- celex: 32022R0759
+  title: Commission Delegated Regulation (EU) 2022/759 of 14 December 2021 amending Annex
+    VII to Directive (EU) 2018/2001 of the European Parliament and of the Council as regards
+    a methodology for calculating the amount of renewable energy used for cooling and district
+    cooling
+- celex: 32022R2202
+  title: Commission Delegated Regulation (EU) 2022/2202 of 29 August 2022 supplementing Regulation
+    (EU) 2021/1153 of the European Parliament and of the Council by establishing a list of
+    selected cross-border projects in the field of renewable energy (Text with EEA relevance)
+- celex: 32023D0852
+  title: Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April
+    2023 amending Decision (EU) 2015/1814 as regards the number of allowances to be placed
+    in the market stability reserve for the Union greenhouse gas emission trading system until
+    2030 (Text with EEA relevance)
+- celex: 32024R2613
+  title: Commission Delegated Regulation (EU) 2024/2613 of 24 July 2024 amending Delegated
+    Regulation (EU) 2022/2202 supplementing Regulation (EU) 2021/1153 of the European Parliament
+    and of the Council by establishing a list of selected cross-border projects in the field
+    of renewable energy (Text with EEA relevance)
+- celex: 32025D1315
+  title: Council Decision (EU) 2025/1315 of 17 June 2025 on the position to be taken on behalf
+    of the European Union concerning the nomination of a Union representative to the Board
+    of the Fund for Responding to Loss and Damage
+requirements:
+- article: Article 1(1)
+  law_celex: 32014D0224
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Central Administrator of the Union registry
+  deadline: null
+  interpretive: null
+  requirement_text: The Central Administrator of the Union registry shall transfer as soon
+    as possible and before the end of the true up period for the first commitment period under
+    the Kyoto Protocol a total quantity which shall not exceed 10 million (10000000) assigned
+    amount units to the Party to the Kyoto Protocol holding account in the registry of Finland.
+- article: Article 1(2)
+  law_celex: 32014D0224
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Central Administrator of the Union registry
+  deadline: null
+  interpretive: null
+  requirement_text: The transfer referred to in paragraph 1 shall be made subject to the availability
+    of assigned amount units in the Union registry and when the commitment regarding Croatia
+    as set out in the Protocol on certain arrangements concerning a possible one-off transfer
+    of assigned amount units issued under the Kyoto Protocol to the United Nations Framework
+    Convention on Climate Change to the Republic of Croatia, as well as the related compensation
+    to the Treaty concerning the accession of the Republic of Croatia to the European Union
+    has been settled or resolved.
+- article: Article 1(1)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU institutions
+  deadline: '2019-01-01'
+  interpretive: null
+  requirement_text: A market stability reserve shall be established in 2018 and the placing
+    of allowances in the reserve shall operate from 1 January 2019
+- article: Article 1(2)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The quantity of 900 million allowances deducted from auctioning volumes
+    during the period 2014-2016 shall not be added to the volumes to be auctioned in 2019
+    and 2020 but shall instead be placed in the reserve
+- article: Article 1(3)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Allowances not allocated to installations pursuant to Article 10a(7) of
+    Directive 2003/87/EC and allowances not allocated to installations because of the application
+    of Article 10a(19) and (20) of that Directive shall be placed in the reserve in 2020
+- article: Article 1(3)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall review Directive 2003/87/EC in relation to those
+    unallocated allowances and, if appropriate, submit a proposal to the European Parliament
+    and to the Council
+- article: Article 1(4)
+  law_celex: 32015L1814
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall publish the total number of allowances in circulation
+    each year, by 15 May of the subsequent year
+- article: Recital (6)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission and Member States
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission and the Member States should, without undue delay following
+    the publication of the total number of allowances in circulation by the Commission by
+    15 May of a given year, ensure that the auction calendars of the common auction platform
+    and, where applicable, of opt-out auction platforms are adjusted
+- article: Recital (9)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should review Directive 2003/87/EC, in particular Article
+    10a thereof, and submit a proposal for the revision of that Directive within six months
+    of the adoption of this Decision
+- article: Recital (10)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should monitor the functioning of the reserve in the context
+    of its annual carbon market report
+- article: Recital (10)
+  law_celex: 32015L1814
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should, within three years of the date of operation of
+    the reserve and periodically thereafter, review the functioning of the reserve in the
+    light of the experience gained from its application
+- article: Article 1
+  law_celex: 32023D0852
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU ETS market stability reserve operators
+  deadline: null
+  interpretive: null
+  requirement_text: Until 31 December 2030, the percentages and the 100 million allowances
+    referred to in Article 1(5) first and second sentences shall be doubled
+- article: Recital 9
+  law_celex: 32023D0852
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should continuously monitor the functioning of the reserve
+    and ensure that the reserve is kept fit for purpose in case of future unforeseeable external
+    shocks
+- article: General Obligation
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall implement accounting rules for greenhouse gas emissions
+    and removals from the LULUCF sector
+- article: General Obligation
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall provide information on their LULUCF actions to limit
+    or reduce emissions and to maintain or increase removals
+- article: General Principle
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall prepare and maintain their accounts ensuring the accuracy,
+    completeness, consistency, comparability and transparency of relevant information used
+    in estimating emissions and removals from the LULUCF sector
+- article: Mandatory Activities
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply accounting rules on a mandatory basis to afforestation,
+    reforestation, deforestation and forest management activities
+- article: Mandatory Activities
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply accounting rules on a mandatory basis to grazing
+    land management and cropland management activities, subject to specific provisions for
+    improving reporting and accounting systems during the first accounting period
+- article: Forest Management Reference Levels
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall set reference levels for forest management transparently
+    in accordance with Decisions 2/CMP.6 and 2/CMP.7, and these reference levels shall be
+    identical to those approved through the UNFCCC processes
+- article: Technical Corrections
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When improvements to methodologies or data relating to the establishment
+    of the reference level become available, Member States shall carry out appropriate technical
+    corrections to include the impact of recalculations in the accounting for forest management
+- article: IPCC Guidelines Compliance
+  law_celex: 32013D0529
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall follow guidance provided in relevant Intergovernmental
+    Panel on Climate Change (IPCC) Guidelines for National Greenhouse Gas Inventories, including
+    methodologies for accounting for non-CO2 greenhouse gas emissions
+- article: Article 1
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation applies to the reports submitted by the Member States
+    containing data required for the year 2021 onwards
+- article: Article 2
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states and the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Member States and the Commission shall use the global warming potentials
+    listed in Annex I to this Regulation for the purpose of determining and reporting greenhouse
+    gas inventories data
+- article: Article 3
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states and the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Member States and the Commission shall determine greenhouse gas inventories
+    in accordance with the 2006 IPCC Guidelines for National Greenhouse Gas Inventories and
+    the modalities, procedures and guidelines for the transparency framework set out in Decision
+    18/CMA.1
+- article: Article 4(1)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: commission
+  applicable_entity: the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall manage, maintain and seek to continuously improve
+    the Union greenhouse gas inventory system based on the quality assurance and quality control
+    programme objectives
+- article: Article 4(2)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: commission
+  applicable_entity: the commission and member states
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission and the Member States shall increase, where possible, the
+    comparability of national greenhouse gas inventories by seeking synergy of methods, activity
+    data, notation keys and the allocation of emissions
+- article: Article 4(4)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure the quality of activity data, emission factors
+    and other parameters used for their national greenhouse gas inventory
+- article: Article 5(1)
+  law_celex: 32020R1044
+  criticality: critical
+  addressee: commission
+  applicable_entity: the commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission estimates for completing the inventory data submitted by
+    a Member State shall be based on specified methodologies and data as set out in the article
+- article: Recital (9)
+  law_celex: 32025D1315
+  criticality: recommended
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission is to report periodically to the Council on the Board's
+    proceedings in line with the principle of sincere cooperation enshrined in the Treaties
+- article: Recital (11)
+  law_celex: 32025D1315
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: true
+  requirement_text: Funding pledges by the Union to the Fund are to be prepared in accordance
+    with the applicable procedures under Union law, while respecting the prerogatives of the
+    institutions concerned
+- article: Article 2
+  law_celex: 32025D1315
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 2
+  law_celex: 32016D1841
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall designate the person(s) empowered to
+    deposit, on behalf of the Union, the instrument of ratification with the Secretary-General
+    of the United Nations, in accordance with Article 20, paragraph 1, of the Paris Agreement,
+    together with the Declaration of Competence.
+- article: Article 3(1)
+  law_celex: 32016D1841
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall endeavour to take the necessary steps with a view
+    to depositing instruments of ratification simultaneously with the Union or as soon as
+    possible thereafter.
+- article: Article 3(2)
+  law_celex: 32016D1841
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall inform the Commission of their decisions on ratification
+    of the Paris Agreement or, according to the circumstances, of the probable date of completion
+    of the necessary procedures.
+- article: Article 1
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annexes I and III to Regulation (EU) 2019/631 are amended in accordance
+    with the Annex to this Regulation
+- article: Article 2
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the seventh day following that
+    of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32020R0022
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital (5)
+  law_celex: 32020R0022
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: base vehicle manufacturers
+  deadline: null
+  interpretive: true
+  requirement_text: The base vehicle manufacturer should report the input values used for
+    the interpolation method as well as the resulting CO2 emissions and mass of incomplete
+    base vehicles to the Commission
+- article: Recital (5)
+  law_celex: 32020R0022
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States should continue to report to the Commission the specific
+    emissions of CO2 and mass in running order of the completed vehicles
+- article: Preamble (10)
+  law_celex: 32021R1119
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: all economic sectors
+  deadline: null
+  interpretive: null
+  requirement_text: Achieving climate neutrality should require a contribution from all economic
+    sectors for which emissions or removals of greenhouse gases are regulated in Union law
+- article: Preamble (12)
+  law_celex: 32021R1119
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation (EU) 2018/841 requires Member States to balance greenhouse
+    gas emissions and removals from land use, land use change and forestry
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply the methodology set out in this regulation for
+    calculating the amount of renewable energy used for cooling and district cooling, including
+    minimum seasonal performance factors for heat pumps operating in reverse mode
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall exclude passive cooling from the scope of renewable
+    cooling calculation, including decreasing cooling need by building design, natural or
+    forced ventilation for air quality purposes, and comfort fan products
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall exclude cooling systems in means of transportation
+    from renewable cooling calculation as these fall under renewable transport target calculation
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall exclude from renewable cooling calculation processes
+    where waste heat avoidance and recovery should be prioritised, including power generation
+    plants, cogeneration, combustion processes, cement manufacturing, iron and steel manufacturing,
+    wastewater treatment plants, data centres, power transmission facilities, cremation and
+    transportation infrastructures
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply the cooling supply temperature range between
+    0°C and 30°C as a parameter to screen cooling process sectors and applications for inclusion
+    in renewable cooling calculation
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that gas, electricity, and hydrogen from renewable
+    sources are considered only once for the purposes of calculating the share of gross final
+    consumption of energy from renewable sources
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall use the seasonal performance factor calculated in
+    primary energy (SPFp) as the central parameter for calculating renewable energy from heat
+    pumps used for cooling
+- article: Article 1
+  law_celex: 32022R0759
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply low and high SPFp threshold values using default
+    coefficients (primary energy factors) as set in Directive 2012/27/EU for stability and
+    predictability
+- article: Article 3
+  law_celex: 32019R0856
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Innovation Fund
+  deadline: null
+  interpretive: null
+  requirement_text: The Innovation Fund shall have the operational objectives to support projects
+    demonstrating highly innovative technologies, processes or products, that are sufficiently
+    mature and have a significant potential to reduce greenhouse gas emissions
+- article: Article 3
+  law_celex: 32019R0856
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Innovation Fund
+  deadline: null
+  interpretive: null
+  requirement_text: The Innovation Fund shall offer financial support tailored to market needs
+    and risk profiles of eligible projects, while attracting additional public and private
+    resources
+- article: Article 3
+  law_celex: 32019R0856
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Innovation Fund
+  deadline: null
+  interpretive: null
+  requirement_text: The Innovation Fund shall ensure that the revenues of the Innovation Fund
+    are managed in accordance with the objectives of Directive 2003/87/EC
+- article: Article 5(1)
+  law_celex: 32019R0856
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponents
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant costs shall be the additional costs that are borne by the
+    project proponent as a result of the application of the innovative technology related
+    to the reduction or avoidance of the greenhouse gas emissions
+- article: Article 5(1)
+  law_celex: 32019R0856
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponents
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant costs shall be calculated as the difference between the best
+    estimate of the total capital expenditure, the net present value of operating costs and
+    benefits arising during 10 years after the entry into operation of the project compared
+    to the result of the same calculation for a conventional production with the same capacity
+- article: Article 9(2)(d)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: Must include in call for proposals a description of the application procedure,
+    specifying whether a one-phase or two-phase procedure applies, and a detailed list of
+    information and documentation to be submitted with the application
+- article: Article 9(2)(f)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: Must include rules on simplified application procedure and specific selection
+    procedure for small-scale projects where applicable
+- article: Article 10(1)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: Shall collect the applications and organise the application procedure
+    as determined pursuant to Article 9(2), point (d)
+- article: Article 10(2)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponent
+  deadline: null
+  interpretive: null
+  requirement_text: At the expression of interest phase, the project proponent shall submit
+    a description of key project characteristics in line with the requirements laid down in
+    the relevant call for proposals
+- article: Article 10(2)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponent
+  deadline: null
+  interpretive: null
+  requirement_text: At the full application phase, the project proponent shall submit a detailed
+    description of the project and all supporting documentation, including the knowledge-sharing
+    plan
+- article: Article 10(3)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponent
+  deadline: null
+  interpretive: null
+  requirement_text: Where the one-phase application procedure applies, the project proponent
+    shall submit a full application
+- article: Article 12a(1)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: The implementing body shall assess, for each project, the eligibility
+    in accordance with Article 10a(8) of Directive 2003/87/EC
+- article: Article 12a(2)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: The implementing body shall draw up a list of the projects that meet the
+    selection criteria and shall proceed with the project evaluation and ranking
+- article: Article 12a(4)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: The list of pre-selected projects and, where applicable, the suggestion
+    shall be communicated to the Commission and shall include specified information
+- article: Article 12a(5)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall, after consulting the Member States, adopt the award
+    decision specifying the support to the selected projects
+- article: Article 13(2)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission or implementing body
+  deadline: null
+  interpretive: null
+  requirement_text: The project development assistance shall be awarded by the Commission
+    or by the implementing body in the form of a grant or a technical assistance
+- article: Article 21(4)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall report to the Member States on the progress made
+    in implementing this Regulation
+- article: Article 27(4)
+  law_celex: 32021R1204
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project proponents
+  deadline: null
+  interpretive: null
+  requirement_text: The project proponents shall provide detailed information on the planned
+    actions in the knowledge-sharing plan
+- article: Article 2
+  law_celex: 32022R2202
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Recital 5
+  law_celex: 32020R1294
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Member States which have fallen below their national reference point should
+    ensure that additional measures are implemented in order to fill the gap towards the EU
+    2030 renewables target
+- article: Recital 10
+  law_celex: 32020R1294
+  criticality: recommended
+  addressee: commission
+  applicable_entity: commission
+  deadline: null
+  interpretive: true
+  requirement_text: The Commission should provide transparency as regards the implementation
+    of the external assigned revenue by means of regular reporting to the Member States
+- article: Recital 18
+  law_celex: 32020R1294
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: renewable energy projects
+  deadline: null
+  interpretive: true
+  requirement_text: The renewable energy projects supported by the mechanism should comply
+    with the relevant Union and national environmental legislation and should fully respect
+    international law
+- article: Article 1
+  law_celex: 32024R2613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The list of cross-border projects in the field of renewable energy selected
+    pursuant to Part IV, point 4(g), of the Annex to Regulation (EU) 2021/1153 shall be as
+    specified in the table containing eight renewable energy projects
+- article: Article 2
+  law_celex: 32024R2613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union legal system
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32024R2613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 7(2) of Regulation (EU) 2021/1153
+  law_celex: 32022R0342
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: project promoters of renewable energy cross-border projects
+  deadline: null
+  interpretive: null
+  requirement_text: Cross-border projects in the field of renewable energy must be set up
+    by a cooperation mechanism taking any of the forms of cooperation agreement provided for
+    in Articles 8, 9, 11 and 13 of Directive (EU) 2018/2001
+- article: Recital 7
+  law_celex: 32022R0342
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: project promoters of renewable energy cross-border projects
+  deadline: null
+  interpretive: true
+  requirement_text: A written declaration expressing willingness to support the project through
+    a cooperation agreement, validated by a responsible institution in all participating Member
+    States and, where relevant, non-EU countries, must be presented
+- article: Recital 9
+  law_celex: 32022R0342
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: project promoters of renewable energy cross-border projects
+  deadline: null
+  interpretive: true
+  requirement_text: The socioeconomic net benefits of a cross-border project in the field
+    of renewable energy must be demonstrated by means of a cost-benefit analysis that covers
+    all elements of point 3 of Annex Part IV to Regulation (EU) 2021/1153
+- article: Recital 14
+  law_celex: 32022R0342
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: renewable energy cross-border projects
+  deadline: null
+  interpretive: true
+  requirement_text: Cross-border projects must always include a renewables generation facility
+    as an integral part of the project
+- article: Recital 16
+  law_celex: 32022R0342
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: renewable energy cross-border projects
+  deadline: null
+  interpretive: true
+  requirement_text: Cross-border projects in the field of renewable energy must comply with
+    the applicable legal requirements on sustainability, greenhouse gas-emission savings,
+    as well as the principle of 'do no significant harm' in accordance with Article 17 of
+    Regulation (EU) 2020/852
+- article: Recital 20
+  law_celex: 32022R0342
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: renewable energy cross-border projects
+  deadline: null
+  interpretive: true
+  requirement_text: All relevant provisions under Union legislation, notably on sustainability
+    of bioenergy, capacity allocation at the borders, unbundling, competition and state aid,
+    biodiversity and environmental protection must be fully respected
+- article: Annex Part IV to Regulation (EU) 2021/1153
+  law_celex: 32022R0342
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall review the list of cross-border projects in the field
+    of renewable energy every 2 years
+- article: Article 1
+  law_celex: 32021D1129
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The annual breakdown of available allocations by Member State under the
+    Just Transition Fund is set out in the Annex
+- article: Article 2
+  law_celex: 32021D1129
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision is addressed to the Member States

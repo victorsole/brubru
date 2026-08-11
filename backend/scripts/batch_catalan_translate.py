@@ -282,7 +282,7 @@ def classify_act(title: str) -> tuple:
         if any(kw.lower() in title_lower for kw in keywords):
             return cat_ca, cat_en
 
-    return 'Altres actes', 'Other acts'
+    return 'Altres', 'Other'
 
 
 def detect_doc_type(title: str) -> str:
@@ -448,16 +448,30 @@ def translate_one(xml_path: str, celex: str) -> bool:
         '--translate', xml_path,
         '--celex', celex,
     ]
+    def _cleanup_partial():
+        # A timed-out/failed act may leave a dir with no index.html (only .partial/.progress).
+        # Remove it so the act is NOT falsely counted as 'already done' and is retried later.
+        d = os.path.join(TRANSLATIONS_DIR, celex)
+        if os.path.isdir(d) and not os.path.isfile(os.path.join(d, 'index.html')):
+            import shutil
+            shutil.rmtree(d, ignore_errors=True)
+
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
+        # 600s (10 min) per act: real acts finish well under this; acts that hang under
+        # Softcatala throttle fail fast and get retried in a later run instead of stalling
+        # the whole batch for an hour.
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
     except subprocess.TimeoutExpired:
-        print(f'    [ERROR] Translation timed out after 3600s: {celex}')
+        print(f'    [ERROR] Translation timed out after 600s: {celex}')
+        _cleanup_partial()
         return False
     except Exception as e:
         print(f'    [ERROR] Translation crashed: {celex}: {e}')
+        _cleanup_partial()
         return False
     if result.returncode != 0:
         print(f'    [ERROR] Translation failed: {result.stderr[-200:] if result.stderr else "unknown"}')
+        _cleanup_partial()
         return False
     return True
 

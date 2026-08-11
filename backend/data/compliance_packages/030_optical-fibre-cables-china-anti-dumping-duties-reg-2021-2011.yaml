@@ -1,0 +1,148 @@
+id: 30
+name: Optical Fibre Cables China Anti-Dumping Duties (Reg 2021/2011)
+policy_area: Trade and Economic Security
+description: 'Commission Implementing Regulation (EU) 2021/2011 imposing definitive anti-dumping
+  duties on single-mode optical fibre cables from China. Adopted 17 November 2021 under Article
+  9(4) of the basic anti-dumping Regulation (Reg 2016/1036). Definitive duties: FTT/FiberHome
+  group 44.0%, ZTT group 19.7%, other cooperating 31.2%, all others 44.0%. Normal value constructed
+  under the Article 2(6a) significant-distortions methodology using Argentina as representative
+  country. Lesser-duty rule applied: duties set at the dumping margins because injury elimination
+  levels (61.3%/42.0%/52.7%) were higher. Overall undercutting 31.5%. Ran in parallel with
+  a separate anti-subsidy investigation on the same product. First anti-dumping entry in the
+  Brubru canon.'
+applicability: 'EU importers and customs authorities; Chinese exporting producers (FiberHome/FTT
+  group, ZTT group, other cooperating in Annex I); EU optical fibre cable producers and Europacable;
+  telecoms and broadband network operators sourcing cable. Product scope: single-mode optical
+  fibre cables, CN ex 8544 70 00 (TARIC 8544700010), from China; excludes connectorised cables
+  and submarine cables.'
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32021R2011
+  title: Commission Implementing Regulation (EU) 2021/2011 of 17 November 2021 imposing a
+    definitive anti-dumping duty on imports of optical fibre cables originating in the People’s
+    Republic of China
+requirements:
+- article: Article 1(1) (product + duty)
+  law_celex: 32021R2011
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU importers of Chinese OFC
+  deadline: null
+  interpretive: null
+  requirement_text: A definitive anti-dumping duty is imposed on imports of single-mode optical
+    fibre cables, made up of one or more individually sheathed fibres with protective casing,
+    whether or not containing electric conductors, currently falling under CN code ex 8544
+    70 00 (TARIC 8544700010) and originating in China. Connectorised cables and submarine
+    cables are excluded.
+- article: Article 1(2) (FTT + ZTT rates)
+  law_celex: 32021R2011
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: FTT group / ZTT group
+  deadline: null
+  interpretive: null
+  requirement_text: The definitive anti-dumping duty is 44.0% for the FTT group (FiberHome
+    Telecommunication Technologies and related companies, TARIC additional code C696) and
+    19.7% for the ZTT group (Jiangsu Zhongtian Technology and related companies, TARIC additional
+    code C697).
+- article: Article 1(2) (cooperating + residual)
+  law_celex: 32021R2011
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: cooperating / all other companies
+  deadline: null
+  interpretive: null
+  requirement_text: The duty is 31.2% for other cooperating companies listed in Annex I, and
+    44.0% for all other companies (TARIC additional code C999).
+- article: Article 2(6a) methodology
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Chinese exporting producers
+  deadline: null
+  interpretive: null
+  requirement_text: Because Chinese domestic prices and costs were found to be affected by
+    significant distortions, the normal value was constructed under Article 2(6a) of the basic
+    Regulation using undistorted costs from a representative country, Argentina.
+- article: Lesser-duty rule
+  law_celex: 32021R2011
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: exporting producers / importers
+  deadline: null
+  interpretive: null
+  requirement_text: 'The lesser-duty rule applies in anti-dumping: the duty is the lower of
+    the dumping margin and the injury elimination level. The injury elimination levels (FTT
+    61.3%, ZTT 42.0%, other 52.7%, all 61.3%) were higher than the dumping margins, so the
+    duties were set at the dumping margins.'
+- article: Injury and causation finding
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Union OFC industry
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission found material injury to the Union industry, with the sampled
+    Chinese exporters undercutting Union prices by 30.0% and 33.2% (overall undercutting 31.5%),
+    price depression and lost sales, and a causal link with the dumped imports.
+- article: Article 1(3) (invoice condition)
+  law_celex: 32021R2011
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: exporting producers / importers
+  deadline: null
+  interpretive: null
+  requirement_text: Application of the individual (company-specific) duty rates is conditional
+    on presentation to customs of a valid commercial invoice bearing a dated and signed declaration
+    by a named official identifying the manufacturer and TARIC additional code; otherwise
+    the all-other-companies rate applies.
+- article: Article 1(5) (length declaration)
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EU importers / customs
+  deadline: null
+  interpretive: null
+  requirement_text: The customs declaration must indicate the length in kilometres of the
+    product, provided this is compatible with the Combined Nomenclature.
+- article: Article 2 (new-exporter review)
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: new Chinese exporting producers
+  deadline: null
+  interpretive: null
+  requirement_text: A genuine new exporting producer from China that did not export during
+    the investigation period, is not related to a producer subject to the measures, and has
+    exported or contracted to export to the Union, may be added to Annex I and subject to
+    the 31.2% cooperating rate.
+- article: Article 3 (registration)
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: customs authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Customs authorities are directed to discontinue the registration of imports
+    that had been established by Commission Implementing Regulation (EU) 2021/548.
+- article: Union interest + parallel case
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Union industry / importers
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission confirmed under Article 21 that measures were in the Union
+    interest. A separate anti-subsidy (countervailing) investigation was initiated on the
+    same product on 21 December 2020 and pursued in parallel.
+- article: Article 4 (entry into force)
+  law_celex: 32021R2011
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EU importers / customs
+  deadline: null
+  interpretive: null
+  requirement_text: The Regulation enters into force on the day following its publication
+    in the Official Journal of the European Union; unless otherwise specified, the provisions
+    in force concerning customs duties apply.

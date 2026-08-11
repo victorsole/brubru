@@ -1,0 +1,201 @@
+id: 44
+name: Amazon State Aid Decision (Decision (EU) 2018/859)
+policy_area: Competition
+description: The Commission found that a Luxembourg tax ruling let Amazon shift most of its
+  EU profit to a non-taxed partnership via an intra-group royalty that departed from the arm's-length
+  principle, conferring a selective advantage and unlawful State aid. The General Court annulled
+  the decision in 2021 and the Court of Justice dismissed the Commission's appeal in 2023.
+applicability: Multinational groups using intra-group licensing and transfer pricing; tax
+  authorities issuing advance rulings.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32018D0859
+  title: Commission Decision (EU) 2018/859 of 4 October 2017 on State aid SA.38944 (2014/C)
+    (ex 2014/NN) implemented by Luxembourg to Amazon (notified under document C(2017) 6740)
+    (Only the French text is authentic) (Text with EEA relevance)
+requirements:
+- article: Article 107(1) TFEU / ATR functional analysis
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises with intra-group IP licensing arrangements;
+    national tax authorities issui
+  deadline: null
+  interpretive: null
+  requirement_text: Any advance tax ruling or advance pricing agreement endorsing a royalty
+    or other intra-group transfer price must be supported by a contemporaneous functional
+    analysis that correctly identifies which entity performs value-creating functions, owns
+    and manages assets, and bears economic risk. Designating a hollow holding entity as the
+    'entrepreneur' when the operating company performs all material functions is not arm's-length
+    compliant.
+- article: OECD TP Guidelines (2010) / Luxembourg ITA Section
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises applying TNMM; transfer pricing advisers
+  deadline: null
+  interpretive: null
+  requirement_text: The tested party in a TNMM analysis must be the entity performing the
+    most routine, least complex functions. Where the operating company drives unique value
+    (technology development, market expansion, customer acquisition), it cannot be benchmarked
+    as a routine service provider; residual profits belong to it, not to a separate IP holding
+    entity.
+- article: OECD TP Guidelines / Profit-level indicator select
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises; transfer pricing advisers preparing benchmarking
+    studies
+  deadline: null
+  interpretive: null
+  requirement_text: The profit-level indicator used to benchmark a tested party must be internally
+    consistent. Operating costs used as a PLI must include all relevant costs, including the
+    tested party's own royalty outflows. Excluding the royalty from the cost base while using
+    operating costs as the PLI creates a circularity that inflates the royalty and artificially
+    suppresses the tested party's taxable income.
+- article: ATR operative conditions / Revenue collar design
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises negotiating APAs; national tax authorities
+    reviewing ruling requests
+  deadline: null
+  interpretive: null
+  requirement_text: Revenue floors or ceilings applied to royalty rates must have an independent
+    economic justification. A floor that guarantees a minimum royalty irrespective of the
+    TNMM outcome, or a ceiling that caps the routine return below the benchmarked arm's-length
+    range, corrupts the transfer pricing result and may constitute a departure from the arm's-length
+    standard.
+- article: Article 107(1) TFEU / Selective advantage — ATR as
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All entities receiving advance tax rulings in EU Member States; Member
+    State tax authorities
+  deadline: null
+  interpretive: null
+  requirement_text: An advance tax ruling that endorses transfer prices below the arm's-length
+    standard confers a selective advantage on the beneficiary and is itself the State aid
+    measure. The ruling does not shield the arrangement from Commission review; the Commission
+    will assess the substantive transfer pricing outcome, not merely whether the ruling was
+    validly issued under national procedure.
+- article: Buy-In Agreement / IP transfer valuation (OECD BEP
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises executing IP transfer or buy-in transactions
+  deadline: null
+  interpretive: null
+  requirement_text: When IP is transferred to a group holding entity under a buy-in or cost-sharing
+    arrangement, the transfer price must reflect the fair market value of the IP at the time
+    of transfer, including reasonable expectations of future value creation. An undervalued
+    buy-in locks in an overstatement of the holding entity's future profit entitlement. Tax
+    authorities and the Commission will scrutinise buy-in valuations retrospectively if the
+    actual profit stream greatly exceeds the buy-in price.
+- article: Article 107(1) TFEU / Substance requirements for I
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises with IP holding structures in low-tax jurisdictions
+  deadline: null
+  interpretive: null
+  requirement_text: 'An entity holding intellectual property within a group structure must
+    have genuine economic substance: real employees making real decisions on development,
+    exploitation, and protection of the IP; financial capacity to bear the risks that contractual
+    arrangements allocate to it; and actual involvement in any risk management. Contractual
+    assumption of risk without operational substance does not support profit attribution to
+    the IP holder.'
+- article: ATAD 2 (Directive 2017/952/EU) / Hybrid mismatch a
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises operating entities in multiple EU Member States;
+    EU Member States implemen
+  deadline: null
+  interpretive: null
+  requirement_text: Hybrid mismatch arrangements that exploit differences in the tax classification
+    of an entity (transparent in one jurisdiction, opaque in another) to produce double non-taxation
+    or long-term tax deferral are now neutralised under ATAD 2, which requires the payer jurisdiction
+    to deny the deduction, or the payee jurisdiction to include the payment in taxable income,
+    where a deduction/no-inclusion outcome arises. New structures must not rely on hybrid
+    mismatches as a structural feature.
+- article: Council Regulation (EU) 2015/1589 Article 16 / Rec
+  law_celex: 32018D0859
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU Member States that have granted fiscal State aid measures subject
+    to a Commission recovery decisi
+  deadline: null
+  interpretive: null
+  requirement_text: Where the Commission orders recovery of State aid, the Member State must
+    recover the full amount, including compound interest from the date the aid was granted,
+    within four months of the Commission decision unless the beneficiary is in genuine financial
+    difficulty. The Member State cannot invoke national procedural rules to justify non-recovery;
+    only absolute impossibility is an accepted defence.
+- article: 'DAC4 / Directive 2016/881/EU / Country-by-Country '
+  law_celex: 32018D0859
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Multinational enterprise groups with EU consolidated revenue above EUR
+    750 million
+  deadline: null
+  interpretive: null
+  requirement_text: Multinational enterprise groups with consolidated annual revenue above
+    EUR 750 million must file a Country-by-Country Report (CbCR) showing profit, revenue,
+    employees, and tax paid in each jurisdiction. CbCR data is shared between EU tax authorities
+    and flags jurisdictions where profits are high relative to employees and functions, triggering
+    risk-based audit selection. Transfer pricing arrangements that produce large profit pools
+    in low-function jurisdictions will systematically attract scrutiny.
+- article: OECD BEPS Actions 8-10 / Value creation alignment
+  law_celex: 32018D0859
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises restructuring or reviewing intra-group pricing
+    policies post-BEPS
+  deadline: null
+  interpretive: null
+  requirement_text: Transfer pricing outcomes must be aligned with the location of value creation.
+    Profits must be allocated to the entity that performs functions, uses assets, and manages
+    risks that drive value, not to entities that merely hold legal title to IP. Post-BEPS,
+    tax authorities in all OECD and Inclusive Framework countries will challenge arrangements
+    where profit location diverges systematically from value creation location.
+- article: APA / ATR periodic review obligation
+  law_celex: 32018D0859
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Multinational enterprises holding long-dated APAs or ATRs; national tax
+    authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Advance pricing agreements or advance tax rulings should include a periodic
+    review clause and a maximum validity period proportionate to the stability of the underlying
+    facts. Long-running rulings (such as one endorsed for eight or more years without review)
+    lock in methodological assumptions that may diverge from evolving OECD guidance and actual
+    economic circumstances. Annual or biennial critical assumption reviews reduce exposure.
+- article: 'Article 108(3) TFEU / Notification and standstill '
+  law_celex: 32018D0859
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EU Member States; national tax authorities; State aid legal advisers
+  deadline: null
+  interpretive: null
+  requirement_text: New individual aid measures and aid schemes must be notified to the Commission
+    before implementation. An advance tax ruling conferring a selective economic advantage
+    that was not notified is unlawful aid from the moment of grant; subsequent recovery will
+    include compound interest across the full period of non-notification. Member States should
+    review new fiscal measures against State aid criteria before adoption.
+- article: 'Luxembourg ITA Section 56 / Domestic arm''s-length '
+  law_celex: 32018D0859
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Luxembourg-based entities with intra-group transactions; EU Member States
+    with domestic arm's-length
+  deadline: null
+  interpretive: null
+  requirement_text: National arm's-length provisions that require intra-group transactions
+    to be priced as if between independent parties apply irrespective of the corporate form
+    of the transacting entities. A tax authority cannot justify below-arm's-length pricing
+    on the grounds that one party is a transparent partnership or that the arrangement was
+    commercially motivated. The arm's-length outcome is assessed against what independent
+    parties would have agreed, not against what the group found convenient.

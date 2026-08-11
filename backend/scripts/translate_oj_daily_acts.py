@@ -42,7 +42,10 @@ OUT_ROOT = BACKEND.parent / "data" / "legislacio-ue-catala"
 # Fresh acts 404 on Cellar for a few days after OJ publication; without a
 # cooldown they sit at the head of every newest-first run and burn slots.
 FAIL_STATE = BACKEND / "logs" / "oj_acts" / "failed_celexes.json"
-FAIL_COOLDOWN_H = 24
+# Same-day acts have titles but no full-text manifestation yet (Cellar/EUR-Lex
+# return 404/202 for a few hours after publication). Retry every ~3h so the
+# corpus link appears the moment the Publications Office finishes building it.
+FAIL_COOLDOWN_H = 3
 
 
 def _load_failures() -> dict:
@@ -102,13 +105,48 @@ def _pending(limit: int, date: str | None):
 
 
 def _register(celex: str, html_path: Path, articles: int, recitals: int):
-    """Create the catalan_translations row (undeployed; the deploy loop ships it)."""
-    from batch_catalan_translate import import_to_db
+    """Create the catalan_translations row (undeployed; the deploy loop ships it).
+
+    Uses the driver's own psycopg2 connection (connect_timeout + keepalives) —
+    batch_catalan_translate.import_to_db goes through SQLAlchemy SessionLocal,
+    which hangs indefinitely when the Supabase pooler drops the connection
+    during the long CPU translation phase (incident 23 Jul 2026: driver froze
+    25 min on a completed act)."""
+    from batch_catalan_translate import classify_act, detect_doc_type, detect_subcategory
     html = html_path.read_text(encoding="utf-8")
     m = _TITLE.search(html)
     title_ca = (m.group(1).strip() if m else celex)[:2000]
-    import_to_db(celex, title_ca, articles, recitals, len(html.encode("utf-8")),
-                 "softcatala", file_type="main", deployed=False)
+    cat_ca, cat_en = classify_act(title_ca)
+    doc_type = detect_doc_type(title_ca)
+    subcategory = detect_subcategory(title_ca)
+    size = len(html.encode("utf-8"))
+    url = f"https://brubru.beresol.eu/legislacio-ue-catala/{celex}/"
+    conn = _db()
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM catalan_translations WHERE celex = %s", (celex,))
+        row = cur.fetchone()
+        if row:
+            cur.execute("""
+                UPDATE catalan_translations
+                   SET title_ca=%s, articles_count=%s, recitals_count=%s,
+                       html_size_bytes=%s, category=%s, category_en=%s,
+                       subcategory=COALESCE(%s, subcategory), updated_at=now()
+                 WHERE id=%s
+            """, (title_ca, articles, recitals, size, cat_ca, cat_en, subcategory, row[0]))
+        else:
+            cur.execute("""
+                INSERT INTO catalan_translations
+                    (celex, title_en, title_ca, short_name, doc_type, category,
+                     category_en, subcategory, file_type, articles_count,
+                     recitals_count, html_size_bytes, engine, source_format,
+                     siteground_url)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'main',%s,%s,%s,'softcatala','formex',%s)
+            """, (celex, title_ca, title_ca, celex, doc_type, cat_ca, cat_en,
+                  subcategory, articles, recitals, size, url))
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def _eurlex_fallback(celex: str) -> str | None:

@@ -1,0 +1,191 @@
+id: 49
+name: Tirrenia State Aid Decision (Decision (EU) 2020/1412)
+policy_area: Competition
+description: The Commission assessed public-service compensation for maritime cabotage routes,
+  priority berthing and tax measures granted to Tirrenia, and whether recovery follows to
+  its acquirer Compagnia Italiana di Navigazione through economic continuity. It applied the
+  Altmark conditions and the SGEI framework under Article 106(2) TFEU and found some measures
+  incompatible aid.
+applicability: Public-service operators receiving SGEI compensation; Member States entrusting
+  maritime cabotage; purchasers of businesses subject to recovery.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32020D1412
+  title: Commission Decision (EU) 2020/1412 of 2 March 2020 on the measures SA.32014, SA.32015,
+    SA.32016 (11/C) (ex 11/NN) implemented by Italy for Tirrenia di Navigazione and its acquirer
+    Compagnia Italiana di Navigazione (notified under document C(2020) 1110) (Only the Italian
+    text is authentic) (Text with EEA relevance)
+requirements:
+- article: Recital 325-351 / Altmark 1
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State granting SGEI compensation
+  deadline: null
+  interpretive: true
+  requirement_text: The service must address a genuine market failure. The Member State must
+    demonstrate, route by route, that private operators would not provide equivalent year-round
+    continuity, regularity, capacity and quality without public-service obligations. A blanket
+    SGEI designation without route-level evidence constitutes a manifest error.
+- article: Recital 353-356 / Altmark 2
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State granting SGEI compensation
+  deadline: null
+  interpretive: true
+  requirement_text: All parameters for calculating public-service compensation (cost methodology,
+    return on capital, WACC/CAPM rate, eligible costs, overcompensation recovery mechanism)
+    must be established in advance in an objective and transparent manner, typically in the
+    entrustment act or a binding ministerial directive issued before the compensation period
+    begins.
+- article: Recital 357-366 / Altmark 3 and SGEI Framework
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Public-service operator (beneficiary)
+  deadline: null
+  interpretive: true
+  requirement_text: Annual route-by-route accounts, audited by an independent auditor, are
+    the primary overcompensation control. Net costs must not exceed the compensation ceiling.
+    Any surplus must be clawed back; any shortfall below a reasonable profit may be carried
+    forward only if the entrustment act explicitly provides for this. Accounts must be separated
+    from all commercial activities.
+- article: Recital 375-405 / Altmark 4
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State granting SGEI compensation; acquirer in privatisation
+  deadline: null
+  interpretive: true
+  requirement_text: 'Where no competitive tender is held, the compensation must be benchmarked
+    against costs that an efficient, well-run operator would incur. A tender producing only
+    one binding bid still satisfies Altmark 4 if: (a) the call was widely published; (b) a
+    minimum price was set by an independent expert; (c) the leading bid was disclosed to all
+    remaining parties with an explicit invitation to submit a higher offer; and (d) a reasonable
+    extension was granted.'
+- article: Recital 304-308 / Altmark 4 failure — prolongation
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State prolonging an existing public-service contract
+  deadline: null
+  interpretive: true
+  requirement_text: Simply rolling over an expiring public-service convention without a tender
+    or efficient-operator benchmark makes Altmark 4 impossible to satisfy for that compensation
+    period. The aid must then be assessed for compatibility under Article 106(2) TFEU and
+    the applicable SGEI framework; it cannot be treated as no-aid.
+- article: Recital 52-59 / 486-491 — Rescue and Restructuring
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State granting rescue aid
+  deadline: null
+  interpretive: true
+  requirement_text: Rescue aid approved by the Commission is automatically time-limited to
+    six months from disbursement. The Member State must formally submit a restructuring or
+    liquidation plan (or proof of full repayment) to the Commission within that period. Informal
+    communications, press releases, and updates through third parties do not substitute for
+    formal submission. Failure triggers incompatible and unlawful prolongation aid from the
+    day the deadline expires.
+- article: Recital 409-415 / 494-501
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Public-service operator (beneficiary)
+  deadline: null
+  interpretive: true
+  requirement_text: Funds earmarked by legislation for a specific purpose (mandatory safety
+    upgrades) and drawn by a beneficiary for a different purpose (working capital or liquidity)
+    constitute incompatible operating aid from the date they are drawn. The aid amount equals
+    the funds diverted minus any portion actually spent on the earmarked purpose. Subsequent
+    expenditure by a successor entity on the same purpose does not extinguish the incompatible
+    aid.
+- article: Recital 416-426 / 502-507
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State; seller in privatisation (beneficiary)
+  deadline: null
+  interpretive: true
+  requirement_text: Tax exemptions granted in connection with a privatisation transaction
+    (indirect taxes on asset transfers, corporate income tax on sale proceeds) are not compatible
+    under Article 106(2) TFEU once the beneficiary has ceased to provide SGEI. They must be
+    justified independently under Article 107(2) or (3) TFEU; no general national-law justification
+    suffices.
+- article: Recital 432-484 / SGEI Framework paragraphs 12-16
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State granting SGEI compensation
+  deadline: null
+  interpretive: true
+  requirement_text: 'For SGEI compensation to be compatible under Article 106(2) TFEU, the
+    entrustment act must specify: (a) the content and duration of the public service obligation;
+    (b) the undertaking and territory; (c) the compensation parameters, including overcompensation
+    recovery; (d) the duration; and (e) details of any exclusive rights. Gaps in the entrustment
+    act are an independent ground for incompatibility and should be remedied before or at
+    the time of signing.'
+- article: Recital 521-541 / economic continuity doctrine
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Acquirer in a distressed-asset privatisation
+  deadline: null
+  interpretive: true
+  requirement_text: 'An open, transparent and non-discriminatory asset sale at market price
+    to an unconnected buyer, executed before the Commission opens a formal investigation,
+    breaks economic continuity and prevents the recovery obligation from passing to the acquirer.
+    The key factors are: no liability transfer, market price confirmed by independent valuation,
+    complete change of ownership, pre-investigation timing, and business logic independent
+    of circumventing State aid recovery.'
+- article: Recital 536 / Land Burgenland case law
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Acquirer in a distressed-asset privatisation
+  deadline: null
+  interpretive: true
+  requirement_text: An independent economic analysis (by a qualified external expert) confirming
+    that the tender price equals or exceeds market value, combined with evidence that asset-only
+    liquidation would achieve a lower price, creates a strong presumption that no advantage
+    was conferred on the acquirer. Purchasers should commission such analysis at bid stage
+    and retain it as due-diligence documentation.
+- article: Recital 519 / Articles 3-4 / recovery
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State responsible for recovery; insolvency administrator
+  deadline: null
+  interpretive: true
+  requirement_text: Recovery must be immediate and effective. In insolvency proceedings the
+    State must register its aid-recovery claim in the schedule of liabilities and ensure it
+    is not ranked below ordinary unsecured claims. Recovery interest accrues from the date
+    the aid was first placed at the beneficiary's disposal and is calculated using the Commission's
+    reference rate methodology (Commission Regulation (EC) No 794/2004).
+- article: Recital 342-348 / Maritime Cabotage Regulation (EE
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State imposing PSOs on maritime routes
+  deadline: null
+  interpretive: true
+  requirement_text: Public-service obligations on maritime cabotage routes connecting islands
+    to the mainland are legitimate under Regulation (EEC) No 3577/92 where the market does
+    not provide an equivalent service. Member States must assess route by route whether private
+    operators provide adequate service before imposing PSOs; routes where competition is genuine
+    and equivalent may not be classified as SGEI without risking a manifest-error finding.
+- article: Recital 41-51 / CIPE Directive compensation method
+  law_celex: 32020D1412
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State; public-service operator
+  deadline: null
+  interpretive: true
+  requirement_text: Where national law prescribes a specific cost-modelling methodology for
+    SGEI compensation (such as the CIPE Directive's WACC/CAPM approach including a risk premium
+    for PSO volatility), that methodology must be applied consistently. Deviations from the
+    approved rate require prior Commission notification and prior approval unless they fall
+    below notification thresholds. Retroactive adjustments to the WACC rate are permitted
+    only with Commission approval.

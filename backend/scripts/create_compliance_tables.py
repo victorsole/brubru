@@ -29,7 +29,6 @@ from backend.models.compliance import (
     ComplianceAnalysis,
     GapFinding,
     ComplianceAction,
-    RequirementEmbedding,
     AnalysisExport
 )
 
@@ -212,7 +211,6 @@ def main():
                 ComplianceAnalysis.__table__,
                 GapFinding.__table__,
                 ComplianceAction.__table__,
-                RequirementEmbedding.__table__,
                 AnalysisExport.__table__
             ]
         )
@@ -254,7 +252,6 @@ def main():
     print("  • compliance_analyses - Compliance check sessions")
     print("  • gap_findings - Individual gap analysis results")
     print("  • compliance_actions - Action items for gaps")
-    print("  • requirement_embeddings - Vector embeddings for semantic search")
     print("  • analysis_exports - Exported compliance reports")
     print("\nNote: The law_requirements table already exists (defined in eu_law.py)")
     print("\nViews created:")

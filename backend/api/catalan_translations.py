@@ -199,3 +199,59 @@ async def get_translation(celex: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Translation {celex} not found")
 
     return translation.to_dict()
+
+
+# ============================================================
+# EuroVocCat marriage - public endpoints for the Catalan acquis
+# ============================================================
+from sqlalchemy import text as _sqltext  # noqa: E402
+
+
+@router.get(
+    "/law/{celex}/eurovoc",
+    summary="EuroVocCat subjects for one translated act",
+    description="Catalan EuroVoc subject tags for a translated act (what the law is about, in Catalan). Annexes inherit their parent act's subjects.",
+)
+def law_eurovoc(celex: str, db: Session = Depends(get_db)):
+    rows = db.execute(_sqltext(
+        "SELECT c.notation, c.concept_uri, c.concept_type, c.labels->>'ca' AS ca, "
+        "c.labels->>'en' AS en, l.relation "
+        "FROM catalan_law_eurovoc l JOIN eurovoc_concepts c ON c.concept_uri = l.concept_uri "
+        "WHERE l.celex = :celex ORDER BY c.notation"), {"celex": celex}).mappings().all()
+    return {"celex": celex, "concepts": [
+        {"notation": r["notation"], "uri": r["concept_uri"], "type": r["concept_type"],
+         "ca": r["ca"], "en": r["en"], "relation": r["relation"]} for r in rows]}
+
+
+@router.get(
+    "/eurovoc/{notation}/acts",
+    summary="Translated acts under a EuroVocCat subject",
+    description="Catalan-translated acts classified under a EuroVoc subject (descriptor, microthesaurus, or domain). Find laws by topic.",
+)
+def eurovoc_acts(notation: str, limit: int = Query(50, ge=1, le=200),
+                 page: int = Query(1, ge=1), db: Session = Depends(get_db)):
+    concept = db.execute(_sqltext(
+        "SELECT concept_uri, concept_type, labels->>'ca' AS ca FROM eurovoc_concepts WHERE notation = :n LIMIT 1"),
+        {"n": notation}).mappings().first()
+    if not concept:
+        raise HTTPException(status_code=404, detail="Concept not found")
+    ctype = concept["concept_type"]
+    if ctype == "descriptor":
+        filt = "l.notation = :n"
+    elif ctype == "microthesaurus":
+        filt = "l.concept_uri IN (SELECT concept_uri FROM eurovoc_concepts WHERE microthesaurus_uri = :uri)"
+    else:
+        filt = "l.concept_uri IN (SELECT concept_uri FROM eurovoc_concepts WHERE domain_uri = :uri)"
+    params = {"n": notation, "uri": concept["concept_uri"]}
+    total = db.execute(_sqltext(
+        f"SELECT count(DISTINCT l.celex) FROM catalan_law_eurovoc l WHERE {filt}"), params).scalar() or 0
+    off = (page - 1) * limit
+    rows = db.execute(_sqltext(
+        "SELECT t.celex, t.title_ca, t.siteground_url AS url, t.category "
+        f"FROM catalan_law_eurovoc l JOIN catalan_translations t ON t.celex = l.celex WHERE {filt} "
+        "GROUP BY t.celex, t.title_ca, t.siteground_url, t.category "
+        "ORDER BY t.title_ca LIMIT :lim OFFSET :off"),
+        {**params, "lim": limit, "off": off}).mappings().all()
+    return {"notation": notation, "concept_ca": concept["ca"], "total": total, "page": page, "limit": limit,
+            "acts": [{"celex": r["celex"], "title_ca": r["title_ca"], "url": r["url"],
+                      "category": r["category"]} for r in rows]}

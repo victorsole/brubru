@@ -1,0 +1,271 @@
+/* "What will be checked" -- the obligation list shown before any upload. */
+
+.cluster-preview {
+  background: #fff;
+  border: 1px solid #e6eaf0;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.cluster-preview__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: #2c3446;
+}
+
+.cluster-preview__toggle:hover { background: #f8faff; }
+.cluster-preview__toggle:focus-visible { outline: 2px solid #6c5ce7; outline-offset: -2px; }
+
+.cluster-preview__toggle .mdi { font-size: 1.15rem; color: #6b7280; }
+
+.cluster-preview__toggle-text {
+  font-size: 0.92rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.cluster-preview__count {
+  font-size: 0.8rem;
+  color: #55607a;
+  background: #f2f5fa;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+.cluster-preview__body {
+  padding: 0 1.1rem 1.1rem;
+  border-top: 1px solid #eef1f6;
+}
+
+.cluster-preview__intro {
+  font-size: 0.85rem;
+  color: #55607a;
+  line-height: 1.55;
+  margin: 0.85rem 0 0.75rem;
+}
+
+.cluster-preview__status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  color: #6b7280;
+  padding: 0.9rem 0;
+  margin: 0;
+}
+
+.cluster-preview__status.is-error { color: #a92f2f; }
+
+.cluster-preview__filters {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.cluster-preview__chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid #dde3ed;
+  background: #fff;
+  color: #55607a;
+  border-radius: 18px;
+  padding: 0.26rem 0.65rem;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: capitalize;
+}
+
+.cluster-preview__chip:hover { border-color: #b9c3d6; }
+.cluster-preview__chip.is-active { background: #3b3183; border-color: #3b3183; color: #fff; }
+
+.cluster-preview__deadline-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: #8a5a10;
+  margin-left: auto;
+}
+
+.cluster-preview__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid #eef1f6;
+  border-radius: 10px;
+}
+
+.cluster-preview__item {
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid #f2f5fa;
+}
+
+.cluster-preview__item:last-child { border-bottom: none; }
+
+.cluster-preview__item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+
+.cluster-preview__item-head code {
+  font-size: 0.75rem;
+  background: #f2f5fa;
+  border-radius: 5px;
+  padding: 0.1rem 0.35rem;
+  color: #45507a;
+}
+
+.cluster-preview__crit {
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0.08rem 0.35rem;
+  text-transform: capitalize;
+}
+
+.cluster-preview__deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  font-size: 0.74rem;
+  color: #8a5a10;
+}
+
+.cluster-preview__celex {
+  font-size: 0.72rem;
+  color: #9aa3b2;
+  margin-left: auto;
+}
+
+.cluster-preview__text {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: #4b5563;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cluster-preview__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.7rem;
+  padding: 0.55rem;
+  background: #f4f6fb;
+  border: 1px dashed #c7d0e4;
+  border-radius: 8px;
+  color: #45507a;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.cluster-preview__more:hover { background: #eaeefa; }
+
+@media (max-width: 767px) {
+  .cluster-preview__deadline-note { margin-left: 0; }
+  .cluster-preview__celex { margin-left: 0; }
+}
+
+/* Obligations that bind someone other than the company reading the report. */
+.cluster-preview__addressee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #55607a;
+  background: #f1f3f6;
+  border-radius: 4px;
+  padding: 0.08rem 0.35rem;
+}
+
+/* The regulatory cascade: what hangs off the package's laws. */
+.cluster-preview__cascade {
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  background: #f8faff;
+  border: 1px solid #e6eaf0;
+  border-radius: 10px;
+}
+
+.cluster-preview__cascade h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  margin: 0 0 0.5rem;
+}
+
+.cluster-preview__cascade-lead {
+  font-size: 0.82rem;
+  color: #55607a;
+  margin: 0.55rem 0 0.35rem;
+  line-height: 1.5;
+}
+
+.cluster-preview__cascade ul { list-style: none; margin: 0; padding: 0; }
+
+.cluster-preview__cascade li {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 0.2rem 0;
+}
+
+.cluster-preview__cascade a { color: #3b3183; text-decoration: none; }
+.cluster-preview__cascade a:hover { text-decoration: underline; }
+
+.cluster-preview__cascade code {
+  font-size: 0.73rem;
+  background: #eef1fb;
+  border-radius: 4px;
+  padding: 0.06rem 0.3rem;
+  margin-right: 0.25rem;
+}
+
+/* Interpretive rows: kept in the list because the context is worth reading,
+   marked because they are not scored. Without the mark the preview would
+   promise more checks than the analysis performs. */
+.cluster-preview__item.is-context { opacity: 0.78; }
+
+.cluster-preview__context-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  background: #f2f5fa;
+  color: #55607a;
+  white-space: nowrap;
+}
+
+.cluster-preview__context-tag .mdi { font-size: 0.8rem; }

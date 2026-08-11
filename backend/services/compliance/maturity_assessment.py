@@ -99,10 +99,10 @@ def _classify_tier(score: int) -> MaturityTier:
 
 def _tier_label(tier: MaturityTier) -> str:
     return {
-        "beginner": "Beginner — you have a Brubru account; the next steps are obvious",
-        "intermediate": "Intermediate — you track files and run analyses",
-        "advanced": "Advanced — you engage upstream and close compliance loops",
-        "expert": "Expert — you operate Brubru as a continuous compliance copilot",
+        "beginner": "Beginner: you have a Brubru account, and the next steps are obvious",
+        "intermediate": "Intermediate: you track files and run analyses",
+        "advanced": "Advanced: you engage upstream and close compliance loops",
+        "expert": "Expert: you operate Brubru as a continuous compliance copilot",
     }[tier]
 
 

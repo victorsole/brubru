@@ -1,0 +1,1484 @@
+id: 11
+name: Migration and Asylum Pact
+policy_area: Migration and Home Affairs
+description: Comprehensive migration and asylum framework
+applicability: Member states, border agencies, asylum authorities
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32004L0081
+  title: Council Directive 2004/81/EC of 29 April 2004 on the residence permit issued to third-country
+    nationals who are victims of trafficking in human beings or who have been the subject
+    of an action to facilitate illegal immigration, who cooperate with the competent authorities
+- celex: 32004L0082
+  title: Council Directive 2004/82/EC of 29 April 2004 on the obligation of carriers to communicate
+    passenger data
+- celex: 32013L0032
+  title: Directive 2013/32/EU of the European Parliament and of the Council of 26 June 2013
+    on common procedures for granting and withdrawing international protection (recast)
+- celex: 32014L0036
+  title: Directive 2014/36/EU of the European Parliament and of the Council of 26 February
+    2014 on the conditions of entry and stay of third-country nationals for the purpose of
+    employment as seasonal workers
+- celex: 32020D0142
+  title: Council Decision (EU) 2020/142 of 21 January 2020 on the conclusion of the Protocol
+    between the European Union, the Swiss Confederation and the Principality of Liechtenstein
+    to the Agreement between the European Community and the Swiss Confederation concerning
+    the criteria and mechanisms for establishing the State responsible for examining a request
+    for asylum lodged in a Member State or in Switzerland regarding access to Eurodac for
+    law enforcement purposes
+- celex: 32020D0865
+  title: Council Decision (EU) 2020/865 of 26 May 2020 on the conclusion of the Status Agreement
+    between the European Union and the Republic of Serbia on actions carried out by the European
+    Border and Coast Guard Agency in the Republic of Serbia
+- celex: 32020D0903
+  title: Council Decision (CFSP) 2020/903 of 29 June 2020 amending Decision 2013/233/CFSP
+    on the European Union Integrated Border Management Assistance Mission in Libya (EUBAM
+    Libya)
+- celex: 32020D0955
+  title: Council Decision (CFSP) 2020/955 of 30 June 2020 amending Joint Action 2005/889/CFSP
+    on establishing a European Union Border Assistance Mission for the Rafah Crossing Point
+    (EU BAM Rafah)
+- celex: 32020D1268
+  title: Decision (EU) 2020/1268 of the European Parliament and of the Council of 15 July
+    2020 on the mobilisation of the Contingency Margin in 2020 to provide continued humanitarian
+    support to refugees in Turkey
+- celex: 32020R0445
+  title: Commission Delegated Regulation (EU) 2020/445 of 15 October 2019 amending Annex II
+    to Regulation (EU) No 516/2014 of the European Parliament and of the Council establishing
+    the Asylum, Migration and Integration Fund
+- celex: 32021D0826
+  title: Commission Decision (EU) 2021/826 of 17 May 2021 on relief from import duties and
+    VAT exemption granted for goods imported by Belgium as response to the assistance requested
+    by Greece in order to deal with the migration crisis (notified under document C(2021)
+    3274) (Only the Dutch, the French and the Greek texts are authentic)
+- celex: 32021D0995
+  title: Commission Implementing Decision (EU) 2021/995 of 18 June 2021 determining the date
+    on which Council Decision (EU) 2017/1908 on the putting into effect of certain provisions
+    of the Schengen acquis relating to the Visa Information System in the Republic of Bulgaria
+    and Romania shall start to apply
+- celex: 32021D1009
+  title: Council Decision (CFSP) 2021/1009 of 18 June 2021 amending Decision 2013/233/CFSP
+    on the European Union Integrated Border Management Assistance Mission in Libya (EUBAM
+    Libya)
+- celex: 32021R1077
+  title: Regulation (EU) 2021/1077 of the European Parliament and of the Council of 24 June
+    2021 establishing, as part of the Integrated Border Management Fund, the instrument for
+    financial support for customs control equipment
+- celex: 32022D0442
+  title: Council Decision (EU) 2022/442 of 21 February 2022 authorising the opening of negotiations
+    with Iceland, the Kingdom of Norway, the Swiss Confederation and the Principality of Liechtenstein
+    with a view to concluding agreements between the European Union and those countries on
+    supplementary rules in relation to the Instrument for Financial Support for Border Management
+    and Visa Policy, as part of the Integrated Border Management Fund
+- celex: 32022D0544
+  title: Council Decision (EU) 2022/544 of 4 April 2022 on the conclusion of the Agreement
+    between the European Union and the Republic of Moldova on operational activities carried
+    out by the European Border and Coast Guard Agency in the Republic of Moldova
+- celex: 32022D1350
+  title: Council Decision (EU) 2022/1350 of 29 July 2022 authorising the opening of negotiations
+    on a status agreement between the European Union and the Republic of North Macedonia on
+    operational activities carried out by the European Border and Coast Guard Agency in the
+    Republic of North Macedonia
+- celex: 32022D1958
+  title: Council Decision (EU) 2022/1958 of 13 October 2022 on the signing, on behalf of the
+    Union, of the Agreement between the European Union and the Republic of North Macedonia
+    on operational activities carried out by the European Border and Coast Guard Agency in
+    the Republic of North Macedonia
+- celex: 32022D2272
+  title: Council Decision (EU) 2022/2272 of 18 November 2022 authorising the opening of negotiations
+    on a status agreement between the European Union and Bosnia and Herzegovina on operational
+    activities carried out by the European Border and Coast Guard Agency in Bosnia and Herzegovina
+- celex: 32022D2451
+  title: Council Decision (EU) 2022/2451 of 8 December 2022 on the full application of the
+    provisions of the Schengen acquis in the Republic of Croatia
+- celex: 32022R0507
+  title: Commission Decision (EU) 2022/507 of 29 March 2022 confirming the participation of
+    Ireland in Regulation (EU) 2021/1147 of the European Parliament and of the Council establishing
+    the Asylum, Migration and Integration Fund
+- celex: 32022R1190
+  title: Regulation (EU) 2022/1190 of the European Parliament and of the Council of 6 July
+    2022 amending Regulation (EU) 2018/1862 as regards the entry of information alerts into
+    the Schengen Information System (SIS) on third-country nationals in the interest of the
+    Union
+- celex: 32022R1620
+  title: Commission Implementing Decision (EU) 2022/1620 of 19 September 2022 laying down
+    model contingency measures for cases of technical impossibility to access data at the
+    external borders, including fall-back procedures to be followed by border authorities
+    pursuant to Article 48(4) of Regulation (EU) 2018/1240 of the European Parliament and
+    the Council
+- celex: 32022R1928
+  title: Commission Decision (EU) 2022/1928 of 11 October 2022 confirming the participation
+    of Ireland in Regulation (EU) 2022/585 of the European Parliament and of the Council amending
+    Regulations (EU) No 514/2014 laying down general provisions on the Asylum, Migration and
+    Integration Fund and on the instrument for financial support for police cooperation, preventing
+    and combating crime, and crisis management, (EU) No 516/2014 establishing the Asylum,
+    Migration and Integration Fund and (EU) 2021/1147 establishing the Asylum, Migration and
+    Integration Fund
+- celex: 32023D0375
+  title: Commission Decision (EU) 2023/375 of 16 February 2023 on relief from import duties
+    and VAT exemption granted for goods imported to Lithuania in 2021 and 2022 to deal with
+    the migration crisis (notified under document C(2023) 1032) (Only the Lithuanian text
+    is authentic)
+- celex: 32023D0418
+  title: Council Decision (EU) 2023/418 of 24 February 2023 on the conclusion of the Agreement
+    between the European Union and the Republic of North Macedonia on operational activities
+    carried out by the European Border and Coast Guard Agency in the Republic of North Macedonia
+- celex: 32023D0870
+  title: Council Decision (EU) 2023/870 of 25 April 2023 on the application of the provisions
+    of the Schengen acquis relating to the Schengen Information System in the Republic of
+    Cyprus
+- celex: 32023D1076
+  title: Council Decision (EU) 2023/1076 of 1 June 2023 on the conclusion, on behalf of the
+    European Union, of the Council of Europe Convention on preventing and combating violence
+    against women and domestic violence with regard to matters related to judicial cooperation
+    in criminal matters, asylum and non-refoulement
+- celex: 32023D1305
+  title: Council Decision (CFSP) 2023/1305 of 26 June 2023 amending Decision 2013/233/CFSP
+    on the European Union Integrated Border Management Assistance Mission in Libya (EUBAM
+    Libya)
+- celex: 32023D2063
+  title: Council Decision (CFSP) 2023/2063 of 25 September 2023 amending Decision 2013/233/CFSP
+    on the European Union Integrated Border Management Assistance Mission in Libya (EUBAM
+    Libya)
+- celex: 32023D2191
+  title: Council Decision (EU) 2023/2191 of 28 September 2023 on the signing, on behalf of
+    the Union, of the Agreement between the European Union and Iceland on supplementary rules
+    in relation to the Instrument for Financial Support for Border Management and Visa Policy,
+    as part of the Integrated Border Management Fund, for the period 2021 to 2027
+- celex: 32023R0169
+  title: Commission Implementing Regulation (EU) 2023/169 of 25 January 2023 establishing
+    the template for the annual performance reports on the Asylum, Migration and Integration
+    Fund for the 2021-2027 programming period, pursuant to Regulation (EU) 2021/1147 of the
+    European Parliament and of the Council
+- celex: 32023R0201
+  title: Commission Implementing Decision (EU) 2023/201 of 30 January 2023 setting the date
+    on which operations of the Schengen Information System start pursuant to Regulation (EU)
+    2018/1861 of the European Parliament and of the Council and Regulation (EU) 2018/1862
+    of the European Parliament and of the Council
+- celex: 32024D0199
+  title: Council Decision (EU) 2024/199 of 13 November 2023 on the signing, on behalf of the
+    Union, and provisional application of the Agreement between the European Union and the
+    Principality of Liechtenstein on supplementary rules in relation to the Instrument for
+    Financial Support for Border Management and Visa Policy, as part of the Integrated Border
+    Management Fund, for the period 2021 to 2027
+- celex: 32024D0210
+  title: Council Decision (EU) 2024/210 of 30 December 2023 on the full application of the
+    provisions of the Schengen acquis in the Republic of Bulgaria and Romania
+- celex: 32024D1639
+  title: Council Decision (EU) 2024/1639 of 30 May 2024 on the signing, on behalf of the Union,
+    of the Agreement between the European Union and the Republic of Serbia on operational
+    activities carried out by the European Border and Coast Guard Agency in the Republic of
+    Serbia
+- celex: 32025D0773
+  title: Council Decision (CFSP) 2025/773 of 14 April 2025 amending Joint Action 2005/889/CFSP
+    on establishing a European Union Border Assistance Mission for the Rafah Crossing Point
+    (EU BAM Rafah)
+- celex: 32025D0805
+  title: Council Decision (EU) 2025/805 of 22 April 2025 on the position to be taken on behalf
+    of the European Union within the Committee of Ministers of the Council of Europe on the
+    extension of the deadline for accession of Tunisia to the Council of Europe Convention
+    on preventing and combating violence against women and domestic violence, with regard
+    to matters related to judicial cooperation in criminal matters, asylum and non-refoulement
+- celex: 32025D1967
+  title: Council Decision (EU) 2025/1967 of 16 September 2025 on the position to be taken
+    on behalf of the European Union within the Committee of Ministers of the Council of Europe
+    on the extension of the deadline for accession of Kazakhstan to the Council of Europe
+    Convention on preventing and combating violence against women and domestic violence, with
+    regard to matters related to judicial cooperation in criminal matters, asylum and non-refoulement
+- celex: 32025R0012
+  title: Regulation (EU) 2025/12 of the European Parliament and of the Council of 19 December
+    2024 on the collection and transfer of advance passenger information for enhancing and
+    facilitating external border checks, amending Regulations (EU) 2018/1726 and (EU) 2019/817,
+    and repealing Council Directive 2004/82/EC
+- celex: null
+  title: Management Board Decision 28/2022 of 4 April 2022 on internal rules concerning restrictions
+    of certain data subject rights in relation to the processing of personal data in the framework
+    of activities carried out by the European Border and Coast Guard Agency
+requirements:
+- article: Article 1
+  law_celex: 32025D1967
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be taken on the Union's behalf at the meeting of the Committee
+    of Ministers of the Council of Europe in September 2025, shall be to support the extension
+    of the deadline for the accession of Kazakhstan to the Council of Europe Convention on
+    preventing and combating violence against women and domestic violence until 23 April 2027
+- article: Article 2
+  law_celex: 32025D1967
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States that are members of the Committee of Ministers of the Council
+    of Europe
+  deadline: null
+  interpretive: null
+  requirement_text: The position referred to in Article 1 shall be expressed by the Member
+    States that are members of the Committee of Ministers of the Council of Europe, acting
+    jointly
+- article: Article 2
+  law_celex: 32023D0418
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall, on behalf of the Union, give the notification
+    provided for in Article 22(1) of the Agreement.
+- article: Article 2
+  law_celex: 32023D0418
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: General Secretariat of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The date of entry into force of the Agreement will be published in the
+    Official Journal of the European Union by the General Secretariat of the Council.
+- article: Recital (4)
+  law_celex: 32023D0418
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Denmark
+  deadline: null
+  interpretive: true
+  requirement_text: Denmark shall, in accordance with Article 4 of Protocol No 22, decide
+    within a period of six months after the Council has decided on this Decision whether it
+    will implement it in its national law.
+- article: Article 1
+  law_celex: 32023D2063
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: '2023-10-01'
+  interpretive: null
+  requirement_text: The financial reference amount intended to cover the expenditure of EUBAM
+    Libya from 1 October 2023 until 30 June 2025 shall be EUR 53,442,350.13
+- article: Article 2
+  law_celex: 32023D2063
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision (CFSP) 2023/2063
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 2
+  law_celex: 32023D2063
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision (CFSP) 2023/2063
+  deadline: '2023-10-01'
+  interpretive: null
+  requirement_text: It shall apply from 1 October 2023
+- article: Article 1
+  law_celex: 32020D1268
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union budget authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The Contingency Margin shall be mobilised to provide the amount of EUR
+    481572239 in commitment appropriations over and above the commitment ceiling of heading
+    4 (Global Europe) of the multiannual financial framework for the general budget of the
+    Union for the financial year 2020
+- article: Article 2
+  law_celex: 32020D1268
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union budget authorities
+  deadline: null
+  interpretive: null
+  requirement_text: 'The total amount of EUR 481572239 shall be offset against the margins
+    under the commitment ceiling for the financial year 2020 of heading 5 (Administration):
+    EUR 16248368 and heading 2 (Sustainable growth: natural resources): EUR 465323871'
+- article: Article 3
+  law_celex: 32020D1268
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All relevant EU institutions and authorities
+  deadline: '2020-07-15'
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union and shall apply from 15 July 2020
+- article: Article 1
+  law_celex: 32022D2272
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission is hereby authorised to open negotiations, on behalf of
+    the Union, for a status agreement between the European Union and Bosnia and Herzegovina
+    on operational activities carried out by the European Border and Coast Guard Agency in
+    the territory of Bosnia and Herzegovina.
+- article: Article 2
+  law_celex: 32022D2272
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations shall be conducted on the basis of the negotiating directives
+    of the Council set out in the addendum to this Decision, and in consultation with the
+    appropriate Working Party of the Council.
+- article: Article 1
+  law_celex: 32025D0773
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: '2024-07-01'
+  interpretive: null
+  requirement_text: The financial reference amount intended to cover the expenditure related
+    to EU BAM Rafah for the period from 1 July 2024 to 30 June 2025 shall be EUR 4323805,94
+- article: Article 2
+  law_celex: 32025D0773
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council of the European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 1
+  law_celex: 32021D0995
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bulgaria and Romania
+  deadline: '2021-07-25'
+  interpretive: null
+  requirement_text: Decision (EU) 2017/1908 shall apply from 25 July 2021
+- article: Article 2
+  law_celex: 32021D0995
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the twentieth day following that
+    of its publication in the Official Journal of the European Union
+- article: Article 1(2)
+  law_celex: 32022R0507
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Ireland
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation (EU) 2021/1147 shall apply to Ireland
+- article: Article 2
+  law_celex: 32020D0142
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall, on behalf of the Union, give the notification
+    provided for in Article 4(1) of the Protocol.
+- article: Article 1(2)
+  law_celex: 32022R1620
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: border authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The notifications provided for in Article 48(1) and (2) of Regulation
+    (EU) 2018/1240 shall take place without delay through communication channels shared by
+    the border authorities, the ETIAS National Units and the ETIAS Central Unit.
+- article: Article 1(3)
+  law_celex: 32022R1620
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: border authorities
+  deadline: null
+  interpretive: null
+  requirement_text: 'The notifications provided for in Article 48(2) of Regulation (EU) 2018/1240,
+    to be communicated by the border authorities to the ETIAS Central Unit and their respective
+    ETIAS National Unit shall contain the following information: (a) the border crossing point(s)
+    affected by the failure and the authority unable to perform the consultation; and (b)
+    the date and time when the failure occurred; (c) where possible, the description of the
+    failure and the response time for resolution.'
+- article: Article 1(3)
+  law_celex: 32022R1620
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ETIAS Central Unit
+  deadline: null
+  interpretive: null
+  requirement_text: The ETIAS Central Unit shall, when informing eu-LISA and the Commission,
+    in accordance with Article 48(2) of Regulation (EU) 2018/1240, provide the same information
+    as received from the border authorities.
+- article: Article 1(1)(b)
+  law_celex: 32022R1620
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: border authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Border authorities may only store this information for the period of the
+    technical impossibility and the subsequent verification.
+- article: Article 1(1)
+  law_celex: 32022D2451
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States and associated countries
+  deadline: null
+  interpretive: null
+  requirement_text: Checks on persons at internal land and sea borders with Croatia shall
+    be lifted and the provisions of the Schengen acquis referred to in the Annex shall apply
+    to Croatia in its relations with specified Member States and associated countries
+- article: Article 1(2)
+  law_celex: 32022D2451
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States and associated countries
+  deadline: null
+  interpretive: null
+  requirement_text: Checks on persons at internal air borders shall be lifted and the provisions
+    regulating the abolition of checks on persons at internal air borders shall apply
+- article: Article 1(3)
+  law_celex: 32022D2451
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: All restrictions on the use of the Schengen Information System by Croatia
+    shall be lifted
+- article: Article 2
+  law_celex: 32022D2451
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: '2023-01-01'
+  interpretive: null
+  requirement_text: National short-stay visas issued by Croatia before 1 January 2023 shall
+    remain valid during their period of validity for transit through territory of other Member
+    States or intended stays not exceeding 90 days in any 180-day period, where such visas
+    have been recognised by Member States in accordance with Decision No 565/2014/EU
+- article: Article 3
+  law_celex: 32024D1639
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall ensure the signing of the Agreement, subject to its
+    conclusion
+- article: General
+  law_celex: 32022R1190
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Member states, border agencies, asylum authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Comply with Regulation (EU) 2022/1190 of the European Parliament and of
+    the Council of 6 July 2022 amending Regulation (EU) 2018/1862 as regards the entry of
+    information alerts into the Schengen Information System (SIS) on third-country nationals
+    in the interest of the Union
+- article: Article 2(1)
+  law_celex: 32021D1009
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall assist the Libyan authorities in the building of state
+    security structures in Libya, in particular in the areas of border management, law enforcement
+    and criminal justice with a view to contributing to efforts to disrupt organised criminal
+    networks involved notably in smuggling migrants, human trafficking and terrorism in Libya
+    and the Central Mediterranean region.
+- article: Article 2(2)
+  law_celex: 32021D1009
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall support the efforts led by the United Nations for peace
+    in Libya in the areas of border management, law enforcement and criminal justice.
+- article: Article 3(1a)
+  law_celex: 32021D1009
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council
+  deadline: null
+  interpretive: null
+  requirement_text: Should a formal request be made by the United Nations or the Libyan authorities,
+    the Council shall decide, on the basis of a dedicated strategic analysis presented by
+    the European External Action Service, on the support to be provided by EUBAM Libya in
+    furtherance of the objective set out in Article 2(2).
+- article: Article 1
+  law_celex: 32023D2191
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The signing on behalf of the Union of the Agreement between the European
+    Union and Iceland on supplementary rules in relation to the Instrument for Financial Support
+    for Borders Management and Visa Policy, as part of the Integrated Border Management Fund,
+    for the period 2021 to 2027 is hereby authorised, subject to the conclusion of the said
+    Agreement.
+- article: Article 2
+  law_celex: 32023D2191
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council is hereby authorised to designate the person(s)
+    empowered to sign the Agreement on behalf of the Union.
+- article: Article 3
+  law_celex: 32023D2191
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its adoption.
+- article: Article 1(1)
+  law_celex: 32022D0442
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission is hereby authorised to open negotiations for agreements
+    with Iceland, the Kingdom of Norway, the Swiss Confederation and the Principality of Liechtenstein
+    on supplementary rules concerning the implementation by those countries of Regulation
+    (EU) 2021/1148
+- article: Article 1(2)
+  law_celex: 32022D0442
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations shall be conducted on the basis of the negotiating directives
+    of the Council set out in the addendum to this Decision
+- article: Article 2
+  law_celex: 32022D0442
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations shall be conducted in consultation with the Justice and
+    Home Affairs Counsellors, who are the preparatory body hereby designated as the special
+    committee within the meaning of Article 218(4) of the Treaty on the Functioning of the
+    European Union
+- article: Article 1
+  law_celex: 32024D0199
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The signing on behalf of the Union of the Agreement between the European
+    Union and the Principality of Liechtenstein on supplementary rules in relation to the
+    Instrument for Financial Support for Border Management and Visa Policy, as part of the
+    Integrated Border Management Fund, for the period 2021 to 2027 is hereby authorised, subject
+    to the conclusion of the Agreement
+- article: Article 2
+  law_celex: 32024D0199
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council is hereby authorised to designate the person(s)
+    empowered to sign the Agreement on behalf of the Union
+- article: Article 3
+  law_celex: 32024D0199
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The Agreement, with the exception of its Article 5, shall be applied on
+    a provisional basis in accordance with its Article 13(6) as from the day following its
+    signature, pending the completion of the procedures necessary for its entry into force
+- article: Article 1
+  law_celex: 32025D0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be taken on the Union's behalf at the meeting of the Committee
+    of Ministers of the Council of Europe on 23 April 2025 shall be to support the extension
+    of the deadline for accession of Tunisia to the Council of Europe Convention on preventing
+    and combating violence against women and domestic violence until 23 April 2027
+- article: Article 2
+  law_celex: 32025D0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU Member States that are members of the Committee of Ministers of the
+    Council of Europe
+  deadline: null
+  interpretive: null
+  requirement_text: The position referred to in Article 1 shall be expressed by the Member
+    States of the Union that are members of the Committee of Ministers of the Council of Europe,
+    acting jointly
+- article: Article 3
+  law_celex: 32025D0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 1
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania (State Border Guard Service)
+  deadline: null
+  interpretive: null
+  requirement_text: Goods imported for release for free circulation by the State Border Guard
+    Service of Lithuania shall be admitted free of import duties and exempted from value added
+    tax (VAT) on the imports where specified conditions are fulfilled
+- article: Article 1(a)
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania (designated State organisations)
+  deadline: null
+  interpretive: null
+  requirement_text: The goods must be intended for distribution free of charge by designated
+    State organisations to third country nationals and stateless persons who have crossed
+    the border between Lithuania and Belarus in an unauthorised manner as well as to applicants
+    for international protection, or being made available free of charge to such persons by
+    designated State organisations while remaining the property of those organisations
+- article: Article 1(b)
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: The goods must satisfy the requirements laid down in Articles 75, 78,
+    79 and 80 of Regulation (EC) No 1186/2009 and Articles 52, 55, 56 and 57 of Directive
+    2009/132/EC
+- article: Article 2
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: Lithuania shall communicate to the Commission consolidated information
+    regarding the goods admitted free of import duties and exempted from VAT, including customs
+    declaration number, acceptance date, Combined Nomenclature code, and other specified details
+- article: Article 2(b)
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: Lithuania shall provide a list of designated State organisations in charge
+    of distributing and making available goods benefiting from the relief from duties and
+    the VAT exemption
+- article: Article 2(c)
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: Lithuania shall report measures taken to ensure compliance with Articles
+    78, 79 and 80 of Regulation (EC) No 1186/2009 and with Articles 55, 56 and 57 of Directive
+    2009/132/EC
+- article: Article 2(d)
+  law_celex: 32023D0375
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Lithuania
+  deadline: null
+  interpretive: null
+  requirement_text: Lithuania shall report the risk management and customs control measures
+    undertaken pursuant to Article 46 of Regulation (EU) No 952/2013, with regard to the goods
+    falling within the scope of this Decision
+- article: Article 1
+  law_celex: 32023R0169
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must submit annual performance reports on the Asylum, Migration
+    and Integration Fund using the template established in this Regulation
+- article: Article 2
+  law_celex: 32023R0169
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in the Member States
+- article: Article 1
+  law_celex: 32023R0201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States, eu-LISA, European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The operations of the Schengen Information System pursuant to Regulations
+    (EU) 2018/1860, (EU) 2018/1861 and (EU) 2018/1862 shall start on 7 March 2023
+- article: Article 66(5) of Regulation (EU) 2018/1861
+  law_celex: 32023R0201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation (EU) 2018/1861 shall apply from the date set in this Decision
+- article: Article 79(5) of Regulation (EU) 2018/1862
+  law_celex: 32023R0201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Regulation (EU) 2018/1862 shall apply from the date set in this Decision
+- article: Article 20 of Regulation (EU) 2018/1860
+  law_celex: 32023R0201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The provisions establishing a new type of alert on the return of third-country
+    nationals in the Schengen Information System shall apply from the start date set in this
+    Decision
+- article: International law obligation (recital 9)
+  law_celex: 32023R0201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Denmark
+  deadline: null
+  interpretive: null
+  requirement_text: Denmark is bound under international law to implement this Decision
+- article: Article 1
+  law_celex: 32021D0826
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Belgium and Greece
+  deadline: null
+  interpretive: null
+  requirement_text: Goods shall be admitted free of import duties and exempted of VAT on the
+    imports where the specified conditions are fulfilled
+- article: Article 1(a)
+  law_celex: 32021D0826
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: General Secretariat for Civil Protection of the Ministry of Citizen Protection
+    of Greece
+  deadline: null
+  interpretive: null
+  requirement_text: The goods were intended for distribution and making available free of
+    charge by the General Secretariat for Civil Protection of the Ministry of Citizen Protection
+    of Greece to the benefit of the asylum seekers and migrants
+- article: Article 1(b)
+  law_celex: 32021D0826
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Belgium and Greece
+  deadline: null
+  interpretive: null
+  requirement_text: The goods satisfy the requirements laid down in Articles 75, 78, 79 and
+    80 of Regulation (EC) No 1186/2009 and Articles 52, 55, 56 and 57 of Directive 2009/132/EC
+- article: Article 1(c)
+  law_celex: 32021D0826
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Greek authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Appropriate measures had been taken by the Greek authorities to ensure
+    compliance with Articles 78, 79 and 80 of Regulation (EC) No 1186/2009 and with Articles
+    55, 56 and 57 of Directive 2009/132/EC with regard to the imported goods falling under
+    the scope of this Decision
+- article: Article 1
+  law_celex: 32024D0210
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Checks on persons at internal air and sea borders with and between Bulgaria
+    and Romania shall be lifted
+- article: Article 1
+  law_celex: 32024D0210
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bulgaria and Romania
+  deadline: null
+  interpretive: null
+  requirement_text: The provisions of the Schengen acquis referred to in the Annex shall apply
+    to Bulgaria and Romania between themselves and in their relations with other specified
+    Member States
+- article: Article 1
+  law_celex: 32024D0210
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Council of the European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The Council shall endeavour to take a decision lifting checks on persons
+    at internal land borders
+- article: Article 1
+  law_celex: 32024D0210
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council of the European Union
+  deadline: null
+  interpretive: null
+  requirement_text: Decision on lifting checks at internal land borders shall be taken by
+    the Council acting by unanimity in accordance with Article 4(2) of the 2005 Act of Accession
+- article: Article 2
+  law_celex: 32024D0210
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Bulgaria and Romania
+  deadline: '2024-03-31'
+  interpretive: null
+  requirement_text: National short-stay visas issued by Bulgaria and Romania before 31 March
+    2024 shall remain valid during their period of validity for specified purposes
+- article: Article 2
+  law_celex: 32024D0210
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The conditions set out in Decision No 565/2014/EU shall apply
+- article: Article 2
+  law_celex: 32022D0544
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall, on behalf of the Union, give the notification
+    provided for in Article 22(1) of the Agreement.
+- article: Article 2
+  law_celex: 32023D1076
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall designate the person(s) empowered to
+    deposit, on behalf of the Union, the instrument of approval provided for in Article 75(2)
+    and (4) of the Convention.
+- article: Article 3
+  law_celex: 32023D1076
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall act as the Union's coordinating body in accordance
+    with Article 10 of the Convention and fulfil the reporting obligations under Chapter IX
+    for matters of the Convention falling under exclusive Union competence.
+- article: Article 1(1)
+  law_celex: 32023D0870
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Republic of Cyprus
+  deadline: '2023-07-25'
+  interpretive: null
+  requirement_text: The provisions of the Schengen acquis relating to the Schengen Information
+    System (SIS) set out in the Annex shall apply in the Republic of Cyprus from 25 July 2023
+    in its relations with specified Member States and associated countries
+- article: Article 1(3)
+  law_celex: 32023D0870
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Republic of Cyprus
+  deadline: '2023-07-25'
+  interpretive: null
+  requirement_text: Cyprus shall be able to enter alerts and additional data into the SIS,
+    to use SIS data and to exchange supplementary information from 25 July 2023
+- article: Article 1(4)(a)
+  law_celex: 32023D0870
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Republic of Cyprus
+  deadline: null
+  interpretive: null
+  requirement_text: Cyprus shall not be obliged to refuse entry into or stay on its territory
+    to third-country nationals for whom an alert has been issued by another Member State for
+    the purpose of refusing entry or stay until checks at internal borders with Cyprus are
+    lifted
+- article: Article 1(4)(b)
+  law_celex: 32023D0870
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Republic of Cyprus
+  deadline: null
+  interpretive: null
+  requirement_text: Cyprus shall refrain from entering into the SIS alerts and additional
+    data, as well as from exchanging supplementary information on third-country nationals,
+    for the purpose of refusing entry or stay until checks at internal borders with Cyprus
+    are lifted
+- article: Article 1
+  law_celex: 32022D1958
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The signing, on behalf of the Union, of the Agreement between the European
+    Union and the Republic of North Macedonia on operational activities carried out by the
+    European Border and Coast Guard Agency in the Republic of North Macedonia is hereby authorised,
+    subject to the conclusion of the said Agreement.
+- article: Article 1
+  law_celex: 32022D1958
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The text of the Agreement will be published together with the decision
+    on its conclusion.
+- article: Article 2
+  law_celex: 32022D1958
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The Declaration attached to this Decision shall be approved on behalf
+    of the Union.
+- article: Article 3
+  law_celex: 32022D1958
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council is hereby authorised to designate the person(s)
+    empowered to sign the Agreement on behalf of the Union.
+- article: Protocol No 22, Article 4
+  law_celex: 32022D1958
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Denmark
+  deadline: null
+  interpretive: null
+  requirement_text: Denmark shall, in accordance with Article 4 of that Protocol, decide within
+    a period of six months after the Council has decided on this Decision whether it will
+    implement it in its national law.
+- article: Article 1(2)
+  law_celex: 32022R1928
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Ireland
+  deadline: '2022-07-14'
+  interpretive: null
+  requirement_text: Regulation (EU) 2022/585 shall apply to Ireland from 14 July 2022
+- article: Article 2
+  law_celex: 32022R1928
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day following that of its
+    publication in the Official Journal of the European Union
+- article: Article 1(1)
+  law_celex: 32020D0955
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU BAM Rafah
+  deadline: '2020-07-01'
+  interpretive: null
+  requirement_text: The financial reference amount intended to cover the expenditure related
+    to EU BAM Rafah for the period from 1 July 2020 to 30 June 2021 shall be EUR 2,180,000.00
+- article: Article 1(2)
+  law_celex: 32020D0955
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU BAM Rafah
+  deadline: null
+  interpretive: null
+  requirement_text: It shall expire on 30 June 2021
+- article: Article 2
+  law_celex: 32020D0955
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision (CFSP) 2020/955
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption
+- article: Article 2
+  law_celex: 32020D0955
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision (CFSP) 2020/955
+  deadline: '2020-07-01'
+  interpretive: null
+  requirement_text: It shall apply from 1 July 2020
+- article: Recital (2)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are under an obligation to report potentially illegal activities,
+    including fraud and corruption, which are detrimental to the interests of the Union
+- article: Recital (2)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Agency staff members
+  deadline: null
+  interpretive: true
+  requirement_text: Staff members are obliged to report conduct relating to the discharge
+    of professional duties which may constitute a serious failure to comply with the obligations
+    of officials of the Union
+- article: Recital (7)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Participants in Frontex activities
+  deadline: null
+  interpretive: true
+  requirement_text: Participants in Frontex activities are under the obligation to report
+    serious incidents in accordance with Article 38(3)(h) of the EBCG Regulation
+- article: Recital (12)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: Under the Regulation, the Agency is obliged to provide information to
+    data subjects on those processing activities and to respect their rights as data subjects
+- article: Recital (18)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency shall provide indirect access to the relevant medical information
+    through the Agency's medical advisor or an external medical provider for the relevant
+    medical information and advice
+- article: Recital (19)
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The Agency should give reasons explaining the justification for those
+    restrictions
+- article: Recital (20)
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: European Border and Coast Guard Agency
+  deadline: null
+  interpretive: true
+  requirement_text: In application of the principle of accountability, the Agency should keep
+    records
+- article: Article 1
+  law_celex: 32020D0865
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The Status Agreement between the European Union and the Republic of Serbia
+    on actions carried out by the European Border and Coast Guard Agency in the Republic of
+    Serbia is hereby approved on behalf of the Union
+- article: Article 2
+  law_celex: 32020D0865
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: President of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The President of the Council shall, on behalf of the Union, give the notification
+    provided for in Article 14(2) of the Agreement
+- article: Article 2
+  law_celex: 32020D0865
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: General Secretariat of the Council
+  deadline: null
+  interpretive: null
+  requirement_text: The date of entry into force of the Agreement will be published in the
+    Official Journal of the European Union by the General Secretariat of the Council
+- article: Article 1
+  law_celex: 32022D1350
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission is hereby authorised to open negotiations, on behalf of
+    the Union, for a status agreement with the Republic of North Macedonia on operational
+    activities carried out by the European Border and Coast Guard Agency in the Republic of
+    North Macedonia.
+- article: Article 2
+  law_celex: 32022D1350
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The negotiations shall be conducted on the basis of the negotiating directives
+    of the Council set out in the addendum to this Decision and in consultation with the relevant
+    Working Party of the Council.
+- article: Article 2
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall contribute to enhancing the capacity of the relevant
+    Libyan authorities and agencies to manage Libya's borders, to fight cross-border crime,
+    including human trafficking and migrant smuggling, and to counter terrorism.
+- article: Article 3(1)(a)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall support the Libyan authorities and agencies responsible
+    for border management, including in facilitating intra-agency, inter-agency and international
+    cooperation as guiding principles of integrated border management.
+- article: Article 3(1)(b)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall support the Libyan authorities and agencies involved
+    in the fight against cross-border crime, including human trafficking and migrant smuggling,
+    and against terrorism, in line with international standards in these areas.
+- article: Article 3(1)(c)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall facilitate and support cooperation and interoperability
+    of the Libyan authorities and agencies in these thematic areas in order to help them mitigate
+    possible gaps or overlaps in border management, address cross-border crime, including
+    human trafficking and migrant smuggling, and counter terrorism.
+- article: Article 3(1)(d)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall provide specific needs assessments and develop related
+    projects in support of the Mission's operational activities.
+- article: Article 3(1a)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: EUBAM Libya shall provide technical advice, capacity building activities
+    at the operational and technical levels and shall carry out projects, complemented as
+    appropriate and on a case-by-case basis by specialised training. EUBAM Libya shall furthermore
+    provide strategic advice where requested by the Libyan authorities.
+- article: Article 13(1)
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: The Council
+  deadline: '2023-10-01'
+  interpretive: null
+  requirement_text: The financial reference amount intended to cover the expenditure of EUBAM
+    Libya from 1 October 2023 until 30 June 2025 shall be decided by the Council.
+- article: Article 16
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Political and Security Committee (PSC)
+  deadline: '2024-06-30'
+  interpretive: null
+  requirement_text: A strategic assessment of EUBAM Libya and its mandate shall be conducted
+    by the PSC by 30 June 2024.
+- article: Article 16
+  law_celex: 32023D1305
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Political and Security Committee (PSC)
+  deadline: null
+  interpretive: null
+  requirement_text: A strategic review of EUBAM Libya shall be conducted in good time before
+    the expiry of this Decision.
+- article: Article 1(1)
+  law_celex: 32020D0903
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Mr Vincenzo TAGLIAFERRI
+  deadline: '2020-07-01'
+  interpretive: null
+  requirement_text: Mr Vincenzo TAGLIAFERRI shall be the Head of Mission for the period from
+    1 July 2020 until 30 September 2020
+- article: Article 1(3)
+  law_celex: 32020D0903
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EUBAM Libya
+  deadline: null
+  interpretive: null
+  requirement_text: The Decision shall apply until 30 June 2021
+- article: General
+  law_celex: 32014L0036
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Member states, border agencies, asylum authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Comply with Directive 2014/36/EU of the European Parliament and of the
+    Council of 26 February 2014 on the conditions of entry and stay of third-country nationals
+    for the purpose of employment as seasonal workers
+- article: Recital 10
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: When implementing this Directive, Member States should take into account
+    relevant guidelines developed by EASO
+- article: Recital 16
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Decisions on all applications for international protection must be taken
+    on the basis of the facts and, in the first instance, by authorities whose personnel has
+    the appropriate knowledge or has received the necessary training in the field of international
+    protection
+- article: Recital 17
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: professionals
+  deadline: null
+  interpretive: true
+  requirement_text: Professionals acting in the framework of the procedures provided for in
+    this Directive must perform their activities with due respect for the applicable deontological
+    principles
+- article: Recital 22
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: Applicants should be provided at first instance, free of charge, with
+    legal and procedural information, taking into account their particular circumstances
+- article: Recital 23
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: In appeals procedures, subject to certain conditions, applicants should
+    be granted free legal assistance and representation provided by persons competent to provide
+    them under national law
+- article: Recital 25
+  law_celex: 32013L0032
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: true
+  requirement_text: 'The procedure in which an application for international protection is
+    examined should normally provide an applicant at least with: the right to stay pending
+    a decision by the determining authority; access to the services of an interpreter for
+    submitting his or her case if interviewed by the authorities; the opportunity to communicate
+    with a representative of the United Nations High Commissioner for Refugees (UNHCR) and
+    with organisations providing advice or counselling to applicants for international protection;
+    the right to appropriate notification of a decision and of the reasons for that decision
+    in fact and in law; the opportunity to consult a legal adviser or other counsellor; the
+    right to be informed of his or her legal position at decisive moments in the course of
+    the procedure, in a language which he or she understands or is reasonably supposed to
+    understand; and, in the case of a negative decision, the right to an effective remedy
+    before a court or a tribunal'
+- article: Article 3(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall take the necessary steps to establish an obligation
+    for carriers to transmit at the request of the authorities responsible for carrying out
+    checks on persons at external borders, by the end of check-in, information concerning
+    the passengers they will carry to an authorised border crossing point through which these
+    persons will enter the territory of a Member State.
+- article: Article 3(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: carriers
+  deadline: null
+  interpretive: null
+  requirement_text: Carriers must transmit passenger information at the request of border
+    authorities by the end of check-in
+- article: Article 4(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall take the necessary measures to impose sanctions on
+    carriers which, as a result of fault, have not transmitted data or have transmitted incomplete
+    or false data.
+- article: Article 4(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall take the necessary measures to ensure that sanctions
+    are dissuasive, effective and proportionate with maximum amount not less than EUR 5000
+    or minimum amount not less than EUR 3000 for each journey for which passenger data were
+    not communicated or were communicated incorrectly.
+- article: Article 5
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that their laws, regulations and administrative
+    provisions stipulate that carriers against which proceedings are brought with a view to
+    imposing penalties have effective rights of defence and appeal.
+- article: Article 6(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that these data are collected by the carriers
+    and transmitted electronically or, in case of failure, by any other appropriate means
+    to the authorities responsible for carrying out border checks.
+- article: Article 6(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: border authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The authorities responsible for carrying out checks on persons at external
+    borders shall save the data in a temporary file.
+- article: Article 6(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: border authorities
+  deadline: null
+  interpretive: null
+  requirement_text: After passengers have entered, these authorities shall delete the data,
+    within 24 hours after transmission, unless the data are needed later for the purposes
+    of exercising the statutory functions of the authorities responsible for carrying out
+    checks on persons at external borders in accordance with national law and subject to data
+    protection provisions under Directive 95/46/EC.
+- article: Article 6(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall take the necessary measures to oblige carriers to
+    delete, within 24 hours of the arrival of the means of transportation pursuant to Article
+    3(1), the personal data they have collected and transmitted to the border authorities
+    for the purposes of this Directive.
+- article: Article 6(1)
+  law_celex: 32004L0082
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: carriers
+  deadline: null
+  interpretive: null
+  requirement_text: Carriers must delete personal data within 24 hours of the arrival of the
+    means of transportation
+- article: Article 7
+  law_celex: 32004L0081
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall give effect to the provision of this Directive without
+    discrimination on the basis of sex, race, colour, ethnic or social origin, genetic characteristics,
+    language, religion or belief, political or other opinions, membership of a national minority,
+    fortune, birth, disabilities, age or sexual orientation
+- article: Article 3(1)
+  law_celex: 32004L0081
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply this Directive to the third-country nationals
+    who are, or have been victims of offences related to the trafficking in human beings,
+    even if they have illegally entered the territory of the Member States
+- article: Article 5
+  law_celex: 32004L0081
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: When the competent authorities of the Member States take the view that
+    a third-country national may fall into the scope of this Directive, they shall inform
+    the person concerned of the possibilities offered under this Directive
+- article: Article 6(1)
+  law_celex: 32004L0081
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that the third-country nationals concerned
+    are granted a reflection period allowing them to recover and escape the influence of the
+    perpetrators of the offences so that they can take an informed decision as to whether
+    to cooperate with the competent authorities
+- article: Article 2
+  law_celex: 32020R0445
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the day following that of its
+    publication in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32020R0445
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in the Member States in accordance with the Treaties

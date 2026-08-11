@@ -11,9 +11,12 @@ Process:
 5. Create action plan with priorities and recommendations
 """
 
+import asyncio
 import json
 import logging
 import math
+import os
+import random
 import re
 from typing import List, Dict, Optional
 from datetime import datetime
@@ -22,6 +25,7 @@ from sqlalchemy.orm import Session
 from models.eu_law import LawRequirement
 from models.compliance import ComplianceAnalysis, GapFinding
 from .document_processor import DocumentProcessor
+from .review_profile import build_extraction_prompt, clean_extracted
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +91,24 @@ def _parse_json_object(raw: str) -> Optional[dict]:
 # Mirrors the valid_gap_status CHECK constraint on gap_findings.status.
 VALID_GAP_STATUSES = {'met', 'partial', 'gap', 'not_applicable'}
 
+# Rendered into the prompt so the model is told the addressee rather than
+# having to infer it. Anything not addressed to the company under analysis is
+# not_applicable however little the documentation says about it.
+ADDRESSEE_LABELS = {
+    'economic_operator': 'this company (an economic operator)',
+    'member_state': 'MEMBER STATES, not this company',
+    'commission': 'THE EUROPEAN COMMISSION, not this company',
+    'pro': 'PRODUCER RESPONSIBILITY ORGANISATIONS, not this company '
+           '(unless the company is itself one)',
+    'online_platform': 'PROVIDERS OF ONLINE PLATFORMS, not this company '
+                       '(selling on a marketplace does not make a company one)',
+    'fulfilment_service': 'FULFILMENT SERVICE PROVIDERS, not this company',
+    'national_authority': 'COMPETENT NATIONAL AUTHORITIES, not this company',
+    'notified_body': 'NOTIFIED BODIES, not this company',
+    'eu_agency': 'AN EU AGENCY OR OFFICE (ESMA, EBA, the AI Office and the '
+                 'like), not this company',
+}
+
 
 def _normalise_confidence(value) -> Optional[float]:
     """Coerce an LLM confidence to a 0-100 float, or None if unusable.
@@ -110,9 +132,33 @@ class GapAnalyzer:
     Analyzes compliance gaps using hybrid semantic + LLM approach.
     """
     
-    def __init__(self, db: Session):
+    # Tunable without a redeploy. Chosen by measurement, not intuition: the
+    # same 38-requirement cluster and document, timed end to end, gave
+    #   sequential  ~125s, 37/38 findings (one lost to an unretried 429)
+    #   concurrency 2   176s, 38/38
+    #   concurrency 4   226s, 38/38
+    #   concurrency 8    95s, 38/38
+    # Higher concurrency provokes more 429s but the retries absorb them in
+    # parallel, so wall-clock falls even as the warning count rises. Coverage
+    # is full from 2 upwards; the retry, not the concurrency, is what fixed
+    # the dropped requirement.
+    DEFAULT_CONCURRENCY = 8
+    DEFAULT_MAX_ATTEMPTS = 3
+    DEFAULT_RETRY_BASE_DELAY = 2.0
+
+    def __init__(self, db: Session, review_profile: Optional[Dict] = None):
         self.db = db
+        # The package's declared review table, or None for the default columns.
+        # Only the `extracted` columns matter here: they add a block to the
+        # prompt and a value to each finding.
+        self.review_profile = review_profile
         self.doc_processor = DocumentProcessor()
+        self.concurrency = int(os.environ.get("COMPLY_ANALYSIS_CONCURRENCY",
+                                              self.DEFAULT_CONCURRENCY))
+        self.max_attempts = int(os.environ.get("COMPLY_ANALYSIS_MAX_ATTEMPTS",
+                                               self.DEFAULT_MAX_ATTEMPTS))
+        self.retry_base_delay = float(os.environ.get("COMPLY_ANALYSIS_RETRY_DELAY",
+                                                     self.DEFAULT_RETRY_BASE_DELAY))
         self._chunks: List[str] = []
         self._idf: Dict[str, float] = {}
         self._doc_vectors: List[Dict[str, float]] = []
@@ -164,20 +210,48 @@ class GapAnalyzer:
             requirements_na = 0
             analysis_errors = 0
 
-            # Analyze each requirement
-            for requirement in requirements:
-                try:
-                    finding = await self._analyze_requirement(
-                        requirement, all_chunks, analysis_id
-                    )
-                except GapAnalysisUnavailable:
-                    # Do not invent a verdict. Count it and carry on so one bad
-                    # response does not lose the whole run.
+            # Analyse requirements with bounded concurrency and backoff.
+            #
+            # Strictly sequential at full speed exhausted every free provider in
+            # turn: a single 38-requirement run produced Cerebras 429 (requests
+            # per minute), Gemini 429, Groq 429 on its 12k tokens-per-minute
+            # ceiling and NVIDIA 503. Each requirement burns several provider
+            # calls because the chain fails over on the first refusal, so the
+            # rate of *provider* calls is a multiple of the requirement rate.
+            #
+            # Two changes: a semaphore so a few requirements are in flight at
+            # once (throughput without a thundering herd), and a retry with
+            # exponential backoff around the whole chain so a momentary 429
+            # waits rather than consuming the next provider's budget too.
+            sem = asyncio.Semaphore(self.concurrency)
+
+            async def analyse_one(requirement):
+                async with sem:
+                    delay = self.retry_base_delay
+                    for attempt in range(self.max_attempts):
+                        try:
+                            return requirement, await self._analyze_requirement(
+                                requirement, all_chunks, analysis_id
+                            ), None
+                        except GapAnalysisUnavailable as exc:
+                            if attempt == self.max_attempts - 1:
+                                return requirement, None, exc
+                            # Jitter so retries from parallel workers do not
+                            # land on the provider in lockstep.
+                            await asyncio.sleep(delay + random.uniform(0, delay / 2))
+                            delay *= 2
+                    return requirement, None, None
+
+            results = await asyncio.gather(*(analyse_one(r) for r in requirements))
+
+            # DB writes stay on this coroutine: the Session is not safe to use
+            # from several tasks at once.
+            for requirement, finding, error in results:
+                if error is not None or finding is None:
                     analysis_errors += 1
                     continue
                 self.db.add(finding)
 
-                # Update counts
                 if finding.status == 'met':
                     requirements_met += 1
                 elif finding.status == 'partial':
@@ -205,36 +279,51 @@ class GapAnalyzer:
                 self.db.commit()
                 return
 
-            # Calculate compliance score (met + 0.5*partial) / (total - na)
+            # The score itself is the trigger's to compute; these counts are
+            # kept only for the log line below. Verified identical before
+            # removing the local formula: (met + 0.5*partial)/applicable*100 and
+            # the trigger's (met*100 + partial*50)/applicable agree exactly.
             total_applicable = requirements_met + requirements_partial + requirements_gap
-            if total_applicable > 0:
-                compliance_score = (requirements_met + 0.5 * requirements_partial) / total_applicable * 100
-            else:
-                compliance_score = 100.0
 
-            # Update analysis with statistics
-            analysis.total_requirements = len(requirements)
-            analysis.requirements_met = requirements_met
-            analysis.requirements_partial = requirements_partial
-            analysis.requirements_gap = requirements_gap
-            analysis.compliance_score = compliance_score
+            # total_requirements, requirements_met/partial/gap and
+            # compliance_score are owned by the `update_compliance_score`
+            # trigger on gap_findings (migrations/create_compliance_tables.sql),
+            # which recomputes all four from the findings after every insert.
+            #
+            # This code used to set them too, and lost: within one commit the
+            # analysis UPDATE flushes before the findings INSERTs, so the
+            # trigger overwrote it. The two also disagreed on what
+            # total_requirements means -- this counted every requirement
+            # CHECKED, the trigger counts those that turned out APPLICABLE, so
+            # a run of 38 requirements with 6 not_applicable reported 20.
+            # The score formulas happen to be identical, so nothing
+            # user-visible was ever wrong, but two authorities for one number
+            # is how that stops being true.
+            #
+            # The trigger keeps the numbers correct even if findings are later
+            # added or removed, which this code cannot, so it wins. What only
+            # this code knows -- how many requirements were checked and how many
+            # the model failed on -- goes to analysis_params below.
             analysis.status = 'completed'
             analysis.completed_at = datetime.utcnow()
-            if analysis_errors:
-                # Partial run: surfaced so the score is read in context rather
-                # than as a verdict over the full requirement set.
-                analysis.analysis_params = {
-                    'partial': True,
-                    'failed_requirements': analysis_errors,
-                    'analysed_requirements': len(requirements) - analysis_errors,
-                }
+            # Coverage, always. The trigger's counts describe the findings that
+            # exist; only this knows how many requirements the run set out to
+            # check and how many the model never answered. Recorded even on a
+            # clean run so the denominator is never inferred.
+            analysis.analysis_params = {
+                **(analysis.analysis_params or {}),
+                'requirements_selected': len(requirements),
+                'requirements_analysed': len(requirements) - analysis_errors,
+                'failed_requirements': analysis_errors,
+                'partial': bool(analysis_errors),
+            }
 
             self.db.commit()
 
             logger.info(
                 f"Compliance analysis {analysis_id} completed: "
                 f"{requirements_met} met, {requirements_partial} partial, "
-                f"{requirements_gap} gaps, score={compliance_score:.1f}%"
+                f"{requirements_gap} gaps over {total_applicable} applicable"
             )
             
         except Exception as e:
@@ -292,7 +381,12 @@ class GapAnalyzer:
             priority=self._calculate_priority(requirement, llm_result['status']),
             estimated_effort=llm_result.get('estimated_effort', 'moderate'),
             similarity_score=llm_result.get('similarity_score'),
-            matched_chunks=relevant_chunks[:3]  # Store top 3 matches
+            matched_chunks=relevant_chunks[:3],  # Store top 3 matches
+            # Declared columns only, coerced to short strings, empties dropped.
+            # An unrecognised key never reaches the table and a profile change
+            # cannot leave stale keys behind on old findings.
+            extra_fields=clean_extracted(self.review_profile,
+                                         llm_result.get('extra_fields')),
         )
         
         return finding
@@ -366,7 +460,27 @@ class GapAnalyzer:
         Returns status, evidence, gaps, and recommendations.
         """
         context = '\n\n---\n\n'.join(relevant_chunks)
+
+        # Who the obligation binds, parsed deterministically from the
+        # requirement's grammatical subject and stored on the row by
+        # scripts/enrich_requirement_metadata.py. Asking the model to infer this
+        # from the text alone was the single largest error source in the gold
+        # set: 5 of 6 not_applicable cases came back as gap or partial, so the
+        # report told a company it was failing to transpose a directive into
+        # national law. Stating it is cheaper and more reliable than prompting
+        # for it.
+        meta = requirement.extra_metadata or {}
+        addressee_label = ADDRESSEE_LABELS.get(
+            meta.get('addressee', 'economic_operator'),
+            'this company (an economic operator)',
+        )
         
+        # A package can declare extra columns for its review table; each one
+        # adds a field the model must read out of the obligation. Empty string
+        # for the 57 packages that use the default table, so their prompt is
+        # byte-for-byte what it was.
+        extraction_block = build_extraction_prompt(self.review_profile)
+
         prompt = f"""Analyze if this legal requirement is met based on the company documents provided.
 
 REQUIREMENT:
@@ -374,16 +488,34 @@ Article: {requirement.article}
 Text: {requirement.requirement_text}
 Criticality: {requirement.criticality}
 Applies to: {requirement.applicable_entity or 'General'}
+Obligation is addressed to: {addressee_label}
 
 COMPANY DOCUMENTATION:
 {context}
 
 TASK:
-Determine if the requirement is:
+FIRST decide who this requirement binds. EU legal texts mix obligations on
+companies with obligations on Member States, national authorities, producer
+responsibility organisations, online platform providers and other third
+parties. A duty addressed to someone other than this company is
+not_applicable, no matter how much the company documentation fails to mention
+it. So is a duty whose scope thresholds exclude this company, and one whose
+implementing act has not been adopted yet.
+
+Read the requirement's grammatical subject. "Member States shall...",
+"Providers of online platforms shall...", "Producer responsibility
+organisations shall..." are NOT obligations on the company unless the company
+is itself that actor. Selling through a marketplace does not make a company an
+online platform provider.
+
+THEN, only for requirements that do bind this company, decide:
 - met: Fully compliant
-- partial: Partially compliant (some elements missing)
-- gap: Not compliant (major gaps)
-- not_applicable: Requirement doesn't apply
+- partial: Some elements in place, others missing or incomplete
+- gap: Not compliant
+- not_applicable: The requirement does not bind this company, or its scope
+  thresholds exclude it, or it is not yet in force for it
+
+Absence of evidence about a duty the company does not owe is not a gap.
 
 Provide:
 1. Status (met/partial/gap/not_applicable)
@@ -403,7 +535,7 @@ Respond in JSON:
   "gap_description": "what's missing",
   "recommendation": "specific steps to take",
   "estimated_effort": "quick|moderate|significant"
-}}"""
+}}{extraction_block}"""
 
         # Runs on the shared free open-model chain, not OpenAI. The previous
         # implementation called gpt-4o-mini directly; when the OpenAI balance

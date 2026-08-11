@@ -1,0 +1,166 @@
+id: 37
+name: Traditional Herbal Medicines (Directive 2004/24/EC)
+policy_area: Health
+description: The simplified traditional-use registration scheme for herbal medicinal products,
+  with the EMA Committee on Herbal Medicinal Products (HMPC).
+applicability: Manufacturers and registrants of traditional herbal medicinal products, national
+  authorities, the HMPC.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32004L0024
+  title: Directive 2004/24/EC of the European Parliament and of the Council amending, as regards
+    traditional herbal medicinal products, Directive 2001/83/EC
+requirements:
+- article: Article 16c(1)(c)
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers and applicants seeking traditional-use registration
+  deadline: null
+  interpretive: null
+  requirement_text: Products must demonstrate 30 years of documented medicinal use, including
+    at least 15 years within the Community, to qualify for traditional-use registration as
+    a substitute for clinical-trial efficacy data.
+- article: Article 16a
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Herbal medicinal products seeking traditional-use registration
+  deadline: null
+  interpretive: null
+  requirement_text: Products must have indications suitable for use without medical supervision
+    and be restricted to oral, external or inhalation routes.
+- article: Article 16a(1)
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Formulated herbal medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Products must not comprise more than a single herbal substance, unless
+    justified by evidence of traditional use.
+- article: Article 16a(2)
+  law_celex: 32004L0024
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Herbal medicinal product manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Products may contain ancillary vitamins and minerals as additional components
+    alongside herbal substances.
+- article: Article 16b
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All applicants for traditional-use registration
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant must be established within the Community and comply with
+    all quality and safety standards regardless of whether clinical-trial efficacy data are
+    required.
+- article: Article 16c(1)(a)-(b)
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All herbal medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Products must comply with physico-chemical, biological and microbiological
+    tests and European Pharmacopoeia standards; quality requirements are not relaxed.
+- article: Article 16c(1)
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Applicants submitting traditional-use registration applications
+  deadline: null
+  interpretive: null
+  requirement_text: The applicant must provide sufficient, non-harmful and plausible traditional-use
+    data demonstrating safety and efficacy over the registered period.
+- article: Article 16d
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Applicants and competent authorities of Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Mutual recognition procedures apply to traditional-use registrations,
+    allowing a product authorised in one Member State to be registered in another without
+    repeating the full assessment.
+- article: Article 16e
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Competent authorities reviewing applications
+  deadline: null
+  interpretive: null
+  requirement_text: Traditional-use registration may be refused if the indication is not plausible
+    based on the traditional-use data or if public health concerns exist.
+- article: Article 16f
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers and the European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: The Community list of herbal substances shall identify which substances
+    meet the traditional-use criteria and require reduced data; substances with fewer than
+    15 years of Community use are referred to the HMPC.
+- article: Article 16g
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers and those responsible for marketing herbal products
+  deadline: null
+  interpretive: null
+  requirement_text: 'All labelling, package leaflets and advertising must carry the mandatory
+    statement: ''a traditional herbal medicinal product for use in [specified indication(s)]
+    exclusively based upon long-standing use'' plus advice to consult a doctor if symptoms
+    persist.'
+- article: Article 16h
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: The Committee for Herbal Medicinal Products (HMPC) is established within
+    the EMA with one member and one alternate per Member State, renewable for three-year terms,
+    with authority to draw up Community herbal monographs.
+- article: Article 2(1)
+  law_celex: 32004L0024
+  criticality: critical
+  addressee: member_state
+  applicable_entity: All Member States
+  deadline: '2005-10-30'
+  interpretive: null
+  requirement_text: Member States must transpose this directive into national law by 30 October
+    2005.
+- article: Article 2(2)
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Existing herbal medicinal products on the market
+  deadline: null
+  interpretive: null
+  requirement_text: A seven-year transitional period applies to herbal medicinal products
+    already on the market, allowing them to comply with the new regime by approximately April
+    2011.
+- article: Article 16c(4)
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Applicants with herbal substances lacking sufficient Community history
+  deadline: null
+  interpretive: null
+  requirement_text: Products containing herbal substances with less than 15 years of documented
+    use within the Community must be referred to the HMPC for evaluation before registration.
+- article: Article 16a(1)
+  law_celex: 32004L0024
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers and applicants for traditional-use registration
+  deadline: null
+  interpretive: null
+  requirement_text: The specified strength and posology of the product must be consistent
+    with the traditional-use data and documented medicinal history.

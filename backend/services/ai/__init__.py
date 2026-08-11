@@ -24,7 +24,7 @@ from .citation_tracker import (
     create_citation_from_procedure,
     create_citation_from_mep
 )
-from .rag_chatbot_service import RAGChatbotService, create_chatbot
+from .rag_chatbot_service import RAGChatbotService, RAGChatbotUnavailable, create_chatbot
 
 __all__ = [
     'ContextBuilder',
@@ -38,5 +38,6 @@ __all__ = [
     'create_citation_from_procedure',
     'create_citation_from_mep',
     'RAGChatbotService',
+    'RAGChatbotUnavailable',
     'create_chatbot'
 ]

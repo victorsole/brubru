@@ -2,6 +2,30 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-11",
+      "action": "updated",
+      "guide": "batteries_regulation",
+      "title": "EU Batteries Regulation (EU) 2023/1542",
+      "summary": "Wired 31 triggers in six languages: the guide had zero triggers, so battery questions fell through to the ecodesign guide or to battery_booster_strategy (industrial policy, not the law)",
+      "refs": [
+        "32023R1542",
+        "2020/0353"
+      ]
+    },
+    {
+      "date": "2026-08-11",
+      "action": "updated",
+      "guide": "ecodesign_digital_product_passport",
+      "title": "ESPR and Digital Product Passport",
+      "summary": "Added Implementing Regulation (EU) 2026/1778 (DPP registry arrangements), ESPR Art. 9(2) delegated-act specification, Art. 13 registry, Art. 14 public portal, Art. 15 customs and CSW-CERTEX, Ecodesign Forum Art. 19 and Member States Expert Group Art. 20, Commission sector rollout with textiles at Q3-Q4 2027; restructured QUICK FACTS so key facts survive the 4,000-char injection cap",
+      "refs": [
+        "32024R1781",
+        "32026R1778",
+        "32026D1736",
+        "2022/0095"
+      ]
+    },
+    {
       "date": "2026-08-05",
       "action": "updated",
       "guide": "eu_trade_defence",

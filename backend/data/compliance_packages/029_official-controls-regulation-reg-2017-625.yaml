@@ -1,0 +1,197 @@
+id: 29
+name: Official Controls Regulation (Reg 2017/625)
+policy_area: Food Safety
+description: 'Regulation (EU) 2017/625, the Official Controls Regulation (OCR): the EU single
+  framework for official controls and other official activities across the entire agri-food
+  chain. Adopted 15 March 2017 (OJ L 95, 7.4.2017); entry into force 27 April 2017; general
+  application 14 December 2019. Legal basis Articles 43(2), 114 and 168(4)(b) TFEU. Covers
+  10 areas: food/food safety, GMOs for food/feed, feed safety, animal health, animal by-products,
+  animal welfare, plant health, plant protection products, organic production, and PDO/PGI/TSG.
+  Risk-based controls by competent authorities; ISO 17025 official labs; border control posts
+  + Common Health Entry Document (CHED); IMSOC (integrating TRACES, RASFF); mandatory fees
+  at cost or Annex IV amounts; EU reference laboratories and centres; effective/proportionate/dissuasive
+  penalties (turnover-linked for fraud). Replaced Reg (EC) 882/2004 and 854/2004 plus 7 Directives/Decisions.
+  Companion enforcement instrument to the Animal Health Law (Reg 2016/429).'
+applicability: Food and feed business operators; importers and exporters of animals, plants,
+  food and feed; Member State competent authorities (food safety, veterinary, phytosanitary);
+  official and reference laboratories; delegated control bodies; border control posts; the
+  European Commission (audits). Covers all 10 agri-food areas in Article 1(2) of Reg 2017/625,
+  from primary production to retail and online trade, plus entry into the Union from third
+  countries.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32017R0625
+  title: Regulation (EU) 2017/625 of the European Parliament and of the Council of 15 March
+    2017 on official controls and other official activities performed to ensure the application
+    of food and feed law, rules on animal health and welfare, plant health and plant protection
+    products, amending Regulations (EC) No 999/2001, (EC) No 396/2005, (EC) No 1069/2009,
+    (EC) No 1107/2009, (EU) No 1151/2012, (EU) No 652/2014, (EU) 2016/429 and (EU) 2016/2031
+    of the European Parliament and of the Council, Council Regulations (EC) No 1/2005 and
+    (EC) No 1099/2009 and Council Directives 98/58/EC, 1999/74/EC, 2007/43/EC, 2008/119/EC
+    and 2008/120/EC, and repealing Regulations (EC) No 854/2004 and (EC) No 882/2004 of the
+    European Parliament and of the Council, Council Directives 89/608/EEC, 89/662/EEC, 90/425/EEC,
+    91/496/EEC, 96/23/EC, 96/93/EC and 97/78/EC and Council Decision 92/438/EEC (Official
+    Controls Regulation) (Text with EEA relevance)
+requirements:
+- article: Article 1(2) (scope, ten areas)
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: 'Official controls verify compliance across ten areas: food and food safety
+    (incl. food-contact materials); GMOs for food and feed production; feed and feed safety;
+    animal health; animal by-products; animal welfare; plant health; plant protection products
+    and sustainable pesticide use; organic production and labelling; and PDO, PGI and TSG.'
+- article: Article 4 (competent authorities)
+  law_celex: 32017R0625
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must designate competent authorities for every area in scope,
+    adequately resourced, impartial and professional, plus a single authority for coordinated
+    communication with other Member States and the Commission.
+- article: Article 9 (risk-based controls)
+  law_celex: 32017R0625
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must perform official controls regularly, on a risk
+    basis and at appropriate frequency, on all operators, activities, animals and goods, generally
+    without prior notice, taking account of the likelihood of fraud.
+- article: Articles 13 to 15 (records, cooperation)
+  law_celex: 32017R0625
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Official controls must be documented in writing, with a copy given to
+    the operator on request; operators must cooperate with and grant access to competent authorities
+    and provide the information needed to identify themselves and their suppliers and customers.
+- article: Articles 28 to 33 (delegation)
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities may delegate certain control tasks to bodies accredited
+    to the relevant ISO standard, or to natural persons, only under conditions preserving
+    impartiality, quality and consistency.
+- article: Articles 34 to 42 (labs, second opinion)
+  law_celex: 32017R0625
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: official laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: Samples must be analysed by official laboratories accredited to EN ISO/IEC
+    17025; operators whose animals or goods are sampled have a right to a second expert opinion
+    at their own expense; mystery shopping may be used for online trade.
+- article: Title II Ch V (border control posts)
+  law_celex: 32017R0625
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: importers / authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Animals and goods entering the Union from third countries must be presented
+    at designated border control posts for documentary, identity and physical checks before
+    release for free circulation, at risk-based frequencies.
+- article: Common Health Entry Document (CHED)
+  law_celex: 32017R0625
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: importers
+  deadline: null
+  interpretive: null
+  requirement_text: Each consignment requiring border controls must travel with a Common Health
+    Entry Document used for prior notification, to record the control outcome and to obtain
+    customs clearance once controls are complete.
+- article: Articles 78 to 83 (mandatory fees)
+  law_celex: 32017R0625
+  criticality: important
+  addressee: national_authority
+  applicable_entity: operators / authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must collect mandatory fees or charges for the controls
+    listed in Annex IV Chapter II and for border controls, either at cost or at the Annex
+    IV amounts; fees must cover but not exceed costs, be transparent, and not be refunded.
+- article: Articles 86 to 91 (certification)
+  law_celex: 32017R0625
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: operators / authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Official certificates and attestations (including plant passports, organic
+    logos, identification marks and PDO/PGI marks) must be issued under common reliability
+    rules by competent authorities or certifying officers.
+- article: Articles 92 to 101 (reference labs)
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: commission
+  applicable_entity: EU / national reference labs
+  deadline: '2018-04-29'
+  interpretive: null
+  requirement_text: The Commission designates EU reference laboratories per sector and EU
+    reference centres for the authenticity and integrity of the agri-food chain and for animal
+    welfare; these apply from 29 April 2018.
+- article: IMSOC + admin assistance
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States / Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Official controls run on a single computerised system (IMSOC) integrating
+    TRACES and RASFF; Member States designate liaison bodies for cross-border administrative
+    assistance to pursue non-compliance and fraud across borders.
+- article: MANCP + annual reports
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Each Member State must set up and update a risk-based multi-annual national
+    control plan (MANCP) covering all areas in scope, coordinated by a single body, and submit
+    an annual report to the Commission.
+- article: Article 139 (penalties)
+  law_celex: 32017R0625
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States / operators
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must lay down effective, proportionate and dissuasive penalties;
+    for violations through fraudulent or deceptive practices, financial penalties must reflect
+    at least the operator's economic advantage or a percentage of turnover.
+- article: Article 140 (whistleblower)
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must ensure effective mechanisms for reporting actual or
+    potential infringements, with protection of reporting persons against retaliation, discrimination
+    and other unfair treatment, and protection of their personal data.
+- article: Article 167 (application dates)
+  law_celex: 32017R0625
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: all operators / authorities
+  deadline: '2018-04-29'
+  interpretive: null
+  requirement_text: The Regulation entered into force on 27 April 2017 and applies from 14
+    December 2019; EU reference laboratory provisions (Articles 92 to 101) apply from 29 April
+    2018; certain plant-health provisions from 29 April 2022.

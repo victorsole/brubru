@@ -1,0 +1,200 @@
+id: 25
+name: ESAs Review (Reg 2019/2175)
+policy_area: Economic and Financial Affairs
+description: 'Regulation (EU) 2019/2175 (the ESAs Review) reforming the three European Supervisory
+  Authorities (EBA, EIOPA, ESMA) and amending MiFIR (Reg 600/2014), the Benchmarks Regulation
+  (Reg 2016/1011) and the transfer-of-funds regulation (Reg 2015/847). Adopted 18 December
+  2019 under Article 114 TFEU. Headline change: EBA becomes the EU AML/CFT hub for the entire
+  financial sector (central AML database, internal AML committee, power to request national
+  investigations). New supervisory-convergence tools across all three ESAs: Union strategic
+  supervisory priorities (Art 29a), strengthened peer reviews (Art 30), public Q&A tool (Art
+  16b), no-action letters (Art 9c), whistleblower protection (Art 17a), coordination groups
+  (Art 45b). ESMA gains direct supervision of data reporting services providers and critical
+  benchmarks from 1 Jan 2022. Application waves: Articles 1/2/3/6 from 1 Jan 2020, Articles
+  4/5 from 1 Jan 2022.'
+applicability: The three European Supervisory Authorities (EBA, EIOPA, ESMA), national competent
+  authorities supervising banks, insurers, pension funds and securities markets, financial
+  sector operators subject to AML/CFT supervision, data reporting services providers (APAs,
+  CTPs, ARMs), benchmark administrators (including third-country administrators seeking EU
+  recognition), and EU financial institutions monitoring supervisory-convergence and equivalence
+  developments. Amends Reg 1093/2010, 1094/2010, 1095/2010, 600/2014, 2016/1011 and 2015/847.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32019R2175
+  title: Regulation (EU) 2019/2175 of the European Parliament and of the Council of 18 December
+    2019 amending Regulation (EU) No 1093/2010 establishing a European Supervisory Authority
+    (European Banking Authority), Regulation (EU) No 1094/2010 establishing a European Supervisory
+    Authority (European Insurance and Occupational Pensions Authority), Regulation (EU) No
+    1095/2010 establishing a European Supervisory Authority (European Securities and Markets
+    Authority), Regulation (EU) No 600/2014 on markets in financial instruments, Regulation
+    (EU) 2016/1011 on indices used as benchmarks in financial instruments and financial contracts
+    or to measure the performance of investment funds, and Regulation (EU) 2015/847 on information
+    accompanying transfers of funds (Text with EEA relevance)
+requirements:
+- article: Article 1 / EBA Art 9a (AML leading role)
+  law_celex: 32019R2175
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA / national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall take a leading, coordinating and monitoring role in preventing
+    and countering money laundering and terrorist financing across the entire financial sector
+    (banking, insurance and securities), collecting AML weakness information from competent
+    authorities, developing common AML guidance and technical standards, and assessing AML/CFT
+    risks.
+- article: Article 1 / EBA Art 9a(2) (central AML database)
+  law_celex: 32019R2175
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA
+  deadline: '2020-12-31'
+  interpretive: null
+  requirement_text: EBA shall establish and keep up to date a central database of AML/CFT
+    weakness information collected from competent authorities, analyse it, and make it available
+    to competent authorities on a need-to-know and confidential basis. EBA had to develop
+    the regulatory technical standards specifying the collection and the database by 31 December
+    2020.
+- article: Article 1 / EBA Art 9a(7) (internal AML committee)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: eu_agency
+  applicable_entity: EBA / Member State AML authorities
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall establish a permanent internal AML/CFT committee composed of
+    high-level representatives of every Member State's AML authorities (one vote per Member
+    State), with EIOPA and ESMA participating without a vote and the Commission, ESRB and
+    ECB Supervisory Board as observers. It replaced the former Joint Committee AML subcommittee.
+- article: Article 1 / EBA Art 9b (request for investigation)
+  law_celex: 32019R2175
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority / financial operator
+  deadline: null
+  interpretive: null
+  requirement_text: Where EBA has indications of material AML breaches, it may request a competent
+    authority to investigate possible breaches and to consider sanctions or an individual
+    decision against the financial sector operator. The competent authority must inform EBA
+    of the steps taken within 10 working days; failing that, the breach-of-Union-law procedure
+    (Article 17) applies.
+- article: Article 1 / Art 9c (no-action letters)
+  law_celex: 32019R2175
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EBA / EIOPA / ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: In exceptional circumstances (an act conflicting with another, missing
+    delegated or implementing acts, or missing guidelines), the ESA shall notify competent
+    authorities and the Commission in writing, provide an opinion on appropriate action, and
+    make that opinion public.
+- article: Article 1 / Art 16b (questions and answers)
+  law_celex: 32019R2175
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EBA / EIOPA / ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Each ESA shall establish and maintain a web-based questions-and-answers
+    tool open to any natural or legal person in any official EU language, publish admissible
+    questions and answers (non-binding), and forward questions requiring interpretation of
+    Union law to the Commission.
+- article: Art 17a (reporting persons protection)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EBA / EIOPA / ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Each ESA shall operate dedicated whistleblower reporting channels allowing
+    anonymous or confidential and safe submissions, protect reporting persons from retaliation
+    in line with the Whistleblower Directive (EU) 2019/1937, and provide feedback where the
+    information shows a material breach.
+- article: Art 29a (strategic supervisory priorities)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: ESAs / national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Each ESA shall, at least every three years by 31 March, identify up to
+    two Union-wide supervisory priorities. Competent authorities shall take those priorities
+    into account when drawing up their work programmes and notify the ESA accordingly.
+- article: Article 1 / Art 30 (peer reviews)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: ESAs / national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Each ESA shall periodically conduct peer reviews of competent authorities
+    through ad hoc peer review committees (Authority staff plus competent-authority members,
+    chaired by Authority staff), assessing resources, independence, governance, convergence
+    and enforcement. The report is adopted by the Board of Supervisors, a follow-up report
+    follows after two years, and the main findings are published.
+- article: Article 1 / Art 31a (fitness and propriety)
+  law_celex: 32019R2175
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ESAs / national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The three ESAs shall jointly establish a system for exchanging information
+    relevant to the assessment of the fitness and propriety of qualifying-holding holders,
+    directors and key function holders of financial institutions.
+- article: Art 33 (third-country equivalence)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: EBA / EIOPA / ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Each ESA shall monitor the regulatory, supervisory and enforcement developments
+    in third countries underpinning Commission equivalence decisions and submit a confidential
+    annual report. It shall not conclude administrative arrangements with authorities of third
+    countries on the EU AML high-risk list.
+- article: Article 1 / Art 45b (coordination groups)
+  law_celex: 32019R2175
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ESAs / national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The Management Board may set up coordination groups on defined topics
+    (and must do so at the request of five Board of Supervisors members). All competent authorities
+    shall participate and provide the necessary information.
+- article: Recitals 7 to 10 (sustainable finance and fintech)
+  law_celex: 32019R2175
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: EBA / EIOPA / ESMA
+  deadline: null
+  interpretive: true
+  requirement_text: The ESAs shall identify and report risks that environmental, social and
+    governance (ESG) factors pose to financial stability, consider those risks when coordinating
+    Union-wide stress tests, provide guidance on embedding sustainability in EU financial
+    legislation, and strengthen their oversight of technological innovation (fintech).
+- article: Article 4 / MiFIR (ESMA supervises DRSPs)
+  law_celex: 32019R2175
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA / data reporting services providers
+  deadline: '2022-01-01'
+  interpretive: null
+  requirement_text: From 1 January 2022, authorisation and supervision of data reporting services
+    providers (approved publication arrangements, consolidated tape providers, approved reporting
+    mechanisms), except those benefiting from a derogation, transfer from national competent
+    authorities to ESMA, which gains direct data-gathering powers, investigation and on-site
+    inspection powers, and the power to impose fines and periodic penalty payments.
+- article: Article 5 / Benchmarks (ESMA critical bmarks)
+  law_celex: 32019R2175
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: ESMA / benchmark administrators
+  deadline: '2022-01-01'
+  interpretive: null
+  requirement_text: From 1 January 2022, certain critical benchmarks are supervised at Union
+    level by ESMA, and ESMA becomes the single authority recognising third-country benchmark
+    administrators, replacing the Member-State-of-reference procedure.

@@ -1,0 +1,191 @@
+id: 48
+name: Cineca State Aid Decision (Decision (EU) 2025/1963)
+policy_area: Competition
+description: The Commission examined the Italian inter-university consortium Cineca and the
+  in-house assignment of public IT and supercomputing services. It assessed whether Cineca
+  is an undertaking carrying on economic activity and whether any selective advantage from
+  public resources distorted competition, clarifying when in-house public-service arrangements
+  stay outside the State-aid rules.
+applicability: Public bodies and in-house entities providing services to their public members;
+  Member States structuring in-house assignments.
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32025D1963
+  title: Commission Decision (EU) 2025/1963 of 21 November 2024 on the measure SA.39639 (2021/C)
+    (ex 2021/NN) implemented by Italy in favour of consortium Cineca (notified under document
+    C(2024) 7987) (Only the Italian text is authentic) (Text with EEA relevance)
+requirements:
+- article: Art 107(1) TFEU / recitals 230-291
+  law_celex: 32025D1963
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Public bodies, in-house entities, and Member States designing in-house
+    arrangements
+  deadline: null
+  interpretive: null
+  requirement_text: An entity that provides services intrinsically linked to an essential
+    State function (such as IT services enabling a ministry or public universities to discharge
+    their constitutional duty to provide tertiary education) is not an undertaking for State
+    aid purposes, even if competitors exist in the market for those services.
+- article: Intrinsic-link doctrine / recitals 244-252
+  law_celex: 32025D1963
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Public bodies and in-house entities seeking to avoid State aid classification
+  deadline: null
+  interpretive: null
+  requirement_text: 'To claim the intrinsic-link shield, a public body must demonstrate three
+    cumulative elements: (1) a legal obligation connecting the State and the service provider
+    to a public task, (2) a common purpose between them, and (3) that the service is essential
+    and inseparable from the State''s ability to carry out the task.'
+- article: Recitals 242-243, TenderNed case law
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Public bodies and in-house entities providing integrated IT or digital
+    services
+  deadline: null
+  interpretive: true
+  requirement_text: The intrinsic-link analysis applies to the totality of the service package.
+    If any single functional component is essential to the system's operation as a whole,
+    the entire package may be treated as non-economic, provided each component is necessary
+    for the system to function without that component.
+- article: Recitals 293-303
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Autonomous public bodies (universities, regional authorities, public
+    research bodies)
+  deadline: null
+  interpretive: true
+  requirement_text: Imputability of a public body's purchasing decision to the State cannot
+    be assumed merely because that body is publicly funded. Where the entity enjoys genuine
+    constitutional or statutory autonomy (as Italian State universities do), the Commission
+    requires transaction-specific evidence of State involvement before imputability can be
+    established.
+- article: Recitals 394-412 / MEO test
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States determining compensation levels for in-house or direct-award
+    contracts
+  deadline: null
+  interpretive: true
+  requirement_text: Even if an activity were economic, no advantage exists where compensation
+    does not exceed the actual costs of providing the service plus a reasonable profit. Profit
+    margins of 4-18 per cent for specialised IT services were found not to constitute an advantage;
+    margins of 40-60 per cent would be needed to reach market benchmarks.
+- article: Recitals 430-432
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: In-house entities and public undertakings carrying out both economic
+    and non-economic activities
+  deadline: null
+  interpretive: true
+  requirement_text: A full-cost Activity-Based Costing (ABC) methodology, with documented
+    cost pools and cost drivers, is an acceptable standard for separating costs between economic
+    and non-economic activities. The methodology must be applied consistently from year to
+    year and described transparently in accompanying cost reports.
+- article: Recitals 281, 444
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Mixed-activity public entities and in-house consortia
+  deadline: null
+  interpretive: true
+  requirement_text: An entity may simultaneously carry out economic and non-economic activities
+    without losing State aid protection for the non-economic strand, provided it keeps strictly
+    separate accounts and ensures that no public funding for non-economic activities flows
+    to commercial activities. Any surplus in a non-economic fund must be ring-fenced and documented
+    in the balance sheet.
+- article: Recitals 425-427 / Transparency Directive 2006/111
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Public undertakings and in-house entities receiving public service compensation
+  deadline: null
+  interpretive: true
+  requirement_text: The Transparency Directive's obligation to maintain separate accounts
+    applies only to undertakings granted special or exclusive rights or entrusted with an
+    SGEI. Where the non-economic-activity finding holds, the Transparency Directive does not
+    impose an ex-ante cost-allocation obligation; ex-post verification using accurate historical
+    data can suffice.
+- article: Recitals 436-444
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: In-house entities, public undertakings, and Member States funding non-commercial
+    activities
+  deadline: null
+  interpretive: true
+  requirement_text: Ruling out cross-subsidisation requires demonstrating, through verified
+    cost and revenue data, that public funding for a non-commercial activity did not produce
+    a surplus available to commercial activities. A cumulative deficit over the review period
+    is the most persuasive evidence; isolated year-on-year surpluses are acceptable if offset
+    by deficits in neighbouring years.
+- article: Recitals 455-470
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: In-house entities submitting annual cost reports to contracting public
+    authorities
+  deadline: null
+  interpretive: true
+  requirement_text: Retroactive restatement of cost reports is permissible provided the restatement
+    leads to equal or higher recorded costs than the original filing. Restatements that reduce
+    claimed costs below the level of public funding received are prima facie evidence of overcompensation
+    and must be explained and documented.
+- article: Recitals 460-464
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: In-house entities and research bodies receiving both national and EU
+    co-funding for shared infrastru
+  deadline: null
+  interpretive: true
+  requirement_text: Where the same staff member works across multiple funding streams (national
+    public, EU co-funded, commercial), timesheet-based cost allocation is required to prevent
+    double-reporting. The fact that a cost is 'eligible' for EU funding does not mean the
+    same cost can simultaneously be charged to a national funder; only the unreimbursed portion
+    may be reported to the latter.
+- article: Recitals 168, 311, 315
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Contracting public authorities and in-house entities subject to public
+    procurement rules
+  deadline: null
+  interpretive: true
+  requirement_text: Before directly awarding contracts to an in-house entity, contracting
+    authorities should conduct a documented ex-ante efficiency assessment comparing the in-house
+    option with available market alternatives (Total Cost of Ownership approach). Formal registration
+    of the in-house entity on a national list of authorised in-house providers, where such
+    a list exists, strengthens the legal basis for direct award.
+- article: Recitals 292, 302-303
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States and contracting authorities distinguishing between public
+    and private higher-education
+  deadline: null
+  interpretive: true
+  requirement_text: The non-economic nature of IT services intrinsically linked to a State
+    educational function applies only to the State universities exercising that function.
+    Private or non-State universities pursuing an economic activity in providing higher education
+    do not benefit from the same shield; IT services procured by them may constitute State
+    resources if imputable to the State.
+- article: Recitals 204, 433, 441
+  law_celex: 32025D1963
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member States and public bodies designing financing frameworks for in-house
+    entities
+  deadline: null
+  interpretive: true
+  requirement_text: Independent external audit of annual financial statements, combined with
+    supervisory pre-approval of payments by bodies such as a national court of auditors or
+    equivalent, significantly reduces the risk of a cross-subsidisation finding. Public bodies
+    should build multi-layer oversight (internal board of auditors, independent external auditor,
+    government accounts department) into the financing framework from the outset.

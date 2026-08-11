@@ -1,0 +1,177 @@
+id: 35
+name: Paediatric Medicines (Regulation 1901/2006)
+policy_area: Health
+description: The framework requiring paediatric investigation plans (PIPs), with rewards and
+  incentives to ensure medicines are studied for use in children.
+applicability: Marketing authorisation holders and applicants, the EMA Paediatric Committee
+  (PDCO).
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32006R1901
+  title: Regulation (EC) No 1901/2006 of the European Parliament and of the Council on medicinal
+    products for paediatric use
+requirements:
+- article: Art 7-8
+  law_celex: 32006R1901
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation applicants and holders for new medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: Every marketing authorisation application for a new medicine, and every
+    new indication, pharmaceutical form or route of administration of a still-patented medicine,
+    must include either results from a completed Paediatric Investigation Plan or a granted
+    waiver or deferral.
+- article: Art 9
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Generic, biosimilar, well-established-use, homeopathic and herbal product
+    applicants
+  deadline: null
+  interpretive: null
+  requirement_text: The paediatric study obligation does not apply to generics, biosimilars,
+    well-established-use products, homeopathic products or herbal products.
+- article: Art 15-19
+  law_celex: 32006R1901
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Applicants for marketing authorisation of new medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: An applicant must submit a Paediatric Investigation Plan (specifying which
+    paediatric subsets to study, methods, timelines and age-appropriate formulations) no later
+    than completion of adult pharmacokinetic studies, for agreement with the Paediatric Committee.
+- article: Art 13, 17, 25
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Paediatric Committee; marketing authorisation applicants
+  deadline: null
+  interpretive: null
+  requirement_text: The Paediatric Committee must deliver an opinion on a submitted Paediatric
+    Investigation Plan, waiver or deferral within 60 days; if modifications are requested,
+    the applicant has 60 days to respond; re-examination occurs within 30 days.
+- article: Art 11-14
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation applicants
+  deadline: null
+  interpretive: null
+  requirement_text: An applicant may request a waiver of the paediatric study obligation on
+    grounds of likely inefficacy or unsafety in the paediatric population, that the condition
+    is exclusively adult, or that the medicine brings no significant benefit. Waivers may
+    be product-specific or class-wide; revocation requires 36 months notice.
+- article: Art 20-21
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation applicants for adult indication
+  deadline: null
+  interpretive: null
+  requirement_text: An applicant may request a deferral of the paediatric study obligation
+    to avoid delaying the grant of the adult marketing authorisation, with a specified completion
+    date provided to the Paediatric Committee.
+- article: Art 33
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders with newly authorised paediatric indications
+  deadline: null
+  interpretive: null
+  requirement_text: Once a paediatric indication is authorised for a medicinal product already
+    on the market, the marketing authorisation holder must place the product with that indication
+    on the market within two years.
+- article: Art 36
+  law_celex: 32006R1901
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders of non-orphan medicinal products with
+    SPC eligibility
+  deadline: null
+  interpretive: null
+  requirement_text: Completion of an agreed Paediatric Investigation Plan entitles the applicant
+    to a six-month extension of the Supplementary Protection Certificate, even if no paediatric
+    indication results, provided study results are included in the product's summary of product
+    characteristics.
+- article: Art 37
+  law_celex: 32006R1901
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Orphan medicinal product holders completing approved paediatric investigation
+    plans
+  deadline: null
+  interpretive: null
+  requirement_text: Instead of the six-month Supplementary Protection Certificate extension,
+    an orphan medicine that completes its Paediatric Investigation Plan has its orphan market
+    exclusivity extended from ten to twelve years.
+- article: Art 30-31
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Applicants for paediatric-use marketing authorisations for off-patent
+    medicines
+  deadline: null
+  interpretive: null
+  requirement_text: A Paediatric Use Marketing Authorisation may be granted for off-patent
+    products developed exclusively for paediatric use, may retain the adult brand name, and
+    earns data and marketing protection equivalent to a new marketing authorisation.
+- article: Art 32
+  law_celex: 32006R1901
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders with paediatric indications
+  deadline: null
+  interpretive: null
+  requirement_text: Medicinal products authorised for paediatric use must be labelled with
+    a specific paediatric symbol (though this requirement became inoperative in practice following
+    2008 Commission decision that no suitable symbol could be defined).
+- article: Art 34
+  law_celex: 32006R1901
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders with authorised paediatric indications
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must ensure pharmacovigilance and implement
+    risk management plans for paediatric indications and formulations.
+- article: Art 47
+  law_celex: 32006R1901
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation applicants accessing PDCO services
+  deadline: null
+  interpretive: null
+  requirement_text: All Paediatric Committee assessments of Paediatric Investigation Plans,
+    waivers, deferrals and compliance checks are provided free of charge, as is scientific
+    advice.
+- article: Art 43
+  law_celex: 32006R1901
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Paediatric Committee; applicants and sponsors consulting therapeutic-needs
+    inventory
+  deadline: null
+  interpretive: null
+  requirement_text: The Paediatric Committee maintains an inventory of therapeutic needs in
+    the paediatric population to identify gaps requiring priority research.
+- article: Art 50(2)
+  law_celex: 32006R1901
+  criticality: important
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: '2013-01-26'
+  interpretive: null
+  requirement_text: The Commission must report to the European Parliament and Council on the
+    Regulation's implementation and effectiveness by 26 January 2013.
+- article: Art 50(3)
+  law_celex: 32006R1901
+  criticality: important
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: '2017-01-26'
+  interpretive: null
+  requirement_text: The Commission must report on the economic impact of the rewards scheme
+    by 26 January 2017 to assess whether incentives are proportionate and effective.

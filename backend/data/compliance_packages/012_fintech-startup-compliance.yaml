@@ -1,0 +1,1025 @@
+id: 12
+name: FinTech Startup Compliance
+policy_area: Economic and Financial Affairs
+description: 'Essential compliance package for FinTech startups: payment services, e-money,
+  crypto-assets, and data protection'
+applicability: FinTech startups, payment service providers, crypto exchanges, digital wallets,
+  neobanks
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 32005L0001
+  title: Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005
+    amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC
+    and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in
+    order to establish a new organisational structure for financial services committees (Text
+    with EEA relevance)
+- celex: 32013R0876
+  title: Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation
+    (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory
+    technical standards on colleges for central counterparties (Text with EEA relevance)
+- celex: 32017D2097
+  title: Decision (EU) 2017/2097 of the European Central Bank of 3 November 2017 on the methodology
+    for calculating sanctions for infringements of the oversight requirements for systemically
+    important payment systems (ECB/2017/35)
+- celex: 32018R0072
+  title: Commission Delegated Regulation (EU) 2018/72 of 4 October 2017 supplementing Regulation
+    (EU) 2015/751 of the European Parliament and of the Council on interchange fees for card-based
+    payment transactions with regard to regulatory technical standards establishing the requirements
+    to be complied with by payment card schemes and processing entities to ensure the application
+    of independence requirements in terms of accounting, organisation and decision-making
+    process (Text with EEA relevance)
+- celex: 32018R0389
+  title: Commission Delegated Regulation (EU) 2018/389 of 27 November 2017 supplementing Directive
+    (EU) 2015/2366 of the European Parliament and of the Council with regard to regulatory
+    technical standards for strong customer authentication and common and secure open standards
+    of communication (Text with EEA relevance)
+- celex: 32019D1349
+  title: Decision (EU) 2019/1349 of the European Central Bank of 26 July 2019 on the procedure
+    and conditions for exercise by a competent authority of certain powers in relation to
+    oversight of systemically important payment systems (ECB/2019/25)
+- celex: 32019R0411
+  title: Commission Delegated Regulation (EU) 2019/411 of 29 November 2018 supplementing Directive
+    (EU) 2015/2366 of the European Parliament and of the Council with regard to regulatory
+    technical standards setting technical requirements on development, operation and maintenance
+    of the electronic central register within the field of payment services and on access
+    to the information contained therein (Text with EEA relevance)
+- celex: 32021D0730
+  title: Decision (EU) 2021/730 of the European Central Bank of 29 April 2021 amending Decision
+    (EU) 2019/1349 on the procedure and conditions for exercise by a competent authority of
+    certain powers in relation to oversight of systemically important payment systems (ECB/2021/19)
+- celex: 32021R0539
+  title: Commission Delegated Regulation (EU) 2021/539 of 11 February 2021 amending Delegated
+    Regulation (EU) No 1222/2014 supplementing Directive 2013/36/EU of the European Parliament
+    and of the Council with regard to regulatory technical standards for the specification
+    of the methodology for the identification of global systemically important institutions
+    and for the definition of subcategories of global systemically important institutions
+    (Text with EEA relevance)
+- celex: 32022R2036
+  title: Regulation (EU) 2022/2036 of the European Parliament and of the Council of 19 October
+    2022 amending Regulation (EU) No 575/2013 and Directive 2014/59/EU as regards the prudential
+    treatment of global systemically important institutions with a multiple-point-of-entry
+    resolution strategy and methods for the indirect subscription of instruments eligible
+    for meeting the minimum requirement for own funds and eligible liabilities (Text with
+    EEA relevance)
+- celex: 32023R1650
+  title: Commission Delegated Regulation (EU) 2023/1650 of 15 May 2023 correcting the Swedish
+    language version of Delegated Regulation (EU) 2018/389 supplementing Directive (EU) 2015/2366
+    of the European Parliament and of the Council with regard to regulatory technical standards
+    for strong customer authentication and common and secure open standards of communication
+    (Text with EEA relevance)
+- celex: null
+  title: Corrigendum to Directive (EU) 2015/2366 of the European Parliament and of the Council
+    of 25 November 2015 on payment services in the internal market, amending Directives 2002/65/EC,
+    2009/110/EC and 2013/36/EU and Regulation (EU) No 1093/2010 and repealing Directive 2007/64/EC
+    (Official Journal of the European Union L 337 of 23 December 2015)
+requirements:
+- article: Article 2
+  law_celex: 32023R1650
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States
+- article: Article 12a
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: global systemically important institutions (G-SIIs) with multiple-point-of-entry
+    resolution strategy
+  deadline: null
+  interpretive: null
+  requirement_text: G-SIIs with a multiple-point-of-entry resolution strategy are to calculate
+    their risk-based requirement for own funds and eligible liabilities on the theoretical
+    assumption that only one entity of the group would be resolved, with the losses and recapitalisation
+    needs of any subsidiaries being transferred to the resolution entity
+- article: Article 45d(4)
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: resolution authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Additional requirement for own funds and eligible liabilities calculations
+    shall take into account all third-country entities that are part of a G-SII that would
+    be resolution entities if they were established in the Union
+- article: Article 45h(2)
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: G-SIIs with multiple-point-of-entry resolution strategy
+  deadline: null
+  interpretive: null
+  requirement_text: The sum of the actual requirements for own funds and eligible liabilities
+    of a G-SII with an MPE resolution strategy is not to be lower than that group's theoretical
+    requirement under an SPE resolution strategy
+- article: Article 92a(3)
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: legislative framework
+  deadline: null
+  interpretive: null
+  requirement_text: Article 92a(3) of Regulation (EU) No 575/2013 should be deleted
+- article: Article 72e(4)
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: intermediate entities
+  deadline: null
+  interpretive: null
+  requirement_text: Intermediate entities should be required to deduct the full holding of
+    internal MREL eligible resources issued by entities that are not themselves resolution
+    entities and which belong to the same resolution group
+- article: Article 45f(6)
+  law_celex: 32022R2036
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: legislative framework
+  deadline: null
+  interpretive: null
+  requirement_text: Article 45f(6) of Directive 2014/59/EU should be deleted
+- article: Article 1
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Payment services offered electronically shall be carried out in a secure
+    manner, adopting technologies able to guarantee the safe authentication of the user and
+    to reduce, to the maximum extent possible, the risk of fraud
+- article: Article 1
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: The authentication procedure shall include transaction monitoring mechanisms
+    to detect attempts to use a payment service user's personalised security credentials that
+    were lost, stolen, or misappropriated
+- article: Article 1
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Strong customer authentication shall be applied each time a payer accesses
+    its payment account online, initiates an electronic payment transaction or carries out
+    any action through a remote channel which may imply a risk of payment fraud or other abuse
+- article: Article 2
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: The security measures for the application of strong customer authentication
+    and its exemptions, the measures to protect confidentiality and integrity of the personalised
+    security credentials, and the measures establishing common and secure open standards of
+    communication shall be documented, periodically tested, evaluated and audited by auditors
+    with expertise in IT security and payments and operationally independent
+- article: Article 2
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Reviews of security measures shall be made available to competent authorities
+    upon their request
+- article: Article 15
+  law_celex: 32018R0389
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Payment service providers that wish to benefit from the exemptions from
+    strong customer authentication shall regularly monitor and make available to competent
+    authorities and to the European Banking Authority (EBA), upon their request, for each
+    payment transaction type, the value of fraudulent or unauthorised payment transactions
+    and the observed fraud rates for all their payment transactions
+- article: Article 2(1a)(a)
+  law_celex: 32021D0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks designated as competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The powers and rights of a competent authority may be exercised either
+    individually by either one of the two Eurosystem central banks designated as competent
+    authorities or jointly by both
+- article: Article 2(1a)(b)
+  law_celex: 32021D0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks designated as competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Any obligation of the competent authority to act in a prescribed manner
+    or undertake a certain action in relation to the exercise of a given power shall be an
+    obligation of the Eurosystem central bank that exercises the given power or, where the
+    given power is exercised by both Eurosystem central banks as designated competent authorities
+    jointly, shall be an obligation of each of them
+- article: Article 2(1a)(c)
+  law_celex: 32021D0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks designated as competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The two Eurosystem central banks designated as competent authorities shall
+    coordinate between themselves any interactions with, and any requests addressed to, the
+    operator of the SIPS concerned
+- article: Article 2(1a)(d)
+  law_celex: 32021D0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: SIPS operators and independent experts
+  deadline: null
+  interpretive: null
+  requirement_text: Any obligation of a SIPS operator, or of an independent expert to a competent
+    authority pursuant to this Decision shall be an obligation to each of the two Eurosystem
+    central banks designated as competent authorities
+- article: Article 2(1a)(d)
+  law_celex: 32021D0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: SIPS operators and independent experts
+  deadline: null
+  interpretive: null
+  requirement_text: A response to any request of either or both of them pursuant to this Decision
+    shall be submitted to each of them
+- article: Article 1(2)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Each competent authority shall appoint at least two members of its staff
+    as internal users
+- article: Article 1(3)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall notify EBA of the identity of the persons
+    referred to in paragraph 2
+- article: Article 2
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall manage the list of internal users, provide the internal users
+    with the authentication details, and provide technical support to the competent authorities
+- article: Article 3(1)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: The application of the electronic central register shall be accessible
+    to internal users only by using two-factor authentication
+- article: Article 3(2)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall provide a default username and password and the other security
+    credentials to the internal users for accessing the application of the electronic central
+    register
+- article: Article 3(3)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: internal users
+  deadline: null
+  interpretive: null
+  requirement_text: Internal users shall be required to change their default username and
+    password at their first log-in into the application of the electronic central register
+- article: Article 3(4)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall ensure that the authentication method applied allows the identification
+    of each internal user
+- article: Article 3(5)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: EBA shall ensure that the application of the electronic central register
+    does not allow information to be inserted or modified in the electronic central register
+    by persons who do not have access to the application of the register or who do not have
+    the appropriate permissions to do so
+- article: Article 4(4)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EBA
+  deadline: null
+  interpretive: null
+  requirement_text: When public users access the electronic central register, the website
+    of EBA shall display the search criteria specified in Article 15(1)
+- article: Article 5(1)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall transmit to EBA the information to be contained
+    in the electronic central register manually via a web user interface or automatically
+    via an application to application interface
+- article: Article 5(2)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall notify EBA about their preferred approach
+    for transmission of information under paragraph 1
+- article: Article 5(4)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall provide EBA with a hyperlink to their national
+    public register
+- article: Article 6(1)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities which have decided to transmit information to EBA
+    manually shall insert or modify information for their Member States in the web application
+    of the electronic central register
+- article: Article 6(5)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall ensure that all amendments to the content
+    of their national public registers related to the granting or withdrawal of authorisation
+    or registration are inserted in the electronic central register of EBA on the same day
+- article: Article 7(2)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: EBA and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: EBA and the competent authorities shall ensure secure transmission of
+    information between the applications of their respective registers in order to safeguard
+    the authenticity, integrity and non-repudiation of the information transmitted, using
+    strong and widely recognised encryption techniques
+- article: Article 7(3)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall transmit to EBA in a single batch file with
+    a common standard and structured format the whole set of information set out in paragraphs
+    2 to 9 of Article 1 of the Implementing Regulation (EU) 2019/410 contained in their national
+    public registers
+- article: Article 7(4)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The transmission of the batch file shall take place at least once each
+    day on which the content of a national public register has been amended
+- article: Article 7(5)
+  law_celex: 32019R0411
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where competent authorities amend the content of their national public
+    registers in relation to the granting or withdrawal of authorisation or registration and
+    they are unable to transmit those changes automatically, they shall insert them manually
+    on the same day
+- article: Article 76(1)
+  law_celex: null
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that, in addition to the right referred to
+    in the first subparagraph of this paragraph, for direct debits as referred to in Article
+    1 of Regulation (EU) No 260/2012, the payer has an unconditional right to a refund within
+    the time limits laid down in Article 77 of this Directive
+- article: Article 99(1)
+  law_celex: null
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that procedures are set up which allow payment
+    service users and other interested parties including consumer associations, to submit
+    complaints to the competent authorities with regard to payment service providers' alleged
+    infringements of the provisions of national law implementing the provisions of this Directive
+- article: Article 102(1)
+  law_celex: null
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that ADR procedures are applicable to payment
+    service providers
+- article: Article 1(3)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: SIPS operators
+  deadline: null
+  interpretive: null
+  requirement_text: SIPS operator is obliged to pay a single amount of money as a fine when
+    sanctioned
+- article: Article 1(5)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: SIPS operators
+  deadline: null
+  interpretive: null
+  requirement_text: SIPS operator is obliged to pay periodic penalty payments as amounts of
+    money for continued infringement, calculated for each complete day of continued infringement
+    following notification
+- article: Article 2(1)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: ECB shall follow the methodology set out in this Decision when calculating
+    the amount of sanctions to be imposed on SIPS operators for infringements
+- article: Article 2(3)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: ECB shall determine the amount of the sanction based on a two-stage process,
+    starting with calculation of baseline amount which may then be increased or reduced in
+    light of aggravating or mitigating circumstances
+- article: Article 3(1)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: ECB shall calculate the baseline amount of any sanction by reference to
+    the turnover and the value of payments processed by the SIPS concerned
+- article: Article 3(2)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: The baseline amount of the sanction shall represent 50% of the sum of
+    1% of turnover and 0.0001% of the value of payments processed
+- article: Article 3(3)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: For periodic penalty payments, the baseline amount shall be divided by
+    180 to calculate the amount payable for each complete day of continued infringement
+- article: Article 4
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: ECB shall take into consideration the circumstances of the specific case
+    when calculating the amount of any sanction, where relevant
+- article: Article 5(1)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: Where the calculated fine amount exceeds EUR 500,000, the ECB shall cap
+    the fine at EUR 500,000
+- article: Article 5(2)
+  law_celex: 32017D2097
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: Where calculated periodic penalty payments exceed EUR 10,000 per day,
+    the ECB shall cap the amount at EUR 10,000 per day of infringement, with maximum period
+    of six months following notification
+- article: Article 3(2)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: relevant authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant authority shall report the indicator values of each relevant
+    entity with a total exposure measure above EUR 200 billion that is authorised within its
+    jurisdiction to the EBA not later than 31 July of each year
+- article: Article 3(2)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: relevant authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant authority shall ensure that the indicator values are identical
+    to those submitted to the Basel Committee on Banking Supervision
+- article: Article 4(1)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: relevant authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant authority shall calculate the scores of the relevant entities
+    that are included in the sample notified by the EBA and which are authorised in its jurisdiction
+    not later than 1 September of each year
+- article: Article 4(2)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where the relevant authority reallocates a G-SII from a lower subcategory
+    to a higher subcategory or designates a relevant entity as a G-SII, the relevant authority
+    shall provide the EBA with a detailed statement in written form on the reasons for its
+    assessment not later than 1 November of each year
+- article: Article 4(3)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where the relevant authority reallocates a G-SII from a higher subcategory
+    to a lower subcategory, the relevant authority shall provide the EBA with a detailed statement
+    in written form on the reasons for its assessment not later than 30 September of each
+    year
+- article: Article 4(5)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant entities identified as G-SII
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entity identified by the relevant authority shall disclose
+    to the relevant authority by 1 March of the year following the year of the identification
+    exercise its group structure by providing the LEIs, where available, of all consolidated
+    entities in the group
+- article: Article 4(5)
+  law_celex: 32021R0539
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant entities identified as G-SII
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant entity shall ensure that its group structure as disclosed
+    through the global LEI database is permanently updated
+- article: Article 2(1)
+  law_celex: 32019D1349
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Set out the procedure a competent authority shall follow and the conditions
+    it shall comply with in exercising its powers under Article 21(1) of Regulation (EU) No
+    795/2014 (ECB/2014/28)
+- article: Article 2(2)(a)
+  law_celex: 32019D1349
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Have regard to the objectives of Regulation (EU) No 795/2014 (ECB/2014/28)
+    and their applicability to the circumstances of the case and only exercise such powers
+    as are proportional to those objectives and the circumstance of the case in order to avoid
+    any unnecessary burden on a SIPS operator
+- article: Article 2(2)(b)
+  law_celex: 32019D1349
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Either apply the same requirements consistently to similar SIPS operators
+    or justify the different treatment of SIPS operators
+- article: Article 2(3)
+  law_celex: 32019D1349
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Notify a SIPS operator in writing of its decision to exercise either of
+    the powers set out in points (b) or (c) of Article 21(1) of Regulation (EU) No 795/2014
+    (ECB/2014/28)
+- article: Article 2(4)
+  law_celex: 32019D1349
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'Set out in the decision: its legal basis and a statement of reasons;
+    the power to be exercised; any additional requirement set out in Articles 4 to 7 according
+    to the power to be exercised; if the power to be exercised is the power to conduct on-site
+    inspections and the written notification to the SIPS operator concerned is omitted in
+    accordance with Article 11, the reasons for proceeding without informing the SIPS operator
+    in advance; the grounds on which the SIPS operator may challenge the decision'
+- article: Article 1(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The most relevant Union currencies shall be identified on the basis of
+    the relative share of each currency in the CCP's average end-of-day open positions across
+    all financial instruments cleared by the CCP, calculated over a period of one year.
+- article: Article 1(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The most relevant Union currencies shall be the three currencies with
+    the highest relative share calculated in accordance with paragraph 1, provided that each
+    individual share exceeds 10%.
+- article: Article 1(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The calculation of the relative share of the currencies shall be calculated
+    on an annual basis.
+- article: Article 2(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: After assessing that an application is complete as referred to in Article
+    17(3) of Regulation (EU) No 648/2012, the CCP's competent authority shall circulate a
+    proposal for the written agreement under Article 18(5) of Regulation (EU) No 648/2012
+    to the members of the college determined in accordance with Article 18(2) of Regulation
+    (EU) No 648/2012.
+- article: Article 2(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The written agreement shall include a process for annual review.
+- article: Article 2(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The written agreement shall include an amendment process whereby changes
+    may be initiated at any time by the CCP's competent authority or by other members of the
+    college, subject to approval by the college in accordance with the procedure set out in
+    this Article.
+- article: Article 2(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Where the members of the college referred to in paragraph 1 do not express
+    any comments within 10 calendar days, the CCP's competent authority shall proceed with
+    the adoption of the written agreement by the college and with the establishment of the
+    college in accordance with Article 18(1) of Regulation (EU) No 648/2012.
+- article: Article 2(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college members
+  deadline: null
+  interpretive: null
+  requirement_text: Where the members of the college express comments regarding the proposal
+    for the written agreement circulated pursuant to paragraph 1, they shall submit those
+    comments together with a thorough explanation to the CCP's competent authority within
+    10 calendar days.
+- article: Article 2(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: If relevant, the CCP's competent authority shall prepare a revised proposal
+    and convene a meeting to agree on the final written agreement taking into account the
+    deadline referred to in Article 18(1) of Regulation (EU) No 648/2012.
+- article: Article 2(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college members
+  deadline: null
+  interpretive: null
+  requirement_text: All members of the college will be bound by the written agreement adopted
+    in accordance with paragraphs 1 to 3 of this Article.
+- article: Article 3(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Where a request for information is made to a college by a competent authority
+    of a Member State which is not a member of the college in accordance with Article 18(3)
+    of Regulation (EU) No 648/2012, the CCP's competent authority, after having consulted
+    the college, shall decide on the most appropriate way to provide and request information
+    to and from the authorities that are not members of the college.
+- article: Article 3(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college members
+  deadline: null
+  interpretive: null
+  requirement_text: Each member of the college shall designate one participant to attend the
+    meetings of the college and may designate one alternate, with the exception of the CCP's
+    competent authority which may require additional participants who shall have no voting
+    rights.
+- article: Article 3(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant central banks
+  deadline: null
+  interpretive: null
+  requirement_text: Where the central bank of issue of one of the most relevant Union currencies
+    corresponds to more than one central bank, the relevant central banks shall determine
+    the single representative who will participate in the college.
+- article: Article 3(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college members
+  deadline: null
+  interpretive: null
+  requirement_text: Where in accordance with this Article there is more than one participant
+    from a college member, or there are more college members belonging to the same Member
+    State than number of votes that can be exercised by those college members in accordance
+    with Article 19(3) of Regulation (EU) No 648/2012, that college member or those college
+    members shall inform the college which participants shall exercise voting rights.
+- article: Article 4(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The CCP's competent authority shall ensure that the work of the college
+    facilitates the tasks to be performed in accordance with Regulation (EU) No 648/2012.
+- article: Article 4(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college
+  deadline: null
+  interpretive: null
+  requirement_text: The college shall notify ESMA of any tasks that the college performs in
+    accordance with paragraph 1.
+- article: Article 4(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall have a coordination role in monitoring the tasks performed
+    by a college and shall ensure that its objectives are in line with those of other colleges
+    as far as possible.
+- article: Article 4(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'The CCP''s competent authority shall at least ensure that: (a) the objectives
+    of any meeting or activity of the college are clearly identified; (b) the college meetings
+    or activities remain effective, while ensuring that all college members are fully informed
+    of the college activities that are relevant to them; (c) the timetable for meetings or
+    activities of the college is defined so that their outcome provides assistance to the
+    supervision of the CCP; (d) the CCP and other key stakeholders have a clear understanding
+    of the role and functioning of the college; (e) the activities of the college are regularly
+    reviewed and remedial action is taken if the college is not operating effectively; (f)
+    the agenda is set for an annual crisis management planning meeting amongst members of
+    the college in cooperation with the CCP if necessary.'
+- article: Article 4(4)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The CCP's competent authority shall act as a central point of contact
+    for any matter related to the practical organisation of the college.
+- article: Article 4(4)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'The CCP''s competent authority shall at least perform the following tasks:
+    (a) draw-up, update and circulate the contact list of college members; (b) circulate the
+    agenda as well as documentation for meetings or activities of the college; (c) record
+    minutes of the meetings and formalise action points; (d) manage the college website or
+    other electronic information-sharing mechanism, if any; (e) where practical, provide information
+    and specialised teams where appropriate, to assist the college in its tasks; (f) share
+    information in an appropriate manner among members of the college.'
+- article: Article 4(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The CCP's competent authority shall organise, periodically, meetings between
+    members of the college and the senior management of the CCP.
+- article: Article 16
+  law_celex: 32005L0001
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The implementing measures adopted shall not modify the essential provisions
+    of the Directives
+- article: Article 18
+  law_celex: 32005L0001
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The European Parliament shall be given a period of three months from the
+    first transmission of draft implementing measures to allow it to examine them and to give
+    its opinion
+- article: Article 18
+  law_celex: 32005L0001
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: If, within that period, a resolution is passed by the European Parliament,
+    the Commission will re-examine the draft measures
+- article: Article 19
+  law_celex: 32005L0001
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: 'In exercising its implementing powers, the Commission shall respect the
+    following principles: ensuring confidence in financial markets among investors by promoting
+    high standards of transparency; providing investors with a wide range of competing investments
+    and disclosure protection; ensuring independent regulatory authorities enforce rules consistently;
+    ensuring high levels of transparency and consultation; encouraging innovation in financial
+    markets; ensuring market integrity; reducing cost of and increasing access to capital;
+    balancing costs and benefits to market participants; fostering international competitiveness
+    of EU financial markets; achieving level playing field for all market participants; respecting
+    differences in national markets; ensuring coherence with other Community legislation'
+- article: Article 3(1)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and participating processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: Payment card schemes and participating processing entities shall have
+    accounting processes in place that enable them to produce financial information on separated
+    profit and loss accounts and explanatory notes to that financial information
+- article: Article 3(2)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: The financial information shall comply with the applicable accounting
+    framework for preparing financial statements of payment card schemes and processing entities
+- article: Article 4(1)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: The financial information shall be based on an allocation of expenses
+    and revenues between the payment card scheme and the processing entity in accordance with
+    specified allocation rules
+- article: Article 4(2)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: The supporting note shall indicate for each allocated cost and revenue
+    the basis for the allocation and the rationale for that basis
+- article: Article 5(1)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: Payment card schemes and processing entities shall produce specific explanatory
+    notes for any transfer of financial resources between them for the provision of services
+    or the use of shared services
+- article: Article 5(2)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities belonging to the same legal
+    entity or group
+  deadline: null
+  interpretive: null
+  requirement_text: Where payment card schemes and processing entities belong to the same
+    legal entity or group, the specific explanatory notes shall provide evidence that the
+    prices and fees do not differ from prices and fees for comparable services charged between
+    entities that do not belong to the same legal entity or group
+- article: Article 6(1)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: payment card schemes and processing entities
+  deadline: null
+  interpretive: null
+  requirement_text: The financial information produced shall be reviewed by an independent
+    and certified auditor
+- article: Article 6(2)
+  law_celex: 32018R0072
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: independent and certified auditor
+  deadline: null
+  interpretive: null
+  requirement_text: The review shall be provided in the form of a report ensuring a trustworthy
+    and fair view, consistency and comparability with accounting frameworks, and consistency
+    with previous years

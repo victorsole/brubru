@@ -1495,6 +1495,7 @@ class AIService:
         message = self._strip_orphan_citations(message, citations or [])
         message = self._strip_context_markers(message)
         message = self._normalise_url_hyphens(message)
+        message = self._repair_stale_urls(message)
         message = self._strip_leading_greeting(message)
         message = self._strip_contradicting_act_numbers(message)
         message = self._fold_prose_dashes(message)
@@ -2820,6 +2821,66 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         # A URL token runs until whitespace or a markdown/paren delimiter.
         return re.sub(r'https?://[^\s\)\]<>"]+', _fold, text)
+
+    # Legacy OEIL procedure-file URL. Any host, http or https, with the
+    # reference carried in the query string. The reference itself contains
+    # parentheses -- 2022/0095(COD) -- so it is captured explicitly rather
+    # than by a generic "not whitespace" run, which would swallow a trailing
+    # markdown delimiter.
+    # The reference may arrive percent-encoded (2025%2F2952%28DEA%29), which is
+    # still a perfectly recoverable reference -- decoding it keeps the user on
+    # their file instead of dropping them on the search page.
+    _OEIL_LEGACY_RE = re.compile(
+        r"https?://[\w.-]*europarl\.europa\.eu/oeil/popups/ficheprocedure\.do"
+        r"(?:\?[^\s)\]\"']*?)?reference="
+        r"(\d{4}(?:/|%2F)\d{4}(?:\(|%28)[A-Z]{3}(?:\)|%29))[^\s)\]\"']*",
+        re.IGNORECASE,
+    )
+    _OEIL_LEGACY_BARE_RE = re.compile(
+        r"https?://[\w.-]*europarl\.europa\.eu/oeil/popups/ficheprocedure\.do"
+        r"[^\s)\]\"']*",
+        re.IGNORECASE,
+    )
+    _OEIL_SEARCH_URL = "https://oeil.secure.europarl.europa.eu/oeil/en/search"
+
+    def _repair_stale_urls(self, text: str) -> str:
+        """Rewrite URL patterns that are known to be dead, in place.
+
+        The legacy ``oeil/popups/ficheprocedure.do`` endpoint 404s for recent
+        procedure files. A code sweep on 25 May 2026 fixed every place Brubru
+        BUILDS one, which left the larger source untouched: the model writes
+        them into prose itself, and the one knowledge guide that exists to
+        forbid the pattern quotes it twice as a "do not use" example, which is
+        exactly the re-priming that feedback_negation_paradox_in_warnings
+        warns about. 17 stored answers carry a dead link, against 39 with the
+        canonical one, so roughly a third of the OEIL links Chat has ever
+        emitted do not resolve. Two were served on 7 August 2026.
+
+        This runs where the instruction could not: _linkify_references
+        deliberately skips anything that is already a link, so a dead href is
+        precisely what it protects. Repairing the href is deterministic, which
+        per feedback_context_block_beats_prompt_rule is the layer this belongs
+        in rather than another line of prompt.
+
+        A URL carrying a procedure reference becomes the canonical
+        procedure-file link for that reference; one without a usable reference
+        becomes the OEIL search page, since a working search beats a 404.
+        """
+        if not text:
+            return text
+
+        def _canonical(m: "re.Match") -> str:
+            ref = (m.group(1)
+                   .replace("%2F", "/").replace("%2f", "/")
+                   .replace("%28", "(").replace("%29", ")"))
+            return (
+                "https://oeil.secure.europarl.europa.eu/oeil/en/"
+                f"procedure-file?reference={ref}"
+            )
+
+        text = self._OEIL_LEGACY_RE.sub(_canonical, text)
+        # Anything still on the legacy path had no reference to rescue.
+        return self._OEIL_LEGACY_BARE_RE.sub(self._OEIL_SEARCH_URL, text)
 
     def _strip_leading_greeting(self, message: str) -> str:
         """

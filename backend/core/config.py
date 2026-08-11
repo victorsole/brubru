@@ -49,6 +49,22 @@ class Settings(BaseSettings):
     OPENAI_ORG_ID: str | None = None
     GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini 2.0 Flash (free, 1M ctx) — big-context catcher
 
+    # OpenRouter — BATCH / EVALUATION ONLY, deliberately NOT in the chat chain.
+    # One key fronts 341 models (OpenAI-compatible, so no new SDK). Benchmarked
+    # 28 July 2026 at Brubru's real ~17K-token prompt; it is unfit for Chat:
+    #   - free tier is capped at 50 requests/DAY (X-RateLimit-Limit: 50);
+    #     $10 of credits raises it to 1,000/day, still short of chat volume
+    #   - best free model ran 9.1s median vs Cerebras at 1.5s (6x slower)
+    #   - paid models 402 below ~13K prompt tokens until credits are funded
+    # Where it IS the right tool: offline batch work (translation, canon, KB
+    # enrichment) where latency does not matter, and as an INDEPENDENT second
+    # model for grading Brubru's own answers in /audit-queries and /training.
+    # Enable explicitly per call site — never wire it into the chat fallback.
+    OPENROUTER_API_KEY: str | None = None
+    OPENROUTER_MODEL: str = "nvidia/nemotron-3-super-120b-a12b:free"  # 6/6 on the eval suite, 9.1s median
+    OPENROUTER_SITE_URL: str = "https://brubru.beresol.eu"  # OpenRouter attribution headers
+    OPENROUTER_APP_NAME: str = "Brubru"
+
     # Beresol Monitor API (partner policy-intelligence feeds, MEUB 4.2 Beresol Monitors)
     BERESOL_API_KEY: str | None = None
     BERESOL_API_BASE: str = "https://beresol.eu/api/v1"

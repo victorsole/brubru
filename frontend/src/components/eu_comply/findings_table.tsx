@@ -49,12 +49,49 @@ const LOW_CONFIDENCE_PCT = 60;
 type StatusFilter = 'attention' | 'all' | 'met' | 'partial' | 'gap' | 'not_applicable';
 type SortKey = 'priority' | 'criticality' | 'status' | 'deadline' | 'confidence' | 'article';
 
+/** A column the package declared, or one of the eight built in. */
+export interface ReviewColumn {
+  id: string;
+  kind: 'builtin' | 'extracted';
+  label?: string;
+  prompt?: string;
+}
+
+export interface ReviewProfile { columns: ReviewColumn[] }
+
 interface FindingsTableProps {
   findings: GapFinding[];
   onAskChatbot: (finding: GapFinding) => void;
   /** Analysis id, used to load and persist per-finding remediation state. */
   analysisId?: number;
+  /** The table this package declared. Absent means the default eight columns. */
+  reviewProfile?: ReviewProfile | null;
 }
+
+// The default table, and the order the eight builtins appear in when a package
+// does not declare its own.
+const DEFAULT_COLUMNS: ReviewColumn[] = [
+  { id: 'status', kind: 'builtin' },
+  { id: 'article', kind: 'builtin' },
+  { id: 'obligation', kind: 'builtin' },
+  { id: 'criticality', kind: 'builtin' },
+  { id: 'deadline', kind: 'builtin' },
+  { id: 'confidence', kind: 'builtin' },
+  { id: 'evidence', kind: 'builtin' },
+  { id: 'action', kind: 'builtin' },
+];
+
+const DEFAULT_LABEL: Record<string, string> = {
+  status: 'Status', article: 'Article', obligation: 'Obligation',
+  criticality: 'Criticality', deadline: 'Deadline', confidence: 'Confidence',
+  evidence: 'Evidence', action: 'Action',
+};
+
+// Which builtin ids are sortable, and the sort key each maps to.
+const SORTABLE: Record<string, SortKey> = {
+  status: 'status', article: 'article', criticality: 'criticality',
+  deadline: 'deadline', confidence: 'confidence',
+};
 
 const CRITICALITY_RANK: Record<string, number> = {
   critical: 0,
@@ -80,6 +117,7 @@ const ADDRESSEE_LABEL: Record<string, string> = {
   fulfilment_service: 'Fulfilment service',
   national_authority: 'National authority',
   notified_body: 'Notified body',
+  eu_agency: 'EU agency or office',
 };
 
 /** An empty cell. Not an em-dash: none appear in user-facing surfaces. */
@@ -94,7 +132,7 @@ const statusIcon = (status: string): string => {
   }
 };
 
-export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTableProps) => {
+export const FindingsTable = ({ findings, onAskChatbot, analysisId, reviewProfile }: FindingsTableProps) => {
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('attention');
   const [criticalityFilter, setCriticalityFilter] = useState<string>('all');
@@ -151,6 +189,94 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
         if (previous) copy[findingId] = previous; else delete copy[findingId];
         return copy;
       });
+    }
+  };
+
+  // The package's declared table, or the default eight. A profile that arrives
+  // malformed falls back rather than rendering a table with no verdict column;
+  // the backend validates too, this is the second line.
+  const columns: ReviewColumn[] = useMemo(() => {
+    const declared = reviewProfile?.columns;
+    if (!Array.isArray(declared) || declared.length === 0) return DEFAULT_COLUMNS;
+    const ok = declared.filter((c) => c && typeof c.id === 'string'
+      && (c.kind === 'extracted' || DEFAULT_COLUMNS.some((d) => d.id === c.id)));
+    const hasCore = ['status', 'article', 'obligation'].every(
+      (id) => ok.some((c) => c.id === id));
+    return hasCore ? ok : DEFAULT_COLUMNS;
+  }, [reviewProfile]);
+
+  /** One cell. Builtins keep exactly the markup they had; an extracted column
+   *  renders the value the analyser stored under its id, or an empty cell. */
+  const renderCell = (col: ReviewColumn, f: GapFinding, low: boolean) => {
+    if (col.kind === 'extracted') {
+      const value = f.extra_fields?.[col.id];
+      return value
+        ? <span className="findings-table__extracted">{value}</span>
+        : <Empty />;
+    }
+    switch (col.id) {
+      case 'status':
+        return (
+          <span className={`findings-table__status status-${f.status}`}>
+            <span className={`mdi ${statusIcon(f.status)}`}></span>
+            {t(`comply.report.status_${f.status}`, f.status.replace('_', ' '))}
+          </span>
+        );
+      case 'article':
+        return <code>{f.article_number}</code>;
+      case 'obligation':
+        return (
+          <>
+            <span className="findings-table__obligation">{f.requirement_text}</span>
+            {f.addressee && f.addressee !== 'economic_operator' && (
+              <span className="findings-table__addressee">
+                <span className="mdi mdi-account-tie-outline"></span>
+                {t('comply.report.bindsLabel', 'Binds')}{' '}
+                {t(`comply.addressee.${f.addressee}`,
+                   ADDRESSEE_LABEL[f.addressee] || f.addressee)}
+              </span>
+            )}
+          </>
+        );
+      case 'criticality':
+        return (
+          <span className={`findings-table__crit criticality-${f.criticality}`}>
+            {f.criticality}
+          </span>
+        );
+      case 'deadline':
+        return f.deadline_date
+          ? new Date(f.deadline_date).toLocaleDateString()
+          : <Empty />;
+      case 'confidence':
+        return f.confidence_score == null ? <Empty /> : (
+          <span className={`findings-table__conf${low ? ' is-low' : ''}`}>
+            <span className="findings-table__conf-bar">
+              <span style={{ width: `${Math.min(100, Math.max(0, f.confidence_score))}%` }} />
+            </span>
+            {Math.round(f.confidence_score)}%
+            {low && <span className="mdi mdi-flag-outline" title={t('comply.report.lowConfidence', 'Low confidence, review manually') as string}></span>}
+          </span>
+        );
+      case 'action':
+        return actions[f.id]
+          ? <span className={`findings-table__action action-${actions[f.id].status}`}>
+              {t(`comply.report.action_${actions[f.id].status}`, actions[f.id].status.replace('_', ' '))}
+            </span>
+          : <Empty />;
+      case 'evidence':
+        return f.evidence_text ? (
+          <span className="findings-table__cited">
+            <span className="mdi mdi-format-quote-close"></span>
+            {f.evidence_source || t('comply.report.citedInDoc', 'Cited in document')}
+          </span>
+        ) : (
+          <span className="findings-table__muted">
+            {t('comply.report.noEvidence', 'Nothing found in your documents')}
+          </span>
+        );
+      default:
+        return <Empty />;
     }
   };
 
@@ -302,34 +428,21 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
         <table className="findings-table__table">
           <thead>
             <tr>
-              <th className="col-status">
-                <button onClick={() => toggleSort('status')}>
-                  {t('comply.report.status', 'Status')} <span className={`mdi ${sortIndicator('status')}`}></span>
-                </button>
-              </th>
-              <th className="col-article">
-                <button onClick={() => toggleSort('article')}>
-                  {t('comply.report.article', 'Article')} <span className={`mdi ${sortIndicator('article')}`}></span>
-                </button>
-              </th>
-              <th className="col-obligation">{t('comply.report.obligation', 'Obligation')}</th>
-              <th className="col-crit">
-                <button onClick={() => toggleSort('criticality')}>
-                  {t('comply.report.criticality', 'Criticality')} <span className={`mdi ${sortIndicator('criticality')}`}></span>
-                </button>
-              </th>
-              <th className="col-deadline">
-                <button onClick={() => toggleSort('deadline')}>
-                  {t('comply.report.deadline')} <span className={`mdi ${sortIndicator('deadline')}`}></span>
-                </button>
-              </th>
-              <th className="col-conf">
-                <button onClick={() => toggleSort('confidence')}>
-                  {t('comply.report.confidence')} <span className={`mdi ${sortIndicator('confidence')}`}></span>
-                </button>
-              </th>
-              <th className="col-evidence">{t('comply.report.evidenceFound')}</th>
-              <th className="col-action">{t('comply.report.action', 'Action')}</th>
+              {columns.map((col) => {
+                const sortKey = col.kind === 'builtin' ? SORTABLE[col.id] : undefined;
+                const label = col.kind === 'extracted'
+                  ? (col.label || col.id)
+                  : t(`comply.report.col_${col.id}`, DEFAULT_LABEL[col.id] || col.id);
+                return (
+                  <th key={col.id} className={`col-${col.id}`}>
+                    {sortKey ? (
+                      <button onClick={() => toggleSort(sortKey)}>
+                        {label} <span className={`mdi ${sortIndicator(sortKey)}`}></span>
+                      </button>
+                    ) : label}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
@@ -346,66 +459,11 @@ export const FindingsTable = ({ findings, onAskChatbot, analysisId }: FindingsTa
                     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(f); }
                   }}
                 >
-                  <td className="col-status">
-                    <span className={`findings-table__status status-${f.status}`}>
-                      <span className={`mdi ${statusIcon(f.status)}`}></span>
-                      {t(`comply.report.status_${f.status}`, f.status.replace('_', ' '))}
-                    </span>
-                  </td>
-                  <td className="col-article"><code>{f.article_number}</code></td>
-                  <td className="col-obligation">
-                    <span className="findings-table__obligation">{f.requirement_text}</span>
-                    {f.addressee && f.addressee !== 'economic_operator' && (
-                      <span className="findings-table__addressee">
-                        <span className="mdi mdi-account-tie-outline"></span>
-                        {t('comply.report.bindsLabel', 'Binds')}{' '}
-                        {t(`comply.addressee.${f.addressee}`,
-                           ADDRESSEE_LABEL[f.addressee] || f.addressee)}
-                      </span>
-                    )}
-                  </td>
-                  <td className="col-crit">
-                    <span className={`findings-table__crit criticality-${f.criticality}`}>
-                      {f.criticality}
-                    </span>
-                  </td>
-                  <td className="col-deadline">
-                    {f.deadline_date
-                      ? new Date(f.deadline_date).toLocaleDateString()
-                      : <Empty />}
-                  </td>
-                  <td className="col-conf">
-                    {f.confidence_score == null ? (
-                      <Empty />
-                    ) : (
-                      <span className={`findings-table__conf${low ? ' is-low' : ''}`}>
-                        <span className="findings-table__conf-bar">
-                          <span style={{ width: `${Math.min(100, Math.max(0, f.confidence_score))}%` }} />
-                        </span>
-                        {Math.round(f.confidence_score)}%
-                        {low && <span className="mdi mdi-flag-outline" title={t('comply.report.lowConfidence', 'Low confidence, review manually') as string}></span>}
-                      </span>
-                    )}
-                  </td>
-                  <td className="col-action">
-                    {actions[f.id]
-                      ? <span className={`findings-table__action action-${actions[f.id].status}`}>
-                          {t(`comply.report.action_${actions[f.id].status}`, actions[f.id].status.replace('_', ' '))}
-                        </span>
-                      : <Empty />}
-                  </td>
-                  <td className="col-evidence">
-                    {f.evidence_text ? (
-                      <span className="findings-table__cited">
-                        <span className="mdi mdi-format-quote-close"></span>
-                        {f.evidence_source || t('comply.report.citedInDoc', 'Cited in document')}
-                      </span>
-                    ) : (
-                      <span className="findings-table__muted">
-                        {t('comply.report.noEvidence', 'Nothing found in your documents')}
-                      </span>
-                    )}
-                  </td>
+                  {columns.map((col) => (
+                    <td key={col.id} className={`col-${col.id}`}>
+                      {renderCell(col, f, low)}
+                    </td>
+                  ))}
                 </tr>
               );
             })}

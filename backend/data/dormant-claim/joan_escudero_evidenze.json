@@ -1,0 +1,36 @@
+[
+  {
+    "slug": "joan-escudero-evidenze",
+    "first_name": "Joan",
+    "full_name": "Joan Escudero",
+    "organization": "Evidenze Health España SLU (Evidenze Group)",
+    "role_title": "Director of Digital Health",
+    "linkedin_url": "https://www.linkedin.com/in/joanescudero/",
+    "country": "ES",
+    "language": "ca",
+    "timezone": "Europe/Madrid",
+    "persona": "health-data",
+    "website": "https://evidenze.com",
+    "source_batch": "evidenze_2026_07",
+    "headline_notes": "Director of Digital Health at Evidenze Group (Evidenze Health España SLU), Barcelona, for around 15 years. Leads Evidenze's positioning as a data-driven CRO under the European Health Data Space framework, including the Evidenze Data Space real-world implementation and Evidenze's participation in the TEHDAS2 joint-action public consultations on secondary use of health data. Background: Computer Engineering (UAB), MBA (2022), Board Member of the TicBioMed Foundation, mentor at the Sant Pau and Vall d'Hebron research institutes. Spoke at Exponential Day on Evidenze Health and applying the EHDS. Public sources: evidenze.com, LinkedIn, ticbiomed.org, b2match Health Revolution Congress 2025.",
+    "policy_interests": [
+      "Health",
+      "Digital Policy and Digital Economy",
+      "Research and Innovation",
+      "Justice and Fundamental Rights",
+      "Single Market"
+    ],
+    "sectors": [
+      "healthtech",
+      "digital-health",
+      "life-sciences",
+      "ai-ml",
+      "data-analytics"
+    ],
+    "feeds": [
+      "Digital Single Market - News",
+      "Research & Innovation - News",
+      "European Commission - Press Releases"
+    ]
+  }
+]

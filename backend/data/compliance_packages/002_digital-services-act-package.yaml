@@ -1,0 +1,438 @@
+id: 2
+name: Digital Services Act Package
+policy_area: Digital Policy and Digital Economy
+description: Digital Services Act regulating online intermediaries and platforms in the EU
+applicability: Online platforms, intermediary services, very large online platforms (VLOPs)
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32005D0752
+  title: Commission Decision of 24 October 2005 establishing an expert group on electronic
+    commerce (2005/752/EC)
+- celex: 32022R2065
+  title: Regulation (EU) 2022/2065 of the European Parliament and of the Council of 19 October
+    2022 on a Single Market For Digital Services and amending Directive 2000/31/EC (Digital
+    Services Act) (Text with EEA relevance)
+- celex: 32023R1127
+  title: Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation
+    (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies
+    and procedures regarding the supervisory fees charged by the Commission on providers of
+    very large online platforms and very large online search engines (Text with EEA relevance)
+- celex: 32023R1201
+  title: Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements
+    for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065
+    of the European Parliament and of the Council (Digital Services Act)
+requirements:
+- article: Article 2(1)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of very large online platforms, providers of very large online
+    search engines, other pe...
+  deadline: null
+  interpretive: null
+  requirement_text: Explanations requested by the Commission or accompanying persons pursuant
+    to Article 69(2), points (f) and (g), of Regulation (EU) 2022/2065 shall be given only
+    by authorised representatives or members of staff
+- article: Article 2(2)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: After the inspection, a copy of any recording made pursuant to paragraph
+    1 shall be made available to the provider concerned
+- article: Article 2(3)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall set a time limit within which the provider or person
+    concerned may communicate rectification, amendment or supplement to explanations given
+    by unauthorised representatives or staff
+- article: Article 3(2)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of very large online platforms, providers of very large online
+    search engines
+  deadline: null
+  interpretive: null
+  requirement_text: Providers shall provide access in a timely and effective manner, enabling
+    the Commission to access all information in the databases and algorithms necessary for
+    assessment of compliance
+- article: Article 3(3)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of very large online platforms, providers of very large online
+    search engines
+  deadline: null
+  interpretive: null
+  requirement_text: Providers ordered to provide access pursuant to Article 72(1) shall comply
+    with the requirements laid down in Article 7 of this Regulation
+- article: Article 3(4)
+  law_celex: 32023R1201
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall define the terms of retention, including the period
+    and scope of documents to be retained when imposing document retention obligations
+- article: Article 43(1)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall charge providers of very large online platforms and
+    of very large online search engines annual supervisory fees
+- article: Article 43(1)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of very large online platforms and very large online search
+    engines
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of very large online platforms and of very large online search
+    engines must pay annual supervisory fees to cover all estimated costs of Commission supervisory
+    tasks
+- article: Article 43(2)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall estimate costs by taking into account all human resources
+    to be employed in year n+1 to carry out supervisory tasks, including officials, temporary
+    and contract agents and seconded national experts
+- article: Article 43(3)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall adopt each year individual implementing acts setting
+    out the individual amount of the supervisory fee to be charged to each provider for the
+    designated service or services
+- article: Article 43(4)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: addressees of designation decisions
+  deadline: null
+  interpretive: null
+  requirement_text: Where the designation decision is addressed to more than one legal person,
+    all addressees shall be jointly and severally liable for the payment of the supervisory
+    fee
+- article: Article 43(5)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of designated services
+  deadline: null
+  interpretive: null
+  requirement_text: Any provider shall not pay an overall amount of supervisory fee exceeding
+    0.05% of its annual worldwide net income
+- article: Article 43(6)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of designated services
+  deadline: null
+  interpretive: null
+  requirement_text: Providers must provide financial information to the Commission to determine
+    their economic capacity based on financial statements
+- article: Article 43(7)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall communicate the provisional amount of the fee to
+    the concerned provider before adopting any implementing decision to give opportunity to
+    submit observations
+- article: Article 43(8)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of designated services
+  deadline: null
+  interpretive: null
+  requirement_text: Supervisory fees must be paid by the end of the same calendar year as
+    specified in the implementing act
+- article: Article 43(9)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of designated services
+  deadline: null
+  interpretive: null
+  requirement_text: Failure to pay within the deadline shall give rise to recovery of unpaid
+    amount together with default interest at ECB refinancing rate increased by 3.5%
+- article: Article 43(10)
+  law_celex: 32023R1127
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall annually report costs incurred and revenues collected
+    to the European Parliament and Council and make such report publicly available on its
+    website
+- article: Article 3(1)
+  law_celex: 32005D0752
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The members of the group should be national contact points appointed under
+    Article 19(2) of the Directive on electronic commerce
+- article: Article 3(3)
+  law_celex: 32005D0752
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: expert group members
+  deadline: null
+  interpretive: null
+  requirement_text: Members remain in function until their replacement or until the end of
+    their mandate
+- article: Article 4
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Group shall be chaired by a representative of the Commission
+- article: Article 4
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: expert group members
+  deadline: null
+  interpretive: null
+  requirement_text: Information obtained during the works of the group or of the sub-groups
+    may not be disseminated if the Commission is of the opinion they are confidential
+- article: Article 4
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: expert group on electronic commerce
+  deadline: null
+  interpretive: null
+  requirement_text: The expert group on electronic commerce shall adopt agreed rules of procedure
+    on the basis of a model adopted by the Commission
+- article: Article 5
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: expert group and sub-groups
+  deadline: null
+  interpretive: null
+  requirement_text: The Group and the sub-groups shall normally meet at the Commission premises
+- article: Article 5
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Secretariat of the Group shall be provided by the Commission
+- article: Article 6
+  law_celex: 32005D0752
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: commission
+  deadline: null
+  interpretive: null
+  requirement_text: Travel and subsistence expenses incurred by members, observers and experts,
+    in connection with the activities of the Group, shall be reimbursed by the Commission
+    in accordance with the provisions in force within the Commission
+- article: Arts 9-10
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All intermediary services
+  deadline: null
+  interpretive: null
+  requirement_text: Upon receipt of a national judicial or administrative authority order
+    to act against specific illegal content or to provide information about individual users,
+    respond without undue delay, inform the issuing authority of any action taken, and notify
+    the affected recipient with a statement of reasons and available redress options.
+- article: Art 11
+  law_celex: 32022R2065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All intermediary services
+  deadline: null
+  interpretive: null
+  requirement_text: Designate and maintain a single, publicly accessible electronic point
+    of contact for Member State authorities, the Commission and the European Board for Digital
+    Services, specifying languages accepted for communication.
+- article: Art 13
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Non-EU established intermediary services
+  deadline: null
+  interpretive: null
+  requirement_text: Providers without an EU establishment but offering services in the Union
+    must designate in writing a legal representative in a Member State, notify the relevant
+    Digital Services Coordinator of the representative's name and contact details, and keep
+    that information publicly accessible.
+- article: Art 14
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All intermediary services
+  deadline: null
+  interpretive: null
+  requirement_text: Publish clear, plain, intelligible, user-friendly and machine-readable
+    terms and conditions covering all content moderation restrictions, algorithmic decision-making
+    procedures and human review rules; notify recipients in advance of any significant changes.
+- article: Art 15
+  law_celex: 32022R2065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All intermediary services (except micro and small enterprises that are
+    not VLOPs)
+  deadline: null
+  interpretive: null
+  requirement_text: Publish at least once per year a public, machine-readable transparency
+    report on content moderation activities, covering orders received, notices processed,
+    automated tools used, complaint statistics and actions taken.
+- article: Art 16
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Hosting services
+  deadline: null
+  interpretive: null
+  requirement_text: Provide an easy-to-access, user-friendly electronic notice-and-action
+    mechanism allowing any person or entity to report allegedly illegal content; acknowledge
+    receipt without undue delay; communicate the decision and available redress options to
+    the notifier.
+- article: Art 17
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Hosting services
+  deadline: null
+  interpretive: null
+  requirement_text: Issue a clear, specific statement of reasons to the affected recipient
+    for any content removal, account suspension, payment restriction or visibility restriction,
+    at the latest at the time the restriction takes effect, including the legal or contractual
+    ground and available redress options.
+- article: Art 20
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Online platforms
+  deadline: null
+  interpretive: null
+  requirement_text: Provide an effective internal complaint-handling system, free of charge
+    and accessible for at least six months after a content moderation decision, allowing users
+    to challenge restrictions; final decisions must be made under the supervision of qualified
+    staff and not solely by automated means.
+- article: Art 22
+  law_celex: 32022R2065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Online platforms
+  deadline: null
+  interpretive: null
+  requirement_text: Give priority processing to notices submitted by trusted flaggers designated
+    by Digital Services Coordinators; if a trusted flagger submits a significant number of
+    inaccurate notices, report this to the awarding Digital Services Coordinator.
+- article: Art 25
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Online platforms
+  deadline: null
+  interpretive: null
+  requirement_text: Do not design, organise or operate online interfaces in a way that deceives,
+    manipulates or materially distorts users' ability to make free and informed decisions;
+    prohibited practices include undue prominence given to certain choices, repeated pop-ups
+    after a decision has been made, and making cancellation significantly more difficult than
+    sign-up.
+- article: Art 26
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Online platforms
+  deadline: null
+  interpretive: null
+  requirement_text: 'For every advertisement presented to a user, disclose clearly and in
+    real time: that it is an advertisement, who commissioned it, who paid for it (if different),
+    and the main targeting parameters; prohibit all advertising based on profiling using GDPR
+    special-category personal data.'
+- article: Art 28
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Online platforms
+  deadline: null
+  interpretive: null
+  requirement_text: Prohibit targeted advertising based on profiling using personal data when
+    the platform is aware with reasonable certainty that the recipient is a minor; put in
+    place appropriate and proportionate measures to ensure a high level of privacy, safety
+    and security for minors.
+- article: Art 30
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Online platforms allowing consumers to conclude distance contracts with
+    traders
+  deadline: null
+  interpretive: null
+  requirement_text: Before allowing traders to offer products or services to EU consumers,
+    collect and use best efforts to verify trader identification information (name, address,
+    contact details, identification documents, payment account, trade register number, self-certification);
+    store the information securely for six months after the relationship ends.
+- article: Arts 34-35
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: VLOPs and VLOSEs
+  deadline: null
+  interpretive: null
+  requirement_text: Conduct at least once per year a specific systemic risk assessment covering
+    four categories (illegal content, fundamental rights, civic discourse and elections, public
+    health and minors); implement reasonable, proportionate and effective risk mitigation
+    measures tailored to identified risks; preserve supporting documentation for at least
+    three years.
+- article: Art 37
+  law_celex: 32022R2065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: VLOPs and VLOSEs
+  deadline: null
+  interpretive: null
+  requirement_text: Commission independent annual audits at own expense by auditors with no
+    conflict of interest, proven risk-management expertise and professional objectivity; take
+    due account of any non-positive audit opinion within one month; transmit the audit report
+    and an audit implementation report publicly and to the Commission and Digital Services
+    Coordinator of establishment.
+- article: Arts 39-40
+  law_celex: 32022R2065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: VLOPs and VLOSEs
+  deadline: null
+  interpretive: null
+  requirement_text: Maintain a publicly searchable repository of all advertisements displayed
+    (content, advertiser, payer, period, targeting parameters) for one year after last display;
+    grant data access to vetted researchers approved by a Digital Services Coordinator for
+    the purpose of detecting and understanding systemic risks.

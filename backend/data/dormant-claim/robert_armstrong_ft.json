@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "robert-armstrong-ft",
+    "first_name": "Robert",
+    "full_name": "Robert Armstrong",
+    "organization": "Financial Times",
+    "role_title": "US Finance Editor (Unhedged)",
+    "linkedin_url": "https://www.linkedin.com/in/robert-armstrong-2a9a1a10/",
+    "country": "US",
+    "language": "en",
+    "timezone": "America/New_York",
+    "persona": "finance-markets",
+    "website": "https://www.ft.com/unhedged",
+    "source_batch": "armstrong_ft_2026_08",
+    "headline_notes": "US Finance Editor at the Financial Times (Aug 2018 to present) and author of the daily Unhedged newsletter and column on markets, valuations, banks and macro. Also chief editorial writer at the FT (Nov 2016 to present). Previously Head of the FT Lex column (2013 to 2016), US Lex editor (2011 to 2013), columnist at Dow Jones Newswires (2009 to 2011), and an analyst at Seminole Capital Partners, a hedge fund (2004 to 2008). PhD in Philosophy, Columbia University; BA in Philosophy, Wesleyan University. Based in New York. Sources: LinkedIn (in/robert-armstrong-2a9a1a10), ft.com/unhedged.",
+    "policy_interests": ["Economic and Financial Affairs", "Competition", "Trade and Economic Security", "Single Market", "Taxation"],
+    "sectors": ["financial-services", "banking-finance", "capital-markets", "fintech", "media-publishing"],
+    "feeds": ["Economy & Finance - News", "European Commission - Press Releases", "Eurostat - Economy & Finance"]
+  }
+]

@@ -59,6 +59,15 @@ def get_clusters_stats(
             'description': cluster.description,
             'law_count': law_count,
             'requirement_count': requirement_count,
+            # Admin deliberately lists unpublished packages too: this endpoint
+            # is the curation queue, so hiding them here would hide the work.
+            'is_published': cluster.is_published,
+            'binding_requirement_count': db.query(func.count(LawRequirement.id)).filter(
+                LawRequirement.cluster_id == cluster.id,
+                func.coalesce(
+                    LawRequirement.extra_metadata['interpretive'].as_string(), ''
+                ) != 'true',
+            ).scalar() or 0,
             'extraction_status': job_status,
             'extraction_progress': job_progress
         })

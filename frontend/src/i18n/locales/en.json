@@ -151,7 +151,9 @@
     "openInBubble": "Open in My EU Bubble",
     "openFileInBubble": "Open this file in My EU Bubble",
     "openVotesForFile": "See how it voted",
-    "openCommitteeCalendar": "What {{code}} has coming up"
+    "openCommitteeCalendar": "What {{code}} has coming up",
+    "openInBrubru": "Take this further",
+    "openInAmendator": "Amend this act in the Amendator"
   },
   "docs": {
     "title": "Documents",
@@ -1416,7 +1418,9 @@
       "passwordsDoNotMatch": "Passwords do not match",
       "passwordTooShort": "Password must be at least 8 characters",
       "passwordNeedsDigit": "Password must contain at least one digit",
-      "passwordNeedsUppercase": "Password must contain at least one uppercase letter"
+      "passwordNeedsUppercase": "Password must contain at least one uppercase letter",
+      "resetRequestFailed": "Could not send the reset link. Please try again.",
+      "resetFailed": "Could not save the new password. Please try again."
     },
     "linkedin": {
       "invalidState": "Invalid state parameter",
@@ -1426,7 +1430,28 @@
       "windowClose": "This window will close automatically...",
       "authenticating": "Authenticating with LinkedIn...",
       "pleaseWait": "Please wait..."
-    }
+    },
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "forgotPassword": "Forgot your password?",
+    "backToLogin": "Back to log in",
+    "forgotTitle": "Reset your password",
+    "forgotSubtitle": "We will email you a link to choose a new one",
+    "forgotSubmit": "Send reset link",
+    "forgotSending": "Sending...",
+    "forgotSent": "If that address has a Brubru account, a reset link is on its way. It expires in one hour.",
+    "forgotSentHint": "Remember to check your spam folder. If you signed up with Google or LinkedIn, use that button on the log in page instead.",
+    "resetTitle": "Choose a new password",
+    "resetSubtitle": "Pick something you have not used before",
+    "resetChecking": "Checking your link...",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "resetSubmit": "Save and log in",
+    "resetSaving": "Saving...",
+    "resetRequestNew": "Request a new link",
+    "resetExpired": "This link has expired. Reset links are valid for one hour.",
+    "resetAlreadyUsed": "This link has already been used. Request a new one if you still need it.",
+    "resetNotFound": "This reset link is not valid. It may have been replaced by a newer one."
   },
   "cookies": {
     "message": "We use cookies to ensure you get the best experience on Brubru. Essential cookies are required for the site to function. By clicking \"Accept\", you consent to our use of cookies."
@@ -1910,7 +1935,8 @@
       "boundElsewhere": "{{count}} of them bind another actor, such as Member States, and are shown for context rather than scored against you.",
       "cascadeTitle": "What hangs off these laws",
       "cascadeBinding": "{{count}} delegated and implementing acts carry the operative detail.",
-      "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations."
+      "cascadeGuidance": "{{count}} Commission notices and guidelines explain how to comply. These do not create obligations.",
+      "contextOnly": "context, not scored"
     },
     "addressee": {
       "member_state": "Member States",
@@ -1921,6 +1947,45 @@
       "national_authority": "National authority",
       "notified_body": "Notified body",
       "eu_agency": "EU agency or office"
+    },
+    "workspaces": {
+      "heading": "Pick up where you left off",
+      "package": "package",
+      "packages": "packages",
+      "run": "run",
+      "runs": "runs",
+      "openActions": "to fix",
+      "lastRun": "Last checked",
+      "today": "today",
+      "yesterday": "yesterday",
+      "daysAgo": "days ago",
+      "openFailed": "Could not open that package. Please pick it from the list below."
+    },
+    "reuse": {
+      "heading": "Re-use what you checked last time",
+      "selected": "selected",
+      "available": "available",
+      "availablePlural": "available",
+      "characters": "characters",
+      "lastUsed": "last used",
+      "runs": "runs",
+      "hint": "Selected documents are checked again as they are. You can also add new files below."
+    },
+    "diff": {
+      "heading": "What changed since your last check",
+      "points": "pts",
+      "improved": "improved",
+      "regressed": "slipped",
+      "reclassified": "reclassified",
+      "noChange": "nothing changed",
+      "comparedWith": "Compared with your run of",
+      "earlier": "an earlier date",
+      "unchanged": "unchanged",
+      "newRequirements": "not checked last time",
+      "improvedHeading": "Improved",
+      "regressedHeading": "Slipped back",
+      "reclassifiedHeading": "Reclassified",
+      "reclassifiedNote": "These moved to or from \"not applicable\". That is a change in whether the obligation binds you, not progress on it."
     }
   },
   "tenderator": {

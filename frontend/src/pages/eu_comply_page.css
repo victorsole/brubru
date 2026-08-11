@@ -1,35 +1,93 @@
-/* frontend/src/pages/eu_comply_page.css */
+/* frontend/src/pages/eu_comply_css */
+/*
+ * Design tokens for EU Law Comply.
+ *
+ * The page used to sit on a fixed, full-viewport photograph of the Parliament
+ * at 0.6 opacity beneath a 40% black overlay. Two costs: it fought every card
+ * for attention, and it silently broke anything with a translucent background
+ * -- the maturity error state rendered its text directly over the photo and was
+ * unreadable. It also forced every panel to be an opaque white card with a
+ * heavy shadow just to stay legible, which is why the page read as a pile of
+ * floating boxes.
+ *
+ * What replaced it is a quiet surface and one set of tokens, shared with the
+ * components in components/eu_comply/ so the page stops looking like two
+ * products stitched together: a purple-gradient era (#667eea -> #764ba2, 16px
+ * radii, 6px shadows) and a flat era (#3b3183, 12px radii, 1px borders).
+ */
 
 .eu-comply-page {
+  --comply-ink:        #2c3446;
+  --comply-ink-soft:   #55607a;
+  --comply-ink-faint:  #8a93a6;
+  --comply-brand:      #3b3183;
+  --comply-brand-soft: #f7f6ff;
+  --comply-line:       #e6eaf0;
+  --comply-line-soft:  #f0f3f8;
+  --comply-surface:    #fff;
+  --comply-radius:     12px;
+  --comply-shadow:     0 1px 2px rgba(44, 52, 70, 0.04);
+  --comply-shadow-lift: 0 2px 10px rgba(44, 52, 70, 0.08);
+
   min-height: calc(100vh - 200px);
   position: relative;
-  padding: 2rem;
-  padding-bottom: 4rem;
+  padding: 1.75rem 2rem 4rem;
   transition: margin-left 0.3s ease;
+  /* A calm ground with a single faint wash of brand colour at the top, rather
+     than an image. Fixed attachment so the wash does not travel on scroll. */
+  background:
+    radial-gradient(1200px 420px at 50% -180px, #eeecfb 0%, rgba(238, 236, 251, 0) 70%),
+    #f7f8fb;
+  background-attachment: fixed;
+  color: var(--comply-ink);
 }
 
-.eu-comply-page__background-image {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-  object-fit: cover;
-  opacity: 0.6;
+/* Header. Previously defined three times over, and never given `display: flex`
+   at all -- so the `align-items` and `flex-wrap` in the later blocks did
+   nothing, header-content and header-actions stacked as block children, and the
+   tier notice took a full row while the sidebar toggle floated a row lower.
+   One definition now, and the whole thing is a single row that wraps. */
+.eu-comply-page__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  background: var(--comply-surface);
+  border: 1px solid var(--comply-line);
+  border-radius: var(--comply-radius);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--comply-shadow);
 }
 
-.eu-comply-page__background-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
+.eu-comply-page__header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.eu-comply-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+.eu-comply-page__tier-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  background: #eef4ff;
+  border: 1px solid #d5e2fb;
+  border-radius: 20px;
+  color: #33518c;
+  font-size: 0.76rem;
+  font-weight: 500;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .eu-comply-page.sidebar-closed {
@@ -51,37 +109,19 @@
   min-width: 0; /* Prevents grid overflow */
 }
 
-/* Header */
-.eu-comply-page__header {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.eu-comply-page__header-content {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.eu-comply-page__header-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1rem;
-}
+/* Header. Was a 2rem white card with a 6px shadow, which on a landing view
+   whose job is to show 43 packages spent the whole first screen on a title. */
 
 .eu-comply-page__mascot {
-  width: 80px;
-  height: 80px;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .eu-comply-page__title {
-  font-size: 2.5rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
   font-weight: 700;
   color: #1a202c;
   margin: 0;
@@ -89,59 +129,52 @@
 }
 
 .eu-comply-page__subtitle {
-  font-size: 1.1rem;
-  color: #4a5568;
-  margin: 0.5rem 0 0;
-}
-
-.eu-comply-page__tier-notice {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: #ebf8ff;
-  border: 1px solid #90cdf4;
-  border-radius: 8px;
-  color: #2c5282;
-  font-size: 0.95rem;
-  flex: 1;
+  font-size: 0.86rem;
+  color: var(--comply-ink-soft);
+  margin: 0.15rem 0 0;
 }
 
 .eu-comply-page__tier-notice .mdi {
-  font-size: 1.25rem;
+  font-size: 0.95rem;
 }
 
 .eu-comply-page__sidebar-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   padding: 0;
-  background: #667eea;
-  border: none;
+  background: var(--comply-surface);
+  border: 1px solid var(--comply-line);
   border-radius: 8px;
-  color: white;
+  color: var(--comply-ink-soft);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: border-color 0.15s ease, color 0.15s ease;
   flex-shrink: 0;
 }
 
 .eu-comply-page__sidebar-toggle:hover {
-  background: #5568d3;
-  transform: scale(1.05);
+  border-color: #b9c3d6;
+  color: var(--comply-brand);
+}
+
+.eu-comply-page__sidebar-toggle:focus-visible {
+  outline: 2px solid #6c5ce7;
+  outline-offset: 2px;
 }
 
 .eu-comply-page__sidebar-toggle .mdi {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
 }
 
 /* Upload Section */
 .eu-comply-page__upload-section {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--comply-surface);
+  border: 1px solid var(--comply-line);
+  border-radius: var(--comply-radius);
+  padding: 1.25rem;
+  box-shadow: var(--comply-shadow);
 }
 
 .eu-comply-page__back-button {
@@ -152,7 +185,7 @@
   background: transparent;
   border: 1px solid #cbd5e0;
   border-radius: 8px;
-  color: #4a5568;
+  color: var(--comply-ink-soft);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -160,15 +193,15 @@
 }
 
 .eu-comply-page__back-button:hover {
-  background: #f7fafc;
-  border-color: #667eea;
-  color: #667eea;
+  background: var(--comply-line-soft);
+  border-color: var(--comply-brand);
+  color: var(--comply-brand);
 }
 
 .eu-comply-page__cluster-info {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--comply-line);
 }
 
 .eu-comply-page__cluster-info h2 {
@@ -189,29 +222,29 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 1rem;
-  color: #4a5568;
+  color: var(--comply-ink-soft);
 }
 
 .eu-comply-page__stat .mdi {
   font-size: 1.5rem;
-  color: #667eea;
+  color: var(--comply-brand);
 }
 
 .eu-comply-page__cluster-description {
   font-size: 1.05rem;
-  color: #2d3748;
+  color: var(--comply-ink);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .eu-comply-page__cluster-applicability {
   font-size: 0.95rem;
-  color: #4a5568;
+  color: var(--comply-ink-soft);
 }
 
 /* Upload Box */
 .eu-comply-page__upload-box {
-  background: #f7fafc;
+  background: var(--comply-line-soft);
   border: 2px dashed #cbd5e0;
   border-radius: 12px;
   padding: 2rem;
@@ -226,7 +259,7 @@
 }
 
 .eu-comply-page__upload-box > p {
-  color: #718096;
+  color: var(--comply-ink-faint);
   margin-bottom: 1.5rem;
 }
 
@@ -241,7 +274,7 @@
 .eu-comply-page__uploaded-files h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--comply-ink);
   margin-bottom: 0.75rem;
 }
 
@@ -256,12 +289,12 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0;
-  color: #4a5568;
+  color: var(--comply-ink-soft);
   font-size: 0.95rem;
 }
 
 .eu-comply-page__uploaded-files .mdi {
-  color: #667eea;
+  color: var(--comply-brand);
   font-size: 1.25rem;
 }
 
@@ -269,12 +302,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0.7rem 1.4rem;
+  background: var(--comply-brand);
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -282,8 +315,13 @@
 }
 
 .eu-comply-page__analyze-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+  background: #2f2769;
+  box-shadow: var(--comply-shadow-lift);
+}
+
+.eu-comply-page__analyze-button:focus-visible {
+  outline: 2px solid #6c5ce7;
+  outline-offset: 2px;
 }
 
 .eu-comply-page__analyze-button:disabled {
@@ -327,6 +365,37 @@
   }
 }
 
+/* The two mandatory breakpoints this page was missing. Without them the layout
+   went straight from the 1200px single-column rule to the 768px mobile rules,
+   so between roughly 768px and 1024px -- iPad portrait, the most common tablet
+   width -- the page kept desktop padding and desktop type on a narrow column.
+   Checked at 1024, 900 and 768 after adding. */
+@media (max-width: 1024px) {
+  .eu-comply-page {
+    padding: 1.5rem 1.25rem 3rem;
+  }
+
+  
+
+  .eu-comply-page__cluster-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .eu-comply-page {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .eu-comply-page__title { font-size: 1.5rem; }
+  .eu-comply-page__subtitle { font-size: 0.85rem; }
+
+  /* The tier notice and the sidebar toggle sat on one line with the title and
+     forced a horizontal scroll below about 880px. */
+  
+}
+
 /* Mobile sidebar - rendered via portal to body */
 .eu-comply-page__history-sidebar--mobile {
   position: fixed;
@@ -335,7 +404,7 @@
   width: 350px;
   max-width: 90vw;
   height: 100vh;
-  background: #f7fafc;
+  background: var(--comply-line-soft);
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
   z-index: 10001;
   padding: 1rem;
@@ -355,10 +424,10 @@
   width: 36px;
   height: 36px;
   padding: 0;
-  background: #e2e8f0;
+  background: var(--comply-line);
   border: none;
   border-radius: 50%;
-  color: #4a5568;
+  color: var(--comply-ink-soft);
   cursor: pointer;
   transition: all 0.2s;
   z-index: 1;
@@ -424,10 +493,7 @@
     gap: 0.75rem;
   }
 
-  .eu-comply-page__header-content {
-    flex-direction: column;
-    text-align: center;
-  }
+  
 
   .eu-comply-page__history-sidebar {
     width: 100%;
@@ -442,18 +508,6 @@
    714px maturity card, so the first cluster started at y=1287 -- 1.4 screens
    of chrome before anything actionable. Keep this block last in the file.
    =========================================================================== */
-
-.eu-comply-page__header {
-  padding: 1.1rem 1.5rem;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.eu-comply-page__header-content {
-  gap: 0.9rem;
-  align-items: center;
-}
 
 .eu-comply-page__mascot {
   width: 46px;
@@ -473,31 +527,29 @@
 
 /* The tier notice was a full-width banner. It is a standing fact, not news:
    make it a chip that sits beside the toggle. */
-.eu-comply-page__tier-notice {
-  font-size: 0.76rem;
-  padding: 0.3rem 0.65rem;
-  border-radius: 20px;
-  gap: 0.35rem;
-  white-space: nowrap;
-}
-
-.eu-comply-page__header-actions {
-  gap: 0.6rem;
-  align-items: center;
-  margin-left: auto;
-}
 
 @media (max-width: 767px) {
-  .eu-comply-page__header {
-    padding: 0.9rem 1.1rem;
-    gap: 0.6rem;
-  }
+  .eu-comply-page { padding: 1rem 0.85rem 3rem; }
   .eu-comply-page__mascot { width: 36px; }
   .eu-comply-page__title { font-size: 1.28rem; }
   .eu-comply-page__subtitle { font-size: 0.8rem; }
+
+  /* Measured overflow of 15px at 375px (iPhone SE): the tier notice is
+     `white-space: nowrap` and, with `margin-left: auto` pulling the actions
+     right, pushed the sidebar toggle past the viewport edge and gave the whole
+     page a horizontal scrollbar. On a phone the actions take their own row and
+     the notice is allowed to wrap. */
+  .eu-comply-page__header-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
   .eu-comply-page__tier-notice {
-    font-size: 0.7rem;
     white-space: normal;
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.35;
   }
 }
 
@@ -510,9 +562,6 @@
 
 /* The tier notice carried flex:1 from when it was a full-width banner, so it
    stretched across the header. As a chip it must size to its content. */
-.eu-comply-page__tier-notice {
-  flex: 0 0 auto;
-}
 
 /* ===========================================================================
    Workspace view (cluster selected -> upload), rebuilt 8 Aug 2026.

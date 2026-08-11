@@ -514,3 +514,23 @@
   color: #8a93a3;
   line-height: 1.5;
 }
+
+/* A value read out of the obligation by a package-declared `extracted` column.
+   Deliberately plain: it is data lifted from the text, not a verdict, and it
+   should not compete with the status column. */
+.findings-table__extracted {
+  font-size: 0.8rem;
+  color: #2c3446;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Declared columns have unpredictable ids, so give any column the table does
+   not have an explicit width a sane default rather than letting one long value
+   push the row wide. */
+.findings-table__table th[class^="col-"],
+.findings-table__table td[class^="col-"] { min-width: 6rem; }

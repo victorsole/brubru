@@ -1,0 +1,326 @@
+id: 4
+name: AI Act Package
+policy_area: Digital Policy and Digital Economy
+description: Artificial Intelligence Act regulating AI systems in the EU
+applicability: AI system providers, deployers, distributors, importers
+is_startup_focused: false
+is_published: false
+laws:
+- celex: 32024D1459
+  title: Commission Decision of 24 January 2024 establishing the European Artificial Intelligence
+    Office
+- celex: 32024R1689
+  title: Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June
+    2024 laying down harmonised rules on artificial intelligence and amending Regulations
+    (EC) No 300/2008, (EU) No 167/2013, (EU) No 168/2013, (EU) 2018/858, (EU) 2018/1139 and
+    (EU) 2019/2144 and Directives 2014/90/EU, (EU) 2016/797 and (EU) 2020/1828 (Artificial
+    Intelligence Act)
+requirements:
+- article: Article 2(1)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall perform the tasks set out in Article 3 for the purposes
+    of implementing and enforcing the forthcoming Regulation laying down harmonised rules
+    on artificial intelligence
+- article: Article 2(2)(a)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall contribute to the strategic, coherent and effective Union
+    approach to international initiatives on AI pursuant to Article 7 in coordination with
+    Member States and in line with Union positions and policies
+- article: Article 2(2)(b)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall contribute to fostering actions and policies in the Commission
+    that reap the societal and economic benefits of AI technologies pursuant to Article 5
+- article: Article 2(2)(c)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall support the accelerated development, roll-out and use
+    of trustworthy AI systems and applications that bring societal and economic benefits and
+    that contribute to the competitiveness and the economic growth of the Union. In particular,
+    the Office shall promote innovation ecosystems by working with relevant public and private
+    actors and the startup community
+- article: Article 2(2)(d)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall monitor the evolution of AI markets and technologies
+- article: Article 3(1)(a)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall perform developing tools, methodologies and benchmarks
+    for evaluating capabilities of general-purpose AI models, in particular for very large
+    general purpose AI models with systemic risks
+- article: Article 3(1)(b)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall perform monitoring the implementation and application
+    of rules on general-purpose AI models and systems, in particular where the model and the
+    system are developed by the same provider
+- article: Article 3(1)(c)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall perform monitoring the emergence of unforeseen risks
+    stemming from general-purpose AI models, including by responding to alerts from the scientific
+    panel
+- article: Article 3(1)(d)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall perform investigating possible infringements of rules
+    on general-purpose AI models and systems, including by collecting complaints and alerts,
+    assisting in the preparation of decisions of the Commission and conducting evaluations
+    pursuant to the forthcoming Regulation
+- article: Article 3(1)(e)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall ensure that when an AI system falls within the scope
+    of relevant Union legislation for which the Commission has powers of supervision and enforcement,
+    such as under Regulation (EU) 2022/2065 or under Regulation (EU) 2022/1925, the supervision
+    and enforcement of that legislation is fully coordinated with the supervision and enforcement
+    of the forthcoming Regulation
+- article: Article 3(1)(f)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall support the implementation of rules on prohibited AI
+    practices and high-risk AI systems in coordination with relevant bodies responsible under
+    sectoral legislation, including facilitating information exchange and collaboration between
+    national authorities, collecting notifications and establishing information platforms
+    and databases, in particular when a general-purpose AI model or system is integrated into
+    a high-risk AI system
+- article: Article 3(2)(h)
+  law_celex: 32024D1459
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Artificial Intelligence Office
+  deadline: null
+  interpretive: null
+  requirement_text: The Office shall be tasked with providing the Secretariat for the AI Board
+    and its subgroups, and providing administrative support to the advisory forum and the
+    scientific panel, where applicable, including by providing the administrative set-up,
+    organising meetings and preparing relevant documents
+- article: Article 5 (prohibited practices)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all operators
+  deadline: null
+  interpretive: null
+  requirement_text: 'Eight AI practices are prohibited: subliminal, manipulative or deceptive
+    techniques causing significant harm; exploitation of vulnerabilities (age, disability,
+    social or economic situation); social scoring; predictive policing of individuals based
+    solely on profiling; untargeted scraping of facial images from the internet or CCTV; emotion
+    recognition in the workplace and education; biometric categorisation by sensitive attributes;
+    and real-time remote biometric identification in public spaces for law enforcement save
+    three narrow, judicially authorised exceptions.'
+- article: Article 6 (high-risk classification)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers
+  deadline: null
+  interpretive: null
+  requirement_text: An AI system is high-risk if it is a safety component of, or is, a product
+    covered by the Annex I product-safety legislation requiring third-party conformity assessment,
+    or if it falls within one of the eight Annex III areas. The Article 6(3) derogation may
+    exclude an Annex III system that poses no significant risk, but never one that performs
+    profiling of natural persons.
+- article: Article 9 (risk management system)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of high-risk AI systems must establish, implement, document
+    and maintain a continuous, iterative risk-management system across the entire lifecycle,
+    identifying and mitigating risks to health, safety and fundamental rights.
+- article: Article 10 (data and data governance)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: Training, validation and testing data sets for high-risk AI systems must
+    be subject to appropriate data-governance practices and be relevant, sufficiently representative
+    and, to the best extent possible, free of errors and complete, with attention to bias
+    mitigation.
+- article: Articles 11 to 12 (documentation, logs)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: High-risk AI systems require technical documentation drawn up before placing
+    on the market (Annex IV) and kept up to date, plus automatic recording of events (logs)
+    over the system's lifetime to ensure traceability.
+- article: Articles 13 to 14 (transparency, oversight)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: High-risk AI systems must be transparent to deployers, accompanied by
+    instructions for use, and designed to allow effective human oversight by natural persons
+    throughout their use.
+- article: Article 15 (accuracy, cybersecurity)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: High-risk AI systems must achieve an appropriate level of accuracy, robustness
+    and cybersecurity consistent with the state of the art, and perform consistently throughout
+    their lifecycle.
+- article: Article 16 (provider obligations)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of high-risk AI systems must operate a quality management system,
+    draw up documentation, carry out the conformity assessment, affix the CE marking, register
+    the system in the EU database and conduct post-market monitoring.
+- article: Articles 26 to 27 (deployer duties)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: high-risk deployers
+  deadline: null
+  interpretive: null
+  requirement_text: Deployers of high-risk AI systems must use them per the instructions,
+    ensure human oversight and monitoring, and (public bodies, public-service providers, banking
+    and insurance) carry out a fundamental rights impact assessment before deployment.
+- article: Article 43 + 49 (conformity, register)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: high-risk providers
+  deadline: null
+  interpretive: null
+  requirement_text: High-risk AI systems must undergo conformity assessment (provider self-assessment
+    as a rule; notified-body assessment for certain biometric systems) and be registered in
+    the public EU database before being placed on the market.
+- article: Article 50 (transparency duties)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: providers and deployers
+  deadline: null
+  interpretive: null
+  requirement_text: Users must be told when interacting with an AI system (chatbots); AI-generated
+    synthetic content must be marked machine-readable; persons exposed to emotion-recognition
+    or biometric-categorisation systems must be informed; and deepfakes and public-interest
+    AI-generated text must be labelled.
+- article: Article 53 (GPAI model duties)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: GPAI model providers
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of general-purpose AI models must keep technical documentation
+    (Annex XI), inform downstream providers (Annex XII), put in place a policy to comply with
+    Union copyright law honouring the text-and-data-mining opt-out, and publish a summary
+    of the content used for training.
+- article: Articles 51 to 52 (systemic risk)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: GPAI model providers
+  deadline: null
+  interpretive: null
+  requirement_text: A general-purpose AI model is classified as having systemic risk when
+    its cumulative training compute exceeds 10^25 floating-point operations or by Commission
+    decision on the Annex XIII criteria; the provider must notify the AI Office within two
+    weeks of meeting or expecting to meet the threshold.
+- article: Article 55 (systemic-risk duties)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: systemic-risk GPAI providers
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of general-purpose AI models with systemic risk must perform
+    model evaluation including adversarial testing (red-teaming), assess and mitigate systemic
+    risks, report serious incidents to the AI Office, and ensure an adequate level of cybersecurity.
+- article: Article 57 (regulatory sandbox)
+  law_celex: 32024R1689
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: Each Member State must ensure at least one AI regulatory sandbox is established
+    and operational by 2 August 2026, giving priority and simplified conditions to SMEs and
+    start-ups, with a regime for testing in real-world conditions.
+- article: Article 99 (penalties)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all operators
+  deadline: null
+  interpretive: null
+  requirement_text: Infringements carry administrative fines up to EUR 35 000 000 or 7% of
+    worldwide annual turnover for prohibited practices, up to EUR 15 000 000 or 3% for other
+    obligations, and up to EUR 7 500 000 or 1% for incorrect or misleading information; GPAI
+    model providers face up to EUR 15 000 000 or 3% (Article 101).
+- article: Article 113 (application dates)
+  law_celex: 32024R1689
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: all operators
+  deadline: '2025-02-02'
+  interpretive: null
+  requirement_text: The Regulation entered into force on 1 August 2024 and applies from 2
+    August 2026; prohibitions and general provisions apply from 2 February 2025; GPAI-model
+    rules, governance and penalties from 2 August 2025; Annex I product-related high-risk
+    systems from 2 August 2027.

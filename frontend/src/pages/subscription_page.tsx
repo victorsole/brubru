@@ -26,6 +26,10 @@ const FEATURE_ROWS = [
   'chat', 'amendments', 'rss', 'predictions', 'comply', 'tenderator', 'exports', 'support',
 ] as const;
 
+// Hidden 10 Aug 2026 at Victor's request. Set back to true to restore the banner.
+// The i18n keys (subscription.ep.*) and the Stripe 'ep' plan are left intact.
+const SHOW_EP_PLAN = false;
+
 export const SubscriptionPage = () => {
   const { t } = useTranslation();
   const { createCheckoutSession } = useSubscription();
@@ -154,6 +158,7 @@ export const SubscriptionPage = () => {
       </section>
 
       {/* EP Plan Banner */}
+      {SHOW_EP_PLAN && (
       <section className="subscription__ep-banner">
         <div className="subscription__ep-banner-content">
           <div className="subscription__ep-banner-info">
@@ -190,6 +195,7 @@ export const SubscriptionPage = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Enterprise Banner */}
       <section className="subscription__ep-banner subscription__ep-banner--enterprise">
@@ -321,7 +327,8 @@ export const SubscriptionPage = () => {
         <h2 className="subscription__faq-title">{t('subscription.faq.title')}</h2>
 
         <div className="subscription__faq-list">
-          {['1', '2', '3', '4', '5', '6'].map((n) => (
+          {/* q6 is the EP Plan question, so it follows the banner's visibility */}
+          {['1', '2', '3', '4', '5', ...(SHOW_EP_PLAN ? ['6'] : [])].map((n) => (
             <div key={n} className="subscription__faq-item">
               <h3 className="subscription__faq-question">{t(`subscription.faq.q${n}`)}</h3>
               <p className="subscription__faq-answer">{t(`subscription.faq.a${n}`)}</p>

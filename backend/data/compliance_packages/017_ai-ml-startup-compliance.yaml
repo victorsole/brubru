@@ -1,0 +1,318 @@
+id: 17
+name: AI/ML Startup Compliance
+policy_area: Digital Policy and Digital Economy
+description: AI Act compliance for machine learning startups and AI system providers
+applicability: AI/ML startups, algorithm developers, predictive analytics, computer vision,
+  NLP, generative AI
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 32016R0679
+  title: Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April
+    2016 on the protection of natural persons with regard to the processing of personal data
+    and on the free movement of such data, and repealing Directive 95/46/EC (General Data
+    Protection Regulation) (Text with EEA relevance)
+- celex: 32023R2854
+  title: Regulation (EU) 2023/2854 of the European Parliament and of the Council of 13 December
+    2023 on harmonised rules on fair access to and use of data and amending Regulation (EU)
+    2017/2394 and Directive (EU) 2020/1828 (Data Act)Text with EEA relevance.
+- celex: 32024L2853
+  title: Directive (EU) 2024/2853 of the European Parliament and of the Council of 23 October
+    2024 on liability for defective products and repealing Council Directive 85/374/EEC (Text
+    with EEA relevance)
+- celex: 32024R1689
+  title: Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June
+    2024 laying down harmonised rules on artificial intelligence and amending Regulations
+    (EC) No 300/2008, (EU) No 167/2013, (EU) No 168/2013, (EU) 2018/858, (EU) 2018/1139 and
+    (EU) 2019/2144 and Directives 2014/90/EU, (EU) 2016/797 and (EU) 2020/1828 (Artificial
+    Intelligence Act)
+requirements:
+- article: Article 6 + Annex III (high-risk?)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: AI providers and deployers
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: 'Establish first whether the AI system is high-risk, because almost every
+    other duty follows from the answer. A system is high-risk if it is a safety component
+    of, or is itself, a product covered by the Union harmonisation legislation in Annex I
+    and requires third-party conformity assessment, or if it falls in an Annex III area: biometrics,
+    critical infrastructure, education, employment and worker management, access to essential
+    public and private services including creditworthiness and life or health insurance pricing,
+    law enforcement, migration and border control, or the administration of justice. A system
+    in an Annex III area is not high-risk if it only performs a narrow procedural task, improves
+    the result of prior human work, detects decision patterns without replacing human assessment,
+    or is preparatory. Document the assessment either way and register it under Article 49(2)
+    when relying on that exemption.'
+- article: Article 5 (prohibited practices)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All AI operators
+  deadline: '2025-02-02'
+  interpretive: null
+  requirement_text: 'Do not place on the market, put into service or use AI for any of the
+    eight prohibited practices: purposefully manipulative or deceptive techniques that materially
+    distort behaviour and cause significant harm; exploitation of vulnerabilities of age,
+    disability or social or economic situation; social scoring leading to detrimental treatment
+    in unrelated contexts or disproportionate to the behaviour; individual criminal-offence
+    risk prediction based solely on profiling or personality traits; untargeted scraping of
+    facial images from the internet or CCTV to build facial-recognition databases; emotion
+    inference in the workplace or in education outside medical or safety reasons; biometric
+    categorisation to deduce race, political opinions, trade union membership, religious or
+    philosophical beliefs, sex life or sexual orientation; and real-time remote biometric
+    identification in publicly accessible spaces for law enforcement, save the narrow listed
+    exceptions.'
+- article: Article 4 (AI literacy)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: All AI providers and deployers
+  deadline: '2025-02-02'
+  interpretive: null
+  requirement_text: Ensure a sufficient level of AI literacy among staff and others operating
+    AI systems on your behalf, taking into account their technical knowledge, experience,
+    education and training and the context the systems are used in. This applies to every
+    provider and deployer regardless of risk tier, and is one of the first duties to bite.
+- article: Article 50 (transparency to people)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Providers and deployers of interactive or generative AI
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: Tell people when they are dealing with AI. Systems interacting directly
+    with natural persons must disclose that fact unless it is obvious to a reasonably observant
+    person. Emotion-recognition and biometric-categorisation systems must inform the people
+    exposed to them. Synthetic audio, image, video or text output must be marked in a machine-readable
+    format as artificially generated or manipulated, and deep fakes and AI-generated text
+    published to inform the public on matters of public interest must be disclosed as such.
+    This binds most consumer-facing startups even when nothing they build is high-risk.
+- article: Arts 9, 10, 15 (risk, data, robustness)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Providers of high-risk AI systems
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: If the system is high-risk, run a continuous iterative risk management
+    system across its lifecycle; govern training, validation and testing data for relevance,
+    representativeness, and to the extent possible freedom from errors and completeness, examining
+    it for bias that could affect health, safety or fundamental rights; and achieve appropriate
+    accuracy, robustness and cybersecurity, declaring the accuracy metrics in the instructions
+    for use.
+- article: Arts 11-14 (docs, logs, oversight)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Providers of high-risk AI systems
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: If the system is high-risk, draw up the Annex IV technical documentation
+    before placing it on the market and keep it current; design the system to log events automatically
+    over its lifetime; make it transparent enough that deployers can interpret and use the
+    output, with instructions for use; and design it so natural persons can effectively oversee
+    it, including the ability to intervene or stop it.
+- article: Arts 16, 43, 47-49 (QMS, conformity)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Providers of high-risk AI systems
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: If the system is high-risk, operate a documented quality management system,
+    carry out the Article 43 conformity assessment (for most Annex III systems this is the
+    provider's own internal-control assessment, not a notified body), draw up the EU declaration
+    of conformity, affix CE marking, and register the system in the EU database before placing
+    it on the market or putting it into service.
+- article: Article 25 (you become the provider)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Anyone rebranding or modifying an AI system
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: Understand when you inherit the full provider obligations for a system
+    someone else built. A distributor, importer, deployer or other third party becomes the
+    provider of a high-risk system if it puts its name or trade mark on it, makes a substantial
+    modification to it, or modifies the intended purpose of a system, including a general-purpose
+    AI system, such that it becomes high-risk. Building a product on top of a third-party
+    model is the single most common way a startup acquires these duties without noticing.
+- article: Arts 26-27 (deploying high-risk AI)
+  law_celex: 32024R1689
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Deployers of high-risk AI systems
+  deadline: '2026-08-02'
+  interpretive: null
+  requirement_text: If you deploy a high-risk system rather than build one, use it in accordance
+    with the instructions for use, assign human oversight to people with the competence, training
+    and authority to exercise it, ensure input data is relevant and sufficiently representative
+    for the intended purpose, keep the automatically generated logs for at least six months,
+    and inform workers' representatives before putting a system into service in the workplace.
+    Bodies governed by public law, private entities providing public services, and deployers
+    running creditworthiness or life and health insurance pricing must also complete a fundamental
+    rights impact assessment.
+- article: Article 53 (general-purpose models)
+  law_celex: 32024R1689
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Providers of general-purpose AI models
+  deadline: '2025-08-02'
+  interpretive: null
+  requirement_text: If you place a general-purpose AI model on the market, keep and maintain
+    the technical documentation in Annex XI, provide downstream providers with the Annex XII
+    information they need to meet their own obligations, put in place a policy to comply with
+    Union copyright law including the Article 4(3) text-and-data-mining reservation, and publish
+    a sufficiently detailed public summary of the content used for training, following the
+    AI Office template. Fine-tuning an existing model can make you the provider of that modified
+    model.
+- article: Arts 51, 52, 55 (systemic risk)
+  law_celex: 32024R1689
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Providers of general-purpose AI models
+  deadline: '2025-08-02'
+  interpretive: true
+  requirement_text: 'Know the threshold even if you are nowhere near it. A general-purpose
+    AI model is presumed to carry systemic risk when the cumulative compute used for training
+    exceeds 10^25 floating-point operations, and the provider must notify the Commission within
+    two weeks of meeting or expecting to meet it. Models with systemic risk carry additional
+    duties: model evaluation including adversarial testing, systemic risk assessment and mitigation,
+    serious-incident reporting to the AI Office, and adequate cybersecurity protection.'
+- article: Arts 57, 62 (sandboxes, SME support)
+  law_celex: 32024R1689
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: SMEs and startups
+  deadline: '2026-08-02'
+  interpretive: true
+  requirement_text: Use the support the Regulation creates for small companies rather than
+    absorbing the full compliance cost alone. Each Member State must have at least one AI
+    regulatory sandbox operational by 2 August 2026, and SMEs including startups have priority
+    access to it free of charge. Member States must also provide dedicated awareness and training
+    channels, and the Commission provides standardised technical documentation forms for SMEs.
+    This is an opportunity, not an obligation, and never counts as a gap.
+- article: Article 99 (penalties)
+  law_celex: 32024R1689
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: All AI operators
+  deadline: '2026-08-02'
+  interpretive: true
+  requirement_text: Price the risk. Breaching the Article 5 prohibitions carries administrative
+    fines up to EUR 35 000 000 or 7% of total worldwide annual turnover for the preceding
+    financial year, whichever is higher. Most other infringements reach EUR 15 000 000 or
+    3%, and supplying incorrect, incomplete or misleading information to authorities EUR 7
+    500 000 or 1%. For SMEs including startups each ceiling is the lower of the percentage
+    and the fixed amount, not the higher.
+- article: Arts 5, 6, 9 (basis for training data)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: AI developers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: Identify and document the lawful basis for every use of personal data
+    in training, fine-tuning and evaluation, and respect purpose limitation and data minimisation.
+    Where the basis is legitimate interests, record the balancing test. Special-category data,
+    including biometric data processed to uniquely identify someone, needs an Article 9(2)
+    condition on top. Scraped web data is personal data whenever people are identifiable in
+    it.
+- article: Article 35 (DPIA)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers deploying AI on personal data
+  deadline: null
+  interpretive: null
+  requirement_text: Carry out a DPIA before processing likely to result in a high risk to
+    individuals, which expressly covers systematic and extensive automated evaluation of personal
+    aspects producing legal or similarly significant effects, large-scale processing of special-category
+    data, and systematic large-scale monitoring of publicly accessible areas. Most AI products
+    serving consumers meet at least one limb. Where a fundamental rights impact assessment
+    is also required under the AI Act, the two can be run together rather than duplicated.
+- article: Article 22 (automated decisions)
+  law_celex: 32016R0679
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Controllers making automated decisions
+  deadline: null
+  interpretive: null
+  requirement_text: A person has the right not to be subject to a decision based solely on
+    automated processing, including profiling, that produces legal effects or similarly significantly
+    affects them, unless it is necessary for a contract, authorised by law, or based on explicit
+    consent. Where an exception applies, provide meaningful information about the logic involved
+    and safeguard the right to obtain human intervention, to express a point of view and to
+    contest the decision.
+- article: Arts 15-17, 20 (subject rights)
+  law_celex: 32016R0679
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Controllers processing personal data
+  deadline: null
+  interpretive: null
+  requirement_text: Be able to answer access, rectification, erasure and portability requests
+    for data used in AI systems. Decide in advance how you will locate an individual's data
+    across training sets, embeddings and logs, since an architecture that makes this impossible
+    does not remove the obligation.
+- article: Arts 25, 32 (by design, security)
+  law_celex: 32016R0679
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Controllers and processors
+  deadline: null
+  interpretive: null
+  requirement_text: Implement data protection by design and by default, and security appropriate
+    to the risk. For AI this includes pseudonymisation where it does not defeat the purpose,
+    access controls over training data and model artefacts, and consideration of model-specific
+    attacks such as membership inference, model inversion and training-data extraction.
+- article: Arts 3-4 (connected product data)
+  law_celex: 32023R2854
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers of connected products
+  deadline: '2025-09-12'
+  interpretive: null
+  requirement_text: If your product is a connected product or a related service, design it
+    so that product data and related service data are, by default, accessible to the user
+    easily, securely, free of charge, in a comprehensive, structured, commonly used and machine-readable
+    format and, where relevant and technically feasible, directly. Tell the user before contracting
+    what data the product generates, in what volume and how to access it.
+- article: Arts 23-26, 29 (cloud switching)
+  law_celex: 32023R2854
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Providers of cloud and edge services
+  deadline: '2025-09-12'
+  interpretive: null
+  requirement_text: If you provide a data processing service, remove the commercial, technical,
+    contractual and organisational obstacles to a customer switching to another provider or
+    to on-premises infrastructure. Switching charges were reduced from 12 January 2024 and
+    are withdrawn entirely from 12 January 2027.
+- article: Arts 4, 6 (software is a product)
+  law_celex: 32024L2853
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Software and AI manufacturers
+  deadline: '2026-12-09'
+  interpretive: null
+  requirement_text: Software, including AI systems and standalone software, is a product for
+    liability purposes, and a defect can arise from the product's effect on other products,
+    from its learning after deployment, or from a failure to supply software updates or security
+    patches needed to maintain safety. A manufacturer stays liable for defects arising after
+    the product is placed on the market where it retains control over updates or upgrades.
+- article: Arts 9-10 (disclosure, presumption)
+  law_celex: 32024L2853
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Software and AI manufacturers
+  deadline: '2026-12-09'
+  interpretive: null
+  requirement_text: Expect the evidential burden to shift. A court can order you to disclose
+    relevant evidence, and defectiveness is presumed where you fail to comply with that order,
+    where the claimant shows the product breached mandatory safety requirements, or where
+    the technical or scientific complexity makes it excessively difficult for the claimant
+    to prove defectiveness or causation. Keep the design, testing and update records that
+    would answer such an order.

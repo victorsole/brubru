@@ -1,0 +1,175 @@
+id: 38
+name: Pharmacovigilance (Directive 2010/84/EU)
+policy_area: Health
+description: 'The 2010 pharmacovigilance overhaul: the PRAC, EudraVigilance single reporting,
+  risk-management plans, the black triangle and the urgent Union procedure.'
+applicability: Marketing authorisation holders, national competent authorities, the EMA Pharmacovigilance
+  Risk Assessment Committee (PRAC).
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32010L0084
+  title: Commission Decision of 9 February 2010 setting a new deadline for the submission
+    of dossiers for certain substances to be examined under the 10-year work programme referred
+    to in Article 16(2) of Directive 98/8/EC of the European Parliament and of the Council
+    (notified under document C(2010) 764) (Text with EEA relevance) (2010/84/EU)
+requirements:
+- article: Art 1(1) + Title IX rewrite
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must operate an audited pharmacovigilance
+    system that monitors post-marketing safety of medicines. The system must include regular
+    audits and be structured to detect, assess and report suspected adverse reactions.
+- article: Art 104
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must appoint a Qualified Person Responsible
+    for Pharmacovigilance (QPPV) who resides and operates in the European Union. The QPPV
+    is accountable for the pharmacovigilance system's effectiveness and compliance.
+- article: Art 1(28e)
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must establish and maintain a pharmacovigilance
+    system master file (PSMF) documenting the structure, responsibilities and procedures of
+    their pharmacovigilance system.
+- article: Art 1(28c)
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders must develop a risk management plan (RMP)
+    for each medicine that identifies potential risks and details mitigation strategies to
+    minimise harm to patients.
+- article: Art 8(3)(ia)/(iaa)
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation applicants
+  deadline: null
+  interpretive: null
+  requirement_text: At marketing authorisation application, the applicant must submit a summary
+    of their pharmacovigilance system, details of the QPPV, and the risk management plan.
+- article: Art 107 (Ch 3)
+  law_celex: 32010L0084
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders and Member States must report suspected
+    adverse reactions exclusively to EudraVigilance within 15 days for serious reactions and
+    90 days for non-serious reactions.
+- article: Art 11, 23 of 726/2004 (invoked)
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders and European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Medicines under additional monitoring (new active substances, biologicals
+    and biosimilars) must carry an inverted black triangle (▼) symbol. The European Medicines
+    Agency maintains a public list of such medicines.
+- article: Art 107h + PRAC
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency via PRAC
+  deadline: null
+  interpretive: null
+  requirement_text: Signal detection of new adverse reaction patterns must be led by the Pharmacovigilance
+    Risk Assessment Committee (PRAC). The PRAC assesses emerging safety signals and recommends
+    regulatory action.
+- article: Art 107 (PSURs)
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Periodic Safety Update Reports (PSURs) must be reoriented to a risk-benefit
+    analysis with single assessment and Union reference dates. Results are stored in a PSUR
+    repository managed by the EMA.
+- article: Art 107i-107k
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Medicines Agency and Member States
+  deadline: null
+  interpretive: null
+  requirement_text: An urgent Union procedure allows rapid safety action when serious adverse
+    reactions require immediate intervention. Competent authorities can suspend or modify
+    marketing authorisation through this expedited process.
+- article: Art 21a, 22a, 22b
+  law_celex: 32010L0084
+  criticality: important
+  addressee: national_authority
+  applicable_entity: Competent authorities and marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities may require post-authorisation safety studies (PASS)
+    and post-authorisation efficacy studies (PAES) as conditions of marketing authorisation
+    to generate additional safety and efficacy data.
+- article: Art 107m-107q (Ch 4)
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Post-authorisation safety studies must have protocols endorsed by the
+    PRAC or national authority, and final reports must be submitted within 12 months of study
+    completion.
+- article: Art 106-106a
+  law_celex: 32010L0084
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States and European Medicines Agency
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must establish national medicines web portals linked to
+    a European medicines web portal to provide medicine safety information to the public.
+    Safety announcements must be notified 24 hours in advance.
+- article: Art 102(f)
+  law_celex: 32010L0084
+  criticality: important
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must establish penalties for pharmacovigilance non-compliance
+    that are effective, proportionate and dissuasive to ensure compliance with pharmacovigilance
+    obligations.
+- article: Art 105
+  law_celex: 32010L0084
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must ensure that pharmacovigilance system funding at the
+    national level is independent and sufficient to support effective post-marketing safety
+    monitoring of medicines.
+- article: Art 1(1) - Adverse reaction definition
+  law_celex: 32010L0084
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Marketing authorisation holders and healthcare professionals
+  deadline: null
+  interpretive: null
+  requirement_text: The definition of adverse reaction is widened to include medication errors,
+    off-label use, misuse and abuse of medicines. Reporting obligations apply to any suspected
+    adverse reaction meeting this broader definition.

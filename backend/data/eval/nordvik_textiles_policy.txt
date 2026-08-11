@@ -1,0 +1,96 @@
+NORDVIK TEXTILES AB
+INTERNAL SUSTAINABILITY AND PRODUCT COMPLIANCE POLICY
+Version 4.2 — reviewed January 2026
+Applies to: all apparel and footwear lines placed on the EU market
+
+1. SCOPE AND ORGANISATION
+
+Nordvik Textiles AB is a large enterprise within the meaning of Directive 2013/34/EU,
+employing 1,340 staff with an annual turnover of EUR 310 million. We design, source and
+sell knitted and woven apparel (CN chapters 61 and 62), leather accessories (CN 4203) and
+footwear (CN 6403, 6404) through our own retail network, our webshop, and third-party
+online marketplaces. Manufacturing is contracted to suppliers in Portugal, Turkey and
+Bangladesh. We import into the Union through our Rotterdam warehouse and hold an EORI
+number. Product compliance is owned by the Head of Product Integrity, who reports to the
+Chief Operating Officer.
+
+2. EXTENDED PRODUCER RESPONSIBILITY
+
+We are registered as a producer in the national producer register in Sweden and in the
+Netherlands, and we pay annual fees to the producer responsibility organisation in both
+markets. Registration in France, Germany, Spain and Italy is in progress and expected to
+complete during 2026. We report tonnage placed on the market annually to each PRO, split
+by material category, based on the finished-goods weight recorded in our ERP.
+
+We have not yet appointed authorised representatives in the Member States where we sell by
+distance contract but are not established. Legal is scoping this work for the second half
+of 2026.
+
+Our fee contributions are calculated on total weight placed on the market. We do not
+currently apply eco-modulation criteria such as durability, recyclability, or recycled
+content, because our PROs have not yet published modulation schedules in the markets where
+we operate.
+
+3. UNSOLD STOCK
+
+Unsold seasonal stock is handled in the following order: (a) transfer to our outlet
+channel, (b) sale to off-price wholesale partners, (c) donation to registered charities,
+(d) destruction. In 2025 we destroyed 41,200 units, principally damaged returns and items
+withdrawn for safety reasons following a drawstring recall.
+
+We do not currently publish figures on discarded unsold products. Our annual sustainability
+report, prepared under Article 19a of Directive 2013/34/EU, discusses waste in general
+terms but does not break down units or weight of unsold goods discarded, nor the reasons
+for discarding, nor the split across waste treatment operations.
+
+Where products are destroyed for intellectual property reasons — principally counterfeit
+seizures and licensed collaborations whose licence term has expired — the decision is taken
+by Brand Protection and recorded in a case file retained for three years.
+
+We do not operate a formal donation-offer step before destruction. Charity donation is
+attempted informally by the warehouse team where time allows.
+
+4. PRODUCT INFORMATION AND TRACEABILITY
+
+Every style carries a QR code on the care label linking to our product microsite, which
+shows fibre composition, country of final assembly, care instructions and our repair
+service. The microsite is maintained in our PIM system. Data is held at style (model)
+level; we do not currently generate batch-level or item-level identifiers, and our QR codes
+resolve to a marketing URL rather than to a persistent unique product identifier.
+
+We have begun a Digital Product Passport readiness project with an external consortium. No
+data carrier standard has been selected and we have not registered any product in any
+Commission registry. We have not obtained a qualified electronic seal or qualified
+electronic signature under Regulation (EU) No 910/2014.
+
+5. SUBSTANCES AND SAFETY
+
+All suppliers sign our Restricted Substances List, which is aligned to REACH Annex XVII and
+updated twice yearly. Third-party laboratory testing is carried out on 8% of styles per
+season on a risk basis. Products found non-compliant are withdrawn and destroyed, and a
+test report stating the non-compliant chemical and the applicable law is retained
+indefinitely.
+
+6. SEPARATE COLLECTION AND REUSE
+
+We operate in-store take-back bins in 40 stores. Collected textiles are passed to a sorting
+partner in Poland. We receive an annual tonnage statement from the sorting partner but do
+not receive a breakdown between preparing for reuse, recycling, and disposal, and we do not
+audit the partner's downstream flows.
+
+Shipments of used goods assessed as fit for reuse are sent to our sorting partner
+accompanied by a commercial invoice and a transport document. We do not currently include a
+declaration of fitness for reuse.
+
+7. RECORD KEEPING
+
+Compliance documentation is retained for five years in our document management system,
+with the exception of Brand Protection case files noted above. Records are retrievable on
+request by competent authorities; our target response time is 30 days.
+
+8. GOVERNANCE
+
+The Product Integrity Committee meets quarterly. Compliance obligations are tracked in a
+spreadsheet maintained by the Head of Product Integrity. There is no automated horizon
+scanning for new or amended EU legislation; changes are identified through our trade
+association newsletter and our external counsel.

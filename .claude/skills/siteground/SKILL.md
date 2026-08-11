@@ -139,10 +139,14 @@ if [ -n "$CSS_FILE" ] && [ "$(wc -c < "$CSS_FILE")" -gt 100 ]; then echo "[OK] C
 
 ```bash
 cd /Users/victorsole/Documents/GitHub/brubru/frontend
-# Check sitemap.xml has all expected routes
-SITEMAP_URLS=$(grep -c '<loc>' dist/sitemap.xml 2>/dev/null || echo 0)
-echo "Sitemap URLs: $SITEMAP_URLS"
-if [ "$SITEMAP_URLS" -ge 5 ]; then echo "[OK] Sitemap has $SITEMAP_URLS URLs"; else echo "[WARN] Sitemap looks incomplete ($SITEMAP_URLS URLs)"; fi
+# IMPORTANT (28 July 2026): dist/sitemap.xml is a sitemap INDEX, not a URL list.
+# It legitimately contains exactly 2 <loc> entries (sitemap-pages.xml and
+# sitemap-legislacio.xml). Counting <loc> in the index and reading "2" as a
+# broken build is a FALSE ALARM -- it cost an unnecessary rebuild. Count the
+# CHILDREN instead. Expect roughly 330 pages + ~34,000 Catalan legislation URLs.
+SITEMAP_URLS=$(cat dist/sitemap-pages.xml dist/sitemap-legislacio.xml 2>/dev/null | grep -c '<loc>' || echo 0)
+echo "Sitemap URLs (children): $SITEMAP_URLS"
+if [ "$SITEMAP_URLS" -ge 1000 ]; then echo "[OK] Sitemap has $SITEMAP_URLS URLs"; else echo "[WARN] Sitemap looks incomplete ($SITEMAP_URLS URLs) -- rebuild in the FOREGROUND"; fi
 ```
 
 Also check if there are uncommitted frontend source changes that should be committed:

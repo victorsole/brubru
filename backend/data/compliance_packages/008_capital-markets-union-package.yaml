@@ -1,0 +1,3257 @@
+id: 8
+name: Capital Markets Union Package
+policy_area: Economic and Financial Affairs
+description: Framework for integrated EU capital markets
+applicability: Investment firms, fund managers, securities markets
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32013R0345
+  title: Regulation (EU) No 345/2013 of the European Parliament and of the Council of 17 April
+    2013 on European venture capital funds (Text with EEA relevance)
+- celex: 32013R0876
+  title: Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation
+    (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory
+    technical standards on colleges for central counterparties (Text with EEA relevance)
+- celex: 32014R0091
+  title: Directive 2014/91/EU of the European Parliament and of the Council of 23 July 2014
+    amending Directive 2009/65/EC on the coordination of laws, regulations and administrative
+    provisions relating to undertakings for collective investment in transferable securities
+    (UCITS) as regards depositary functions, remuneration policies and sanctions (Text with
+    EEA relevance)
+- celex: 32014R0909
+  title: Regulation (EU) No 909/2014 of the European Parliament and of the Council of 23 July
+    2014 on improving securities settlement in the European Union and on central securities
+    depositories and amending Directives 98/26/EC and 2014/65/EU and Regulation (EU) No 236/2012
+    (Text with EEA relevance)
+- celex: 32015D1612
+  title: Commission Implementing Decision (EU) 2015/1612 of 23 September 2015 amending Decision
+    2008/961/EC on the use by third countries' issuers of securities of certain third country's
+    national accounting standards and International Financial Reporting Standards to prepare
+    their consolidated financial statements (notified under document C(2015) 6369) (Text with
+    EEA relevance)
+- celex: 32015D1613
+  title: Decision (EU) 2015/1613 of the European Central Bank of 10 September 2015 amending
+    Decision (EU) 2015/5 on the implementation of the asset-backed securities purchase programme
+    (ECB/2015/31)
+- celex: 32015R0730
+  title: Regulation (EU) 2015/730 of the European Central Bank of 16 April 2015 amending Regulation
+    (EU) No 1011/2012 concerning statistics on holdings of securities (ECB/2012/24) (ECB/2015/18)
+- celex: 32015R0948
+  title: Guideline (EU) 2015/948 of the European Central Bank of 16 April 2015 amending Guideline
+    ECB/2013/7 concerning statistics on holdings of securities (ECB/2015/19)
+- celex: 32015R2365
+  title: Regulation (EU) 2015/2365 of the European Parliament and of the Council of 25 November
+    2015 on transparency of securities financing transactions and of reuse and amending Regulation
+    (EU) No 648/2012 (Text with EEA relevance)
+- celex: 32016R1033
+  title: Regulation (EU) 2016/1033 of the European Parliament and of the Council of 23 June
+    2016 amending Regulation (EU) No 600/2014 on markets in financial instruments, Regulation
+    (EU) No 596/2014 on market abuse and Regulation (EU) No 909/2014 on improving securities
+    settlement in the European Union and on central securities depositories (Text with EEA
+    relevance)
+- celex: 32016R1384
+  title: Regulation (EU) 2016/1384 of the European Central Bank of 2 August 2016 amending
+    Regulation (EU) No 1011/2012 (ECB/2012/24) concerning statistics on holdings of securities
+    (ECB/2016/22)
+- celex: 32016R1386
+  title: Guideline (EU) 2016/1386 of the European Central Bank of 2 August 2016 amending Guideline
+    ECB/2013/7 concerning statistics on holdings of securities (ECB/2016/23)
+- celex: 32017D0102
+  title: Decision (EU) 2017/102 of the European Central Bank of 11 January 2017 amending Decision
+    (EU) 2015/5 on the implementation of the asset-backed securities purchase programme (ECB/2017/3)
+- celex: 32017D1361
+  title: Decision (EU) 2017/1361 of the European Central Bank of 18 May 2017 amending Decision
+    (EU) 2015/5 on the implementation of the asset-backed securities purchase programme (ECB/2017/15)
+- celex: 32017R1158
+  title: Commission Implementing Regulation (EU) 2017/1158 of 29 June 2017 laying down implementing
+    technical standards with regards to the procedures and forms for competent authorities
+    exchanging information with the European Securities Market Authority as referred to in
+    Article 33 of Regulation (EU) No 596/2014 of the European Parliament and of the Council
+    (Text with EEA relevance)
+- celex: 32017R1404
+  title: Guideline (EU) 2017/1404 of the European Central Bank of 23 June 2017 amending Guideline
+    ECB/2012/13 on TARGET2-Securities (ECB/2017/19)
+- celex: 32019D1006
+  title: Decision (EU) 2019/1006 of the European Central Bank of 7 June 2019 amending Decision
+    ECB/2011/20 establishing detailed rules and procedures for implementing the eligibility
+    criteria for central securities depositories to access TARGET2-Securities services (ECB/2019/15)
+- celex: 32019R0357
+  title: Commission Delegated Regulation (EU) 2019/357 of 13 December 2018 supplementing Regulation
+    (EU) 2015/2365 of the European Parliament and of the Council with regard to regulatory
+    technical standards on access to details of securities financing transactions (SFTs) held
+    in trade repositories (Text with EEA relevance)
+- celex: 32019R0358
+  title: Commission Delegated Regulation (EU) 2019/358 of 13 December 2018 supplementing Regulation
+    (EU) 2015/2365 of the European Parliament and of the Council with regard to regulatory
+    technical standards on the collection, verification, aggregation, comparison and publication
+    of data on securities financing transactions (SFTs) by trade repositories (Text with EEA
+    relevance)
+- celex: 32019R1007
+  title: Guideline (EU) 2019/1007 of the European Central Bank of 7 June 2019 amending Guideline
+    ECB/2012/13 on TARGET2-Securities (ECB/2019/16)
+- celex: 32019R2175
+  title: Regulation (EU) 2019/2175 of the European Parliament and of the Council of 18 December
+    2019 amending Regulation (EU) No 1093/2010 establishing a European Supervisory Authority
+    (European Banking Authority), Regulation (EU) No 1094/2010 establishing a European Supervisory
+    Authority (European Insurance and Occupational Pensions Authority), Regulation (EU) No
+    1095/2010 establishing a European Supervisory Authority (European Securities and Markets
+    Authority), Regulation (EU) No 600/2014 on markets in financial instruments, Regulation
+    (EU) 2016/1011 on indices used as benchmarks in financial instruments and financial contracts
+    or to measure the performance of investment funds, and Regulation (EU) 2015/847 on information
+    accompanying transfers of funds (Text with EEA relevance)
+- celex: 32020R1302
+  title: Commission Delegated Regulation (EU) 2020/1302 of 14 July 2020 supplementing Regulation
+    (EU) No 648/2012 of the European Parliament and of the Council with regard to fees charged
+    by the European Securities and Markets Authority to central counterparties established
+    in third countries (Text with EEA relevance)
+- celex: 32020R1732
+  title: Commission Delegated Regulation (EU) 2020/1732 of 18 September 2020 supplementing
+    Regulation (EU) 2017/2402 of the European Parliament and of the Council with regard to
+    fees charged by the European Securities and Markets Authority to securitisation repositories
+    (Text with EEA relevance)
+- celex: 32021D1822
+  title: Council Implementing Decision (EU) 2021/1822 of 15 October 2021 on the appointment
+    of the Chair of the European Securities and Markets Authority (ESMA)
+- celex: 32021L1270
+  title: Commission Delegated Directive (EU) 2021/1270 of 21 April 2021 amending Directive
+    2010/43/EU as regards the sustainability risks and sustainability factors to be taken
+    into account for Undertakings for Collective Investment in Transferable Securities (UCITS)
+    (Text with EEA relevance)
+- celex: 32021L2261
+  title: Directive (EU) 2021/2261 of the European Parliament and of the Council of 15 December
+    2021 amending Directive 2009/65/EC as regards the use of key information documents by
+    management companies of undertakings for collective investment in transferable securities
+    (UCITS) (Text with EEA relevance)
+- celex: 32021R0085
+  title: Commission Implementing Decision (EU) 2021/85 of 27 January 2021 on the equivalence
+    to the requirements of Regulation (EU) No 648/2012 of the European Parliament and of the
+    Council of the regulatory framework of the United States of America for central counterparties
+    that are authorised and supervised by the U.S. Securities and Exchange Commission (Text
+    with EEA relevance)
+- celex: 32021R0337
+  title: Regulation (EU) 2021/337 of the European Parliament and of the Council of 16 February
+    2021 amending Regulation (EU) 2017/1129 as regards the EU Recovery prospectus and targeted
+    adjustments for financial intermediaries and Directive 2004/109/EC as regards the use
+    of the single electronic reporting format for annual financial reports, to support the
+    recovery from the COVID-19 crisis (Text with EEA relevance)
+- celex: 32021R0731
+  title: Commission Delegated Regulation (EU) 2021/731 of 26 January 2021 supplementing Regulation
+    (EU) No 648/2012 of the European Parliament and of the Council with regard to rules of
+    procedure for penalties imposed on third-country central counterparties or related third
+    parties by the European Securities and Markets Authority (Text with EEA relevance)
+- celex: 32021R0732
+  title: Commission Delegated Regulation (EU) 2021/732 of 26 January 2021 amending Delegated
+    Regulation (EU) No 667/2014 with regard to the content of the file to be submitted by
+    the investigation officer to the European Securities and Markets Authority, the right
+    to be heard with regard to interim decisions and the lodging of fines and periodic penalty
+    payments (Text with EEA relevance)
+- celex: 32021R0822
+  title: Commission Delegated Regulation (EU) 2021/822 of 24 March 2021 amending Delegated
+    Regulations (EU) No 1003/2013 and (EU) 2019/360 as regards the annual supervisory fees
+    charged by the European Securities and Markets Authority to trade repositories for 2021
+    (Text with EEA relevance)
+- celex: 32021R2259
+  title: Regulation (EU) 2021/2259 of the European Parliament and of the Council of 15 December
+    2021 amending Regulation (EU) No 1286/2014 as regards the extension of the transitional
+    arrangement for management companies, investment companies and persons advising on, or
+    selling, units of undertakings for collective investment in transferable securities (UCITS)
+    and non-UCITS (Text with EEA relevance)
+- celex: 32022L0552
+  title: Commission Implementing Decision (EU) 2022/552 of 4 April 2022 determining that national
+    securities exchanges of the United States of America that are registered with the Securities
+    and Exchange Commission comply with legally binding requirements which are equivalent
+    to the requirements laid down in Title III of Directive 2014/65/EU and are subject to
+    effective supervision and enforcement (Text with EEA relevance)
+- celex: 32022R0466
+  title: Commission Delegated Regulation (EU) 2022/466 of 17 December 2021 supplementing Regulation
+    (EU) No 600/2014 of the European Parliament and of the Council by specifying criteria
+    for derogation of the principle that approved publication arrangements and approved reporting
+    mechanisms are supervised by the European Securities Markets Authority (Text with EEA
+    relevance)
+- celex: 32022R0551
+  title: Commission Implementing Decision (EU) 2022/551 of 4 April 2022 amending Implementing
+    Decision (EU) 2021/85 on the equivalence to the requirements of Regulation (EU) No 648/2012
+    of the European Parliament and of the Council of the regulatory framework of the United
+    States of America for central counterparties that are authorised and supervised by the
+    U.S. Securities and Exchange Commission (Text with EEA relevance)
+- celex: 32022R0803
+  title: Commission Delegated Regulation (EU) 2022/803 of 16 February 2022 supplementing Regulation
+    (EU) No 600/2014 of the European Parliament and of the Council by specifying rules of
+    procedure for the exercise of the power to impose fines or periodic penalty payments by
+    the European Securities Markets Authority regarding data reporting service providers (Text
+    with EEA relevance)
+- celex: 32022R0804
+  title: Commission Delegated Regulation (EU) 2022/804 of 16 February 2022 supplementing Regulation
+    (EU) 2016/1011 of the European Parliament and of the Council by specifying rules of procedure
+    for measures applicable to the supervision by the European Securities Markets Authority
+    of certain benchmark administrators (Text with EEA relevance)
+- celex: 32022R0805
+  title: Commission Delegated Regulation (EU) 2022/805 of 16 February 2022 supplementing Regulation
+    (EU) 2016/1011 of the European Parliament and of the Council by specifying fees applicable
+    to the supervision by the European Securities Markets Authority of certain benchmark administrators
+    (Text with EEA relevance)
+- celex: 32022R0930
+  title: Commission Delegated Regulation (EU) 2022/930 of 10 March 2022 supplementing Regulation
+    (EU) No 600/2014 of the European Parliament and of the Council by specifying fees relating
+    to the supervision by the European Securities Markets Authority of data reporting service
+    providers
+- celex: 32023D0269
+  title: Council Decision (EU) 2023/269 of 30 January 2023 on the position to be adopted,
+    on behalf of the European Union, within the EEA Joint Committee, concerning an amendment
+    to Annex IX (Financial Services) to the EEA Agreement (Central Securities Depository –
+    Liechtenstein) (Text with EEA relevance)
+- celex: 32025R1768
+  title: Commission Delegated Regulation (EU) 2025/1768 of 7 May 2025 amending Delegated Regulation
+    (EU) 2022/803 as regards rules of procedure for the exercise of the power to impose fines
+    or periodic penalty payments by the European Securities Markets Authority with respect
+    to consolidated tape providers (Text with EEA relevance)
+- celex: null
+  title: Corrigendum to Commission Delegated Regulation (EU) 2017/390 of 11 November 2016
+    supplementing Regulation (EU) No 909/2014 of the European Parliament and of the Council
+    with regard to regulatory technical standards on certain prudential requirements for central
+    securities depositories and designated credit institutions offering banking-type ancillary
+    services (Official Journal of the European Union L 65 of 10 March 2017)
+- celex: null
+  title: Commission Opinion of 26 February 2015 on the draft amended Regulation of the European
+    Central Bank concerning statistics on holdings of securities
+- celex: null
+  title: Decision of the Management Board of the European Securities and Markets Authority
+    of 1 October 2019 adopting internal rules concerning restrictions of certain rights of
+    data subjects in relation to processing of personal data in the framework of the functioning
+    of ESMA
+requirements:
+- article: Article 2(1)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Each competent authority shall designate a single contact point for sending
+    the information referred to in Article 3 and for communications on any issue relating
+    to submission of that information.
+- article: Article 2(2)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall notify the European Securities and Markets
+    Authority (ESMA) of the contact points designated in accordance with paragraph 1.
+- article: Article 2(3)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall designate a contact point for receiving the information set
+    out in Articles 3 and 4 and for communications on any issue relating to the reception
+    of that information.
+- article: Article 2(4)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall publish the contact point referred to in paragraph 2 on its
+    website.
+- article: Article 3(1)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall provide ESMA with the information referred
+    to in paragraphs 1 and 2 of Article 33 of Regulation (EU) No 596/2014, by filling in,
+    as appropriate, the form set out in Annex I to this Regulation.
+- article: Article 3(2)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The information referred to in paragraph 1 shall be provided to ESMA no
+    later than 31 of March of each year and shall relate to all investigations undertaken
+    and all sanctions and measures imposed during the previous calendar year.
+- article: Article 3(3)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall provide ESMA with the information referred
+    to in paragraph 1 by secure electronic means of transmission.
+- article: Article 3(4)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: For the purposes of paragraph 1, ESMA shall specify and identify the secure
+    electronic means to be used. Those means shall ensure that the completeness, integrity
+    and confidentiality of the information is maintained during its transmission.
+- article: Article 4(1)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities shall report to ESMA the sanctions and measures
+    referred to in Article 33(3) of Regulation (EU) No 596/2014 using the interfaces provided
+    by the information technology system, and the related database, set up by ESMA to manage
+    the receipt, storage and publication of information on those sanctions and measures.
+- article: Article 4(2)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The sanctions and measures referred to in paragraph 1 shall be submitted
+    to ESMA in a report file in the format set out in Annex II.
+- article: Article 5(1)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where a competent authority wishes to invalidate an existing report file
+    it has previously submitted to ESMA in accordance with Article 4, it shall cancel the
+    existing report file and send a new report file.
+- article: Article 5(2)
+  law_celex: 32017R1158
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Where a competent authority wishes to update an existing report file it
+    has previously submitted to ESMA in accordance with Article 4, it shall resubmit the report
+    file with the updated information.
+- article: Article 5(1)(a)
+  law_celex: 32019D1006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSDs with access to T2S services
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD with access to T2S services shall comply, after it has migrated
+    to T2S, with the five CSD access criteria on an ongoing basis and shall ensure, in particular,
+    through a reliable self-assessment conducted each year and supported by relevant documentation
+    that it continues to comply with CSD access criteria 1, 3, 4 and 5
+- article: Article 5(1)(b)
+  law_celex: 32019D1006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSDs with access to T2S services
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD with access to T2S services shall promptly provide the MIB with
+    the most recent outcome of the assessment conducted by the relevant competent authority
+    against Regulation (EU) No 909/2014, the Principles for Financial Market Infrastructures
+    of the Committee on Payment and Market Infrastructures and the International Organisation
+    of Securities Commissions (PFMI) or a legal framework implementing the PFMI. If the above
+    outcome of the assessment is not available, the CSD shall submit a self-attestation based
+    on the relevant documentation
+- article: Article 5(1)(c)
+  law_celex: 32019D1006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSDs with access to T2S services
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD with access to T2S services shall request a new assessment by the
+    relevant competent authorities of its compliance with Regulation (EU) No 909/2014, the
+    PFMI or a legal framework implementing the PFMI in the event of material changes to the
+    CSD's system
+- article: Article 5(1)(d)
+  law_celex: 32019D1006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSDs with access to T2S services
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD with access to T2S services shall notify the MIB without undue delay
+    where a relevant competent authority assessment or a self-assessment has established non-compliance
+    with any of the five CSD access criteria
+- article: Article 5(1)(e)
+  law_celex: 32019D1006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSDs with access to T2S services
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD with access to T2S services shall, following a request from the
+    MIB, provide an assessment report demonstrating that the CSD still complies with the five
+    CSD access criteria
+- article: Article 4(1)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: Management companies must take into account sustainability risks when
+    complying with organizational requirements
+- article: Article 5(5)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: Management companies must retain the necessary resources and expertise
+    for the effective integration of sustainability risks
+- article: Article 5a
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment companies
+  deadline: null
+  interpretive: null
+  requirement_text: Investment companies must integrate sustainability risks in the management
+    of UCITS, taking into account the nature, scale and complexity of their business
+- article: Article 9(2)(g)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: senior management
+  deadline: null
+  interpretive: null
+  requirement_text: Senior management must be responsible for the integration of sustainability
+    risks in company activities
+- article: Article 17(3)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: Management companies must identify and include conflicts of interest that
+    may arise as a result of the integration of sustainability risks in their processes, systems
+    and internal controls
+- article: Article 23(5)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: Management companies must take into account sustainability risks when
+    complying with risk management requirements
+- article: Article 23(6)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies, investment companies
+  deadline: null
+  interpretive: null
+  requirement_text: Management companies and investment companies must take into account principal
+    adverse impacts on sustainability factors when complying with risk management requirements,
+    where they consider such impacts
+- article: Article 38(1)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: Risk management policy must include procedures to assess exposure to sustainability
+    risks for each UCITS managed
+- article: Article 2(1)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2022-07-31'
+  interpretive: null
+  requirement_text: Member States must adopt and publish laws, regulations and administrative
+    provisions necessary to comply with this Directive by 31 July 2022
+- article: Article 2(1)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2022-08-01'
+  interpretive: null
+  requirement_text: Member States must apply transposition measures from 1 August 2022
+- article: Article 2(1)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must communicate to the Commission the text of transposition
+    provisions
+- article: Article 2(2)
+  law_celex: 32021L1270
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must communicate to the Commission the text of main provisions
+    of national law adopted in the field covered by this Directive
+- article: Article 2a(2)
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third country markets
+  deadline: null
+  interpretive: null
+  requirement_text: A third country market is to be considered equivalent to a regulated market
+    where that market complies with legally binding requirements that are equivalent to the
+    requirements laid down in Title III of Directive 2014/65/EU and provided that that market
+    is subject to effective supervision and enforcement in that third country on an ongoing
+    basis
+- article: Section 19(a)(1) Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: An exchange must be registered with the SEC as a NSE before it may begin
+    operations
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: registered national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: Registered NSEs are required to maintain rules, policies and procedures
+    consistent with their statutory obligations, and to have the capacity to carry out their
+    obligations on a continuous basis
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: NSEs must provide their members with impartial access to their markets
+    and services
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: registered national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: Registered NSEs are required to have clear and transparent rules regarding
+    the admission of securities to trading so that those securities are capable of being traded
+    in a fair, orderly, and efficient manner and are freely negotiable
+- article: SEC rules
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: NSEs are prohibited from listing any security of an issuer that does not
+    comply with the audit committee requirements set out in the SEC rules
+- article: SEC Rule 9b-1
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: options markets
+  deadline: null
+  interpretive: null
+  requirement_text: Options markets are required to prepare an options disclosure document
+    with certain specified information about the characteristics and risks of exchange traded
+    options
+- article: SEC Rule 9b-1
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: broker-dealers
+  deadline: null
+  interpretive: null
+  requirement_text: Broker-dealers are to provide customers with that options disclosure document,
+    and that document is to be filed with the SEC prior to being furnished to customers
+- article: SEC Rule 17Ad-22(c)
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Options Clearing Corporation
+  deadline: null
+  interpretive: null
+  requirement_text: The OCC is required to disclose annual audited financials publicly
+- article: SEC Rule 17Ad-22(e)(23)
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Options Clearing Corporation
+  deadline: null
+  interpretive: null
+  requirement_text: An OCC is required to enforce policies and procedures that provide for
+    the public disclosure of all relevant rules and material procedures, including key aspects
+    of its default management rules and procedures, of basic data on transaction volume and
+    values, and of a comprehensive description of its material rules, policies, and procedures
+    regarding its legal, governance, risk management, and operating framework
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: NSEs are required to address any potential violations of the market's
+    rules or the federal securities laws by its members
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: They are required to inform the SEC of significant infringements
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: registered national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: All registered NSEs are required to be able to enforce compliance by their
+    members and persons associated with their members with the Exchange Act, the rules and
+    regulations thereunder, and their own rules
+- article: Exchange Act
+  law_celex: 32022L0552
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national securities exchanges
+  deadline: null
+  interpretive: null
+  requirement_text: NSEs are required to inform the SEC of any rule changes
+- article: Article 2(1)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: Upon completion of an investigation, the investigation officer shall inform
+    the person subject to investigation in writing stating its findings and shall provide
+    that person with the opportunity to make written submissions
+- article: Article 2(1)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set out the facts liable to constitute
+    one or more infringements including an assessment of the nature and seriousness of those
+    infringements
+- article: Article 2(2)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set a reasonable time limit of at least
+    four weeks for the person subject to investigation to make its written submissions
+- article: Article 2(2)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The investigation officer shall not be obliged to take into account written
+    submissions received after the time limit has expired
+- article: Article 3(1)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include the statement of findings, copy of written submissions, and minutes of any
+    oral hearing
+- article: Article 3(2)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: When a file is incomplete, ESMA shall make a reasoned request for additional
+    documents to the investigation officer
+- article: Article 3(3)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers that the facts do not constitute infringements, it
+    shall decide to close the case and shall notify that decision to the person subject to
+    investigation
+- article: Article 3(4)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA does not agree with the findings, it shall submit a new statement
+    of findings with a time limit of at least four weeks for written submissions
+- article: Article 3(4)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the time limit expiry for adopting decisions on infringements and supervisory measures
+- article: Article 3(5)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA agrees with findings, it shall inform the person accordingly
+    and set a time limit of at least two weeks (full agreement) or four weeks (partial agreement)
+    for written submissions
+- article: Article 3(5)
+  law_celex: 32022R0803
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the time limit expiry for adopting decisions on infringements and supervisory measures
+- article: Article 3(1)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third country benchmark administrators applying for recognition
+  deadline: null
+  interpretive: null
+  requirement_text: A benchmark administrator established in a third country that applies
+    for recognition pursuant to article 32 of Regulation (EU) 2016/1011 shall pay a recognition
+    fee of EUR 40000
+- article: Article 3(2)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: critical benchmark administrators applying for authorisation
+  deadline: null
+  interpretive: null
+  requirement_text: The administrator of a critical benchmark that applies for authorisation
+    in accordance with article 34 of Regulation (EU) 2016/1011 shall pay an application fee
+    of EUR 250000
+- article: Article 3(3)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: benchmark administrators applying for authorisation or recognition
+  deadline: null
+  interpretive: null
+  requirement_text: The authorisation fee and the recognition fee shall be paid at the time
+    of the submission of the application, upon receipt of ESMA's debit note
+- article: Article 3(4)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third country benchmark administrators with applications received after
+    1 October 2021
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of the applications received by national competent authorities
+    after 1 October 2021 and transferred to ESMA, the recognition fees shall be paid at the
+    beginning of 2022
+- article: Article 4(1)(a)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: critical benchmark administrators with college of supervisors
+  deadline: null
+  interpretive: null
+  requirement_text: The administrator of one or more critical benchmarks shall pay an annual
+    supervisory fee of EUR 250000, in cases where ESMA has to chair a college of supervisors
+    pursuant to article 46 of Regulation (EU) 2016/1011
+- article: Article 4(1)(b)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: critical benchmark administrators without college of supervisors
+  deadline: null
+  interpretive: null
+  requirement_text: The administrator of one or more critical benchmarks shall pay an annual
+    supervisory fee of EUR 200000, in cases where ESMA does not have to chair a college of
+    supervisors pursuant to article 46 of Regulation (EU) 2016/1011
+- article: Article 4(2)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: recognised third country benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: A benchmark administrator established in a third country recognised by
+    ESMA shall pay an annual supervisory fee calculated according to specified formula based
+    on turnover coefficient
+- article: Article 4(2)(d)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: recognised third country benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: The minimum annual supervisory fee for recognised third country administrators
+    shall be EUR 20000, including when the applicable turnover of the recognised third country
+    administrator is equal to zero
+- article: Article 4(3)
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: Benchmark administrators shall pay their relevant annual supervisory fees
+    to ESMA at the latest on 31 March of the calendar year in which they are due
+- article: Article 5
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: newly recognised third country administrators and authorised critical
+    benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: The supervisory fee of the first year shall be paid after the administrator
+    has been notified by ESMA that its application has been successful and within 30 days
+    from the date of issuance of ESMA's relevant debit note
+- article: Article 6
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: recognised third country benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: A recognised third country benchmark administrator shall provide ESMA,
+    on an annual basis, with audited figures confirming its revenues accrued in relation to
+    the use of its benchmarks in the Union
+- article: Article 6
+  law_celex: 32022R0805
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: recognised third country benchmark administrators
+  deadline: null
+  interpretive: null
+  requirement_text: The figures shall be certified by an external audit and shall be submitted
+    to ESMA by electronic means before 30 September every year
+- article: Article 25(6)
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third-country central counterparties
+  deadline: null
+  interpretive: null
+  requirement_text: CCPs authorised in a third country must comply with legally binding requirements
+    which are equivalent to the requirements laid down in Title IV of Regulation (EU) No 648/2012
+- article: Section 17A
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs clearing securities or security-based derivatives
+  deadline: null
+  interpretive: null
+  requirement_text: A CCP clearing securities or security-based derivatives is required to
+    register with the SEC or to seek exemption from registration
+- article: Section 3(a)26
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: registered CCPs
+  deadline: null
+  interpretive: null
+  requirement_text: CCP must file any rule change with the SEC for approval as a self-regulatory
+    organization
+- article: Rule 17Ad-22(d) and (e)
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: covered clearing agencies
+  deadline: null
+  interpretive: null
+  requirement_text: CCPs with a more complex risk profile or that are systemically important
+    must comply with enhanced framework requirements
+- article: Primary rules
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: covered clearing agencies
+  deadline: null
+  interpretive: null
+  requirement_text: CCP qualified as a covered clearing agency must fulfil requirements with
+    respect to its organisational structure and rules to ensure prompt and accurate clearing
+    and settlement, safeguard of securities and funds, and protection of investors and public
+    interest
+- article: Primary rules
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: covered clearing agencies
+  deadline: null
+  interpretive: null
+  requirement_text: CCPs qualified as covered clearing agencies are required to set up procedures
+    to cover any uncovered liquidity shortfall, ensuring that committed resources are available
+    where losses exceed the default of the clearing member to which it has the largest exposure
+- article: Primary rules
+  law_celex: 32021R0085
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: covered clearing agencies clearing security-based derivatives
+  deadline: null
+  interpretive: null
+  requirement_text: CCPs qualified as covered clearing agencies must apply the cover 2 principle
+    where they clear security-based derivatives
+- article: Article 82a(1)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that, where an investment company or, for any
+    of the common funds it manages, a management company draws up, provides, revises and translates
+    a key information document which complies with the requirements for key information documents
+    laid down in Regulation (EU) No 1286/2014, competent authorities consider that key information
+    document to satisfy the requirements applicable to key investor information set out in
+    Articles 78 to 82 and Article 94 of this Directive.
+- article: Article 82a(2)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall ensure that competent authorities do not require an
+    investment company or, for any of the common funds it manages, a management company to
+    draw up key investor information in accordance with Articles 78 to 82 and Article 94 of
+    this Directive where it draws up, provides, revises and translates a key information document
+    which complies with the requirements for key information documents set out in Regulation
+    (EU) No 1286/2014.
+- article: Article 2(1)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2022-06-30'
+  interpretive: null
+  requirement_text: By 30 June 2022, Member States shall adopt and publish the measures necessary
+    to comply with this Directive. They shall immediately inform the Commission thereof.
+- article: Article 2(1)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2023-01-01'
+  interpretive: null
+  requirement_text: They shall apply those measures from 1 January 2023.
+- article: Article 2(1)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those measures, they shall contain a reference
+    to this Directive or shall be accompanied by such a reference on the occasion of their
+    official publication.
+- article: Article 2(2)
+  law_celex: 32021L2261
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    measures of national law which they adopt in the field covered by this Directive.
+- article: Article 1(1)
+  law_celex: 32020R1302
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third-country central counterparties (CCPs)
+  deadline: null
+  interpretive: null
+  requirement_text: A CCP established in a third country that applies for recognition in accordance
+    with Article 25 of Regulation (EU) No 648/2012 shall pay a basic recognition fee of EUR
+    50 000.
+- article: Article 1(2)
+  law_celex: 32020R1302
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Tier 2 CCPs (systemically important third-country CCPs)
+  deadline: null
+  interpretive: null
+  requirement_text: A CCP established in a third country shall pay an additional recognition
+    fee of EUR 360 000 where ESMA determines that CCP is systemically important or likely
+    to become systemically important (Tier 2 CCP).
+- article: Article 2(1)
+  law_celex: 32020R1302
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: recognised third-country CCPs
+  deadline: null
+  interpretive: null
+  requirement_text: A recognised CCP shall pay an annual fee.
+- article: Article 4(1)
+  law_celex: 32020R1302
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Tier 2 CCPs
+  deadline: null
+  interpretive: null
+  requirement_text: Tier 2 CCPs shall provide ESMA, on an annual basis, with audited figures
+    confirming its worldwide revenues accrued from the provision of clearing services.
+- article: Article 4(1)
+  law_celex: 32020R1302
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Tier 2 CCPs
+  deadline: null
+  interpretive: null
+  requirement_text: The audited figures shall be submitted to ESMA no late[r than the specified
+    deadline].
+- article: Article 1(1)(a)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include the statement of findings and a copy of the statement of findings addressed
+    to the person subject to the investigation
+- article: Article 1(1)(b)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include a copy of the written submissions by the person subject to the investigation
+- article: Article 1(1)(c)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include the minutes of any oral hearing
+- article: Article 3a(2)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The investigation officer shall submit the file with his or her findings
+    to ESMA and immediately inform the person subject to investigation of his or her findings
+    but shall not provide that person with the opportunity to make submissions
+- article: Article 3a(2)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings of the investigation officer shall set out the
+    facts liable to constitute one or more of the infringements listed in Annex I to Regulation
+    (EU) No 648/2012, including any aggravating or mitigating factors of those infringements
+- article: Article 3a(2)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: Where so requested, the investigation officer shall grant access to the
+    file to the person subject to investigation
+- article: Article 3a(3)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers that the facts described in the statement of findings
+    of the investigation officer appear not to constitute an infringement listed in Annex
+    I to Regulation (EU) No 648/2012, it shall decide to close the investigation and notify
+    that decision to the person subject to investigation
+- article: Article 3a(4)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA decides that one or more of the infringements listed in Annex
+    I to Regulation (EU) No 648/2012 has been committed by a person subject to investigation
+    and adopts an interim decision imposing supervisory measures as laid down in Article 73(1),
+    points (a), (c) and (d), of Regulation (EU) No 648/2012, ESMA shall immediately notify
+    that interim decision to that person
+- article: Article 3a(4)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall set a reasonable time limit within which the persons subject
+    to investigation may make written submissions on the interim decision
+- article: Article 3a(4)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the expiry of that time limit
+- article: Article 3a(4)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where so requested, ESMA shall grant access to the file to the persons
+    subject to the investigation
+- article: Article 3a(5)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall hear the person subject to the investigation and take a final
+    decision as soon as possible after the adoption of the interim decision
+- article: Article 3a(5)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers, based on the complete file and after having heard
+    the persons subject to investigation, that one or more of the infringements listed in
+    Annex I to Regulation (EU) No 648/2012 has been committed by the person subject to investigation,
+    it shall adopt a confirmatory decision imposing one or more of the supervisory measures
+    laid down in Article 73(1), points (a), (c) and (d), of Regulation (EU) No 648/2012
+- article: Article 3a(5)
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall immediately notify the person concerned of that decision
+- article: Article 8
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA accounting officer
+  deadline: null
+  interpretive: null
+  requirement_text: The amounts of fines and periodic penalty payments collected by ESMA shall
+    be lodged to an interest-bearing account opened by the accounting officer of ESMA until
+    such time as they become final
+- article: Article 8
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA accounting officer
+  deadline: null
+  interpretive: null
+  requirement_text: In case multiple fines or periodic penalty payments are collected by ESMA
+    in parallel, the accounting officer of ESMA shall ensure that they are lodged to different
+    accounts or subaccounts
+- article: Article 8
+  law_celex: 32021R0732
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA Accounting Officer
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA's Accounting Officer shall report on a regular basis to the Authorising
+    Officer of Directorate-General for Financial Stability, Financial Services and Capital
+    Markets Union of the European Commission on the amounts of fines and periodic penalty
+    payments imposed and their status
+- article: Article 2
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: null
+  interpretive: null
+  requirement_text: The Eurosystem central banks shall comply with points 1, 2 and 19 of Article
+    1 from that date.
+- article: Article 2
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: '2018-10-01'
+  interpretive: null
+  requirement_text: The Eurosystem central banks shall comply with points 3 to 18 and 20 and
+    21 of Article 1 of this Guideline from 1 October 2018.
+- article: Article 1
+  law_celex: 32017D1361
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: entities originating or establishing asset-backed securities under the
+    ABSPP
+  deadline: null
+  interpretive: null
+  requirement_text: The entity which has originated or established the ABS must not be an
+    entity that has as its main purpose the gradual divestment of its assets and the cessation
+    of its business
+- article: Article 1
+  law_celex: 32017D1361
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: entities originating or establishing asset-backed securities under the
+    ABSPP
+  deadline: null
+  interpretive: null
+  requirement_text: The entity which has originated or established the ABS must not be an
+    asset management or divestment entity established to support financial sector restructuring
+    and/or resolution, including asset management vehicles resulting from a resolution action
+    in the form of the application of an asset separation tool pursuant to Article 26 of Regulation
+    (EU) No 806/2014 or national legislation implementing Article 42 of Directive 2014/59/EU
+- article: Article 2
+  law_celex: 32017D1361
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank and relevant entities
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on 21 July 2017
+- article: Article 1(1)
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: approved publication arrangements (APAs) and approved reporting mechanisms
+    (ARMs)
+  deadline: null
+  interpretive: null
+  requirement_text: APAs and ARMs shall be subject to authorisation and supervision by a competent
+    authority of a Member State if their activities on average do not exceed the thresholds
+    set out in Article 2 and where more than one APA or ARM is operated by the same operator,
+    a derogation shall only apply if the activities of none of the APAs or ARMs exceed the
+    thresholds
+- article: Article 1(3)
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Securities and Markets Authority (ESMA)
+  deadline: null
+  interpretive: null
+  requirement_text: The relevance for the internal market of the activities of an APA or an
+    ARM shall be reassessed by ESMA every year, starting in the year following the first full
+    calendar year after authorisation
+- article: Article 1(4)
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: APAs and ARMs subject to reassessment
+  deadline: null
+  interpretive: null
+  requirement_text: In the case that based on the reassessment in two consecutive years the
+    thresholds for derogation or application of ESMA supervision are no longer met, the change
+    into application or derogation of ESMA supervision shall take effect on 1 June in the
+    following year
+- article: Article 2(1)
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: approved publication arrangements (APAs) and approved reporting mechanisms
+    (ARMs)
+  deadline: null
+  interpretive: null
+  requirement_text: An APA or ARM shall be subject to a derogation from ESMA supervision where
+    it provides services to investment firms in maximum three different Member States with
+    at least 50% of those firms authorised in the same Member State, and where trading volumes
+    do not exceed 0.5% of total volumes for equity and non-equity instruments, and transaction
+    reporting does not exceed 0.5% of total transactions
+- article: Article 2(2)
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: approved publication arrangements (APAs) and approved reporting mechanisms
+    (ARMs)
+  deadline: null
+  interpretive: null
+  requirement_text: APAs and ARMs shall provide the competent authority on request data which
+    allows the assessment of the criterion laid down in paragraph 1, point (a)
+- article: Article 3
+  law_celex: 32022R0466
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: European Securities and Markets Authority (ESMA)
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall perform the initial assessment of the derogation criteria listed
+    in Article 2 based on data related to the first 6 months of 2021
+- article: Article 1
+  law_celex: 32016R1033
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall elaborate draft regulatory technical standards for submission
+    to the Commission regarding a methodology for determining package orders for which there
+    is a liquid market
+- article: Article 1
+  law_celex: 32016R1033
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall adopt draft regulatory technical standards by means
+    of delegated acts pursuant to Article 290 of the Treaty on the Functioning of the Union
+    and in accordance with Articles 10 to 14 of Regulation (EU) No 1095/2010
+- article: Article 1
+  law_celex: 32016R1033
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All entities subject to Regulation (EU) No 600/2014
+  deadline: null
+  interpretive: null
+  requirement_text: Application of Regulation (EU) No 600/2014 is deferred until 3 January
+    2018
+- article: Article 2
+  law_celex: 32016R1033
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All entities subject to Regulation (EU) No 596/2014
+  deadline: null
+  interpretive: null
+  requirement_text: Application of Article 4(2) and (3) of Regulation (EU) No 596/2014 is
+    deferred until 3 January 2018
+- article: Article 3
+  law_celex: 32016R1033
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All entities interpreting Regulation (EU) No 596/2014
+  deadline: null
+  interpretive: null
+  requirement_text: References in Regulation (EU) No 596/2014 to organised trading facilities,
+    SME growth markets, emission allowances or auctioned products shall be read as references
+    to Directive 2004/39/EC until the application date of Regulation (EU) No 600/2014 and
+    Directive 2014/65/EU
+- article: Article 1
+  law_celex: 32017D0102
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank and national central banks implementing the asset-backed
+    securities purchas...
+  deadline: null
+  interpretive: null
+  requirement_text: Purchases of nominal ABSs at a negative yield to maturity (or yield to
+    worst) equal to or above the deposit facility rate are permitted
+- article: Article 1
+  law_celex: 32017D0102
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank and national central banks implementing the asset-backed
+    securities purchas...
+  deadline: null
+  interpretive: null
+  requirement_text: Purchases of nominal ABSs at a negative yield to maturity (or yield to
+    worst) below the deposit facility rate are permitted to the extent necessary
+- article: Article 2
+  law_celex: 32017D0102
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank and national central banks
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on 13 January 2017
+- article: Article 2(1)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: Upon completion of an investigation of potential infringements, and before
+    submitting a file to ESMA, the investigation officer shall inform the person subject to
+    investigation in writing of its findings and shall provide that person with the opportunity
+    to make written submissions
+- article: Article 2(1)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set out the facts liable to constitute
+    one or more of the infringements of the requirements set out in Title VI of Regulation
+    (EU) 2016/1011, including an assessment of the nature and seriousness of those infringements
+- article: Article 2(2)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set a reasonable time limit for the person
+    subject to investigation to make its written submissions
+- article: Article 2(2)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The investigation officer shall not be obliged to take into account a
+    written submissions received after that time limit has expired
+- article: Article 3(1)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include the statement of finding and a copy thereof addressed to the benchmark administrator
+    or the person subject to the investigation, a copy of the written submission, and the
+    minutes of any oral hearing
+- article: Article 3(2)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: When a file is incomplete, ESMA shall make a reasoned request for additional
+    documents to the investigation officer
+- article: Article 3(3)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers that the facts described in the statement of findings
+    do not constitute infringements, it shall decide to close the case and it shall notify
+    that decision to the person subject to investigation
+- article: Article 3(4)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA does not agree with the findings of the investigation officer
+    it shall submit a new statement of findings to the person subject to investigation
+- article: Article 3(4)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: That statement of findings shall set a time limit of at least four weeks
+    within which the person subject to investigation may make written submissions
+- article: Article 3(4)
+  law_celex: 32022R0804
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the expiry of that time limit for adopting a decision
+- article: Article 14b(m)
+  law_celex: 32014R0091
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: management companies
+  deadline: null
+  interpretive: null
+  requirement_text: A substantial portion, and in any event at least 50%, of any variable
+    remuneration component must consist of units of the UCITS concerned, equivalent ownership
+    interests, or share-linked instruments or equivalent non-cash instruments with equally
+    effective incentives, unless the management of UCITS accounts for less than 50% of the
+    total portfolio managed by the management company.
+- article: Article 1 (Article 15a, paragraph 1)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories already registered with ESMA as of 31 December 2020
+    shall be charged an annual supervisory fee for 2021 calculated in accordance with Article
+    7, with applicable turnover calculated according to specified methodology.
+- article: Article 1 (Article 15a, paragraph 3)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: '2021-05-26'
+  interpretive: null
+  requirement_text: ESMA shall reimburse the difference to the trade repository where the
+    amount already paid before 26 May 2021 is higher than the annual supervisory fee calculated.
+- article: Article 1 (Article 15a, paragraph 4)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: The annual supervisory fee for 2021 for the trade repositories shall be
+    due on 31 October 2021.
+- article: Article 1 (Article 15a, paragraph 5)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall send the invoice for the annual supervisory fee for 2021 to
+    the trade repositories at least 30 days before the payment date.
+- article: Article 1 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories shall report to ESMA the indicators referred to in
+    Article 3(1) for 2021 when the audited accounts for 2021 become available.
+- article: Article 1 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories shall be charged any difference between the annual
+    supervisory fee actually paid and the fee that would have been due based on reported indicators.
+- article: Article 1 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall send the invoice for any additional payment at least 30 days
+    before the respective payment date.
+- article: Article 2 (Article 15a, paragraph 1)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories already registered with ESMA as of 31 December 2020
+    shall be charged an annual supervisory fee for 2021 calculated in accordance with Article
+    6, with applicable turnover calculated according to specified methodology.
+- article: Article 2 (Article 15a, paragraph 3)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: '2021-05-26'
+  interpretive: null
+  requirement_text: ESMA shall reimburse the difference to the trade repository where the
+    amount already paid before 26 May 2021 is higher than the annual supervisory fee calculated.
+- article: Article 2 (Article 15a, paragraph 4)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: The annual supervisory fee for 2021 for the trade repositories shall be
+    due on 31 October 2021.
+- article: Article 2 (Article 15a, paragraph 5)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall send the invoice for the annual supervisory fee for 2021 to
+    the trade repositories at least 30 days before the payment date.
+- article: Article 2 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories shall report to ESMA the indicators referred to in
+    Article 2(3) for 2021 when the audited accounts for 2021 become available.
+- article: Article 2 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories registered with ESMA as of 31 December 2020
+  deadline: null
+  interpretive: null
+  requirement_text: Trade repositories shall be charged any difference between the annual
+    supervisory fee actually paid and the fee that would have been due based on reported indicators.
+- article: Article 2 (Article 15a, paragraph 6)
+  law_celex: 32021R0822
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall send the invoice for any additional payment at least 30 days
+    before the respective payment date.
+- article: Article 5(2) of Council Regulation (EC) No 2533/98
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank (ECB)
+  deadline: null
+  interpretive: null
+  requirement_text: The ECB must consult the Commission on draft ECB regulations whenever
+    links with the statistical requirements of the Commission exist
+- article: Article 1(1)(c)
+  law_celex: 32022R0551
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: central counterparties clearing TBAs that are supervised by the SEC and
+    applying for recognition ...
+  deadline: null
+  interpretive: null
+  requirement_text: Must apply a liquidation period of three days calculated on a net basis
+    for mortgage-backed securities traded on To-Be-Announced basis
+- article: Article 1(2)(d)
+  law_celex: 32022R0551
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: central counterparties for contracts referred to in points (a), (b) and
+    (c)
+  deadline: null
+  interpretive: null
+  requirement_text: 'Must apply measures designed to limit procyclicality equivalent to at
+    least one of the three specified measures: (i) margin buffer at least equal to 25% of
+    calculated margins, or (ii) at least 25% weight to stressed observations in look-back
+    period, or (iii) margin requirements not lower than those calculated using volatility
+    estimated over 10 year historical look-back period'
+- article: Recital (7)
+  law_celex: 32022R0551
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Securities and Markets Authority (ESMA)
+  deadline: null
+  interpretive: true
+  requirement_text: ESMA shall verify that risk management standards are part of the internal
+    rules and procedures of any CCP that clears TBAs and is supervised by the SEC and is applying
+    for recognition in the Union
+- article: Recital (7)
+  law_celex: 32022R0551
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: European Securities and Markets Authority (ESMA)
+  deadline: null
+  interpretive: true
+  requirement_text: ESMA shall check that the CCP applies a three-day liquidation period with
+    respect to TBAs on a net basis and applies anti-procyclicality measures equivalent to
+    those in Article 28(1) of Delegated Regulation (EU) No 153/2013
+- article: Article 26(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CSD-banking service providers
+  deadline: null
+  interpretive: null
+  requirement_text: A CSD-banking service provider shall have effective reimbursement procedures
+    of intraday credit, which comply with the requirements in paragraph 2.
+- article: Article 1
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repositories
+  deadline: null
+  interpretive: null
+  requirement_text: The fees charged to securitisation repositories shall cover all costs
+    relating to the registration and supervision of securitisation repositories by ESMA in
+    accordance with Regulation (EU) 2017/2402, including costs resulting from the extension
+    of registration for trade repositories that have already been registered under Title VI,
+    Chapter 1 of Regulation (EU) No 648/2012 or Chapter III of Regulation (EU) 2015/2365
+- article: Article 1
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repositories
+  deadline: null
+  interpretive: null
+  requirement_text: The fees charged to securitisation repositories shall cover all costs
+    for the reimbursement of competent authorities that have carried out work pursuant to
+    Regulation (EU) 2017/2402, and as a result of any delegation of tasks pursuant to Article
+    14(1) of that Regulation
+- article: Article 2(1)
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repositories
+  deadline: null
+  interpretive: null
+  requirement_text: Securitisation repositories registered only under Regulation (EU) 2017/2402
+    shall keep audited accounts for the purposes of this Regulation which distinguish the
+    revenues generated from core securitisation services, ancillary securitisation services,
+    and any other services provided
+- article: Article 2(2)
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A securitisation repository registered under Regulation (EU) 2017/2402
+    that is also registered as a trade repository under either Regulation (EU) No 648/2012
+    or Regulation (EU) 2015/2365 shall keep audited accounts for the purposes of this Regulation
+    which distinguish between the revenues generated from provision of core securitisation
+    services, ancillary securitisation services, core functions of trade repositories, and
+    other specified services
+- article: Article 2(5)
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A securitisation repository that decides to provide ESMA with an update
+    of the expected revenues for year n shall do so by 30 September of year n-1
+- article: Article 3(1)
+  law_celex: 32020R1732
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: securitisation repository applicants
+  deadline: null
+  interpretive: null
+  requirement_text: Where the applicant is not registered as a trade repository under either
+    Title VI, Chapter 1, of Regulation (EU) No 648/2012 or Chapter III of Regulation (EU)
+    2015/2365, the registration fee shall amount to EUR 100,000 where the repository intends
+    to provide ancillary services, or EUR 65,000 where it does not
+- article: Article 2(a)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: Where a DRSP applies for authorisation to provide data reporting services
+    it shall pay for APAs and ARMs an application fee of EUR 20000 for the first application
+    and EUR 10000 for each following application for authorisation of additional data reporting
+    services in case the applicant does not have a derogation
+- article: Article 2(b)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: Where a DRSP applies for authorisation to provide data reporting services
+    it shall pay for APAs and ARMs an authorisation fee of EUR 80000 for the first authorisation
+    and EUR 40000 for each following authorisation of additional data reporting services,
+    in case the applicant does not have a derogation
+- article: Article 3(1)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: A DRSP which is subject to ESMA supervision shall be charged an annual
+    supervisory fee
+- article: Article 3(3)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: approved publication arrangements (APAs) and approved reporting mechanisms
+    (ARMs)
+  deadline: null
+  interpretive: null
+  requirement_text: In no case shall an APA or ARM authorised by ESMA pay an annual supervisory
+    fee of less than EUR 30000
+- article: Article 3(3)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: In case an entity is subject to minimum supervisory fees for more than
+    one data reporting service, it shall pay the minimum supervisory fee for each service
+    provided
+- article: Article 4(1)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: DRSPs shall keep audited accounts for the purposes of this Regulation
+    which distinguish between revenues generated from ARM services, revenues generated from
+    APA services, revenues generated from ancillary services to ARM activities, and revenues
+    generated from ancillary services to APA activities
+- article: Article 4(4)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: DRSPs shall provide ESMA, on an annual basis, with audited accounts. The
+    documents shall be submitted to ESMA by electronic means no later than 30 September each
+    year (n-1)
+- article: Article 4(4)
+  law_celex: 32022R0930
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs)
+  deadline: null
+  interpretive: null
+  requirement_text: If a DRSP authorised after 30 September, it shall provide the figures
+    immediately upon authorisation and by end of the year of authorisation
+- article: Article 3(1)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall collect and report to the ECB statistical information on holdings
+    of securities with an ISIN code provided by sectoral data reporting agents, on a security-by-security
+    basis, in accordance with the reporting schemes in Annex I, Part 1 (Tables 1 to 3) and
+    Part 2 (Tables 1 to 3), and in compliance with electronic reporting standards which are
+    laid down separately
+- article: Article 3(1)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall also report end-of-year positions, as laid down in Article
+    3(2b) of Regulation (EU) No 1011/2012 (ECB/2012/24) in accordance with the reporting scheme
+    in Annex I, Part 3 (Tables 1 to 2)
+- article: Article 3(2)(a)(i)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall report on a quarterly basis data on end-of-quarter security-by-security
+    positions by close of business on the 70th calendar day following the end of the quarter
+    to which the data relate
+- article: Article 3(2)(a)(ii)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: 'NCBs shall report either: (1) on a quarterly basis security-by-security
+    transactions and, where available, other changes in volume over the reference quarter
+    by close of business on the 70th calendar day following the end of the quarter to which
+    the data relate; or (2) security-by-security positions and, where available, other changes
+    in volume, which are necessary for the derivation of transactions'
+- article: Article 3(2)(a)(ii)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall report in accordance with the approaches described under Part
+    1 of Chapter 1 of Annex I to Regulation (EU) No 1011/2012 (ECB/2012/24) by close of business
+    on the 70th calendar day following the end of the quarter to which the data relate for
+    quarterly security-by-security data and on the 63rd calendar day following the end of
+    the month to which the data relate for monthly security-by-security data
+- article: Article 3(2)(b)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: with respect to holdings of securities by insurance corporations (ICs)
+    on an annual basis, NCBs shall report data on end-of-year aggregated positions by close
+    of business on the 70th calendar day following the end of the year to which the data relate
+- article: Article 3a(1)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall collect and report to the ECB statistical information on holdings
+    of securities with an ISIN code provided by group data reporting agents, on a security-by-security
+    basis, in accordance with the reporting schemes in Annex I, Part 2 (Tables 1 to 3), and
+    in compliance with electronic reporting standards which are laid down separately
+- article: Article 3a(2)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall report to the ECB the data mentioned in paragraph 1 by close
+    of business on the 55th calendar day following the end of the quarter to which the data
+    relate
+- article: Article 3a(2)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: 'the NCB shall submit a request for a derogation to the ECB in writing,
+    setting out: (a) the reasons on which the request is based, demonstrating that it is necessary
+    for the purposes of ensuring the accuracy and consistency of the data reported to the
+    ECB by enabling the NCB to cross-check the data with additional data sources, which otherwise
+    would not be available in time for the required quality checking of input data; (b) the
+    period for which such a derogation should be granted'
+- article: Article 3b(2)(a)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: 'NCBs shall report regular revisions as follows: (i) revisions to monthly
+    data with reference to the three months prior to the most recent quarter, which are transmitted
+    on a quarterly basis, shall be sent together with the data for the most recent quarter
+    (regular data transmission); revisions to monthly data with reference to the month prior
+    to the most recent month, which are transmitted on a monthly basis, shall be sent together
+    with the data for the most recent month (regular data transmission)'
+- article: Article 3b(2)(a)(ii)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: revisions to quarterly data with reference to the quarter prior to the
+    most recent quarter shall be sent together with the data for the most recent quarter (regular
+    data transmission)
+- article: Article 3b(2)(a)(iii)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: revisions to the previous three years (12 quarters) shall be sent together
+    with the regular transmission of data referring to the third quarter of the year
+- article: Article 3b(2)(a)(iv)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: the reporting of any other regular revisions not falling under points
+    (i) to (iii) shall be agreed with the ECB
+- article: Article 3b(2)(b)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall report exceptional revisions that significantly improve the
+    quality of the data as soon as available and outside the regular transmission periods,
+    subject to prior agreement with the ECB
+- article: Article 3b(2)(b)
+  law_celex: 32016R1386
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall submit explanatory notes to the ECB setting out the reasons
+    for significant revisions
+- article: Article 1(1)
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: 'NCBs shall collect and report to the ECB statistical information on holdings
+    of securities with an ISIN code, on a security-by-security basis, in accordance with the
+    reporting schemes in Annex I, Part 1 (Tables 1 to 3) and Part 2 (Tables 1 to 3), and in
+    compliance with electronic reporting standards which are laid down separately, for the
+    following types of instruments: short-term debt securities (F.31); long-term debt securities
+    (F.32); listed shares (F.511) and investment fund shares or units (F.52)'
+- article: Article 1(1)
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall report end-of-quarter positions and either (i) end-of-quarter
+    financial transactions over the reference quarter, or (ii) end-of-month or end-of-quarter
+    data that are necessary to derive financial transactions
+- article: Article 1(1)
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: NCBs shall also report end-of-year positions, as laid down in Article
+    3(2b) of Regulation (EU) No 1011/2012 (ECB/2012/24) in accordance with the reporting scheme
+    in Annex I, Part 3 (Tables 1 to 2) of this Guideline
+- article: Article 1(1)
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: Financial transactions or data necessary to derive financial transactions
+    that are reported by actual reporting agents to NCBs in accordance with Part 1 of Annex
+    I to Regulation (EU) No 1011/2012 (ECB/2012/24) shall be measured as laid down in Part
+    3 of Annex II to Regulation (EU) No 1011/2012 (ECB/2012/24)
+- article: Article 1(2)
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks (NCBs)
+  deadline: null
+  interpretive: null
+  requirement_text: with respect to holdings of securities by insurance corporations (ICs)
+    on an annual basis, NCBs shall report data on end-of-year aggregated positions
+- article: Article 3
+  law_celex: 32015R0948
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: null
+  interpretive: null
+  requirement_text: The Eurosystem central banks shall comply with this Guideline from the
+    date of entry into force of Regulation (EU) 2015/730 of the European Central Bank (ECB/2015/18)
+- article: Recital 4
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: credit institutions
+  deadline: null
+  interpretive: true
+  requirement_text: The exemption threshold for credit institutions shall only be available
+    for a limited period of time, ending on 31 December 2022
+- article: Recital 8
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: issuers
+  deadline: null
+  interpretive: true
+  requirement_text: The EU Recovery prospectus should only be used for secondary issuances
+    of shares
+- article: Recital 8
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: companies using EU Recovery prospectus
+  deadline: null
+  interpretive: true
+  requirement_text: Companies must have had shares admitted to trading on a regulated market
+    or traded on an SME growth market continuously for at least the last 18 months before
+    the offer of shares or admission to trading
+- article: Recital 8
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: companies using EU Recovery prospectus
+  deadline: null
+  interpretive: true
+  requirement_text: Companies should have complied with periodic and ongoing disclosure requirements
+    under Regulation (EU) No 596/2014 and Directive 2004/109/EC
+- article: Recital 8
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: issuers or offerors using EU Recovery prospectus
+  deadline: null
+  interpretive: true
+  requirement_text: Issuers or offerors should address how the COVID-19 pandemic has affected
+    the issuers' business activities as well as the pandemic's future anticipated impact on
+    the issuers' business activities, if any
+- article: Recital 10
+  law_celex: 32021R0337
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: issuers using EU Recovery prospectus
+  deadline: null
+  interpretive: true
+  requirement_text: The EU Recovery prospectus summary should focus on key information covering
+    specifically the business and financial impact, if any, of the COVID-19 pandemic
+- article: Article 1
+  law_celex: 32023D0269
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: The position to be adopted, on behalf of the Union, within the EEA Joint
+    Committee on the proposed amendment to Annex IX (Financial Services) to the EEA Agreement
+    shall be based on the draft Decision of the EEA Joint Committee attached to this Decision.
+- article: Article 2
+  law_celex: 32023D0269
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Union
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its adoption.
+- article: Article 5
+  law_celex: 32019R1007
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Market Infrastructure Board (MIB)
+  deadline: null
+  interpretive: null
+  requirement_text: The MIB shall be in charge of the tasks assigned to it in accordance with
+    Decision (EU) 2019/166 (ECB/2019/3)
+- article: Article 15(1)(b)
+  law_celex: 32019R1007
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: central securities depositories (CSDs)
+  deadline: null
+  interpretive: null
+  requirement_text: CSDs must have been positively assessed by the competent authorities against
+    (i) Regulation (EU) No 909/2014 for CSDs located in an EEA jurisdiction, or (ii) the Principles
+    for Financial Market Infrastructures of the Committee on Payment and Market Infrastructures
+    and the International Organisation of Securities Commissions dated April 2012 or a legal
+    framework implementing those principles, for CSDs located in a non-EEA jurisdiction
+- article: Article 2
+  law_celex: 32019R1007
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: This Guideline shall take effect on the day of its notification to the
+    national central banks of the Member States whose currency is the euro
+- article: Article 8(1)(a)
+  law_celex: 32017R1404
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: null
+  interpretive: null
+  requirement_text: Eurosystem central banks shall ensure that T2S Board members shall not
+    be directly involved in the oversight of T2S or of CSDs that outsource settlement operations
+    to T2S, to the extent that such involvement could give rise to actual or potential conflicts
+    with their functions as T2S Board Members, and appropriate measures shall be put in place
+    to identify and avoid any such conflicts
+- article: Article 8(1)(b)
+  law_celex: 32017R1404
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: null
+  interpretive: null
+  requirement_text: Eurosystem central banks shall ensure that T2S Board members shall not
+    be part of the Internal Auditors Committee (IAC), nor shall they be involved in Level
+    3 Activities on a day-to-day basis
+- article: Article 8(1)(c)
+  law_celex: 32017R1404
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Eurosystem central banks
+  deadline: null
+  interpretive: null
+  requirement_text: Eurosystem central banks shall ensure that T2S oversight activities shall
+    be separated from T2S operational activities
+- article: Article 2
+  law_celex: 32017R1404
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: This Guideline shall take effect on the day of its notification to the
+    national central banks of the Member States whose currency is the euro
+- article: Article 1
+  law_celex: 32015D1612
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: third-country issuers
+  deadline: null
+  interpretive: null
+  requirement_text: Third-country issuers are permitted to prepare their annual and half-yearly
+    consolidated financial statements in accordance with Indian GAAP until 1 April 2016
+- article: Article 2
+  law_celex: 32015D1612
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must implement this Decision
+- article: Article 2
+  law_celex: 32021R2259
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the day following that of its
+    publication in the Official Journal of the European Union and shall be binding in its
+    entirety and directly applicable in all Member States
+- article: Article 54(8)
+  law_celex: 32014R0909
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Power is delegated to the Commission to adopt the regulatory technical
+    standards referred to in the first subparagraph in accordance with Articles 10 to 14 of
+    Regulation (EU) No 1093/2010
+- article: Article 1
+  law_celex: 32019R0357
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall ensure that details of SFTs made accessible to
+    each entity listed in Article 12(2) of Regulation (EU) 2015/2365 include the reports of
+    SFTs reported in accordance with Tables 1 to 4 of the Annex to Commission Delegated Regulation
+    (EU) 2019/356, including the latest trade states of SFTs that have not matured or which
+    have not been the subject of reports with action types Error, Termination/Early termination,
+    or Position component as referred to in Field 98 of Table 2 of Annex I to Commission Implementing
+    Regulation (EU) 2019/363
+- article: Article 1
+  law_celex: 32019R0357
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall ensure that details of SFTs made accessible to
+    each entity listed in Article 12(2) of Regulation (EU) 2015/2365 include the relevant
+    details of SFT reports rejected by the trade repository, including any SFT reports rejected
+    during the previous working day and the reasons for their rejection
+- article: Article 1(1)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA may restrict the application of the rights enshrined in Articles
+    14 to 21, and 35, as well as Article 4 of Regulation (EU) 2018/1725 only under the conditions
+    laid down in this Decision
+- article: Article 2(1)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Paper documents shall be kept in secured cupboards and only accessible
+    to authorized staff
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: All electronic data shall be managed with ESMA's approved devices, information
+    systems, applications and storage media resources
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA's document management system applications shall be used to organise,
+    find, share, maintain and protect ESMA's electronic data
+- article: Article 2(1)(b)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Authorised ESMA's staff shall only be granted access to electronic data
+    based on a need to know basis
+- article: Article 2(1)(c)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: persons having access to data
+  deadline: null
+  interpretive: null
+  requirement_text: All persons having access to the data are bound by the obligation of confidentiality
+- article: Article 2(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Data subjects shall be informed of the delegated controller by way of
+    the data protection records published on the website of ESMA
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period of the personal data processed shall be no longer
+    than necessary and appropriate for the purposes for which the data are processed
+- article: Article 2(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: The retention period shall be specified in the data protection records
+    and privacy statements
+- article: Article 2(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers to apply a restriction, the risk to the rights and
+    freedoms of the data subject shall be weighed against the risk to the rights and freedoms
+    of other data subjects and the risk of cancelling the effect of ESMA's investigations
+- article: Article 3(1)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Any restriction shall only be applied by ESMA to safeguard the specified
+    purposes listed in points (a) through (f)
+- article: Recital 9
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: true
+  requirement_text: Before making use of the restrictions foreseen in these internal rules,
+    ESMA should consider whether any of the exemptions laid down in Regulation (EU) 2018/1725
+    applies
+- article: Recital 9
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: true
+  requirement_text: In the cases where restrictions under these internal rules apply, ESMA
+    has to explain why these restrictions are strictly necessary and proportionate in a democratic
+    society and respect the essence of the fundamental rights and freedoms
+- article: Recital 10
+  law_celex: null
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: true
+  requirement_text: ESMA should monitor if the conditions that justify the restriction continue
+    to apply and lift the restriction when they no longer apply
+- article: Recital 11
+  law_celex: null
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: ESMA Controller
+  deadline: null
+  interpretive: true
+  requirement_text: The Controller should inform the Data Protection Officer when restricting
+    the application of certain data subjects' rights under this Decision, when extending such
+    restriction and when the restriction is lifted
+- article: Article 2(1)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: Upon completion of the investigation and before submitting the file to
+    ESMA, the investigation officer shall inform the person subject to investigation in writing
+    stating his or her findings and shall provide that person with the opportunity to make
+    written submissions
+- article: Article 2(2)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set a reasonable time limit within which
+    the person subject to investigation may make its written submissions
+- article: Article 2(2)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The investigation officer shall not be obliged to take into account written
+    submissions received after that time limit has expired
+- article: Article 3(1)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investigation officer
+  deadline: null
+  interpretive: null
+  requirement_text: The complete file to be submitted by the investigation officer to ESMA
+    shall include the statement of findings and a copy of the statement of findings addressed
+    to the person subject to the investigation, copy of the written submissions by the person
+    subject to the investigation, and the minutes of any oral hearing
+- article: Article 3(2)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers that the file submitted by the investigation officer
+    is not complete, it shall send back the file to the investigation officer with reasoned
+    request for additional documents
+- article: Article 3(3)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA considers, on the basis of a complete file, that the facts
+    described in the statement of findings appear not to constitute an infringement listed
+    in Annex III to Regulation (EU) No 648/2012, it shall decide to close the investigation
+    and notify that decision to the persons subject to investigation
+- article: Article 3(4)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA does not agree with the findings of the investigation officer
+    it shall submit a new statement of findings to the persons subject to investigation
+- article: Article 3(4)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set a reasonable time limit within which
+    the persons subject to investigation may make written submissions
+- article: Article 3(4)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the expiry of that time limit
+- article: Article 3(5)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA agrees with all or some of the findings of the investigation
+    officer it shall inform the persons subject to investigation accordingly
+- article: Article 3(5)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Such communication shall set a reasonable time limit within which the
+    person subject to investigation may make written submissions
+- article: Article 3(5)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the expiry of that time limit
+- article: Article 3(6)
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Where ESMA decides that one or more of the infringements listed in Annex
+    III to Regulation (EU) No 648/2012 has been committed by a person subject to investigation
+    and adopts a decision imposing a fine, it shall immediately notify that decision to the
+    person subject to investigation
+- article: Article 4
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: Before making a decision imposing a periodic penalty payment, ESMA shall
+    submit a statement of findings to the person subject to the proceedings setting out the
+    reasons justifying the imposition of a periodic penalty payment and the amount of the
+    periodic penalty payment per day of non-compliance
+- article: Article 4
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: The statement of findings shall set a time limit within which the person
+    subject to proceedings may make written submissions
+- article: Article 4
+  law_celex: 32021R0731
+  criticality: critical
+  addressee: eu_agency
+  applicable_entity: ESMA
+  deadline: null
+  interpretive: null
+  requirement_text: ESMA shall not be obliged to take into account written submissions received
+    after the expiry of that time limit for deciding on the periodic penalty payment
+- article: Article 1
+  law_celex: 32025R1768
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: data reporting services providers (DRSPs) subject to ESMA supervision
+  deadline: null
+  interpretive: null
+  requirement_text: This Delegated Regulation applies to data reporting services providers,
+    or DRSPs, as defined in Article 2(1)(36a) of Regulation (EU) No 600/2014, that are subject
+    to ESMA supervision.
+- article: Article 2
+  law_celex: 32025R1768
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: this Regulation
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall enter into force on the twentieth day following
+    that of its publication in the Official Journal of the European Union.
+- article: Article 2
+  law_celex: 32025R1768
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: This Regulation shall be binding in its entirety and directly applicable
+    in all Member States.
+- article: Article 2(1)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks
+  deadline: null
+  interpretive: null
+  requirement_text: The actual reporting population shall consist of the resident MFIs, IFs,
+    FVCs, ICs, custodians and the heads of banking groups identified by the Governing Council
+    as reporting groups pursuant to paragraph 4 and notified of their reporting obligations
+    pursuant to paragraph 5
+- article: Article 2(2)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Persons representing or liable for MMFs, IFs, FVCs, ICs without legal
+    personality
+  deadline: null
+  interpretive: null
+  requirement_text: If an MMF, IF, FVC or IC does not have legal personality under their national
+    law, the persons legally entitled to represent them or, in the absence of formalised representation,
+    persons that under the applicable national laws are liable for their acts, shall be responsible
+    for reporting the information required under this Regulation
+- article: Article 3(1)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: MFIs, IFs, FVCs, ICs and custodians
+  deadline: null
+  interpretive: null
+  requirement_text: MFIs, IFs, FVCs, ICs and custodians shall provide to their relevant NCB
+    security-by-security data on end-of-quarter or end-of-month positions and, in accordance
+    with paragraph 5, financial transactions over the reference month or quarter, or the statistical
+    information needed to derive such transactions, on own holdings of securities with an
+    ISIN code, in accordance with Part 2 of Annex I
+- article: Article 3(2a)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant NCB shall request that custodians report on a quarterly or
+    monthly basis, in accordance with the reporting instructions laid down by the relevant
+    NCBs, security-by-security data and investor information on end-of-quarter or end-of-month
+    positions and, in accordance with paragraph 5, financial transactions over the reference
+    quarter or month, on the securities with an ISIN code they hold in custody on behalf of
+    ICs
+- article: Article 3(2b)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Insurance Corporations
+  deadline: null
+  interpretive: null
+  requirement_text: Where NCBs derive data to be reported by ICs under this Regulation from
+    data collected under Directive 2009/138/EC, ICs shall provide to the relevant NCB, on
+    an annual basis, either aggregated or security-by-security data on end-of-year positions
+    of securities with an ISIN code, further broken down by the total domestic holdings of
+    the IC and the total holdings of its branches in each EEA country and outside the EEA
+- article: Article 3(8)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant NCB shall request that heads of reporting groups report on
+    a quarterly basis, the information required in Part 6 of Annex I under the flag 'issuer
+    is part of the reporting group' (on a security-by-security basis), on the securities with
+    an ISIN code which are held by their group in accordance with Article 3(3), and on the
+    securities without an ISIN code which are held by their group in accordance with Article
+    3(6)
+- article: Article 3(10)
+  law_celex: 32015R0730
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: National Central Banks
+  deadline: null
+  interpretive: null
+  requirement_text: Where a quantitative reporting template for supervisory reporting contains
+    data needed to fulfil the statistical reporting requirements for ICs under this Regulation,
+    NCBs shall have access to the entire template in order to ensure data quality
+- article: Article 1(1)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: 'A trade repository shall verify all of the following in a received SFT
+    report: (a) the identity of the report submitting entity, (b) that the XML template complies
+    with ISO 20022 methodology, (c) that the report submitting entity is duly authorized,
+    (d) that the same SFT report has not been submitted previously, (e-k) various other verification
+    requirements'
+- article: Article 1(2)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall verify whether information about collateral has
+    been reported in Fields 73 to 96 for SFTs where Field 72 'Uncollateralised SL flag' is
+    reported as 'false'
+- article: Article 1(2)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: The trade repository shall notify the report submitting entity and the
+    reporting counterparty as well as the entity responsible for reporting, if applicable,
+    of the result of the verification
+- article: Article 1(3)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall reject an SFT report that does not comply with
+    one of the requirements set out in paragraph 1 and assign to it one of the rejection categories
+- article: Article 1(4)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall provide the report submitting entity and the
+    reporting counterparty as well as the entity responsible for reporting with detailed information
+    on the results of the data verification in an XML format and a template developed in accordance
+    with the ISO 20022 methodology
+- article: Article 2(1)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall seek to reconcile a reported SFT by undertaking
+    the steps set out in paragraph 2, provided that specified conditions are met
+- article: Article 2(2)(a)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository having received an SFT report shall verify whether
+    it has received a corresponding SFT report from or on behalf of the other counterparty
+- article: Article 2(2)(b)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository that has not received a corresponding SFT report shall
+    attempt to identify the trade repository that has received the corresponding SFT report
+    by communicating to all registered trade repositories the values of specified fields
+- article: Article 2(2)(c)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository that determines that another trade repository has received
+    a corresponding SFT report shall exchange with that trade repository the details of the
+    reported SFT in an XML format and a template developed in accordance with the ISO 20022
+    methodology
+- article: Article 2(2)(e)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall seek to match separately the fields pertaining
+    to the loan data and the fields pertaining to the collateral data of a reported SFT in
+    accordance with the tolerance limits and relevant dates of application
+- article: Article 2(2)(f)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall subsequently assign values for the reconciliation
+    categories for each reported SFT
+- article: Article 2(2)(g)
+  law_celex: 32019R0358
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: trade repositories
+  deadline: null
+  interpretive: null
+  requirement_text: A trade repository shall conclude the steps in points (a) to (f) at the
+    earliest opportunity and shall take no such steps after 18:00 Universal Coordinated Time
+    on a given working day
+- article: Article 1
+  law_celex: 32021D1822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Ms Verena ROSS
+  deadline: '2021-11-01'
+  interpretive: null
+  requirement_text: Ms Verena ROSS is hereby appointed as Chair of the European Securities
+    and Markets Authority (ESMA) for a period of 5 years from 1 November 2021
+- article: Article 2
+  law_celex: 32021D1822
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Council Decision
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the date of its publication in
+    the Official Journal of the European Union
+- article: Article 1(2)
+  law_celex: 32015D1613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: The requirements set out in Article 77 of Guideline ECB/2014/60 shall
+    not apply to ABS mezzanine tranches that are only eligible for purchase under the ABSPP
+    if they meet specified guarantee and credit assessment requirements
+- article: Article 1(2)(a)(i)
+  law_celex: 32015D1613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ABS mezzanine tranches under ABSPP
+  deadline: null
+  interpretive: null
+  requirement_text: ABS mezzanine tranches must be secured by a guarantee meeting the requirements
+    for guarantees of marketable assets as set out in Articles 114, 115, 117 and 118 of Part
+    Four, Title IV of Guideline (EU) 2015/510
+- article: Article 1(2)(a)(ii)
+  law_celex: 32015D1613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: guarantors of ABS mezzanine tranches
+  deadline: null
+  interpretive: null
+  requirement_text: Guarantor must have a credit assessment in accordance with Article 83(c)
+    of Guideline ECB/2014/60 and provided by at least one accepted ECAI system, expressed
+    in the form of a public credit rating, in compliance with, as a minimum, credit quality
+    step 3 in the Eurosystem's harmonised rating scale
+- article: Article 1(2)(b)
+  law_celex: 32015D1613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: ABS mezzanine tranches under ABSPP
+  deadline: null
+  interpretive: null
+  requirement_text: ABS mezzanine tranches must satisfy all other applicable eligibility criteria
+    for purchase under the ABSPP
+- article: Article 2
+  law_celex: 32015D1613
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Central Bank
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the twentieth day following its
+    publication in the Official Journal of the European Union
+- article: Article 2(1)(b)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: heads of banking groups, institutions or financial institutions
+  deadline: null
+  interpretive: null
+  requirement_text: Group data reporting agents shall be heads of banking groups and institutions
+    or financial institutions established in participating Member States and which are not
+    part of a banking group where they have been identified by the Governing Council pursuant
+    to paragraph 4 as part of the actual reporting population, and notified of their reporting
+    obligations pursuant to paragraph 5.
+- article: Article 2(3)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: actual reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: The actual reporting agents shall be subject to full reporting requirements
+    unless any derogation granted pursuant to Articles 4, 4a or 4b applies.
+- article: Article 2(5)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant NCB
+  deadline: null
+  interpretive: null
+  requirement_text: The relevant NCB shall notify the group data reporting agents of the Governing
+    Council's decision pursuant to paragraph 4, and of their obligations under this Regulation.
+- article: Article 2(6)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: group data reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: Any group data reporting agent that is notified in accordance with paragraph
+    5 after the first reporting under this Regulation has started, shall begin reporting data
+    no later than 6 months after the date of notification.
+- article: Article 2(7)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: group data reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: A group data reporting agent notified in accordance with paragraph 5 shall
+    inform the relevant NCB of changes to its name or legal form, of mergers or restructurings,
+    and of any other event or circumstances affecting its reporting obligations, within 14
+    days of the occurrence of such event or circumstances.
+- article: Article 2(8)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: group data reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: A group data reporting agent notified in accordance with paragraph 5 shall
+    remain subject to the obligations set out in this Regulation until it receives notification
+    to the contrary by the relevant NCB.
+- article: Article 3(2)(a)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: custodians
+  deadline: null
+  interpretive: null
+  requirement_text: Custodians shall report securities they hold in custody for resident clients
+    that do not report their own holdings pursuant to paragraph 1, in accordance with Part
+    3 of Chapter 1 of Annex I.
+- article: Article 3(2)(b)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: custodians
+  deadline: null
+  interpretive: null
+  requirement_text: Custodians shall report securities they hold in custody for non-financial
+    clients resident in other euro area Member States, in accordance with Part 4 of Chapter
+    1 of Annex I.
+- article: Article 3(2)(c)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: custodians
+  deadline: null
+  interpretive: null
+  requirement_text: Custodians shall report securities issued by euro area entities they hold
+    in custody for clients resident in non-euro area Member States and for clients resident
+    outside the Union, in accordance with Part 5 of Chapter 1 of Annex I.
+- article: Article 3(5)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: sectoral data reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: Sectoral data reporting agents shall, in accordance with instructions
+    by the relevant NCB, report either (a) security-by-security data on monthly or quarterly
+    financial transactions and, where requested by the relevant NCB, other changes in volume;
+    or (b) the statistical information needed to derive financial transactions on the basis
+    of one of the approaches specified in Part 1 of Chapter 1 of Annex I.
+- article: Article 3(6)
+  law_celex: 32016R1384
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: sectoral data reporting agents
+  deadline: null
+  interpretive: null
+  requirement_text: Sectoral data reporting agents shall, if instructed by the relevant NCB,
+    report on a quarterly or monthly basis data on end-of-quarter or end-of-month positions
+    and, in accordance with paragraph 5, statistical information over the reference quarter
+    or month, on holdings of securities without an ISIN code, in accordance with Part 7 of
+    Chapter 1 of Annex I.
+- article: Article 3(2)
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: managers of collective investment undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: Managers must not exceed the threshold of assets under management as referred
+    to in point (b) of Article 3(2) of Directive 2011/61/EU
+- article: Registration requirement
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: managers of collective investment undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: Managers must be registered with the competent authority in their home
+    Member State in accordance with Directive 2011/61/EU
+- article: Investment threshold
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: qualifying venture capital funds
+  deadline: null
+  interpretive: null
+  requirement_text: Qualifying venture capital funds must invest at least 70% of their aggregate
+    capital contributions and uncalled committed capital in qualifying portfolio undertakings
+- article: Investment limitation
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: qualifying venture capital funds
+  deadline: null
+  interpretive: null
+  requirement_text: Qualifying venture capital funds must not invest more than 30% of their
+    aggregate capital contributions and uncalled committed capital in assets other than qualifying
+    investments
+- article: Geographic establishment requirement
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: qualifying venture capital funds
+  deadline: null
+  interpretive: null
+  requirement_text: A qualifying venture capital fund must be established in the Union in
+    order to be entitled to use the designation EuVECA
+- article: Internal management restriction
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: internally managed qualifying venture capital funds
+  deadline: null
+  interpretive: null
+  requirement_text: A qualifying venture capital fund which is internally managed must not
+    be permitted to be the external manager of other collective investment undertakings or
+    UCITS
+- article: Continued compliance requirement
+  law_celex: 32013R0345
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: venture capital fund managers
+  deadline: null
+  interpretive: null
+  requirement_text: Managers that exceed the threshold and become subject to Directive 2011/61/EU
+    must continue to comply with certain requirements for the use of the designation EuVECA
+    at all times in relation to qualifying venture capital funds
+- article: Article 1(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The most relevant Union currencies shall be identified on the basis of
+    the relative share of each currency in the CCP's average end-of-day open positions across
+    all financial instruments cleared by the CCP, calculated over a period of one year.
+- article: Article 1(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The most relevant Union currencies shall be the three currencies with
+    the highest relative share calculated in accordance with paragraph 1, provided that each
+    individual share exceeds 10%.
+- article: Article 1(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCPs and competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: The calculation of the relative share of the currencies shall be calculated
+    on an annual basis.
+- article: Article 2(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: After assessing that an application is complete as referred to in Article
+    17(3) of Regulation (EU) No 648/2012, the CCP's competent authority shall circulate a
+    proposal for the written agreement under Article 18(5) of Regulation (EU) No 648/2012
+    to the members of the college determined in accordance with Article 18(2) of Regulation
+    (EU) No 648/2012.
+- article: Article 2(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: That written agreement shall include a process for annual review. It shall
+    also include an amendment process whereby changes may be initiated at any time by the
+    CCP's competent authority or by other members of the college, subject to approval by the
+    college.
+- article: Article 2(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Where the members of the college referred to in paragraph 1 do not express
+    any comments within 10 calendar days, the CCP's competent authority shall proceed with
+    the adoption of the written agreement by the college and with the establishment of the
+    college in accordance with Article 18(1) of Regulation (EU) No 648/2012.
+- article: Article 2(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: members of the college
+  deadline: null
+  interpretive: null
+  requirement_text: Where the members of the college express comments regarding the proposal
+    for the written agreement circulated pursuant to paragraph 1, they shall submit those
+    comments together with a thorough explanation to the CCP's competent authority within
+    10 calendar days.
+- article: Article 2(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: If relevant, the CCP's competent authority shall prepare a revised proposal
+    and convene a meeting to agree on the final written agreement taking into account the
+    deadline referred to in Article 18(1) of Regulation (EU) No 648/2012.
+- article: Article 2(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all members of the college
+  deadline: null
+  interpretive: null
+  requirement_text: All members of the college will be bound by the written agreement adopted
+    in accordance with paragraphs 1 to 3 of this Article.
+- article: Article 3(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: Where a request for information is made to a college by a competent authority
+    of a Member State which is not a member of the college in accordance with Article 18(3)
+    of Regulation (EU) No 648/2012, the CCP's competent authority, after having consulted
+    the college, shall decide on the most appropriate way to provide and request information
+    to and from the authorities that are not members of the college.
+- article: Article 3(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: each member of the college
+  deadline: null
+  interpretive: null
+  requirement_text: Each member of the college shall designate one participant to attend the
+    meetings of the college and may designate one alternate, with the exception of the CCP's
+    competent authority which may require additional participants who shall have no voting
+    rights.
+- article: Article 3(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: relevant central banks
+  deadline: null
+  interpretive: null
+  requirement_text: Where the central bank of issue of one of the most relevant Union currencies
+    corresponds to more than one central bank, the relevant central banks shall determine
+    the single representative who will participate in the college.
+- article: Article 3(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college members
+  deadline: null
+  interpretive: null
+  requirement_text: Where in accordance with this Article there is more than one participant
+    from a college member, or there are more college members belonging to the same Member
+    State than number of votes that can be exercised by those college members in accordance
+    with Article 19(3) of Regulation (EU) No 648/2012, that college member or those college
+    members shall inform the college which participants shall exercise voting rights.
+- article: Article 4(1)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The CCP's competent authority shall ensure that the work of the college
+    facilitates the tasks to be performed in accordance with Regulation (EU) No 648/2012.
+- article: Article 4(2)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: college
+  deadline: null
+  interpretive: null
+  requirement_text: The college shall notify ESMA of any tasks that the college performs in
+    accordance with paragraph 1.
+- article: Article 4(3)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'The CCP''s competent authority, shall at least ensure that: (a) the objectives
+    of any meeting or activity of the college are clearly identified; (b) the college meetings
+    or activities remain effective, while ensuring that all college members are fully informed
+    of the college activities that are relevant to them; (c) the timetable for meetings or
+    activities of the college is defined so that their outcome provides assistance to the
+    supervision of the CCP; (d) the CCP and other key stakeholders have a clear understanding
+    of the role and functioning of the college; (e) the activities of the college are regularly
+    reviewed and remedial action is taken if the college is not operating effectively; (f)
+    the agenda is set for an annual crisis management planning meeting amongst members of
+    the college in cooperation with the CCP if necessary.'
+- article: Article 4(4)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: To ensure the efficiency and effectiveness of the college, the CCP's competent
+    authority shall act as a central point of contact for any matter related to the practical
+    organisation of the college.
+- article: Article 4(4)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: 'The CCP''s competent authority shall at least perform the following tasks:
+    (a) draw-up, update and circulate the contact list of college members; (b) circulate the
+    agenda as well as documentation for meetings or activities of the college; (c) record
+    minutes of the meetings and formalise action points; (d) manage the college website or
+    other electronic information-sharing mechanism, if any; (e) where practical, provide information
+    and specialised teams where appropriate, to assist the college in its tasks; (f) share
+    information in an appropriate manner among members of the college.'
+- article: Article 4(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority and college
+  deadline: null
+  interpretive: null
+  requirement_text: There shall be at least an annual meeting of the college and if deemed
+    necessary by the CCP's competent authority, a meeting each time that a decision needs
+    to be taken under Regulation (EU) No 648/2012.
+- article: Article 4(5)
+  law_celex: 32013R0876
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: CCP's competent authority
+  deadline: null
+  interpretive: null
+  requirement_text: The CCP's competent authority shall organise, periodically, meetings between
+    members of the college and the senior management of the CCP.

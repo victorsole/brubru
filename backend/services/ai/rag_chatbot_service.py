@@ -20,6 +20,11 @@ from services.embeddings import VectorSearchService
 logger = logging.getLogger(__name__)
 
 
+class RAGChatbotUnavailable(RuntimeError):
+    """Retrieval or generation failed. Distinct from "no relevant requirement
+    was found", which is a legitimate empty result the caller should render."""
+
+
 class RAGChatbotService:
     """
     RAG-powered chatbot for EU law compliance assistance.
@@ -122,12 +127,21 @@ class RAGChatbotService:
 
         except Exception as e:
             logger.error(f"Error answering question: {str(e)}")
-            return {
-                'answer': f"I encountered an error while processing your question: {str(e)}",
-                'sources': [],
-                'confidence': 0.0,
-                'error': str(e)
-            }
+            # Raise rather than return an answer-shaped dict.
+            #
+            # This is currently unrouted, but the previous shape was a trap for
+            # whoever wires it up: `{'answer': ..., 'sources': [], 'confidence':
+            # 0.0, 'error': ...}` reads as a legitimate "nothing found" result
+            # to any caller that renders `answer` and `sources` without checking
+            # `error`. That is the same failure-as-a-business-answer pattern
+            # that made a dead OpenAI key present itself as 0% compliance in
+            # EU Law Comply on 8 Aug 2026.
+            #
+            # Note this service still calls OpenAI directly (self.openai_client)
+            # while the rest of Brubru runs on the free open-model chain, so it
+            # will fail on every call until it is migrated or funded. Fail
+            # loudly so that is discovered at wiring time, not in production.
+            raise RAGChatbotUnavailable(str(e)) from e
 
     def _build_context(self, requirements: List[Dict]) -> str:
         """

@@ -151,7 +151,9 @@
     "openInBubble": "Abrir en My EU Bubble",
     "openFileInBubble": "Abrir este expediente en My EU Bubble",
     "openVotesForFile": "Ver cómo se votó",
-    "openCommitteeCalendar": "Qué tiene previsto {{code}}"
+    "openCommitteeCalendar": "Qué tiene previsto {{code}}",
+    "openInBrubru": "Da un paso más",
+    "openInAmendator": "Enmienda esta norma en el Amendator"
   },
   "docs": {
     "title": "Documentos",
@@ -1416,7 +1418,9 @@
       "passwordsDoNotMatch": "Las contraseñas no coinciden",
       "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
       "passwordNeedsDigit": "La contraseña debe contener al menos un dígito",
-      "passwordNeedsUppercase": "La contraseña debe contener al menos una letra mayúscula"
+      "passwordNeedsUppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "resetRequestFailed": "No se ha podido enviar el enlace. Inténtalo de nuevo.",
+      "resetFailed": "No se ha podido guardar la contraseña nueva. Inténtalo de nuevo."
     },
     "linkedin": {
       "invalidState": "Parámetro de estado no válido",
@@ -1426,7 +1430,28 @@
       "windowClose": "Esta ventana se cerrará automáticamente...",
       "authenticating": "Autenticando con LinkedIn...",
       "pleaseWait": "Espera un momento..."
-    }
+    },
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "forgotPassword": "¿Has olvidado la contraseña?",
+    "backToLogin": "Volver al acceso",
+    "forgotTitle": "Restablece tu contraseña",
+    "forgotSubtitle": "Te enviaremos un enlace por correo para elegir una nueva",
+    "forgotSubmit": "Enviar enlace",
+    "forgotSending": "Enviando...",
+    "forgotSent": "Si esa dirección tiene una cuenta de Brubru, el enlace ya está en camino. Caduca en una hora.",
+    "forgotSentHint": "Recuerda mirar la carpeta de spam. Si te registraste con Google o LinkedIn, usa ese botón en la página de acceso.",
+    "resetTitle": "Elige una contraseña nueva",
+    "resetSubtitle": "Escoge una que no hayas usado antes",
+    "resetChecking": "Comprobando el enlace...",
+    "newPassword": "Contraseña nueva",
+    "confirmNewPassword": "Confirma la contraseña nueva",
+    "resetSubmit": "Guardar y entrar",
+    "resetSaving": "Guardando...",
+    "resetRequestNew": "Pedir un enlace nuevo",
+    "resetExpired": "Este enlace ha caducado. Los enlaces son válidos durante una hora.",
+    "resetAlreadyUsed": "Este enlace ya se ha usado. Pide uno nuevo si aún lo necesitas.",
+    "resetNotFound": "Este enlace no es válido. Es posible que otro más reciente lo haya sustituido."
   },
   "cookies": {
     "message": "Usamos cookies para ofrecerte la mejor experiencia en Brubru. Las cookies esenciales son necesarias para el funcionamiento del sitio. Al hacer clic en \"Aceptar\", consientes el uso de cookies."
@@ -1910,7 +1935,8 @@
       "boundElsewhere": "{{count}} de ellas obligan a otro actor, como los Estados miembros, y se muestran como contexto en lugar de puntuarse en su contra.",
       "cascadeTitle": "Qué se deriva de estas normas",
       "cascadeBinding": "{{count}} actos delegados y de ejecución contienen el detalle operativo.",
-      "cascadeGuidance": "{{count}} comunicaciones y directrices de la Comisión explican cómo cumplir. No crean obligaciones."
+      "cascadeGuidance": "{{count}} comunicaciones y directrices de la Comisión explican cómo cumplir. No crean obligaciones.",
+      "contextOnly": "contexto, no puntuado"
     },
     "addressee": {
       "member_state": "Estados miembros",
@@ -1921,6 +1947,45 @@
       "national_authority": "Autoridad nacional",
       "notified_body": "Organismo notificado",
       "eu_agency": "Agencia u oficina de la UE"
+    },
+    "workspaces": {
+      "heading": "Continúe donde lo dejó",
+      "package": "paquete",
+      "packages": "paquetes",
+      "run": "análisis",
+      "runs": "análisis",
+      "openActions": "por resolver",
+      "lastRun": "Última comprobación",
+      "today": "hoy",
+      "yesterday": "ayer",
+      "daysAgo": "días atrás",
+      "openFailed": "No se ha podido abrir ese paquete. Selecciónelo en la lista siguiente."
+    },
+    "reuse": {
+      "heading": "Reutilice lo que ya comprobó",
+      "selected": "seleccionados",
+      "available": "disponible",
+      "availablePlural": "disponibles",
+      "characters": "caracteres",
+      "lastUsed": "último uso",
+      "runs": "análisis",
+      "hint": "Los documentos seleccionados se vuelven a comprobar tal cual. También puede añadir archivos nuevos abajo."
+    },
+    "diff": {
+      "heading": "Qué ha cambiado desde su última comprobación",
+      "points": "pts",
+      "improved": "mejorados",
+      "regressed": "empeorados",
+      "reclassified": "reclasificados",
+      "noChange": "sin cambios",
+      "comparedWith": "Comparado con su análisis del",
+      "earlier": "una fecha anterior",
+      "unchanged": "sin cambios",
+      "newRequirements": "no comprobados la vez anterior",
+      "improvedHeading": "Mejorados",
+      "regressedHeading": "Han empeorado",
+      "reclassifiedHeading": "Reclasificados",
+      "reclassifiedNote": "Han pasado a \"no aplicable\" o han salido de esa categoría. Es un cambio sobre si la obligación le vincula, no un avance en su cumplimiento."
     }
   },
   "tenderator": {

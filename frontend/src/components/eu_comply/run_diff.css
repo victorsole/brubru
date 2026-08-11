@@ -1,0 +1,191 @@
+/* "What changed since your last check" -- collapsed by default, above the
+   findings table on the results view. */
+
+.run-diff {
+  background: #fff;
+  border: 1px solid #e6eaf0;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.run-diff__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: #2c3446;
+  flex-wrap: wrap;
+}
+
+.run-diff__toggle:hover { background: #f8faff; }
+.run-diff__toggle:focus-visible { outline: 2px solid #6c5ce7; outline-offset: -2px; }
+.run-diff__toggle > .mdi { font-size: 1.15rem; color: #6b7280; }
+
+.run-diff__toggle-text {
+  font-size: 0.92rem;
+  font-weight: 600;
+  flex: 1;
+  min-width: 12rem;
+}
+
+.run-diff__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: #f2f5fa;
+  color: #55607a;
+  white-space: nowrap;
+}
+
+.run-diff__delta.is-up   { background: #e7f6ed; color: #1d6f43; }
+.run-diff__delta.is-down { background: #fbeaea; color: #a92f2f; }
+.run-diff__delta .mdi { font-size: 0.95rem; }
+
+.run-diff__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.run-diff__pill {
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: #f2f5fa;
+  color: #55607a;
+  white-space: nowrap;
+}
+
+.run-diff__pill.is-improved     { background: #e7f6ed; color: #1d6f43; }
+.run-diff__pill.is-regressed    { background: #fbeaea; color: #a92f2f; }
+.run-diff__pill.is-reclassified { background: #eef0fb; color: #3b3183; }
+
+.run-diff__body {
+  padding: 0 1.1rem 1.1rem;
+  border-top: 1px solid #f0f3f8;
+}
+
+.run-diff__context {
+  margin: 0.8rem 0 0.9rem;
+  font-size: 0.82rem;
+  color: #55607a;
+  line-height: 1.5;
+}
+
+.run-diff__group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 1rem 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.run-diff__group.is-improved     { color: #1d6f43; }
+.run-diff__group.is-regressed    { color: #a92f2f; }
+.run-diff__group.is-reclassified { color: #3b3183; }
+.run-diff__group .mdi { font-size: 1.05rem; }
+
+.run-diff__note {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.run-diff__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.run-diff__row {
+  display: grid;
+  grid-template-columns: minmax(6rem, 9rem) minmax(11rem, 15rem) 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #eef1f6;
+  border-left: 3px solid #d7dced;
+  border-radius: 8px;
+  background: #fcfdff;
+}
+
+.run-diff__row--improved     { border-left-color: #1d6f43; }
+.run-diff__row--regressed    { border-left-color: #a92f2f; }
+.run-diff__row--reclassified { border-left-color: #3b3183; }
+
+.run-diff__article {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #2c3446;
+  background: #f2f5fa;
+  border-radius: 5px;
+  padding: 0.12rem 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.run-diff__move {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.run-diff__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.run-diff__status .mdi { font-size: 0.9rem; }
+.run-diff__status.status-met            { color: #1d6f43; }
+.run-diff__status.status-partial        { color: #8a5b12; }
+.run-diff__status.status-gap            { color: #a92f2f; }
+.run-diff__status.status-not_applicable { color: #6b7280; }
+
+.run-diff__arrow { font-size: 0.85rem; color: #9aa3b2; }
+
+.run-diff__text {
+  font-size: 0.78rem;
+  color: #55607a;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .run-diff__row { grid-template-columns: minmax(6rem, 8rem) 1fr; }
+  .run-diff__text { grid-column: 1 / -1; }
+}
+
+@media (max-width: 767px) {
+  .run-diff__row { grid-template-columns: 1fr; gap: 0.35rem; }
+  .run-diff__article { justify-self: start; }
+  .run-diff__toggle { padding: 0.75rem 0.85rem; }
+  .run-diff__body { padding: 0 0.85rem 0.85rem; }
+}

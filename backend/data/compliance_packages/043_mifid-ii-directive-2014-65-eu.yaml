@@ -1,0 +1,175 @@
+id: 43
+name: MiFID II (Directive 2014/65/EU)
+policy_area: Economic and Financial Affairs
+description: 'The recast markets-in-financial-instruments framework: authorisation and organisation
+  of investment firms, the venue taxonomy (regulated market, MTF and the new OTF), algorithmic
+  and high-frequency trading controls, investor protection (best execution, suitability, product
+  governance, inducements), commodity position limits and data reporting services. Companion
+  to MiFIR.'
+applicability: Investment firms, trading venues, data reporting service providers, national
+  competent authorities and ESMA.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32014L0065
+  title: Directive 2014/65/EU of the European Parliament and of the Council on markets in
+    financial instruments (MiFID II)
+requirements:
+- article: Article 5 (authorisation requirement)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: All investment service providers must obtain prior authorisation from
+    their home Member State competent authority before providing investment services or activities
+    professionally.
+- article: Article 9 (management body governance)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: The management body must define and oversee governance arrangements, approve
+    the firm's organisation and remuneration policy, and ensure at least two persons effectively
+    direct the business (four-eyes principle).
+- article: Article 16(3) (product governance)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers must define a target market for each financial instrument
+    and review products regularly; distributors must obtain product information and understand
+    it before recommending products.
+- article: Article 16(8-9) (client asset safeguarding)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: Client funds and financial instruments must be kept separate from firm
+    assets and may not be used for the firm's own account without explicit client consent.
+- article: Article 17(1) (algorithmic trading resilience)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms using algorithmic trading
+  deadline: null
+  interpretive: null
+  requirement_text: Algorithmic trading systems must be resilient, have sufficient capacity,
+    include appropriate thresholds, prevent erroneous orders, and maintain business continuity
+    arrangements.
+- article: Article 17(2) (HFT record-keeping)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms using HFT techniques
+  deadline: null
+  interpretive: null
+  requirement_text: Firms using high-frequency algorithmic trading must store accurate, time-sequenced
+    records of all placed orders including cancellations and notify competent authorities
+    regularly.
+- article: Article 17(5) (direct electronic access controls)
+  law_celex: 32014L0065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: investment firms providing DEA
+  deadline: null
+  interpretive: null
+  requirement_text: Firms providing direct electronic access must assess client suitability,
+    impose pre-set trading and credit thresholds, monitor client activity, retain responsibility
+    for orders, and enter binding written agreements.
+- article: Article 24(1) (best interests obligation)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: Investment firms must act honestly, fairly and professionally in the best
+    interests of clients at all times.
+- article: Article 24(4) (cost and charges disclosure)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: All costs and charges including third-party payments must be disclosed
+    in aggregated form showing cumulative effect on return, with itemised breakdown available
+    on request.
+- article: Article 24(9) (inducements prohibition)
+  law_celex: 32014L0065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: Firms may only receive or pay fees or commissions to third parties if
+    they enhance service quality, do not impair the duty to act in the client's best interests,
+    and are disclosed.
+- article: Article 25(2) (suitability assessment)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms advising or managing portfolios
+  deadline: null
+  interpretive: null
+  requirement_text: For investment advice and portfolio management, firms must assess client
+    knowledge and experience, financial situation including ability to bear losses, and investment
+    objectives including risk tolerance.
+- article: Article 27(1) (best execution)
+  law_celex: 32014L0065
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: investment firms executing orders
+  deadline: null
+  interpretive: null
+  requirement_text: Investment firms must take all sufficient steps to obtain the best possible
+    result for clients considering price, costs, speed, likelihood of execution and settlement,
+    size, nature and other relevant factors.
+- article: Article 20 (OTF operational restrictions)
+  law_celex: 32014L0065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: OTF operators
+  deadline: null
+  interpretive: null
+  requirement_text: Organised trading facilities must not execute against operator proprietary
+    capital, limit matched principal trading to specified instruments with consent, and prohibit
+    own-account dealing except in sovereign debt without liquid markets.
+- article: Article 57 (commodity position limits)
+  law_celex: 32014L0065
+  criticality: important
+  addressee: national_authority
+  applicable_entity: competent authorities and commodity traders
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must establish and apply position limits on net
+    positions in commodity derivatives to prevent market abuse and support orderly pricing;
+    limits do not apply to non-financial entities reducing commercial risks.
+- article: Article 58 (position reporting)
+  law_celex: 32014L0065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: trading venues and investment firms
+  deadline: null
+  interpretive: null
+  requirement_text: Trading venues must publish weekly aggregated position reports by category
+    of holder and provide daily complete breakdowns to competent authorities, distinguishing
+    risk-reducing from other positions.
+- article: Article 65 (consolidated tape provider requirement
+  law_celex: 32014L0065
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: data reporting services providers
+  deadline: null
+  interpretive: null
+  requirement_text: Consolidated tape providers must collect all trade reports and consolidate
+    them into a continuous electronic live data stream with real-time publication and free
+    access after 15 minutes.

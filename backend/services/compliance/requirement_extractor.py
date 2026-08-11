@@ -26,6 +26,14 @@ from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
+
+class RequirementExtractionUnavailable(RuntimeError):
+    """The extraction model could not be reached or returned nothing usable.
+
+    Distinct from "this sentence contains no requirement". Conflating the two
+    is how a dead API key writes fabricated obligations into the corpus.
+    """
+
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -343,15 +351,23 @@ class RequirementExtractor:
 
         except Exception as e:
             logger.error(f"LLM analysis failed for '{sentence[:100]}': {str(e)}")
-            # Fallback: basic extraction
-            return {
-                'article': article_num,
-                'requirement_text': sentence[:500],
-                'criticality': 'important',
-                'applicable_entity': None,
-                'deadline': None,
-                'metadata': {'model': self.model, 'fallback': True}
-            }
+            # Do NOT return a synthetic requirement here.
+            #
+            # This used to hand back the raw sentence as `requirement_text` with
+            # criticality 'important' and a quiet `fallback: True` marker. When
+            # the provider is unreachable -- which is exactly what happened to
+            # the gap analyser on 8 Aug 2026, OpenAI returning
+            # credit_balance_exhausted on every call -- that turns an outage
+            # into hundreds of plausible-looking obligations written into the
+            # compliance corpus, where they are indistinguishable from curated
+            # ones and get scored against real companies.
+            #
+            # Raising means the caller's per-law `except` logs the law and moves
+            # on, and the extraction reports fewer requirements rather than
+            # fabricated ones. Fewer is recoverable; fabricated is not.
+            raise RequirementExtractionUnavailable(
+                f"model unavailable while extracting article {article_num}: {e}"
+            ) from e
 
     def _analyze_with_openai(self, sentence: str, article_num: str, law: EULaw) -> Dict:
         """Analyze requirement using OpenAI GPT-4"""

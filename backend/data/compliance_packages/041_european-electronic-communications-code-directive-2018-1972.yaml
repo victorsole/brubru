@@ -1,0 +1,201 @@
+id: 41
+name: European Electronic Communications Code (Directive 2018/1972)
+policy_area: Communication Networks, Content and Technology
+description: 'The recast single code for electronic communications networks and services:
+  market regulation and SMP remedies, very-high-capacity network deployment, radio spectrum,
+  general authorisation, end-user rights and universal service, and BEREC governance.'
+applicability: Providers of electronic communications networks and services, national regulatory
+  authorities, BEREC, spectrum users.
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32018L1972
+  title: Directive (EU) 2018/1972 of the European Parliament and of the Council of 11 December
+    2018 establishing the European Electronic Communications Code (Recast) (Text with EEA
+    relevance)
+requirements:
+- article: Article 12 (general authorisation)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of electronic communications networks and services
+  deadline: null
+  interpretive: null
+  requirement_text: Electronic communications networks and services may be provided subject
+    only to a general authorisation regime with simple notification requirements (name, legal
+    status, address, website, brief description), rather than individual licences.
+- article: Article 40 (security)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of public electronic communications networks and services
+  deadline: null
+  interpretive: null
+  requirement_text: Providers of public networks and publicly available services must implement
+    proportionate technical and organisational security measures, including encryption, prevent
+    security incidents, and notify competent authorities of security breaches with significant
+    impact without undue delay.
+- article: Article 49 (spectrum duration)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: spectrum rights holders in harmonised wireless broadband bands
+  deadline: null
+  interpretive: null
+  requirement_text: For harmonised wireless broadband spectrum, Member States must grant individual
+    rights of use for at least 15 years with regulatory predictability guaranteed for at least
+    20 years.
+- article: Article 61 (access obligations)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings controlling access to end-users and SMP-designated undertakings
+  deadline: null
+  interpretive: null
+  requirement_text: NRAs may impose access obligations to interconnection, network elements,
+    civil engineering assets, and symmetric access to wiring and cables inside buildings or
+    to distribution points where replication is economically inefficient or physically impracticable.
+- article: Article 68 (SMP remedies)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: undertakings with significant market power
+  deadline: null
+  interpretive: null
+  requirement_text: NRAs must impose appropriate obligations on SMP-designated undertakings
+    selected from transparency, non-discrimination, accounting separation, access to civil
+    engineering, network elements, price control and cost-orientation requirements.
+- article: Article 76 (co-investment)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: SMP-designated undertakings investing in new very high capacity networks
+  deadline: null
+  interpretive: null
+  requirement_text: SMP undertakings offering open co-investment commitments for very high
+    capacity networks meeting specified criteria must have those commitments made binding
+    by the NRA for at least seven years, with the NRA then refraining from imposing additional
+    access obligations on those new elements.
+- article: Article 84 (universal service)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States and designated universal service providers
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must ensure all consumers have access at affordable prices
+    to adequate broadband internet access and voice communications services at a fixed location.
+- article: Article 101 (full harmonisation)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States may not maintain or introduce end-user protection provisions
+    diverging from Articles 102 to 115, except stricter provisions in force on 20 December
+    2018 may continue until 21 December 2021 if proportionate.
+- article: Article 102 (contract information)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: providers of electronic communications services to consumers
+  deadline: null
+  interpretive: null
+  requirement_text: Before binding a consumer, providers must supply all mandatory information
+    and a concise contract summary (maximum one A4 page) covering service characteristics,
+    price, duration, renewal and termination conditions, accessibility for disabled users,
+    and internet access quality summary.
+- article: Article 105 (contract duration)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: providers of electronic communications services to consumers
+  deadline: null
+  interpretive: null
+  requirement_text: Consumer contracts must not mandate commitment periods longer than 24
+    months. After automatic renewal, consumers may terminate with one month's notice at no
+    cost beyond service charges during notice.
+- article: Article 106 (switching and portability)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: providers of internet access and number-based interpersonal communications
+    services
+  deadline: null
+  interpretive: null
+  requirement_text: Service continuity must be maintained during provider switching with loss
+    not exceeding one working day. All end-users with national numbers must retain their numbers
+    when switching providers, with porting completed within one working day.
+- article: Article 109 (emergency access 112)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: providers of publicly available number-based interpersonal communications
+    services
+  deadline: null
+  interpretive: null
+  requirement_text: All end-users of number-based interpersonal communications services must
+    be able to access emergency services free of charge via 112 and national emergency numbers,
+    with caller location information provided to emergency services immediately upon call
+    set-up.
+- article: Article 110 (public warning)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: providers of mobile number-based interpersonal communications services
+  deadline: '2022-06-21'
+  interpretive: null
+  requirement_text: By 21 June 2022, Member States must ensure that public warnings of imminent
+    or developing major emergencies and disasters are transmitted by mobile number-based interpersonal
+    communications service providers to end-users in affected areas.
+- article: Article 6 (NRA independence)
+  law_celex: 32018L1972
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States establishing national regulatory authorities
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must guarantee the legal and functional independence of
+    national regulatory authorities from any undertaking providing networks, equipment or
+    services. Structural separation is required where the state retains ownership.
+- article: Article 54 (5G bands)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Member States managing radio spectrum
+  deadline: '2020-12-31'
+  interpretive: null
+  requirement_text: By 31 December 2020, Member States must take measures to allow use of
+    sufficiently large blocks of the 3.4-3.8 GHz band and at least 1 GHz of the 24.25-27.5
+    GHz band for 5G deployment.
+- article: Article 70 (non-discrimination)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: undertakings with significant market power
+  deadline: null
+  interpretive: null
+  requirement_text: NRAs may require SMP undertakings to apply equivalent conditions in equivalent
+    circumstances, including supplying access products to all undertakings on identical timescales,
+    terms, conditions, systems and processes.
+- article: Article 43 (rights of way)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: national_authority
+  applicable_entity: competent authorities granting network infrastructure installation rights
+  deadline: null
+  interpretive: null
+  requirement_text: Competent authorities must process rights-of-way applications for network
+    infrastructure installation within six months maximum using simple, efficient, transparent
+    and non-discriminatory procedures.
+- article: Article 22 (geographical surveys)
+  law_celex: 32018L1972
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: national regulatory authorities
+  deadline: '2023-12-21'
+  interpretive: null
+  requirement_text: NRAs must conduct a geographical survey of broadband network reach by
+    21 December 2023, updated at least every three years, covering very high capacity networks
+    and planned upgrades to at least 100 Mbps at appropriate local granularity.

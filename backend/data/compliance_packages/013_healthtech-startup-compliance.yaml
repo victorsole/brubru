@@ -1,0 +1,1882 @@
+id: 13
+name: HealthTech Startup Compliance
+policy_area: Health
+description: Medical device and health data compliance for HealthTech startups
+applicability: HealthTech startups, medical device manufacturers, digital health apps, telemedicine
+  platforms
+is_startup_focused: true
+is_published: true
+laws:
+- celex: 32018D0133
+  title: Commission Implementing Decision (EU) 2018/133 of 24 January 2018 amending Decision
+    2008/911/EC shing a list of herbal substances, preparations and combinations thereof for
+    use in traditional herbal medicinal products (notified under document C(2018) 213) (Text
+    with EEA relevance)
+- celex: 32018L1617
+  title: Commission Decision (EU) 2018/1617 of 25 October 2018 concerning a measure adopted
+    by France pursuant to Council Directive 93/42/EEC with regard to the Terrafor and Defiligne
+    medical devices (notified under document C(2018) 6943) (Text with EEA relevance)
+- celex: 32019D1765
+  title: Commission Implementing Decision 2019/1765 of 22 October 2019 providing the rules
+    for the establishment, the management and the functioning of the network of national authorities
+    responsible for eHealth, and repealing Implementing Decision 2011/890/EU (notified under
+    document C(2019) 7460) (Text with EEA relevance)
+- celex: 32020L0366
+  title: Commission Delegated Directive (EU) 2020/366 of 17 December 2019 amending, for the
+    purposes of adapting to scientific and technical progress, Annex IV to Directive 2011/65/EU
+    of the European Parliament and of the Council as regards an exemption for lead as a thermal
+    stabiliser in polyvinyl chloride used in certain in-vitro diagnostic medical devices for
+    the analysis of blood and other body fluids and body gases (Text with EEA relevance)
+- celex: 32020L2020
+  title: Council Directive (EU) 2020/2020 of 7 December 2020 amending Directive 2006/112/EC
+    as regards temporary measures in relation to value added tax applicable to COVID-19 vaccines
+    and in vitro diagnostic medical devices in response to the COVID-19 pandemic
+- celex: 32020R0561
+  title: Regulation (EU) 2020/561 of the European Parliament and of the Council of 23 April
+    2020 amending Regulation (EU) 2017/745 on medical devices, as regards the dates of application
+    of certain of its provisions (Text with EEA relevance)
+- celex: 32021D0609
+  title: Commission Implementing Decision (EU) 2021/609 of 14 April 2021 amending Implementing
+    Decision (EU) 2020/439 as regards harmonised standards on packaging for terminally sterilised
+    medical devices and sterilisation of health care products
+- celex: 32021L1978
+  title: Commission Delegated Directive (EU) 2021/1978 of 11 August 2021 amending, for the
+    purposes of adapting to scientific and technical progress, Annex IV to Directive 2011/65/EU
+    of the European Parliament and of the Council as regards an exemption for the use of bis(2-ethylhexyl)
+    phthalate (DEHP), butyl benzyl phthalate (BBP), dibutyl phthalate (DBP) and diisobutyl
+    phthalate (DIBP) in spare parts recovered from and used for the repair or refurbishment
+    of medical devices (Text with EEA relevance)
+- celex: 32021R1182
+  title: Commission Implementing Decision (EU) 2021/1182 of 16 July 2021 on the harmonised
+    standards for medical devices drafted in support of Regulation (EU) 2017/745 of the European
+    Parliament and of the Council
+- celex: 32021R1195
+  title: Commission Implementing Decision (EU) 2021/1195 of 19 July 2021 on the harmonised
+    standards for in vitro diagnostic medical devices drafted in support of Regulation (EU)
+    2017/746 of the European Parliament and of the Council
+- celex: 32021R2078
+  title: Commission Implementing Regulation (EU) 2021/2078 of 26 November 2021 laying down
+    rules for the application of Regulation (EU) 2017/745 of the European Parliament and of
+    the Council as regards the European Database on Medical Devices (Eudamed)
+- celex: 32021R2226
+  title: Commission Implementing Regulation (EU) 2021/2226 of 14 December 2021 laying down
+    rules for the application of Regulation (EU) 2017/745 of the European Parliament and of
+    the Council as regards electronic instructions for use of medical devices
+- celex: 32022D0006
+  title: Commission Implementing Decision (EU) 2022/6 of 4 January 2022 amending Implementing
+    Decision (EU) 2021/1182 as regards harmonised standards for biological evaluation of medical
+    devices, sterilisation of health care products, aseptic processing of health care products,
+    quality management systems, symbols to be used with information to be supplied by the
+    manufacturer, processing of health care products and home light therapy equipment
+- celex: 32022D0729
+  title: Commission Implementing Decision (EU) 2022/729 of 11 May 2022 amending Implementing
+    Decision (EU) 2021/1195 as regards harmonised standards for quality management systems
+    and for application of risk management to medical devices
+- celex: 32022R0112
+  title: Regulation (EU) 2022/112 of the European Parliament and of the Council of 25 January
+    2022 amending Regulation (EU) 2017/746 as regards transitional provisions for certain
+    in vitro diagnostic medical devices and the deferred application of conditions for in-house
+    devices (Text with EEA relevance)
+- celex: 32022R0123
+  title: Regulation (EU) 2022/123 of the European Parliament and of the Council of 25 January
+    2022 on a reinforced role for the European Medicines Agency in crisis preparedness and
+    management for medicinal products and medical devices (Text with EEA relevance)
+- celex: 32022R0944
+  title: Commission Implementing Regulation (EU) 2022/944 of 17 June 2022 laying down rules
+    for the application of Regulation (EU) 2017/746 of the European Parliament and of the
+    Council as regards the tasks of and criteria for European Union reference laboratories
+    in the field of in vitro diagnostic medical devices (Text with EEA relevance)
+- celex: 32022R0945
+  title: Commission Implementing Regulation (EU) 2022/945 of 17 June 2022 laying down rules
+    for the application of Regulation (EU) 2017/746 of the European Parliament and the Council
+    with regard to fees that may be levied by EU reference laboratories in the field of in
+    vitro diagnostic medical devices (Text with EEA relevance)
+- celex: 32022R2306
+  title: Commission Implementing Decision (EU) 2022/2306 of 23 November 2022 granting derogations
+    to certain Member States with respect to the transmission of statistics pursuant to Regulation
+    (EC) No 1338/2008 of the European Parliament and of the Council, as regards statistics
+    on healthcare facilities, healthcare human resources and healthcare utilisation (notified
+    under document C(2022) 8341) (Only the Czech, Dutch, English, French, German, Greek, Irish,
+    Portuguese, Romanian, Spanish and Swedish texts are authentic) (Text with EEA relevance)
+- celex: 32023L1526
+  title: Commission Delegated Directive (EU) 2023/1526 of 16 May 2023 amending Directive 2011/65/EU
+    of the European Parliament and of the Council as regards an exemption for lead as a thermal
+    stabilizer in polyvinyl chloride used as base material in sensors used in in vitro diagnostic
+    medical devices (Text with EEA relevance)
+- celex: 32023R0607
+  title: Regulation (EU) 2023/607 of the European Parliament and of the Council of 15 March
+    2023 amending Regulations (EU) 2017/745 and (EU) 2017/746 as regards the transitional
+    provisions for certain medical devices and in vitro diagnostic medical devices (Text with
+    EEA relevance)
+- celex: 32023R2713
+  title: Commission Implementing Regulation (EU) 2023/2713 of 5 December 2023 designating
+    European Union reference laboratories in the field of in vitro diagnostic medical devices
+    (Text with EEA relevance)
+- celex: 32024D0817
+  title: Commission Implementing Decision (EU) 2024/817 of 6 March 2024 amending Implementing
+    Decision (EU) 2021/1195 as regards harmonised standards for sterilisation of health care
+    products and packaging for terminally sterilised medical devices (Text with EEA relevance)
+- celex: 32025R0117
+  title: Commission Implementing Regulation (EU) 2025/117 of 24 January 2025 laying down rules
+    for the application of Regulation (EU) 2021/2282 with regard to the procedures for joint
+    scientific consultations on medical devices and in vitro diagnostic medical devices (Text
+    with EEA relevance)
+- celex: null
+  title: Corrigendum to Regulation (EU) 2017/746 of the European Parliament and of the Council
+    of 5 April 2017 on in vitro diagnostic medical devices and repealing Directive 98/79/EC
+    and Commission Decision 2010/227/EU (Official Journal of the European Union L 117 of 5
+    May 2017)
+- celex: null
+  title: Directive 2001/20/EC of the European Parliament and of the Council of 4 April 2001
+    on the approximation of the laws, regulations and administrative provisions of the Member
+    States relating to the implementation of good clinical practice in the conduct of clinical
+    trials on medicinal products for human use
+- celex: null
+  title: Corrigendum to Regulation (EU) 2017/746 of the European Parliament and of the Council
+    of 5 April 2017 on in vitro diagnostic medical devices and repealing Directive 98/79/EC
+    and Commission Decision 2010/227/EU (Official Journal of the European Union L 117 of 5
+    May 2017)
+- celex: null
+  title: Corrigendum to Regulation (EU) 2017/745 of the European Parliament and of the Council
+    of 5 April 2017 on medical devices, amending Directive 2001/83/EC, Regulation (EC) No
+    178/2002 and Regulation (EC) No 1223/2009 and repealing Council Directives 90/385/EEC
+    and 93/42/EEC (Official Journal of the European Union L 117 of 5 May 2017)
+requirements:
+- article: Article 1
+  law_celex: 32021R1182
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The references of harmonised standards for medical devices drafted in
+    support of Regulation (EU) 2017/745 and listed in the Annex to this Decision are hereby
+    published in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32021R1182
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Article 7
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers and other entities involved in device marketing
+  deadline: null
+  interpretive: null
+  requirement_text: It shall be prohibited to use text, names, trade marks, pictures in the
+    labelling, instructions for use, making available, putting into service and advertising
+    of devices
+- article: Article 10(15)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Where manufacturers have their devices designed or manufactured by another
+    legal or natural person the information on the identity of that person shall be part of
+    the information to be submitted in accordance with Article 29(4)
+- article: Article 78(14)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2027-05-26'
+  interpretive: null
+  requirement_text: From 26 May 2027, all Member States shall be required to apply that procedure
+- article: Article 120(6)
+  law_celex: null
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Notified bodies must be notified prior to 26 May 2020
+- article: Annex VII, Section 4.5.2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies or certification entities
+  deadline: null
+  interpretive: null
+  requirement_text: That plan shall ensure that the entire range of devices covered by the
+    certificate is sampled
+- article: Annex VIII, Section 3.2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers and regulatory bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Accessories for a medical device shall be classified in their own right
+- article: Annex IX, Section 2.3
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of class IIa and class IIb devices, the quality management
+    system assessment shall be accompanied by the assessment of technical documentation for
+    devices selected on a representative basis as specified in Section 4
+- article: Annex IX, Section 3.5
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of class IIa and class IIb devices, the surveillance assessment
+    shall also include an assessment of the technical documentation as specified in Section
+    4 for the device or devices concerned on the basis of further representative samples
+- article: Annex IX, Section 4.3
+  law_celex: null
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: The notified body shall assess the technical documentation using staff
+    with proven knowledge
+- article: Article 4(1)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers of devices that provide instructions for use in electronic
+    form to users instead of in paper form shall undertake a documented risk assessment covering
+    specific elements including knowledge and experience of intended users, characteristics
+    of environment, user experience with hardware/software, access to electronic resources,
+    safeguards against tampering, safety mechanisms, emergency situations, website unavailability
+    impact, provision timeframe for paper form, website compatibility, and version management.
+- article: Article 4(2)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The risk assessment for the provision of the instructions for use in electronic
+    form shall be updated in view of the experience gained in the post-marketing phase.
+- article: Article 5(1)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The risk assessment shall demonstrate that providing instructions for
+    use in electronic form maintains or improves the level of safety obtained by providing
+    the instructions for use in paper form.
+- article: Article 5(2)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall provide instructions for use in electronic form in all Member
+    States where the product is made available or put into service unless duly justified in
+    the risk assessment.
+- article: Article 5(3)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall have a system in place to provide the instructions for use
+    in paper form at no additional cost for the user, within the time period set out in the
+    risk assessment and at the latest within 7 calendar days of receiving a request from the
+    user or at the time of delivery of the device if so requested at the time of order.
+- article: Article 5(4)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall provide, on the device or a leaflet, information on foreseeable
+    medical emergency situations and, for devices fitted with a built-in system visually displaying
+    the instructions for use, information on how to start the device.
+- article: Article 5(5)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall ensure the proper design and functioning of the instructions
+    for use in electronic form and provide verification and validation evidence to this effect.
+- article: Article 5(6)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: For medical devices fitted with a built-in system visually displaying
+    the instructions for use, they shall ensure that displaying the instructions for use does
+    not impede the safe use of the device, in particular, life-monitoring or life-supporting
+    functions.
+- article: Article 5(7)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall provide, in their catalogue or other appropriate device information
+    support, information on software and hardware requirements needed to display the instructions
+    for use.
+- article: Article 5(8)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: They shall have a system in place to clearly indicate when the instructions
+    for use have been revised and to inform each user of the device thereof if the revision
+    was necessary for safety reasons.
+- article: Article 5(9)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: For devices with a defined expiry date, except implantable devices, they
+    shall keep the instructions for use available for users in electronic form for 10 years
+    after the last device has been placed on the market and at least 2 years after the end
+    of the expiry date of the last produced device.
+- article: Article 5(10)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: For devices without a defined expiry date and implantable devices, they
+    shall keep the instructions for use available for the users in electronic form for 15
+    years after the last device has been placed on the market.
+- article: Article 5(11)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The instructions for use shall be available on their website in an official
+    language of the Union determined by the Member State in which the device is made available
+    to the user or patient.
+- article: Article 5(12)
+  law_celex: 32021R2226
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Effective systems and procedures shall be in place to ensure that device
+    users having downloaded instructions for use from the website can be informed in case
+    of updates or corrective actions with regards to those instructions for use.
+- article: Article 110(2)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Devices with certificates issued under Directive 98/79/EC may continue
+    to be placed on the market or put into service until 27 May 2025
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Devices must continue to comply with Directive 98/79/EC from the date
+    of application of this Regulation if placed on the market under derogation provisions
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: There shall be no significant changes in the design and intended purpose
+    of devices placed on the market under derogation provisions
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Class D devices requiring notified body involvement under this Regulation
+    but not under Directive 98/79/EC may be placed on the market until 26 May 2025
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Class C devices requiring notified body involvement under this Regulation
+    but not under Directive 98/79/EC may be placed on the market until 26 May 2026
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Class B devices requiring notified body involvement under this Regulation
+    but not under Directive 98/79/EC may be placed on the market until 26 May 2027
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Class A devices placed on the market in sterile condition and requiring
+    notified body involvement under this Regulation but not under Directive 98/79/EC may be
+    placed on the market until 26 May 2027
+- article: Article 110(3)
+  law_celex: 32022R0112
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: economic operators
+  deadline: null
+  interpretive: null
+  requirement_text: Devices eligible for extended transitional periods must have had a declaration
+    of conformity drawn up prior to 26 May 2022 in accordance with Directive 98/79/EC
+- article: General
+  law_celex: 32022R0123
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: HealthTech startups, medical device manufacturers, digital health apps,
+    telemedicine platforms
+  deadline: null
+  interpretive: null
+  requirement_text: Comply with Regulation (EU) 2022/123 of the European Parliament and of
+    the Council of 25 January 2022 on a reinforced role for the European Medicines Agency
+    in crisis preparedness and management for medicinal products and medical devices (Text
+    with EEA relevance)
+- article: Article 1
+  law_celex: 32022D0729
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Decision (EU) 2021/1195 is amended in accordance
+    with the Annex to this Decision
+- article: Article 2
+  law_celex: 32022D0729
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32022D0729
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States and relevant entities
+  deadline: '2022-01-07'
+  interpretive: null
+  requirement_text: Point 1 of the Annex shall apply from 7 January 2022
+- article: Article 2(1)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The fees levied by the EU reference laboratories shall be non-discriminatory,
+    fair, reasonable and proportionate to the services rendered.
+- article: Article 2(2)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The EU reference laboratories shall set the fees based on incurred costs.
+- article: Article 2(2)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The amount of the fee covering the general costs of the operation of the
+    laboratory shall be determined by calculating a percentage of the combined costs and shall
+    not constitute more than 7% of those costs.
+- article: Article 3(1)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The EU reference laboratories shall lay down the rules according to which
+    they calculate the fees for carrying out the requested tasks, including the rules for
+    the estimation of incurred costs based on average costs.
+- article: Article 3(1)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The EU reference laboratories shall make the rules for fee calculation
+    publicly available on their websites.
+- article: Article 3(2)
+  law_celex: 32022R0945
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The EU reference laboratories shall review the rules for fee calculation
+    at least every 2 years and, if needed, adjust them.
+- article: Article 1
+  law_celex: 32024D0817
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Decision (EU) 2021/1195 is amended in accordance
+    with the Annex to this Decision
+- article: Article 2
+  law_celex: 32024D0817
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Recital 3
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Member State Coordination Group on Health Technology Assessment
+  deadline: null
+  interpretive: true
+  requirement_text: The Coordination Group shall set the request periods for joint scientific
+    consultations on medical devices and in vitro diagnostic medical devices at the latest
+    by the day on which it adopts its annual work programme
+- article: Recital 4
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: health technology developers
+  deadline: null
+  interpretive: true
+  requirement_text: Health technology developers shall submit the requests for joint scientific
+    consultations, the briefing package and any further data through the HTA IT platform
+- article: Recital 4
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: health technology developers
+  deadline: null
+  interpretive: true
+  requirement_text: Requests and dossiers shall be presented using the templates set out by
+    the Coordination Group pursuant to Article 21, points (a) and (b), of Regulation (EU)
+    2021/2282
+- article: Recital 5
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: health technology developers
+  deadline: null
+  interpretive: true
+  requirement_text: The health technology developer shall indicate in the request for joint
+    scientific consultation whether, in parallel, it is requesting the expert panel consultation
+- article: Recital 7
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat shall share with the European Medicines Agency the
+    list of requests for joint scientific consultation on medical devices for which the health
+    technology developer indicated that it is requesting in parallel the expert panel consultation
+- article: Recital 7
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat and European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat and the European Medicines Agency shall inform each
+    other which of the requests were selected for joint scientific consultation and which
+    ones were accepted for the expert panel consultation
+- article: Recital 8
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat and European Medicines Agency
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat and the European Medicines Agency shall exchange the
+    appropriate information to ensure that the parallel consultations have synchronised timing
+- article: Recital 9
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Coordination Group via HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The Coordination Group, via the HTA secretariat, shall inform the health
+    technology developer of the timetable for the joint scientific consultation, including
+    the deadline to submit the briefing package
+- article: Recital 11
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat shall start identification of individual experts as
+    early as possible
+- article: Recital 11
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: JSC Subgroup
+  deadline: null
+  interpretive: true
+  requirement_text: The JSC Subgroup shall specify, for each joint scientific consultation,
+    the medical condition, the therapeutic area concerned and other specific expertise
+- article: Recital 11
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat shall consult the stakeholder network, European reference
+    networks for rare and complex diseases and other relevant sources to identify individual
+    experts
+- article: Recital 12
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: JSC Subgroup via HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The JSC Subgroup, via the HTA secretariat, shall share with the selected
+    individual experts the briefing package
+- article: Recital 12
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: HTA secretariat
+  deadline: null
+  interpretive: true
+  requirement_text: The HTA secretariat shall invite the selected individual experts to the
+    meeting for an exchange of views with the health technology developer
+- article: Recital 13
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: true
+  requirement_text: Individual experts shall only be selected and involved in joint scientific
+    consultations after the Commission has assessed their declared interests
+- article: Recital 14
+  law_celex: 32025R0117
+  criticality: recommended
+  addressee: economic_operator
+  applicable_entity: Coordination Group
+  deadline: null
+  interpretive: true
+  requirement_text: The Coordination Group shall consult and reach agreement with the European
+    Medicines Agency on the template for briefing packages used in parallel consultations
+- article: Article 8(1)
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Where a Member State ascertains that devices, when correctly installed,
+    maintained and used for their intended purpose, may compromise the health and/or safety
+    of patients, users or, where applicable, other persons, it shall take all appropriate
+    interim measures to withdraw such devices from the market or prohibit or restrict their
+    being placed on the market or put into service
+- article: Article 8(1)
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The Member State shall immediately inform the Commission of any such measures,
+    indicating the reasons for its decision
+- article: Article 8(2)
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: commission
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission must determine whether the measures are justified or not
+- article: Article 3
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: medical device manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Medical devices must meet the essential requirements set out in Annex
+    I to the Directive which apply to them
+- article: Article 11, Article 17(1)
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: medical device manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: The manufacturer must follow one of the conformity assessment procedures
+    provided for in the Directive, which allows the CE marking to be affixed to the devices
+- article: French Decision
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Claytone-Terrafor Laboratory
+  deadline: null
+  interpretive: null
+  requirement_text: The manufacture, placing on the market, distribution, export and use of
+    the Terrafor and Defiligne medical devices shall be suspended until the products have
+    been brought into line with the legislative and regulatory provisions which apply to them
+- article: French Decision
+  law_celex: 32018L1617
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Claytone-Terrafor Laboratory
+  deadline: null
+  interpretive: null
+  requirement_text: The Claytone-Terrafor laboratory is required to withdraw the Terrafor
+    and Defiligne medical devices from all the distributors concerned
+- article: Article 2(1)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall adopt and publish, by XX.XX.XXXX at the latest, the
+    laws, regulations and administrative provisions necessary to comply with this Directive
+- article: Article 2(1)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall forthwith communicate the text of those provisions
+    to the Commission
+- article: Article 2(1)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall apply those provisions from YY.XX.XXXX
+- article: Article 2(1)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those provisions, they shall contain a reference
+    to this Directive or be accompanied by such a reference on the occasion of their official
+    publication
+- article: Article 2(1)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine how such reference is to be made
+- article: Article 2(2)
+  law_celex: 32023L1526
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    provisions of national law which they adopt in the field covered by this Directive
+- article: Article 1
+  law_celex: 32023R2713
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: laboratories listed in the Annex
+  deadline: null
+  interpretive: null
+  requirement_text: The laboratories listed in the Annex are designated as EU reference laboratories
+    for the specific devices or a category or group of devices, or for specific hazards related
+    to a category or group of devices, as specified in that Annex
+- article: Article 2(2)
+  law_celex: 32023R2713
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: '2024-10-01'
+  interpretive: null
+  requirement_text: For the purpose of the tasks referred to in Article 100(2) of Regulation
+    (EU) 2017/746, this Regulation shall apply from 1 October 2024
+- article: Article 2(3)
+  law_celex: 32023R2713
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: '2024-10-01'
+  interpretive: null
+  requirement_text: EU reference laboratories shall carry out the task referred to in Article
+    100(2), point (a), of Regulation (EU) 2017/746, only for devices for which manufacturers
+    or authorised representatives lodge formal applications for conformity assessment with
+    a notified body in accordance with Section 4.3, first subparagraph, of Annex VII to Regulation
+    (EU) 2017/746 from 1 October 2024
+- article: Article 120(2)
+  law_celex: 32023R0607
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies, manufacturers
+  deadline: '2017-05-25'
+  interpretive: null
+  requirement_text: Certificates issued by notified bodies in accordance with Directives 90/385/EEC
+    and 93/42/EEC from 25 May 2017 that were still valid on 26 May 2021 and that have not
+    been withdrawn afterwards shall remain valid after the end of the period indicated on
+    the certificate until the date set out in paragraph 3a of this Article applicable for
+    the relevant risk class of the devices.
+- article: Article 120(2)
+  law_celex: 32023R0607
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers, notified bodies
+  deadline: '2017-05-25'
+  interpretive: null
+  requirement_text: 'Certificates issued by notified bodies in accordance with those Directives
+    from 25 May 2017 that were still valid on 26 May 2021 and that have expired before 20
+    March 2023 shall be considered to be valid until the dates set out in paragraph 3a of
+    this Article only if one of the following conditions is fulfilled: (a) before the date
+    of expiry of the certificate, the manufacturer and a notified body have signed a written
+    agreement in accordance with Section 4.3, second subparagraph, of Annex VII to this Regulation
+    for the conformity assessment in respect of the device covered by the expired certificate'
+- article: Article 1(1)(a)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in the first
+    sentence of the second subparagraph of Article 1(2) of Regulation (EU) 2017/745
+- article: Article 1(1)(b)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in the second
+    sentence of the second subparagraph of Article 1(2) of Regulation (EU) 2017/745
+- article: Article 1(2)(a)(i)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in the first
+    sentence of paragraph 5 of Article 17 of Regulation (EU) 2017/745
+- article: Article 1(2)(a)(ii)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in the third
+    sentence of paragraph 5 of Article 17 of Regulation (EU) 2017/745
+- article: Article 1(2)(b)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in paragraph
+    6 of Article 17 of Regulation (EU) 2017/745
+- article: Article 1(3)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '25 March 2020' shall be replaced by '25 March 2021' in Article
+    34(1) of Regulation (EU) 2017/745
+- article: Article 1(4)(b)
+  law_celex: 32020R0561
+  criticality: important
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2020-04-24'
+  interpretive: null
+  requirement_text: Member States may inform the Commission and the other Member States of
+    any authorisation granted in accordance with Article 9(9) of Directive 90/385/EEC or Article
+    11(13) of Directive 93/42/EEC before 24 April 2020
+- article: Article 1(4)(c)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: commission
+  applicable_entity: european commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission may, by means of implementing acts, extend for a limited
+    period of time the validity of an authorisation granted by a Member State to the territory
+    of the Union and set the conditions under which the device may be placed on the market
+    or put into service
+- article: Article 1(4)(c)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: european commission
+  deadline: null
+  interpretive: null
+  requirement_text: Those implementing acts shall be adopted in accordance with the examination
+    procedure referred to in Article 114(3)
+- article: Article 1(5)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '25 February 2020' shall be replaced by '25 February 2021' in
+    Article 113 of Regulation (EU) 2017/745
+- article: Article 1(6)(a)
+  law_celex: 32020R0561
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: The date '26 May 2020' shall be replaced by '26 May 2021' in paragraph
+    1 of Article 120 of Regulation (EU) 2017/745
+- article: Article 10(14)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Where manufacturers have their devices designed or manufactured by another
+    legal or natural person the information on the identity of that person shall be part of
+    the information to be submitted in accordance with Article 26(3)
+- article: Article 74(14)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2029-05-26'
+  interpretive: null
+  requirement_text: From 26 May 2029, all Member States shall be required to apply that procedure
+- article: Article 110(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: '2022-05-26'
+  interpretive: null
+  requirement_text: Devices lawfully placed on the market pursuant to Directive 98/79/EC prior
+    to 26 May 2022 and devices placed on the market from 26 May 2022 by virtue of a certificate
+    may continue to be made available on the market or put into service until 27 May 2025
+- article: Article 113(3)(g)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2029-05-26'
+  interpretive: null
+  requirement_text: The procedure set out in Article 74 shall apply from 26 May 2029 without
+    prejudice to Article 74(14)
+- article: Annex VII, Section 4.5.2
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: That plan shall ensure that the entire range of devices covered by the
+    certificate is sampled over the period of validity of the certificate
+- article: Annex IX, Section 2.1
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: Procedures in place to fulfil the obligations arising from the quality
+    management system
+- article: Annex IX, Section 2.3
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of class B and C devices, the quality management system assessment
+    shall be accompanied by the assessment of the technical documentation for devices selected
+    on a representative basis as specified in Section 4
+- article: Annex IX, Section 2.3
+  law_celex: null
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: The notified body shall notify the manufacturer of its decision to issue
+    the certificate
+- article: Annex IX, Section 3.5
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: In the case of class B and C devices, the surveillance assessment shall
+    also include an assessment of the technical documentation as specified in Section 4 for
+    the device or devices concerned on the basis of further representative
+- article: Annex IX, Section 4.3
+  law_celex: null
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: The notified body shall assess the technical documentation using staff
+    with proven knowledge
+- article: Article 1
+  law_celex: 32021D0609
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex I to Implementing Decision (EU) 2020/439 is amended in accordance
+    with the Annex to this Decision
+- article: Article 2
+  law_celex: 32021D0609
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Article 1
+  law_celex: 32021R1195
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The references of harmonised standards for in vitro diagnostic medical
+    devices drafted in support of Regulation (EU) 2017/746 and listed in the Annex to this
+    Decision are hereby published in the Official Journal of the European Union
+- article: Article 2
+  law_celex: 32021R1195
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Article 4(2)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: national competent authorities for medicinal products
+  deadline: null
+  interpretive: null
+  requirement_text: National competent authorities for medicinal products, acting through
+    the single points of contact referred to in Article 3(6), second subparagraph, or the
+    platform referred to in Article 13 (the ESMP), once it is fully functional, shall report
+    in a timely manner to the Agency
+- article: Article 8(1)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: MSSG
+  deadline: null
+  interpretive: null
+  requirement_text: For the duration of a public health emergency, or following the recognition
+    of a major event as referred to in Article 4(3) until it has been confirmed that the major
+    event has been sufficiently addressed pursuant to Article 4(4), the MSSG shall regularly
+    report the results of the monitoring referred to in Article 7 to the Commission and the
+    single points of contact referred to in Article 3(6), second subparagraph, and, in particular,
+    shall signal any actual or potential shortages of medicinal products included on the critical
+    medicines lists or any event that is likely to lead to a major event
+- article: Article 8(2)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: MSSG
+  deadline: null
+  interpretive: null
+  requirement_text: Where requested by the Commission or one or more single point of contact
+    as referred to in Article 3(6), second subparagraph, the MSSG shall provide aggregated
+    data and demand forecasts to support its findings and conclusions
+- article: Article 10(2)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: marketing authorisation holders
+  deadline: null
+  interpretive: null
+  requirement_text: Marketing authorisation holders shall submit the requested information
+    by the deadline set by the Agency, through the single points of contact referred to in
+    Article 9(2), point (a), using the monitoring and reporting methods and systems established
+    pursuant to Article 9(1), points (b) and (c), respectively. Those marketing authorisation
+    holders shall provide updates where necessary
+- article: Article 11(1)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicable entities under Article 11(1)
+  deadline: null
+  interpretive: null
+  requirement_text: Submit the set of information referred to in Article 9(2), point (d),
+    including available and estimated data on volume of demand and demand forecasts, through
+    the single point of contact referred to in Article 3(6), second subparagraph, using the
+    reporting methods and systems established pursuant to Article 9(1), points (b) and (c),
+    respectively
+- article: Article 11(3)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Where Member States have any information in addition to the information
+    to be provided in accordance with paragraphs 1 and 2 of this Article on volumes of sales
+    of and volumes of prescriptions for medicinal products which provides evidence of an actual
+    or potential shortage of a medicinal product included on the critical medicines lists,
+    including data referred to in Article 23a, third paragraph, of Directive 2001/83/EC, they
+    shall immediately provide such information to the MSSG through their respective single
+    points of contact referred to in Article 3(6), second subparagraph, of this Regulation
+- article: Article 13(3)(b)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall use the ESMP to report information relating to medicinal
+    products on the critical medicines lists to the Agency, through the single points of contact
+    referred to in Article 3(6), second subparagraph, in accordance with Articles 9 and 11
+- article: Article 13(4)(b)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall use the ESMP to report to the Agency on shortages
+    of medicinal products that are likely to lead to a public health emergency or major event
+    in accordance with Article 4(2), through the single points of contact referred to in Article
+    3(6), second subparagraph
+- article: Article 24(1)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: MDSSG
+  deadline: null
+  interpretive: null
+  requirement_text: For the duration of the public health emergency, the MDSSG shall regularly
+    report the results of the monitoring referred to in Article 23 to the Commission and the
+    single points of contact referred to in Article 21(5), second subparagraph, and, in particular,
+    shall signal any actual or potential shortages of medical devices included on the public
+    health emergency critical devices list
+- article: Article 27(1)(a)
+  law_celex: 32022R0123
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: applicable entities under Article 27(1)
+  deadline: null
+  interpretive: null
+  requirement_text: Submit the set of information referred to in Article 25(2), point (d),
+    including available information about needs related to the medical devices included in
+    the public health emergency critical devices list, and available and estimated data on
+    volume of demand and demand forecasts for those medical devices, through the respective
+    single point of contact referred to in Article 21(5), second subparagraph, using the monitoring
+    and reporting methods and systems established pursuant to Article 25(1), point (b)
+- article: Article 2(1)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Laws, regulations and administrative provisions adopted and published
+    by Member States necessary to comply with this Directive shall contain a reference to
+    this Directive or be accompanied by such a reference on the occasion of their official
+    publication
+- article: Article 2(1)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine how such reference is to be made
+- article: Article 2(2)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    provisions of national law which they adopt in the field covered by this Directive
+- article: Article 129a(1)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Only COVID-19 in vitro diagnostic medical devices that are in conformity
+    with the applicable requirements set out in Directive 98/79/EC or Regulation (EU) 2017/746
+    and other applicable Union legislation shall be eligible for the measures
+- article: Article 129a(2)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Only COVID-19 vaccines authorised by the Commission or by Member States
+    shall be eligible for the exemption
+- article: Article 129a(3)
+  law_celex: 32020L2020
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Article shall apply until 31 December 2022
+- article: Article 2(1)
+  law_celex: 32021L1978
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2022-04-30'
+  interpretive: null
+  requirement_text: Member States shall adopt and publish, by 30 April 2022 at the latest,
+    the laws, regulations and administrative provisions necessary to comply with this Directive
+- article: Article 2(1)
+  law_celex: 32021L1978
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate the text of those provisions to the Commission
+    forthwith
+- article: Article 2(1)
+  law_celex: 32021L1978
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2021-07-21'
+  interpretive: null
+  requirement_text: Member States shall apply those provisions from 21 July 2021
+- article: Article 2(1)
+  law_celex: 32021L1978
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those provisions, they shall contain a reference
+    to this Directive or be accompanied by such a reference on the occasion of their official
+    publication
+- article: Article 2(2)
+  law_celex: 32021L1978
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    provisions of national law that they adopt in the field covered by this Directive
+- article: Article 3(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall have a sufficient number of technical
+    and scientific staff with appropriate qualifications
+- article: Article 3(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratory directors
+  deadline: null
+  interpretive: null
+  requirement_text: The director of the EU reference laboratory shall have a master's degree
+    or equivalent qualification in a field relevant to the scope of designation and at least
+    five years of professional experience in that field
+- article: Article 3(3)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: technical and scientific staff of EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: Technical and scientific staff shall have at least a bachelor's degree
+    or equivalent qualification in a field relevant to their tasks and at least two years
+    of professional experience in that field
+- article: Article 3(4)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall put in place a continuous training and
+    education programme for their staff
+- article: Article 4(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall keep documentation demonstrating that
+    they possess the equipment, including specimens and control materials, and reference materials
+    necessary to carry out their tasks
+- article: Article 4(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall have an acquisition plan in place to ensure
+    continuous availability of specimens, control materials and reference materials
+- article: Article 5
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall identify international standards and best
+    practices that apply to activities within their scope of designation and integrate them
+    into their operating procedures
+- article: Article 6(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall be established as legal entities
+- article: Article 6(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall be economically viable and have sources
+    of funding
+- article: Article 7
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories receiving Union contribution
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories that may receive a Union contribution shall
+    fulfil the conditions for recipients of Union funds laid down in Regulation (EU, Euratom)
+    2018/1046
+- article: Article 8(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall have sufficient administrative staff
+- article: Article 8(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall keep documentation demonstrating their
+    structure and organisational procedures, as well as records of costs and fees levied and
+    a yearly overview of the tasks performed
+- article: Article 9
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall ensure that their staff handles, stores
+    and processes confidential information and data in an appropriate manner and shall take
+    measures to prevent undue disclosure of such information
+- article: Article 11
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall put in place a policy to identify and
+    prevent, on a continuous basis, any conflict of interest of their staff in relation to
+    the fulfilment of their tasks
+- article: Article 13(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall verify the compliance of laboratories for which they
+    intend to submit an application with the criteria laid down in Article 100(4) of Regulation
+    (EU) 2017/746 prior to submitting the application
+- article: Article 13(3)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission's Joint Research Centre
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission's Joint Research Centre shall verify that it complies with
+    the criteria if it intends to submit an application for its designation as an EU reference
+    laboratory
+- article: Article 15(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: Tasks requested of EU reference laboratories by notified bodies and Member
+    States shall be performed in accordance with predetermined terms and conditions covered
+    by a contract
+- article: Article 16(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Notified bodies shall provide EU reference laboratories with information
+    specific to the device to be tested
+- article: Article 16(2)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories and notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Any communication between the EU reference laboratory and the notified
+    body shall be documented
+- article: Article 17(1)
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: notified_body
+  applicable_entity: notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Notified bodies shall ensure that EU reference laboratories have access
+    to manufacturer-specific equipment and reference materials free of charge
+- article: Article 18
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: EU reference laboratories shall not refuse requests from notified bodies
+    for a contract to perform tasks referred to in Article 100(2), points (a) and (b), of
+    Regulation (EU) 2017/746 that are in their scope of designation
+- article: Article 20
+  law_celex: 32022R0944
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: EU reference laboratories
+  deadline: null
+  interpretive: null
+  requirement_text: The period of 60 days for providing opinions shall start from the day
+    following the day on which the EU reference laboratory receives all necessary information
+    and materials for performing the task
+- article: Article 2(1)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Eudamed shall be accessible for authorised users via a restricted website
+    and for non-identified users via a public website
+- article: Article 2(2)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall provide each Member State and notified body with
+    data exchange access points enabling them to use machine-to-machine data exchange services
+    upon their request
+- article: Article 3(1)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: natural persons
+  deadline: null
+  interpretive: null
+  requirement_text: A natural person shall create an account on the Commission authentication
+    service website in order to be granted access to Eudamed via the restricted website
+- article: Article 3(2)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall register the competent authorities and the authorities
+    responsible for the notified bodies and shall grant access to the restricted website to
+    a first natural person to act on their behalf
+- article: Article 3(2)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall provide to the Commission information on their competent
+    authorities, the authorities responsible for notified bodies and the natural persons to
+    become the first authorised users of those authorities
+- article: Article 3(3)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall register the notified bodies in Eudamed on the basis
+    of the information in the database of notified bodies developed and managed by the Commission
+    (NANDO)
+- article: Article 3(3)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: natural persons acting for notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: The first natural person acting on behalf of an actor that is a notified
+    body shall submit an access request via the restricted website
+- article: Article 3(3)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: national_authority
+  applicable_entity: authorities responsible for notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: The authority responsible for the notified body shall approve the request
+- article: Article 3(4)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: natural persons acting for prospective actors
+  deadline: null
+  interpretive: null
+  requirement_text: A natural person acting on behalf of the prospective actor shall submit
+    an actor registration request, via the restricted website. The actor registration request
+    shall include the signed declaration on information security responsibilities
+- article: Article 3(4)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: national competent authorities
+  deadline: null
+  interpretive: null
+  requirement_text: A national competent authority shall approve the actor registration request,
+    except when the request concerns a sponsor of a clinical investigation or a performance
+    study
+- article: Article 3(5)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: natural persons
+  deadline: null
+  interpretive: null
+  requirement_text: A natural person shall submit an access request via the restricted website
+    in order to be granted access to act on behalf of an actor
+- article: Article 3(5)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Local Actor Administrators and Local User Administrators
+  deadline: null
+  interpretive: null
+  requirement_text: A LAA or LUA of that actor shall approve the access request
+- article: Article 3(6)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: natural persons
+  deadline: null
+  interpretive: null
+  requirement_text: Natural persons shall accept the user rights and obligations and consult
+    the privacy statement in order to become authorised users
+- article: Article 4
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: authorised users
+  deadline: null
+  interpretive: null
+  requirement_text: Authorised users shall use the open access codes of the European Medical
+    Device Nomenclature (EMDN) when providing information on medical devices in Eudamed
+- article: Article 4
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall make the EMDN available in Eudamed free of charge
+- article: Article 5(1)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall set up an application support team to provide timely
+    assistance to users of Eudamed, reachable via a dedicated functional mailbox
+- article: Article 5(2)
+  law_celex: 32021R2078
+  criticality: critical
+  addressee: commission
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Commission shall make available to the users of Eudamed the relevant
+    technical documentation on Eudamed, Frequently Asked Questions regarding Eudamed and the
+    documentation in support of machine-to-machine data exchange services
+- article: Article 1
+  law_celex: 32022D0006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The Annex to Implementing Decision (EU) 2021/1182 is amended in accordance
+    with the Annex to this Decision
+- article: Article 2
+  law_celex: 32022D0006
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision shall enter into force on the day of its publication in
+    the Official Journal of the European Union
+- article: Article 110(8)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: manufacturers, authorised representatives, importers and notified bodies
+  deadline: null
+  interpretive: null
+  requirement_text: Manufacturers, authorised representatives, importers and notified bodies
+    must comply with Articles 26(3), 28(1) and 51(5) of this Regulation during the period
+    starting on the later of the dates referred to in point (f) of Article 113(3) and ending
+    18 months later
+- article: Article 113(3)(a)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: all entities subject to the regulation
+  deadline: null
+  interpretive: null
+  requirement_text: Articles 26(3) and 51(5) shall apply from 18 months after the later of
+    the dates referred to in point (f)
+- article: Article 1
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annex IV to Directive 2011/65/EU is amended as set out in the Annex to
+    this Directive
+- article: Article 2(1)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: '2021-03-31'
+  interpretive: null
+  requirement_text: Member States shall adopt and publish, by 31 March 2021 at the latest,
+    the laws, regulations and administrative provisions necessary to comply with this Directive
+- article: Article 2(1)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: They shall forthwith communicate to the Commission the text of those provisions
+- article: Article 2(1)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: '2021-04-01'
+  interpretive: null
+  requirement_text: They shall apply those provisions from 1 April 2021
+- article: Article 2(1)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: When Member States adopt those provisions, they shall contain a reference
+    to this Directive or be accompanied by such a reference on the occasion of their official
+    publication
+- article: Article 2(1)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall determine how such reference is to be made
+- article: Article 2(2)
+  law_celex: 32020L0366
+  criticality: critical
+  addressee: member_state
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Member States shall communicate to the Commission the text of the main
+    provisions of national law which they adopt in the field covered by this Directive
+- article: Article 1(2)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: clinical trial sponsors and investigators
+  deadline: null
+  interpretive: null
+  requirement_text: Good clinical practice requirements must be observed for designing, conducting,
+    recording and reporting clinical trials that involve the participation of human subjects
+- article: Article 1(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The principles of good clinical practice and detailed guidelines in line
+    with those principles shall be adopted and, if necessary, revised to take account of technical
+    and scientific progress
+- article: Article 1(3)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Commission
+  deadline: null
+  interpretive: null
+  requirement_text: Detailed guidelines shall be published by the Commission
+- article: Article 1(4)
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: clinical trial sponsors and investigators
+  deadline: null
+  interpretive: null
+  requirement_text: All clinical trials, including bioavailability and bioequivalence studies,
+    shall be designed, conducted and reported in accordance with the principles of good clinical
+    practice
+- article: Article 1
+  law_celex: 32022R2306
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: specified member states (Belgium, Czech Republic, Ireland, Greece, Spain,
+    France, Cyprus, Luxembo...
+  deadline: null
+  interpretive: null
+  requirement_text: Derogations as set out in the Annex are granted to the Member States listed
+    therein
+- article: Article 2
+  law_celex: 32022R2306
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Kingdom of Belgium, Czech Republic, Ireland, Hellenic Republic, Kingdom
+    of Spain, French Republic...
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision is addressed to the Kingdom of Belgium, the Czech Republic,
+    Ireland, the Hellenic Republic, the Kingdom of Spain, the French Republic, the Republic
+    of Cyprus, the Grand Duchy of Luxembourg, the Kingdom of the Netherlands, the Republic
+    of Austria, the Portuguese Republic, Romania and the Kingdom of Sweden
+- article: Article 1
+  law_celex: 32018D0133
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: Annexes I and II to Decision 2008/911/EC are amended in accordance with
+    the Annex to this Decision
+- article: Article 2
+  law_celex: 32018D0133
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: member states
+  deadline: null
+  interpretive: null
+  requirement_text: This Decision is addressed to the Member States

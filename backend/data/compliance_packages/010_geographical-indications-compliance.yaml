@@ -1,0 +1,286 @@
+id: 10
+name: Geographical Indications Compliance
+policy_area: Agriculture
+description: EU legal framework for Geographical Indications covering wine, spirits, agricultural
+  products, and craft/industrial goods. Includes registration, protection, producer group
+  governance, and labelling requirements.
+applicability: Producer groups, wine producers, spirit drink producers, agricultural product
+  makers (cheese, meat, oils), craft & industrial product manufacturers
+is_startup_focused: false
+is_published: true
+laws:
+- celex: 32014R0665
+  title: Commission Delegated Regulation (EU) No 665/2014 of 11 March 2014 supplementing Regulation
+    (EU) No 1151/2012 of the European Parliament and of the Council with regard to conditions
+    of use of the optional quality term mountain product
+- celex: 32018R0273
+  title: Commission Delegated Regulation (EU) 2018/273 of 11 December 2017 supplementing Regulation
+    (EU) No 1308/2013 of the European Parliament and of the Council as regards the scheme
+    of authorisations for vine plantings, the vineyard register, accompanying documents and
+    certification, the inward and outward register, compulsory declarations, notifications
+    and publication of notified information, and supplementing Regulation (EU) No 1306/2013
+    of the European Parliament and of the Council as regards the relevant checks and penalties,
+    amending Commission Regulations (EC) No 555/2008, (EC) No 606/2009 and (EC) No 607/2009
+    and repealing Commission Regulation (EC) No 436/2009 and Commission Delegated Regulation
+    (EU) 2015/560
+- celex: 32019R0787
+  title: Regulation (EU) 2019/787 of the European Parliament and of the Council of 17 April
+    2019 on the definition, description, presentation and labelling of spirit drinks, the
+    use of the names of spirit drinks in the presentation and labelling of other foodstuffs,
+    the protection of geographical indications for spirit drinks, the use of ethyl alcohol
+    and distillates of agricultural origin in alcoholic beverages, and repealing Regulation
+    (EC) No 110/2008
+- celex: 32020D0583
+  title: Council Decision (EU) 2020/583 of 25 March 2020 on the position to be taken on behalf
+    of the European Union within the Trade Committee of the Free Trade Agreement between the
+    European Union and the Republic of Singapore on the interpretation, pursuant to Article
+    16.1(4)(d), of Articles 10.17 and 10.22 of that Agreement as regards changes to the protection
+    of geographical indications for wines, spirits, agricultural products and foodstuffs registered
+    in Singapore
+- celex: 32021R1465
+  title: Commission Delegated Regulation (EU) 2021/1465 of 6 July 2021 amending Regulation
+    (EU) 2019/787 of the European Parliament and of the Council as regards the definition
+    of allusions to legal names of spirit drinks or geographical indications for spirit drinks
+    and their use in the description, presentation and labelling of spirit drinks other than
+    the spirit drinks to which allusion is made
+- celex: 32021R2117
+  title: Regulation (EU) 2021/2117 of the European Parliament and of the Council of 2 December
+    2021 amending Regulations (EU) No 1308/2013 establishing a common organisation of the
+    markets in agricultural products, (EU) No 1151/2012 on quality schemes for agricultural
+    products and foodstuffs, (EU) No 251/2014 on the definition, description, presentation,
+    labelling and the protection of geographical indications of aromatised wine products and
+    (EU) No 228/2013 laying down specific measures for agriculture in the outermost regions
+    of the Union
+- celex: 32025R0026
+  title: Corrigendum to Commission Implementing Regulation (EU) 2025/26 of 30 October 2024
+    laying down rules for the application of Regulation (EU) 2024/1143 of the European Parliament
+    and of the Council as regards registrations, amendments, cancellations, enforcement of
+    the protection, labelling and communication in respect of geographical indications and
+    traditional specialities guaranteed, and amending Implementing Regulation (EU) 2019/34
+    as regards geographical indications in the wine sector, and repealing Implementing Regulations
+    (EU) No 668/2014 and (EU) 2021/1236 (OJ L, 2025/26, 15.1.2025)
+requirements:
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Producer groups must be established as a legal entity (association, cooperative,
+    or collective) with proper governance structures
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Producer representatives must be included on governance bodies of the
+    producer group
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Product specifications must define the geographical area, production methods,
+    and quality standards
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Producer groups must appoint an independent verification authority for
+    compliance controls
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Control bodies, Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Regular compliance inspections must be conducted by the designated control
+    body
+- article: General
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Specification amendments must follow standard or union amendment procedures
+    as applicable
+- article: General
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: Producer groups must monitor the market and file complaints against unauthorized
+    use of the GI name
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producers
+  deadline: null
+  interpretive: null
+  requirement_text: Producers must maintain production records and audit trails for traceability
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups, Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Product specifications must be published and the Commission must be notified
+    of registrations and amendments
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producers
+  deadline: null
+  interpretive: null
+  requirement_text: Official EU GI symbols (PDO, PGI, TSG) must be used correctly on product
+    labelling
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Member States, Third parties
+  deadline: null
+  interpretive: null
+  requirement_text: A 3-month opposition/consultation period must be respected for new GI
+    registrations and amendments
+- article: Article 119
+  law_celex: 32021R2117
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Wine producers
+  deadline: null
+  interpretive: null
+  requirement_text: Wine labelling must include the protected designation of origin or protected
+    geographical indication where applicable
+- article: General
+  law_celex: 32018R0273
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Wine producers
+  deadline: null
+  interpretive: null
+  requirement_text: Wine producers must maintain vineyard registers with plot identification
+    and grape variety information
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Wine producers
+  deadline: null
+  interpretive: null
+  requirement_text: Oenological practices must comply with authorized methods for wines with
+    GI protection
+- article: Article 3
+  law_celex: 32019R0787
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Spirit drink producers
+  deadline: null
+  interpretive: null
+  requirement_text: Spirit drinks must be produced, labelled and presented in accordance with
+    the definitions of the 44 spirit drink categories
+- article: Article 21
+  law_celex: 32019R0787
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Spirit drink producers
+  deadline: null
+  interpretive: null
+  requirement_text: Spirit drinks with GI must comply with the product specification including
+    raw materials, production method, and geographical area
+- article: General
+  law_celex: 32021R1465
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Spirit drink producers
+  deadline: null
+  interpretive: null
+  requirement_text: Allusions to geographical indications on spirit drink labels must comply
+    with strict conditions to avoid consumer confusion
+- article: General
+  law_celex: 32014R0665
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Agricultural producers
+  deadline: null
+  interpretive: null
+  requirement_text: The optional quality term 'mountain product' may only be used for products
+    where raw materials and processing occur in mountain areas
+- article: General
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Food manufacturers
+  deadline: null
+  interpretive: null
+  requirement_text: When a PDO/PGI product is used as an ingredient, it must be clearly labelled
+    with the registered name and percentage
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Craft and industrial producers
+  deadline: null
+  interpretive: null
+  requirement_text: Craft and industrial products with GI must demonstrate a link between
+    quality/reputation and geographical origin
+- article: General
+  law_celex: 32025R0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups, Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Single document applications must include a summary of the product specification
+    for EU register publication
+- article: General
+  law_celex: 32025R0026
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Producer groups
+  deadline: null
+  interpretive: null
+  requirement_text: GI applications must be submitted through the national competent authority
+    before transmission to the Commission
+- article: General
+  law_celex: null
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: European Commission
+  deadline: null
+  interpretive: null
+  requirement_text: The EU GI register must be maintained in machine-readable format with
+    all registered names and specifications
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: member_state
+  applicable_entity: Member States
+  deadline: null
+  interpretive: null
+  requirement_text: Member States must designate competent authorities for GI registration,
+    control, and enforcement
+- article: General
+  law_celex: null
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: All market operators
+  deadline: null
+  interpretive: null
+  requirement_text: GI names are protected against misuse, imitation, evocation, and any practice
+    liable to mislead consumers

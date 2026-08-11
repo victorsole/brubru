@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func, case, text
 from typing import Any, Dict, List, Optional
 from datetime import datetime
+import hashlib
 import logging
 import tempfile
 import os
@@ -28,6 +29,10 @@ from models.user_document import UserDocument
 from api.auth import get_current_user
 from services.compliance import GapAnalyzer
 from services.compliance.report_exporter import ReportExporter
+from services.compliance.review_profile import validate_profile
+from services.compliance.evidence_manifest import (
+    build_manifest, public_key_b64, seal, verify as verify_manifest,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +44,16 @@ router = APIRouter(prefix="/eu-law-comply", tags=["eu-law-comply"])
 # exact inverse of what a compliance user needs. Always order by this expression, never
 # by the raw column. The vocabulary is normalised to these three values by
 # scripts/normalise_requirement_criticality.py; anything unrecognised sorts last.
+# A requirement is BINDING unless it is flagged interpretive: recitals, penalty
+# ceilings, application dates and classification thresholds explain the regime
+# rather than impose a duty, and api/eu_law_comply.py excludes them from every
+# analysis. Every user-facing count must use this same filter, or the catalogue
+# promises 22 checks and the run performs 19.
+IS_BINDING_REQUIREMENT = func.coalesce(
+    LawRequirement.extra_metadata['interpretive'].as_string(), ''
+) != 'true'
+
+
 CRITICALITY_ORDER = case(
     (LawRequirement.criticality == 'critical', 0),
     (LawRequirement.criticality == 'important', 1),
@@ -84,9 +99,27 @@ async def run_compliance_analysis_task(
     try:
         logger.info(f"Starting background analysis for analysis_id={analysis_id}")
 
-        # Get requirements for this cluster
+        # Get the BINDING requirements for this cluster.
+        #
+        # extra_metadata.interpretive marks rows that explain the law rather
+        # than impose a duty: recitals, penalty ceilings, application dates,
+        # classification thresholds a company is nowhere near, and support
+        # measures such as regulatory sandboxes. 306 rows carry the flag and
+        # until now nothing read it, so a penalties article was put to the
+        # model as an obligation and came back a "gap" -- telling a company it
+        # had failed to comply with the size of its own potential fine.
+        #
+        # They stay in the corpus and in the cluster preview, where the context
+        # is worth reading. They are simply not scored.
+        # COALESCE rather than a bare `!=`: the column is declared JSON, so a
+        # missing key yields SQL NULL, and `NULL != 'true'` is NULL, not true.
+        # Without the coalesce this filter would drop every requirement that
+        # has no extra_metadata at all, which is most of the corpus.
         requirements = db.query(LawRequirement).filter(
-            LawRequirement.cluster_id == cluster_id
+            LawRequirement.cluster_id == cluster_id,
+            func.coalesce(
+                LawRequirement.extra_metadata['interpretive'].as_string(), ''
+            ) != 'true',
         ).all()
 
         if not requirements:
@@ -102,26 +135,87 @@ async def run_compliance_analysis_task(
 
         logger.info(f"Found {len(requirements)} requirements to check")
 
+        # The package's declared review table, if it has one. Only the
+        # `extracted` columns reach the analyser: each adds a field the model
+        # must read out of the obligation and store on the finding.
+        cluster_row = db.query(LawCluster).filter(LawCluster.id == cluster_id).first()
+        profile = cluster_row.review_profile if cluster_row else None
+        problems = validate_profile(profile)
+        if problems:
+            # A malformed profile must not silently reshape a run. Fall back to
+            # the default table and say so, rather than asking the model for
+            # fields nobody can render.
+            logger.warning(
+                f"Cluster {cluster_id} has an invalid review_profile, using the "
+                f"default columns instead: {problems}")
+            profile = None
+
         # Run gap analysis
-        analyzer = GapAnalyzer(db)
+        analyzer = GapAnalyzer(db, review_profile=profile)
         await analyzer.analyze_compliance(analysis_id, requirements, document_paths)
 
         logger.info(f"Compliance analysis {analysis_id} completed successfully")
 
+        # Seal the run. Evidence has to be created at the moment of the run: a
+        # manifest built on demand later would attest whatever the data happens
+        # to look like when someone asks, which is the opposite of the point.
+        # Never fails the analysis -- a run that produced findings but could not
+        # be sealed is still a valid run, it simply cannot be verified later.
+        try:
+            _seal_analysis(db, analysis_id)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Could not seal analysis {analysis_id}: "
+                           f"{type(exc).__name__}: {exc}")
+
     except Exception as e:
         logger.error(f"Background analysis failed for {analysis_id}: {str(e)}")
 
-        # Mark analysis as failed
-        try:
-            analysis = db.query(ComplianceAnalysis).filter(
-                ComplianceAnalysis.id == analysis_id
-            ).first()
-            if analysis:
-                analysis.status = 'failed'
-                analysis.completed_at = datetime.utcnow()
-                db.commit()
-        except:
-            pass
+        # Mark the run failed, and be stubborn about it. The previous version
+        # reused `db` and swallowed any secondary error with a bare except, so
+        # when the original failure was a dropped database connection the status
+        # write failed too and the run sat in 'processing' forever -- a poll loop
+        # with no terminal state, indistinguishable from a slow analysis.
+        #
+        # Two attempts: roll back the poisoned session and retry on it, then fall
+        # back to a completely fresh session. A run whose status cannot be
+        # written is logged at error level, never passed over in silence.
+        marked = False
+        for attempt, session in enumerate(('rolled-back', 'fresh')):
+            fresh = None
+            try:
+                if session == 'rolled-back':
+                    db.rollback()
+                    target = db
+                else:
+                    fresh = SessionLocal()
+                    target = fresh
+                analysis = target.query(ComplianceAnalysis).filter(
+                    ComplianceAnalysis.id == analysis_id
+                ).first()
+                if analysis:
+                    analysis.status = 'failed'
+                    analysis.completed_at = datetime.utcnow()
+                    analysis.analysis_params = {
+                        **(analysis.analysis_params or {}),
+                        'failure': str(e)[:500],
+                    }
+                    target.commit()
+                marked = True
+                break
+            except Exception as inner:
+                logger.warning(
+                    f"Could not mark analysis {analysis_id} failed via the "
+                    f"{session} session: {type(inner).__name__}: {inner}"
+                )
+            finally:
+                if fresh is not None:
+                    fresh.close()
+        if not marked:
+            logger.error(
+                f"Analysis {analysis_id} is stuck in 'processing': the run failed "
+                f"and neither session could record it. A client polling this id "
+                f"will never see a terminal state."
+            )
 
     finally:
         db.close()
@@ -169,7 +263,9 @@ def list_clusters(
                 detail="EU Law Comply is available for Yellow and Blue tier users only"
             )
 
-        query = db.query(LawCluster)
+        # Unpublished packages never appear in the catalogue. They still resolve
+        # by id, so an analysis someone already ran keeps working (migration 210).
+        query = db.query(LawCluster).filter(LawCluster.is_published.is_(True))
 
         # Filter on the explicit flag (migration 205), never on the id. This was
         # `LawCluster.id > 11`, hardcoded when clusters 12-21 happened to be the
@@ -195,7 +291,7 @@ def list_clusters(
         )
         requirement_counts = dict(
             db.query(LawRequirement.cluster_id, func.count(LawRequirement.id))
-            .filter(LawRequirement.cluster_id.isnot(None))
+            .filter(LawRequirement.cluster_id.isnot(None), IS_BINDING_REQUIREMENT)
             .group_by(LawRequirement.cluster_id)
             .all()
         )
@@ -266,12 +362,16 @@ def clusters_for_me(
         ids = soft_ids | hard_cluster_ids
         if not ids:
             return {"clusters": []}
-        clusters = db.query(LawCluster).filter(LawCluster.id.in_(ids)).order_by(LawCluster.id).all()
+        clusters = (db.query(LawCluster)
+                    .filter(LawCluster.id.in_(ids),
+                            LawCluster.is_published.is_(True))
+                    .order_by(LawCluster.id).all())
 
         out = []
         for c in clusters:
             law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
-            req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+            req_count = db.query(func.count(LawRequirement.id)).filter(
+                LawRequirement.cluster_id == c.id, IS_BINDING_REQUIREMENT).scalar()
             out.append({
                 'id': c.id, 'name': c.name, 'description': c.description,
                 'applicability': c.applicability, 'policy_area': c.policy_area,
@@ -343,7 +443,8 @@ async def get_cluster_details(
             LawRequirement.criticality,
             func.count(LawRequirement.id)
         ).filter(
-            LawRequirement.cluster_id == cluster_id
+            LawRequirement.cluster_id == cluster_id,
+            IS_BINDING_REQUIREMENT,
         ).group_by(
             LawRequirement.criticality
         ).all()
@@ -807,10 +908,63 @@ async def get_law_by_celex(
 # ANALYSIS ENDPOINTS
 # ============================================================================
 
+def _seal_analysis(db: Session, analysis_id: int) -> Optional[str]:
+    """Build and store the evidence manifest for a completed run.
+
+    Returns the digest, or None if the run is not in a sealable state. Only
+    completed runs are sealed: sealing a failed or partial-by-error run would
+    attest a verdict set nobody should rely on.
+    """
+    analysis = db.query(ComplianceAnalysis).filter(
+        ComplianceAnalysis.id == analysis_id).first()
+    if not analysis or analysis.status != 'completed':
+        return None
+
+    cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+    findings_with_reqs = (
+        db.query(GapFinding, LawRequirement)
+        .join(LawRequirement, GapFinding.requirement_id == LawRequirement.id)
+        .filter(GapFinding.analysis_id == analysis_id)
+        .all()
+    )
+    documents = []
+    if analysis.document_uuids:
+        documents = (db.query(UserDocument)
+                     .filter(UserDocument.id.in_(list(analysis.document_uuids)))
+                     .all())
+
+    body = build_manifest(analysis, cluster, findings_with_reqs, documents)
+    sealed = seal(body)
+
+    analysis.manifest = sealed["manifest"]
+    analysis.manifest_sha256 = sealed["manifest_sha256"]
+    analysis.manifest_signature = sealed["signature"]
+    analysis.manifest_key_id = sealed["key_id"]
+    analysis.sealed_at = datetime.utcnow()
+    db.commit()
+    logger.info(f"Sealed analysis {analysis_id}: {sealed['manifest_sha256'][:16]}... "
+                f"signed={sealed['signed']}")
+    return sealed["manifest_sha256"]
+
+
 @router.post("/analyze")
 async def create_compliance_analysis(
     cluster_id: int = Form(...),
-    documents: List[UploadFile] = File(...),
+    # `List[UploadFile] = File(default=[])`, NOT `Optional[List[UploadFile]] =
+    # File(None)`. The Optional form made the field nullable in the generated
+    # pydantic model, and a multipart body carrying one file then failed
+    # validation with "Input should be a valid list" -- so making uploads
+    # optional for the re-use feature broke the ordinary single-file upload,
+    # which is the main action of the whole product. An empty default keeps the
+    # field a list that may be empty.
+    documents: List[UploadFile] = File(default=[]),
+    # UUIDs of user_documents from an earlier run of this package, comma
+    # separated. Migration 209 started storing the extracted text of every
+    # upload, but nothing could read it back, so each run began at an empty
+    # dropzone even though last month's policy was sitting in the database.
+    # Either source is enough on its own, and they can be combined: re-use the
+    # policy, add the new annex.
+    reuse_document_ids: Optional[str] = Form(None),
     analysis_name: Optional[str] = Form(None),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db),
@@ -845,11 +999,18 @@ async def create_compliance_analysis(
                 detail=f"Cluster {cluster_id} not found"
             )
 
-        # Validate documents
-        if not documents or len(documents) == 0:
+        # FastAPI hands back a single empty UploadFile when a multipart field is
+        # declared but sent blank, so filter those out before counting.
+        documents = [d for d in (documents or []) if d and d.filename]
+
+        reuse_ids: List[str] = [
+            s.strip() for s in (reuse_document_ids or '').split(',') if s.strip()
+        ]
+
+        if not documents and not reuse_ids:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="At least one document must be uploaded"
+                detail="Upload at least one document, or re-use one from an earlier run"
             )
 
         # Check file types
@@ -895,6 +1056,45 @@ async def create_compliance_analysis(
                     detail=f"Failed to save document: {uploaded_file.filename}"
                 )
 
+        # Re-used documents: write the stored extracted text back out as .txt so
+        # the analyser reads them by exactly the same path as a fresh upload.
+        # Ownership is enforced in the query, so a guessed UUID belonging to
+        # another user simply does not resolve.
+        reused_uuids = []
+        if reuse_ids:
+            stored = (
+                db.query(UserDocument)
+                .filter(UserDocument.id.in_(reuse_ids),
+                        UserDocument.user_id == current_user.id)
+                .all()
+            )
+            found = {str(d.id) for d in stored}
+            missing = [i for i in reuse_ids if i not in found]
+            if missing:
+                logger.warning(
+                    f"Re-use requested for {len(missing)} document(s) that do not "
+                    f"belong to user {current_user.id} or no longer exist: {missing}"
+                )
+            for d in stored:
+                if not (d.content or '').strip():
+                    # An empty stored document would silently weaken the run:
+                    # every requirement would come back a gap for lack of
+                    # evidence. Skip it and say so rather than analyse nothing.
+                    logger.warning(f"Re-used document {d.id} has no extracted text; skipping")
+                    continue
+                with tempfile.NamedTemporaryFile(
+                        delete=False, suffix='.txt', mode='w', encoding='utf-8') as tmp:
+                    tmp.write(d.content)
+                    document_paths.append(tmp.name)
+                reused_uuids.append(d.id)
+
+            if not document_paths:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="None of the selected documents could be re-used. "
+                           "Upload the document again.",
+                )
+
         # One durable workspace per (user, cluster). Runs, uploads and
         # remediation state all hang off it, so a second analysis of the same
         # package continues the first rather than starting from nothing.
@@ -918,7 +1118,11 @@ async def create_compliance_analysis(
         # reads, rather than the original blob.
         from services.compliance.document_processor import DocumentProcessor
         processor = DocumentProcessor()
-        document_uuids = []
+        # Re-used documents are already stored, so they are recorded on this run
+        # without being written again. Fresh uploads occupy the FIRST len(documents)
+        # entries of document_paths (the save loop runs before the re-use block),
+        # so zip pairs them correctly and stops before the re-used tail.
+        document_uuids = list(reused_uuids)
         for path, uploaded in zip(document_paths, documents):
             # SAVEPOINT per document. A plain try/except is not enough: a failed
             # flush poisons the whole Session, so the analysis INSERT that
@@ -1066,7 +1270,10 @@ async def get_analysis_results(
                 # The cluster preview already showed it; the results did not.
                 'addressee': (requirement.extra_metadata or {}).get('addressee') or 'economic_operator',
                 'deadline_date': requirement.deadline.isoformat() if requirement.deadline else None,
-                'deadline_text': None  # TODO: Add deadline_text to LawRequirement model
+                'deadline_text': None,  # TODO: Add deadline_text to LawRequirement model
+                # Values for the package's declared extracted columns, keyed by
+                # column id. Empty for the default review table.
+                'extra_fields': finding.extra_fields or {},
             })
 
         return {
@@ -1077,7 +1284,18 @@ async def get_analysis_results(
                 'policy_area': cluster.policy_area
             },
             'status': analysis.status,
+            # Owned by the update_compliance_score trigger: how many of the
+            # findings turned out to APPLY. Not the same as how many were
+            # checked, which is why coverage is reported alongside it rather
+            # than left for the reader to infer from a shorter list.
             'total_requirements': analysis.total_requirements,
+            'coverage': {
+                'selected': (analysis.analysis_params or {}).get('requirements_selected'),
+                'analysed': (analysis.analysis_params or {}).get('requirements_analysed'),
+                'failed': (analysis.analysis_params or {}).get('failed_requirements', 0),
+                'not_applicable': sum(1 for f in findings if f['status'] == 'not_applicable'),
+                'partial_run': bool((analysis.analysis_params or {}).get('partial')),
+            },
             'requirements_met': analysis.requirements_met,
             'requirements_partial': analysis.requirements_partial,
             'requirements_gap': analysis.requirements_gap,
@@ -1085,6 +1303,11 @@ async def get_analysis_results(
             # Migration 209 gave a run a durable home and a record of the
             # documents it was actually performed against. Both were persisted
             # but neither was serialised, so no client could reach them.
+            # The review table this package declared, so the client renders the
+            # columns the analysis was actually performed against rather than
+            # assuming the default eight.
+            'review_profile': (cluster.review_profile
+                               if cluster and cluster.review_profile else None),
             'workspace_id': analysis.workspace_id,
             'document_uuids': [str(u) for u in (analysis.document_uuids or [])],
             'gap_findings': findings,
@@ -1278,6 +1501,63 @@ async def get_user_analysis_history(
 # ============================================================================
 
 @router.get(
+    "/analysis/{analysis_id}/verify",
+    summary="Prove a compliance check has not changed since it ran",
+    description=(
+        "**What it does**\n\n"
+        "Re-reads the run from the database and compares it against the seal "
+        "written when it completed: the documents examined, the obligations "
+        "checked, and the verdict recorded for each. Reports which part changed "
+        "if any did.\n\n"
+        "**When to use it**\n\n"
+        "Before relying on a past report, and whenever a third party asks you to "
+        "show that a compliance check is the one you say it is.\n\n"
+        "**Input**\n\n`analysis_id` in the path. Bearer JWT. Only your own runs.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/analysis/26/verify`.\n\n"
+        "**You get back**\n\n"
+        "`verified` true or false, `checks` with `documents_unchanged`, "
+        "`obligations_unchanged` and `verdicts_unchanged`, the `manifest_sha256`, "
+        "and whether a signature is present and valid. This proves INTEGRITY, "
+        "not correctness: it shows the findings are the ones produced that day, "
+        "not that they were right."
+    ),
+)
+async def verify_analysis(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Compare a sealed run against the current state of the database."""
+    analysis = db.query(ComplianceAnalysis).filter(
+        and_(ComplianceAnalysis.id == analysis_id,
+             ComplianceAnalysis.user_id == current_user.id)
+    ).first()
+    if not analysis:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Analysis {analysis_id} not found")
+
+    cluster = db.query(LawCluster).filter(LawCluster.id == analysis.cluster_id).first()
+    findings_with_reqs = (
+        db.query(GapFinding, LawRequirement)
+        .join(LawRequirement, GapFinding.requirement_id == LawRequirement.id)
+        .filter(GapFinding.analysis_id == analysis_id)
+        .all()
+    )
+    documents = []
+    if analysis.document_uuids:
+        documents = (db.query(UserDocument)
+                     .filter(UserDocument.id.in_(list(analysis.document_uuids)))
+                     .all())
+
+    rebuilt = build_manifest(analysis, cluster, findings_with_reqs, documents)
+    result = verify_manifest(analysis.manifest, analysis.manifest_sha256,
+                             analysis.manifest_signature, rebuilt)
+    result["analysis_id"] = analysis_id
+    result["public_key"] = public_key_b64()
+    return result
+
+
+@router.get(
     "/workspaces",
     summary="Your compliance workspaces",
     description=(
@@ -1324,6 +1604,101 @@ def list_workspaces(
         "latest_score": float(r["latest_score"]) if r["latest_score"] is not None else None,
         "open_actions": r["open_actions"],
     } for r in rows], "count": len(rows)}
+
+
+@router.get(
+    "/clusters/{cluster_id}/documents",
+    summary="Documents you can re-use for this package",
+    description=(
+        "**What it does**\n\n"
+        "Lists the documents you have already analysed against this compliance "
+        "package, so a repeat check can re-use them instead of asking you to "
+        "find and upload the same policy again.\n\n"
+        "**When to use it**\n\n"
+        "When opening a package you have run before. Offer the stored documents "
+        "alongside the upload control; the user can re-use, add, or do both.\n\n"
+        "**Input**\n\n"
+        "`cluster_id` in the path. Bearer JWT. Only your own documents are ever "
+        "returned.\n\n"
+        "**Try it**\n\n`GET /api/eu-law-comply/clusters/58/documents`.\n\n"
+        "**You get back**\n\n"
+        "`documents`: a list of `{id, title, filename, characters, last_used_at, "
+        "used_in_runs}`, newest first, and `count`. Pass the ids you want to "
+        "`POST /analyze` as `reuse_document_ids`, comma separated."
+    ),
+)
+async def list_reusable_documents(
+    cluster_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Documents already analysed against this package by this user.
+
+    Sourced from compliance_analyses.document_uuids rather than from
+    user_documents at large: the point is "what did I check this package
+    against last time", not "everything I have ever uploaded anywhere".
+    """
+    runs = (
+        db.query(ComplianceAnalysis)
+        .filter(ComplianceAnalysis.user_id == current_user.id,
+                ComplianceAnalysis.cluster_id == cluster_id,
+                ComplianceAnalysis.document_uuids.isnot(None))
+        .order_by(ComplianceAnalysis.started_at.desc())
+        .all()
+    )
+
+    # Preserve most-recent-first order, and count how many runs used each doc.
+    order: List[str] = []
+    used_in: Dict[str, int] = {}
+    last_used: Dict[str, Optional[datetime]] = {}
+    for run in runs:
+        for uid in (run.document_uuids or []):
+            key = str(uid)
+            if key not in used_in:
+                order.append(key)
+                last_used[key] = run.started_at
+            used_in[key] = used_in.get(key, 0) + 1
+
+    if not order:
+        return {"documents": [], "count": 0}
+
+    docs = {
+        str(d.id): d
+        for d in db.query(UserDocument)
+                   .filter(UserDocument.id.in_(order),
+                           UserDocument.user_id == current_user.id)
+                   .all()
+    }
+
+    # Collapse byte-identical documents. Uploading the same policy on three
+    # occasions writes three user_documents rows, and offering the user three
+    # indistinguishable choices is worse than offering none: there is no way to
+    # tell them apart and no reason to prefer one. Keyed on a hash of the
+    # extracted text, so this is exact rather than a guess at the filename.
+    # The most recently used row wins and carries the combined run count.
+    out = []
+    seen: Dict[str, int] = {}          # content hash -> index in `out`
+    for key in order:
+        d = docs.get(key)
+        if not d:
+            continue      # deleted since; simply not offered
+        digest = hashlib.sha256((d.content or '').encode('utf-8')).hexdigest()
+        if digest in seen:
+            existing = out[seen[digest]]
+            existing["used_in_runs"] += used_in[key]
+            existing["duplicate_copies"] += 1
+            continue
+        seen[digest] = len(out)
+        out.append({
+            "id": str(d.id),
+            "title": d.title,
+            "filename": d.original_filename,
+            "characters": len(d.content or ''),
+            "last_used_at": last_used[key].isoformat() if last_used.get(key) else None,
+            "used_in_runs": used_in[key],
+            "duplicate_copies": 0,
+        })
+    return {"documents": out, "count": len(out)}
 
 
 @router.get(
@@ -1975,7 +2350,7 @@ def resolve_clusters_by_topic(
     or_clauses = [func.lower(LawCluster.policy_area) == pa.lower() for pa in resolved_policy_areas]
     clusters = (
         db.query(LawCluster)
-        .filter(or_(*or_clauses))
+        .filter(or_(*or_clauses), LawCluster.is_published.is_(True))
         .order_by(LawCluster.id)
         .all()
     )
@@ -1983,7 +2358,8 @@ def resolve_clusters_by_topic(
     out = []
     for c in clusters:
         law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
-        req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+        req_count = db.query(func.count(LawRequirement.id)).filter(
+            LawRequirement.cluster_id == c.id, IS_BINDING_REQUIREMENT).scalar()
         # Which template targets resolved to this cluster's policy_area
         matched_targets = [t for t, pas in target_to_actual.items() if (c.policy_area or "") in pas]
         match_reason = sorted({r for t in matched_targets for r in reasons.get(t, [])})
