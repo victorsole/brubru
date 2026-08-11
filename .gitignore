@@ -147,3 +147,9 @@ test_scraper.py
 
 # Backup files
 *.bak
+
+# Training corpora: 210MB+ JSONL, over GitHub's hard 100MB limit. These blocked a
+# push on 11 Aug 2026 after being committed under backend/data/, which the bare
+# `data/` rule does not match.
+backend/data/eurovoc_corpus/
+backend/data/dpp_corpus/
