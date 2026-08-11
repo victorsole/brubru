@@ -72,17 +72,32 @@ def _items(item_type: str, q: Optional[str] = None, limit: int = 25,
 
 
 def handle_ask_dpp(question: str) -> Dict[str, Any]:
-    """Front door: search every DPP resource at once and say what was found."""
+    """Front door: search every DPP resource at once and say what was found.
+
+    ONE query across all nine resource types, grouped in Python. The first
+    version ran a query per type, so a single ask_dpp call opened and closed ten
+    database sessions; twelve concurrent calls then exhausted the pool
+    (QueuePool size 5, overflow 5) and most of them failed. The front door is the
+    most-called tool, so it must be the cheapest, not the most expensive.
+    """
     q = (question or "").strip()
     if not q:
         return {"error": "Ask a question about the digital product passport."}
 
+    rows = _rows(
+        "SELECT id, item_type, title, summary, public_url, document_date FROM ("
+        "  SELECT id, item_type, title, summary, public_url, document_date,"
+        "         row_number() OVER (PARTITION BY item_type"
+        "                            ORDER BY document_date DESC NULLS LAST, id) AS rn"
+        "  FROM economy_items"
+        "  WHERE body_code = :b"
+        "    AND (title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"
+        ") t WHERE rn <= 4 ORDER BY item_type, rn",
+        {"b": BODY, "q": f"%{q}%"},
+    )
     found: Dict[str, List[Dict[str, Any]]] = {}
-    for t in ("law", "sector", "registry", "standard", "data_point",
-              "guidance", "audience", "news", "event"):
-        hits = _items(t, q, limit=4)
-        if hits:
-            found[t] = hits
+    for r in rows:
+        found.setdefault(r.pop("item_type"), []).append(r)
 
     consultations = handle_dpp_consultations(query=q, limit=4).get("consultations", [])
 
