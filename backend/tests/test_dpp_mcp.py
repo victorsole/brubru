@@ -191,7 +191,14 @@ try:
                "What data must a battery passport carry?",
                "How do I register in the DPP registry?",
                "Quan sera obligatori el passaport digital per als textils?",
-               "Cuando puedo dar feedback sobre los actos delegados de ecodiseno?"):
+               "Cuando puedo dar feedback sobre los actos delegados de ecodiseno?",
+               # These needed a DPP-specific glossary: the general bridge knows
+               # broad policy words, not "normes harmonitzades" or "ecodisseny".
+               "Quines normes harmonitzades s'apliquen al passaport digital?",
+               "Quins actes delegats hi ha sobre ecodisseny?",
+               "Que diu el reglament sobre el registre?",
+               "Que puntos de datos necesita el pasaporte de baterias?",
+               "Cuales son las normas armonizadas?"):
         _r = handle_ask_dpp(_q)
         check(f"answers: {_q[:52]}", _r.get("found") is True, str(_r)[:110])
     for _q in ("zzzz nothing at all here", "pizza recipes"):

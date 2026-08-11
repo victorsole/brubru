@@ -27,7 +27,7 @@ being up.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from sqlalchemy import text
 
@@ -93,6 +93,70 @@ _STOPWORDS = {
 }
 
 
+# Domain vocabulary the general query bridge does not carry. The bridge knows
+# broad EU-policy words; it does not know that "normes harmonitzades" is
+# "harmonised standards" or that "ecodisseny" is "ecodesign". Terraqui works in
+# Catalan and this server is entirely about this vocabulary, so the gap is the
+# normal case here rather than an edge case. Longest phrases first so
+# "passaport digital de producte" wins over "passaport".
+_DOMAIN_TERMS: List[Tuple[str, str]] = [
+    ("passaport digital de producte", "digital product passport"),
+    ("pasaporte digital de producto", "digital product passport"),
+    ("passaport digital", "digital product passport"),
+    ("pasaporte digital", "digital product passport"),
+    ("normes harmonitzades", "harmonised standards"),
+    ("normas armonizadas", "harmonised standards"),
+    ("actes delegats", "delegated act"),
+    ("actos delegados", "delegated act"),
+    ("consulta publica", "consultation"),
+    ("punts de dades", "data points"),
+    ("puntos de datos", "data points"),
+    ("residus textils", "textile waste"),
+    ("residuos textiles", "textile waste"),
+    ("passaport", "passport"),
+    ("pasaporte", "passport"),
+    ("ecodisseny", "ecodesign"),
+    ("ecodiseno", "ecodesign"),
+    ("registre", "registry"),
+    ("registro", "registry"),
+    ("reglament", "regulation"),
+    ("reglamento", "regulation"),
+    ("directiva", "directive"),
+    ("bateries", "batteries"),
+    ("baterias", "batteries"),
+    ("textils", "textiles"),
+    ("textil", "textile"),
+    ("residus", "waste"),
+    ("residuos", "waste"),
+    ("obligatori", "mandatory"),
+    ("obligatorio", "mandatory"),
+    ("termini", "deadline"),
+    ("plazo", "deadline"),
+    ("duana", "customs"),
+    ("aduana", "customs"),
+    ("fabricant", "manufacturer"),
+    ("fabricante", "manufacturer"),
+    ("etiquetatge", "labelling"),
+    ("etiquetado", "labelling"),
+    ("empremta de carboni", "carbon footprint"),
+    ("huella de carbono", "carbon footprint"),
+]
+
+
+def _domain_bridge(question: str) -> str:
+    """Append English domain terms for any Catalan/Spanish phrase recognised."""
+    import unicodedata as _ud
+
+    folded = "".join(c for c in _ud.normalize("NFD", (question or "").lower())
+                     if _ud.category(c) != "Mn")
+    extra, used = [], set()
+    for src, en in _DOMAIN_TERMS:
+        if src in folded and en not in used:
+            used.add(en)
+            extra.append(en)
+    return f"{question} {' '.join(extra)}" if extra else question
+
+
 def _terms(question: str) -> List[str]:
     """The words worth searching for in a question.
 
@@ -141,6 +205,7 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
         bridged = bridge_query(q) or q
     except Exception:  # noqa: BLE001 - retrieval must not depend on the bridge
         pass
+    bridged = _domain_bridge(bridged)
 
     terms = _terms(bridged) or [q]
     # score = how many of the question's terms this row matches
