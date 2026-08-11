@@ -475,6 +475,86 @@ def build_rows(db) -> List[Dict[str, Any]]:
             "guid": f"dpp-guidance-{slug}",
         })
 
+    # ---- battery passport data points -------------------------------------
+    dp_file = CORPUS / "_battery_data_points.json"
+    if dp_file.exists():
+        import json as _json
+
+        for dp in _json.loads(dp_file.read_text(encoding="utf-8")):
+            title = f"Battery passport data point {dp['number']}: {dp['name']}"
+            facts = {
+                "Data point number": dp["number"],
+                "Legal source": dp["source"] or "not stated in the guidance",
+                "Electric vehicle batteries": dp["ev"],
+                "Light means of transport batteries": dp["lmt"],
+                "Industrial batteries": dp["industrial"],
+                "Applicability confidence": dp.get("applicability_confidence", "clean"),
+            }
+            txt, htm = compose(
+                title,
+                "A field the battery digital product passport must carry, with its "
+                "legal source and its applicability by battery type. Mandatory from "
+                "18 February 2027 for the battery types indicated.",
+                facts,
+                dp.get("parse_note", ""),
+            )
+            rows.append({
+                "item_type": "data_point", "title": title,
+                "summary": f"{dp['name'][:150]} ({dp['source'] or 'source not stated'}).",
+                "public_url": (
+                    "https://single-market-economy.ec.europa.eu/document/download/"
+                    "cd1e5e6c-4a4a-4b99-995a-49eb6916187e_en#data-point-"
+                    f"{dp['number']}"
+                ),
+                "body_txt": txt, "body_html": htm,
+                "document_date": date(2026, 7, 28), "source_kind": "pdf",
+                "guid": f"dpp-datapoint-battery-{dp['number']}",
+            })
+    else:
+        print(f"  [WARN] {dp_file.name} missing, no data points ingested")
+
+    # ---- Commission news + events -------------------------------------------
+    # The listing renders dates as '07 JUL 2026' across three lines, which is fragile
+    # to parse. The URL slug ends in the publication date, so take it from there.
+    _SLUG_DATE = re.compile(r"-(\d{4})-(\d{2})-(\d{2})_en/?$")
+
+    def _date_from_url(url: str) -> Optional[date]:
+        m = _SLUG_DATE.search(url)
+        if not m:
+            return None
+        try:
+            return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            return None
+
+    for fname, item_type, noun in (
+        ("_dpp_news.json", "news", "Commission news item"),
+        ("_dpp_events.json", "event", "Commission event"),
+    ):
+        f = CORPUS / fname
+        if not f.exists():
+            print(f"  [WARN] {fname} missing, no {item_type} ingested")
+            continue
+        import json as _json
+
+        for it in _json.loads(f.read_text(encoding="utf-8")):
+            d = _date_from_url(it["url"])
+            txt, htm = compose(
+                it["title"],
+                f"{noun} on the Digital Product Passport.",
+                {"Published": d.isoformat() if d else "date not stated",
+                 "Source": "European Commission, single market newsroom",
+                 "Link": it["url"]},
+            )
+            rows.append({
+                "item_type": item_type, "title": it["title"],
+                "summary": f"{noun} on the Digital Product Passport.",
+                "public_url": it["url"],
+                "body_txt": txt, "body_html": htm,
+                "document_date": d, "source_kind": "html",
+                "guid": f"dpp-{item_type}-{it['url'].rstrip('/').rsplit('/', 1)[-1][:60]}",
+            })
+
     for r in rows:
         r["body_code"] = BODY
         r["creation_date"] = now

@@ -14,13 +14,18 @@ Design (see docs/instructions.md "FOR THE API SESSION — Terraqui / LIFE DPP-TE
     backend deploy.
 
   * Titles / ELI / status are RESOLVED LIVE from the Publications Office Cellar
-    SPARQL graph (`CellarSPARQLClient`) with a server-side TTL cache. This is
-    deliberate: `eu_laws` has no recurring ingest and is missing several corpus
-    acts (see memory/feedback_eu_laws_has_no_recurring_ingest.md), so reading
-    titles/dates from `eu_laws` alone would return blanks. Cellar is
-    authoritative, WAF-free and immune to the ingest gap. The curated seed is
-    the FLOOR — if Cellar is unreachable the endpoint still returns the full
-    5-datapoint contract from the seed (graceful degradation).
+    SPARQL graph (`CellarSPARQLClient`) with a server-side TTL cache, because
+    Cellar is authoritative for in-force status and an act's status changes
+    without anything in this repository changing. Cellar is also WAF-free.
+    The curated seed is the FLOOR — if Cellar is unreachable the endpoint still
+    returns the full contract from the seed (graceful degradation).
+
+    NOTE (corrected 11 Aug 2026): this docstring used to justify the live
+    resolution by claiming `eu_laws` was missing several corpus acts. That is
+    no longer true — 32025L1892, 32026R1778 and the rest of the DPP regime were
+    ingested on 11 Aug (see scripts/_ingest_dpp_regime_oneshot.py), and
+    `eu_laws` still has no recurring ingest but does now hold these acts. The
+    live-Cellar design stands on freshness, not on absence.
 
   * The still-moving delegated acts / proposals live in `legislative_carriages`
     (NOT `eu_laws`) and are resolved by their OEIL procedure reference so
@@ -42,6 +47,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from html import escape as html_escape
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
@@ -441,6 +447,13 @@ def _build_base_act(seed: Dict[str, Any], lang: str, cellar: Dict[str, Any]) -> 
         for ms, deadline in seed["transposition"].items():
             transposition.append(Transposition(member_state=ms, deadline=_as_date(deadline)))
 
+    _body_txt, _body_html = _compose_body(
+        title=title, celex=seed["celex"], procedure_ref=None, eli=eli,
+        role=seed["role"], status="in_force", in_force=in_force, entry=entry,
+        transposition=transposition,
+        key_dates=_localise_key_dates(seed.get("key_dates", []), lang),
+        latest_step=None, deep_link=seed["deep_link"],
+    )
     return TextileAct(
         celex=seed["celex"],
         procedure_ref=None,
@@ -458,9 +471,60 @@ def _build_base_act(seed: Dict[str, Any], lang: str, cellar: Dict[str, Any]) -> 
         deep_link=seed["deep_link"],
         # 5 Brubru datapoints
         public_url=seed["deep_link"],
+        body_txt=_body_txt,
+        body_html=_body_html,
         document_date=doc_date,
         creation_date=datetime.now(timezone.utc),
     )
+
+
+def _compose_body(*, title: str, celex: Optional[str], procedure_ref: Optional[str],
+                  eli: Optional[str], role: str, status: str, in_force: bool,
+                  entry: Optional[date], transposition: List["Transposition"],
+                  key_dates: List[Any], latest_step: Optional[str],
+                  deep_link: str) -> tuple:
+    """Compose body_txt + body_html for one act.
+
+    The v2 item contract requires a rendered body on every item, structured data
+    included: the body is what chat and RAG ingest, so an act returned with a null
+    body is invisible to everything downstream of the API.
+    """
+    lines = [title, ""]
+    if celex:
+        lines.append(f"CELEX: {celex}")
+    if procedure_ref:
+        lines.append(f"Procedure: {procedure_ref}")
+    if eli:
+        lines.append(f"ELI: {eli}")
+    lines.append(f"Role in textile circularity: {role}")
+    lines.append(f"Status: {status}" + (" (in force)" if in_force else ""))
+    if entry:
+        lines.append(f"Entry into force: {entry}")
+    if latest_step:
+        lines.append(f"Latest procedural step: {latest_step}")
+    for t in transposition or []:
+        if getattr(t, "deadline", None):
+            lines.append(f"Transposition, {t.member_state}: {t.deadline}")
+    for kd in key_dates or []:
+        label = getattr(kd, "label", None) or (kd.get("label") if isinstance(kd, dict) else None)
+        when = getattr(kd, "date", None) or (kd.get("date") if isinstance(kd, dict) else None)
+        if label and when:
+            lines.append(f"Key date, {label}: {when}")
+    lines += ["", f"Brubru explainer: {deep_link}"]
+    txt = "\n".join(lines)
+
+    rows_html = "".join(
+        f"<tr><th align='left'>{html_escape(str(k))}</th><td>{html_escape(str(v))}</td></tr>"
+        for k, v in (
+            ("CELEX", celex), ("Procedure", procedure_ref), ("ELI", eli),
+            ("Role", role), ("Status", status),
+            ("Entry into force", entry), ("Latest step", latest_step),
+        ) if v
+    )
+    htm = (f"<h2>{html_escape(title)}</h2>"
+           f"<table>{rows_html}</table>"
+           f"<p><a href='{html_escape(deep_link)}'>Brubru explainer</a></p>")
+    return txt, htm
 
 
 def _build_delegated_act(seed: Dict[str, Any], lang: str, carriage: Dict[str, Any]) -> TextileAct:
@@ -471,6 +535,12 @@ def _build_delegated_act(seed: Dict[str, Any], lang: str, carriage: Dict[str, An
     title = titles.get(lang) or titles.get("en")
     deep_link = carriage.get("url") or _PARENT_DEEP_LINK.get(seed.get("parent_celex")) or f"{_BRUBRU}/api"
 
+    _body_txt, _body_html = _compose_body(
+        title=title, celex=None, procedure_ref=seed["procedure_ref"], eli=None,
+        role=seed["role"], status="pending", in_force=False, entry=None,
+        transposition=[], key_dates=[], latest_step=carriage.get("latest_step"),
+        deep_link=deep_link,
+    )
     return TextileAct(
         celex=None,
         procedure_ref=seed["procedure_ref"],
@@ -487,6 +557,8 @@ def _build_delegated_act(seed: Dict[str, Any], lang: str, carriage: Dict[str, An
         latest_step=carriage.get("latest_step"),
         deep_link=deep_link,
         public_url=deep_link,
+        body_txt=_body_txt,
+        body_html=_body_html,
         document_date=None,
         creation_date=datetime.now(timezone.utc),
     )

@@ -82,11 +82,19 @@ router = make_single_body_folder(
         {
             "item_type": "data_point",
             "slug": "data-points",
-            "noun": "data point groups",
-            "source": "Commission guidance on passport data points by category.",
+            "noun": "data points",
+            "source": (
+                "Commission guidance 'Digital Batteries Passport: data points by "
+                "category', version 1.0 of 28 July 2026."
+            ),
             "extra": (
-                "The concrete fields a passport must carry, by category. This is what "
-                "a passport platform builds its schema against."
+                "The 71 concrete fields the battery passport must carry, each with its "
+                "legal source in Regulation (EU) 2023/1542 and its applicability to "
+                "electric-vehicle, light-means-of-transport and industrial batteries. "
+                "This is the schema a passport platform builds against, and the "
+                "template the later sectors follow. Where the guidance layout could "
+                "not be read unambiguously the item says so in its body rather than "
+                "asserting an obligation: check `applicability_confidence` in the body."
             ),
         },
         {
