@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n935 requests across 48 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n994 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -57,6 +57,11 @@
                   "disabled": true
                 },
                 {
+                  "key": "days",
+                  "value": "7",
+                  "disabled": true
+                },
+                {
                   "key": "q",
                   "value": "data protection",
                   "disabled": true
@@ -83,7 +88,7 @@
                 }
               ]
             },
-            "description": "**What it does**\nThe unified events feed across every EU body, newest first.\n\n**When to use it**\nOne call for 'all events from the bodies I care about'. Scope it with `body` (comma-separated codes) and/or `family` (a Brubru policy family, e.g. `defence-security-borders`); omit both for every body.\n\n**Input**\n`body` (comma list of body codes), `family` (comma list of family slugs), `when` (upcoming | past | all), `from` / `to` (YYYY-MM-DD on the event date), `q` (free text), `source` (economy | calendar | all), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/events/all?family=defence-security-borders&when=upcoming\nGET /api/v2/events/all?body=commission,parliament,ecb&order=recent\n```\n\n**You get back**\nA paginated envelope of events. Each carries the 5 datapoints (`body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint), plus body_code, body_name, the policy families, source and (for calendar events) event_type and venue. Undated events sort last.\n\n**Data freshness**\nLive union of economy_items + eu_calendar_events."
+            "description": "**What it does**\nThe unified events feed across every EU body, newest first.\n\n**When to use it**\nOne call for 'all events from the bodies I care about'. Scope it with `body` (comma-separated codes) and/or `family` (a Brubru policy family, e.g. `defence-security-borders`); omit both for every body.\n\n**Input**\n`body` (comma list of body codes), `family` (comma list of family slugs), `when` (upcoming | past | all), `from` / `to` (YYYY-MM-DD on the event date), `days` (shorthand window: the next N days when `when=upcoming`, otherwise the last N days), `q` (free text), `source` (economy | calendar | all), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/events/all?when=upcoming&days=14\nGET /api/v2/events/all?family=defence-security-borders&when=upcoming\nGET /api/v2/events/all?body=commission,parliament,ecb&order=recent\n```\n\n**You get back**\nA paginated envelope of events. Each carries the 5 datapoints (`body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint), plus body_code, body_name, the policy families, source and (for calendar events) event_type and venue. `published_from` / `published_to` echo the date window actually applied. Undated events sort last.\n\n**Data freshness**\nLive union of economy_items + eu_calendar_events."
           },
           "response": []
         },
@@ -228,6 +233,11 @@
                   "disabled": true
                 },
                 {
+                  "key": "days",
+                  "value": "7",
+                  "disabled": true
+                },
+                {
                   "key": "q",
                   "value": "data protection",
                   "disabled": true
@@ -249,7 +259,41 @@
                 }
               ]
             },
-            "description": "**What it does**\nThe unified news feed across every EU body, newest first. 'News' bundles latest news, press releases, stories, speeches and statements.\n\n**When to use it**\nOne call for 'all news from the bodies I care about'. Scope with `body` (comma-separated codes) and/or `family` (a Brubru policy family); omit both for every body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | all), `from` / `to` (YYYY-MM-DD), `q` (free text), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/news/all?family=finance-economy&order=recent\nGET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), plus body_code, body_name, the policy families and kind.\n\n**Data freshness**\nLive from economy_items."
+            "description": "**What it does**\nThe unified news feed across every EU body, newest first. 'News' bundles latest news, press releases, stories, speeches and statements.\n\n**When to use it**\nOne call for 'all news from the bodies I care about'. Scope with `body` (comma-separated codes) and/or `family` (a Brubru policy family); omit both for every body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | all), `from` / `to` (YYYY-MM-DD), `days` (shorthand for the last N days; ignored when `from` is given), `q` (free text), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\nGET /api/v2/news/all?family=finance-economy&order=recent\nGET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), plus body_code, body_name, the policy families and kind. `published_from` / `published_to` echo the date window actually applied, so you can confirm your filter took effect.\n\n**Data freshness**\nLive from economy_items."
+          },
+          "response": []
+        },
+        {
+          "name": "How fresh is the news data?",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/news/latest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "news",
+                "latest"
+              ],
+              "query": [
+                {
+                  "key": "stale_after_days",
+                  "value": "3",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nReports the newest ingested news date, overall and per body, so you can tell whether the feed is current before you trust an empty result.\n\n**When to use it**\nWhen a date-filtered query on `/api/v2/news/all` comes back empty. An empty window plus a stale `latest_date` here means the ingestion is behind, not that nothing happened.\n\n**Input**\n`stale_after_days` (optional, default 3) - how many days old the newest item may be before this endpoint reports `stale: true`.\n\n**Try it**\n```\nGET /api/v2/news/latest\n```\n\n**You get back**\n`latest_date`, `age_days`, `stale`, `total_items`, and `by_body` (the ten most recently updated bodies with their newest date).\n\n**Data freshness**\nLive."
           },
           "response": []
         },
@@ -555,7 +599,7 @@
                 },
                 {
                   "key": "limit",
-                  "value": "60",
+                  "value": "30",
                   "disabled": true
                 },
                 {
@@ -564,7 +608,7 @@
                   "disabled": true
                 },
                 {
-                  "key": "deep",
+                  "key": "shallow",
                   "value": "False",
                   "disabled": true
                 },
@@ -1963,6 +2007,56 @@
           "name": "EuroVoc & vocabularies",
           "item": [
             {
+              "name": "Catalan-translated acts under one EuroVocCat subject (find laws by topic)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/catalan/concept/:notation/acts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "catalan",
+                    "concept",
+                    ":notation",
+                    "acts"
+                  ],
+                  "variable": [
+                    {
+                      "key": "notation",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the acts in the Catalan legislation library classified under a EuroVoc subject. Accepts a descriptor, a microthesaurus (rolls up its descriptors) or a domain (rolls up the whole branch).\n\n**When to use it**\nPower a subject navigator over the Catalan acquis: pick a EuroVocCat topic, get the translated laws about it.\n\n**Input**\n`notation` \u2014 a EuroVoc notation (descriptor `1764`, microthesaurus `2826`, or domain `28`). Pagination via `page`/`limit`.\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/catalan/concept/2826/acts`\n\n**You get back**\nA `PaginatedResponse[CatalanLinkedAct]`: each act's `celex`, Catalan title `title_ca`, `url` (live page), `category`, and `relation`."
+              },
+              "response": []
+            },
+            {
               "name": "Directory of EU legal acts \u2014 the 20-chapter subject classification tree",
               "request": {
                 "method": "GET",
@@ -2127,6 +2221,241 @@
                   ]
                 },
                 "description": "**What it does**\nLanguage-aware lookups against the EU's Named Authority Lists (NALs). One endpoint, four tables selected by the `table` path segment:\n- `corporate-bodies` \u2014 EU institutions, agencies, DGs, joint undertakings (~1,958 concepts).\n- `procedures` \u2014 inter-institutional procedure types (COD / CNS / APP / CONS / INI ...).\n- `directories` \u2014 the subject-matter directory tree of EU legal acts (~475 concepts). This also serves the \"directory of legal acts\" subject classification.\n- `modification-types` \u2014 amends / repeals / corrects / consolidates / replaces.\n\n**When to use it**\nResolve an acronym (`EP`, `EMA`) to its canonical multilingual name, translate a 3-letter procedure code, build a subject navigator, or render relationship labels \u2014 all in the user's language (en/fr/es/ca/it/nl).\n\n**Input**\n- `table` (path) \u2014 one of `corporate-bodies` / `procedures` / `directories` / `modification-types`.\n- `q` \u2014 substring on `pref_label` + exact match on `alt_labels` (acronym-friendly).\n- `lang` \u2014 Brubru language (default `en`).\n- `limit` (1-200, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/authority/corporate-bodies?q=Parliament&lang=en\nGET /api/v2/legislative/eurovoc/authority/directories?q=environment\n```\n\n**You get back**\nA `PaginatedResponse[VocabularyConcept]`; each carries the canonical `uri` (== `public_url`), `pref_label`, `alt_labels[]`, `lang`, plus the 5 envelope datapoints. HTTP 404 (`reason_code: not_found`) for an unknown table.\n\n**Data freshness**\nRefreshed nightly from the Cellar SPARQL endpoint into the local authority-label cache."
+              },
+              "response": []
+            },
+            {
+              "name": "EuroVoc descriptors \u2014 the ~7,500 subject terms (by microthesaurus or free-text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/taxonomy/descriptors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "taxonomy",
+                    "descriptors"
+                  ],
+                  "query": [
+                    {
+                      "key": "microthesaurus",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nWalks the EuroVoc thesaurus tree top-down: the descriptors, filtered by microthesaurus and/or a label search. Labels in en/es/fr/it/nl (ca once the Catalan taxonomy is loaded).\n\n**When to use it**\nBuild a subject navigator over the acquis, or export the taxonomy to translate/re-use as an official classification.\n\n**Input**\n`microthesaurus` \u2014 a microthesaurus notation (e.g. 2826); `q` \u2014 substring match on the label in `lang`. `lang` (en|es|fr|it|nl|ca, default en) selects which label to surface in `body_txt`; `labels` always carries every language. Pagination via `page`/`limit`.\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/taxonomy/descriptors?microthesaurus=2826`\n\n**You get back**\nA `PaginatedResponse[EuroVocTaxonomyConcept]`: each concept's stable `uri` (== `public_url`), `notation`, `concept_type`, the multilingual `labels`, and its `domain_uri`/`microthesaurus_uri`/`broader_uri` for walking the hierarchy."
+              },
+              "response": []
+            },
+            {
+              "name": "EuroVoc mid level \u2014 the 127 microthesauri (optionally within one domain)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/taxonomy/microthesauri",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "taxonomy",
+                    "microthesauri"
+                  ],
+                  "query": [
+                    {
+                      "key": "domain",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "200",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nWalks the EuroVoc thesaurus tree top-down: the 127 microthesauri, optionally filtered to one domain. Labels in en/es/fr/it/nl (ca once the Catalan taxonomy is loaded).\n\n**When to use it**\nBuild a subject navigator over the acquis, or export the taxonomy to translate/re-use as an official classification.\n\n**Input**\n`domain` \u2014 a domain notation like `28` to list only that domain's microthesauri. `lang` (en|es|fr|it|nl|ca, default en) selects which label to surface in `body_txt`; `labels` always carries every language. Pagination via `page`/`limit`.\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/taxonomy/microthesauri?domain=28`\n\n**You get back**\nA `PaginatedResponse[EuroVocTaxonomyConcept]`: each concept's stable `uri` (== `public_url`), `notation`, `concept_type`, the multilingual `labels`, and its `domain_uri`/`microthesaurus_uri`/`broader_uri` for walking the hierarchy."
+              },
+              "response": []
+            },
+            {
+              "name": "EuroVoc top level \u2014 the 21 subject domains (Politics, Law, Environment, ...)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/taxonomy/domains",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "taxonomy",
+                    "domains"
+                  ],
+                  "query": [
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nWalks the EuroVoc thesaurus tree top-down: the 21 top domains. Labels in en/es/fr/it/nl (ca once the Catalan taxonomy is loaded).\n\n**When to use it**\nBuild a subject navigator over the acquis, or export the taxonomy to translate/re-use as an official classification.\n\n**Input**\n`lang` (en|es|fr|it|nl|ca, default en) selects which label to surface in `body_txt`; `labels` always carries every language. Pagination via `page`/`limit`.\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/taxonomy/domains`\n\n**You get back**\nA `PaginatedResponse[EuroVocTaxonomyConcept]`: each concept's stable `uri` (== `public_url`), `notation`, `concept_type`, the multilingual `labels`, and its `domain_uri`/`microthesaurus_uri`/`broader_uri` for walking the hierarchy."
+              },
+              "response": []
+            },
+            {
+              "name": "EuroVocCat subjects for one Catalan-translated act (what the law is about, in Catalan)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/catalan/law/:celex/concepts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "catalan",
+                    "law",
+                    ":celex",
+                    "concepts"
+                  ],
+                  "variable": [
+                    {
+                      "key": "celex",
+                      "value": "32016R0679",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the EuroVoc subject concepts attached to one act of the Catalan legislation library (brubru.beresol.eu/legislacio-ue-catala), with their Catalan (EuroVocCat) labels.\n\n**When to use it**\nTo render subject tags on a translated act page, so a Catalan reader sees what topics the law covers.\n\n**Input**\n`celex` \u2014 the act's CELEX (e.g. `32016R0679`). Annex acts return their parent act's subjects (`relation='inherited'`).\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/catalan/law/32016R0679/concepts`\n\n**You get back**\nA `PaginatedResponse[CatalanActConcept]`: each subject's `notation`, `concept_uri` (stable, links back to EUR-Lex EuroVoc), Catalan `label_ca`, `label_en`, and `relation`."
+              },
+              "response": []
+            },
+            {
+              "name": "One EuroVoc concept by notation, with its full hierarchy path",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/taxonomy/concept/:notation",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "taxonomy",
+                    "concept",
+                    ":notation"
+                  ],
+                  "variable": [
+                    {
+                      "key": "notation",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EuroVoc concept (domain, microthesaurus or descriptor) by its `notation`, plus its ancestors (domain > microthesaurus > broader-terms) so you have the full path in one call.\n\n**When to use it**\nResolve a EuroVoc code to its multilingual labels and place in the tree.\n\n**Input**\n`notation` \u2014 the EuroVoc code (descriptor id like `1764`, microthesaurus `2826`, or domain `28`). `lang` selects `body_txt`.\n\n**Try it**\n`GET /api/v2/legislative/eurovoc/taxonomy/concept/1764`\n\n**You get back**\nA `PaginatedResponse[EuroVocTaxonomyConcept]` whose `data` is the concept followed by its ancestors, root-last."
               },
               "response": []
             },
@@ -7241,6 +7570,119 @@
           "response": []
         },
         {
+          "name": "Get the mapped boundaries of EU GIs as GeoJSON (for maps)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/geometry",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "geometry"
+              ],
+              "query": [
+                {
+                  "key": "country",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "precise_only",
+                  "value": "False",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "500",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does** \u2014 Returns the resolved delimited areas of EU geographical indications as a standard GeoJSON FeatureCollection, ready to render on a map.\n\n**When to use it** \u2014 To draw GI production areas. Each feature's `confidence` says whether the boundary is municipality-precise or a province-level approximation.\n\n**Input** \u2014 Optional `country` (2-letter), `q` (name/area text), `precise_only` (only municipality-precise boundaries), `limit` (default 500, max 4000).\n\n**Try it** \u2014 `/api/v2/geographical-indications/geometry?country=ES&limit=200`\n\n**You get back** \u2014 `{type:'FeatureCollection', features:[...]}` in EPSG:4326; each feature's properties include name, gi_type, product_type, competent_authority, area_km2 and confidence."
+          },
+          "response": []
+        },
+        {
+          "name": "Search EU GI records with their production-area text, control body and geometry status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "details"
+              ],
+              "query": [
+                {
+                  "key": "country",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "gi_type",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "product_type",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "has_geometry",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does** \u2014 Lists EU geographical indications from the harvested detail table, each with the plain-language description of its delimited production area, the competent authority / control body (where known), and whether a mapped boundary exists.\n\n**When to use it** \u2014 To find GIs by country, type or product and see which have a resolved map boundary before fetching the geometry.\n\n**Input** \u2014 Optional filters: `country` (2-letter, e.g. ES), `gi_type` (PDO/PGI/GI), `product_type` (e.g. wine, cheese), `q` (free text over name and area), `has_geometry`. Paginated with `page` and `limit`.\n\n**Try it** \u2014 `/api/v2/geographical-indications/details?country=ES&has_geometry=true`\n\n**You get back** \u2014 A page of records: protected name, type, product, countries, status, competent authority, the area description, area in km2, and a `has_geometry` flag."
+          },
+          "response": []
+        },
+        {
           "name": "eAmbrosia (third-country GIs) \u2014 third-country geographical indications (newest first)",
           "request": {
             "method": "GET",
@@ -7390,6 +7832,76 @@
               ]
             },
             "description": "**What it does**\nReturns one GIView (EUIPO) geographical indication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /giview/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the GIView EU geographical-indications register (the full union register).."
+          },
+          "response": []
+        },
+        {
+          "name": "Get one EU GI record with its full production-area text and control body",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/details/:file_number",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "details",
+                ":file_number"
+              ],
+              "variable": [
+                {
+                  "key": "file_number",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does** \u2014 Returns a single GI's full detail record.\n\n**When to use it** \u2014 When you have a file number (e.g. from the list) and want the complete area description and metadata.\n\n**Input** \u2014 `file_number` in the path (e.g. PDO-ES-A1560).\n\n**Try it** \u2014 `/api/v2/geographical-indications/details/PDO-ES-A1560`\n\n**You get back** \u2014 The record: name, type, product, countries, status, EU protection date, competent authority, full geographical-area text, area km2 and geometry status."
+          },
+          "response": []
+        },
+        {
+          "name": "Get one EU GI's mapped boundary as a GeoJSON Feature",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/geometry/:file_number",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "geometry",
+                ":file_number"
+              ],
+              "variable": [
+                {
+                  "key": "file_number",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does** \u2014 Returns a single GI's resolved boundary as a GeoJSON Feature.\n\n**When to use it** \u2014 To draw or inspect one GI's production area.\n\n**Input** \u2014 `file_number` in the path.\n\n**Try it** \u2014 `/api/v2/geographical-indications/geometry/PDO-ES-A1560`\n\n**You get back** \u2014 A GeoJSON Feature (EPSG:4326) with name, type, product, competent authority, area km2 and confidence in its properties; 404 if the GI has no geometry yet."
           },
           "response": []
         },
@@ -10158,6 +10670,70 @@
                   ]
                 },
                 "description": "**What it does**\nLists the **EU Solidarity Fund** disaster cases (2002-2021): floods, forest fires, earthquakes, storms, health emergencies. One row per case, with the applicant country, disaster type, accepted total direct damage and the EUSF grant paid (amounts in EUR million), plus the 5 datapoints (`body_txt`/`body_html` null on the list \u2014 fetch the detail endpoint for the full body).\n\n**When to use it**\nTo see which disasters the EUSF responded to, in which countries, and how much was paid. The EUSF assists Member States and accession countries hit by major natural disasters (and, since 2020, major health emergencies).\n\n**Input**\n- `country` \u2014 applicant country ISO code (e.g. `DE`, `IT`).\n- `disaster_type` \u2014 substring (e.g. `Floods`, `Earthquake`, `Health`).\n- `status` \u2014 substring (e.g. `Accepted`).\n- `year` \u2014 year of occurrence.\n- `q` \u2014 substring on the disaster name or body.\n- `limit` (default 50, max 200), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/funding/eusf?country=IT\nGET /api/v2/funding/eusf?disaster_type=Floods\nGET /api/v2/funding/eusf?year=2021\n```\n\n**You get back**\nA `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest first). Each item carries `id`, `public_url`, `document_date`, `creation_date`, the case fields (`name_of_disaster`, `disaster_type`, `applicant_country`, `total_direct_damage_meur`, `eusf_grant_paid_meur`, ...) and `body_txt`/`body_html` = null. Use the detail endpoint for the full body.\n\n**Data freshness**\nSynced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 7a49-av34)."
+              },
+              "response": []
+            },
+            {
+              "name": "EU financial instruments for entrepreneurs, by delivery intermediary",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/entrepreneur-instruments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "entrepreneur-instruments"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "open,forthcoming",
+                      "disabled": true
+                    },
+                    {
+                      "key": "programme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_before",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the EU financial instruments that support **entrepreneurs delivered through an intermediary or platform** \u2014 the money a founder reaches *via* a system stakeholder, not the raw call list. Scoped by `topic_id` family and tagged with the **`intermediary`** that actually delivers each instrument:\n- **EIC** (Accelerator, STEP Scale-up, Transition, Pathfinder) \u2192 **EIC Fund** (blended finance / equity) + **EISMEA**.\n- **Single Market Programme (SME strand)** \u2192 **EISMEA + Enterprise Europe Network**.\n- **Interregional Innovation Investments (I3)** \u2192 regional innovation ecosystems (managing authorities).\n- **Digital Europe** \u2192 **European Digital Innovation Hubs (EDIH)**.\n- **ESF+ / EaSI** \u2192 national managing authorities / EaSI microfinance intermediaries.\n- **Erasmus for Young Entrepreneurs** \u2192 EYE intermediary organisations.\n\nEach item carries a derived **`programme`**, **`instrument_family`** and **`intermediary`** so the payload answers *who delivers it*.\n\n**When to use it**\nFor an accelerator, incubator, business angel or ecosystem builder (like KinEtix Impact) that wants the intermediated-instrument list in one call, to pull into its own systems. The Tenderator is the profile-matched day-to-day view; this is the machine-readable equivalent.\n\n**Input**\n- `status` \u2014 comma list, default `open,forthcoming` (also `closed`, `under-evaluation`; `all` for every status).\n- `programme` \u2014 one of the coarse labels (e.g. `HORIZON (EIC)`, `Digital Europe`, `Single Market Programme`).\n- `deadline_before` \u2014 only calls closing on/before this date.\n- `q` \u2014 free text over title / description.\n- `limit` (default 20, max 50), `page`.\n\n**Try it**\n```\nGET /api/v2/funding/entrepreneur-instruments\nGET /api/v2/funding/entrepreneur-instruments?programme=HORIZON%20(EIC)&status=open\nGET /api/v2/funding/entrepreneur-instruments?status=all&q=accelerator\n```\n\n**You get back**\nA `PaginatedResponse[EntrepreneurInstrumentItem]` \u2014 each item carries `topic_id` (stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), `programme`, `instrument_family`, **`intermediary`**, `title`, `status`, `deadline`, `indicative_budget`, `source_url` and the 5 datapoints. Most recent deadlines first.\n\n**Coverage note**\n`ESF+ / EaSI` and `Erasmus for Young Entrepreneurs` families are wired but Brubru currently holds few or no open rows for them (they appear once the F&T Portal publishes calls). `Digital Europe` is matched on the whole `DIGITAL-` prefix, which is broader than EDIH alone.\n\n**Data freshness**\nDaily sync from the EU Funding & Tenders Portal (SEDIA). Reads existing data \u2014 no dedicated scraper."
               },
               "response": []
             },
@@ -43870,6 +44446,55 @@
               "response": []
             },
             {
+              "name": "Live status of EU textile-circularity law",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/textile-circularity",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "textile-circularity"
+                  ],
+                  "query": [
+                    {
+                      "key": "lang",
+                      "value": "ca",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "all",
+                      "disabled": true
+                    },
+                    {
+                      "key": "member_state",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "include_delegated",
+                      "value": "True",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the curated corpus of EU law that governs the textile / waste / ecodesign product lifecycle \u2014 the acts a digital product passport must track so it always shows the norm **in force**, not a copy that ages. Each act carries a stable ELI permalink, a plain-language title (Catalan / Spanish / English), its in-force status and key operational dates, the latest legislative step for acts still moving, and a Brubru deep-link. Titles, ELI and in-force status are resolved **live** from the EU Publications Office (Cellar), so this never returns the blanks a stale local mirror would.\n\n**When to use it**\nFeed a digital-product-passport platform (or any compliance surface) the live regulatory backbone for textiles: the Textile EPR / Waste Framework Directive, the ESPR, the PPWR, the Waste Shipments Regulation, the Critical Raw Materials Act and CBAM, plus the delegated acts and proposals still moving through the institutions.\n\n**Input**\n- `lang` \u2014 `ca` | `es` | `en` (default `ca`). Selects the title and key-date labels.\n- `status` \u2014 `in_force` | `pending` | `all` (default `all`). `pending` returns the delegated acts / proposals still in procedure.\n- `member_state` \u2014 `ES` | `BG` | ... . Restricts to acts that carry a transposition deadline for that Member State (directives) and echoes that date.\n- `include_delegated` \u2014 `true` (default) | `false`. Set `false` to drop the not-yet-adopted delegated acts / proposals.\n\n**Try it**\n```\nGET /api/v2/proprietary/textile-circularity?lang=ca\nGET /api/v2/proprietary/textile-circularity?status=pending\nGET /api/v2/proprietary/textile-circularity?member_state=ES\nGET /api/v2/proprietary/textile-circularity?lang=es&include_delegated=false\n```\n\n**You get back**\nA `PaginatedResponse[TextileAct]`. Each item: `celex` (or `procedure_ref` for pending acts), `kind`, `eli`, `title` (+ `titles{}` in ca/es/en), `role`, `status`, `in_force`, `entry_into_force`, `transposition[]` (per Member State), `key_dates[]`, `latest_step` (pending acts), `deep_link`, plus the 5 Brubru datapoints (`public_url` == the deep-link; `document_date`; `creation_date`). In-force acts carry a non-null `eli`; delegated acts / proposals carry a `procedure_ref` and a live `latest_step` instead.\n\n**Data freshness**\nCurated corpus, live-resolved. ELI / in-force / titles come from Cellar SPARQL (12h server-side cache); `latest_step` comes from `legislative_carriages`; transposition dates and key operational dates are Brubru-curated from the primary act. If Cellar is briefly unreachable the endpoint degrades to the curated values."
+              },
+              "response": []
+            },
+            {
               "name": "EU Law Comply clusters relevant to a funding template: Tender Docs cross-fetch",
               "request": {
                 "method": "GET",
@@ -44548,6 +45173,2112 @@
                   ]
                 },
                 "description": "**What it does**\nReturns the dated news/update items Brubru has detected on one Brussels lobby's own website, newest first. Items come from the organisation's RSS/Atom feed or sitemap; organisations whose news section is HTML-only return an empty list while still being flagged as publishing news in the directory (use `news_feed_url` there to link out).\n\n**When to use it**\n- Read what a specific lobby has published recently.\n- Build a per-organisation activity timeline.\n\n**Input**\n- `code` (path) \u2014 EU Transparency Register identification code (from the directory).\n- `since` (date, optional) \u2014 only items published on/after this date.\n- `limit` (1\u2013100, default 50), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/proprietary/brussels-lobbies/03543031681-83/news\n```\n\n**You get back**\nA `PaginatedResponse[LobbyNewsItem]`: title, summary, item URL, published_at, source kind, and the 5 datapoints (item URL as public_url, composed body, published date).\n\n**Data freshness**\nRefreshed on the tiered news-detection crawl."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Other EU bodies",
+      "item": [
+        {
+          "name": "DPP",
+          "item": [
+            {
+              "name": "Digital Product Passport \u2014 acts (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/legal-framework",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "legal-framework"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's acts, newest first. The acts that create digital product passport obligations, each with its registry hook: the ESPR framework itself, the implementing regulation for the registry, the harmonised-standards decision, and the sectoral laws named in Implementing Regulation (EU) 2026/1778 Article 1 (batteries, construction products, toys, detergents). The detail endpoint returns the full text of the act.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /legal-framework?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from EUR-Lex and the Publications Office Cellar graph.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 audience guides (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/audiences",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "audiences"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's audience guides, newest first. What the passport means for each group the regime addresses: economic operators, consumers, repairers and recyclers, and public authorities.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /audiences?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Commission DPP audience pages.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 data points (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/data-points",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "data-points"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's data points, newest first. The 71 concrete fields the battery passport must carry, each with its legal source in Regulation (EU) 2023/1542 and its applicability to electric-vehicle, light-means-of-transport and industrial batteries. This is the schema a passport platform builds against, and the template the later sectors follow. Where the guidance layout could not be read unambiguously the item says so in its body rather than asserting an obligation: check `applicability_confidence` in the body.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /data-points?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from Commission guidance 'Digital Batteries Passport: data points by category', version 1.0 of 28 July 2026.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 events (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "events"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's events, newest first. Webinars and stakeholder events on the passport, past and upcoming.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /events?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Commission single-market events listing, filtered to DPP.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 guidance documents (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/guidance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "guidance"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's guidance documents, newest first. Commission-published guidance including the registry user guide for economic operators and the battery passport data-point guidance.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /guidance?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from Commission DPP guidance, user guides and FAQs.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 harmonised standards (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/standards",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "standards"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's harmonised standards, newest first. The six EN standards whose references were published in the OJ and which therefore carry a presumption of conformity for DPP requirements: data exchange protocols, unique identifiers, data carriers, storage and persistence, APIs, and system interoperability.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /standards?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from Commission Implementing Decision (EU) 2026/1736, Annex.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 news items (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/news",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "news"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's news items, newest first. Commission announcements on the passport, the registry and sector milestones.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /news?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Commission single-market newsroom, filtered to DPP.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 registry facts (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/registry",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "registry"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's registry facts, newest first. How registration works: the production and acceptance environments, the two registration pathways (user interface and API), what the unique registration identifier is and, importantly, what it is not (Article 13(5) states it is not proof of compliance).\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /registry?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Commission DPP registry pages and Reg. (EU) 2026/1778.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 sector profiles (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/sectors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "sectors"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists Digital Product Passport's sector profiles, newest first. One profile per product group in the rollout: batteries, textiles and apparel, iron and steel, aluminium, tyres, construction products, furniture, mattresses, toys, detergents and ICT. Each carries the indicative date its passport becomes mandatory, its legal basis and the state of its delegated act.\n\n**When to use it**\nTrack what DPP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /sectors?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Commission DPP sector pages and the ESPR working plan.."
+              },
+              "response": []
+            },
+            {
+              "name": "DPP folder directory \u2014 what DPP carries",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp"
+                  ]
+                },
+                "description": "**What it does**\nReturns Digital Product Passport (DPP) with a count of stored items per resource type.\n\n**When to use it**\nA one-call overview before drilling into a specific feed.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/dpp\n```\n\n**You get back**\nOne body record with acronym, name, mandate, website and an `item_counts` map.\n\n**Data freshness**\nCounts are live from the database."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one act (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/legal-framework/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "legal-framework",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport act in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /legal-framework/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from EUR-Lex and the Publications Office Cellar graph.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one audience guide (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/audiences/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "audiences",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport audience guide in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /audiences/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission DPP audience pages.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one data point (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/data-points/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "data-points",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport data point in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /data-points/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from Commission guidance 'Digital Batteries Passport: data points by category', version 1.0 of 28 July 2026.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one event (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/events/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "events",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport event in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /events/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission single-market events listing, filtered to DPP.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one guidance document (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/guidance/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "guidance",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport guidance document in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /guidance/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from Commission DPP guidance, user guides and FAQs.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one harmonised standard (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/standards/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "standards",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport harmonised standard in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /standards/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from Commission Implementing Decision (EU) 2026/1736, Annex.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one news item (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/news/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "news",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport news item in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /news/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission single-market newsroom, filtered to DPP.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one registry fact (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/registry/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "registry",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport registry fact in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /registry/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission DPP registry pages and Reg. (EU) 2026/1778.."
+              },
+              "response": []
+            },
+            {
+              "name": "Digital Product Passport \u2014 one sector profile (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/dpp/sectors/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "dpp",
+                    "sectors",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Digital Product Passport sector profile in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /sectors/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission DPP sector pages and the ESPR working plan.."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "EU GovTech",
+          "item": [
+            {
+              "name": "EU GovTech \u2014 events (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "events"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists EU GovTech's events, newest first. Conferences, webinars, hackathons and matchmaking events for the govtech ecosystem (VivaTech, Techsylvania and the community's own sessions).\n\n**When to use it**\nTrack what EU GovTech is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /events?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU GovTech events listing.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 news (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/news",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "news"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists EU GovTech's news, newest first. News from the EU GovTech community, including the Startups' Corner digests and the GovTech4All public-sector-challenge updates. Filter with q (e.g. a country or theme).\n\n**When to use it**\nTrack what EU GovTech is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /news?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU GovTech news listing on the Interoperable Europe Portal.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 publications (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/publications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "publications"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists EU GovTech's publications, newest first. GovTech reports, policy briefs and foresight studies from the Knowledge Centre: evidence on how govtech can modernise public administrations across the EU.\n\n**When to use it**\nTrack what EU GovTech is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /publications?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU GovTech Knowledge Centre.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 reusable solutions (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/solutions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "solutions"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists EU GovTech's reusable solutions, newest first. Reusable govtech solutions and toolkits shared by the community (e.g. civic-intelligence platforms and assessment toolkits).\n\n**When to use it**\nTrack what EU GovTech is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /solutions?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU GovTech solutions listing.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 topic pages (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/topics",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "topics"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists EU GovTech's topic pages, newest first. Standing snapshots of the EU GovTech hubs: the Welcome page, the GovTech Atlas (initiatives and startups), GovTech4All (public-sector challenges) and the Knowledge Centre landing.\n\n**When to use it**\nTrack what EU GovTech is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /topics?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU GovTech hub pages (snapshots).."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech folder directory \u2014 what EU GovTech carries",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech"
+                  ]
+                },
+                "description": "**What it does**\nReturns EU GovTech (EU GovTech) with a count of stored items per resource type.\n\n**When to use it**\nA one-call overview before drilling into a specific feed.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/eugovtech\n```\n\n**You get back**\nOne body record with acronym, name, mandate, website and an `item_counts` map.\n\n**Data freshness**\nCounts are live from the database."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 one event (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/events/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "events",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EU GovTech event in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /events/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU GovTech events listing.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 one new (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/news/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "news",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EU GovTech new in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /news/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU GovTech news listing on the Interoperable Europe Portal.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 one publication (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/publications/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "publications",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EU GovTech publication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /publications/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU GovTech Knowledge Centre.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 one reusable solution (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/solutions/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "solutions",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EU GovTech reusable solution in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /solutions/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU GovTech solutions listing.."
+              },
+              "response": []
+            },
+            {
+              "name": "EU GovTech \u2014 one topic page (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eugovtech/topics/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eugovtech",
+                    "topics",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one EU GovTech topic page in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /topics/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU GovTech hub pages (snapshots).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "EU Interoperable",
+          "item": [
+            {
+              "name": "Interoperable Europe \u2014 events (newest first, filter by collection)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "events"
+                  ],
+                  "query": [
+                    {
+                      "key": "collection",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Interoperable Europe Portal's events, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is hosting without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/events?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 use the detail endpoint).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 news (newest first, filter by collection)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/news",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "news"
+                  ],
+                  "query": [
+                    {
+                      "key": "collection",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Interoperable Europe Portal's news, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is publishing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/news?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 use the detail endpoint).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 reusable solutions (newest first, filter by collection)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/solutions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "solutions"
+                  ],
+                  "query": [
+                    {
+                      "key": "collection",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Interoperable Europe Portal's reusable solutions, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is sharing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/solutions?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 use the detail endpoint).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 the thematic collections directory",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/collections",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "collections"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "title",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the portal's thematic collections (OSOR, SEMIC, EU GovTech, EIF/Monitoring, Public Sector Tech Watch, EUPL, CAMSS/EIRA, Digital-Ready Policymaking, Regulatory Sandboxes, Guidelines, the Academy), each a snapshot with its standing description.\n\n**When to use it**\nTo discover the hubs you can then filter on (`?collection=`) or open with the per-collection endpoint.\n\n**Input**\n`q` free-text, `order`, `page`, `limit`.\n\n**Try it**\n```\nGET /api/v2/interoperable/collections\n```\n\n**You get back**\nA paginated envelope of collection snapshots, each with the 5 datapoints (`public_url` is the hub's page; full description on the per-collection endpoint).\n\n**Data freshness**\nRendered from the portal, refreshed regularly."
+              },
+              "response": []
+            },
+            {
+              "name": "EU Interoperable folder directory \u2014 what it carries",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable"
+                  ]
+                },
+                "description": "**What it does**\nOverview of the EU Interoperable folder: stored item counts per resource type and the number of thematic collections.\n\n**When to use it**\nA one-call overview before drilling into news, events, solutions or a specific collection.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/interoperable\n```\n\n**You get back**\nThe body record (name, website), an `item_counts` map (news / event / solution / collection) and the collections count.\n\n**Data freshness**\nCounts are live from the database."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 one collection's footprint (description + its recent items)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/collections/:collection_key",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "collections",
+                    ":collection_key"
+                  ],
+                  "variable": [
+                    {
+                      "key": "collection_key",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "15",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one thematic collection's snapshot plus its most recent news, events and reusable solutions.\n\n**When to use it**\n'Show me everything in OSOR / EU GovTech / SEMIC' in one call.\n\n**Input**\n`collection_key` (path; the collection slug, e.g. `open-source-observatory-osor`, `eugovtech`, `semic-support-centre`), `limit` (items per resource, max 50).\n\n**Try it**\n```\nGET /api/v2/interoperable/collections/open-source-observatory-osor\n```\n\n**You get back**\n`{collection_key, collection, recent_news, recent_events, recent_solutions}` \u2014 the collection snapshot (full body) and lists of its recent items, each with the 5 datapoints.\n\n**Data freshness**\nRendered from the portal, refreshed regularly."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 one event (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/events/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "events",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Interoperable Europe event in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record.\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /api/v2/interoperable/events/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRendered from the item's own page on interoperable-europe.ec.europa.eu."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 one news item (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/news/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "news",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Interoperable Europe news item in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record.\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /api/v2/interoperable/news/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRendered from the item's own page on interoperable-europe.ec.europa.eu."
+              },
+              "response": []
+            },
+            {
+              "name": "Interoperable Europe \u2014 one solution (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/interoperable/solutions/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "interoperable",
+                    "solutions",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Interoperable Europe solution in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record.\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /api/v2/interoperable/solutions/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRendered from the item's own page on interoperable-europe.ec.europa.eu."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Social",
+          "item": [
+            {
+              "name": "Platform pick-list + content-fetch feasibility",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/platforms",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "platforms"
+                  ]
+                },
+                "description": "**What it does**: Lists the social platforms Brubru recognises, each with its content-fetch tier and how many accounts/posts it holds.\n\n**When to use it**: To know which platforms carry post content (open) vs mapping-only.\n\n**Input**: none.\n\n**Try it**: `GET /api/v2/social/platforms`\n\n**You get back**: a list of `SocialPlatform`: code, name, fetch_tier (open/gated/hard/none), notes, account_count, post_count."
+              },
+              "response": []
+            },
+            {
+              "name": "Recent EU social posts (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/posts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "posts"
+                  ],
+                  "query": [
+                    {
+                      "key": "platform",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "entity_key",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**: Lists recent posts from mapped EU accounts, newest first.\n\n**When to use it**: Monitor what EU institutions, MEPs, Commissioners and EU-affairs journalists are posting.\n\n**Input**: `platform`, `entity_type`, `entity_key`, `account_id`, `since` (ISO date), `q` (text search), `page`, `limit`.\n\n**Try it**: `GET /api/v2/social/posts?entity_type=commissioner&platform=x&limit=20`\n\n**You get back**: a `PaginatedResponse[SocialPost]`. Each item: entity, platform, engagement counts, and the 5 datapoints (post URL as public_url, body null on list, published date). Use the detail endpoint for the full text."
+              },
+              "response": []
+            },
+            {
+              "name": "The account directory (search by entity, platform, verified)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/accounts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "entity_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "platform",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "verified",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**: Lists mapped social accounts across all platforms.\n\n**When to use it**: Find an entity's accounts, or browse who Brubru tracks on a platform.\n\n**Input**: `entity_type`, `platform`, `verified` (bool), `q` (name/handle search), `page`, `limit`.\n\n**Try it**: `GET /api/v2/social/accounts?entity_type=mep&platform=bluesky&verified=true`\n\n**You get back**: a `PaginatedResponse[SocialAccount]`. Each item: entity, platform, scope, handle, status/verified, discovery source, and the 5 datapoints (account URL as public_url, composed profile on detail, last-checked date)."
+              },
+              "response": []
+            },
+            {
+              "name": "Social folder directory \u2014 what's mapped and what carries content",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social"
+                  ]
+                },
+                "description": "**What it does**: Overview of Brubru's EU social directory: how many accounts and posts, broken down by entity type and platform.\n\n**When to use it**: First call to understand coverage before querying posts or accounts.\n\n**Input**: none.\n\n**Try it**: `GET /api/v2/social`\n\n**You get back**: total accounts/posts, verified count, accounts by entity_type (mep, commissioner, institution, eu_agency, ec_official, eu_influencer), accounts and posts by platform, and a note on which platforms carry content vs mapping-only."
+              },
+              "response": []
+            },
+            {
+              "name": "One account (composed profile)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/accounts/:account_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "account_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**: Returns one account with its composed profile body.\n\n**When to use it**: Inspect a specific account's metadata.\n\n**Input**: `account_id` (path).\n\n**Try it**: `GET /api/v2/social/accounts/7145`\n\n**You get back**: a `SocialAccount` with all 5 datapoints: public_url, body_txt + body_html (composed profile), document_date (last checked), creation_date (first mapped)."
+              },
+              "response": []
+            },
+            {
+              "name": "One entity's full social footprint (accounts + recent posts)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/entity/:entity_type/:entity_key",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "entity",
+                    ":entity_type",
+                    ":entity_key"
+                  ],
+                  "variable": [
+                    {
+                      "key": "entity_type",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "entity_key",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "posts_limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**: Returns every mapped account for one entity plus its most recent posts.\n\n**When to use it**: 'Show me everything X says' \u2014 one MEP, Commissioner, institution, agency or journalist.\n\n**Input**: `entity_type` (path), `entity_key` (path; the official id/slug), `posts_limit`.\n\n**Try it**: `GET /api/v2/social/entity/commissioner/maros_sefcovic`\n\n**You get back**: `{entity_type, entity_key, entity_name, accounts: [SocialAccount], recent_posts: [SocialPost]}` \u2014 accounts with composed profiles, posts with full body."
+              },
+              "response": []
+            },
+            {
+              "name": "One post (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/social/posts/:post_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "social",
+                    "posts",
+                    ":post_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "post_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**: Returns a single post with its full body.\n\n**When to use it**: After finding a post in the list and you want the complete text.\n\n**Input**: `post_id` (path).\n\n**Try it**: `GET /api/v2/social/posts/12345`\n\n**You get back**: a `SocialPost` with all 5 datapoints populated: public_url, body_txt + body_html (full text), document_date (published), creation_date (fetched)."
               },
               "response": []
             }

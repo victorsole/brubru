@@ -310,3 +310,24 @@ footer {
   pre { font-size: 12.5px; padding: 12px 14px; }
   .main { font-size: 16px; }
 }
+
+/* Canonical Brubru header, shared by the docs pages and the full reference */
+.brubru-header {
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  flex-wrap:wrap; padding:.75rem 1.5rem; background:#fff;
+  border-bottom:1px solid #e4e7f2;
+}
+.brubru-header__brand { display:flex; align-items:center; gap:.65rem; text-decoration:none; color:var(--brand); }
+.brubru-header__brand img { height:34px; width:auto; }
+.brubru-header__name { display:flex; flex-direction:column; line-height:1.05; font-weight:700; font-size:1.15rem; }
+.brubru-header__sub { font-weight:400; font-size:.74rem; letter-spacing:.04em; text-transform:uppercase; opacity:.62; }
+.brubru-header__nav { display:flex; align-items:center; gap:1.15rem; flex-wrap:wrap; }
+.brubru-header__nav a { color:#33395c; text-decoration:none; font-size:.94rem; }
+.brubru-header__nav a:hover { color:var(--brand); text-decoration:underline; }
+.brubru-header__nav a.is-active { color:var(--brand); font-weight:700; }
+@media (max-width: 767px) {
+  .brubru-header { padding:.65rem 1rem; gap:.75rem; }
+  .brubru-header__nav { gap:.8rem; }
+  .brubru-header__nav a { font-size:.86rem; }
+  .brubru-header__brand img { height:28px; }
+}

@@ -4,12 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Full API reference: Brubru EU Data API</title>
-  <meta name="description" content="Complete, always-current reference for the Brubru EU Data API: 900+ endpoints across 87 EU institution folders (Parliament, Commission, Council, the EU agencies, funding, open data and Brubru's proprietary EU intelligence). Rendered live from the OpenAPI specification." />
+  <meta name="description" content="Complete, always-current reference for the Brubru EU Data API: 985 endpoints across 89 EU institution folders (Parliament, Commission, Council, the EU agencies, funding, open data and Brubru's proprietary EU intelligence). Rendered live from the OpenAPI specification." />
   <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- docs.css carries the @font-face for Adobe Caslon Pro and the --font token, so
+       this page uses the same typography as the rest of the API docs. -->
+  <link rel="stylesheet" href="/api/docs/_assets/docs.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
   <style>
-    :root { --brand:#1a2b6b; }
+    :root {
+      --brand:#1a2b6b;
+      /* Scalar renders the reference in its own shadow styling and defaults to
+         Inter, so the page font alone does not reach it. These are Scalar's own
+         tokens: without them the reference below stays sans-serif while the page
+         chrome around it is Caslon. */
+      --scalar-font: "Adobe Caslon Pro", Georgia, "Times New Roman", serif;
+      --scalar-font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --scalar-heading-font: "Adobe Caslon Pro", Georgia, "Times New Roman", serif;
+    }
     * { box-sizing: border-box; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#fff; }
+    body {
+      margin:0; background:#fff;
+      font-family:"Adobe Caslon Pro", Georgia, "Times New Roman", serif;
+    }
+    .scalar-app, .scalar-api-reference { font-family: var(--scalar-font) !important; }
+    .scalar-app code, .scalar-app pre { font-family: var(--scalar-font-code) !important; }
     .ref-bar {
       display:flex; align-items:center; gap:1rem; padding:.7rem 1.25rem;
       background:var(--brand); color:#fff; font-size:.9rem; position:sticky; top:0; z-index:50;
@@ -44,6 +63,23 @@
     <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
 </head>
 <body>
+  <!-- Canonical Brubru header: the logo, the product name and the same navigation
+       the rest of the API docs carry, so the reference does not read as a detached
+       third-party page. -->
+  <header class="brubru-header">
+    <a class="brubru-header__brand" href="/api/">
+      <img src="/assets/brubru_mainlogo.png" alt="Brubru" />
+      <span class="brubru-header__name">Brubru<span class="brubru-header__sub">EU Data API</span></span>
+    </a>
+    <nav class="brubru-header__nav">
+      <a href="/api/docs/">Documentation</a>
+      <a href="/api/docs/endpoints.html">Endpoints</a>
+      <a href="/api/docs/authentication.html">Authentication</a>
+      <a href="/api/docs/reference.html" class="is-active">Full reference</a>
+      <a href="/api">Get a key</a>
+    </nav>
+  </header>
+
   <div class="ref-bar">
     <a href="/api/docs/">&larr; Brubru EU Data API docs</a>
     <span class="sep">|</span>
@@ -79,7 +115,7 @@
     </div>
   </div>
 
-  <div id="ref-fallback" class="ref-loading">Loading the live API reference&hellip; (900+ endpoints across 87 EU institution folders)</div>
+  <div id="ref-fallback" class="ref-loading">Loading the live API reference&hellip; (985 endpoints across 89 EU institution folders)</div>
   <!-- Scalar renders the live v2 OpenAPI spec served by the API host (CORS-enabled
        for brubru.beresol.eu), so this page always reflects every deployed endpoint
        with zero hand-maintenance. -->

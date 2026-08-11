@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Introduction: Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API v2: 934 REST endpoints across 88 EU institution folders. 8,710 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament / Council / Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data, the 19 funding-application templates behind Brubru's Tender Docs product, and Brubru's proprietary EU intelligence. One API key.">
+<meta name="description" content="Brubru EU Data API v2: 985 REST endpoints across 89 EU institution folders. 8,710 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament / Council / Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data, the 19 funding-application templates behind Brubru's Tender Docs product, and Brubru's proprietary EU intelligence. One API key.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -33,6 +33,21 @@
 })();
 </script>
 
+<!-- Canonical Brubru header, shared with the full reference page. -->
+<header class="brubru-header">
+  <a class="brubru-header__brand" href="/api/">
+    <img src="/assets/brubru_mainlogo.png" alt="Brubru" />
+    <span class="brubru-header__name">Brubru<span class="brubru-header__sub">EU Data API</span></span>
+  </a>
+  <nav class="brubru-header__nav">
+    <a href="/api/docs/" class="is-active">Documentation</a>
+    <a href="/api/docs/endpoints.html">Endpoints</a>
+    <a href="/api/docs/authentication.html">Authentication</a>
+    <a href="/api/docs/reference.html">Full reference</a>
+    <a href="/api">Get a key</a>
+  </nav>
+</header>
+
 <div class="shell">
 <aside class="sidebar">
   <a href="/api/" class="sidebar__brand">
@@ -43,7 +58,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home" class="active">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 966 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 985 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -128,6 +143,7 @@
 
   <h3>Proprietary</h3>
   <ul>
+    <li><a href="/api/docs/endpoints.html#dpp" data-nav="ep-dpp">Digital Product Passport (19)</a></li>
     <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
     <li><a href="/api/docs/endpoints.html#tender-docs" data-nav="ep-tender-docs">Tender Docs (4)</a></li>
   </ul>
@@ -155,7 +171,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 966 endpoints across 88 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 985 endpoints across 89 EU institution folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
 Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>8,710 adopted EU laws</strong> (28,513 OJ publications), <strong>2,080 legislative files</strong> tracked from proposal to adoption, <strong>16,521 EU officials</strong>, every MEP, <strong>58,399 EP amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data including <strong>12 curated Eurostat sport + fitness-relevant health datasets</strong> served live, the <strong>19 funding-application templates</strong> behind Brubru's Tender Docs product, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
@@ -488,7 +504,7 @@ eurovoc.classify_url("https://environment.ec.europa.eu/news_en", api_key="brubru
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html">
   <div class="toc-card__title">All endpoints</div>
-  <div class="toc-card__desc">The full hand-grouped list of all 934 v2 endpoints, one section per institution folder.</div>
+  <div class="toc-card__desc">The full hand-grouped list of all 985 v2 endpoints, one section per institution folder.</div>
 </a>
 <a class="toc-card" href="/api/docs/authentication.html">
   <div class="toc-card__title">Authentication</div>
