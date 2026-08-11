@@ -71,35 +71,111 @@ def _items(item_type: str, q: Optional[str] = None, limit: int = 25,
     return _rows(sql, params)
 
 
+# Words that carry no signal in a question. Includes Catalan and Spanish because
+# Terraqui works in Catalan and Joana will ask in it.
+_STOPWORDS = {
+    # English
+    "a", "об", "об", "the", "is", "are", "was", "were", "be", "been", "what", "when",
+    "which", "who", "whom", "how", "why", "where", "does", "do", "did", "can", "could",
+    "should", "would", "will", "shall", "must", "may", "might", "have", "has", "had",
+    "of", "for", "to", "in", "on", "at", "by", "with", "from", "about", "into", "and",
+    "or", "but", "not", "no", "any", "all", "there", "this", "that", "these", "those",
+    "it", "its", "my", "our", "your", "their", "me", "we", "you", "they", "i",
+    "please", "tell", "give", "show", "need", "want", "know", "get", "make", "under",
+    # Catalan / Spanish
+    "el", "la", "els", "les", "un", "una", "uns", "unes", "que", "qui", "quan", "com",
+    "on", "per", "amb", "sobre", "des", "del", "dels", "als", "hi", "ha", "es", "son",
+    "sera", "seran", "estan", "esta", "aixo", "aquest", "aquesta", "aquests", "meu",
+    "nostre", "vull", "vols", "cal", "quins", "quines", "quina", "quin",
+    "los", "las", "unos", "unas", "y", "o", "de", "en", "con", "sobre", "cual",
+    "cuando", "como", "donde", "porque", "hay", "esta", "estan", "sera", "seran",
+    "este", "esta", "estos", "estas", "mi", "nuestro", "quiero", "necesito",
+}
+
+
+def _terms(question: str) -> List[str]:
+    """The words worth searching for in a question.
+
+    Matching the RAW question with ILIKE was the original behaviour and it meant
+    every natural question returned nothing: no row contains the literal string
+    "When is the textile passport mandatory?". Only bare keywords worked, which
+    is exactly what the first tests used, so it passed.
+    """
+    import re as _re
+
+    words = _re.split(r"[^0-9a-zA-ZàáâäçèéêëíïîòóôöùúûüñÀÁÂÄÇÈÉÊËÍÏÎÒÓÔÖÙÚÛÜÑ/·-]+",
+                      (question or "").lower())
+    out, seen = [], set()
+    for w in words:
+        w = w.strip("-·/")
+        if len(w) < 3 or w in _STOPWORDS or w in seen:
+            continue
+        seen.add(w)
+        out.append(w)
+    return out[:8]
+
+
 def handle_ask_dpp(question: str) -> Dict[str, Any]:
     """Front door: search every DPP resource at once and say what was found.
 
-    ONE query across all nine resource types, grouped in Python. The first
-    version ran a query per type, so a single ask_dpp call opened and closed ten
-    database sessions; twelve concurrent calls then exhausted the pool
-    (QueuePool size 5, overflow 5) and most of them failed. The front door is the
-    most-called tool, so it must be the cheapest, not the most expensive.
+    ONE query across all nine resource types, grouped in Python. Running a query
+    per type meant a single call opened ten database sessions, and twelve
+    concurrent calls exhausted the pool.
+
+    The question is reduced to its significant terms and rows are ranked by how
+    many of them they match, so a real sentence works, not just a keyword.
     """
     q = (question or "").strip()
     if not q:
         return {"error": "Ask a question about the digital product passport."}
 
+    # Bridge non-English questions into English before extracting terms. The
+    # corpus is English, so a Catalan question scored 1 for "digital" and nothing
+    # else, and the relevance floor then discarded it entirely. Terraqui works in
+    # Catalan, so this is not an edge case for this client. Same helper the chat
+    # knowledge base uses.
+    bridged = q
+    try:
+        from knowledge_base.query_language_bridge import bridge_query
+
+        bridged = bridge_query(q) or q
+    except Exception:  # noqa: BLE001 - retrieval must not depend on the bridge
+        pass
+
+    terms = _terms(bridged) or [q]
+    # score = how many of the question's terms this row matches
+    score = " + ".join(
+        f"(CASE WHEN title ILIKE :t{i} OR summary ILIKE :t{i} OR body_txt ILIKE :t{i}"
+        f" THEN 1 ELSE 0 END)" for i in range(len(terms))
+    )
+    where = " OR ".join(
+        f"title ILIKE :t{i} OR summary ILIKE :t{i} OR body_txt ILIKE :t{i}"
+        for i in range(len(terms))
+    )
+    params: Dict[str, Any] = {f"t{i}": f"%{t}%" for i, t in enumerate(terms)}
+    params["b"] = BODY
+    # A relevance floor. OR-ing the terms alone meant "zzzz nothing at all here"
+    # returned 13 rows, because one common word matched a lot of legal text. With
+    # three or more terms, insist on at least two of them.
+    params["floor"] = 2 if len(terms) >= 3 else 1
+
     rows = _rows(
-        "SELECT id, item_type, title, summary, public_url, document_date FROM ("
-        "  SELECT id, item_type, title, summary, public_url, document_date,"
-        "         row_number() OVER (PARTITION BY item_type"
-        "                            ORDER BY document_date DESC NULLS LAST, id) AS rn"
+        "SELECT id, item_type, title, summary, public_url, document_date, hits FROM ("
+        f"  SELECT id, item_type, title, summary, public_url, document_date, ({score}) AS hits,"
+        f"         row_number() OVER (PARTITION BY item_type ORDER BY ({score}) DESC,"
+        "                            document_date DESC NULLS LAST, id) AS rn"
         "  FROM economy_items"
-        "  WHERE body_code = :b"
-        "    AND (title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"
-        ") t WHERE rn <= 4 ORDER BY item_type, rn",
-        {"b": BODY, "q": f"%{q}%"},
+        f"  WHERE body_code = :b AND ({where})"
+        ") t WHERE rn <= 4 AND hits >= :floor ORDER BY item_type, hits DESC, rn",
+        params,
     )
     found: Dict[str, List[Dict[str, Any]]] = {}
     for r in rows:
+        r.pop("hits", None)
         found.setdefault(r.pop("item_type"), []).append(r)
 
-    consultations = handle_dpp_consultations(query=q, limit=4).get("consultations", [])
+    consultations = handle_dpp_consultations(
+        query=terms[0] if terms else q, limit=4).get("consultations", [])
 
     if not found and not consultations:
         return {
@@ -127,7 +203,10 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
 # full_text returned six acts at once: 285,000 tokens, which no host will accept
 # and which would cost more than the answer is worth. Full text is therefore
 # capped, and only ever for ONE act at a time.
-_TEXT_CAP = 40_000          # ~10k tokens, a comfortable single-response budget
+# 24,000 characters is ~6,000 tokens in the handler and ~12,000 on the wire,
+# because the result is serialised twice. 40,000 looked fine measured on the
+# handler and was 20,000 tokens by the time the client saw it.
+_TEXT_CAP = 24_000
 _EXCERPT_WINDOW = 1_200     # characters either side of a `contains` hit
 _MAX_EXCERPTS = 12
 
@@ -231,21 +310,59 @@ def handle_dpp_when(sector: Optional[str] = None) -> Dict[str, Any]:
     }
 
 
+# A tool result is serialised TWICE on the wire: once as content text and once
+# as structuredContent, because different hosts read different ones. So the wire
+# payload is about double the handler's output, and a cap measured on the handler
+# is half the cap that actually applies. 30,000 characters here means roughly
+# 60,000 on the wire.
+_LIST_BODY_MAX_ROWS = 15
+
+
 def handle_dpp_data_points(query: Optional[str] = None,
                            battery_type: Optional[str] = None) -> Dict[str, Any]:
     rows = _items("data_point", query, limit=80, with_body=True)
     if battery_type:
+        # Filter on the APPLICABILITY for that battery type, not on the type
+        # being mentioned: every composed body names all three types, so
+        # matching the name returned all 71 rows and the filter did nothing.
         bt = battery_type.strip().lower()
-        key = {"ev": "Electric vehicle", "electric vehicle": "Electric vehicle",
-               "lmt": "Light means of transport",
-               "light means of transport": "Light means of transport",
-               "industrial": "Industrial"}.get(bt)
-        if key:
-            rows = [r for r in rows if key.lower() in (r.get("body_txt") or "").lower()]
+        label = {"ev": "Electric vehicle batteries",
+                 "electric vehicle": "Electric vehicle batteries",
+                 "lmt": "Light means of transport batteries",
+                 "light means of transport": "Light means of transport batteries",
+                 "industrial": "Industrial batteries"}.get(bt)
+        if label:
+            keep = []
+            for r in rows:
+                body = r.get("body_txt") or ""
+                i = body.find(label + ":")
+                if i < 0:
+                    continue
+                value = body[i + len(label) + 1: i + len(label) + 60].strip().lower()
+                if value.startswith("not to be filled"):
+                    continue
+                keep.append(r)
+            rows = keep
+
+    # Drop the prose body when many rows come back: 71 composed bodies was
+    # 147,000 characters on the wire. The summary already names the field and its
+    # legal source, which is what a list is for; narrow the query to read detail.
+    trimmed = len(rows) > _LIST_BODY_MAX_ROWS
+    if trimmed:
+        for r in rows:
+            r.pop("body_txt", None)
+            # summary repeats the title, and document_date is identical on all
+            # 71 rows. Dropping both keeps the list inside the wire budget.
+            r.pop("summary", None)
+            r.pop("document_date", None)
     return {
         "count": len(rows),
         "data_points": rows,
-        "note": ("The battery passport data points from the Commission guidance of "
+        "detail_omitted": trimmed,
+        "note": (("Showing all data points without their detail. Narrow with query= "
+                  f"or battery_type= to get fewer than {_LIST_BODY_MAX_ROWS} with "
+                  "their full applicability text. " if trimmed else "")
+                 + "The battery passport data points from the Commission guidance of "
                  "28 July 2026. Each body states its legal source in Regulation (EU) "
                  "2023/1542 and its applicability per battery type. Where the source "
                  "PDF layout could not be read unambiguously the body says so: treat "

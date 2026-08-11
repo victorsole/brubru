@@ -180,12 +180,42 @@ try:
               str(ftxt)[:110])
 
 
+
+    print("\n=== ask_dpp must answer QUESTIONS, not just keywords ===")
+    from services.mcp.dpp_tools import handle_ask_dpp
+
+    # The original front door ILIKE'd the raw question, so no row ever contained
+    # "When is the textile passport mandatory?" and every real question returned
+    # nothing. Keyword-only tests passed happily.
+    for _q in ("When is the textile passport mandatory?",
+               "What data must a battery passport carry?",
+               "How do I register in the DPP registry?",
+               "Quan sera obligatori el passaport digital per als textils?",
+               "Cuando puedo dar feedback sobre los actos delegados de ecodiseno?"):
+        _r = handle_ask_dpp(_q)
+        check(f"answers: {_q[:52]}", _r.get("found") is True, str(_r)[:110])
+    for _q in ("zzzz nothing at all here", "pizza recipes"):
+        _r = handle_ask_dpp(_q)
+        check(f"declines noise: {_q}", _r.get("found") is False, str(_r)[:90])
+
+    print("\n=== battery_type must actually filter ===")
+    from services.mcp.dpp_tools import handle_dpp_data_points as _dp
+
+    _all = _dp()["count"]
+    _ev = _dp(battery_type="ev")["count"]
+    check(f"battery_type=ev narrows the set ({_ev} of {_all})", 0 < _ev < _all,
+          f"all={_all} ev={_ev}")
+
     print("\n=== response size: an MCP result goes straight into a context ===")
     import json as _j
     from services.mcp.dpp_tools import handle_dpp_law, handle_fetch, handle_dpp_data_points
 
     def _tok(obj):
-        return len(_j.dumps(obj, default=str)) // 4
+        # A tool result is serialised TWICE on the wire (content text plus
+        # structuredContent), so the handler's own size is HALF what the client
+        # receives. Measuring the handler alone let a 147,000-character result
+        # through a 60,000-character assertion.
+        return (len(_j.dumps(obj, default=str)) * 2) // 4
 
     # The regression this guards: dpp_law(query='textile', full_text=True) once
     # returned SIX acts of full legal text, 285,000 tokens, and fetch on the ESPR
@@ -198,8 +228,11 @@ try:
           _tok(handle_dpp_law(celex="32026R1778", contains="granularity")) < 8_000)
     check("fetch on an act is capped under 15k tokens",
           _tok(handle_fetch("dpp:1842784")) < 15_000)
-    check("dpp_data_points (all 71) stays under 25k tokens",
+    check("dpp_data_points (all 71) stays under 25k wire tokens",
           _tok(handle_dpp_data_points()) < 25_000)
+    check("every tool stays under 20k wire tokens on a broad call",
+          max(_tok(handle_dpp_law()), _tok(handle_dpp_data_points()),
+              _tok(handle_ask_dpp("digital product passport"))) < 20_000)
 
     print("\n=== scoping: a main-server tool must NOT exist here ===")
     out = rpc(DPP, "tools/call",
