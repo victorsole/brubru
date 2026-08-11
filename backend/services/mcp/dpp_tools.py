@@ -107,24 +107,101 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
     }
 
 
+# An MCP tool result is fed straight into a model's context. The ESPR alone is
+# 364,000 characters, about 91,000 tokens, and asking for "textile" with
+# full_text returned six acts at once: 285,000 tokens, which no host will accept
+# and which would cost more than the answer is worth. Full text is therefore
+# capped, and only ever for ONE act at a time.
+_TEXT_CAP = 40_000          # ~10k tokens, a comfortable single-response budget
+_EXCERPT_WINDOW = 1_200     # characters either side of a `contains` hit
+_MAX_EXCERPTS = 12
+
+
+def _excerpts(body: str, needle: str) -> List[str]:
+    """Windows of an act around each mention of `needle`.
+
+    This is what a regulatory lawyer actually asks for: not the whole regulation
+    but "what does it say about granularity". Returning windows keeps the answer
+    inside a sane context budget and is more useful than the first 40,000
+    characters, which is almost always the preamble.
+    """
+    out: List[str] = []
+    low, n = body.lower(), needle.lower()
+    start = 0
+    while len(out) < _MAX_EXCERPTS:
+        i = low.find(n, start)
+        if i < 0:
+            break
+        a = max(0, i - _EXCERPT_WINDOW)
+        b = min(len(body), i + len(needle) + _EXCERPT_WINDOW)
+        out.append(("..." if a > 0 else "") + body[a:b].strip() + ("..." if b < len(body) else ""))
+        start = b
+    return out
+
+
 def handle_dpp_law(query: Optional[str] = None, celex: Optional[str] = None,
-                   full_text: bool = False) -> Dict[str, Any]:
-    """The acts that create passport obligations. Optionally the whole text."""
+                   full_text: bool = False, contains: Optional[str] = None
+                   ) -> Dict[str, Any]:
+    """The acts that create passport obligations, optionally with their text."""
+    want_body = bool(full_text or contains)
+
     if celex:
-        rows = _items("law", celex, limit=3, with_body=full_text)
+        rows = _items("law", celex, limit=3, with_body=want_body)
     elif query:
-        rows = _items("law", query, limit=6, with_body=full_text)
+        rows = _items("law", query, limit=6, with_body=want_body)
     else:
         rows = _items("law", None, limit=25, with_body=False)
-    for r in rows:
-        if not full_text:
+
+    if not want_body:
+        for r in rows:
             r.pop("body_txt", None)
+        return {
+            "count": len(rows), "acts": rows,
+            "note": ("Pass celex plus full_text=true to read one act, or "
+                     "contains='...' to get only the passages that mention a term."),
+        }
+
+    # Body requested. Refuse to return several acts of full text at once.
+    if len(rows) > 1:
+        for r in rows:
+            r.pop("body_txt", None)
+        return {
+            "count": len(rows), "acts": rows,
+            "needs_choice": True,
+            "note": (f"{len(rows)} acts match. Full text is returned for one act at "
+                     "a time because a single regulation can exceed 90,000 tokens. "
+                     "Call again with the celex of the one you want."),
+        }
+    if not rows:
+        return {"count": 0, "acts": [], "note": "No act matches."}
+
+    act = rows[0]
+    body = act.pop("body_txt", "") or ""
+
+    if contains:
+        windows = _excerpts(body, contains)
+        act["excerpts"] = windows
+        act["excerpt_count"] = len(windows)
+        return {
+            "count": 1, "acts": [act],
+            "note": (f"{len(windows)} passage(s) of this act mention {contains!r}. "
+                     "These are windows around each mention, not the whole act."
+                     if windows else
+                     f"This act does not mention {contains!r}."),
+        }
+
+    truncated = len(body) > _TEXT_CAP
+    act["body_txt"] = body[:_TEXT_CAP]
+    act["truncated"] = truncated
+    act["full_length_chars"] = len(body)
     return {
-        "count": len(rows),
-        "acts": rows,
-        "note": ("body_txt on each act is its FULL legal text as published, not a "
-                 "summary." if full_text else
-                 "Pass full_text=true to get the complete legal text of an act."),
+        "count": 1, "acts": [act],
+        "note": (
+            f"Showing the first {_TEXT_CAP:,} of {len(body):,} characters. Call again "
+            f"with contains='<term>' to get the passages about a specific point "
+            "instead of the opening of the act."
+            if truncated else "Full legal text of the act."
+        ),
     }
 
 
@@ -272,13 +349,25 @@ def handle_fetch(id: str) -> Dict[str, Any]:  # noqa: A002 - name fixed by the s
     if not rows:
         return {"error": f"No DPP item with id {id!r}."}
     r = rows[0]
+    body = r["body_txt"] or ""
+    # Same cap as dpp_law: fetch on an act was returning 91,000 tokens, which is
+    # more than most hosts will accept in a single tool result.
+    text_out = body[:_TEXT_CAP]
+    meta = {"item_type": r["item_type"],
+            "document_date": str(r["document_date"] or "")}
+    if len(body) > _TEXT_CAP:
+        meta["truncated"] = True
+        meta["full_length_chars"] = len(body)
+        meta["how_to_read_more"] = (
+            "Use dpp_law with this act's celex and contains='<term>' to get the "
+            "passages on a specific point rather than the opening of the act."
+        )
     return {
         "id": f"dpp:{r['id']}",
         "title": r["title"],
-        "text": r["body_txt"] or "",
+        "text": text_out,
         "url": r["public_url"],
-        "metadata": {"item_type": r["item_type"],
-                     "document_date": str(r["document_date"] or "")},
+        "metadata": meta,
     }
 
 
@@ -316,20 +405,22 @@ DPP_TOOLS: List[McpTool] = [
             "framework, the implementing regulation for the registry, the "
             "harmonised-standards decision, and the sectoral laws (batteries, "
             "construction products, toys, detergents), plus textile EPR and textile "
-            "labelling. Set full_text=true to read the COMPLETE legal text of an "
-            "act rather than a summary."
+            "labelling. For a specific question use contains='<term>' to get just "
+            "the passages that address it; use celex + full_text=true to read one "
+            "act from the beginning."
         ),
         input_schema={
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "Free text, e.g. 'registry' or 'textile'."},
                 "celex": {"type": "string", "description": "A CELEX number, e.g. 32024R1781."},
-                "full_text": {"type": "boolean", "description": "Return the act's full legal text."},
+                "full_text": {"type": "boolean", "description": "Return the act's text (one act at a time, capped)."},
+                "contains": {"type": "string", "description": "Return only the passages of the act that mention this term, e.g. 'granularity' or 'customs'. Preferred over full_text for a specific question."},
             },
         },
         scope="read:laws", cost_micro=COST_LIGHT_MCP,
-        handler=lambda query=None, celex=None, full_text=False, **_:
-            handle_dpp_law(query, celex, bool(full_text)),
+        handler=lambda query=None, celex=None, full_text=False, contains=None, **_:
+            handle_dpp_law(query, celex, bool(full_text), contains),
     ),
     McpTool(
         name="dpp_when",

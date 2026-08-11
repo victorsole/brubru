@@ -495,11 +495,21 @@ async def _handle_mcp(
     # key (?key= or header) never reach here, so Option A is untouched.
     if not plaintext:
         base = f"https://{request.headers.get('host', 'brubru-production.up.railway.app')}"
+        # Point at the metadata for THIS resource, not a fixed one. Per RFC 9728
+        # the client fetches the document named here and binds its token to the
+        # `resource` that document declares. With a second MCP server mounted at
+        # /api/mcp/dpp, a fixed challenge sent a client connecting to the DPP
+        # server to metadata declaring /api/mcp: a different resource from the
+        # one it was calling, so the token would carry the wrong audience.
+        resource_path = request.url.path.rstrip("/") or "/api/mcp"
         return JSONResponse(
             {"jsonrpc": "2.0", "id": req_id,
              "error": {"code": _ERR_AUTH_MISSING, "message": "Authentication required."}},
             status_code=401,
-            headers={"WWW-Authenticate": f'Bearer resource_metadata="{base}/.well-known/oauth-protected-resource"'},
+            headers={"WWW-Authenticate": (
+                "Bearer resource_metadata="
+                f'"{base}/.well-known/oauth-protected-resource{resource_path}"'
+            )},
         )
 
     db = SessionLocal()

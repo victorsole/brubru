@@ -106,6 +106,25 @@ check("main discovery still ends /api/mcp",
 check("DPP discovery advertises the same authorization server",
       d.get("authorization_servers") == d2.get("authorization_servers"))
 
+
+print("\n=== the 401 challenge must name THIS resource ===")
+import re as _re
+for _path, _expect in ((MAIN, "/api/mcp"), (DPP, "/api/mcp/dpp")):
+    _r = client.post(_path, json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
+    _hdr = _r.headers.get("WWW-Authenticate", "")
+    _m = _re.search(r'resource_metadata="([^"]+)"', _hdr)
+    check(f"{_path} 401 carries a resource_metadata pointer", bool(_m), _hdr)
+    if _m:
+        _doc = client.get(_m.group(1).split("testserver", 1)[1]).json()
+        # A fixed pointer here would send a DPP client to metadata declaring
+        # /api/mcp, binding its OAuth token to the wrong audience.
+        check(f"{_path} challenge declares {_expect}",
+              _doc.get("resource", "").endswith(_expect), _doc.get("resource"))
+# the bare document must survive for clients that probe it directly
+_bare = client.get("/.well-known/oauth-protected-resource")
+check("bare oauth-protected-resource still served", _bare.status_code == 200,
+      str(_bare.status_code))
+
 minted = admin_key()
 if not minted:
     print("\n[SKIP] no admin user; cannot exercise tools")
@@ -159,6 +178,28 @@ try:
         ftxt = _json.loads(f["result"]["content"][0]["text"])
         check(f"fetch({first}) returns text", bool(ftxt.get("text")),
               str(ftxt)[:110])
+
+
+    print("\n=== response size: an MCP result goes straight into a context ===")
+    import json as _j
+    from services.mcp.dpp_tools import handle_dpp_law, handle_fetch, handle_dpp_data_points
+
+    def _tok(obj):
+        return len(_j.dumps(obj, default=str)) // 4
+
+    # The regression this guards: dpp_law(query='textile', full_text=True) once
+    # returned SIX acts of full legal text, 285,000 tokens, and fetch on the ESPR
+    # returned 91,000. Both "worked" and both would have broken the client.
+    check("dpp_law with a broad query + full_text stays small (returns a choice)",
+          _tok(handle_dpp_law(query="textile", full_text=True)) < 4_000)
+    check("dpp_law on one act is capped under 15k tokens",
+          _tok(handle_dpp_law(celex="32024R1781", full_text=True)) < 15_000)
+    check("dpp_law contains= returns passages, not the act",
+          _tok(handle_dpp_law(celex="32026R1778", contains="granularity")) < 8_000)
+    check("fetch on an act is capped under 15k tokens",
+          _tok(handle_fetch("dpp:1842784")) < 15_000)
+    check("dpp_data_points (all 71) stays under 25k tokens",
+          _tok(handle_dpp_data_points()) < 25_000)
 
     print("\n=== scoping: a main-server tool must NOT exist here ===")
     out = rpc(DPP, "tools/call",
