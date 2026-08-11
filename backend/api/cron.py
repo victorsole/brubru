@@ -542,6 +542,14 @@ async def cron_sync_daily(
     results = {}
 
     results["consultations"] = await _run_script_async("consultations", "scripts/sync_consultations.py", [], timeout=900)
+    # Full Have Your Say sweep. The job above had only ever collected 362 of the
+    # ~4,100 initiatives on the portal, so a user tracking a file could be told there
+    # was no consultation on it when there was one (found 11 Aug 2026 looking for
+    # initiative 16116, the ESPR delegated act on apparel textiles). This one pages
+    # the whole portal and upserts on initiative_id, so the two are complementary:
+    # this gives breadth, sync_consultations.py above enriches detail.
+    results["have_your_say"] = await _run_script_async(
+        "have_your_say", "scripts/sync_have_your_say.py", ["--apply"], timeout=1800)
     results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
     results["tris"] = await _run_script_async("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
     results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
