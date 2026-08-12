@@ -7,6 +7,9 @@ import { useAuth } from '../hooks/use_auth';
 
 export interface DatasetDistribution {
   title: string; format: string; url: string;
+  /** Short endpoint name for the chip. Six chips reading "JSON" name
+   *  nothing; "legal-framework" and "data-points" do. */
+  label: string;
   /** v1/v2 endpoints take an API key and reject a session token, so a
    *  browser click on one returns a raw 401. The UI offers a copy action
    *  instead of a dead link. */

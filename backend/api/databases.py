@@ -569,6 +569,27 @@ def catalan(current_user: User = Depends(get_current_user), db: Session = Depend
 
 
 
+def _dist_label(url: str, fmt: str) -> str:
+    """A short name for the chip.
+
+    Six chips all reading "JSON" tell a reader nothing: on the digital product
+    passport card they were legal-framework, sectors, registry, standards,
+    data-points and guidance, and nothing on screen distinguished them. The
+    endpoint's own last path segment does, and it is also exactly what a
+    developer types, so it needs no translation.
+    """
+    tail = [p for p in (url or "").split("?")[0].rstrip("/").split("/") if p]
+    seg = tail[-1] if tail else ""
+    # A bare host or a host-root path carries no name of its own.
+    if not seg or "." in seg and seg.count(".") > 1:
+        return fmt or "link"
+    if seg == "dpp" and (fmt or "").upper().startswith("JSON-RPC"):
+        return "MCP"
+    if seg in ("api", "docs"):
+        return {"api": "API", "docs": "docs"}[seg]
+    return seg
+
+
 def _needs_api_key(url: str) -> bool:
     """True when opening this URL in a browser would 401.
 
@@ -616,6 +637,7 @@ def datasets_catalogue(
             "themes": list(r.dcat_theme or []),
             "distributions": [
                 {"title": d.get("title"), "format": d.get("format"),
+                 "label": _dist_label(d.get("access_url") or "", d.get("format") or ""),
                  "url": d.get("access_url"),
                  # /api/v1/* and /api/v2/* authenticate by brubru_live_ API key
                  # ONLY: they reject a session token, so a browser click on one

@@ -309,15 +309,15 @@ function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
                   use in an API client instead. */}
               {d.distributions.map((dist) => (dist.requires_api_key ? (
                 <button key={dist.url} type="button" className="db-dataset-card__dist is-key"
-                        title={`${dist.title} \u2014 ${dist.url}`}
+                        title={`${dist.title} (${dist.format}) ${dist.url}`}
                         onClick={() => copyEndpoint(dist.url)}>
                   <Icon path={copied === dist.url ? mdiCheck : mdiKeyOutline} size={0.5} />
-                  {copied === dist.url ? t('db.datasetsCopied', 'copied') : dist.format}
+                  {copied === dist.url ? t('db.datasetsCopied', 'copied') : dist.label}
                 </button>
               ) : (
                 <a key={dist.url} href={dist.url} target="_blank" rel="noopener noreferrer"
-                   className="db-dataset-card__dist" title={dist.title}>
-                  <Icon path={mdiOpenInNew} size={0.5} /> {dist.format}
+                   className="db-dataset-card__dist" title={`${dist.title} (${dist.format})`}>
+                  <Icon path={mdiOpenInNew} size={0.5} /> {dist.label}
                 </a>
               )))}
             </div>
