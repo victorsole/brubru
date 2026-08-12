@@ -610,6 +610,20 @@ _CA_DECISIVE = frozenset({
     # EU-work nouns whose Spanish form differs after folding: ES uses
     # "ponente" / "enmienda", so these are Catalan-only in practice.
     "ponent", "ponents", "esmena", "esmenes",
+    # Interrogatives and product/data vocabulary. Added 12 Aug 2026: a Catalan
+    # subscriber asking "Quan va entrar en funcionament el registre del
+    # passaport digital de producte?" scored ES and was answered in Spanish,
+    # and "Quantes dades ha de portar el passaport de bateries?" scored NL,
+    # because not one word of either sentence was in this set. ES writes
+    # cuando / cuantas / funcionamiento / pasaporte / producto / datos /
+    # textiles, so every token here differs after folding.
+    # Deliberately EXCLUDED, having been considered:
+    #   "registre", "normes", "actes"  are French words
+    #   "creen"    is Spanish for "they believe"
+    #   "com"      appears inside .com domains
+    #   "entrar", "vigor"  are shared with Spanish
+    "quan", "quants", "quantes", "funcionament", "passaport",
+    "producte", "productes", "dades", "textils", "seguiment", "dret",
     "soc", "som", "sou", "ets", "escric", "voldria", "podriem",
     # -cio nouns: the Catalan singular folds to "-cio" where Spanish folds to
     # "-cion" and French keeps "-tion". Listed explicitly rather than matched by

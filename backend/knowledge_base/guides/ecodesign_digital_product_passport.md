@@ -4,10 +4,11 @@
 - Full name: Ecodesign for Sustainable Products Regulation (ESPR)
 - Reference: Regulation (EU) 2024/1781 -- CELEX 32024R1781 -- entry into force 18 July 2024
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1781
-- **The registry implementing act: Commission Implementing Regulation (EU) 2026/1778** of 16 July 2026, laying down the implementation arrangements for the DPP registry set up under Reg. (EU) 2024/1781. CELEX **32026R1778**, ref C/2026/4922, **OJ L, 2026/1778, 17.7.2026**, in force. https://eur-lex.europa.eu/eli/reg_impl/2026/1778/oj/eng
-- **DPP Registry: legal deadline 19 July 2026 (Art. 13(1)); actually live 20 July 2026.** Both dates are correct -- say which you mean. Registration via secure user interface or API; the registry returns a unique registration identifier which is NOT proof of compliance (Art. 13(5)).
+- **The registry implementing act: Commission Implementing Regulation (EU) 2026/1778** of 16 July 2026, CELEX **32026R1778**, OJ L, 2026/1778, 17.7.2026, in force. https://eur-lex.europa.eu/eli/reg_impl/2026/1778/oj/eng
+- **DPP Registry: legal deadline 19 July 2026 (Art. 13(1)); live 20 July 2026.** Both are correct, say which you mean. Registration by user interface or API; the registry returns a unique registration identifier, which is NOT proof of compliance (Art. 13(5)).
 - **DPP for textiles, garments and footwear: Q3-Q4 2027** (Commission indicative rollout). This is the date that matters for textile operators.
 - **First hard DPP deadline: 18 February 2027, certain large batteries.** Everything else is later.
+- **The battery passport carries 71 data points**, fixed in **Annex XIII of the Batteries Regulation (EU) 2023/1542**, mandatory 18 Feb 2027: 28 public, 5 for notified bodies and market surveillance, 21 for persons with a legitimate interest, the rest recorded over the battery's life. Applicability varies by battery type. The only passport whose content is already fixed in law.
 - **The ESPR creates no DPP by itself.** Substance arrives via **delegated acts under Article 4**; Article 9(2) lists the seven things each delegated act must specify (data per Annex III, data carrier, layout, model/batch/item level, customer accessibility, who reads, who writes).
 - Ecodesign Forum: **Article 19** ESPR. Member States Expert Group: **Article 20**, a subgroup of the Forum. This is the formal consultation channel where delegated acts are prepared.
 - Public DPP web portal to search and compare passport data: **Article 14** ESPR -- a separate surface from the Registry.
@@ -18,15 +19,11 @@
 - OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0095(COD)
 - Responsible DGs: DG ENV (ecodesign requirements), DG GROW (DPP infrastructure). Commission DPP contact: GROW-DIGITAL-PRODUCT-PASSPORT@ec.europa.eu
 - Commission DPP web page (launched 17 July 2026): https://single-market-economy.ec.europa.eu/single-market/digital-product-passport_en
-- Replaces Directive 2009/125/EC (Ecodesign Directive)
 - Working Plan 2025-2030: SWD(2025)130 (adopted 16 April 2025; statutory deadline 19 April 2025 under Art. 18(5))
-- First wave products: iron/steel, aluminium, textiles, furniture, mattresses, tyres
-- 5 key measures: (1) ecodesign requirements via delegated acts, (2) Digital Product Passport, (3) ban on destruction of unsold consumer products, (4) green public procurement criteria, (5) EPREL database expansion
 - Related: textile EPR Directive (EU) 2025/1892 -- see guide `textile_epr_waste_framework_directive_2025_1892`
-- **LATEST (Monday 20 July 2026 — THE DIGITAL PRODUCT PASSPORT REGISTRY IS LIVE):** The Commission announced that the **DPP Registry is now live** (DG ENV and DG GROW newsrooms, publication date 20 July 2026), together with a **testing environment**. Product data itself is stored **decentrally**, but **economic operators must register each Digital Product Passport in the Registry**, which provides the secure infrastructure for registering **unique product identifiers and associated metadata**. Scope: products covered by ESPR delegated acts -- textiles, steel and aluminium, tyres, furniture, ICT products and energy-related products -- plus certain large batteries, construction products, toys, detergents and end-user surfactants. Operators can access a testing environment, technical documentation, implementation guidelines, webinars and a dedicated helpdesk via the DPP website. **Brubru EU Law Comply candidate** -- the February 2027 battery deadline is the first hard date.
-- **LATEST (Tuesday 14 July 2026 — HARMONISED STANDARDS FOR THE DIGITAL PRODUCT PASSPORT ADOPTED):** Commission Implementing Decision (EU) 2026/1736 on harmonised standards for digital product passports, drafted in support of Regulation (EU) 2024/1781, was published in the OJ L-series. Harmonised standards carry a **presumption of conformity** for the referenced DPP requirements, giving industry the technical baseline for the DPP data carrier and interoperability just as the Registry goes operational.
+- **LATEST (20 July 2026, THE DPP REGISTRY IS LIVE):** product data stays **decentralised**; what operators register centrally is each passport's unique product identifier and metadata. Scope: ESPR delegated-act products plus certain large batteries, construction products, toys, detergents and surfactants. Testing environment, documentation and helpdesk on the DPP website.
+- **LATEST (14 July 2026, HARMONISED STANDARDS ADOPTED):** Implementing Decision (EU) 2026/1736 on harmonised standards for digital product passports. They carry a **presumption of conformity**, giving industry the technical baseline for the data carrier and interoperability as the Registry goes live.
 - ESPR press release: COM(2022)142
-- JRC Paper (22 April 2026, Springer, JRC145962): "Advancing the circular economy assessment framework for the Ecodesign policy" (Gonzalez Torres, Magrini, Rodriguez Manotas, Senatore, Bernad Beltran, Gama Caldas). Reviews the EcoReport tool used to assess economic + environmental impacts of Ecodesign requirements; proposes a new assessment framework integrating resource-loop circularity indicators to fill gaps in the current approach while balancing added complexity vs policymaking delay. Directly informs the 2026-2027 delegated-act pipeline on iron/steel, aluminium, textiles, furniture, mattresses, tyres. doi: 10.1007/s12053-026-10423-8
 
 ## Overview
 
@@ -143,6 +140,49 @@ Published on the Commission DPP web page (launched 17 July 2026). These are indi
 | 2029 | Mattresses; recycled content requirements |
 
 **Commission guidance published July 2026:** "Digital Batteries Passport -- Data Points by Category" and "DPP Registry -- User Guide for Economic Operators". Commission contact for DPP questions: GROW-DIGITAL-PRODUCT-PASSPORT@ec.europa.eu.
+
+### Sector lookup: is my product covered, and from when
+
+The date table above reads chronologically. This one reads by sector, which is how an operator asks the question. Both come from the same Commission rollout; "indicative" means Commission planning, not a date fixed in law.
+
+| Sector | Passport mandatory from |
+|--------|-------------------------|
+| Batteries (certain large batteries) | **18 February 2027** (fixed in Reg. (EU) 2023/1542) |
+| Iron and steel | Q4 2026 (indicative) |
+| Construction products | Q2 2027 (indicative) |
+| Textiles and apparel | **Q3-Q4 2027** (indicative) |
+| Aluminium | Q3-Q4 2027 (indicative) |
+| Tyres | Q3-Q4 2027 (indicative) |
+| Furniture | 2028 (indicative) |
+| Mattresses | 2029 (indicative) |
+| Toys | per Regulation (EU) 2025/2509 |
+| Detergents and surfactants | per Regulation (EU) 2026/405 |
+| ICT products and electronics | not yet scheduled |
+
+## The battery passport: 71 data points
+
+The battery passport is the only digital product passport with its data content already fixed in law, which makes it the worked example for every sector that follows. It carries **71 data points**, set out in **Annex XIII of the Batteries Regulation (EU) 2023/1542** and mandatory from **18 February 2027**.
+
+Annex XIII splits them by who may read them, and that split is the part operators most often get wrong: a battery passport is not one public record but four access tiers over the same product.
+
+| Annex XIII point | Data points | Who may read them |
+|------------------|-------------|-------------------|
+| 1 | 28 | the general public |
+| 2 | 5 | notified bodies, market surveillance authorities and the Commission |
+| 3 | 1 | persons with a legitimate interest, and the Commission |
+| 4 | 20 | persons with a legitimate interest, and the Commission (performance and durability data) |
+
+The remaining points are dynamic values recorded over the battery's life rather than fixed at placing on the market.
+
+What the 71 cover, in order: identification and manufacturer details (points 1 to 9); physical characteristics, weight, capacity, chemistry, hazardous substances and usable extinguishing agent (10 to 14); critical raw materials, carbon footprint declaration and label, responsible sourcing, and the recycled-content shares for cobalt, lithium and nickel plus renewable content (15 to 24); electrochemical performance and durability, rated capacity, voltages, power capability, expected lifetime, temperature range, warranty period and round-trip efficiency (25 to 39); marking, EU declaration of conformity, prevention and management of waste batteries, dismantling and repair information, part numbers and exploded diagrams (40 to 50); and the state-of-health series, capacity fade, power fade, internal resistance, negative events and periodically recorded information (51 to 71).
+
+**Applicability varies by battery type.** Not every data point applies to every battery: the Annex marks each against the battery categories it binds (LMT, industrial above 2 kWh, and electric-vehicle batteries), and a passport is complete only against its own type. In Brubru's own dataset, **13 of the 71 carry an ambiguous applicability reading** and should be checked against the Annex text before an operator relies on them.
+
+Brubru serves these as data, one row per point with its legal source and applicability, at `/api/v2/dpp/data-points`, filterable by category and battery type.
+
+## Research informing the delegated acts
+
+JRC Paper (22 April 2026, Springer, JRC145962): "Advancing the circular economy assessment framework for the Ecodesign policy" (Gonzalez Torres, Magrini, Rodriguez Manotas, Senatore, Bernad Beltran, Gama Caldas). Reviews the EcoReport tool used to assess economic + environmental impacts of Ecodesign requirements; proposes a new assessment framework integrating resource-loop circularity indicators to fill gaps in the current approach while balancing added complexity vs policymaking delay. Directly informs the 2026-2027 delegated-act pipeline on iron/steel, aluminium, textiles, furniture, mattresses, tyres. doi: 10.1007/s12053-026-10423-8
 
 ## Working Plan 2025-2030
 

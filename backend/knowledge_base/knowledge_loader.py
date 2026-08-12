@@ -2834,12 +2834,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'dpp registry': ['ecodesign_digital_product_passport'],
     '32026d1736': ['ecodesign_digital_product_passport'],
     'passaporte digital producto normas': ['ecodesign_digital_product_passport'],
-    'espr': ['ecodesign_digital_product_passport'],
-    'ecodesign regulation': ['ecodesign_digital_product_passport'],
-    'ecodesign requirements': ['ecodesign_digital_product_passport'],
-    'sustainable products regulation': ['ecodesign_digital_product_passport'],
-    '2024/1781': ['ecodesign_digital_product_passport'],
-    '32024r1781': ['ecodesign_digital_product_passport'],
+    'espr': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+    'ecodesign regulation': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+    'ecodesign requirements': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+    'sustainable products regulation': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+    '2024/1781': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+    '32024r1781': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
     'regulation 2024/1781': ['ecodesign_digital_product_passport'],
     '2022/0095': ['ecodesign_digital_product_passport'],
     'dpp registry': ['ecodesign_digital_product_passport'],
@@ -2847,6 +2847,27 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'eprel': ['ecodesign_digital_product_passport'],
     'energy labelling registry': ['ecodesign_digital_product_passport'],
     'battery passport': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    # A trigger is worth +8.0 in guide ranking, so a question with no trigger
+    # competes on incidental word overlap alone. Audited 12 Aug 2026:
+    # "Quantes dades ha de portar el passaport de bateries?" matched no
+    # trigger at all. Both accented and folded forms are listed because the
+    # matcher compares raw lowercase substrings and does not fold.
+    'passaport de bateries': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'passaport de bateria': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'pasaporte de baterias': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'pasaporte de baterías': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'passeport de batteries': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'passeport de batterie': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'passaporto delle batterie': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'batterijpaspoort': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'punts de dades': ['ecodesign_digital_product_passport'],
+    'puntos de datos': ['ecodesign_digital_product_passport'],
+    'points de donnees': ['ecodesign_digital_product_passport'],
+    'points de données': ['ecodesign_digital_product_passport'],
+    'punti dati': ['ecodesign_digital_product_passport'],
+    'gegevenspunten': ['ecodesign_digital_product_passport'],
+    'annex xiii': ['ecodesign_digital_product_passport', 'batteries_regulation'],
+    'annex xiii bateries': ['ecodesign_digital_product_passport', 'batteries_regulation'],
     'alessandra moretti': ['ecodesign_digital_product_passport'],
     'ecodesign forum': ['ecodesign_digital_product_passport'],
     'unsold products': ['ecodesign_digital_product_passport'],
@@ -3767,7 +3788,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'low voltage directive': ['dg_grow_databases'],
     'pressure equipment': ['dg_grow_databases'],
     'medical device regulation': ['dg_grow_databases'],
-    'construction products regulation': ['dg_grow_databases'],
+    'construction products regulation': ['dg_grow_databases', 'cpr_construction_products_regulation'],
     'ppe regulation': ['dg_grow_databases'],
     'personal protective equipment': ['dg_grow_databases'],
     'radio equipment directive': ['dg_grow_databases'],
@@ -13368,6 +13389,19 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'batterie e rifiuti di batterie': ['batteries_regulation'],
     'batterijenverordening': ['batteries_regulation'],
     'afgedankte batterijen': ['batteries_regulation'],
+    # Appended at the end of the dict: an entry placed above an existing
+    # duplicate key is dead. Added 12 Aug 2026 after the trigger audit found
+    # cpr_construction_products_regulation (53,547 chars) reachable by no
+    # trigger at all, and its CELEX and OJ number carrying none either. The
+    # bare acronym "cpr" is deliberately NOT a trigger: in EU usage it is the
+    # Common Provisions Regulation for the cohesion funds.
+    'construction products': ['cpr_construction_products_regulation'],
+    'construction product': ['cpr_construction_products_regulation'],
+    '2024/3110': ['cpr_construction_products_regulation'],
+    '32024r3110': ['cpr_construction_products_regulation'],
+    'productes de construccio': ['cpr_construction_products_regulation'],
+    'productos de construccion': ['cpr_construction_products_regulation'],
+    'ecodesign for sustainable products': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
 }
 
 
