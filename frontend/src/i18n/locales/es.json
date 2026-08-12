@@ -4891,7 +4891,10 @@
     "datasetsNoDist": "Aún no hay descarga pública",
     "periodDaily": "actualizado a diario",
     "periodWeekly": "actualizado semanalmente",
-    "periodMonthly": "actualizado mensualmente"
+    "periodMonthly": "actualizado mensualmente",
+    "datasetsCopied": "copiado",
+    "datasetsKeyNote": "Los puntos de acceso marcados con una llave necesitan una clave API de Brubru. Haz clic para copiarlo y llámalo desde tu cliente.",
+    "datasetsGetKey": "Obtén una clave API"
   },
   "sm": {
     "subtitle": "Quién importa en tus expedientes y en tus intereses: los actores del Parlamento, la Comisión y el Consejo y las organizaciones a su alrededor.",

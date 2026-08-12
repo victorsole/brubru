@@ -4891,7 +4891,10 @@
     "datasetsNoDist": "No public download yet",
     "periodDaily": "updated daily",
     "periodWeekly": "updated weekly",
-    "periodMonthly": "updated monthly"
+    "periodMonthly": "updated monthly",
+    "datasetsCopied": "copied",
+    "datasetsKeyNote": "Endpoints marked with a key need a Brubru API key. Click one to copy it, then call it from your own client.",
+    "datasetsGetKey": "Get an API key"
   },
   "sm": {
     "subtitle": "Who matters on your files and across your interests: the Parliament, Commission and Council actors and the organisations active around them.",

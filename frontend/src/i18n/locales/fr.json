@@ -4891,7 +4891,10 @@
     "datasetsNoDist": "Pas encore de téléchargement public",
     "periodDaily": "mis à jour quotidiennement",
     "periodWeekly": "mis à jour chaque semaine",
-    "periodMonthly": "mis à jour chaque mois"
+    "periodMonthly": "mis à jour chaque mois",
+    "datasetsCopied": "copié",
+    "datasetsKeyNote": "Les points d'accès marqués d'une clé nécessitent une clé API Brubru. Cliquez pour le copier, puis appelez-le depuis votre client.",
+    "datasetsGetKey": "Obtenir une clé API"
   },
   "sm": {
     "subtitle": "Qui compte sur vos dossiers et dans vos intérêts : les acteurs du Parlement, de la Commission et du Conseil et les organisations qui gravitent autour.",

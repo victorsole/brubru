@@ -4891,7 +4891,10 @@
     "datasetsNoDist": "Nessun download pubblico ancora",
     "periodDaily": "aggiornato ogni giorno",
     "periodWeekly": "aggiornato ogni settimana",
-    "periodMonthly": "aggiornato ogni mese"
+    "periodMonthly": "aggiornato ogni mese",
+    "datasetsCopied": "copiato",
+    "datasetsKeyNote": "Gli endpoint contrassegnati da una chiave richiedono una chiave API di Brubru. Clicca per copiarlo e chiamalo dal tuo client.",
+    "datasetsGetKey": "Ottieni una chiave API"
   },
   "sm": {
     "subtitle": "Chi conta sui tuoi dossier e nei tuoi interessi: gli attori di Parlamento, Commissione e Consiglio e le organizzazioni che vi gravitano attorno.",

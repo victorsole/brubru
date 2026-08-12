@@ -138,8 +138,34 @@ def _translator():
 
 
 def _fetch_undetected(table: str, spec: dict, batch: int, funding_only: bool):
-    """Short read connection: pull the next chunk of undetected items."""
-    where = spec["where"] + " AND detected_lang IS NULL"
+    """Short read connection: pull the next chunk of items still needing work.
+
+    "Needing work" is not the same as "never seen". detected_lang was doing
+    double duty as both the detection result and the have-we-processed-this
+    flag, so a row whose language was detected but whose translation never
+    landed could never be selected again: the daily cron would skip it for
+    ever, and its title would stay in a language no user searches in.
+
+    Measured 12 Aug 2026: zero rows are currently in that state, so this is
+    defensive rather than a repair. It costs nothing (the batch is filled from
+    the undetected backlog either way) and makes the job self-healing if a
+    detection ever commits without its translations.
+
+    A row qualifies if its language has not been detected yet, OR it is
+    outside Brubru's six languages and carries no sidecar translation.
+    The second branch must exclude the six and 'und'. A row detected as
+    Spanish is already in a Brubru language and needs no sidecar, so counting
+    it as work would re-select the same rows on every run for ever and starve
+    the rows that do need it. An earlier version of this filter used
+    detected_lang <> 'en' and would have done exactly that.
+    """
+    six = "', '".join(SIX)
+    where = (
+        spec["where"] + f" AND (detected_lang IS NULL OR (detected_lang NOT IN ('{six}')"
+        f" AND detected_lang <> 'und'"
+        f" AND NOT EXISTS (SELECT 1 FROM {spec['sidecar']} s"
+        f" WHERE s.{spec['sidecar_fk']} = {table}.{spec['pk']})))"
+    )
     if table == "economy_items" and funding_only:
         where += " AND item_type IN ('tender','grant','eoi_call','startup_funding')"
     conn = _db()

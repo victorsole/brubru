@@ -569,6 +569,17 @@ def catalan(current_user: User = Depends(get_current_user), db: Session = Depend
 
 
 
+def _needs_api_key(url: str) -> bool:
+    """True when opening this URL in a browser would 401.
+
+    The v1 and v2 surfaces take an API key and nothing else. Everything served
+    from the SiteGround host (the guides index, the Catalan legislation, the API
+    documentation) is public HTML, and the MCP endpoint answers a plain GET with
+    its probe payload.
+    """
+    return "/api/v1/" in url or "/api/v2/" in url
+
+
 @router.get("/datasets", summary="Brubru open datasets: the DCAT catalogue of what Brubru publishes")
 def datasets_catalogue(
     current_user: User = Depends(get_current_user),
@@ -605,7 +616,14 @@ def datasets_catalogue(
             "themes": list(r.dcat_theme or []),
             "distributions": [
                 {"title": d.get("title"), "format": d.get("format"),
-                 "url": d.get("access_url")}
+                 "url": d.get("access_url"),
+                 # /api/v1/* and /api/v2/* authenticate by brubru_live_ API key
+                 # ONLY: they reject a session token, so a browser click on one
+                 # returns a raw 401 JSON blob. The UI must not render these as
+                 # if they were downloads. Flagged here rather than sniffed in
+                 # the frontend, because the rule belongs with the auth it
+                 # describes.
+                 "requires_api_key": _needs_api_key(d.get("access_url") or "")}
                 for d in (r.distribution or [])
             ],
             "license": r.license,

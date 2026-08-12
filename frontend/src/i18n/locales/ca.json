@@ -4891,7 +4891,10 @@
     "datasetsNoDist": "Encara no hi ha descàrrega pública",
     "periodDaily": "actualitzat diàriament",
     "periodWeekly": "actualitzat setmanalment",
-    "periodMonthly": "actualitzat mensualment"
+    "periodMonthly": "actualitzat mensualment",
+    "datasetsCopied": "copiat",
+    "datasetsKeyNote": "Els punts d'accés marcats amb una clau necessiten una clau API de Brubru. Fes-hi clic per copiar-lo i crida'l des del teu client.",
+    "datasetsGetKey": "Obtén una clau API"
   },
   "sm": {
     "subtitle": "Qui importa als teus expedients i als teus interessos: els actors del Parlament, la Comissió i el Consell i les organitzacions al seu voltant.",

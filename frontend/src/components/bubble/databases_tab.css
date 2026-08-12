@@ -5,7 +5,24 @@
 .db-tab__title h2 { margin: 0; font-size: 1.4rem; color: #0f172a; }
 .db-tab__title p { margin: 0.25rem 0 0; color: #64748b; font-size: 0.9rem; max-width: 64ch; }
 
-.db-subtabs { display: flex; gap: 0.4rem; border-bottom: 1px solid #e8edf3; margin-bottom: 1.2rem; flex-wrap: wrap; }
+/* One row, always. flex-wrap dropped the eighth Catalan tab onto a second
+   line, which read as two unrelated groups of tabs. The row scrolls
+   horizontally instead, with the scrollbar hidden and momentum scrolling on
+   touch, so a narrow viewport swipes through the same single row. */
+.db-subtabs {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: 1px solid #e8edf3;
+  margin-bottom: 1.2rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.db-subtabs::-webkit-scrollbar { display: none; }
+.db-subtabs button { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; }
 .db-subtabs button {
   display: inline-flex; align-items: center; gap: 0.35rem; border: 0; background: transparent;
   padding: 0.55rem 0.85rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #64748b;
@@ -608,3 +625,21 @@ button.db-guide-card {
   font-style: italic;
   color: #94a3b8;
 }
+
+/* An endpoint that needs an API key is not a link: clicking one returned a raw
+   401, and the caller's key must never appear in an href. These copy instead. */
+.db-dataset-card__dist.is-key {
+  cursor: pointer;
+  font-family: inherit;
+  color: #7c2d12;
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+.db-dataset-card__dist.is-key:hover { background: #fef3c7; border-color: #b45309; }
+.db-dataset-keynote {
+  margin: -0.4rem 0 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+.db-dataset-keynote a { color: #1e3a8a; font-weight: 600; }

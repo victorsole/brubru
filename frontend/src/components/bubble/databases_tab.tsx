@@ -28,7 +28,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MeubHeader } from './meub_header';
 import Icon from '@mdi/react';
 import {
-  mdiDatabaseOutline,
+  mdiDatabaseOutline, mdiKeyOutline, mdiCheck,
   mdiBookshelf, mdiBookOpenPageVariantOutline, mdiFileDocumentMultipleOutline, mdiTranslate,
   mdiSitemapOutline, mdiRadar, mdiOpenInNew, mdiAccountGroupOutline,
   mdiDomain, mdiBankOutline, mdiArrowRight, mdiInformationOutline,
@@ -260,6 +260,13 @@ const PERIODICITY: Record<string, [string, string]> = {
 // in the product read it, so a user could not see what Brubru publishes. Each
 // card is a dataset; each chip under it is a distribution you can actually open.
 function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
+  const [copied, setCopied] = useState<string | null>(null);
+  const copyEndpoint = (url: string) => {
+    navigator.clipboard?.writeText(url).then(
+      () => { setCopied(url); window.setTimeout(() => setCopied(null), 1800); },
+      () => {},
+    );
+  };
   if (!data) return <ListSkeleton count={5} lines={3} />;
   return (
     <div className="db-section">
@@ -273,6 +280,16 @@ function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
             label: t('db.datasetsKpiDist', 'distributions') },
         ]}
       />
+      {data.datasets.some((d) => d.distributions.some((x) => x.requires_api_key)) && (
+        <p className="db-dataset-keynote">
+          {t('db.datasetsKeyNote',
+             'Endpoints marked with a key need a Brubru API key. Click one to copy it, then call it from your own client.')}
+          {' '}
+          <a href="/api" target="_blank" rel="noopener noreferrer">
+            {t('db.datasetsGetKey', 'Get an API key')}
+          </a>
+        </p>
+      )}
       <div className="db-canon-grid">
         {data.datasets.map((d, i) => (
           <motion.div key={d.uri} className="db-canon-card"
@@ -286,12 +303,23 @@ function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
                   {t('db.datasetsNoDist', 'No public download yet')}
                 </span>
               )}
-              {d.distributions.map((dist) => (
+              {/* A key-gated endpoint is not a link. Clicking one used to show a
+                  raw 401 JSON blob, and putting the caller's key in the href
+                  would leak it into history and logs, so these copy the URL for
+                  use in an API client instead. */}
+              {d.distributions.map((dist) => (dist.requires_api_key ? (
+                <button key={dist.url} type="button" className="db-dataset-card__dist is-key"
+                        title={`${dist.title} \u2014 ${dist.url}`}
+                        onClick={() => copyEndpoint(dist.url)}>
+                  <Icon path={copied === dist.url ? mdiCheck : mdiKeyOutline} size={0.5} />
+                  {copied === dist.url ? t('db.datasetsCopied', 'copied') : dist.format}
+                </button>
+              ) : (
                 <a key={dist.url} href={dist.url} target="_blank" rel="noopener noreferrer"
                    className="db-dataset-card__dist" title={dist.title}>
                   <Icon path={mdiOpenInNew} size={0.5} /> {dist.format}
                 </a>
-              ))}
+              )))}
             </div>
             <span className="db-canon-card__celex">
               {d.themes.length} {t('db.datasetsThemes', 'EuroVoc themes')}

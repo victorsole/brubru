@@ -3999,7 +3999,10 @@
     "datasetsNoDist": "Nog geen publieke download",
     "periodDaily": "dagelijks bijgewerkt",
     "periodWeekly": "wekelijks bijgewerkt",
-    "periodMonthly": "maandelijks bijgewerkt"
+    "periodMonthly": "maandelijks bijgewerkt",
+    "datasetsCopied": "gekopieerd",
+    "datasetsKeyNote": "Endpoints met een sleutel vereisen een Brubru API-sleutel. Klik om te kopiëren en roep hem aan vanuit je eigen client.",
+    "datasetsGetKey": "Vraag een API-sleutel aan"
   },
   "sm": {
     "subtitle": "Wie ertoe doet op je dossiers en binnen je interesses: de actoren van Parlement, Commissie en Raad en de organisaties eromheen.",
