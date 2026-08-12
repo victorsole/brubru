@@ -225,6 +225,8 @@
 }
 
 .my-eu-bubble-nav__item {
+  /* query container so the label can measure the row it must fit inside */
+  container-type: inline-size;
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -267,6 +269,34 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Catalan and Spanish labels run far longer than the English ones: "My Tracked
+   Files" is "Els meus expedients en seguiment", which the ellipsis cuts to
+   something unreadable. On hover the label scrolls itself so the whole name can
+   be read without widening the nav for every language.
+
+   The distance is -100% of the label's own width plus 100% of the container's,
+   so a label that already fits does not move at all. Respects
+   prefers-reduced-motion, where the label simply shows its end instead. */
+@media (hover: hover) and (pointer: fine) {
+  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label {
+    text-overflow: clip;
+    animation: meub-label-scroll 6s linear 0.4s infinite alternate;
+  }
+}
+
+@keyframes meub-label-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(min(0px, calc(100cqw - 100%))); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label {
+    animation: none;
+    direction: rtl;          /* show the END of the label instead of scrolling */
+    text-align: left;
+  }
 }
 
 /* Predictions special treatment */
