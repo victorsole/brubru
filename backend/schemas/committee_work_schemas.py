@@ -194,9 +194,16 @@ class TrackedWorkItemResponse(BaseModel):
     archived_at: Optional[datetime] = None
     work_item: CommitteeWorkItemSummary
     tracked_since: datetime
-    notify_on_status_change: bool
-    notify_on_rapporteur_change: bool
-    notify_on_new_documents: bool
+    # A single NULL notification flag used to take down the whole tab: the
+    # columns were nullable with no default, a required bool here rejected the
+    # None, and the handler turned one bad row into a 500 for every tracked
+    # item the user had. Five accounts were affected, two of them paying.
+    # The columns are now DEFAULT TRUE NOT NULL; these defaults are the second
+    # line so a stray NULL from any future insert path degrades to the value
+    # the rest of the table already uses instead of blanking the page.
+    notify_on_status_change: bool = True
+    notify_on_rapporteur_change: bool = True
+    notify_on_new_documents: bool = True
     notes: Optional[str] = None
     last_notified_at: Optional[datetime] = None
 
