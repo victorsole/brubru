@@ -238,8 +238,15 @@ def upsert(cur, row: Dict[str, Any]) -> None:
             -- may replace a real status.
             status = CASE WHEN EXCLUDED.status = 'unknown'
                           THEN funding_opportunities.status ELSE EXCLUDED.status END,
-            type_of_action = EXCLUDED.type_of_action,
-            deadline = EXCLUDED.deadline,
+            type_of_action = COALESCE(EXCLUDED.type_of_action, funding_opportunities.type_of_action),
+            -- Never let an absent field erase a present one. The SEDIA search
+            -- record carries no deadline for many topics, so EXCLUDED.deadline
+            -- is NULL and a plain assignment wiped the real date: one run
+            -- cleared the deadline on all 31 LIFE 2026 calls, which is the
+            -- single most important thing a funding feed knows. Same reasoning
+            -- for the budget, which the search API never carries at all and
+            -- which is filled in from the portal's topic page.
+            deadline = COALESCE(EXCLUDED.deadline, funding_opportunities.deadline),
             keywords = EXCLUDED.keywords,
             -- scraped_at on the conflict path too, so "when did we last SEE
             -- this call" is answerable. Without it scraped_at only ever
@@ -303,12 +310,12 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
             title = EXCLUDED.title,
             description = EXCLUDED.description,
             status = EXCLUDED.status,
-            deadline = EXCLUDED.deadline,
+            deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_tenders.deadline),
             contracting_authority = EXCLUDED.contracting_authority,
             contract_type = EXCLUDED.contract_type,
             estimated_value = EXCLUDED.estimated_value,
             value_currency = EXCLUDED.value_currency,
-            documents_url = EXCLUDED.documents_url,
+            documents_url = COALESCE(EXCLUDED.documents_url, ft_calls_for_tenders.documents_url),
             scraped_at = NOW(),
             last_updated = NOW()
         """,
@@ -359,8 +366,8 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             -- may replace a real status.
             status = CASE WHEN EXCLUDED.status = 'unknown'
                           THEN ft_calls_for_proposals.status ELSE EXCLUDED.status END,
-            type_of_action = EXCLUDED.type_of_action,
-            deadline = EXCLUDED.deadline,
+            type_of_action = COALESCE(EXCLUDED.type_of_action, ft_calls_for_proposals.type_of_action),
+            deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_proposals.deadline),
             keywords = EXCLUDED.keywords,
             -- scraped_at on the conflict path too, so "when did we last SEE
             -- this call" is answerable. Without it scraped_at only ever
