@@ -61,6 +61,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32026R1778': '/eucanon/2026-1778_dpp_registry/',
   '32026D1736': '/eucanon/2026-1736_dpp_standards/',
   '32026R0002': '/eucanon/2026-2_unsold_disclosure/',
+  '32026R0296': '/eucanon/2026-296_unsold_ban/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
