@@ -225,8 +225,6 @@
 }
 
 .my-eu-bubble-nav__item {
-  /* query container so the label can measure the row it must fit inside */
-  container-type: inline-size;
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -263,12 +261,26 @@
 }
 
 .my-eu-bubble-nav__item-label {
+  /* The query container is the label, not the row: 100cqw must be the width
+     the text actually has to fit into. On the row it included the icon and the
+     padding, so calc(100cqw - 100%) came out positive, min(0px, ...) pinned the
+     animation at zero, and the label sat truncated while appearing to animate. */
+  container-type: inline-size;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.my-eu-bubble-nav__item-label-text {
+  display: inline-block;
+  white-space: nowrap;
+  width: max-content;
+  max-width: none;
+  text-overflow: clip;
 }
 
 /* Catalan and Spanish labels run far longer than the English ones: "My Tracked
@@ -280,8 +292,7 @@
    so a label that already fits does not move at all. Respects
    prefers-reduced-motion, where the label simply shows its end instead. */
 @media (hover: hover) and (pointer: fine) {
-  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label {
-    text-overflow: clip;
+  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label-text {
     animation: meub-label-scroll 6s linear 0.4s infinite alternate;
   }
 }
@@ -292,8 +303,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label {
+  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label-text {
     animation: none;
+  }
+  .my-eu-bubble-nav__item:hover .my-eu-bubble-nav__item-label {
     direction: rtl;          /* show the END of the label instead of scrolling */
     text-align: left;
   }

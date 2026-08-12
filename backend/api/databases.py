@@ -636,7 +636,12 @@ def datasets_catalogue(
             "languages": sorted(desc.keys()),
             "themes": list(r.dcat_theme or []),
             "distributions": [
-                {"title": d.get("title"), "format": d.get("format"),
+                {# the tooltip follows the reader too: it was English for
+                 # everyone, so hovering a Catalan card produced English
+                 "title": ((d.get("title_i18n") or {}).get(lang)
+                           or (d.get("title_i18n") or {}).get("en")
+                           or d.get("title")),
+                 "format": d.get("format"),
                  "label": _dist_label(d.get("access_url") or "", d.get("format") or ""),
                  "url": d.get("access_url"),
                  # /api/v1/* and /api/v2/* authenticate by brubru_live_ API key

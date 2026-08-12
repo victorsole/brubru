@@ -319,7 +319,10 @@ export const MyEUBubblePage = () => {
         </span>
         <span className={`my-eu-bubble-nav__item-label ${isPred && isActive ? 'my-eu-bubble-nav__item-label--gradient' : ''}`}>
           {isPred && isActive && <Icon path={mdiCreation} size={0.55} className="my-eu-bubble-nav__sparkle" />}
-          {tabLabel(id)}
+          {/* The text sits in its own span so it can keep its natural width and
+              be scrolled on hover. Measured against the label, it is the only
+              element whose width exceeds the space available. */}
+          <span className="my-eu-bubble-nav__item-label-text">{tabLabel(id)}</span>
         </span>
       </button>
     );
