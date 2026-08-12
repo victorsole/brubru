@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Normes harmonisées PNP | EU Canon | Brubru</title>
+<meta content="Guide en langage simple de la décision d'exécution (UE) 2026/1736 de la Commission, qui publie six normes EN harmonisées pour les passeports numériques de produit rédigées à l'appui de l'ESPR, conférant à leur conformité une présomption légale de respect des articles 10 et 11 du règlement (UE) 2024/1781." name="description"/>
+<meta content="Normes harmonisées PNP | EU Canon | Brubru" property="og:title"/>
+<meta content="fr_FR" property="og:locale"/>
+<meta content="La décision d'exécution (UE) 2026/1736 de la Commission publie six normes EN, identifiants, supports de données, protocoles d'échange, stockage et persistance, API, et interopérabilité des systèmes, pour les passeports numériques de produit. Leur conformité confère une présomption de conformité aux articles 10 et 11 de l'ESPR." property="og:description"/>
+<meta content="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="https://images.pexels.com/photos/4486718/pexels-photo-4486718.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Normes harmonisées PNP (2026) expliquées | Brubru EU Canon" name="twitter:title"/>
+<meta content="Six normes EN, une présomption de conformité. L'ossature technique sous le passeport numérique de produit de l'ESPR, entièrement expliquée." name="twitter:description"/>
+<meta content="https://images.pexels.com/photos/4486718/pexels-photo-4486718.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" name="twitter:image"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/index.html" rel="canonical"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/index.html" hreflang="en" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/es.html" hreflang="es" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/fr.html" hreflang="fr" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/it.html" hreflang="it" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/nl.html" hreflang="nl" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/ca.html" hreflang="ca" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2026-1736_dpp_standards/index.html" hreflang="x-default" rel="alternate"/>
+<link href="../../assets/brubru_icon.png" rel="icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="shortcut icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="apple-touch-icon"/>
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"/>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Commission Implementing Decision (EU) 2026/1736 of 14 July 2026 on harmonised standards for digital product passports drafted in support of Regulation (EU) 2024/1781 of the European Parliament and of the Council",
+    "alternateName": "DPP harmonised standards Decision",
+    "identifier": "CELEX:32026D1736",
+    "legislationIdentifier": "32026D1736",
+    "legislationType": "Decision",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736",
+    "datePublished": "2026-07-15",
+    "dateCreated": "2026-07-14",
+    "dateModified": "2026-08-12",
+    "dateEffective": "2026-07-15",
+    "jurisdiction": "EU",
+    "spatialCoverage": "European Union",
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Commission"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "digital product passport, harmonised standards, presumption of conformity, ESPR, CEN, Cenelec, ETSI, standardisation request, EN 18216, EN 18219, EN 18220, EN 18221, EN 18222, EN 18223"
+    }
+  }
+  </script>
+<style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Container ---- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 780px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* ---- Hero image ---- */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* ---- Key figures strip ---- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ---- Sections ---- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* ---- Info boxes ---- */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(5,150,105,0.2);
+    }
+    .info-box--blue {
+      background: linear-gradient(135deg, rgba(6,147,227,0.08) 0%, rgba(155,81,224,0.06) 100%);
+      border-color: rgba(6,147,227,0.25);
+    }
+
+    /* ---- Definition box ---- */
+    .definition-box {
+      display: block;
+      background: linear-gradient(135deg, rgba(155,81,224,0.07) 0%, rgba(6,147,227,0.05) 100%);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-purple);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .definition-box h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .definition-box dt { font-weight: 700; color: var(--color-purple); margin-top: 0.9rem; font-size: 0.95rem; }
+    .definition-box dt:first-of-type { margin-top: 0; }
+    .definition-box dd { color: var(--color-secondary); margin-left: 0; margin-top: 0.2rem; font-size: 0.9rem; line-height: 1.55; }
+
+    /* ---- 5-card grid: 3+2 centred ---- */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pillars-grid .pillar-card:nth-child(1),
+    .pillars-grid .pillar-card:nth-child(2),
+    .pillars-grid .pillar-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .pillar-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pillar-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .pillar-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .pillar-card__num { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin-bottom: 0.25rem; }
+    .pillar-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .pillar-card__chapter { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.35rem; }
+    .pillar-card__desc { font-size: 0.78rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Ratio / headline-number grid (3 cols) ---- */
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ratio-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .ratio-card:hover { border-color: var(--color-purple); transform: translateY(-2px); }
+    .ratio-card__value { font-size: 1.8rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.2rem; }
+    .ratio-card__label { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 0.2rem; }
+    .ratio-card__ref { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Comparison table ---- */
+    .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .comp-table th, .comp-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .comp-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .comp-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .comp-table .col-label { font-weight: 700; color: var(--color-text); }
+    .comp-table .col-crma { color: var(--color-blue); }
+    .comp-table .col-old { color: var(--color-purple); }
+
+    /* ---- Timeline ---- */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* ---- Glossary 2-col grid ---- */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Related canon: 3+2 centred grid ---- */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .related-grid .related-card:nth-child(1),
+    .related-grid .related-card:nth-child(2),
+    .related-grid .related-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .related-grid .related-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .related-grid .related-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .related-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: all 0.2s;
+      display: block;
+    }
+    .related-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .related-card .mdi { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; color: var(--color-blue); }
+    .related-card__name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .related-card__celex { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Brubru features 3x2 grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* ---- Pill badges ---- */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* ---- CTA Strip ---- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---- Footer ---- */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; background: #ffffff; border-radius: 6px; padding: 4px 8px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* ---- Back to top ---- */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* ====================================================
+       RESPONSIVE BREAKPOINTS
+       ==================================================== */
+
+    /* Tablet and below: drop 4-col grids to 2-col */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* 5-card grid: drop 3+2 centred to 2-col */
+      .pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .pillars-grid .pillar-card:nth-child(1),
+      .pillars-grid .pillar-card:nth-child(2),
+      .pillars-grid .pillar-card:nth-child(3),
+      .pillars-grid .pillar-card:nth-child(4),
+      .pillars-grid .pillar-card:nth-child(5) {
+        grid-column: span 1;
+      }
+      /* related: drop 3+2 centred to 2-col */
+      .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .related-grid .related-card:nth-child(1),
+      .related-grid .related-card:nth-child(2),
+      .related-grid .related-card:nth-child(3),
+      .related-grid .related-card:nth-child(4),
+      .related-grid .related-card:nth-child(5) {
+        grid-column: span 1;
+      }
+    }
+
+    /* Narrow tablet: drop any remaining 3-col grids to 2-col */
+    @media (max-width: 900px) {
+      .ratio-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .comp-table { font-size: 0.85rem; }
+    }
+
+    /* Mobile: everything to 1 column */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .pillars-grid .pillar-card:nth-child(n) { grid-column: span 1; }
+      .ratio-grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .related-grid .related-card:nth-child(n) { grid-column: span 1; }
+      .comp-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .hero-image img { height: 220px; }
+    }
+  </style>
+<script defer="" src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js"></script>
+</head>
+<body>
+<!-- =====================================================
+     STICKY HEADER
+     ===================================================== -->
+<header class="header" id="top">
+<a aria-label="Accueil Brubru" href="https://brubru.beresol.eu">
+<img alt="Brubru" class="header__logo" src="../../assets/brubru_mainlogo.png"/>
+</a>
+<div class="header__text">
+<div class="header__title">Brubru</div>
+<div class="header__subtitle">Intelligence politique de l'UE</div>
+</div>
+<select aria-label="Language selector" class="header__lang" onchange="window.location.href=this.value">
+<option selected="" value="./index.html">English</option>
+<option value="./es.html">Español</option>
+<option value="./fr.html" selected>Français</option>
+<option value="./it.html">Italiano</option>
+<option value="./nl.html">Nederlands</option>
+<option value="./ca.html">Català</option>
+</select>
+<a aria-label="Démarrez votre essai gratuit Brubru" class="header__cta" href="https://brubru.beresol.eu/signup">Démarrer l'essai gratuit</a>
+</header>
+<div class="container">
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero">
+<div class="hero__tag">
+<a href="../index.html">EU Canon</a> / Économie circulaire et passeports numériques de produit
+  </div>
+<h1 class="hero__title">Normes harmonisées PNP : <span>six normes EN qui transforment les règles du passeport de l'ESPR en une spécification testable</span></h1>
+<p class="hero__subtitle">
+    La décision d'exécution (UE) 2026/1736 de la Commission publie, au Journal officiel, les références de six normes harmonisées rédigées par le CEN, le Cenelec et l'ETSI pour les passeports numériques de produit à la demande de la Commission. La conformité à ces normes, portant sur les identifiants, les supports de données, les protocoles d'échange, le stockage et la persistance, les API et l'interopérabilité des systèmes, confère aux fabricants une présomption légale de conformité aux articles 10 et 11 de l'ESPR, le règlement (UE) 2024/1781. Il s'agit d'une décision courte, en deux articles, mais c'est la couche technique qui rend le passeport numérique de produit concrètement réalisable plutôt qu'abstrait.
+  </p>
+<div class="hero__meta">
+<span><i class="mdi mdi-tag-outline"></i> CELEX 32026D1736 · JO L, 2026/1736, 15.7.2026</span>
+<span><i class="mdi mdi-calendar"></i> Adoptée le 14 juillet 2026</span>
+<span><i class="mdi mdi-calendar-check-outline"></i> En vigueur le 15 juillet 2026 (jour de la publication)</span>
+<span><i class="mdi mdi-gavel"></i> Art. 41, paragraphe 2, ESPR · Art. 10, paragraphe 6, règlement 1025/2012</span>
+</div>
+</section>
+<!-- Hero image -->
+<figure class="hero-image">
+<img alt="Gros plan sur un équipement de technologie numérique, représentant les systèmes de données normalisés par le passeport numérique de produit" loading="eager" src="https://images.pexels.com/photos/4486718/pexels-photo-4486718.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940"/>
+<figcaption>
+    Photo : <a href="https://www.pexels.com/@brett-sayles" rel="noopener" target="_blank">Brett Sayles</a> via Pexels
+    | Six normes EN dotent le passeport numérique de produit d'une spécification technique testable pour les identifiants, les supports de données, les protocoles d'échange, le stockage, les API et l'interopérabilité
+  </figcaption>
+</figure>
+<!-- =====================================================
+     KEY FIGURES STRIP (4x1, drops to 2x2)
+     ===================================================== -->
+<div class="figures">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">6</div>
+<div class="figure-card__label">normes harmonisées</div>
+<div class="figure-card__context">EN 18216:2026 à EN 18223:2026, rédigées par le CEN, le Cenelec et l'ETSI</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">2</div>
+<div class="figure-card__label">articles</div>
+<div class="figure-card__context">L'article 1er publie les références ; l'article 2 fixe l'entrée en vigueur. Aucun chapitre ; une seule annexe</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">15 juillet 2026</div>
+<div class="figure-card__label">entrée en vigueur</div>
+<div class="figure-card__context">Le même jour que la publication au JO, délibérément, afin que la présomption de conformité s'applique immédiatement (considérant 6)</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">Art. 10 et 11</div>
+<div class="figure-card__label">Exigences de l'ESPR couvertes</div>
+<div class="figure-card__context">Les exigences en matière de données du passeport numérique de produit auxquelles les six normes confèrent une présomption de conformité</div>
+</div>
+</div>
+<!-- =====================================================
+     TABLE OF CONTENTS
+     ===================================================== -->
+<nav aria-label="Page contents" class="toc">
+<div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Sommaire</div>
+<div class="toc__grid">
+<a class="toc__link" href="#overview"><i class="mdi mdi-information-outline"></i> Vue d'ensemble</a>
+<a class="toc__link" href="#covers"><i class="mdi mdi-view-grid-outline"></i> Ce que couvre cette décision</a>
+<a class="toc__link" href="#standards"><i class="mdi mdi-format-list-checks"></i> Les six normes harmonisées</a>
+<a class="toc__link" href="#articles"><i class="mdi mdi-file-document-outline"></i> Ce que fait réellement cette décision</a>
+<a class="toc__link" href="#presumption"><i class="mdi mdi-shield-check-outline"></i> Le mécanisme de présomption de conformité</a>
+<a class="toc__link" href="#stack"><i class="mdi mdi-layers-triple-outline"></i> Sa place dans l'architecture du PNP</a>
+<a class="toc__link" href="#lineage"><i class="mdi mdi-timeline-outline"></i> Demande de normalisation et calendrier</a>
+<a class="toc__link" href="#glossary"><i class="mdi mdi-alphabetical"></i> Glossaire</a>
+<a class="toc__link" href="#sources"><i class="mdi mdi-link-variant"></i> Sources officielles</a>
+<a class="toc__link" href="#brubru"><i class="mdi mdi-robot-outline"></i> Explorer avec Brubru</a>
+<a class="toc__link" href="#related"><i class="mdi mdi-book-open-outline"></i> Entrées connexes du canon</a>
+</div>
+</nav>
+<!-- =====================================================
+     SECTION: OVERVIEW
+     ===================================================== -->
+<section class="section" id="overview">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+<h2 class="section__title">Vue d'ensemble</h2>
+</div>
+<p class="section__subtitle">Ce qu'est la décision sur les normes harmonisées PNP, pourquoi elle existe et comment elle est structurée</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-format-list-checks" style="color: var(--color-blue);"></i> Une décision courte qui publie six normes techniques</div>
+<p>La décision d'exécution (UE) 2026/1736 de la Commission fait une seule chose : elle publie, au Journal officiel, les références de six normes EN harmonisées pour les passeports numériques de produit. Il ne s'agit pas de nouvelles obligations juridiques. C'est la spécification technique, rédigée par les organismes de normalisation européens, qui offre aux fabricants un moyen concret et testable de satisfaire aux exigences en matière de données que l'ESPR fixe déjà à ses articles 10 et 11. La décision elle-même est courte : deux articles, aucun chapitre, et une seule annexe listant les six normes.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-purple);"></i> Un acte de la Commission, adopté au titre du règlement sur la normalisation</div>
+<p>Il s'agit d'une décision d'exécution de la Commission, adoptée par la Commission seule à Bruxelles le 14 juillet 2026 et signée par la présidente de la Commission Ursula von der Leyen, publiée au JO L, 2026/1736 le 15 juillet 2026. Sa base juridique est l'article 10, paragraphe 6, du règlement (UE) n° 1025/2012, le règlement sur la normalisation, lu conjointement avec l'article 41, paragraphe 2, de l'ESPR, le règlement (UE) 2024/1781.</p>
+</div>
+<div class="info-box--blue info-box">
+<h3><i class="mdi mdi-calendar-check-outline" style="color: var(--color-blue);"></i> Une date, pas deux : l'adoption et l'entrée en vigueur sont proches mais distinctes</h3>
+<p>La décision a été adoptée à Bruxelles le <strong>14 juillet 2026</strong>. Elle est entrée en vigueur le lendemain, le <strong>15 juillet 2026</strong>, jour de sa publication au JO (article 2). Le considérant 6 en explique la raison : la conformité à une norme harmonisée confère une présomption de conformité à compter de la date de publication de sa référence au Journal officiel, aussi la décision est-elle délibérément rédigée pour produire ses effets juridiques dès la publication, plutôt qu'après le délai habituel de vingt jours.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-sitemap-outline" style="color: var(--color-green);"></i> La couche technique sous l'architecture juridique du PNP</div>
+<p>Brubru suit 13 actes dans l'architecture juridique du passeport numérique de produit de l'UE : l'ESPR elle-même, le règlement d'exécution relatif au registre du PNP, des lois sectorielles telles que les règlements sur les batteries, les produits de construction, la sécurité des jouets et les détergents, et désormais cette décision, la couche des normes qui se situe sous toutes ces lois pour les produits couverts par l'ESPR. C'est l'élément qui transforme « le passeport doit porter certaines données » en « voici exactement comment ces données sont structurées, transportées, échangées, stockées et rendues consultables ».</p>
+</div>
+</section>
+<!-- =====================================================
+     SECTION: WHAT IT COVERS (3-card, fills the 3+2 grid exactly)
+     ===================================================== -->
+<section class="section" id="covers">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+<h2 class="section__title">Ce que couvre cette décision</h2>
+</div>
+<p class="section__subtitle">Les trois volets de la décision d'exécution (UE) 2026/1736 de la Commission</p>
+<div class="pillars-grid">
+<div class="pillar-card">
+<i class="mdi mdi-file-certificate-outline" style="color: var(--color-blue);"></i>
+<div class="pillar-card__num">Publication</div>
+<div class="pillar-card__name">Six références de normes entrent au JO</div>
+<div class="pillar-card__chapter">Article 1er, annexe</div>
+<div class="pillar-card__desc">Les références de la norme EN 18216:2026 à la norme EN 18223:2026 sont formellement publiées au Journal officiel de l'Union européenne</div>
+</div>
+<div class="pillar-card">
+<i class="mdi mdi-shield-check-outline" style="color: var(--color-purple);"></i>
+<div class="pillar-card__num">Présomption</div>
+<div class="pillar-card__name">La conformité aux normes présume la conformité à la loi</div>
+<div class="pillar-card__chapter">Art. 41, paragraphe 2, ESPR ; considérant 1</div>
+<div class="pillar-card__desc">Un passeport numérique de produit construit selon ces normes est présumé satisfaire aux parties correspondantes des articles 10 et 11 de l'ESPR</div>
+</div>
+<div class="pillar-card">
+<i class="mdi mdi-calendar-check-outline" style="color: var(--color-green);"></i>
+<div class="pillar-card__num">Effet immédiat</div>
+<div class="pillar-card__name">En vigueur le jour même de sa publication</div>
+<div class="pillar-card__chapter">Article 2 ; considérant 6</div>
+<div class="pillar-card__desc">La présomption de conformité commence à courir à compter de la date de publication au JO, si bien que la décision entre en vigueur ce même jour</div>
+</div>
+</div>
+</section>
+<!-- =====================================================
+     THE SIX HARMONISED STANDARDS
+     ===================================================== -->
+<section class="section" id="standards">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-format-list-checks"></i></div>
+<h2 class="section__title">Les six normes harmonisées (annexe)</h2>
+</div>
+<p class="section__subtitle">Rédigées par le CEN, le Cenelec et l'ETSI, et publiées intégralement dans l'annexe de cette décision</p>
+<div class="card">
+<table class="comp-table">
+<thead>
+<tr><th>N°</th><th>Référence EN</th><th>Titre</th></tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-label">1</td>
+<td class="col-crma">EN 18216:2026</td>
+<td>Passeport numérique de produit, protocoles d'échange de données</td>
+</tr>
+<tr>
+<td class="col-label">2</td>
+<td class="col-crma">EN 18219:2026</td>
+<td>Passeport numérique de produit, identifiants uniques</td>
+</tr>
+<tr>
+<td class="col-label">3</td>
+<td class="col-crma">EN 18220:2026</td>
+<td>Passeport numérique de produit, supports de données</td>
+</tr>
+<tr>
+<td class="col-label">4</td>
+<td class="col-crma">EN 18221:2026</td>
+<td>Passeport numérique de produit, stockage, archivage et persistance des données</td>
+</tr>
+<tr>
+<td class="col-label">5</td>
+<td class="col-crma">EN 18222:2026</td>
+<td>Passeport numérique de produit, interfaces de programmation applicative (API) pour la gestion du cycle de vie et la recherche du passeport de produit</td>
+</tr>
+<tr>
+<td class="col-label">6</td>
+<td class="col-crma">EN 18223:2026</td>
+<td>Passeport numérique de produit, interopérabilité des systèmes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="info-box--green info-box">
+<h3><i class="mdi mdi-check-decagram-outline" style="color: var(--color-green);"></i> Une norme par couche fonctionnelle</h3>
+<p>Prises ensemble, les six normes couvrent l'ensemble de la chaîne technique dont a besoin un passeport numérique de produit : comment il est identifié de manière unique (EN 18219), comment il est porté physiquement ou numériquement (EN 18220), comment ses données sont échangées entre systèmes (EN 18216), comment ces données sont stockées et restent accessibles dans le temps (EN 18221), comment il est interrogé et géré via des API tout au long de son cycle de vie (EN 18222), et comment différents systèmes interopèrent entre eux (EN 18223). Le considérant 4 indique que la Commission, avec le CEN, le Cenelec et l'ETSI, a évalué et confirmé que les six normes satisfont à la demande de normalisation initiale.</p>
+</div>
+</section>
+<!-- =====================================================
+     WHAT THIS DECISION ACTUALLY DOES
+     ===================================================== -->
+<section class="section" id="articles">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-file-document-outline"></i></div>
+<h2 class="section__title">Ce que fait réellement cette décision (articles 1er et 2)</h2>
+</div>
+<p class="section__subtitle">Deux articles, rien de plus : il s'agit d'un acte de publication, non d'un acte réglementaire</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-numeric-1-circle-outline" style="color: var(--color-blue);"></i> Article 1er : les références sont publiées</div>
+<p>L'article 1er dispose que les références des six normes harmonisées pour les passeports numériques de produit, élaborées à l'appui du règlement (UE) 2024/1781 et énumérées à l'annexe, sont publiées au Journal officiel de l'Union européenne. C'est là toute la substance opérationnelle de la décision : elle ne crée pas de nouvelles obligations, elle publie les références qui déclenchent le mécanisme de présomption de conformité déjà intégré à l'ESPR.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-numeric-2-circle-outline" style="color: var(--color-purple);"></i> Article 2 : entrée en vigueur le jour de la publication</div>
+<p>L'article 2 prévoit que la décision entre en vigueur le jour de sa publication au Journal officiel de l'Union européenne, c'est-à-dire le 15 juillet 2026. Il n'y a ni application différée, ni période de transition, ni mesure d'exécution supplémentaire attachée à cette décision. Son seul effet juridique est de rendre officielles, à compter de cette date, les références des six normes EN.</p>
+</div>
+<div class="info-box--amber info-box">
+<h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Ce que cette décision ne contient pas</h3>
+<p>Il s'agit délibérément d'une décision de publication étroite, en deux articles. Elle ne fixe pas de nouveaux délais, n'impose pas d'obligations aux États membres, ne crée pas de sanctions, et ne décrit pas elle-même le contenu technique des six normes au-delà de leurs titres dans l'annexe ; les exigences techniques substantielles se trouvent dans les normes EN elles-mêmes, publiées par le CEN, le Cenelec et l'ETSI, et non dans le texte de cette décision.</p>
+</div>
+</section>
+<!-- =====================================================
+     THE PRESUMPTION OF CONFORMITY MECHANISM
+     ===================================================== -->
+<section class="section" id="presumption">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-shield-check-outline"></i></div>
+<h2 class="section__title">Le mécanisme de présomption de conformité</h2>
+</div>
+<p class="section__subtitle">Pourquoi la publication de la référence d'une norme au JO importe juridiquement, expliqué à travers l'ESPR et le règlement sur la normalisation</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> Le mécanisme réside dans l'ESPR, non dans cette décision</div>
+<p>En vertu de l'article 41, paragraphe 2, de l'ESPR, le règlement (UE) 2024/1781, les passeports numériques de produit conformes à des normes harmonisées, ou à des parties de celles-ci, dont les références ont été publiées au Journal officiel sont présumés conformes aux exigences des articles 10 et 11 dudit règlement couvertes par ces normes. Cette décision ne crée pas ce mécanisme de présomption ; c'est l'ESPR qui le fait. Cette décision le déclenche, en publiant les six références de normes qui rendent la présomption disponible pour la première fois.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-book-open-variant-outline" style="color: var(--color-purple);"></i> La demande de normalisation à l'origine des six normes</div>
+<p>Les normes n'ont pas été rédigées librement par le CEN, le Cenelec et l'ETSI de leur propre initiative. La Commission a émis une demande de normalisation formelle, la décision d'exécution C(2024) 5423 du 31 juillet 2024, modifiée ultérieurement par la décision d'exécution C(2025) 8024 du 28 novembre 2025, demandant aux trois organismes européens de normalisation de rédiger des normes harmonisées à l'appui des exigences des articles 10 et 11 de l'ESPR. Le considérant 5 confirme que les six normes qui en résultent satisfont à ces exigences, ce qui explique pourquoi la Commission a jugé approprié de publier leurs références.</p>
+</div>
+<div class="info-box--blue info-box">
+<h3><i class="mdi mdi-fast-forward-outline" style="color: var(--color-blue);"></i> L'effet pratique pour les fabricants</h3>
+<p>Pour un fabricant, un importateur ou un opérateur économique construisant un passeport numérique de produit pour un produit couvert par l'ESPR, se conformer à ces six normes EN constitue désormais la voie rapide : la conformité à ces normes confère une présomption légale de respect des parties correspondantes des articles 10 et 11, sans devoir démontrer la conformité exigence par exigence à partir de zéro. Cette présomption est réfragable, et elle ne couvre que les parties des articles 10 et 11 effectivement traitées par la norme concernée, mais elle allège sensiblement la charge de conformité pour quiconque adopte ces normes.</p>
+</div>
+</section>
+<!-- =====================================================
+     WHERE IT SITS IN THE DPP STACK
+     ===================================================== -->
+<section class="section" id="stack">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-layers-triple-outline"></i></div>
+<h2 class="section__title">Sa place dans l'architecture du PNP</h2>
+</div>
+<p class="section__subtitle">La couche des normes, sous le registre, sous les lois sectorielles</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-leaf-circle-outline" style="color: var(--color-blue);"></i> Directement liée à l'ESPR, articles 10 et 11</div>
+<p>Ces six normes sont rédigées spécifiquement à l'appui du règlement (UE) 2024/1781, l'ESPR, et des exigences en matière de données qu'il fixe aux articles 10 et 11. Elles s'appliquent aux passeports numériques de produit couverts par ce règlement. Cette décision n'étend pas, en tant que telle, la présomption de conformité des six normes à d'autres lois relatives aux produits.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-database-outline" style="color: var(--color-purple);"></i> Un texte complémentaire du registre du PNP</div>
+<p>Par ailleurs, le règlement d'exécution (UE) 2026/1778 de la Commission met en œuvre le registre unique du passeport numérique de produit à l'échelle de l'UE que l'ESPR a créé à son article 13, le système dans lequel l'identifiant unique de chaque passeport est en définitive enregistré. Ce règlement étend déjà ses propres dispositions d'enregistrement au-delà des produits ESPR aux batteries, aux produits de construction, aux jouets, ainsi qu'aux détergents et aux tensioactifs destinés aux utilisateurs finaux. Les six normes de cette décision et le règlement d'enregistrement du registre constituent deux couches distinctes mais complémentaires d'une même architecture de passeport numérique de produit : l'une offre aux fabricants une spécification technique et une présomption de conformité, l'autre dote chaque passeport d'une infrastructure d'enregistrement et d'identité commune.</p>
+</div>
+<div class="info-box--purple info-box">
+<h3><i class="mdi mdi-family-tree" style="color: var(--color-purple);"></i> Les autres lois sectorielles sur le PNP conservent leurs propres voies de conformité</h3>
+<p>Des lois sectorielles telles que le règlement sur les batteries (UE) 2023/1542, le règlement sur les produits de construction (UE) 2024/3110, le règlement sur la sécurité des jouets (UE) 2025/2509 et le règlement sur les détergents (UE) 2026/405 établissent chacune leurs propres obligations en matière de passeport numérique de produit, et chacune relie les identifiants uniques de son passeport au même registre central. La question de savoir si et comment de futures normes harmonisées seront rédigées et publiées pour ces passeports sectoriels relève d'un exercice distinct de cette décision, qui ne concerne que la conformité à l'ESPR.</p>
+</div>
+</section>
+<!-- =====================================================
+     STANDARDISATION REQUEST AND LEGISLATIVE TIMELINE
+     ===================================================== -->
+<section class="section" id="lineage">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+<h2 class="section__title">Demande de normalisation et calendrier législatif</h2>
+</div>
+<p class="section__subtitle">Du règlement sur la normalisation à l'entrée en vigueur des six normes EN</p>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">25 octobre 2012</div>
+<div class="timeline__text"><strong>Adoption du règlement (UE) n° 1025/2012, le règlement sur la normalisation</strong>, dont l'article 10, paragraphe 6, fournit la base juridique de cette décision.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">13 juin 2024</div>
+<div class="timeline__text"><strong>Adoption du règlement (UE) 2024/1781, l'ESPR</strong>, dont les articles 10, 11 et 41, paragraphe 2, créent les exigences en matière de données et le mécanisme de présomption de conformité que cette décision active.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">31 juillet 2024</div>
+<div class="timeline__text"><strong>Décision d'exécution C(2024) 5423 de la Commission</strong>, la demande de normalisation adressée par la Commission au CEN, au Cenelec et à l'ETSI pour des normes relatives au passeport numérique de produit à l'appui de l'ESPR.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">28 novembre 2025</div>
+<div class="timeline__text"><strong>Décision d'exécution C(2025) 8024 de la Commission</strong>, modifiant la base juridique et les délais d'adoption de la demande de normalisation.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">14 juillet 2026</div>
+<div class="timeline__text"><strong>Adoption de cette décision, la décision d'exécution (UE) 2026/1736 de la Commission</strong> à Bruxelles, signée par la présidente de la Commission Ursula von der Leyen.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">15 juillet 2026</div>
+<div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736" rel="noopener" target="_blank"><strong>Publiée au JO L, 2026/1736,</strong></a> et entre en vigueur le même jour (article 2).</div>
+</div>
+</div>
+</section>
+<!-- =====================================================
+     GLOSSARY (2-col)
+     ===================================================== -->
+<section class="section" id="glossary">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+<h2 class="section__title">Glossaire</h2>
+</div>
+<p class="section__subtitle">Termes clés tels qu'employés dans la décision d'exécution (UE) 2026/1736 de la Commission</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-card__term">Norme harmonisée</div>
+<div class="glossary-card__def">Une norme rédigée par un organisme européen de normalisation, le CEN, le Cenelec ou l'ETSI, sur la base d'une demande de la Commission, dont la publication de la référence au Journal officiel déclenche une présomption de conformité aux exigences juridiques correspondantes (considérant 6).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Présomption de conformité</div>
+<div class="glossary-card__def">L'effet juridique, prévu à l'article 41, paragraphe 2, de l'ESPR, en vertu duquel un passeport numérique de produit conforme à une norme harmonisée publiée est présumé satisfaire aux exigences correspondantes de l'ESPR couvertes par cette norme.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Demande de normalisation</div>
+<div class="glossary-card__def">L'instruction formelle que la Commission adresse au CEN, au Cenelec et à l'ETSI leur demandant de rédiger des normes harmonisées sur un sujet donné ; ici, la décision d'exécution C(2024) 5423, telle que modifiée par la décision C(2025) 8024.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">CEN, Cenelec, ETSI</div>
+<div class="glossary-card__def">Le Comité européen de normalisation, le Comité européen de normalisation électrotechnique et l'Institut européen des normes de télécommunication, les trois organismes reconnus au titre du règlement (UE) n° 1025/2012 pour rédiger les normes harmonisées européennes.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Référence EN</div>
+<div class="glossary-card__def">L'identifiant formel d'une norme européenne, tel que EN 18216:2026, indiquant le numéro de la norme et l'année de sa finalisation.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">ESPR</div>
+<div class="glossary-card__def">Le règlement (UE) 2024/1781, le règlement sur l'écoconception pour des produits durables, qui fixe à ses articles 10 et 11 les exigences en matière de données du passeport numérique de produit auxquelles ces six normes confèrent une présomption de conformité.</div>
+</div>
+</div>
+</section>
+<!-- =====================================================
+     OFFICIAL SOURCES
+     ===================================================== -->
+<section class="section" id="sources">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+<h2 class="section__title">Sources officielles</h2>
+</div>
+<p class="section__subtitle">Sources primaires de la décision d'exécution (UE) 2026/1736 de la Commission</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> EUR-Lex : la décision sur les normes harmonisées PNP</div>
+<p>Texte intégral de la décision d'exécution (UE) 2026/1736 de la Commission du 14 juillet 2026, deux articles, une annexe :</p>
+<p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736" rel="noopener" target="_blank">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736</a></p>
+<p style="margin-top:0.5rem;">Numéro CELEX : <strong>32026D1736</strong> | Référence JO : JO L, 2026/1736, 15.7.2026 | ELI : <a href="http://data.europa.eu/eli/dec_impl/2026/1736/oj" rel="noopener" target="_blank">http://data.europa.eu/eli/dec_impl/2026/1736/oj</a></p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-document-multiple-outline" style="color: var(--color-purple);"></i> EUR-Lex : acte parent, l'ESPR</div>
+<p>Le règlement (UE) 2024/1781, le règlement sur l'écoconception pour des produits durables, dont l'article 41, paragraphe 2, crée le mécanisme de présomption de conformité, et dont les articles 10 et 11 fixent les exigences en matière de données auxquelles répondent ces normes :</p>
+<p><a href="https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng" rel="noopener" target="_blank">https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng</a></p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-green);"></i> EUR-Lex : le règlement sur la normalisation</div>
+<p>Le règlement (UE) n° 1025/2012 du 25 octobre 2012 relatif à la normalisation européenne, dont l'article 10, paragraphe 6, constitue la base juridique de cette décision :</p>
+<p><a href="http://data.europa.eu/eli/reg/2012/1025/oj" rel="noopener" target="_blank">http://data.europa.eu/eli/reg/2012/1025/oj</a></p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =====================================================
+     EXPLORE WITH BRUBRU (3x2)
+     ===================================================== -->
+<section class="section" id="brubru">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+<h2 class="section__title">Explorer les normes harmonisées PNP avec Brubru</h2>
+</div>
+<p class="section__subtitle">Six outils pour analyser, suivre et travailler avec les normes et la législation plus large de l'UE sur le passeport numérique de produit</p>
+<div class="features-grid">
+<div class="feature-card">
+<i class="mdi mdi-chat-outline"></i>
+<div class="feature-card__title">Brubru Chat</div>
+<div class="feature-card__desc">Posez toute question sur les six normes : ce que couvre chacune d'elles, le fonctionnement réel de la présomption de conformité, ou la manière dont cette décision se rattache aux articles 10 et 11 de l'ESPR. Réponses fondées sur des sources officielles.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/main">Ouvrir Chat</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-clipboard-check-outline"></i>
+<div class="feature-card__title">EU Law Comply</div>
+<div class="feature-card__desc">Effectuez une analyse des écarts de conformité pour les obligations de l'ESPR relatives au passeport numérique de produit, et découvrez où le respect des six normes harmonisées confère à votre passeport une présomption de conformité.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Ouvrir EU Law Comply</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-database-search-outline"></i>
+<div class="feature-card__title">Brubru Databases</div>
+<div class="feature-card__desc">Recherchez en une seule fois la fiche CELEX et la fiche d'analyse approfondie de cette décision, aux côtés de l'ESPR, du règlement d'exécution relatif au registre du PNP, et de toute autre loi porteuse d'obligations en matière de PNP.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/my-eu-bubble">Ouvrir Databases</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-file-edit-outline"></i>
+<div class="feature-card__title">Amendator et Position Analysis</div>
+<div class="feature-card__desc">Chargez la décision d'exécution (UE) 2026/1736 de la Commission dans l'Amendator pour travailler à partir du texte officiel EUR-Lex, ou suivez les positions des parties prenantes sur le processus de normalisation.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/amendator">Ouvrir Amendator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-radar"></i>
+<div class="feature-card__title">Regulatory Scan</div>
+<div class="feature-card__desc">Passez au crible le corpus juridique de Brubru pour repérer toute loi adoptée pertinente pour un fabricant construisant un passeport numérique de produit, et voyez comment les normes harmonisées s'articulent avec l'ESPR et le règlement du registre.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Lancer un scan</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-magnify"></i>
+<div class="feature-card__title">Sitemap Search</div>
+<div class="feature-card__desc">Trouvez, en une seule recherche, toutes les pages, guides et points d'accès API de Brubru qui font référence au passeport numérique de produit, à ses normes harmonisées ou au mécanisme de présomption de conformité sur l'ensemble de la plateforme.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eucanon">Rechercher dans le Canon</a>
+</div>
+</div>
+</section>
+</div><!-- /container -->
+<!-- =====================================================
+     CTA STRIP (Pexels background, different from hero)
+     ===================================================== -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/163170/board-printed-circuit-board-computer-electronics-163170.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940'); background-size: cover; background-position: center;">
+<h2 class="cta-strip__title">Accédez à l'ensemble de la plateforme Brubru</h2>
+<p class="cta-strip__sub">Essai gratuit de 14 jours. Aucune carte requise.</p>
+<a aria-label="Démarrez votre essai gratuit Brubru" class="cta-strip__btn" href="https://brubru.beresol.eu/signup">Démarrer l'essai gratuit</a>
+</div>
+<div class="container">
+<!-- =====================================================
+     RELATED CANON ENTRIES
+     ===================================================== -->
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-book-open-outline"></i></div>
+<h2 class="section__title">Entrées connexes du canon</h2>
+</div>
+<p class="section__subtitle">La décision sur les normes harmonisées PNP est l'un des 13 actes de l'architecture juridique du passeport numérique de produit de l'UE</p>
+<div class="related-grid">
+<a class="related-card" href="../digital-product-passport/">
+<i class="mdi mdi-qrcode"></i>
+<div class="related-card__name">Passeport numérique de produit</div>
+<div class="related-card__celex">Cette décision est l'un des 13 actes PNP</div>
+</a>
+<a class="related-card" href="../2024-1781_espr/">
+<i class="mdi mdi-leaf-circle-outline"></i>
+<div class="related-card__name">ESPR</div>
+<div class="related-card__celex">CELEX 32024R1781</div>
+</a>
+<a class="related-card" href="../2026-1778_dpp_registry/">
+<i class="mdi mdi-database-outline"></i>
+<div class="related-card__name">Règlement d'exécution relatif au registre du PNP</div>
+<div class="related-card__celex">CELEX 32026R1778</div>
+</a>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-book-open-outline" style="color: var(--color-blue);"></i> La couche des normes sous l'architecture du passeport</div>
+<p>Le hub Passeport numérique de produit retrace comment cette décision sur les normes sous-tend les propres obligations de l'ESPR en matière de passeport, aux côtés du règlement du registre et de chaque loi sectorielle qui se raccorde à la même architecture. L'ESPR est l'acte parent de cette décision, et son article 41, paragraphe 2, est le mécanisme de présomption de conformité que cette décision active. À mesure que Brubru analyse d'autres actes délégués et d'exécution relatifs au PNP, ils apparaîtront ici automatiquement.</p>
+<p style="margin-top:0.5rem;"><a href="../index.html" style="color: var(--color-blue);">Parcourir toutes les entrées de l'EU Canon</a>, couvrant actuellement le RGPD, le DSA, le DMA, NIS2, DORA, l'EHDS, ainsi qu'un ensemble croissant d'instruments relatifs à la pharmacie, à la défense commerciale, à la finance, à l'environnement et à l'autonomie stratégique ouverte.</p>
+</div>
+</section>
+</div><!-- /container -->
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer" id="footer">
+<div class="footer__inner">
+<div class="footer__col">
+<div class="footer__logos">
+<img alt="Brubru" class="footer__logo-brubru" src="../../assets/brubru_mainlogo.png"/>
+</div>
+<div class="footer__text">
+<p>Brubru est l'assistant d'intelligence politique de l'UE propulsé par l'IA, conçu par <a href="https://beresol.eu">Beresol SL</a>.</p>
+<p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Démarrez votre essai gratuit de 14 jours</a>, sans carte requise.</p>
+<p style="margin-top:0.4rem;">
+<a href="https://brubru.beresol.eu/main">Chat</a>  | 
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a>  | 
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a>  | 
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+</p>
+<p style="margin-top:0.5rem; font-weight:700;">Toute l'UE, avec l'IA.</p>
+</div>
+</div>
+<div class="footer__col">
+<div class="footer__text">
+<p style="font-weight:700; margin-bottom:0.5rem;">Bibliothèque EU Canon</p>
+<ul class="footer__nav">
+<li><a href="../index.html">Toutes les entrées du canon</a></li>
+<li><a href="../2024-1781_espr/index.html">ESPR - Règlement (UE) 2024/1781</a></li>
+<li><a href="../2026-1778_dpp_registry/index.html">Règlement d'exécution relatif au registre du PNP - Règlement (UE) 2026/1778</a></li>
+<li><a href="index.html">Normes harmonisées PNP - Décision (UE) 2026/1736 (cette page)</a></li>
+</ul>
+<p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Sources officielles</p>
+<ul class="footer__nav">
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736" rel="noopener" target="_blank">Décision sur les normes harmonisées PNP sur EUR-Lex (CELEX 32026D1736)</a></li>
+<li><a href="https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng" rel="noopener" target="_blank">Acte parent : l'ESPR sur EUR-Lex (CELEX 32024R1781)</a></li>
+</ul>
+</div>
+</div>
+<div class="footer__col" style="text-align:right;">
+<img alt="Beresol" class="footer__logo-beresol" src="../../assets/beresol-logo.png" style="display:block; margin-left:auto; margin-bottom:0.75rem;"/>
+<div class="footer__text">
+<p style="font-weight:700;">Conçu par Beresol SL</p>
+<p>Bruxelles, Belgique</p>
+<p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+<p style="margin-top:0.5rem; font-size:0.78rem;">Il s'agit d'une analyse indépendante et non d'un document officiel de l'UE. Tous les faits renvoient à la décision (UE) 2026/1736 et à des sources officielles EUR-Lex.</p>
+</div>
+</div>
+</div>
+<div class="footer__bottom">
+<p>© 2026 Beresol · Brubru. Tous droits réservés.  |  <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>  |  <a href="https://beresol.eu">beresol.eu</a></p>
+<p style="margin-top:0.35rem;">Photographie principale de Brett Sayles sur Pexels. Photographie d'arrière-plan de l'appel à l'action de Pixabay sur Pexels.</p>
+</div>
+</footer>
+<!-- Back to top button -->
+<a aria-label="Retour en haut" class="back-to-top" href="#top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
