@@ -60,6 +60,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32026R0405': '/eucanon/2026-405_detergents/',
   '32026R1778': '/eucanon/2026-1778_dpp_registry/',
   '32026D1736': '/eucanon/2026-1736_dpp_standards/',
+  '32026R0002': '/eucanon/2026-2_unsold_disclosure/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
