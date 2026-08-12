@@ -321,7 +321,7 @@
     },
     {
       "category": "Sustainability and Environmental Policies",
-      "description": "4 areas (European Green Deal)",
+      "description": "5 areas (European Green Deal)",
       "policy_areas": [
         {
           "name": "Climate Action",
@@ -535,6 +535,104 @@
             "60",
             "63",
             "45"
+          ]
+        },
+        {
+          "name": "Ecodesign of sustainable products / Digital product passport",
+          "description": "Ecodesign requirements, the digital product passport and product circularity across the EU single market",
+          "aliases": [
+            "ecodesign",
+            "eco-design",
+            "espr",
+            "digital product passport",
+            "dpp",
+            "product passport",
+            "sustainable products",
+            "ecodesign requirements",
+            "espr delegated act",
+            "delegated act ecodesign",
+            "ecodesign forum",
+            "dpp registry",
+            "product passport registry",
+            "harmonised standards dpp",
+            "unique registration identifier",
+            "data carrier",
+            "battery passport",
+            "textile passport",
+            "unsold goods",
+            "destruction of unsold goods",
+            "right to repair",
+            "reparability",
+            "recycled content",
+            "durability",
+            "extended producer responsibility",
+            "epr",
+            "textile epr",
+            "textile waste",
+            "end-of-waste",
+            "circular economy",
+            "circularity",
+            "ecodisseny",
+            "ecodiseno",
+            "passaport digital de producte",
+            "pasaporte digital de producto",
+            "passaport digital",
+            "pasaporte digital",
+            "normes harmonitzades",
+            "normas armonizadas",
+            "actes delegats",
+            "actos delegados",
+            "residus textils",
+            "residuos textiles"
+          ],
+          "keywords": [
+            "ecodesign",
+            "espr",
+            "digital product passport",
+            "dpp",
+            "product passport",
+            "sustainable products",
+            "delegated act",
+            "registry",
+            "harmonised standard",
+            "unique identifier",
+            "data carrier",
+            "battery passport",
+            "textile",
+            "extended producer responsibility",
+            "circularity",
+            "recycled content",
+            "durability",
+            "reparability",
+            "unsold",
+            "end-of-waste"
+          ],
+          "committees": [
+            "ENVI",
+            "IMCO",
+            "ITRE"
+          ],
+          "dgs": [
+            "ENV",
+            "GROW"
+          ],
+          "council_configs": [
+            "ENVI",
+            "COMPET"
+          ],
+          "agencies": [
+            "ECHA"
+          ],
+          "policy_area_strings": [
+            "Ecodesign of sustainable products / Digital product passport",
+            "Ecodesign",
+            "Digital Product Passport",
+            "Sustainable products"
+          ],
+          "cpv": [
+            "90",
+            "39",
+            "18"
           ]
         }
       ]
