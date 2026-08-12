@@ -69,6 +69,7 @@ const ROUTE_META = {
   '/eucanon/2024-1781_espr/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2024-1252_crma/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2024-3110_cpr/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2025-2509_toys/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/digital-product-passport/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-500_morocco_aluminium_wheels/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2017-625_official_controls/': { priority: 0.9, changefreq: 'monthly' },
