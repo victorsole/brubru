@@ -4423,8 +4423,8 @@
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru dentro de",
-    "titleAccent": "Claude, ChatGPT y tu IDE",
-    "lede": "Conecta Brubru con cualquier cliente compatible con MCP: Claude, ChatGPT, Cursor, Gemini y más. La misma clave API, el mismo saldo en euros. Casi siempre solo necesitas una herramienta: ask_brubru.",
+    "titleAccent": "Claude, ChatGPT, Mistral y Gemini",
+    "lede": "Conecta Brubru a cualquier cliente MCP - Claude, ChatGPT, Mistral, Gemini, Cursor y mas. La misma clave API, el mismo saldo en euros. La mayoria de las veces solo necesitas una herramienta: ask_brubru.",
     "sidebar": {
       "onThisPage": "En esta página"
     },
@@ -4439,7 +4439,8 @@
       "chatgpt": "ChatGPT",
       "gemini": "Gemini",
       "tools": "Herramientas",
-      "pricing": "Precios"
+      "pricing": "Precios",
+      "mistral": "Mistral"
     },
     "cta": {
       "mintKey": "Crear una API key",
@@ -4453,7 +4454,7 @@
     },
     "what": {
       "title": "¿Qué es MCP?",
-      "body1": "Model Context Protocol es un estándar abierto que permite a los asistentes de IA descubrir y llamar a herramientas externas. Brubru ejecuta un servidor MCP para que cualquier cliente compatible - Claude Desktop, Cursor, Cline, Continue, GPTs personalizados - pueda preguntarle a Brubru sobre política UE, legislación, eventos del calendario, eurodiputados y comisiones sin que tengas que copiar contexto.",
+      "body1": "El Model Context Protocol es un estandar abierto que permite a los asistentes de IA descubrir y llamar a herramientas externas. Brubru ejecuta un servidor MCP para que cualquier cliente compatible - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - pueda preguntar a Brubru sobre politica, legislacion, eventos de calendario, eurodiputados y comisiones de la UE sin copiar y pegar contexto.",
       "body2": "La autenticación va con tu clave API de Brubru. Cada llamada a una herramienta debita tu saldo en euros al mismo precio que la API REST. Las herramientas que necesitan acceso más amplio (p. ej. read:ep, read:commission) solo funcionan si la clave se creó con ese ámbito: tu radio de impacto es exactamente el conjunto de ámbitos que elegiste."
     },
     "quickstart": {
@@ -4464,7 +4465,7 @@
       "step2": "Añade al menos 1 € de crédito en",
       "step2b": "Cada llamada a una herramienta MCP cuesta 0,005 €.",
       "step3Title": "Pega la configuración en tu cliente",
-      "step3": "Elige tu cliente abajo y pega el JSON. Reinicia el cliente - las seis herramientas de Brubru pasan a estar disponibles para la IA.",
+      "step3": "Elige tu cliente abajo y pega la configuracion. Reinicia el cliente: las quince herramientas de Brubru quedan disponibles para la IA.",
       "curlLabel": "Verificación con curl"
     },
     "claude": {
@@ -4507,30 +4508,44 @@
       "s3": "Recarga la ventana - las seis herramientas de Brubru aparecen en la lista de herramientas del asistente."
     },
     "chatgpt": {
-      "title": "ChatGPT (GPT personalizado)",
-      "body": "ChatGPT no habla MCP nativamente desde mayo de 2026, pero puedes conectar Brubru con una Action de GPT personalizado.",
+      "title": "ChatGPT",
+      "body": "ChatGPT habla MCP de forma nativa en modo desarrollador. Ignora la clave en la URL y ejecuta el inicio de sesion OAuth, asi que autorizas una vez con tu cuenta de Brubru.",
       "bodyMoaning": "Necesitas una cuenta ChatGPT Plus o Teams para crear GPTs personalizados. La configuración tarda unos tres minutos.",
-      "s1": "En ChatGPT, ve a Explore GPTs → Create.",
-      "s2": "En Configure → Actions, añade una nueva action.",
-      "s3": "Pon la URL de abajo como endpoint y Authentication = Bearer Token con tu clave de Brubru.",
-      "s4": "Añade una instrucción breve diciéndole al GPT que puede llamar a las herramientas MCP de Brubru para preguntas de política UE.",
-      "actionUrl": "Endpoint de la action"
+      "s1": "Ajustes -> Conectores (o Plugins) -> activa el modo desarrollador.",
+      "s2": "Anade un servidor personalizado: llamalo Brubru, pega la URL de abajo, transporte Streamable HTTP.",
+      "s3": "Al conectar, ChatGPT te lleva a la pagina de inicio de sesion de Brubru: inicia sesion con tu correo + contrasena de Brubru y autoriza.",
+      "s4": "En un chat, pregunta: \"Usa Brubru: cual es el estado de la Ley de IA?\"",
+      "actionUrl": "Endpoint de la action",
+      "plan": "Necesitas un plan de pago de ChatGPT (Plus/Pro/Team/Enterprise) con el modo desarrollador activado.",
+      "urlLabel": "URL del servidor"
     },
     "gemini": {
-      "title": "Gemini (y otros LLMs)",
-      "body": "La API de tool-calling de Gemini puede llamar directamente al endpoint HTTP de Brubru. Proporciona la URL del endpoint y la cabecera Authorization: Bearer en tu SDK de Gemini; el esquema de herramientas refleja la respuesta de MCP `tools/list`.",
-      "bodySecondary": "Si usas otro proveedor - Mistral, herramientas basadas en Llama, o tu propio framework de agentes - apúntalo al mismo endpoint /api/mcp. El protocolo es JSON-RPC abierto; no hace falta un SDK específico de Brubru."
+      "title": "Gemini CLI",
+      "body": "La Gemini CLI lee los servidores MCP de ~/.gemini/settings.json. Usa httpUrl (streamable HTTP) con una cabecera Bearer. (La propia API de Gemini no conecta servidores MCP remotos: la CLI es la via.)",
+      "bodySecondary": "Si usas otro proveedor - Mistral, herramientas basadas en Llama, o tu propio framework de agentes - apúntalo al mismo endpoint /api/mcp. El protocolo es JSON-RPC abierto; no hace falta un SDK específico de Brubru.",
+      "s1": "Instala la Gemini CLI y abre ~/.gemini/settings.json.",
+      "s2": "Anade Brubru bajo mcpServers como abajo, reemplazando YOUR_KEY.",
+      "s3": "Reinicia la CLI y ejecuta /mcp: aparecen las herramientas de Brubru. Luego haz una pregunta de politica de la UE."
     },
     "tools": {
       "title": "Herramientas disponibles hoy",
-      "lede": "Seis herramientas, mapeadas 1:1 a los endpoints /api/v1/* relevantes. Cada llamada cuesta 0,005 € de tu saldo.",
+      "lede": "Quince herramientas. ask_brubru es la que necesitas; search + fetch alimentan los clientes de Deep Research; el resto son avanzadas. Cada llamada cuesta €0.005 de tu saldo.",
       "descs": {
         "ask_brubru": "La que necesitas. Pregunta cualquier cosa sobre la UE y obtén las guías de política que coinciden, las leyes relevantes (con enlaces a EUR-Lex) y el estado en directo del procedimiento, en una sola llamada.",
         "search_eu_legislation": "Avanzado: búsqueda por palabras clave en la base de datos de legislación de la UE. ask_brubru ya incluye las leyes que coinciden.",
         "search_knowledge_guides": "Avanzado: busca solo en las guías de conocimiento seleccionadas.",
         "get_procedure_status": "Avanzado: un procedimiento por su referencia OEIL exacta. ask_brubru resuelve las referencias automáticamente.",
         "get_calendar_events": "Próximos eventos del calendario del Parlamento, Consejo y Comisión.",
-        "search_eprs": "Publicaciones del Servicio de Estudios del PE (informes, estudios)."
+        "search_eprs": "Publicaciones del Servicio de Estudios del PE (informes, estudios).",
+        "search": "Busqueda estandar sobre las guias + legislacion de la UE de Brubru; devuelve id, titulo y URL por resultado. La usa Deep Research de ChatGPT. Combinala con fetch.",
+        "fetch": "Obtiene el texto completo de un resultado de busqueda por su id (guide:<slug> o law:<CELEX>).",
+        "search_funding": "Convocatorias e instrumentos de financiacion de la UE (EIC, Horizon, Digital Europe, cohesion) que coinciden con una consulta.",
+        "search_sanctions": "Listados de sanciones / medidas restrictivas de la UE que coinciden con un nombre o consulta.",
+        "search_geographical_indications": "Indicaciones geograficas protegidas de la UE (DOP/IGP) - alimentos, vino, licores - por nombre o lugar.",
+        "search_lobbyists": "Organizaciones del Registro de Transparencia de la UE que coinciden con una consulta.",
+        "search_consultations": "Consultas publicas de la UE abiertas y recientes que coinciden con un tema.",
+        "list_brubru_datasets": "Explora todo el catalogo de la API v2 de Brubru (mas de 900 endpoints): ruta + resumen, filtrable.",
+        "query_brubru_api": "Llama a cualquier endpoint v2 de Brubru desde list_brubru_datasets: la puerta de enlace generica a toda la API."
       }
     },
     "pricing": {
@@ -4540,6 +4555,17 @@
       "b2": "Sin crédito gratuito de registro; recarga mínima 1 €. El sandbox público cubre evaluadores.",
       "b3": "Si una llamada falla (error de servidor), el coste se reembolsa automáticamente.",
       "b4": "El control de ámbitos sigue aplicándose - una clave con sólo read:laws no puede llamar a ask_brubru (necesita read:knowledge)."
+    },
+    "mistral": {
+      "title": "Mistral (Le Chat y la vibe CLI)",
+      "body": "Mistral respeta la clave en la URL, asi que no se necesita OAuth.",
+      "leChatTitle": "Le Chat / Mistral Vibe (la app)",
+      "s1": "Context -> Conectores -> Anadir nuevo conector -> Conector MCP personalizado.",
+      "s2": "Llamalo Brubru, pega la URL de abajo (lleva tu clave), Metodo de autenticacion = Sin autenticacion.",
+      "s3": "Conecta y haz una pregunta a Brubru en un chat.",
+      "urlLabel": "URL del conector (incluye tu clave)",
+      "cliTitle": "La vibe CLI",
+      "cliBody": "La CLI usa una cabecera Bearer (no admite OAuth). Anade Brubru a tu config.toml:"
     }
   },
   "votes": {
@@ -4855,7 +4881,17 @@
       "updated": "Actualizado",
       "canon": "Canon",
       "deep_dive": "Análisis en profundidad"
-    }
+    },
+    "tabDatasets": "Datos abiertos",
+    "datasetsTitle": "Datos abiertos",
+    "datasetsDesc": "Todo lo que Brubru publica como datos abiertos: los corpus detrás del producto, cada uno con los endpoints que puedes llamar.",
+    "datasetsKpi": "conjuntos de datos",
+    "datasetsKpiDist": "distribuciones",
+    "datasetsThemes": "temas EuroVoc",
+    "datasetsNoDist": "Aún no hay descarga pública",
+    "periodDaily": "actualizado a diario",
+    "periodWeekly": "actualizado semanalmente",
+    "periodMonthly": "actualizado mensualmente"
   },
   "sm": {
     "subtitle": "Quién importa en tus expedientes y en tus intereses: los actores del Parlamento, la Comisión y el Consejo y las organizaciones a su alrededor.",

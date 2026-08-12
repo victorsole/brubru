@@ -4423,8 +4423,8 @@
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru dins de",
-    "titleAccent": "Claude, ChatGPT i el teu IDE",
-    "lede": "Connecta Brubru amb qualsevol client compatible amb MCP: Claude, ChatGPT, Cursor, Gemini i més. La mateixa clau API, el mateix saldo en euros. Gairebé sempre només necessites una eina: ask_brubru.",
+    "titleAccent": "Claude, ChatGPT, Mistral i Gemini",
+    "lede": "Connecta Brubru a qualsevol client MCP - Claude, ChatGPT, Mistral, Gemini, Cursor i mes. La mateixa clau API, el mateix saldo en euros. La majoria de vegades nomes necessites una eina: ask_brubru.",
     "sidebar": {
       "onThisPage": "En aquesta pàgina"
     },
@@ -4439,7 +4439,8 @@
       "chatgpt": "ChatGPT",
       "gemini": "Gemini",
       "tools": "Eines",
-      "pricing": "Preus"
+      "pricing": "Preus",
+      "mistral": "Mistral"
     },
     "cta": {
       "mintKey": "Crear una API key",
@@ -4453,7 +4454,7 @@
     },
     "what": {
       "title": "Què és MCP?",
-      "body1": "Model Context Protocol és un estàndard obert que permet als assistents d'IA descobrir i cridar eines externes. Brubru fa servir un servidor MCP perquè qualsevol client compatible - Claude Desktop, Cursor, Cline, Continue, GPTs personalitzats - pugui preguntar a Brubru sobre política UE, legislació, esdeveniments del calendari, eurodiputats i comissions sense que hagis de copiar context.",
+      "body1": "El Model Context Protocol es un estandard obert que permet als assistents d'IA descobrir i cridar eines externes. Brubru executa un servidor MCP perque qualsevol client compatible - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - pugui preguntar a Brubru sobre politica, legislacio, esdeveniments del calendari, eurodiputats i comissions de la UE sense copiar i enganxar context.",
       "body2": "L'autenticació va amb la teva clau API de Brubru. Cada crida a una eina debita el teu saldo en euros al mateix preu que l'API REST. Les eines que necessiten un accés més ampli (per exemple read:ep, read:commission) només funcionen si la clau es va crear amb aquell àmbit: el teu radi d'impacte és exactament el conjunt d'àmbits que vas triar."
     },
     "quickstart": {
@@ -4464,7 +4465,7 @@
       "step2": "Afegeix almenys 1 € de crèdit a",
       "step2b": "Cada crida a una eina MCP costa 0,005 €.",
       "step3Title": "Enganxa la configuració al teu client",
-      "step3": "Tria el teu client a sota i enganxa el JSON. Reinicia el client - les sis eines de Brubru queden disponibles per a la IA.",
+      "step3": "Tria el teu client a sota i enganxa la configuracio. Reinicia el client: les quinze eines de Brubru queden disponibles per a la IA.",
       "curlLabel": "Verificació amb curl"
     },
     "claude": {
@@ -4507,30 +4508,44 @@
       "s3": "Recarrega la finestra - les sis eines de Brubru apareixen a la llista d'eines de l'assistent."
     },
     "chatgpt": {
-      "title": "ChatGPT (GPT personalitzat)",
-      "body": "ChatGPT no parla MCP de manera nativa el maig del 2026, però pots connectar Brubru via una Action de GPT personalitzat.",
+      "title": "ChatGPT",
+      "body": "ChatGPT parla MCP de manera nativa en mode desenvolupador. Ignora la clau a l'URL i executa l'inici de sessio OAuth, aixi que autoritzes un cop amb el teu compte de Brubru.",
       "bodyMoaning": "Necessites un compte ChatGPT Plus o Teams per crear GPTs personalitzats. La configuració triga uns tres minuts.",
-      "s1": "A ChatGPT, ves a Explore GPTs → Create.",
-      "s2": "A Configure → Actions, afegeix una nova action.",
-      "s3": "Posa la URL de sota com a endpoint i Authentication = Bearer Token amb la teva clau de Brubru.",
-      "s4": "Afegeix una instrucció breu dient al GPT que pot cridar les eines MCP de Brubru per preguntes de política UE.",
-      "actionUrl": "Endpoint de l'action"
+      "s1": "Configuracio -> Connectors (o Plugins) -> activa el mode desenvolupador.",
+      "s2": "Afegeix un servidor personalitzat: anomena'l Brubru, enganxa l'URL de sota, transport Streamable HTTP.",
+      "s3": "En connectar, ChatGPT et porta a la pagina d'inici de sessio de Brubru: inicia la sessio amb el teu correu + contrasenya de Brubru i autoritza.",
+      "s4": "En un xat, pregunta: \"Fes servir Brubru: quin es l'estat de la Llei d'IA?\"",
+      "actionUrl": "Endpoint de l'action",
+      "plan": "Necessites un pla de pagament de ChatGPT (Plus/Pro/Team/Enterprise) amb el mode desenvolupador activat.",
+      "urlLabel": "URL del servidor"
     },
     "gemini": {
-      "title": "Gemini (i altres LLMs)",
-      "body": "L'API de tool-calling de Gemini pot cridar directament l'endpoint HTTP de Brubru. Proporciona la URL de l'endpoint i la capçalera Authorization: Bearer al teu SDK de Gemini; l'esquema d'eines reflecteix la resposta de MCP `tools/list`.",
-      "bodySecondary": "Si fas servir un altre proveïdor - Mistral, eines basades en Llama, o el teu propi framework d'agents - apunta'l al mateix endpoint /api/mcp. El protocol és JSON-RPC obert; no cal un SDK específic de Brubru."
+      "title": "Gemini CLI",
+      "body": "La Gemini CLI llegeix els servidors MCP de ~/.gemini/settings.json. Fes servir httpUrl (streamable HTTP) amb una capçalera Bearer. (La propia API de Gemini no connecta servidors MCP remots: la CLI es la via.)",
+      "bodySecondary": "Si fas servir un altre proveïdor - Mistral, eines basades en Llama, o el teu propi framework d'agents - apunta'l al mateix endpoint /api/mcp. El protocol és JSON-RPC obert; no cal un SDK específic de Brubru.",
+      "s1": "Instal·la la Gemini CLI i obre ~/.gemini/settings.json.",
+      "s2": "Afegeix Brubru sota mcpServers com a sota, reemplaçant YOUR_KEY.",
+      "s3": "Reinicia la CLI i executa /mcp: apareixen les eines de Brubru. Despres fes una pregunta de politica de la UE."
     },
     "tools": {
       "title": "Eines disponibles avui",
-      "lede": "Sis eines, mapejades 1:1 als endpoints /api/v1/* rellevants. Cada crida costa 0,005 € del teu saldo.",
+      "lede": "Quinze eines. ask_brubru es la que necessites; search + fetch alimenten els clients de Deep Research; la resta son avancades. Cada crida costa €0.005 del teu saldo.",
       "descs": {
         "ask_brubru": "La que necessites. Pregunta qualsevol cosa sobre la UE i obtén les guies de política que coincideixen, les lleis rellevants (amb enllaços a EUR-Lex) i l'estat en directe del procediment, en una sola crida.",
         "search_eu_legislation": "Avançat: cerca per paraules clau a la base de dades de legislació de la UE. ask_brubru ja inclou les lleis que coincideixen.",
         "search_knowledge_guides": "Avançat: cerca només a les guies de coneixement seleccionades.",
         "get_procedure_status": "Avançat: un procediment per la seva referència OEIL exacta. ask_brubru resol les referències automàticament.",
         "get_calendar_events": "Pròxims esdeveniments del calendari del Parlament, Consell i Comissió.",
-        "search_eprs": "Publicacions del Servei d'Estudis del PE (informes, estudis)."
+        "search_eprs": "Publicacions del Servei d'Estudis del PE (informes, estudis).",
+        "search": "Cerca estandard sobre les guies + legislacio de la UE de Brubru; retorna id, titol i URL per resultat. La fa servir el Deep Research de ChatGPT. Combina-la amb fetch.",
+        "fetch": "Obte el text complet d'un resultat de cerca pel seu id (guide:<slug> o law:<CELEX>).",
+        "search_funding": "Convocatories i instruments de finançament de la UE (EIC, Horizon, Digital Europe, cohesio) que coincideixen amb una consulta.",
+        "search_sanctions": "Llistats de sancions / mesures restrictives de la UE que coincideixen amb un nom o consulta.",
+        "search_geographical_indications": "Indicacions geografiques protegides de la UE (DOP/IGP) - aliments, vi, licors - per nom o lloc.",
+        "search_lobbyists": "Organitzacions del Registre de Transparencia de la UE que coincideixen amb una consulta.",
+        "search_consultations": "Consultes publiques de la UE obertes i recents que coincideixen amb un tema.",
+        "list_brubru_datasets": "Explora tot el cataleg de l'API v2 de Brubru (mes de 900 endpoints): ruta + resum, filtrable.",
+        "query_brubru_api": "Crida qualsevol endpoint v2 de Brubru des de list_brubru_datasets: la passarel·la generica a tota l'API."
       }
     },
     "pricing": {
@@ -4540,6 +4555,17 @@
       "b2": "Sense crèdit gratuït de registre; recàrrega mínima 1 €. El sandbox públic cobreix els avaluadors.",
       "b3": "Si una crida falla (error de servidor), el cost es reemborsa automàticament.",
       "b4": "El control d'àmbits segueix aplicant-se - una clau només amb read:laws no pot cridar ask_brubru (cal read:knowledge)."
+    },
+    "mistral": {
+      "title": "Mistral (Le Chat i la vibe CLI)",
+      "body": "Mistral respecta la clau a l'URL, aixi que no cal OAuth.",
+      "leChatTitle": "Le Chat / Mistral Vibe (l'app)",
+      "s1": "Context -> Connectors -> Afegeix un connector nou -> Connector MCP personalitzat.",
+      "s2": "Anomena'l Brubru, enganxa l'URL de sota (porta la teva clau), Metode d'autenticacio = Sense autenticacio.",
+      "s3": "Connecta i fes una pregunta a Brubru en un xat.",
+      "urlLabel": "URL del connector (inclou la teva clau)",
+      "cliTitle": "La vibe CLI",
+      "cliBody": "La CLI usa una capçalera Bearer (no admet OAuth). Afegeix Brubru al teu config.toml:"
     }
   },
   "votes": {
@@ -4855,7 +4881,17 @@
       "updated": "Actualitzat",
       "canon": "Canon",
       "deep_dive": "Anàlisi en profunditat"
-    }
+    },
+    "tabDatasets": "Dades obertes",
+    "datasetsTitle": "Dades obertes",
+    "datasetsDesc": "Tot el que Brubru publica com a dades obertes: els corpus darrere del producte, cadascun amb els punts finals que pots cridar.",
+    "datasetsKpi": "conjunts de dades",
+    "datasetsKpiDist": "distribucions",
+    "datasetsThemes": "temes EuroVoc",
+    "datasetsNoDist": "Encara no hi ha descàrrega pública",
+    "periodDaily": "actualitzat diàriament",
+    "periodWeekly": "actualitzat setmanalment",
+    "periodMonthly": "actualitzat mensualment"
   },
   "sm": {
     "subtitle": "Qui importa als teus expedients i als teus interessos: els actors del Parlament, la Comissió i el Consell i les organitzacions al seu voltant.",

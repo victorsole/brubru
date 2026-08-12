@@ -3531,8 +3531,8 @@
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru in",
-    "titleAccent": "Claude, ChatGPT en je IDE",
-    "lede": "Verbind Brubru met elke MCP-compatibele client: Claude, ChatGPT, Cursor, Gemini en meer. Dezelfde API-sleutel, hetzelfde eurosaldo. Meestal heb je maar één tool nodig: ask_brubru.",
+    "titleAccent": "Claude, ChatGPT, Mistral en Gemini",
+    "lede": "Verbind Brubru met elke MCP-client - Claude, ChatGPT, Mistral, Gemini, Cursor en meer. Dezelfde API-sleutel, hetzelfde eurosaldo. Meestal heb je maar een tool nodig: ask_brubru.",
     "sidebar": {
       "onThisPage": "Op deze pagina"
     },
@@ -3547,7 +3547,8 @@
       "chatgpt": "ChatGPT",
       "gemini": "Gemini",
       "tools": "Tools",
-      "pricing": "Prijzen"
+      "pricing": "Prijzen",
+      "mistral": "Mistral"
     },
     "cta": {
       "mintKey": "Maak een API-sleutel",
@@ -3561,7 +3562,7 @@
     },
     "what": {
       "title": "Wat is MCP?",
-      "body1": "Model Context Protocol is een open standaard waarmee AI-assistenten externe tools kunnen ontdekken en aanroepen. Brubru draait een MCP-server zodat elke compatibele client - Claude Desktop, Cursor, Cline, Continue, custom GPT's - Brubru kan bevragen over EU-beleid, wetgeving, agenda, MEP's en commissies zonder dat je context kopieert en plakt.",
+      "body1": "Het Model Context Protocol is een open standaard waarmee AI-assistenten externe tools kunnen ontdekken en aanroepen. Brubru draait een MCP-server zodat elke compatibele client - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - Brubru kan bevragen over EU-beleid, wetgeving, agenda-items, Europarlementariers en commissies zonder context te kopieren en plakken.",
       "body2": "Authenticatie loopt via je Brubru API-sleutel. Elke tool-call boekt af van je euro-saldo tegen dezelfde prijs als de REST API. Tools die ruimere toegang nodig hebben (read:ep, read:commission, ...) werken alleen als de sleutel met die scope is aangemaakt - je impactstraal komt exact overeen met de gekozen scopes."
     },
     "quickstart": {
@@ -3572,7 +3573,7 @@
       "step2": "Voeg minstens € 1 krediet toe op",
       "step2b": "Elke MCP tool-call kost € 0,005.",
       "step3Title": "Plak de configuratie in je client",
-      "step3": "Kies hieronder je client en plak de JSON. Herstart de client - de zes Brubru-tools worden beschikbaar voor de AI.",
+      "step3": "Kies je client hieronder en plak de configuratie. Herstart de client - Brubru's vijftien tools worden beschikbaar voor de AI.",
       "curlLabel": "Sanity-check met curl"
     },
     "claude": {
@@ -3615,30 +3616,44 @@
       "s3": "Herlaad het venster - de zes Brubru-tools verschijnen in de tools-lijst van de assistent."
     },
     "chatgpt": {
-      "title": "ChatGPT (custom GPT)",
-      "body": "ChatGPT spreekt geen MCP native per mei 2026, maar je kunt Brubru aansluiten via een custom GPT Action.",
+      "title": "ChatGPT",
+      "body": "ChatGPT spreekt MCP native in ontwikkelaarsmodus. Het negeert een sleutel in de URL en voert de OAuth-aanmelding uit, dus je autoriseert eenmaal met je Brubru-account.",
       "bodyMoaning": "Je hebt een ChatGPT Plus- of Teams-account nodig om custom GPT's te maken. De setup duurt ongeveer drie minuten.",
-      "s1": "Ga in ChatGPT naar Explore GPTs → Create.",
-      "s2": "In Configure → Actions, voeg een nieuwe action toe.",
-      "s3": "Zet de URL hieronder als endpoint en Authentication = Bearer Token met je Brubru-sleutel.",
-      "s4": "Voeg een korte instructie toe die de GPT vertelt dat hij Brubru's MCP-tools kan aanroepen voor EU-beleidsvragen.",
-      "actionUrl": "Action endpoint"
+      "s1": "Instellingen -> Connectoren (of Plugins) -> zet ontwikkelaarsmodus aan.",
+      "s2": "Voeg een aangepaste server toe: noem hem Brubru, plak de URL hieronder, transport Streamable HTTP.",
+      "s3": "Bij Verbinden stuurt ChatGPT je naar de Brubru-aanmeldpagina: log in met je Brubru e-mail + wachtwoord en autoriseer.",
+      "s4": "Vraag in een chat: \"Gebruik Brubru: wat is de status van de AI Act?\"",
+      "actionUrl": "Action endpoint",
+      "plan": "Je hebt een betaald ChatGPT-abonnement nodig (Plus/Pro/Team/Enterprise) met ontwikkelaarsmodus aan.",
+      "urlLabel": "Server-URL"
     },
     "gemini": {
-      "title": "Gemini (en andere LLM's)",
-      "body": "Gemini's tool-calling API kan Brubru's HTTP-endpoint direct aanroepen. Geef de endpoint-URL en de Authorization: Bearer-header op in je Gemini SDK-setup; het tool-schema komt overeen met de MCP `tools/list`-respons.",
-      "bodySecondary": "Voor een andere provider - Mistral, Llama-tools, of je eigen agent-framework - wijs het naar hetzelfde /api/mcp-endpoint. Het protocol is open JSON-RPC; geen Brubru-specifieke SDK nodig."
+      "title": "Gemini CLI",
+      "body": "De Gemini CLI leest MCP-servers uit ~/.gemini/settings.json. Gebruik httpUrl (streamable HTTP) met een Bearer-header. (De Gemini API zelf verbindt geen externe MCP-servers - de CLI is de weg.)",
+      "bodySecondary": "Voor een andere provider - Mistral, Llama-tools, of je eigen agent-framework - wijs het naar hetzelfde /api/mcp-endpoint. Het protocol is open JSON-RPC; geen Brubru-specifieke SDK nodig.",
+      "s1": "Installeer de Gemini CLI en open ~/.gemini/settings.json.",
+      "s2": "Voeg Brubru toe onder mcpServers zoals hieronder, vervang YOUR_KEY.",
+      "s3": "Herstart de CLI en voer /mcp uit - Brubru's tools verschijnen. Stel dan een EU-beleidsvraag."
     },
     "tools": {
       "title": "Tools vandaag beschikbaar",
-      "lede": "Zes tools, 1:1 gekoppeld aan de relevante /api/v1/*-endpoints. Elke call kost € 0,005 van je saldo.",
+      "lede": "Vijftien tools. ask_brubru is degene die je nodig hebt; search + fetch voeden Deep-Research-clients; de rest is geavanceerd. Elke aanroep kost €0.005 van je saldo.",
       "descs": {
         "ask_brubru": "Degene die je nodig hebt. Stel elke vraag over de EU en krijg de bijpassende beleidsgidsen, de relevante wetten (met EUR-Lex-links) en de actuele procedurestatus, in één aanroep.",
         "search_eu_legislation": "Geavanceerd: zoeken op trefwoord in de EU-wetgevingsdatabase. ask_brubru bevat de bijpassende wetten al.",
         "search_knowledge_guides": "Geavanceerd: doorzoek alleen de samengestelde kennisgidsen.",
         "get_procedure_status": "Geavanceerd: één procedure via de exacte OEIL-referentie. ask_brubru lost referenties automatisch op.",
         "get_calendar_events": "Aankomende agendapunten van Parlement, Raad en Commissie.",
-        "search_eprs": "Publicaties van de Onderzoeksdienst van het EP (briefings, studies)."
+        "search_eprs": "Publicaties van de Onderzoeksdienst van het EP (briefings, studies).",
+        "search": "Standaardzoekopdracht over Brubru's gidsen + EU-wetgeving; geeft id, titel en URL per resultaat. Gebruikt door ChatGPT Deep Research. Combineer met fetch.",
+        "fetch": "Haalt de volledige tekst van een zoekresultaat op via zijn id (guide:<slug> of law:<CELEX>).",
+        "search_funding": "Open EU-financieringsoproepen en -instrumenten (EIC, Horizon, Digital Europe, cohesie) die bij een zoekopdracht passen.",
+        "search_sanctions": "EU-sancties / beperkende maatregelen die bij een naam of zoekopdracht passen.",
+        "search_geographical_indications": "Beschermde EU geografische aanduidingen (BOB/BGA) - voeding, wijn, gedistilleerd - op naam of plaats.",
+        "search_lobbyists": "Organisaties in het EU-transparantieregister die bij een zoekopdracht passen.",
+        "search_consultations": "Open en recente EU publieke raadplegingen die bij een onderwerp passen.",
+        "list_brubru_datasets": "Blader door de hele Brubru v2 API-catalogus (900+ endpoints): pad + samenvatting, filterbaar.",
+        "query_brubru_api": "Roep elk Brubru v2-endpoint aan vanuit list_brubru_datasets - de generieke gateway naar de hele API."
       }
     },
     "pricing": {
@@ -3648,6 +3663,17 @@
       "b2": "Geen gratis registratietegoed; minimum bijvullen € 1. Publieke sandbox dekt evaluatie.",
       "b3": "Als een call mislukt (serverfout), wordt de kost automatisch teruggestort.",
       "b4": "Scope-controle blijft van toepassing - een sleutel met alleen read:laws kan ask_brubru niet aanroepen (vereist read:knowledge)."
+    },
+    "mistral": {
+      "title": "Mistral (Le Chat en de vibe CLI)",
+      "body": "Mistral respecteert de sleutel in de URL, dus OAuth is niet nodig.",
+      "leChatTitle": "Le Chat / Mistral Vibe (de app)",
+      "s1": "Context -> Connectoren -> Nieuwe connector toevoegen -> Aangepaste MCP-connector.",
+      "s2": "Noem hem Brubru, plak de URL hieronder (bevat je sleutel), Authenticatiemethode = Geen authenticatie.",
+      "s3": "Verbind en stel een Brubru-vraag in een chat.",
+      "urlLabel": "Connector-URL (bevat je sleutel)",
+      "cliTitle": "De vibe CLI",
+      "cliBody": "De CLI gebruikt een Bearer-header (het ondersteunt geen OAuth). Voeg Brubru toe aan je config.toml:"
     }
   },
   "votes": {
@@ -3963,7 +3989,17 @@
       "updated": "Bijgewerkt",
       "canon": "Canon",
       "deep_dive": "Diepteanalyse"
-    }
+    },
+    "tabDatasets": "Open data",
+    "datasetsTitle": "Open data",
+    "datasetsDesc": "Alles wat Brubru als open data publiceert: de corpora achter het product, elk met de endpoints die je kunt aanroepen.",
+    "datasetsKpi": "datasets",
+    "datasetsKpiDist": "distributies",
+    "datasetsThemes": "EuroVoc-thema's",
+    "datasetsNoDist": "Nog geen publieke download",
+    "periodDaily": "dagelijks bijgewerkt",
+    "periodWeekly": "wekelijks bijgewerkt",
+    "periodMonthly": "maandelijks bijgewerkt"
   },
   "sm": {
     "subtitle": "Wie ertoe doet op je dossiers en binnen je interesses: de actoren van Parlement, Commissie en Raad en de organisaties eromheen.",

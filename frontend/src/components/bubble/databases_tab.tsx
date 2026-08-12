@@ -1,11 +1,14 @@
 /**
  * Brubru Databases tab (MEUB Section 4.2 - Analysis & Strategy).
  *
- * Six sub-tabs (seven in the Catalan UI):
+ * Seven sub-tabs (eight in the Catalan UI):
  *   - EU Canon: synthetic, animated mirror of /eucanon/ (binding-law explainers).
  *   - Deep Dives: animated summary of the thematic deep-dive reports.
  *   - Knowledge Guides: synthetic mirror of /guides/index.html (categories + counts).
  *   - Dret europeu en catala: Catalan-only; mirror of /legislacio-ue-catala/.
+ *   - Open datasets: the DCAT catalogue (brubru_dataset_catalog), which described
+ *     every Brubru dataset to the outside world while no surface in the product
+ *     read it. Each card is a dataset, each chip a callable distribution.
  *   - Policy Areas: "who does what" across the EU institutions, PI-aware, charts.
  *   - Beresol Monitors: live Beresol policy-intelligence digests (Beresol Monitor API).
  *
@@ -25,6 +28,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MeubHeader } from './meub_header';
 import Icon from '@mdi/react';
 import {
+  mdiDatabaseOutline,
   mdiBookshelf, mdiBookOpenPageVariantOutline, mdiFileDocumentMultipleOutline, mdiTranslate,
   mdiSitemapOutline, mdiRadar, mdiOpenInNew, mdiAccountGroupOutline,
   mdiDomain, mdiBankOutline, mdiArrowRight, mdiInformationOutline,
@@ -42,6 +46,7 @@ import {
 } from 'recharts';
 import { databasesService } from '../../services/databases_service';
 import type {
+  DatasetsResult,
   CanonResult, GuidesResult, CatalanResult, PolicyAreasResult, PolicyArea,
   BeresolMonitorsResult, BeresolMonitorDetail, KbChangelogResult, KbChangelogEntry,
   GuideListResult, GuideSummary, GuideDetail,
@@ -49,7 +54,7 @@ import type {
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import './databases_tab.css';
 
-type Sub = 'canon' | 'deep' | 'guides' | 'catalan' | 'policy' | 'partners';
+type Sub = 'canon' | 'deep' | 'guides' | 'catalan' | 'datasets' | 'policy' | 'partners';
 
 const C = { primary: '#1e3a8a', accent: '#0693e3', pi: '#d97706', ep: '#be123c', ec: '#0693e3', council: '#9b51e0', muted: '#cbd5e1' };
 
@@ -146,7 +151,7 @@ function LibHero({ icon, title, subtitle, kpis, cta }: {
   );
 }
 
-const SUBS: Sub[] = ['canon', 'deep', 'guides', 'catalan', 'policy', 'partners'];
+const SUBS: Sub[] = ['canon', 'deep', 'guides', 'catalan', 'datasets', 'policy', 'partners'];
 
 export function DatabasesTab() {
   const { t, i18n } = useTranslation();
@@ -181,6 +186,7 @@ export function DatabasesTab() {
   const [guideList, setGuideList] = useState<GuideListResult | null>(null);
   const [changelog, setChangelog] = useState<KbChangelogResult | null>(null);
   const [catalan, setCatalan] = useState<CatalanResult | null>(null);
+  const [datasets, setDatasets] = useState<DatasetsResult | null>(null);
   const [pa, setPa] = useState<PolicyAreasResult | null>(null);
   const [paMine, setPaMine] = useState(true);
   const [selArea, setSelArea] = useState<string | null>(null);
@@ -194,6 +200,7 @@ export function DatabasesTab() {
   useEffect(() => { if (sub === 'guides' && !changelog) databasesService.kbChangelog().then(setChangelog).catch(() => {}); }, [sub, changelog]);
   useEffect(() => { if (sub === 'guides' && !guideList) databasesService.guidesList().then(setGuideList).catch(() => {}); }, [sub, guideList]);
   useEffect(() => { if (sub === 'catalan' && !catalan) databasesService.catalan().then(setCatalan).catch(() => {}); }, [sub, catalan]);
+  useEffect(() => { if (sub === 'datasets' && !datasets) databasesService.datasets().then(setDatasets).catch(() => {}); }, [sub, datasets]);
   useEffect(() => {
     if (sub !== 'policy') return;
     databasesService.policyAreas(paMine).then((r) => { setPa(r); setSelArea(r.areas[0]?.name || null); }).catch(() => {});
@@ -204,6 +211,7 @@ export function DatabasesTab() {
     ['deep', mdiFileDocumentMultipleOutline, t('db.tabDeep', 'Deep Dives')],
     ['guides', mdiBookshelf, t('db.tabGuides', 'Knowledge Guides')],
     ...(isCa ? [['catalan', mdiTranslate, t('db.tabCatalan', 'Dret europeu en català')]] as [Sub, string, string][] : []),
+    ['datasets', mdiDatabaseOutline, t('db.tabDatasets', 'Open datasets')],
     ['policy', mdiSitemapOutline, t('db.tabPolicy', 'Policy Areas')],
     ['partners', mdiRadar, t('db.tabPartners', 'Beresol Monitors')],
   ];
@@ -230,10 +238,70 @@ export function DatabasesTab() {
           {sub === 'deep' && <DeepDives t={t} lang={i18n.language} />}
           {sub === 'guides' && <KnowledgeGuides data={guides} list={guideList} changelog={changelog} t={t} />}
           {sub === 'catalan' && <CatalanLibrary data={catalan} t={t} />}
+          {sub === 'datasets' && <OpenDatasets data={datasets} t={t} />}
           {sub === 'policy' && <PolicyAreas pa={pa} mine={paMine} setMine={setPaMine} sel={selArea} setSel={setSelArea} t={t} />}
           {sub === 'partners' && <BeresolMonitors t={t} />}
         </motion.div>
       </AnimatePresence>
+    </div>
+  );
+}
+
+
+// ISO 8601 durations, as they appear in brubru_dataset_catalog today.
+const PERIODICITY: Record<string, [string, string]> = {
+  P1D: ['db.periodDaily', 'updated daily'],
+  P1W: ['db.periodWeekly', 'updated weekly'],
+  P1M: ['db.periodMonthly', 'updated monthly'],
+};
+
+// ------------------------------------------------------------- Open datasets
+// brubru_dataset_catalog held DCAT metadata for the outside world while nothing
+// in the product read it, so a user could not see what Brubru publishes. Each
+// card is a dataset; each chip under it is a distribution you can actually open.
+function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
+  if (!data) return <ListSkeleton count={5} lines={3} />;
+  return (
+    <div className="db-section">
+      <LibHero
+        icon={mdiDatabaseOutline}
+        title={t('db.datasetsTitle', 'Open datasets')}
+        subtitle={t('db.datasetsDesc', 'Everything Brubru publishes as open data: the corpora behind the product, each with the endpoints you can call.')}
+        kpis={[
+          { value: data.count, label: t('db.datasetsKpi', 'datasets') },
+          { value: data.datasets.reduce((n, d) => n + d.distributions.length, 0),
+            label: t('db.datasetsKpiDist', 'distributions') },
+        ]}
+      />
+      <div className="db-canon-grid">
+        {data.datasets.map((d, i) => (
+          <motion.div key={d.uri} className="db-canon-card"
+            custom={i} variants={cardVariants} initial="hidden" animate="show"
+            whileHover={{ y: -4, boxShadow: '0 12px 28px rgba(15,23,42,0.12)' }}>
+            <h4>{d.title}</h4>
+            <p className="db-dataset-card__desc">{d.description}</p>
+            <div className="db-dataset-card__dists">
+              {d.distributions.length === 0 && (
+                <span className="db-dataset-card__nodist">
+                  {t('db.datasetsNoDist', 'No public download yet')}
+                </span>
+              )}
+              {d.distributions.map((dist) => (
+                <a key={dist.url} href={dist.url} target="_blank" rel="noopener noreferrer"
+                   className="db-dataset-card__dist" title={dist.title}>
+                  <Icon path={mdiOpenInNew} size={0.5} /> {dist.format}
+                </a>
+              ))}
+            </div>
+            <span className="db-canon-card__celex">
+              {d.themes.length} {t('db.datasetsThemes', 'EuroVoc themes')}
+              {/* accrual_periodicity is an ISO 8601 duration: correct in DCAT,
+                  unreadable on a card. P1D is "daily", not a serial number. */}
+              {PERIODICITY[d.updated] ? ` · ${t(PERIODICITY[d.updated][0], PERIODICITY[d.updated][1])}` : ''}
+            </span>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

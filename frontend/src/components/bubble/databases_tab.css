@@ -572,3 +572,39 @@ button.db-guide-card {
 
 .db-whatsnew__go { flex-shrink: 0; align-self: center; color: #cbd5e1; }
 .db-whatsnew__hit:hover .db-whatsnew__go { color: #0693e3; }
+
+/* Open datasets: a card is a dataset, each chip a distribution you can open. */
+.db-dataset-card__desc {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #475569;
+  margin: 0.4rem 0 0.7rem;
+}
+.db-dataset-card__dists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+.db-dataset-card__dist {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-decoration: none;
+  background: #f8fafc;
+}
+.db-dataset-card__dist:hover {
+  background: #eef2ff;
+  border-color: #1e3a8a;
+}
+.db-dataset-card__nodist {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #94a3b8;
+}

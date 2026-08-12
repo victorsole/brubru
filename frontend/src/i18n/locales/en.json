@@ -4423,8 +4423,8 @@
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru inside",
-    "titleAccent": "Claude, ChatGPT and your IDE",
-    "lede": "Connect Brubru to any MCP-capable client - Claude, ChatGPT, Cursor, Gemini and more. Same API key, same euro balance. Most of the time you only need one tool: ask_brubru.",
+    "titleAccent": "Claude, ChatGPT, Mistral and Gemini",
+    "lede": "Connect Brubru to any MCP client - Claude, ChatGPT, Mistral, Gemini, Cursor and more. Same API key, same euro balance. Most of the time you only need one tool: ask_brubru.",
     "sidebar": {
       "onThisPage": "On this page"
     },
@@ -4439,7 +4439,8 @@
       "chatgpt": "ChatGPT",
       "gemini": "Gemini",
       "tools": "Tools",
-      "pricing": "Pricing"
+      "pricing": "Pricing",
+      "mistral": "Mistral"
     },
     "cta": {
       "mintKey": "Mint an API key",
@@ -4453,7 +4454,7 @@
     },
     "what": {
       "title": "What is MCP?",
-      "body1": "Model Context Protocol is an open standard that lets AI assistants discover and call external tools. Brubru runs an MCP server so any compatible client - Claude Desktop, Cursor, Cline, Continue, ChatGPT custom GPTs - can ask Brubru about EU policy, legislation, calendar events, MEPs and committees without you copy-pasting context.",
+      "body1": "Model Context Protocol is an open standard that lets AI assistants discover and call external tools. Brubru runs an MCP server so any compatible client - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - can ask Brubru about EU policy, legislation, calendar events, MEPs and committees without you copy-pasting context.",
       "body2": "Authentication is by your Brubru API key. Each tool call debits your euro balance against the same pricing as the REST API. Tools that need broader access (e.g. read:ep, read:commission) only work if the key was minted with that scope - your blast radius is exactly the scope set you chose."
     },
     "quickstart": {
@@ -4464,7 +4465,7 @@
       "step2": "Add at least €1 of credit at",
       "step2b": "Each MCP tool call costs €0.005.",
       "step3Title": "Paste the config into your client",
-      "step3": "Pick your client below and paste the JSON. Restart the client - Brubru's six tools become available to the AI.",
+      "step3": "Pick your client below and paste the config. Restart the client - Brubru's fifteen tools become available to the AI.",
       "curlLabel": "Sanity-check with curl"
     },
     "claude": {
@@ -4507,30 +4508,44 @@
       "s3": "Reload the window - the six Brubru tools appear in the assistant's tool list."
     },
     "chatgpt": {
-      "title": "ChatGPT (custom GPT)",
-      "body": "ChatGPT doesn't speak MCP natively as of May 2026, but you can wire Brubru in via a custom GPT Action.",
+      "title": "ChatGPT",
+      "body": "ChatGPT speaks MCP natively in Developer mode. It ignores a key in the URL and runs the OAuth sign-in instead, so you authorise once with your Brubru account.",
       "bodyMoaning": "You'll need a ChatGPT Plus or Teams account to create custom GPTs. The setup takes about three minutes.",
-      "s1": "In ChatGPT, go to Explore GPTs → Create.",
-      "s2": "In Configure → Actions, add a new action.",
-      "s3": "Set the URL below as the action endpoint and Authentication = Bearer Token with your Brubru key.",
-      "s4": "Add a brief instruction telling the GPT it can call Brubru's MCP tools for EU policy questions.",
-      "actionUrl": "Action endpoint"
+      "s1": "Settings -> Connectors (or Plugins) -> turn on Developer mode.",
+      "s2": "Add a custom server: name it Brubru, paste the URL below, transport Streamable HTTP.",
+      "s3": "On Connect, ChatGPT sends you to the Brubru sign-in page - sign in with your Brubru email + password and authorise.",
+      "s4": "In a chat, ask: \"Use Brubru: what's the status of the AI Act?\"",
+      "actionUrl": "Action endpoint",
+      "plan": "You need a paid ChatGPT plan (Plus/Pro/Team/Enterprise) with Developer mode enabled.",
+      "urlLabel": "Server URL"
     },
     "gemini": {
-      "title": "Gemini (and other LLMs)",
-      "body": "Gemini's tool-calling API can hit Brubru's HTTP endpoint directly. Provide the endpoint URL and the Authorization: Bearer header in your Gemini SDK setup; the tool schema mirrors the MCP `tools/list` response.",
-      "bodySecondary": "If you use a different provider - Mistral, Llama-based tools, or your own agent framework - point it at the same /api/mcp endpoint. The protocol is open JSON-RPC; no Brubru-specific SDK needed."
+      "title": "Gemini CLI",
+      "body": "The Gemini CLI reads MCP servers from ~/.gemini/settings.json. Use httpUrl (streamable HTTP) with a Bearer header. (The Gemini API itself does not connect remote MCP servers - the CLI is the way in.)",
+      "bodySecondary": "If you use a different provider - Mistral, Llama-based tools, or your own agent framework - point it at the same /api/mcp endpoint. The protocol is open JSON-RPC; no Brubru-specific SDK needed.",
+      "s1": "Install the Gemini CLI, then open ~/.gemini/settings.json.",
+      "s2": "Add Brubru under mcpServers as below, replacing YOUR_KEY.",
+      "s3": "Restart the CLI and run /mcp - Brubru's tools appear. Then ask an EU-policy question."
     },
     "tools": {
       "title": "Tools available today",
-      "lede": "Six tools, mapped 1:1 to the relevant /api/v1/* endpoints. Each call is metered at €0.005 against your balance.",
+      "lede": "Fifteen tools. ask_brubru is the one you need; search + fetch power Deep-Research clients; the rest are advanced. Each call is metered at €0.005 against your balance.",
       "descs": {
         "ask_brubru": "The one you need. Ask anything about the EU and get the matching policy guides, the relevant laws (with EUR-Lex links) and live procedure status - in a single call.",
         "search_eu_legislation": "Advanced: raw keyword search over the EU legislation database. ask_brubru already includes the matching laws.",
         "search_knowledge_guides": "Advanced: search only the curated knowledge guides.",
         "get_procedure_status": "Advanced: one procedure by exact OEIL reference. ask_brubru resolves references automatically.",
         "get_calendar_events": "Upcoming Parliament, Council and Commission calendar events.",
-        "search_eprs": "European Parliamentary Research Service publications (briefings, studies)."
+        "search_eprs": "European Parliamentary Research Service publications (briefings, studies).",
+        "search": "Standard search over Brubru's guides + EU legislation; returns id, title and URL per hit. Used by ChatGPT Deep Research. Pair with fetch.",
+        "fetch": "Fetch the full text of one search result by its id (guide:<slug> or law:<CELEX>).",
+        "search_funding": "Open EU funding calls and instruments (EIC, Horizon, Digital Europe, cohesion) matching a query.",
+        "search_sanctions": "EU sanctions / restrictive-measures listings matching a name or query.",
+        "search_geographical_indications": "Protected EU geographical indications (PDO/PGI) - food, wine, spirits - by name or place.",
+        "search_lobbyists": "Organisations in the EU Transparency Register matching a query.",
+        "search_consultations": "Open and recent EU public consultations matching a topic.",
+        "list_brubru_datasets": "Browse the whole Brubru v2 API catalogue (900+ endpoints): path + summary, filterable.",
+        "query_brubru_api": "Call any Brubru v2 endpoint from list_brubru_datasets - the generic gateway to the full API."
       }
     },
     "pricing": {
@@ -4540,6 +4555,17 @@
       "b2": "No free signup credit; minimum top-up is €1. Public sandbox covers evaluators.",
       "b3": "If a tool call crashes (server error), the cost is refunded automatically.",
       "b4": "Per-key scope check still applies - a key with only read:laws can't call ask_brubru (needs read:knowledge)."
+    },
+    "mistral": {
+      "title": "Mistral (Le Chat and the vibe CLI)",
+      "body": "Mistral honours the key in the URL, so no OAuth is needed.",
+      "leChatTitle": "Le Chat / Mistral Vibe (the app)",
+      "s1": "Context -> Connectors -> Add new connector -> Custom MCP Connector.",
+      "s2": "Name it Brubru, paste the URL below (it carries your key), Authentication Method = No authentication.",
+      "s3": "Connect, then ask a Brubru question in a chat.",
+      "urlLabel": "Connector URL (includes your key)",
+      "cliTitle": "The vibe CLI",
+      "cliBody": "The CLI uses a Bearer header (it does not support OAuth). Add Brubru to your config.toml:"
     }
   },
   "votes": {
@@ -4855,7 +4881,17 @@
       "updated": "Updated",
       "canon": "Canon",
       "deep_dive": "Deep dive"
-    }
+    },
+    "tabDatasets": "Open datasets",
+    "datasetsTitle": "Open datasets",
+    "datasetsDesc": "Everything Brubru publishes as open data: the corpora behind the product, each with the endpoints you can call.",
+    "datasetsKpi": "datasets",
+    "datasetsKpiDist": "distributions",
+    "datasetsThemes": "EuroVoc themes",
+    "datasetsNoDist": "No public download yet",
+    "periodDaily": "updated daily",
+    "periodWeekly": "updated weekly",
+    "periodMonthly": "updated monthly"
   },
   "sm": {
     "subtitle": "Who matters on your files and across your interests: the Parliament, Commission and Council actors and the organisations active around them.",

@@ -5,6 +5,14 @@
 import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
 
+export interface DatasetDistribution { title: string; format: string; url: string }
+export interface DatasetEntry {
+  uri: string; title: string; description: string; languages: string[];
+  themes: string[]; distributions: DatasetDistribution[];
+  license: string | null; updated: string; last_validated: string | null;
+}
+export interface DatasetsResult { count: number; lang: string; datasets: DatasetEntry[] }
+
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api/databases`;
 
 function authHeaders() {
@@ -184,6 +192,11 @@ export const databasesService = {
   },
   kbChangelog: async (limit = 20): Promise<KbChangelogResult> => {
     const r = await axios.get(`${API_BASE}/kb-changelog?limit=${limit}`, { headers: authHeaders() });
+    return r.data;
+  },
+  /** The DCAT catalogue: every dataset Brubru publishes, with its distributions. */
+  datasets: async (): Promise<DatasetsResult> => {
+    const r = await axios.get(`${API_BASE}/datasets`, { headers: authHeaders() });
     return r.data;
   },
   catalan: async (): Promise<CatalanResult> => {
