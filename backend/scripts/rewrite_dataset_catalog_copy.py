@@ -213,3 +213,12 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+# Titles were rewritten in the same pass on 12 Aug 2026, applied directly:
+#   EU legislation TSVECTOR corpus (eu_laws)      -> EU legislation, searchable word by word
+#   EU authority labels (Brubru cache)            -> The EU's official names for its own institutions and acts
+#   EU textile-circularity law corpus (live-...)  -> EU textile circularity law, from design to waste
+#   Brubru chat knowledge guides                  -> The briefings behind Brubru's chat
+#   EU Digital Product Passport regime (ESPR...)  -> The EU digital product passport, end to end
+# A card headed "Corpus TSVECTOR (eu_laws)" over plain-language prose is still
+# unreadable, and eu_laws is a table name rather than anything a user has.
