@@ -83,6 +83,15 @@ SOURCES: List[dict] = [
     _src("cordis", "research", "rocket", _G, "CORDIS",
          "Results of EU-funded research (Horizon Europe, H2020, FP7): projects, deliverables, result briefs",
          "https://cordis.europa.eu/projects", "https://cordis.europa.eu/search?q={q}", ["*"]),
+    # The Product Bureau is where the ecodesign preparatory studies live, one
+    # product group at a time. It is the research source behind every ESPR
+    # delegated act, including textiles (product group 467), and it was absent.
+    _src("jrc_product_bureau", "research", "microscope", _A, "JRC Product Bureau",
+         "Ecodesign and Ecolabel preparatory studies by product group: the technical "
+         "evidence base behind ESPR delegated acts, including textiles and apparel",
+         "https://susproc.jrc.ec.europa.eu/product-bureau/product-groups",
+         "https://susproc.jrc.ec.europa.eu/product-bureau/product-groups",
+         ["ecodesign", "product", "circular", "textile", "environment", "energy"]),
     _src("knowledge4policy", "research", "lightbulb", _A, "JRC Knowledge Centres",
          "Science-for-policy knowledge centres and observatories (bioeconomy, migration, food security, cancer, disaster risk and more)",
          "https://knowledge4policy.ec.europa.eu/", "https://knowledge4policy.ec.europa.eu/search?text={q}", ["*"]),
@@ -491,6 +500,20 @@ def _seed_search(src: dict, pi: List[str]) -> str:
             break
     if not chosen and pi:
         chosen = pi[0]
+    # A policy-interest LABEL is a heading, not a search term. Seeding a
+    # repository search with "Ecodesign of sustainable products / Digital
+    # product passport", slash and all, returns nothing on JRC or CORDIS. The
+    # taxonomy already carries a curated keyword list per interest whose first
+    # entry is the concise form: ecodesign, environment, climate, digital.
+    if chosen:
+        try:
+            from services.tracking.pi_committee_crosswalk import PI_TO_KEYWORDS
+
+            kws = PI_TO_KEYWORDS.get(chosen.strip()) or []
+            if kws:
+                chosen = kws[0]
+        except Exception:  # noqa: BLE001 - a bad seed must never break the page
+            pass
     return tmpl.replace("{q}", urllib.parse.quote(chosen))
 
 
