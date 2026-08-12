@@ -714,6 +714,66 @@ LAW_PACKAGES = {
         'date_from': 2023
     },
 
+    'espr_ecodesign_regulation': {
+        'name': 'ESPR - Ecodesign for Sustainable Products Regulation (Reg 2024/1781)',
+        'primary_celex': '32024R1781',
+        'description': (
+            'Regulation (EU) 2024/1781, the Ecodesign for Sustainable Products '
+            'Regulation (ESPR), the framework that lets the Commission set '
+            'ecodesign requirements for almost any physical product placed on '
+            'the Union market, through product-group delegated acts. It repeals '
+            'the old Ecodesign Directive 2009/125/EC, amends Directive (EU) '
+            '2020/1828 and Regulation (EU) 2023/1542 (Batteries), and is the act '
+            'that creates the EU Digital Product Passport (Articles 9 to 15) and '
+            'its central registry. ESPR sets both performance requirements '
+            '(durability, reusability, reparability, recycled content, energy '
+            'and resource efficiency, presence of substances of concern) and '
+            'information requirements carried by the digital product passport. '
+            'It also bans the destruction of unsold consumer products (Article '
+            '25) starting with textiles and footwear, with derogations and '
+            'disclosure duties, mandates a working plan of prioritised product '
+            'groups (Article 18: iron and steel, aluminium, textiles including '
+            'apparel and footwear, furniture, tyres and more), and provides for '
+            'green public procurement requirements, self-regulation measures and '
+            'SME support. Legal base Article 114 TFEU. Adopted 13 June 2024, '
+            'entered into force 18 July 2024.'
+        ),
+        'applicability': (
+            'Manufacturers, importers, distributors, authorised representatives '
+            'and fulfilment service providers placing products in scope on the '
+            'Union market, plus online marketplaces and providers of online '
+            'search. Concrete obligations bite product-group by product-group as '
+            'the Commission adopts delegated acts under Article 4, so a given '
+            'operator is bound once a delegated act covers its product. The '
+            'unsold-goods destruction ban applies first to large enterprises for '
+            'textiles and footwear, with medium enterprises phased in later and '
+            'micro and small enterprises largely exempt.'
+        ),
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': [
+            'espr', 'ecodesign', 'ecodesign regulation',
+            'ecodesign for sustainable products', 'sustainable products',
+            '2024/1781', '32024r1781', 'regulation 2024/1781',
+            'regulation (eu) 2024/1781',
+            'ecodesign directive', '2009/125', '32009l0125',
+            'digital product passport', 'dpp', 'product passport',
+            'delegated act ecodesign', 'working plan', 'product group',
+            'performance requirement', 'information requirement',
+            'durability', 'reparability', 'reusability', 'recyclability',
+            'recycled content', 'resource efficiency', 'energy efficiency',
+            'substances of concern', 'destruction of unsold products',
+            'unsold consumer products', 'unsold goods ban', 'article 25 espr',
+            'green public procurement', 'gpp', 'self-regulation measure',
+            'ecodesign requirements', 'circular economy', 'green deal',
+            'circular economy action plan', 'article 18 working plan',
+            'iron and steel', 'aluminium', 'textiles', 'furniture', 'tyres',
+            'online marketplace', 'market surveillance', '2022/0095',
+            'battery regulation espr', 'espr delegated act',
+        ],
+        'date_from': 2024
+    },
+
     'china_egypt_gff_countervailing_duties': {
         'name': 'China and Egypt GFF Countervailing Duties (Reg 2020/776)',
         'primary_celex': '32020R0776',

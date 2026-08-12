@@ -53,7 +53,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32022L2464': '/eucanon/2022-2464_csrd/',
   '32024L1760': '/eucanon/2024-1760_csddd/',
   '32023R1542': '/eucanon/2023-1542_batteries/',
-  '32024R1781': '/eucanon/digital-product-passport/',
+  '32024R1781': '/eucanon/2024-1781_espr/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -115,6 +115,7 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Batteries Regulation (Regulation (EU) 2023/1542)': '/eucanon/2023-1542_batteries/',
   'Textiles: EPR, Ecodesign and Digital Product Passport (DPP-TEX)': '/eucanon/digital-product-passport/',
   'EU Digital Product Passport (ESPR Reg 2024/1781)': '/eucanon/digital-product-passport/',
+  'ESPR - Ecodesign for Sustainable Products Regulation (Reg 2024/1781)': '/eucanon/2024-1781_espr/',
 };
 
 export interface EucanonLookupInput {
