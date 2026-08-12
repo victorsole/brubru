@@ -383,6 +383,20 @@
       "type": "Proposal",
       "year": 2026,
       "full_name": "EU Inc (28th Regime Corporate Legal Framework)"
+    },
+    "ESPR": {
+      "celex": "32024R1781",
+      "full_title": "Regulation (EU) 2024/1781 establishing a framework for the setting of ecodesign requirements for sustainable products",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Ecodesign for Sustainable Products Regulation"
+    },
+    "PPWR": {
+      "celex": "32025R0040",
+      "full_title": "Regulation (EU) 2025/40 on packaging and packaging waste",
+      "type": "Regulation",
+      "year": 2025,
+      "full_name": "Packaging and Packaging Waste Regulation"
     }
   }
 }
