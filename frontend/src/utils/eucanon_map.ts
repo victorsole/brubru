@@ -55,6 +55,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32023R1542': '/eucanon/2023-1542_batteries/',
   '32024R1781': '/eucanon/2024-1781_espr/',
   '32024R1252': '/eucanon/2024-1252_crma/',
+  '32024R3110': '/eucanon/2024-3110_cpr/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -119,6 +120,7 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'EU Digital Product Passport regime (ESPR + product laws)': '/eucanon/digital-product-passport/',
   'ESPR - Ecodesign for Sustainable Products Regulation (Reg 2024/1781)': '/eucanon/2024-1781_espr/',
   'CRMA - Critical Raw Materials Act (Reg 2024/1252)': '/eucanon/2024-1252_crma/',
+  'CPR - Construction Products Regulation (Reg 2024/3110)': '/eucanon/2024-3110_cpr/',
 };
 
 export interface EucanonLookupInput {
