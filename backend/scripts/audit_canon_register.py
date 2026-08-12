@@ -40,6 +40,15 @@ ROOT = Path(__file__).resolve().parents[2]
 CSV_PATH = ROOT / "data" / "canon" / "brubru_binding_laws.csv"
 EUCANON_DIR = ROOT / "frontend" / "public" / "eucanon"
 
+# Regime hubs are canon pages that describe a whole regulatory regime rather than
+# one binding act, so they are intentionally NOT keyed to a single CELEX row in
+# the register. They are built from live Brubru API data (see
+# data/canon/_build_dpp_hub.py), not from a Formex XML, and re-run to refresh.
+# Excluded from the CSV-consistency checks so they do not trip MISSING_ROW.
+REGIME_HUBS = {
+    "digital-product-passport",  # /api/v2/dpp regime (ESPR 2024/1781 + 13 acts)
+}
+
 # Extract CELEX from a slug like "2016-679_gdpr" or "2014-536_ctr".
 # The slug encodes YEAR-NUMBER; we don't know the R/L/D letter from the slug
 # alone, so we look for any CELEX that matches on year+number and pick the
@@ -65,6 +74,12 @@ def main() -> int:
     live_slugs = sorted(
         d.name for d in EUCANON_DIR.iterdir()
         if d.is_dir() and (d / "index.html").is_file()
+        and d.name not in REGIME_HUBS
+    )
+    live_hubs = sorted(
+        d.name for d in EUCANON_DIR.iterdir()
+        if d.is_dir() and (d / "index.html").is_file()
+        and d.name in REGIME_HUBS
     )
 
     rows_by_slug: dict[str, list[dict]] = defaultdict(list)
@@ -116,6 +131,8 @@ def main() -> int:
 
     print(f"[audit] live eucanon pages : {total_live}")
     print(f"[audit] canon_completed rows: {total_marked}")
+    if live_hubs:
+        print(f"[audit] regime hubs (excl.) : {len(live_hubs)} ({', '.join(live_hubs)})")
     print()
 
     def _section(title: str, items: list, formatter=str) -> None:
