@@ -7,6 +7,7 @@ the user's Policy Interests, like the Legislative Train view), and the bridge to
 My Tracked Files (an act carries its matched carriage when the CELEX lines up).
 """
 
+import re
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -35,10 +36,26 @@ def _user_keywords(user: Optional[User]) -> List[str]:
 
 
 def _matches(entry: OjEntry, keywords: List[str]) -> bool:
+    """Does this OJ entry match any of the user's interest keywords?
+
+    Short keywords are matched on WORD BOUNDARIES, long ones as substrings.
+    Plain substring matching on a four-letter acronym is how "espr" came to
+    match AIRESPRING in a merger notification, putting a telecoms concentration
+    in the feed of someone tracking ecodesign. Longer keywords stay substrings
+    so "textile" still matches "textiles".
+
+    Same rule the knowledge base uses for its triggers, for the same reason.
+    """
     if not keywords:
         return False
     hay = (entry.title or "").lower()
-    return any(k in hay for k in keywords)
+    for k in keywords:
+        if len(k) <= 4:
+            if re.search(r"(?<![a-z])" + re.escape(k) + r"(?![a-z])", hay):
+                return True
+        elif k in hay:
+            return True
+    return False
 
 
 # Languages with cached entry translations in oj_entry_translations (mig 201).
