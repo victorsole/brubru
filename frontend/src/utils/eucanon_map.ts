@@ -57,6 +57,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32024R1252': '/eucanon/2024-1252_crma/',
   '32024R3110': '/eucanon/2024-3110_cpr/',
   '32025R2509': '/eucanon/2025-2509_toys/',
+  '32026R0405': '/eucanon/2026-405_detergents/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
