@@ -17,6 +17,7 @@ from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -566,6 +567,49 @@ def catalan(current_user: User = Depends(get_current_user), db: Session = Depend
     # static catalogue (a relative path can fall back to the SPA root).
     return {"count": count, "url": "https://brubru.beresol.eu/legislacio-ue-catala/", "items": items}
 
+
+
+@router.get("/datasets", summary="Brubru open datasets: the DCAT catalogue of what Brubru publishes")
+def datasets_catalogue(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """The DCAT catalogue in brubru_dataset_catalog: every dataset Brubru
+    publishes, with its distributions (API endpoints, HTML renderings, MCP
+    servers), EuroVoc themes, licence and refresh cadence.
+
+    The table existed and was serving DCAT metadata to the outside world while
+    nothing in the product read it, so a user could not see what Brubru
+    publishes. Descriptions are multilingual; the caller's language is served
+    with an English fallback.
+    """
+    lang = (getattr(current_user, "language", None) or "en")[:2]
+    rows = db.execute(text(
+        "SELECT dcat_uri, title, description, dcat_theme, distribution, "
+        "       license, accrual_periodicity, last_validated_at "
+        "FROM brubru_dataset_catalog ORDER BY title"
+    )).fetchall()
+
+    out = []
+    for r in rows:
+        desc = r.description or {}
+        out.append({
+            "uri": r.dcat_uri,
+            "title": r.title,
+            # served in the reader's language, English if we have not translated it
+            "description": desc.get(lang) or desc.get("en") or "",
+            "languages": sorted(desc.keys()),
+            "themes": list(r.dcat_theme or []),
+            "distributions": [
+                {"title": d.get("title"), "format": d.get("format"),
+                 "url": d.get("access_url")}
+                for d in (r.distribution or [])
+            ],
+            "license": r.license,
+            "updated": (r.accrual_periodicity or ""),
+            "last_validated": r.last_validated_at.isoformat() if r.last_validated_at else None,
+        })
+    return {"count": len(out), "lang": lang, "datasets": out}
 
 @router.get("/beresol-monitors", summary="Beresol Monitors: the partner policy-intelligence feed index")
 def beresol_monitors(current_user: User = Depends(get_current_user)):
