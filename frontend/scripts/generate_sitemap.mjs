@@ -75,6 +75,7 @@ const ROUTE_META = {
   '/eucanon/2026-1736_dpp_standards/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-2_unsold_disclosure/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-296_unsold_ban/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2011-1007_textile_labelling/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/digital-product-passport/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-500_morocco_aluminium_wheels/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2017-625_official_controls/': { priority: 0.9, changefreq: 'monthly' },
