@@ -184,8 +184,13 @@ def normalise_row(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     programme_period = first_or_none(md.get("programmePeriod")) or ""
     call_id = first_or_none(md.get("callIdentifier"))
+    # SEDIA publishes the SAME topic once per EU language, and the search
+    # returns them interleaved. Carried here so the caller can prefer English
+    # rather than whichever record happened to arrive first.
+    record_lang = (first_or_none(md.get("language")) or "").lower()
 
     return {
+        "record_lang": record_lang,
         "topic_id": topic_id,
         "call_id": call_id,
         "programme": programme_period,
@@ -224,7 +229,15 @@ def upsert(cur, row: Dict[str, Any]) -> None:
             title = EXCLUDED.title,
             short_summary = EXCLUDED.short_summary,
             description = EXCLUDED.description,
-            status = EXCLUDED.status,
+            -- The SEDIA search record carries no status field at all, so
+            -- normalise_row falls back to 'unknown' on every row. Assigning
+            -- that unconditionally overwrote a known 'open' or 'closed' with
+            -- 'unknown' on every nightly run, which is how twelve LIFE 2025
+            -- calls ended up statusless, and it would have undone
+            -- close_expired_calls.py the same night it ran. Only a real status
+            -- may replace a real status.
+            status = CASE WHEN EXCLUDED.status = 'unknown'
+                          THEN funding_opportunities.status ELSE EXCLUDED.status END,
             type_of_action = EXCLUDED.type_of_action,
             deadline = EXCLUDED.deadline,
             keywords = EXCLUDED.keywords,
@@ -328,8 +341,24 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
         ON CONFLICT (topic_id) DO UPDATE SET
             call_id = EXCLUDED.call_id,
             title = EXCLUDED.title,
+            -- A changed title invalidates both the detected language and any
+            -- sidecar translation derived from the old one. Without this reset,
+            -- correcting a German title to the portal's own English left
+            -- detected_lang='de' behind, and the Tenderator's translation
+            -- overlay then covered the correct English with a machine
+            -- translation of the German, em-dash included.
+            detected_lang = CASE WHEN EXCLUDED.title IS DISTINCT FROM ft_calls_for_proposals.title
+                                 THEN NULL ELSE ft_calls_for_proposals.detected_lang END,
             description = EXCLUDED.description,
-            status = EXCLUDED.status,
+            -- The SEDIA search record carries no status field at all, so
+            -- normalise_row falls back to 'unknown' on every row. Assigning
+            -- that unconditionally overwrote a known 'open' or 'closed' with
+            -- 'unknown' on every nightly run, which is how twelve LIFE 2025
+            -- calls ended up statusless, and it would have undone
+            -- close_expired_calls.py the same night it ran. Only a real status
+            -- may replace a real status.
+            status = CASE WHEN EXCLUDED.status = 'unknown'
+                          THEN ft_calls_for_proposals.status ELSE EXCLUDED.status END,
             type_of_action = EXCLUDED.type_of_action,
             deadline = EXCLUDED.deadline,
             keywords = EXCLUDED.keywords,
@@ -408,6 +437,10 @@ def main():
     rows_seen = 0
     rows_written = 0
     seen_topic_ids: set[str] = set()
+    # topic_id -> the language we stored it in, so a later English record can
+    # replace a Polish or German one instead of being discarded as a duplicate.
+    seen_lang: dict[str, str] = {}
+    upgraded = 0
 
     for query in queries:
         if rows_seen >= args.limit:
@@ -425,14 +458,31 @@ def main():
             if not results:
                 break
             page_valid = 0
+            # English first, so the first record kept for a topic is the
+            # portal's own English wording. Without this the Tenderator stored
+            # "Kreislaufwirtschaft und Null-Schadstoff-Belastung" for a call
+            # whose English title, present in the very same response, is
+            # "Circular Economy and Zero Pollution", and then paid to machine
+            # translate it back.
+            results = sorted(
+                results,
+                key=lambda x: ((first_or_none((x.get("metadata") or {}).get("language"))
+                                or "").lower() != "en"),
+            )
             for r in results:
                 row = normalise_row(r)
                 if row is None:
                     continue
                 tid = row["topic_id"]
+                lang = row.get("record_lang") or ""
                 if tid in seen_topic_ids:
-                    continue
+                    # Only reason to look again: we stored a non-English record
+                    # and the English one has now turned up.
+                    if not (lang == "en" and seen_lang.get(tid) != "en"):
+                        continue
+                    upgraded += 1
                 seen_topic_ids.add(tid)
+                seen_lang[tid] = lang
                 rows_seen += 1
                 per_query_seen += 1
                 page_valid += 1
@@ -465,7 +515,8 @@ def main():
             time.sleep(0.4)
         print(f"  [QUERY DONE] {query!r}: {per_query_seen} valid rows")
 
-    print(f"\n[DONE] seen={rows_seen} written={rows_written} apply={args.apply}")
+    print(f"\n[DONE] seen={rows_seen} written={rows_written} "
+          f"upgraded_to_english={upgraded} apply={args.apply}")
 
 
 if __name__ == "__main__":
