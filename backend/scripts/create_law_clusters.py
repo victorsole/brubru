@@ -774,6 +774,61 @@ LAW_PACKAGES = {
         'date_from': 2024
     },
 
+    'crma_critical_raw_materials_act': {
+        'name': 'CRMA - Critical Raw Materials Act (Reg 2024/1252)',
+        'primary_celex': '32024R1252',
+        'description': (
+            'Regulation (EU) 2024/1252, the Critical Raw Materials Act (CRMA), '
+            'the framework for a secure and sustainable supply of the raw '
+            'materials the EU green and digital transitions depend on. It amends '
+            'Regulations (EU) 168/2013, (EU) 2018/858, (EU) 2018/1724 and (EU) '
+            '2019/1020. It sets two lists, critical raw materials and the '
+            'narrower strategic raw materials, and 2030 capacity benchmarks for '
+            'strategic raw materials measured against EU annual consumption: at '
+            'least 10 percent from Union extraction, at least 40 percent from '
+            'Union processing, at least 25 percent from recycling, and no more '
+            'than 65 percent of the annual consumption of each strategic raw '
+            'material at any relevant stage from a single third country. It '
+            'creates a Strategic Projects regime with streamlined and '
+            'time-bound permitting through national single points of contact, '
+            'supply-chain monitoring and stress tests, strategic stockpiling '
+            'coordination, circularity and recycling duties, recognised '
+            'sustainability schemes, and joint purchasing of strategic raw '
+            'materials. Legal base Article 114 TFEU. Adopted 11 April 2024.'
+        ),
+        'applicability': (
+            'Member States (permitting, monitoring, national measures, recycling '
+            'programmes), the Commission and the European Critical Raw Materials '
+            'Board, and companies across the critical-raw-materials value chain. '
+            'Large companies that manufacture strategic technologies using '
+            'strategic raw materials must carry out periodic supply-chain risk '
+            'assessments. Project promoters can apply for Strategic Project '
+            'status to obtain priority, time-bound permitting.'
+        ),
+        'policy_area': 'Industrial Policy',
+        'priority_level': 'high',
+        'keywords': [
+            'crma', 'critical raw materials', 'critical raw materials act',
+            'strategic raw materials', 'raw materials',
+            '2024/1252', '32024r1252', 'regulation 2024/1252',
+            'regulation (eu) 2024/1252',
+            'strategic project', 'strategic projects', 'permitting',
+            'single point of contact', 'benchmark', '2030 benchmark',
+            'extraction', 'processing', 'recycling critical raw materials',
+            'single country dependency', 'supply chain', 'supply security',
+            'stress test', 'monitoring', 'stockpiling', 'strategic stocks',
+            'joint purchasing', 'recognised scheme', 'sustainability',
+            'lithium', 'cobalt', 'nickel', 'rare earths', 'rare earth elements',
+            'permanent magnets', 'graphite', 'gallium', 'germanium',
+            'magnesium', 'bauxite', 'copper', 'silicon', 'boron', 'manganese',
+            'critical raw materials board', 'risk assessment',
+            'raw materials initiative', 'crm action plan',
+            'battery raw materials', 'green transition', 'digital transition',
+            '2023/0079', 'value chain', 'circularity raw materials',
+        ],
+        'date_from': 2024
+    },
+
     'china_egypt_gff_countervailing_duties': {
         'name': 'China and Egypt GFF Countervailing Duties (Reg 2020/776)',
         'primary_celex': '32020R0776',
