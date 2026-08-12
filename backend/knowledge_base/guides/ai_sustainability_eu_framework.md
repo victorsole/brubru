@@ -57,7 +57,7 @@ When a user asks about AI and sustainability — in any of the 6 supported langu
 - `eu_energy_policy.md` — EED Article 12 + electrification action plan
 - `accelerateeu_fossil_energy_crisis.md` — 22 April 2026 affordable energy communication
 - `european_climate_law.md` — 2040 binding target + Copernicus warming acceleration
-- `eu_critical_raw_materials_act.md` — gallium, germanium, rare earths for AI hardware
+- `crma_critical_raw_materials_act.md` — gallium, germanium, rare earths for AI hardware
 - `jrc_capitalism_sustainability_democracy.md` — JRC strategic frame
 - (forthcoming) `cloud_and_ai_development_act.md` — to be created on 27 May 2026 once adopted
 

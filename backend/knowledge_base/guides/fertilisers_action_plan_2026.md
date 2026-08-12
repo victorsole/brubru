@@ -45,7 +45,7 @@ The Fertilisers Action Plan is the Commission's response to a multi-cause cost s
 
 - `common_agricultural_policy.md` — CAP 2023-2027 + 2028-2034 guidance (28 April 2026)
 - `cbam_downstream_goods_extension.md` — 2025/0419(COD), nitrogen fertilisers in scope
-- `eu_critical_raw_materials_act.md` — phosphate rock strategic-materials angle (if guide exists; otherwise update `eu_critical_raw_materials_act.md` or `apply_ai_strategy_public_sector.md`)
+- `crma_critical_raw_materials_act.md` — phosphate rock strategic-materials angle (if guide exists; otherwise update `crma_critical_raw_materials_act.md` or `apply_ai_strategy_public_sector.md`)
 - `accelerateeu_fossil_energy_crisis.md` — 22 April 2026 affordable energy communication that frames the gas-price context
 - `eu_energy_policy.md` — gas market + ETS context
 

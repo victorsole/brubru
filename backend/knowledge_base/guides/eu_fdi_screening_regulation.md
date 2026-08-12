@@ -60,7 +60,7 @@ The economic-security package is structurally about **de-risking** without **dec
 - `eu_trade_policy` — DG TRADE policy landscape
 - `eu_anti_coercion_instrument` (if exists) — companion external-policy tool
 - `foreign_subsidies_regulation` (if exists) — internal-market level-playing-field tool
-- `eu_critical_raw_materials_act` — overlap on critical-input dependency
+- `crma_critical_raw_materials_act` — overlap on critical-input dependency
 - `eu_dual_use_goods_export_control` (if exists) — export-side dual-use controls
 - `competitiveness_compass_2025` — strategic frame
 - `ai_act_regulation` — sectoral overlap on AI as critical technology

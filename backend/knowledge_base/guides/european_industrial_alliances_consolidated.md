@@ -61,7 +61,7 @@ Every alliance name, launch date and lead DG above was checked against the Europ
 
 ## Related Brubru guides
 - `clean_industrial_deal.md`, the 2025 strategic umbrella under which most alliances now operate
-- `eu_critical_raw_materials_act.md`, legal counterpart to the European Raw Materials Alliance
+- `crma_critical_raw_materials_act.md`, legal counterpart to the European Raw Materials Alliance
 - `battery_booster_strategy.md` and `battery_regulation_removability_consultation.md`, legislative and strategy detail behind the European Battery Alliance
 - `smr_strategy_nuclear.md`, strategy detail behind the European Industrial Alliance on Small Modular Reactors
 - `eu_chips_act.md` and `eu_chips_act_2_0.md`, legislative counterpart to the Processors and Semiconductor Technologies Alliance

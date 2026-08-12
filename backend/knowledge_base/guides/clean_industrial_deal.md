@@ -21,12 +21,12 @@
   - Industrial Accelerator Act, COM(2026) 100, 4 March 2026 (see `industrial_accelerator_act.md`)
   - Temporary Decarbonisation Fund proposal (see `temporary_decarbonisation_fund.md`)
   - Clean Industrial Deal State Aid Framework (CISAF), C(2025) 7600, adopted 25 June 2025
-  - Critical Raw Materials Demand Aggregation Platform, launched 13 April 2026 under the Critical Raw Materials Act (see `eu_critical_raw_materials_act.md`)
+  - Critical Raw Materials Demand Aggregation Platform, launched 13 April 2026 under the Critical Raw Materials Act (see `crma_critical_raw_materials_act.md`)
   - "Delivering on the Clean Industrial Deal I" follow-up Communication, COM(2025) 378, 2 July 2025
 - **EP response**: European Parliament resolution on the Clean Industrial Deal, 19 June 2025, procedure 2025/2656(RSP), adopted text P10_TA(2025) 0137, rapporteur Tom Berendsen (EPP, NL, ITRE). Commission formally responded 17 November 2025 (SP(2025) 329). See `industrial_accelerator_act.md` for the full EP-request vs Commission-response comparison table.
 - **Council configuration**: Competitiveness Council; discussed at multiple European Council meetings on competitiveness (20-21 March 2025, 19-20 March 2026). See `eu_competitiveness_council_debate.md`.
 - **Where it sits in the priorities architecture**: flagship of von der Leyen II Priority 1, "A new plan for Europe's sustainable prosperity and competitiveness" (see `eu_commission_priorities_2024_2029.md`)
-- **Related guides**: `clean_energy_investment_strategy.md`, `industrial_accelerator_act.md`, `eu_critical_raw_materials_act.md`, `eu_ets_review_2026.md`, `step_strategic_technologies_for_europe.md`, `european_competitiveness_fund.md`, `eu_competitiveness_council_debate.md`, `eu_commission_priorities_2024_2029.md`, `temporary_decarbonisation_fund.md`
+- **Related guides**: `clean_energy_investment_strategy.md`, `industrial_accelerator_act.md`, `crma_critical_raw_materials_act.md`, `eu_ets_review_2026.md`, `step_strategic_technologies_for_europe.md`, `european_competitiveness_fund.md`, `eu_competitiveness_council_debate.md`, `eu_commission_priorities_2024_2029.md`, `temporary_decarbonisation_fund.md`
 
 ## Overview
 
@@ -52,7 +52,7 @@ Commits to mobilising **over EUR 100 billion** for industrial decarbonisation, a
 Up to EUR 50 billion is also earmarked via an amended **InvestEU**, alongside EUR 450 million in dedicated Horizon Europe clean-industry research calls. The **Temporary Decarbonisation Fund** (see `temporary_decarbonisation_fund.md`) is a further financing proposal in this action area, aimed at de-risking industrial decarbonisation capital expenditure for energy-intensive industries.
 
 ### 4. Circularity and Access to Materials
-Targets **24% circular material use by 2030** and establishes the **Critical Raw Materials Centre**, a joint-purchasing mechanism allowing EU companies to aggregate demand for strategic raw materials (lithium, cobalt, rare earths, magnesium, gallium, germanium, natural graphite) and match with diversified international suppliers, mirroring the AggregateEU model used for gas. Operationally launched as the **Critical Raw Materials Demand Aggregation Platform** on 13 April 2026 under the Critical Raw Materials Act (Regulation (EU) 2024/1252). See `eu_critical_raw_materials_act.md`.
+Targets **24% circular material use by 2030** and establishes the **Critical Raw Materials Centre**, a joint-purchasing mechanism allowing EU companies to aggregate demand for strategic raw materials (lithium, cobalt, rare earths, magnesium, gallium, germanium, natural graphite) and match with diversified international suppliers, mirroring the AggregateEU model used for gas. Operationally launched as the **Critical Raw Materials Demand Aggregation Platform** on 13 April 2026 under the Critical Raw Materials Act (Regulation (EU) 2024/1252). See `crma_critical_raw_materials_act.md`.
 
 ### 5. Global Markets and Trade
 Proposes **Clean Trade and Investment Partnerships** with third countries to diversify supply chains away from concentrated dependencies (notably on China for processed critical raw materials and clean-tech components), alongside continued use of the Carbon Border Adjustment Mechanism (CBAM) to prevent carbon leakage and protect the competitiveness of EU industry facing carbon pricing under the EU ETS. A first partnership was launched with South Africa. See `eu_ets_review_2026.md` for the linked carbon-pricing dimension.

@@ -99,4 +99,4 @@ For **online intermediaries** (e.g. chemical marketplaces, lab-equipment platfor
 - `eu_anti_trafficking_directive` — adjacent criminal-law file
 - `digital_services_act` — DSA Article 31 traceability cross-link
 - `eu_pharmaceutical_legislation` — pharma-precursor overlap
-- `eu_critical_raw_materials_act` — strategic chemicals overlap (different list)
+- `crma_critical_raw_materials_act` — strategic chemicals overlap (different list)
