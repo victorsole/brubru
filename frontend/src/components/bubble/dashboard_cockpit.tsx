@@ -11,6 +11,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { chatReturnParams } from '../../utils/chat_return';
+import { eurLexUrl } from '../../utils/eu_links';
 import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -50,10 +51,6 @@ import { destinationName } from '../../utils/destination_label';
 import './dashboard_cockpit.css';
 import { uiDateLocale } from '../../i18n/config';
 
-// Canonical EUR-Lex deep link for a CELEX that came from the database. Matches
-// the pattern already used in parliamentary_questions_tab / consultation_detail.
-const eurLexUrl = (celex: string) =>
-  `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${encodeURIComponent(celex)}`;
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return '';

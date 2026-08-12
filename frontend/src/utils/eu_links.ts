@@ -59,3 +59,15 @@ export function getRegDelUrl(procedureRef: string): string | null {
 export function getOeilUrl(procedureRef: string): string {
   return `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(procedureRef)}`;
 }
+
+/**
+ * EUR-Lex permalink for a CELEX number.
+ *
+ * Lived as a private copy in dashboard_cockpit, parliamentary_questions_tab and
+ * consultation_detail, while legislative_file_detail rendered CELEX numbers as
+ * plain text: every tracked-file card showed "CELEX: 32026D1736" with no way to
+ * reach the act. A citation the reader cannot open is half a citation.
+ */
+export function eurLexUrl(celex: string): string {
+  return `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${encodeURIComponent(celex.trim())}`;
+}

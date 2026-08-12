@@ -8,6 +8,7 @@
  * Created: January 2026
  */
 
+import { eurLexUrl } from '../../utils/eu_links';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -834,7 +835,7 @@ export const ConsultationDetail: React.FC<ConsultationDetailProps> = ({
                 {consultation.celex_numbers.map((celex, index) => (
                   <a
                     key={`celex-${index}`}
-                    href={`https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${celex}`}
+                    href={eurLexUrl(celex)}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ ...styles.legislationItem, textDecoration: 'none' }}

@@ -48,7 +48,7 @@ import type { CommitteeWorkItem } from '../../hooks/use_committee_work';
 import { useTextsAdopted } from '../../hooks/use_texts_adopted';
 import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
-import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
+import { eurLexUrl, getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { MeubHeader } from './meub_header';
 import { ArchiveToggle, ArchiveButton, type ArchiveView } from './archive_controls';
 import { archiveService } from '../../services/archive_service';
@@ -1830,7 +1830,33 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, onMe
             {file.lead_committee}
           </span>
         )}
-        {file.days_in_current_status && (
+        {/* An adopted act carries no procedure reference and no committee, so
+            without this its CELEX was the only identifier it had, and it was
+            not shown at all. Linked, because a citation the reader cannot open
+            is half a citation. */}
+        {file.celex_numbers && file.celex_numbers.length > 0 && (
+          <span className="tracked-file-card__celex">
+            {file.celex_numbers.slice(0, 2).map((celex, i) => (
+              <span key={celex}>
+                {i > 0 && ', '}
+                <a
+                  href={eurLexUrl(celex)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  title={t('fileDetail.viewOnEurlex', 'View on EUR-Lex')}
+                >
+                  {celex}
+                </a>
+              </span>
+            ))}
+          </span>
+        )}
+        {/* `value && <JSX/>` renders a literal 0 when value is the NUMBER zero,
+            which is why a freshly tracked act showed a bare "0" as its only
+            metadata. Compare explicitly. Zero days in status is also not worth
+            saying. */}
+        {typeof file.days_in_current_status === 'number' && file.days_in_current_status > 0 && (
           <span className="tracked-file-card__days">
             <Icon path={mdiClockOutline} size={0.6} />
             {t('myFilesTab.daysInStatus', { n: file.days_in_current_status })}

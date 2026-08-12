@@ -42,7 +42,7 @@ import { FutureComplyPreview } from '../shared/future_comply_preview';
 import { RegulatoryCascade } from '../shared/regulatory_cascade';
 import CommitteeDocumentsCard from './committee_documents_card';
 import LegislativeJourneyPanel from './legislative_journey_panel';
-import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
+import { eurLexUrl, getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
 import { uiDateLocale } from '../../i18n/config';
 
@@ -674,7 +674,19 @@ export const LegislativeFileDetail = () => {
                 {selectedFile.celex_numbers && selectedFile.celex_numbers.length > 0 && (
                   <div className="legislative-file-detail__reference">
                     <strong>{t('fileDetail.celexLabel')}</strong>
-                    {selectedFile.celex_numbers.join(', ')}
+                    {selectedFile.celex_numbers.map((celex, i) => (
+                      <span key={celex}>
+                        {i > 0 && ', '}
+                        <a
+                          href={eurLexUrl(celex)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={t('fileDetail.viewOnEurlex', 'View on EUR-Lex')}
+                        >
+                          {celex}
+                        </a>
+                      </span>
+                    ))}
                   </div>
                 )}
                 {selectedFile.legal_text_url && (

@@ -590,6 +590,7 @@
 
 .tracked-file-card__ref,
 .tracked-file-card__committee,
+.tracked-file-card__celex,
 .tracked-file-card__days {
   display: inline-flex;
   align-items: center;
@@ -1827,3 +1828,14 @@
 .committee-work-card__opinion-link:hover { text-decoration: underline; }
 
 .my-tracked-files-tab__subtitle-count { color: #94a3b8; font-weight: 500; white-space: nowrap; }
+
+/* The CELEX chip is a link: keep it legible against the chip background and
+   make it obvious it can be opened. */
+.tracked-file-card__celex a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.tracked-file-card__celex a:hover {
+  text-decoration-thickness: 2px;
+}
