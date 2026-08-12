@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The DPP Registry Implementing Regulation (2026) explained | Brubru</title>
+  <meta name="description" content="Plain-language guide to Commission Implementing Regulation (EU) 2026/1778, the rulebook for the EU's central digital product passport registry: identity verification, registration pathways, the semantic repository, and the difference between the registry's go-live and this Regulation's own entry into force.">
+  <meta property="og:title" content="The DPP Registry Implementing Regulation (2026) explained | Brubru">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:description" content="Commission Implementing Regulation (EU) 2026/1778 lays down how the EU's single digital product passport registry actually works: 25 articles, no chapters, no annexes, identity verification for every user, two registration pathways, and a unique registration identifier that is explicitly not proof of compliance.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DPP Registry Implementing Regulation 2026 explained | Brubru EU Canon">
+  <meta name="twitter:description" content="25 articles. No chapters. No annexes. The Commission's rulebook for the EU's shared digital product passport registry, fully explained.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2026-1778_dpp_registry/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Commission Implementing Regulation (EU) 2026/1778 of 16 July 2026 laying down the implementation arrangements for the digital product passport registry set up under Regulation (EU) 2024/1781 of the European Parliament and of the Council",
+    "alternateName": "DPP Registry Implementing Regulation",
+    "identifier": "CELEX:32026R1778",
+    "legislationIdentifier": "32026R1778",
+    "legislationType": "Regulation",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778",
+    "datePublished": "2026-07-17",
+    "dateCreated": "2026-07-16",
+    "dateModified": "2026-08-12",
+    "dateEffective": "2026-08-06",
+    "jurisdiction": "EU",
+    "spatialCoverage": "European Union",
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Commission"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "digital product passport, DPP registry, unique registration identifier, ESPR, identity verification, semantic repository, log system, national administrator, customs interconnection, EU CSW-CERTEX"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Container ---- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 780px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* ---- Hero image ---- */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* ---- Key figures strip ---- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ---- Sections ---- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* ---- Info boxes ---- */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(5,150,105,0.2);
+    }
+    .info-box--blue {
+      background: linear-gradient(135deg, rgba(6,147,227,0.08) 0%, rgba(155,81,224,0.06) 100%);
+      border-color: rgba(6,147,227,0.25);
+    }
+
+    /* ---- Definition box ---- */
+    .definition-box {
+      display: block;
+      background: linear-gradient(135deg, rgba(155,81,224,0.07) 0%, rgba(6,147,227,0.05) 100%);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-purple);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .definition-box h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .definition-box dt { font-weight: 700; color: var(--color-purple); margin-top: 0.9rem; font-size: 0.95rem; }
+    .definition-box dt:first-of-type { margin-top: 0; }
+    .definition-box dd { color: var(--color-secondary); margin-left: 0; margin-top: 0.2rem; font-size: 0.9rem; line-height: 1.55; }
+
+    /* ---- 5-card grid: 3+2 centred ---- */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pillars-grid .pillar-card:nth-child(1),
+    .pillars-grid .pillar-card:nth-child(2),
+    .pillars-grid .pillar-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .pillar-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pillar-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .pillar-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .pillar-card__num { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin-bottom: 0.25rem; }
+    .pillar-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .pillar-card__chapter { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.35rem; }
+    .pillar-card__desc { font-size: 0.78rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Ratio / headline-number grid (3 cols) ---- */
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ratio-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .ratio-card:hover { border-color: var(--color-purple); transform: translateY(-2px); }
+    .ratio-card__value { font-size: 1.8rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.2rem; }
+    .ratio-card__label { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 0.2rem; }
+    .ratio-card__ref { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Comparison table ---- */
+    .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .comp-table th, .comp-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .comp-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .comp-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .comp-table .col-label { font-weight: 700; color: var(--color-text); }
+    .comp-table .col-crma { color: var(--color-blue); }
+    .comp-table .col-old { color: var(--color-purple); }
+
+    /* ---- Timeline ---- */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* ---- Glossary 2-col grid ---- */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Related canon: 3+2 centred grid ---- */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .related-grid .related-card:nth-child(1),
+    .related-grid .related-card:nth-child(2),
+    .related-grid .related-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .related-grid .related-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .related-grid .related-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .related-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: all 0.2s;
+      display: block;
+    }
+    .related-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .related-card .mdi { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; color: var(--color-blue); }
+    .related-card__name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .related-card__celex { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Brubru features 3x2 grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* ---- Pill badges ---- */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* ---- CTA Strip ---- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---- Footer ---- */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; background: #ffffff; border-radius: 6px; padding: 4px 8px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* ---- Back to top ---- */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* ====================================================
+       RESPONSIVE BREAKPOINTS
+       ==================================================== */
+
+    /* Tablet and below: drop 4-col grids to 2-col */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* 5-card grid: drop 3+2 centred to 2-col */
+      .pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .pillars-grid .pillar-card:nth-child(1),
+      .pillars-grid .pillar-card:nth-child(2),
+      .pillars-grid .pillar-card:nth-child(3),
+      .pillars-grid .pillar-card:nth-child(4),
+      .pillars-grid .pillar-card:nth-child(5) {
+        grid-column: span 1;
+      }
+      /* related: drop 3+2 centred to 2-col */
+      .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .related-grid .related-card:nth-child(1),
+      .related-grid .related-card:nth-child(2),
+      .related-grid .related-card:nth-child(3),
+      .related-grid .related-card:nth-child(4),
+      .related-grid .related-card:nth-child(5) {
+        grid-column: span 1;
+      }
+    }
+
+    /* Narrow tablet: drop any remaining 3-col grids to 2-col */
+    @media (max-width: 900px) {
+      .ratio-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .comp-table { font-size: 0.85rem; }
+    }
+
+    /* Mobile: everything to 1 column */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .pillars-grid .pillar-card:nth-child(n) { grid-column: span 1; }
+      .ratio-grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .related-grid .related-card:nth-child(n) { grid-column: span 1; }
+      .comp-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .hero-image img { height: 220px; }
+    }
+  </style>
+    <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
+</head>
+<body>
+
+<!-- =====================================================
+     STICKY HEADER
+     ===================================================== -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home">
+    <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  </a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU policy intelligence</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language selector">
+    <option value="./index.html" selected>English</option>
+    <option value="./es.html">Español</option>
+    <option value="./fr.html">Français</option>
+    <option value="./it.html">Italiano</option>
+    <option value="./nl.html">Nederlands</option>
+    <option value="./ca.html">Català</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta" aria-label="Start your free Brubru trial">Start free trial</a>
+</header>
+
+<div class="container">
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / Circular Economy &amp; Digital Product Passports
+  </div>
+  <h1 class="hero__title">The DPP Registry Implementing Regulation: <span>the Commission's rulebook for one shared passport database</span></h1>
+  <p class="hero__subtitle">
+    Commission Implementing Regulation (EU) 2026/1778 lays down how the EU's single digital product passport registry actually works: who can use it, how they prove who they are, how a passport gets registered, what happens to the data over time, and who is responsible for what. Adopted by the Commission alone on 16 July 2026 under its implementing powers, not through the ordinary legislative procedure, it is the operational rulebook for the registry the ESPR created in Article 13, and it already extends beyond ESPR products to batteries, construction products, toys, and detergents and end-user surfactants.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32026R1778 &middot; OJ L, 2026/1778, 17.7.2026</span>
+    <span><i class="mdi mdi-calendar"></i> Entry into force 6 August 2026</span>
+    <span><i class="mdi mdi-database-check-outline"></i> Registry live since 20 July 2026</span>
+    <span><i class="mdi mdi-gavel"></i> Art 13(5) ESPR</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+    alt="Close-up of a blue-lit server rack in a data centre"
+    loading="eager"
+  >
+  <figcaption>
+    Photo: panumas nikhomkhai via <a href="https://www.pexels.com/photo/close-up-of-a-blue-server-rack-in-datacenter-37730211/" target="_blank" rel="noopener">Pexels</a>
+    | The registry stores identifiers and metadata centrally, but the underlying passport data itself continues to live with digital product passport service providers, not inside the registry (recital 3)
+  </figcaption>
+</figure>
+
+<!-- =====================================================
+     KEY FIGURES STRIP (4x1, drops to 2x2)
+     ===================================================== -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">25</div>
+    <div class="figure-card__label">articles</div>
+    <div class="figure-card__context">Articles 1-24, plus an inserted Article 6a; no chapters, no annexes</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">20 Jul 2026</div>
+    <div class="figure-card__label">registry live</div>
+    <div class="figure-card__context">The ESPR Article 13(1) deadline met, ahead of this Regulation's own entry into force</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">0</div>
+    <div class="figure-card__label">annexes</div>
+    <div class="figure-card__context">The registry's whole architecture is set out in the articles alone</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">2032</div>
+    <div class="figure-card__label">first evaluation</div>
+    <div class="figure-card__context">The Commission evaluates the registry by the end of 2032, then every 6 years (Art 23)</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     TABLE OF CONTENTS
+     ===================================================== -->
+<nav class="toc" aria-label="Page contents">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#covers" class="toc__link"><i class="mdi mdi-view-grid-outline"></i> What the Regulation covers</a>
+    <a href="#headline-numbers" class="toc__link"><i class="mdi mdi-numeric"></i> Headline numbers</a>
+    <a href="#scope" class="toc__link"><i class="mdi mdi-file-document-outline"></i> Scope, definitions and registry architecture</a>
+    <a href="#identity" class="toc__link"><i class="mdi mdi-account-key-outline"></i> Identity verification and user management</a>
+    <a href="#national" class="toc__link"><i class="mdi mdi-bank-outline"></i> National authorities</a>
+    <a href="#registration" class="toc__link"><i class="mdi mdi-database-sync-outline"></i> Registration and data lifecycle</a>
+    <a href="#semantic" class="toc__link"><i class="mdi mdi-book-search-outline"></i> The semantic repository</a>
+    <a href="#support" class="toc__link"><i class="mdi mdi-shield-lock-outline"></i> Support, logging, availability and security</a>
+    <a href="#governance" class="toc__link"><i class="mdi mdi-scale-balance"></i> Responsibilities and governance</a>
+    <a href="#entry-into-force" class="toc__link"><i class="mdi mdi-calendar-check-outline"></i> Entry into force</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-outline"></i> Key definitions</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-compare-horizontal"></i> Before and after the registry</a>
+    <a href="#lineage" class="toc__link"><i class="mdi mdi-family-tree"></i> Legal lineage and family</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossary</a>
+    <a href="#legislative-timeline" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Legislative timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-book-open-outline"></i> Related canon entries</a>
+  </div>
+</nav>
+
+<!-- =====================================================
+     SECTION: OVERVIEW
+     ===================================================== -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overview</h2>
+  </div>
+  <p class="section__subtitle">What the DPP Registry Implementing Regulation is, why it exists, and how it is structured</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-database-outline" style="color: var(--color-blue);"></i> The rulebook for the shared registry behind every digital product passport</div>
+    <p>This Regulation is the Commission's rulebook for the single EU digital product passport registry, the central system that stores the identifiers behind every digital product passport issued across the EU's growing family of product-passport laws. Regulation (EU) 2024/1781, the Ecodesign for Sustainable Products Regulation, the ESPR, created the legal obligation for that registry in its Article 13(1). This Implementing Regulation, adopted a little over two years later, is where the Commission spells out how the registry actually works: who can use it, how they prove who they are, how a passport gets registered, what happens to the data over time, and who is responsible for what.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-purple);"></i> A Commission implementing act, adopted alone under Article 13(5) ESPR</div>
+    <p>Unlike the ordinary legislative procedure that produced the ESPR itself, this is a Commission Implementing Regulation: adopted by the Commission alone, signed only by the Commission President, following the examination procedure of the Committee established under Article 73 ESPR. Its legal basis is Article 13(5), second and third subparagraphs, of the ESPR. Adopted at Brussels on 16 July 2026 and published in OJ L, 2026/1778 the following day, it runs to 25 Articles, Articles 1 to 24 with an Article 6a inserted between Articles 6 and 7, with no chapters and no annexes.</p>
+  </div>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-calendar-alert-outline" style="color: var(--color-blue);"></i> Two dates, not one: registry go-live versus this Regulation's own entry into force</h3>
+    <p>The registry itself became operational on <strong>20 July 2026</strong>, meeting the ESPR's own Article 13(1) deadline of 19 July 2026 for the Commission to have the registry established. This Implementing Regulation's own rules, in contrast, formally entered into force on <strong>6 August 2026</strong>, the twentieth day after its 17 July 2026 OJ publication (Article 24). In short, the registry launched under the ESPR's direct mandate roughly two weeks before this Regulation's detailed governance rules took legal effect. Always specify which date is meant when citing "entry into force" for this file.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-sitemap-outline" style="color: var(--color-green);"></i> One of the 13 acts in the EU Digital Product Passport architecture</div>
+    <p>The registry is not exclusive to ESPR products. Article 1(1) extends these implementation arrangements to any product whose enabling Union law requires a digital product passport registered in the Article 13 ESPR registry: products under ESPR delegated acts, batteries under Article 77 of the Batteries Regulation (EU) 2023/1542, construction products under Article 76 of the Construction Products Regulation (EU) 2024/3110, toys under Article 19 of the Toy Safety Regulation (EU) 2025/2509, and detergents and end-user surfactants under Article 21 of the Detergents Regulation (EU) 2026/405. That makes this Regulation one of the 13 acts in Brubru's EU Digital Product Passport legal architecture, the one that operationalises the central registry itself rather than a sectoral passport.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION: WHAT IT COVERS (5-card, 3+2 centred)
+     ===================================================== -->
+<section class="section" id="covers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+    <h2 class="section__title">What the Regulation covers</h2>
+  </div>
+  <p class="section__subtitle">The five building blocks of Commission Implementing Regulation (EU) 2026/1778</p>
+
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <i class="mdi mdi-database-outline" style="color: var(--color-blue);"></i>
+      <div class="pillar-card__num">Registry</div>
+      <div class="pillar-card__name">One registry for many product laws</div>
+      <div class="pillar-card__chapter">Article 1</div>
+      <div class="pillar-card__desc">A single EU-wide digital product passport registry now has a formal operating rulebook, shared by ESPR products, batteries, construction products, toys, and detergents and end-user surfactants alike</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-shield-account-outline" style="color: var(--color-purple);"></i>
+      <div class="pillar-card__num">Identity</div>
+      <div class="pillar-card__name">No verification of compliance, only of identity</div>
+      <div class="pillar-card__chapter">Arts 4-6a; 8(8), recital 16</div>
+      <div class="pillar-card__desc">Economic operators and value chain actors must prove who they are through eIDAS-grade signatures or seals; the unique registration identifier that follows is not proof the product itself complies with EU law</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-door-sliding-open" style="color: var(--color-green);"></i>
+      <div class="pillar-card__num">Access</div>
+      <div class="pillar-card__name">Two doors, one identifier</div>
+      <div class="pillar-card__chapter">Art 3(a)-(b), Art 8(6)</div>
+      <div class="pillar-card__desc">Registration happens either through a secure user interface or through an API; either way, the registry hands back the same kind of unique registration identifier</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-database-clock-outline" style="color: var(--color-amber);"></i>
+      <div class="pillar-card__num">Lifecycle</div>
+      <div class="pillar-card__name">Built for the long haul</div>
+      <div class="pillar-card__chapter">Arts 10, 14</div>
+      <div class="pillar-card__desc">Versioned data, time-stamped updates, a graduated logging regime and a default 10-year retention period give the registry the audit trail customs and market surveillance need</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-account-group-outline" style="color: var(--color-red);"></i>
+      <div class="pillar-card__num">Governance</div>
+      <div class="pillar-card__name">Four actors, four duty sets</div>
+      <div class="pillar-card__chapter">Arts 7, 19, 21-22</div>
+      <div class="pillar-card__desc">The Commission owns and runs the registry, Member States manage national access through a single administrator, and economic operators and value chain actors each carry their own accuracy, security and reporting duties</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION: HEADLINE NUMBERS
+     ===================================================== -->
+<section class="section" id="headline-numbers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+    <h2 class="section__title">Headline numbers</h2>
+  </div>
+  <p class="section__subtitle">The key figures from Commission Implementing Regulation (EU) 2026/1778</p>
+
+  <div class="ratio-grid">
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">3 years</div>
+      <div class="ratio-card__label">maximum validity of "verified" status for economic operators and value chain actors before re-verification</div>
+      <div class="ratio-card__ref">Arts 4(4), 5(4)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-green);">18 Feb 2027</div>
+      <div class="ratio-card__label">deadline for each Member State to appoint its designated national administrator</div>
+      <div class="ratio-card__ref">Art 7(1)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-purple);">90 days</div>
+      <div class="ratio-card__label">availability window for a downloadable proof of registration</div>
+      <div class="ratio-card__ref">Art 9(4)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-red);">10 years</div>
+      <div class="ratio-card__label">default retention period for registration data where no other Union law sets a different duration</div>
+      <div class="ratio-card__ref">Art 10(3)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-amber);">08:00-20:00</div>
+      <div class="ratio-card__label">year-round helpdesk operating hours, Brussels time, ahead of a fully automated 24-hour tool due by February 2029</div>
+      <div class="ratio-card__ref">Art 13(1)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">9</div>
+      <div class="ratio-card__label">structural components making up the registry, from the user interface and API to the log system and semantic repository</div>
+      <div class="ratio-card__ref">Art 3</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SCOPE, DEFINITIONS AND REGISTRY ARCHITECTURE
+     ===================================================== -->
+<section class="section" id="scope">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-file-document-outline"></i></div>
+    <h2 class="section__title">Scope, definitions and registry architecture (Arts 1-3)</h2>
+  </div>
+  <p class="section__subtitle">Who this Regulation applies to, and the nine components the registry is built from</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target" style="color: var(--color-blue);"></i> Scope beyond the ESPR (Art 1)</div>
+    <p>Article 1(1) extends these implementation arrangements to any product whose enabling Union law requires a digital product passport to be registered in the Article 13 ESPR registry: products covered by ESPR delegated acts, batteries under Article 77 of the Batteries Regulation, construction products under Article 76 of the Construction Products Regulation, toys under Article 19 of the Toy Safety Regulation, detergents and end-user surfactants under Article 21 of the Detergents Regulation, and any other product a future Union act brings within the same registry. This Regulation is the shared technical and procedural backbone underneath every sectoral digital product passport obligation, however different those sectoral rules are in substance.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-view-module-outline" style="color: var(--color-purple);"></i> The registry's nine components (Art 3)</div>
+    <p>Recital 1 explains the purpose plainly: the registry stores, securely, at least the unique identifiers behind each digital product passport. Article 3 sets out its structure as nine components:</p>
+    <ul>
+      <li>a website providing a secure user interface for economic operators, value chain actors, competent national authorities and customs authorities;</li>
+      <li>an API for registering digital product passports and receiving information from the registry;</li>
+      <li>a verification platform confirming the existence and completeness of digital product passports;</li>
+      <li>a scheme for generating unique registration identifiers;</li>
+      <li>a storage component for unique identifiers and commodity codes of products intended for the customs procedure "release for free circulation";</li>
+      <li>a list of verified digital product passport service providers registered in the registry;</li>
+      <li>a semantic repository;</li>
+      <li>a log system;</li>
+      <li>identification and authorisation schemes for registry users.</li>
+    </ul>
+  </div>
+
+  <div class="info-box--green info-box">
+    <h3><i class="mdi mdi-source-branch" style="color: var(--color-green);"></i> A decentralised design: identifiers here, passport data elsewhere</h3>
+    <p>Recital 3 notes the registry's design reflects the decentralised nature of the digital product passport system: the registry stores identifiers and metadata centrally, but the underlying passport data itself continues to live with digital product passport service providers, not inside the registry. The Commission is the registry's owner and manager (Article 21), and its data controller for personal data under Regulation (EU) 2018/1725 (recital 13).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     IDENTITY VERIFICATION AND USER MANAGEMENT
+     ===================================================== -->
+<section class="section" id="identity">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-key-outline"></i></div>
+    <h2 class="section__title">Identity verification and user management (Arts 4-6a, 18)</h2>
+  </div>
+  <p class="section__subtitle">No verification, no registration: every user proves who they are before touching a single passport</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-factory" style="color: var(--color-blue);"></i> Economic operators and value chain actors (Arts 4-5)</div>
+    <p>Before an economic operator or verified value chain actor, such as a repairer, refurbisher, remanufacturer or recycler, can register anything, it must first pass identity verification. For natural persons acting as sole traders, and for legal persons, the routes differ depending on whether the person must be established in the Union, but all routes run through the eIDAS framework, Regulation (EU) No 910/2014: a qualified electronic signature backed by a qualified certificate, a qualified electronic seal issued by a qualified trust service provider for legal persons, an eIDAS "high" assurance-level electronic identification means, or an electronic attestation of attributes issued under Union law. "Verified" status lasts until the electronic identification means expires, and in any event no longer than three years from verification, whichever comes first. Where the registry is integrated with another EU system using an equivalent verification process, such as EPREL, a repeat verification is not required (recital 11).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-edit-outline" style="color: var(--color-purple);"></i> Keeping profiles accurate, and transferring responsibility (Arts 6, 6a)</div>
+    <p>Verified economic operators and verified value chain actors must manage their own electronic verification process and keep registry profile data, including any change to legal representative, accurate, complete and up to date (Article 6(3)-(4)). Article 6a, inserted between Articles 6 and 7, requires a verified economic operator or value chain actor to formally transfer responsibility for its registered digital product passports to another verified actor on any change of ownership or organisational status, so a passport never sits orphaned in the registry after a corporate change.</p>
+  </div>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-card-account-details-outline" style="color: var(--color-blue);"></i> What the registry stores about every user (Art 18)</h3>
+    <p>Article 18 sets out the personal data the Commission stores on every registry user to verify identity: first and last name, or that of the legal representative; authentication credentials, including login credentials or authentication tokens; postal address of economic operators and value chain actors; email address; and any metadata embedded in uploaded documents that helps identify or verify a user. For natural persons specifically, the registry must also store a personal identifier such as a passport number, national identity card number, national eID number, civil registry number, tax identification number, or an equivalent third-country identifier (Article 18(2)).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     NATIONAL AUTHORITIES
+     ===================================================== -->
+<section class="section" id="national">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">National authorities (Art 7)</h2>
+  </div>
+  <p class="section__subtitle">One official contact point per Member State, appointed by 18 February 2027</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-account-tie-outline" style="color: var(--color-amber);"></i> A single designated national administrator per country</h3>
+    <p>Competent national authorities and customs authorities get access through a single designated national administrator per Member State, appointed by 18 February 2027 at the latest. This administrator is the sole official contact point for the Commission on that Member State's registry access rights, and may delegate access further within the Member State's own authorities (Article 7). Member States must also ensure an appropriate level of security for any national components used to access the registry, and inform the Commission without undue delay of changes affecting the registry's functioning (Article 22).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     REGISTRATION AND DATA LIFECYCLE
+     ===================================================== -->
+<section class="section" id="registration">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-database-sync-outline"></i></div>
+    <h2 class="section__title">Registration and data lifecycle (Arts 8-11)</h2>
+  </div>
+  <p class="section__subtitle">From registration levels and automatic checks to proof of registration and long-term retention</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-layers-outline" style="color: var(--color-green);"></i> Registration levels: model, batch or item (Art 8(1)-(5))</div>
+    <p>Registration must happen at the granularity level, model, batch or item, set out in the applicable Union law for that product. Where a passport is created at item level, the corresponding batch and model identifiers must also be linked, provided a batch or model design exists for the product; products that are unique by nature, such as handmade goods, are exempt from this cascading requirement (recital 14). Where a passport is created at batch level, the model identifier must be linked in the same way. Where the same product is subject to different Union rules setting different granularity requirements, the most granular level applies.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-door-sliding-open" style="color: var(--color-blue);"></i> Two registration pathways, one automatic verification (Art 8(6)-(10))</div>
+    <p>Article 8(6) is explicit: the relevant actor registers a digital product passport either through the secure user interface of the registry, or through the API. Both pathways lead to the same automatic verification and the same outcome. Upon submission, the Commission automatically checks the semantic conformity of the data, the coherence of mandatory data against the values provided, conformity with the required granularity level, the validity of the product's commodity code where relevant, and the link to the digital product passport service provider's back-up. The registry then communicates the outcome back "through the user interface or the API response, depending on the service used" (Article 8(10)).</p>
+  </div>
+
+  <div class="info-box--purple info-box" style="background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.05) 100%); border-color: rgba(155,81,224,0.25);">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-purple);"></i> The unique registration identifier is not proof of compliance</h3>
+    <p>Following successful verification, the registry generates and stores a unique and persistent registration identifier (Article 8(8)-(9)). Recital 16 is deliberately narrow about what the automatic checks prove: they confirm data structure, granularity level and, where relevant, commodity code validity and the service-provider back-up link, "and accordingly, the automated verifications should not be deemed to constitute proof of compliance with the requirements of the Union rules applicable to the product, including with market surveillance rules." That reading is anchored directly in the parent ESPR: Article 13(5) states the unique registration identifier is not, of itself, proof of compliance with the ESPR or any other Union law. A registration identifier proves a passport exists and passed the registry's structural checks; it does not prove the underlying product is lawful.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-certificate-outline" style="color: var(--color-purple);"></i> Proof of registration and data retention (Arts 9-10)</div>
+    <p>An economic operator can request proof of registration for any digital product passport it is responsible for. That proof is a secure electronic document, sealed with a qualified electronic seal and an electronic time stamp, containing the unique product identifier, the commodity code where relevant, the responsible verified economic operator's identity, the date and time of the latest registration, and a hash of the digital product passport version concerned. It remains downloadable for 90 calendar days from generation, with the option to regenerate it if needed (Article 9). The Commission logs every change to registration data, supports versioning with a time-stamp for each update, and retains registration data for 10 years by default where Union law sets no other duration (Article 10(1)-(3)); a registry user's request to delete their account, once no longer responsible for registry activities, must also be processed (Article 10(4)).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     THE SEMANTIC REPOSITORY
+     ===================================================== -->
+<section class="section" id="semantic">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-book-search-outline"></i></div>
+    <h2 class="section__title">The semantic repository (Art 12)</h2>
+  </div>
+  <p class="section__subtitle">The one part of the registry that is free and open to everyone, not only verified users</p>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-earth" style="color: var(--color-blue);"></i> Free access, a shared vocabulary, and a public search service</h3>
+    <p>The semantic repository is a partial exception to the registry's role-gated access. It is the Commission-maintained collection of data models and semantic definitions that gives digital product passport data a common structure, versioning and cross-lingual interpretation across all users. Access to and use of the semantic repository and its APIs must be free of charge (Article 12(7)), and it includes a search service so any user, verified or not, can read, search and retrieve semantic definitions and data structures (Article 12(5)).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SUPPORT, LOGGING, AVAILABILITY AND SECURITY
+     ===================================================== -->
+<section class="section" id="support">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-shield-lock-outline"></i></div>
+    <h2 class="section__title">Support, logging, availability and security (Arts 13-17)</h2>
+  </div>
+  <p class="section__subtitle">The graduated accountability regime that keeps the registry auditable and available</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lifebuoy" style="color: var(--color-blue);"></i> Helpdesk support (Art 13)</div>
+    <p>Support is provided through a Commission helpdesk operating year-round from 08:00 to 20:00 Brussels time, with a fully automated technical support tool due by February 2029 to give 24-hour, year-round coverage. Written exchanges with the helpdesk are stored for six months after a request is closed and made available to market surveillance authorities on request.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-multiple-outline" style="color: var(--color-purple);"></i> A categorised, graduated log system (Art 14)</div>
+    <p>The Commission runs a mandatory log system covering four categories of registry action: access and authentication entries; data modifications by all registry users; administrative actions, including account creation, changes and deletion, and configuration changes; and data exchange logs. Retention periods are graduated by risk: six months for access and authentication logs, five years for administrative-action and data-exchange logs, and for the full duration of the registration for logs of data modifications. Logs must be made available to competent national authorities and customs authorities for suspected incidents, audits and random security checks, and the Commission must guarantee at least the immutability and confidentiality of the logs.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-timer-sand" style="color: var(--color-green);"></i> Availability and maintenance (Art 15)</div>
+    <p>The registry as a whole must be accessible at all times outside necessary maintenance, with advance notice of planned maintenance published on the registry's public website. In exceptional circumstances, such as a malfunction, cyber-attack or urgent security need, the Commission may suspend access without prior notice, but must record the date and time of any such unavailability and keep that record available on request for at least five years.</p>
+  </div>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-alert-decagram-outline" style="color: var(--color-amber);"></i> Security and misuse, including "massive data download" (Arts 16-17)</h3>
+    <p>Article 16 requires the Commission to prevent unauthorised access to and processing of registry data, detect unauthorised activity, prevent data breaches, and log security events to the Commission's own IT security standards. Article 17 gives the Commission power to act against inappropriate or fraudulent use of the registry, expressly including "massive data download", defined as retrieval of an exceptionally large or complex dataset, typically terabytes to petabytes, that exceeds normal tooling or interferes with monitoring safeguards. Every user who becomes aware of, or reasonably suspects, malicious behaviour must notify the Commission and, where relevant, the affected Member State immediately.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     RESPONSIBILITIES AND GOVERNANCE
+     ===================================================== -->
+<section class="section" id="governance">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">Responsibilities and governance (Arts 19-23)</h2>
+  </div>
+  <p class="section__subtitle">Four actors, each carrying a distinct set of duties for the registry's data and its lifecycle</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-check-outline" style="color: var(--color-blue);"></i> The verified economic operator's duty of accuracy (Art 19)</div>
+    <p>A verified economic operator must ensure the information it submits at registration is accurate and complete, keep it up to date, and act as controller of the data it submits (Article 19(1)-(2), (5)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-purple);"></i> The Commission's role as registry owner and manager (Art 21)</div>
+    <p>The Commission owns and manages the registry's full lifecycle, development, availability, monitoring, updating, maintenance and hosting, and processes registry data securely and lawfully. The Commission also has access to registry data to obtain information necessary for measures under other EU legislative acts, including market surveillance, consumer protection and customs compliance (Article 21(3)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-green);"></i> Member State responsibilities (Art 22)</div>
+    <p>Each Member State must ensure an appropriate level of security for any national components used to access the registry, and must inform the Commission without undue delay of changes affecting the registry's functioning.</p>
+  </div>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-calendar-refresh-outline" style="color: var(--color-blue);"></i> A recurring evaluation cycle (Art 23)</h3>
+    <p>As part of the wider ESPR monitoring and evaluation exercise, the Commission must deliver its first evaluation of this Regulation by the end of 2032, and every six years thereafter (Article 23).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     ENTRY INTO FORCE
+     ===================================================== -->
+<section class="section" id="entry-into-force">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-calendar-check-outline"></i></div>
+    <h2 class="section__title">Entry into force (Art 24)</h2>
+  </div>
+  <p class="section__subtitle">Three dates that matter for this file, and should never be conflated</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Date</th><th>What it marks</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="col-label">19 July 2026</td><td>The ESPR's own Article 13(1) legal deadline for the Commission to have the registry established</td></tr>
+        <tr><td class="col-label">20 July 2026</td><td>The date the registry practically went live, meeting that ESPR deadline</td></tr>
+        <tr><td class="col-label">6 August 2026</td><td>The date this Implementing Regulation, 2026/1778, itself formally entered into force under Article 24, the twentieth day after its 17 July 2026 OJ publication</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box--purple info-box" style="background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.05) 100%); border-color: rgba(155,81,224,0.25);">
+    <h3><i class="mdi mdi-lightbulb-on-outline" style="color: var(--color-purple);"></i> The practical effect</h3>
+    <p>The registry began operating under the ESPR's direct mandate before the detailed governance rulebook in this Regulation had formally taken legal effect. Two further forward-looking dates sit downstream of go-live: Member States must appoint their designated national administrator by 18 February 2027 (Article 7(1)), and the Commission must deliver its first evaluation of this Regulation by the end of 2032, and every six years thereafter (Article 23).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     KEY DEFINITIONS
+     ===================================================== -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-outline"></i></div>
+    <h2 class="section__title">Key definitions (Art 2)</h2>
+  </div>
+  <p class="section__subtitle">The load-bearing concepts that drive the rest of the Regulation:</p>
+
+  <aside class="definition-box">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-purple);"></i> Six definitions worth memorising</h3>
+    <dl>
+      <dt>Digital product passport registry</dt>
+      <dd>The information system established and maintained by the Commission under Article 13 of the ESPR, Regulation (EU) 2024/1781 (Art 2(1)).</dd>
+      <dt>Unique registration identifier</dt>
+      <dd>The identifier automatically generated and communicated once a digital product passport submission passes the registry's automatic verification checks; not proof of compliance with the underlying product rules (Art 8(8), (10); recital 16; ESPR Art 13(5)).</dd>
+      <dt>Verified economic operator</dt>
+      <dd>An economic operator that has successfully completed the identity-verification process set out in Article 4.</dd>
+      <dt>Verified value chain actor</dt>
+      <dd>A value chain actor, such as a repairer, refurbisher, remanufacturer or recycler, that has successfully completed the identity-verification process set out in Article 5.</dd>
+      <dt>Registration pathway</dt>
+      <dd>The two routes into the registry for registering a digital product passport: the secure user interface, a website, or the API (Art 3(a)-(b), Art 8(6)).</dd>
+      <dt>Designated national administrator</dt>
+      <dd>The single official contact point each Member State must appoint, by 18 February 2027, to manage and oversee that country's registry access rights (Art 7).</dd>
+    </dl>
+  </aside>
+</section>
+
+<!-- =====================================================
+     COMPARISON TABLE: BEFORE AND AFTER THE REGISTRY
+     ===================================================== -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-compare-horizontal"></i></div>
+    <h2 class="section__title">Before and after the registry</h2>
+  </div>
+  <p class="section__subtitle">A fragmented starting point versus the single, shared registry Regulation (EU) 2026/1778 now governs</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="col-old">Before this Regulation</th>
+          <th class="col-crma">Under Regulation (EU) 2026/1778</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">Central registry</td>
+          <td class="col-old">No shared registry existed; each product law would need its own registration solution</td>
+          <td class="col-crma">One EU-wide registry under Article 13 ESPR, with this Regulation as its operational rulebook (Art 1(1))</td>
+        </tr>
+        <tr>
+          <td class="col-label">Product laws covered</td>
+          <td class="col-old">Not applicable, no shared coverage existed</td>
+          <td class="col-crma">ESPR products, batteries, construction products, toys, detergents and end-user surfactants, and any future product law directed to the same registry (Art 1(1))</td>
+        </tr>
+        <tr>
+          <td class="col-label">Identity verification</td>
+          <td class="col-old">No harmonised registry-level identity check</td>
+          <td class="col-crma">eIDAS-grade electronic signature, seal or attestation of attributes required before any registration, valid up to 3 years (Arts 4-6a)</td>
+        </tr>
+        <tr>
+          <td class="col-label">National access</td>
+          <td class="col-old">No single national contact point for registry access</td>
+          <td class="col-crma">One designated national administrator per Member State, appointed by 18 February 2027 (Art 7)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Registration pathway</td>
+          <td class="col-old">Not applicable</td>
+          <td class="col-crma">Two equivalent routes, a secure user interface or an API, with the same automatic verification either way (Art 8(6))</td>
+        </tr>
+        <tr>
+          <td class="col-label">Proof of compliance</td>
+          <td class="col-old">Not applicable</td>
+          <td class="col-crma">A unique registration identifier is issued, but it is explicitly not proof of compliance with the underlying product law (Art 8(8), recital 16)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Data retention</td>
+          <td class="col-old">Varied by product law, with no shared default</td>
+          <td class="col-crma">10 years by default where no other Union law sets a different duration (Art 10(3))</td>
+        </tr>
+        <tr>
+          <td class="col-label">Logging and security</td>
+          <td class="col-old">No shared registry-level logging regime</td>
+          <td class="col-crma">Categorised log system with graduated retention, from 6 months to the duration of registration (Art 14)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box--green info-box">
+    <h3><i class="mdi mdi-link-variant" style="color: var(--color-green);"></i> One shared backbone, not one more sectoral silo</h3>
+    <p>The most important shift is structural, not substantive: instead of every product law inventing its own registration system, the ESPR's Article 13 registry, now operationalised by this Regulation, gives batteries, construction products, toys and detergents a single shared identity, registration and logging framework, while leaving each sectoral law free to define its own passport content and compliance rules.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     LEGAL LINEAGE AND FAMILY
+     ===================================================== -->
+<section class="section" id="lineage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-family-tree"></i></div>
+    <h2 class="section__title">Legal lineage and family</h2>
+  </div>
+  <p class="section__subtitle">From the ESPR's registry mandate to every sectoral digital product passport that now plugs into it</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">13 June 2024</div>
+      <div class="timeline__text"><strong>Regulation (EU) 2024/1781, the ESPR</strong>, adopted, Article 13(1) mandating the Commission to establish the digital product passport registry.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">12 July 2023</div>
+      <div class="timeline__text"><strong>Batteries Regulation (EU) 2023/1542</strong> adopted, later amended by the ESPR to require battery unique identifiers to be uploaded to this same registry.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">27 November 2024</div>
+      <div class="timeline__text"><strong>Construction Products Regulation (EU) 2024/3110</strong> adopted, building its own sectoral digital product passport onto this registry, Article 76.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 November 2025</div>
+      <div class="timeline__text"><strong>Toy Safety Regulation (EU) 2025/2509</strong> adopted, building its own sectoral digital product passport onto this registry, Article 19.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 February 2026</div>
+      <div class="timeline__text"><strong>Detergents Regulation (EU) 2026/405</strong> adopted, building its own sectoral digital product passport onto this registry, Article 21.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 July 2026</div>
+      <div class="timeline__text"><strong>Commission Implementing Regulation (EU) 2026/1778 adopted</strong>, operationalising the shared registry for all of them.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     GLOSSARY (2-col)
+     ===================================================== -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossary</h2>
+  </div>
+  <p class="section__subtitle">Load-bearing terms as used in Commission Implementing Regulation (EU) 2026/1778</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">Digital product passport registry</div>
+      <div class="glossary-card__def">The information system established and maintained by the Commission under Article 13 of the ESPR, Regulation (EU) 2024/1781 (Art 2(1)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Unique registration identifier</div>
+      <div class="glossary-card__def">The identifier automatically generated and communicated once a digital product passport submission passes the registry's automatic verification checks; not proof of compliance with the underlying product rules (Art 8(8), (10); recital 16; ESPR Art 13(5)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Verified economic operator</div>
+      <div class="glossary-card__def">An economic operator that has successfully completed the identity-verification process set out in Article 4.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Verified value chain actor</div>
+      <div class="glossary-card__def">A value chain actor, such as a repairer, refurbisher, remanufacturer or recycler, that has successfully completed the identity-verification process set out in Article 5.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Registration pathway</div>
+      <div class="glossary-card__def">The two routes into the registry for registering a digital product passport: the secure user interface, a website, or the API (Art 3(a)-(b), Art 8(6)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Semantic repository</div>
+      <div class="glossary-card__def">The Commission-maintained collection of data models and semantic definitions that gives digital product passport data a common structure, versioning and cross-lingual interpretation across all users (Art 2(8), Art 12).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Log system</div>
+      <div class="glossary-card__def">The automated system that records and stores information on every operation and interaction carried out in the registry (Art 2(14), Art 14).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Designated national administrator</div>
+      <div class="glossary-card__def">The single official contact point each Member State must appoint, by 18 February 2027, to manage and oversee that country's registry access rights (Art 7).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Proof of registration</div>
+      <div class="glossary-card__def">The secure, qualified-electronic-seal-backed electronic document a verified economic operator can generate to evidence that a specific digital product passport has been properly registered, available for download for 90 calendar days (Art 9).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Economic operator</div>
+      <div class="glossary-card__def">The natural or legal person, manufacturer, importer, distributor or authorised representative, responsible for placing on the market or making available a product subject to a digital product passport obligation under the applicable Union product law, such as the ESPR, or the Batteries, Construction Products, Toy Safety or Detergents Regulations.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     LEGISLATIVE TIMELINE (no active markers, closed file)
+     ===================================================== -->
+<section class="section" id="legislative-timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Legislative timeline</h2>
+  </div>
+  <p class="section__subtitle">From the ESPR's registry mandate in 2024 to the Commission's first evaluation, due by the end of 2032</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">13 June 2024</div>
+      <div class="timeline__text"><strong>Regulation (EU) 2024/1781, the ESPR, adopted</strong>, Article 13(1) mandating the digital product passport registry.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 July 2026</div>
+      <div class="timeline__text"><strong>Commission Implementing Regulation (EU) 2026/1778 adopted</strong> at Brussels.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 July 2026</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778" target="_blank" rel="noopener"><strong>Published in OJ L, 2026/1778.</strong></a></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 July 2026</div>
+      <div class="timeline__text"><strong>ESPR Article 13(1) legal deadline</strong> for the registry to be operational.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 July 2026</div>
+      <div class="timeline__text"><strong>Registry practically goes live</strong>, meeting the ESPR deadline.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">6 August 2026</div>
+      <div class="timeline__text"><strong>This Regulation's own entry into force</strong>, the twentieth day after OJ publication, Article 24.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">18 February 2027</div>
+      <div class="timeline__text"><strong>Deadline for Member States to appoint their designated national administrator</strong>, Article 7(1).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">February 2029</div>
+      <div class="timeline__text"><strong>Deadline for the Commission's 24-hour automated technical support tool</strong>, Article 13(1).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">End of 2032, then every 6 years</div>
+      <div class="timeline__text"><strong>First, and recurring, Commission evaluation</strong> of this Regulation, Article 23.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     OFFICIAL SOURCES
+     ===================================================== -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">Primary sources for Commission Implementing Regulation (EU) 2026/1778</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> EUR-Lex: DPP Registry Implementing Regulation base act</div>
+    <p>Full text of Commission Implementing Regulation (EU) 2026/1778 of 16 July 2026, 25 Articles, no chapters, no annexes:</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778</a></p>
+    <p style="margin-top:0.5rem;">CELEX number: <strong>32026R1778</strong> | OJ reference: OJ L, 2026/1778, 17.7.2026</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-multiple-outline" style="color: var(--color-purple);"></i> EUR-Lex: parent act, the ESPR</div>
+    <p>Regulation (EU) 2024/1781, the Ecodesign for Sustainable Products Regulation, whose Article 13(1) created the registry's legal obligation and Article 13(5) empowers this Implementing Regulation:</p>
+    <p><a href="https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng" target="_blank" rel="noopener">https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng</a></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =====================================================
+     EXPLORE WITH BRUBRU (3x2)
+     ===================================================== -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore the DPP Registry Implementing Regulation with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track, and work with the registry rules and EU digital product passport legislation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask anything about the registry: how identity verification works, what the unique registration identifier does and does not prove, or why the registry went live before this Regulation's own entry into force. Answers grounded in official sources.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a compliance gap analysis for identity verification, registration timing, and data retention obligations across every product law that plugs into this registry.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-database-search-outline"></i>
+      <div class="feature-card__title">Brubru Databases</div>
+      <div class="feature-card__desc">Search the CELEX card and deep-dive card for this Regulation in one hit, alongside the ESPR, Batteries, Construction Products, Toy Safety and Detergents Regulations.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open Databases</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator &amp; Position Analysis</div>
+      <div class="feature-card__desc">Load Regulation (EU) 2026/1778 into the Amendator to draft amendment language against the official EUR-Lex text, or track stakeholder positions on the registry's rollout.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-radar"></i>
+      <div class="feature-card__title">Regulatory Scan</div>
+      <div class="feature-card__desc">Scan Brubru's legal corpus for every adopted law relevant to a manufacturer, importer or distributor with a digital product passport obligation, and see how the registry rulebook fits alongside them.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Run a Scan</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-magnify"></i>
+      <div class="feature-card__title">Sitemap Search</div>
+      <div class="feature-card__desc">Find every Brubru page, guide and API endpoint that references the digital product passport registry, unique registration identifiers, or the semantic repository across the whole platform in a single search.</div>
+      <a href="https://brubru.beresol.eu/eucanon" class="feature-card__btn">Search the Canon</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     CTA STRIP (Pexels background, different from hero)
+     ===================================================== -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/12935051/pexels-photo-12935051.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Get the full Brubru platform</h2>
+  <p class="cta-strip__sub">14-day free trial. No card needed.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn" aria-label="Start your free Brubru trial">Start free trial</a>
+</div>
+
+<div class="container">
+
+<!-- =====================================================
+     RELATED CANON ENTRIES
+     ===================================================== -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-book-open-outline"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">The DPP Registry Implementing Regulation is one of 13 acts in the EU Digital Product Passport legal architecture</p>
+
+  <div class="related-grid">
+    <a href="../digital-product-passport/" class="related-card">
+      <i class="mdi mdi-qrcode"></i>
+      <div class="related-card__name">Digital Product Passport</div>
+      <div class="related-card__celex">This Regulation is one of 13 DPP acts</div>
+    </a>
+    <a href="../2024-1781_espr/" class="related-card">
+      <i class="mdi mdi-leaf-circle-outline"></i>
+      <div class="related-card__name">ESPR</div>
+      <div class="related-card__celex">CELEX 32024R1781</div>
+    </a>
+    <a href="../2023-1542_batteries/" class="related-card">
+      <i class="mdi mdi-battery-charging-high"></i>
+      <div class="related-card__name">Batteries Regulation</div>
+      <div class="related-card__celex">CELEX 32023R1542</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-outline" style="color: var(--color-blue);"></i> The shared backbone under every sectoral passport</div>
+    <p>The Digital Product Passport hub tracks how this registry rulebook underpins every sectoral obligation, from batteries and construction products to toys and detergents, and every future product law a Union act brings into the same registry. The ESPR is this Regulation's parent act, providing the Article 13 legal mandate this Regulation operationalises. The Batteries Regulation was the first sectoral digital product passport obligation to register its unique identifiers in this same registry, under its Article 77. As Brubru analyses more sectoral delegated acts and future registry amendments, they will appear here automatically.</p>
+    <p style="margin-top:0.5rem;"><a href="../index.html" style="color: var(--color-blue);">Browse all EU Canon entries</a>, currently covering GDPR, DSA, DMA, NIS2, DORA, EHDS, and a growing set of pharma, trade defence, finance, environmental and open-strategic-autonomy instruments.</p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is the AI-powered EU policy intelligence assistant by <a href="https://beresol.eu">Beresol SL</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start your 14-day free trial</a>, no card required.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon library</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">All canon entries</a></li>
+          <li><a href="../2024-1781_espr/index.html">ESPR - Regulation (EU) 2024/1781</a></li>
+          <li><a href="../2023-1542_batteries/index.html">Batteries Regulation - Regulation (EU) 2023/1542</a></li>
+          <li><a href="index.html">DPP Registry Implementing Regulation - Regulation (EU) 2026/1778 (this page)</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778" target="_blank" rel="noopener">DPP Registry Implementing Regulation on EUR-Lex (CELEX 32026R1778)</a></li>
+          <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1781/oj/eng" target="_blank" rel="noopener">Parent act: the ESPR on EUR-Lex (CELEX 32024R1781)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Built by Beresol SL</p>
+        <p>Brussels, Belgium</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Regulation (EU) 2026/1778 and official EUR-Lex sources.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>&copy; 2026 Beresol &middot; Brubru. All rights reserved. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Hero photograph by panumas nikhomkhai on Pexels. CTA background photograph by iMin Technology on Pexels.</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
