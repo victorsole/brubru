@@ -137,8 +137,15 @@ def _add_dataset(g: Graph, row: Dict[str, Any], contact: URIRef) -> URIRef:
     )
     g.add((ds_uri, RDF.type, DCAT.DataService if is_data_service else DCAT.Dataset))
 
-    # Title (multi-lang from JSONB description.title or row.title)
-    g.add((ds_uri, DCTERMS.title, Literal(row.get("title", "Untitled"), lang="en")))
+    # Title, one dct:title per language. Before migration 216 this column did
+    # not exist and every harvested catalogue was English-only.
+    titles = row.get("title_i18n") or {}
+    if isinstance(titles, dict) and titles:
+        for lang_code, txt in titles.items():
+            if txt:
+                g.add((ds_uri, DCTERMS.title, Literal(txt, lang=lang_code)))
+    else:
+        g.add((ds_uri, DCTERMS.title, Literal(row.get("title", "Untitled"), lang="en")))
 
     # Description (multi-lang from JSONB description)
     desc = row.get("description") or {}

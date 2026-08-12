@@ -33,7 +33,7 @@ def _load_rows(db: Session) -> List[Dict[str, Any]]:
     rs = db.execute(
         text(
             """
-            SELECT id, dcat_uri, title, description, dcat_theme, distribution,
+            SELECT id, dcat_uri, title, title_i18n, description, dcat_theme, distribution,
                    license, accrual_periodicity, last_validated_at,
                    created_at, updated_at
             FROM brubru_dataset_catalog
@@ -46,6 +46,7 @@ def _load_rows(db: Session) -> List[Dict[str, Any]]:
             "id": str(r.id),
             "dcat_uri": r.dcat_uri,
             "title": r.title,
+            "title_i18n": r.title_i18n,
             "description": r.description,
             "dcat_theme": list(r.dcat_theme or []),
             "distribution": r.distribution,

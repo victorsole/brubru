@@ -585,7 +585,7 @@ def datasets_catalogue(
     """
     lang = (getattr(current_user, "language", None) or "en")[:2]
     rows = db.execute(text(
-        "SELECT dcat_uri, title, description, dcat_theme, distribution, "
+        "SELECT dcat_uri, title, title_i18n, description, dcat_theme, distribution, "
         "       license, accrual_periodicity, last_validated_at "
         "FROM brubru_dataset_catalog ORDER BY title"
     )).fetchall()
@@ -593,9 +593,12 @@ def datasets_catalogue(
     out = []
     for r in rows:
         desc = r.description or {}
+        titles = r.title_i18n or {}
         out.append({
             "uri": r.dcat_uri,
-            "title": r.title,
+            # title and description both follow the reader; an English heading
+            # over a Catalan body is what this table shipped before 216
+            "title": titles.get(lang) or titles.get("en") or r.title,
             # served in the reader's language, English if we have not translated it
             "description": desc.get(lang) or desc.get("en") or "",
             "languages": sorted(desc.keys()),
