@@ -139,7 +139,7 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
     if until:
         ew.append("document_date <= :until"); ep["until"] = until
     if q:
-        ew.append("(title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"); ep["q"] = f"%{q}%"
+        ew.append("search_vector @@ plainto_tsquery('english', :q)"); ep["q"] = q
     if specific_status:
         ew.append("summary ILIKE :st"); ep["st"] = f"%{status}%"  # economy rows carry status in the summary
     if is_comm:

@@ -123,7 +123,7 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
         elif when == "past":
             where.append("document_date < :now"); params["now"] = now
         if q:
-            where.append("(title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+            where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
         cols = "id, body_code, title, summary, public_url, document_date, creation_date" + (
             ", body_txt, body_html" if with_body else "")
         rows = db.execute(text(

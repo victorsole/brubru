@@ -66,8 +66,8 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": body_code, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
     if q:
-        where.append("(title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)")
-        params["q"] = f"%{q}%"
+        where.append("search_vector @@ plainto_tsquery('english', :q)")
+        params["q"] = q
     if since:
         where.append("document_date >= :since")
         params["since"] = since

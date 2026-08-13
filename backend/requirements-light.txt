@@ -99,3 +99,8 @@ PyYAML>=6.0.2,<7.0.0
 # Lightweight (pure-Python + et-xmlfile); without it to_xlsx ImportErrors and the
 # export middleware silently falls back to JSON. Keep in sync with requirements.txt.
 openpyxl==3.1.5
+
+# Markdown -> HTML for proprietary endpoints that render a knowledge guide's body
+# into body_html (e.g. the PPWR endpoint's _guide_body()). Loosely pinned so it
+# never conflicts with the light build; a <pre> escape fallback covers its absence.
+markdown>=3.4

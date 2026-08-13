@@ -9,6 +9,7 @@ sub-router per source:
     /brussels-lobbies      Curated Brussels lobby register snapshot
     /tender-docs           Funding-application template library + Comply cross-fetch
     /textile-circularity   Curated, live-resolved EU textile/waste/ecodesign corpus (LIFE DPP-TEX)
+    /packaging-waste-regulation  PPWR (Reg 2025/40): act + phased timeline + delegated acts + resources
 
 Same 1:1 mapping the "Legislative data" domain follows (Postman collection
 "Brubru Proprietary Databases" -> sub-folders -> URL segments).
@@ -32,6 +33,7 @@ from . import canon as _canon
 from . import brussels_lobbies as _brussels_lobbies
 from . import tender_docs as _tender_docs
 from . import textile_circularity as _textile_circularity
+from . import packaging_waste_regulation as _packaging_waste_regulation
 
 router = APIRouter(prefix="/proprietary")
 router.include_router(_guides.router)
@@ -40,3 +42,4 @@ router.include_router(_canon.router)
 router.include_router(_brussels_lobbies.router)
 router.include_router(_tender_docs.router)
 router.include_router(_textile_circularity.router)
+router.include_router(_packaging_waste_regulation.router)

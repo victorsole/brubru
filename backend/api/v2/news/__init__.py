@@ -90,7 +90,7 @@ def _build_where(codes, kinds, since, until, q):
     if until:
         where.append("document_date <= :until"); params["until"] = until
     if q:
-        where.append("(title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+        where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     return " AND ".join(where), params
 
 
