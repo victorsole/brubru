@@ -99,3 +99,13 @@ PyYAML>=6.0.2,<7.0.0
 # Lightweight (pure-Python + et-xmlfile); without it to_xlsx ImportErrors and the
 # export middleware silently falls back to JSON. Keep in sync with requirements.txt.
 openpyxl==3.1.5
+markdown>=3.4
+
+# Softcatala NMT (EN->CA) for the "oj_catalan" fast-tier sync, which translates
+# each day's Official Journal entries into Catalan. Local inference, no API cost.
+# The eng-cat model (~103MB) is fetched on first use by ensure_model(); set
+# BRUBRU_MODEL_CACHE to a mounted volume so it survives cold deploys.
+# Without these two, scripts/backfill_oj_translations.py ImportErrors and the
+# source records as failed while the ingest keeps succeeding.
+ctranslate2==4.7.1
+sentencepiece==0.2.1

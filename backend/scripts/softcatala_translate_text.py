@@ -22,7 +22,10 @@ MODELS = {
     "en": ("eng-cat", "https://www.softcatala.org/pub/softcatala/opennmt/models/2022-11-22/eng-cat-2024-09-24.zip"),
     "es": ("spa-cat", "https://www.softcatala.org/pub/softcatala/opennmt/models/2022-11-22/spa-cat-2022-11-16.zip"),
 }
-CACHE = os.path.expanduser("~/.cache/brubru")
+# Overridable so Railway can point it at a mounted volume: the container
+# filesystem is ephemeral, so without a volume the ~103MB eng-cat model
+# re-downloads on every cold deploy. Local runs keep the old default.
+CACHE = os.environ.get("BRUBRU_MODEL_CACHE") or os.path.expanduser("~/.cache/brubru")
 FLUSH_EVERY = 8
 
 PROTECT = re.compile(r'(https?://\S+|\b\d{5}[A-Z]{1,2}\d{4}\b|C[-‑]\d+/\d+|ECLI:[A-Z:0-9]+|[A-Z]{2}:[A-Z]{1,3}:\d{4}:\d+|EU:C:\d{4}:\d+|\bLOA\b|Articles?\s\d+(?:\(\d+\))?|Brubru|Beresol|Softcatal[aà]|Pexels)')

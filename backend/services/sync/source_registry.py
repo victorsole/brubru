@@ -40,6 +40,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("news_bespoke", "News - other bodies",           "fast", "scripts/sync_bespoke_news.py",   timeout=900),
     SourceSpec("news_ft",      "News - Funding & Tenders",      "fast", "scripts/sync_ft_news.py",         timeout=600),
     SourceSpec("oj",           "My OJ (Official Journal)",      "fast", "scripts/sync_oj.py",             ("--apply", "--explain"), timeout=900),
+    # Must stay directly after "oj": the tier runs sources in list order, so the
+    # ingest lands the day's entries and this translates them in the same pass.
+    # Softcatala NMT (local CTranslate2, free) writes oj_entry_translations, which
+    # api/oj.py reads straight from the DB, so unlike the acquis corpus there is
+    # no deploy step to mirror. Per-entry cost swings with explanation length
+    # (~1.5s typical, ~12s worst seen), so --limit 60 keeps one run inside the
+    # timeout while still clearing a normal OJ day (10-72 entries) in one go;
+    # the ~3h tier gives 8 passes/day, so any backlog drains within a day.
+    SourceSpec("oj_catalan",   "My OJ - Catalan translations",  "fast", "scripts/backfill_oj_translations.py", ("--limit", "60"), timeout=1200),
     SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply",), timeout=1200),
     SourceSpec("votes_council","Votes - Council",               "fast", "scripts/sync_council_votes.py",  ("--max", "20"), timeout=900),
 
