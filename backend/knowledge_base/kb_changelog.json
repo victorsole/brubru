@@ -2,6 +2,16 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-13",
+      "action": "updated",
+      "guide": "end_of_life_vehicles_regulation",
+      "title": "End-of-Life Vehicles Regulation",
+      "summary": "Rewritten the day Regulation (EU) 2026/1738 entered into force: CELEX, the Article 59 application ladder, the Article 53 amendment to the Batteries Regulation, and the adopted recycled-plastic figures replacing the committee-stage ones",
+      "refs": [
+        "32026R1738"
+      ]
+    },
+    {
       "date": "2026-08-11",
       "action": "updated",
       "guide": "batteries_regulation",

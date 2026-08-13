@@ -222,9 +222,37 @@ PRIORITY_KEYWORDS_MEDIUM = [
 ]
 
 
+# A mixed feed carries EU policy next to third-country politics, and the source
+# priority cannot tell them apart. On 13 August 2026 every one of the 40 saved
+# headlines came back at priority 1, so "Trump's press secretary to depart the
+# White House" outranked three Commission announcements that never made the cut.
+# The demotion only ever applies to a headline that shows NO EU-policy signal at
+# all, so a genuine EU story reported by the same outlet keeps its place.
+NON_EU_SIGNALS = [
+    r'\btrump\b', r'\bwhite\s+house\b', r'\bbiden\b', r'\bputin\b',
+    r'\bkremlin\b', r'\bxi\s+jinping\b', r'\bmodi\b', r'\bnetanyahu\b',
+    r'\bcrossword', r'\bpodcast\b', r'\bnewsletter\b', r'\bplaybook\b',
+    r'\bopinion\b', r'\bobituary\b',
+]
+
+EU_SIGNALS = [
+    r'\beu\b', r'\beuropean\b', r'\bcommission\b', r'\bparliament\b',
+    r'\bcouncil\b', r'\bmep\b', r'\bbrussels\b', r'\bmember\s+state',
+    r'\bdirective\b', r'\bregulation\b', r'\bstrasbourg\b', r'\beuro\b',
+    r'\bcommissioner\b',
+]
+
+
 def classify_priority(title: str, base_priority: int) -> int:
     """Adjust priority based on headline keywords."""
     title_lower = title.lower()
+
+    # Demote first: a headline about somebody else's domestic politics is not a
+    # priority-1 EU item however prominent the outlet that carried it.
+    if any(re.search(p, title_lower) for p in NON_EU_SIGNALS) and \
+            not any(re.search(p, title_lower) for p in EU_SIGNALS):
+        return max(base_priority, 4)
+
     for pattern in PRIORITY_KEYWORDS_HIGH:
         if re.search(pattern, title_lower):
             return min(base_priority, 1)

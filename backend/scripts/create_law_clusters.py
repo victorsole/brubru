@@ -31,6 +31,24 @@ from sqlalchemy import or_
 
 # Major EU Law Packages
 LAW_PACKAGES = {
+    # Built by /lawdrop on 13 August 2026, the day the Regulation entered into
+    # force, and recorded here so the cluster is reproducible. The cluster
+    # itself already exists (id 70) with 23 binding obligations seeded by
+    # scripts/seed_elv_cluster.py; the name below must match it exactly so a
+    # re-run deepens rather than duplicates.
+    'elv': {
+        'name': 'ELV - End-of-Life Vehicles Regulation',
+        'primary_celex': '32026R1738',
+        'description': 'Regulation (EU) 2026/1738 on circularity requirements for vehicle design and on management of end-of-life vehicles, replacing Directives 2000/53/EC and 2005/64/EC',
+        'applicability': 'Vehicle manufacturers and suppliers, importers and distributors, producers and their authorised representatives, producer responsibility organisations, authorised treatment facilities and shredders, traders in used and remanufactured parts, exporters of used vehicles',
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': ['end-of-life vehicle', 'vehicle circularity', '2026/1738',
+                     'circularity vehicle passport', 'authorised treatment facility',
+                     'certificate of destruction', 'recycled plastic vehicles'],
+        'date_from': 2026
+    },
+
     'gdpr': {
         'name': 'GDPR Package (Data Protection)',
         'primary_celex': '32016R0679',  # GDPR
