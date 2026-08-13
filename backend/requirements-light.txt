@@ -107,3 +107,12 @@ openpyxl==3.1.5
 # into body_html (e.g. the PPWR endpoint's _guide_body()). Loosely pinned so it
 # never conflicts with the light build; a <pre> escape fallback covers its absence.
 markdown>=3.4
+
+# Softcatala NMT (EN->CA) for the "oj_catalan" fast-tier sync, which translates
+# each day's Official Journal entries into Catalan. Local inference, no API cost.
+# The eng-cat model (~103MB) is fetched on first use by ensure_model(); set
+# BRUBRU_MODEL_CACHE to a mounted volume so it survives cold deploys.
+# Without these two, scripts/backfill_oj_translations.py ImportErrors and the
+# source records as failed while the ingest keeps succeeding.
+ctranslate2==4.7.1
+sentencepiece==0.2.1
