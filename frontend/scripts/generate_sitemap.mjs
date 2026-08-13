@@ -58,6 +58,7 @@ const ROUTE_META = {
   '/pharma-laws/':                  { priority: 0.8, changefreq: 'weekly'  },
   '/eucanon/':                      { priority: 0.85, changefreq: 'weekly'  },
   '/eucanon/2013-575_crr/':         { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2026-1738_elv/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2024-2754_china_bev_duties/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2020-776_china_egypt_glass_fibre/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2022-433_india_indonesia_stainless_steel/': { priority: 0.9, changefreq: 'monthly' },

@@ -240,7 +240,7 @@ BASE    = "https://brubru.beresol.eu/api/v2"
 
 # Search laws by keyword
 resp = requests.get(f"{BASE}/legislative/eur-lex/laws",
-                    params={"q": "victims rights directive", "limit": 5},
+                    params={"q": "end-of-life vehicles circularity", "limit": 5},
                     headers={"Authorization": f"Bearer {API_KEY}"})
 for law in resp.json()["data"]:
     print(f'{law["celex"]}  {law["title"][:80]}')
@@ -256,7 +256,7 @@ for org in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v2";
 
-const res = await fetch(\`\${BASE}/legislative/eur-lex/laws?q=victims+rights+directive&limit=5\`, {
+const res = await fetch(\`\${BASE}/legislative/eur-lex/laws?q=end-of-life+vehicles+circularity&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();
