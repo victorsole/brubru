@@ -22,7 +22,7 @@ stripe==10.0.0  # Stripe payment processing
 # AI SDKs
 mistralai>=1.0.0  # Mistral (primary - cost-effective)
 anthropic>=0.77.0  # Claude (fallback 1)
-openai>=2.0.0  # GPT-4 (fallback 2)
+openai>=2.0.0,<3.0.0  # GPT-4 (fallback 2). Cap <3: openai 3.x vendors httpx_aiohttp needing aiohttp.SocketTimeoutError, absent in aiohttp==3.9.3, crashing boot.
 google-generativeai>=0.8.0  # Gemini (fallback 3)
 google-cloud-translate==3.15.0  # Google Translate API
 

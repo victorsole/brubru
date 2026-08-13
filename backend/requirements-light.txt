@@ -27,7 +27,10 @@ stripe==10.0.0
 # this file. When PyPI un-quarantines, restore the simple pin here and drop
 # the Dockerfile clone step.
 anthropic>=0.77.0
-openai>=2.0.0
+# Cap below 3.0.0: openai 3.x vendors httpx_aiohttp, whose transport imports
+# aiohttp.SocketTimeoutError (absent in the pinned aiohttp==3.9.3), which crashes
+# boot at `import openai` in embedding_service.py. 2.x has no vendored transport.
+openai>=2.0.0,<3.0.0
 google-generativeai>=0.8.0
 google-cloud-translate==3.15.0
 
