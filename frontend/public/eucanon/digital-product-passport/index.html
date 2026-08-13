@@ -15,7 +15,7 @@
   <meta name="twitter:title" content="The EU Digital Product Passport explained | Brubru">
   <meta name="twitter:description" content="How the EU Digital Product Passport works across 13 binding acts and 11 product sectors: the ESPR framework, the central registry live since 20 July 2026, the battery passport&#x27;s 71 data points, and the harmonised standards behind it.">
   <meta name="twitter:image" content="https://images.pexels.com/photos/12935049/pexels-photo-12935049.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=900&amp;w=1600">
-  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/digital-product-passport/">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/digital-product-passport/index.html">
   <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/digital-product-passport/index.html">
   <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/digital-product-passport/es.html">
   <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/digital-product-passport/fr.html">
@@ -320,8 +320,10 @@
     .act-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
     .act-card__meta { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.6rem; }
     .act-card__desc { font-size: 0.85rem; color: var(--color-secondary); margin-bottom: 0.75rem; }
+    .act-card__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; }
     .act-card__link { font-size: 0.82rem; font-weight: 700; color: var(--color-blue); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; }
     .act-card__link:hover { text-decoration: underline; }
+    .act-card__link--secondary { font-weight: 600; color: var(--color-muted); }
 
     /* ---- Sector rollout timeline ---- */
     .timeline { position: relative; padding-left: 2rem; }
@@ -487,11 +489,11 @@
   </div>
   <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language selector">
     <option value="./index.html" selected>English</option>
-    <option value="./es.html">Español</option>
-    <option value="./fr.html">Français</option>
+    <option value="./es.html">Espanol</option>
+    <option value="./fr.html">Francais</option>
     <option value="./it.html">Italiano</option>
     <option value="./nl.html">Nederlands</option>
-    <option value="./ca.html">Català</option>
+    <option value="./ca.html">Catala</option>
   </select>
   <a href="https://brubru.beresol.eu/signup" class="header__cta" aria-label="Start your free Brubru trial">Start free trial</a>
 </header>
@@ -628,7 +630,10 @@
     <div class="act-card__name">ESPR Regulation (EU) 2024/1781</div>
     <div class="act-card__meta">2024-06-13 &middot; CELEX 32024R1781</div>
     <p class="act-card__desc">The framework act. Creates the digital product passport (Articles 9 to 15), the registry (Article 13), the public web portal (Article 14) and the customs check (Article 15). Sets no product requirement itself: those arrive by delegated act under Article 4.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1781" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2024-1781_espr/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1781" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -637,7 +642,10 @@
     <div class="act-card__name">Registry Implementing Regulation (EU) 2026/1778</div>
     <div class="act-card__meta">2026-07-16 &middot; CELEX 32026R1778</div>
     <p class="act-card__desc">The implementing act for the registry. Its Article 1 is the authoritative list of which legislation obliges registration.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2026-1778_dpp_registry/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1778" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -646,7 +654,10 @@
     <div class="act-card__name">Harmonised Standards Decision (EU) 2026/1736</div>
     <div class="act-card__meta">2026-07-14 &middot; CELEX 32026D1736</div>
     <p class="act-card__desc">Publishes the references of the harmonised standards for digital product passports, giving a presumption of conformity.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2026-1736_dpp_standards/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1736" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -655,7 +666,10 @@
     <div class="act-card__name">Batteries Regulation (EU) 2023/1542</div>
     <div class="act-card__meta">2023-07-12 &middot; CELEX 32023R1542</div>
     <p class="act-card__desc">The battery passport: the first passport with a hard deadline, 18 February 2027.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2023-1542_batteries/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -664,7 +678,10 @@
     <div class="act-card__name">Construction Products Regulation (EU) 2024/3110</div>
     <div class="act-card__meta">2024-11-27 &middot; CELEX 32024R3110</div>
     <p class="act-card__desc">Requires a passport for construction products.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R3110" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2024-3110_cpr/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R3110" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -673,7 +690,10 @@
     <div class="act-card__name">Toy Safety Regulation (EU) 2025/2509</div>
     <div class="act-card__meta">2025-11-26 &middot; CELEX 32025R2509</div>
     <p class="act-card__desc">Requires a passport for toys.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R2509" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2025-2509_toys/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R2509" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -682,7 +702,10 @@
     <div class="act-card__name">Detergents and Surfactants Regulation (EU) 2026/405</div>
     <div class="act-card__meta">2026-02-11 &middot; CELEX 32026R0405</div>
     <p class="act-card__desc">Requires a passport for detergents and end-user surfactants.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0405" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2026-405_detergents/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0405" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -691,7 +714,10 @@
     <div class="act-card__name">Packaging and Packaging Waste Regulation (EU) 2025/40</div>
     <div class="act-card__meta">2024-12-19 &middot; CELEX 32025R0040</div>
     <p class="act-card__desc">Packaging and packaging waste. Carries its own passport-style obligations but is NOT named in Implementing Regulation (EU) 2026/1778 Article 1, so it does not feed the central registry on that basis.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0040" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2025-40_ppwr/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0040" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -700,7 +726,10 @@
     <div class="act-card__name">Critical Raw Materials Act (EU) 2024/1252</div>
     <div class="act-card__meta">2024-04-11 &middot; CELEX 32024R1252</div>
     <p class="act-card__desc">Critical raw materials: supply-chain and circularity duties that the passport information layer draws on.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2024-1252_crma/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -709,7 +738,10 @@
     <div class="act-card__name">Textile Waste Framework Directive amendment (EU) 2025/1892</div>
     <div class="act-card__meta">2025-09-10 &middot; CELEX 32025L1892</div>
     <p class="act-card__desc">Extended producer responsibility for textiles and footwear. The financial and collection regime that sits alongside the textile passport.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L1892" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2025-1892_wfd_textiles/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L1892" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -718,7 +750,10 @@
     <div class="act-card__name">Textile Fibre Labelling Regulation (EU) No 1007/2011</div>
     <div class="act-card__meta">2011-09-27 &middot; CELEX 32011R1007</div>
     <p class="act-card__desc">Textile fibre names and labelling. The existing baseline for fibre composition information that the textile passport inherits.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011R1007" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2011-1007_textile_labelling/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011R1007" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -727,7 +762,10 @@
     <div class="act-card__name">Unsold Goods Disclosure Implementing Regulation (EU) 2026/2</div>
     <div class="act-card__meta">2026-02-09 &middot; CELEX 32026R0002</div>
     <p class="act-card__desc">Implementing regulation in the ecodesign series.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0002" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2026-2_unsold_disclosure/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0002" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   <div class="act-card">
     <div class="act-card__pills">
@@ -736,7 +774,10 @@
     <div class="act-card__name">Unsold Goods Destruction Ban Delegated Regulation (EU) 2026/296</div>
     <div class="act-card__meta">2026-02-09 &middot; CELEX 32026R0296</div>
     <p class="act-card__desc">Delegated regulation in the ecodesign series on unsold consumer products.</p>
-    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0296" target="_blank" rel="noopener" class="act-card__link">Read the act <i class="mdi mdi-open-in-new"></i></a>
+    <div class="act-card__links">
+    <a href="../2026-296_unsold_ban/index.html" class="act-card__link">Read the Brubru explainer <i class="mdi mdi-arrow-right"></i></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0296" target="_blank" rel="noopener" class="act-card__link act-card__link--secondary">EUR-Lex <i class="mdi mdi-open-in-new"></i></a>
+    </div>
   </div>
   </div>
 </section>
