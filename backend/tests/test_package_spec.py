@@ -132,11 +132,39 @@ def test_duplicate_requirement_keys_on_text_not_article():
     assert "duplicate_requirement" not in codes(validate(same_article_different_text))
 
     genuinely_duplicated = pkg(
-        requirements=[req(article="Article 13", text="Keep documentation."),
-                      req(article="Article 99", text="keep   DOCUMENTATION.")]
+        requirements=[req(article="Article 13", text="Keep documentation.", celex="32024R1689"),
+                      req(article="Article 99", text="keep   DOCUMENTATION.", celex="32024R1689")]
                      + [req(article=f"Article {i}", text=f"Other {i}.") for i in range(3, 13)])
     f = validate(genuinely_duplicated)
     assert "duplicate_requirement" in codes(f), "whitespace and case must not hide a duplicate"
+
+
+def test_same_text_across_acts_is_a_warning_not_an_error():
+    """A hub aggregating many acts legitimately repeats an obligation.
+
+    The DPP hub (cluster 65) collects the same supply-chain traceability duty
+    from the Toys and Detergents Regulations, worded identically. That is two
+    duties under two acts, not a double-count of one, so it is a warning to
+    confirm, never a blocking error. The same text under the SAME act stays an
+    error.
+    """
+    across = pkg(
+        laws=[{"celex": "32025R2509", "title": "Toys"},
+              {"celex": "32026R0405", "title": "Detergents"}],
+        requirements=[req(article="Art 13", text="Identify the supply-chain operators.", celex="32025R2509"),
+                      req(article="Art 15", text="Identify the supply-chain operators.", celex="32026R0405")]
+                     + [req(article=f"Article {i}", text=f"Other {i}.", celex="32025R2509") for i in range(3, 13)])
+    f = validate(across)
+    assert "duplicate_requirement" not in codes(f)
+    assert "same_text_across_acts" in codes(f)
+    assert is_publishable(f), "an aggregation warning must not block publication"
+
+    within = pkg(
+        requirements=[req(article="Art 13", text="Identify the supply-chain operators.", celex="32024R1689"),
+                      req(article="Art 15", text="Identify the supply-chain operators.", celex="32024R1689")]
+                     + [req(article=f"Article {i}", text=f"Other {i}.") for i in range(3, 13)])
+    f = validate(within)
+    assert "duplicate_requirement" in codes(f)
 
 
 def test_invalid_celex():

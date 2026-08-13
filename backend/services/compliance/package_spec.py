@@ -192,27 +192,44 @@ def validate(pkg: Package) -> List[Finding]:
                 "error", "orphan_requirement",
                 f"Cites {celex}, which is not among the package's laws.", where))
 
-        # Redundancy is keyed on the TEXT, not the article label.
+        # Redundancy is keyed on (act, text), and only within one act is it an
+        # error.
         #
-        # Two earlier versions of this rule were wrong, and the corpus said so
-        # both times. Keying on the label alone reported 322 duplicates, because
-        # a package covering ten acts legitimately holds ten "Article 2(1)" rows.
-        # Keying on (law, article) still reported 284, because one article of one
-        # act legitimately yields several distinct obligations: Article 13 of the
-        # AI Act has many paragraphs and the corpus records one row each. Checked
-        # against the database: 259 such groups exist and NONE of them share their
-        # text. What does double-count is the same obligation text appearing
-        # twice, of which there are 55 real cases.
+        # Three versions of this rule, each corrected by the corpus. Keying on
+        # the article label alone reported 322 duplicates (ten acts legitimately
+        # hold ten "Article 2(1)" rows). Keying on (law, article) still reported
+        # 284 (one article yields several distinct obligations). Keying on text
+        # alone was right for single-law packages but wrong for a HUB that
+        # deliberately aggregates many acts: the Digital Product Passport hub
+        # (cluster 65) collects the same supply-chain traceability obligation
+        # from the Toys Regulation and the Detergents Regulation, worded
+        # identically, and that is not a double-count of one duty, it is two
+        # duties a company owes under two acts. So: same text under the SAME act
+        # is a real double-count (error); the same text under DIFFERENT acts is
+        # possible over-count from aggregation, flagged as a warning for a human
+        # to judge, not a blocker.
         body_key = re.sub(r"\s+", " ", (r.get("requirement_text") or "")).strip().lower()
         if body_key:
-            seen_articles[body_key] = seen_articles.get(body_key, 0) + 1
+            seen_articles.setdefault(body_key, []).append(celex or "(no celex)")
 
-    for body_key, n in seen_articles.items():
-        if n > 1:
+    for body_key, celexes in seen_articles.items():
+        if len(celexes) < 2:
+            continue
+        # Same act twice is an unambiguous double-count; across acts it is
+        # aggregation and only worth a human glance.
+        max_within_one_act = max(celexes.count(c) for c in set(celexes))
+        if max_within_one_act > 1:
             errors.append(Finding(
                 "error", "duplicate_requirement",
-                f"the same obligation text appears {n} times in this package, so "
-                f"it is scored {n} times: \"{body_key[:70]}...\""))
+                f"the same obligation text appears {max_within_one_act} times under "
+                f"one act, so it is scored more than once: \"{body_key[:70]}...\""))
+        else:
+            warnings.append(Finding(
+                "warning", "same_text_across_acts",
+                f"the same obligation text appears under {len(celexes)} different "
+                f"acts ({', '.join(sorted(set(celexes)))}); legitimate for an "
+                f"aggregating hub, but confirm it is not accidental: "
+                f"\"{body_key[:60]}...\""))
 
     for law in pkg.laws:
         celex = (law.get("celex") or "").strip()
