@@ -328,6 +328,17 @@ import contextvars as _contextvars
 
 _V2_PREFIX = "/api/v2/"
 
+# Response-size guards for the generic gateway, so a model calling a large
+# endpoint cannot flood its own context. A default `limit` keeps list endpoints
+# small (endpoints that do not declare `limit` ignore it — FastAPI drops unknown
+# query params); the raw byte ceiling is a hard backstop against multi-MB bodies;
+# the data[] trim keeps an oversized paginated envelope useful instead of erroring.
+_GATEWAY_DEFAULT_LIMIT = 25
+_GATEWAY_MAX_BYTES = 400_000       # hard read ceiling for a single gateway call
+_GATEWAY_MAX_DATA_ITEMS = 25       # keep at most this many items from an envelope's data[]
+_GATEWAY_SOFT_JSON = 180_000       # if the serialized result still exceeds this, trim harder
+_LIMIT_PARAM_KEYS = ("limit", "page_size", "per_page", "size")
+
 # Forwarded caller key for the gateway self-call (admin-only; see above). A
 # ContextVar so it is per-request and propagates into the worker thread that
 # anyio.to_thread.run_sync uses to run the handler.
@@ -342,7 +353,8 @@ def set_gateway_caller_key(key: str) -> None:
     _GATEWAY_CALLER_KEY.set(key or "")
 
 
-def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) -> Dict[str, Any]:
+def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True,
+              max_bytes: Optional[int] = None) -> Dict[str, Any]:
     import os
     import json as _json
     import urllib.error
@@ -366,11 +378,21 @@ def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) 
         req.add_header("X-API-Key", key)
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
-            raw, status = resp.read().decode("utf-8", "replace"), resp.getcode()
+            # Read one byte past the ceiling so we can detect (and report) overflow
+            # without pulling a multi-MB body into the model's context.
+            data = resp.read(max_bytes + 1) if max_bytes else resp.read()
+            status = resp.getcode()
     except urllib.error.HTTPError as e:
-        raw, status = e.read().decode("utf-8", "replace"), e.code
+        data, status = e.read(), e.code            # error bodies are small; read in full
     except Exception as exc:  # noqa: BLE001
         return {"error": "gateway_call_failed", "detail": str(exc)[:200], "path": path}
+    over = bool(max_bytes) and len(data) > max_bytes
+    raw = (data[:max_bytes] if max_bytes else data).decode("utf-8", "replace")
+    if over:
+        return {"http_status": status, "path": path, "truncated": True,
+                "detail": (f"Response exceeded {max_bytes // 1000} KB and was cut off. "
+                           "Re-call with a smaller 'limit', add filters, or paginate with 'page'."),
+                "preview": raw[:1500]}
     try:
         body = _json.loads(raw)
     except Exception:  # noqa: BLE001
@@ -378,8 +400,43 @@ def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) 
     return {"http_status": status, "path": path, "body": body}
 
 
+def _gateway_trim_result(res: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep an oversized paginated envelope useful: trim its data[] list and note it.
+
+    Complements the raw byte ceiling in _self_get — that stops multi-MB bodies;
+    this stops a merely-large in-limit envelope (or one from an endpoint that
+    ignored the injected limit) from still swamping the model context.
+    """
+    import json as _json
+    if not isinstance(res, dict) or not isinstance(res.get("body"), dict):
+        return res
+    body = res["body"]
+    data = body.get("data")
+    if isinstance(data, list) and len(data) > _GATEWAY_MAX_DATA_ITEMS:
+        body["_gateway_note"] = (
+            f"Showing the first {_GATEWAY_MAX_DATA_ITEMS} of {len(data)} items to fit the "
+            "model context. Pass a larger 'limit' or use 'page' for more.")
+        body["data"] = data[:_GATEWAY_MAX_DATA_ITEMS]
+    try:  # final serialized-size backstop for big per-item bodies
+        if len(_json.dumps(res)) > _GATEWAY_SOFT_JSON and isinstance(body.get("data"), list):
+            keep = max(1, _GATEWAY_MAX_DATA_ITEMS // 3)
+            body["data"] = body["data"][:keep]
+            note = body.get("_gateway_note", "")
+            body["_gateway_note"] = (note + f" Response still large; further trimmed to {keep} items.").strip()
+    except Exception:  # noqa: BLE001
+        pass
+    return res
+
+
 def _handle_query_brubru_api(path: str = "", params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Call any Brubru v2 GET endpoint (from list_brubru_datasets) and return its JSON."""
+    """Call any Brubru v2 GET endpoint (from list_brubru_datasets) and return its JSON.
+
+    Guards the model's context: injects a default `limit` when the caller gave
+    none (list endpoints stay small; endpoints without a `limit` param ignore it),
+    caps the raw response at _GATEWAY_MAX_BYTES, and trims an oversized envelope's
+    data[]. If the injected limit trips an endpoint whose own max is below the
+    default (HTTP 422), it retries once with the caller's original params.
+    """
     p = (path or "").strip()
     if not p:
         return {"error": "invalid_path", "detail": "Provide a v2 path, e.g. /api/v2/funding/funding-opportunities"}
@@ -389,7 +446,19 @@ def _handle_query_brubru_api(path: str = "", params: Optional[Dict[str, Any]] = 
         p = _V2_PREFIX + p.lstrip("/")
     if ".." in p:
         return {"error": "invalid_path"}
-    return _self_get(p, params or {}, authed=True)
+
+    params = dict(params) if isinstance(params, dict) else {}
+    injected = False
+    if not any(k in params for k in _LIMIT_PARAM_KEYS):
+        params["limit"] = _GATEWAY_DEFAULT_LIMIT
+        injected = True
+    res = _self_get(p, params, authed=True, max_bytes=_GATEWAY_MAX_BYTES)
+    # An endpoint whose limit cap is below our default (or that rejects the param)
+    # returns 422 — retry once with the endpoint's own default instead.
+    if injected and isinstance(res, dict) and res.get("http_status") == 422:
+        params.pop("limit", None)
+        res = _self_get(p, params, authed=True, max_bytes=_GATEWAY_MAX_BYTES)
+    return _gateway_trim_result(res)
 
 
 def _handle_list_brubru_datasets(filter: str = "", limit: int = 60) -> Dict[str, Any]:
