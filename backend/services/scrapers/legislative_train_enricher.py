@@ -30,8 +30,12 @@ from schemas.scrapers.legislative_train_schemas import (
     TimelineEntry
 )
 from .oeil_scraper import OEILScraper
-from services.matching.eprs_matcher import get_eprs_matcher
+# get_eprs_matcher is imported lazily where constructed (below): it pulls the EPRS
+# ChromaDB indexer (chromadb + onnxruntime, ~200 MB). This enricher is imported at
+# boot by api/legislative_train.py, so a module-level import would pay that cost on
+# every process start even though the production vector store is empty.
 from services.api_clients.eurlex_client import EURLexClient
+from services.search.hybrid_search import semantic_store_available
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +93,11 @@ class LegislativeTrainEnricher:
         else:
             self.eurlex_client = None
 
-        if use_eprs_matcher:
+        # EPRS matching runs on the ChromaDB vector store. Build the matcher only when
+        # a populated store exists; on the empty production store it stays None and the
+        # enrich-EPRS branch is skipped (already guarded below), so chromadb never loads.
+        if use_eprs_matcher and semantic_store_available():
+            from services.matching.eprs_matcher import get_eprs_matcher
             self.eprs_matcher = get_eprs_matcher()
         else:
             self.eprs_matcher = None

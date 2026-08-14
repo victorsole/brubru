@@ -23,25 +23,11 @@ from services.embeddings.embedding_service import EmbeddingService, get_embeddin
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class SearchResult:
-    """Single search result"""
-    id: str
-    text: str
-    score: float  # Similarity score (0-1, higher is better)
-    metadata: Dict[str, Any]
-    collection: str  # Source collection
-    rank: int  # Position in results (1-indexed)
-
-
-@dataclass
-class SearchResponse:
-    """Complete search response"""
-    query: str
-    results: List[SearchResult]
-    total_found: int
-    search_time_ms: float
-    collections_searched: List[str]
+# SearchResult and SearchResponse moved to search_types (no heavy imports) so
+# hybrid_search can build an empty response without pulling chromadb. Re-exported
+# here so existing `from services.search.semantic_search import SearchResult`
+# imports keep working.
+from .search_types import SearchResult, SearchResponse
 
 
 class SemanticSearch:

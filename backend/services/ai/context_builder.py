@@ -16,14 +16,25 @@ import logging
 import re
 import asyncio
 import unicodedata
-from typing import List, Dict, Any, Optional, Set, Tuple
+from typing import List, Dict, Any, Optional, Set, Tuple, TYPE_CHECKING
 from datetime import date, datetime, timedelta
 from dataclasses import dataclass, field
 
-from services.search.hybrid_search import HybridSearch, get_hybrid_search
+from services.search.hybrid_search import HybridSearch, get_hybrid_search, semantic_store_available
 from services.indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
-from services.indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer  # Phase 2: EPRS search
-from services.matching.eprs_matcher import EPRSMatcher, get_eprs_matcher  # Phase 3: Auto-matching
+# EPRSIndexer is NOT imported at module level: services.indexing.eprs_indexer imports
+# services.vector_db.vector_store (chromadb + onnxruntime, ~200 MB resident). In
+# production the vector store is empty, so the EPRS ChromaDB pass returns nothing and
+# the PostgreSQL pass carries EPRS retrieval. The indexer is imported and constructed
+# only when a populated store exists (see __init__ below), so the boot path stays light.
+if TYPE_CHECKING:  # pragma: no cover
+    from services.indexing.eprs_indexer import EPRSIndexer
+# EPRSMatcher is NOT imported at module level either: it wraps the EPRSIndexer, so it
+# transitively pulls chromadb. All of its matching runs on the vector store (no
+# PostgreSQL path), so on an empty production store it returns nothing. Constructed and
+# imported only when a populated store exists (see __init__ below).
+if TYPE_CHECKING:  # pragma: no cover
+    from services.matching.eprs_matcher import EPRSMatcher
 from .ai_summary_generator import AISummaryGenerator, get_ai_summary_generator  # Phase 5: AI summaries
 from .freshness_detector import FreshnessDetector, get_freshness_detector  # Phase 5: Freshness detection
 from .tender_context_provider import TenderContextProvider, get_tender_context_provider, TenderIntent, TenderContextData  # Phase 8: Tender chat
@@ -959,8 +970,8 @@ class ContextBuilder:
         rss_manager: Optional[Any] = None,  # RSSManager not yet implemented
         reference_data_service: Optional[ReferenceDataService] = None,
         knowledge_loader: Optional[KnowledgeLoader] = None,
-        eprs_indexer: Optional[EPRSIndexer] = None,  # Phase 2: EPRS search
-        eprs_matcher: Optional[EPRSMatcher] = None,  # Phase 3: Auto-matching
+        eprs_indexer: "Optional[EPRSIndexer]" = None,  # Phase 2: EPRS search
+        eprs_matcher: "Optional[EPRSMatcher]" = None,  # Phase 3: Auto-matching
         ai_summary_generator: Optional[AISummaryGenerator] = None,  # Phase 5: AI summaries
         freshness_detector: Optional[FreshnessDetector] = None,  # Phase 5: Freshness detection
         tender_context_provider: Optional[TenderContextProvider] = None,  # Phase 8: Tender chat
@@ -1005,8 +1016,26 @@ class ContextBuilder:
         self.rss_manager = rss_manager
         self.reference_data_service = reference_data_service or get_reference_data_service()
         self.knowledge_loader = knowledge_loader or get_knowledge_loader()
-        self.eprs_indexer = eprs_indexer or get_eprs_indexer()  # Phase 2
-        self.eprs_matcher = eprs_matcher or get_eprs_matcher()  # Phase 3
+        # EPRS semantic (ChromaDB) indexer: constructed only when a populated vector
+        # store exists. In production the store is empty, so this stays None and the
+        # ChromaDB pass is skipped -- EPRS retrieval runs on the PostgreSQL pass alone.
+        # Constructing it imports chromadb + onnxruntime (~200 MB); gating avoids that.
+        if eprs_indexer is not None:
+            self.eprs_indexer = eprs_indexer
+        elif semantic_store_available():
+            from services.indexing.eprs_indexer import get_eprs_indexer
+            self.eprs_indexer = get_eprs_indexer()
+        else:
+            self.eprs_indexer = None  # Phase 2: ChromaDB pass disabled (empty store)
+        # EPRS matcher (Phase 3): wraps the ChromaDB indexer, so gated the same way.
+        # None on an empty production store; the two call sites below are skipped.
+        if eprs_matcher is not None:
+            self.eprs_matcher = eprs_matcher
+        elif semantic_store_available():
+            from services.matching.eprs_matcher import get_eprs_matcher
+            self.eprs_matcher = get_eprs_matcher()
+        else:
+            self.eprs_matcher = None  # Phase 3: auto-matching disabled (empty store)
         self.ai_summary_generator = ai_summary_generator or get_ai_summary_generator()  # Phase 5
         self.freshness_detector = freshness_detector or get_freshness_detector()  # Phase 5
         self.tender_context_provider = tender_context_provider or get_tender_context_provider()  # Phase 8
@@ -2540,7 +2569,7 @@ class ContextBuilder:
 
                 # Phase 3: Auto-include EPRS explainers
                 has_current_explainer = False
-                if self.auto_include_explainers:
+                if self.auto_include_explainers and self.eprs_matcher is not None:
                     explainers = await self.eprs_matcher.find_explainers_for_celex(
                         celex=celex,
                         max_results=2
@@ -2690,7 +2719,7 @@ class ContextBuilder:
 
             # Phase 3: Auto-include EPRS explainers (prioritize "At a Glance")
             # -- attach regardless of whether the detail came from OEIL or the DB.
-            if self.auto_include_explainers:
+            if self.auto_include_explainers and self.eprs_matcher is not None:
                 try:
                     explainers = await self.eprs_matcher.find_explainers_for_procedure(
                         procedure_ref=proc_ref,
@@ -5888,7 +5917,10 @@ class ContextBuilder:
             logger.warning(f"PostgreSQL EPRS search failed (non-fatal): {str(e)}")
 
         # Pass 2: ChromaDB semantic search (if we need more results)
-        if len(eprs_results) < self.max_eprs_results:
+        # Skipped when the vector store is empty (production): self.eprs_indexer is None,
+        # the PostgreSQL pass above already carried EPRS retrieval, and we never touch
+        # chromadb. Runs only when a populated store made the indexer available.
+        if self.eprs_indexer is not None and len(eprs_results) < self.max_eprs_results:
             try:
                 # Build filters based on extracted entities
                 filters = {}

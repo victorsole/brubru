@@ -20,8 +20,60 @@ from datetime import datetime, timedelta
 from collections import Counter
 import re
 
-from .semantic_search import SemanticSearch, SearchResult, SearchResponse, get_semantic_search
-from services.vector_db.vector_store import VectorStore
+import os
+from typing import TYPE_CHECKING
+
+# Types are light (no chromadb). SemanticSearch and get_semantic_search are NOT
+# imported at module level: they pull services.vector_db.vector_store, which
+# imports chromadb + onnxruntime + scikit-learn + scipy (~457 MB resident). In
+# production the vector store is empty (chroma_db is gitignored and never
+# populated at boot), so semantic search returns nothing and hybrid_search
+# returns an empty response WITHOUT ever importing that stack. get_semantic_search
+# is imported function-locally in get_hybrid_search, only when the store exists.
+from .search_types import SearchResult, SearchResponse
+
+if TYPE_CHECKING:  # pragma: no cover
+    from .semantic_search import SemanticSearch
+
+# Collection names, previously read from VectorStore.COLLECTION_* (which required
+# importing chromadb). Inlined so this module never pulls the vector stack.
+_COLLECTION_LEGISLATION = "eu_legislation"
+_COLLECTION_MEPS = "mep_profiles"
+_COLLECTION_PROCEDURES = "procedures"
+_COLLECTION_RSS = "rss_entries"
+
+
+def _semantic_store_available() -> bool:
+    """True only if a populated chroma store exists on disk.
+
+    Checked with the filesystem alone, never by importing chromadb, so an empty
+    or absent store (the production case) costs nothing. A populated store has
+    chroma.sqlite3 AND at least one collection directory; a freshly-created empty
+    store has only chroma.sqlite3, so the collection-dir check rejects it.
+    An explicit BRUBRU_SEMANTIC_SEARCH=0/1 overrides the probe.
+    """
+    override = os.environ.get("BRUBRU_SEMANTIC_SEARCH")
+    if override is not None:
+        return override.strip().lower() in {"1", "true", "yes", "on"}
+    persist_dir = os.environ.get("CHROMA_PERSIST_DIR", "./chroma_db")
+    if not os.path.isdir(persist_dir):
+        return False
+    if not os.path.exists(os.path.join(persist_dir, "chroma.sqlite3")):
+        return False
+    # Collection subdirectories (uuid-named) only exist once data was added.
+    return any(
+        os.path.isdir(os.path.join(persist_dir, e))
+        for e in os.listdir(persist_dir)
+    )
+
+
+# Public alias: other modules (context_builder gating the EPRS indexer) reuse the
+# exact same probe so the whole chat retrieval path makes ONE consistent decision
+# about whether the vector stack should load.
+def semantic_store_available() -> bool:
+    """Public wrapper around the filesystem probe (see _semantic_store_available)."""
+    return _semantic_store_available()
+
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +188,7 @@ class HybridSearch:
 
     def __init__(
         self,
-        semantic_search: SemanticSearch,
+        semantic_search: 'Optional[SemanticSearch]' = None,
         semantic_weight: float = 0.6,
         keyword_weight: float = 0.4,
         recency_weight: float = 0.1,
@@ -202,6 +254,15 @@ class HybridSearch:
         start_time = datetime.now()
 
         # 1. Semantic search
+        # No semantic store (production: empty chroma). Return an empty response
+        # without touching the vector stack; the caller's other retrieval paths
+        # (knowledge base, keyword) carry the query. Behaviour is identical to the
+        # existing "no semantic results" early return below, minus the import cost.
+        if self.semantic_search is None:
+            return SearchResponse(
+                query=query, results=[], total_found=0,
+                search_time_ms=0.0, collections_searched=[])
+
         semantic_results = await self.semantic_search.search_all(
             query=query,
             limit_per_collection=limit * 2,  # Get more results for reranking
@@ -273,6 +334,15 @@ class HybridSearch:
         start_time = datetime.now()
 
         # Get semantic results
+        # No semantic store (production: empty chroma). Return an empty response
+        # without touching the vector stack; the caller's other retrieval paths
+        # (knowledge base, keyword) carry the query. Behaviour is identical to the
+        # existing "no semantic results" early return below, minus the import cost.
+        if self.semantic_search is None:
+            return SearchResponse(
+                query=query, results=[], total_found=0,
+                search_time_ms=0.0, collections_searched=[])
+
         semantic_results = await self.semantic_search.search_all(
             query=query,
             limit_per_collection=limit * 2,
@@ -523,13 +593,13 @@ class HybridSearch:
         """
         try:
             # Determine source from collection or metadata
-            if result.collection == VectorStore.COLLECTION_LEGISLATION:
+            if result.collection == _COLLECTION_LEGISLATION:
                 source = 'eur-lex'
-            elif result.collection == VectorStore.COLLECTION_MEPS:
+            elif result.collection == _COLLECTION_MEPS:
                 source = 'parliament'
-            elif result.collection == VectorStore.COLLECTION_PROCEDURES:
+            elif result.collection == _COLLECTION_PROCEDURES:
                 source = 'oeil'
-            elif result.collection == VectorStore.COLLECTION_RSS:
+            elif result.collection == _COLLECTION_RSS:
                 # Check RSS source
                 rss_source = result.metadata.get('source', '').lower()
                 if 'parliament' in rss_source:
@@ -556,7 +626,7 @@ _hybrid_search: Optional[HybridSearch] = None
 
 
 def get_hybrid_search(
-    semantic_search: Optional[SemanticSearch] = None,
+    semantic_search: "Optional[SemanticSearch]" = None,
     semantic_weight: float = 0.6,
     keyword_weight: float = 0.4,
     recency_weight: float = 0.1,
@@ -578,8 +648,21 @@ def get_hybrid_search(
     global _hybrid_search
 
     if _hybrid_search is None:
+        # Build the semantic backend ONLY when a populated store exists on disk.
+        # In production the store is empty, so this stays None and HybridSearch
+        # runs keyword-only, never importing chromadb/onnxruntime/scikit-learn.
+        sem = semantic_search
+        if sem is None and _semantic_store_available():
+            from .semantic_search import get_semantic_search
+            sem = get_semantic_search()
+        if sem is None:
+            logger.info(
+                "HybridSearch: no populated vector store; semantic search "
+                "disabled (keyword path only). Set BRUBRU_SEMANTIC_SEARCH=1 to "
+                "force it on once the store is populated."
+            )
         _hybrid_search = HybridSearch(
-            semantic_search=semantic_search or get_semantic_search(),
+            semantic_search=sem,
             semantic_weight=semantic_weight,
             keyword_weight=keyword_weight,
             recency_weight=recency_weight,
