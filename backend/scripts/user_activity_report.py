@@ -60,12 +60,23 @@ load_dotenv(BACKEND_DIR.parent / ".env")
 # prospect shell. Internal actors are excluded by default: they are the loudest
 # rows in every table and they are not evidence of anything.
 #
-# NULL/empty email = a pre-provisioned prospect row (claim_token flow), never a
-# human who used the product.
+# A pre-provisioned prospect shell is identified by the claim flow itself, NOT by
+# a missing email. Until 14 Aug 2026 this test was "email IS NULL", on the
+# assumption that a shell never carries one. It broke the day two dormant
+# profiles were created together: the one with email NULL was excluded, and
+# `support@cadence.com` was counted as a paying weekly-active user on the
+# strength of ten actions that were all its own provisioning writes, four
+# minutes after the row was created. Nobody at Cadence had been contacted.
+#
+# A row is a shell while `pre_provisioned_at` is set and `claimed_at` is not.
+# On the day a human claims it, `claimed_at` fills in and the row becomes a real
+# actor with real history. 19 unclaimed shells existed when this was written,
+# against 3 ever claimed, so the default has to be exclusion.
 INTERNAL_USER_SQL = """
     (
         u.role = 'admin'
         OR u.is_trainer IS TRUE
+        OR (u.pre_provisioned_at IS NOT NULL AND u.claimed_at IS NULL)
         OR u.email IS NULL OR u.email = ''
         OR u.email ILIKE '%beresol%'
         OR u.email ILIKE '%@example.com'
@@ -735,11 +746,21 @@ def section_blind_spots(conn, start, end):
         )
 
     # 7. Synthetic share of chat traffic.
+    #
+    # `marked` counts chats where the probe header was in play at all, whatever
+    # its value. Without it this check certifies a false clean: on 13 Aug 2026 it
+    # reported "0/7 (0.0%) are our own probes, 0 blind spots" while every one of
+    # the seven was ours, because the probes carried well-formed UUIDs and sent
+    # no header, so the shape heuristic matched nothing. A check that cannot see
+    # probes must say so rather than pass. Same discipline as
+    # feedback_null_propagation_and_silent_fallback_hide_failures: degrade to a
+    # loud failure, never to a silent OK.
     rows = q(
         conn,
         f"""
         SELECT count(*) AS total,
-               count(*) FILTER (WHERE {SYNTHETIC_PRE_USER_SQL}) AS synthetic
+               count(*) FILTER (WHERE {SYNTHETIC_PRE_USER_SQL}) AS synthetic,
+               count(*) FILTER (WHERE c.chat_metadata ? 'is_probe') AS marked
         FROM chats c WHERE c.created_at >= :start AND c.created_at < :end
         """,
         start=start,
@@ -747,14 +768,28 @@ def section_blind_spots(conn, start, end):
     )
     if not errored(rows):
         r = rows[0]
-        share = round(100.0 * r["synthetic"] / r["total"], 1) if r["total"] else 0.0
+        total, marked = r["total"] or 0, r["marked"] or 0
+        share = round(100.0 * r["synthetic"] / total, 1) if total else 0.0
+        unverifiable = total > 0 and marked == 0
+        if unverifiable:
+            detail = (f"{r['synthetic']}/{total} chats ({share}%) matched the probe "
+                      f"heuristic, but 0 chats carry the is_probe marker, so the "
+                      f"share CANNOT BE VERIFIED")
+            means = ("Probes that send `X-Brubru-Probe: 1` stamp chat_metadata.is_probe. "
+                     "With no marked chat in the window, the only signal left is the "
+                     "id-shape heuristic, which misses probes that use real UUIDs. Treat "
+                     "this window's user counts as unproven and fix at the probe sender, "
+                     "not here.")
+        else:
+            detail = f"{r['synthetic']}/{total} chats ({share}%) are our own probes"
+            means = ("Above 50%: any unfiltered read of this table describes our "
+                     "testing, not our users.")
         checks.append(
             {
                 "check": "synthetic probe share of chat traffic",
-                "ok": share < 50.0,
-                "detail": f"{r['synthetic']}/{r['total']} chats ({share}%) are our own probes",
-                "means": "Above 50%: any unfiltered read of this table describes our "
-                "testing, not our users.",
+                "ok": (total == 0) or (not unverifiable and share < 50.0),
+                "detail": detail,
+                "means": means,
             }
         )
 
