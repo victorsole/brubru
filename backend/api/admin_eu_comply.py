@@ -15,8 +15,15 @@ from models.user import User
 from models.eu_law import LawCluster, ClusterLaw, LawRequirement, EULaw
 from .admin_auth import get_current_admin_user
 from services.compliance.requirement_extractor import RequirementExtractor
-from services.embeddings import VectorSearchService
-from services.ai import create_chatbot
+# VectorSearchService and create_chatbot are imported function-locally, not here.
+# Both pull services.embeddings, which drags in scikit-learn, scipy, onnxruntime,
+# nltk and tokenizers (+457 MB resident, measured under production conditions).
+# This router is registered at boot and its three vector-search endpoints plus
+# the comply chatbot are admin-only, so importing the stack at module level paid
+# that memory on every process start for machinery no user path reaches. Deferred
+# to the endpoints that actually use it. See services/ai/__init__.py, which was
+# made lazy for the same reason, and services/tenders/__init__.py for the
+# original precedent.
 
 router = APIRouter()
 
@@ -267,6 +274,7 @@ async def build_index_background(cluster_id: int):
 
     db = SessionLocal()
     try:
+        from services.embeddings import VectorSearchService
         search_service = VectorSearchService(db)
         count = search_service.build_requirement_index(
             cluster_id=cluster_id,
@@ -292,6 +300,7 @@ async def search_requirements(
     Semantic search across requirements.
     Returns requirements ranked by similarity to query.
     """
+    from services.embeddings import VectorSearchService
     search_service = VectorSearchService(db)
 
     try:
@@ -327,6 +336,7 @@ async def find_similar_requirements(
     Find requirements similar to a given requirement.
     Useful for identifying duplicates or related obligations.
     """
+    from services.embeddings import VectorSearchService
     search_service = VectorSearchService(db)
 
     try:
@@ -543,6 +553,7 @@ async def ask_chatbot(
     """
     try:
         # Create chatbot instance
+        from services.ai import create_chatbot
         chatbot = create_chatbot(db, cluster_id=cluster_id)
 
         # Get answer
