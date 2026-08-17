@@ -64,11 +64,29 @@ def ingest_cedefop_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return items
 
 
+def _fetch_listing(path: str, item_type: str, link_substr: str) -> list[Item]:
+    """Cedefop's ?page=N returns a ~10KB anti-bot stub (Aug 2026), which broke the
+    walk() pagination; and even the bare listing URL is rate-limited to that stub
+    after repeated hits. Fetch the bare URL and RETRY with backoff, accepting only a
+    full-size response (the stub is ~10KB), then parse with the shared _parse_page.
+    Recent items only; historical rows already persist in economy_items."""
+    import time
+    from services.scrapers.eu_agency_listing import _anchor_re, _parse_page
+    anchor = _anchor_re(link_substr)
+    for attempt in range(4):
+        r = http_get(_BASE + path)
+        if r is not None and len(r.text) > 40000:  # full page, not the stub
+            out: dict = {}
+            _parse_page(r.text, anchor, _BASE, path, "cedefop", item_type,
+                        "cedefop_drupal", 12, out, datetime.now(timezone.utc))
+            if out:
+                return list(out.values())
+        time.sleep(1.5 * (attempt + 1))
+    return []
+
+
 def ingest_cedefop_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    # Cedefop paginates 1-indexed now (Aug 2026): ?page=0 returns a ~10KB stub, so
-    # the 0-indexed walk broke on the first page. Start at page 1.
-    return walk(_BASE, "/en/news", "cedefop", "news", "/en/news/", "cedefop_drupal",
-                page_start=1)
+    return _fetch_listing("/en/news", "news", "/en/news/")
 
 
 def _event_start_date(card) -> datetime | None:
@@ -206,5 +224,4 @@ def cedefop_event_date(url: str, *, retries: int = 3) -> datetime | None:
 
 
 def ingest_cedefop_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return walk(_BASE, "/en/publications", "cedefop", "publication", "/en/publications/",
-                "cedefop_drupal")
+    return _fetch_listing("/en/publications", "publication", "/en/publications/")
