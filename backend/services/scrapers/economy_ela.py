@@ -41,8 +41,12 @@ _TOPIC_PATHS = [
     "/en/activities/relations-social-partners",
 ]
 
-_LINK_SEL = ("a.standalone, a.card-title, .oe-sc-news__node-title a[href], "
-             ".node-title a[href], h2 a[href], h3 a[href]")
+# ELA moved to Bootstrap `card v2` blocks (Europa ECL migration, Aug 2026): the
+# title is a classless <a href="/en/news/..."> (or /en/news-events/... for events),
+# so match those content links in addition to the legacy title-link classes.
+_LINK_SEL = ('a.standalone, a.card-title, .oe-sc-news__node-title a[href], '
+             '.node-title a[href], h2 a[href], h3 a[href], '
+             'a[href*="/en/news/"], a[href*="/en/news-events/"]')
 
 
 def _parse(html: str):

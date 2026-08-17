@@ -46,19 +46,21 @@ def _parse(html: str):
     soup = BeautifulSoup(html, "html.parser")
     out = []
     seen = set()
-    for card in soup.select("article"):
-        link = card.select_one("h2 a[href], h3 a[href], a.card-title")
-        if not link or not link.get("href"):
-            continue
-        href = link["href"]
-        url = norm_url(href if href.startswith("http") else _BASE + href)
-        if url in seen:
-            continue
+    # EFCA moved news into Bootstrap cards under /en/hubs-explorer/news/ (Europa
+    # ECL migration, Aug 2026): the old <article> + h2/h3/card-title selectors no
+    # longer match. Match the news/event detail-links directly and pair each with
+    # its card's <time>.
+    for link in soup.select('a[href*="/news/"], a[href*="/event"]'):
+        href = link.get("href") or ""
         title = clean(link.get_text(" ", strip=True))
         if not title or len(title) < 10:
             continue
+        url = norm_url(href if href.startswith("http") else _BASE + href)
+        if url in seen:
+            continue
         seen.add(url)
-        tm = card.select_one("time[datetime]")
+        card = link.find_parent(["article", "div", "li"])
+        tm = card.select_one("time[datetime]") if card else None
         doc_dt = _iso_dt(tm.get("datetime")) if tm else None
         out.append((url, title, doc_dt))
     return out

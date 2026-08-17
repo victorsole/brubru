@@ -68,8 +68,10 @@ def ingest_ecdc_topics(*, fetch_bodies: bool = True) -> list[Item]:
                           public_url=url, creation_date=now, source_kind="html",
                           guid=url, body_txt=body_txt, body_html=body_html))
     return items
+# ECDC moved its news off the category-search endpoint to a direct listing
+# (Europa ECL migration, Aug 2026). The article.ct-news markup is unchanged.
 _SOURCES = {
-    "news": (f"{_SEARCH}1307", "article.ct-news"),
+    "news": (f"{_BASE}/en/news-events", "article.ct-news"),
     "publication": (f"{_SEARCH}1244", "article.ct-publication"),
 }
 
@@ -95,8 +97,9 @@ def _scrape(item_type: str, *, fetch_bodies: bool, max_pages: int) -> list[Item]
     items: list[Item] = []
     seen: set[str] = set()
     now = datetime.now(timezone.utc)
+    _sep = "&" if "?" in listing else "?"
     for page in range(max_pages):
-        url = listing if page == 0 else f"{listing}&page={page}"
+        url = listing if page == 0 else f"{listing}{_sep}page={page}"
         r = http_get(url)
         if r is None:
             break

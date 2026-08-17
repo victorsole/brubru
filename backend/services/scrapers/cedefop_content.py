@@ -65,7 +65,10 @@ def ingest_cedefop_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 
 def ingest_cedefop_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return walk(_BASE, "/en/news", "cedefop", "news", "/en/news/", "cedefop_drupal")
+    # Cedefop paginates 1-indexed now (Aug 2026): ?page=0 returns a ~10KB stub, so
+    # the 0-indexed walk broke on the first page. Start at page 1.
+    return walk(_BASE, "/en/news", "cedefop", "news", "/en/news/", "cedefop_drupal",
+                page_start=1)
 
 
 def _event_start_date(card) -> datetime | None:

@@ -81,14 +81,25 @@ def _parse_nodes(html: str):
 
 
 def _scrape(pages, item_type: str, *, fetch_bodies: bool) -> list[Item]:
+    # EDPS sits behind a WAF that returns 202/empty (and 403 to curl) for raw HTTP
+    # clients (Aug 2026), so http_get gets nothing. Render the listings through the
+    # headless-browser WafBrowserFetcher (same tool as FRA / eu_osha); the
+    # node--type-edpsweb markup the parser expects is unchanged.
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
     items: list[Item] = []
     seen: set[str] = set()
     now = datetime.now(timezone.utc)
-    for page in (pages if isinstance(pages, list) else [pages]):
-        r = http_get(page)
-        if r is None:
+    page_list = pages if isinstance(pages, list) else [pages]
+    with WafBrowserFetcher() as f:
+        html_by_page = {}
+        for page in page_list:
+            res = f.fetch(page, strip_chrome=False)
+            html_by_page[page] = getattr(res, "html", None)
+    for page in page_list:
+        html = html_by_page.get(page)
+        if not html:
             continue
-        for url, title, doc_dt, is_pdf in _parse_nodes(r.text):
+        for url, title, doc_dt, is_pdf in _parse_nodes(html):
             if url in seen:
                 continue
             seen.add(url)
@@ -109,11 +120,18 @@ def ingest_edps_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 
 def ingest_edps_press_releases(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return _scrape(PRESS_PAGE, "press_release", fetch_bodies=fetch_bodies)
+    # EDPS collapsed press-releases + publications into the single press-news feed
+    # (Europa ECL migration, Aug 2026): the old /press-releases_en and
+    # /publications/*_en listings now all redirect to the same news content. Running
+    # them here would mislabel news items as press_release, so return nothing until
+    # a distinct source resurfaces. edps `news` carries the merged feed.
+    return []
 
 
 def ingest_edps_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return _scrape(PUB_PAGES, "publication", fetch_bodies=fetch_bodies)
+    # See ingest_edps_press_releases: the distinct publications listing is gone;
+    # returning [] avoids mislabeling the merged press-news feed as publications.
+    return []
 
 
 def ingest_edps_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
