@@ -29,15 +29,21 @@ def ingest_research_projects(*, fetch_bodies: bool = True, **_) -> list[Item]:
     try:
         raw = requests.get(_URL, headers={"User-Agent": _UA}, timeout=240).content
         z = zipfile.ZipFile(io.BytesIO(raw))
-        member = next((n for n in z.namelist()
-                       if n.lower().endswith("project.json") or n.lower() == "project.json"), None)
-        if not member:
-            return []
-        data = json.loads(z.read(member).decode("utf-8", "replace"))
-    except (requests.RequestException, zipfile.BadZipFile, ValueError, StopIteration):
+        # CORDIS restructured the bulk export (Aug 2026): one JSON file PER project,
+        # named `project-rcn-NNNNNN_en.json` (flat project dict), instead of a single
+        # `project.json` holding a list. Iterate the per-project members.
+        members = [n for n in z.namelist()
+                   if n.lower().endswith(".json") and "project-rcn-" in n.lower()]
+    except (requests.RequestException, zipfile.BadZipFile, ValueError):
         return []
-    projects = data if isinstance(data, list) else (
-        data.get("projects") or data.get("project") or [])
+    projects = []
+    for _name in members:
+        try:
+            obj = json.loads(z.read(_name).decode("utf-8", "replace"))
+        except ValueError:
+            continue
+        if isinstance(obj, dict):
+            projects.append(obj.get("project") if isinstance(obj.get("project"), dict) else obj)
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     seen: set[str] = set()
