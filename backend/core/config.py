@@ -38,7 +38,13 @@ class Settings(BaseSettings):
     # Groq (open, primary) -> Gemini (free) -> Mistral (free, EU) -> Cerebras
     # (open, deep fallback) -> Anthropic (opportunistic, when funded) -> OpenAI.
     GROQ_API_KEY: str | None = None  # Groq free tier (open models: Llama/Qwen/gpt-oss) — chat primary
-    GROQ_MODEL: str = "llama-3.3-70b-versatile"  # clean multilingual incl. Catalan; swap to qwen/qwen3-32b if needed
+    # llama-3.3-70b-versatile was decommissioned by Groq on 16 Aug 2026. Groq
+    # recommended gpt-oss-120b or qwen3.6-27b; qwen wins on the axis that
+    # matters here -- 5/5 correct EU act numbers with zero fabrications, where
+    # both llama-3.3-70b and gpt-oss-120b invented 2 of 5 (including the AI
+    # Act). It also keeps model diversity: Cerebras already runs gpt-oss-120b.
+    # qwen emits <think> blocks, stripped by _strip_think / the stream suppressor.
+    GROQ_MODEL: str = "qwen/qwen3.6-27b"
     CEREBRAS_API_KEY: str | None = None  # Cerebras free tier (gpt-oss-120b, zai-glm-4.7) — deep open fallback
     CEREBRAS_MODEL: str = "gpt-oss-120b"  # high TPD; reasoning model (reasoning_effort=low, content/<think> handled)
     NVIDIA_API_KEY: str | None = None  # NVIDIA NIM free tier (Llama-3.3-70B, 128K ctx) — 2nd open fallback below Cerebras

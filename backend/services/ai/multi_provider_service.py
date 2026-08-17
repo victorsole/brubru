@@ -8,7 +8,7 @@ chat generator runs on a stacked chain of FREE tiers, in this order:
 
     Cerebras gpt-oss-120b (OPEN, PRIMARY, streams, ~0.8s)
       → Gemini 2.5-flash (free tier, streams, full context)
-      → Groq llama-3.3-70b (OPEN; 12K free TPM 413s on Brubru's prompt)
+      → Groq qwen3.6-27b (OPEN; 12K free TPM 413s on Brubru's prompt)
       → NVIDIA llama-3.3-70b (OPEN, full-context backstop, slow)
       → Mistral (free, EU, open-weight; reads only ~30% of injected context)
       → OpenAI (paid last resort)
@@ -248,6 +248,38 @@ class OpenAIProvider(AIProvider):
         )
 
 
+def _strip_think(text: str) -> str:
+    """Remove reasoning-model thinking blocks from a completed answer.
+
+    The obvious version -- ``re.sub(r"<think>.*?</think>", "")`` -- only removes
+    a CLOSED pair, and a reasoning model that hits ``max_tokens`` mid-thought
+    never emits the closing tag. The unclosed block then survives and the user
+    is shown the model's raw deliberation instead of an answer. Measured 17 Aug
+    2026 on Groq's `qwen/qwen3.6-27b` at max_tokens=320: content began
+    "<think> Here's a thinking process: 1. Analyze User Input..." and went
+    straight through the old stripper. It does not bite at Brubru's production
+    budget of 4,000 tokens, where the model closes the tag reliably -- but it is
+    one lowered limit, or one very long answer, away from biting.
+
+    Three shapes, all handled:
+      1. closed pair anywhere                -> removed
+      2. unclosed ``<think>`` to end of text -> removed to the end
+      3. orphan leading ``</think>``         -> everything up to it removed
+         (happens when a vendor splits reasoning into its own field but leaves
+         the terminator on the front of ``content``)
+
+    The streaming path does NOT use this: it suppresses inline as deltas arrive
+    and already handles the unclosed case by never leaving suppression, which
+    yields nothing and lets the chain fall through to the next provider.
+    """
+    if not text or "think>" not in text:
+        return text.strip() if text else text
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.S)
+    text = re.sub(r"<think>.*\Z", "", text, flags=re.S)      # truncated mid-thought
+    text = re.sub(r"\A.*?</think>", "", text, flags=re.S)    # orphan terminator
+    return text.strip()
+
+
 class _OpenAICompatibleProvider(AIProvider):
     """Base for OpenAI-compatible FREE open-model endpoints (Groq, Cerebras).
 
@@ -343,7 +375,7 @@ class _OpenAICompatibleProvider(AIProvider):
                 content = (getattr(choice.message, attr, None) or "").strip()
                 if content:
                     break
-        content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
+        content = _strip_think(content)
         tokens = response.usage.total_tokens if response.usage else 0
 
         if not content:
@@ -441,13 +473,23 @@ class _OpenAICompatibleProvider(AIProvider):
 
 
 class GroqProvider(_OpenAICompatibleProvider):
-    """Groq free tier — chat PRIMARY. Open models (default Llama 3.3 70B; swap
-    to qwen/qwen3-32b via GROQ_MODEL for stronger Catalan). Fast, clean,
-    multilingual. Free TPM is tight (~12K) so very large contexts 429 and fall
-    through to Gemini — intended (Gemini is the big-context catcher)."""
+    """Groq free tier — open models, third link in the chain. Default
+    qwen/qwen3.6-27b since 17 Aug 2026, when Groq decommissioned
+    llama-3.3-70b-versatile. Override with GROQ_MODEL.
+
+    Why qwen and not Groq's other suggestion, gpt-oss-120b: on a five-act
+    identifier test qwen returned 5/5 correct EU act numbers with zero
+    fabrications, while gpt-oss-120b and the retired llama both invented 2 of 5
+    — including the AI Act, the most-asked-about act in the corpus. gpt-oss-120b
+    would also have duplicated the Cerebras primary, costing model diversity.
+
+    qwen is a reasoning model and wraps thinking in <think>...</think>; both the
+    completed-answer path (_strip_think) and the stream suppressor remove it.
+    Free TPM is tight (~12K) so very large contexts 429 and fall through to
+    Gemini — intended (Gemini is the big-context catcher)."""
 
     BASE_URL = "https://api.groq.com/openai/v1"
-    MODEL = "llama-3.3-70b-versatile"
+    MODEL = "qwen/qwen3.6-27b"
     _NAME = "Groq"
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
