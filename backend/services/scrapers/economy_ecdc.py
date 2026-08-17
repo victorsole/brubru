@@ -72,7 +72,11 @@ def ingest_ecdc_topics(*, fetch_bodies: bool = True) -> list[Item]:
 # (Europa ECL migration, Aug 2026). The article.ct-news markup is unchanged.
 _SOURCES = {
     "news": (f"{_BASE}/en/news-events", "article.ct-news"),
-    "publication": (f"{_SEARCH}1244", "article.ct-publication"),
+    # The old category-search publication endpoint is dead. ECDC's data products
+    # (surveillance databases + dashboards: Atlas, EpiPulse, ERVISS, ESAC-Net,
+    # Geoportal, Respicast, disease dashboards) are listed on the data-dashboards
+    # -and-databases hub, filed under /en/publications-data/. Use that.
+    "publication": (f"{_BASE}/en/data-dashboards-and-databases", "article"),
 }
 
 
