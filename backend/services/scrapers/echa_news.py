@@ -109,14 +109,19 @@ async def _scrape_topics(*, fetch_bodies: bool) -> list[Item]:
             url = _BASE + path
             try:
                 resp = await page.goto(url, wait_until="domcontentloaded", timeout=45000)
-                await page.wait_for_timeout(1000)
+                await page.wait_for_timeout(2500)
             except Exception:
                 continue
-            if resp is None or resp.status != 200:
+            if resp is None:
                 continue
             content = await page.content()
+            # ECHA's WAF returns HTTP 403 but still renders the real page for a
+            # browser (Aug 2026); only its ~10KB challenge stub lacks content, so
+            # gate on rendered size, not status.
+            if len(content) < 40000:
+                continue
             soup = BeautifulSoup(content, "html.parser")
-            h1 = soup.select_one("main h1, h1")
+            h1 = soup.select_one(".page-title, main h1, h1")
             if h1 and len(h1.get_text(strip=True)) > 2:
                 title = clean(h1.get_text(" ", strip=True))
             elif soup.title and soup.title.get_text(strip=True):
