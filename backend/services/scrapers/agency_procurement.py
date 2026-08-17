@@ -602,54 +602,58 @@ _EU_OSHA = "https://osha.europa.eu"
 
 def _parse_eu_osha_views(html: str, base: str, body_code: str, item_type: str,
                         source_kind: str) -> list[Item]:
-    """EU-OSHA views-row blocks. Title in views-field-title > h2 > a;
-    reference in views-field-field-reference (Drupal-typical) or in the
-    title's span; deadline in views-field-field-closing-date / -deadline."""
+    """EU-OSHA procurement listing (revamp-row grid, JS-rendered). Each entry has
+    an optional publication-date <time datetime> then views-field-title > h2 > a
+    linking to a /procurement/call-tender/<slug> (or /call-expression-.../) detail
+    page. Match the detail links directly (robust to the grid wrapper) and pair
+    each with the nearest preceding <time> as its document date."""
     now = datetime.now(timezone.utc)
     out: list[Item] = []
-    for row in re.findall(r'<div[^>]*class="[^"]*views-row[^"]*"[^>]*>(.*?)</div>\s*</div>',
-                          html, re.S):
-        am = re.search(
-            r'views-field-title.*?<h2[^>]*>\s*<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>',
-            row, re.S)
-        if not am:
+    seen: set[str] = set()
+    pat = re.compile(
+        r'views-field-title[^>]*>\s*<h2[^>]*>\s*<a[^>]+href="'
+        r'(/en/about-eu-osha/procurement/call[^"]+)"[^>]*>(.*?)</a>', re.S)
+    for m in pat.finditer(html):
+        href, title = m.group(1), _txt(m.group(2))
+        if not title or href in seen:
             continue
-        title = _txt(am.group(2))
-        if not title:
-            continue
-        href = am.group(1)
-        url = href if href.startswith("http") else base + href
-        ref_m = re.search(
-            r'views-field-field-(?:reference|tender-reference)[^>]*>.*?<.*?>([^<]+)<',
-            row, re.S)
-        reference = _txt(ref_m.group(1)) if ref_m else ""
-        dl = None
-        dm = _DATE.search(_txt(row))
-        if dm:
-            dl = _parse_date(dm.group(1))
+        seen.add(href)
+        pre = html[max(0, m.start() - 500):m.start()]
+        times = re.findall(r'<time[^>]*datetime="([^"]+)"', pre)
+        doc_dt = _parse_date(times[-1][:10]) if times else None
         out.append(_build(
-            body_code=body_code, item_type=item_type, title=title, url=url,
-            reference=reference, status="Open", deadline=dl, now=now,
+            body_code=body_code, item_type=item_type, title=title, url=base + href,
+            reference="", status="Open", deadline=doc_dt, now=now,
             source_kind=source_kind,
         ))
     return out
 
 
 def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_) -> list[Item]:
-    """EU-OSHA collapses /calls-tender to a year tree; rows live on
-    /calls_archive/<year>. Crawl current + previous year."""
+    """EU-OSHA procurement. The site's WAF fingerprints TLS and drops raw HTTP
+    clients (requests/urllib -> RemoteDisconnected), while a real browser and
+    curl pass, so fetch via the headless-browser WafBrowserFetcher (same tool
+    used for FRA). Two current listings: open calls for tender and calls for
+    expression of interest. (The old /calls_archive/<year> tree is gone.)"""
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
     items: list[Item] = []
-    seen = set()
-    now_year = datetime.now(timezone.utc).year
-    for year in (now_year, now_year - 1):
-        url = f"{_EU_OSHA}/en/about-eu-osha/procurement/calls_archive/{year}"
-        for it in _parse_eu_osha_views(_fetch(url), _EU_OSHA,
-                                       body_code="eu_osha", item_type="tender",
-                                       source_kind="eu_osha_procurement"):
-            if it.guid in seen:
+    seen: set[str] = set()
+    pages = [
+        "/en/about-eu-osha/procurement/calls-tender",
+        "/en/about-eu-osha/procurement/calls-expression-interest",
+    ]
+    with WafBrowserFetcher() as f:
+        for path in pages:
+            res = f.fetch(_EU_OSHA + path, strip_chrome=False)
+            if getattr(res, "error", None) or not getattr(res, "html", None):
                 continue
-            seen.add(it.guid)
-            items.append(it)
+            for it in _parse_eu_osha_views(res.html, _EU_OSHA,
+                                           body_code="eu_osha", item_type="tender",
+                                           source_kind="eu_osha_procurement"):
+                if it.guid in seen:
+                    continue
+                seen.add(it.guid)
+                items.append(it)
     return items
 
 
