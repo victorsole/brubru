@@ -19,8 +19,8 @@ from services.scrapers.economy_common import (
 
 _BASE = "https://www.eppo.europa.eu"
 
-EPPO_NEWS_PAGES = [f"{_BASE}/en/media/news"]
-EPPO_PUB_PAGES = [f"{_BASE}/en/documents/documents"]
+EPPO_NEWS_PAGES = [f"{_BASE}/news"]
+EPPO_PUB_PAGES = [f"{_BASE}/en/documents"]
 
 
 def ingest_eppo_news(**kw) -> list[Item]:
