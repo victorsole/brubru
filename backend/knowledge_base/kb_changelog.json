@@ -2,6 +2,46 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-17",
+      "action": "updated",
+      "guide": "cbam_carbon_border_adjustment_mechanism",
+      "title": "CBAM - Carbon Border Adjustment Mechanism",
+      "summary": "Added the DG TAXUD definitive-period guidance series published 14 August 2026: four general guides plus six sector-specific ones",
+      "refs": [
+        "32023R0956"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "action": "added",
+      "guide": "cyber_resilience_act",
+      "title": "Cyber Resilience Act (Regulation (EU) 2024/2847)",
+      "summary": "New guide: Article 14 vulnerability and incident reporting starts applying 11 September 2026, with the 24h/72h/14-day clock, the three staggered application dates and the Article 64 fine tiers",
+      "refs": [
+        "32024R2847"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "action": "updated",
+      "guide": "general_data_protection_regulation",
+      "title": "GDPR article-level reference",
+      "summary": "Made reachable from natural-language questions: previously only the literal CELEX 32016R0679 routed to it, so the article index and canon link never surfaced",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "General Data Protection Regulation (GDPR)",
+      "summary": "Corrected the entry-into-force date (24 May 2016, applies 25 May 2018), added the adoption date, both Article 83 fine tiers, the 11/99/173 structure, and the canon deep-dive link",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
       "date": "2026-08-13",
       "action": "updated",
       "guide": "end_of_life_vehicles_regulation",

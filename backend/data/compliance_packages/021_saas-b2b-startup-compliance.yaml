@@ -11,24 +11,13 @@ laws:
     2016 on the protection of natural persons with regard to the processing of personal data
     and on the free movement of such data, and repealing Directive 95/46/EC (General Data
     Protection Regulation) (Text with EEA relevance)
-- celex: 32022R2555
-  title: Corrigendum to Directive (EU) 2022/2555 of the European Parliament and of the Council
-    of 14 December 2022 on measures for a high common level of cybersecurity across the Union,
-    amending Regulation (EU) No 910/2014 and Directive (EU) 2018/1972, and repealing Directive
-    (EU) 2016/1148 (NIS 2 Directive) (OJ L 333, 27.12.2022)
+- celex: 32022L2555
+  title: Directive (EU) 2022/2555 of the European Parliament and of the Council of 14 December
+    2022 on measures for a high common level of cybersecurity across the Union (NIS2 Directive)
 - celex: 32023R2854
   title: Regulation (EU) 2023/2854 of the European Parliament and of the Council of 13 December
     2023 on harmonised rules on fair access to and use of data and amending Regulation (EU)
     2017/2394 and Directive (EU) 2020/1828 (Data Act)Text with EEA relevance.
-- celex: 32024R2690
-  title: Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down
-    rules for the application of Directive (EU) 2022/2555 as regards technical and methodological
-    requirements of cybersecurity risk-management measures and further specification of the
-    cases in which an incident is considered to be significant with regard to DNS service
-    providers, TLD name registries, cloud computing service providers, data centre service
-    providers, content delivery network providers, managed service providers, managed security
-    service providers, providers of online market places, of online search engines and of
-    social networking services platforms, and trust service providers (Text with EEA relevance)
 - celex: 32024R2847
   title: Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October
     2024 on horizontal cybersecurity requirements for products with digital elements and amending
@@ -36,7 +25,7 @@ laws:
     Act)
 requirements:
 - article: Arts 2-3 + Annexes I-II (are you in scope?)
-  law_celex: 32022R2555
+  law_celex: 32022L2555
   criticality: critical
   addressee: economic_operator
   applicable_entity: Digital service providers
@@ -52,7 +41,7 @@ requirements:
     those last categories. A small SaaS company selling ordinary business software is usually
     out of scope, and recording that conclusion is the compliant outcome.
 - article: Article 21 (risk management measures)
-  law_celex: 32022R2555
+  law_celex: 32022L2555
   criticality: critical
   addressee: economic_operator
   applicable_entity: Essential and important entities
@@ -68,7 +57,7 @@ requirements:
     security, access control and asset management; and multi-factor or continuous authentication
     and secured communications.'
 - article: Article 23 (24h / 72h / 1 month reporting)
-  law_celex: 32022R2555
+  law_celex: 32022L2555
   criticality: critical
   addressee: economic_operator
   applicable_entity: Essential and important entities
@@ -81,7 +70,7 @@ requirements:
     or financial loss, or considerable material or non-material damage to others. Where the
     incident is likely to affect the provision of services, inform recipients too.'
 - article: Article 20 (management accountability)
-  law_celex: 32022R2555
+  law_celex: 32022L2555
   criticality: important
   addressee: economic_operator
   applicable_entity: Management bodies of in-scope entities
@@ -358,7 +347,7 @@ requirements:
 - article: Art 64 (penalties)
   law_celex: 32024R2847
   criticality: recommended
-  addressee: economic_operator
+  addressee: member_state
   applicable_entity: Manufacturers of products with digital elements
   deadline: null
   interpretive: true
@@ -371,7 +360,7 @@ requirements:
 - article: Art 33 (support for SMEs and start-ups)
   law_celex: 32024R2847
   criticality: recommended
-  addressee: economic_operator
+  addressee: member_state
   applicable_entity: SMEs and start-ups
   deadline: null
   interpretive: true
@@ -379,3 +368,77 @@ requirements:
     on the Regulation tailored to microenterprises and small enterprises, establish a dedicated
     communication channel for advice and queries, and support testing and conformity assessment
     procedures. This is an offer to use, not a duty to discharge, and never counts as a gap.
+- article: Art 69(3) (legacy products, reporting)
+  law_celex: 32024R2847
+  criticality: critical
+  addressee: economic_operator
+  applicable_entity: Manufacturers of products with digital elements
+  deadline: '2026-09-11'
+  interpretive: null
+  requirement_text: 'The reporting duty reaches products you already sold. Article 69(2) spares
+    products placed on the market before 11 December 2027 unless they are substantially modified,
+    but Article 69(3) expressly disapplies that for Article 14: from 11 September 2026 you
+    must notify actively exploited vulnerabilities and severe incidents for every in-scope
+    product with digital elements you have placed on the market, including the existing installed
+    base. The Commission FAQ (v1.0, 3 December 2025, section 5.3) sets the limit: for those
+    legacy products you are required to notify, but you are NOT required to meet the other
+    obligations such as vulnerability handling, since build environments, tooling and staff
+    for old code may no longer exist. The duty attaches on becoming aware after the reporting
+    rules start applying, not retrospectively. Build the notification path for the whole portfolio,
+    not only for new products.'
+- article: Art 69(1) (existing certificates)
+  law_celex: 32024R2847
+  criticality: important
+  addressee: economic_operator
+  applicable_entity: Manufacturers relying on existing cybersecurity certificates
+  deadline: '2028-06-11'
+  interpretive: null
+  requirement_text: EU-type examination certificates and approval decisions issued on cybersecurity
+    requirements under other Union harmonisation legislation, such as Commission Delegated
+    Regulation (EU) 2022/30 under the Radio Equipment Directive, remain valid until 11 June
+    2028, unless that legislation says otherwise or the certificate expires sooner. Check
+    the expiry of every certificate you rely on and plan reassessment under the CRA before
+    it lapses, because the transitional does not renew itself.
+- article: Arts 35-51 (notified bodies, applying)
+  law_celex: 32024R2847
+  criticality: recommended
+  addressee: member_state
+  applicable_entity: Member States and conformity assessment bodies
+  deadline: '2026-06-11'
+  interpretive: true
+  requirement_text: 'Chapter IV has been applying since 11 June 2026, ahead of the rest of
+    the Regulation. By that date Member States had to designate the notifying authorities
+    responsible for assessing, designating and monitoring conformity assessment bodies. Bodies
+    that complete the procedure are published on the Commission''s NANDO database. This is
+    context rather than a duty on you, but it is the reason a notified body can be engaged
+    now: if your product needs a third-party route, capacity is being built during the run-up,
+    and Article 43(2) only asks Member States to strive to have enough notified bodies by
+    11 December 2026.'
+- article: Art 16 (single reporting platform)
+  law_celex: 32024R2847
+  criticality: recommended
+  addressee: eu_agency
+  applicable_entity: ENISA and the coordinating CSIRTs
+  deadline: '2026-09-11'
+  interpretive: true
+  requirement_text: Notifications under Article 14 go through a single reporting platform
+    operated by ENISA, with the notification reaching the CSIRT designated as coordinator
+    and ENISA at the same time. The platform is the infrastructure the reporting duty depends
+    on, so confirm the submission route and your access to it before 11 September 2026 rather
+    than while a 24-hour clock is running.
+- article: Art 27 (harmonised standards route)
+  law_celex: 32024R2847
+  criticality: recommended
+  addressee: commission
+  applicable_entity: Manufacturers of products with digital elements
+  deadline: '2027-12-11'
+  interpretive: true
+  requirement_text: 'Conformity is presumed where a product meets harmonised standards cited
+    in the Official Journal, and for most products self-assessment against those standards
+    is the default route. The standards are not all ready: the Commission FAQ records that
+    the horizontal standard on secure products and the standard on vulnerability handling
+    were requested from the European standardisation organisations by 30 August 2026, and
+    the standard covering the Annex I Part I essential requirements by 30 October 2027. Where
+    no harmonised standard is available in time, the burden of demonstrating conformity by
+    other means falls on you, so track the citations rather than assuming a standard will
+    exist.'

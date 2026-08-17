@@ -1151,7 +1151,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'water framework 2026 amendment': ['eu_water_legislation'],
     'cra delegated regulation': ['cybersecurity_act'],
     'regulation 2026/881': ['cybersecurity_act'],
-    'cyber resilience vulnerability handling': ['cybersecurity_act'],
+    'cyber resilience vulnerability handling': ['cyber_resilience_act'],
     'afco institutional framework': ['afco_institutional_framework_review'],
     'article 19 teu': ['afco_institutional_framework_review'],
     '2025/2263(ini)': ['afco_institutional_framework_review'],
@@ -6309,8 +6309,20 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     '2025/37': ['cybersecurity_act'],
     'marketa gregorova': ['cybersecurity_act'],
     'gregorova cybersecurity': ['cybersecurity_act'],
-    'cyber resilience act': ['cybersecurity_act'],
-    '2024/2847': ['cybersecurity_act'],
+    # The CRA is Reg (EU) 2024/2847; the Cybersecurity Act is Reg (EU) 2019/881.
+    # Two different laws. These keys used to serve the 2019/881 guide, which
+    # mentions the CRA only in passing, so every CRA question got the ENISA and
+    # certification guide instead (audit 17 Aug 2026). The CRA guide leads;
+    # cybersecurity_act stays as secondary for the ENISA/certification overlap.
+    'cyber resilience act': ['cyber_resilience_act', 'cybersecurity_act'],
+    '2024/2847': ['cyber_resilience_act'],
+    'cra': ['cyber_resilience_act'],
+    'products with digital elements': ['cyber_resilience_act'],
+    'actively exploited vulnerability': ['cyber_resilience_act'],
+    'open-source software steward': ['cyber_resilience_act'],
+    'ley de ciberresiliencia': ['cyber_resilience_act'],
+    'reglament de ciberresiliencia': ['cyber_resilience_act'],
+    'reglement cyberresilience': ['cyber_resilience_act'],
     'nis2 omnibus': ['cybersecurity_act'],
     '2026/0012': ['cybersecurity_act'],
     'cybersecurity reserve': ['cybersecurity_act'],
@@ -6477,7 +6489,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # GDPR / Data Protection (training 31 Mar 2026)
     'gdpr': ['gdpr_data_protection'],
-    'general data protection regulation': ['gdpr_data_protection'],
+    # The article-level reference guide also carries the canon deep-dive
+    # ALWAYS-LINK. It used to be reachable ONLY by typing the literal CELEX, so
+    # every natural-language GDPR question missed it and the eucanon URL was
+    # never offered (audit 17 Aug 2026). Paired here on the phrasings that ask
+    # about the instrument itself, where the article detail is what is wanted.
+    'general data protection regulation': ['gdpr_data_protection', 'general_data_protection_regulation'],
     'data protection': ['gdpr_data_protection'],
     'data protection regulation': ['gdpr_data_protection'],
     'rgpd': ['gdpr_data_protection'],
@@ -6486,8 +6503,18 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'protezione dei dati': ['gdpr_data_protection'],
     'gegevensbescherming': ['gdpr_data_protection'],
     'protection des donnees': ['gdpr_data_protection'],
-    '2016/679': ['gdpr_data_protection'],
+    '2016/679': ['gdpr_data_protection', 'general_data_protection_regulation'],
     'data subject rights': ['gdpr_data_protection'],
+    # Article-level questions route to the reference guide, which indexes all
+    # 99 articles; the news guide above carries the LATEST/enforcement layer.
+    'gdpr article': ['general_data_protection_regulation'],
+    'lawful basis': ['general_data_protection_regulation'],
+    'legitimate interest': ['general_data_protection_regulation'],
+    'data protection impact assessment': ['general_data_protection_regulation'],
+    'dpia': ['general_data_protection_regulation'],
+    'records of processing': ['general_data_protection_regulation'],
+    'standard contractual clauses': ['general_data_protection_regulation'],
+    'adequacy decision': ['general_data_protection_regulation'],
     'right to be forgotten': ['gdpr_data_protection'],
     'data breach notification': ['gdpr_data_protection'],
     'data protection officer': ['gdpr_data_protection'],

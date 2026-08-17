@@ -813,6 +813,12 @@ class ChatResponse:
     total_time_ms: float
     actions: List[Dict[str, Any]] = None
     drafted_document: Optional[Dict[str, Any]] = None
+    # Which provider in the chain actually answered. The router reads it as
+    # `getattr(response, 'provider', '')`; while the field did not exist that
+    # defensive default silently wrote NULL on EVERY non-streaming answer, so
+    # the model was attributable and the provider was not. The 6 Aug 2026
+    # attribution fix covered chat_stream() only (audit 17 Aug 2026).
+    provider: str = ""
 
 
 class AIService:
@@ -1376,6 +1382,7 @@ class AIService:
             total_time_ms=total_time_ms,
             actions=action_dicts,
             drafted_document=drafted_dict,
+            provider=provider_used,
         )
 
     async def _validate_and_maybe_override(
@@ -3174,8 +3181,19 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                     return m.group(0)
             run = []
             for w in words:
-                if re.match(r"^\*{0,2}[A-Z0-9][\w&:’'\-‑]*[.,;]?\*{0,2}$", w):
+                # The closing-bracket class matters: without it a name written
+                # inside parentheses, "(My EU Bubble -> EU Law Tracker).", broke
+                # the run at "Tracker)." and only "EU Law" was dropped, leaving
+                # the invented "My EU Bubble Tracker" -- a name less real than
+                # the one being repaired (audit 17 Aug 2026).
+                if re.match(r"^\*{0,2}[A-Z0-9][\w&:’'\-‑]*\*{0,2}[)\]]*[.,;:]?$", w):
                     run.append(w)
+                    # A closing bracket or sentence punctuation ENDS the name.
+                    # Without this break the run walks into the next sentence,
+                    # because its first word is capitalised too, and "…Tracker).
+                    # This will help." lost its "This".
+                    if re.search(r"[)\].,;:]$", w):
+                        break
                 else:
                     break
             if not run:
@@ -3184,8 +3202,11 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 "[FEATURE-GUARD] dropped invented feature reference: %r", " ".join(run)
             )
             tail = " ".join(words[len(run):])
-            # Keep any sentence punctuation that was riding on the last word.
-            end = "." if run[-1].endswith(".") else ""
+            # Keep whatever closing bracket / sentence punctuation was riding on
+            # the last word, so the bracket that opened before "My EU Bubble"
+            # still closes.
+            end_m = re.search(r"[)\]]*[.,;:]?$", run[-1])
+            end = end_m.group(0) if end_m else ""
             return f"{head}{end}" + (f" {tail}" if tail else "")
 
         text = re.sub(

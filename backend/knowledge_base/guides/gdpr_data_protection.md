@@ -1,11 +1,14 @@
 # General Data Protection Regulation (GDPR)
 
 ## QUICK FACTS
+- **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2016-679_gdpr/
 - **LATEST (Monday 8 June 2026 — EDPB CHAIR PRESENTS 2025 ANNUAL REPORT TO LIBE):** EDPB Chair **Anu Talus** presented the **European Data Protection Board 2025 Annual Report** to the European Parliament's Committee on Civil Liberties, Justice and Home Affairs (LIBE). Headline figures from the report: national data protection authorities issued **EUR 1.1 billion in fines in 2025** and handled **572 cross-border decisions**; the EDPB and the DPAs are preparing to apply the new **GDPR Procedural Regulation**, since adopted as **Regulation (EU) 2025/2518** (in force 1 January 2026, applicable from 2 April 2027), which harmonises cross-border procedure and the one-stop-shop; see `edpb_consistency_one_stop_shop_gdpr_arts_60_to_66` for the full mechanism. On the digital-rulebook interplay, the EDPB **endorsed joint DMA-GDPR guidelines** with the Commission, **published DSA-GDPR guidelines**, and is working on **joint AI Act-GDPR guidance**. On simplification (Digital Omnibus / AI Omnibus), the Board supports cutting red tape "but not at any cost": it backs higher data-protection-certification thresholds, common data-breach and DPIA templates, a biometric-authentication derogation where the verification means are under the individual's sole control, a remedy for cookie-banner consent fatigue, harmonising the notion of scientific research, and exempting SMEs from record-keeping (except high-risk cases), but **firmly opposes the proposed change to the definition of personal data**, arguing that practical EDPB guidance on the CJEU case law brings more legal certainty than rewriting the GDPR. Under its **Helsinki Statement (2025)** the EDPB is issuing templates (legitimate-interest assessment, records of processing, privacy notice, DPIA, breach notification), accessible guideline summaries, and forthcoming **anonymisation guidelines**, all under the existing framework. Source: EP LIBE committee meeting, 8 June 2026 (webstream). Cross-link: `digital_omnibus_package`, `ai_act_regulation`.
 - Full name: Regulation (EU) 2016/679 of the European Parliament and of the Council on the protection of natural persons with regard to the processing of personal data and on the free movement of such data
 - CELEX: 32016R0679
+- Adopted: 27 April 2016
 - Published: OJ L 119, 4 May 2016
-- In force: 25 May 2018 (two-year transition after 24 May 2016 entry into force)
+- Entry into force: 24 May 2016
+- Applies from: 25 May 2018 (two-year implementation period)
 - Legal basis: Article 16 TFEU (data protection), Article 8 Charter of Fundamental Rights
 - Type: Regulation (directly applicable in all Member States)
 - Responsible DG: DG JUST (Justice and Consumers)
@@ -14,7 +17,9 @@
 - Replaces: Data Protection Directive 95/46/EC (CELEX 31995L0046), repealed 25 May 2018
 - Complemented by: Law Enforcement Directive (EU) 2016/680 (CELEX 32016L0680) for police/criminal justice
 - Supervisory framework: 27 national Data Protection Authorities (DPAs) + European Data Protection Board (EDPB)
-- Max penalty: EUR 20 million or 4% of global annual turnover, whichever is higher
+- Administrative fines (Tier 1, Art 83(4)): up to EUR 10 million or 2% of total worldwide annual turnover, whichever is higher, for controller/processor obligations
+- Administrative fines (Tier 2, Art 83(5)): up to EUR 20 million or 4% of total worldwide annual turnover, whichever is higher, for basic principles, consent conditions, data subject rights and international transfers
+- Structure: 11 chapters, 99 articles, 173 recitals
 - EDPB established: 25 May 2018 (replaces Article 29 Working Party)
 
 ## Overview

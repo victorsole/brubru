@@ -228,14 +228,26 @@ async def latest_news(request: Request,
         how the first cut of this endpoint 500'd in production on 5 Aug 2026."""
         return v.date() if isinstance(v, datetime) else v
 
+    # The freshness anchor must IGNORE future-dated rows. Many bodies publish
+    # calls for expression of interest, dynamic purchasing systems and research
+    # projects whose scraped "date" is a DEADLINE or project end, not a
+    # publication date -- on 17 Aug 2026 there were 1,486 such rows across 44
+    # bodies, the furthest dated 2031. Taking a bare max() let one of them set
+    # latest_date to a future day, making age_days negative and `stale` False
+    # for ever. The guard reported a clean bill of health while ingestion had
+    # been dead for four days. A monitoring check that cannot fail is worse
+    # than no check, so the anchor is now the newest row that is not in the
+    # future, and the bad rows are reported instead of silently swallowed.
     row = db.execute(text(
-        "SELECT max(document_date) AS latest, count(*) AS n FROM economy_items "
-        "WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
+        "SELECT max(document_date) FILTER (WHERE document_date <= now()) AS latest, "
+        "       count(*) AS n, "
+        "       count(*) FILTER (WHERE document_date > now()) AS future_dated "
+        "FROM economy_items WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
     latest = _as_date(row.latest) if row and row.latest else None
     age = (date.today() - latest).days if latest else None
     per_body = db.execute(text(
         "SELECT body_code, max(document_date) AS latest, count(*) AS n FROM economy_items "
-        "WHERE item_type = ANY(:t) AND document_date IS NOT NULL "
+        "WHERE item_type = ANY(:t) AND document_date IS NOT NULL AND document_date <= now() "
         "GROUP BY body_code ORDER BY max(document_date) DESC LIMIT 10"),
         {"t": _NEWS_TYPES}).fetchall()
     names = _body_names(db)
@@ -245,6 +257,8 @@ async def latest_news(request: Request,
         "stale": (age is None or age > stale_after_days),
         "stale_after_days": stale_after_days,
         "total_items": row.n if row else 0,
+        # Non-zero means dates are being scraped from the wrong field somewhere.
+        "future_dated_items": (row.future_dated if row else 0),
         "by_body": [
             {"code": r.body_code, "name": names.get(r.body_code),
              "latest_date": _as_date(r.latest).isoformat() if r.latest else None,

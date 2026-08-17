@@ -65,7 +65,13 @@ class OEILScraper(BaseScraper):
     MEP_URL_PATTERN = re.compile(r'/meps/en/(\d+)')
     DATE_PATTERN = re.compile(r'(\d{2})/(\d{2})/(\d{4})')
 
-    def __init__(self, **kwargs):
+    def __init__(self, use_api: bool = True, **kwargs):
+        # use_api is consumed HERE and never forwarded. BaseScraper does not
+        # accept it, so while it rode in **kwargs any caller writing the
+        # apparently-harmless OEILScraper(use_api=True) got a TypeError -- and
+        # the one caller that did, the on-demand OEIL fetch in the context
+        # builder, lost its entire legislative-files block to the outer
+        # handler (audit 17 Aug 2026).
         super().__init__(
             base_url="https://oeil.secure.europarl.europa.eu/oeil/en",
             name="OEIL",
@@ -75,7 +81,7 @@ class OEILScraper(BaseScraper):
 
         # PHASE 4: Initialize API client
         self.api_client = OEILClient()
-        self.use_api = True
+        self.use_api = use_api
 
         logger.info("OEIL Scraper initialized with API client")
 

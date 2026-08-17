@@ -4233,7 +4233,13 @@ class ContextBuilder:
                     try:
                         from services.scrapers.oeil_scraper import OEILScraper
 
-                        scraper = OEILScraper(use_api=True)
+                        # No kwargs: OEILScraper forwards **kwargs to
+                        # BaseScraper, which has no use_api parameter, so
+                        # OEILScraper(use_api=True) raised TypeError and the
+                        # outer handler returned an EMPTY legislative-files
+                        # block for the whole query (audit 17 Aug 2026). The
+                        # API client is enabled by default anyway.
+                        scraper = OEILScraper()
                         for ref in missing_refs[:3]:  # Limit to 3 to avoid slow responses
                             try:
                                 proc_data = await scraper.get_procedure(ref)
@@ -4419,7 +4425,14 @@ class ContextBuilder:
             return train_files
 
         except Exception as e:
-            logger.error(f"Failed to fetch legislative files: {str(e)}")
+            # Name the exception type and keep the traceback. A TypeError from
+            # a bad call signature and a timed-out request both used to print
+            # one indistinguishable line, so a programming error that emptied
+            # this block on every affected query read like a flaky network.
+            logger.error(
+                "Failed to fetch legislative files (%s): %s",
+                type(e).__name__, e, exc_info=True,
+            )
             return []
 
     # =========================================================================
