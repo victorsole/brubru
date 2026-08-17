@@ -45,6 +45,11 @@ langchain-core==0.1.10
 # Web Scraping
 aiohttp==3.9.3
 beautifulsoup4==4.12.3
+# curl_cffi impersonates a real browser's TLS/JA3 fingerprint to clear
+# fingerprint WAFs that 403 plain requests but don't need a JS challenge (EUDA
+# sitemaps). Ships manylinux wheels with the curl-impersonate binary. Used by
+# services/scrapers/euda_content.py (_cffi_session).
+curl_cffi>=0.7,<1.0
 lxml==5.1.0
 tenacity==8.2.3
 feedparser==6.0.11

@@ -21,7 +21,9 @@ import requests
 from services.scrapers.economy_common import Item, clean
 
 _SITEMAP = "https://www.euda.europa.eu/sitemap.xml?page={page}"
-_SITEMAP_PAGES = 7
+# The EUDA sitemap index has 35 sub-sitemap pages; scan them all (news/events/
+# publications URLs are spread across them). The old cap of 7 missed most.
+_SITEMAP_PAGES = 35
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA}
@@ -36,7 +38,7 @@ def sitemap_urls(session: requests.Session, substr: str) -> list[str]:
     for page in range(1, _SITEMAP_PAGES + 1):
         try:
             r = session.get(_SITEMAP.format(page=page), timeout=40)
-        except requests.RequestException:
+        except Exception:  # requests OR curl_cffi errors
             continue
         if r.status_code != 200:
             continue

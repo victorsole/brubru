@@ -45,6 +45,7 @@ faiss-cpu==1.7.4  # Fast vector similarity search (use faiss-gpu for GPU)
 aiohttp==3.9.3
 beautifulsoup4==4.12.3
 lxml==5.1.0
+curl_cffi>=0.7,<1.0  # browser TLS/JA3 impersonation for fingerprint WAFs (EUDA); keep in sync with requirements-light.txt
 tenacity==8.2.3  # Retry logic
 feedparser==6.0.11  # RSS/Atom feed parsing
 

@@ -46,9 +46,17 @@ def _item(url: str, title: str, item_type: str, now: datetime) -> Item:
         document_date=None, creation_date=now, source_kind="euda_sitemap", guid=url)
 
 
+def _cffi_session():
+    """EUDA sits behind a WAF that 403s plain requests (Aug 2026), including its
+    sitemap sub-pages. A curl_cffi session impersonating a real Chrome TLS/JA3
+    fingerprint clears it (Playwright can't read the XML sitemaps). Drop-in
+    compatible with the requests.Session API the helpers use."""
+    from curl_cffi import requests as _creq
+    return _creq.Session(impersonate="chrome131")
+
+
 def _ingest(substr: str, item_type: str, fetch_bodies: bool) -> list[Item]:
-    s = requests.Session()
-    s.headers.update(_HEADERS)
+    s = _cffi_session()
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     for url in sitemap_urls(s, substr):
@@ -66,8 +74,7 @@ def ingest_euda_events(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 
 def ingest_euda_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    s = requests.Session()
-    s.headers.update(_HEADERS)
+    s = _cffi_session()
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     for path in _TOPIC_PATHS:
