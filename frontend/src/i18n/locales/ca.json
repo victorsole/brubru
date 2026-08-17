@@ -4431,7 +4431,7 @@
     "nav": {
       "what": "Què és MCP",
       "quickstart": "Inici ràpid",
-      "claude": "Claude Desktop",
+      "claude": "Claude",
       "cursor": "Cursor",
       "cline": "Cline",
       "continue": "Continue",
@@ -4440,7 +4440,8 @@
       "gemini": "Gemini",
       "tools": "Eines",
       "pricing": "Preus",
-      "mistral": "Mistral"
+      "mistral": "Mistral",
+      "allfour": "Els quatre alhora"
     },
     "cta": {
       "mintKey": "Crear una API key",
@@ -4454,7 +4455,7 @@
     },
     "what": {
       "title": "Què és MCP?",
-      "body1": "El Model Context Protocol es un estandard obert que permet als assistents d'IA descobrir i cridar eines externes. Brubru executa un servidor MCP perque qualsevol client compatible - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - pugui preguntar a Brubru sobre politica, legislacio, esdeveniments del calendari, eurodiputats i comissions de la UE sense copiar i enganxar context.",
+      "body1": "El Model Context Protocol es un estandard obert que permet als assistents d'IA descobrir i cridar eines externes. Brubru executa un servidor MCP perque qualsevol client compatible - Claude, ChatGPT, Mistral o Gemini - pugui preguntar a Brubru sobre politica, legislacio, esdeveniments del calendari, eurodiputats i comissions de la UE sense copiar i enganxar context.",
       "body2": "L'autenticació va amb la teva clau API de Brubru. Cada crida a una eina debita el teu saldo en euros al mateix preu que l'API REST. Les eines que necessiten un accés més ampli (per exemple read:ep, read:commission) només funcionen si la clau es va crear amb aquell àmbit: el teu radi d'impacte és exactament el conjunt d'àmbits que vas triar."
     },
     "quickstart": {
@@ -4469,7 +4470,7 @@
       "curlLabel": "Verificació amb curl"
     },
     "claude": {
-      "title": "Claude Desktop",
+      "title": "Claude",
       "body": "Claude Desktop llegeix els seus servidors MCP d'un fitxer JSON. Afegeix Brubru així.",
       "s1": "Obre Claude Desktop → Ajustaments → Developer → Edit config.",
       "s2": "Enganxa el JSON de sota. Substitueix YOUR_KEY amb el text pla que vas copiar a brubru.beresol.eu/api.",
@@ -4566,6 +4567,14 @@
       "urlLabel": "URL del connector (inclou la teva clau)",
       "cliTitle": "La vibe CLI",
       "cliBody": "La CLI usa una capçalera Bearer (no admet OAuth). Afegeix Brubru al teu config.toml:"
+    },
+    "allfour": {
+      "title": "Fes-lo servir als quatre alhora",
+      "body": "El connector és un únic endpoint sense estat, de manera que una clau no està lligada a un dispositiu ni a una sessió. Pots connectar Claude, ChatGPT, Mistral i Gemini al mateix temps i consultar-los tots en paral·lel.",
+      "b1": "Una clau, un saldo. Enganxa la mateixa clau a Claude, Mistral i Gemini; a ChatGPT inicies sessió i Brubru associa aquesta sessió al mateix compte. Cada crida, des de qualsevol client, consumeix el mateix saldo.",
+      "b2": "Cada host arriba a tota l'API. Les mateixes dues eines de passarel·la (explorar el catàleg i després cridar qualsevol ruta) exposen els més de 900 endpoints a cada client, mai un subconjunt reduït.",
+      "b3": "Realment simultani. Quatre clients cridant l'endpoint alhora és trànsit web normal, sense places, bloquejos ni límit per dispositiu.",
+      "b4": "Un límit de freqüència compartit. Les peticions dels quatre hosts comparteixen el límit per minut de la teva clau, generós als plans de pagament i que mai s'assoleix amb un ús normal de xat."
     }
   },
   "votes": {

@@ -4431,7 +4431,7 @@
     "nav": {
       "what": "Cos'è MCP",
       "quickstart": "Avvio rapido",
-      "claude": "Claude Desktop",
+      "claude": "Claude",
       "cursor": "Cursor",
       "cline": "Cline",
       "continue": "Continue",
@@ -4440,7 +4440,8 @@
       "gemini": "Gemini",
       "tools": "Strumenti",
       "pricing": "Prezzi",
-      "mistral": "Mistral"
+      "mistral": "Mistral",
+      "allfour": "Tutti e quattro insieme"
     },
     "cta": {
       "mintKey": "Crea una API key",
@@ -4454,7 +4455,7 @@
     },
     "what": {
       "title": "Cos'è MCP?",
-      "body1": "Il Model Context Protocol e uno standard aperto che consente agli assistenti IA di scoprire e chiamare strumenti esterni. Brubru esegue un server MCP cosi che qualsiasi client compatibile - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - possa interrogare Brubru su politica, legislazione, eventi del calendario, eurodeputati e commissioni dell'UE senza copiare e incollare il contesto.",
+      "body1": "Il Model Context Protocol e uno standard aperto che consente agli assistenti IA di scoprire e chiamare strumenti esterni. Brubru esegue un server MCP cosi che qualsiasi client compatibile - Claude, ChatGPT, Mistral o Gemini - possa interrogare Brubru su politica, legislazione, eventi del calendario, eurodeputati e commissioni dell'UE senza copiare e incollare il contesto.",
       "body2": "L'autenticazione usa la tua chiave API Brubru. Ogni chiamata a uno strumento addebita il tuo saldo in euro allo stesso prezzo dell'API REST. Gli strumenti che richiedono accesso più ampio (read:ep, read:commission) funzionano solo se la chiave è stata creata con quell'ambito: il tuo raggio d'impatto è esattamente l'insieme di ambiti scelto."
     },
     "quickstart": {
@@ -4469,7 +4470,7 @@
       "curlLabel": "Verifica con curl"
     },
     "claude": {
-      "title": "Claude Desktop",
+      "title": "Claude",
       "body": "Claude Desktop legge i server MCP da un file JSON. Aggiungi Brubru così.",
       "s1": "Apri Claude Desktop → Settings → Developer → Edit config.",
       "s2": "Incolla il JSON sotto. Sostituisci YOUR_KEY con il testo che hai copiato a brubru.beresol.eu/api.",
@@ -4566,6 +4567,14 @@
       "urlLabel": "URL del connettore (include la tua chiave)",
       "cliTitle": "La vibe CLI",
       "cliBody": "La CLI usa un header Bearer (non supporta OAuth). Aggiungi Brubru al tuo config.toml:"
+    },
+    "allfour": {
+      "title": "Usalo su tutti e quattro insieme",
+      "body": "Il connettore è un unico endpoint stateless, quindi una chiave non è legata a un dispositivo né a una sessione. Puoi collegare Claude, ChatGPT, Mistral e Gemini contemporaneamente e interrogarli tutti in parallelo.",
+      "b1": "Una chiave, un saldo. Incolla la stessa chiave in Claude, Mistral e Gemini; in ChatGPT accedi e Brubru associa quella sessione allo stesso account. Ogni chiamata, da qualsiasi client, attinge allo stesso saldo.",
+      "b2": "Ogni host raggiunge l'intera API. Gli stessi due strumenti gateway (sfogliare il catalogo, poi chiamare qualsiasi percorso) espongono gli oltre 900 endpoint in ogni client, mai un sottoinsieme ridotto.",
+      "b3": "Davvero simultaneo. Quattro client che chiamano l'endpoint insieme sono normale traffico web, senza posti, blocchi o limiti per dispositivo.",
+      "b4": "Un limite di frequenza condiviso. Le richieste dei quattro host condividono il tetto al minuto della tua chiave, generoso nei piani a pagamento e mai raggiunto nell'uso normale in chat."
     }
   },
   "votes": {

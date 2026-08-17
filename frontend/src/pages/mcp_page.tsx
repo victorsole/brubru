@@ -26,12 +26,21 @@ import './api_page.css';   // reuse the eyebrow / hero / sidebar layout
 import './mcp_page.css';
 
 const TOOLS = [
-  { name: 'ask_brubru',            scope: 'read:knowledge', costEur: 0.005 },
-  { name: 'search_eu_legislation', scope: 'read:laws',      costEur: 0.005 },
-  { name: 'search_knowledge_guides', scope: 'read:knowledge', costEur: 0.005 },
-  { name: 'get_procedure_status',  scope: 'read:procedures', costEur: 0.005 },
-  { name: 'get_calendar_events',   scope: 'read:calendar',  costEur: 0.005 },
-  { name: 'search_eprs',           scope: 'read:knowledge', costEur: 0.005 },
+  { name: 'ask_brubru',                    scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search',                        scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'fetch',                         scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search_eu_legislation',         scope: 'read:laws',       costEur: 0.005 },
+  { name: 'search_knowledge_guides',       scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'get_procedure_status',          scope: 'read:procedures', costEur: 0.005 },
+  { name: 'get_calendar_events',           scope: 'read:calendar',   costEur: 0.005 },
+  { name: 'search_eprs',                   scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search_funding',                scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search_sanctions',              scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search_geographical_indications', scope: 'read:knowledge', costEur: 0.005 },
+  { name: 'search_lobbyists',              scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'search_consultations',          scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'list_brubru_datasets',          scope: 'read:knowledge',  costEur: 0.005 },
+  { name: 'query_brubru_api',              scope: 'read:knowledge',  costEur: 0.005 },
 ] as const;
 
 // Production URL — used in the copy-paste blocks. This is the Railway backend
@@ -42,13 +51,15 @@ const PROD_URL = 'https://brubru-production.up.railway.app/api/mcp';
 // connector, some Gemini/ChatGPT flows) the key rides in the query string.
 const PROD_URL_WITH_KEY = (key = 'brubru_live_YOUR_KEY') => `${PROD_URL}?key=${key}`;
 
-const CONFIG_JSON_CLAUDE = (key = 'brubru_live_YOUR_KEY') =>
+// Gemini CLI (~/.gemini/settings.json) — remote HTTP uses `httpUrl` + Bearer header.
+const CONFIG_JSON_GEMINI = (key = 'brubru_live_YOUR_KEY') =>
   JSON.stringify(
     {
       mcpServers: {
         brubru: {
-          url: PROD_URL,
+          httpUrl: PROD_URL,
           headers: { Authorization: `Bearer ${key}` },
+          timeout: 15000,
         },
       },
     },
@@ -56,19 +67,9 @@ const CONFIG_JSON_CLAUDE = (key = 'brubru_live_YOUR_KEY') =>
     2,
   );
 
-const CONFIG_JSON_CURSOR = (key = 'brubru_live_YOUR_KEY') =>
-  JSON.stringify(
-    {
-      mcpServers: {
-        brubru: {
-          url: PROD_URL,
-          env: { AUTHORIZATION: `Bearer ${key}` },
-        },
-      },
-    },
-    null,
-    2,
-  );
+// Mistral vibe CLI (config.toml) — Bearer header, no OAuth.
+const CONFIG_TOML_MISTRAL = (key = 'brubru_live_YOUR_KEY') =>
+  `[[mcp_servers]]\nname = "brubru"\ntransport = "http"\nurl = "${PROD_URL}"\nheaders = { "Authorization" = "Bearer ${key}" }`;
 
 const CURL_EXAMPLE = (key = 'brubru_live_YOUR_KEY') =>
   `curl -X POST ${PROD_URL} \\\n  -H "Authorization: Bearer ${key}" \\\n  -H "Content-Type: application/json" \\\n  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'`;
@@ -117,12 +118,10 @@ export const McpPage = () => {
     { id: 'what',        label: t('mcp.nav.what') },
     { id: 'quickstart',  label: t('mcp.nav.quickstart') },
     { id: 'claude',      label: t('mcp.nav.claude') },
-    { id: 'cursor',      label: t('mcp.nav.cursor') },
-    { id: 'cline',       label: t('mcp.nav.cline') },
-    { id: 'continue',    label: t('mcp.nav.continue') },
-    { id: 'vscode',      label: t('mcp.nav.vscode') },
     { id: 'chatgpt',     label: t('mcp.nav.chatgpt') },
+    { id: 'mistral',     label: t('mcp.nav.mistral') },
     { id: 'gemini',      label: t('mcp.nav.gemini') },
+    { id: 'allfour',     label: t('mcp.nav.allfour') },
     { id: 'tools',       label: t('mcp.nav.tools') },
     { id: 'pricing',     label: t('mcp.nav.pricing') },
   ];
@@ -235,93 +234,64 @@ export const McpPage = () => {
           {/* ===== Claude ===== */}
           <section className="policy-page__section" id="claude">
             <h2>{t('mcp.claude.title')}</h2>
-
-            {/* Path 1 — claude.ai web / Desktop Connectors UI (URL only) */}
-            <h3 className="mcp-subhead">{t('mcp.claude.webTitle')}</h3>
             <p>{t('mcp.claude.webBody')}</p>
             <CopyableBlock value={PROD_URL_WITH_KEY()} label={t('mcp.claude.webUrlLabel') as string} />
-
-            {/* Path 2 — Desktop config file (header auth) */}
-            <h3 className="mcp-subhead">{t('mcp.claude.cfgTitle')}</h3>
-            <p>{t('mcp.claude.body')}</p>
-            <ol className="mcp-list">
-              <li>{t('mcp.claude.s1')}</li>
-              <li>{t('mcp.claude.s2')}</li>
-              <li>{t('mcp.claude.s3')}</li>
-              <li>{t('mcp.claude.s4')}</li>
-            </ol>
-            <CopyableBlock value={CONFIG_JSON_CLAUDE()} label="claude_desktop_config.json" />
-          </section>
-
-          {/* ===== Cursor ===== */}
-          <section className="policy-page__section" id="cursor">
-            <h2>{t('mcp.cursor.title')}</h2>
-            <p>{t('mcp.cursor.body')}</p>
-            <ol className="mcp-list">
-              <li>{t('mcp.cursor.s1')}</li>
-              <li>{t('mcp.cursor.s2')}</li>
-              <li>{t('mcp.cursor.s3')}</li>
-            </ol>
-            <CopyableBlock value={CONFIG_JSON_CURSOR()} label=".cursor/mcp.json" />
-          </section>
-
-          {/* ===== Cline ===== */}
-          <section className="policy-page__section" id="cline">
-            <h2>{t('mcp.cline.title')}</h2>
-            <p>{t('mcp.cline.body')}</p>
-            <ol className="mcp-list">
-              <li>{t('mcp.cline.s1')}</li>
-              <li>{t('mcp.cline.s2')}</li>
-              <li>{t('mcp.cline.s3')}</li>
-            </ol>
-            <CopyableBlock value={CONFIG_JSON_CLAUDE()} label="cline_mcp_settings.json" />
-          </section>
-
-          {/* ===== Continue ===== */}
-          <section className="policy-page__section" id="continue">
-            <h2>{t('mcp.continue.title')}</h2>
-            <p>{t('mcp.continue.body')}</p>
-            <ol className="mcp-list">
-              <li>{t('mcp.continue.s1')}</li>
-              <li>{t('mcp.continue.s2')}</li>
-            </ol>
-            <CopyableBlock value={CONFIG_JSON_CLAUDE()} label="~/.continue/config.json" />
-          </section>
-
-          {/* ===== VS Code ===== */}
-          <section className="policy-page__section" id="vscode">
-            <h2>{t('mcp.vscode.title')}</h2>
-            <p>{t('mcp.vscode.body')}</p>
-            <ol className="mcp-list">
-              <li>{t('mcp.vscode.s1')}</li>
-              <li>{t('mcp.vscode.s2')}</li>
-              <li>{t('mcp.vscode.s3')}</li>
-            </ol>
-            <CopyableBlock value={CONFIG_JSON_CLAUDE()} label=".vscode/mcp.json" />
           </section>
 
           {/* ===== ChatGPT ===== */}
           <section className="policy-page__section" id="chatgpt">
             <h2>{t('mcp.chatgpt.title')}</h2>
             <p>{t('mcp.chatgpt.body')}</p>
-            <p>{t('mcp.chatgpt.bodyMoaning')}</p>
+            <p>{t('mcp.chatgpt.plan')}</p>
             <ol className="mcp-list">
               <li>{t('mcp.chatgpt.s1')}</li>
               <li>{t('mcp.chatgpt.s2')}</li>
               <li>{t('mcp.chatgpt.s3')}</li>
               <li>{t('mcp.chatgpt.s4')}</li>
             </ol>
-            <CopyableBlock
-              value={`${PROD_URL}\n(use Bearer auth in the action's Authentication settings)`}
-              label={t('mcp.chatgpt.actionUrl') as string}
-            />
+            <CopyableBlock value={PROD_URL_WITH_KEY()} label={t('mcp.chatgpt.urlLabel') as string} />
+          </section>
+
+          {/* ===== Mistral ===== */}
+          <section className="policy-page__section" id="mistral">
+            <h2>{t('mcp.mistral.title')}</h2>
+            <p>{t('mcp.mistral.body')}</p>
+
+            <h3 className="mcp-subhead">{t('mcp.mistral.leChatTitle')}</h3>
+            <ol className="mcp-list">
+              <li>{t('mcp.mistral.s1')}</li>
+              <li>{t('mcp.mistral.s2')}</li>
+              <li>{t('mcp.mistral.s3')}</li>
+            </ol>
+            <CopyableBlock value={PROD_URL_WITH_KEY()} label={t('mcp.mistral.urlLabel') as string} />
+
+            <h3 className="mcp-subhead">{t('mcp.mistral.cliTitle')}</h3>
+            <p>{t('mcp.mistral.cliBody')}</p>
+            <CopyableBlock value={CONFIG_TOML_MISTRAL()} label="config.toml" />
           </section>
 
           {/* ===== Gemini ===== */}
           <section className="policy-page__section" id="gemini">
             <h2>{t('mcp.gemini.title')}</h2>
             <p>{t('mcp.gemini.body')}</p>
-            <p>{t('mcp.gemini.bodySecondary')}</p>
+            <ol className="mcp-list">
+              <li>{t('mcp.gemini.s1')}</li>
+              <li>{t('mcp.gemini.s2')}</li>
+              <li>{t('mcp.gemini.s3')}</li>
+            </ol>
+            <CopyableBlock value={CONFIG_JSON_GEMINI()} label="~/.gemini/settings.json" />
+          </section>
+
+          {/* ===== Use it in all four at once ===== */}
+          <section className="policy-page__section" id="allfour">
+            <h2>{t('mcp.allfour.title')}</h2>
+            <p>{t('mcp.allfour.body')}</p>
+            <ul className="mcp-bullets">
+              <li>{t('mcp.allfour.b1')}</li>
+              <li>{t('mcp.allfour.b2')}</li>
+              <li>{t('mcp.allfour.b3')}</li>
+              <li>{t('mcp.allfour.b4')}</li>
+            </ul>
           </section>
 
           {/* ===== Tool catalogue ===== */}

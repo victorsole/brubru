@@ -3539,7 +3539,7 @@
     "nav": {
       "what": "Wat is MCP",
       "quickstart": "Snelstart",
-      "claude": "Claude Desktop",
+      "claude": "Claude",
       "cursor": "Cursor",
       "cline": "Cline",
       "continue": "Continue",
@@ -3548,7 +3548,8 @@
       "gemini": "Gemini",
       "tools": "Tools",
       "pricing": "Prijzen",
-      "mistral": "Mistral"
+      "mistral": "Mistral",
+      "allfour": "Alle vier tegelijk"
     },
     "cta": {
       "mintKey": "Maak een API-sleutel",
@@ -3562,7 +3563,7 @@
     },
     "what": {
       "title": "Wat is MCP?",
-      "body1": "Het Model Context Protocol is een open standaard waarmee AI-assistenten externe tools kunnen ontdekken en aanroepen. Brubru draait een MCP-server zodat elke compatibele client - Claude, ChatGPT, Mistral, Gemini, Cursor, Cline - Brubru kan bevragen over EU-beleid, wetgeving, agenda-items, Europarlementariers en commissies zonder context te kopieren en plakken.",
+      "body1": "Het Model Context Protocol is een open standaard waarmee AI-assistenten externe tools kunnen ontdekken en aanroepen. Brubru draait een MCP-server zodat elke compatibele client - Claude, ChatGPT, Mistral of Gemini - Brubru kan bevragen over EU-beleid, wetgeving, agenda-items, Europarlementariers en commissies zonder context te kopieren en plakken.",
       "body2": "Authenticatie loopt via je Brubru API-sleutel. Elke tool-call boekt af van je euro-saldo tegen dezelfde prijs als de REST API. Tools die ruimere toegang nodig hebben (read:ep, read:commission, ...) werken alleen als de sleutel met die scope is aangemaakt - je impactstraal komt exact overeen met de gekozen scopes."
     },
     "quickstart": {
@@ -3577,7 +3578,7 @@
       "curlLabel": "Sanity-check met curl"
     },
     "claude": {
-      "title": "Claude Desktop",
+      "title": "Claude",
       "body": "Claude Desktop leest MCP-servers uit een JSON-configbestand. Voeg Brubru zo toe.",
       "s1": "Open Claude Desktop → Settings → Developer → Edit config.",
       "s2": "Plak de JSON hieronder. Vervang YOUR_KEY door de plaintext die je hebt gekopieerd op brubru.beresol.eu/api.",
@@ -3674,6 +3675,14 @@
       "urlLabel": "Connector-URL (bevat je sleutel)",
       "cliTitle": "De vibe CLI",
       "cliBody": "De CLI gebruikt een Bearer-header (het ondersteunt geen OAuth). Voeg Brubru toe aan je config.toml:"
+    },
+    "allfour": {
+      "title": "Gebruik het op alle vier tegelijk",
+      "body": "De connector is één stateless endpoint, dus een sleutel is niet gebonden aan een apparaat of sessie. Je kunt Claude, ChatGPT, Mistral en Gemini tegelijk verbinden en ze allemaal parallel bevragen.",
+      "b1": "Eén sleutel, één saldo. Plak dezelfde sleutel in Claude, Mistral en Gemini; in ChatGPT log je in en koppelt Brubru die sessie aan hetzelfde account. Elke aanroep, vanaf welke client dan ook, gaat van hetzelfde saldo af.",
+      "b2": "Elke host bereikt de hele API. Dezelfde twee gateway-tools (blader door de catalogus en roep vervolgens elk pad aan) ontsluiten alle 900+ endpoints in elke client, nooit een beperkte subset.",
+      "b3": "Echt gelijktijdig. Vier clients die het endpoint samen aanroepen is gewoon webverkeer, zonder plaatsen, sloten of limiet per apparaat.",
+      "b4": "Eén gedeelde rate limit. Verzoeken van alle vier de hosts delen het limiet-per-minuut van je sleutel, royaal op betaalde abonnementen en nooit bereikt bij normaal chatgebruik."
     }
   },
   "votes": {
