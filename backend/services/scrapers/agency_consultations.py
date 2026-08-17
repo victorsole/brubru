@@ -131,7 +131,14 @@ _ECHA_CAT = __import__("re").compile(
 
 def ingest_echa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
     import re as _re
-    html = _fetch(_ECHA + "/consultations/current")
+    # ECHA sits behind a WAF that 403s raw HTTP (Aug 2026): _fetch returns a stub.
+    # The dt/dd consultation list only renders in a real browser, so fetch via the
+    # headless-Chromium WafBrowserFetcher (Playwright). The _ECHA_CAT structure is
+    # unchanged.
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    with WafBrowserFetcher() as _f:
+        _res = _f.fetch(_ECHA + "/consultations/current", strip_chrome=False)
+    html = getattr(_res, "html", "") or ""
     now = datetime.now(timezone.utc)
     out: dict[str, Item] = {}
     for typ, href, count, rest in _ECHA_CAT.findall(html):
