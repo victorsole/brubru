@@ -160,6 +160,14 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if weekday == 6 and hour == 5:
         fires.append(("weekly", "/api/cron/sync/weekly"))
 
+    # Commission heavy bulk datasets: Sunday 07:00 UTC. The 6 large commission
+    # sub-types (CORDIS research / RASFF alerts / DG COMP state-aid / EBTI tariff
+    # rulings / TARIC codes / FTS recipients) that no other tier covers -- bulk
+    # reference universes that move slowly. Separate weekly slot so they never
+    # collide with the daily economy batches (10/15/21) on the single worker.
+    if weekday == 6 and hour == 7:
+        fires.append(("commission_heavy", "/api/cron/sync/commission-heavy"))
+
     # Monthly tier: 1st of month 02:00 UTC (offset to 02:30 conceptually but we wake on minute 0)
     # Avoid collision with warm-12h (also at 02:00) by using a different hour for monthly: 01.
     # Actually keep at 02 — let both fire in sequence. They use separate endpoints anyway.

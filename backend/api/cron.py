@@ -756,7 +756,8 @@ async def cron_sync_economy(
     Runs the batch as a BACKGROUND task and returns immediately so the
     dispatcher's HTTP call cannot time out and kill the run mid-flight. Records
     a freshness run at the end (visible in /api/sync/health). Cadence: once per
-    day per body. `commission` is excluded (already on the daily/weekly tiers).
+    day per body. `commission` is excluded here; its heavy bulk sub-datasets run
+    on the dedicated `/sync/commission-heavy` weekly tier (Sunday 07:00 UTC).
     """
     _verify_cron_secret(authorization)
     import asyncio
@@ -770,6 +771,102 @@ async def cron_sync_economy(
     _economy_tasks.add(task)
     task.add_done_callback(_economy_tasks.discard)
     return {"status": "started", "tier": f"economy_b{batch}", "bodies": len(bodies)}
+
+
+# ---- Commission heavy bulk datasets (weekly) -------------------------------
+# The 6 large economy_items sub-types under body_code='commission' that NO other
+# cron tier covers. Bulk reference universes (tens-to-hundreds of thousands of
+# rows) that move slowly; without this tier they went stale ~2 months (frozen
+# since June 2026 until the 17 Aug 2026 general DB update surfaced it). Each
+# syncs one at a time via sync_economy --no-bodies (500-row batched commits +
+# reconnect-on-drop), so a 100k-row upsert stays gentle on the pooled connection.
+_COMMISSION_HEAVY_TYPES: list[str] = [
+    "research_project",    # CORDIS Horizon projects (~23k)
+    "rasff_notification",  # RASFF food-safety alerts (~32k)
+    "state_aid_case",      # DG COMP state-aid cases (~62k)
+    "tariff_ruling",       # EBTI binding tariff rulings (~76k; slow EBTI export)
+    "tariff_code",         # TARIC tariff codes (~13k)
+    "funding_recipient",   # FTS funding recipients (~186k)
+]
+_commission_heavy_running: set = set()
+_commission_heavy_tasks: set = set()
+
+
+async def _run_commission_heavy_bg() -> None:
+    """Run the 6 heavy commission sub-datasets sequentially, fail-soft per type."""
+    from datetime import datetime, timezone
+    from services.sync.freshness import record_run
+
+    started = datetime.now(timezone.utc)
+    results: dict = {}
+    ok_count = 0
+    first_fail = ""
+    try:
+        for t in _COMMISSION_HEAVY_TYPES:
+            res = await _run_script_async(
+                f"commission_{t}", "scripts/sync_economy.py",
+                ["--body", "commission", "--type", t, "--no-bodies"], timeout=1800,
+            )
+            results[t] = res.get("status")
+            if res.get("status") == "success":
+                ok_count += 1
+            elif not first_fail:
+                _detail = (res.get("stderr_tail") or res.get("error")
+                           or res.get("reason") or f"rc={res.get('returncode')}")
+                first_fail = f"{t}: {str(_detail)[:400]}"
+        logger.info(f"[CRON] commission-heavy sync complete: {results}")
+        db = SessionLocal()
+        try:
+            record_run(
+                db, source_key="cron_dispatch", tier="commission_heavy",
+                status=("success" if ok_count else "failed"),
+                items_added=ok_count, started_at=started,
+                finished_at=datetime.now(timezone.utc),
+                error=(None if ok_count else
+                       f"{ok_count}/{len(_COMMISSION_HEAVY_TYPES)} types ok; first_fail {first_fail}"),
+            )
+        finally:
+            db.close()
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning(f"[CRON] commission-heavy background run failed: {exc}")
+        db = SessionLocal()
+        try:
+            record_run(
+                db, source_key="cron_dispatch", tier="commission_heavy",
+                status="failed", error=str(exc)[:500], started_at=started,
+                finished_at=datetime.now(timezone.utc),
+            )
+        finally:
+            db.close()
+    finally:
+        _commission_heavy_running.discard(0)
+
+
+@router.post("/sync/commission-heavy")
+async def cron_sync_commission_heavy(authorization: str = Header(...)):
+    """
+    Commission heavy bulk datasets (weekly, Sunday 07:00 UTC): the 6 large
+    economy_items sub-types under body_code='commission' that no other cron tier
+    covers -- CORDIS research projects, RASFF food-safety alerts, DG COMP
+    state-aid cases, EBTI tariff rulings, TARIC tariff codes, and FTS funding
+    recipients. Bulk reference universes (tens-to-hundreds of thousands of rows)
+    that move slowly; without this tier they were frozen ~2 months (stuck since
+    June 2026 until the 17 Aug general DB update).
+
+    Runs as a BACKGROUND task (returns immediately) so the dispatcher's HTTP call
+    cannot time out. Each sub-type syncs one at a time via sync_economy
+    --no-bodies (its own 500-row batched commits + reconnect-on-drop). Records a
+    freshness run for /api/sync/health.
+    """
+    _verify_cron_secret(authorization)
+    import asyncio
+    if 0 in _commission_heavy_running:
+        return {"status": "already_running", "tier": "commission_heavy"}
+    _commission_heavy_running.add(0)
+    task = asyncio.create_task(_run_commission_heavy_bg())
+    _commission_heavy_tasks.add(task)
+    task.add_done_callback(_commission_heavy_tasks.discard)
+    return {"status": "started", "tier": "commission_heavy", "types": len(_COMMISSION_HEAVY_TYPES)}
 
 
 @router.post("/sync/weekly")
