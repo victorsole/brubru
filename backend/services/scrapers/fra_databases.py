@@ -83,6 +83,40 @@ def ingest_fra_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return asyncio.run(_scrape_topics_async(fetch_bodies=fetch_bodies))
 
 
+# The EU Charter of Fundamental Rights (CELEX 12012P/TXT) is static public law:
+# 54 articles across 7 titles, unchanged since 2012. FRA's Charterpedia listing
+# went behind an Anubis anti-bot verification wall (Aug 2026), so re-source the
+# articles authoritatively from EUR-Lex rather than scraping past the wall — more
+# reliable, and the canonical text. EUR-Lex marks each article with a `ti-art`
+# ("Article N") heading followed by an `sti-art` subtitle (the article name).
+_CHARTER_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:12012P/TXT"
+
+
 def ingest_fra_charterpedia(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return ingest_browser(_BASE, "/en/charterpedia", "fra", "charter_article",
-                          "/en/eu-charter/article/", "fra_charterpedia", min_title=6)
+    import re
+    import urllib.request
+    req = urllib.request.Request(_CHARTER_URL, headers={"User-Agent": _UA})
+    try:
+        html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "replace")
+    except Exception:
+        return []
+    soup = BeautifulSoup(html, "html.parser")
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    for ti in soup.select(".ti-art"):
+        m = re.match(r"Article\s+(\d{1,2})\b", ti.get_text(" ", strip=True))
+        if not m:
+            continue
+        n = m.group(1)
+        sti = ti.find_next(class_="sti-art")
+        name = clean(sti.get_text(" ", strip=True)) if sti else ""
+        if not name:
+            continue
+        url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012P/TXT#art_{n}"
+        body = f"{name}\nEU Charter of Fundamental Rights, Article {n} (CELEX 12012P/TXT)."
+        items.append(Item(
+            body_code="fra", item_type="charter_article",
+            title=f"Article {n}: {name}"[:300], public_url=url,
+            body_txt=clean(body), document_date=None, creation_date=now,
+            source_kind="eurlex_charter", guid=f"charter-art-{n}"))
+    return items
