@@ -658,11 +658,16 @@ def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_
 
 
 def ingest_eu_osha_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """Calls for expression of interest live at /calls-expression-interest;
-    layout matches _parse_eu_osha_views."""
+    """Calls for expression of interest at /calls-expression-interest; layout
+    matches _parse_eu_osha_views. EU-OSHA's WAF drops raw HTTP (_fetch ->
+    RemoteDisconnected), so render via WafBrowserFetcher like ingest_eu_osha_tenders.
+    Returns [] cleanly when there are no open EOI calls."""
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    with WafBrowserFetcher() as f:
+        res = f.fetch(_EU_OSHA + "/en/about-eu-osha/procurement/calls-expression-interest",
+                      strip_chrome=False)
     return _parse_eu_osha_views(
-        _fetch(_EU_OSHA + "/en/about-eu-osha/procurement/calls-expression-interest"),
-        _EU_OSHA,
+        getattr(res, "html", "") or "", _EU_OSHA,
         body_code="eu_osha", item_type="eoi_call",
         source_kind="eu_osha_procurement",
     )
@@ -683,24 +688,26 @@ def ingest_eurofound_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     parser mirrors the EU-OSHA views-row pattern; if Eurofound's per-tab
     listing markup diverges, this returns [] cleanly and a follow-up pass
     can refine the regex once row examples are captured."""
+    # Eurofound consolidated its procurement onto a single /en/about/procurement
+    # page (Aug 2026); the old /calls-tenders-140k + /calls-tenders-below-140k
+    # sub-pages 404. Returns [] cleanly when the page shows no open procedures.
     items: list[Item] = []
-    for path in ("/en/about/procurement/calls-tenders-140k",
-                 "/en/about/procurement/calls-tenders-below-140k"):
-        try:
-            html = _fetch_eurofound_playwright(path)
-        except Exception:
-            continue
-        items += _parse_eu_osha_views(
-            html, _EUROFOUND, body_code="eurofound", item_type="tender",
-            source_kind="eurofound_procurement",
-        )
+    try:
+        html = _fetch_eurofound_playwright("/en/about/procurement")
+    except Exception:
+        return []
+    items += _parse_eu_osha_views(
+        html, _EUROFOUND, body_code="eurofound", item_type="tender",
+        source_kind="eurofound_procurement",
+    )
     return items
 
 
 def ingest_eurofound_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    # Same consolidated /en/about/procurement page as tenders (old
+    # /calls-expression-interest sub-page 404s).
     try:
-        html = _fetch_eurofound_playwright(
-            "/en/about/procurement/calls-expression-interest")
+        html = _fetch_eurofound_playwright("/en/about/procurement")
     except Exception:
         return []
     return _parse_eu_osha_views(
