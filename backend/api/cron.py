@@ -869,6 +869,94 @@ async def cron_sync_commission_heavy(authorization: str = Header(...)):
     return {"status": "started", "tier": "commission_heavy", "types": len(_COMMISSION_HEAVY_TYPES)}
 
 
+# ---- Scraper-health detector (nightly) -------------------------------------
+# Runs scripts/scraper_health.py in confirm mode: a DB fetched_at scan narrows to
+# stale/empty candidates, then a live ingest-run confirms broken vs cron-gap. Only
+# ALERTS when a scraper is BROKEN/ERROR on >= 2 consecutive nightly runs -- a single
+# run can trip a source rate-limit and false-positive -- tracked by the
+# consecutive_fails counter in scraper_health_state.
+_scraper_health_running: set = set()
+_scraper_health_tasks: set = set()
+
+_SCRAPER_HEALTH_UPSERT = """
+    INSERT INTO scraper_health_state
+      (body_code, item_type, consecutive_fails, last_status, rows_count, last_parse, detail, last_checked)
+    VALUES (:b, :t, :init_cf, :st, :rows, :parse, :detail, now())
+    ON CONFLICT (body_code, item_type) DO UPDATE SET
+      consecutive_fails = CASE WHEN :is_break
+          THEN scraper_health_state.consecutive_fails + 1 ELSE 0 END,
+      last_status = EXCLUDED.last_status, rows_count = EXCLUDED.rows_count,
+      last_parse = EXCLUDED.last_parse, detail = EXCLUDED.detail, last_checked = now()
+    RETURNING consecutive_fails
+"""
+
+
+async def _run_scraper_health_bg() -> None:
+    """Run the detector, update consecutive-fail counters, log/record confirmed breaks."""
+    import asyncio as _asyncio
+    from datetime import datetime, timezone
+    from sqlalchemy import text as _text
+    from services.sync.freshness import record_run
+
+    started = datetime.now(timezone.utc)
+    confirmed: list[str] = []
+    try:
+        import scripts.scraper_health as sh
+        # confirm mode does blocking live scraper runs -> off the event loop.
+        results = await _asyncio.to_thread(sh.run, "confirm", None)
+        db = SessionLocal()
+        try:
+            for r in results:
+                is_break = r["cls"] in ("BROKEN", "ERROR")
+                cf = db.execute(_text(_SCRAPER_HEALTH_UPSERT), {
+                    "b": r["body"], "t": r["type"],
+                    "init_cf": 1 if is_break else 0, "is_break": is_break,
+                    "st": r["cls"], "rows": r["rows"], "parse": r.get("parse"),
+                    "detail": r["detail"],
+                }).scalar()
+                if is_break and cf and cf >= 2:
+                    confirmed.append(f'{r["body"]}/{r["type"]} (x{cf}): {r["detail"]}')
+            db.commit()
+            record_run(
+                db, source_key="cron_dispatch", tier="scraper_health",
+                status="success", items_added=len(confirmed), started_at=started,
+                finished_at=datetime.now(timezone.utc),
+                error=(None if not confirmed else "CONFIRMED BREAKS: " + "; ".join(confirmed[:12])),
+            )
+        finally:
+            db.close()
+        if confirmed:
+            logger.warning(f"[CRON] scraper-health {len(confirmed)} CONFIRMED break(s): {confirmed}")
+        else:
+            logger.info(f"[CRON] scraper-health OK ({len(results)} scrapers, no confirmed breaks)")
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning(f"[CRON] scraper-health run failed: {exc}")
+    finally:
+        _scraper_health_running.discard(0)
+
+
+@router.post("/scraper-health")
+async def cron_scraper_health(authorization: str = Header(...)):
+    """
+    Scraper-health detector (nightly, 23:00 UTC). Runs scripts/scraper_health.py in
+    confirm mode: a fast fetched_at scan narrows to stale/empty candidates, a live
+    ingest-run confirms broken vs cron-gap, and a retry filters transient blips.
+    Persists a per-(body,item_type) consecutive-fail counter in scraper_health_state
+    and logs/records CONFIRMED breaks (BROKEN/ERROR on >= 2 consecutive runs -- a
+    single run can trip a source rate-limit). Fire-and-forget background task so the
+    dispatcher's HTTP call cannot time out; result visible in /api/sync/health.
+    """
+    _verify_cron_secret(authorization)
+    import asyncio
+    if 0 in _scraper_health_running:
+        return {"status": "already_running", "tier": "scraper_health"}
+    _scraper_health_running.add(0)
+    task = asyncio.create_task(_run_scraper_health_bg())
+    _scraper_health_tasks.add(task)
+    task.add_done_callback(_scraper_health_tasks.discard)
+    return {"status": "started", "tier": "scraper_health"}
+
+
 @router.post("/sync/weekly")
 async def cron_sync_weekly(
     authorization: str = Header(...),

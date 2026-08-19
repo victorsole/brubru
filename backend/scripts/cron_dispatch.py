@@ -168,6 +168,12 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if weekday == 6 and hour == 7:
         fires.append(("commission_heavy", "/api/cron/sync/commission-heavy"))
 
+    # Scraper-health detector: 23:00 UTC daily, after the last economy batch (21:00)
+    # so freshly-synced bodies aren't flagged stale. Confirm mode (fetched_at scan +
+    # live-confirm candidates); alerts only on 2 consecutive BROKEN runs.
+    if hour == 23:
+        fires.append(("scraper_health", "/api/cron/scraper-health"))
+
     # Monthly tier: 1st of month 02:00 UTC (offset to 02:30 conceptually but we wake on minute 0)
     # Avoid collision with warm-12h (also at 02:00) by using a different hour for monthly: 01.
     # Actually keep at 02 — let both fire in sequence. They use separate endpoints anyway.
