@@ -892,10 +892,83 @@ async def list_conversations(
 
 
 # Health check endpoint
+# How long a provider-reachability verdict is reused before we spend another
+# token on it. Health endpoints get polled; probing the primary on every poll
+# would burn the very quota we are checking.
+_PRIMARY_PROBE_TTL_S = 300
+_primary_probe_cache: Dict[str, Any] = {"at": None, "result": None}
+
+
+async def _probe_primary_provider(force: bool = False) -> Dict[str, Any]:
+    """Ask the FIRST provider in the chain whether it would actually answer.
+
+    Why this exists (incident, 19 Aug 2026): the Cerebras account hit its
+    quota and began returning HTTP 402 `payment_required` to every request.
+    Chat kept working -- the chain fell through as designed -- but answers went
+    from roughly 8-13 seconds to 23.8, undoing half of the 6-7 August latency
+    rework. `/health` reported `"status": "healthy"` throughout, because it
+    listed the chain's CONFIGURATION and never asked a provider anything. A
+    health check that cannot fail on the failure that matters is not a health
+    check.
+
+    A 402 is not a 429. The chain absorbs a rate limit by design; quota
+    exhaustion is permanent until someone pays, so it must be surfaced.
+
+    Scope is deliberately ONE provider. A first draft also walked the chain to
+    report which provider was "serving", and it was wrong: a 1-token probe is
+    not a real request, so Groq failed it with `empty content (finish=length)`
+    -- its model spends the budget on reasoning tokens -- and NVIDIA timed out
+    at max_tokens=1 but answered at 8. The probe would have reported Mistral
+    while production was demonstrably being served by Gemini. Replacing an
+    over-optimistic signal with a confidently wrong one is not an improvement,
+    so this reports only what one cheap call can honestly establish.
+    """
+    now = datetime.now()
+    cached = _primary_probe_cache
+    if (not force and cached["at"]
+            and (now - cached["at"]).total_seconds() < _PRIMARY_PROBE_TTL_S):
+        return cached["result"]
+
+    out: Dict[str, Any] = {"primary": None, "primary_reachable": None,
+                           "primary_error": None}
+    try:
+        mp = getattr(get_ai_service(), "multi_provider", None)
+        if not mp or not getattr(mp, "providers", None):
+            out["primary_error"] = "no providers configured"
+            _primary_probe_cache.update(at=now, result=out)
+            return out
+
+        provider = mp.providers[0]
+        out["primary"] = provider.name
+        try:
+            await provider.generate(
+                system_prompt="Reply with the single word: ok",
+                messages=[{"role": "user", "content": "ok"}],
+                max_tokens=8,
+                temperature=0,
+            )
+            out["primary_reachable"] = True
+        except Exception as exc:  # noqa: BLE001
+            # Keep the provider's own words: "payment_required" and
+            # "rate_limit_exceeded" call for different responses from us.
+            out["primary_reachable"] = False
+            out["primary_error"] = f"{type(exc).__name__}: {str(exc)[:200]}"
+    except Exception as exc:  # noqa: BLE001
+        out["primary_error"] = f"{type(exc).__name__}: {str(exc)[:200]}"
+
+    _primary_probe_cache.update(at=now, result=out)
+    return out
+
+
 @router.get("/health")
-async def health_check():
+async def health_check(probe: bool = True):
     """
     Health check for chat service.
+
+    `probe=true` (the default) spends one token asking the primary provider
+    whether it would answer, cached for five minutes. `probe=false` returns
+    the configuration only -- the pre-19-August behaviour, kept for callers
+    that must not touch a provider.
     """
     try:
         ai_service = get_ai_service()
@@ -913,8 +986,17 @@ async def health_check():
             or os.getenv("GIT_COMMIT_SHA")
             or "unknown"
         )
+        chain_probe = await _probe_primary_provider() if probe else {}
+        # 'degraded' is the state that used to be invisible: chat answers, but
+        # not from the provider the latency budget assumes.
+        status = 'healthy'
+        if chain_probe.get('primary_reachable') is False:
+            # Chat still answers from a lower link in the chain, so this is a
+            # degradation (latency, cost), not an outage. Say which.
+            status = 'degraded'
+
         return {
-            'status': 'healthy',
+            'status': status,
             'service': 'chat',
             # The generator model is chosen per request from the free
             # open-model chain; this field reported a hardcoded Anthropic id
@@ -925,6 +1007,7 @@ async def health_check():
             'model': model_info['model'],
             'commit': commit[:12],
             'conversations': chat_count,
+            **chain_probe,
             'timestamp': datetime.now().isoformat()
         }
 

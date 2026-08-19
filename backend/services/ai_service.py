@@ -667,6 +667,108 @@ _IT_DECISIVE = frozenset({
 })
 
 
+# Language NAMES, accent-folded, mapped to the Brubru code they request. Used
+# only by _detect_language_request below -- never by the bag-of-words scorer,
+# where "catalan" appearing in an English sentence must not count as a Catalan
+# marker.
+_LANG_REQUEST_NAMES = {
+    "CA": ("catala", "catalan", "catalano", "catalaans"),
+    "ES": ("espanyol", "espanol", "castella", "castellano", "spanish",
+           "espagnol", "spaans", "spagnolo"),
+    "EN": ("angles", "ingles", "english", "anglais", "engels", "inglese"),
+    "FR": ("frances", "francais", "french", "frans", "francese"),
+    "IT": ("italiano", "italian", "italien", "italiaans", "italiana"),
+    "NL": ("neerlandes", "neerlandais", "dutch", "nederlands", "olandese",
+           "holandes"),
+}
+_LANG_NAME_TO_CODE = {n: c for c, ns in _LANG_REQUEST_NAMES.items() for n in ns}
+_LANG_NAMES_ALT = "|".join(sorted(_LANG_NAME_TO_CODE, key=len, reverse=True))
+
+# The language name must be IMMEDIATELY governed by a request word. A
+# sentence-wide preposition test was tried first and produced exactly the
+# false positive this guard exists to prevent: "What does Catalan law say
+# about waste collection in Barcelona?" matched on the "in" of "in Barcelona"
+# and answered an English question in Catalan.
+_LANG_REQUEST_RE = re.compile(
+    r"\b(?:in|en|em|op|nel|su|au|a)\s+(?:the\s+)?(" + _LANG_NAMES_ALT + r")\b|"
+    r"\b(?:responde?|respon|respondre|repondre|rispondi|antwoord|answer|reply|"
+    r"write|escriu|escribe|parla|parlez|traduce|tradueix|translate)\b"
+    r"(?:\s+\w+){0,2}\s+(" + _LANG_NAMES_ALT + r")\b")
+
+
+def _fold_diacritics(text: str) -> str:
+    """Strip combining marks so marker sets can stay pure ASCII."""
+    return "".join(
+        ch for ch in unicodedata.normalize("NFD", text.lower())
+        if unicodedata.category(ch) != "Mn"
+    )
+
+
+def _detect_language_request(text: str) -> Optional[str]:
+    """Return a Brubru language code when the user EXPLICITLY asks to be
+    answered in a given language, else None.
+
+    Why this exists (audit, 19 Aug 2026): a Terraqui subscriber asked in
+    Catalan, was answered in French because of a detector gap, replied
+    "En catala o angles." -- and was answered in English, because that
+    correction is the message with the least lexical signal a user ever
+    sends. It carries no content words, no "-cions" plural, no interpunct,
+    so the bag-of-words scorer finds nothing and falls through to the EN
+    default. The detector is at its weakest at the exact moment the user is
+    telling it what to do. She never received a Catalan answer and did not
+    write again.
+
+    Conservative on purpose: a MENTION of a language must never fire, because
+    answering an English question in Catalan is a worse failure than missing
+    the request. Hence the adjacency requirement in _LANG_REQUEST_RE, and
+    hence the short-query branch is capped at six words.
+    """
+    if not text:
+        return None
+    folded = _fold_diacritics(text)
+    words = re.findall(r"\b\w+\b", folded)
+    if not words:
+        return None
+    named = [_LANG_NAME_TO_CODE[w] for w in words if w in _LANG_NAME_TO_CODE]
+    if not named:
+        return None
+    # A query that is essentially nothing but a language name IS a request.
+    # "En catala o angles." names two; the FIRST is the user's preference.
+    if len(words) <= 6:
+        return named[0]
+    m = _LANG_REQUEST_RE.search(folded)
+    if m:
+        return _LANG_NAME_TO_CODE.get(m.group(1) or m.group(2), named[0])
+    return None
+
+
+def _resolve_answer_language(user_message: str, conversation_history=None) -> str:
+    """The language to answer in: an explicit request wins over detection, and
+    a request PERSISTS for the rest of the conversation until the user makes a
+    different one.
+
+    A user who writes "answer me in Catalan" means it for the conversation,
+    not for that one turn. Before this, the request had to be repeated every
+    message, and a user who asked once and was ignored had no way to tell the
+    difference between "Brubru cannot" and "Brubru will not".
+    """
+    asked = _detect_language_request(user_message)
+    if asked:
+        return asked
+    if conversation_history:
+        for msg in reversed(conversation_history):
+            role = getattr(msg, "role", None) or (
+                msg.get("role") if isinstance(msg, dict) else None)
+            if role != "user":
+                continue
+            content = getattr(msg, "content", None) or (
+                msg.get("content") if isinstance(msg, dict) else None)
+            earlier = _detect_language_request(content or "")
+            if earlier:
+                return earlier
+    return _detect_query_language(user_message)
+
+
 def _detect_query_language(text: str) -> str:
     """
     Cheap bag-of-words language detector. Returns two-letter upper-case code.
@@ -1047,7 +1149,9 @@ class AIService:
             context_str = memory_context
 
         # Build system prompt
-        _qlang = _detect_query_language(user_message)
+        # An explicit language request beats detection and persists for the
+        # conversation. See _resolve_answer_language (audit, 19 Aug 2026).
+        _qlang = _resolve_answer_language(user_message, conversation_history)
         system_prompt = self._build_system_prompt(
             is_pre_user=is_pre_user,
             query_lang=_qlang,
@@ -1190,6 +1294,7 @@ class AIService:
             provider_used=provider_used,
             user_id=user_id,
             use_context=use_context,
+            query_lang=_qlang,
         )
 
         total_time_ms = (datetime.now() - start_time).total_seconds() * 1000
@@ -1394,6 +1499,7 @@ class AIService:
         provider_used: str,
         user_id: Optional[str],
         use_context: bool,
+        query_lang: str = "EN",
     ) -> str:
         """Run the anti-hallucination validator; return the final answer text.
 
@@ -1446,13 +1552,56 @@ class AIService:
                 _validation.latency_ms,
                 _validation.error or "-",
             )
+            # Language check, added 19 Aug 2026 after the audit found the
+            # validator certifying a language failure as fine.
+            #
+            # A Terraqui subscriber asked in Catalan, was answered in French,
+            # and the row logged `language: fr, passed: true` -- because the
+            # validator judges the answer against the language the DETECTOR
+            # picked, so a mis-detection is graded as a correct answer in the
+            # wrong language. The check could not fail in the one case it
+            # existed to catch.
+            #
+            # Two observations are added here, and only the second is a true
+            # oracle. Stated plainly so nobody later mistakes the first for
+            # stronger evidence than it is:
+            #   language_mismatch       -- the answer is not in the language we
+            #       instructed. Catches the model disobeying, NOT a bad
+            #       detection: if detection is wrong, both sides are wrong
+            #       together and this stays silent.
+            #   language_request_ignored -- the user EXPLICITLY named a
+            #       language and the answer is not in it. This one is ground
+            #       truth: the user told us, so no detector opinion is
+            #       involved. It is the check that would have caught Joana.
+            try:
+                _resp_lang = _detect_query_language(message)
+                _asked_lang = _detect_language_request(user_message)
+                from services.ai.response_validator import Violation as _V
+                if _asked_lang and _resp_lang != _asked_lang:
+                    _validation.violations.append(_V(
+                        type="language_request_ignored",
+                        evidence=f"user asked for {_asked_lang}, answer reads as {_resp_lang}",
+                        explanation=("The user named the answer language explicitly. "
+                                     "This is ground truth, not a detector guess."),
+                    ))
+                elif _resp_lang != query_lang:
+                    _validation.violations.append(_V(
+                        type="language_mismatch",
+                        evidence=f"instructed {query_lang}, answer reads as {_resp_lang}",
+                        explanation=("The generator answered in a different language "
+                                     "from the one it was instructed to use."),
+                    ))
+            except Exception as _e:
+                # Never let the language observation break validation logging.
+                logger.warning("[VALIDATOR] language check failed: %s", type(_e).__name__)
+
             asyncio.create_task(
                 self._log_chat_validation(
                     query=user_message,
                     response=message,
                     context_length=len(context_str),
                     generator=provider_used,
-                    language=_detect_query_language(user_message),
+                    language=query_lang,
                     result=_validation,
                     shadow_mode=VALIDATOR_SHADOW_MODE,
                     user_id=user_id,
@@ -1781,7 +1930,9 @@ class AIService:
                 document_content = []
 
         # Build prompts
-        _qlang = _detect_query_language(user_message)
+        # An explicit language request beats detection and persists for the
+        # conversation. See _resolve_answer_language (audit, 19 Aug 2026).
+        _qlang = _resolve_answer_language(user_message, conversation_history)
         system_prompt = self._build_system_prompt(
             is_pre_user=is_pre_user,
             query_lang=_qlang,
@@ -1867,6 +2018,7 @@ class AIService:
                     provider_used=telemetry.get("provider", "") or "stream",
                     user_id=user_id,
                     use_context=use_context,
+                    query_lang=_qlang,
                 )
                 if cleaned != raw_message:
                     logger.info(

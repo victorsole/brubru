@@ -601,11 +601,21 @@ def section_blind_spots(conn, start, end):
         checks.append(
             {
                 "check": "chat_analytics keeps pace with chat_messages",
-                "ok": bool(lag is not None and lag <= 1),
+                # Recency AND completeness. The old test was lag-only: it
+                # printed "152 answers vs 102 analytics rows" in the detail and
+                # ignored it in the verdict, so a third of the answers could go
+                # unrecorded and the check still said OK (19 Aug 2026).
+                "ok": bool(
+                    lag is not None and lag <= 1
+                    and (not r["answers"] or (r["analytics_rows"] / r["answers"]) >= 0.9)
+                ),
+                "unproven": not r["answers"],
                 "detail": f"messages to {r['msgs_max']}, analytics to {r['analytics_max']} "
                 f"(lag {lag}d); window: {r['answers']} answers vs {r['analytics_rows']} analytics rows",
-                "means": "Lag > 1d: the streaming path is not writing analytics. "
-                "Provider mix, latency and citation counts are stale -- do not quote them.",
+                "means": "Either the analytics table lags by more than a day, or fewer "
+                "than 90% of answers produced a row (the streaming path is the usual "
+                "culprit -- it is the route real users hit). Provider mix, latency and "
+                "citation counts are incomplete -- do not quote them.",
             }
         )
 
@@ -624,10 +634,16 @@ def section_blind_spots(conn, start, end):
         checks.append(
             {
                 "check": "api_usage_events records status_code",
-                "ok": r["calls"] == 0 or r["with_status"] > 0,
+                # Coverage, not "ever non-null". The old test was
+                # `calls == 0 or with_status > 0`, which ONE populated row out
+                # of a million passed. On 19 Aug it returned OK while 43 of
+                # 1,292 calls carried no status code at all.
+                "ok": r["calls"] == 0 or (r["with_status"] / r["calls"]) >= 0.99,
+                "unproven": r["calls"] == 0,
                 "detail": f"{r['with_status']}/{r['calls']} calls carry a status_code",
-                "means": "All NULL: zero errors is an artefact of not recording them. "
-                "The metering path writes the row before the response is known.",
+                "means": "Under 99% coverage: the error rate is computed over calls whose "
+                "outcome was never recorded, so a low count is partly an artefact. The "
+                "metering path writes the row before the response is known.",
             }
         )
 
@@ -688,6 +704,7 @@ def section_blind_spots(conn, start, end):
             {
                 "check": "tender matches reach a human",
                 "ok": r["matches"] == 0 or r["viewed"] > 0 or r["notified"] > 0,
+                "unproven": r["matches"] == 0,
                 "detail": f"{r['matches']} matches, {r['viewed']} viewed, {r['notified']} notified",
                 "means": "Matches with no views and no notifications: compute is running "
                 "into a void. Either the digest is not sending or the tab is not wired.",
@@ -710,6 +727,7 @@ def section_blind_spots(conn, start, end):
             {
                 "check": "notifications get read",
                 "ok": r["sent"] == 0 or r["read"] > 0,
+                "unproven": r["sent"] == 0,
                 "detail": f"{r['sent']} sent, {r['read']} read",
                 "means": "Sent but never read: check the bell renders and that is_read "
                 "is actually persisted on open.",
@@ -738,6 +756,7 @@ def section_blind_spots(conn, start, end):
             {
                 "check": "anonymous chats carry a pre_user_id",
                 "ok": tot == 0 or r["orphaned"] == 0,
+                "unproven": tot == 0,
                 "detail": f"{r['orphaned']}/{tot} anonymous chats have no pre_user_id",
                 "means": "Orphaned anonymous chats cannot be joined to pre_user_events, "
                 "so query_1/2/3 undercount activation and the funnel looks worse "
@@ -788,6 +807,7 @@ def section_blind_spots(conn, start, end):
             {
                 "check": "synthetic probe share of chat traffic",
                 "ok": (total == 0) or (not unverifiable and share < 50.0),
+                "unproven": total == 0,
                 "detail": detail,
                 "means": means,
             }
@@ -875,14 +895,33 @@ def render(report):
         "",
         "-- 11. INSTRUMENTATION BLIND SPOTS ---------------------------------------",
     ]
+    # Three states, not two. A check whose denominator is zero has not passed:
+    # it has not run. Printing that as [OK] is how a 3-day window reported six
+    # verified instruments on 19 Aug 2026 when five of them had no data at all
+    # -- and the same instrument that read [OK] over 3 days read [FAIL] over 14
+    # (20 of 54 anonymous chats orphaned). Same code, same morning, opposite
+    # verdicts, purely because of window size.
     for c in report["blind_spots"]:
-        out.append(f"  [{'OK' if c['ok'] else 'FAIL'}] {c['check']}")
+        if c.get("unproven"):
+            label = "----"
+        elif c["ok"]:
+            label = " OK "
+        else:
+            label = "FAIL"
+        out.append(f"  [{label}] {c['check']}")
         out.append(f"         {c['detail']}")
-        if not c["ok"]:
+        if c.get("unproven"):
+            out.append("         -> NOT PROVEN: no data in this window. Widen the window "
+                       "before reading this as healthy.")
+        elif not c["ok"]:
             out.append(f"         -> {c['means']}")
     out.append("")
-    fails = [c for c in report["blind_spots"] if not c["ok"]]
-    out.append(f"  {len(fails)} blind spot(s) -- treat any zero on those surfaces as UNPROVEN.")
+    fails = [c for c in report["blind_spots"] if not c["ok"] and not c.get("unproven")]
+    unproven = [c for c in report["blind_spots"] if c.get("unproven")]
+    line = f"  {len(fails)} blind spot(s) -- treat any zero on those surfaces as UNPROVEN."
+    if unproven:
+        line += f"\n  {len(unproven)} check(s) UNPROVEN (no data in window) -- not the same as passing."
+    out.append(line)
     out.append("")
     return "\n".join(out)
 

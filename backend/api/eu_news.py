@@ -15,7 +15,7 @@ import re
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, or_, text
+from sqlalchemy import Date, func, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -140,7 +140,31 @@ def list_news(
                              EuNewsItem.summary.ilike(f"%{search}%")))
 
         total = q.count()
-        rows = (q.order_by(EuNewsItem.news_date.desc().nullslast())
+        # Order by the publication date when we have one, and by when we first
+        # saw the item when we do not.
+        #
+        # Why (found in /news, 19 Aug 2026): `nullslast()` pushed every undated
+        # row to the very end of every page, so 601 rows across 17 bodies
+        # (EIB, EIT, CoR, Europol, ESMA, ENISA, ECHA, EUIPO, ACER, CdT, CPVO,
+        # ECDC, CEPOL, EUAA, Eurojust, EU-OSHA, Ombudsman) were invisible in
+        # practice. ECHA was among them, so the day the ELV Regulation produced
+        # its first implementing workstream, that story could not appear in MEUB
+        # News at all.
+        #
+        # They are undated because THE UPSTREAM FEEDS CARRY NO DATE. Verified by
+        # parsing them: the Europol and ESMA entries contain only <title>,
+        # <link> and <description> -- no pubDate, no published, no updated, no
+        # dc:date. The parser is correct; there is nothing to parse.
+        #
+        # `created_at` is a fact we actually know (when the row was ingested),
+        # so it is safe to ORDER by. It is deliberately NOT written into
+        # `news_date`: inventing a publication date we were never given is the
+        # thing feedback_backfill_no_hallucination forbids. The payload keeps
+        # news_date null so the UI can say the date is unknown.
+        rows = (q.order_by(func.coalesce(
+                    EuNewsItem.news_date,
+                    func.cast(EuNewsItem.created_at, Date),
+                ).desc())
                 .offset(offset).limit(limit).all())
         # Defensive: collapse rows sharing a canonical article URL (cross-listed).
         seen: set = set()

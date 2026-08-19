@@ -153,3 +153,17 @@ test_scraper.py
 # `data/` rule does not match.
 backend/data/eurovoc_corpus/
 backend/data/dpp_corpus/
+
+# Payment-services / payment-fraud KB work, 19 August 2026.
+# Kept out of git at Victor's request: the session that produced it also handled
+# a family bank-fraud case, and its artefacts live in the already-ignored docs/.
+# NOTE: backend/knowledge_base/knowledge_loader.py is TRACKED, so its edits from
+# the same session are NOT covered by these rules and cannot be. Decision of
+# 19 Aug 2026: leave that file modified in the working tree, uncommitted, and
+# stage it deliberately at deploy time. Its edits are the two trigger misroute
+# fixes ('fraud' -> procurement, 'psd3'/'psr'/'open banking' -> MiFID II) plus
+# 77 payment triggers; without them the two guides above are unreachable.
+backend/knowledge_base/guides/eu_payment_services_psd2_psd3.md
+backend/knowledge_base/guides/eu_payment_fraud_consumer_redress.md
+backend/scripts/_ingest_payments_oneshot.py
+backend/scripts/_seed_payments_cluster.py

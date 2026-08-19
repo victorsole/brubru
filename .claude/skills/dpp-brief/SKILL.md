@@ -1,3 +1,9 @@
+---
+name: dpp-brief
+description: A /news for one regime and one reader — everything that moved on the EU digital product passport (ESPR, the registry, the 13 acts that impose a passport, standards, sector rollout dates, who is lobbying it), written for a lawyer who has to comply and delivered as a Catalan Gmail draft. Runs inside /morning as Phase 1d on the days the user asks for it. Triggered by "/dpp-brief", "DPP brief", "what moved on the product passport".
+user_invocable: true
+---
+
 # /dpp-brief — the digital product passport brief
 
 A `/news` for one regime and one reader. Where `/news` sweeps the whole EU and

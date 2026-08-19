@@ -2,6 +2,27 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-19",
+      "action": "updated",
+      "guide": "end_of_life_vehicles_regulation",
+      "title": "End-of-Life Vehicles Regulation",
+      "summary": "ECHA has begun work to reduce hazardous substances in vehicles, the first implementing workstream after entry into force",
+      "refs": [
+        "32026R1738"
+      ]
+    },
+    {
+      "date": "2026-08-19",
+      "action": "updated",
+      "guide": "eu_economic_governance_reform_2024",
+      "title": "Economic Governance Reform (reformed Stability and Growth Pact)",
+      "summary": "National escape clause broadened from defence to energy security: 0.3%/0.6% of GDP caps, 28 February 2026 additionality cut-off, enhanced reporting",
+      "refs": [
+        "52026XC04514",
+        "32024R1263"
+      ]
+    },
+    {
       "date": "2026-08-17",
       "action": "updated",
       "guide": "cbam_carbon_border_adjustment_mechanism",

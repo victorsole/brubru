@@ -186,6 +186,7 @@ Present results as:
 ```bash
 cd /Users/victorsole/Documents/GitHub/brubru/backend
 curl -s -X POST http://localhost:8000/api/chat/message \
+  -H "X-Brubru-Probe: 1" \
   -H "Content-Type: application/json" \
   -d '{"message": "QUERY", "user_id": null, "conversation_id": null, "use_context": true}' \
   --max-time 200 | python3.12 -m json.tool
