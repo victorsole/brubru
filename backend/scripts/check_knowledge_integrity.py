@@ -32,6 +32,7 @@ Checks:
 import argparse
 import json
 import re
+import subprocess
 import sys
 import time
 from collections import Counter, defaultdict
@@ -43,6 +44,9 @@ HERE = Path(__file__).resolve().parent
 BACKEND_ROOT = HERE.parent
 PROJECT_ROOT = BACKEND_ROOT.parent
 GUIDES_DIR = BACKEND_ROOT / "knowledge_base" / "guides"
+# git resolves a RELATIVE pathspec against the CWD, so every git call here
+# passes cwd=PROJECT_ROOT and an absolute path. Getting that wrong produces an
+# empty result and a silent false "clean" -- it did, twice, on 24 Aug 2026.
 
 sys.path.insert(0, str(BACKEND_ROOT))
 from knowledge_base.knowledge_loader import GUIDE_KEYWORD_TRIGGERS  # noqa: E402
@@ -81,6 +85,51 @@ def check_orphan_triggers(guide_ids: set) -> list:
             "guide_id": guide_id,
             "detail": f"{len(keywords)} triggers point here but the guide doesn't exist",
             "sample_keywords": keywords[:5],
+        })
+    return findings
+
+
+def check_undeployable_guides(guides: dict) -> list:
+    """8. Guides that exist locally but cannot reach production. FAIL.
+
+    The orphan check above reads the FILESYSTEM, so a guide that is gitignored
+    or merely untracked looks perfectly present and its triggers look perfectly
+    healthy -- locally. Production only ever gets what git carries.
+
+    On 19 Aug 2026 two payment guides were gitignored on purpose while the 82
+    trigger entries pointing at them were committed in the same commit. Every
+    local check passed. Production served 553 guides against 555 here, answered
+    payment-fraud questions with the wrong law, and the orphan audit reported
+    clean throughout, because it was structurally incapable of seeing the
+    difference. This check exists to make that impossible to repeat.
+    """
+    findings = []
+    try:
+        tracked = set(subprocess.run(
+            ["git", "ls-files", "--", str(GUIDES_DIR)],
+            capture_output=True, text=True, timeout=30, cwd=str(PROJECT_ROOT),
+        ).stdout.split())
+        tracked_stems = {Path(p).stem for p in tracked if p.endswith(".md")}
+    except Exception as e:  # noqa: BLE001 - never let the check itself pass silently
+        return [{
+            "severity": Severity.WARN, "check": "undeployable_guides", "guide_id": "-",
+            "detail": f"could not ask git which guides are tracked ({type(e).__name__}); "
+                      f"deployability UNPROVEN, not clean",
+        }]
+    if not tracked_stems:
+        return [{
+            "severity": Severity.WARN, "check": "undeployable_guides", "guide_id": "-",
+            "detail": "git returned no tracked guides at all; deployability UNPROVEN "
+                      "(wrong working directory?), not clean",
+        }]
+    for guide_id in sorted(set(guides) - tracked_stems):
+        n = sum(1 for targets in GUIDE_KEYWORD_TRIGGERS.values() if guide_id in targets)
+        findings.append({
+            "severity": Severity.FAIL,
+            "check": "undeployable_guides",
+            "guide_id": guide_id,
+            "detail": f"exists locally but is NOT tracked by git, so production cannot have it"
+                      f"{f'; {n} trigger(s) already point at it' if n else ''}",
         })
     return findings
 
@@ -285,6 +334,7 @@ def main():
 
     findings = []
     findings.extend(check_orphan_triggers(guide_ids))
+    findings.extend(check_undeployable_guides(guides))
     findings.extend(check_unreachable_guides(guides))
     findings.extend(check_missing_quick_facts(guides))
     findings.extend(check_stale_guides(mtimes))

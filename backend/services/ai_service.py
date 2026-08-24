@@ -1281,6 +1281,7 @@ class AIService:
         # Post-process: Add EUR-Lex links for legislation acronyms
         logger.info("Post-processing response with legislation acronyms")
         assistant_message = self._linkify_legislation(assistant_message)
+        assistant_message = self._sanitise_celex_links(assistant_message)
 
         # Workstream 1: response validator. As of 28 May 2026 ON in production with
         # CRITICAL_OVERRIDE action -- a critical-severity verdict replaces the
@@ -1681,6 +1682,7 @@ class AIService:
             )
 
         message = self._linkify_legislation(message)
+        message = self._sanitise_celex_links(message)
         # After the acronym pass, so an acronym that already became a link is
         # treated as a link segment here and is not touched again.
         message = self._linkify_references(message)
@@ -3085,6 +3087,91 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             logger.info("Stripped leaked self-introduction greeting preamble")
             return remainder
         return message
+
+
+    # ------------------------------------------------------------------
+    # Deterministic CELEX sanity pass (24 Aug 2026)
+    # ------------------------------------------------------------------
+    _CELEX_LINK_RE = re.compile(
+        r'\[([^\]]+)\]\((https://eur-lex\.europa\.eu/[^)]*?CELEX(?::|%3A)([0-9][0-9A-Za-z()]+)[^)]*)\)'
+    )
+    # "Regulation (EC) No 260/2012", "Directive (EU) 2015/2366", "Decision 2016/807"
+    _ACT_IN_TEXT_RE = re.compile(
+        r'\b(Regulation|Directive|Decision)\b[^,;\]]{0,40}?\b(?:No\s*)?(\d{1,4})/(\d{2,4})\b',
+        re.IGNORECASE,
+    )
+    _ACT_TYPE_LETTER = {"regulation": "R", "directive": "L", "decision": "D"}
+
+    def _sanitise_celex_links(self, text: str) -> str:
+        """Drop or correct EUR-Lex links whose CELEX cannot be right.
+
+        Two deterministic checks, both cheap, neither needing a provider call:
+
+        1. **Impossible year.** A CELEX is sector + YYYY + type + NNNN. On
+           24 Aug 2026, 71 of 661 entries in legislation_acronyms.json carried a
+           transposed CELEX (`31073R1999` for OLAF, year "1073"), and one of them
+           shipped to a real user as a citation. The data is repaired, but the
+           generator can invent the same shape, so the shape is now checked here
+           at the point of emission. Link dropped, TEXT KEPT: a reader losing a
+           hyperlink is a much smaller harm than a reader following a fabricated
+           citation.
+
+        2. **Link text contradicts its target.** Production answered a payments
+           question with `[Regulation (EC) 260/2012](...CELEX:32024R0886)` -- the
+           text names one act and the URL points at another. When the text states
+           an act number explicitly, the CELEX is derivable from it, so derive it
+           rather than trust the pair. The visible claim is what the reader
+           verifies, so the URL is made to agree with the text.
+
+        The validator pre-filter deliberately skips CELEX (see
+        `_response_needs_validation`) on the grounds that the linkifier handles it
+        deterministically. This is the function that has to make that true.
+        """
+        if not text or "CELEX" not in text:
+            return text
+        year_max = datetime.now().year
+
+        def _fix(m):
+            label, url, celex = m.group(1), m.group(2), m.group(3)
+            core = re.match(r'^(\d)(\d{4})([A-Z]{1,2})(\d{4})', celex or "")
+            # (2) text names an act -> derive the CELEX from the text
+            a = self._ACT_IN_TEXT_RE.search(label)
+            if a and core:
+                kind, g1, g2 = a.group(1).lower(), a.group(2), a.group(3)
+                # EU act numbering changed direction in 2015. Old acts are
+                # NUMBER/YEAR ("Regulation (EC) No 260/2012"); acts from 2015 on
+                # are YEAR/NUMBER ("Regulation (EU) 2024/886"). Reading one as the
+                # other silently produces a real-looking CELEX for a different
+                # act, so decide from the values, and when BOTH halves could be a
+                # year, refuse rather than guess.
+                if len(g2) == 2:                                  # 4064/89
+                    yr, num = (("19" + g2) if int(g2) > 50 else ("20" + g2)), g1
+                else:
+                    g1_year = 1951 <= int(g1) <= year_max and len(g1) == 4
+                    g2_year = 1951 <= int(g2) <= year_max and len(g2) == 4
+                    if g1_year and g2_year:
+                        return m.group(0)                         # ambiguous: leave it
+                    if g1_year:
+                        yr, num = g1, g2                          # 2024/886
+                    elif g2_year:
+                        yr, num = g2, g1                          # 260/2012
+                    else:
+                        return m.group(0)
+                letter = self._ACT_TYPE_LETTER.get(kind)
+                if letter and 1951 <= int(yr) <= year_max and int(num) < 10000:
+                    want = f"3{yr}{letter}{int(num):04d}"
+                    if want != celex:
+                        logger.info("[celex] link text %r disagreed with %s -> %s",
+                                    label[:40], celex, want)
+                        return f"[{label}](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{want})"
+                    return m.group(0)
+            # (1) impossible year -> drop the link, keep the words
+            if core and not (1951 <= int(core.group(2)) <= year_max):
+                logger.warning("[celex] dropping impossible CELEX %s behind %r", celex, label[:40])
+                return label
+            return m.group(0)
+
+        return self._CELEX_LINK_RE.sub(_fix, text)
 
     def _strip_orphan_citations(self, text: str, citations: List[Dict]) -> str:
         """
