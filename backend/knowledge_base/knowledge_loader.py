@@ -13610,6 +13610,34 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'productes de construccio': ['cpr_construction_products_regulation'],
     'productos de construccion': ['cpr_construction_products_regulation'],
     'ecodesign for sustainable products': ['ecodesign_digital_product_passport', 'espr_ecodesign_regulation'],
+
+    # --- VAT special schemes / OSS-IOSS (added 24 Aug 2026 with IR 2026/1869) ---
+    # Appended at the END of the dict on purpose: this file carries 400+ duplicate
+    # keys, and a key added ABOVE a later duplicate is silently dead.
+    'transfer of own goods': ['vat_in_the_digital_age_2026'],
+    'transfer of own goods scheme': ['vat_in_the_digital_age_2026'],
+    'one stop shop': ['vat_in_the_digital_age_2026'],
+    'import one stop shop': ['vat_in_the_digital_age_2026'],
+    'vat special schemes': ['vat_in_the_digital_age_2026'],
+    'single vat registration': ['vat_in_the_digital_age_2026'],
+    'regimenes especiales iva': ['vat_in_the_digital_age_2026'],
+    'ventanilla unica iva': ['vat_in_the_digital_age_2026'],
+    'transferencia de bienes propios': ['vat_in_the_digital_age_2026'],
+    'guichet unique tva': ['vat_in_the_digital_age_2026'],
+    'regimi speciali iva': ['vat_in_the_digital_age_2026'],
+    'finestrella unica iva': ['vat_in_the_digital_age_2026'],
+    'eenloketsysteem btw': ['vat_in_the_digital_age_2026'],
+    # --- EU-US commercial rebalancing (added 24 Aug 2026 with IR 2026/1893) ---
+    'rebalancing measures': ['eu_us_trade_deal_2026'],
+    'commercial rebalancing': ['eu_us_trade_deal_2026'],
+    'rebalancing suspended': ['eu_us_trade_deal_2026'],
+    'countermeasures united states': ['eu_us_trade_deal_2026'],
+    'medidas de reequilibrio': ['eu_us_trade_deal_2026'],
+    'reequilibrio comercial': ['eu_us_trade_deal_2026'],
+    'mesures de reequilibrage': ['eu_us_trade_deal_2026'],
+    'misure di riequilibrio': ['eu_us_trade_deal_2026'],
+    'mesures de reequilibri': ['eu_us_trade_deal_2026'],
+    'herbalanceringsmaatregelen': ['eu_us_trade_deal_2026'],
 }
 
 

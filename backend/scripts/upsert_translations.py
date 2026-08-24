@@ -37,7 +37,8 @@ ENGINE = "claude-haiku-4-5-subagent"
 
 
 def _db():
-    url = [l.split("=", 1)[1].strip() for l in open(".env") if l.startswith("DATABASE_URL=")][0]
+    from scripts._db_url import get_database_url   # env first; .env is a dev fallback
+    url = get_database_url()
     return psycopg2.connect(url)
 
 

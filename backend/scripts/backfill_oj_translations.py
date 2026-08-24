@@ -47,7 +47,8 @@ _OJ_POSTFIX = [
 
 
 def _db():
-    url = [l.split("=", 1)[1].strip() for l in open(".env") if l.startswith("DATABASE_URL=")][0]
+    from scripts._db_url import get_database_url   # env first; .env is a dev fallback
+    url = get_database_url()
     c = psycopg2.connect(url, connect_timeout=15, keepalives=1,
                          keepalives_idle=30, keepalives_interval=10, keepalives_count=5)
     c.autocommit = False

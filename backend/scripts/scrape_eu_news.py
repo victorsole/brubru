@@ -955,21 +955,66 @@ def clean_brief_headline(title: str) -> str:
     return "" if _BARE_REF_RE.match(t) else t
 
 
-def clean_brief_url(url: str) -> str:
-    """Repair the malformed EUR-Lex URLs the OJ feed emits.
+_ELI_CACHE: dict = {}
+
+
+def eli_for_celex(celex: str) -> str | None:
+    """Resolve a CELEX to its canonical ELI permalink via Cellar.
+
+    The ELI path cannot be derived from the CELEX: type letter `R` covers
+    regulations, IMPLEMENTING regulations and DELEGATED regulations, which take
+    `reg`, `reg_impl` and `reg_del` respectively. Guessing produces a confident
+    404, so this asks Cellar, which knows. Cached per run; failures return None
+    and the caller falls back to a well-formed CELEX URL rather than dropping
+    the link.
+    """
+    if not celex:
+        return None
+    if celex in _ELI_CACHE:
+        return _ELI_CACHE[celex]
+    eli = None
+    try:
+        import asyncio as _a
+        from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+
+        async def _go():
+            async with CellarSPARQLClient() as c:
+                return await c.get_eli(celex)
+        eli = _a.run(_go())
+    except Exception:  # noqa: BLE001 - a link upgrade must never break a scrape
+        eli = None
+    if eli:
+        eli = eli.replace("http://publications.europa.eu/resource/eli/",
+                          "http://data.europa.eu/eli/")
+    _ELI_CACHE[celex] = eli
+    return eli
+
+
+def clean_brief_url(url: str, *, resolve_eli: bool = False) -> str:
+    """Repair malformed OJ links, and upgrade to an ELI permalink when asked.
 
     The feed produced `https://eur-lex.europa.eu/./legal-content/AUTO/?uri=...`
-    -- note the `/./`. Left alone these are also `legal-content` links, which
-    return 202-and-empty to any non-browser client, so a reader following one
-    from an email gets a blank page.
+    -- note the `/./`. Worse, `legal-content` URLs return 202-and-empty to any
+    non-browser client and are not stable across the 1 Oct 2023 act-by-act OJ
+    change, so a reader following one out of an email can get a blank page.
+    ELI (`data.europa.eu/eli/...`) is canonical, stable, and dereferences to the
+    consolidated version.
     """
     u = (url or "").strip()
     if not u:
         return u
     u = u.replace("/./", "/")
+    m = re.search(r'(https?://data\.europa\.eu/eli/[^\s&)"\']+)', u)
+    if m:                       # source already gave us one: it wins outright
+        return m.group(1)
     m = re.search(r'[?&]uri=CELEX(?::|%3A)([0-9A-Z()]+)', u, re.IGNORECASE)
     if m and "eur-lex.europa.eu" in u:
-        return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{m.group(1)}"
+        celex = m.group(1)
+        if resolve_eli:
+            eli = eli_for_celex(celex)
+            if eli:
+                return eli
+        return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
     return u
 
 
@@ -1023,7 +1068,8 @@ def save_to_daily_briefs(items: List[NewsItem]):
                     """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                        ON CONFLICT (brief_date, url, audience) DO NOTHING""",
-                    (today, clean_headline, clean_brief_url(item.url), item.source, item.category,
+                    (today, clean_headline, clean_brief_url(item.url, resolve_eli=True),
+                     item.source, item.category,
                      item.priority, item.snippet or None,
                      generate_suggested_query(item.title))
                 )

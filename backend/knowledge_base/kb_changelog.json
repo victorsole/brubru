@@ -2,6 +2,36 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-24",
+      "action": "updated",
+      "guide": "ppwr_packaging_waste_regulation",
+      "title": "Packaging and Packaging Waste Regulation",
+      "summary": "Authorised-representative duty flagged as contested: Commission has asked co-legislators to suspend it to 2035, not yet law",
+      "refs": [
+        "32025R0040"
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "action": "updated",
+      "guide": "eu_us_trade_deal_2026",
+      "title": "EU-US Trade Deal 2026",
+      "summary": "Commercial rebalancing measures suspended again from 7 August 2026; third consecutive suspension, not a repeal",
+      "refs": [
+        "32026R1893"
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "action": "updated",
+      "guide": "vat_in_the_digital_age_2026",
+      "title": "VAT in the Digital Age",
+      "summary": "OSS/IOSS detailed rules rewritten for the fourth special scheme (transfer of own goods); applies 1 July 2028",
+      "refs": [
+        "32026R1869"
+      ]
+    },
+    {
       "date": "2026-08-19",
       "action": "updated",
       "guide": "end_of_life_vehicles_regulation",
