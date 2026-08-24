@@ -131,6 +131,43 @@ def _strip_chrome(text: str) -> str:
     return "\n".join(out).strip()
 
 
+# Chromium launch flags for a memory- and process-capped container.
+#
+# Production evidence (20-23 Aug 2026): `votes_ep` failed 49 of 49 runs, and the
+# non-timeout failures carry
+#     pthread_create: Resource temporarily unavailable (11)
+#     Zygote could not fork: process_type gpu-process
+# The container runs out of processes/threads before Chromium finishes starting.
+# Every one of these flags removes a process or a shared-memory dependency that
+# a headless scrape does not need:
+#
+#   --no-sandbox              the sandbox needs extra helper processes and buys
+#                             nothing here: we render EU government pages, not
+#                             untrusted user content, and the container is the
+#                             isolation boundary.
+#   --disable-dev-shm-usage   Docker gives /dev/shm 64 MB by default; Chromium
+#                             falls over on larger pages. Sends it to /tmp.
+#   --no-zygote               the zygote is a fork server. It is the thing that
+#                             "could not fork" in the logs.
+#   --disable-gpu             no GPU exists here; the gpu-process is pure cost
+#                             and is named in the fork failure.
+#   --disable-extensions,
+#   --disable-background-*    fewer background processes and timers.
+#
+# NOT included: --single-process. It removes the most processes and also breaks
+# navigation on JS-heavy sites, which is exactly what this fetcher is for.
+_CONTAINER_ARGS = [
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--no-zygote",
+    "--disable-gpu",
+    "--disable-extensions",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--disable-renderer-backgrounding",
+]
+
+
 def _call_bounded(fn, timeout_s: float, what: str):
     """Run a blocking Playwright call with a hard wall-clock bound.
 
@@ -233,7 +270,7 @@ class WafBrowserFetcher:
         # the scraper-health detector from 22 Aug 2026 onwards.
         self._pw = sync_playwright().start()
         self._browser = self._pw.chromium.launch(
-            headless=True, timeout=self.launch_timeout_ms)
+            headless=True, timeout=self.launch_timeout_ms, args=_CONTAINER_ARGS)
         self._ctx = self._browser.new_context(
             user_agent=self.user_agent, locale=self.locale, viewport=self.viewport
         )

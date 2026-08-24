@@ -154,7 +154,7 @@ def ingest_ssm_publications(**kw) -> list[Item]:
 
 
 # --- legal acts (Cellar SPARQL) --------------------------------------------
-def fetch_ecb_legal_acts(limit: int = 100) -> list[Item]:
+def fetch_ecb_legal_acts(limit: int = 100, **_) -> list[Item]:
     """ECB legal acts via Cellar SPARQL (author = ECB corporate body). CELEX verbatim."""
     query = f"""
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>

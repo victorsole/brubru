@@ -131,14 +131,24 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour == 5:
         fires.append(("procedure_snapshots", "/api/cron/build-procedure-snapshots"))
 
-    # Social posts — open tier (Bluesky/Mastodon/YouTube), 06:00 UTC daily, oldest-checked
+    # Social posts — open tier (Bluesky/Mastodon/YouTube), TWICE daily, oldest-checked
     # first so it drips through the set. Robust keyless APIs.
-    if hour == 6:
-        fires.append(("social_open", "/api/cron/fetch-social-posts?mode=open&limit=150"))
+    #
+    # Raised from 150 once a day on 24 Aug 2026. Measured that morning: of 1,676
+    # fetch-enabled accounts only 349 (21%) had been checked within two days and
+    # 292 had not been checked for over a FORTNIGHT, the oldest frontier being 17
+    # days. A feed described as "today's EU social pulse" was true of a fifth of
+    # it. 510 open-tier accounts at 300 x 2 clears the set inside a day, and a
+    # manual run of 200 accounts took about two minutes, so the cost is small.
+    if hour in (6, 18):
+        fires.append(("social_open", "/api/cron/fetch-social-posts?mode=open&limit=300"))
 
-    # Social posts — X drip (paced, throttle-stop) at 01/09/17 UTC. Public syndication endpoint
-    # rate-limits, so small slow batches rotate through the 978 X accounts over ~days.
-    if hour in (1, 9, 17):
+    # Social posts — X drip (paced, throttle-stop) every 4 hours. The public
+    # syndication endpoint rate-limits, so the batch stays SMALL and slow and we
+    # add slots rather than size: 6 x 40 = 240/day against 1,166 X accounts is
+    # about five days per cycle, down from ten. Never add proxies or evasion to
+    # beat the throttle.
+    if hour in (1, 5, 9, 13, 17, 21):
         fires.append(("social_x_drip", "/api/cron/fetch-social-posts?mode=x&limit=40"))
 
     # Economy folders (v2 institutional/agency/database endpoints backed by

@@ -49,7 +49,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     # timeout while still clearing a normal OJ day (10-72 entries) in one go;
     # the ~3h tier gives 8 passes/day, so any backlog drains within a day.
     SourceSpec("oj_catalan",   "My OJ - Catalan translations",  "fast", "scripts/backfill_oj_translations.py", ("--limit", "60"), timeout=1200),
-    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply",), timeout=1200),
+    # --max-sittings caps the work per run. Without it this script walks EVERY
+    # sitting day, each behind a JS challenge at 9s settle + up to 20s
+    # networkidle, so it is unbounded work inside a bounded window: it failed
+    # 49 of 49 runs over 14 days, 43 of them on the 1200s timeout, and never
+    # once succeeded. Sittings are processed NEWEST FIRST, so a cap still
+    # captures the votes that matter and the tail catches up across runs.
+    # 20 x ~30s leaves roughly half the budget as headroom.
+    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply", "--max-sittings", "20"), timeout=1200),
     SourceSpec("votes_council","Votes - Council",               "fast", "scripts/sync_council_votes.py",  ("--max", "20"), timeout=900),
 
     # ---- WARM (~6h): slower-moving institutional feeds --------------------
