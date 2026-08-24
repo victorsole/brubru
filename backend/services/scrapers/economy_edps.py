@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
     Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
+    intentionally_empty,
 )
 
 _BASE = "https://www.edps.europa.eu"
@@ -119,6 +120,11 @@ def ingest_edps_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return _scrape(NEWS_PAGE, "news", fetch_bodies=fetch_bodies)
 
 
+@intentionally_empty(
+    "EDPS merged press-releases into the single press-news feed (Europa ECL "
+    "migration, Aug 2026); `edps/news` carries it. Delete this marker when a "
+    "distinct listing resurfaces."
+)
 def ingest_edps_press_releases(*, fetch_bodies: bool = True, **_) -> list[Item]:
     # EDPS collapsed press-releases + publications into the single press-news feed
     # (Europa ECL migration, Aug 2026): the old /press-releases_en and
@@ -128,6 +134,11 @@ def ingest_edps_press_releases(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return []
 
 
+@intentionally_empty(
+    "EDPS merged publications into the single press-news feed (Europa ECL "
+    "migration, Aug 2026); `edps/news` carries it. Delete this marker when a "
+    "distinct listing resurfaces."
+)
 def ingest_edps_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
     # See ingest_edps_press_releases: the distinct publications listing is gone;
     # returning [] avoids mislabeling the merged press-news feed as publications.

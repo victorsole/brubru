@@ -47,6 +47,36 @@ class Item:
 _CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")  # C0 controls except \t \n \r
 
 
+def intentionally_empty(reason: str):
+    """Mark an ingestor that returns [] BY DESIGN, so the health detector can
+    tell intentional silence from a regression.
+
+    Without this, `_classify` sees `parse_count == 0` with historical rows and
+    reports BROKEN "regression" -- correctly, on the evidence available to it,
+    and permanently wrong. That is exactly what happened to
+    `edps/press_release` and `edps/publication`: they were deliberately
+    switched to `return []` on 17 Aug 2026 (EDPS merged press-releases and
+    publications into one press-news feed), the detector shipped two days
+    later, and it alerted every night on a state somebody had just created on
+    purpose. `consecutive_fails` could never reset, because the condition was
+    permanent by design.
+
+    The marker lives on the FUNCTION, next to the `return []`, rather than in a
+    registry somewhere else, so the two cannot drift: re-enabling the scraper
+    and deleting the marker are the same edit.
+
+    Usage::
+
+        @intentionally_empty("upstream merged this feed into `news`, Aug 2026")
+        def ingest_x(*, fetch_bodies: bool = True, **_) -> list[Item]:
+            return []
+    """
+    def deco(fn):
+        fn.intentionally_empty = reason
+        return fn
+    return deco
+
+
 def clean(s: str | None) -> str | None:
     """Strip NUL + other C0 control chars Postgres TEXT rejects (PDF extraction emits them)."""
     if not s:

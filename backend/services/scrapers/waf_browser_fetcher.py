@@ -46,8 +46,12 @@ CLI
 
 from __future__ import annotations
 
+import concurrent.futures as _cf
+import logging
 import sys
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
 
 # Browser User-Agent — a real Chrome string is required; the WAF fingerprints
 # obviously-automated agents.
@@ -127,6 +131,41 @@ def _strip_chrome(text: str) -> str:
     return "\n".join(out).strip()
 
 
+def _call_bounded(fn, timeout_s: float, what: str):
+    """Run a blocking Playwright call with a hard wall-clock bound.
+
+    Playwright bounds `launch()` (30s by default) and every navigation, but
+    `sync_playwright().start()` -- which spawns the driver process -- takes no
+    timeout at all, and neither `browser.close()` nor `playwright.stop()` can be
+    interrupted once the browser is a zombie. In a container where Chromium
+    fails to fork (`Zygote could not fork: process_type gpu-process`, observed
+    in production on 22-23 Aug 2026) those calls can block for ever.
+
+    A blocked *scraper* is a bad day. A blocked scraper inside a caller that
+    releases its concurrency guard in a `finally` is a dead nightly job, because
+    the `finally` never runs: that is exactly how the scraper-health detector
+    went silent after 21 Aug 2026 and stayed silent.
+
+    On timeout the worker thread is abandoned rather than killed -- Python
+    cannot interrupt a blocking C call -- but the CALLER is freed, which is the
+    whole point. One leaked thread per incident is cheap; a permanently wedged
+    cron is not.
+    """
+    pool = _cf.ThreadPoolExecutor(max_workers=1)
+    fut = pool.submit(fn)
+    try:
+        return fut.result(timeout=timeout_s)
+    except _cf.TimeoutError:
+        raise TimeoutError(f"{what} exceeded {timeout_s}s") from None
+    finally:
+        # NEVER `with ThreadPoolExecutor(...)`: its __exit__ calls
+        # shutdown(wait=True), which blocks until the worker finishes -- so the
+        # deadline would expire and the caller would still wait for the hang it
+        # was supposed to escape. Measured: a 2s bound on a 30s call returned
+        # after 30.01s. wait=False is the entire point of this helper.
+        pool.shutdown(wait=False)
+
+
 class WafBrowserFetcher:
     """Headless-Chromium fetcher that clears the EUR-Lex JS-challenge WAF.
 
@@ -147,6 +186,7 @@ class WafBrowserFetcher:
         settle_ms: int = 5000,
         networkidle_ms: int = 15000,
         nav_timeout_ms: int = 45000,
+        launch_timeout_ms: int = 30000,
         locale: str = "en-US",
         viewport: tuple[int, int] = (1440, 1200),
     ) -> None:
@@ -163,6 +203,7 @@ class WafBrowserFetcher:
         self.settle_ms = settle_ms
         self.networkidle_ms = networkidle_ms
         self.nav_timeout_ms = nav_timeout_ms
+        self.launch_timeout_ms = launch_timeout_ms
         self.locale = locale
         self.viewport = {"width": viewport[0], "height": viewport[1]}
         self._pw = None
@@ -173,8 +214,26 @@ class WafBrowserFetcher:
     def __enter__(self) -> "WafBrowserFetcher":
         from playwright.sync_api import sync_playwright
 
+        # NOTE ON WHAT IS AND IS NOT BOUNDED HERE (audited 24 Aug 2026).
+        #
+        # `launch()` is bounded -- Playwright defaults it to 30s and we now pass
+        # it explicitly so the bound is visible and tunable rather than folklore.
+        #
+        # `sync_playwright().start()` takes no timeout, and neither `close()`
+        # nor `stop()` can be interrupted once the browser is a zombie. Those
+        # calls CANNOT be bounded from here: Playwright's sync API is
+        # thread-affine (greenlet), so running them in a watchdog thread and
+        # using the result from the caller raises
+        # `greenlet.error: cannot switch to a different thread`. Verified by
+        # test, not assumed.
+        #
+        # The deadline for those therefore belongs at the JOB boundary, where
+        # one bound covers every way a run can wedge, browser or not. See
+        # `api/cron.py::_run_scraper_health_bg`. A hang here is what silenced
+        # the scraper-health detector from 22 Aug 2026 onwards.
         self._pw = sync_playwright().start()
-        self._browser = self._pw.chromium.launch(headless=True)
+        self._browser = self._pw.chromium.launch(
+            headless=True, timeout=self.launch_timeout_ms)
         self._ctx = self._browser.new_context(
             user_agent=self.user_agent, locale=self.locale, viewport=self.viewport
         )
@@ -291,11 +350,12 @@ class WafBrowserFetcher:
 def fetch_one(url: str, **kwargs) -> FetchResult:
     """Convenience: launch a browser, fetch a single URL, tear down.
 
-    Constructor knobs (settle_ms, networkidle_ms, nav_timeout_ms, user_agent,
-    locale, viewport) are routed to WafBrowserFetcher; the rest (expand_accordions,
+    Constructor knobs (settle_ms, networkidle_ms, nav_timeout_ms, launch_timeout_ms,
+    user_agent, locale, viewport) are routed to WafBrowserFetcher; the rest (expand_accordions,
     strip_chrome) go to fetch().
     """
-    ctor_keys = {"user_agent", "settle_ms", "networkidle_ms", "nav_timeout_ms", "locale", "viewport"}
+    ctor_keys = {"user_agent", "settle_ms", "networkidle_ms", "nav_timeout_ms",
+                 "launch_timeout_ms", "locale", "viewport"}
     ctor_kwargs = {k: v for k, v in kwargs.items() if k in ctor_keys}
     fetch_kwargs = {k: v for k, v in kwargs.items() if k not in ctor_keys}
     with WafBrowserFetcher(**ctor_kwargs) as f:

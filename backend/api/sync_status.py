@@ -50,18 +50,24 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
     description=(
         "**What it does**\n"
         "Reports when the hourly cron dispatcher (`scripts/cron_dispatch.py`) "
-        "last fired its liveness heartbeat, plus when the registry `fast` "
-        "(News/OJ/Votes) and `warm` (Calendar/Transcripts/Lobby/Questions) "
-        "tiers last ran.\n\n"
+        "last fired its liveness heartbeat, then, for **every** sync tier, when "
+        "it last succeeded, when it last ran at all, and how often it has failed "
+        "in the last 24 hours. Also surfaces the nightly scraper-health "
+        "detector: how many scrapers it checked, and which ones are confirmed "
+        "broken.\n\n"
         "**When to use it**\n"
         "To confirm the Railway cron is actually scheduled — `alive` is true "
         "only if the dispatcher checked in within the last 90 minutes (it runs "
         "hourly). If `alive` is false, the cron service is not running and MEUB "
         "feeds will drift.\n\n"
         "**Input**\nNone.\n\n"
+        "**Try it**\nOpen it directly; no sign-in needed. "
+        "`GET /api/sync/health`\n\n"
         "**You get back**\n"
-        "`dispatcher` (last_seen, minutes_ago, alive) and `tiers` (last "
-        "fast/warm registry sync time)."
+        "`dispatcher` (last_seen, minutes_ago, alive); `tiers`, one entry per "
+        "tier with `last_success`, `last_run`, `failures_24h`, `runs_24h` and a "
+        "`healthy` flag; and `scrapers` with the last detector run, the number "
+        "checked, and any confirmed breaks by body and item type."
     ),
 )
 def get_sync_health(db: Session = Depends(get_db)) -> dict:
@@ -77,13 +83,77 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         minutes_ago = int((datetime.now(timezone.utc) - last_seen).total_seconds() // 60)
         alive = minutes_ago <= 90  # dispatcher runs hourly; 1.5h grace
 
+    # Every tier, discovered from the data. The old version iterated a hardcoded
+    # ("fast", "warm"), so scraper_health, economy_b0/b1/b2, commission_heavy and
+    # monthly could never appear here -- including on 22-23 Aug 2026, when the
+    # scraper-health detector stopped running and this endpoint kept reporting
+    # a clean bill of health. A fixed list cannot report on what it does not name.
+    tier_rows = db.execute(text("""
+        SELECT tier,
+               -- Two spellings of success are written today: the tier syncs use
+               -- 'success', the hourly heartbeat writes 'ok'. Filtering on
+               -- 'success' alone reported `last_success: null` for a tier that
+               -- had run 168 times without a single failure. Kept as an explicit
+               -- allowlist rather than `status <> 'failed'`, so a new status
+               -- nobody has thought about is not silently counted as fine.
+               max(finished_at) FILTER (WHERE status IN ('success', 'ok')) AS last_success,
+               max(finished_at)                                   AS last_run,
+               count(*) FILTER (WHERE status = 'failed'
+                                 AND started_at > now() - interval '24 hours') AS failures_24h,
+               count(*) FILTER (WHERE started_at > now() - interval '24 hours') AS runs_24h
+        FROM sync_runs
+        WHERE tier IS NOT NULL
+        GROUP BY tier
+        ORDER BY tier
+    """)).mappings().all()
+
     tiers = {}
-    for tier in ("fast", "warm"):
-        ts = db.execute(
-            text("SELECT max(finished_at) FROM sync_runs WHERE tier = :t AND status = 'success'"),
-            {"t": tier},
-        ).scalar()
-        tiers[tier] = ts.isoformat() if ts else None
+    for r in tier_rows:
+        runs, fails = int(r["runs_24h"] or 0), int(r["failures_24h"] or 0)
+        # A tier reporting only its last SUCCESS looks perfect while failing most
+        # of the time: on 24 Aug 2026 `fast` had 57 failures against 79 successes
+        # and still showed a fresh timestamp. Judge on the failure RATE, and say
+        # `null` rather than `true` when there is nothing to judge -- an untested
+        # tier is unproven, not healthy.
+        tiers[r["tier"]] = {
+            "last_success": r["last_success"].isoformat() if r["last_success"] else None,
+            "last_run": r["last_run"].isoformat() if r["last_run"] else None,
+            "runs_24h": runs,
+            "failures_24h": fails,
+            "failure_rate_24h": round(fails / runs, 3) if runs else None,
+            "healthy": (fails / runs < 0.2) if runs else None,
+        }
+
+    # The scraper-health detector's verdict, which until now reached only a
+    # logger.warning in the container logs. A canary nobody can hear is not a
+    # canary. DISABLED is excluded deliberately: it means "empty by design".
+    scrapers: dict = {"last_checked": None, "checked": 0, "confirmed_breaks": []}
+    try:
+        srows = db.execute(text("""
+            SELECT body_code, item_type, last_status, consecutive_fails, detail, last_checked
+            FROM scraper_health_state
+            WHERE last_status IN ('BROKEN', 'ERROR') AND consecutive_fails >= 2
+            ORDER BY consecutive_fails DESC, body_code, item_type
+            LIMIT 50
+        """)).mappings().all()
+        agg = db.execute(text(
+            "SELECT count(*) n, max(last_checked) t FROM scraper_health_state")).mappings().first()
+        scrapers = {
+            "last_checked": agg["t"].isoformat() if agg and agg["t"] else None,
+            "checked": int(agg["n"] or 0) if agg else 0,
+            "confirmed_breaks": [
+                {"body": r["body_code"], "item_type": r["item_type"],
+                 "status": r["last_status"], "consecutive_fails": int(r["consecutive_fails"] or 0),
+                 "detail": r["detail"]}
+                for r in srows
+            ],
+        }
+    except Exception as exc:  # noqa: BLE001 - table may predate a migration
+        # Loud in the payload, not silent: an unreadable health table must not
+        # render identically to a fleet with nothing wrong.
+        logger.warning("[sync-health] scraper_health_state unreadable: %s", exc)
+        scrapers = {"last_checked": None, "checked": 0, "confirmed_breaks": [],
+                    "error": f"{type(exc).__name__}"}
 
     return {
         "dispatcher": {
@@ -92,4 +162,5 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
             "alive": alive,
         },
         "tiers": tiers,
+        "scrapers": scrapers,
     }

@@ -21,6 +21,11 @@ Classification (empty-vs-broken is the hard 20% — resolved via the DB baseline
   EMPTY?   : parses 0 AND 0 historical rows -> never populated / maybe genuinely
              empty (e.g. an agency with no open tenders). review, low.
   STALE    : (fast mode only) stale fetched_at, not yet live-confirmed.
+  DISABLED : the ingestor is marked @intentionally_empty and parses 0 -- silence
+             BY DESIGN, not a break. Not actionable, hidden unless --full.
+  STALE-MARKER : marked @intentionally_empty but it PARSED something. The marker
+             is out of date (upstream came back, or it was wrong). Actionable:
+             delete the marker.
 
 Usage:
   python3.12 scripts/scraper_health.py                 # confirm mode (default)
@@ -55,8 +60,8 @@ import scripts.sync_economy as se
 STALE_DAYS = 10          # fetched_at older than this = candidate for a live check
 RETRIES = 3              # retry a 0/error live-run — transient blips (rate-limits,
 RETRY_DELAY = 2.5        # network) must not raise a BROKEN false-positive. First >0 wins.
-SEVERITY = {"BROKEN": 0, "ERROR": 0, "CRON-GAP": 1, "STALE": 1,
-            "EMPTY?": 2, "HEALTHY": 3, "OK": 3}
+SEVERITY = {"BROKEN": 0, "ERROR": 0, "STALE-MARKER": 1, "CRON-GAP": 1, "STALE": 1,
+            "EMPTY?": 2, "HEALTHY": 3, "OK": 3, "DISABLED": 4}
 
 
 def _db_state(db):
@@ -66,14 +71,26 @@ def _db_state(db):
     return {(r.body_code, r.item_type): (r.n, r.f) for r in rows}
 
 
-def _classify(n_rows, last_sync, days, parse_count, err):
-    if parse_count is None and err is None:      # fast mode, not live-run
+def _classify(n_rows, last_sync, days, parse_count, err, disabled_reason=None):
+    if err is not None:
+        return "ERROR", err
+    # An ingestor marked @intentionally_empty returns [] on purpose. Judged
+    # BEFORE the parse>0 / rows>0 arithmetic, because that arithmetic is exactly
+    # what produced a permanent false positive on edps/press_release and
+    # edps/publication for three consecutive nights. Judged before the fast-mode
+    # branch too: a deliberately-empty scraper never refreshes fetched_at, so
+    # fast mode would otherwise report it STALE for ever -- a quieter version of
+    # the same lie.
+    if disabled_reason is not None:
+        if parse_count and parse_count > 0:
+            return "STALE-MARKER", (f"marked intentionally-empty but parsed "
+                                    f"{parse_count} -- delete the marker")
+        return "DISABLED", f"intentionally empty: {disabled_reason}"
+    if parse_count is None:                      # fast mode, not live-run
         if last_sync is None:
             return "EMPTY?", "no rows, not live-checked"
         return ("STALE", f"{days}d stale") if (days is not None and days > STALE_DAYS) \
             else ("OK", f"{days}d")
-    if err is not None:
-        return "ERROR", err
     if parse_count > 0:
         stale = days is not None and days > STALE_DAYS
         return ("CRON-GAP", f"parses {parse_count}, {days}d stale") if stale \
@@ -119,8 +136,11 @@ def run(mode="confirm", bodies=None):
                 if attempt < RETRIES - 1:
                     time.sleep(RETRY_DELAY)
             ms = round((time.time() - t0) * 1000)
-        cls, detail = _classify(n_rows, last_sync, days, parse_count, err)
+        disabled_reason = getattr(fn, "intentionally_empty", None)
+        cls, detail = _classify(n_rows, last_sync, days, parse_count, err,
+                                disabled_reason)
         results.append({"body": body, "type": itype, "rows": n_rows,
+                        "disabled_reason": disabled_reason,
                         "days_since_sync": days, "parse": parse_count,
                         "attempts": attempts, "ms": ms, "cls": cls, "detail": detail})
     results.sort(key=lambda r: (SEVERITY.get(r["cls"], 9), r["body"], r["type"]))
@@ -146,7 +166,7 @@ def main():
     for r in results:
         if args.alerts_only and r["cls"] not in ("BROKEN", "ERROR"):
             continue
-        if r["cls"] in ("HEALTHY", "OK") and not args.full:
+        if r["cls"] in ("HEALTHY", "OK", "DISABLED") and not args.full:
             continue  # keep the report to what needs attention unless --full
         print(f"{r['cls']:9} {r['body']:14} {r['type']:22} {r['rows']:>7} "
               f"{str(r['parse']) if r['parse'] is not None else '-':>6}  {r['detail']}")

@@ -12,8 +12,22 @@ product passport and says what it means for a project that has to comply. Built
 for Joana Castella (Terraqui, LIFE DPP-TEX), and usable for any subscriber who
 ticks the ecodesign interest.
 
-Cadence: whenever something has actually moved. A brief with nothing in it is
-not sent. The gate is in Step 5.
+**Cadence, set by Joana herself on 19 August 2026: MONTHLY, plus an URGENT brief
+whenever something genuinely new lands.** Not weekly, not "whenever something
+moved". Two tracks:
+
+- **Monthly**: a scheduled round-up, sent even in a quiet month, because the
+  value is partly the "nothing moved" line. She has been away and wants to know
+  she has not missed anything.
+- **Urgent**: out of cycle, only when something actually binds, opens or shifts.
+  This is where the Step 5 gate applies in full.
+
+**A quiet month is NOT a reason to skip the monthly brief; it IS a reason to skip
+an urgent one.** On 19 August 2026 the gate technically passed (PPWR applicable
+12 Aug, ELV Art 53 amending the Batteries Regulation 13 Aug) and Victor still
+decided not to send, because none of it was significant enough for an out-of-cycle
+mail on the DPP regime specifically. **Her attention is the scarce resource.**
+When in doubt between urgent and monthly, hold it for the monthly.
 
 ## What counts as DPP news
 
@@ -65,6 +79,23 @@ Read, in this order, and never paraphrase press as primary:
 Brubru's own aggregators cover most of this:
 `/api/v2/news/all?days=N` and `/api/v2/events/all?days=N`.
 
+**Run `scripts/dpp_watch.py` first — it does steps 1 and 2 in one pass** across
+`economy_items`, `eu_news_items`, `social_posts` and `public_consultations`,
+deduplicated, and prints an explicit URGENT / ROUTINE / NOTHING / UNPROVEN
+verdict plus a freshness check on the watchlist bodies:
+
+```bash
+python3.12 scripts/dpp_watch.py --days 7          # the daily gate decision
+python3.12 scripts/dpp_watch.py --days 30 --json  # the monthly round-up
+```
+
+It carries the three scopes as data (DPP-TEX core with the eight consortium
+partners by name, Blue Room's other sectors, Terraqui's eight practice areas),
+so widening coverage is a one-line edit rather than a rewrite. **A zero from it
+is only a verdict when the watchlist bodies are fresh** — otherwise it reports
+UNPROVEN, because "nothing happened" and "nothing was ingested" are different
+answers.
+
 ## Step 3 — classify, and show everything
 
 Group into: **Binding** (in force or adopted), **Moving** (proposed, consulted,
@@ -76,16 +107,37 @@ keyword-crude; the reader is the one who decides what matters. This mirrors the
 
 ## Step 4 — write it for a lawyer, not a marketer
 
-- **Catalan** for Joana. Accented properly: sóc, perquè, política, Brussel·les,
-  regulació. EU Regulation is **Reglament**, never "Regulació".
-- No em-dashes, no emojis, no institutional codes in the headline. Codes belong
-  in the body and in link targets.
+**The format is LOCKED, from Victor's edited-and-sent version of 24 Aug 2026.**
+Full diff and rationale: `memory/feedback_joana_brief_format.md`. Follow it
+exactly rather than re-deriving it.
+
+- **Catalan** for Joana. Accented properly: sóc, perquè, política, Brussel·les.
+  EU Regulation is **Reglament**, never "Regulació".
+- **Open with `Bon dia, Joana,` then a lowercase continuation.**
+- **Every date carries its weekday**, computed and never guessed:
+  `["dilluns","dimarts","dimecres","dijous","divendres","dissabte","diumenge"][d.weekday()]`.
+  "Es tanca el **diumenge** 30 d'agost", "a partir de **dijous** 18 de febrer de
+  2027". Vary a repeated date: "Es tanca **també el mateix** dimecres 16".
+- **Hedge every inference; assert only what is verified.** Dates, article numbers
+  and what a document literally says stay flat. Anything forward-looking or
+  analogical becomes conditional: "**potser podria** marcar el to", "**sembla
+  que** s'aplica abans", "**podria ser** la plantilla". Victor made this edit
+  three times in one email; it is the difference between a briefing and a pitch.
+- **`Reglament 2023/1542`, without `(UE)`**, for this reader specifically. This
+  departs from `feedback_catalan_instrument_names`, which still governs
+  everywhere else.
+- Name the DG in full with its acronym: "Direcció General de Mercat Interior
+  (DG GROW)".
+- Sentence-case section headings. No em-dashes, no emojis, no institutional
+  codes in the subject line.
 - Each item: what happened, what it changes, and the date that binds.
-- **At most two calls to action in the whole email.** This is the difference
-  from `/brief`. A regulatory reader wants the substance; a CTA after every
-  headline reads as a newsletter, not a briefing.
-- Link every act to EUR-Lex by CELEX, every consultation to Have Your Say,
-  every call to the Funding and Tenders portal.
+- **ZERO calls to action.** Not "at most two" — none. Victor deletes them.
+- Keep an **`Un senyal a verificar`** section for anything unconfirmed, stating
+  its provenance and that no legislative text has been located.
+- **Sign `Victor` + `hello@beresol.eu`, with no `brubru.beresol.eu` link.** It is
+  correspondence from a person, not a send from a platform.
+- Link every act to EUR-Lex, every consultation to Have Your Say, every call to
+  the Funding and Tenders portal — hyperlinked on the title in the HTML part.
 
 ## Step 5 — the send-worthiness gate
 

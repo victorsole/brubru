@@ -8,6 +8,7 @@ Railway cron service calls these endpoints on a schedule.
 """
 
 import logging
+import time as _time
 from fastapi import APIRouter, HTTPException, Header, Query
 from sqlalchemy.orm import Session
 
@@ -875,8 +876,28 @@ async def cron_sync_commission_heavy(authorization: str = Header(...)):
 # ALERTS when a scraper is BROKEN/ERROR on >= 2 consecutive nightly runs -- a single
 # run can trip a source rate-limit and false-positive -- tracked by the
 # consecutive_fails counter in scraper_health_state.
-_scraper_health_running: set = set()
+# The concurrency guard is a LEASE (a start timestamp), not a boolean.
+#
+# It used to be `set()` with the release in `_run_scraper_health_bg`'s `finally`.
+# On 22 Aug 2026 a run wedged inside the detector, so the `finally` never ran,
+# the flag stayed set for the life of the process, and every subsequent nightly
+# POST returned "already_running" and wrote nothing. The detector was silent for
+# two nights and nothing anywhere said so. A `finally` that lives inside the
+# thing that can hang is not a release mechanism.
+#
+# A lease expires on wall-clock instead, so a wedged run self-heals on the next
+# nightly tick rather than needing a redeploy.
+_SCRAPER_HEALTH_DEADLINE_S = 20 * 60   # a healthy confirm run takes ~2.5 min
+_SCRAPER_HEALTH_LEASE_S = 40 * 60      # 2x the deadline; the job runs once a day
+_scraper_health_started_at: float | None = None
 _scraper_health_tasks: set = set()
+
+
+def _scraper_health_lease_held() -> bool:
+    """True only while a run is genuinely in flight and inside its lease."""
+    if _scraper_health_started_at is None:
+        return False
+    return (_time.monotonic() - _scraper_health_started_at) < _SCRAPER_HEALTH_LEASE_S
 
 _SCRAPER_HEALTH_UPSERT = """
     INSERT INTO scraper_health_state
@@ -893,6 +914,7 @@ _SCRAPER_HEALTH_UPSERT = """
 
 async def _run_scraper_health_bg() -> None:
     """Run the detector, update consecutive-fail counters, log/record confirmed breaks."""
+    global _scraper_health_started_at
     import asyncio as _asyncio
     from datetime import datetime, timezone
     from sqlalchemy import text as _text
@@ -902,8 +924,16 @@ async def _run_scraper_health_bg() -> None:
     confirmed: list[str] = []
     try:
         import scripts.scraper_health as sh
-        # confirm mode does blocking live scraper runs -> off the event loop.
-        results = await _asyncio.to_thread(sh.run, "confirm", None)
+        # confirm mode does blocking live scraper runs -> off the event loop, and
+        # under a hard deadline. `to_thread` cannot be cancelled, so on timeout the
+        # worker thread is abandoned; that is deliberate and safe. `sh.run` reads
+        # DB state up front and closes the connection before the slow part, and
+        # all the writing happens HERE, in the caller. An abandoned thread
+        # therefore touches nothing -- it just finishes into the void.
+        results = await _asyncio.wait_for(
+            _asyncio.to_thread(sh.run, "confirm", None),
+            timeout=_SCRAPER_HEALTH_DEADLINE_S,
+        )
         db = SessionLocal()
         try:
             for r in results:
@@ -929,10 +959,32 @@ async def _run_scraper_health_bg() -> None:
             logger.warning(f"[CRON] scraper-health {len(confirmed)} CONFIRMED break(s): {confirmed}")
         else:
             logger.info(f"[CRON] scraper-health OK ({len(results)} scrapers, no confirmed breaks)")
-    except Exception as exc:  # pragma: no cover - defensive
-        logger.warning(f"[CRON] scraper-health run failed: {exc}")
+    except Exception as exc:  # noqa: BLE001 - every failure must leave a trace
+        # A failure used to reach only logger.warning, so `sync_runs` had no row
+        # and /api/sync/health showed nothing: the run was indistinguishable from
+        # a run that never happened. Record it.
+        kind = "TIMEOUT" if isinstance(exc, (_asyncio.TimeoutError, TimeoutError)) else type(exc).__name__
+        detail = f"{kind}: {str(exc)[:200]}" if str(exc) else kind
+        if kind == "TIMEOUT":
+            detail = f"TIMEOUT: exceeded {_SCRAPER_HEALTH_DEADLINE_S}s (thread abandoned)"
+        logger.warning(f"[CRON] scraper-health run failed: {detail}")
+        try:
+            db2 = SessionLocal()
+            try:
+                record_run(
+                    db2, source_key="cron_dispatch", tier="scraper_health",
+                    status="failed", items_added=0, started_at=started,
+                    finished_at=datetime.now(timezone.utc), error=detail,
+                )
+            finally:
+                db2.close()
+        except Exception as rec_exc:  # noqa: BLE001
+            logger.warning(f"[CRON] scraper-health could not record failure: {rec_exc}")
     finally:
-        _scraper_health_running.discard(0)
+        # Released HERE and, if this coroutine never gets here, by lease expiry
+        # in the endpoint. Two independent releases, because one of them lives
+        # inside the thing that can hang.
+        _scraper_health_started_at = None
 
 
 @router.post("/scraper-health")
@@ -944,13 +996,26 @@ async def cron_scraper_health(authorization: str = Header(...)):
     Persists a per-(body,item_type) consecutive-fail counter in scraper_health_state
     and logs/records CONFIRMED breaks (BROKEN/ERROR on >= 2 consecutive runs -- a
     single run can trip a source rate-limit). Fire-and-forget background task so the
-    dispatcher's HTTP call cannot time out; result visible in /api/sync/health.
+    dispatcher's HTTP call cannot time out. The result IS now visible in
+    /api/sync/health (`scrapers`) -- until 24 Aug 2026 this docstring claimed it
+    was while that endpoint iterated a hardcoded ("fast", "warm") and could not
+    show it.
     """
     _verify_cron_secret(authorization)
     import asyncio
-    if 0 in _scraper_health_running:
-        return {"status": "already_running", "tier": "scraper_health"}
-    _scraper_health_running.add(0)
+    global _scraper_health_started_at
+    if _scraper_health_lease_held():
+        held_s = int(_time.monotonic() - (_scraper_health_started_at or 0))
+        return {"status": "already_running", "tier": "scraper_health",
+                "held_for_s": held_s}
+    # Past the lease, a previous run is presumed wedged: take over rather than
+    # decline for ever. Say so, so a recurring takeover is visible as a symptom.
+    if _scraper_health_started_at is not None:
+        logger.warning(
+            "[CRON] scraper-health lease expired after "
+            f"{int(_time.monotonic() - _scraper_health_started_at)}s -- previous run "
+            "presumed wedged; taking over")
+    _scraper_health_started_at = _time.monotonic()
     task = asyncio.create_task(_run_scraper_health_bg())
     _scraper_health_tasks.add(task)
     task.add_done_callback(_scraper_health_tasks.discard)
