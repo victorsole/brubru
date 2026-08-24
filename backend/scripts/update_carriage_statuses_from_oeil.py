@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent.parent / '.env')
 
+from sqlalchemy.exc import OperationalError, DBAPIError
 from core.database import SessionLocal
 from models.legislative_train import LegislativeCarriage, CarriageStatusEnum
 from services.scrapers.oeil_scraper import OEILScraper
@@ -108,6 +109,7 @@ async def update_statuses():
         updated_count = 0
         updated_key_events = 0
         errors = 0
+        reconnects = 0
         status_changes = []
 
         for i, carriage in enumerate(carriages):
@@ -162,13 +164,36 @@ async def update_statuses():
                 await asyncio.sleep(0.5)
 
             except Exception as e:
-                log(f"   -> ERROR: {str(e)[:80]}")
+                # A dropped Supabase connection must not end the run. This loop
+                # holds a session across ~2 seconds of OEIL fetch per carriage
+                # and runs for half an hour; on 24 Aug 2026 the server closed the
+                # connection at carriage 545 of 1,377 and the script stopped
+                # there -- while still exiting 0, so it reported success having
+                # done 40% of the work. `pool_pre_ping` does not save you here:
+                # it fires on CHECKOUT, and a session that already holds a
+                # connection never checks out again.
+                msg = str(e)
+                if isinstance(e, (OperationalError, DBAPIError)) or "server closed the connection" in msg:
+                    log(f"   -> CONNECTION LOST: {msg[:70]} -- reconnecting")
+                    try:
+                        db.close()
+                    except Exception:
+                        pass
+                    db = SessionLocal()
+                    reconnects += 1
+                    errors += 1
+                    continue
+                log(f"   -> ERROR: {msg[:80]}")
                 errors += 1
-                db.rollback()
+                try:
+                    db.rollback()
+                except Exception:
+                    db.close(); db = SessionLocal(); reconnects += 1
 
         log("\n" + "=" * 60)
         log("Summary:")
         log(f"  Total checked: {len(carriages)}")
+        log(f"  Reconnects after a dropped connection: {reconnects}")
         log(f"  Key events updated: {updated_key_events}")
         log(f"  Status changes: {updated_count}")
         log(f"  Errors: {errors}")
@@ -189,10 +214,18 @@ async def update_statuses():
 
         log("=" * 60)
 
+        return 1 if errors else 0
+
     finally:
         await scraper.close()
-        db.close()
+        try:
+            db.close()
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
-    asyncio.run(update_statuses())
+    # Exit non-zero when anything failed. Exiting 0 on a half-finished run is how
+    # a 40%-complete sweep reported success on 24 Aug 2026.
+    _rc = asyncio.run(update_statuses())
+    sys.exit(_rc or 0)
