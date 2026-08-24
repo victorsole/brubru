@@ -4,6 +4,7 @@ Recent posts fetched from mapped accounts via public keyless APIs (Bluesky / Mas
 YouTube RSS). Mirrors migrations/195_social_posts.sql. Hard platforms produce no rows (D1).
 """
 from sqlalchemy import (
+    Boolean,
     Column, BigInteger, Text, DateTime, ForeignKey, UniqueConstraint, Index,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -27,6 +28,14 @@ class SocialPost(Base):
     repost_count = Column(BigInteger, nullable=True)
     reply_count = Column(BigInteger, nullable=True)
     view_count = Column(BigInteger, nullable=True)
+    # Repost provenance (migration 219, 24 Aug 2026). Without these, a repost is
+    # indistinguishable from a statement the account made: 398 post bodies
+    # appeared under more than one account in 30 days, and the database read as
+    # though Thomas Pellerin-Carlin had declared for the French presidency when
+    # he had reposted Raphael Glucksmann. Never cite a row with is_repost = True
+    # as evidence of what THIS actor said.
+    is_repost = Column(Boolean, nullable=False, default=False, server_default="false")
+    original_author = Column(Text, nullable=True)
     media = Column(JSONB, nullable=False, default=list)
     extra = Column(JSONB, nullable=False, default=dict)
     fetched_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

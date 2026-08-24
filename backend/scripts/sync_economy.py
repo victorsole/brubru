@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 from functools import partial
 import sys
 from pathlib import Path
@@ -508,6 +509,37 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 """
 
 
+# Item types that report something that ALREADY happened. A future date on these
+# is always a parse error -- news cannot be published tomorrow. Deliberately does
+# NOT cover tender / eoi_call / event / research_project / grant, which are
+# legitimately future-dated: on 19 Aug 2026, 3,433 of 3,434 "future-dated" rows
+# were exactly those, and reading that count without the item_type produced a
+# phantom regression report. The real defect was a single news row.
+_PAST_ONLY_TYPES = {"news", "press_release", "publication", "speech", "statement"}
+
+
+def _reject_future_news_date(it) -> None:
+    """Null a future document_date on a past-only item type.
+
+    Nulls rather than guesses a date: feed ordering already falls back to
+    created_at, so a NULL degrades the item to "undated" instead of parking it
+    at the top of every feed until the date passes. On 24 Aug 2026 one eugovtech
+    row titled "Startups' Corner Digest | July 2026" carried 2026-12-02 and sat
+    above genuinely fresh items.
+    """
+    d = getattr(it, "document_date", None)
+    if not d or getattr(it, "item_type", None) not in _PAST_ONLY_TYPES:
+        return
+    try:
+        day = d.date() if hasattr(d, "date") else d
+        if day > _dt.date.today() + _dt.timedelta(days=1):   # 1 day of tz slack
+            print(f"[WARN] {it.body_code}/{it.item_type}: future document_date {day} "
+                  f"on a past-only type -> nulled ({(it.title or '')[:60]})")
+            it.document_date = None
+    except Exception:  # noqa: BLE001 - a date guard must never break an ingest
+        pass
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
     if itype == "legal":
@@ -520,6 +552,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
     by_url: dict = {}
     for it in items:
         if it.public_url:
+            _reject_future_news_date(it)
             by_url[(it.body_code, it.item_type, it.public_url)] = it
     rows = [(it.body_code, it.item_type, it.title, it.summary, it.public_url, it.body_txt,
              it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid)

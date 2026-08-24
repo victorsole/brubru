@@ -903,7 +903,74 @@ async def main():
 
     # Save top headlines to database for Daily Brief feature
     if args.save:
-        save_to_daily_briefs(all_items[:20])
+        # The cap used to be a bare `all_items[:20]`, which on 24 Aug 2026 dropped
+        # 41 of 61 scraped items with no log line at all. The standing rule is
+        # that /news shows the COMPLETE ledger -- high, medium AND low buckets --
+        # because the priority classifier is keyword-crude and Victor reads the
+        # full list to catch what it buries. A cap is defensible; a SILENT cap is
+        # not. Keep everything by default and say so when anything is dropped.
+        limit = args.top if getattr(args, "top", None) else None
+        to_save = all_items[:limit] if limit else all_items
+        if limit and len(all_items) > limit:
+            print(f"[WARN] --top {limit}: dropping {len(all_items) - limit} of "
+                  f"{len(all_items)} scraped items from daily_briefs", file=sys.stderr)
+        save_to_daily_briefs(to_save)
+
+
+
+# ---------------------------------------------------------------------------
+# Brief hygiene (24 Aug 2026)
+# ---------------------------------------------------------------------------
+# Standing rule: headlines that reach a brief must never lead with an
+# institutional code. On 24 Aug every OJ headline saved here carried its raw
+# prefix ("OJ:L_202601956: Commission Implementing Decision ...") and four rows
+# had NO title at all, only the reference. Codes belong in the URL target and in
+# detailed snippets, never in the lead.
+# A bracketed institutional reference MUST CONTAIN A DIGIT. Without that, and
+# with re.IGNORECASE, a class like [0-9A-Z()] also matches lowercase, so a
+# perfectly good headline "[Opinion] Why the EU needs reform" lost its bracket.
+# No IGNORECASE here: OJ, CELEX and C/2026/04106 are uppercase in the source, and
+# case-folding buys nothing but false positives.
+_REF_BODY = r'(?=[^\]]*\d)[0-9A-Z()/.\-]+'
+_OJ_PREFIX_RE = re.compile(
+    r'^\s*(?:\[' + _REF_BODY + r'\]|OJ:[A-Z]_\d+|CELEX:[0-9A-Z()]+)\s*[:\-\u2013]?\s*'
+)
+_BARE_REF_RE = re.compile(
+    r'^\s*(?:\[' + _REF_BODY + r'\]|OJ:[A-Z]_\d+|CELEX:[0-9A-Z()]+)\s*$'
+)
+_TAG_PREFIX_RE = re.compile(r'^\[(?:IP|MEX|QANDA|FS|SPEECH|STATEMENT)\]\s*', re.IGNORECASE)
+
+
+def clean_brief_headline(title: str) -> str:
+    """Strip institutional-code prefixes; return '' when nothing survives.
+
+    Returning '' is the point: a headline that IS only a reference cannot be
+    rescued, and saving it wastes a slot and breaks the no-codes rule at once.
+    """
+    t = (title or "").strip()
+    if not t or _BARE_REF_RE.match(t):
+        return ""
+    t = _TAG_PREFIX_RE.sub("", t).strip()
+    t = _OJ_PREFIX_RE.sub("", t).strip()
+    return "" if _BARE_REF_RE.match(t) else t
+
+
+def clean_brief_url(url: str) -> str:
+    """Repair the malformed EUR-Lex URLs the OJ feed emits.
+
+    The feed produced `https://eur-lex.europa.eu/./legal-content/AUTO/?uri=...`
+    -- note the `/./`. Left alone these are also `legal-content` links, which
+    return 202-and-empty to any non-browser client, so a reader following one
+    from an email gets a blank page.
+    """
+    u = (url or "").strip()
+    if not u:
+        return u
+    u = u.replace("/./", "/")
+    m = re.search(r'[?&]uri=CELEX(?::|%3A)([0-9A-Z()]+)', u, re.IGNORECASE)
+    if m and "eur-lex.europa.eu" in u:
+        return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{m.group(1)}"
+    return u
 
 
 def generate_suggested_query(headline: str) -> str:
@@ -942,15 +1009,21 @@ def save_to_daily_briefs(items: List[NewsItem]):
         today = datetime.now().strftime('%Y-%m-%d')
         saved = 0
 
+        skipped_untitled = 0
         for item in items:
             try:
-                # Clean headline: strip [IP], [MEX], etc. prefixes
-                clean_headline = re.sub(r'^\[(?:IP|MEX|QANDA|FS|SPEECH|STATEMENT)\]\s*', '', item.title).strip()
+                clean_headline = clean_brief_headline(item.title)
+                if not clean_headline:
+                    # A row whose entire headline is an OJ reference ("OJ:L_202690709")
+                    # is unusable in a brief and consumed one of the slots anyway.
+                    # Four of the twenty saved on 24 Aug 2026 were exactly this.
+                    skipped_untitled += 1
+                    continue
                 cur.execute(
                     """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                        ON CONFLICT (brief_date, url, audience) DO NOTHING""",
-                    (today, clean_headline, item.url, item.source, item.category,
+                    (today, clean_headline, clean_brief_url(item.url), item.source, item.category,
                      item.priority, item.snippet or None,
                      generate_suggested_query(item.title))
                 )
@@ -960,6 +1033,9 @@ def save_to_daily_briefs(items: List[NewsItem]):
                 print(f"  [ERROR] Failed to save: {str(e)[:60]}", file=sys.stderr)
 
         conn.close()
+        if skipped_untitled:
+            print(f"[WARN] skipped {skipped_untitled} item(s) with no usable headline "
+                  f"(bare OJ/CELEX reference)", file=sys.stderr)
         print(f"[OK] Saved {saved} headlines to daily_briefs for {today}", file=sys.stderr)
 
     except Exception as e:

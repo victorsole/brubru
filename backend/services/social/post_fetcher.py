@@ -34,7 +34,13 @@ OPEN_TIER = ("bluesky", "mastodon", "youtube")
 # post feed -> content still deferred there (mapping only).
 FETCHABLE = ("bluesky", "mastodon", "youtube", "x")
 _REFRESH = ["post_url", "content", "lang", "posted_at", "like_count", "repost_count",
+            "is_repost", "original_author",
             "reply_count", "view_count", "media", "extra"]
+
+
+# X syndication prefixes an amplified post with "RT @handle:". It is the only
+# repost marker that endpoint gives us, and it is reliable.
+_RT_PREFIX_RE = re.compile(r"^RT @([A-Za-z0-9_]{1,15})\s*:")
 
 
 def _get(url, parse="json", tries=3, timeout=25):
@@ -103,11 +109,14 @@ def fetch_x(handle, n=20):
         if not tid or tid in seen:
             continue
         seen.add(tid)
-        out.append({"platform_post_id": tid, "content": t.get("full_text"),
+        _txt = t.get("full_text") or ""
+        _rt = _RT_PREFIX_RE.match(_txt)
+        out.append({"platform_post_id": tid, "content": _txt,
                     "post_url": f"https://x.com/{handle}/status/{tid}",
                     "posted_at": _dt_twitter(t.get("created_at")), "lang": t.get("lang"),
                     "like_count": t.get("favorite_count"), "repost_count": t.get("retweet_count"),
-                    "reply_count": t.get("reply_count"), "view_count": None, "media": [], "extra": {}})
+                    "reply_count": t.get("reply_count"), "view_count": None, "media": [], "extra": {},
+                    "is_repost": bool(_rt), "original_author": _rt.group(1) if _rt else None})
     return out
 
 
@@ -120,11 +129,20 @@ def fetch_bluesky(handle, n=10):
         uri = p.get("uri", "")
         rkey = uri.split("/")[-1] if uri else None
         langs = rec.get("langs") or []
+        # `reason` is present when this feed entry is an amplification. The real
+        # author sits on the post, not on the feed we asked for -- without this,
+        # a repost is stored as the account's own statement, which is how
+        # Thomas Pellerin-Carlin came to "declare" for the French presidency.
+        _reason = it.get("reason") or {}
+        _author = (p.get("author") or {}).get("handle")
+        _is_rt = bool(_reason) or (bool(_author) and _author.lower() != handle.lower())
         out.append({"platform_post_id": uri or rkey, "content": rec.get("text"),
-                    "post_url": f"https://bsky.app/profile/{handle}/post/{rkey}" if rkey else None,
+                    "post_url": (f"https://bsky.app/profile/{_author or handle}/post/{rkey}"
+                                 if rkey else None),
                     "posted_at": _dt(rec.get("createdAt")), "lang": langs[0] if langs else None,
                     "like_count": p.get("likeCount"), "repost_count": p.get("repostCount"),
-                    "reply_count": p.get("replyCount"), "view_count": None, "media": [], "extra": {}})
+                    "reply_count": p.get("replyCount"), "view_count": None, "media": [], "extra": {},
+                    "is_repost": _is_rt, "original_author": _author if _is_rt else None})
     return out
 
 
@@ -140,7 +158,8 @@ def fetch_mastodon(instance, user, n=10):
                     "post_url": s.get("url"), "posted_at": _dt(s.get("created_at")),
                     "lang": s.get("language"), "like_count": s.get("favourites_count"),
                     "repost_count": s.get("reblogs_count"), "reply_count": s.get("replies_count"),
-                    "view_count": None, "media": s.get("media_attachments") or [], "extra": {}})
+                    "view_count": None, "media": s.get("media_attachments") or [], "extra": {},
+                    "is_repost": False, "original_author": None})  # exclude_reblogs=true upstream
     return out
 
 

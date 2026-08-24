@@ -55,7 +55,8 @@ def derive_celex(reference: str, doc_type: str) -> str | None:
 
 
 def main():
-    db_url = open(ROOT / ".env").read().split("DATABASE_URL=")[1].split("\n")[0].strip().strip('"')
+    from scripts._db_url import get_database_url   # env first; .env is a dev fallback
+    db_url = get_database_url()
     conn = psycopg2.connect(db_url)
     cur = conn.cursor()
 
