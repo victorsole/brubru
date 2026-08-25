@@ -30,9 +30,14 @@ router = APIRouter(prefix="/news", tags=["v2-news"])
 
 _NEWS_TYPES = ["news", "press_release"]
 _KINDS = {"news", "press_release", "all"}
+# Every order carries an `id` tiebreak. Without one, two rows with equal sort
+# keys can come back in a different relative order on each call, and LIMIT/OFFSET
+# pagination then repeats or skips rows across pages. `title` had no tiebreak; it
+# happened to be stable on today's data, which is luck rather than a guarantee,
+# and the UNION makes ties more likely because two independent tables interleave.
 _ORDERS = {"recent": "document_date DESC NULLS LAST, id DESC",
            "oldest": "document_date ASC NULLS LAST, id ASC",
-           "title": "title ASC"}
+           "title": "title ASC, id ASC"}
 
 
 class NewsItem(BaseModel):
@@ -265,7 +270,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), "
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
-                "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; Commission, Parliament and Council news is unioned in from the institutional news store, so this feed covers both. Institutional items carry a NEGATIVE `id` -- pass it through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
+                "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; Commission, Parliament and Council news is unioned in from the institutional news store, so this feed covers both. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
 async def list_news(
     request: Request,
     db: Session = Depends(get_db),

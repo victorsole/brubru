@@ -222,3 +222,42 @@ def test_pagination_is_stable_across_the_union(client):
     ids1 = {str(i["id"]) for i in p1}
     ids2 = {str(i["id"]) for i in p2}
     assert not (ids1 & ids2), f"{len(ids1 & ids2)} item(s) appear on both pages"
+
+
+def test_the_description_matches_the_shipped_id_contract():
+    """The published description must not describe an id scheme that was replaced.
+
+    Caught in the second audit pass. The first implementation disambiguated the
+    two stores by NEGATING the id, and the endpoint description said so. That
+    scheme was then abandoned -- eu_news_items is keyed by UUID, and
+    `-uuid` is not an operation Postgres has -- but the description still told
+    partners to expect a negative integer. A wrong contract on a paid endpoint is
+    worse than an undocumented one.
+    """
+    from main import app
+    desc = next(
+        r.description for r in app.routes
+        if getattr(r, "path", "") == "/api/v2/news/all"
+    )
+    assert "NEGATIVE" not in desc.upper(), "description still promises negative ids"
+    assert "UUID" in desc.upper(), "description does not mention the institutional id type"
+
+
+@pytest.mark.parametrize("order", ["recent", "oldest", "title"])
+def test_every_order_has_a_deterministic_tiebreak(order):
+    """LIMIT/OFFSET pagination over a UNION needs a total order.
+
+    Two rows with equal sort keys may come back in a different relative order on
+    each call, so a page boundary that falls inside a tie repeats or skips rows.
+    `title` shipped with no tiebreak and was stable only by luck on current data.
+    """
+    from api.v2.news import _ORDERS
+    assert "id" in _ORDERS[order], f"order={order} has no id tiebreak: {_ORDERS[order]!r}"
+
+
+@pytest.mark.parametrize("order", ["recent", "oldest", "title"])
+def test_pages_do_not_overlap_under_any_order(client, order):
+    p1 = client.get(f"/api/v2/news/all?days=365&limit=25&page=1&order={order}").json()["data"]
+    p2 = client.get(f"/api/v2/news/all?days=365&limit=25&page=2&order={order}").json()["data"]
+    overlap = {str(i["id"]) for i in p1} & {str(i["id"]) for i in p2}
+    assert not overlap, f"order={order}: {len(overlap)} item(s) on both pages"

@@ -24,6 +24,27 @@ import pytest
 SRC = Path(__file__).resolve().parents[1] / "scripts" / "sync_ep_votes.py"
 
 
+def code_only(text_: str) -> str:
+    """The source with COMMENTS removed.
+
+    Grepping raw source for a token lets a COMMENT satisfy the assertion. That is
+    not hypothetical here: the first version of
+    `test_a_skipped_report_is_not_counted_as_a_missing_one` passed against broken
+    code because the word it searched for appeared in the comment explaining why
+    the code should be there. Any text assertion about BEHAVIOUR runs through this.
+    """
+    import io, tokenize
+    out, last = [], (1, 0)
+    for tok in tokenize.generate_tokens(io.StringIO(text_).readline):
+        if tok.type == tokenize.COMMENT:
+            continue
+        if tok.start[0] > last[0]:
+            out.append("\n" * (tok.start[0] - last[0]))
+        out.append(tok.string)
+        last = tok.end
+    return "".join(out)
+
+
 @pytest.fixture(scope="module")
 def source():
     return SRC.read_text()
@@ -122,15 +143,16 @@ def test_committee_loop_guard_sits_before_the_fetch(source):
 
 def test_skips_are_reported_not_swallowed(source):
     """A truncated run must say so, with counts, or it reads as a complete one."""
-    assert "skipped_sittings" in source and "skipped_reports" in source
-    assert "[WARN] deadline" in source, "no warning line when work is dropped"
+    code = code_only(source)
+    assert "skipped_sittings" in code and "skipped_reports" in code
+    assert "[WARN] deadline" in code, "no warning line when work is dropped"
     for token in ("sitting(s) not fetched", "committee report(s) skipped"):
-        assert token in source, f"summary does not report {token!r}"
+        assert token in code, f"summary does not report {token!r}"
 
 
 def test_a_complete_run_says_so_explicitly(source):
     """The other half: 'nothing skipped' must be stated, not inferred from silence."""
-    assert "nothing skipped" in source
+    assert "nothing skipped" in code_only(source)
 
 
 def test_partial_progress_is_committed(source):
@@ -149,5 +171,58 @@ def test_partial_progress_is_committed(source):
 def test_settle_time_is_the_measured_value(source):
     """9000ms was costing ~6s per fetch for byte-identical HTML (measured on two
     RCV dates and a committee report). Pinned so it is not restored by reflex."""
-    assert "settle_ms=3000" in source
-    assert "settle_ms=9000" not in source
+    code = code_only(source)
+    assert "settle_ms=3000" in code, "the measured settle value is not in the CODE"
+    assert "settle_ms=9000" not in code, "the 9000ms settle was restored"
+
+
+def test_a_skipped_report_is_not_counted_as_a_missing_one(source):
+    """A deadline-skip must NOT fall through into the `no_committee` counter.
+
+    Caught in the second audit pass. The first version set `cpv = None` and fell
+    through to `if cpv: ... else: counts["no_committee"] += 1`, so a committee
+    report we never LOOKED at was recorded as a report that does not EXIST. Two
+    different facts, only one of them about the upstream site -- and the summary
+    would have understated the skips while overstating a data gap.
+
+    The guard branch must `continue`.
+
+    Asserted over the AST, not the text. The first version of this test searched
+    the branch source for the word "continue" -- and passed against a deliberately
+    broken fall-through, because the word appears in the explanatory COMMENT above
+    the statement. A test that matches its own documentation cannot fail.
+    """
+    tree = ast.parse(source)
+    fn = next(n for n in ast.walk(tree)
+              if isinstance(n, ast.FunctionDef) and n.name == "run")
+
+    guards = [
+        n for n in ast.walk(fn)
+        if isinstance(n, ast.If)
+        and isinstance(n.test, ast.Call)
+        and isinstance(n.test.func, ast.Name)
+        and n.test.func.id == "out_of_time"
+    ]
+    assert guards, "no out_of_time() guard found in run()"
+
+    # The committee guard is the one whose body records a skipped REPORT.
+    committee_guard = [
+        g for g in guards
+        if any(
+            isinstance(c, ast.Attribute) and c.attr == "add"
+            and isinstance(c.value, ast.Name) and c.value.id == "skipped_reports"
+            for c in ast.walk(g)
+        )
+    ]
+    assert committee_guard, "no guard records a skipped committee report"
+    assert any(isinstance(n, ast.Continue) for n in ast.walk(committee_guard[0])), (
+        "the deadline branch falls through to the no_committee counter, "
+        "reporting an unfetched report as a missing one"
+    )
+
+
+def test_skipped_reports_are_counted_distinctly(source):
+    """The same report_ref recurs across targets in a sitting; counting fetch
+    attempts instead of distinct reports would inflate the number in the summary."""
+    assert "skipped_reports: set = set()" in source, "skipped_reports is not a set"
+    assert "len(skipped_reports)" in source, "the summary prints the container, not its size"

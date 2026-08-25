@@ -180,7 +180,7 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
     committee_cache: dict = {}
     started = time.monotonic()
     skipped_sittings: list = []
-    skipped_reports = 0
+    skipped_reports: set = set()
 
     def out_of_time() -> bool:
         return deadline_seconds is not None and (time.monotonic() - started) >= deadline_seconds
@@ -272,10 +272,16 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                         if rep in committee_cache:
                             cpv, ctext = committee_cache[rep]
                         elif out_of_time():
-                            # The uncapped loop. Skip the fetch, keep the plenary
-                            # row already written above, and count what was missed.
-                            skipped_reports += 1
-                            cpv, ctext = None, ""
+                            # The uncapped loop. Skip the fetch and keep the plenary
+                            # row already written above.
+                            #
+                            # `continue`, NOT a fall-through: reaching the `if cpv`
+                            # test below would land in `no_committee`, recording a
+                            # report we never LOOKED at as a report that does not
+                            # EXIST. Those are different facts and only one of them
+                            # is about the upstream site.
+                            skipped_reports.add(rep)
+                            continue
                         else:
                             curl = committee_report_url(rep)
                             ctext = fetcher.fetch(curl).text if curl else ""
@@ -312,7 +318,7 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
             print(f"[WARN] deadline {deadline_seconds}s reached after {elapsed:.0f}s: "
                   f"{len(skipped_sittings)} sitting(s) not fetched "
                   f"({', '.join(skipped_sittings) or '-'}), "
-                  f"{skipped_reports} committee report(s) skipped. "
+                  f"{len(skipped_reports)} committee report(s) skipped. "
                   f"Newest-first, so the next run resumes at the tail.")
         else:
             print(f"[INFO] complete in {elapsed:.0f}s, nothing skipped.")

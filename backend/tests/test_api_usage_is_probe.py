@@ -138,7 +138,12 @@ def test_wapu_query_excludes_probes():
     text_ = src.read_text()
     idx = text_.find("SELECT user_id, 'api' FROM api_usage_events")
     assert idx != -1, "WAPU api branch not found -- did the query move?"
-    assert "NOT is_probe" in text_[idx: idx + 320], "WAPU still counts probe calls"
+    window = text_[idx: idx + 320]
+    # Strip SQL line-comments first: `-- our own verification traffic is not a
+    # user action` sits on the same line as the filter, and a version of this
+    # test that grepped the raw window could be satisfied by the comment alone.
+    sql_only = "\n".join(line.split("--")[0] for line in window.splitlines())
+    assert "NOT is_probe" in sql_only, "WAPU still counts probe calls (filter not in the SQL)"
 
 
 @pytest.mark.parametrize("rel", ["api/v1/_deps.py", "api/mcp_http.py"])
