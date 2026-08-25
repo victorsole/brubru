@@ -29,13 +29,21 @@ def main() -> int:
     ap.add_argument("--platforms", help="comma list (default Bluesky/Mastodon/YouTube)")
     ap.add_argument("--pace", type=float, default=0.4, help="seconds between accounts")
     ap.add_argument("--empty-streak-stop", type=int, help="stop after N consecutive empties (X throttle)")
+    # action="append", never nargs="+": a repeated flag with nargs silently
+    # overwrites its earlier values (three confirmed incidents in this repo).
+    ap.add_argument("--handle", action="append",
+                    help="fetch this handle regardless of when it was last checked; repeatable")
+    ap.add_argument("--prioritise-verified", action="store_true",
+                    help="verified accounts first, then oldest-first (use on throttled platforms)")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
     plats = tuple(args.platforms.split(",")) if args.platforms else OPEN_TIER
     db = SessionLocal()
     try:
         stats = run(db, platforms=plats, limit_accounts=args.limit, per_account=args.per_account,
-                    pace=args.pace, empty_streak_stop=args.empty_streak_stop, dry_run=not args.apply)
+                    pace=args.pace, empty_streak_stop=args.empty_streak_stop, dry_run=not args.apply,
+                    handles=args.handle,
+                    prioritise_verified=args.prioritise_verified)
     finally:
         db.close()
     print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] accounts={stats['accounts']} "

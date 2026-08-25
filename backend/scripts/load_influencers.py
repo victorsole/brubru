@@ -30,6 +30,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert  # noqa: E402
 from core.database import SessionLocal, engine  # noqa: E402
 engine.echo = False
 from models.social_account import SocialAccount  # noqa: E402
+from services.social.eu_directory_loader import _handle as _account_handle
 
 _UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 _TRANSLIT = {"ł": "l", "ø": "o", "đ": "d", "þ": "th", "ß": "ss", "æ": "ae", "œ": "oe", "ð": "d", "ı": "i"}
@@ -158,7 +159,7 @@ def main():
                 stats["by_source"][source] = stats["by_source"].get(source, 0) + 1
                 if args.apply:
                     row = {"entity_type": "eu_influencer", "entity_key": _slug(name), "entity_name": name,
-                           "platform": plat, "scope": "personal", "handle": cu.split("/")[-1].lstrip("@"),
+                           "platform": plat, "scope": "personal", "handle": _account_handle(cu),
                            "account_url": cu, "status": "candidate", "verified": False,
                            "discovery_source": source, "content_fetch_enabled": False,
                            "extra": {"outlet": source, **({"ft_profile": FT_PROFILES[name]} if source == "financial_times" and name in FT_PROFILES else {})}}

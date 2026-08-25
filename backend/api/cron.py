@@ -484,7 +484,7 @@ async def cron_fetch_social_posts(
     """
     Fetch recent posts from mapped social accounts (Phase 4.2 content layer). Oldest-checked
     accounts first, so each run drips through the set over time. mode='open' pulls the robust
-    keyless APIs (Bluesky/Mastodon/YouTube). mode='x' drips the 978 X accounts via the public
+    keyless APIs (Bluesky/Mastodon/YouTube). mode='x' drips the X accounts (1,135 enabled as of 25 Aug 2026) via the public
     syndication endpoint with slow pacing + a throttle-stop (no paid API, no IG/LinkedIn/TikTok).
     """
     _verify_cron_secret(authorization)
@@ -493,9 +493,17 @@ async def cron_fetch_social_posts(
     db = SessionLocal()
     try:
         if mode == "x":
+            # prioritise_verified added 25 Aug 2026. X throttles, so every run
+            # stops early on its empty-streak guard and real throughput is ~70
+            # accounts/day against 1,135 enabled -- a 16-day cycle, not the 4.9
+            # the slot arithmetic predicts. More slots just hit the throttle
+            # more often. Spending the scarce budget on the 464 verified
+            # accounts first cycles institutions, Commissioners and confirmed
+            # MEPs in ~6.6 days and lets the unverified tail lag.
             result = await run_in_threadpool(
                 run, db, platforms=("x",), limit_accounts=limit or 40,
-                per_account=10, pace=5.0, empty_streak_stop=8)
+                per_account=10, pace=5.0, empty_streak_stop=8,
+                prioritise_verified=True)
         else:
             result = await run_in_threadpool(
                 run, db, platforms=("bluesky", "mastodon", "youtube"),

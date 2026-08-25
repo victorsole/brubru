@@ -147,10 +147,44 @@ def resolve_agency(name: str, idx: dict | None):
     return _slug(name), False           # real agency, just not in our registry -> flagged slug
 
 
+# Trailing URL path segments that are VIEWS of an account, not the account.
+# `segs[-1]` used to take them literally, so the European Parliament in the UK,
+# Manon Aubry and 47 others were stored with handle "featured", "videos",
+# "photo" or "about" (audit, 25 Aug 2026). Fetching still worked because it goes
+# through platform_account_id, so nothing failed loudly -- but every surface
+# keyed on handle (MEP Watch, Stakeholder Mapping, the social API, dedup) saw
+# eight different accounts all called "@featured".
+_VIEW_SEGMENTS = frozenset({
+    "featured", "videos", "about", "feed", "posts", "photo", "photos",
+    "profile", "albums", "sets", "info", "timeline", "blog", "playlists",
+    "channels", "community", "home", "media", "likes", "with_replies",
+    "shorts", "streams", "reels", "highlights", "tagged", "events",
+})
+
+# Path segments that introduce the identifier rather than being it:
+# /user/EpinUk/featured, /channel/UCxxxx/featured, /c/Name, /in/person.
+_CONTAINER_SEGMENTS = frozenset({"user", "channel", "c", "in", "company",
+                                 "pages", "groups", "people", "photos"})
+
+
 def _handle(url: str) -> str | None:
+    """Last MEANINGFUL path segment of an account URL.
+
+    Walks back from the end past view segments ("/featured", "/videos") and
+    refuses to return a container word ("user", "channel", "in") on its own.
+    Returns None rather than a wrong handle -- an empty handle is honest, a
+    handle of "featured" is a fabricated identity.
+    """
     try:
         segs = [s for s in urlparse(url).path.split("/") if s]
-        return segs[-1].lstrip("@") if segs else None
+        while segs and segs[-1].lower() in _VIEW_SEGMENTS:
+            segs.pop()
+        if not segs:
+            return None
+        candidate = segs[-1].lstrip("@")
+        if candidate.lower() in _CONTAINER_SEGMENTS:
+            return None
+        return candidate or None
     except Exception:
         return None
 

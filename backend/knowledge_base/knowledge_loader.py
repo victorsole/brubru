@@ -13638,6 +13638,34 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'misure di riequilibrio': ['eu_us_trade_deal_2026'],
     'mesures de reequilibri': ['eu_us_trade_deal_2026'],
     'herbalanceringsmaatregelen': ['eu_us_trade_deal_2026'],
+    # --- CBAM verification + accreditation (added 25 Aug 2026, DG TAXUD guidance
+    # of 24 Aug). Appended at the END of the dict on purpose: this dict has 400+
+    # duplicate keys and a key added ABOVE a later duplicate is dead. ---
+    'cbam verifier': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam verifiers': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam verification': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam accreditation': ['cbam_carbon_border_adjustment_mechanism'],
+    'accredited verifier': ['cbam_carbon_border_adjustment_mechanism'],
+    'national accreditation body': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam registry access': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam registry': ['cbam_carbon_border_adjustment_mechanism'],
+    'verification report cbam': ['cbam_carbon_border_adjustment_mechanism'],
+    'actual verified emissions': ['cbam_carbon_border_adjustment_mechanism'],
+    'verificador cbam': ['cbam_carbon_border_adjustment_mechanism'],
+    'acreditacion cbam': ['cbam_carbon_border_adjustment_mechanism'],
+    'organismo nacional de acreditacion': ['cbam_carbon_border_adjustment_mechanism'],
+    'verificateur macf': ['cbam_carbon_border_adjustment_mechanism'],
+    'accreditation macf': ['cbam_carbon_border_adjustment_mechanism'],
+    'verificatore cbam': ['cbam_carbon_border_adjustment_mechanism'],
+    'organisme d acreditacio': ['cbam_carbon_border_adjustment_mechanism'],
+    'cbam accreditatie': ['cbam_carbon_border_adjustment_mechanism'],
+    # --- EU trade agreements concluded / entered into force, late Aug 2026 ---
+    'pakistan gatt article xxviii': ['eu_trade_policy'],
+    'eu pakistan agreement': ['eu_trade_policy'],
+    'acuerdo ue pakistan': ['eu_trade_policy'],
+    'eu lebanon agreement': ['eu_trade_policy'],
+    'acuerdo ue libano': ['eu_trade_policy'],
+    'accord ue liban': ['eu_trade_policy'],
 }
 
 

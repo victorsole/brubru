@@ -29,6 +29,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert  # noqa: E402
 from core.database import SessionLocal, engine  # noqa: E402
 engine.echo = False
 from models.social_account import SocialAccount  # noqa: E402
+from services.social.eu_directory_loader import _handle as _account_handle
 
 CACHE = ("/private/tmp/claude-501/-Users-victorsole-Documents-GitHub-brubru/"
          "467dde5d-b102-4717-9258-3805a4ea37f8/scratchpad/eu_social_directory_raw.json")
@@ -108,7 +109,7 @@ def main():
         stats["commissioner_accounts" if cname else "ec_official_accounts"] += 1
         if args.apply:
             row = {"entity_type": etype, "entity_key": ekey, "entity_name": name,
-                   "platform": platform, "scope": "personal", "handle": url.rstrip("/").split("/")[-1].split("?")[0],
+                   "platform": platform, "scope": "personal", "handle": _account_handle(url),
                    "account_url": url, "status": "verified", "verified": True,
                    "verification_source": "eu_directory", "discovery_source": "eu_directory",
                    "content_fetch_enabled": False,

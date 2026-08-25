@@ -234,16 +234,60 @@ def _resolve_youtube(db, a, dry_run):
 
 
 def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.4,
-        empty_streak_stop=None, dry_run=False) -> dict:
+        empty_streak_stop=None, dry_run=False, handles=None,
+        prioritise_verified=False) -> dict:
     """Fetch posts for content_fetch_enabled accounts, OLDEST-checked first (so a capped
     cron run drips through the whole set over time). empty_streak_stop: stop the run after
     this many consecutive empty fetches (X throttle signal). last_checked_at is bumped per
-    account so the next run advances."""
-    q = ("SELECT id, platform, account_url, platform_account_id, entity_name FROM social_accounts "
-         "WHERE content_fetch_enabled = true AND platform = ANY(:plats) "
-         "ORDER BY last_checked_at ASC NULLS FIRST")
+    account so the next run advances.
+
+    `handles`: fetch these specific handles INSTEAD of the oldest-first queue, ignoring
+    when they were last checked. Added 25 Aug 2026. The drip alone cannot answer the
+    question /social-eu asks on a law-drop day -- "did the institutions amplify their own
+    law?" -- because the responsible DG is wherever the oldest-first queue happens to
+    have left it. On 25 Aug the Commission published CBAM verifier guidance and
+    @EU_Taxud had last been checked four days EARLIER, so a search for "CBAM" returned
+    zero posts. Zero there meant "we have not looked", not "they said nothing", and the
+    two are opposite findings. Targeting the handle makes the difference visible.
+    """
+    params = {"plats": list(platforms)}
+    if handles:
+        q = ("SELECT id, platform, account_url, platform_account_id, entity_name "
+             "FROM social_accounts "
+             "WHERE content_fetch_enabled = true AND platform = ANY(:plats) "
+             "AND lower(handle) = ANY(:handles) "
+             "ORDER BY last_checked_at ASC NULLS FIRST")
+        params["handles"] = [h.lower().lstrip("@") for h in handles]
+    elif prioritise_verified:
+        # Verified accounts first, THEN oldest-first within each group.
+        #
+        # Pure oldest-first is the right policy when a full cycle is short. On X
+        # it is not: the syndication endpoint throttles, every run stops early on
+        # its empty-streak guard, and the measured throughput is ~70 accounts a
+        # day against 1,135 enabled -- a 16-day cycle, not the 4.9 days the slot
+        # arithmetic predicts. Adding cron slots does not fix that; it just hits
+        # the throttle more often.
+        #
+        # So spend the scarce budget where the signal is. 464 of the 1,135 are
+        # verified -- institutions, Commissioners, confirmed MEPs -- and those
+        # cycle in ~6.6 days on the same throughput, while the unverified tail
+        # lags. A Commissioner announcing a proposal is worth more than an
+        # unconfirmed handle, and until today both waited the same 16 days.
+        q = ("SELECT id, platform, account_url, platform_account_id, entity_name "
+             "FROM social_accounts "
+             "WHERE content_fetch_enabled = true AND platform = ANY(:plats) "
+             "ORDER BY verified DESC, last_checked_at ASC NULLS FIRST")
+    else:
+        q = ("SELECT id, platform, account_url, platform_account_id, entity_name "
+             "FROM social_accounts "
+             "WHERE content_fetch_enabled = true AND platform = ANY(:plats) "
+             "ORDER BY last_checked_at ASC NULLS FIRST")
     rows = db.execute(text(q + (f" LIMIT {int(limit_accounts)}" if limit_accounts else "")),
-                      {"plats": list(platforms)}).mappings().all()
+                      params).mappings().all()
+    if handles and not rows:
+        # Say so. A targeted fetch that matched nothing must not look like a quiet feed.
+        logger.warning("[social] no fetch-enabled account matches handles=%s on platforms=%s",
+                       handles, list(platforms))
     stats = {"accounts": len(rows), "fetched_ok": 0, "skipped": 0, "posts_written": 0,
              "by_platform": {}, "skips": {}, "stopped_early": False, "dry_run": dry_run}
     empty_streak = 0

@@ -1,6 +1,7 @@
 # Ecodesign for Sustainable Products Regulation (ESPR) - Regulation (EU) 2024/1781
 
 ## QUICK FACTS
+- **OPEN CONSULTATION, CLOSES 15 OCTOBER 2026 - "Omnibus simplification of energy-efficient product legislation" (DG ENER, Have Your Say initiative 16872).** Opened **20 August 2026**, foreseen act type a **proposed Regulation**, currently at adoption-workflow stage. This is the single most consequential open consultation for anyone who has built compliance work on this Regulation: a simplification omnibus reaching across energy-efficient product legislation sits directly upstream of the ecodesign framework and of the delegated acts that carry it. **Nothing is decided** - it is a consultation on a foreseen proposal, so do not describe any change as agreed or forthcoming. What is actionable today is the deadline: feedback closes **15 October 2026**. Track it in My EU Bubble > EU Public Consultations. Source: `public_consultations`, initiative 16872, verified 25 August 2026.
 - **CELEX:** 32024R1781
 - **Full title:** Regulation (EU) 2024/1781 of the European Parliament and of the Council of 13 June 2024 establishing a framework for the setting of ecodesign requirements for sustainable products, amending Directive (EU) 2020/1828 and Regulation (EU) 2023/1542 and repealing Directive 2009/125/EC (Text with EEA relevance)
 - **Common name:** ESPR (Ecodesign for Sustainable Products Regulation)
