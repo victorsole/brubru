@@ -56,6 +56,7 @@ from services.billing.api_meter import (
     debit,
     mark_event_refunded,
     record_usage,
+    is_probe_header,
     refund,
     sandbox_consume,
     set_event_status,
@@ -345,6 +346,7 @@ async def _dispatch_tools_call(
     request_id: str,
     caller_key: Optional[str] = None,
     profile: "McpProfile" = None,
+    is_probe: bool = False,
 ) -> Dict[str, Any]:
     tool_name = params.get("name") if params else None
     arguments = params.get("arguments") if params else None
@@ -418,6 +420,10 @@ async def _dispatch_tools_call(
             request_id=request_id,
             status_code=None,
             is_sandbox=is_sandbox,
+            # The 13 Aug 2026 incident this exists for was on THIS path: 178
+            # `mcp:ask_dpp` debugging calls landed on a client's row and counted
+            # as her usage. Billing is unchanged; only analytics may exclude it.
+            is_probe=is_probe,
         )
 
     # Invoke the handler OFF the event loop. Handlers do blocking DB work (and the
@@ -571,6 +577,7 @@ async def _handle_mcp(
                 request_id=str(uuid.uuid4()),
                 caller_key=plaintext,
                 profile=profile,
+                is_probe=is_probe_header(request.headers.get("X-Brubru-Probe")),
             )
 
         return _err(req_id, -32601, f"Method not found: {method!r}")

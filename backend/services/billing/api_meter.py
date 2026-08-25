@@ -151,6 +151,22 @@ def credit_topup(db: Session, user_id: UUID, amount_micro: int) -> int:
 # Usage ledger
 # ---------------------------------------------------------------------------
 
+# Accepted truthy values for the X-Brubru-Probe header. Kept identical to the
+# set api/chat.py has used since 19 Aug 2026 so one header behaves the same way
+# on both surfaces; a probe script should not have to remember which is which.
+_PROBE_TRUTHY = {"1", "true", "yes"}
+
+
+def is_probe_header(value: Optional[str]) -> bool:
+    """Parse the `X-Brubru-Probe` request header.
+
+    Anything unrecognised (absent, empty, "0", "no", garbage) reads as False:
+    a call is real traffic until it says otherwise, so a malformed header
+    over-reports usage instead of quietly erasing it from every metric.
+    """
+    return str(value or "").strip().lower() in _PROBE_TRUTHY
+
+
 def record_usage(
     db: Session,
     *,
@@ -163,8 +179,15 @@ def record_usage(
     status_code: Optional[int],
     is_sandbox: bool = False,
     refunded: bool = False,
+    is_probe: bool = False,
 ) -> ApiUsageEvent:
-    """Insert a usage event row. Caller commits."""
+    """Insert a usage event row. Caller commits.
+
+    `is_probe` marks the row as Brubru's own synthetic traffic (deploy
+    verification, debugging). It defaults to False deliberately: an unmarked
+    call is counted as real, so forgetting the header over-reports usage rather
+    than hiding it.
+    """
     evt = ApiUsageEvent(
         user_id=user_id,
         api_key_id=api_key_id,
@@ -175,6 +198,7 @@ def record_usage(
         status_code=status_code,
         is_sandbox=is_sandbox,
         refunded=refunded,
+        is_probe=is_probe,
     )
     db.add(evt)
     db.commit()

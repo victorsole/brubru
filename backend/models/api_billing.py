@@ -64,6 +64,9 @@ class ApiUsageEvent(Base):
     status_code = Column(Integer, nullable=True)
     is_sandbox = Column(Boolean, nullable=False, default=False)
     refunded = Column(Boolean, nullable=False, default=False)
+    # Our own synthetic traffic, set from the X-Brubru-Probe header (migration 222).
+    # FALSE means "not marked", never "proven human" -- exclude from user metrics.
+    is_probe = Column(Boolean, nullable=False, default=False)
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

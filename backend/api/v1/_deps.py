@@ -23,6 +23,7 @@ from services.api_keys.scopes import is_free_path, resolve_required_scope
 from services.billing.api_meter import (
     debit,
     record_usage,
+    is_probe_header,
     resolve_cost_micro,
     sandbox_consume,
 )
@@ -145,6 +146,10 @@ async def api_user_with_rate_limit(
         request_id=None,  # set by the v1 error/envelope wrapper for 4xx/5xx
         status_code=None,
         is_sandbox=is_sandbox,
+        # Our own verification traffic still bills and still rate-limits -- it is
+        # only excluded from usage ANALYTICS. Marking it must never become a way
+        # to call the API for free.
+        is_probe=is_probe_header(request.headers.get("X-Brubru-Probe")),
     )
     request.state.billing_event_id = evt.id
     request.state.billing_cost_micro = cost_micro

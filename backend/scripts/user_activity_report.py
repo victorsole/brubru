@@ -431,6 +431,7 @@ def section_api(conn, start, end, include_internal):
                count(*) FILTER (WHERE e.status_code >= 400) AS errors,
                count(*) FILTER (WHERE e.status_code IS NULL) AS status_unrecorded,
                count(*) FILTER (WHERE e.is_sandbox) AS sandbox,
+               count(*) FILTER (WHERE e.is_probe) AS probes,
                round(sum(e.cost_eur_micro) / 1000000.0, 4) AS eur
         FROM api_usage_events e
         LEFT JOIN users u ON u.id = e.user_id
@@ -559,6 +560,7 @@ def section_wapu(conn, end):
             UNION ALL
             SELECT user_id, 'api' FROM api_usage_events
                 WHERE created_at >= :start AND created_at < :end
+                  AND NOT is_probe   -- our own verification traffic is not a user action
         )
         SELECT p.email, p.subscription_tier,
                count(a.action) AS actions,
