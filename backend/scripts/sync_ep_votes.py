@@ -23,6 +23,7 @@ Usage:
 """
 
 import argparse
+import time
 import re
 import sys
 from datetime import date, timedelta
@@ -155,12 +156,34 @@ def _upsert_vote(db, *, vote_key, level, pv, apply, **fields):
 
 # ---- main -----------------------------------------------------------------
 
-def run(committees, since, ta, limit, apply, max_sittings):
+def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None):
+    """Sync EP votes.
+
+    `deadline_seconds` bounds the run in wall-clock time. Without it this job was
+    SIGKILLed by the cron's 1200s timeout on every run from 16 June 2026 onward,
+    which lost the ENTIRE run: no rows, no partial progress, just `timeout_1200s`
+    in sync_runs 49 times in a row.
+
+    Capping `--max-sittings` alone could not fix that, because the sitting cap
+    bounds only the RCV pages. Each target inside those sittings can trigger a
+    SECOND browser fetch for its committee report, and that loop was uncapped:
+    6 sittings held 80 targets, so the real worst case was ~98 fetches, not 18.
+
+    On expiry the run stops cleanly, commits what it has, and prints exactly what
+    it skipped. Sittings are processed newest-first, so the tail catches up on
+    later runs instead of never being reached at all.
+    """
     db = SessionLocal()
     counts = {"plenary_added": 0, "plenary_updated": 0, "committee_added": 0,
               "committee_updated": 0, "no_match": 0, "no_rcv": 0, "no_committee": 0}
     rcv_cache: dict = {}
     committee_cache: dict = {}
+    started = time.monotonic()
+    skipped_sittings: list = []
+    skipped_reports = 0
+
+    def out_of_time() -> bool:
+        return deadline_seconds is not None and (time.monotonic() - started) >= deadline_seconds
 
     try:
         targets = _select_targets(db, committees, since, ta, limit)
@@ -178,8 +201,16 @@ def run(committees, since, ta, limit, apply, max_sittings):
         print(f"[INFO] {len(sittings)} sitting days to fetch"
               + (f" (capped from {len(by_sitting)})" if max_sittings and len(by_sitting) > max_sittings else ""))
 
-        with WafBrowserFetcher(settle_ms=9000, networkidle_ms=20000) as fetcher:
+        # settle_ms measured, not guessed (25 Aug 2026): 9000 / 3000 / 1500 ms
+        # returned BYTE-IDENTICAL html and an identical parse (15 items, 144
+        # subitems) on two RCV dates and a committee report, while costing
+        # 12.9s / 6.3s / 4.3s per fetch. 3000 keeps a 2x margin over the lowest
+        # value proven sufficient, and roughly halves the run.
+        with WafBrowserFetcher(settle_ms=3000, networkidle_ms=20000) as fetcher:
             for sitting in sittings:
+                if out_of_time():
+                    skipped_sittings = [str(x) for x in sittings[sittings.index(sitting):]]
+                    break
                 # RCV page (try the sitting date, then +/-1 day for tz edge).
                 items = None
                 for cand in (sitting, sitting + timedelta(days=1), sitting - timedelta(days=1)):
@@ -240,6 +271,11 @@ def run(committees, since, ta, limit, apply, max_sittings):
                     else:
                         if rep in committee_cache:
                             cpv, ctext = committee_cache[rep]
+                        elif out_of_time():
+                            # The uncapped loop. Skip the fetch, keep the plenary
+                            # row already written above, and count what was missed.
+                            skipped_reports += 1
+                            cpv, ctext = None, ""
                         else:
                             curl = committee_report_url(rep)
                             ctext = fetcher.fetch(curl).text if curl else ""
@@ -265,7 +301,21 @@ def run(committees, since, ta, limit, apply, max_sittings):
                 if apply:
                     db.commit()
 
+        if apply:
+            db.commit()   # persist whatever the deadline let us finish
+
         print(f"\n[{'APPLIED' if apply else 'DRY-RUN'}] " + ", ".join(f"{k}={v}" for k, v in counts.items() if v))
+        elapsed = time.monotonic() - started
+        if skipped_sittings or skipped_reports:
+            # Stating the drop is the point. A cap that says nothing is how this
+            # codebase shipped `all_items[:20]` and lost 41 of 61 news items.
+            print(f"[WARN] deadline {deadline_seconds}s reached after {elapsed:.0f}s: "
+                  f"{len(skipped_sittings)} sitting(s) not fetched "
+                  f"({', '.join(skipped_sittings) or '-'}), "
+                  f"{skipped_reports} committee report(s) skipped. "
+                  f"Newest-first, so the next run resumes at the tail.")
+        else:
+            print(f"[INFO] complete in {elapsed:.0f}s, nothing skipped.")
     finally:
         db.close()
 
@@ -278,10 +328,14 @@ def main():
     p.add_argument("--limit", type=int, help="Cap number of adopted-text targets")
     p.add_argument("--max-sittings", type=int, help="Cap number of sitting days fetched")
     p.add_argument("--apply", action="store_true", help="Persist (default dry-run)")
+    p.add_argument("--deadline-seconds", type=int,
+                   help="Wall-clock budget. Stop cleanly and report what was skipped "
+                        "rather than being killed by the cron timeout.")
     args = p.parse_args()
 
     coms = [c.strip().upper() for c in args.committees.split(",")] if args.committees else None
-    run(coms, args.since, args.ta, args.limit, args.apply, args.max_sittings)
+    run(coms, args.since, args.ta, args.limit, args.apply, args.max_sittings,
+        deadline_seconds=args.deadline_seconds)
 
 
 if __name__ == "__main__":

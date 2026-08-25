@@ -61,7 +61,7 @@ MEUB_SOURCES: List[SourceSpec] = [
     # plus up to 20s networkidle, so worst case is 20 x 3 x 29s = ~1,740s against
     # a 1,200s budget. 6 sittings is 6 x 3 x 29 = ~520s, comfortably under half.
     # Newest-first, so the tail still catches up across runs.
-    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply", "--max-sittings", "6"), timeout=1200),
+    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply", "--max-sittings", "6", "--deadline-seconds", "900"), timeout=1200),
     SourceSpec("votes_council","Votes - Council",               "fast", "scripts/sync_council_votes.py",  ("--max", "20"), timeout=900),
 
     # ---- WARM (~6h): slower-moving institutional feeds --------------------
