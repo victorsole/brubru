@@ -2,7 +2,8 @@
 /api/v2/news — every EU body's news in one folder.
 
 A cross-body AGGREGATOR (ingests nothing): a query-time view over the news Brubru
-already keeps fresh in economy_items, where "News" bundles item_type 'news' and
+already keeps fresh in economy_items (agencies) and eu_news_items (Commission,
+Parliament, Council -- see _INSTITUTIONAL_NEWS), where "News" bundles item_type 'news' and
 'press_release' (latest news, press releases, stories, speeches and statements are
 all folded into 'news' at ingest). Same proprietary body/family picker as the
 events folder. The 5 mandatory datapoints. Scope: read:economy.
@@ -10,7 +11,7 @@ events folder. The 5 mandatory datapoints. Scope: read:economy.
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query, Request
 from pydantic import BaseModel, Field
@@ -35,7 +36,10 @@ _ORDERS = {"recent": "document_date DESC NULLS LAST, id DESC",
 
 
 class NewsItem(BaseModel):
-    id: int = Field(..., description="Stable Brubru item id (use on the detail endpoint).")
+    id: Union[int, str] = Field(..., description=(
+        "Stable Brubru item id (use on the detail endpoint). An INTEGER for agency "
+        "items and a UUID STRING for Commission / Parliament / Council items, which "
+        "live in a different store. Pass whichever you got through unchanged."))
     body_code: str = Field(..., description="Canonical body code the item belongs to.")
     body_name: Optional[str] = Field(None, description="Human-readable body name.")
     families: List[str] = Field(default_factory=list, description="Brubru policy families this body belongs to.")
@@ -94,9 +98,119 @@ def _build_where(codes, kinds, since, until, q):
     return " AND ".join(where), params
 
 
+# ---------------------------------------------------------------------------
+# The three institutions that generate most EU news live in a DIFFERENT table
+# ---------------------------------------------------------------------------
+# `economy_items` has never held a single news row for the Commission, the
+# Parliament or the Council -- 12,021 news rows across 72 bodies, and zero for
+# those three, ever. The 72 that do produce news are the agencies, so an endpoint
+# named `/news/all` was in truth an AGENCY-news aggregator, and MEUB News
+# consumed a feed missing the three institutions that generate most EU news.
+# Measured on 25 Aug 2026: a direct scrape found 62 Commission items in 24 hours
+# while `/api/v2/news/all?days=1` held 4.
+#
+# The news itself was never missing -- it is in `eu_news_items` (Commission 1,730
+# rows, newest today; EP 381; Council 81), written by a different pipeline.
+#
+# So this unions the two stores at read time rather than copying 2,000+ rows into
+# economy_items. Duplicating them would create a second source of truth for the
+# same fact, and `dpp_watch.py` already reports the same item appearing three
+# times across these two stores.
+#
+# INVARIANT: only bodies with ZERO news rows in economy_items may appear here, or
+# the union double-counts. `tests/test_v2_news_institutional_union.py` asserts it,
+# so if a Commission ingestor is ever added to sync_economy.py the test fails and
+# tells you to remove the entry rather than silently serving every item twice.
+_INSTITUTIONAL_NEWS = {
+    "commission": "COMMISSION",
+    "parliament": "EP",
+    "council": "COUNCIL",
+}
+
+# eu_news_items uses its own item_type vocabulary; map it onto the v2 contract
+# (`news` | `press_release`). 'publication' is deliberately excluded: it is a
+# document, not news, and belongs to the publications endpoints.
+_EU_NEWS_KIND_SQL = (
+    "CASE WHEN n.item_type = 'press' THEN 'press_release' ELSE 'news' END"
+)
+_EU_NEWS_SOURCE_TYPES = ["news", "press", "story"]
+
+# Both halves must expose the SAME column types for UNION ALL, and the two id
+# spaces are different types: economy_items.id is an integer, eu_news_items.id is
+# a UUID. They are therefore unioned as TEXT and converted back on the way out by
+# `_coerce_id`, so an agency item still serialises as the integer callers already
+# depend on. (A first cut negated the id to disambiguate, which cannot work on a
+# UUID -- `operator does not exist: - uuid`.)
+_ECONOMY_COLS = ("id::text AS id, body_code, item_type, title, summary, public_url, "
+                 "document_date, creation_date")
+
+
+def _coerce_id(raw):
+    """Digits -> int (agency item); anything else -> str (institutional UUID)."""
+    txt = str(raw)
+    return int(txt) if txt.isdigit() else txt
+
+
+def _institutional_sql(codes, kinds, since, until, q):
+    """Projection of eu_news_items onto the economy_items news shape.
+
+    Returns (sql, params), or (None, {}) when the requested scope excludes all
+    three institutions -- in which case the caller skips the union entirely.
+    """
+    wanted = {c: inst for c, inst in _INSTITUTIONAL_NEWS.items()
+              if codes is None or c in codes}
+    if not wanted:
+        return None, {}
+
+    # Built from the mapping, so the dict above stays the single source of truth.
+    case_body = "CASE n.institution " + " ".join(
+        f"WHEN '{inst}' THEN '{code}'" for code, inst in wanted.items()
+    ) + " END"
+
+    where = ["n.institution = ANY(:i_insts)", "n.item_type = ANY(:i_srctypes)",
+             f"({_EU_NEWS_KIND_SQL}) = ANY(:i_kinds)"]
+    params = {"i_insts": list(wanted.values()),
+              "i_srctypes": _EU_NEWS_SOURCE_TYPES,
+              "i_kinds": list(kinds)}
+
+    # 883 rows across 17 bodies carry news_date IS NULL for every row they have.
+    # COALESCE to created_at keeps them visible and orderable -- the same fix
+    # api/eu_news.py made on 19 Aug 2026 -- instead of dropping them silently.
+    date_expr = "COALESCE(n.news_date::timestamptz, n.created_at)"
+    if since:
+        where.append(f"{date_expr} >= :i_since"); params["i_since"] = since
+    if until:
+        where.append(f"{date_expr} <= :i_until"); params["i_until"] = until
+    if q:
+        # eu_news_items has no tsvector column, so this is ILIKE rather than
+        # the FTS the economy half uses. Deliberately not silent about it: see
+        # the `search_mode` note in the endpoint description.
+        where.append("(n.title ILIKE :i_q OR coalesce(n.summary,'') ILIKE :i_q)")
+        params["i_q"] = f"%{q}%"
+
+    sql = (
+        f"SELECT n.id::text AS id, {case_body} AS body_code, "
+        f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
+        f"n.source_url AS public_url, {date_expr} AS document_date, "
+        "n.created_at AS creation_date "
+        f"FROM eu_news_items n WHERE {' AND '.join(where)}"
+    )
+    return sql, params
+
+
+def _news_source_sql(codes, kinds, since, until, q):
+    """The full news corpus: agencies (economy_items) + institutions (eu_news_items)."""
+    clause, params = _build_where(codes, kinds, since, until, q)
+    econ = f"SELECT {_ECONOMY_COLS} FROM economy_items WHERE {clause}"
+    inst_sql, inst_params = _institutional_sql(codes, kinds, since, until, q)
+    if inst_sql is None:
+        return f"({econ})", params
+    return f"({econ} UNION ALL {inst_sql})", {**params, **inst_params}
+
+
 def _to_item(r, names, *, with_body):
     return NewsItem(
-        id=r.id, body_code=r.body_code, body_name=names.get(r.body_code),
+        id=_coerce_id(r.id), body_code=r.body_code, body_name=names.get(r.body_code),
         families=families_for_body(r.body_code), kind=r.item_type, title=r.title, summary=r.summary,
         public_url=r.public_url, document_date=r.document_date, creation_date=r.creation_date,
         body_txt=(getattr(r, "body_txt", None) if with_body else None),
@@ -121,14 +235,15 @@ class NewsDirectory(BaseModel):
                 "and policy families covered, and the date span.\n\n**When to use it**\nBefore querying, "
                 "to see the shape of what is there.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\n"
                 "GET /api/v2/news\n```\n\n**You get back**\nA summary object. Then call `/api/v2/news/all`, "
-                "`/api/v2/news/bodies`, or `/api/v2/news/{id}`.\n\n**Data freshness**\nLive from economy_items."))
+                "`/api/v2/news/bodies`, or `/api/v2/news/{id}`.\n\n**Data freshness**\nLive, across both news stores."))
 async def directory(request: Request, db: Session = Depends(get_db),
                     user: User = Depends(api_user_with_rate_limit)):
+    src, src_params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
     row = db.execute(text(
         "SELECT count(*) total, count(*) FILTER (WHERE item_type='news') n, "
         "count(*) FILTER (WHERE item_type='press_release') pr, "
         "count(distinct body_code) bodies, min(document_date) lo, max(document_date) hi "
-        "FROM economy_items WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
+        f"FROM {src} u"), src_params).fetchone()
     return NewsDirectory(total_items=row.total, news=row.n, press_releases=row.pr,
                          bodies_with_news=row.bodies, families=len(FAMILIES),
                          earliest=row.lo, latest=row.hi)
@@ -150,7 +265,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), "
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
-                "effect.\n\n**Data freshness**\nLive from economy_items."))
+                "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; Commission, Parliament and Council news is unioned in from the institutional news store, so this feed covers both. Institutional items carry a NEGATIVE `id` -- pass it through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
 async def list_news(
     request: Request,
     db: Session = Depends(get_db),
@@ -178,12 +293,14 @@ async def list_news(
         from_ = date.today() - timedelta(days=days)
     kinds = _NEWS_TYPES if kind == "all" else [kind]
     codes = _resolve_scope(body, family)
-    clause, params = _build_where(codes, kinds, from_, to, q)
-    total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    # Agencies (economy_items) UNION institutions (eu_news_items) -- see
+    # _INSTITUTIONAL_NEWS. Before 25 Aug 2026 this read economy_items alone and
+    # could not return a single Commission, Parliament or Council item.
+    src, params = _news_source_sql(codes, kinds, from_, to, q)
+    total = db.execute(text(f"SELECT count(*) FROM {src} u"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(text(
-        "SELECT id, body_code, item_type, title, summary, public_url, document_date, creation_date "
-        f"FROM economy_items WHERE {clause} ORDER BY {_ORDERS[order]} LIMIT :limit OFFSET :offset"),
+        f"SELECT * FROM {src} u ORDER BY {_ORDERS[order]} LIMIT :limit OFFSET :offset"),
         params2).fetchall()
     names = _body_names(db)
     # Report the window that was actually applied. These envelope fields existed
@@ -238,18 +355,22 @@ async def latest_news(request: Request,
     # been dead for four days. A monitoring check that cannot fail is worse
     # than no check, so the anchor is now the newest row that is not in the
     # future, and the bad rows are reported instead of silently swallowed.
+    # Over the SAME union /all serves. Reading economy_items alone made this probe
+    # report the agency feed's freshness while calling it the whole corpus -- and
+    # `dpp_watch.py` independently read "commission 0 news rows" from it.
+    src, src_params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
     row = db.execute(text(
         "SELECT max(document_date) FILTER (WHERE document_date <= now()) AS latest, "
         "       count(*) AS n, "
         "       count(*) FILTER (WHERE document_date > now()) AS future_dated "
-        "FROM economy_items WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
+        f"FROM {src} u"), src_params).fetchone()
     latest = _as_date(row.latest) if row and row.latest else None
     age = (date.today() - latest).days if latest else None
     per_body = db.execute(text(
-        "SELECT body_code, max(document_date) AS latest, count(*) AS n FROM economy_items "
-        "WHERE item_type = ANY(:t) AND document_date IS NOT NULL AND document_date <= now() "
+        f"SELECT body_code, max(document_date) AS latest, count(*) AS n FROM {src} u "
+        "WHERE document_date IS NOT NULL AND document_date <= now() "
         "GROUP BY body_code ORDER BY max(document_date) DESC LIMIT 10"),
-        {"t": _NEWS_TYPES}).fetchall()
+        src_params).fetchall()
     names = _body_names(db)
     return {
         "latest_date": latest.isoformat() if latest else None,
@@ -275,12 +396,14 @@ async def latest_news(request: Request,
                 "with news (count + families) and every Brubru policy family (bodies + total count).\n\n"
                 "**When to use it**\nTo build a picker, or to see what `family=` expands to.\n\n**Input**\n"
                 "No parameters.\n\n**Try it**\n```\nGET /api/v2/news/bodies\n```\n\n**You get back**\n"
-                "`{bodies: [...], families: [...]}`.\n\n**Data freshness**\nLive."))
+                "`{bodies: [...], families: [...]}`.\n\n**Data freshness**\nLive, across both news stores."))
 async def bodies_facet(request: Request, db: Session = Depends(get_db),
                        user: User = Depends(api_user_with_rate_limit)):
+    # Same union: a body the picker cannot show is a body nobody can filter to.
+    src, src_params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
     rows = db.execute(text(
-        "SELECT body_code, count(*) n FROM economy_items WHERE item_type = ANY(:t) GROUP BY body_code"),
-        {"t": _NEWS_TYPES}).fetchall()
+        f"SELECT body_code, count(*) n FROM {src} u GROUP BY body_code"),
+        src_params).fetchall()
     by_body = {r.body_code: r.n for r in rows}
     names = _body_names(db)
     bodies = [NewsBody(code=c, name=names.get(c), families=families_for_body(c), item_count=n)
@@ -303,13 +426,40 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
                 "**You get back**\nA single item with the full 5-datapoint contract.\n\n**Data freshness**\n"
                 "Live."))
 async def get_news(request: Request,
-                   item_id: int = PathParam(..., description="Brubru item id from the list endpoint."),
+                   item_id: str = PathParam(..., description=(
+                       "Brubru item id from the list endpoint: an integer for an agency "
+                       "item, a UUID for a Commission / Parliament / Council item.")),
                    db: Session = Depends(get_db),
                    user: User = Depends(api_user_with_rate_limit)):
-    r = db.execute(text(
-        "SELECT id, body_code, item_type, title, summary, public_url, body_txt, body_html, "
-        "document_date, creation_date FROM economy_items "
-        "WHERE id = :id AND item_type = ANY(:t)"), {"id": item_id, "t": _NEWS_TYPES}).fetchone()
+    # `item_id` is typed str, not int, because the institutional half of the feed
+    # is keyed by UUID. NOTE: `/latest` and `/bodies` are literal paths declared
+    # BEFORE this route and are matched first -- that ordering was already
+    # load-bearing when this was int-typed, and it is more so now that a string
+    # id would happily match them. Do not move this route above them.
+    if item_id.isdigit():
+        r = db.execute(text(
+            "SELECT id, body_code, item_type, title, summary, public_url, body_txt, body_html, "
+            "document_date, creation_date FROM economy_items "
+            "WHERE id = :id AND item_type = ANY(:t)"),
+            {"id": int(item_id), "t": _NEWS_TYPES}).fetchone()
+    else:
+        case_body = "CASE n.institution " + " ".join(
+            f"WHEN '{inst}' THEN '{code}'" for code, inst in _INSTITUTIONAL_NEWS.items()
+        ) + " END"
+        try:
+            r = db.execute(text(
+                f"SELECT n.id::text AS id, {case_body} AS body_code, {_EU_NEWS_KIND_SQL} AS item_type, "
+                "n.title, n.summary, n.source_url AS public_url, NULL AS body_txt, NULL AS body_html, "
+                "COALESCE(n.news_date::timestamptz, n.created_at) AS document_date, "
+                "n.created_at AS creation_date FROM eu_news_items n "
+                "WHERE n.id = :id AND n.institution = ANY(:i) AND n.item_type = ANY(:t)"),
+                {"id": item_id, "i": list(_INSTITUTIONAL_NEWS.values()),
+                 "t": _EU_NEWS_SOURCE_TYPES}).fetchone()
+        except Exception:
+            # A malformed UUID is a bad id, not a server fault. Roll back so the
+            # session stays usable, then fall through to the 404 below.
+            db.rollback()
+            r = None
     if r is None:
         raise HTTPException(404, f"No news item with id {item_id}")
     return _to_item(r, _body_names(db), with_body=True)
