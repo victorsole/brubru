@@ -1,6 +1,7 @@
 # EU Payment Services Law: PSD2 today, PSD3 and the PSR tomorrow
 
 ## QUICK FACTS
+- **Verification of Payee is a NAME-to-IBAN MATCH CHECK.** The payer's provider compares the payee name the payer typed against the name that actually holds the destination account, and reports whether they match, before the payment is authorised. The duty begins and ends with that comparison: no document is examined, no person is identified, and nothing in it belongs to the customer due diligence regime. State the obligation as a match check on a name against an account number.
 - **PSD2 is the law in force**: Directive (EU) 2015/2366 on payment services in the internal market. It governs BOTH consumer conduct rules (authorisation of transactions, liability, refunds) AND the licensing and supervision of payment institutions.
 - **The reform splits those two halves.** PSD3 (a directive) keeps only licensing and prudential supervision. The **PSR** (a regulation) takes all conduct and liability rules, including consumer redress. A regulation applies directly and identically in all 27 Member States, which removes the national divergence that PSD2's directive form created.
 - **Status as of 19 August 2026: NOT in force.** Both files sit at **"Awaiting Council's 1st reading position"**. The ECON committee approved the texts agreed in interinstitutional negotiations on **5 May 2026**. Indicative plenary sitting date: **14 December 2026**.

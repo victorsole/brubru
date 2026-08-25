@@ -1,6 +1,7 @@
 # Payment Fraud: what a defrauded bank customer can claim, and how
 
 ## QUICK FACTS
+- **Verification of Payee is a NAME-to-IBAN MATCH CHECK.** The bank compares the payee name the customer typed against the name that actually holds the destination account, and reports whether they match, before the payment is authorised. The duty begins and ends with that comparison: no document is examined, no person is identified, and nothing in it belongs to the customer due diligence regime. State the obligation as a match check on a name against an account number.
 - **The bank bears the burden of proof.** If the customer denies authorising a transaction, it is the payment service provider that must prove the transaction was authenticated, correctly recorded, and unaffected by a technical failure. The mere record of the payment instrument being used is NOT enough to prove authorisation, nor fraud or gross negligence by the customer. PSD2 Article 72; Spain, Real Decreto-ley 19/2018 Article 44.
 - **Unauthorised transactions must be refunded by the end of the next business day (D+1).** The ONLY exception is reasonable suspicion of fraud by the customer, communicated in writing to the competent national authority. PSD2 Article 73(1); Spain, RDL 19/2018 Article 45.1.
 - **Gross negligence must be more than mere negligence.** PSD2 recital 72 requires a significant degree of carelessness. The bank must prove it.

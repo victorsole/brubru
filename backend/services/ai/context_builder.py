@@ -5438,6 +5438,26 @@ class ContextBuilder:
             logger.warning("[tier3] Calendar fallback DB query failed: %s", exc)
             return []
 
+    # Phrases that mean the user is actually asking about the institutional
+    # diary, as opposed to merely using a temporal word inside a legal
+    # question. Kept narrower than the look_past / look_future keyword lists
+    # on purpose -- see the relevance gate in _fetch_eu_calendar_events
+    # (audit defect D5, 25 Aug 2026).
+    _CALENDAR_INTENT_KEYWORDS = (
+        'calendar', 'agenda', 'schedule', 'diary', 'timetable',
+        'what is on', "what's on", 'what is happening', "what's happening",
+        'coming up', 'this week', 'next week', 'this month', 'next month',
+        'events', 'meetings', 'plenary session', 'sitting',
+        # the six languages Brubru answers in. Accent-free variants are listed
+        # explicitly because users type both, and matching here is a plain
+        # substring test rather than an accent-folded one.
+        'calendrier', 'ordre du jour', 'reunion', 'réunion', 'seance', 'séance',
+        'calendario', 'orden del dia', 'orden del día', 'reunion', 'reuniones',
+        'calendari', 'reunio', 'reunió', 'sessio', 'sessió',
+        'kalender', 'agenda van', 'vergadering', 'bijeenkomst',
+        'riunione', 'riunioni', 'seduta',
+    )
+
     async def _fetch_eu_calendar_events(
         self,
         query: str,
@@ -5596,6 +5616,52 @@ class ContextBuilder:
                         EUCalendarEvent.procedure_refs.any(proc_ref)
                     )
                 filters.append(or_(*proc_conditions))
+
+            # ----------------------------------------------------------
+            # Relevance gate (audit defect D5, 25 Aug 2026).
+            #
+            # Every filter above is optional. When none of them matches, what
+            # survives is "any event in the date window that is not a recess"
+            # -- and the .limit(8) below then returns eight arbitrary events,
+            # which are injected into the context and emitted as citations.
+            #
+            # On 24 Aug every payments answer carried the same eight, of which
+            # seven had nothing to do with the question: an International
+            # Youth Day beach cleanup at Pedrogao, a von der Leyen freestyle
+            # award, a CHMP plenary. Across all answers since 1 July this block
+            # produced 906 citations, the second-largest source in the system.
+            #
+            # So: return events when the query has a topical hook (institution,
+            # policy area, committee, procedure) OR when it actually asks about
+            # the calendar. Otherwise return nothing, which is the honest
+            # answer -- "what is the verification of payee obligation" has no
+            # calendar dimension, and a beach cleanup is not a weak match to
+            # it, it is a non-match.
+            #
+            # Deliberately NOT gated on look_past/look_future: those fire on
+            # bare words like "when does", so "when does the GDPR apply" would
+            # still pull eight unrelated events. That is a question about a
+            # law's application date, answered from the law.
+            # ----------------------------------------------------------
+            committee_filter_applied = bool(
+                entities.committee_codes and not multi_institution_query
+            )
+            has_topical_hook = bool(
+                matched_institutions
+                or matched_areas
+                or committee_filter_applied
+                or entities.procedure_references
+            )
+            asks_about_calendar = any(
+                kw in query_lower for kw in self._CALENDAR_INTENT_KEYWORDS
+            )
+            if not (has_topical_hook or asks_about_calendar):
+                logger.debug(
+                    "[CALENDAR] no topical hook and no calendar intent in %r -- "
+                    "returning no events rather than 8 arbitrary ones", query[:60]
+                )
+                db.close()
+                return []
 
             # Build query
             base_query = db.query(EUCalendarEvent).filter(and_(*filters))

@@ -2629,7 +2629,26 @@ USER QUESTION: {user_message}
 
 Please answer using the EU context provided above. Include citations [1], [2], etc. when referencing specific sources. Write the entire answer in {lang_name}, whatever language the context happens to be written in."""
             else:
-                user_content = user_message
+                # No context block, but the language reminder still has to be
+                # here (audit defect D7, 25 Aug 2026). It used to be attached
+                # only to the context branch, so a query that retrieved nothing
+                # went to the model with the answer language named ONLY in the
+                # distant system prompt -- which is the exact arrangement the
+                # recency restatement exists to fix.
+                #
+                # That is the shape of the reproducing failure: "Quelle est la
+                # position du Conseil sur cette directive?" has an unresolvable
+                # referent, so it retrieves nothing, and four minutes after an
+                # Italian query on the same provider it came back in Italian.
+                # The validator logged "instructed FR, answer reads as IT" --
+                # instructed, so detection was right and the instruction lost.
+                # With no context to anchor it, the last thing the model sees
+                # is the previous turn, in the previous language.
+                user_content = (
+                    f"{user_message}\n\n"
+                    f"Write the entire answer in {lang_name}, whatever language "
+                    f"the conversation above happens to be in."
+                )
 
             messages.append({
                 'role': 'user',
@@ -3853,6 +3872,12 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         return text
 
+    # Where Brubru's own corpus lives publicly. Guides have no per-guide page,
+    # so a guide citation points at the index rather than at a deep link that
+    # would 404 (audit D4, 25 Aug 2026).
+    _GUIDES_INDEX_URL = "https://brubru.beresol.eu/guides/"
+    _EURLEX_CELEX_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:"
+
     def _build_citations_from_context(self, context_data: Any) -> List[Dict[str, Any]]:
         """
         Build the citation list from context data. THE single citation builder.
@@ -3935,6 +3960,65 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 institution=event.get('institution', ''),
                 date=event.get('start_date'),
                 event_type=event.get('event_type', ''))
+
+        # --------------------------------------------------------------
+        # Brubru's OWN corpus. Added 25 Aug 2026 (audit defect D4).
+        #
+        # Until today this builder covered eleven source kinds and none of
+        # them was ours. Across every answer since 1 July: 945 web_search,
+        # 906 eu_calendar, 202 beresol_report, 8 committee -- 2,061 citations,
+        # and not one pointing at the 555 knowledge guides or the 28,526-law
+        # corpus. The guides WERE retrieved and plainly reached the model (the
+        # 24 Aug payments answer reproduces the VoP guide almost verbatim);
+        # they were simply never attributable, so the answer credited SurePay
+        # and an EY blog for Brubru's own work.
+        #
+        # It is not only presentational. Only citable sources carry weight, so
+        # a tier-5 blog put "provisional political agreement on 27 November
+        # 2025" into that answer, contradicting the maintained guide, which
+        # has the file awaiting the Council's first reading.
+        #
+        # Guides have no per-guide public URL (the /guides/ index has category
+        # anchors only), so they link to the index rather than to a fabricated
+        # deep link that would 404. The guide id travels in metadata.
+        # --------------------------------------------------------------
+        for item in getattr(context_data, 'internal_knowledge', None) or []:
+            kind = 'knowledge_base' if item.get('type') == 'guide' else 'internal'
+            add(kind, item.get('title', ''), self._GUIDES_INDEX_URL,
+                guide=item.get('name', ''),
+                trigger_matched=item.get('trigger_matched', False),
+                staleness=item.get('staleness_caveat', ''))
+
+        for law in getattr(context_data, 'local_eu_laws', None) or []:
+            celex = (law.get('celex') or '').strip()
+            add('legislation', law.get('title', ''),
+                f"{self._EURLEX_CELEX_URL}{celex}" if celex else '',
+                celex=celex, doc_type=law.get('doc_type', ''),
+                date=law.get('date'), oj_reference=law.get('oj_reference', ''))
+
+        for pub in getattr(context_data, 'eprs_publications', None) or []:
+            add('eprs', pub.get('title', ''),
+                pub.get('url') or pub.get('pdf_url', ''),
+                reference=pub.get('reference', ''), date=pub.get('date'))
+
+        for train in getattr(context_data, 'legislative_train_files', None) or []:
+            add('oeil', train.get('title', ''),
+                train.get('url') or train.get('oeil_url', ''),
+                reference=train.get('oeil_procedure_ref', ''),
+                status=train.get('current_status', ''))
+
+        for doc in getattr(context_data, 'commission_documents', None) or []:
+            add('commission_document', doc.get('title', ''), doc.get('url', ''),
+                reference=doc.get('reference', ''), date=doc.get('date'))
+
+        for cons in getattr(context_data, 'public_consultations', None) or []:
+            add('public_consultation', cons.get('title', ''), cons.get('url', ''),
+                deadline=cons.get('deadline'), status=cons.get('status', ''))
+
+        for work in getattr(context_data, 'committee_work_items', None) or []:
+            add('committee_work', work.get('title', ''), work.get('url', ''),
+                committee=work.get('committee', ''),
+                reference=work.get('reference', ''))
 
         tender_ctx = getattr(context_data, 'tender_context', None)
         if tender_ctx is not None:

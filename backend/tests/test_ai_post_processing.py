@@ -565,3 +565,156 @@ class TestAcronymCollisionGuards:
                 " applies.")
         out = service._sanitise_celex_links(text)
         assert "32016R0679" in out and "](https://eur-lex" in out
+
+
+class TestBrubruCorpusIsCitable:
+    """Audit defect D4, 25 Aug 2026.
+
+    Across every answer since 1 July: 945 web_search, 906 eu_calendar, 202
+    beresol_report, 8 committee -- 2,061 citations and not one pointing at the
+    555 knowledge guides or the law corpus. The guides were retrieved and
+    reached the model; they were simply never emitted as citations, so answers
+    credited vendor blogs for Brubru's own work.
+    """
+
+    class _Ctx:
+        """Minimal stand-in for ContextData; only the fields under test."""
+        def __init__(self, **kw):
+            for f in ('relevant_documents', 'legislation_details', 'procedure_details',
+                      'mep_profiles', 'committee_info', 'recent_rss_entries',
+                      'web_search_results', 'beresol_content', 'eu_calendar_events',
+                      'internal_knowledge', 'local_eu_laws', 'eprs_publications',
+                      'legislative_train_files', 'commission_documents',
+                      'public_consultations', 'committee_work_items'):
+                setattr(self, f, [])
+            self.tender_context = None
+            for k, v in kw.items():
+                setattr(self, k, v)
+
+    def test_a_retrieved_guide_becomes_a_citation(self, service):
+        ctx = self._Ctx(internal_knowledge=[
+            {'type': 'guide', 'name': 'eu_payment_services_psd2_psd3',
+             'title': 'EU Payment Services Law', 'trigger_matched': True},
+        ])
+        cites = service._build_citations_from_context(ctx)
+        assert len(cites) == 1
+        assert cites[0]['type'] == 'knowledge_base'
+        assert cites[0]['metadata']['guide'] == 'eu_payment_services_psd2_psd3'
+        assert 'brubru.beresol.eu/guides' in cites[0]['url']
+
+    def test_a_retrieved_law_becomes_a_tier_1_citation_with_a_eurlex_url(self, service):
+        ctx = self._Ctx(local_eu_laws=[
+            {'celex': '32024R0886', 'title': 'Instant Payments Regulation',
+             'doc_type': 'Regulation', 'date': '2024-03-13'},
+        ])
+        cites = service._build_citations_from_context(ctx)
+        assert cites[0]['type'] == 'legislation'
+        assert cites[0]['source_tier'] == 1, "the legal text is the most authoritative source"
+        assert cites[0]['url'].endswith('CELEX:32024R0886')
+
+    def test_our_corpus_outranks_a_blog(self, service):
+        ctx = self._Ctx(
+            internal_knowledge=[{'type': 'guide', 'name': 'g', 'title': 'Guide'}],
+            local_eu_laws=[{'celex': '32016R0679', 'title': 'GDPR'}],
+            web_search_results=[{'title': 'Some vendor blog', 'url': 'https://vendor.example'}],
+        )
+        tiers = {c['type']: c['source_tier'] for c in service._build_citations_from_context(ctx)}
+        assert tiers['legislation'] < tiers['web_search']
+        assert tiers['knowledge_base'] < tiers['web_search']
+
+    def test_a_law_without_a_celex_gets_no_fabricated_url(self, service):
+        ctx = self._Ctx(local_eu_laws=[{'celex': '', 'title': 'Something'}])
+        assert service._build_citations_from_context(ctx)[0]['url'] == ''
+
+    def test_ids_stay_sequential_across_all_sources(self, service):
+        ctx = self._Ctx(
+            internal_knowledge=[{'type': 'guide', 'name': 'g', 'title': 'G'}],
+            local_eu_laws=[{'celex': '32016R0679', 'title': 'GDPR'}],
+            eprs_publications=[{'title': 'Briefing', 'url': 'https://x'}],
+            legislative_train_files=[{'title': 'File', 'url': 'https://y'}],
+            web_search_results=[{'title': 'Blog', 'url': 'https://z'}],
+        )
+        cites = service._build_citations_from_context(ctx)
+        assert [c['id'] for c in cites] == list(range(1, len(cites) + 1))
+        assert len(cites) == 5
+
+
+class TestAnswerLanguageSurvivesAnEmptyContext:
+    """Audit defect D7, 25 Aug 2026.
+
+    The recency restatement of the answer language was attached only to the
+    branch that has a context block. A query retrieving nothing therefore went
+    to the model with the language named only in the distant system prompt --
+    exactly the arrangement the restatement exists to defeat. The validator
+    logged "instructed FR, answer reads as IT" on such a query, four minutes
+    after an Italian one on the same provider.
+    """
+
+    def test_language_is_restated_when_there_is_no_context(self, service):
+        msgs = service._build_messages(
+            user_message="Quelle est la position du Conseil sur cette directive?",
+            context="", conversation_history=None, documents=None, query_lang="FR",
+        )
+        assert "French" in msgs[-1]['content']
+
+    def test_language_is_still_restated_when_there_is_context(self, service):
+        msgs = service._build_messages(
+            user_message="Q?", context="EU CONTEXT HERE",
+            conversation_history=None, documents=None, query_lang="IT",
+        )
+        assert "Italian" in msgs[-1]['content']
+
+    def test_the_reminder_is_the_last_thing_the_model_reads(self, service):
+        msgs = service._build_messages(
+            user_message="Question?", context="",
+            conversation_history=None, documents=None, query_lang="CA",
+        )
+        assert msgs[-1]['content'].rstrip().endswith("happens to be in.")
+        assert "Catalan" in msgs[-1]['content']
+
+    def test_the_user_question_itself_is_not_lost(self, service):
+        msgs = service._build_messages(
+            user_message="Quina es la posicio del Consell?", context="",
+            conversation_history=None, documents=None, query_lang="CA",
+        )
+        assert "Quina es la posicio del Consell?" in msgs[-1]['content']
+
+
+class TestVoPGuideDisambiguation:
+    """Audit defect D6, 25 Aug 2026.
+
+    Two of three providers described Verification of Payee as verifying the
+    payee's IDENTITY. It is a name-to-IBAN match check. The guides were not at
+    fault (the word "identity" appeared in none of them), so the remedy is a
+    positive contrast line early enough that a provider reading ~30% of the
+    injected context still sees it.
+    """
+
+    GUIDES = ("eu_payment_services_psd2_psd3", "eu_payment_fraud_consumer_redress")
+
+    @pytest.fixture(scope="class")
+    def loader(self):
+        from knowledge_base.knowledge_loader import KnowledgeLoader
+        ldr = KnowledgeLoader()
+        ldr.load_all()
+        return ldr
+
+    @pytest.mark.parametrize("guide_id", GUIDES)
+    def test_the_contrast_line_is_present(self, loader, guide_id):
+        assert "MATCH CHECK" in loader.get_guide(guide_id)
+
+    @pytest.mark.parametrize("guide_id", GUIDES)
+    def test_it_sits_in_the_first_tenth_of_the_guide(self, loader, guide_id):
+        content = loader.get_guide(guide_id)
+        position = content.find("MATCH CHECK") / len(content)
+        assert position < 0.10, (
+            f"contrast line is {position:.0%} into {guide_id}; Mistral reads "
+            f"roughly the first 30% of injected context, so it must be early"
+        )
+
+    @pytest.mark.parametrize("guide_id", GUIDES)
+    def test_the_guides_never_call_vop_identity_verification(self, loader, guide_id):
+        content = loader.get_guide(guide_id).lower()
+        for wrong in ("verify the payee's identity", "verifying the payee's identity",
+                      "verification of the payee's identity"):
+            assert wrong not in content, f"{guide_id} states the obligation wrongly"
