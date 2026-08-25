@@ -6,6 +6,27 @@ Every 4xx/5xx response on v1 is wrapped to:
 
 reason_code is a stable machine-readable identifier partners can switch on.
 request_id equals the X-Request-Id response header for traceability.
+
+An error body deliberately carries NO `data` key
+------------------------------------------------
+This is load-bearing, not an oversight, and it was nearly changed the wrong way.
+
+A caller reading a list endpoint typically writes `len(body.get("data") or [])`.
+On an error body that yields 0, which is indistinguishable from a successful but
+empty result -- twice in August 2026 an unauthenticated call to
+`/api/v2/news/all` was read as "no EU news today" for exactly this reason.
+
+The instinct is to add `data: []` to error bodies so the shape is uniform. That
+makes it strictly WORSE: today `body.get("data")` returns None on an error and []
+on a genuinely empty result, so the two ARE distinguishable. Adding `data: []`
+would erase the only signal a naive client has.
+
+The contract is therefore:
+    success -> `data` is always present (possibly [])
+    error   -> `data` is always ABSENT; `error` and `reason_code` are present
+
+Check the HTTP status, or `"error" in body`, or `body.get("data") is None`.
+`tests/test_v1_error_envelope_shape.py` pins all of this.
 """
 
 import uuid
