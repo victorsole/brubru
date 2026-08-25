@@ -4042,8 +4042,21 @@ USER QUESTION: {user_message}
                 # A bare reference beats the word "Untitled", which tells the
                 # reader nothing and looks like a bug.
                 title = f"Legislative procedure {ref}"
-            add('oeil', title, self._oeil_url(ref),
+            # EUR-Lex-sourced carriages have no OEIL procedure ref at all, so
+            # _oeil_url() correctly returns nothing and the citation shipped
+            # linkless (4 of them in a live answer, 25 Aug 2026). They do carry
+            # a CELEX, which is the right target for exactly those rows.
+            # Deliberately NO fallback for Commission documents without a
+            # portal_url: deriving a CELEX from a COM number is the
+            # CELEX-vs-procedure-numbering trap, and a missing link is better
+            # than a confident wrong one.
+            celexes = train.get('celex_numbers') or []
+            url = self._oeil_url(ref)
+            if not url and celexes:
+                url = f"{self._EURLEX_CELEX_URL}{str(celexes[0]).strip()}"
+            add('oeil', title, url,
                 reference=ref,
+                celex=(str(celexes[0]).strip() if celexes else ''),
                 status=train.get('current_status', ''),
                 train=train.get('train_name', ''))
 

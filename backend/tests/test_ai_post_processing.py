@@ -857,3 +857,29 @@ class TestCitationOrderingAndBinding:
         c = service._build_citations_from_context(ctx)[0]
         assert '2024/0999(COD)' in c['title'], "a bare reference beats the word Untitled"
         assert 'oeil' in c['url'] and 'procedure-file' in c['url']
+
+    def test_a_eurlex_sourced_file_falls_back_to_its_celex_link(self, service):
+        """EUR-Lex-sourced carriages carry no OEIL procedure ref at all, so the
+        OEIL builder correctly returns nothing and four citations shipped
+        linkless in a live answer (25 Aug 2026). They do carry a CELEX."""
+        ctx = TestBrubruCorpusIsCitable._Ctx(legislative_train_files=[
+            {'file_title': 'A Council Decision', 'oeil_ref': '',
+             'celex_numbers': ['52026PC0321'], 'train_name': 'EUR-Lex'},
+        ])
+        c = service._build_citations_from_context(ctx)[0]
+        assert c['url'].endswith('CELEX:52026PC0321')
+        assert c['metadata']['celex'] == '52026PC0321'
+
+    def test_the_oeil_reference_still_wins_when_present(self, service):
+        ctx = TestBrubruCorpusIsCitable._Ctx(legislative_train_files=[
+            {'file_title': 'PSR', 'oeil_ref': '2023/0209(COD)',
+             'celex_numbers': ['52023PC0367']},
+        ])
+        c = service._build_citations_from_context(ctx)[0]
+        assert 'procedure-file' in c['url'], "a real procedure ref beats the CELEX fallback"
+
+    def test_no_link_is_invented_when_there_is_nothing_to_link_to(self, service):
+        ctx = TestBrubruCorpusIsCitable._Ctx(legislative_train_files=[
+            {'file_title': 'Neither', 'oeil_ref': '', 'celex_numbers': []},
+        ])
+        assert service._build_citations_from_context(ctx)[0]['url'] == ''
