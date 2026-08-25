@@ -55,8 +55,13 @@ MEUB_SOURCES: List[SourceSpec] = [
     # 49 of 49 runs over 14 days, 43 of them on the 1200s timeout, and never
     # once succeeded. Sittings are processed NEWEST FIRST, so a cap still
     # captures the votes that matter and the tail catches up across runs.
-    # 20 x ~30s leaves roughly half the budget as headroom.
-    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply", "--max-sittings", "20"), timeout=1200),
+    # 20 was a GUESS and it was wrong: both runs on 24-25 Aug still hit
+    # timeout_1200s. The arithmetic nobody did first: each sitting tries up to
+    # THREE candidate dates (the sitting, +1, -1) and each fetch costs 9s settle
+    # plus up to 20s networkidle, so worst case is 20 x 3 x 29s = ~1,740s against
+    # a 1,200s budget. 6 sittings is 6 x 3 x 29 = ~520s, comfortably under half.
+    # Newest-first, so the tail still catches up across runs.
+    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply", "--max-sittings", "6"), timeout=1200),
     SourceSpec("votes_council","Votes - Council",               "fast", "scripts/sync_council_votes.py",  ("--max", "20"), timeout=900),
 
     # ---- WARM (~6h): slower-moving institutional feeds --------------------

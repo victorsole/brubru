@@ -131,12 +131,8 @@ brubru/
 
 ## Environment Variables
 
-Required in `.env`:
-- `SUPABASE_URL`, `SUPABASE_KEY` - Database/auth
-- `MISTRAL_API_KEY` - Primary AI
-- `ANTHROPIC_API_KEY` - Fallback AI 1
-- `OPENAI_API_KEY` - Fallback AI 2
-- `GOOGLE_GEMINI_API_KEY` - Fallback AI 3 (optional)
+Required in `.env`: `SUPABASE_URL`, `SUPABASE_KEY` (database/auth).
+- Chat-chain keys in Tech Stack order (Cerebras -> Gemini -> Groq -> NVIDIA -> Mistral). **No Anthropic** (removed 6 Aug 2026); OpenAI retired 19 Aug 2026, key kept only for transcription/embedding fallbacks.
 - `STRIPE_SECRET_KEY` - Payments
 - 18 Stripe Price IDs (see Pricing Model section below)
 
@@ -173,7 +169,7 @@ PostgreSQL via Supabase. Key tables:
 
 ## Canonical Numbers of the EU Legal Corpus
 
-LEG_2025-11 (Nov 2025 Publications Office bulk export): **8,710 distinct laws / 28,513 OJ publications / 61,219 translatable XML files**. One law can span multiple files (REACH=7, AI Act=14). Always cite the triple. `28,505` is deprecated.
+LEG_2025-11 (Nov 2025 Publications Office bulk export): **8,710 distinct laws / 28,513 OJ publications / 61,219 translatable XML files**. One law can span multiple files (REACH=7, AI Act=14). Always cite the triple; `28,505` is deprecated.
 
 ## Testing
 
@@ -286,6 +282,7 @@ Seed script: `backend/scripts/seed_test_users.py`
 - **Marketing cadence Mon-Thu inside /morning (11 May 2026).** Mon = post + /brubru-design slide; Tue = reel (new every ~2 weeks, `frontend/public/europa-2026/` pattern); Wed = outreach; Thu = long-form. Fri = `/competitors`. 6 mandatory languages: EN+FR+IT+ES+CA+NL. Tier-1 import from `coreyhaines31/marketingskills` (MIT, 41 skills): 7 selected. Full plan: `memory/project_brubru_marketing_gtm_strategy_2026_05.md`.
 - **Pack-objects SIGBUS bypass on `git push` (set 22 May 2026).** If `git push` returns `error: pack-objects died of signal 10` on this Mac, retry with `git -c pack.window=0 -c pack.depth=0 -c pack.compression=0 push origin main` (disables delta+compression, the crashing parts). Root cause is an mmap fault on the `~/Documents/`-mounted repo, not disk pressure. Detail: `feedback_git_push_sigbus_pack_objects`, `feedback_git_commit_hangs_use_plumbing`.
 - **EP10 URL discipline (set 22 May 2026).** EP10 doceo URLs use `-10-` not `-9-`; adopted texts are `P10_TA(YYYY)NNNN`; reports `A10-NNNN/YYYY`; resolutions `B10-NNNN/YYYY`. When an EP URL returns 404, **switch tool — never re-guess a similar path**. First fallback: Tavily with date range. Second fallback: the scraper output file. Third fallback: ask the user. Verified-working anchors: `europarl.europa.eu/news/en/press-room`, `/plenary/en/votes.html?tab=votes`, `/plenary/en/texts-adopted.html`, `/plenary/en/agendas.html`. Memory: `feedback_ep_url_no_guessing`.
+- **Silence is not success (set 24 Aug 2026, after five instances in one day).** (a) A job that can fail must record the failure durably and must not exit 0 — never `except -> logger.warning` alone, never a silent slice [a](feedback_silent_failure_reports_success.md). (b) Count PERSISTED changes, not attempts, and make health flags three-state (`true`/`false`/**`null`**) so "untested" cannot read "healthy". (c) **An empty output is never evidence of absence** — a relative pathspec resolves against the CWD, so `git ls-tree origin/main backend/x/` from `backend/` prints nothing and exits 0; use `git cat-file -e <rev>:<path>` [b](feedback_empty_output_is_not_absence.md). (d) `pool_pre_ping` fires on CHECKOUT, so it cannot protect a Session held across 30 min of network work; catch `OperationalError`, rebuild, continue, count reconnects [c](feedback_long_session_needs_reconnect.md).
 - **Public-marketing posts: no codes + code-grep before competitor claims (set 22 May 2026).** Rule (1): LinkedIn / public marketing copy must NEVER contain institutional codes (P10_TA, COM, COD/INI, CELEX, A-/B-/T-/PE-/IP-numbers, directive/regulation numbers). Use plain-language titles. Treaty articles + popular acronyms (GDPR, DSA, AI Act, ETS, CBAM) are common vocab and OK. Rule (2): when a counterattack/comparison post makes a feature claim against a competitor, **grep the actual Brubru code FIRST**. Incident 22 May 2026: a draft action item claimed "Brubru EP committee transcription in 6 languages" — `language="en"` is hardcoded at `services/committee_transcription_service.py:194` (Whisper uses the EN interpretation booth feed, same as competitors). The 5-second grep prevented an inflated LinkedIn post. Memory: `feedback_linkedin_no_institutional_codes`.
 
 ---
