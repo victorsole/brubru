@@ -48,6 +48,21 @@ _LINKIFY_ACRONYM_DENYLIST = frozenset({
     "COVID-19", "COVID",  # disease names, not legislation (false-fire on every health answer)
     "ACT", "NEW", "API", "ART", "EOV", "SET", "END", "KEY", "ONE", "TWO",
     "AID", "AIR", "GAS", "NET", "USE", "WAR",
+    # Added 25 Aug 2026 (audit defects D2/D3). Each of these IS a real gloss
+    # inside a real act's title, so the bulk Formex ingestion harvested it and
+    # both existing guards wave it through: none is denylisted and none of the
+    # titles carries an Implementing/Delegated marker. But in the sense a reader
+    # actually means, each points at the wrong act. PSP was confirmed firing in
+    # production on 24 Aug, in all three payments answers, on three different
+    # providers -- which is what proves this is post-processing, not the model.
+    "PSP",   # Payment Service Provider, not paralytic shellfish poison (32017R1980)
+    "BIT",   # bilateral investment treaty, not a benzisothiazolinone biocide
+    "CIT",   # corporate income tax, not a chloro-methylisothiazolinone biocide
+    "PES",   # Party of European Socialists, not public employment services
+    "PAC",   # Politique Agricole Commune (the CAP, in French), not a device grouping
+    "EEE",   # Espace economique europeen (the EEA, in French), not e-waste weight
+    "MIT",   # the institute / the substance, ambiguous either way
+    "SGEI",  # the general concept, never one Italian State aid case
 })
 
 # Safe-by-default linkifier rule (11 June 2026). legislation_acronyms.json was
@@ -3092,8 +3107,23 @@ Please answer using the EU context provided above. Include citations [1], [2], e
     # ------------------------------------------------------------------
     # Deterministic CELEX sanity pass (24 Aug 2026)
     # ------------------------------------------------------------------
+    # The CELEX group must NOT admit parentheses as ordinary characters. It did
+    # until 25 Aug 2026, and `[0-9A-Za-z()]+` then swallowed the link's OWN
+    # closing bracket and ran on to the next ")" anywhere in the paragraph. Two
+    # links in one paragraph collapsed into a single 209-character match and the
+    # 113 characters between them were deleted, silently, with the second
+    # sentence's citation markers grafted onto the first -- so the output still
+    # looked well-formed. Corrigendum CELEX (`32016R0679(01)`) are the reason the
+    # parens were there; they are readmitted as ONE optional trailing group
+    # instead, which cannot escape the link. `\s` is excluded from the URL runs
+    # for the same reason: a URL never contains a space, so a match that crosses
+    # one is always a runaway.
+    # See audit 25 Aug 2026, defect D1.
     _CELEX_LINK_RE = re.compile(
-        r'\[([^\]]+)\]\((https://eur-lex\.europa\.eu/[^)]*?CELEX(?::|%3A)([0-9][0-9A-Za-z()]+)[^)]*)\)'
+        r'\[([^\]]+)\]\('
+        r'(https://eur-lex\.europa\.eu/[^)\s]*?CELEX(?::|%3A)'
+        r'([0-9][0-9A-Za-z]+(?:\(\d+\))?)'
+        r'[^)\s]*)\)'
     )
     # "Regulation (EC) No 260/2012", "Directive (EU) 2015/2366", "Decision 2016/807"
     _ACT_IN_TEXT_RE = re.compile(
@@ -3134,6 +3164,16 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         def _fix(m):
             label, url, celex = m.group(1), m.group(2), m.group(3)
             core = re.match(r'^(\d)(\d{4})([A-Z]{1,2})(\d{4})', celex or "")
+            # (0) a denylisted acronym must not carry a EUR-Lex link no matter
+            # who built it. The denylist guards _linkify_legislation, which is
+            # where these links normally come from -- but three answers with
+            # `[PSP](...32017R1980)` are already in chat_messages, and history is
+            # fed back into context, so the generator can echo one straight past
+            # a guard that only runs on OUR link-building. Drop the link, keep
+            # the word, same trade-off as rule (1) below.
+            if label.strip().upper() in _LINKIFY_ACRONYM_DENYLIST:
+                logger.info("[celex] dropping denylisted-acronym link %r -> %s", label[:20], celex)
+                return label
             # (2) text names an act -> derive the CELEX from the text
             a = self._ACT_IN_TEXT_RE.search(label)
             if a and core:

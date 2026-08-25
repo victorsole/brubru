@@ -4,7 +4,7 @@
     "description": "Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation",
     "source": "docs/LEG_2025-11/ + manual curation",
     "extraction_date": "2025-11-19",
-    "total_entries": 676,
+    "total_entries": 547,
     "auto_extracted": 658,
     "manually_curated": 20,
     "extraction_stats": {
@@ -12,7 +12,33 @@
       "processed_files": 20467,
       "acronyms_found": 706,
       "errors": 0
-    }
+    },
+    "cleanups": [
+      {
+        "date": "2026-08-25",
+        "removed": 17,
+        "reason": "audit D3: organisation/treaty acronyms and State-aid case numbers harvested from parenthetical glosses",
+        "keys": [
+          "IOC",
+          "WCO",
+          "GRECO",
+          "ICAC",
+          "IPEEC",
+          "IRSG",
+          "GFCM",
+          "WCPFC",
+          "ECSA",
+          "ETSC",
+          "ERAC",
+          "CFSP",
+          "C29/08",
+          "CNU",
+          "EMEF",
+          "SZP",
+          "ZFM"
+        ]
+      }
+    ]
   },
   "acronyms": {
     "PTBP": {
@@ -224,13 +250,6 @@
       "type": "Directive",
       "year": 2016,
       "source_file": "L_2016119EN.01013201.xml"
-    },
-    "IOC": {
-      "celex": "32024D2911",
-      "full_title": "Council Decision (EU) 2024/2911 of 5 November 2024 on the position to be taken on behalf of the European Union within the Council of Members of the International Olive Council (IOC) as regards one met",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202402911EN.000101.fmx.xml"
     },
     "ECB/2020/13": {
       "celex": "32020D0407",
@@ -512,13 +531,6 @@
       "year": 2017,
       "source_file": "L_2018065EN.01004801.xml"
     },
-    "CFSP": {
-      "celex": "32004R0314",
-      "full_title": "Corrigendum to Council Regulation (CFSP) 2021/251 of 18 February 2021 amending Regulation (EC) No 314/2004 concerning restrictive measures in view of the situation in Zimbabwe ( Official Journal of th",
-      "type": "Regulation",
-      "year": 2021,
-      "source_file": "L_2021065EN.01006001.xml"
-    },
     "PAA": {
       "celex": "32020R1771",
       "full_title": "Commission Implementing Regulation (EU) 2020/1771 of 26 November 2020 approving reaction mass of peracetic acid (PAA) and peroxyoctanoic acid (POOA) as an existing active substance for use in biocidal",
@@ -581,13 +593,6 @@
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020117EN.01000101.xml"
-    },
-    "WCPFC": {
-      "celex": "32023D2810",
-      "full_title": "Council Decision (EU) 2023/2810 of 11 December 2023 on the position to be taken on behalf of the European Union in the Western and Central Pacific Fisheries Commission (WCPFC) and repealing Decision (",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302810EN.000101.fmx.xml"
     },
     "ECB/2022/9": {
       "celex": "32022D0435",
@@ -1058,13 +1063,6 @@
       "year": 2020,
       "source_file": "L_2020141EN.01002801.xml"
     },
-    "GFCM": {
-      "celex": "32023R2124",
-      "full_title": "Regulation (EU) 2023/2124 of the European Parliament and of the Council of 4 October 2023 on certain provisions for fishing in the General Fisheries Commission for the Mediterranean (GFCM) Agreement a",
-      "type": "Regulation",
-      "year": 2023,
-      "source_file": "L_202302124EN.000101.fmx.xml"
-    },
     "STCW": {
       "celex": "32023D1082",
       "full_title": "Council Decision (EU) 2023/1082 of 30 May 2023 on the position to be taken on behalf of the European Union within the International Maritime Organization’s Maritime Safety Committee during its 107th s",
@@ -1408,13 +1406,6 @@
       "year": 2019,
       "source_file": "L_2019151EN.01001501.xml"
     },
-    "ETSC": {
-      "celex": "32017D1507",
-      "full_title": "Commission Decision (EU) 2017/1507 of 28 August 2017 amending Decision 2005/37/EC establishing the European Technical and Scientific Centre (ETSC) and providing for coordination of technical actions t",
-      "type": "Decision",
-      "year": 2017,
-      "source_file": "L_2017222EN.01002501.xml"
-    },
     "ECB/2016/41": {
       "celex": "32017D0934",
       "full_title": "Decision (EU) 2017/934 of the European Central Bank of 16 November 2016 on the delegation of decisions on the significance of supervised entities (ECB/2016/41)",
@@ -1470,13 +1461,6 @@
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202400190EN.000101.fmx.xml"
-    },
-    "WCO": {
-      "celex": "32023D2898",
-      "full_title": "Council Decision (EU) 2023/2898 of 19 December 2023 on the position to be taken on behalf of the European Union within the World Customs Organization (WCO) with regard to the adoption of Explanatory N",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302898EN.000101.fmx.xml"
     },
     "ECB/2019/2": {
       "celex": "32019D0137",
@@ -1779,13 +1763,6 @@
       "year": 2016,
       "source_file": "L_2016134EN.01004601.xml"
     },
-    "C29/08": {
-      "celex": "32016D0789",
-      "full_title": "Commission Decision (EU) 2016/789 of 1 October 2014 on the State aid SA.21121 (C29/08) (ex NN 54/07) implemented by Germany concerning the financing of Frankfurt Hahn airport and the financial relatio",
-      "type": "Decision",
-      "year": 2016,
-      "source_file": "L_2016134EN.01004601.xml"
-    },
     "CHED": {
       "celex": "32024R0950",
       "full_title": "Commission Delegated Regulation (EU) 2024/950 of 15 January 2024 amending Delegated Regulation (EU) 2019/1602 as regards the date of application and the cases where customs authorities are required to",
@@ -1975,13 +1952,6 @@
       "year": 2021,
       "source_file": "L_2021157EN.01000701.xml"
     },
-    "IRSG": {
-      "celex": "32025D2163",
-      "full_title": "Council Decision (EU) 2025/2163 of 17 October 2025 concerning the withdrawal of the European Union from the International Rubber Study Group (IRSG)",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202502163EN.000101.fmx.xml"
-    },
     "ECB/2021/40": {
       "celex": "32021D1443",
       "full_title": "Decision (EU) 2021/1443 of the European Central Bank of 26 August 2021 nominating heads of work units to adopt delegated internal models and extension of deadlines decisions (ECB/2021/40)",
@@ -2051,13 +2021,6 @@
       "type": "Decision",
       "year": 2018,
       "source_file": "L_2018208EN.01009101.xml"
-    },
-    "CNU": {
-      "celex": "32020D1012",
-      "full_title": "Commission Decision (EU) 2020/1012 of 24 February 2020 on State aid SA.48394 2018/C (ex 2017/N) which Romania has partly implemented in favour of National Uranium Company (CNU) (notified under documen",
-      "type": "Decision",
-      "year": 2020,
-      "source_file": "L_2020224EN.01001101.xml"
     },
     "ECB/2016/19": {
       "celex": "32016D1162",
@@ -2367,13 +2330,6 @@
       "year": 2018,
       "source_file": "L_2018299EN.01005501.xml"
     },
-    "ERAC": {
-      "celex": "32021D2241",
-      "full_title": "Council Decision (EU) 2021/2241 of 13 December 2021 on the composition and the mandate of the European Research Area and Innovation Committee (ERAC)",
-      "type": "Decision",
-      "year": 2021,
-      "source_file": "L_2021450EN.01014301.xml"
-    },
     "ECB/2020/22": {
       "celex": "32020R0605",
       "full_title": "Regulation (EU) 2020/605 of the European Central Bank of 9 April 2020 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2020/22)",
@@ -2415,20 +2371,6 @@
       "type": "Decision",
       "year": 2016,
       "source_file": "L_2016079EN.01004101.xml"
-    },
-    "GRECO": {
-      "celex": "32019D1086",
-      "full_title": "Council Decision (EU) 2019/1086 of 18 June 2019 on the position to be taken on behalf of the European Union within the Plenary Meeting of the Group of States against Corruption (GRECO) or within the C",
-      "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019171EN.01011501.xml"
-    },
-    "IPEEC": {
-      "celex": "32019D1133",
-      "full_title": "Council Decision (EU) 2019/1133 of 25 June 2019 on the position to be taken on behalf of the European Union in the International Partnership for Energy Efficiency Cooperation (IPEEC) with regard to th",
-      "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019179EN.01002301.xml"
     },
     "ECB/2016/11": {
       "celex": "32016D0811",
@@ -2843,13 +2785,6 @@
       "year": 2021,
       "source_file": "L_2021467EN.01000101.xml"
     },
-    "ICAC": {
-      "celex": "32017D0876",
-      "full_title": "Council Decision (EU) 2017/876 of 18 May 2017 on the accession of the European Union to the International Cotton Advisory Committee (ICAC)",
-      "type": "Decision",
-      "year": 2017,
-      "source_file": "L_2017134EN.01002301.xml"
-    },
     "SQC": {
       "celex": "32018L2001",
       "full_title": "Commission Implementing Decision (EU) 2022/608 of 8 April 2022 on the recognition of the Scottish Quality Crops Farm Assurance Scheme (SQC) for demonstrating compliance with the requirements set in Di",
@@ -3193,13 +3128,6 @@
       "year": 2021,
       "source_file": "L_2021367EN.01000201.xml"
     },
-    "EMEF": {
-      "celex": "32021D2182",
-      "full_title": "Commission Decision (EU) 2021/2182 of 6 March 2020 SA.41727 (2016/C) (ex 2016/NN) (ex 2015/CP) on the measures in favour of Empresa de Manutenção de Equipamento Ferroviário, S.A. (EMEF) (notified unde",
-      "type": "Decision",
-      "year": 2021,
-      "source_file": "L_2021444EN.01000101.xml"
-    },
     "ECB/2015/41": {
       "celex": "32015D2330",
       "full_title": "Decision (EU) 2015/2330 of the European Central Bank of 4 December 2015 amending Decision ECB/2014/53 on the approval of the volume of coin issuance in 2015 (ECB/2015/41)",
@@ -3368,13 +3296,6 @@
       "year": 2015,
       "source_file": "L_2015041EN.01002501.xml"
     },
-    "SZP": {
-      "celex": "32015D0248",
-      "full_title": "Commission Decision (EU) 2015/248 of 15 October 2014 on the measures SA.23008 (2013/C) (ex 2013/NN) implemented by Slovak Republic for Spoločná zdravotná poisťovňa, a. s. (SZP) and Všeobecná zdravotná",
-      "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015041EN.01002501.xml"
-    },
     "PBDE": {
       "celex": "32016L0585",
       "full_title": "Commission Delegated Directive (EU) 2016/585 of 12 February 2016 amending, for the purposes of adapting to technical progress, Annex IV to Directive 2011/65/EU of the European Parliament and of the Co",
@@ -3528,13 +3449,6 @@
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020039EN.01001201.xml"
-    },
-    "ECSA": {
-      "celex": "32018L0131",
-      "full_title": "Council Directive (EU) 2018/131 of 23 January 2018 implementing the Agreement concluded by the European Community Shipowners' Associations (ECSA) and the European Transport Workers' Federation (ETF) t",
-      "type": "Directive",
-      "year": 2018,
-      "source_file": "L_2018022EN.01002801.xml"
     },
     "ECB/2021/53": {
       "celex": "32021D2254",
@@ -3808,13 +3722,6 @@
       "type": "Decision",
       "year": 2018,
       "source_file": "L_2018327EN.01008701.xml"
-    },
-    "ZFM": {
-      "celex": "32022D1414",
-      "full_title": "Commission Decision (EU) 2022/1414 of 4 December 2020 ON AID SCHEME SA.21259 (2018/C) (ex 2018/NN) implemented by Portugal for Zona Franca da Madeira (ZFM) – Regime III (notified under document C(2020",
-      "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022217EN.01004901.xml"
     },
     "ECB/2020/42": {
       "celex": "32020D1334",

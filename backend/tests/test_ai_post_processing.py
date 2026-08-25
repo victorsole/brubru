@@ -399,3 +399,169 @@ class TestLinkifySafeByDefault:
         assert "Renewable Energy Sources Act" not in db
         # IPA II repointed to its base regulation, not the implementing reg.
         assert db["IPA II"]["celex"] == "32014R0231"
+
+
+class TestSanitiseCelexLinks:
+    """_sanitise_celex_links must never delete answer text.
+
+    Regression guard for defect D1 (audit, 25 Aug 2026). The CELEX capture
+    group admitted parentheses, so it swallowed a link's own closing bracket
+    and ran to the next ")" in the paragraph. Two links in one paragraph
+    collapsed into a single match and everything between them was deleted --
+    silently, with the second sentence's citation markers grafted onto the
+    first, so the output still parsed as valid Markdown. Measured against the
+    production corpus: 98 of 589 stored answers would have lost text, 35,060
+    characters in total, worst single answer 1,348 characters.
+
+    The first test below is the one that matters: it fails loudly on any
+    future regex change that starts eating prose.
+    """
+
+    EURLEX = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:"
+
+    def _link(self, label, celex):
+        return f"[{label}]({self.EURLEX}{celex})"
+
+    def test_two_links_in_one_paragraph_keep_the_text_between_them(self, service):
+        """The D1 case, with a second label that is NOT denylisted.
+
+        The production sentence used [PSP], but that is now stripped by the
+        echoed-denylist guard, which would mask what this test is actually
+        about: prose between two links surviving. Keep the two concerns apart.
+        """
+        between = " [2], [3]. Refund duty is owed under "
+        text = (
+            "Article 5c of "
+            + self._link("Regulation (EC) 260/2012", "32024R0886")
+            + between
+            + self._link("Regulation (EU) 2024/886", "32024R0886")
+            + " [1], [3]."
+        )
+        out = service._sanitise_celex_links(text)
+        assert "Refund duty is owed under" in out, "prose between two links was deleted"
+        assert out.count("](https://eur-lex") == 2, "two links in, two links out"
+        assert out.count("[2], [3]") == 1 and out.count("[1], [3]") == 1
+
+    def test_many_links_in_one_paragraph_lose_nothing(self, service):
+        parts = [f"clause {i} " + self._link(f"Act {i}", c) + " ends. "
+                 for i, c in enumerate(("32016R0679", "32024R1689", "32017R1980",
+                                        "32022R2065", "32023R1542"))]
+        text = "".join(parts)
+        out = service._sanitise_celex_links(text)
+        for i in range(5):
+            assert f"clause {i}" in out
+        assert out.count("](https://eur-lex") == 5
+
+    def test_link_text_still_overrides_a_contradicting_celex(self, service):
+        """The function's actual job must keep working."""
+        text = "Article 5c of " + self._link("Regulation (EC) 260/2012", "32024R0886") + "."
+        out = service._sanitise_celex_links(text)
+        assert "CELEX:32012R0260" in out, "text names 260/2012, so the URL must say so"
+
+    def test_impossible_year_drops_the_link_but_keeps_the_words(self, service):
+        text = "The " + self._link("OLAF Regulation", "31073R1999") + " applies."
+        out = service._sanitise_celex_links(text)
+        assert "OLAF Regulation" in out and "applies" in out
+        assert "eur-lex" not in out
+
+    def test_corrigendum_celex_is_still_matched_whole(self, service):
+        text = "See " + self._link("GDPR corrigendum", "32016R0679(01)") + " today."
+        out = service._sanitise_celex_links(text)
+        assert "today" in out
+        assert "32016R0679(01)" in out
+
+    def test_url_with_trailing_query_params_survives(self, service):
+        text = "[AI Act](" + self.EURLEX + "32024R1689&from=EN) is in force."
+        out = service._sanitise_celex_links(text)
+        assert "is in force" in out
+        assert out.count("](https://eur-lex") == 1
+
+    def test_output_is_never_shorter_unless_a_link_was_dropped(self, service):
+        """Blanket guard: the only sanctioned way to lose characters is rule 1."""
+        text = (
+            "First " + self._link("Regulation (EU) 2024/1689", "32024R1689")
+            + " and second " + self._link("Regulation (EU) 2016/679", "32016R0679")
+            + " and third " + self._link("Directive (EU) 2015/2366", "32015L2366") + "."
+        )
+        out = service._sanitise_celex_links(text)
+        assert len(out) == len(text), "no link should be dropped here, so length must hold"
+
+
+class TestAcronymCollisionGuards:
+    """Audit defects D2/D3, 25 Aug 2026.
+
+    PSP was confirmed firing in production on 24 Aug in all three payments
+    answers, on three different providers, linking "payment service provider"
+    to a paralytic-shellfish-poison regulation. It survived the 24 Aug cleanup
+    because it genuinely appears inside a real act's title, and it passed both
+    existing guards. These tests pin the two remedies: a code denylist for
+    acronyms whose entry is accurate but whose common meaning is something
+    else, and outright removal for organisation acronyms and State-aid case
+    numbers, which per CLAUDE.md must never be in the file at all.
+    """
+
+    COLLIDING = ("PSP", "BIT", "CIT", "PES", "PAC", "EEE", "MIT", "SGEI")
+    ORGS_AND_JUNK = ("IOC", "WCO", "GRECO", "ICAC", "IPEEC", "IRSG", "GFCM",
+                     "WCPFC", "ECSA", "ETSC", "ERAC", "CFSP",
+                     "C29/08", "CNU", "EMEF", "SZP", "ZFM")
+
+    def test_colliding_acronyms_never_linkify(self, service):
+        for acr in self.COLLIDING:
+            out = service._linkify_legislation(f"The {acr} framework applies here.")
+            assert f"[{acr}](" not in out, f"{acr} must not auto-link"
+
+    def test_the_production_psp_sentence_stays_clean(self, service):
+        """The exact shape that shipped to production on 24 August."""
+        out = service._linkify_legislation(
+            "Article 5c(8) creates a refund duty on the payer's PSP."
+        )
+        assert "32017R1980" not in out, "shellfish regulation linked into a payments answer"
+        assert "eur-lex" not in out
+
+    def test_organisation_and_junk_keys_are_gone_from_the_file(self):
+        import json
+        from pathlib import Path
+        path = (
+            Path(__file__).resolve().parent.parent
+            / "knowledge_base" / "institutions" / "legislation_acronyms.json"
+        )
+        db = json.loads(path.read_text(encoding="utf-8"))["acronyms"]
+        for key in self.ORGS_AND_JUNK:
+            assert key not in db, f"{key} is an organisation or a case number, not legislation"
+
+    def test_grandfathered_entries_are_untouched(self):
+        """CLAUDE.md names IMO explicitly. Do not let a future sweep take it."""
+        import json
+        from pathlib import Path
+        path = (
+            Path(__file__).resolve().parent.parent
+            / "knowledge_base" / "institutions" / "legislation_acronyms.json"
+        )
+        db = json.loads(path.read_text(encoding="utf-8"))["acronyms"]
+        assert db["IMO"]["celex"] == "32016D0807"
+
+    def test_marquee_acts_still_linkify(self, service):
+        for acr in ("GDPR", "DSA", "CBAM", "DMA"):
+            out = service._linkify_legislation(f"The {acr} framework applies.")
+            assert f"[{acr}](" in out, f"{acr} must still link"
+
+    def test_an_echoed_denylisted_link_is_stripped(self, service):
+        """The denylist guards our linkifier; this guards the generator.
+
+        Three answers carrying [PSP](...32017R1980) are already stored in
+        chat_messages, and history is replayed into context, so the model can
+        echo one back past a guard that only runs when WE build the link.
+        """
+        text = ("Article 5c(8) creates a refund duty on the payer's "
+                "[PSP](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R1980)"
+                " within the deadline.")
+        out = service._sanitise_celex_links(text)
+        assert "32017R1980" not in out, "echoed shellfish link survived"
+        assert "PSP" in out, "the word itself must be kept"
+        assert "within the deadline" in out, "surrounding prose must be kept"
+
+    def test_a_legitimate_acronym_link_is_not_stripped(self, service):
+        text = ("The [GDPR](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679)"
+                " applies.")
+        out = service._sanitise_celex_links(text)
+        assert "32016R0679" in out and "](https://eur-lex" in out
