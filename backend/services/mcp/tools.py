@@ -41,7 +41,28 @@ _STOP = {
     "your", "they", "them", "than", "then", "here", "over", "some", "such",
     "opportunit", "opportunities", "opportunity", "funding", "grants", "grant",
     "call", "calls", "scheme", "schemes", "available", "open",
+    # Generic legal-English added 25 Aug 2026. The OR fallback below ranks by
+    # full-text hits, and EU law is full of acts whose TITLE is built from these
+    # words -- there are thousands of "Regulation ... IMPOSING a definitive
+    # countervailing DUTY on imports of ...". Asking "which ARTICLE of the Cyber
+    # Resilience Act IMPOSES the 24-hour REPORTING DUTY" therefore returned a
+    # countervailing duty on sulphanilic acid from India as the top related law.
+    # Confidently irrelevant, on the surface we are about to market.
+    "article", "articles", "duty", "duties", "impose", "imposes", "imposing",
+    "report", "reports", "reporting", "requirement", "requirements", "obligation",
+    "obligations", "provision", "provisions", "rule", "rules", "apply", "applies",
+    "applying", "says", "state", "states", "means", "meaning", "hour", "hours",
+    "day", "days", "deadline", "deadlines", "notify", "notification", "notifications",
+    "regulation", "directive", "decision", "law", "laws", "legal", "union",
+    "european", "europe", "commission", "council", "parliament", "member",
 }
+
+# A rank threshold was tried here and removed the same afternoon. Calibrated on
+# five sample queries it dropped genuinely relevant results (CBAM implementing
+# regulations at 0.041, payment-services acts at 0.038) while adding nothing the
+# stop-list above had not already fixed. A blunt cut-off tuned on a handful of
+# examples is the kind of check that fails in a direction nobody notices, which
+# is precisely what this file was being audited for.
 
 # When ask_brubru should ALSO pull live EU funding calls (not just guide facts).
 _FUNDING_INTENT = re.compile(
@@ -99,7 +120,13 @@ def _related_laws(query: str, limit: int = 5) -> List[Dict[str, Any]]:
                 FROM eu_laws
                 WHERE search_vector @@ to_tsquery('english', :q)
                   AND celex IS NOT NULL
-                ORDER BY rank DESC
+                ORDER BY rank DESC,
+                         -- A corrigendum carries the same words as the act it
+                         -- corrects, so it ties on rank and can win on nothing
+                         -- but row order. The act itself is what a reader wants
+                         -- named first.
+                         (title ILIKE 'Corrigendum%') ASC,
+                         celex ASC
                 LIMIT :lim
                 """
             ),
