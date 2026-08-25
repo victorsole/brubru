@@ -291,3 +291,20 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "slow: mark test as slow running"
     )
+
+
+# ---------------------------------------------------------------------------
+# API test users need a funded balance
+# ---------------------------------------------------------------------------
+# The /api/v1/* metering gate debits BEFORE the route handler runs, so a test
+# user created without a balance gets 402 Payment Required from every metered
+# endpoint. The assertion then reads `assert 402 == 200`, and the suite cannot
+# tell "the endpoint is broken" from "the test user has no money" -- 33 tests
+# across six v1 files were failing this way on 25 Aug 2026, of which only two
+# had been noticed.
+#
+# Funding the fixture is preferred over exempting it: the test then exercises the
+# real metered path a paying customer hits, including the debit, rather than
+# routing around it. 10 EUR against a 0.005 EUR light call is ~2,000 calls, far
+# more than any single test session makes.
+TEST_API_BALANCE_MICRO = 10_000_000  # 10.00 EUR in micro-euros

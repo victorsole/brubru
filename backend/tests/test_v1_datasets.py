@@ -17,6 +17,8 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+from tests.conftest import TEST_API_BALANCE_MICRO
+
 
 @pytest.fixture
 def auth_headers():
@@ -27,6 +29,9 @@ def auth_headers():
             full_name="v1 ds test",
             subscription_tier="blue",
             is_active=True,
+            # Metered v1 endpoints debit before the handler runs; an unfunded
+            # user 402s and the test reports a billing gate as a broken endpoint.
+            api_balance_eur_micro=TEST_API_BALANCE_MICRO,
         )
         db.add(user)
         db.flush()
@@ -55,10 +60,15 @@ def test_laws_returns_envelope_shape(auth_headers):
     r = client.get("/api/v1/laws?limit=3", headers=auth_headers)
     assert r.status_code == 200
     body = r.json()
-    for field in ["total", "pages", "page", "limit", "has_more", "data", "meta"]:
+    # The v1 envelope is flat (PaginatedResponse in api/v1/_envelope.py):
+    # pagination fields sit at the top level and the metadata block is
+    # `op_core` (OP Core Metadata). The old nested `meta` key no longer
+    # exists. This assertion could not notice the change while the test
+    # was 402ing on an unfunded fixture.
+    for field in ["total", "pages", "page", "limit", "has_more", "data", "op_core"]:
         assert field in body, f"missing {field} in {body.keys()}"
     assert body["limit"] == 3
-    assert body["meta"]["powered_by"] == "Brubru"
+    assert body["op_core"]["dct:publisher"].startswith("https://brubru.beresol.eu")
     assert isinstance(body["data"], list)
     assert len(body["data"]) <= 3
 
@@ -161,6 +171,11 @@ def test_commissioner_known_name_returns_envelope(auth_headers):
         r = client.get("/api/v1/commissioners/Fitto/agenda", headers=auth_headers)
     assert r.status_code == 200
     body = r.json()
-    assert body["commissioner_name"] == "Raffaele Fitto"
+    # `commissioner_name` was a bespoke top-level field; the endpoint now returns
+    # the standard v1 envelope, which carries no per-endpoint custom keys. The
+    # commissioner is identified by the path, and the agenda lives in `data[]`.
+    assert "commissioner_name" not in body, (
+        "a bespoke envelope field reappeared -- v1 endpoints share one envelope"
+    )
     assert body["total"] == 1
     assert body["data"][0]["title"] == "Meeting with stakeholders"

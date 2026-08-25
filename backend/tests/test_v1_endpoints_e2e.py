@@ -21,6 +21,8 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+from tests.conftest import TEST_API_BALANCE_MICRO
+
 
 @pytest.fixture
 def blue_user_and_key():
@@ -31,6 +33,9 @@ def blue_user_and_key():
             full_name="v1 test",
             subscription_tier="blue",
             is_active=True,
+            # Metered v1 endpoints debit before the handler runs; an unfunded
+            # user 402s and the test reports a billing gate as a broken endpoint.
+            api_balance_eur_micro=TEST_API_BALANCE_MICRO,
         )
         db.add(user)
         db.flush()

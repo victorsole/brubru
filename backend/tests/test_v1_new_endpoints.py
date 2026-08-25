@@ -11,6 +11,8 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+from tests.conftest import TEST_API_BALANCE_MICRO
+
 
 @pytest.fixture
 def auth_headers():
@@ -21,6 +23,9 @@ def auth_headers():
             full_name="new endpoints test",
             subscription_tier="blue",
             is_active=True,
+            # Metered v1 endpoints debit before the handler runs; an unfunded
+            # user 402s and the test reports a billing gate as a broken endpoint.
+            api_balance_eur_micro=TEST_API_BALANCE_MICRO,
         )
         db.add(user)
         db.flush()
@@ -72,7 +77,12 @@ def test_eprs_envelope(auth_headers):
     r = TestClient(app).get("/api/v1/eprs?limit=5", headers=auth_headers)
     assert r.status_code == 200
     body = r.json()
-    for f in ["total", "returned", "data", "meta"]:
+    # The v1 envelope is flat (PaginatedResponse in api/v1/_envelope.py):
+    # pagination fields sit at the top level and the metadata block is
+    # `op_core` (OP Core Metadata). The old nested `meta` key no longer
+    # exists. This assertion could not notice the change while the test
+    # was 402ing on an unfunded fixture.
+    for f in ["total", "returned", "data", "op_core", "coverage_complete"]:
         assert f in body
 
 

@@ -5,7 +5,7 @@ Coverage:
     GET /api/mcp                     -> probe returns server info, no auth
     POST initialize                  -> no auth required, returns capabilities
     POST tools/list  (no auth)       -> auth_missing
-    POST tools/list  (auth)          -> 6 tools
+    POST tools/list  (auth)          -> the full published tool surface
     POST tools/call  (in-scope)      -> result + debit
     POST tools/call  (out-of-scope)  -> scope_missing JSON-RPC error
     POST tools/call  (0 balance)     -> insufficient_balance JSON-RPC error
@@ -32,6 +32,34 @@ from main import app
 from models.api_billing import ApiUsageEvent
 from models.api_key import ApiKey
 from models.user import User
+
+# The MCP tool surface, pinned BY NAME rather than by count.
+#
+# These tests asserted `== 6` from May 2026 until 25 Aug 2026 while the server
+# actually exposed 15, so three of them failed continuously and the real surface
+# was never tested against its real shape. A count also fails uninformatively:
+# it says "something changed", not "search_sanctions disappeared".
+#
+# Adding a tool means adding it here deliberately -- which is the point, because
+# every name below is a public contract with the MCP hosts (Claude, ChatGPT,
+# Gemini CLI, Cursor) that connect to it.
+EXPECTED_MCP_TOOLS = {
+    "ask_brubru",
+    "fetch",
+    "get_calendar_events",
+    "get_procedure_status",
+    "list_brubru_datasets",
+    "query_brubru_api",
+    "search",
+    "search_consultations",
+    "search_eprs",
+    "search_eu_legislation",
+    "search_funding",
+    "search_geographical_indications",
+    "search_knowledge_guides",
+    "search_lobbyists",
+    "search_sanctions",
+}
 
 
 @pytest.fixture
@@ -123,7 +151,7 @@ def test_get_probe(client):
     body = r.json()
     assert body["service"] == "Brubru"
     assert body["protocol"] == "Model Context Protocol"
-    assert body["tools_available"] == 6
+    assert body["tools_available"] == len(EXPECTED_MCP_TOOLS)
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +179,7 @@ def test_tools_list_requires_auth(client):
     assert body["error"]["code"] == -32001  # _ERR_AUTH_MISSING
 
 
-def test_tools_list_returns_six_tools(client, user_with_key_full_scopes):
+def test_tools_list_matches_the_published_surface(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(
         "/api/mcp",
@@ -161,12 +189,10 @@ def test_tools_list_returns_six_tools(client, user_with_key_full_scopes):
     body = r.json()
     assert "result" in body, body
     tools = body["result"]["tools"]
-    assert len(tools) == 6
-    names = {t["name"] for t in tools}
-    assert names == {
-        "ask_brubru", "search_eu_legislation", "search_knowledge_guides",
-        "get_procedure_status", "get_calendar_events", "search_eprs",
-    }
+    assert {t['name'] for t in tools} == EXPECTED_MCP_TOOLS, (
+        'the MCP tool surface changed; update EXPECTED_MCP_TOOLS deliberately '
+        'and check the host connector docs'
+    )
     # Each tool has proper MCP shape
     for t in tools:
         assert "name" in t
@@ -381,4 +407,4 @@ def test_x_api_key_header_works(client, user_with_key_full_scopes):
     )
     body = r.json()
     assert "result" in body, body
-    assert len(body["result"]["tools"]) == 6
+    assert {t["name"] for t in body["result"]["tools"]} == EXPECTED_MCP_TOOLS
