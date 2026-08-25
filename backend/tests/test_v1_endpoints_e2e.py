@@ -76,7 +76,7 @@ def test_whoami_bad_key_returns_401():
 def test_whoami_valid_key_returns_200_with_rate_limit_headers(blue_user_and_key):
     user, plaintext, _ = blue_user_and_key
     client = TestClient(app)
-    r = client.get("/api/v1/whoami", headers={"X-API-Key": plaintext})
+    r = client.get("/api/v1/whoami", headers={"X-API-Key": plaintext, "X-Brubru-Probe": "1"})
     assert r.status_code == 200
     body = r.json()
     assert body["tier"] == "blue"
@@ -90,7 +90,7 @@ def test_whoami_valid_key_returns_200_with_rate_limit_headers(blue_user_and_key)
 def test_rate_limit_kicks_in_after_60_calls(blue_user_and_key):
     user, plaintext, _ = blue_user_and_key
     client = TestClient(app)
-    headers = {"X-API-Key": plaintext}
+    headers = {"X-API-Key": plaintext, "X-Brubru-Probe": "1"}  # probe: suite traffic must not count as user activity
 
     # Burn through the window
     for _ in range(60):

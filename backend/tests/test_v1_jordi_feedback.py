@@ -30,7 +30,13 @@ def auth_headers():
         db.add(user); db.flush()
         plaintext, key = ApiKey.generate(user_id=user.id, name="jordi")
         db.add(key); db.commit()
-        yield {"X-API-Key": plaintext}
+        # Every metered call these tests make writes a real row to
+        # api_usage_events. Funding the fixture (25 Aug 2026) is what made
+        # them reach the ledger at all -- before that they 402'd and wrote
+        # nothing. Mark them, or the suite's own traffic is counted as user
+        # activity in /users and /audit-queries, which is the exact defect
+        # `is_probe` was added to fix.
+        yield {"X-API-Key": plaintext, "X-Brubru-Probe": "1"}
     finally:
         db.query(ApiKey).filter(ApiKey.user_id == user.id).delete()
         db.query(User).filter(User.id == user.id).delete()

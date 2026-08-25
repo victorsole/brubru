@@ -39,6 +39,9 @@ def blue_user_key():
         plaintext, key = ApiKey.generate(user_id=user.id, name="day6")
         db.add(key)
         db.commit()
+        # Callers add `X-Brubru-Probe: 1`: every metered call these tests make
+        # writes a real api_usage_events row, and unmarked suite traffic is
+        # counted as user activity by /users and /audit-queries.
         yield plaintext
     finally:
         db.query(ApiKey).filter(ApiKey.user_id == user.id).delete()
@@ -74,7 +77,7 @@ def test_error_envelope_for_unknown_endpoint_404():
 
 def test_error_envelope_for_bad_query_422(blue_user_key):
     client = TestClient(app)
-    r = client.get("/api/v1/laws?limit=9999", headers={"X-API-Key": blue_user_key})
+    r = client.get("/api/v1/laws?limit=9999", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
     assert r.status_code == 422
     body = r.json()
     assert body.get("reason_code") == "invalid_query"
@@ -86,7 +89,7 @@ def test_error_envelope_for_bad_query_422(blue_user_key):
 
 def test_x_request_id_on_success(blue_user_key):
     client = TestClient(app)
-    r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key})
+    r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
     assert r.status_code == 200
     assert "X-Request-Id" in r.headers
     assert re.fullmatch(r"[0-9a-f-]{36}", r.headers["X-Request-Id"])
@@ -116,7 +119,7 @@ def test_x_request_id_echoes_inbound(blue_user_key):
 
 def test_envelope_has_returned_and_coverage_complete(blue_user_key):
     client = TestClient(app)
-    r = client.get("/api/v1/laws?limit=3", headers={"X-API-Key": blue_user_key})
+    r = client.get("/api/v1/laws?limit=3", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
     assert r.status_code == 200
     body = r.json()
     assert "returned" in body
@@ -132,7 +135,7 @@ def test_published_end_alias_is_accepted(blue_user_key):
     client = TestClient(app)
     r = client.get(
         "/api/v1/laws?published_from=2026-01-01&published_end=2026-01-31&limit=2",
-        headers={"X-API-Key": blue_user_key},
+        headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"},
     )
     assert r.status_code == 200
     body = r.json()
@@ -157,7 +160,7 @@ def test_authorization_bearer_works(blue_user_key):
 
 def test_x_api_key_still_works(blue_user_key):
     client = TestClient(app)
-    r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key})
+    r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
     assert r.status_code == 200
 
 
@@ -178,7 +181,7 @@ def test_meta_enums_unauth_returns_401():
 
 def test_meta_enums_returns_expected_keys(blue_user_key):
     client = TestClient(app)
-    r = client.get("/api/v1/meta/enums", headers={"X-API-Key": blue_user_key})
+    r = client.get("/api/v1/meta/enums", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
     assert r.status_code == 200
     body = r.json()
     for k in [

@@ -177,3 +177,33 @@ def test_both_write_paths_pass_is_probe_to_record_usage(rel):
             f"{rel}: record_usage() at line {call.lineno} does not pass is_probe, "
             "so every call on this path records as real user traffic"
         )
+
+
+# ---------------------------------------------------------------------------
+# 4. The suite must not pollute the ledger it is testing
+# ---------------------------------------------------------------------------
+
+def test_every_key_minting_v1_test_marks_itself_as_a_probe():
+    """A test fixture that mints a funded key writes REAL api_usage_events rows.
+
+    Found by probing production after deploying: funding the v1 fixtures (so the
+    metered path could be tested at all) made the suite write 136 unmarked usage
+    rows in one afternoon, which /users then counted as genuine API activity.
+    Fixing the CI blind spot had quietly recreated the measurement blind spot.
+
+    Any test file that mints an ApiKey and calls a metered endpoint must send
+    `X-Brubru-Probe: 1`, or the suite's own traffic becomes user activity.
+    """
+    from pathlib import Path
+    tests_dir = Path(__file__).resolve().parent
+    offenders = []
+    for f in sorted(tests_dir.glob("test_v1_*.py")):
+        src = f.read_text()
+        if "ApiKey.generate" not in src or "X-API-Key" not in src:
+            continue  # does not authenticate against the metered surface
+        if "X-Brubru-Probe" not in src:
+            offenders.append(f.name)
+    assert not offenders, (
+        f"{offenders} mint an API key and call metered endpoints without marking "
+        "the traffic as a probe; their rows will be counted as real user activity"
+    )
