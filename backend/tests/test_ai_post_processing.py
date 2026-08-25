@@ -810,3 +810,50 @@ class TestCitationOrderingAndBinding:
         )
         text_blocks = [b['text'] for b in msgs[-1]['content'] if b.get('type') == 'text']
         assert any("AVAILABLE SOURCES" in t for t in text_blocks)
+
+    def test_every_new_source_reads_the_keys_its_fetcher_actually_writes(self, service):
+        """Guessing conventional key names shipped 10 citations reading 'Untitled'.
+
+        Caught by a live probe against production on 25 Aug 2026, and only
+        because ordering had just promoted OEIL above web search, which put the
+        broken ones at [1]. These shapes are copied from the fetchers in
+        context_builder.py -- if a fetcher renames a key, this fails rather
+        than silently degrading to 'Untitled' with no link.
+        """
+        ctx = TestBrubruCorpusIsCitable._Ctx(
+            legislative_train_files=[{
+                'file_title': 'Payment Services Regulation',
+                'oeil_ref': '2023/0209(COD)', 'current_status': 'ongoing',
+                'train_name': 'OEIL',
+            }],
+            commission_documents=[{
+                'title': 'A Commission proposal', 'portal_url': 'https://ec.example',
+                'reference': 'COM(2026)1', 'publication_date': '2026-01-01',
+                'dg_responsible': 'FISMA',
+            }],
+            public_consultations=[{
+                'title': 'A consultation', 'portal_url': 'https://hys.example',
+                'end_date': '2026-09-01', 'status': 'OPEN', 'dg_responsible': 'ENV',
+            }],
+            committee_work_items=[{
+                'title': 'Committee work', 'ep_page_url': 'https://ep.example',
+                'committee': 'ECON', 'reference': 'X',
+            }],
+            eprs_publications=[{
+                'title': 'A briefing', 'publication_url': 'https://eprs.example',
+                'reference': 'PE 1',
+            }],
+        )
+        cites = service._build_citations_from_context(ctx)
+        assert len(cites) == 5
+        for c in cites:
+            assert c['title'] not in ('', 'Untitled'), f"{c['type']} title not resolved"
+            assert c['url'], f"{c['type']} has no URL"
+
+    def test_a_train_file_without_a_title_falls_back_to_its_reference(self, service):
+        ctx = TestBrubruCorpusIsCitable._Ctx(legislative_train_files=[
+            {'file_title': '', 'oeil_ref': '2024/0999(COD)'},
+        ])
+        c = service._build_citations_from_context(ctx)[0]
+        assert '2024/0999(COD)' in c['title'], "a bare reference beats the word Untitled"
+        assert 'oeil' in c['url'] and 'procedure-file' in c['url']

@@ -3887,6 +3887,23 @@ USER QUESTION: {user_message}
     _GUIDES_INDEX_URL = "https://brubru.beresol.eu/guides/"
     _EURLEX_CELEX_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:"
 
+    @staticmethod
+    def _oeil_url(procedure_ref: Optional[str]) -> str:
+        """Canonical OEIL procedure-file URL, or '' when there is no reference.
+
+        Delegates to the single builder in services/comparator/cell_extractors,
+        because the legacy `oeil/popups/ficheprocedure.do` endpoint 404s for
+        recent procedures and this codebase has already swept 24 occurrences of
+        that mistake once (feedback_oeil_url_endpoint). One builder, not two.
+        """
+        if not procedure_ref:
+            return ''
+        try:
+            from services.comparator.cell_extractors import _oeil_url as _build
+            return _build(procedure_ref) or ''
+        except Exception:  # noqa: BLE001 -- a citation URL is never worth an exception
+            return ''
+
     def _build_citations_from_context(self, context_data: Any) -> List[Dict[str, Any]]:
         """
         Build the citation list from context data. THE single citation builder.
@@ -4007,25 +4024,47 @@ USER QUESTION: {user_message}
 
         for pub in getattr(context_data, 'eprs_publications', None) or []:
             add('eprs', pub.get('title', ''),
-                pub.get('url') or pub.get('pdf_url', ''),
+                pub.get('publication_url') or pub.get('pdf_url') or '',
                 reference=pub.get('reference', ''), date=pub.get('date'))
 
         for train in getattr(context_data, 'legislative_train_files', None) or []:
-            add('oeil', train.get('title', ''),
-                train.get('url') or train.get('oeil_url', ''),
-                reference=train.get('oeil_procedure_ref', ''),
-                status=train.get('current_status', ''))
+            # These dicts use `file_title` / `oeil_ref`, NOT `title` /
+            # `oeil_procedure_ref`, and carry no URL at all. Guessing the
+            # conventional names produced 52 citations reading "Untitled",
+            # and once ordering put OEIL above web search they were the first
+            # six things a reader saw (caught by a live probe against
+            # production, 25 Aug 2026). All three append sites in
+            # _fetch_legislative_train_files agree on these keys; the
+            # alternatives are kept as fallbacks in case a fourth appears.
+            ref = train.get('oeil_ref') or train.get('oeil_procedure_ref') or ''
+            title = (train.get('file_title') or train.get('title') or '').strip()
+            if not title and ref:
+                # A bare reference beats the word "Untitled", which tells the
+                # reader nothing and looks like a bug.
+                title = f"Legislative procedure {ref}"
+            add('oeil', title, self._oeil_url(ref),
+                reference=ref,
+                status=train.get('current_status', ''),
+                train=train.get('train_name', ''))
 
         for doc in getattr(context_data, 'commission_documents', None) or []:
-            add('commission_document', doc.get('title', ''), doc.get('url', ''),
-                reference=doc.get('reference', ''), date=doc.get('date'))
+            add('commission_document',
+                doc.get('title') or doc.get('common_name') or '',
+                doc.get('portal_url') or '',
+                reference=doc.get('reference', ''),
+                date=doc.get('publication_date'),
+                dg=doc.get('dg_responsible', ''))
 
         for cons in getattr(context_data, 'public_consultations', None) or []:
-            add('public_consultation', cons.get('title', ''), cons.get('url', ''),
-                deadline=cons.get('deadline'), status=cons.get('status', ''))
+            add('public_consultation',
+                cons.get('title') or cons.get('short_title') or '',
+                cons.get('portal_url') or cons.get('feedback_url') or '',
+                deadline=cons.get('end_date'), status=cons.get('status', ''),
+                dg=cons.get('dg_responsible', ''))
 
         for work in getattr(context_data, 'committee_work_items', None) or []:
-            add('committee_work', work.get('title', ''), work.get('url', ''),
+            add('committee_work', work.get('title', ''),
+                work.get('ep_page_url') or work.get('oeil_url') or '',
                 committee=work.get('committee', ''),
                 reference=work.get('reference', ''))
 
