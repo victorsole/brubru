@@ -89,6 +89,13 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     last_login = Column(DateTime(timezone=True), nullable=True)
+    # Migration 221. Presence, as opposed to re-authentication. `last_login`
+    # only moves when someone actually signs in, and the access token lives 7
+    # days and is refreshed silently, so a daily returning user can leave
+    # last_login frozen for months. Written on the cheap authenticated
+    # touchpoints, throttled to once an hour. NULL means "not measured", never
+    # "absent".
+    last_seen_at = Column(DateTime(timezone=True), nullable=True)
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
     is_trainer = Column(Boolean, default=False)

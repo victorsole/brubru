@@ -529,8 +529,16 @@ class TestAcronymCollisionGuards:
         for key in self.ORGS_AND_JUNK:
             assert key not in db, f"{key} is an organisation or a case number, not legislation"
 
-    def test_grandfathered_entries_are_untouched(self):
-        """CLAUDE.md names IMO explicitly. Do not let a future sweep take it."""
+    def test_no_organisation_acronym_is_grandfathered(self):
+        """One rule, no exceptions (Victor's ruling, 25 Aug 2026).
+
+        CLAUDE.md used to contradict itself: it listed IMO and UNECE among
+        acronyms that "must NEVER be added", then said to leave them because
+        they point at real Council Decisions. Every organisation removed today
+        satisfied that second clause equally, so the exception had to go rather
+        than the rule. An organisation is not a law, whatever the decision
+        about it happens to be.
+        """
         import json
         from pathlib import Path
         path = (
@@ -538,7 +546,8 @@ class TestAcronymCollisionGuards:
             / "knowledge_base" / "institutions" / "legislation_acronyms.json"
         )
         db = json.loads(path.read_text(encoding="utf-8"))["acronyms"]
-        assert db["IMO"]["celex"] == "32016D0807"
+        for org in ("IMO", "UNECE", "WTO", "OECD", "NATO", "EFTA", "IMF", "GATT", "EEC"):
+            assert org not in db, f"{org} is an organisation or treaty, not legislation"
 
     def test_marquee_acts_still_linkify(self, service):
         for acr in ("GDPR", "DSA", "CBAM", "DMA"):
@@ -718,3 +727,86 @@ class TestVoPGuideDisambiguation:
         for wrong in ("verify the payee's identity", "verifying the payee's identity",
                       "verification of the payee's identity"):
             assert wrong not in content, f"{guide_id} states the obligation wrongly"
+
+
+class TestCitationOrderingAndBinding:
+    """Audit defects D8 and D9, 25 Aug 2026.
+
+    `[N]` markers were bound to nothing. `_strip_orphan_citations` checked only
+    `1 <= N <= len(citations)`; the model's numbers came from the per-section
+    numbering inside the context block, which restarts at 1 in each section. So
+    the `[2]` in an answer and the `[2]` in the rendered footer were unrelated
+    things that happened to share a digit.
+
+    Ordering was "whichever loop ran first", which put a vendor blog at [1] and
+    the legal text further down. Reordering is only safe BECAUSE the numbering
+    is now bound -- these two fixes have to travel together.
+    """
+
+    Ctx = TestBrubruCorpusIsCitable._Ctx
+
+    def _mixed(self):
+        return self.Ctx(
+            web_search_results=[{'title': 'Vendor blog', 'url': 'https://v.example'},
+                                {'title': 'Another blog', 'url': 'https://w.example'}],
+            eu_calendar_events=[{'title': 'Some meeting', 'source_url': 'https://c.example'}],
+            internal_knowledge=[{'type': 'guide', 'name': 'g', 'title': 'A Brubru guide'}],
+            local_eu_laws=[{'celex': '32024R0886', 'title': 'Instant Payments Regulation'}],
+            legislative_train_files=[{'title': 'A procedure', 'url': 'https://o.example'}],
+        )
+
+    def test_the_legal_text_is_cited_first_and_the_blog_last(self, service):
+        cites = service._build_citations_from_context(self._mixed())
+        assert cites[0]['type'] == 'legislation'
+        assert cites[-1]['type'] == 'web_search'
+
+    def test_citations_are_ordered_by_authority(self, service):
+        tiers = [c['source_tier'] for c in service._build_citations_from_context(self._mixed())]
+        assert tiers == sorted(tiers), "a lower-authority source outranks a higher one"
+
+    def test_ids_are_renumbered_after_sorting(self, service):
+        cites = service._build_citations_from_context(self._mixed())
+        assert [c['id'] for c in cites] == list(range(1, len(cites) + 1))
+
+    def test_sorting_is_stable_within_a_tier(self, service):
+        cites = service._build_citations_from_context(self._mixed())
+        blogs = [c['title'] for c in cites if c['type'] == 'web_search']
+        assert blogs == ['Vendor blog', 'Another blog'], "gathering order lost within a tier"
+
+    def test_the_model_is_given_the_numbering_it_must_cite_against(self, service):
+        cites = service._build_citations_from_context(self._mixed())
+        msgs = service._build_messages(
+            user_message="Q?", context="CONTEXT", conversation_history=None,
+            documents=None, query_lang="EN", citations=cites,
+        )
+        body = msgs[-1]['content']
+        assert "AVAILABLE SOURCES" in body
+        for c in cites:
+            assert f"[{c['id']}] {c['title']}" in body, f"source {c['id']} not named for the model"
+        assert "Do not invent numbers" in body
+
+    def test_no_sources_block_when_there_are_no_citations(self, service):
+        msgs = service._build_messages(
+            user_message="Q?", context="CONTEXT", conversation_history=None,
+            documents=None, query_lang="EN", citations=None,
+        )
+        assert "AVAILABLE SOURCES" not in msgs[-1]['content']
+
+    def test_a_capped_source_list_says_what_it_dropped(self, service):
+        """A silent cap reads as 'these are all the sources'."""
+        many = self.Ctx(web_search_results=[
+            {'title': f'Source {i}', 'url': f'https://x{i}.example'} for i in range(30)
+        ])
+        cites = service._build_citations_from_context(many)
+        block = service._format_sources_block(cites)
+        assert "further source(s)" in block
+        assert "not listed here" in block
+
+    def test_the_documents_branch_also_gets_the_numbering(self, service):
+        cites = service._build_citations_from_context(self._mixed())
+        msgs = service._build_messages(
+            user_message="Q?", context="CONTEXT", conversation_history=None,
+            documents=[{'type': 'text', 'text': 'a doc'}], query_lang="EN", citations=cites,
+        )
+        text_blocks = [b['text'] for b in msgs[-1]['content'] if b.get('type') == 'text']
+        assert any("AVAILABLE SOURCES" in t for t in text_blocks)

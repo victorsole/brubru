@@ -182,6 +182,11 @@ def section_actors(conn, start, end, include_internal):
         f"""
         SELECT u.email, u.subscription_tier, u.organization,
                u.created_at::date AS created, u.last_login::date AS last_login,
+               -- Presence, not re-authentication (migration 221). last_login
+               -- stays frozen for a returning user whose token refreshes
+               -- silently, so it must never be read as "last used". NULL here
+               -- means not measured, never absent.
+               u.last_seen_at::date AS last_seen,
                {INTERNAL_USER_SQL} AS internal
         FROM users u
         WHERE u.created_at >= :start AND u.created_at < :end
@@ -852,7 +857,7 @@ def render(report):
         _fmt(report["actors"]["segments"]),
         "",
         "  New accounts:",
-        _fmt(report["actors"]["signups"], ["email", "subscription_tier", "organization", "created", "last_login"]),
+        _fmt(report["actors"]["signups"], ["email", "subscription_tier", "organization", "created", "last_login", "last_seen"]),
         "",
         "-- 2. CHAT (detail: /audit-queries) --------------------------------------",
         _fmt(report["chat"]),

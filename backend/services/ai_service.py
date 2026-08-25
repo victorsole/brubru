@@ -1178,7 +1178,8 @@ class AIService:
             context=context_str,
             query_lang=_qlang,
             conversation_history=conversation_history,
-            documents=document_content
+            documents=document_content,
+            citations=citations,
         )
 
         # Call AI (with fallback chain if enabled)
@@ -1960,6 +1961,7 @@ class AIService:
             query_lang=_qlang,
             conversation_history=conversation_history,
             documents=document_content or None,
+            citations=stream_citations,
         )
 
         # Stream response via the FREE open-model chain (Groq -> Gemini ->
@@ -2555,6 +2557,7 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
         conversation_history: Optional[List[ChatMessage]] = None,
         documents: Optional[List[Dict[str, Any]]] = None,
         query_lang: str = "EN",
+        citations: Optional[List[Dict[str, Any]]] = None,
     ) -> List[Dict[str, Any]]:
         """
         Build messages array for the model.
@@ -2577,6 +2580,12 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
         """
         messages = []
         lang_name = LANG_NAMES.get(query_lang, "English")
+        # Bind the model's [N] markers to the citation list the reader will see
+        # (audit D8). Empty string when there are no citations, so the prompt
+        # reads normally rather than announcing an empty source list.
+        _sources = self._format_sources_block(citations)
+        sources_block = (_sources + "\n\n") if _sources else ""
+
 
         # Add conversation history
         if conversation_history:
@@ -2604,7 +2613,7 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
 
 USER QUESTION: {user_message}
 
-Please analyse the uploaded documents above along with the EU context provided. Include citations [1], [2], etc. when referencing specific sources. Write the entire answer in {lang_name}, whatever language the context or the documents happen to be written in."""
+{sources_block}Please analyse the uploaded documents above along with the EU context provided. Cite sources using the exact numbers listed above, so that [1] in your answer means the source numbered [1]. Do not invent numbers, and do not renumber. Write the entire answer in {lang_name}, whatever language the context or the documents happen to be written in."""
             else:
                 text_content = f"""Please analyze the uploaded documents above and answer: {user_message}"""
 
@@ -2627,7 +2636,7 @@ Please analyse the uploaded documents above along with the EU context provided. 
 
 USER QUESTION: {user_message}
 
-Please answer using the EU context provided above. Include citations [1], [2], etc. when referencing specific sources. Write the entire answer in {lang_name}, whatever language the context happens to be written in."""
+{sources_block}Please answer using the EU context provided above. Cite sources using the exact numbers listed above, so that [1] in your answer means the source numbered [1]. Do not invent numbers, and do not renumber. Write the entire answer in {lang_name}, whatever language the context happens to be written in."""
             else:
                 # No context block, but the language reminder still has to be
                 # here (audit defect D7, 25 Aug 2026). It used to be attached
@@ -4035,11 +4044,61 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                     publication_number=tender.get('publication_number', ''),
                     match_score=match.get('match_score'))
 
+        # Order by authority, then number (audit D4 follow-up, 25 Aug 2026).
+        #
+        # Until today the order was simply "whichever loop ran first", which put
+        # web search at [1] and the legal text further down: a reader checking
+        # provenance met a vendor blog before the Regulation. Python's sort is
+        # stable, so sources within a tier keep the order they were gathered in
+        # and only the tiers move.
+        #
+        # This is safe to do ONLY because the numbering is now bound to this
+        # list -- _build_messages renders these same numbers into the context as
+        # a SOURCES block, so the model cites against the order the reader sees.
+        # Reordering without that binding would just shuffle which source a
+        # marker happened to land on.
+        citations.sort(key=lambda c: c.get('source_tier') or 99)
+
         # Sequential ids so the frontend can resolve [1], [2] markers.
         for i, citation in enumerate(citations):
             citation['id'] = i + 1
 
         return citations
+
+    # How many sources to name in the context block. The model only needs the
+    # numbering to be unambiguous; listing fifty titles would spend context on
+    # something the reader already sees in the footer.
+    _MAX_LISTED_SOURCES = 20
+
+    def _format_sources_block(self, citations: Optional[List[Dict[str, Any]]]) -> str:
+        """Render the citation list as the numbering the model must cite against.
+
+        WHY (audit D8, 25 Aug 2026). `[N]` markers were never bound to anything.
+        `_strip_orphan_citations` checks only `1 <= N <= len(citations)`; nothing
+        verified that marker N meant source N. The model's numbers came from the
+        per-section numbering inside the context block, which restarts at 1 in
+        every section, so a `[2]` in the answer and the `[2]` in the rendered
+        footer were two unrelated things that happened to share a digit.
+
+        Naming the sources with their real numbers is the cheap half of the fix:
+        the model is told exactly which number belongs to which source, in the
+        same order the reader will see them.
+        """
+        if not citations:
+            return ""
+        lines = []
+        for c in citations[:self._MAX_LISTED_SOURCES]:
+            title = (c.get('title') or 'Untitled').strip().replace('\n', ' ')
+            if len(title) > 120:
+                title = title[:117].rstrip() + '...'
+            lines.append(f"[{c['id']}] {title}")
+        omitted = len(citations) - len(lines)
+        if omitted > 0:
+            # Say what was dropped. A silent cap reads as "these are all the
+            # sources", and the model would then never cite the rest.
+            lines.append(f"(and {omitted} further source(s), numbered "
+                         f"{len(lines) + 1}-{len(citations)}, not listed here)")
+        return "AVAILABLE SOURCES (cite by these exact numbers):\n" + "\n".join(lines)
 
     async def get_model_info(self) -> Dict[str, Any]:
         """

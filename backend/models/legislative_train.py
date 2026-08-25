@@ -297,6 +297,14 @@ class UserCarriageTrack(Base):
     tracked_since = Column(DateTime, default=datetime.now, nullable=False)
     last_notified_at = Column(DateTime)
 
+    # Migration 220. The status this user was last TOLD about, which is the only
+    # reliable anchor for "has it moved since you last heard from us":
+    # legislative_carriages.status_history is empty on all 2,770 rows, and
+    # last_updated bumps on every nightly sweep write. NULL means never
+    # notified -- the notifier seeds it without sending, so switching the
+    # feature on cannot fire 613 notifications at once.
+    last_notified_status = Column(Text, nullable=True)
+
     # Position Analysis: user's stance on this tracked file
     # Shape: {stance, notes, evidence_urls[], priority_articles[], last_updated}
     user_position = Column(JSONB, nullable=True)

@@ -631,6 +631,25 @@ async def cron_sync_daily(
         ["--table", "ft_funded_projects", "--limit", "50", "--batch", "20"], timeout=600,
     )
 
+    # Tell users when a legislative file they track has moved. Added 25 Aug
+    # 2026, because until that day Brubru had NEVER sent one of these: 613
+    # carriage tracks, `last_notified_at` set on zero of them ever, and the
+    # notifications table untouched since 18 June. Tracking is a promise of
+    # future notification and the promise had never once been kept.
+    #
+    # This runs AFTER the carriage/OEIL syncs above on purpose: it compares each
+    # track's stored baseline against the status those syncs have just written,
+    # so running it first would report yesterday's world.
+    #
+    # Safe to run before seeding: a track with no baseline is skipped, never
+    # notified, so a fresh environment cannot fire hundreds of notifications on
+    # its first night. Seed deliberately with --seed-baseline.
+    results["carriage_status_notifications"] = await _run_script_async(
+        "carriage_status_notifications",
+        "scripts/notify_carriage_status.py",
+        [], timeout=600,
+    )
+
     logger.info(f"[CRON] daily tier sync complete: {results}")
     return {"status": "success", "tier": "daily", "results": results}
 

@@ -4,7 +4,7 @@
     "description": "Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation",
     "source": "docs/LEG_2025-11/ + manual curation",
     "extraction_date": "2025-11-19",
-    "total_entries": 547,
+    "total_entries": 546,
     "auto_extracted": 658,
     "manually_curated": 20,
     "extraction_stats": {
@@ -45,6 +45,13 @@
           "ECMR"
         ],
         "reason": "audit D3 follow-up: both resolved to REPEALED acts; repointed to the act in force, each title verified against Cellar"
+      },
+      {
+        "date": "2026-08-25",
+        "removed": [
+          "IMO"
+        ],
+        "reason": "Victor's ruling: one rule, no exceptions -- organisation acronyms never belong in this file, IMO/UNECE included"
       }
     ]
   },
@@ -1364,13 +1371,6 @@
       "type": "Regulation",
       "year": 2024,
       "source_file": "L_202400903EN.000101.fmx.xml"
-    },
-    "IMO": {
-      "celex": "32016D0807",
-      "full_title": "Council Decision (EU) 2016/807 of 15 March 2016 on the position to be adopted on behalf of the European Union at the International Maritime Organization (IMO) during the 40th session of the Facilitati",
-      "type": "Regulation",
-      "year": 2016,
-      "source_file": "L_2016132EN.01009901.xml"
     },
     "GATS": {
       "celex": "32022D2384",

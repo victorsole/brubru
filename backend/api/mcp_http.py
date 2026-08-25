@@ -207,7 +207,44 @@ def _resolve_api_key(
     user = db.query(User).filter(User.id == api_key.user_id).first()
     if user is None or not user.is_active:
         return None, None, (_ERR_AUTH_INVALID, "API key owner is inactive.")
+    _touch_last_used(db, api_key)
     return api_key, user, None
+
+
+def _touch_last_used(db: Session, api_key: ApiKey) -> None:
+    """Record that this key was just used.
+
+    The REST path (api/auth_api_key.py) has always done this via a background
+    task; the MCP path never did, so a key used exclusively through MCP read
+    `last_used_at = NULL` no matter how much traffic it carried. Measured
+    25 Aug 2026: 23 keys had usage events, only 14 had the column set, and the
+    gap was the MCP-only callers. One client's key showed "never used" against
+    178 recorded calls -- the kind of instrument that answers a question wrongly
+    rather than admitting it does not know.
+
+    Throttled to once a minute: MCP clients fire many small calls per session
+    and the exact second is worth nothing. Failure here must never break the
+    call -- knowing when a key was last used is strictly less important than
+    the request working -- so it degrades to a log line on its own connection
+    state rather than poisoning the caller's transaction.
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        previous = api_key.last_used_at
+        if previous is not None:
+            if previous.tzinfo is None:
+                previous = previous.replace(tzinfo=timezone.utc)
+            if (now - previous).total_seconds() < 60:
+                return
+        api_key.last_used_at = now
+        db.commit()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[mcp] could not update last_used_at for key %s: %s: %s",
+                       getattr(api_key, "key_prefix", "?"), type(exc).__name__, exc)
+        try:
+            db.rollback()
+        except Exception:  # noqa: BLE001
+            pass
 
 
 # ---------------------------------------------------------------------------

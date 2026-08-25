@@ -732,11 +732,49 @@ async def reset_password(
     }
 
 
+SEEN_THROTTLE_SECONDS = 3600
+
+
+def touch_last_seen(db: Session, user: User) -> None:
+    """Record that this user is present right now (migration 221).
+
+    `last_login` cannot answer "when were they last here": the token lives 7
+    days, the frontend persists it, and /auth/refresh mints a new one without
+    touching it, so a daily returning user leaves last_login frozen. That is
+    how a client on a paid trial was reported as "last used 11 August" when the
+    truthful statement was "last re-authenticated 11 August".
+
+    Throttled to once an hour per user so this costs an UPDATE per active user
+    per hour, not one per request. Never allowed to break the request it rides
+    on -- knowing when someone was last seen is worth strictly less than the
+    call succeeding.
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        previous = user.last_seen_at
+        if previous is not None:
+            if previous.tzinfo is None:
+                previous = previous.replace(tzinfo=timezone.utc)
+            if (now - previous).total_seconds() < SEEN_THROTTLE_SECONDS:
+                return
+        user.last_seen_at = now
+        db.commit()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[auth] could not update last_seen_at for %s: %s: %s",
+                       getattr(user, "id", "?"), type(exc).__name__, exc)
+        try:
+            db.rollback()
+        except Exception:  # noqa: BLE001
+            pass
+
+
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Get current user information"""
+    touch_last_seen(db, current_user)
     return current_user
 
 
@@ -812,6 +850,13 @@ async def refresh_token(
     db: Session = Depends(get_db)
 ):
     """Refresh access token"""
+
+    # This is the touchpoint that made "who is active" unanswerable: the axios
+    # interceptor calls it silently on any 401 and retries, so it is often the
+    # ONLY server-side trace a returning user leaves. It deliberately does not
+    # move last_login -- refreshing a token is not re-authenticating -- but it
+    # is unambiguous evidence of presence. See migration 221.
+    touch_last_seen(db, current_user)
 
     # Create new access token
     access_token = create_access_token(
