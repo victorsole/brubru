@@ -34,7 +34,7 @@ from services.scrapers.economy_common import clean  # noqa: E402
 from services.scrapers.ep_mep_assistants import _parse_assistants, _ASSIST, _CURRENT  # noqa: E402
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _UPSERT = """
 INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,

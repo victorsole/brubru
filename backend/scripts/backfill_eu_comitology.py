@@ -48,7 +48,7 @@ BASE = "https://ec.europa.eu/transparency/comitology-register/core/api/front"
 # pattern for the committee detail view.
 PUBLIC_DOC_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/documents/{reference}/consult?lang=en"
 PUBLIC_COM_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/committees/{code}/consult?lang=en"
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 PAGE_SIZE = 100
 THROTTLE_S = 0.15
 

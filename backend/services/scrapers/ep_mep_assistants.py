@@ -30,7 +30,7 @@ _API = "https://data.europarl.europa.eu/api/v2/meps"
 _CURRENT = "https://data.europarl.europa.eu/api/v2/meps/show-current"
 _ASSIST = "https://www.europarl.europa.eu/meps/en/{mid}/{slug}/assistants"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _CATS = ["Accredited assistants", "Local assistants", "Trainees",
          "Paying agents", "Service providers"]
 _SPAN = re.compile(r'erpl_assistant[^>]*>(.*?)</span>', re.S)

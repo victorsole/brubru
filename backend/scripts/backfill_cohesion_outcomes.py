@@ -29,7 +29,7 @@ from _specialised_helpers import ChunkedDb  # noqa: E402
 DATASET = "xi3a-zddk"
 RESOURCE_URL = f"https://cohesiondata.ec.europa.eu/resource/{DATASET}.json"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 NUMERIC_COLS = [
     "baseline_value", "milestone_value_2024", "target_value_2029",

@@ -27,7 +27,7 @@ _KEY = "428a6eab6ad825546f741c199084e245"  # public search-only key shipped by t
 _SITE = "https://www.euipo.europa.eu/"
 _INDEXES = {"news": ("ews-en-news", "date"), "event": ("ews-en-events", "startDate")}
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 # Curated about + IP-domain landing pages. euipo.europa.eu is a JS SPA, so these
 # are rendered through Playwright (local refresh / cron with Chromium).
@@ -172,7 +172,7 @@ def ingest_euipo_events(*, fetch_bodies: bool = True, max_pages: int = 6) -> lis
 _TMVIEW_API = "https://www.tmdn.org/tmview/api/search/results?translate=true"
 _TMVIEW_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                  "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
     "Content-Type": "application/json", "Accept": "application/json",
     "Origin": "https://www.tmdn.org", "Referer": "https://www.tmdn.org/tmview/",
 }
@@ -250,7 +250,7 @@ def ingest_euipo_trademarks(*, fetch_bodies: bool = True, max_pages: int = 50,
 _GIVIEW_API = "https://www.tmdn.org/giview/api/search/union_register"
 _GIVIEW_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                  "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
     "Content-Type": "application/json", "Accept": "application/json",
     "Origin": "https://www.tmdn.org", "Referer": "https://www.tmdn.org/giview/",
 }

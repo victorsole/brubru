@@ -27,7 +27,7 @@ logger = logging.getLogger("social-post-fetcher")
 _UA = "BrubruBot/1.0 (https://brubru.beresol.eu; hello@beresol.eu)"
 # Browser-ish UA for X's public syndication embed endpoint.
 _BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-               "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+               "(KHTML, like Gecko) Chrome/151.0 Safari/537.36")
 OPEN_TIER = ("bluesky", "mastodon", "youtube")
 # X added via its PUBLIC syndication/embed endpoint (keyless, login-free, the same feed
 # Twitter serves for embedded timelines). Instagram/LinkedIn/TikTok have no equivalent free

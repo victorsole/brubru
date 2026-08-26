@@ -28,7 +28,7 @@ _SPEC = "https://api.tech.ec.europa.eu/agrifood/v3/api-docs"
 _API = "https://api.tech.ec.europa.eu/agrifood"
 _PORTAL = "https://agridata.ec.europa.eu/extensions/DataPortal/home.html"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 _EXAMPLE = re.compile(r"\[(/api/[^\]\s]+)\]")
 

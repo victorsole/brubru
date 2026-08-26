@@ -24,7 +24,7 @@ logger = logging.getLogger("eu-social-directory")
 _WBQL = "https://webtools.europa.eu/rest/wbase/wbql/9HmRO2UdOH/5/sheet1"
 _HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"),
+                   "(KHTML, like Gecko) Chrome/151.0 Safari/537.36"),
     "Accept": "application/json, text/plain, */*",
     "Referer": "https://european-union.europa.eu/contact-eu/social-media-channels_en",
 }

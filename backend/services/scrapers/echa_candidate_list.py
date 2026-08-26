@@ -19,7 +19,7 @@ from services.scrapers.economy_common import Item, clean
 _URL = "https://echa.europa.eu/candidate-list-table"
 _SUBSTANCE = "https://echa.europa.eu/substance-information/-/substanceinfo/{sid}"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _ROW = re.compile(
     r'id="_disslists_WAR_disslistsportlet_dislistSearchResultVOsSearchContainer_\d+"')
 

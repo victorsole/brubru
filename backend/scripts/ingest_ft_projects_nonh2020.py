@@ -264,7 +264,7 @@ def crawl(*, apply: bool, max_pages: int, size: int, probe: bool,
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(
             user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36")
+                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151 Safari/537.36")
         page = ctx.new_page()
 
         def _session():

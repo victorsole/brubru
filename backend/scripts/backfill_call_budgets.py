@@ -46,7 +46,7 @@ from core.database import SessionLocal
 DETAILS = ("https://ec.europa.eu/info/funding-tenders/opportunities/data/"
            "topicDetails/{topic}.json")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 
 def fetch_budget(topic_id: str) -> tuple[float | None, str, list[str]]:

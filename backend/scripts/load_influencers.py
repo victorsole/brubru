@@ -32,7 +32,7 @@ engine.echo = False
 from models.social_account import SocialAccount  # noqa: E402
 from services.social.eu_directory_loader import _handle as _account_handle
 
-_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0 Safari/537.36"
 _TRANSLIT = {"ł": "l", "ø": "o", "đ": "d", "þ": "th", "ß": "ss", "æ": "ae", "œ": "oe", "ð": "d", "ı": "i"}
 CONTEXTE_CACHE = ("/private/tmp/claude-501/-Users-victorsole-Documents-GitHub-brubru/"
                   "467dde5d-b102-4717-9258-3805a4ea37f8/scratchpad/contexte_cards.json")

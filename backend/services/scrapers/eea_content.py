@@ -41,7 +41,7 @@ _TOPIC_PATHS = [
     "/en/analysis/publications/the-european-environment-agency-in-brief",
 ] + [f"/en/topics/in-depth/{slug}" for slug in _IN_DEPTH]
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA, "Accept": "application/json"}
 
 

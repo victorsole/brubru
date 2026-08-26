@@ -44,7 +44,7 @@ SOURCE_URL = "https://transparency-register.europa.eu/odplastorganisationxml_en"
 PUBLIC_URL_TPL = "https://transparency-register.europa.eu/search-detail_en?id={code}"
 NS = "http://intragate.ec.europa.eu/transparencyregister/odp"
 MIN_BODY_LEN = 200
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 
 
 def fetch_xml(url: str = SOURCE_URL, dest: Path = Path("/tmp/tr.xml")) -> Path:

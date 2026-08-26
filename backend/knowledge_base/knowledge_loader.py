@@ -24,6 +24,28 @@ logger = logging.getLogger(__name__)
 # Keyword triggers for guide matching
 # Maps keywords (lowercase) to guide file stems that should be surfaced
 # when those keywords appear in user queries
+# Triggers longer than 4 characters are matched as PLAIN SUBSTRINGS, which is
+# right for almost all of them but wrong for a short phrase that can sit inside
+# an ordinary word. Found by the audit on 26 Aug 2026: 'era act' matched inside
+# "op-ERA ACT-ion", surfacing the European Research Area guide for a question
+# about culture. Same shape as the PSP -> shellfish-poison collision found the
+# same morning: a short key that is a substring of ordinary language.
+#
+# Add a trigger here when it is longer than 4 characters AND could appear inside
+# a word. The cost is only that the trigger must sit on word boundaries, which
+# is what a user typing it would produce anyway.
+_WORD_BOUNDED_TRIGGERS = frozenset({
+    "era act",   # matched inside "op-ERA ACT-ion"
+    "reach",     # matched inside "b-REACH", "out-REACH"; 11 of 33 sample matches
+                 # were one of those, surfacing the chemicals Regulation for a
+                 # question about stakeholder outreach. Word-bounding also stops
+                 # "the proposal reaches plenary", which is the right call: the
+                 # trigger is an acronym, not the English verb.
+    "cultura",   # a deliberate ES/CA/IT key, but as a substring it matches the
+                 # ENGLISH "cultural" and "agri-CULTURA-l"; 5 of 6 sample matches
+                 # were English words. Bounding keeps the Spanish, drops the rest.
+})
+
 GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # /news 13 July 2026 — EP committee week (13-17 Jul): EU Inc. active in ECON+JURI+EMPL, BUDG on MFF successor programmes, long-term CSA Reg back at LIBE
     'eu inc empl': ['28th_regime_innovation_act'],
@@ -2022,7 +2044,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'erc budget': ['fp10_ecf_competitiveness'],
     'eic budget': ['fp10_ecf_competitiveness'],
     'excellent science': ['fp10_ecf_competitiveness'],
-    'european research area': ['fp10_ecf_competitiveness'],
+    'european research area': ['era_act_research_area', 'fp10_ecf_competitiveness'],
     'fp10 ecf': ['fp10_ecf_competitiveness'],
     'fp10 and ecf': ['fp10_ecf_competitiveness'],
     'ecf and fp10': ['fp10_ecf_competitiveness'],
@@ -3101,9 +3123,9 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'fisheries': ['eu_fisheries_control'],
     'common fisheries policy': ['eu_fisheries_control'],
     'cfp': ['eu_fisheries_control'],
-    'fishing quota': ['eu_fisheries_control'],
-    'tac': ['eu_fisheries_control'],
-    'total allowable catch': ['eu_fisheries_control'],
+    'fishing quota': ['eu_fishing_opportunities_tac_quotas', 'eu_fisheries_control'],
+    'tac': ['eu_fishing_opportunities_tac_quotas', 'eu_fisheries_control'],
+    'total allowable catch': ['eu_fishing_opportunities_tac_quotas', 'eu_fisheries_control'],
     'emfaf': ['eu_fisheries_control'],
     'illegal fishing': ['eu_fisheries_control'],
     'iuu fishing': ['eu_fisheries_control'],
@@ -4145,7 +4167,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'council formation': ['european_council_and_council_personnel', 'council_guide'],
     'council configuration': ['european_council_and_council_personnel', 'council_guide'],
     'ecofin': ['european_council_and_council_personnel', 'council_guide'],
-    'agrifish': ['european_council_and_council_personnel', 'council_guide'],
+    'agrifish': ['eu_fishing_opportunities_tac_quotas', 'european_council_and_council_personnel', 'council_guide'],
     'epsco': ['european_council_and_council_personnel', 'council_guide'],
     'gac': ['european_council_and_council_personnel', 'council_guide'],
     'fac': ['european_council_and_council_personnel', 'council_guide'],
@@ -13666,6 +13688,45 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'eu lebanon agreement': ['eu_trade_policy'],
     'acuerdo ue libano': ['eu_trade_policy'],
     'accord ue liban': ['eu_trade_policy'],
+
+    # --- /news 26 Aug 2026: fishing opportunities cycle + ERA Act -------------
+    'fishing opportunities': ['eu_fishing_opportunities_tac_quotas', 'eu_fisheries_control'],
+    'tacs': ['eu_fishing_opportunities_tac_quotas'],
+    'fishing quotas': ['eu_fishing_opportunities_tac_quotas', 'eu_fisheries_control'],
+    'relative stability': ['eu_fishing_opportunities_tac_quotas'],
+    'december fisheries council': ['eu_fishing_opportunities_tac_quotas'],
+    'who decides fishing quotas': ['eu_fishing_opportunities_tac_quotas'],
+    'posibilidades de pesca': ['eu_fishing_opportunities_tac_quotas'],
+    'cuotas pesqueras': ['eu_fishing_opportunities_tac_quotas'],
+    'possibilitats de pesca': ['eu_fishing_opportunities_tac_quotas'],
+    'quotes de pesca': ['eu_fishing_opportunities_tac_quotas'],
+    'possibilites de peche': ['eu_fishing_opportunities_tac_quotas'],
+    'possibilites de peche 2027': ['eu_fishing_opportunities_tac_quotas'],
+    'possibilita di pesca': ['eu_fishing_opportunities_tac_quotas'],
+    'vangstmogelijkheden': ['eu_fishing_opportunities_tac_quotas'],
+    'era act': ['era_act_research_area'],
+    'european research area act': ['era_act_research_area'],
+    'fifth freedom': ['era_act_research_area'],
+    'espacio europeo de investigacion': ['era_act_research_area'],
+    'ley del espacio europeo de investigacion': ['era_act_research_area'],
+    'espai europeu de recerca': ['era_act_research_area'],
+    'espace europeen de la recherche': ['era_act_research_area'],
+    'spazio europeo della ricerca': ['era_act_research_area'],
+    'europese onderzoeksruimte': ['era_act_research_area'],
+    'pact for research and innovation': ['era_act_research_area'],
+    'era policy agenda': ['era_act_research_area'],
+
+
+    # --- /emeetings 26 Aug 2026: EU-UK Gibraltar agreement ---------------------
+    'gibraltar': ['eu_uk_gibraltar_agreement'],
+    'gibraltar agreement': ['eu_uk_gibraltar_agreement'],
+    'eu uk gibraltar': ['eu_uk_gibraltar_agreement'],
+    'acuerdo sobre gibraltar': ['eu_uk_gibraltar_agreement'],
+    'acord sobre gibraltar': ['eu_uk_gibraltar_agreement'],
+    'accord sur gibraltar': ['eu_uk_gibraltar_agreement'],
+    'la linea de la concepcion': ['eu_uk_gibraltar_agreement'],
+    'verja de gibraltar': ['eu_uk_gibraltar_agreement'],
+
 }
 
 
@@ -14712,7 +14773,7 @@ class KnowledgeLoader:
         sorted_triggers = sorted(GUIDE_KEYWORD_TRIGGERS.keys(), key=len, reverse=True)
         for trigger in sorted_triggers:
             matched = False
-            if len(trigger) <= 4:
+            if len(trigger) <= 4 or trigger in _WORD_BOUNDED_TRIGGERS:
                 if re.search(r'(?<![a-z])' + re.escape(trigger) + r'(?![a-z])', query_lower):
                     matched = True
             else:

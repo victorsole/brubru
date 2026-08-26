@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup
 
 _UA = {"User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")}
+                      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")}
 _MONTHS = {m: i for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june", "july", "august",
      "september", "october", "november", "december"], 1)}

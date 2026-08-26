@@ -149,7 +149,7 @@ _FIRDS_SEARCH = "https://registers.esma.europa.eu/publication/searchRegister/doM
 _FIRDS_FILES_PAGE = "https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_firds_files"
 _FIRDS_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                  "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
     "Content-Type": "application/json",
     "Accept": "application/json, text/javascript, */*; q=0.01",
     "X-Requested-With": "XMLHttpRequest",

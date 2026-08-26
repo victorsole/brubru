@@ -620,6 +620,26 @@ def main() -> None:
                 db.rollback()
                 print(f"[ERROR] {body}/{itype}: {exc}", flush=True)
         print(f"[DONE] total upserted: {total}", flush=True)
+
+        # Say what was DROPPED, not only what was upserted. The Interoperable /
+        # EU GovTech listings fall back to "the first date-shaped string in the
+        # card", which once stored a July digest as 2 December 2026 and pinned it
+        # to the top of every recency feed for three months. The guard added on
+        # 26 Aug 2026 rejects such rows -- but a rejection nobody prints is just
+        # the original silent failure wearing a nicer hat.
+        try:
+            from services.scrapers.economy_interoperable import future_dated_rejects
+            rejected = future_dated_rejects()
+            if rejected:
+                print(f"[WARN] dropped {len(rejected)} future-dated news item(s) "
+                      f"-- a news item cannot be published in the future:", flush=True)
+                for title, when in rejected[:5]:
+                    print(f"  [WARN]   {when}  {title}", flush=True)
+                if len(rejected) > 5:
+                    print(f"  [WARN]   ...and {len(rejected) - 5} more", flush=True)
+        except Exception as exc:  # noqa: BLE001 - reporting must never break a sync
+            print(f"[WARN] could not report future-dated rejects: "
+                  f"{type(exc).__name__}", flush=True)
     finally:
         db.close()
 

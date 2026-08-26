@@ -25,7 +25,7 @@ ROOT = Path("/Users/victorsole/Documents/GitHub/brubru")
 load_dotenv(ROOT / ".env")
 
 OUT = ROOT / "docs/marketing/designs/cra_deck.html"
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/151 Safari/537.36"
 
 # Chosen from the Pexels landscape search; ids pinned so the deck is reproducible.
 # The first pick, a bright green circuit board (18372332), rendered loud and

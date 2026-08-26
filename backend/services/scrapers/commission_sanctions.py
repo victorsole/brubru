@@ -20,7 +20,7 @@ from services.scrapers.economy_common import Item, clean, norm_url, _iso_dt
 _FSD_URL = ("https://webgate.ec.europa.eu/fsd/fsf/public/files/"
             "xmlFullSanctionsList_1_1/content?token=dG9rZW4tMjAxNw")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _SUBJECT = {"person": "Person", "enterprise": "Entity", "P": "Person", "E": "Entity"}
 
 

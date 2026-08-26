@@ -2,6 +2,88 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-26",
+      "action": "updated",
+      "guide": "eu_food_safety_pesticides",
+      "title": "EU Food Safety and Pesticide Regulation",
+      "summary": "Added the food and feed simplification package reaching the joint AGRI+ENVI committee on 2 September (2025/0409(COD) and 2025/0410(COD))",
+      "refs": [
+        "52025PC1021",
+        "52025PC1030"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "added",
+      "guide": "eu_uk_gibraltar_agreement",
+      "title": "The EU-UK Agreement in respect of Gibraltar",
+      "summary": "New guide: procedure 2026/0058(NLE), Article 218(6) TFEU consent, the three February 2026 Commission documents, and the AFET+INTA joint committee on 1 September",
+      "refs": [
+        "52026PC0091",
+        "52026PC0092",
+        "52026PC0093"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "updated",
+      "guide": "eu_funding_third_country_participation",
+      "title": "Third-Country Participation in Horizon Europe and Euratom",
+      "summary": "Added the entry into force of the EU-Lebanon PRIMA participation agreement, and the distinction between PRIMA participation and Horizon Europe association",
+      "refs": [
+        "22026X01951"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "updated",
+      "guide": "gi_craft_industrial_2024_1143",
+      "title": "Geographical Indications for Craft and Industrial Products",
+      "summary": "Added the five July 2026 registrations under Reg 2024/1143 and clarified they are agricultural-pillar register activity, not a regime change",
+      "refs": [
+        "32026R1871",
+        "32026R1899",
+        "32026R1901",
+        "32026R1920",
+        "32026R1927"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "updated",
+      "guide": "eu_fisheries_control",
+      "title": "EU Fisheries Policy and Control",
+      "summary": "Added the 2027 Baltic fishing-opportunities proposal and two June delegated acts (Mediterranean swordfish; Article 15(2) international obligations)",
+      "refs": [
+        "52026PC0437",
+        "32026R1281",
+        "32026R1342"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "added",
+      "guide": "era_act_research_area",
+      "title": "The European Research Area (ERA) Act -- announced but not yet tabled",
+      "summary": "New guide grounded in EP resolution P10_TA(2026)0068 of 10 March 2026; states clearly that no Commission proposal exists yet",
+      "refs": [
+        "32021R0695"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "action": "added",
+      "guide": "eu_fishing_opportunities_tac_quotas",
+      "title": "How the EU Sets Fishing Opportunities -- TACs, Quotas and the Annual Council Cycle",
+      "summary": "New guide on the Article 43(3) TFEU Council-only procedure for fixing TACs and quotas, relative stability, and the staggered Baltic/Atlantic/Mediterranean calendar",
+      "refs": [
+        "32013R1380",
+        "32026R0249",
+        "32016R1139",
+        "52026PC0437"
+      ]
+    },
+    {
       "date": "2026-08-24",
       "action": "updated",
       "guide": "ppwr_packaging_waste_regulation",

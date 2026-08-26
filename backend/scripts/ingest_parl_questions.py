@@ -47,7 +47,7 @@ def main():
     inserted = 0
     skipped = 0
     headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml",
     }
 

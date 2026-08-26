@@ -13,7 +13,7 @@ from services.scrapers.eu_agency_listing import walk
 
 _BASE = "https://www.cedefop.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _MONTHS = {m: i for i, m in enumerate(
     ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"], 1)}
 _EVENT_NAV = {"/en/events", "/en/events/upcoming-events", "/en/events/past-events"}

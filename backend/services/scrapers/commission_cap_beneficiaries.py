@@ -21,7 +21,7 @@ from services.scrapers.economy_common import Item, clean
 _PAGE = ("https://agriculture.ec.europa.eu/common-agricultural-policy/"
          "financing-cap/beneficiaries_en")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 # EU27 + the United Kingdom (legacy CAP payments still published).
 _COUNTRIES = {

@@ -29,7 +29,7 @@ _API = "https://data.europarl.europa.eu/api/v2/meps"
 _CURRENT = "https://data.europarl.europa.eu/api/v2/meps/show-current"
 _DECL = "https://www.europarl.europa.eu/meps/en/{mid}/{slug}/declarations"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA, "Accept": "application/ld+json"}
 
 

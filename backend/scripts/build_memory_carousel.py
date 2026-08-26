@@ -36,7 +36,7 @@ OUT = ROOT / "docs" / "marketing" / "designs" / "memory_carousel.html"
 ASSETS = ROOT / "frontend" / "public" / "assets"
 KEY = os.environ.get("PEXELS_API_KEY", "")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/124 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151 Safari/537.36")
 
 W, H = 1080, 1350
 

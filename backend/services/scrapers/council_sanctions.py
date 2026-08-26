@@ -18,7 +18,7 @@ from services.scrapers.economy_common import Item, clean
 _API = "https://www.sanctionsmap.eu/api/v1/regime"
 _DETAIL = "https://www.sanctionsmap.eu/#/main/details/{id}"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA, "Accept": "application/json",
             "Referer": "https://www.sanctionsmap.eu/"}
 

@@ -94,7 +94,7 @@ async def _harvest(instrument: str, partitions: list[str | None]) -> dict:
         b = await p.chromium.launch(headless=True)
         ctx = await b.new_context(user_agent=(
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"))
+            "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"))
         page = await ctx.new_page()
         await page.goto(_ORIGIN, wait_until="domcontentloaded", timeout=60000)
         await page.wait_for_timeout(1500)

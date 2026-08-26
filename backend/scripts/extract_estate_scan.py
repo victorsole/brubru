@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from services.extract import classifier, handlers
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _URL = re.compile(r"https?://[^\s)\"'>\`\]]+")
 _LISTING = re.compile(r"/(news|events?|publications?|press|consultations?|newsroom|media|"
                       r"calendar|meetings?|documents?|reports?|tenders?|funding|calls?)\b", re.I)

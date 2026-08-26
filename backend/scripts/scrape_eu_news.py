@@ -35,6 +35,8 @@ except ImportError:
     print("[ERROR] Required: pip install httpx beautifulsoup4")
     sys.exit(1)
 
+from services.scrapers.user_agent import BROWSER_UA
+
 
 # ─── Portal Definitions ──────────────────────────────────────────────────────
 
@@ -265,7 +267,9 @@ def classify_priority(title: str, base_priority: int) -> int:
 # ─── Scraping Logic ──────────────────────────────────────────────────────────
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    # One source of truth. A hardcoded Chrome version rots: op.europa.eu 403d
+    # our Chrome/124 on 26 Aug 2026 under a minimum-browser-version rule.
+    "User-Agent": BROWSER_UA,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-GB,en;q=0.9",
 }
@@ -489,12 +493,175 @@ async def scrape_oj_rss(portal: dict) -> List[NewsItem]:
             items = items[:15]
 
     except Exception as e:
-        print(f"  [ERROR] {source} RSS: {str(e)[:80]}", file=sys.stderr)
+        # Name the exception TYPE. `str(e)` on an httpx timeout is the empty
+        # string, so the old line printed "[ERROR] Official Journal (L) RSS: "
+        # and told the operator nothing at all.
+        print(f"  [ERROR] {source} RSS: {type(e).__name__}: {str(e)[:80]}",
+              file=sys.stderr)
+
+    # Cellar fallback. The EUR-Lex RSS feed failed 1 run in 6 on 26 Aug 2026,
+    # and the Official Journal is the single most important source in the daily
+    # brief -- a silent zero there means a brief with no legislation in it. The
+    # /news skill designates Cellar SPARQL as the PRIMARY OJ source and RSS as
+    # a secondary cross-check; this scraper had it the other way round with no
+    # fallback at all. Cellar has no WAF and is authoritative.
+    if not items:
+        try:
+            sectors = "3" if "L" in source.upper() else "2,4,5,6"
+            fetched = _run_coro_blocking(_oj_from_cellar(sectors, portal))
+            if fetched:
+                print(f"  [INFO] {source}: RSS empty, recovered "
+                      f"{len(fetched)} item(s) from Cellar", file=sys.stderr)
+                return fetched
+        except Exception as exc:  # noqa: BLE001 - a fallback must not break the run
+            print(f"  [WARN] {source}: Cellar fallback failed: "
+                  f"{type(exc).__name__}", file=sys.stderr)
     return items
 
 
+async def _oj_from_cellar(sectors: str, portal: dict) -> List[NewsItem]:
+    """Today's OJ acts straight from Cellar SPARQL, shaped as NewsItems."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location(
+        "cellar_news_helper",
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "cellar_news_helper.py"))
+    _mod = _ilu.module_from_spec(_spec)
+    sys.modules["cellar_news_helper"] = _mod
+    _spec.loader.exec_module(_mod)
+    payload = await _mod.oj_today(days=2, hours=None, sectors=sectors, limit=60)
+    out: List[NewsItem] = []
+    for act in (payload or {}).get("acts", [])[:15]:
+        celex, title = act.get("celex"), act.get("title")
+        if not celex:
+            continue
+        display = f"[{celex}] {title[:200]}" if title else f"[{celex}]"
+        out.append(NewsItem(
+            title=display,
+            url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}",
+            date=act.get("date"),
+            source=portal["source"],
+            category=portal["category"],
+            priority=classify_priority(title or celex, portal["priority"]),
+        ))
+    return out
+
+
+# Portals that answer 200 but render their listing in JavaScript, and portals
+# behind a WAF, both leave BeautifulSoup with nothing to parse. The project's
+# hard rule is: AT A WAF OR A JS WALL, USE PLAYWRIGHT -- never tune headers and
+# hope. Until 26 Aug 2026 this scraper did neither: it printed
+# "[WARN] No items from: council, ecb, ep (Cloudflare/JS-rendered -- check
+# manually)" every single run and moved on, so three institutions -- the
+# Parliament, the Council and the ECB -- contributed ZERO items to the daily
+# brief indefinitely, while the project already owned a working headless
+# fetcher.
+_WAF_STATUSES = frozenset({202, 403, 429, 503})
+
+# Upper bound on a plausible OJ act number within a year. Measured 26 Aug 2026
+# across 141 acts published in the preceding 30 days: 2026 numbers ran 91-1961.
+# 10,000 leaves an order of magnitude of headroom while still excluding the
+# 9xxxx references that are a different series entirely.
+_OJ_ACT_NUMBER_CAP = 10_000
+_WAF_FALLBACK_USED: list[str] = []
+
+# Cap on headless-Chromium launches per run. Today 2 portals needed the
+# fallback, which is the normal case -- but the trigger is "returned nothing a
+# parser recognises", and a network blip makes that true of ALL 47 portals at
+# once. Without a cap that is 47 Chromium launches against a semaphore of 5,
+# on a box where Chromium has already failed to fork once (24 Aug 2026). The
+# cap degrades to the old behaviour instead of falling over, and says so.
+_WAF_FALLBACK_MAX = 8
+_WAF_FALLBACK_SKIPPED: list[str] = []
+_SCRAPED_BY_CAT: dict[str, int] = {}
+
+
+def _extract_candidates(soup, url: str) -> list:
+    """Find (title, href, date_text) triples using the four listing patterns."""
+    candidates = []
+
+    # Pattern 1: <article> tags
+    for article in soup.find_all('article', limit=15):
+        link = article.find('a', href=True)
+        if link and link.text.strip():
+            date_el = article.find('time') or article.find(class_=re.compile(r'date|time|meta'))
+            date_text = date_el.get('datetime', date_el.text) if date_el else ""
+            candidates.append((link.text.strip(), link['href'], date_text))
+
+    # Pattern 2: <div> with news-related classes
+    if not candidates:
+        for div in soup.find_all('div', class_=re.compile(r'views-row|news-item|listing-item|card|teaser'), limit=15):
+            link = div.find('a', href=True)
+            if link and link.text.strip() and len(link.text.strip()) > 15:
+                date_el = div.find('time') or div.find(class_=re.compile(r'date|time|meta'))
+                date_text = date_el.get('datetime', date_el.text) if date_el else ""
+                candidates.append((link.text.strip(), link['href'], date_text))
+
+    # Pattern 3: <h2>/<h3>/<h4> with links (newer EC sites)
+    if not candidates:
+        for heading in soup.find_all(['h2', 'h3', 'h4'], limit=20):
+            link = heading.find('a', href=True)
+            if link and link.text.strip() and len(link.text.strip()) > 15:
+                parent = heading.parent
+                date_el = parent.find('time') if parent else None
+                date_text = date_el.get('datetime', date_el.text) if date_el else ""
+                candidates.append((link.text.strip(), link['href'], date_text))
+
+    # Pattern 4: generic link scan
+    if not candidates:
+        for link in soup.find_all('a', href=True, limit=30):
+            href = link.get('href', '')
+            title = link.text.strip()
+            # Parenthesised. As originally written, `and` bound tighter than
+            # `or`, so the condition was
+            #   (title and 20<len<300 and '/news/' in href) OR '/press/' in href
+            #   OR '/latest/' in href OR '/whats-new/' in href
+            # -- i.e. the title guards applied to /news/ links ONLY, and a
+            # /press/, /latest/ or /whats-new/ link was admitted with an EMPTY
+            # or 5,000-character title. Found by the second audit pass,
+            # 26 Aug 2026. This is a last-resort pattern, but the Playwright
+            # fallback added the same day routes more portals through it, so the
+            # latent bug now sees more traffic.
+            if (title and 20 < len(title) < 300
+                    and any(seg in href for seg in
+                            ('/news/', '/press/', '/latest/', '/whats-new/'))):
+                candidates.append((title, href, ""))
+    return candidates
+
+
+async def _render_with_playwright(url: str, source: str) -> Optional[str]:
+    """Re-fetch a walled or JS-rendered listing through headless Chromium.
+
+    Returns rendered HTML, or None. Never raises: a fallback that breaks the
+    scrape is worse than the gap it was meant to close. Records every use so the
+    run can SAY it fell back rather than silently appearing to have worked.
+    """
+    if len(_WAF_FALLBACK_USED) >= _WAF_FALLBACK_MAX:
+        # Loud, not silent: a skipped fallback is a portal we chose not to
+        # rescue, and the report must be able to say so.
+        _WAF_FALLBACK_SKIPPED.append(source)
+        return None
+    try:
+        from services.scrapers.waf_browser_fetcher import fetch_one
+        res = await asyncio.to_thread(
+            fetch_one, url, expand_accordions=False, strip_chrome=False)
+        html = getattr(res, "html", None)
+        if html:
+            _WAF_FALLBACK_USED.append(source)
+        return html
+    except Exception as exc:  # noqa: BLE001
+        print(f"  [WARN] {source}: Playwright fallback failed: "
+              f"{type(exc).__name__}: {str(exc)[:60]}", file=sys.stderr)
+        return None
+
+
 async def scrape_portal(client: httpx.AsyncClient, portal: dict) -> List[NewsItem]:
-    """Scrape a single news portal for headlines."""
+    """Scrape a single news portal for headlines.
+
+    Two-stage: a plain fetch first, then headless Chromium when the plain fetch
+    hits a WAF status or renders nothing a parser can see. The second stage is
+    the project hard rule -- at a WAF or a JS wall, use Playwright.
+    """
     items = []
     url = portal["url"]
     source = portal["source"]
@@ -502,59 +669,29 @@ async def scrape_portal(client: httpx.AsyncClient, portal: dict) -> List[NewsIte
     base_priority = portal["priority"]
 
     try:
-        response = await client.get(url, follow_redirects=True)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        # Strategy: find article/news links
-        # EU sites typically use <article>, <div class="views-row">,
-        # or lists of links with dates
-
-        # Try common EU site patterns
         candidates = []
+        walled = False
+        try:
+            response = await client.get(url, follow_redirects=True)
+            if response.status_code in _WAF_STATUSES:
+                walled = True
+            else:
+                response.raise_for_status()
+                candidates = _extract_candidates(
+                    BeautifulSoup(response.text, 'html.parser'), url)
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code not in _WAF_STATUSES:
+                raise
+            walled = True
 
-        # Pattern 1: <article> tags
-        for article in soup.find_all('article', limit=15):
-            link = article.find('a', href=True)
-            if link and link.text.strip():
-                title = link.text.strip()
-                href = link['href']
-                date_el = article.find('time') or article.find(class_=re.compile(r'date|time|meta'))
-                date_text = date_el.get('datetime', date_el.text) if date_el else ""
-                candidates.append((title, href, date_text))
-
-        # Pattern 2: <div> with news-related classes
-        if not candidates:
-            for div in soup.find_all('div', class_=re.compile(r'views-row|news-item|listing-item|card|teaser'), limit=15):
-                link = div.find('a', href=True)
-                if link and link.text.strip() and len(link.text.strip()) > 15:
-                    title = link.text.strip()
-                    href = link['href']
-                    date_el = div.find('time') or div.find(class_=re.compile(r'date|time|meta'))
-                    date_text = date_el.get('datetime', date_el.text) if date_el else ""
-                    candidates.append((title, href, date_text))
-
-        # Pattern 3: <h2> or <h3> with links (common on newer EC sites)
-        if not candidates:
-            for heading in soup.find_all(['h2', 'h3', 'h4'], limit=20):
-                link = heading.find('a', href=True)
-                if link and link.text.strip() and len(link.text.strip()) > 15:
-                    title = link.text.strip()
-                    href = link['href']
-                    parent = heading.parent
-                    date_el = parent.find('time') if parent else None
-                    date_text = date_el.get('datetime', date_el.text) if date_el else ""
-                    candidates.append((title, href, date_text))
-
-        # Pattern 4: Generic link scan (fallback)
-        if not candidates:
-            for link in soup.find_all('a', href=True, limit=30):
-                href = link.get('href', '')
-                title = link.text.strip()
-                if (title and len(title) > 20 and len(title) < 300
-                        and '/news/' in href or '/press/' in href
-                        or '/latest/' in href or '/whats-new/' in href):
-                    candidates.append((title, href, ""))
+        # A 200 that yields nothing is a JS wall, and is treated exactly like a
+        # WAF status: hand it to the browser rather than reporting an empty
+        # portal. An empty result is not absence -- here it was the instrument.
+        if walled or not candidates:
+            rendered = await _render_with_playwright(url, source)
+            if rendered:
+                candidates = _extract_candidates(
+                    BeautifulSoup(rendered, 'html.parser'), url)
 
         # Deduplicate and build items
         seen_titles = set()
@@ -667,8 +804,36 @@ def format_news_report(items: List[NewsItem], hours: int) -> str:
     # Warn about missing categories
     expected_cats = {"ec", "ep", "council", "ecb"}
     missing = expected_cats - set(by_cat.keys())
-    if missing:
-        lines.append(f"[WARN] No items from: {', '.join(sorted(missing))} (Cloudflare/JS-rendered -- check manually)")
+    if _WAF_FALLBACK_USED:
+        from collections import Counter
+        used = ", ".join(f"{k} x{v}" if v > 1 else k
+                         for k, v in sorted(Counter(_WAF_FALLBACK_USED).items()))
+        lines.append(f"[INFO] Playwright fallback used for: {used}")
+    if _WAF_FALLBACK_SKIPPED:
+        lines.append(f"[WARN] Playwright fallback CAPPED at {_WAF_FALLBACK_MAX}; "
+                     f"{len(_WAF_FALLBACK_SKIPPED)} portal(s) not retried: "
+                     f"{', '.join(sorted(set(_WAF_FALLBACK_SKIPPED))[:6])}"
+                     f"{' ...' if len(set(_WAF_FALLBACK_SKIPPED)) > 6 else ''}")
+    # THREE states, not two. A category can be empty because the portal failed,
+    # or because the institution genuinely published nothing in the window, and
+    # those demand opposite responses. Until 26 Aug 2026 both printed
+    # "(Cloudflare/JS-rendered -- check manually)", which was simply false for
+    # the Parliament: its portal returned 10 correctly-parsed items, all dated
+    # July, because the EP was in recess. The report blamed a WAF for a recess.
+    quiet, broken = [], []
+    for cat in sorted(missing):
+        (quiet if _SCRAPED_BY_CAT.get(cat, 0) else broken).append(cat)
+    if quiet:
+        lines.append(f"[INFO] Nothing recent from: {', '.join(quiet)} "
+                     f"-- the portal WORKS and returned "
+                     f"{sum(_SCRAPED_BY_CAT.get(c, 0) for c in quiet)} item(s), "
+                     f"all older than the window. The institution published "
+                     f"nothing; this is not a defect.")
+    if broken:
+        lines.append(f"[WARN] Nothing at all from: {', '.join(broken)} "
+                     f"-- plain fetch AND headless Chromium both returned nothing "
+                     f"a listing parser recognises. Needs a per-portal selector, "
+                     f"not another header.")
 
     return "\n".join(lines)
 
@@ -860,6 +1025,14 @@ async def main():
         all_items.extend(committee_items)
 
     # Filter by time window
+    # Remember what each category produced BEFORE the recency filter. Without
+    # this, "the Parliament published nothing this week" and "the Parliament
+    # portal is broken" are the same empty bucket, and for months the report
+    # asserted the second while the first was true (26 Aug 2026: the EP portal
+    # returned 10 correctly-parsed items, every one from July, because
+    # Parliament was in recess).
+    for _i in all_items:
+        _SCRAPED_BY_CAT[_i.category] = _SCRAPED_BY_CAT.get(_i.category, 0) + 1
     all_items = [i for i in all_items if is_recent(i, args.hours)]
 
     # Sort: priority first, then date (newest first)
@@ -958,6 +1131,29 @@ def clean_brief_headline(title: str) -> str:
 _ELI_CACHE: dict = {}
 
 
+_ELI_FAILURES: list[tuple[str, str]] = []
+
+
+def _run_coro_blocking(coro):
+    """Run a coroutine to completion whether or not a loop is already running.
+
+    `asyncio.run()` raises RuntimeError when called from inside a running loop,
+    AND leaves the coroutine un-awaited. This scraper's only caller of the ELI
+    resolver sits inside `asyncio.run(main())`, so the naive form could never
+    work here. When a loop is already running we hand the coroutine to a
+    private loop on a worker thread, which is safe because the coroutine does
+    not touch this thread's loop.
+    """
+    import asyncio as _a
+    try:
+        _a.get_running_loop()
+    except RuntimeError:
+        return _a.run(coro)          # no loop on this thread: the simple path
+    import concurrent.futures
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(_a.run, coro).result()
+
+
 def eli_for_celex(celex: str) -> str | None:
     """Resolve a CELEX to its canonical ELI permalink via Cellar.
 
@@ -974,14 +1170,22 @@ def eli_for_celex(celex: str) -> str | None:
         return _ELI_CACHE[celex]
     eli = None
     try:
-        import asyncio as _a
         from services.api_clients.cellar_sparql_client import CellarSPARQLClient
 
         async def _go():
             async with CellarSPARQLClient() as c:
                 return await c.get_eli(celex)
-        eli = _a.run(_go())
-    except Exception:  # noqa: BLE001 - a link upgrade must never break a scrape
+        eli = _run_coro_blocking(_go())
+    except Exception as exc:  # noqa: BLE001 - a link upgrade must never break a scrape
+        # Count it. Until 26 Aug 2026 this was a bare `eli = None`, and the
+        # whole resolver had been DEAD for as long as it had existed: the only
+        # caller runs inside `asyncio.run(main())`, so the old `asyncio.run()`
+        # here raised "cannot be called from a running event loop", the broad
+        # except swallowed it, and every OJ link in the brief shipped as a
+        # `legal-content` URL -- which is WAF-walled and returns 202-and-empty
+        # to a reader's browser. The only visible trace was a RuntimeWarning
+        # about an un-awaited coroutine on stderr.
+        _ELI_FAILURES.append((celex, f"{type(exc).__name__}: {exc}"[:120]))
         eli = None
     if eli:
         eli = eli.replace("http://publications.europa.eu/resource/eli/",
@@ -1007,7 +1211,14 @@ def clean_brief_url(url: str, *, resolve_eli: bool = False) -> str:
     m = re.search(r'(https?://data\.europa\.eu/eli/[^\s&)"\']+)', u)
     if m:                       # source already gave us one: it wins outright
         return m.group(1)
-    m = re.search(r'[?&]uri=CELEX(?::|%3A)([0-9A-Z()]+)', u, re.IGNORECASE)
+    # A real CELEX begins with a sector DIGIT (1-9). The old character class
+    # also excluded '_', so `?uri=CELEX:C_202604108` -- an OJ-style reference
+    # the feed sometimes emits under a CELEX key -- captured just "C" and
+    # produced `?uri=CELEX:C`, a dead link that was being SAVED to the brief.
+    # Found by the second audit pass, 26 Aug 2026. Requiring the leading digit
+    # makes such a reference fall through to the OJ branch below, where it
+    # belongs.
+    m = re.search(r'[?&]uri=CELEX(?::|%3A)([0-9][0-9A-Z()]{4,})', u, re.IGNORECASE)
     if m and "eur-lex.europa.eu" in u:
         celex = m.group(1)
         if resolve_eli:
@@ -1015,6 +1226,37 @@ def clean_brief_url(url: str, *, resolve_eli: bool = False) -> str:
             if eli:
                 return eli
         return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+    # An `OJ:C_202604008` / `OJ:L_202601957` reference carries no CELEX, so the
+    # Cellar lookup above cannot see it. Since the 1 Oct 2023 act-by-act switch
+    # each OJ item has its own number, and the ELI is derivable from it directly:
+    # OJ:<series>_<YYYY><NNNNN> -> data.europa.eu/eli/<series>/<YYYY>/<N>/oj.
+    # Verified 26 Aug 2026 through the WAF browser fetcher, both series:
+    #   eli/C/2026/4008/oj -> 52026IP0068 (the ERA Act resolution)
+    #   eli/C/2026/4615/oj -> 52026M12497 (a merger prior notification)
+    #   eli/L/2026/1957/oj -> 22026D1957  (the EU-Angola committee decision)
+    # Until today these 16 of 24 OJ links in the daily brief kept the
+    # `legal-content` form, which is not stable across the OJ split.
+    # The feed emits this reference under BOTH keys -- `uri=OJ:C_202604108`
+    # and `uri=CELEX:C_202604108` -- for the same document, which is one of
+    # the two reasons a URL cannot be a dedup key. Accept either spelling.
+    m = re.search(r'[?&]uri=(?:OJ|CELEX)(?::|%3A)([CL])_(\d{4})(\d+)', u, re.IGNORECASE)
+    if m and "eur-lex.europa.eu" in u:
+        series, year, number = m.group(1).upper(), m.group(2), int(m.group(3))
+        # Guard, added by the second audit pass on 26 Aug 2026. The derivation
+        # above is only valid for an OJ ACT number, and not every OJ:_ reference
+        # carries one. `OJ:L_202690714` yields eli/L/2026/90714/oj, which
+        # resolves to a EUR-Lex SEARCH RESULTS page -- a dead link dressed as a
+        # permalink -- while 4008/4615/1957 resolve to real acts (52026IP0068,
+        # 52026M12497, 22026D1957).
+        #
+        # The bound is measured, not invented: across 141 OJ acts published in
+        # the 30 days to 26 Aug 2026, 2026 act numbers ran from 91 to 1961. A
+        # five-digit number beginning with 9 is 46x the highest real one, so it
+        # belongs to a different series. Below the cap we derive; above it we
+        # keep the CELEX/legal-content form, which is less stable but real.
+        if number < _OJ_ACT_NUMBER_CAP:
+            return f"http://data.europa.eu/eli/{series}/{year}/{number}/oj"
     return u
 
 
@@ -1064,14 +1306,40 @@ def save_to_daily_briefs(items: List[NewsItem]):
                     # Four of the twenty saved on 24 Aug 2026 were exactly this.
                     skipped_untitled += 1
                     continue
+                brief_url = clean_brief_url(item.url, resolve_eli=True)
+                # NULL-safe de-duplication.
+                #
+                # `ON CONFLICT (brief_date, url, audience) DO NOTHING` looked
+                # like a dedup and was not one: `audience` is NULL on 3,879 of
+                # 3,934 rows, and a UNIQUE index never matches NULL against
+                # NULL. So every re-run of the scraper inserted the whole set
+                # again. Measured 26 Aug 2026: 24 Aug carried 61 duplicate rows,
+                # 23 Aug 13, 18 Aug 23 -- always and only on days the scrape ran
+                # more than once, which is why it never looked broken.
+                #
+                # `IS NOT DISTINCT FROM` is the NULL-safe equality the unique
+                # index cannot express. It is necessary but NOT sufficient:
+                # the URL is not stable across runs. The same document arrives
+                # as `?uri=OJ:C_202604022` on one run and
+                # `?uri=CELEX:52026AP0058` on the next, and a best-effort ELI
+                # lookup that transiently fails yields a third form. So the key
+                # is (date, source, headline), which the feed does keep stable.
                 cur.execute(
-                    """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
-                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                       ON CONFLICT (brief_date, url, audience) DO NOTHING""",
-                    (today, clean_headline, clean_brief_url(item.url, resolve_eli=True),
+                    """INSERT INTO daily_briefs
+                           (brief_date, headline, url, source, category, priority, snippet, suggested_query)
+                       SELECT %s, %s, %s, %s, %s, %s, %s, %s
+                       WHERE NOT EXISTS (
+                           SELECT 1 FROM daily_briefs
+                            WHERE brief_date = %s
+                              AND source = %s
+                              AND headline = %s
+                              AND audience IS NOT DISTINCT FROM NULL
+                       )""",
+                    (today, clean_headline, brief_url,
                      item.source, item.category,
                      item.priority, item.snippet or None,
-                     generate_suggested_query(item.title))
+                     generate_suggested_query(item.title),
+                     today, item.source, clean_headline)
                 )
                 if cur.rowcount > 0:
                     saved += 1
@@ -1082,6 +1350,19 @@ def save_to_daily_briefs(items: List[NewsItem]):
         if skipped_untitled:
             print(f"[WARN] skipped {skipped_untitled} item(s) with no usable headline "
                   f"(bare OJ/CELEX reference)", file=sys.stderr)
+        # Report the ELI resolver's PERSISTED outcome, not its attempts. A link
+        # upgrade that silently degrades to the WAF-walled `legal-content` form
+        # is indistinguishable from one that never had a CELEX to upgrade.
+        _resolved = sum(1 for v in _ELI_CACHE.values() if v)
+        _attempted = len(_ELI_CACHE)
+        if _attempted:
+            print(f"[{'OK' if not _ELI_FAILURES else 'WARN'}] ELI permalinks: "
+                  f"{_resolved}/{_attempted} CELEX resolved", file=sys.stderr)
+        if _ELI_FAILURES:
+            for _celex, _err in _ELI_FAILURES[:3]:
+                print(f"  [WARN] ELI unresolved {_celex}: {_err}", file=sys.stderr)
+            if len(_ELI_FAILURES) > 3:
+                print(f"  [WARN] ...and {len(_ELI_FAILURES) - 3} more", file=sys.stderr)
         print(f"[OK] Saved {saved} headlines to daily_briefs for {today}", file=sys.stderr)
 
     except Exception as e:

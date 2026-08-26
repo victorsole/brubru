@@ -142,7 +142,7 @@ _EUCLID_API = "https://euclid.eba.europa.eu/register/api/search/entities"
 _EUCLID_QUERY = {"$and": [{"_messagetype": "EUCLIDMD"}]}
 _EUCLID_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                  "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
     "Content-Type": "application/json", "Accept": "application/json",
     "Origin": "https://euclid.eba.europa.eu",
     "Referer": "https://euclid.eba.europa.eu/register/cir/search",

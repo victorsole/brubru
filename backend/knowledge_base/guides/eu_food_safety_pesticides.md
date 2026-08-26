@@ -1,6 +1,10 @@
 # EU Food Safety and Pesticide Regulation
 
 ## QUICK FACTS
+- **NEXT STEP (Wednesday 2 September 2026)**: the food and feed **simplification package** reaches its first joint committee meeting of the autumn -- **`CJ14(2026)0902_1`, a joint AGRI + ENVI meeting**, the second day of the committee week after the recess. Two ordinary-legislative files are on the agenda together:
+  - **`2025/0409(COD)`**, **COM(2025)1021** -- *Proposal for a Directive amending Council Directive 98/58/EC and Directive 2009/128/EC as regards the simplification and strengthening of food and feed safety requirements*. Directive **98/58/EC** is the framework directive on the **protection of animals kept for farming purposes**; Directive **2009/128/EC** is the **sustainable use of pesticides** directive. EP document `C10-0361/2025`.
+  - **`2025/0410(COD)`**, **COM(2025)1030** -- amending Regulations (EC) No 999/2001 (TSE), (EC) No 1829/2003 (GM food and feed), (EC) No 1831/2003 (feed additives), (EC) No 852/2004 (food hygiene) and others. EP document `C10-0359/2025`. Covered in detail in `eu_food_feed_simplification_omnibus.md`.
+  Note the pairing: the package touches **animal welfare, pesticide use and food/feed safety in one legislative movement**, which is why AGRI and ENVI sit jointly rather than one taking the lead. Ordinary legislative procedure, so unlike a consent file these **can** be amended.
 - **LATEST (Wednesday 13 May 2026, Eurostat)**: **EU pesticide sales rebounded by +8% in 2024** (Eurostat data release, 13 May 2026). The 8% year-on-year increase reverses the multi-year downward trend observed under the Farm to Fork Strategy and the 50% pesticide-reduction headline target (Reg (EU) 2024/590 SUR final architecture). Eurostat attributes the rebound to (a) wet 2024 growing season raising fungicide demand, (b) Member State emergency authorisations under Art. 53 of Reg 1107/2009, (c) post-Bromadiolone-class re-approvals. Source: ec.europa.eu/eurostat/web/products-eurostat-news
 - Key legislation: Regulation (EC) No 1107/2009 (plant protection products) + Regulation (EC) No 396/2005 (maximum residue levels)
 - CELEX (PPP Regulation): 32009R1107

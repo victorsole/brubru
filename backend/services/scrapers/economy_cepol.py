@@ -29,7 +29,7 @@ from services.scrapers.economy_common import Item, clean, extract_html
 
 _BASE = "https://www.cepol.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 NEWS_LISTING = "/newsroom/news"
 _NEWS_HREF = re.compile(r"^/newsroom/news/[a-z0-9-]{8,}$")

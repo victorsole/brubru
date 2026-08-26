@@ -29,7 +29,7 @@ from services.scrapers.economy_common import Item, clean, _iso_dt
 
 _BASE = "https://ec.europa.eu/budget/financial-transparency-system/download"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 
 def _fetch_latest() -> tuple[int, bytes] | None:

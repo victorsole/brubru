@@ -28,7 +28,7 @@ _DOC = "https://www.europarl.europa.eu/thinktank/en/document/{ref}"
 _CONTRIB = "poldep"  # Policy Departments (the committee supporting-analyses producers)
 _FIRST_YEAR = 1992   # Think Tank poldep corpus starts 31/08/1992
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA, "X-Requested-With": "XMLHttpRequest"}
 
 _CARD = re.compile(r'<div class="es_document ', re.S)

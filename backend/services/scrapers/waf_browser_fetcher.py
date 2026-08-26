@@ -54,11 +54,11 @@ from dataclasses import dataclass, field
 logger = logging.getLogger(__name__)
 
 # Browser User-Agent — a real Chrome string is required; the WAF fingerprints
-# obviously-automated agents.
-_DEFAULT_UA = (
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-)
+# obviously-automated agents. It must also be a CURRENT Chrome: on 26 Aug 2026
+# op.europa.eu answered 403 to our Chrome/124 under a minimum-browser-version
+# rule, so a hardcoded version here rots into a hard failure. Single source of
+# truth in services/scrapers/user_agent.py, guarded by a freshness test.
+from services.scrapers.user_agent import BROWSER_UA as _DEFAULT_UA  # noqa: E402
 
 # EUR-Lex left-nav / toolbar labels that pollute body inner_text. Stripped so
 # the caller gets substance, not chrome. Kept conservative — only exact-match

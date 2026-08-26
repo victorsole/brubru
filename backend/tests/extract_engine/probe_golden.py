@@ -26,7 +26,7 @@ from bs4 import BeautifulSoup
 
 _HERE = Path(__file__).resolve().parent
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 # Broad candidate selectors across platform types — we only count, not extract.
 _CANDIDATE = [".ecl-content-item", ".teaser", ".card", ".views-row", "article",
               ".node", ".list-item", ".result", ".search-result"]

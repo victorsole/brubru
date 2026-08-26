@@ -147,7 +147,7 @@ def ingest_ecdc_surveillance(*, fetch_bodies: bool = True, **_):
     from services.scrapers.economy_common import Item, clean
     B = "https://atlas.ecdc.europa.eu/public/AtlasService/rest"
     H = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "Accept": "application/json"}
+                       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36", "Accept": "application/json"}
     topics: dict = {}
     for did in (27, 1):
         try:

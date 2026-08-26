@@ -50,7 +50,7 @@ GIVIEW_URL = "https://www.tmdn.org/giview/api/search/union_register"
 PUBLIC_URL_TPL = "https://webgate.ec.europa.eu/eambrosia/#searchTab=protectedProducts&giIdentifier={gi}"
 UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 )
 THROTTLE_S = 0.5
 MIN_BODY_LEN = 200  # Summary sheets can be short

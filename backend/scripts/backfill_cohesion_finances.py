@@ -29,7 +29,7 @@ from _specialised_helpers import ChunkedDb  # noqa: E402
 DATASET = "9qee-iv7c"
 RESOURCE_URL = f"https://cohesiondata.ec.europa.eu/resource/{DATASET}.json"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 # Socrata `fund` codes present in the dataset (verified 14 June 2026).
 FUND_CODES = ["ERDF", "ESF", "CF", "JTF", "INTERREG", "EMFAF", "AMIF", "BMVI", "ISF"]

@@ -32,7 +32,7 @@ async def fetch_feed_entries(feed: RSSFeed, db: Session) -> int:
         # Fetch feed with proper headers to avoid bot detection
         parsed = feedparser.parse(
             feed.url,
-            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36'
         )
 
         if parsed.bozo:  # Feed parse error

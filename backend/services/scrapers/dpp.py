@@ -34,7 +34,7 @@ _EVENTS = (f"{_BASE}/events_en?f%5B0%5D=oe_event_status%3Apast"
 
 _HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"),
+                   "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"),
     "Accept-Language": "en",
 }
 

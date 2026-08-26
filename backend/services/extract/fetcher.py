@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 import requests
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _CHALLENGE = ("/challenge", "/cdn-cgi", "just a moment", "/sorry", "enable javascript",
               "anubis", "making sure you're not a bot", "making sure you’re not a bot",
               "proof of work", "proof-of-work")

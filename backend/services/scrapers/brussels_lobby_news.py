@@ -36,7 +36,7 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
 _TIMEOUT = 12
 

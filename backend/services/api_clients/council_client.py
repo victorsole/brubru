@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 LIST_API = "https://newsroomapi.consilium.europa.eu/api/homepage/latestvideos"
 DETAIL_API = "https://newsroomapi.consilium.europa.eu/api/videos/{slug}"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0 Safari/537.36")
 
 
 def _pick_video(formats: Dict) -> Optional[str]:

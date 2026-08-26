@@ -15,7 +15,7 @@ from services.scrapers.economy_common import Item, clean, extract_html
 _ARCHIVE = "https://echa.europa.eu/news-and-events/news-alerts/archive"
 _BASE = "https://echa.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 # Curated about / committees / regulation landing pages, snapshotted as topics.
 # echa.europa.eu blocks the default crawler UA, so these are rendered through

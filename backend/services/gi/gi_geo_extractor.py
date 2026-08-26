@@ -35,7 +35,7 @@ import time
 
 import requests
 
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151 Safari/537.36"
 
 EAMBROSIA_REGISTER = "https://webgate.ec.europa.eu/eambrosia-api/api/v1/geographical-indications"
 GIVIEW_DETAIL = "https://www.tmdn.org/giview/api/geographical-indications"

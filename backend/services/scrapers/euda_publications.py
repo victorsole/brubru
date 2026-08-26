@@ -25,7 +25,7 @@ _SITEMAP = "https://www.euda.europa.eu/sitemap.xml?page={page}"
 # publications URLs are spread across them). The old cap of 7 missed most.
 _SITEMAP_PAGES = 35
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA}
 _OG = re.compile(r'<meta property="og:title" content="([^"]+)"')
 _TITLE = re.compile(r"<title>(.*?)</title>", re.S)

@@ -21,7 +21,7 @@ from services.scrapers.economy_common import Item, clean, norm_url, _iso_dt
 
 _URL = "https://cordis.europa.eu/data/cordis-HORIZONprojects-json.zip"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _OBJ_CAP = 2000
 
 

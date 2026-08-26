@@ -101,6 +101,14 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour in (7, 13, 19, 23):
         fires.append(("registry_fast", "/api/cron/sync/tier/fast"))
 
+    # EP eMeeting committee documents: daily 08:00 UTC, alongside registry_warm.
+    # 10:00 CEST, so the morning's EP publications are up, and clear of the
+    # economy batches at 10/15/21. Added 26 Aug 2026: this sync had NO schedule
+    # at all and had been frozen since mid-July while the EP published 17 new
+    # agendas, six of them for the committee week starting 31 August.
+    if hour == 8:
+        fires.append(("ep_emeeting", "/api/cron/sync/ep-emeeting"))
+
     # Registry WARM tier — slower MEUB feeds: My EU Calendar, Transcripts,
     # Lobby Meetings, Parliamentary Questions. Twice a day on light hours.
     if hour in (8, 20):

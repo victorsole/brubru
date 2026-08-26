@@ -30,7 +30,7 @@ import requests
 from services.scrapers.economy_common import Item, clean
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 _RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
 _SKOS = "{http://www.w3.org/2004/02/skos/core#}"

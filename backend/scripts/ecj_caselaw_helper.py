@@ -28,7 +28,7 @@ def fetch_press_releases(days):
     plain-language summaries. A case with a PR is, by definition, one the Court
     considers important AND for which a ready-made summary exists (use it to seed
     a KB guide / deep-dive). Newest first."""
-    req = urllib.request.Request(PR_LIST_URL, headers={"User-Agent": "Mozilla/5.0 Chrome/124"})
+    req = urllib.request.Request(PR_LIST_URL, headers={"User-Agent": "Mozilla/5.0 Chrome/151"})
     try:
         html = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "ignore")
     except Exception as e:

@@ -1104,6 +1104,37 @@ async def cron_sync_monthly(
     return {"status": "success", "tier": "monthly", "results": results}
 
 
+@router.post("/sync/ep-emeeting")
+async def cron_sync_ep_emeeting(
+    authorization: str = Header(...),
+):
+    """
+    EP eMeeting committee documents (daily 08:00 UTC).
+
+    Refreshes `ep_emeeting_agendas` and `ep_emeeting_documents` from the open EP
+    eMeeting JSON API. These feed SIX My EU Bubble surfaces -- Position Analysis,
+    Votes (voting lists), Commission documents, In committee, My EU Calendar
+    (agenda backfill) and Transcripts (minutes).
+
+    WHY THIS EXISTS (26 August 2026): it did not. `sync_ep_emeeting.py` had no
+    cron entry in either the dispatcher or this module, so it ran only when a
+    human ran it. The last hand-run was mid-July, and by 26 August the store's
+    newest meeting was 15 July while the EP had already published 17 agendas for
+    August and September -- including a LIBE agenda three weeks old and the
+    joint-committee agendas for the 1-2 September committee week. A 16,000-row
+    dataset behind six product surfaces was frozen for six weeks and nothing
+    said so. Committee documents land days BEFORE a meeting, which is precisely
+    when the freeze costs the most.
+    """
+    _verify_cron_secret(authorization)
+    result = await _run_script_async(
+        "ep_emeeting", "scripts/sync_ep_emeeting.py", ["--per-committee", "12"],
+        timeout=1800,
+    )
+    logger.info(f"[CRON] ep_emeeting sync complete: {result}")
+    return {"status": "success", "tier": "ep_emeeting", "result": result}
+
+
 def _send_staleness_email(stale: list[dict]) -> None:
     """Ping the operator when fast MEUB feeds miss their refresh window."""
     if not stale:

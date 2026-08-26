@@ -26,7 +26,7 @@ DATASET = "7a49-av34"
 RESOURCE_URL = f"https://cohesiondata.ec.europa.eu/resource/{DATASET}.json"
 PUBLIC_URL = "https://ec.europa.eu/regional_policy/funding/solidarity-fund_en"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 
 def _num(v):

@@ -49,7 +49,7 @@ _TOPIC_PATHS = [
 def ingest_eige_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return snapshot_topics("eige", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA}
 # teaser-title links, in document order; the publication date sits in the markup
 # shortly after each title, so we read it from the window up to the next title.

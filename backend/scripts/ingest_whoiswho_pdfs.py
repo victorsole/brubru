@@ -35,7 +35,7 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[2]
 ENV = ROOT / ".env"
-USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/126.0.0.0"
+USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/151.0.0.0"
 
 INSTITUTIONS: Dict[str, Dict[str, str]] = {
     "EP":       {"slug": "european-parliament",            "label": "European Parliament"},

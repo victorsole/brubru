@@ -51,7 +51,7 @@ ORIGIN = "https://brubru-production.up.railway.app"
 REGISTRY = "https://brubru.beresol.eu/datasets/europa-source-registry"
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 # The v1 root is not a document; the OpenAPI spec is.
 EXPLICIT = {f"{SITEGROUND}/api/v1/": f"{ORIGIN}/openapi.json"}

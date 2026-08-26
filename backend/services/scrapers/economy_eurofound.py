@@ -25,7 +25,7 @@ from services.scrapers.economy_common import Item, clean, extract_html
 
 _BASE = "https://www.eurofound.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 _TOPIC_PATHS = [
     "/en/topic/digitalisation", "/en/topic/minimum-wages", "/en/topic/minimum-wage",

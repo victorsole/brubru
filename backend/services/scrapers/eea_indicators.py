@@ -20,7 +20,7 @@ _API = ("https://www.eea.europa.eu/++api++/en/analysis/indicators/@search"
         "?portal_type=ims_indicator&b_size=500"
         "&metadata_fields=Description&metadata_fields=Subject&metadata_fields=effective")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA, "Accept": "application/json"}
 
 

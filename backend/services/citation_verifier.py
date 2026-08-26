@@ -54,7 +54,7 @@ EURLEX_BASE = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:"
 
 BROWSER_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 )
 HEAD_TIMEOUT_S = 6.0   # Cellar redirects + OEIL slowness need headroom
 TOTAL_BUDGET_S = 8.0   # ceiling per verify_text call across all refs combined

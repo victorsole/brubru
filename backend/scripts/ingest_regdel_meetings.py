@@ -39,7 +39,7 @@ import psycopg2
 
 ROOT = Path(__file__).resolve().parents[2]
 ENV = ROOT / ".env"
-USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/126.0.0.0"
+USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/151.0.0.0"
 
 
 def get_env(k: str) -> str:

@@ -32,7 +32,7 @@ from _specialised_helpers import ChunkedDb, get_env  # noqa: E402
 CATALOG_URL = "https://cohesiondata.ec.europa.eu/api/views.json"
 PUBLIC_URL_TPL = "https://cohesiondata.ec.europa.eu/d/{socrata_id}"
 API_ENDPOINT_TPL = "https://cohesiondata.ec.europa.eu/resource/{socrata_id}.json"
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 MIN_BODY_LEN = 200
 
 

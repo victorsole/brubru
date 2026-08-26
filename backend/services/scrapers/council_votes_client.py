@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 LIST_URL = "https://www.consilium.europa.eu/en/documents/public-register/votes/"
 _TAG = re.compile(r"<[^>]+>")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0 Safari/537.36")
 
 # EU member states in Council protocol order (ISO-2; EL = Greece per EU usage).
 EU27 = {

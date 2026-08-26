@@ -31,7 +31,7 @@ _DOWNLOAD = ("https://ec.europa.eu/taxation_customs/dds2/ebti/downloadcsv"
              "?filepath=/ec/prod/server/d2ebti_1_p/data/group_WLS124/app/dds2-ebti/tmp/DDS2-EBTI_Full.zip"
              "&filetype=application/zip&filename=DDS2-EBTI_Full.zip")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _RECENT_YEARS = 2
 
 

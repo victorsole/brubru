@@ -27,7 +27,8 @@ import asyncio
 from datetime import datetime, timezone
 
 from services.scrapers.economy_common import Item, clean, extract_html
-from services.scrapers.economy_interoperable import _BASE, _UA, _abs, _parse_date, _render
+from services.scrapers.economy_interoperable import (_BASE, _UA, _abs, _parse_date,
+                                                     _parse_item_date, _render)
 
 _BODY = "eugovtech"
 _COLLECTION = "/collection/eugovtech"
@@ -102,7 +103,8 @@ async def _scrape_listing(path: str, kinds: list[str], *, fetch_bodies: bool,
             items.append(Item(
                 body_code=_BODY, item_type=_KIND_TO_TYPE[kind],
                 title=clean(r["title"])[:300], public_url=url,
-                document_date=_parse_date(r.get("date")), creation_date=now,
+                document_date=_parse_item_date(r.get("date"), _KIND_TO_TYPE[kind],
+                                               title=clean(r["title"])), creation_date=now,
                 source_kind="html", guid=url))
         if fetch_bodies:
             for it in items[:body_cap]:

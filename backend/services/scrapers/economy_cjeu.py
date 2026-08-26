@@ -37,7 +37,7 @@ from services.scrapers.economy_common import (
 _BASE = "https://curia.europa.eu"
 _SITE = "https://curia.europa.eu/site/"  # the page <base href> for relative links
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 PRESS_PAGE = f"{_BASE}/site/jcms/d2_5158/en/press-releases"
 EVENTS_PAGE = f"{_BASE}/site/jcms/d2_5160/en/events"

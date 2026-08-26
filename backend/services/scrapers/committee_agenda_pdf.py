@@ -32,7 +32,7 @@ import httpx
 logger = logging.getLogger(__name__)
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0 Safari/537.36")
 
 _MONTHS = {
     "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,

@@ -42,7 +42,7 @@ EXCLUDE_LOCALPART = ("noreply", "no-reply", "donotreply", "no-responder")
 
 CONTACT_PATHS = ("", "/contacto", "/contact", "/contact-us", "/es/contacto", "/sobre-nosotros", "/quienes-somos", "/aviso-legal", "/about")
 
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0 Safari/537.36"
 
 
 def _decode_cf_email(hex_str: str) -> Optional[str]:

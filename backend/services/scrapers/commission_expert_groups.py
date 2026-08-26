@@ -24,7 +24,7 @@ _BASE = ("https://ec.europa.eu/transparency/expert-groups-register/core/api/fron
 _SCREEN = ("https://ec.europa.eu/transparency/expert-groups-register/screen/"
            "expert-groups/consult?lang=en&groupID=")
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 _HEADERS = {
     "User-Agent": _UA, "Accept": "application/json", "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",

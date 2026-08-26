@@ -24,7 +24,7 @@ import httpx
 logger = logging.getLogger(__name__)
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0 Safari/537.36")
 _OEIL = "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={ref}"
 _MEP_ID_RE = re.compile(r"/meps/en/(\d+)")
 _PROC_RE = re.compile(r"\d{4}/\d{4}\([A-Z]{2,4}\)")

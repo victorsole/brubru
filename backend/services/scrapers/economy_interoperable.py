@@ -32,13 +32,13 @@ from __future__ import annotations
 
 import asyncio
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from services.scrapers.economy_common import Item, clean, extract_html
 
 _BASE = "https://interoperable-europe.ec.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 _LISTINGS = {
     "news":     "/news",
@@ -147,6 +147,37 @@ def _parse_date(s: str | None) -> datetime | None:
         return None
 
 
+# A news item cannot be published in the future. These listings fall back to
+# "the first date-shaped string anywhere in the card" when there is no
+# <time datetime>, so an event date or an application deadline sitting in the
+# teaser text can land in `document_date`. On 17 Aug 2026 "Startups' Corner
+# Digest | July 2026" was stored as 2 December 2026 and pinned itself to the top
+# of every recency-ordered feed -- including /api/v2/news/all -- for three
+# months. Events legitimately carry future dates, so the guard is type-aware,
+# and it returns None rather than guessing a date we do not know.
+_NEWSLIKE_TYPES = {"news", "press_release", "publication"}
+_FUTURE_DATED_REJECTS: list[tuple[str, str]] = []
+
+
+def _parse_item_date(raw: str | None, item_type: str, *, title: str = "") -> datetime | None:
+    d = _parse_date(raw)
+    if d is None or item_type not in _NEWSLIKE_TYPES:
+        return d
+    if d.date() > datetime.now(timezone.utc).date() + timedelta(days=1):
+        _FUTURE_DATED_REJECTS.append((title[:80], d.date().isoformat()))
+        return None
+    return d
+
+
+def future_dated_rejects() -> list[tuple[str, str]]:
+    """Rows whose parsed date was in the future and was therefore dropped.
+
+    Exposed so a sync run can REPORT what it rejected. A silent drop is how the
+    original defect stayed invisible for nine days.
+    """
+    return list(_FUTURE_DATED_REJECTS)
+
+
 async def _render(page, url: str, *, scrolls: int = 0, settle_ms: int = 2500) -> str | None:
     try:
         # Listings populate their cards via AJAX after first paint, so wait for
@@ -188,7 +219,9 @@ async def _scrape_listing(item_type: str, path: str, *, fetch_bodies: bool,
             items.append(Item(
                 body_code="interoperable", item_type=item_type,
                 title=clean(r["title"])[:300], public_url=url,
-                document_date=_parse_date(r.get("date")), creation_date=now,
+                document_date=_parse_item_date(r.get("date"), item_type,
+                                               title=clean(r["title"])),
+                creation_date=now,
                 source_kind="html", guid=url,
                 extras={"collection": ck} if ck else {}))
         if fetch_bodies:
