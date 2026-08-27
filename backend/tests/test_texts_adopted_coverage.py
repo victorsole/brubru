@@ -160,3 +160,65 @@ def test_explicit_date_backfill_is_available():
         "dates that yielded nothing are not reported, so a failed fetch and an "
         "empty sitting look identical"
     )
+
+
+# ---------------------------------------------------------------------------
+# 4. body_txt / body_html must be the REAL text, not the synthesised fallback
+# ---------------------------------------------------------------------------
+
+def test_adopted_texts_hold_the_real_text_not_just_a_composed_body(db):
+    """`body_txt` and `body_html` are 2 of the 5 mandatory datapoints.
+
+    This is the subtlest gap in the whole D2 work. The TOC pages carry metadata
+    only, so all 452 recovered rows arrived with `full_text = NULL` -- and the
+    endpoint STILL returned a non-null `body_txt`, because it composes one from
+    the structured row when the text is missing. A coverage check on the API
+    therefore answered 50/50 while only 125 of 703 rows held the actual document.
+
+    A datapoint that is always present is not the same as a datapoint that is
+    always real, so this asserts against the STORED text.
+    """
+    total, with_body = db.execute(text(
+        "SELECT count(*), count(full_text) FROM texts_adopted")).fetchone()
+    missing = db.execute(text(
+        "SELECT count(*) FROM texts_adopted WHERE full_text IS NULL "
+        "AND ta_reference LIKE 'P10\\_TA%' ESCAPE '\\'")).scalar()
+    assert missing == 0, (
+        f"{missing} adopted text(s) still have no real body -- run "
+        "scripts/backfill_texts_adopted_bodies.py --apply"
+    )
+    assert with_body > total * 0.9, f"only {with_body}/{total} rows hold the real text"
+
+
+def test_stored_texts_are_distinct_documents(db):
+    """Identical bodies would mean one error page written N times, which a count
+    of non-null rows cannot distinguish from real coverage."""
+    n, distinct = db.execute(text(
+        "SELECT count(*), count(DISTINCT md5(full_text)) FROM texts_adopted "
+        "WHERE full_text IS NOT NULL")).fetchone()
+    assert distinct >= n * 0.98, f"only {distinct} distinct bodies across {n} rows"
+
+
+def test_stored_texts_are_not_navigation_chrome(db):
+    """doceo wraps documents in page furniture; storing that would satisfy every
+    length check while holding no document."""
+    bad = db.execute(text(
+        "SELECT count(*) FROM texts_adopted WHERE full_text IS NOT NULL AND ("
+        "  left(full_text,400) ILIKE '%we use cookies%' OR "
+        "  left(full_text,400) ILIKE '%skip to main%' OR "
+        "  left(full_text,200) ILIKE '%page not found%')")).scalar()
+    assert bad == 0, f"{bad} stored body/bodies are page chrome, not documents"
+
+
+def test_the_content_extractor_is_not_silently_returning_nothing():
+    """`.ep_content`, `.doc-content` and `#TextesAdoptes` are all dead on current
+    doceo markup. A selector that matches nothing returned None without
+    complaint, which is why full_text was NULL for every text this scraper ever
+    fetched. The live container is `tr.contents`."""
+    import inspect
+    from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
+    src = inspect.getsource(TextsAdoptedScraper._parse_detail_page)
+    assert "tr.contents" in src, "the current doceo content container is not tried"
+    assert "logger.warning" in src, (
+        "a page with no matching container must WARN, not silently yield no body"
+    )

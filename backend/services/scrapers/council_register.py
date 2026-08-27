@@ -78,9 +78,22 @@ _DATE_RE = re.compile(r"(\d{2})/(\d{2})/(\d{4})")
 # The stripped pieces are not lost -- the ref becomes `external_id` and the type
 # becomes `doc_type`.
 _TITLE_CUT = re.compile(r"\s*(Subject matters?:|Date of )", re.I)
-_REF_PREFIX = re.compile(
+# Two stages, because the register's prefix is not one shape.
+#   "WK 9054 2026 INIT - INFORMATION 22/06/2026 A Cross-Sectoral ..."
+#   "ST 12436 2026 INIT - LEGISLATIVE ACTS AND OTHER INSTRUMENTS: Council Reg ..."
+#   "ST 14964 2018 ADD 1 - 'I/A' ITEM NOTE 04/12/2018 Proposal for ..."
+# The first version required a DATE after the document type, so the second and
+# third forms kept their codes: 35 of 248 stored titles still opened with
+# "ST 12436 2026 INIT -". The document type can carry punctuation (' / :) and the
+# date is optional, so the reference and the type are stripped separately.
+_REF_HEAD = re.compile(
     r"^(?:ST|WK|CM|SN|RE)\s+\d+\s+\d{4}(?:\s+[A-Z]+(?:\s+\d+)?)*\s*-\s*"
-    r"(?P<doctype>[A-Z][A-Z ]*?)\s+(?P<date>\d{2}/\d{2}/\d{4})\s*"
+)
+# An ALL-CAPS document type, optionally quoted or slashed, optionally followed by
+# a date. Stops at the first mixed-case word, which is where the human title begins.
+_DOCTYPE_HEAD = re.compile(
+    r"^(?P<doctype>['\"]?[A-Z][A-Z'\"/\- ]*[A-Z]['\"]?)\s*:?\s*"
+    r"(?P<date>\d{2}/\d{2}/\d{4})?\s*"
 )
 
 
@@ -148,11 +161,14 @@ def _parse_results(html: str) -> List[CouncilDoc]:
         head = (text[: cut.start()] if cut else text).strip()
 
         doc_type, prefix_date = None, None
-        pref = _REF_PREFIX.match(head)
-        if pref:
-            doc_type = pref.group("doctype").strip().title()
-            prefix_date = pref.group("date")
-            head = head[pref.end():]
+        m_ref = _REF_HEAD.match(head)
+        if m_ref:
+            head = head[m_ref.end():]
+            m_type = _DOCTYPE_HEAD.match(head)
+            if m_type and len(m_type.group("doctype")) > 2:
+                doc_type = m_type.group("doctype").strip(" -:'").title()
+                prefix_date = m_type.group("date")
+                head = head[m_type.end():]
         title = head.strip(" -–—")
         if not title or len(title) < 8:
             continue
@@ -331,6 +347,40 @@ def fetch_document_text(doc: "CouncilDoc", max_chars: int = 200_000) -> Optional
     "empty body" and does not persist an empty string as if it were the document.
     """
     import requests
+
+    # `www.consilium.europa.eu` sits behind the browser check; `data.consilium`
+    # does not. A press release therefore CANNOT be read with plain requests --
+    # measured: it returns nothing, and the first version of this function
+    # reported "no body" for all 17 press releases as though they had none.
+    if "//www.consilium.europa.eu" in doc.url:
+        try:
+            from services.scrapers.waf_browser_fetcher import fetch_one
+            from bs4 import BeautifulSoup
+
+            res = fetch_one(doc.url, expand_accordions=False, strip_chrome=True)
+            html = getattr(res, "html", None) or ""
+            if len(html) < 500:
+                logger.debug("[council-register] %s rendered %d bytes",
+                             doc.external_id, len(html))
+                return None
+            soup = BeautifulSoup(html, "html.parser")
+            for junk in soup(["script", "style", "noscript", "nav", "header", "footer"]):
+                junk.decompose()
+            # Strip the consent banner explicitly. Without this the stored body
+            # OPENS with "We use cookies to improve you..." -- 590 characters of
+            # chrome that a length check happily accepts as a document.
+            for junk in soup.select(
+                "[class*=cookie], [class*=consent], [class*=banner]"
+            ):
+                junk.decompose()
+            # The article itself, not the whole page.
+            main = soup.select_one("main.gsc-main-content") or soup.select_one("main")
+            body = " ".join((main or soup).get_text(" ", strip=True).split())
+            return body[:max_chars] if len(body) > 200 else None
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("[council-register] browser body %s failed: %s",
+                         doc.external_id, exc)
+            return None
 
     try:
         r = requests.get(doc.url, headers={"User-Agent": _UA}, timeout=_TEXT_TIMEOUT)

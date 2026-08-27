@@ -88,19 +88,62 @@ def test_a_query_about_minors_online_returns_council_material(client):
     assert docs, "matches exist but none is a document"
 
 
-def test_document_titles_carry_no_register_codes(client):
+def test_document_titles_carry_no_register_codes(db):
     """Register rows arrive as 'WK 9054 2026 INIT - INFORMATION 22/06/2026 <title>'.
 
     The reference and type are stripped into `external_id`/tags at ingest, because
     Brubru's standing rule keeps institutional codes out of human-facing titles.
+
+    Checked over the WHOLE corpus, not a query. The first version of this test
+    sampled `?q=minors`, passed, and missed 35 of 248 titles that still opened
+    with their reference -- the prefix stripper required a DATE after the document
+    type, so "ST 12436 2026 INIT - LEGISLATIVE ACTS AND OTHER INSTRUMENTS: ..."
+    and "'I/A' ITEM NOTE" kept theirs. A sample is not a corpus.
     """
-    body = client.get("/api/v1/council-documents?q=minors&limit=50").json()
-    bad = [
-        i["title"] for i in body["data"]
-        if i["source"] == "publication"
-        and any(tok in i["title"] for tok in (" INIT", " REV ", "WK ", "ST "))
-    ]
-    assert not bad, f"titles still carry raw register codes: {bad[:3]}"
+    bad = db.execute(text(
+        r"SELECT title FROM institutional_publications "
+        r"WHERE institution_slug ILIKE '%council%' "
+        r"AND title ~ '^(ST|WK|CM|SN|RE) [0-9]+ [0-9]{4}'"
+    )).fetchall()
+    assert not bad, (
+        f"{len(bad)} title(s) still open with a register code, e.g. "
+        f"{[b.title[:60] for b in bad[:3]]}"
+    )
+
+
+def test_every_council_document_has_a_real_body(db):
+    """`body_txt`/`body_html` are 2 of the 5 mandatory datapoints.
+
+    The ingest originally stored metadata only, so 218 of 248 rows had no body at
+    all -- and because the endpoint composes a fallback body from the structured
+    row, a presence check on the API still reported 100%. Assert against the
+    STORED text, which is the only place the difference is visible.
+    """
+    n, with_body = db.execute(text(
+        "SELECT count(*), count(html_content) FROM institutional_publications "
+        "WHERE institution_slug ILIKE '%council%'")).fetchone()
+    assert with_body == n, f"only {with_body}/{n} Council documents hold a real body"
+
+
+def test_stored_bodies_are_distinct_documents(db):
+    """All-identical bodies would mean one error page stored N times -- which a
+    count of non-null rows cannot distinguish from full coverage."""
+    n, distinct = db.execute(text(
+        "SELECT count(*), count(DISTINCT md5(html_content)) "
+        "FROM institutional_publications "
+        "WHERE institution_slug ILIKE '%council%' AND html_content IS NOT NULL")).fetchone()
+    assert distinct >= n * 0.95, f"only {distinct} distinct bodies across {n} rows"
+
+
+def test_bodies_do_not_open_with_consent_chrome(db):
+    """consilium serves a cookie banner ahead of the article; an early version
+    stored bodies opening with "We use cookies to improve you...", which passes
+    every length check."""
+    bad = db.execute(text(
+        "SELECT count(*) FROM institutional_publications "
+        "WHERE institution_slug ILIKE '%council%' AND html_content IS NOT NULL "
+        "AND left(html_content, 300) ILIKE '%we use cookies%'")).scalar()
+    assert bad == 0, f"{bad} body/bodies open with the cookie banner"
 
 
 def test_documents_carry_a_resolvable_source_url(client):

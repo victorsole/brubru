@@ -526,11 +526,36 @@ class TextsAdoptedScraper(BaseScraper):
         title_elem = soup.select_one('h1, .ep_name, .doc-title, title')
         title = title_elem.get_text(strip=True) if title_elem else ta_reference
 
-        # Extract full text
-        content_elem = soup.select_one('.ep_content, .doc-content, #TextesAdoptes')
+        # Extract full text.
+        #
+        # `.ep_content`, `.doc-content` and `#TextesAdoptes` are ALL DEAD on
+        # current doceo markup -- verified against live pages, none of the three
+        # matches anything. The page is table-based: the document body lives in
+        # `tr.contents`. Because a failed selector returned None without
+        # complaint, `full_text` has been silently NULL for every adopted text
+        # this scraper fetched, and the API served a synthesised body instead.
+        #
+        # Ordered: legacy selectors first (older cached pages may still use
+        # them), then the current one. Whichever yields the MOST text wins,
+        # rather than whichever matches first -- `table.doc_box_header` matches
+        # on these pages but returns only the ~200-char header.
         full_text = None
-        if content_elem:
-            full_text = content_elem.get_text(separator='\n', strip=True)
+        _best = 0
+        for _sel in ('.ep_content', '.doc-content', '#TextesAdoptes',
+                     'tr.contents', 'table.doc_box_header'):
+            _el = soup.select_one(_sel)
+            if not _el:
+                continue
+            _txt = _el.get_text(separator='\n', strip=True)
+            if len(_txt) > _best:
+                full_text, _best = _txt, len(_txt)
+        if not full_text:
+            # Loud, not silent: a body we could not find is a parser problem and
+            # must not be indistinguishable from a document with no text.
+            logger.warning(
+                "[texts-adopted] no content container matched for %s (%d bytes of "
+                "html) -- the doceo markup may have changed again", ta_reference, len(html)
+            )
 
         # Extract procedure reference
         page_text = soup.get_text()
