@@ -121,3 +121,41 @@ def test_sources_block_does_not_invite_uncited_sources(svc):
     assert "further source" not in block
     assert "not listed here" not in block
     assert block.count("\n") == svc._MAX_LISTED_SOURCES  # header + 20 lines
+
+
+def test_a_second_bare_mention_is_not_claimed_by_a_shorter_acronym(svc):
+    """
+    The real mechanism behind the 26 August nested link, found by probing
+    PRODUCTION after the first fix had already shipped and passed its tests.
+
+    `count=1` links only the FIRST occurrence of an acronym, so a second mention
+    of "Cyber Resilience Act" stays bare. The shorter key "Resilience Act" then
+    matched that bare occurrence and linked it to IMERA. Masking existing links
+    could not help: at that position there is no link to mask.
+
+    A longer acronym now claims every span it matches, linked or not.
+    """
+    text = ("Under Article 14 of the Cyber Resilience Act, manufacturers must report. "
+            "You can track the implementation of the Cyber Resilience Act in "
+            "My Tracked Files.")
+    out = svc._linkify_legislation(svc._strip_contradicting_act_numbers(text))
+    assert "32024R2847" in out
+    assert "32024R2747" not in out, "the second bare mention was claimed by 'Resilience Act'"
+    assert out.count("](https://eur-lex.europa.eu") == 1, "count=1 semantics must survive"
+
+
+@pytest.mark.parametrize("short_key,long_name,_num", COLLISION_PAIRS,
+                         ids=[f"{s}-in-{l}" for s, l, _ in COLLISION_PAIRS])
+def test_no_collision_pair_mislinks_a_repeated_mention(svc, short_key, long_name, _num):
+    """Same trap, swept across all twenty pairs rather than the CRA alone."""
+    text = f"The {long_name} matters. Later we mention the {long_name} again."
+    out = svc._linkify_legislation(text)
+    import re
+    # Whatever gets linked, the label must never be the SHORT key standing alone
+    # where the longer name is what the sentence actually says.
+    for m in re.finditer(r'\[([^\]]+)\]\(https://eur-lex[^)]*\)', out):
+        label = m.group(1).replace('**', '')
+        if label == short_key and short_key != long_name:
+            raise AssertionError(
+                f"{short_key!r} linked inside a sentence naming {long_name!r}: {out[:180]}"
+            )

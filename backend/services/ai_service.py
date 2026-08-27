@@ -3803,6 +3803,24 @@ USER QUESTION: {user_message}
         sorted_acronyms = sorted(acronyms_db.keys(), key=len, reverse=True)
 
         links_added = 0
+        # Spans already OWNED by a longer acronym (audit follow-up, 27 Aug 2026).
+        #
+        # Found by probing production after the first fix shipped, which is the
+        # whole reason a behavioural probe exists: the answer still rendered
+        # "Cyber [Resilience Act](...32024R2747)".
+        #
+        # The mechanism is the interaction of two rules that are each correct
+        # alone. `count=1` links only the FIRST occurrence of an acronym, so a
+        # second mention of "Cyber Resilience Act" stays bare; the shorter key
+        # "Resilience Act" then matches that bare occurrence and links it to
+        # IMERA. Masking EXISTING links is not enough, because at that position
+        # there is no link to mask -- the longer name has simply spent its one
+        # replacement elsewhere.
+        #
+        # So a longer acronym claims EVERY span it matches, linked or not, and a
+        # shorter one is refused an overlapping span. Same discipline as
+        # `_strip_contradicting_act_numbers`; the two post-processors now agree.
+        claimed_spans: List[tuple] = []
         for acronym in sorted_acronyms:
             # Skip very short or numeric-only entries that cause false matches
             if len(acronym) <= 2 or acronym.isdigit():
@@ -3825,7 +3843,19 @@ USER QUESTION: {user_message}
             # Safe-by-default: skip entries whose full_title is an implementing
             # or delegated act -- the auto-ingestion mis-keyed popular acronyms
             # onto those (DSA->implementing-reg class). See _is_linkify_safe_act.
+            #
+            # It still CLAIMS its spans first (27 Aug 2026). Declining to link an
+            # act is not the same as deciding the text does not name it: a span
+            # reading "DANUBIUS-ERIC" is not a span naming "ERIC", whatever we do
+            # about linking either. Without this the four *-ERIC names were
+            # filtered out here, never claimed their spans, and the bare key
+            # `ERIC` linked inside all four. Caught by sweeping the collision
+            # table across repeated mentions rather than testing the CRA alone.
             if not _is_linkify_safe_act(leg_info.get('full_title')):
+                claimed_spans.extend(
+                    _m.span() for _m in re.finditer(
+                        r'\b' + re.escape(acronym) + r'\b', text)
+                )
                 continue
             celex = leg_info['celex']
 
@@ -3866,12 +3896,31 @@ USER QUESTION: {user_message}
             # "not inside an existing link", so a skipped match no longer spends
             # the one replacement.
             link_spans = self._markdown_link_spans(text)
-            for _m in re.finditer(pattern, text):
+            matches = list(re.finditer(pattern, text))
+            # Refuse any span a LONGER acronym already owns.
+            eligible = [
+                _m for _m in matches
+                if not any(not (_m.end() <= _a or _m.start() >= _b)
+                           for _a, _b in claimed_spans)
+            ]
+            # Whatever this acronym legitimately matches is now its own, so a
+            # shorter acronym cannot claim it later in this loop.
+            claimed_spans.extend(_m.span() for _m in eligible)
+
+            for _m in eligible:
                 if any(_a <= _m.start() < _b for _a, _b in link_spans):
                     continue
                 cleaned_text = _m.group(0).replace('**', '')
+                shift = len(f'[{cleaned_text}]({eurlex_url})') - (_m.end() - _m.start())
                 text = f'{text[:_m.start()]}[{cleaned_text}]({eurlex_url}){text[_m.end():]}'
                 links_added += 1
+                # Inserting the link shifts every later position, including the
+                # spans just claimed. Move them so the next acronym tests
+                # against real offsets rather than stale ones.
+                claimed_spans[:] = [
+                    (a + shift, b + shift) if a > _m.start() else (a, b)
+                    for a, b in claimed_spans
+                ]
                 break
 
         if links_added > 0:
