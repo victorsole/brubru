@@ -553,10 +553,29 @@ class TextsAdoptedScraper(BaseScraper):
         # them), then the current one. Whichever yields the MOST text wins,
         # rather than whichever matches first -- `table.doc_box_header` matches
         # on these pages but returns only the ~200-char header.
+        # Strip page furniture before measuring, or the cookie banner and nav
+        # count toward "most text wins" and can beat the document itself.
+        for _junk in soup.select(
+                'header, footer, nav, [class*=cookie], [class*=epjs_cookie], '
+                # `.ep_hidden` is screen-reader / hidden furniture, and on doceo
+                # it carries the "Choisissez la langue de votre document" picker.
+                # 47 stored bodies OPENED with that language list before it was
+                # stripped -- navigation saved as the text of an adopted act.
+                '.ep_hidden'):
+            _junk.decompose()
+
         full_text = None
         _best = 0
+        # TA documents (adopted texts) are table-based -> tr.contents.
+        # A documents (committee reports tabled for plenary, i.e. the
+        # texts-SUBMITTED corpus) use a completely different template, whose
+        # container is a <main> (id "website-body" -- an ID, not a class; reading
+        # it as a class cost a round of debugging). Measured on live pages:
+        # a 721KB A-document matched NONE of the TA selectors and silently
+        # yielded no body, which is why all 18 submitted texts had none.
         for _sel in ('.ep_content', '.doc-content', '#TextesAdoptes',
-                     'tr.contents', 'table.doc_box_header'):
+                     'tr.contents', 'table.doc_box_header',
+                     'main#website-body', 'main'):
             _el = soup.select_one(_sel)
             if not _el:
                 continue

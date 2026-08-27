@@ -288,6 +288,7 @@ async def list_resolutions(
     # already do for /committees/{code}/work-items.
     refs = [r.procedure_ref for r in rows if r.procedure_ref]
     oeil_bodies: dict = {}
+    adopted_bodies: dict = {}
     if refs:
         oeil_rows = db.execute(_sql_text("""
             SELECT oeil_procedure_ref, oeil_text_body, oeil_html_body
@@ -297,9 +298,35 @@ async def list_resolutions(
         """), {"refs": refs}).fetchall()
         oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
 
+        # The resolution's OWN adopted text, which is what `body_txt` should be.
+        # Until 27 Aug 2026 this surface served the OEIL PROCEDURE PAGE as the
+        # body -- real content, but a description of the file rather than the
+        # text the Parliament adopted. Now that `texts_adopted.full_text` is
+        # populated (703/703), the actual resolution is available and takes
+        # precedence; OEIL remains the fallback for procedures with no adopted
+        # text yet. Read from texts_adopted rather than copied, so there stays
+        # ONE source of truth for the document.
+        adopted_rows = db.execute(_sql_text("""
+            SELECT procedure_ref, full_text
+            FROM texts_adopted
+            WHERE procedure_ref = ANY(:refs) AND full_text IS NOT NULL
+        """), {"refs": refs}).fetchall()
+        adopted_bodies = {row[0]: row[1] for row in adopted_rows}
+
     data = []
     for r in rows:
-        body = oeil_bodies.get(r.procedure_ref) or (None, None)
+        adopted = adopted_bodies.get(r.procedure_ref)
+        if adopted:
+            # Minimal, faithful HTML: the adopted text is plain text, so it is
+            # wrapped rather than invented.
+            import html as _html_mod
+            body = (adopted,
+                    "<article>" + "".join(
+                        f"<p>{_html_mod.escape(p)}</p>"
+                        for p in adopted.split("\n") if p.strip()
+                    ) + "</article>")
+        else:
+            body = oeil_bodies.get(r.procedure_ref) or (None, None)
         data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1]))
 
     # Declare the corpus, and say what a NULL adoption date means (D3).
@@ -327,7 +354,11 @@ async def list_resolutions(
             f"{undated} have none because the procedure has not been adopted yet "
             "(still tabled or close to adoption). A null adoption_date means NOT "
             "YET ADOPTED, not 'date unknown', and a date-filtered query therefore "
-            "excludes pending resolutions by design."
+            "excludes pending resolutions by design. "
+            "SCOPE: this surface holds own-initiative and topical resolutions "
+            "(INI / RSP / INL). The Parliament's positions on LEGISLATIVE "
+            "procedures (COD, NLE, CNS, APP) are a different instrument and live "
+            "in /api/v1/texts-adopted -- their absence here is scope, not a gap."
         ),
     )
 

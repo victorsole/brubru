@@ -150,3 +150,107 @@ def test_rapporteurs_were_filled_from_the_parsed_carriages(db):
     n = db.execute(text(
         "SELECT count(rapporteur) FROM ep_resolutions")).scalar()
     assert n >= 16, f"only {n} resolutions carry a rapporteur"
+
+
+# ---------------------------------------------------------------------------
+# 4. The CORPUS, not just the dates
+# ---------------------------------------------------------------------------
+
+def test_the_resolution_corpus_was_backfilled_not_just_dated(db):
+    """D3 said "72 rows with NULL dates". Fixing the dates answered half of it.
+
+    The other half: 72 rows was never the corpus. Once `texts_adopted` reached
+    703 rows, 157 resolution-typed texts had no row here at all. A surface can be
+    perfectly consistent and still be missing most of its subject.
+    """
+    n = db.execute(text("SELECT count(*) FROM ep_resolutions")).scalar()
+    assert n > 100, f"ep_resolutions holds only {n} rows; the corpus backfill has not run"
+
+
+def test_no_own_initiative_or_topical_resolution_is_missing(db):
+    """Every INI / RSP / INL adopted text must have a row here.
+
+    That is this table's declared taxonomy, so a gap in it is a real gap --
+    unlike COD/NLE/CNS, which are a different instrument.
+    """
+    missing = db.execute(text(r"""
+        SELECT count(*) FROM texts_adopted t
+        WHERE t.text_type::text IN ('resolution','legislative_resolution')
+          AND t.procedure_ref IS NOT NULL
+          AND substring(t.procedure_ref from '\(([A-Z]+)\)') IN ('INI','RSP','INL')
+          AND NOT EXISTS (SELECT 1 FROM ep_resolutions r
+                          WHERE r.procedure_ref = t.procedure_ref)
+    """)).scalar()
+    assert missing == 0, (
+        f"{missing} INI/RSP/INL adopted text(s) have no ep_resolutions row -- run "
+        "scripts/backfill_ep_resolutions_corpus.py --apply"
+    )
+
+
+def test_the_declared_type_matches_the_procedure_reference(db):
+    """`resolution_type` is derived from the procedure suffix, so a mismatch means
+    a row was typed by guesswork rather than from its own reference."""
+    bad = db.execute(text(r"""
+        SELECT count(*) FROM ep_resolutions
+        WHERE substring(procedure_ref from '\(([A-Z]+)\)') IS NOT NULL
+          AND resolution_type::text <> substring(procedure_ref from '\(([A-Z]+)\)')
+    """)).scalar()
+    assert bad == 0, f"{bad} row(s) whose resolution_type contradicts their procedure_ref"
+
+
+def test_vote_tallies_are_internally_consistent(db):
+    """A total that is not the sum of its parts is a fabricated tally."""
+    bad = db.execute(text(
+        "SELECT count(*) FROM ep_resolutions WHERE vote_total IS NOT NULL "
+        "AND vote_total <> vote_for + vote_against + vote_abstention")).scalar()
+    assert bad == 0, f"{bad} resolution(s) have a vote_total that does not add up"
+
+
+def test_the_endpoint_declares_what_it_does_not_cover(client):
+    """Legislative-procedure texts are absent BY SCOPE. Without saying so, a
+    caller reads their absence as the Parliament not having acted."""
+    note = client.get("/api/v1/resolutions?limit=1").json()["coverage_note"].lower()
+    assert "texts-adopted" in note or "texts_adopted" in note, (
+        "coverage_note does not point at where legislative texts actually live"
+    )
+
+
+def test_resolutions_serve_their_own_adopted_text_not_the_procedure_page(client, db):
+    """`body_txt` should be the resolution the Parliament adopted.
+
+    This surface used to serve the OEIL PROCEDURE PAGE as the body -- real
+    content, but a description of the file rather than its text. Now that
+    texts_adopted holds 703/703 bodies, the actual text takes precedence and OEIL
+    is the fallback for procedures with no adopted text yet.
+    """
+    items = []
+    for page in (1, 2):
+        items += client.get(f"/api/v1/resolutions?limit=100&page={page}").json().get("data") or []
+    assert items, "no resolutions returned"
+    procedure_page = sum(1 for i in items
+                         if (i.get("body_txt") or "").startswith("Basic information"))
+    real = len(items) - procedure_page
+    assert real > procedure_page, (
+        f"only {real} of {len(items)} resolutions serve their own text; "
+        f"{procedure_page} still serve the OEIL procedure page"
+    )
+
+
+def test_no_resolution_body_is_navigation_chrome(client):
+    """doceo hides a language picker in `.ep_hidden`; 47 stored bodies once OPENED
+    with "Choisissez la langue de votre document" -- navigation saved as the text
+    of an adopted act, which passes every length and non-null check."""
+    items = client.get("/api/v1/resolutions?limit=100").json().get("data") or []
+    bad = [i["procedure_ref"] for i in items
+           if "Choisissez la langue" in (i.get("body_txt") or "")[:400]]
+    assert not bad, f"{len(bad)} resolution body/bodies are the language picker: {bad[:3]}"
+
+
+def test_every_resolution_has_both_body_datapoints(client):
+    items = []
+    for page in (1, 2):
+        items += client.get(f"/api/v1/resolutions?limit=100&page={page}").json().get("data") or []
+    missing_txt = [i["procedure_ref"] for i in items if not (i.get("body_txt") or "").strip()]
+    missing_html = [i["procedure_ref"] for i in items if not (i.get("body_html") or "").strip()]
+    assert not missing_txt, f"{len(missing_txt)} without body_txt"
+    assert not missing_html, f"{len(missing_html)} without body_html"
