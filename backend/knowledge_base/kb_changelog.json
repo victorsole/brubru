@@ -3,6 +3,19 @@
   "entries": [
     {
       "date": "2026-08-27",
+      "action": "added",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "Children, Social Media and Age Limits in the EU",
+      "summary": "New guide. The EU has NOT banned social media for children: Parliament asked for 16 (non-binding), 25 of 27 signed the Jutland Declaration (non-binding), the Commission recommended age-verification technology (non-binding). Only DSA duties bind, and they set no age.",
+      "refs": [
+        "32022R2065",
+        "32016R0679",
+        "32018L1808",
+        "32024R1183"
+      ]
+    },
+    {
+      "date": "2026-08-27",
       "action": "updated",
       "guide": "eu_canada_relations",
       "title": "EU-Canada Relations",
