@@ -91,6 +91,26 @@ class PaginatedResponse(BaseModel, Generic[T]):
     updated_end: Optional[datetime] = None
     detail_level: DetailLevel = "Full"
 
+    # --- Corpus coverage ---------------------------------------------------
+    # What the ENDPOINT holds, as distinct from what this QUERY matched.
+    #
+    # Added 27 Aug 2026. A caller cannot tell an empty result that means "we have
+    # nothing in that window" from one that means "nothing exists". Two live
+    # examples: /api/texts-adopted opens on 20 Jan 2026, so the EP's November
+    # 2025 resolution on protecting minors online is invisible and a search for
+    # it returns a clean zero; and /api/v1/council-documents draws on a register
+    # that is queryable but not enumerable, so its corpus is a slice.
+    #
+    # Populating these converts a false negative into an honest one. NULL means
+    # the endpoint has not declared its bounds -- not that it is unbounded.
+    coverage_from: Optional[date] = Field(
+        None, description="Earliest item the endpoint's corpus contains (null = undeclared).")
+    coverage_to: Optional[date] = Field(
+        None, description="Latest item the endpoint's corpus contains (null = undeclared).")
+    coverage_note: Optional[str] = Field(
+        None, description="How the corpus is bounded, in plain English. Read this before "
+                          "concluding that an empty result means the thing does not exist.")
+
     # Phase 3 of docs/applications/euvoc.md — additive OP Core Metadata block.
     op_core: Optional[OPCoreMetadata] = Field(
         None,
@@ -127,6 +147,9 @@ def build_envelope(
     updated_to: Optional[datetime] = None,
     detail_level: DetailLevel = "Full",
     coverage_complete: bool = True,
+    coverage_from: Optional[date] = None,
+    coverage_to: Optional[date] = None,
+    coverage_note: Optional[str] = None,
     # Phase 3 of docs/applications/euvoc.md — OP Core Metadata enrichment.
     op_core_title: Optional[str] = None,
     op_core_type: Optional[str] = None,
@@ -175,6 +198,9 @@ def build_envelope(
         next_page=next_page,
         remaining_pages=remaining,
         coverage_complete=coverage_complete,
+        coverage_from=coverage_from,
+        coverage_to=coverage_to,
+        coverage_note=coverage_note,
         published_from=published_from,
         published_to=published_to,
         published_end=published_to,

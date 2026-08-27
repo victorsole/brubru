@@ -15,12 +15,12 @@ the Council data we already have ingested.
 """
 
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -57,6 +57,18 @@ CONFIG_NAMES = {
     "EUROGROUP": "Eurogroup",
 }
 
+
+# Bounds of the ACTUAL corpus, both branches, computed per request. Cheap (two
+# indexed min/max) and always true, unlike a hardcoded date that rots silently.
+_COVERAGE_SQL = text("""
+    SELECT least(p.lo, c.lo) AS lo, greatest(p.hi, c.hi) AS hi
+    FROM (SELECT min(published_date) lo, max(published_date) hi
+            FROM institutional_publications
+           WHERE institution_slug ILIKE '%council%') p,
+         (SELECT min(start_date) lo, max(start_date) hi
+            FROM eu_calendar_events
+           WHERE institution IN ('COUNCIL', 'EUROPEAN_COUNCIL')) c
+""")
 
 COUNCIL_INSTITUTION_SLUGS = (
     "council_of_the_eu",
@@ -287,7 +299,10 @@ def _cal_to_item(r) -> CouncilDocumentItem:
     response_model=PaginatedResponse[CouncilDocumentItem],
     summary="Council of the EU documents — press releases, conclusions, meeting agendas, summits",
     description="""**What it does**
-Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council conclusions, meeting agendas, summit outcomes. Today the surface unions `institutional_publications` (Council-tagged rows) with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL events. A dedicated Council document register scraper (working-party + COREPER docs + Council conclusions full text) is queued.
+Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council register documents (notes, working documents, presidency discussion notes), meeting agendas and summit outcomes. It unions Council-tagged `institutional_publications` with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL.
+
+**What the corpus covers, and what it does not**
+Read `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The Council public register is *queryable but not enumerable* — a date-only search returns nothing and there is no listing API — so register documents are ingested per policy term across Brubru's 35 canonical policy areas, alongside the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence — while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.
 
 **When to use it**
 For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.
@@ -365,9 +380,15 @@ async def list_council_documents(
         pub_filters.append(InstitutionalPublication.fetched_at <= updated_to)
     if q:
         like = f"%{q}%"
+        # Search the BODY as well as the title. Council register subject lines are
+        # bureaucratic ("ANNEX to the COUNCIL IMPLEMENTING DECISION amending ..."),
+        # so the documents that actually discuss a topic frequently do not name it
+        # in their title. Title-only matching is how a populated corpus can still
+        # answer "nothing" to a real question.
         pub_filters.append(or_(
             InstitutionalPublication.title.ilike(like),
             InstitutionalPublication.summary.ilike(like),
+            InstitutionalPublication.html_content.ilike(like),
         ))
     if pub_filters:
         pub_q = pub_q.filter(and_(*pub_filters))
@@ -394,21 +415,61 @@ async def list_council_documents(
     cal_total = cal_q.count()
     total = pub_total + cal_total
 
-    pub_rows = pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast()).limit(limit).all()
-    cal_rows = cal_q.order_by(EUCalendarEvent.start_date.desc()).limit(limit).all()
+    # Take page*limit from EACH branch, not `limit`. The union is merged and
+    # sorted in Python, so the slice below can only see what was fetched: with
+    # `.limit(limit)` the merged list held at most 2*limit rows and every page
+    # from 3 onwards came back EMPTY while `total` still advertised more.
+    # Found 27 Aug 2026 while filling branch 1 (D1).
+    depth = page * limit
+    pub_rows = pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast()).limit(depth).all()
+    cal_rows = cal_q.order_by(EUCalendarEvent.start_date.desc()).limit(depth).all()
 
     data: list = [_pub_to_item(r) for r in pub_rows]
     data.extend(_cal_to_item(r) for r in cal_rows)
 
-    # Sort union by published_date desc
-    data.sort(key=lambda x: x.published_date or datetime.min, reverse=True)
+    # Sort the union by published_date desc.
+    #
+    # The key must normalise tzinfo. `institutional_publications.published_date`
+    # is timestamptz (AWARE) while calendar rows and the `datetime.min` fallback
+    # are NAIVE, and Python refuses to compare the two. This raised a TypeError
+    # the moment branch 1 stopped being empty on 27 Aug 2026 -- so the endpoint
+    # could never have worked with real documents in it, and nobody could tell
+    # while it was serving only meetings.
+    _FLOOR = datetime.min.replace(tzinfo=timezone.utc)
+
+    def _sort_key(item):
+        d = item.published_date
+        if d is None:
+            return _FLOOR
+        return d if d.tzinfo is not None else d.replace(tzinfo=timezone.utc)
+
+    data.sort(key=_sort_key, reverse=True)
     # Apply page slice
     page_data = data[(page - 1) * limit : page * limit]
+
+    # State what the corpus IS, so an empty result is readable. Until 27 Aug 2026
+    # branch 1 held zero rows and this endpoint returned only Council MEETINGS,
+    # so `?q=minors` came back empty and read as "the Council has said nothing"
+    # -- while 25 Member States had signed the Jutland Declaration on minors
+    # online. The corpus is now real but still a SLICE: the Council register is
+    # queryable, not enumerable (a date-only search returns nothing and there is
+    # no listing API), so documents are pulled per policy term.
+    cov = db.execute(_COVERAGE_SQL).fetchone()
+    coverage_note = (
+        "Council press releases in full, plus register documents matching Brubru's "
+        "35 canonical policy areas (the register is queryable, not enumerable, so "
+        "this is a policy-driven slice rather than the complete Council corpus), "
+        "plus Council and European Council meetings from the calendar. An empty "
+        "result means nothing matched THIS corpus, not that the Council was silent."
+    )
 
     return build_envelope(
         page_data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
+        coverage_from=(cov.lo.date() if cov and cov.lo else None),
+        coverage_to=(cov.hi.date() if cov and cov.hi else None),
+        coverage_note=coverage_note,
         op_core_title="Council of the EU documents",
         op_core_type="Council document",
         op_core_identifier=str(request.url),

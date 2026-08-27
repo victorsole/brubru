@@ -39,6 +39,16 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("news_ep",      "News - Parliament",             "fast", "scripts/sync_ep_news.py",        timeout=900),
     SourceSpec("news_bespoke", "News - other bodies",           "fast", "scripts/sync_bespoke_news.py",   timeout=900),
     SourceSpec("news_ft",      "News - Funding & Tenders",      "fast", "scripts/sync_ft_news.py",         timeout=600),
+    # Council documents (D1, 27 Aug 2026). `/api/v1/council-documents` served a
+    # CALENDAR because its documents branch had zero rows since it shipped. A
+    # corpus that is filled once and never refreshed becomes the same defect
+    # again, quietly, so it is on the warm tier. `--window-days 7` keeps each
+    # window well under the register's 1,000-document cap; bodies are fetched so
+    # `q` can find documents whose bureaucratic subject line omits the topic.
+    SourceSpec("council_documents", "Documents - Council", "warm",
+               "scripts/ingest_council_documents.py",
+               ("--apply", "--since-days", "14", "--window-days", "7", "--fetch-bodies"),
+               timeout=1800, stale_after_hours=48),
     SourceSpec("oj",           "My OJ (Official Journal)",      "fast", "scripts/sync_oj.py",             ("--apply", "--explain"), timeout=900),
     # Must stay directly after "oj": the tier runs sources in list order, so the
     # ingest lands the day's entries and this translates them in the same pass.
