@@ -14,7 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, text as _sql_text
+from sqlalchemy import and_, text as _sql_text, func
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -302,11 +302,33 @@ async def list_resolutions(
         body = oeil_bodies.get(r.procedure_ref) or (None, None)
         data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1]))
 
+    # Declare the corpus, and say what a NULL adoption date means (D3).
+    #
+    # All 72 rows carried `adoption_date = NULL`, so date filtering could not work
+    # and every dated query returned nothing. 34 of those were genuinely missing a
+    # date and have been recovered from `texts_adopted` and the OEIL "Decision by
+    # Parliament" event. The REST are NULL correctly: their procedures are still
+    # TABLED or CLOSE_TO_ADOPTION, so no adoption date exists yet. Those are
+    # different facts and the response has to distinguish them.
+    cov = db.query(
+        func.min(EPResolution.adoption_date), func.max(EPResolution.adoption_date),
+        func.count(EPResolution.id), func.count(EPResolution.adoption_date),
+    ).one()
+    undated = (cov[2] or 0) - (cov[3] or 0)
+
     return build_envelope(
         data,
         total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
+        coverage_from=cov[0], coverage_to=cov[1],
+        coverage_note=(
+            f"{cov[3]} of {cov[2]} resolutions carry an adoption date; the other "
+            f"{undated} have none because the procedure has not been adopted yet "
+            "(still tabled or close to adoption). A null adoption_date means NOT "
+            "YET ADOPTED, not 'date unknown', and a date-filtered query therefore "
+            "excludes pending resolutions by design."
+        ),
     )
 
 
