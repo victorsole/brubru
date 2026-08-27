@@ -94,6 +94,64 @@ class TextsAdoptedSyncService:
             if self._owns_db and self._db:
                 self._db.close()
 
+    async def sync_dates(
+        self,
+        dates: List[str],
+        term: int = 10,
+        skip_existing: bool = False,
+        progress_callback: Optional[Callable[[int, int, str], None]] = None
+    ) -> Dict[str, Any]:
+        """Sync explicit plenary dates (YYYY-MM-DD), bypassing date discovery.
+
+        Needed because `get_plenary_dates` reads the texts-adopted index, and that
+        index lists only the CURRENT year. Every earlier sitting is therefore
+        undiscoverable from it, which is why the corpus opened on 20 January 2026
+        and the 26 November 2025 resolution on protecting minors online was
+        invisible to every search.
+
+        A TOC URL is deterministic (`TA-<term>-<date>-TOC_EN.html`), so a date
+        that is known can always be fetched. Dates that hold no sitting are
+        counted and reported rather than silently skipped.
+        """
+        logger.info("[START] Texts Adopted sync for %d explicit date(s)", len(dates))
+        empty_dates: List[str] = []
+        seen: Set[str] = set()
+        result: Dict[str, Any] = {"added": 0, "updated": 0, "skipped": 0, "errors": 0}
+
+        for i, date_str in enumerate(dates, 1):
+            if progress_callback:
+                progress_callback(i, len(dates), f"TOC {date_str}")
+            try:
+                got = await self.scraper.scrape_toc_page(date_str, term)
+            except Exception as exc:  # noqa: BLE001
+                # A failed FETCH is not an empty sitting. Keep them apart.
+                logger.error("[ERROR] TOC %s failed: %s", date_str, exc)
+                empty_dates.append(f"{date_str}(error)")
+                continue
+            if not got:
+                empty_dates.append(date_str)
+                continue
+
+            # Persist PER DATE, not once at the end. A full-term backfill is a
+            # ~45-minute browser walk, and batching every write until the last
+            # date means one late failure discards all of it -- the same reason
+            # `votes_ep` commits inside its loop.
+            fresh = [it for it in got if it.ta_reference not in seen]
+            for it in fresh:
+                seen.add(it.ta_reference)
+            if fresh:
+                part = await self._process_items(fresh, skip_existing)
+                for k in ("added", "updated", "skipped", "errors"):
+                    result[k] = result.get(k, 0) + (part.get(k) or 0)
+
+        result["dates_requested"] = len(dates)
+        result["dates_with_no_texts"] = empty_dates
+        logger.info("[OK] %d date(s): added=%s updated=%s skipped=%s errors=%s; "
+                    "%d date(s) yielded nothing",
+                    len(dates), result.get("added"), result.get("updated"),
+                    result.get("skipped"), result.get("errors"), len(empty_dates))
+        return result
+
     async def sync_term(
         self,
         term: int = 10,

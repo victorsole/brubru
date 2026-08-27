@@ -64,6 +64,51 @@ class TextsAdoptedScraper(BaseScraper):
         4: "TA-4",
     }
 
+    # europarl.europa.eu answers a plain HTTP fetch with an HTTP 202 and a
+    # near-empty JS shell -- 2,431 bytes and ZERO links on the texts-adopted
+    # index, 0 bytes on a doceo TOC. Nothing raises, so `get_plenary_dates`
+    # found no dates and reported "0 plenary dates" as a fact about the
+    # Parliament rather than about our own fetch. That is why `texts_adopted`
+    # holds only what the RSS feed carried and the corpus opens on 20 Jan 2026,
+    # making the 26 November 2025 resolution on protecting minors online
+    # invisible to every search.
+    #
+    # Anything smaller than this is treated as a FETCH FAILURE and retried
+    # through a real browser, per `feedback_waf_walled_use_playwright`.
+    _MIN_PLAUSIBLE_BYTES = 5000
+
+    async def _fetch(self, url: str, *args, **kwargs):  # type: ignore[override]
+        """Plain fetch, falling back to a real browser on a JS shell.
+
+        Raises when neither path yields a plausible page, so an empty corpus can
+        never again be mistaken for an empty Parliament.
+        """
+        html = None
+        try:
+            html = await super()._fetch(url, *args, **kwargs)
+        except Exception as exc:  # noqa: BLE001 -- fall through to the browser
+            logger.debug("[texts-adopted] plain fetch failed for %s: %s", url, exc)
+
+        if html and len(html) >= self._MIN_PLAUSIBLE_BYTES:
+            return html
+
+        import asyncio as _asyncio
+        from services.scrapers.waf_browser_fetcher import fetch_one
+
+        got = len(html or "")
+        logger.info("[texts-adopted] %s returned %d bytes -- rendering with a browser",
+                    url, got)
+        # fetch_one drives Playwright's SYNC api, which raises on the event loop.
+        res = await _asyncio.to_thread(fetch_one, url, expand_accordions=True,
+                                       strip_chrome=False)
+        rendered = getattr(res, "html", None) or ""
+        if len(rendered) < self._MIN_PLAUSIBLE_BYTES:
+            raise RuntimeError(
+                f"{url} returned {got} bytes plain and {len(rendered)} rendered -- "
+                "treat as a FETCH FAILURE, never as 'no texts adopted'"
+            )
+        return rendered
+
     def __init__(self, **kwargs):
         super().__init__(
             base_url="https://www.europarl.europa.eu",

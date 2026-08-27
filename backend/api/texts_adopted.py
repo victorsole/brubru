@@ -134,12 +134,24 @@ def get_items(
         # Paginate
         items = query.offset(offset).limit(limit).all()
 
+        # Corpus bounds, computed from the data (D2). A zero result must be
+        # readable as "outside what we hold" rather than as "no such text".
+        cov = db.query(func.min(TextAdopted.adoption_date),
+                       func.max(TextAdopted.adoption_date)).one()
+
         return TextAdoptedListResponse(
             items=[TextAdoptedSummary.model_validate(item) for item in items],
             total=total,
             limit=limit,
             offset=offset,
-            filters_applied=filters_applied if filters_applied else None
+            filters_applied=filters_applied if filters_applied else None,
+            coverage_from=(cov[0].date() if cov and cov[0] else None),
+            coverage_to=(cov[1].date() if cov and cov[1] else None),
+            coverage_note=(
+                "Earliest and latest adopted text HELD, not the bounds of the "
+                "parliamentary term. A query with no results before coverage_from "
+                "means the corpus does not reach that far back."
+            ),
         )
 
     except Exception as e:

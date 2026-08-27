@@ -6,7 +6,7 @@ Pydantic models for EP Texts Adopted API endpoints.
 Created: February 2026
 """
 
-from datetime import datetime
+from datetime import datetime, date
 from enum import Enum
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
@@ -97,6 +97,13 @@ class TextAdoptedListResponse(BaseModel):
     limit: int
     offset: int
     filters_applied: Optional[Dict[str, Any]] = None
+    # What the CORPUS holds, as distinct from what this QUERY matched (D2).
+    # The corpus opened on 20 Jan 2026 and never said so, so the EP's 26 Nov 2025
+    # resolution on protecting minors online was invisible and a search for it
+    # returned a confident zero.
+    coverage_from: Optional[date] = None
+    coverage_to: Optional[date] = None
+    coverage_note: Optional[str] = None
 
 
 # ===== Tracking Schemas =====

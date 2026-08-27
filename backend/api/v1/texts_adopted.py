@@ -13,7 +13,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -254,11 +254,30 @@ async def list_texts_adopted(
         order_col = TextAdopted.adoption_date.desc().nullslast()
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
 
+    # Declare the corpus bounds (D2). Until 27 Aug 2026 this corpus opened on
+    # 20 January 2026 and said nothing about it, so the EP's 26 November 2025
+    # resolution on protecting minors online fell before the first row and every
+    # search for it returned a clean, confident zero -- indistinguishable from
+    # "no such text exists". Computed from the data, not hardcoded, so it cannot
+    # rot as the backfill extends.
+    cov = db.query(
+        func.min(TextAdopted.adoption_date), func.max(TextAdopted.adoption_date)
+    ).one()
+
     return build_envelope(
         [_row_to_item(r, body_threshold=body_threshold) for r in rows],
         total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
+        coverage_from=(cov[0].date() if cov and cov[0] else None),
+        coverage_to=(cov[1].date() if cov and cov[1] else None),
+        coverage_note=(
+            "Adopted texts scraped from the Parliament's plenary TOC pages. "
+            "coverage_from is the earliest text held, NOT the start of the "
+            "parliamentary term: a search that returns nothing for a date before "
+            "it means the corpus does not reach back that far, not that the "
+            "Parliament adopted nothing."
+        ),
     )
 
 

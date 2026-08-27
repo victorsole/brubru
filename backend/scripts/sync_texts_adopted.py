@@ -76,6 +76,37 @@ async def run_rss_sync(dry_run: bool = False):
     print(f"  Errors: {result['errors']}")
 
 
+async def run_dates_sync(dates, term: int = 10, dry_run: bool = False):
+    """Backfill explicit plenary dates."""
+    from services.scrapers.texts_adopted_sync_service import TextsAdoptedSyncService
+
+    if dry_run:
+        from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
+        scraper = TextsAdoptedScraper()
+        total = 0
+        for d in dates:
+            try:
+                items = await scraper.scrape_toc_page(d, term)
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [ERROR] {d}: {exc}")
+                continue
+            total += len(items)
+            print(f"  [{d}] {len(items)} text(s)" + (f" e.g. {items[0].title[:60]}" if items else ""))
+        print(f"\n[DRY RUN] {total} text(s) across {len(dates)} date(s); nothing written")
+        return
+
+    service = TextsAdoptedSyncService()
+    result = await service.sync_dates(dates, term=term, skip_existing=True,
+                                      progress_callback=progress_callback)
+    print(f"\n[OK] added={result.get('added')} updated={result.get('updated')} "
+          f"skipped={result.get('skipped')} errors={result.get('errors')}")
+    empty = result.get("dates_with_no_texts") or []
+    if empty:
+        # Named, not swallowed: a date with no sitting and a date that failed to
+        # fetch look identical in a count.
+        print(f"[INFO] {len(empty)} date(s) yielded no texts: {', '.join(empty[:12])}")
+
+
 async def run_term_sync(term: int, max_dates: int = None, dry_run: bool = False):
     """Sync a specific parliamentary term."""
     from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
@@ -168,9 +199,18 @@ def main():
     group.add_argument('--rss', action='store_true', help='Sync from RSS feed (recent texts)')
     group.add_argument('--term', type=int, choices=range(4, 11), help='Sync specific term (4-10)')
     group.add_argument('--all-terms', action='store_true', help='Sync all terms (historical backfill)')
+    group.add_argument('--dates', nargs='+', metavar='YYYY-MM-DD',
+                       help='Sync explicit plenary dates. The texts-adopted index lists '
+                            'only the CURRENT year, so earlier sittings can only be '
+                            'reached this way (TOC urls are deterministic).')
+    group.add_argument('--date-range', nargs=2, metavar=('FROM', 'TO'),
+                       help='Sync every Mon-Thu between two dates (plenary sittings fall '
+                            'on those days). Dates with no sitting are reported, not hidden.')
 
     parser.add_argument('--max-dates', type=int, help='Max plenary dates to scrape per term')
     parser.add_argument('--dry-run', action='store_true', help='Test without database writes')
+    parser.add_argument('--term-for-dates', type=int, default=10,
+                        help='Parliamentary term the --dates belong to (default 10)')
 
     args = parser.parse_args()
 
@@ -182,6 +222,20 @@ def main():
     elif args.term:
         print(f"[START] Syncing Texts Adopted for term {args.term}...")
         asyncio.run(run_term_sync(args.term, max_dates=args.max_dates, dry_run=args.dry_run))
+    elif args.dates or args.date_range:
+        dates = args.dates
+        if args.date_range:
+            from datetime import date as _d, timedelta as _td
+            a = _d.fromisoformat(args.date_range[0]); b = _d.fromisoformat(args.date_range[1])
+            dates = []
+            cur = a
+            while cur <= b:
+                if cur.weekday() < 4:      # Mon-Thu; plenary does not sit Fri-Sun
+                    dates.append(cur.isoformat())
+                cur += _td(days=1)
+        print(f"[START] Syncing {len(dates)} explicit date(s)...")
+        asyncio.run(run_dates_sync(dates, term=args.term_for_dates,
+                                   dry_run=args.dry_run))
     elif args.all_terms:
         print("[START] Syncing Texts Adopted for ALL terms...")
         asyncio.run(run_all_terms_sync(max_dates=args.max_dates, dry_run=args.dry_run))
