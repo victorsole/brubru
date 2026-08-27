@@ -294,7 +294,18 @@ class OEILSyncService:
         # Determine status - if it has an OEIL ref, it's at least tabled
         status = CarriageStatusEnum.TABLED
 
-        # Get committee code
+        # Provisional lead committee.
+        #
+        # The OEIL XML feed returns a FLAT committee list with no indication of
+        # which is responsible and which holds an opinion, so `committees[0]` is a
+        # guess whose order carries no meaning. It put IMCO on 2025/2081(INI) when
+        # the committee responsible is CULT and IMCO only gives an opinion, and it
+        # was wrong on 28 of the 788 carriages whose procedure page we could check.
+        #
+        # It stays as a first approximation for a brand-new carriage -- something
+        # is better than nothing before the page is fetched -- and is REPLACED by
+        # `backfill_oeil_committee_roles.py` once the procedure page is stored.
+        # `oeil_roles_parsed_at` marks a carriage whose roles are authoritative.
         lead_committee = None
         if item.committees:
             committee_name = item.committees[0]
@@ -328,8 +339,14 @@ class OEILSyncService:
         """
         Update an existing carriage with new OEIL data.
         """
-        # Update committee if we have new data
-        if item.committees:
+        # Update the committee ONLY while we have no authoritative roles.
+        #
+        # `committees[0]` is a positional guess (see _create_carriage). Once the
+        # procedure page has been parsed, `oeil_roles_parsed_at` is set and
+        # `lead_committee` holds what OEIL actually calls the committee
+        # RESPONSIBLE. Letting the feed overwrite that would silently undo every
+        # correction on the next sync -- the fix would last exactly one run.
+        if item.committees and getattr(carriage, "oeil_roles_parsed_at", None) is None:
             committee_name = item.committees[0]
             committee_code = COMMITTEE_NAME_TO_CODE.get(committee_name)
             if committee_code:

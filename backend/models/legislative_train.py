@@ -9,7 +9,7 @@ ENHANCED (January 2025):
 - Text type and spotlight tags
 """
 
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, JSON, Text, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, JSON, Text, ForeignKey, Enum as SQLEnum, Date
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -206,6 +206,16 @@ class LegislativeCarriage(Base):
     oeil_procedure_data = Column(JSON)
     oeil_timeline = Column(JSON, default=[])
     oeil_key_events = Column(JSON, default=[])
+    # OEIL "Forecasts": what is EXPECTED. Kept apart from oeil_key_events, which
+    # is what HAPPENED -- merging them presented an indicative plenary date as a
+    # committee vote that had already taken place (migration 225).
+    oeil_forecasts = Column(JSON, default=[])
+    rapporteur_name = Column(String)
+    rapporteur_appointed = Column(Date)
+    # NULL = the procedure page has never been parsed, so lead_committee is still
+    # the positional guess from the OEIL feed. Load-bearing: the sync uses it to
+    # decide whether it may overwrite lead_committee.
+    oeil_roles_parsed_at = Column(DateTime(timezone=True))
     eurlex_documents = Column(JSON, default=[])
     legal_text_url = Column(String)
     eprs_matched_briefings = Column(JSON, default=[])
