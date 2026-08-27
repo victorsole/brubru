@@ -37,6 +37,25 @@ Report coverage + freshness to the user before proceeding.
    # X drip (paced + throttle-stop; the syndication endpoint rate-limits, so a small slow batch)
    python3.12 scripts/fetch_social_posts.py --platforms x --per-account 10 --pace 5 --empty-streak-stop 8 --limit 40 --apply
    ```
+
+   **The X backlog does not clear at `--limit 40`** (measured 27 Aug 2026): 719 of
+   1,135 fetch-enabled X accounts were stale beyond seven days, which is 18 runs
+   at that cap even before throttling. The open tier was 100% fresh in the same
+   window, so the staleness is X-specific and structural, not a drip failure.
+   X carries ~69% of fetch-enabled accounts and nearly every MEP, so the MEP
+   layer is the thinnest part of any day's picture. Raise the cap when the
+   endpoint tolerates it:
+
+   ```bash
+   # second, larger X window -- stop early on a throttle streak, as before
+   python3.12 scripts/fetch_social_posts.py --platforms x --per-account 5 --pace 4 --empty-streak-stop 10 --limit 150 --apply
+   ```
+
+   **Always check whether an empty run is throttle or a dead pipeline** before
+   reporting it: `SELECT posted_at::date, count(*) FROM social_posts WHERE
+   platform='x' AND posted_at > now()-interval '10 days' GROUP BY 1`. On 27 Aug
+   the batch returned 0 posts while X had produced 78 the previous day -- that is
+   throttle. Never add a proxy or evasion to beat it.
    X is best-effort: if it stops early on a throttle streak that is expected (the cron keeps dripping). Never add proxy/evasion to beat the throttle.
 
 2. **Directory freshness (weekly-ish, surface gaps daily):**
@@ -68,9 +87,15 @@ rows=db.execute(text("""
            -- relevance, and this feed exists to find the second thing.
            (CASE a.entity_type WHEN 'commissioner' THEN 3 WHEN 'institution' THEN 2
                                WHEN 'eu_agency' THEN 2 ELSE 1 END) DESC,
-           (p.content ~* '(regulation|directive|proposal|sanction|deadline|entry into force|'
+           -- The concatenation MUST be parenthesised (fixed 27 Aug 2026). `~*`
+           -- binds tighter than `||`, so without the outer parentheses Postgres
+           -- evaluates `content ~* '(regulation|...|'` -- an unbalanced regex --
+           -- and the whole query dies with
+           -- "invalid regular expression: parentheses () not balanced".
+           -- This query had never run as written.
+           (p.content ~* ('(regulation|directive|proposal|sanction|deadline|entry into force|'
                        || 'applies from|adopt|trilogue|delegated act|implementing act|'
-                       || 'consultation|passport|ecodesign|tariff)') DESC,
+                       || 'consultation|passport|ecodesign|tariff)')) DESC,
            eng DESC NULLS LAST, p.posted_at DESC""")).mappings().all()
 print("posts in window:", len(rows))
 PY
