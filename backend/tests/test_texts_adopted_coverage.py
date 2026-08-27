@@ -222,3 +222,49 @@ def test_the_content_extractor_is_not_silently_returning_nothing():
     assert "logger.warning" in src, (
         "a page with no matching container must WARN, not silently yield no body"
     )
+
+
+# ---------------------------------------------------------------------------
+# 5. What is NOT recoverable must be stated, never invented
+# ---------------------------------------------------------------------------
+
+def test_the_classifier_is_never_fed_a_whole_document():
+    """`_classify_text_type` is a substring test.
+
+    `elif 'decision' in combined` fires on any text that mentions the word, so
+    over a 20,000-character resolution it confidently returns DECISION -- 7 of 8
+    sampled rows were misclassified that way. The description is truncated so a
+    full document cannot reach it.
+    """
+    import inspect
+    from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
+    src = inspect.getsource(TextsAdoptedScraper._classify_text_type)
+    assert "[:300]" in src, (
+        "the classifier still consumes the whole description; a full document "
+        "will be mislabelled by substring match"
+    )
+
+
+def test_a_resolution_is_not_classified_as_a_decision(db):
+    """The concrete case: a resolution whose body mentions 'decision' in passing."""
+    from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
+    row = db.execute(text(
+        "SELECT title, full_text FROM texts_adopted "
+        "WHERE ta_reference = 'P10_TA(2024)0012'")).fetchone()
+    if not row or not row.full_text:
+        pytest.skip("sample row not present")
+    got = TextsAdoptedScraper()._classify_text_type(row.title or "", row.full_text)
+    assert getattr(got, "value", str(got)) != "decision", (
+        "a resolution is being classified as a decision from its body text"
+    )
+
+
+def test_the_unclassified_rows_are_declared_not_disguised(client):
+    """437 TOC-recovered rows carry text_type='other' and it is NOT recoverable:
+    the TOC has no type marker and the document header reads only
+    "Texts adopted - <title> - <date>". A caller filtering on text_type must know
+    that excludes them, rather than reading 'other' as a real classification."""
+    note = client.get("/api/texts-adopted/items?limit=1").json()["coverage_note"].lower()
+    assert "unclassified" in note, (
+        "coverage_note does not explain that text_type='other' means unclassified"
+    )

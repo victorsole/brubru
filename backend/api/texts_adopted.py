@@ -150,7 +150,10 @@ def get_items(
             coverage_note=(
                 "Earliest and latest adopted text HELD, not the bounds of the "
                 "parliamentary term. A query with no results before coverage_from "
-                "means the corpus does not reach that far back."
+                "means the corpus does not reach that far back. Note also that "
+                "text_type='other' means UNCLASSIFIED, not 'a different kind of "
+                "text': rows recovered from plenary TOC pages carry no type "
+                "marker, and inferring one from the document body mislabels it."
             ),
         )
 

@@ -276,7 +276,10 @@ async def list_texts_adopted(
             "coverage_from is the earliest text held, NOT the start of the "
             "parliamentary term: a search that returns nothing for a date before "
             "it means the corpus does not reach back that far, not that the "
-            "Parliament adopted nothing."
+            "Parliament adopted nothing. text_type='other' means UNCLASSIFIED: "
+            "rows recovered from plenary TOC pages carry no type marker and the "
+            "document header does not either, so filtering on text_type excludes "
+            "them rather than proving they are a different kind of text."
         ),
     )
 

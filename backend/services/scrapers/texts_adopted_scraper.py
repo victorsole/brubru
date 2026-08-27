@@ -278,8 +278,22 @@ class TextsAdoptedScraper(BaseScraper):
         )
 
     def _classify_text_type(self, title: str, description: str) -> TextType:
-        """Classify the type of adopted text."""
-        combined = f"{title} {description}".lower()
+        """Classify the type of adopted text from its title and a SHORT description.
+
+        WARNING: never pass a full document here. This is a substring test, and
+        `elif 'decision' in combined` fires on any text that mentions the word
+        anywhere -- so over a 20,000-character resolution it confidently returns
+        DECISION. Measured 27 Aug 2026: 7 of 8 sampled resolutions were
+        misclassified that way. The description is therefore truncated.
+
+        Note also what this CANNOT do. The 437 rows backfilled from plenary TOC
+        pages have no description at all -- the TOC carries only a title, and the
+        document page's own header reads "Texts adopted - <title> - <date>" with
+        no type marker. They stay OTHER, which here means UNCLASSIFIED, not
+        "some other kind of text". Guessing from body text would mislabel them.
+        """
+        # A title plus a short lead is enough to classify; a whole document is not.
+        combined = f"{title} {(description or '')[:300]}".lower()
 
         if 'legislative resolution' in combined:
             return TextType.LEGISLATIVE_RESOLUTION
