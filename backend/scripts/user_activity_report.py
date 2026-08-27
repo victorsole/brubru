@@ -76,7 +76,15 @@ INTERNAL_USER_SQL = """
     (
         u.role = 'admin'
         OR u.is_trainer IS TRUE
-        OR (u.pre_provisioned_at IS NOT NULL AND u.claimed_at IS NULL)
+        -- U3 (27 Aug 2026): provisioned + unclaimed + NEVER LOGGED IN.
+        -- The `last_login IS NULL` clause is the whole change. A shell a real
+        -- human has signed into is not our own row, whatever its claim state:
+        -- on 26 Aug two GBSB staff logged in during a live demo and this rule
+        -- filed both as "internal", so Section 1 printed "(none)" on a day
+        -- three people used Brubru. A binary flag could not express the third
+        -- state; SEGMENT_SQL now carries `logged_in_unclaimed` for it.
+        OR (u.pre_provisioned_at IS NOT NULL AND u.claimed_at IS NULL
+            AND u.last_login IS NULL)
         OR u.email IS NULL OR u.email = ''
         OR u.email ILIKE '%beresol%'
         OR u.email ILIKE '%@example.com'
@@ -118,13 +126,19 @@ SEGMENT_SQL = f"""
     CASE
         WHEN {SYNTHETIC_PRE_USER_SQL} THEN 'synthetic'
         WHEN u.id IS NULL THEN 'pre-user'
+        -- A provisioned shell someone has actually signed into. Reported under
+        -- its own name so a demo is visible instead of being folded into 'us'.
+        WHEN u.pre_provisioned_at IS NOT NULL AND u.claimed_at IS NULL
+             AND u.last_login IS NOT NULL THEN 'logged_in_unclaimed'
         WHEN {INTERNAL_USER_SQL} THEN 'internal'
         WHEN u.subscription_tier IN ('yellow', 'blue') THEN 'subscriber'
         ELSE 'free'
     END
 """
 
-REAL_SEGMENTS = ("pre-user", "subscriber", "free")
+# `logged_in_unclaimed` is a REAL segment: a human signed in. It is not a
+# paying subscriber, so it never reaches WAPU, but it must be visible.
+REAL_SEGMENTS = ("pre-user", "subscriber", "free", "logged_in_unclaimed")
 
 
 def _engine():
@@ -536,29 +550,38 @@ def section_wapu(conn, end):
         conn,
         f"""
         WITH paid AS (
-            SELECT u.id, u.email, u.subscription_tier
+            SELECT u.id, u.email, u.subscription_tier,
+                   u.claimed_at, u.pre_provisioned_at,
+                   -- U2 (27 Aug 2026): EVIDENCE of payment, not a tier string.
+                   -- `subscription_tier` is set by the provisioning script as
+                   -- readily as by Stripe, so a pre-provisioned demo shell
+                   -- satisfied "paid subscriber" and reported itself as WAPU.
+                   -- On 27 Aug all three blue rows carried stripe_customer_id
+                   -- NULL and stripe_subscription_id NULL: nobody had paid us
+                   -- anything, and the north star said 1.
+                   (u.stripe_subscription_id IS NOT NULL) AS has_stripe_sub
             FROM users u
             WHERE u.subscription_tier IN ('yellow', 'blue')
               AND u.is_active IS NOT FALSE
               AND NOT {INTERNAL_USER_SQL}
         ),
         acted AS (
-            SELECT user_id, 'chat' AS action FROM chats
+            SELECT user_id, 'chat' AS action, created_at AS acted_at FROM chats
                 WHERE created_at >= :start AND created_at < :end
             UNION ALL
-            SELECT user_id, 'document' FROM user_documents
+            SELECT user_id, 'document', created_at FROM user_documents
                 WHERE created_at >= :start AND created_at < :end
             UNION ALL
-            SELECT user_id, 'tracked file' FROM user_carriage_tracks
+            SELECT user_id, 'tracked file', tracked_since FROM user_carriage_tracks
                 WHERE tracked_since >= :start AND tracked_since < :end
             UNION ALL
-            SELECT user_id, 'amendment' FROM amendments
+            SELECT user_id, 'amendment', created_at FROM amendments
                 WHERE created_at >= :start AND created_at < :end
             UNION ALL
-            SELECT user_id, 'compliance run' FROM compliance_analyses
+            SELECT user_id, 'compliance run', created_at FROM compliance_analyses
                 WHERE created_at >= :start AND created_at < :end
             UNION ALL
-            SELECT user_id, 'api' FROM api_usage_events
+            SELECT user_id, 'api', created_at FROM api_usage_events
                 WHERE created_at >= :start AND created_at < :end
                   AND NOT is_probe   -- our own verification traffic is not a user action
         )
@@ -566,7 +589,19 @@ def section_wapu(conn, end):
                count(a.action) AS actions,
                string_agg(DISTINCT a.action, ', ') AS surfaces
         FROM paid p
-        LEFT JOIN acted a ON a.user_id = p.id
+        -- U1 (27 Aug 2026): a CLAIMED shell's history BEFORE the claim is OURS,
+        -- not theirs. /dormant-claim writes a private-guide bundle into
+        -- user_documents at provisioning time; when the prospect later claims
+        -- the row, those writes became "their" actions retroactively. Xavier
+        -- Arola's three credited document actions were written by the
+        -- provisioning script at 13:42 on 25 Aug; he claimed at 08:49 on
+        -- 26 Aug, nineteen hours later. The 14 Aug claim gate closed the
+        -- unclaimed-shell hole and moved this one one step along.
+        LEFT JOIN acted a
+               ON a.user_id = p.id
+              AND (p.pre_provisioned_at IS NULL
+                   OR (p.claimed_at IS NOT NULL AND a.acted_at >= p.claimed_at))
+        WHERE p.has_stripe_sub          -- U2: paid means paid
         GROUP BY 1, 2
         HAVING count(a.action) > 0
         ORDER BY 3 DESC

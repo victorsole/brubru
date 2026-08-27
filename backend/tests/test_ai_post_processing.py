@@ -792,15 +792,34 @@ class TestCitationOrderingAndBinding:
         )
         assert "AVAILABLE SOURCES" not in msgs[-1]['content']
 
-    def test_a_capped_source_list_says_what_it_dropped(self, service):
-        """A silent cap reads as 'these are all the sources'."""
+    def test_a_capped_source_list_does_not_invite_uncited_sources(self, service):
+        """
+        REVERSED on 27 Aug 2026 (audit P3). This test previously asserted the
+        opposite: that the block ends with "(and N further source(s), numbered
+        21-N, not listed here)". The reasoning behind that was sound -- a silent
+        cap reads as "these are all the sources" -- but the remedy was worse
+        than the disease. Naming twenty sources and then telling the model there
+        are forty-three more, by number, is an instruction to cite documents it
+        has never seen, and it obeyed: the 26 Aug fishing answer held 63
+        citations, was shown 20, and cited [60], sourcing a legal definition to
+        an unrelated act. `_strip_orphan_citations` passed it because 60 <= 63.
+
+        The invariant now is the honest one: a source is citable only if it was
+        named. `_citable_citations()` truncates the array the guard bounds
+        against to the same twenty, so the bound can fail again.
+        """
         many = self.Ctx(web_search_results=[
             {'title': f'Source {i}', 'url': f'https://x{i}.example'} for i in range(30)
         ])
         cites = service._build_citations_from_context(many)
         block = service._format_sources_block(cites)
-        assert "further source(s)" in block
-        assert "not listed here" in block
+        assert "further source(s)" not in block
+        assert "not listed here" not in block
+
+        citable = service._citable_citations(cites)
+        assert len(citable) == service._MAX_LISTED_SOURCES
+        # A marker beyond the named set must now be stripped, not passed.
+        assert "[25]" not in service._strip_orphan_citations("Quotas are set [25].", citable)
 
     def test_the_documents_branch_also_gets_the_numbering(self, service):
         cites = service._build_citations_from_context(self._mixed())

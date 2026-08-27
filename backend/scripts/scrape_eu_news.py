@@ -173,8 +173,40 @@ PORTALS = [
      "source": "Contexte EU", "category": "ec", "priority": 2},
 
     # ── ECB Press Releases (via RSS) ─────────────────────────────────
+    # type="rss" since 27 Aug 2026: this is an RSS document served with a .html
+    # extension. Parsed as HTML it yielded 0 items for months.
     {"url": "https://www.ecb.europa.eu/rss/press.html",
-     "source": "ECB", "category": "ecb", "priority": 2},
+     "source": "ECB", "category": "ecb", "priority": 2, "type": "rss"},
+
+    # ── Council of the EU ────────────────────────────────────────────
+    # Added 27 Aug 2026. The Council was absent from this list ENTIRELY, so
+    # "nothing from the Council" was never a finding about the Council -- we
+    # had never asked it. consilium.europa.eu 403s an honest bot UA behind a
+    # "Browser check", so it is fetched with Playwright.
+    {"url": "https://www.consilium.europa.eu/en/press/press-releases/",
+     "source": "Council of the EU", "category": "council", "priority": 1,
+     "type": "waf_listing", "link_re": r"/en/press/press-releases/\d{4}/\d{2}/\d{2}/"},
+
+    # ── Agency holdouts the v2 store carried and this scrape did not ──
+    # Added 27 Aug 2026 after the cross-check: EBA consultations, EPPO
+    # investigations and EEAS statements all reached /api/v2/news/all and never
+    # reached these 47 portals. The reverse direction was clean, so the portal
+    # list -- not the store -- was the narrow end.
+    {"url": "https://www.eba.europa.eu/rss.xml",
+     "source": "EBA", "category": "agency", "priority": 3, "type": "rss"},
+    # EPPO and EEAS publish no RSS -- both candidate feed paths 404. Probed
+    # rather than guessed a third time (the "404 = switch tool, never re-guess a
+    # similar path" rule); their HTML listings return 200, so they use the
+    # default listing parser.
+    {"url": "https://www.eppo.europa.eu/media/news_en",
+     "source": "EPPO", "category": "agency", "priority": 3},
+    # EEAS is deliberately NOT wired here (27 Aug 2026). Its press-material
+    # listing parses into navigation labels and tender notices
+    # ("Afghanistan (454)", "CALL FOR EXPRESSION OF INTEREST ..."), not press
+    # items. A portal that emits noise is worse than one that is absent,
+    # because noise reads as coverage. EEAS statements DO reach
+    # /api/v2/news/all, so nothing is lost meanwhile; wiring it needs a real
+    # per-page selector, tracked as an open item.
 
     # ── Official Journal L-series (adopted legislation via EUR-Lex RSS) ─
     {"url": "https://eur-lex.europa.eu/EN/display-feed.rss?rssId=222",
@@ -276,12 +308,18 @@ HEADERS = {
 
 # Date patterns commonly found on EU institutional pages
 DATE_PATTERNS = [
+    # RFC-822, the standard RSS <pubDate> form. Added 27 Aug 2026: without it
+    # every item from an RSS portal arrived undated, which silently exempts it
+    # from the recency window.
+    re.compile(r'(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{4})', re.I),
     re.compile(r'(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})', re.I),
     re.compile(r'(\d{4})-(\d{2})-(\d{2})'),
     re.compile(r'(\d{1,2})/(\d{1,2})/(\d{4})'),
 ]
 
 MONTH_MAP = {
+    'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'jun': 6, 'jul': 7,
+    'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
     'january': 1, 'february': 2, 'march': 3, 'april': 4,
     'may': 5, 'june': 6, 'july': 7, 'august': 8,
     'september': 9, 'october': 10, 'november': 11, 'december': 12,
@@ -422,6 +460,143 @@ async def scrape_politico_eu(portal: dict) -> List[NewsItem]:
     except Exception as e:
         print(f"  [ERROR] Politico EU RSS: {str(e)[:80]}", file=sys.stderr)
     return items
+
+
+async def _parse_rss_bytes(xml_text: str, portal: dict) -> List[NewsItem]:
+    """Parse a plain RSS/Atom document into NewsItems.
+
+    Shared by `rss` (plain fetch) and `waf_rss` (Playwright fetch) so the two
+    differ only in HOW the bytes were obtained, never in how they are read.
+    """
+    from xml.etree import ElementTree as ET
+    items: List[NewsItem] = []
+    try:
+        root = ET.fromstring(xml_text)
+    except ET.ParseError as exc:
+        print(f"  [WARN] {portal['source']}: not parseable as XML ({exc})", file=sys.stderr)
+        return items
+
+    ATOM = '{http://www.w3.org/2005/Atom}'
+    nodes = root.findall('.//item') or root.findall(f'.//{ATOM}entry')
+    for el in nodes:
+        t_el = el.find('title')
+        if t_el is None:
+            t_el = el.find(f'{ATOM}title')
+        title = (t_el.text or '').strip() if t_el is not None else ''
+
+        l_el = el.find('link')
+        if l_el is not None and (l_el.text or '').strip():
+            link = (l_el.text or '').strip()
+        else:
+            l_el = el.find(f'{ATOM}link')
+            link = (l_el.get('href') or '').strip() if l_el is not None else ''
+
+        d_el = el.find('pubDate')
+        if d_el is None:
+            d_el = el.find(f'{ATOM}updated')
+        date = parse_date_text((d_el.text or '').strip()) if d_el is not None and d_el.text else None
+
+        desc_el = el.find('description')
+        if desc_el is None:
+            desc_el = el.find(f'{ATOM}summary')
+        snippet = re.sub(r'<[^>]+>', ' ', (desc_el.text or '')) if desc_el is not None and desc_el.text else ''
+        snippet = re.sub(r'\s+', ' ', snippet).strip()[:300]
+
+        if not title or not link:
+            continue
+        if link.startswith('/'):
+            from urllib.parse import urljoin
+            link = urljoin(portal['url'], link)
+        items.append(NewsItem(title=title, url=link, date=date,
+                              source=portal['source'], category=portal['category'],
+                              priority=portal.get('priority', 99), snippet=snippet))
+    return items
+
+
+async def scrape_rss(client, portal: dict) -> List[NewsItem]:
+    """Plain-fetch RSS/Atom.
+
+    WHY (audit 27 Aug 2026): the ECB feed had been configured as a normal HTML
+    portal and reported 0 items for months. It was never a WAF and never a fetch
+    failure -- `https://www.ecb.europa.eu/rss/press.html` returns perfectly valid
+    RSS, it just carries a .html extension, so the listing parser was handed an
+    XML document and found no article cards in it. An empty result is usually a
+    broken instrument, and here the instrument was the parser choice.
+    """
+    try:
+        resp = await client.get(portal["url"], headers={
+            'User-Agent': HEADERS['User-Agent'],
+            'Accept': 'application/rss+xml, application/atom+xml, text/xml, */*',
+        })
+        if resp.status_code != 200:
+            print(f"  [WARN] {portal['source']} RSS returned {resp.status_code}", file=sys.stderr)
+            return []
+        return await _parse_rss_bytes(resp.text, portal)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  [WARN] {portal['source']} RSS failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return []
+
+
+async def scrape_waf_listing(portal: dict) -> List[NewsItem]:
+    """A listing page behind a WAF -- rendered with Playwright, links extracted.
+
+    WHY (audit 27 Aug 2026): the Council was absent from PORTALS ENTIRELY, so
+    "nothing from the Council" was never a finding about the Council; we had
+    never asked it. consilium.europa.eu answers an honest bot UA with HTTP 403
+    and a "Browser check" interstitial, and the standing rule at a wall is to
+    bring a real browser rather than negotiate with it by guessing headers
+    (memory/feedback_waf_walled_use_playwright).
+
+    Its RSS endpoint is NOT usable through a browser: Chromium renders the raw
+    XML to an empty body (39 bytes, `<html><head></head><body></body></html>`).
+    The HTML listing renders fully, and carries the publication date inside the
+    article path (/en/press/press-releases/YYYY/MM/DD/slug), which is a more
+    reliable date than any on-page string.
+    """
+    items: List[NewsItem] = []
+    try:
+        from services.scrapers.waf_browser_fetcher import fetch_one
+        # `fetch_one` drives Playwright's SYNC API, which raises if called on
+        # the event loop; the scrape runs under asyncio, so it goes to a thread.
+        res = await asyncio.to_thread(
+            fetch_one, portal["url"], expand_accordions=False, strip_chrome=False
+        )
+        html = (getattr(res, "html", None) or "")
+        if len(html) < 500:
+            print(f"  [WARN] {portal['source']}: browser render returned "
+                  f"{len(html)} bytes -- treat as FETCH failure, not as 'no news'",
+                  file=sys.stderr)
+            return items
+
+        link_re = re.compile(portal["link_re"])
+        soup = BeautifulSoup(html, "html.parser")
+        seen = set()
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            m = link_re.search(href)
+            if not m:
+                continue
+            title = " ".join(a.get_text(" ", strip=True).split())
+            if not title or len(title) < 15:
+                continue
+            from urllib.parse import urljoin
+            url = urljoin(portal["url"], href)
+            if url in seen:
+                continue
+            seen.add(url)
+            date = None
+            d = re.search(r"/(\d{4})/(\d{2})/(\d{2})/", href)
+            if d:
+                date = f"{d.group(1)}-{d.group(2)}-{d.group(3)}"
+            items.append(NewsItem(title=title, url=url, date=date,
+                                  source=portal["source"], category=portal["category"],
+                                  priority=portal.get("priority", 99)))
+    except Exception as exc:  # noqa: BLE001
+        print(f"  [WARN] {portal['source']} WAF listing failed: "
+              f"{type(exc).__name__}: {exc}", file=sys.stderr)
+    return items
+
+
 
 
 async def scrape_oj_rss(portal: dict) -> List[NewsItem]:
@@ -1002,6 +1177,10 @@ async def main():
                     result = await scrape_politico_eu(portal)
                 elif portal_type == "oj_rss":
                     result = await scrape_oj_rss(portal)
+                elif portal_type == "rss":
+                    result = await scrape_rss(client, portal)
+                elif portal_type == "waf_listing":
+                    result = await scrape_waf_listing(portal)
                 else:
                     result = await scrape_portal(client, portal)
                 if result:

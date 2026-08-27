@@ -2,6 +2,93 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "First-reading amendments of 11 March 2026 published in the OJ C-series.",
+      "refs": [
+        "52026AP0070"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "european_semester_annual_report_2026",
+      "title": "European Semester Annual Report 2026",
+      "summary": "March 2026 plenary resolution published as P10_TA(2026)0075.",
+      "refs": [
+        "52026IP0075"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "eu_fishing_opportunities_tac_quotas",
+      "title": "How the EU Sets Fishing Opportunities",
+      "summary": "EP resolution on sensitive and invasive species published in the OJ C-series.",
+      "refs": [
+        "52026IP0067"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "eu_funding_third_country_participation",
+      "title": "EU Funding: Third-Country Participation",
+      "summary": "EU-Angola Sustainable Investment Facilitation Agreement committee decision 1/2026.",
+      "refs": [
+        "22026D1957"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "eu_uk_security_defence_partnership",
+      "title": "EU-UK Security and Defence Partnership",
+      "summary": "TCA Specialised Committee Decision 1/2026 on UK participation in Union programmes.",
+      "refs": [
+        "22026D1962"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence",
+      "summary": "Titanium dioxide anti-dumping investigation reopened, plus three new duty regulations.",
+      "refs": [
+        "52026XC04533",
+        "32026R1904",
+        "32026R1929",
+        "32026R1914"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "updated",
+      "guide": "animal_health_law_regulation",
+      "title": "Animal Health Law (Regulation (EU) 2016/429)",
+      "summary": "Four disease-control acts in one week: African swine fever in Finland, avian influenza entries for Canada and the US, sheep and goat pox in Romania.",
+      "refs": [
+        "32026R1961",
+        "32026R1959",
+        "32026D1958",
+        "32026D1956"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "action": "added",
+      "guide": "eu_canada_relations",
+      "title": "EU-Canada Relations: CETA, SPA and the 2026 Parliament Recommendation",
+      "summary": "New guide. Parliament recommendation on enhanced EU-Canada cooperation published in the OJ; CETA is provisionally applied, not in force.",
+      "refs": [
+        "52026IP0078",
+        "32017D0038"
+      ]
+    },
+    {
       "date": "2026-08-26",
       "action": "updated",
       "guide": "eu_food_safety_pesticides",

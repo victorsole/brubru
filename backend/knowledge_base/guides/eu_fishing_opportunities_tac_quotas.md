@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **PUBLISHED (OJ C-series, week to 27 August 2026)**: the plenary resolution of **10 March 2026** on **fisheries management approaches for safeguarding sensitive species, tackling invasive species and benefiting local economies** was published as **P10_TA(2026)0067** - CELEX `52026IP0067`. An own-initiative resolution: it does not bind the Council's Article 43(3) TAC decision, and is the kind of text the Parliament uses to make its views heard on a file it cannot vote on.
 - **LATEST (Monday 24 August 2026)**: the Commission tabled **COM 52026PC0437**, a Proposal for a Council Regulation **fixing the fishing opportunities for certain fish stocks in the Baltic Sea for 2027**, and amending Regulation (EU) 2026/249 as regards certain fishing opportunities in other waters. This is the opening move of the 2027 fishing-opportunities round. Announced the same day by the Commission newsroom ("Commission proposes fishing opportunities for 2027 in the Baltic Sea").
 - **The single most misunderstood fact**: fishing opportunities are fixed by the **Council alone**, under **Article 43(3) TFEU**, on a Commission proposal. **The European Parliament has no vote.** It is not the ordinary legislative procedure. PECH may hold exchanges of views and the EP adopts own-initiative resolutions on the policy, but the TAC regulation itself is a Council act.
 - **Parent framework**: Common Fisheries Policy, **Regulation (EU) No 1380/2013** — CELEX `32013R1380`. ELI: http://publications.europa.eu/resource/eli/reg/2013/1380/oj

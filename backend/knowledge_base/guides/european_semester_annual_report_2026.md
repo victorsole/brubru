@@ -1,6 +1,7 @@
 # European Semester Annual Report 2026 -- EP Reports
 
 ## QUICK FACTS
+- **PUBLISHED (OJ C-series, week to 27 August 2026)**: the plenary resolution of **11 March 2026** on the European Semester for economic policy coordination 2026 (procedure 2025/2214(INI)) was published as **P10_TA(2026)0075** - CELEX `52026IP0075`. This is the citable OJ reference for the adopted text.
 - Topic: EP own-initiative reports on the 2026 European Semester (economic coordination + employment)
 - ECON report procedure: 2025/2182(INI), rapporteur Kira Marie Peter-Hansen (Greens/EFA, Denmark)
 - EMPL report procedure: 2025/2183(INI), rapporteur Nela Riehl (Greens/EFA, Germany), reference A10-0033/2026

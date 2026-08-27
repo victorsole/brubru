@@ -1242,7 +1242,10 @@ class AIService:
         assistant_message = self._strip_fabricated_beresol_links(assistant_message)
 
         # Strip orphan [N] citation markers that don't map to real sources
-        assistant_message = self._strip_orphan_citations(assistant_message, citations)
+        # Bound against the sources the model was SHOWN, not every source we
+        # built (audit P3, 27 Aug 2026). See _citable_citations.
+        assistant_message = self._strip_orphan_citations(
+            assistant_message, self._citable_citations(citations))
 
         # Strip leaked internal context markers from response
         assistant_message = self._strip_context_markers(assistant_message)
@@ -1679,7 +1682,9 @@ class AIService:
         message = self._strip_fabricated_beresol_links(message)
         # citations=[] means every [N] marker is an orphan, which is the
         # correct reading when no sources were attached.
-        message = self._strip_orphan_citations(message, citations or [])
+        # Bound against the sources the model was SHOWN (audit P3, 27 Aug 2026).
+        message = self._strip_orphan_citations(
+            message, self._citable_citations(citations))
         message = self._strip_context_markers(message)
         message = self._normalise_url_hyphens(message)
         message = self._repair_stale_urls(message)
@@ -3660,6 +3665,18 @@ USER QUESTION: {user_message}
             parts[i] = seg
         return "".join(parts)
 
+    @staticmethod
+    def _markdown_link_spans(text: str) -> List[tuple]:
+        """
+        (start, end) spans of every markdown link already present in `text`
+        (audit P4, 27 Aug 2026).
+
+        Used to stop the linkifier matching an acronym inside another link's
+        LABEL, which is the one position the single-character lookarounds
+        cannot see and the one that produces a nested link.
+        """
+        return [m.span() for m in re.finditer(r'\[[^\]\[]*\]\([^)\s]*\)', text or '')]
+
     def _linkify_legislation(self, text: str) -> str:
         """
         Post-process AI response to add EUR-Lex markdown links for legislation acronyms.
@@ -3832,23 +3849,30 @@ USER QUESTION: {user_message}
             # Negative lookahead: not followed by ]( or )
             pattern = r'(?<!\]\()(?<!\[)\*{0,2}\b(' + escaped_acronym + r')\b\*{0,2}(?!\]\()(?!\))'
 
-            # Replacement: preserve any found text structure but wrap in link
-            def replace_func(match):
-                nonlocal links_added
-                matched_text = match.group(0)
-                # Remove any markdown bold from the matched text
-                cleaned_text = matched_text.replace('**', '')
+            # LINK-SPAN SKIP (audit P4, 27 Aug 2026) + first-occurrence-only.
+            #
+            # The lookarounds above are single-token: they refuse a match glued
+            # to `[` or `](`, but they cannot see a match in the MIDDLE of a
+            # link label. So a short acronym could be linked inside a link a
+            # longer name had already produced, yielding a nested
+            # "[Cyber [Resilience Act](wrong)](right)" -- which is what shipped
+            # on 26 Aug. Masking the spans of links already present makes that
+            # structurally impossible, whatever order the names are tried in
+            # and however the model phrased the sentence.
+            #
+            # count=1 semantics preserved (24 Jun 2026, audit B1): link only the
+            # FIRST eligible occurrence, or a sentence renders the same EUR-Lex
+            # link two or three times and reads as broken. "Eligible" now means
+            # "not inside an existing link", so a skipped match no longer spends
+            # the one replacement.
+            link_spans = self._markdown_link_spans(text)
+            for _m in re.finditer(pattern, text):
+                if any(_a <= _m.start() < _b for _a, _b in link_spans):
+                    continue
+                cleaned_text = _m.group(0).replace('**', '')
+                text = f'{text[:_m.start()]}[{cleaned_text}]({eurlex_url}){text[_m.end():]}'
                 links_added += 1
-                return f'[{cleaned_text}]({eurlex_url})'
-
-            # For case-sensitive matching (most acronyms are uppercase).
-            # count=1 (24 Jun 2026): link only the FIRST unlinked occurrence of
-            # each acronym. Without it, re.sub linkified EVERY occurrence, so a
-            # single sentence rendered "[CBAM](url) ... buy [CBAM](url)
-            # certificates" -- the same EUR-Lex link repeated 2-3x per line,
-            # which reads as broken. Mirrors the count=1 doc-link injector above.
-            # See audit B1 2026-06-24.
-            text = re.sub(pattern, replace_func, text, count=1)
+                break
 
         if links_added > 0:
             logger.info(f"Added {links_added} legislation EUR-Lex links to response")
@@ -4144,13 +4168,32 @@ USER QUESTION: {user_message}
             if len(title) > 120:
                 title = title[:117].rstrip() + '...'
             lines.append(f"[{c['id']}] {title}")
-        omitted = len(citations) - len(lines)
-        if omitted > 0:
-            # Say what was dropped. A silent cap reads as "these are all the
-            # sources", and the model would then never cite the rest.
-            lines.append(f"(and {omitted} further source(s), numbered "
-                         f"{len(lines) + 1}-{len(citations)}, not listed here)")
+        # NO "further sources" invitation (audit P3, 27 Aug 2026).
+        #
+        # This block used to end with "(and N further source(s), numbered
+        # 21-N, not listed here)" -- an explicit instruction to cite sources
+        # the model had never been shown. It did exactly that. The witness:
+        # the 26 Aug fishing answer held 63 citations, was shown 20, and cited
+        # [60]; `_strip_orphan_citations` passed it because 60 <= 63, a check
+        # that cannot fail on the very input it exists for. Three of the four
+        # answers stored the day after this block shipped carried a marker
+        # above [20], sourcing legal definitions to unrelated documents.
+        #
+        # Naming a source is what makes it citable. The companion half of this
+        # fix is in `_citable_citations()`, which truncates the array the guard
+        # bounds against to the same named set, so the bound can fail again.
         return "AVAILABLE SOURCES (cite by these exact numbers):\n" + "\n".join(lines)
+
+    def _citable_citations(self, citations: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+        """
+        The sources the model was actually shown, and therefore the only ones a
+        `[N]` marker may legitimately refer to (audit P3, 27 Aug 2026).
+
+        `_strip_orphan_citations` must bound against THIS, not the full array.
+        Passing it the full array is what let `[60]` through against 63
+        citations of which 20 were named.
+        """
+        return list(citations or [])[:self._MAX_LISTED_SOURCES]
 
     async def get_model_info(self) -> Dict[str, Any]:
         """
@@ -4744,32 +4787,116 @@ USER QUESTION: {user_message}
                 return None
             return f"{m.group(1)}/{int(m.group(2))}"
 
-        result = text
-        for name, entry in acronyms.items():
+        # Build the candidate list ONCE, longest name first (audit P2, 27 Aug
+        # 2026). The linkifier has sorted this way since it shipped; this
+        # function iterated `acronyms.items()` in dict order, so a short key
+        # could win a match a longer key owns.
+        candidates = []
+        for name, entry in sorted(acronyms.items(), key=lambda kv: len(kv[0]), reverse=True):
             if len(name) < 3:
                 continue
             canonical = _canonical_number((entry or {}).get("celex", ""))
-            if not canonical:
-                continue
-            for name_match in re.finditer(re.escape(name) + r"\b", result):
-                tail_start = name_match.end()
-                # Only look immediately after the act name. The name is often
-                # the label of a markdown link, so skip an optional "](url)"
-                # closer and any whitespace before testing for the apposition.
-                gap = re.compile(r"(?:\]\([^)\s]*\))?\s*").match(result, tail_start)
-                appos = self._ACT_NUMBER_APPOSITION_RE.match(result, gap.end())
-                if not appos:
-                    continue
-                asserted = f"{appos.group(1)}/{int(appos.group(2))}"
-                if asserted == canonical:
-                    continue
-                logger.warning(
-                    "[post] dropped contradicting act number for %s: asserted %s, canonical %s",
-                    name, asserted, canonical,
-                )
-                result = result[:appos.start()] + result[appos.end():]
-                break  # positions shifted; the next pass over names re-scans
+            if canonical:
+                # LEFT BOUNDARY (audit P1, 27 Aug 2026). The pattern used to be
+                # `re.escape(name) + r"\b"`: a RIGHT boundary only, so `RIS`
+                # matched inside `ECRIS`, `IAS` inside `ETIAS`, `IMA` inside
+                # `PRIMA`. A lookbehind rather than `\b`, because `\b` still
+                # matches after a hyphen and would re-admit `ERIC` inside
+                # `DANUBIUS-ERIC` and `ECRIS` inside `ECRIS-TCN`.
+                candidates.append((
+                    name, canonical,
+                    re.compile(r"(?<![A-Za-z0-9-])" + re.escape(name) + r"\b"),
+                ))
+
+        def _overlaps(span, claimed):
+            return any(not (span[1] <= a or span[0] >= b) for a, b in claimed)
+
+        result = text
+        # Re-scan after each deletion: removing an apposition shifts every
+        # position after it, so cached spans cannot be trusted across an edit.
+        # Bounded so a pathological answer cannot spin.
+        for _ in range(20):
+            pending = None
+            claimed = []  # spans owned by an act name already considered
+            for name, canonical, pattern in candidates:
+                for name_match in pattern.finditer(result):
+                    # SPAN CLAIMING (audit P1, 27 Aug 2026) -- the half a left
+                    # boundary cannot do. `Resilience Act` nests inside `Cyber
+                    # Resilience Act` on a SPACE, so no character-class
+                    # lookbehind can separate them. Because candidates are
+                    # ordered longest-first, the longer name claims the span
+                    # first and the shorter one is refused it.
+                    #
+                    # This is the Cyber Resilience Act defect: the short key's
+                    # canonical number is IMERA's 2024/2747, so it read the
+                    # CRA's own TRUE 2024/2847 as a contradiction and deleted
+                    # it -- fifteen days before CRA Article 14 applies.
+                    if _overlaps(name_match.span(), claimed):
+                        continue
+                    claimed.append(name_match.span())
+                    tail_start = name_match.end()
+                    # Only look immediately after the act name. The name is
+                    # often the label of a markdown link, so skip an optional
+                    # "](url)" closer and any whitespace before testing.
+                    gap = re.compile(r"(?:\]\([^)\s]*\))?\s*").match(result, tail_start)
+                    appos = self._ACT_NUMBER_APPOSITION_RE.match(result, gap.end())
+                    if not appos:
+                        continue
+                    asserted = f"{appos.group(1)}/{int(appos.group(2))}"
+                    if asserted == canonical:
+                        continue
+                    pending = (name, asserted, canonical, appos.start(), appos.end())
+                    break
+                if pending:
+                    break
+            if not pending:
+                break
+            name, asserted, canonical, a_start, a_end = pending
+            # Count it durably (audit P5, 27 Aug 2026). This transform DELETES
+            # text from an answer a user is about to read. Until today it only
+            # logger.warning'd, so there was no way to say how many TRUE act
+            # numbers it had removed historically -- the question the CRA defect
+            # raised and that we could not answer. Silence is not success.
+            self._record_act_number_deletion(name, asserted, canonical)
+            logger.warning(
+                "[post] dropped contradicting act number for %s: asserted %s, canonical %s",
+                name, asserted, canonical,
+            )
+            result = result[:a_start] + result[a_end:]
         return re.sub(r"\s{2,}", " ", result).replace(" .", ".").replace(" ,", ",")
+
+    def _record_act_number_deletion(self, name: str, asserted: str, canonical: str) -> None:
+        """
+        Persist one act-number deletion (audit P5, 27 Aug 2026).
+
+        Writes to `post_processing_deletions` (migration 224). Best-effort by
+        design: this runs inside answer post-processing, so a bookkeeping
+        failure must never cost the user their answer. But it must not be
+        silent either -- a swallowed write is exactly the failure mode this row
+        exists to measure, so the fallback is a loud, greppable log line and an
+        in-process counter surfaced on /api/chat/health.
+        """
+        AIService._act_number_deletions = getattr(AIService, "_act_number_deletions", 0) + 1
+        try:
+            from core.database import SessionLocal
+            from sqlalchemy import text as _sql
+            with SessionLocal() as session:
+                session.execute(
+                    _sql("""
+                        INSERT INTO post_processing_deletions
+                            (transform, act_name, asserted_number, canonical_number)
+                        VALUES (:t, :n, :a, :c)
+                    """),
+                    {"t": "strip_contradicting_act_numbers", "n": name[:200],
+                     "a": asserted[:32], "c": canonical[:32]},
+                )
+                session.commit()
+        except Exception as exc:  # noqa: BLE001
+            logger.error(
+                "[post][DELETION-UNRECORDED] could not persist act-number deletion "
+                "(name=%s asserted=%s canonical=%s): %s: %s",
+                name, asserted, canonical, type(exc).__name__, exc,
+            )
 
     def _get_legislation_acronyms(self) -> Dict[str, Dict[str, Any]]:
         """Cached accessor for the acronym -> canonical CELEX map."""

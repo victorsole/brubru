@@ -134,11 +134,17 @@ def test_wapu_query_excludes_probes():
     still reads the same inflated number.
     """
     from pathlib import Path
+    import re as _re
     src = Path(__file__).resolve().parents[1] / "scripts" / "user_activity_report.py"
     text_ = src.read_text()
-    idx = text_.find("SELECT user_id, 'api' FROM api_usage_events")
-    assert idx != -1, "WAPU api branch not found -- did the query move?"
-    window = text_[idx: idx + 320]
+    # Match the api branch by its SHAPE, not by an exact column list. The first
+    # version pinned the literal "SELECT user_id, 'api' FROM api_usage_events"
+    # and broke on 27 Aug when the branch gained `created_at` for the U1
+    # pre-claim fix -- a true change to a neighbouring concern reported as a
+    # failure of this one. What must hold is that the api branch filters probes.
+    m = _re.search(r"SELECT\s+user_id\s*,\s*'api'.*?FROM\s+api_usage_events", text_, _re.S)
+    assert m is not None, "WAPU api branch not found -- did the query move?"
+    window = text_[m.start(): m.start() + 320]
     # Strip SQL line-comments first: `-- our own verification traffic is not a
     # user action` sits on the same line as the filter, and a version of this
     # test that grepped the raw window could be satisfied by the comment alone.
