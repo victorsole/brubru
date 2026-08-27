@@ -155,6 +155,32 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         scrapers = {"last_checked": None, "checked": 0, "confirmed_breaks": [],
                     "error": f"{type(exc).__name__}"}
 
+    # --- corpus completeness -------------------------------------------
+    # The tier table says whether jobs RAN. This says whether the corpora they
+    # maintain are actually COMPLETE, which is a different question: every
+    # defect found on 27 Aug 2026 was a corpus that looked fine while a job
+    # reported success over a range that was itself wrong.
+    #
+    # Computed live rather than read from a cached verdict, so it can never be
+    # stale in the direction that matters.
+    try:
+        from scripts.ep_council_completeness import run_checks
+        checks = run_checks(db.connection())
+        gaps = [c for c in checks if c["gap"]]
+        corpora = {
+            "checks": len(checks),
+            "gaps": len(gaps),
+            "healthy": len(gaps) == 0,
+            "detail": [{"check": g["check"], "detail": g["detail"], "fix": g["fix"]}
+                       for g in gaps],
+        }
+    except Exception as exc:  # noqa: BLE001
+        # An error key, never an empty gap list: a check that could not run must
+        # not render identically to a corpus with nothing missing.
+        logger.warning("[sync-health] completeness checks failed: %s", exc)
+        corpora = {"checks": 0, "gaps": None, "healthy": None,
+                   "error": f"{type(exc).__name__}: {exc}"}
+
     return {
         "dispatcher": {
             "last_seen": last_seen.isoformat() if last_seen else None,
@@ -163,4 +189,5 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         },
         "tiers": tiers,
         "scrapers": scrapers,
+        "corpora": corpora,
     }

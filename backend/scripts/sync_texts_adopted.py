@@ -206,6 +206,11 @@ def main():
     group.add_argument('--date-range', nargs=2, metavar=('FROM', 'TO'),
                        help='Sync every Mon-Thu between two dates (plenary sittings fall '
                             'on those days). Dates with no sitting are reported, not hidden.')
+    group.add_argument('--recent-days', type=int, metavar='N',
+                       help='Rolling window for cron: re-walk the last N days of '
+                            'Mon-Thu sittings. Idempotent (existing texts are skipped), '
+                            'so a run that overlaps the previous one is harmless and a '
+                            'sitting published late is still picked up.')
 
     parser.add_argument('--max-dates', type=int, help='Max plenary dates to scrape per term')
     parser.add_argument('--dry-run', action='store_true', help='Test without database writes')
@@ -222,8 +227,13 @@ def main():
     elif args.term:
         print(f"[START] Syncing Texts Adopted for term {args.term}...")
         asyncio.run(run_term_sync(args.term, max_dates=args.max_dates, dry_run=args.dry_run))
-    elif args.dates or args.date_range:
+    elif args.dates or args.date_range or args.recent_days:
         dates = args.dates
+        if args.recent_days:
+            from datetime import date as _d, timedelta as _td
+            _to = _d.today()
+            _from = _to - _td(days=args.recent_days)
+            args.date_range = [_from.isoformat(), _to.isoformat()]
         if args.date_range:
             from datetime import date as _d, timedelta as _td
             a = _d.fromisoformat(args.date_range[0]); b = _d.fromisoformat(args.date_range[1])

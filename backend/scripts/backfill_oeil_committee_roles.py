@@ -121,6 +121,15 @@ def main() -> int:
                     pending_referral += 1
                 else:
                     parse_failed += 1
+                # Stamp it anyway. `oeil_roles_parsed_at` is the third state that
+                # separates "never looked at this page" from "looked, and the page
+                # genuinely carries no roles". Leaving it NULL here made the
+                # completeness check report 104 unparsed carriages that had in
+                # fact all been read -- a monitor crying about its own blind spot.
+                if args.apply:
+                    conn.execute(text(
+                        "UPDATE legislative_carriages SET oeil_roles_parsed_at = now() "
+                        "WHERE id = :id"), {"id": r.id})
                 continue
             was_wrong = (
                 facts.responsible_committee

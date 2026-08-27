@@ -49,6 +49,45 @@ MEUB_SOURCES: List[SourceSpec] = [
                "scripts/ingest_council_documents.py",
                ("--apply", "--since-days", "14", "--window-days", "7", "--fetch-bodies"),
                timeout=1800, stale_after_hours=48),
+
+    # ---- EP texts pipeline (registered 27 Aug 2026) ----------------------
+    # The tier runner executes THIS LIST IN ORDER, sequentially and fail-soft,
+    # so the order below IS the dependency chain: fetch texts -> fetch their
+    # bodies -> parse OEIL roles -> date the resolutions -> grow the resolutions
+    # corpus -> fill the joined columns -> check for gaps.
+    #
+    # Every one of these was a manual command on 27 Aug. `sync_texts_adopted`
+    # had NEVER been scheduled at all, which is why the corpus sat frozen at 251
+    # rows opening on 20 January 2026 and the EP's November 2025 resolution on
+    # protecting minors online was invisible to every search.
+    #
+    # All are idempotent: existing rows are skipped or COALESCE-guarded, so a run
+    # that overlaps the previous one is harmless.
+    SourceSpec("texts_adopted", "Texts adopted - Parliament", "warm",
+               "scripts/sync_texts_adopted.py", ("--recent-days", "30"),
+               timeout=1800, stale_after_hours=48),
+    SourceSpec("texts_adopted_bodies", "Texts adopted - full text", "warm",
+               "scripts/backfill_texts_adopted_bodies.py", ("--apply", "--limit", "150"),
+               timeout=1800, stale_after_hours=48),
+    SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
+               "scripts/backfill_oeil_committee_roles.py", ("--apply",),
+               timeout=900, stale_after_hours=48),
+    SourceSpec("resolution_dates", "Resolutions - adoption dates", "warm",
+               "scripts/backfill_resolution_dates.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
+    SourceSpec("resolutions_corpus", "Resolutions - corpus", "warm",
+               "scripts/backfill_ep_resolutions_corpus.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
+    SourceSpec("ep_enrich", "EP texts - joined columns", "warm",
+               "scripts/enrich_ep_texts_and_resolutions.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
+    # LAST on purpose: it asks what is still missing AFTER everything above ran,
+    # and exits non-zero on a real gap so the run is recorded as failed rather
+    # than passing quietly. A backfill that reports success over its own range
+    # proves nothing about whether the range was right.
+    SourceSpec("ep_council_gaps", "EP + Council completeness", "warm",
+               "scripts/ep_council_completeness.py", (),
+               timeout=300, stale_after_hours=48),
     SourceSpec("oj",           "My OJ (Official Journal)",      "fast", "scripts/sync_oj.py",             ("--apply", "--explain"), timeout=900),
     # Must stay directly after "oj": the tier runs sources in list order, so the
     # ingest lands the day's entries and this translates them in the same pass.
