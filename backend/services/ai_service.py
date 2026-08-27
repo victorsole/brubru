@@ -4926,6 +4926,15 @@ USER QUESTION: {user_message}
         in-process counter surfaced on /api/chat/health.
         """
         AIService._act_number_deletions = getattr(AIService, "_act_number_deletions", 0) + 1
+        # Never write from a test run (audit, 27 Aug 2026, same day this shipped).
+        # `tests/test_act_number_collisions.py` calls the real function, so the
+        # suite wrote four "AI Act" rows straight into the production ledger --
+        # rows an operator would read as the transform firing on live traffic.
+        # This repeats a known incident class: the v1 suite writing unmarked
+        # usage rows into production (fixed in 151e0b99). A diagnostic table is
+        # worthless if its own tests are in it.
+        if os.environ.get("PYTEST_CURRENT_TEST"):
+            return
         try:
             from core.database import SessionLocal
             from sqlalchemy import text as _sql
