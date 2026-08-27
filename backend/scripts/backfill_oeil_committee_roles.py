@@ -102,13 +102,25 @@ def main() -> int:
                   f"page and are UNTOUCHED -- they keep oeil_roles_parsed_at NULL, "
                   f"which means 'never parsed', not 'no opinion committees'")
 
-        changed = corrected = no_facts = 0
+        changed = corrected = 0
+        # "unparseable" was one bucket hiding three different facts. Audited:
+        # of 104, 96 pages carry no "Committee responsible" heading at all and
+        # 8 say "Pending final decision on the referral" -- the committee is not
+        # assigned yet. Zero were parser failures. Keeping them apart means a
+        # real parser regression cannot hide inside an expected count.
+        no_heading = pending_referral = parse_failed = 0
         samples = []
         for r in rows:
             facts = parse_procedure_text(r.oeil_text_body)
             if not facts.responsible_committee and not facts.opinion_committees \
                and not facts.rapporteur_name:
-                no_facts += 1
+                body = r.oeil_text_body or ""
+                if "Committee responsible" not in body:
+                    no_heading += 1
+                elif "Pending final decision on the referral" in body:
+                    pending_referral += 1
+                else:
+                    parse_failed += 1
                 continue
             was_wrong = (
                 facts.responsible_committee
@@ -139,7 +151,13 @@ def main() -> int:
             conn.commit()
 
         print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] parsed={changed} "
-              f"lead_committee_corrected={corrected} unparseable={no_facts}")
+              f"lead_committee_corrected={corrected}")
+        print(f"[INFO] not parsed: no_committee_section={no_heading} "
+              f"referral_still_pending={pending_referral} parse_failed={parse_failed}")
+        if parse_failed:
+            # The only one of the three that is a defect.
+            print(f"[WARN] {parse_failed} page(s) HAVE a committee section the "
+                  f"parser could not read -- that is a parser gap, not a data gap")
         if samples:
             print("[INFO] committees that were WRONG (stored -> OEIL):")
             for s in samples:

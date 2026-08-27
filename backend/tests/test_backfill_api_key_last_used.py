@@ -145,16 +145,33 @@ def test_running_twice_changes_nothing(conn):
     assert kid not in _pending_ids(conn)
 
 
-def test_production_has_no_key_with_usage_and_a_null_column():
-    """The live invariant the backfill was run to establish (20 -> 0)."""
+def test_production_has_no_key_with_settled_usage_and_a_null_column():
+    """The live invariant the backfill established (20 -> 0), minus a grace window.
+
+    `last_used_at` is written by a THROTTLED BACKGROUND task (once a minute), so a
+    key used moments ago has legitimately not been stamped yet. The first version
+    of this test ignored that and asserted an instantaneous invariant; it went red
+    on a fixture key created two minutes earlier, which is the write path working
+    as designed rather than a defect.
+
+    The real invariant is about HISTORY: usage that has had time to settle must
+    not still read as "never used".
+    """
     from core.database import SessionLocal
     db = SessionLocal()
     try:
         stale = db.execute(text("""
             SELECT count(*) FROM api_keys k
             WHERE k.last_used_at IS NULL
-              AND EXISTS (SELECT 1 FROM api_usage_events e WHERE e.api_key_id = k.id)
+              AND EXISTS (
+                  SELECT 1 FROM api_usage_events e
+                  WHERE e.api_key_id = k.id
+                    AND e.created_at < now() - interval '15 minutes'
+              )
         """)).scalar()
     finally:
         db.close()
-    assert stale == 0, f"{stale} key(s) have usage but still read as never used"
+    assert stale == 0, (
+        f"{stale} key(s) have usage older than 15 minutes and still read as "
+        "never used -- run scripts/backfill_api_key_last_used.py --apply"
+    )
