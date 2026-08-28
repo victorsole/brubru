@@ -261,3 +261,81 @@ def test_pages_do_not_overlap_under_any_order(client, order):
     p2 = client.get(f"/api/v2/news/all?days=365&limit=25&page=2&order={order}").json()["data"]
     overlap = {str(i["id"]) for i in p1} & {str(i["id"]) for i in p2}
     assert not overlap, f"order={order}: {len(overlap)} item(s) on both pages"
+
+
+# ---------------------------------------------------------------------------
+# body_txt / body_html — reported by a partner, missed by my own audit
+# ---------------------------------------------------------------------------
+# A v2 integrator found `/api/v2/news/all` returning body_txt and body_html NULL
+# with no way to force content. Three separate causes, all in the API layer while
+# the DATA was there all along (11,752 of 12,375 economy news rows have body_txt):
+#
+#   1. the union SELECT did not carry the body columns at all;
+#   2. the list hardcoded `with_body=False` and exposed no parameter;
+#   3. the detail route hardcoded `NULL AS body_txt` for institutional items, so
+#      a Commission item could not return a body from ANY route.
+#
+# My audit of v2 checked envelopes, ids, filters and pagination and never asked
+# for the body. Hence the standing rule these tests enforce.
+
+def test_the_union_carries_the_body_columns(db):
+    """If the SELECT does not project them, no parameter can ever surface them."""
+    from api.v2.news import _news_source_sql, _NEWS_TYPES
+    src, params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
+    row = db.execute(text(f"SELECT * FROM {src} u LIMIT 1"), params).fetchone()
+    assert row is not None, "no news rows at all"
+    cols = set(row._mapping.keys())
+    assert {"body_txt", "body_html"} <= cols, f"union drops the body columns: {sorted(cols)}"
+
+
+def test_include_body_returns_real_content(client):
+    """The parameter the partner could not find. Without it there is no bulk route
+    to the body at all."""
+    off = client.get("/api/v2/news/all?days=30&limit=10").json()["data"]
+    on = client.get("/api/v2/news/all?days=30&limit=10&include_body=true").json()["data"]
+    assert on, "no items returned"
+    with_body = sum(1 for i in on if (i.get("body_txt") or "").strip())
+    assert with_body > 0, "include_body=true still returns no body_txt"
+    assert all(not (i.get("body_txt") or "") for i in off), (
+        "the default list now ships full articles; that is a payload-size change"
+    )
+
+
+def test_agency_items_serve_the_full_article(client):
+    body = client.get(
+        "/api/v2/news/all?body=cedefop&days=3650&limit=5&include_body=true").json()["data"]
+    if not body:
+        pytest.skip("no cedefop items")
+    assert any((i.get("body_txt") or "").strip() for i in body)
+
+
+def test_institutional_items_are_not_hardcoded_null(client):
+    """A Commission item used to return NULL from the list AND the detail route."""
+    lst = client.get(
+        "/api/v2/news/all?body=commission&days=365&limit=5&include_body=true").json()["data"]
+    assert lst, "no commission items"
+    assert any((i.get("body_txt") or "").strip() for i in lst), (
+        "commission items still return no body_txt"
+    )
+    detail = client.get(f"/api/v2/news/{lst[0]['id']}").json()
+    assert (detail.get("body_txt") or "").strip(), (
+        "the detail route still hardcodes NULL for institutional items"
+    )
+
+
+@pytest.mark.parametrize("scope", ["commission", "cedefop"])
+def test_the_detail_route_always_serves_a_body(client, scope):
+    lst = client.get(f"/api/v2/news/all?body={scope}&days=3650&limit=1").json()["data"]
+    if not lst:
+        pytest.skip(f"no {scope} items")
+    d = client.get(f"/api/v2/news/{lst[0]['id']}").json()
+    assert (d.get("body_txt") or "").strip(), f"{scope} detail returns no body_txt"
+
+
+def test_the_description_tells_callers_how_to_get_the_body():
+    """The partner's actual complaint was 'no parameter forces these fields'. A
+    switch nobody can find is the same as no switch."""
+    from main import app
+    desc = next(r.description for r in app.routes
+                if getattr(r, "path", "") == "/api/v2/news/all")
+    assert "include_body" in desc, "the description does not mention include_body"

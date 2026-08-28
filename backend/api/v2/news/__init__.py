@@ -147,7 +147,7 @@ _EU_NEWS_SOURCE_TYPES = ["news", "press", "story"]
 # depend on. (A first cut negated the id to disambiguate, which cannot work on a
 # UUID -- `operator does not exist: - uuid`.)
 _ECONOMY_COLS = ("id::text AS id, body_code, item_type, title, summary, public_url, "
-                 "document_date, creation_date")
+                 "document_date, creation_date, body_txt, body_html")
 
 
 def _coerce_id(raw):
@@ -197,7 +197,11 @@ def _institutional_sql(codes, kinds, since, until, q):
         f"SELECT n.id::text AS id, {case_body} AS body_code, "
         f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
         f"n.source_url AS public_url, {date_expr} AS document_date, "
-        "n.created_at AS creation_date "
+        "n.created_at AS creation_date, "
+        # eu_news_items has no body column -- `summary` is the fullest text held
+        # for an institutional item. Serving it beats serving NULL, and the
+        # endpoint description says which is which rather than implying parity.
+        "n.summary AS body_txt, NULL AS body_html "
         f"FROM eu_news_items n WHERE {' AND '.join(where)}"
     )
     return sql, params
@@ -267,7 +271,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
                 "GET /api/v2/news/all?family=finance-economy&order=recent\n"
                 "GET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated "
-                "envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), "
+                "envelope. Each item carries the 5 datapoints. **`body_txt` / `body_html` are null on the list by default — pass `include_body=true` to get them in bulk**, or call `/api/v2/news/{id}` for one item. Agency items carry the full scraped article; Commission / Parliament / Council items carry the summary the institutional feed publishes, which is the fullest text held for them. "
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
                 "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; Commission, Parliament and Council news is unioned in from the institutional news store, so this feed covers both. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
@@ -285,6 +289,15 @@ async def list_news(
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because a page of full articles is large; there is no other "
+            "way to get the body in bulk, so set it to true rather than calling "
+            "the detail endpoint once per item."
+        ),
+    ),
 ):
     if kind not in _KINDS:
         raise HTTPException(400, f"kind must be one of {sorted(_KINDS)}")
@@ -312,7 +325,7 @@ async def list_news(
     # but were never populated here, so every response claimed a null date range
     # regardless of the filter in force.
     return build_envelope(
-        [_to_item(r, names, with_body=False) for r in rows], total, page, limit,
+        [_to_item(r, names, with_body=include_body) for r in rows], total, page, limit,
         published_from=from_, published_to=to,
     )
 
@@ -454,7 +467,11 @@ async def get_news(request: Request,
         try:
             r = db.execute(text(
                 f"SELECT n.id::text AS id, {case_body} AS body_code, {_EU_NEWS_KIND_SQL} AS item_type, "
-                "n.title, n.summary, n.source_url AS public_url, NULL AS body_txt, NULL AS body_html, "
+                "n.title, n.summary, n.source_url AS public_url, "
+            # `summary` is the fullest text eu_news_items holds; hardcoding NULL
+            # here meant a Commission item could never return a body from ANY
+            # route, list or detail. Reported by a partner integrating v2.
+            "n.summary AS body_txt, NULL AS body_html, "
                 "COALESCE(n.news_date::timestamptz, n.created_at) AS document_date, "
                 "n.created_at AS creation_date FROM eu_news_items n "
                 "WHERE n.id = :id AND n.institution = ANY(:i) AND n.item_type = ANY(:t)"),
