@@ -4582,6 +4582,12 @@
         "notYetDeclaredPriorInfo": "Nog niet aangegeven (vooraankondiging)",
         "inheritsFromOriginal": "Erft van originele melding",
         "notDeclaredInNotice": "Niet aangegeven in deze melding"
+      },
+      "awardCriteriaTypes": {
+        "price": "Laagste prijs",
+        "cost": "Kosten (levenscycluskosten)",
+        "quality": "Kwaliteit",
+        "bestValue": "Beste prijs-kwaliteitverhouding"
       }
     },
     "docEditor": {

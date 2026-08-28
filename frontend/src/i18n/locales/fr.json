@@ -2349,6 +2349,12 @@
         "notYetDeclaredPriorInfo": "Non encore déclarée (pré-information)",
         "inheritsFromOriginal": "Héritée de l'avis original",
         "notDeclaredInNotice": "Non déclarée dans cet avis"
+      },
+      "awardCriteriaTypes": {
+        "price": "Prix le plus bas",
+        "cost": "Coût (coût du cycle de vie)",
+        "quality": "Qualité",
+        "bestValue": "Meilleur rapport qualité-prix"
       }
     },
     "docEditor": {

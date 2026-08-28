@@ -28,6 +28,7 @@ from core.database import SessionLocal
 from models.tender import Tender, TenderProfile, TenderMatch
 from services.tenders.tender_service import TenderService
 from services.tenders.dg_grow_enrichment import DGGrowEnrichment
+from services.tenders.vocabulary import contract_nature_label, procedure_label
 
 logger = logging.getLogger(__name__)
 
@@ -623,6 +624,8 @@ class TenderContextProvider:
             'currency': tender.estimated_value_currency,  # Map to estimated_value_currency
             'cpv_main': tender.cpv_main,
             'procedure_type': tender.procedure_type,
+            'procedure_label': procedure_label(tender.procedure_type),
+            'contract_nature_label': contract_nature_label(tender.contract_nature),
             'submission_deadline': tender.submission_deadline.isoformat() if tender.submission_deadline else None,
             'status': tender.status,
             'description': tender.description[:500] if tender.description else None,
@@ -822,7 +825,9 @@ class TenderContextProvider:
                 sections.append(f"   Publication: {tender['publication_number']}")
                 sections.append(f"   Buyer: {tender['buyer_name']} ({tender['buyer_country']})")
                 sections.append(f"   Value: EUR {tender['estimated_value']:,.0f}" if tender.get('estimated_value') else "   Value: Not specified")
-                sections.append(f"   Procedure: {tender['procedure_type']}")
+                sections.append(
+                    f"   Procedure: {tender.get('procedure_label') or tender.get('procedure_type') or 'Not stated'}"
+                )
                 sections.append(f"   Deadline: {tender.get('submission_deadline', 'N/A')}")
                 sections.append(f"   CPV: {tender['cpv_main']}")
                 if tender.get('sme_suitability_score'):

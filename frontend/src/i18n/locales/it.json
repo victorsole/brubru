@@ -1300,6 +1300,12 @@
         "notYetDeclaredPriorInfo": "Non ancora dichiarata (informazione preventiva)",
         "inheritsFromOriginal": "Eredita dal bando originale",
         "notDeclaredInNotice": "Non dichiarata in questo bando"
+      },
+      "awardCriteriaTypes": {
+        "price": "Prezzo più basso",
+        "cost": "Costo (costo del ciclo di vita)",
+        "quality": "Qualità",
+        "bestValue": "Miglior rapporto qualità-prezzo"
       }
     },
     "docEditor": {

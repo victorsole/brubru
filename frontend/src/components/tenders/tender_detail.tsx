@@ -70,6 +70,16 @@ const PROCEDURE_LABELS_I18N_KEYS: Record<string, string> = {
   'open-2step': 'tenderator.detail.procedureTypes.openTwoStage',
 };
 
+// Award-criteria codes (Directive 2014/24/EU Art. 67). These rendered raw --
+// the detail page showed "best-value" and "cost" verbatim while the procedure
+// beside them was fully decoded.
+const AWARD_CRITERIA_I18N_KEYS: Record<string, string> = {
+  'price': 'tenderator.detail.awardCriteriaTypes.price',
+  'cost': 'tenderator.detail.awardCriteriaTypes.cost',
+  'quality': 'tenderator.detail.awardCriteriaTypes.quality',
+  'best-value': 'tenderator.detail.awardCriteriaTypes.bestValue',
+};
+
 // Notice subtypes where procedure_type is legitimately absent.
 const NO_PROCEDURE_SUBTYPES = new Set([
   'pin-only', 'pin-buyer', 'pin-rtl', 'pin-cf',
@@ -803,7 +813,7 @@ export const TenderDetail = ({
                   introKey = 'tenderator.detail.socialServicesCriteria';
                 }
                 const typeHint = tender.award_criteria_type && tender.award_criteria_type !== 'best-value'
-                  ? ` ${t('tenderator.detail.primaryCriterionType')}: ${tender.award_criteria_type}.`
+                  ? ` ${t('tenderator.detail.primaryCriterionType')}: ${AWARD_CRITERIA_I18N_KEYS[tender.award_criteria_type] ? t(AWARD_CRITERIA_I18N_KEYS[tender.award_criteria_type]) : tender.award_criteria_type}.`
                   : '';
                 return (
                   <div className="tender-detail__no-data">
@@ -875,7 +885,7 @@ export const TenderDetail = ({
                       <p>
                         {t('tenderator.detail.reviewCriteriaStrategy')}
                         {tender.award_criteria_type && (
-                          <> {t('tenderator.detail.primaryCriterionType')}: <strong>{tender.award_criteria_type}</strong>.</>
+                          <> {t('tenderator.detail.primaryCriterionType')}: <strong>{AWARD_CRITERIA_I18N_KEYS[tender.award_criteria_type] ? t(AWARD_CRITERIA_I18N_KEYS[tender.award_criteria_type]) : tender.award_criteria_type}</strong>.</>
                         )}
                       </p>
                     )}

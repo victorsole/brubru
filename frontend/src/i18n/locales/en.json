@@ -2349,6 +2349,12 @@
         "notYetDeclaredPriorInfo": "Not yet declared (prior information)",
         "inheritsFromOriginal": "Inherits from original notice",
         "notDeclaredInNotice": "Not declared in this notice"
+      },
+      "awardCriteriaTypes": {
+        "price": "Lowest price",
+        "cost": "Cost (life-cycle costing)",
+        "quality": "Quality",
+        "bestValue": "Best price-quality ratio"
       }
     },
     "docEditor": {

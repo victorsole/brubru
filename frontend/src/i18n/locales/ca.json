@@ -2349,6 +2349,12 @@
         "notYetDeclaredPriorInfo": "No declarat encara (informació prèvia)",
         "inheritsFromOriginal": "Hereta de l'avís original",
         "notDeclaredInNotice": "No declarat en aquest avís"
+      },
+      "awardCriteriaTypes": {
+        "price": "Preu més baix",
+        "cost": "Cost (cost del cicle de vida)",
+        "quality": "Qualitat",
+        "bestValue": "Millor relació qualitat-preu"
       }
     },
     "docEditor": {

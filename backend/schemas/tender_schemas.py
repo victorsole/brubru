@@ -5,8 +5,14 @@ Pydantic schemas for Tenderator API operations.
 Part of Tenderator - EU public procurement tender monitoring for Blue-tier users.
 """
 
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field, field_validator, computed_field
+
+from services.tenders.vocabulary import (
+    award_criteria_label,
+    contract_nature_label,
+    procedure_label,
+)
+from typing import Optional, List, Dict, Any, Union
 from datetime import datetime
 from uuid import UUID
 from enum import Enum
@@ -100,6 +106,20 @@ class TenderSummary(BaseModel):
     submission_deadline: Optional[datetime] = None
     status: TenderStatus = TenderStatus.OPEN
     sme_suitability_score: Optional[float] = None
+    procedure_type: Optional[str] = None
+    contract_nature: Optional[str] = None
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def procedure_label(self) -> Optional[str]:
+        """Plain-language procedure, e.g. "Negotiated (with prior call)"."""
+        return procedure_label(self.procedure_type)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def contract_nature_label(self) -> Optional[str]:
+        """Works / Supplies / Services, capitalised for reading."""
+        return contract_nature_label(self.contract_nature)
 
     class Config:
         from_attributes = True
@@ -126,9 +146,14 @@ class TenderDetail(TenderBase):
     contract_start_date: Optional[datetime] = None
     contract_duration_months: Optional[int] = None
     award_criteria_type: Optional[str] = None
-    award_criteria: Optional[Dict[str, Any]] = None
-    selection_criteria: Optional[Dict[str, Any]] = None
-    minimum_requirements: Optional[Dict[str, Any]] = None
+    # eForms emits a LIST of criterion objects ([{name, weight, ...}]); the
+    # legacy TED shape was a dict ({"quality": 70, "price": 30}). This was typed
+    # dict-only, so TenderDetail.model_validate raised on every notice carrying
+    # real award criteria and GET /api/tenders/{id} returned 500 for 4,343 of
+    # 5,895 tenders. The frontend has handled both shapes all along.
+    award_criteria: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = None
+    selection_criteria: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = None
+    minimum_requirements: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = None
     has_lots: bool = False
     lot_count: Optional[int] = 0
     lots: Optional[List[Dict[str, Any]]] = None
@@ -144,6 +169,24 @@ class TenderDetail(TenderBase):
     keywords: Optional[List[str]] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def procedure_label(self) -> Optional[str]:
+        """Plain-language procedure, e.g. "Negotiated (with prior call)"."""
+        return procedure_label(self.procedure_type)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def contract_nature_label(self) -> Optional[str]:
+        """Works / Supplies / Services."""
+        return contract_nature_label(self.contract_nature)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def award_criteria_label(self) -> Optional[str]:
+        """What the contract is awarded on, per Directive 2014/24/EU Art. 67."""
+        return award_criteria_label(self.award_criteria_type)
 
     class Config:
         from_attributes = True
