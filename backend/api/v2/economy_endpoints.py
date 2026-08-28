@@ -62,7 +62,8 @@ _LIST_COLS = "id, body_code, item_type, title, summary, public_url, document_dat
 _DETAIL_COLS = "id, body_code, item_type, title, summary, public_url, body_txt, body_html, document_date, creation_date, source_kind"
 
 
-def _list_items(db: Session, body_code: str, item_type: str, q, since, until, order, page, limit):
+def _list_items(db: Session, body_code: str, item_type: str, q, since, until, order,
+                page, limit, include_body: bool = False):
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": body_code, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
     if q:
@@ -76,11 +77,14 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
         params["until"] = until
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    # Select the body columns only when asked: they dominate the row size, and
+    # the default list is meant to stay cheap.
+    cols = _DETAIL_COLS if include_body else _LIST_COLS
     rows = db.execute(
-        text(f"SELECT {_LIST_COLS} FROM economy_items WHERE {clause} "
+        text(f"SELECT {cols} FROM economy_items WHERE {clause} "
              f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return [_row_to_item(r, with_body=False) for r in rows], total
+    return [_row_to_item(r, with_body=include_body) for r in rows], total
 
 
 def _get_item(db: Session, body_code: str, item_type: str, item_id: int):
@@ -107,7 +111,7 @@ GET {path}?order=recent&limit=10
 ```
 
 **You get back**
-A paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list — fetch the detail endpoint for those).
+A paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default — **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.
 
 **Data freshness**
 Refreshed from {source}."""
@@ -149,10 +153,20 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         order: str = Query("recent", description="recent | oldest | title."),
         page: int = Query(1, ge=1),
         limit: int = Query(20, ge=1, le=100),
+        include_body: bool = Query(
+            False,
+            description=(
+                "Return `body_txt` / `body_html` on every item in the list. Off by "
+                "default because bodies dominate the payload, but without it the "
+                "only route to the text is one detail call PER ITEM, which is not "
+                "a usable way to ingest a feed."
+            ),
+        ),
     ):
         if order not in _ORDERS:
             raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
-        items, total = _list_items(db, body_code, item_type, q, since, until, order, page, limit)
+        items, total = _list_items(db, body_code, item_type, q, since, until, order,
+                                   page, limit, include_body=include_body)
         return build_envelope(items, total, page, limit)
 
     async def detail_ep(
