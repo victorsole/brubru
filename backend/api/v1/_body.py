@@ -99,6 +99,49 @@ def body_from_html(
     return html, text, has
 
 
+_HTML_TAG_RE = re.compile(r"<(p|div|article|section|span|h[1-6]|ul|ol|li|table|br)\b", re.I)
+
+
+def looks_like_html(value: Optional[str]) -> bool:
+    """True when the string really carries HTML markup.
+
+    A bare `<` does not count -- "< 2% inflation" is prose, not a tag.
+    """
+    return bool(value and _HTML_TAG_RE.search(value))
+
+
+def body_from_html_or_text(
+    value: Optional[str],
+    threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> Tuple[Optional[str], Optional[str], bool]:
+    """For a column that MIGHT hold HTML and might hold plain text.
+
+    `institutional_publications.html_content` is named for HTML and, measured on
+    28 August 2026, holds plain text in 695 of 705 rows -- every Council
+    document, every ECB and EMA publication. Feeding that to `body_from_html`
+    returned the text unchanged as `body_html`, so `body_txt` and `body_html`
+    were byte-identical and clients were told prose was markup.
+
+    Real HTML is passed through and stripped for the text form, as before. Plain
+    text becomes the text form, and the HTML form is COMPOSED from it -- one <p>
+    per paragraph, escaped. That is the same thing the committee-agenda, social
+    and consultation handlers already do, and unlike synthesising HTML from a PDF
+    binary it invents nothing: the words are the words we hold, marked up.
+    """
+    if value is None:
+        return None, None, False
+    value = value.strip()
+    if not value:
+        return None, None, False
+    if looks_like_html(value):
+        return body_from_html(value, threshold)
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", value) if p.strip()]
+    if not paragraphs:
+        paragraphs = [value]
+    html = "<article>" + "".join(f"<p>{_html_escape(p)}</p>" for p in paragraphs) + "</article>"
+    return html, value, len(value) >= threshold
+
+
 def compose_html_from_sections(
     sections: list,
     threshold: int = DEFAULT_HAS_BODY_THRESHOLD,

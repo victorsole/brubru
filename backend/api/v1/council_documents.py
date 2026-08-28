@@ -32,6 +32,8 @@ import html as _html
 
 from ._body import _strip_html_to_text
 from ._deps import api_user_with_rate_limit
+from ._body import body_from_html_or_text
+from core.body_sources import read_body
 from ._envelope import PaginatedResponse, build_envelope
 
 logger = logging.getLogger(__name__)
@@ -194,10 +196,16 @@ def _pub_body(r) -> tuple:
     """Body for an institutional-publication row. body_html prefers the stored
     html_content; body_txt is the summary or the stripped HTML. Never drops
     real content (the old endpoint hard-coded body_html=None)."""
-    html_c = (getattr(r, "html_content", None) or "").strip() or None
+    # Column name comes from core/body_sources.py, not from here.
+    _, _html_src = read_body("institutional_publications", r)
+    html_c = (_html_src or "").strip() or None
     summ = (getattr(r, "summary", None) or "").strip() or None
     if html_c:
-        return (summ or _strip_html_to_text(html_c) or None), html_c
+        # html_content holds PLAIN TEXT on all 248 Council documents, so passing
+        # it through as body_html told clients prose was markup. Compose real
+        # markup from it instead; genuine HTML still passes through untouched.
+        composed_html, text_form, _ = body_from_html_or_text(html_c)
+        return (summ or text_form or None), composed_html
     if summ:
         return summ, f"<article><p>{_html.escape(summ)}</p></article>"
     return None, None

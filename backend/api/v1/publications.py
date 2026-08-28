@@ -22,9 +22,10 @@ from core.database import get_db
 from models.institutional_publication import InstitutionalPublication
 from models.user import User
 
-from ._body import body_from_html, body_threshold_param, deprecated_body
+from ._body import body_from_html, body_from_html_or_text, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.body_sources import read_body
 
 logger = logging.getLogger(__name__)
 
@@ -199,7 +200,11 @@ async def list_publications(
 
     data = []
     for r in rows:
-        body_html, body_text, has_body = body_from_html(r.html_content, threshold=body_threshold)
+    # Which column holds this table's text is declared once in
+    # core/body_sources.py; institutional_publications keeps HTML only, so
+    # body_txt is derived from it rather than read from a column.
+        _, _html_src = read_body("institutional_publications", r)
+        body_html, body_text, has_body = body_from_html_or_text(_html_src, threshold=body_threshold)
         data.append(PublicationItem(
             id=str(r.id),
             source_slug=r.source_slug,
@@ -374,7 +379,11 @@ async def get_publication_detail(
                 "id": publication_id,
             },
         )
-    body_html, body_text, has_body = body_from_html(r.html_content, threshold=body_threshold)
+    # Which column holds this table's text is declared once in
+    # core/body_sources.py; institutional_publications keeps HTML only, so
+    # body_txt is derived from it rather than read from a column.
+    _, _html_src = read_body("institutional_publications", r)
+    body_html, body_text, has_body = body_from_html_or_text(_html_src, threshold=body_threshold)
     return PublicationItem(
         id=str(r.id),
         source_slug=r.source_slug,
