@@ -221,8 +221,14 @@ def test_canon_filters(client, fresh_user):
     pharma = client.get(f"{BASE}/canon?report_type=canon&legal_family=eu_pharmaceutical", headers=h)
     assert pharma.status_code == 200, pharma.text
     pb = pharma.json()
-    assert pb["total"] == 5, "5 pharma canon entries expected"
+    # A lower bound, not an equality: the canon grows, and this assertion went
+    # red on 28 Aug 2026 purely because the pharmaceutical family reached 10.
+    # What the test is actually for is that the FILTER filters -- pinning the
+    # exact size just fails every time the corpus does its job.
+    assert pb["total"] >= 5, f"expected at least the 5 known pharma canon entries, got {pb['total']}"
     assert all(i["legal_family"] == "eu_pharmaceutical" for i in pb["data"])
+    unfiltered = client.get(f"{BASE}/canon?report_type=canon", headers=h).json()["total"]
+    assert pb["total"] < unfiltered, "legal_family filter returned the whole catalogue"
 
     bad = client.get(f"{BASE}/canon?report_type=nope", headers=h)
     assert bad.status_code == 400

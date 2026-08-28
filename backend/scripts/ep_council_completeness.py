@@ -167,7 +167,20 @@ def run_checks(conn) -> list[dict]:
         f"{cb}/{cn} Council documents hold their text",
         "scripts/ingest_council_documents.py --fetch-bodies --apply")
 
-    # --- 9. Carriages: OEIL roles parsed where the page is stored ------------
+    # --- 9. EP: committee agendas hold the agenda document -------------------
+    # Counted only against agendas that HAVE a document URL. 40 of the 226 carry
+    # a committee homepage as their only link, and a homepage is not a missing
+    # agenda -- folding those in would make the check permanently red.
+    ag_total, ag_cached = conn.execute(text(
+        "SELECT count(*) FILTER (WHERE agenda_url IS NOT NULL), "
+        "       count(*) FILTER (WHERE agenda_url IS NOT NULL "
+        "                          AND related_documents ? 'agenda_body_txt') "
+        "FROM eu_calendar_events WHERE source = 'ep_committee_agenda'")).fetchone()
+    add("ep.agendas_hold_their_document", ag_cached < ag_total,
+        f"{ag_cached}/{ag_total} committee agendas with a document URL hold its text",
+        "scripts/backfill_committee_agenda_bodies.py --apply")
+
+    # --- 10. Carriages: OEIL roles parsed where the page is stored ------------
     unparsed = conn.execute(text(
         "SELECT count(*) FROM legislative_carriages "
         "WHERE oeil_text_body IS NOT NULL AND oeil_roles_parsed_at IS NULL")).scalar()

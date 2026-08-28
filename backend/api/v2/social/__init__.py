@@ -172,13 +172,14 @@ async def directory(db: Session = Depends(get_db), user: User = Depends(api_user
 
 **Try it**: `GET /api/v2/social/posts?entity_type=commissioner&platform=x&limit=20`
 
-**You get back**: a `PaginatedResponse[SocialPost]`. Each item: entity, platform, engagement counts, and the 5 datapoints (post URL as public_url, body null on list, published date). Use the detail endpoint for the full text.""")
+**You get back**: a `PaginatedResponse[SocialPost]`. Each item: entity, platform, engagement counts, and the 5 datapoints (post URL as public_url, published date). The post text is null on the list by default -- pass `include_body=true` to get it in bulk, or call the detail endpoint for one post.""")
 async def list_posts(db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit),
                      platform: Optional[str] = Query(None), entity_type: Optional[str] = Query(None),
                      entity_key: Optional[str] = Query(None), account_id: Optional[int] = Query(None),
                      since: Optional[str] = Query(None, description="ISO date; posts on/after this"),
                      q: Optional[str] = Query(None, description="text search in post content"),
-                     page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=200)):
+                     page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=200),
+                     include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
     where, params = ["1=1"], {}
     if platform: where.append("p.platform=:pf"); params["pf"] = platform
     if entity_type: where.append("a.entity_type=:et"); params["et"] = entity_type
@@ -191,7 +192,7 @@ async def list_posts(db: Session = Depends(get_db), user: User = Depends(api_use
     params.update(off=(page - 1) * limit, lim=limit)
     rows = db.execute(text(f"SELECT {_POST_COLS} FROM social_posts p JOIN social_accounts a ON a.id=p.account_id "
                            f"WHERE {w} ORDER BY p.posted_at DESC NULLS LAST, p.id DESC LIMIT :lim OFFSET :off"), params).mappings().all()
-    return build_envelope([_post_item(r, with_body=False) for r in rows], total, page, limit)
+    return build_envelope([_post_item(r, with_body=include_body) for r in rows], total, page, limit)
 
 
 @router.get("/posts/{post_id}", response_model=SocialPost, summary="One post (full text)",

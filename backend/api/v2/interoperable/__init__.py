@@ -34,7 +34,8 @@ _BODY = "interoperable"
 _COLL_LIKE = "public_url ILIKE '%/collection/' || :coll || '/%'"
 
 
-def _list(db, item_type, *, q, since, until, order, collection, page, limit):
+def _list(db, item_type, *, q, since, until, order, collection, page, limit,
+          include_body=False):
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": _BODY, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
     if q:
@@ -47,9 +48,10 @@ def _list(db, item_type, *, q, since, until, order, collection, page, limit):
         where.append(_COLL_LIKE); params["coll"] = collection
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
-    rows = db.execute(text(f"SELECT {_LIST_COLS} FROM economy_items WHERE {clause} "
+    cols = _DETAIL_COLS if include_body else _LIST_COLS
+    rows = db.execute(text(f"SELECT {cols} FROM economy_items WHERE {clause} "
                            f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params).fetchall()
-    return [_row_to_item(r, with_body=False) for r in rows], total
+    return [_row_to_item(r, with_body=include_body) for r in rows], total
 
 
 def _detail(db, item_type, item_id):
@@ -74,7 +76,7 @@ GET /api/v2/interoperable/{slug}?collection=eugovtech&limit=10
 ```
 
 **You get back**
-A paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list — use the detail endpoint).
+A paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list by default — pass `include_body=true` to get them in bulk, or use the detail endpoint for one item).
 
 **Data freshness**
 Rendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."""
@@ -106,11 +108,13 @@ def _register(slug, item_type, noun, noun_singular, verb):
                       collection: Optional[str] = Query(None, description="Filter to one thematic collection (its slug, e.g. open-source-observatory-osor, eugovtech, semic-support-centre)."),
                       q: Optional[str] = Query(None), since: Optional[date] = Query(None),
                       until: Optional[date] = Query(None), order: str = Query("recent"),
-                      page: int = Query(1, ge=1), limit: int = Query(20, ge=1, le=100)):
+                      page: int = Query(1, ge=1), limit: int = Query(20, ge=1, le=100),
+                      include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
         if order not in _ORDERS:
             raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
         items, total = _list(db, item_type, q=q, since=since, until=until, order=order,
-                             collection=collection, page=page, limit=limit)
+                             collection=collection, page=page, limit=limit,
+                             include_body=include_body)
         return build_envelope(items, total, page, limit)
 
     async def detail_ep(request: Request, item_id: int = PathParam(...),
@@ -191,18 +195,20 @@ GET /api/v2/interoperable/collections
 ```
 
 **You get back**
-A paginated envelope of collection snapshots, each with the 5 datapoints (`public_url` is the hub's page; full description on the per-collection endpoint).
+A paginated envelope of collection snapshots, each with the 5 datapoints (`public_url` is the hub's page; pass `include_body=true` for the full description, or use the per-collection endpoint).
 
 **Data freshness**
 Rendered from the portal, refreshed regularly.""")
 async def list_collections(request: Request, db: Session = Depends(get_db),
                            user: User = Depends(api_user_with_rate_limit),
                            q: Optional[str] = Query(None), order: str = Query("title"),
-                           page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100)):
+                           page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100),
+                           include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
     items, total = _list(db, "collection", q=q, since=None, until=None, order=order,
-                         collection=None, page=page, limit=limit)
+                         collection=None, page=page, limit=limit,
+                         include_body=include_body)
     return build_envelope(items, total, page, limit)
 
 
@@ -237,16 +243,18 @@ GET /api/v2/interoperable/collections/open-source-observatory-osor
 Rendered from the portal, refreshed regularly.""")
 async def collection_footprint(collection_key: str = PathParam(..., description="Collection slug."),
                                limit: int = Query(15, ge=1, le=50),
+                               include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."),
                                db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
     snap = db.execute(text(f"SELECT {_DETAIL_COLS} FROM economy_items "
                            "WHERE body_code=:bc AND item_type='collection' AND public_url ILIKE '%/collection/' || :k"),
                       {"bc": _BODY, "k": collection_key}).fetchone()
     def recent(itype):
-        rows = db.execute(text(f"SELECT {_LIST_COLS} FROM economy_items "
+        cols = _DETAIL_COLS if include_body else _LIST_COLS
+        rows = db.execute(text(f"SELECT {cols} FROM economy_items "
                                f"WHERE body_code=:bc AND item_type=:it AND {_COLL_LIKE} "
                                "ORDER BY document_date DESC NULLS LAST, id DESC LIMIT :lim"),
                           {"bc": _BODY, "it": itype, "coll": collection_key, "lim": limit}).fetchall()
-        return [_row_to_item(r, with_body=False) for r in rows]
+        return [_row_to_item(r, with_body=include_body) for r in rows]
     news, events, sols = recent("news"), recent("event"), recent("solution")
     if snap is None and not (news or events or sols):
         raise HTTPException(404, f"No Interoperable Europe collection or content for '{collection_key}'")

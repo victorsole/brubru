@@ -85,6 +85,16 @@ MEUB_SOURCES: List[SourceSpec] = [
     # and exits non-zero on a real gap so the run is recorded as failed rather
     # than passing quietly. A backfill that reports success over its own range
     # proves nothing about whether the range was right.
+    # Draft agendas: the endpoint promises body_txt/body_html on every row, and
+    # served NULL on all 226 from the day it shipped. doceo answers urllib with
+    # HTTP 202 + zero bytes, which raises nothing, so the request path cached
+    # nothing and nothing complained. Chromium clears the WAF; this fills the
+    # cache out of band because the list endpoint fetches one body PER ROW and
+    # must never launch a browser. --limit 40 keeps a run inside the timeout;
+    # already-cached agendas are skipped, so steady state is a near no-op.
+    SourceSpec("committee_agenda_bodies", "Committee agendas - full text", "warm",
+               "scripts/backfill_committee_agenda_bodies.py", ("--apply", "--limit", "40"),
+               timeout=1800, stale_after_hours=48),
     SourceSpec("ep_council_gaps", "EP + Council completeness", "warm",
                "scripts/ep_council_completeness.py", (),
                timeout=300, stale_after_hours=48),

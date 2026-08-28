@@ -393,6 +393,14 @@ async def list_summaries(
     chapter: Optional[str] = Query(None, description="Filter by chapter code (e.g. 03) or chapter title substring"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return the summary prose itself (`body_txt` / `body_html`) on every "
+            "item. Off by default because the summaries average ~7,700 characters, "
+            "but without it the only route to the text is one detail call PER ITEM."
+        ),
+    ),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SummaryItem]:
@@ -412,8 +420,9 @@ async def list_summaries(
         total = int(db.execute(text(f"SELECT COUNT(*) FROM public.legissum_summaries {where}"), params).scalar() or 0)
         rows = db.execute(
             text(
-                f"SELECT slug, title, celex, url, chapter_code, chapter_title "
-                f"FROM public.legissum_summaries {where} ORDER BY title LIMIT :lim OFFSET :off"
+                f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at"
+                + (", summary_text, summary_html" if include_body else "")
+                + f" FROM public.legissum_summaries {where} ORDER BY title LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
         ).mappings().all()
@@ -430,7 +439,11 @@ async def list_summaries(
             title=r["title"],
             lsu_url=r["url"],
             public_url=r["url"],
-            creation_date=datetime.utcnow(),
+            body_txt=(r["summary_text"] if include_body else None),
+            body_html=(r["summary_html"] if include_body else None),
+            # The row's own creation, not this response's. utcnow() here made
+            # every one of the 4,457 summaries look minted on the spot.
+            creation_date=r["created_at"],
         )
         for r in rows
     ]
@@ -481,7 +494,7 @@ async def get_summary(
     try:
         row = db.execute(
             text(
-                "SELECT slug, title, celex, url, summary_text "
+                "SELECT slug, title, celex, url, summary_text, summary_html, created_at "
                 "FROM public.legissum_summaries WHERE slug = :s OR celex = :s LIMIT 1"
             ),
             {"s": sid},
@@ -499,8 +512,9 @@ async def get_summary(
             title=row["title"],
             lsu_url=row["url"],
             public_url=row["url"],
-            body_txt=row["summary_text"],  # null until a --fetch-text sync populates it
-            creation_date=datetime.utcnow(),
+            body_txt=row["summary_text"],
+            body_html=row["summary_html"],
+            creation_date=row["created_at"],
         )
     # Fallback when the catalogue has no row: construct the LSU URL.
     if _CELEX_RE.match(sid):

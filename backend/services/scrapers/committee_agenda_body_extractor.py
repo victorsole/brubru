@@ -8,11 +8,22 @@ The agenda metadata (committee, date, the doc URL) is already stored as an
 EUCalendarEvent (source='ep_committee_agenda'); this module fills in the
 document BODY.
 
-doceo is JS-WAF-walled to most hosts (a plain request returns HTTP 202 + an
-empty body). `fetch_pdf` (urllib + the EP-accepted User-Agent) succeeds from
-the Railway host — the very same path that already populated
-committee_minutes.full_text (110 rows in production). Body extraction therefore
-runs where the API runs (Railway), not from a developer sandbox.
+doceo is JS-WAF-walled (a plain request returns HTTP 202 + an empty body).
+`fetch_pdf` (urllib + an EP-accepted User-Agent) was assumed to succeed from the
+Railway host. Measured on 28 Aug 2026, it does not: **0 of 226 agendas had ever
+been cached**, in production included, so every agenda has served
+`body_txt: null` since the endpoint shipped. A 202 with zero bytes raises
+nothing, so the failure was invisible.
+
+The fix is the house rule for a WAF: use a real browser, never tune headers.
+`AgendaPdfBrowser` clears the challenge once, then pulls each PDF through the
+browser context (which carries the WAF cookie and Chromium's TLS fingerprint).
+The same URL that returns 202/0 bytes to urllib returns a 186KB PDF this way.
+
+Chromium is far too heavy for the request path, which fetches one body PER ROW,
+so it is NOT used there: `ensure_agenda_body` keeps its cheap urllib attempt and
+the cache, and `scripts/backfill_committee_agenda_bodies.py` (warm cron tier)
+fills the cache with the browser out of band.
 
 The extracted body is cached on EUCalendarEvent.related_documents (JSONB) so
 each agenda PDF is fetched at most once. body_html is composed from the real
@@ -62,10 +73,71 @@ def extract_agenda_body(url: str) -> Tuple[Optional[str], Optional[str]]:
     data = fetch_pdf(url)
     if not data:
         return None, None
+    return pdf_bytes_to_body(data)
+
+
+class AgendaPdfBrowser:
+    """One Chromium for a whole batch of agenda PDFs.
+
+    Opening a browser per document would be absurd (each launch costs seconds
+    and ~200MB), so the challenge is cleared once on the doceo root and every
+    subsequent PDF is pulled through the same context.
+    """
+
+    _WARMUP = "https://www.europarl.europa.eu/doceo/"
+
+    def __init__(self, settle_ms: int = 9000, timeout_ms: int = 60000):
+        self.settle_ms = settle_ms
+        self.timeout_ms = timeout_ms
+        self._pw = self._browser = self._ctx = None
+
+    def __enter__(self) -> "AgendaPdfBrowser":
+        from playwright.sync_api import sync_playwright
+
+        self._pw = sync_playwright().start()
+        self._browser = self._pw.chromium.launch(headless=True)
+        self._ctx = self._browser.new_context()
+        page = self._ctx.new_page()
+        try:
+            page.goto(self._WARMUP, wait_until="domcontentloaded",
+                      timeout=self.timeout_ms)
+            # The first response IS the 202 challenge; this wait lets Chromium
+            # run it and set the cookie the PDF requests then reuse.
+            page.wait_for_timeout(self.settle_ms)
+        finally:
+            page.close()
+        return self
+
+    def __exit__(self, *exc) -> None:
+        for obj, meth in ((self._ctx, "close"), (self._browser, "close"),
+                          (self._pw, "stop")):
+            try:
+                if obj is not None:
+                    getattr(obj, meth)()
+            except Exception:  # noqa: BLE001
+                pass
+
+    def get(self, url: str) -> Optional[bytes]:
+        """Return the PDF bytes, or None. Verifies the %PDF magic: the WAF
+        answers with an HTML challenge under a 200, which pypdf would then
+        reject with a confusing parse error rather than an honest miss."""
+        resp = self._ctx.request.get(url, timeout=self.timeout_ms)
+        if resp.status != 200:
+            logger.warning("[WARN] agenda PDF %s -> HTTP %s", url, resp.status)
+            return None
+        data = resp.body()
+        if not data or data[:4] != b"%PDF":
+            logger.warning("[WARN] agenda PDF %s -> %d bytes, not a PDF (WAF page?)",
+                           url, len(data or b""))
+            return None
+        return data
+
+
+def pdf_bytes_to_body(data: bytes) -> Tuple[Optional[str], Optional[str]]:
+    """Shared PDF -> (body_txt, body_html) step."""
     from pypdf import PdfReader
 
-    reader = PdfReader(io.BytesIO(data))
-    text = "\n".join((page.extract_text() or "") for page in reader.pages).strip()
+    text = "\n".join((page.extract_text() or "") for page in PdfReader(io.BytesIO(data)).pages).strip()
     if not text:
         return None, None
     text = re.sub(r"[ \t]+", " ", text)
