@@ -23,6 +23,7 @@ import { ProgrammesPanel } from './programmes_panel';
 import { BodiesPanel } from './bodies_panel';
 import { PortalActivityPanel } from './portal_activity_panel';
 import { PipelineView } from './pipeline_view';
+import { GlossaryModal } from './glossary_modal';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import './tenderator_dashboard.css';
 import { uiDateLocale } from '../../i18n/config';
@@ -137,6 +138,7 @@ export const TenderatorDashboard = ({
   const validInitialSource: SourceFilter | null = incomingSourceParam &&
     (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency','intl_coop','pipeline'] as SourceFilter[])
       .includes(incomingSourceParam) ? incomingSourceParam : null;
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [source, setSource] = useState<SourceFilter>(validInitialSource || 'all');
   const [error, setError] = useState<string | null>(null);
@@ -234,6 +236,15 @@ export const TenderatorDashboard = ({
           </div>
         </div>
         <div className="tenderator-dashboard__header-actions">
+          <button
+            type="button"
+            className="tenderator-dashboard__icon-button"
+            onClick={() => setGlossaryOpen(true)}
+            title={t('tenderator.glossary.title')}
+            aria-label={t('tenderator.glossary.open')}
+          >
+            <span className="mdi mdi-book-open-page-variant-outline" aria-hidden="true" />
+          </button>
           <button
             type="button"
             className="tenderator-dashboard__icon-button"
@@ -845,6 +856,9 @@ export const TenderatorDashboard = ({
 
       {/* Opportunity drawer (Phase 3): brief + similar projects */}
       <OpportunityDrawer opportunity={drawerOpp} onClose={() => setDrawerOpp(null)} />
+
+      {/* Glossary. Portalled to document.body from inside the component. */}
+      <GlossaryModal open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
     </div>
   );
 };

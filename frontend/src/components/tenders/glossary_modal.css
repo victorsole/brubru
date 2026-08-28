@@ -1,0 +1,192 @@
+/* Glossary modal. Portalled to document.body, so these rules sit at the top
+   level and are not affected by the AnimatedPage transform. */
+
+.tender-glossary__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;                 /* above the MEUB sidebar and the page chrome */
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.tender-glossary {
+  background: #fff;
+  border-radius: 14px;
+  width: min(760px, 100%);
+  max-height: min(86vh, 900px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+}
+
+.tender-glossary__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem 0.9rem;
+  border-bottom: 1px solid #e8edf2;
+}
+
+.tender-glossary__heading {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  color: #0693e3;
+}
+
+.tender-glossary__heading h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #16202b;
+}
+
+.tender-glossary__heading p {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: #5b6b7c;
+}
+
+.tender-glossary__close {
+  background: none;
+  border: none;
+  color: #5b6b7c;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.tender-glossary__close:hover,
+.tender-glossary__close:focus-visible {
+  background: #f1f5f9;
+  color: #16202b;
+}
+
+.tender-glossary__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  border-bottom: 1px solid #eef2f6;
+  color: #7a8895;
+}
+
+.tender-glossary__search input {
+  flex: 1;
+  border: 1px solid #d7dde3;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  font: inherit;
+  font-size: 0.9rem;
+  min-width: 0;                  /* lets the input shrink instead of overflowing */
+}
+
+.tender-glossary__search input:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 1px;
+  border-color: #0693e3;
+}
+
+.tender-glossary__count {
+  font-size: 0.78rem;
+  color: #7a8895;
+  white-space: nowrap;
+}
+
+.tender-glossary__body {
+  overflow-y: auto;
+  padding: 0.35rem 1.35rem 1.35rem;
+}
+
+.tender-glossary__group h3 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7a8895;
+  margin: 1.15rem 0 0.5rem;
+}
+
+.tender-glossary__group dl {
+  margin: 0;
+}
+
+.tender-glossary__entry {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f2f5f8;
+}
+
+.tender-glossary__entry:last-child {
+  border-bottom: none;
+}
+
+.tender-glossary__entry dt {
+  font-weight: 600;
+  color: #16202b;
+  font-size: 0.92rem;
+  margin-bottom: 0.15rem;
+}
+
+.tender-glossary__entry dd {
+  margin: 0;
+  color: #46586b;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  /* Definitions are prose and can carry long codes; wrap rather than overflow. */
+  overflow-wrap: break-word;
+}
+
+.tender-glossary__empty {
+  color: #7a8895;
+  font-size: 0.9rem;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+/* Tablet portrait and below: the dialog takes the width it needs. */
+@media (max-width: 767px) {
+  .tender-glossary__overlay {
+    padding: 0.75rem;
+    align-items: flex-end;       /* sheet-style, thumb-reachable */
+  }
+
+  .tender-glossary {
+    max-height: 92vh;
+    width: 100%;
+  }
+
+  .tender-glossary__header,
+  .tender-glossary__search,
+  .tender-glossary__body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* The count would squeeze the input at this width; the list already shows
+     how many there are. */
+  .tender-glossary__count {
+    display: none;
+  }
+}
+
+/* iPhone SE and similar. */
+@media (max-width: 400px) {
+  .tender-glossary__overlay {
+    padding: 0;
+  }
+
+  .tender-glossary {
+    border-radius: 14px 14px 0 0;
+    max-height: 95vh;
+  }
+
+  .tender-glossary__heading p {
+    display: none;               /* the title carries it at this size */
+  }
+}

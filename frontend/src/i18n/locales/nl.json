@@ -5117,6 +5117,159 @@
           "hint": "Vorige EU externe-doelstellingstoezegging van het Financial Transparency System. NDICI (Buurt, Ontwikkeling en Internationale Samenwerking), IPA III (pre-toetredingsperiode) of Humanitaire hulp. Toont wie al EU-hulpgeld waar heeft gewonnen, nuttig als concurrentigegevens."
         }
       }
+    },
+    "glossary": {
+      "title": "Woordenlijst",
+      "subtitle": "De woorden die de EU voor geld gebruikt, en wat ze betekenen.",
+      "button": "Woordenlijst",
+      "open": "Woordenlijst openen",
+      "close": "Sluiten",
+      "search": "Zoek een term",
+      "noResults": "Geen term komt overeen met die zoekopdracht.",
+      "categories": {
+        "procurement": "Overheidsopdrachten",
+        "funding": "EU-financiering",
+        "eic": "Europese Innovatieraad"
+      },
+      "count": "{{count}} termen",
+      "terms": {
+        "ted": {
+          "term": "TED",
+          "definition": "Tenders Electronic Daily, het EU-supplement waarin overheidsopdrachten boven de Europese drempels moeten worden aangekondigd."
+        },
+        "cpv": {
+          "term": "CPV",
+          "definition": "Gemeenschappelijke woordenlijst overheidsopdrachten: een code van acht cijfers die aangeeft wat een opdracht inkoopt, gebruikt om opdrachten aan jouw sector te koppelen."
+        },
+        "nuts": {
+          "term": "NUTS",
+          "definition": "De standaard regiocodes van de EU, hier gebruikt om aan te geven waar een opdracht wordt uitgevoerd."
+        },
+        "contractingAuthority": {
+          "term": "Aanbestedende dienst",
+          "definition": "De overheidsinstantie die de aanbesteding voert en de opdracht gunt."
+        },
+        "lot": {
+          "term": "Perceel",
+          "definition": "Een opdracht opgesplitst in delen waarop je afzonderlijk kunt inschrijven, waardoor grote opdrachten binnen bereik komen van kleinere bedrijven."
+        },
+        "frameworkAgreement": {
+          "term": "Raamovereenkomst",
+          "definition": "Een overeenkomst die de voorwaarden vastlegt voor toekomstige opdrachten met een of meer leveranciers, zonder een concrete bestelling toe te zeggen."
+        },
+        "awardCriteria": {
+          "term": "Gunningscriteria",
+          "definition": "Waarop de inkoper inschrijvingen beoordeelt, en het gewicht van elk criterium. Volgens Richtlijn 2014/24/EU: prijs, kosten of beste prijs-kwaliteitverhouding."
+        },
+        "espd": {
+          "term": "UEA",
+          "definition": "Uniform Europees Aanbestedingsdocument: een eigen verklaring dat je aan de uitsluitings- en selectiecriteria voldoet, ingediend in plaats van alle bewijsstukken."
+        },
+        "openProcedure": {
+          "term": "Openbare procedure",
+          "definition": "Elk geïnteresseerd bedrijf mag rechtstreeks inschrijven. De meest toegankelijke procedure."
+        },
+        "restrictedProcedure": {
+          "term": "Niet-openbare procedure",
+          "definition": "Bedrijven vragen eerst om deelname en alleen de geselecteerde partijen worden uitgenodigd in te schrijven."
+        },
+        "negotiatedProcedure": {
+          "term": "Onderhandelingsprocedure",
+          "definition": "De inkoper onderhandelt over de voorwaarden met inschrijvers. 'Met voorafgaande oproep' betekent dat de opdracht eerst is aangekondigd; 'zonder' dat dit niet is gebeurd."
+        },
+        "competitiveDialogue": {
+          "term": "Concurrentiegerichte dialoog",
+          "definition": "De inkoper bespreekt mogelijke oplossingen met geselecteerde bedrijven voordat om definitieve inschrijvingen wordt gevraagd. Voor complexe opdrachten."
+        },
+        "innovationPartnership": {
+          "term": "Innovatiepartnerschap",
+          "definition": "Een procedure om iets te kopen dat nog niet bestaat: ontwikkeling en aankoop in één opdracht."
+        },
+        "contractNotice": {
+          "term": "Aankondiging van een opdracht",
+          "definition": "De gepubliceerde aankondiging dat een opdracht openstaat voor inschrijvingen, met termijn en eisen."
+        },
+        "estimatedValue": {
+          "term": "Geraamde waarde",
+          "definition": "De raming van de inkoper van wat de opdracht waard is, exclusief btw. Zij bepaalt welke Europese regels en drempels gelden."
+        },
+        "callForProposals": {
+          "term": "Oproep tot het indienen van voorstellen",
+          "definition": "Een uitnodiging om een EU-subsidie aan te vragen. Je stelt een project voor; je verkoopt geen dienst."
+        },
+        "callForTenders": {
+          "term": "Oproep tot inschrijving",
+          "definition": "Een uitnodiging om in te schrijven op een EU-opdracht. De instelling koopt een dienst of levering bij je."
+        },
+        "topicId": {
+          "term": "Topic ID",
+          "definition": "De aanduiding van één financieringsonderwerp op het EU-portaal voor financiering en aanbestedingen, zoals HORIZON-EIC-2026-ACCELERATOR-01."
+        },
+        "typeOfAction": {
+          "term": "Type actie",
+          "definition": "Het soort project dat een oproep financiert en welk deel wordt vergoed. Gebruikelijk zijn onderzoeks- en innovatieacties, innovatieacties, en coördinatie- en ondersteuningsacties."
+        },
+        "workProgramme": {
+          "term": "Werkprogramma",
+          "definition": "Het document dat vastlegt wat een programma in een bepaalde periode financiert, met budgetten en verwachte termijnen."
+        },
+        "consortium": {
+          "term": "Consortium",
+          "definition": "De groep organisaties die samen één subsidie aanvragen, met vastgelegde rollen en een gedeeld budget."
+        },
+        "coordinator": {
+          "term": "Coördinator",
+          "definition": "De organisatie die een consortium leidt, de subsidieovereenkomst ondertekent en het aanspreekpunt van de Commissie is."
+        },
+        "pic": {
+          "term": "PIC",
+          "definition": "Deelnemersidentificatiecode: het negencijferige nummer dat je organisatie identificeert bij elke EU-financieringsaanvraag."
+        },
+        "trl": {
+          "term": "TRL",
+          "definition": "Technology Readiness Level, 1 tot 9: hoe ver een technologie is gevorderd van het laboratorium (1) tot bewezen in de praktijk (9)."
+        },
+        "lumpSum": {
+          "term": "Vaste-bedragsubsidie",
+          "definition": "Een subsidie die wordt betaald voor afgeronde werkpakketten in plaats van voor opgegeven kosten, zodat losse facturen niet worden gecontroleerd."
+        },
+        "mga": {
+          "term": "Modelsubsidieovereenkomst",
+          "definition": "Het standaardcontract dat je tekent als je aanvraag slaagt, met de regels voor het geld."
+        },
+        "sealOfExcellence": {
+          "term": "Seal of Excellence",
+          "definition": "Een kwaliteitslabel voor een voorstel dat goed scoorde maar niet gefinancierd kon worden, en dat sommige nationale regelingen alsnog financieren."
+        },
+        "coFinancingRate": {
+          "term": "Medefinancieringspercentage",
+          "definition": "Het deel van de projectkosten dat de EU betaalt. De rest financier je zelf."
+        },
+        "eic": {
+          "term": "EIC",
+          "definition": "Europese Innovatieraad: het EU-orgaan dat innovatie met hoog risico en hoog potentieel financiert, van onderzoek tot opschaling."
+        },
+        "eicAccelerator": {
+          "term": "EIC Accelerator",
+          "definition": "EIC-financiering waarmee één bedrijf een innovatie naar de markt brengt, als subsidie, als kapitaal of als beide."
+        },
+        "eicPathfinder": {
+          "term": "EIC Pathfinder",
+          "definition": "EIC-financiering voor onderzoek in een vroeg stadium naar een technologie die nog niet bestaat."
+        },
+        "eicTransition": {
+          "term": "EIC Transition",
+          "definition": "EIC-financiering om een bewezen onderzoeksresultaat om te zetten in iets dat klaar is voor een markt."
+        },
+        "stepScaleUp": {
+          "term": "STEP Scale Up",
+          "definition": "Kapitaalinvestering van de EIC in Europese bedrijven die strategische technologieën opschalen, onder het STEP-platform."
+        },
+        "blendedFinance": {
+          "term": "Gemengde financiering",
+          "definition": "Subsidie en kapitaalinvestering gecombineerd in één toekenning, gebruikelijk bij de EIC Accelerator."
+        }
+      }
     }
   },
   "tenderDocs": {

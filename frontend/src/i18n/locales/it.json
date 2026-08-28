@@ -1835,6 +1835,159 @@
           "hint": "Impegno passato di azione esterna dell'UE dal Sistema di Trasparenza Finanziaria. NDICI (Vicinato, Sviluppo e Cooperazione Internazionale), IPA III (pre-adesione), o Aiuto Umanitario. Mostra chi ha già vinto finanziamenti UE dove, utile come intelligence competitiva."
         }
       }
+    },
+    "glossary": {
+      "title": "Glossario",
+      "subtitle": "Le parole che l'UE usa per i soldi, e che cosa significano.",
+      "button": "Glossario",
+      "open": "Apri il glossario",
+      "close": "Chiudi",
+      "search": "Cerca un termine",
+      "noResults": "Nessun termine corrisponde a questa ricerca.",
+      "categories": {
+        "procurement": "Appalti pubblici",
+        "funding": "Finanziamenti dell'UE",
+        "eic": "Consiglio europeo per l'innovazione"
+      },
+      "count": "{{count}} termini",
+      "terms": {
+        "ted": {
+          "term": "TED",
+          "definition": "Tenders Electronic Daily, il supplemento dell'UE in cui vanno pubblicati gli appalti pubblici che superano le soglie europee."
+        },
+        "cpv": {
+          "term": "CPV",
+          "definition": "Vocabolario comune per gli appalti pubblici: un codice a otto cifre che classifica che cosa acquista un appalto e permette di abbinarlo al tuo settore."
+        },
+        "nuts": {
+          "term": "NUTS",
+          "definition": "I codici regionali standard dell'UE, usati qui per indicare dove sarà eseguito un appalto."
+        },
+        "contractingAuthority": {
+          "term": "Amministrazione aggiudicatrice",
+          "definition": "L'ente pubblico che gestisce la gara e aggiudica l'appalto."
+        },
+        "lot": {
+          "term": "Lotto",
+          "definition": "Un appalto diviso in parti a cui puoi partecipare separatamente, il che mette gli appalti grandi alla portata delle imprese piccole."
+        },
+        "frameworkAgreement": {
+          "term": "Accordo quadro",
+          "definition": "Un accordo che fissa le condizioni di appalti futuri con uno o più fornitori, senza impegnare alcun ordine specifico."
+        },
+        "awardCriteria": {
+          "term": "Criteri di aggiudicazione",
+          "definition": "Ciò che l'acquirente valuta nelle offerte, e il peso di ciascun criterio. Secondo la direttiva 2014/24/UE: prezzo, costo o miglior rapporto qualità-prezzo."
+        },
+        "espd": {
+          "term": "DGUE",
+          "definition": "Documento di gara unico europeo: un'autodichiarazione di possedere i requisiti di ammissione e selezione, presentata al posto della documentazione completa."
+        },
+        "openProcedure": {
+          "term": "Procedura aperta",
+          "definition": "Qualsiasi impresa interessata può presentare un'offerta direttamente. È la procedura più accessibile."
+        },
+        "restrictedProcedure": {
+          "term": "Procedura ristretta",
+          "definition": "Le imprese chiedono prima di partecipare e solo quelle selezionate sono invitate a presentare offerta."
+        },
+        "negotiatedProcedure": {
+          "term": "Procedura negoziata",
+          "definition": "L'acquirente negozia le condizioni con gli offerenti. «Con previa indizione di gara» significa che l'appalto è stato pubblicato prima; «senza», che non lo è stato."
+        },
+        "competitiveDialogue": {
+          "term": "Dialogo competitivo",
+          "definition": "L'acquirente discute le soluzioni possibili con imprese selezionate prima di chiedere le offerte finali. Si usa per appalti complessi."
+        },
+        "innovationPartnership": {
+          "term": "Partenariato per l'innovazione",
+          "definition": "Una procedura per acquistare qualcosa che non esiste ancora: sviluppo e acquisto in un unico appalto."
+        },
+        "contractNotice": {
+          "term": "Bando di gara",
+          "definition": "L'annuncio pubblicato che un appalto è aperto alle offerte, con la scadenza e i requisiti."
+        },
+        "estimatedValue": {
+          "term": "Valore stimato",
+          "definition": "La stima dell'acquirente di quanto vale l'appalto, IVA esclusa. Determina quali norme e soglie europee si applicano."
+        },
+        "callForProposals": {
+          "term": "Invito a presentare proposte",
+          "definition": "Un invito a chiedere una sovvenzione dell'UE. Proponi un progetto; non vendi un servizio."
+        },
+        "callForTenders": {
+          "term": "Bando di gara dell'UE",
+          "definition": "Un invito a presentare offerta per un contratto dell'UE. L'istituzione acquista da te un servizio o una fornitura."
+        },
+        "topicId": {
+          "term": "Topic ID",
+          "definition": "L'identificativo di un tema di finanziamento sul portale Finanziamenti e appalti dell'UE, ad esempio HORIZON-EIC-2026-ACCELERATOR-01."
+        },
+        "typeOfAction": {
+          "term": "Tipo di azione",
+          "definition": "Il genere di progetto che un bando finanzia e quanta parte viene rimborsata. I più comuni: azioni di ricerca e innovazione, di innovazione, e di coordinamento e sostegno."
+        },
+        "workProgramme": {
+          "term": "Programma di lavoro",
+          "definition": "Il documento che stabilisce che cosa finanzierà un programma in un dato periodo, con budget e scadenze previste."
+        },
+        "consortium": {
+          "term": "Consorzio",
+          "definition": "Il gruppo di organizzazioni che chiedono insieme una stessa sovvenzione, con ruoli definiti e un budget condiviso."
+        },
+        "coordinator": {
+          "term": "Coordinatore",
+          "definition": "L'organizzazione che guida un consorzio, firma la convenzione di sovvenzione ed è il referente della Commissione."
+        },
+        "pic": {
+          "term": "PIC",
+          "definition": "Codice di identificazione del partecipante: il numero di nove cifre che identifica la tua organizzazione in ogni domanda di finanziamento dell'UE."
+        },
+        "trl": {
+          "term": "TRL",
+          "definition": "Livello di maturità tecnologica, da 1 a 9: quanto una tecnologia si è spostata dal laboratorio (1) alla validazione in esercizio (9)."
+        },
+        "lumpSum": {
+          "term": "Sovvenzione forfettaria",
+          "definition": "Una sovvenzione pagata a fronte di pacchetti di lavoro completati anziché di costi dichiarati, così le singole fatture non vengono controllate."
+        },
+        "mga": {
+          "term": "Convenzione di sovvenzione tipo",
+          "definition": "Il contratto standard che firmi se la domanda va a buon fine, e che fissa le regole sull'uso dei fondi."
+        },
+        "sealOfExcellence": {
+          "term": "Sigillo di eccellenza",
+          "definition": "Un marchio di qualità per una proposta valutata bene ma non finanziabile, che alcuni programmi nazionali finanziano al suo posto."
+        },
+        "coFinancingRate": {
+          "term": "Tasso di cofinanziamento",
+          "definition": "La quota dei costi di progetto pagata dall'UE. Il resto lo finanzi tu."
+        },
+        "eic": {
+          "term": "EIC",
+          "definition": "Consiglio europeo per l'innovazione: l'organismo dell'UE che finanzia innovazione ad alto rischio e alto potenziale, dalla ricerca alla crescita."
+        },
+        "eicAccelerator": {
+          "term": "EIC Accelerator",
+          "definition": "Finanziamento dell'EIC perché una singola impresa porti un'innovazione sul mercato, come sovvenzione, come capitale o come entrambi."
+        },
+        "eicPathfinder": {
+          "term": "EIC Pathfinder",
+          "definition": "Finanziamento dell'EIC per la ricerca in fase iniziale verso una tecnologia che non esiste ancora."
+        },
+        "eicTransition": {
+          "term": "EIC Transition",
+          "definition": "Finanziamento dell'EIC per trasformare un risultato di ricerca già validato in qualcosa di pronto per un mercato."
+        },
+        "stepScaleUp": {
+          "term": "STEP Scale Up",
+          "definition": "Investimento in capitale dell'EIC in imprese europee che scalano tecnologie strategiche, nell'ambito della piattaforma STEP."
+        },
+        "blendedFinance": {
+          "term": "Finanziamento misto",
+          "definition": "Sovvenzione e investimento in capitale combinati in un unico sostegno, tipico dell'EIC Accelerator."
+        }
+      }
     }
   },
   "euLawComply": {

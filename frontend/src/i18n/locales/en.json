@@ -2884,6 +2884,159 @@
           "hint": "Past EU external-action commitment from the Financial Transparency System. NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-accession), or Humanitarian Aid. Shows who has already won EU aid money where, useful as competitive intelligence."
         }
       }
+    },
+    "glossary": {
+      "title": "Glossary",
+      "subtitle": "The words the EU uses for money, and what they mean.",
+      "button": "Glossary",
+      "open": "Open glossary",
+      "close": "Close",
+      "search": "Search a term",
+      "noResults": "No term matches that search.",
+      "categories": {
+        "procurement": "Public procurement",
+        "funding": "EU funding",
+        "eic": "European Innovation Council"
+      },
+      "count": "{{count}} terms",
+      "terms": {
+        "ted": {
+          "term": "TED",
+          "definition": "Tenders Electronic Daily, the EU supplement where public contracts above the EU thresholds must be advertised."
+        },
+        "cpv": {
+          "term": "CPV",
+          "definition": "Common Procurement Vocabulary: an eight-digit code classifying what a contract buys, used to match tenders to your sector."
+        },
+        "nuts": {
+          "term": "NUTS",
+          "definition": "The EU's standard regional codes, used here to say where a contract will be performed."
+        },
+        "contractingAuthority": {
+          "term": "Contracting authority",
+          "definition": "The public body running the procurement and awarding the contract."
+        },
+        "lot": {
+          "term": "Lot",
+          "definition": "A contract split into separate parts you can bid for individually, which puts larger contracts within reach of smaller firms."
+        },
+        "frameworkAgreement": {
+          "term": "Framework agreement",
+          "definition": "An agreement fixing the terms for future contracts with one or more suppliers, without committing to any particular order."
+        },
+        "awardCriteria": {
+          "term": "Award criteria",
+          "definition": "What the buyer scores bids on, and the weight of each. Under Directive 2014/24/EU this is price, cost, or best price-quality ratio."
+        },
+        "espd": {
+          "term": "ESPD",
+          "definition": "European Single Procurement Document: a self-declaration that you meet the eligibility and selection criteria, submitted instead of full evidence."
+        },
+        "openProcedure": {
+          "term": "Open procedure",
+          "definition": "Any interested company may submit a bid directly. The most accessible procedure."
+        },
+        "restrictedProcedure": {
+          "term": "Restricted procedure",
+          "definition": "Companies first ask to take part, and only those selected are invited to bid."
+        },
+        "negotiatedProcedure": {
+          "term": "Negotiated procedure",
+          "definition": "The buyer negotiates terms with bidders. 'With prior call' means the contract was advertised first; 'without' means it was not."
+        },
+        "competitiveDialogue": {
+          "term": "Competitive dialogue",
+          "definition": "The buyer discusses possible solutions with selected companies before asking for final bids. Used for complex contracts."
+        },
+        "innovationPartnership": {
+          "term": "Innovation partnership",
+          "definition": "A procedure for buying something that does not exist yet: development and purchase in a single contract."
+        },
+        "contractNotice": {
+          "term": "Contract notice",
+          "definition": "The published announcement that a contract is open for bids, carrying its deadline and requirements."
+        },
+        "estimatedValue": {
+          "term": "Estimated value",
+          "definition": "The buyer's estimate of what the contract is worth, excluding VAT. It determines which EU rules and thresholds apply."
+        },
+        "callForProposals": {
+          "term": "Call for proposals",
+          "definition": "An invitation to apply for an EU grant. You propose a project; you are not selling a service."
+        },
+        "callForTenders": {
+          "term": "Call for tenders",
+          "definition": "An invitation to bid for an EU contract. The institution buys a service or supply from you."
+        },
+        "topicId": {
+          "term": "Topic ID",
+          "definition": "The identifier of one funding topic on the EU Funding and Tenders Portal, such as HORIZON-EIC-2026-ACCELERATOR-01."
+        },
+        "typeOfAction": {
+          "term": "Type of action",
+          "definition": "The kind of project a call funds and how much of it is reimbursed. Research and Innovation, Innovation, and Coordination and Support Actions are the common ones."
+        },
+        "workProgramme": {
+          "term": "Work programme",
+          "definition": "The document setting out what a programme will fund in a given period, with budgets and expected deadlines."
+        },
+        "consortium": {
+          "term": "Consortium",
+          "definition": "The group of organisations applying together for one grant, with defined roles and a shared budget."
+        },
+        "coordinator": {
+          "term": "Coordinator",
+          "definition": "The organisation leading a consortium, which signs the grant agreement and is the Commission's point of contact."
+        },
+        "pic": {
+          "term": "PIC",
+          "definition": "Participant Identification Code: the nine-digit number identifying your organisation across every EU funding application."
+        },
+        "trl": {
+          "term": "TRL",
+          "definition": "Technology Readiness Level, 1 to 9: how far a technology has travelled from the laboratory (1) to proven in operation (9)."
+        },
+        "lumpSum": {
+          "term": "Lump sum grant",
+          "definition": "A grant paid against completed work packages rather than reported costs, so you are not audited on individual invoices."
+        },
+        "mga": {
+          "term": "Model Grant Agreement",
+          "definition": "The standard contract you sign if your application succeeds, setting the rules that govern the money."
+        },
+        "sealOfExcellence": {
+          "term": "Seal of Excellence",
+          "definition": "A quality label for a proposal that scored well but could not be funded, which some national schemes will fund instead."
+        },
+        "coFinancingRate": {
+          "term": "Co-financing rate",
+          "definition": "The share of project costs the EU pays. You fund the remainder yourself."
+        },
+        "eic": {
+          "term": "EIC",
+          "definition": "European Innovation Council: the EU's funding body for high-risk, high-potential innovation, from research through to scale-up."
+        },
+        "eicAccelerator": {
+          "term": "EIC Accelerator",
+          "definition": "EIC funding for a single company to take an innovation to market, as a grant, as equity, or as both."
+        },
+        "eicPathfinder": {
+          "term": "EIC Pathfinder",
+          "definition": "EIC funding for early-stage research towards a technology that does not exist yet."
+        },
+        "eicTransition": {
+          "term": "EIC Transition",
+          "definition": "EIC funding to take a proven research result and turn it into something ready for a market."
+        },
+        "stepScaleUp": {
+          "term": "STEP Scale Up",
+          "definition": "EIC equity investment in European companies scaling strategic technologies, under the Strategic Technologies for Europe Platform."
+        },
+        "blendedFinance": {
+          "term": "Blended finance",
+          "definition": "Grant and equity investment combined in a single award, common in the EIC Accelerator."
+        }
+      }
     }
   },
   "featurePreview": {

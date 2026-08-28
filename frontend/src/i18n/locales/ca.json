@@ -2884,6 +2884,159 @@
           "hint": "Compromís anterior d'acció externa de la UE del Sistema de Transparència Financera. NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-adhesió) o Ajuda Humanitària. Mostra qui ja ha guanyat diners d'ajuda exterior de la UE on, útil com a intel·ligència competitiva."
         }
       }
+    },
+    "glossary": {
+      "title": "Glossari",
+      "subtitle": "Les paraules que la UE fa servir per als diners, i què volen dir.",
+      "button": "Glossari",
+      "open": "Obre el glossari",
+      "close": "Tanca",
+      "search": "Cerca un terme",
+      "noResults": "Cap terme coincideix amb aquesta cerca.",
+      "categories": {
+        "procurement": "Contractació pública",
+        "funding": "Finançament de la UE",
+        "eic": "Consell Europeu d'Innovació"
+      },
+      "count": "{{count}} termes",
+      "terms": {
+        "ted": {
+          "term": "TED",
+          "definition": "Tenders Electronic Daily, el suplement de la UE on s'han d'anunciar els contractes públics que superen els llindars europeus."
+        },
+        "cpv": {
+          "term": "CPV",
+          "definition": "Vocabulari Comú de Contractació Pública: un codi de vuit dígits que classifica què compra un contracte i permet aparellar-lo amb el teu sector."
+        },
+        "nuts": {
+          "term": "NUTS",
+          "definition": "Els codis regionals estàndard de la UE, emprats aquí per indicar on s'executarà un contracte."
+        },
+        "contractingAuthority": {
+          "term": "Poder adjudicador",
+          "definition": "L'organisme públic que gestiona la licitació i adjudica el contracte."
+        },
+        "lot": {
+          "term": "Lot",
+          "definition": "Un contracte dividit en parts a les quals pots licitar per separat, cosa que posa contractes grans a l'abast d'empreses petites."
+        },
+        "frameworkAgreement": {
+          "term": "Acord marc",
+          "definition": "Un acord que fixa les condicions de contractes futurs amb un o més proveïdors, sense comprometre cap comanda concreta."
+        },
+        "awardCriteria": {
+          "term": "Criteris d'adjudicació",
+          "definition": "Allò que el comprador puntua de les ofertes, i el pes de cada criteri. Segons la Directiva 2014/24/UE pot ser preu, cost o millor relació qualitat-preu."
+        },
+        "espd": {
+          "term": "DEUC",
+          "definition": "Document Europeu Únic de Contractació: una declaració responsable que compleixes els criteris d'admissió i selecció, presentada en lloc de tota la documentació."
+        },
+        "openProcedure": {
+          "term": "Procediment obert",
+          "definition": "Qualsevol empresa interessada pot presentar una oferta directament. És el procediment més accessible."
+        },
+        "restrictedProcedure": {
+          "term": "Procediment restringit",
+          "definition": "Les empreses demanen primer de participar i només les seleccionades són convidades a ofertar."
+        },
+        "negotiatedProcedure": {
+          "term": "Procediment negociat",
+          "definition": "El comprador negocia les condicions amb els licitadors. 'Amb publicitat prèvia' vol dir que el contracte es va anunciar abans; 'sense publicitat', que no."
+        },
+        "competitiveDialogue": {
+          "term": "Diàleg competitiu",
+          "definition": "El comprador debat solucions possibles amb empreses seleccionades abans de demanar ofertes finals. S'usa en contractes complexos."
+        },
+        "innovationPartnership": {
+          "term": "Associació per a la innovació",
+          "definition": "Un procediment per comprar una cosa que encara no existeix: desenvolupament i compra en un mateix contracte."
+        },
+        "contractNotice": {
+          "term": "Anunci de licitació",
+          "definition": "L'anunci publicat que un contracte admet ofertes, amb el termini i els requisits."
+        },
+        "estimatedValue": {
+          "term": "Valor estimat",
+          "definition": "L'estimació del comprador sobre quant val el contracte, sense IVA. Determina quines normes i llindars europeus s'apliquen."
+        },
+        "callForProposals": {
+          "term": "Convocatòria de propostes",
+          "definition": "Una invitació a sol·licitar una subvenció de la UE. Proposes un projecte; no véns un servei."
+        },
+        "callForTenders": {
+          "term": "Convocatòria de licitació",
+          "definition": "Una invitació a ofertar per un contracte de la UE. La institució et compra un servei o un subministrament."
+        },
+        "topicId": {
+          "term": "Topic ID",
+          "definition": "L'identificador d'un tema de finançament al Portal de Finançament i Licitacions de la UE, com ara HORIZON-EIC-2026-ACCELERATOR-01."
+        },
+        "typeOfAction": {
+          "term": "Tipus d'acció",
+          "definition": "La mena de projecte que finança una convocatòria i quina part es reemborsa. Les habituals són accions de recerca i innovació, d'innovació, i de coordinació i suport."
+        },
+        "workProgramme": {
+          "term": "Programa de treball",
+          "definition": "El document que fixa què finançarà un programa en un període donat, amb pressupostos i terminis previstos."
+        },
+        "consortium": {
+          "term": "Consorci",
+          "definition": "El grup d'organitzacions que sol·liciten juntes una subvenció, amb funcions definides i un pressupost compartit."
+        },
+        "coordinator": {
+          "term": "Coordinador",
+          "definition": "L'organització que lidera un consorci, signa l'acord de subvenció i és el punt de contacte de la Comissió."
+        },
+        "pic": {
+          "term": "PIC",
+          "definition": "Codi d'Identificació del Participant: el número de nou dígits que identifica la teva organització a totes les sol·licituds de finançament de la UE."
+        },
+        "trl": {
+          "term": "TRL",
+          "definition": "Nivell de Maduresa Tecnològica, d'1 a 9: com de lluny ha arribat una tecnologia des del laboratori (1) fins a estar provada en operació (9)."
+        },
+        "lumpSum": {
+          "term": "Subvenció a tant alçat",
+          "definition": "Una subvenció pagada per paquets de treball completats i no per costos declarats, de manera que no s'auditen factures individuals."
+        },
+        "mga": {
+          "term": "Model d'acord de subvenció",
+          "definition": "El contracte estàndard que signes si la teva sol·licitud prospera, i que fixa les regles dels diners."
+        },
+        "sealOfExcellence": {
+          "term": "Segell d'Excel·lència",
+          "definition": "Una etiqueta de qualitat per a una proposta ben puntuada que no es va poder finançar, i que alguns programes nacionals sí que financen."
+        },
+        "coFinancingRate": {
+          "term": "Taxa de cofinançament",
+          "definition": "La part dels costos del projecte que paga la UE. La resta la finances tu."
+        },
+        "eic": {
+          "term": "EIC",
+          "definition": "Consell Europeu d'Innovació: l'organisme de la UE que finança innovació d'alt risc i alt potencial, des de la recerca fins a l'escalat."
+        },
+        "eicAccelerator": {
+          "term": "EIC Accelerator",
+          "definition": "Finançament de l'EIC perquè una sola empresa porti una innovació al mercat, en forma de subvenció, de capital o de totes dues."
+        },
+        "eicPathfinder": {
+          "term": "EIC Pathfinder",
+          "definition": "Finançament de l'EIC per a recerca en fase inicial cap a una tecnologia que encara no existeix."
+        },
+        "eicTransition": {
+          "term": "EIC Transition",
+          "definition": "Finançament de l'EIC per convertir un resultat de recerca ja provat en una cosa a punt per a un mercat."
+        },
+        "stepScaleUp": {
+          "term": "STEP Scale Up",
+          "definition": "Inversió en capital de l'EIC en empreses europees que escalen tecnologies estratègiques, en el marc de la Plataforma STEP."
+        },
+        "blendedFinance": {
+          "term": "Finançament mixt",
+          "definition": "Subvenció i inversió en capital combinades en un mateix ajut, habitual a l'EIC Accelerator."
+        }
+      }
     }
   },
   "featurePreview": {

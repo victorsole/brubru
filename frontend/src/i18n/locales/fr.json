@@ -2884,6 +2884,159 @@
           "hint": "Engagement antérieur d'action externe UE du système de transparence financière. NDICI (Voisinage, développement et coopération internationale), IPA III (pré-adhésion) ou Aide humanitaire. Montre qui a déjà gagné l'aide UE où, utile comme renseignement concurrentiel."
         }
       }
+    },
+    "glossary": {
+      "title": "Glossaire",
+      "subtitle": "Les mots que l'UE emploie pour parler d'argent, et ce qu'ils veulent dire.",
+      "button": "Glossaire",
+      "open": "Ouvrir le glossaire",
+      "close": "Fermer",
+      "search": "Rechercher un terme",
+      "noResults": "Aucun terme ne correspond à cette recherche.",
+      "categories": {
+        "procurement": "Marchés publics",
+        "funding": "Financements de l'UE",
+        "eic": "Conseil européen de l'innovation"
+      },
+      "count": "{{count}} termes",
+      "terms": {
+        "ted": {
+          "term": "TED",
+          "definition": "Tenders Electronic Daily, le supplément de l'UE où les marchés publics dépassant les seuils européens doivent être publiés."
+        },
+        "cpv": {
+          "term": "CPV",
+          "definition": "Vocabulaire commun pour les marchés publics : un code à huit chiffres qui classe ce qu'achète un marché et permet de le rapprocher de votre secteur."
+        },
+        "nuts": {
+          "term": "NUTS",
+          "definition": "Les codes régionaux normalisés de l'UE, utilisés ici pour indiquer où un marché sera exécuté."
+        },
+        "contractingAuthority": {
+          "term": "Pouvoir adjudicateur",
+          "definition": "L'organisme public qui mène la procédure et attribue le marché."
+        },
+        "lot": {
+          "term": "Lot",
+          "definition": "Un marché découpé en parties auxquelles vous pouvez soumissionner séparément, ce qui met les grands marchés à la portée des petites entreprises."
+        },
+        "frameworkAgreement": {
+          "term": "Accord-cadre",
+          "definition": "Un accord fixant les conditions de marchés futurs avec un ou plusieurs fournisseurs, sans engager de commande précise."
+        },
+        "awardCriteria": {
+          "term": "Critères d'attribution",
+          "definition": "Ce que l'acheteur note dans les offres, et le poids de chaque critère. Selon la directive 2014/24/UE : le prix, le coût ou le meilleur rapport qualité-prix."
+        },
+        "espd": {
+          "term": "DUME",
+          "definition": "Document unique de marché européen : une déclaration sur l'honneur attestant que vous remplissez les critères d'admission et de sélection, déposée au lieu des pièces justificatives."
+        },
+        "openProcedure": {
+          "term": "Procédure ouverte",
+          "definition": "Toute entreprise intéressée peut déposer une offre directement. C'est la procédure la plus accessible."
+        },
+        "restrictedProcedure": {
+          "term": "Procédure restreinte",
+          "definition": "Les entreprises demandent d'abord à participer et seules celles retenues sont invitées à soumissionner."
+        },
+        "negotiatedProcedure": {
+          "term": "Procédure négociée",
+          "definition": "L'acheteur négocie les conditions avec les soumissionnaires. « Avec publicité préalable » signifie que le marché a été publié d'abord ; « sans », qu'il ne l'a pas été."
+        },
+        "competitiveDialogue": {
+          "term": "Dialogue compétitif",
+          "definition": "L'acheteur discute des solutions possibles avec des entreprises retenues avant de demander les offres finales. Réservé aux marchés complexes."
+        },
+        "innovationPartnership": {
+          "term": "Partenariat d'innovation",
+          "definition": "Une procédure pour acheter ce qui n'existe pas encore : développement et achat dans un même marché."
+        },
+        "contractNotice": {
+          "term": "Avis de marché",
+          "definition": "L'annonce publiée indiquant qu'un marché est ouvert aux offres, avec son délai et ses exigences."
+        },
+        "estimatedValue": {
+          "term": "Valeur estimée",
+          "definition": "L'estimation par l'acheteur de ce que vaut le marché, hors TVA. Elle détermine quelles règles et quels seuils européens s'appliquent."
+        },
+        "callForProposals": {
+          "term": "Appel à propositions",
+          "definition": "Une invitation à demander une subvention de l'UE. Vous proposez un projet ; vous ne vendez pas un service."
+        },
+        "callForTenders": {
+          "term": "Appel d'offres",
+          "definition": "Une invitation à soumissionner pour un marché de l'UE. L'institution vous achète un service ou une fourniture."
+        },
+        "topicId": {
+          "term": "Topic ID",
+          "definition": "L'identifiant d'un sujet de financement sur le portail Financement et appels d'offres de l'UE, par exemple HORIZON-EIC-2026-ACCELERATOR-01."
+        },
+        "typeOfAction": {
+          "term": "Type d'action",
+          "definition": "Le genre de projet qu'un appel finance et la part remboursée. Les plus courants : actions de recherche et innovation, actions d'innovation, actions de coordination et de soutien."
+        },
+        "workProgramme": {
+          "term": "Programme de travail",
+          "definition": "Le document précisant ce qu'un programme financera sur une période donnée, avec les budgets et les échéances prévues."
+        },
+        "consortium": {
+          "term": "Consortium",
+          "definition": "Le groupe d'organisations qui demandent ensemble une même subvention, avec des rôles définis et un budget partagé."
+        },
+        "coordinator": {
+          "term": "Coordinateur",
+          "definition": "L'organisation qui dirige un consortium, signe la convention de subvention et sert d'interlocuteur à la Commission."
+        },
+        "pic": {
+          "term": "PIC",
+          "definition": "Code d'identification du participant : le numéro à neuf chiffres qui identifie votre organisation dans toutes les demandes de financement de l'UE."
+        },
+        "trl": {
+          "term": "TRL",
+          "definition": "Niveau de maturité technologique, de 1 à 9 : la distance parcourue par une technologie du laboratoire (1) à l'exploitation éprouvée (9)."
+        },
+        "lumpSum": {
+          "term": "Subvention forfaitaire",
+          "definition": "Une subvention versée pour des lots de travaux achevés plutôt que sur des coûts déclarés, de sorte que les factures ne sont pas auditées une à une."
+        },
+        "mga": {
+          "term": "Convention de subvention type",
+          "definition": "Le contrat standard que vous signez si votre demande aboutit, et qui fixe les règles encadrant les fonds."
+        },
+        "sealOfExcellence": {
+          "term": "Label d'excellence",
+          "definition": "Un label de qualité pour une proposition bien notée qui n'a pas pu être financée, et que certains dispositifs nationaux financent à la place."
+        },
+        "coFinancingRate": {
+          "term": "Taux de cofinancement",
+          "definition": "La part des coûts du projet payée par l'UE. Vous financez le reste."
+        },
+        "eic": {
+          "term": "EIC",
+          "definition": "Conseil européen de l'innovation : l'organisme de l'UE qui finance l'innovation à haut risque et à fort potentiel, de la recherche jusqu'au passage à l'échelle."
+        },
+        "eicAccelerator": {
+          "term": "EIC Accelerator",
+          "definition": "Un financement de l'EIC pour qu'une seule entreprise porte une innovation jusqu'au marché, sous forme de subvention, de fonds propres ou des deux."
+        },
+        "eicPathfinder": {
+          "term": "EIC Pathfinder",
+          "definition": "Un financement de l'EIC pour la recherche en amont vers une technologie qui n'existe pas encore."
+        },
+        "eicTransition": {
+          "term": "EIC Transition",
+          "definition": "Un financement de l'EIC pour transformer un résultat de recherche déjà éprouvé en quelque chose de prêt pour un marché."
+        },
+        "stepScaleUp": {
+          "term": "STEP Scale Up",
+          "definition": "Un investissement en fonds propres de l'EIC dans des entreprises européennes qui déploient des technologies stratégiques, au titre de la plateforme STEP."
+        },
+        "blendedFinance": {
+          "term": "Financement mixte",
+          "definition": "Subvention et investissement en fonds propres réunis dans une même aide, courant dans l'EIC Accelerator."
+        }
+      }
     }
   },
   "featurePreview": {
