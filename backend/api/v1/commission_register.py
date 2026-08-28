@@ -30,6 +30,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.body_sources import read_body
 
 logger = logging.getLogger(__name__)
 
@@ -111,11 +112,10 @@ def _row_to_item(
     pdf = r.pdf_url
     if pdf is None and r.celex:
         pdf = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
-    # body_html now sourced from the new column (Cellar XHTML manifestation)
-    # rather than being forced to None. body_text comes from the existing
-    # text_body column.
-    body_html_value = getattr(r, "body_html", None)
-    body_text_value = r.text_body
+    # Which columns hold this table's text is declared once, in
+    # core/body_sources.py, so a rename does not have to be chased through
+    # every handler. For commission_documents that is text_body + body_html.
+    body_text_value, body_html_value = read_body("commission_documents", r)
     has_body = bool(
         (body_text_value and len(body_text_value) >= body_threshold)
         or (body_html_value and len(body_html_value) >= body_threshold)

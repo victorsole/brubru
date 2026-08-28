@@ -35,6 +35,16 @@ Handlers stop knowing physical column names and ask here instead, so:
     exists, so a rename that lands in the database and not here fails loudly
     instead of serving nulls.
 
+Why this lives in `core/` and not `api/v2/`
+------------------------------------------
+It first went to `api/v2/_body_sources.py` and took the API down on import.
+`api/v2/commission/commission_register.py` does `from api.v1.commission_register
+import *` to reproduce v1's namespace, so a v1 handler importing anything under
+`api.v2` re-enters a half-initialised module and dies on a NameError. The
+registry describes the DATABASE, not an API version, and both v1 and v2 need it;
+`core/` is a namespace package, so importing from it runs no package __init__ at
+all and cannot cycle.
+
 Coverage numbers below are measured, not assumed, and are what tells a null body
 apart from a missing one. They are a snapshot: the test checks the columns exist,
 never that a percentage held.
@@ -154,7 +164,7 @@ def get_source(table: str) -> BodySource:
     except KeyError:
         raise UnknownBodyTable(
             f"{table!r} has no declared body source. Add it to BODY_SOURCES in "
-            f"api/v2/_body_sources.py, naming the column(s) that hold its text, "
+            f"core/body_sources.py, naming the column(s) that hold its text, "
             f"rather than aliasing the column inside the handler."
         ) from None
 

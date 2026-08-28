@@ -1,6 +1,6 @@
 """The body-source registry must describe the database that actually exists.
 
-`api/v2/_body_sources.py` is the single place naming the column that holds each
+`core/body_sources.py` is the single place naming the column that holds each
 table's text. Its whole value is that handlers stop hardcoding physical column
 names, so the eventual rename to `body_txt` / `body_html` everywhere becomes a
 one-line edit per table.
@@ -15,7 +15,7 @@ the file.
 import pytest
 from sqlalchemy import text
 
-from api.v2._body_sources import (BODY_SOURCES, UnknownBodyTable, body_select,
+from core.body_sources import (BODY_SOURCES, UnknownBodyTable, body_select,
                                   declared_tables, get_source)
 
 

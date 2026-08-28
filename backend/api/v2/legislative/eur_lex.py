@@ -42,7 +42,7 @@ from api.v1 import citations as _v1_citations
 from api.v1 import cellar_discover as _v1_cellar
 from api.v1._body import body_threshold_param
 from api.v1._deps import api_user_with_rate_limit
-from api.v2._body_sources import body_select
+from core.body_sources import body_select
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.laws import LawItem, LawTextResponse
 from api.v1.identify import IdentifyResult
