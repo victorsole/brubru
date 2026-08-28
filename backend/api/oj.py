@@ -75,17 +75,31 @@ def _translations_map(db: Session, lang: str, entry_ids: List[str]) -> dict:
     return {str(r[0]): (r[1], r[2]) for r in rows}
 
 
-def _catalan_acts(db: Session, celexes: List[str]) -> set:
-    """CELEXes with a deployed full-text Catalan translation at
+def _ca_key(e) -> Optional[str]:
+    """The corpus slug for an OJ entry: CELEX when it has one (L-series),
+    otherwise the oj_id (C-series). Keep this the single definition of the
+    slug so the lookup set and the emitted URL can never disagree."""
+    return e.celex or e.oj_id
+
+
+def _catalan_acts(db: Session, keys: List[str]) -> set:
+    """Corpus keys with a deployed full-text Catalan translation at
     brubru.beresol.eu/legislacio-ue-catala/ (fed daily by
-    scripts/translate_oj_daily_acts.py + the acquis corpus)."""
-    celexes = [c for c in celexes if c]
-    if not celexes:
+    scripts/translate_oj_daily_acts.py, scripts/translate_oj_c_series.py and
+    the acquis corpus).
+
+    A key is a CELEX for L-series acts and an oj_id for C-series items, which
+    have no CELEX at all (oj_scraper.derive_celex returns None off L-series).
+    Both are matched in one pass because a page is addressed by exactly one of
+    them -- see catalan_translations_key_ck in migration 223."""
+    keys = [k for k in keys if k]
+    if not keys:
         return set()
     rows = db.execute(text("""
-        SELECT celex FROM catalan_translations
-         WHERE deployed_at IS NOT NULL AND celex = ANY(:cx)
-    """), {"cx": celexes}).fetchall()
+        SELECT COALESCE(celex, oj_id) FROM catalan_translations
+         WHERE deployed_at IS NOT NULL
+           AND (celex = ANY(:kx) OR oj_id = ANY(:kx))
+    """), {"kx": keys}).fetchall()
     return {r[0] for r in rows}
 
 
@@ -110,8 +124,9 @@ def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(
         "eurlex_url": e.eurlex_url,
         "plain_explanation": t_expl or e.plain_explanation,
         "translated_from": "en" if t_title else None,
-        "catalan_url": (f"https://brubru.beresol.eu/legislacio-ue-catala/{e.celex}/"
-                        if e.celex and e.celex in catalan_acts else None),
+        # L-series pages are addressed by CELEX, C-series by oj_id.
+        "catalan_url": (f"https://brubru.beresol.eu/legislacio-ue-catala/{_ca_key(e)}/"
+                        if _ca_key(e) in catalan_acts else None),
         "change_kind": e.change_kind,
         "theme": e.theme,
         "carriage_id": str(e.carriage_id) if e.carriage_id else None,
@@ -188,7 +203,7 @@ def oj_entries(
 
         rows = q.order_by(OjEntry.series, OjEntry.act_type, OjEntry.oj_number).all()
         trans_map = _translations_map(db, (lang or "en").lower()[:2], [str(e.id) for e in rows])
-        catalan_acts = _catalan_acts(db, [e.celex for e in rows])
+        catalan_acts = _catalan_acts(db, [_ca_key(e) for e in rows])
         items = [_entry_dict(e, keywords, tracked_procs, tracked_celex,
                              trans_map.get(str(e.id)), catalan_acts) for e in rows]
         if my_interests and keywords:

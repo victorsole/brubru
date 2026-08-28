@@ -130,6 +130,20 @@ MEUB_SOURCES: List[SourceSpec] = [
     # the model provider's rate limit, which answers a 429 by sleeping ~60s
     # rather than falling through.
     SourceSpec("carriage_short_titles","File names (AI)",         "warm", "scripts/backfill_carriage_short_titles.py", ("--limit", "40", "--sleep", "4"), timeout=900, stale_after_hours=48),
+    # Full-text Catalan for the day's OJ. "oj_catalan" above translates each
+    # entry's TITLE + explanation; these two translate the ACT ITSELF, which is
+    # what makes a My OJ card link to Catalan instead of falling back to the
+    # English EUR-Lex page. They ran only from a local launchd job that had
+    # never once succeeded (exit 78, Full Disk Access), so full text silently
+    # stopped on 24 Jul 2026 while titles kept flowing.
+    #
+    # Sized for STEADY STATE, not backlog: ~140s/item means --limit 10 fits
+    # inside the timeout, and the ~3h fast tier gives 8 runs/day = ~80 items,
+    # comfortably above the ~60 entries a normal OJ day publishes. A historical
+    # backlog is cleared by running the same scripts locally with a big --limit;
+    # both are idempotent (they skip anything already in catalan_translations).
+    SourceSpec("oj_acts_ca", "My OJ - Catalan full text (L)", "fast", "scripts/translate_oj_daily_acts.py", ("--limit", "10"), timeout=1800, stale_after_hours=14),
+    SourceSpec("oj_c_ca",    "My OJ - Catalan full text (C)", "fast", "scripts/translate_oj_c_series.py",   ("--limit", "10"), timeout=1800, stale_after_hours=14),
 ]
 # fmt: on
 

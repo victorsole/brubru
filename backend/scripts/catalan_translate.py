@@ -430,6 +430,54 @@ def _parse_consolidated_html(soup, html_path: str, celex: str = '') -> dict:
     return result
 
 
+def _parse_generic_c_html(soup, html_path: str, celex: str = '') -> dict:
+    """Parse an OJ **C-series** document, which has no articles or recitals.
+
+    The L-series parsers key off the act skeleton (visas -> recitals -> articles).
+    C-series items have no such skeleton: an EP resolution is "The European
+    Parliament, - having regard to ... 1. Considers ...", a merger notice is a
+    handful of prose paragraphs, a State aid authorisation is a short table-ish
+    block. Feeding those to parse_oj_html yields 0/0/0 and the caller aborts with
+    "may not be OJ format", which is why C-series could not be translated at all.
+
+    So flatten instead of imposing a skeleton: take the document body in reading
+    order and emit ONE untitled pseudo-article holding every paragraph. The
+    translation pipeline and generate_html both iterate articles/paragraphs, so
+    nothing downstream needs to know this document had no articles.
+    """
+    body = (soup.select_one('#document1') or soup.select_one('.eli-container')
+            or soup.select_one('#text') or soup.body or soup)
+    seen, paragraphs = set(), []
+    for el in body.find_all(['p', 'h1', 'h2', 'h3', 'li', 'td']):
+        # A <p> inside a <li>/<td> would otherwise be emitted twice.
+        if el.find(['p', 'li']):
+            continue
+        text = ' '.join(el.get_text(' ', strip=True).split())
+        if len(text) < 2:
+            continue
+        key = text[:160]
+        if key in seen:
+            continue
+        seen.add(key)
+        paragraphs.append(text)
+    title = ''
+    for sel in ('h1', '.doc-ti', 'title'):
+        node = soup.select_one(sel)
+        if node:
+            title = ' '.join(node.get_text(' ', strip=True).split())
+            if title:
+                break
+    return {
+        'source_file': html_path,
+        'metadata': {'celex': celex, 'language': 'EN'},
+        'title': title or celex,
+        'preamble_init': '', 'visas': [], 'recitals_init': '', 'recitals': [],
+        'preamble_final': '', 'chapters': [],
+        'articles': [{'identifier': 'C_BODY', 'title': '', 'paragraphs': paragraphs}],
+        'final': '',
+    }
+
+
 def parse_oj_html(html_path: str, celex: str = '') -> dict:
     """
     Parse an OJ-format HTML file (from EUR-Lex or Cellar XHTML) and extract
@@ -457,6 +505,10 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
         'articles': [],
         'final': '',
     }
+
+    # C-series items are keyed on the OJ id and have no act skeleton at all.
+    if celex.startswith('C_'):
+        return _parse_generic_c_html(soup, html_path, celex)
 
     # Detect consolidated EUR-Lex format
     is_consolidated = bool(soup.select('p.title-article-norm'))
@@ -707,6 +759,24 @@ GLOSSARY_CORRECTIONS = [
     ("REGULACIÓ (CE)", "REGLAMENT (CE)"),
     ("Regulació d'execució", "Reglament d'execució"),
     ("Regulació delegada", "Reglament delegat"),
+    # "Implementing Regulation" -> "Reglament d'execució". The NMT renders it as
+    # "Reglament d'aplicació" (via "application"), which the d'implementació rule
+    # above does not catch, so a single act could carry BOTH "Reglament
+    # d'aplicació" and the correct "Decisió d'execució" (observed in 32026R1961,
+    # 26 Aug 2026). "d'aplicació directa" is a DIFFERENT phrase meaning directly
+    # applicable and must survive, so it is sentinel-protected across the swap.
+    # These pairs are order-dependent: the list is applied as sequential
+    # str.replace, so protect -> swap -> restore must stay adjacent and in order.
+    ("Reglament d'aplicació directa", "@@BRU_RAD@@"),
+    ("reglament d'aplicació directa", "@@BRU_RADL@@"),
+    ("REGLAMENT D'APLICACIÓ DIRECTA", "@@BRU_RADU@@"),
+    ("Reglament d'aplicació", "Reglament d'execució"),
+    ("reglament d'aplicació", "reglament d'execució"),
+    ("REGLAMENT D'APLICACIÓ", "REGLAMENT D'EXECUCIÓ"),
+    ("Regulació d'aplicació", "Reglament d'execució"),
+    ("@@BRU_RAD@@", "Reglament d'aplicació directa"),
+    ("@@BRU_RADL@@", "reglament d'aplicació directa"),
+    ("@@BRU_RADU@@", "REGLAMENT D'APLICACIÓ DIRECTA"),
     # Instrument names WITHOUT the (UE)/(CE) marker — hero titles, nav links and
     # table cells render "the X Regulation" as a bare name. Still a Reglament.
     # Each entry names a concrete EU instrument, so none can collide with the
@@ -925,7 +995,7 @@ def _save_partial_html(output_dir: str, translated: dict, celex: str):
     os.makedirs(output_dir, exist_ok=True)
     partial_path = os.path.join(output_dir, 'index.partial.html')
     try:
-        html = generate_html(translated, celex)
+        html = generate_html(translated, celex, display_ref)
         with open(partial_path, 'w', encoding='utf-8') as f:
             f.write(html)
     except Exception:
@@ -1022,7 +1092,7 @@ def _do_translate(parsed: dict, translate_text, translate_batch,
 # Step 3: HTML Generator
 # ============================================================
 
-def generate_html(translated: dict, celex: str) -> str:
+def generate_html(translated: dict, celex: str, display_ref: str = '') -> str:
     """Generate a Brubru-styled HTML page from translated segments."""
 
     title = translated['title']
@@ -1072,7 +1142,24 @@ def generate_html(translated: dict, celex: str) -> str:
             articles_html += f'  <p class="article-text">{_annotate(para)}</p>\n'
         articles_html += '</div>\n'
 
-    eurlex_url = f'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}'
+    # C-series pages are keyed on the OJ id (C_202604005), which is NOT a CELEX:
+    # the CELEX: URI form does not resolve for them, and printing "CELEX:" would
+    # be factually wrong on every C page. Use the OJ: form and an "OJ" label.
+    # display_ref lets the caller show a DIFFERENT reference from the storage
+    # key: acts whose derived CELEX is fabricated (wrong sector) are still
+    # stored under that CELEX so every existing lookup keeps working, but the
+    # page must link to the OJ id, which is the URL that actually resolves.
+    ref_key = display_ref or celex
+    if ref_key.startswith(('C_', 'L_')):
+        eurlex_url = f'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:{ref_key}'
+        _digits = ref_key[2:]
+        ref_label = 'DOUE'
+        _series = ref_key[0]
+        ref_value = (f"{_series}/{_digits[:4]}/{_digits[4:].lstrip('0') or '0'}"
+                     if len(_digits) > 4 and _digits[:4].isdigit() else ref_key)
+    else:
+        eurlex_url = f'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}'
+        ref_label, ref_value = 'CELEX', celex
 
     return f'''<!DOCTYPE html>
 <html lang="ca">
@@ -1157,7 +1244,7 @@ def generate_html(translated: dict, celex: str) -> str:
 <div class="doc-header">
   <h1>{title}</h1>
   <div class="meta">
-    CELEX: {celex} | <a href="{eurlex_url}" target="_blank" rel="noopener">Text original a EUR-Lex</a> | Data: {formatted_date}
+    {ref_label}: {ref_value} | <a href="{eurlex_url}" target="_blank" rel="noopener">Text original a EUR-Lex</a> | Data: {formatted_date}
   </div>
 </div>
 
@@ -1198,7 +1285,7 @@ def generate_html(translated: dict, celex: str) -> str:
 
 
 # ============================================================
-def _translate_one_html(html_path: str, celex: str, engine: str, output: str):
+def _translate_one_html(html_path: str, celex: str, engine: str, output: str, display_ref: str = ''):
     """Translate an OJ HTML file (from Cellar or EUR-Lex) to Catalan."""
     import subprocess
 
@@ -1235,7 +1322,7 @@ def _translate_one_html(html_path: str, celex: str, engine: str, output: str):
             translated = translate_segments_softcatala(parsed, output_dir=output_dir, celex=celex)
 
         output_path = os.path.join(output_dir, 'index.html')
-        html_output = generate_html(translated, celex)
+        html_output = generate_html(translated, celex, display_ref)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(html_output)
 
@@ -1384,6 +1471,7 @@ def main():
                         help='Translation engine (default: softcatala)')
     parser.add_argument('--find', type=str, help='Find XML files matching an OJ reference pattern')
     parser.add_argument('--celex', type=str, default='', help='CELEX number for the output')
+    parser.add_argument('--ref', type=str, default='', help="Display reference override (e.g. an OJ id) when the storage CELEX is fabricated; affects only the page's shown reference and original-text link")
     parser.add_argument('--output', type=str, default='', help='Output HTML path (default: auto)')
     parser.add_argument('--batch', type=str, default='',
                         help='Batch file with one "xml_path|celex" per line for overnight translation')
@@ -1434,7 +1522,7 @@ def main():
         if not args.celex:
             print('[ERROR] --celex is required with --html (e.g. --html file.html --celex 32026R0129)')
             return
-        _translate_one_html(args.html, args.celex, args.engine, args.output)
+        _translate_one_html(args.html, args.celex, args.engine, args.output, args.ref)
         if args.deploy:
             deploy_to_siteground(args.celex)
         return
@@ -1518,7 +1606,7 @@ def _translate_one(xml_path: str, celex: str, engine: str, output: str):
             translated = translate_segments_softcatala(parsed, output_dir, celex)
 
         output_path = os.path.join(output_dir, 'index.html')
-        html = generate_html(translated, celex)
+        html = generate_html(translated, celex, display_ref)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(html)
 

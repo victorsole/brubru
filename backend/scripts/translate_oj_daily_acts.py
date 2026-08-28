@@ -82,7 +82,7 @@ def _pending(limit: int, date: str | None):
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         q = """
-            SELECT DISTINCT ON (e.celex) e.celex, e.oj_date, e.title
+            SELECT DISTINCT ON (e.celex) e.celex, e.oj_id, e.oj_date, e.title
               FROM oj_entries e
              WHERE e.series = 'L' AND e.celex IS NOT NULL
                -- EEA Joint Committee decisions carry scraper-derived CELEXes in
@@ -157,9 +157,23 @@ def _eurlex_fallback(celex: str) -> str | None:
         from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
         url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:{celex}"
         print("  [INFO] Cellar miss; trying EUR-Lex HTML via WAF fetcher", flush=True)
-        with WafBrowserFetcher() as f:
-            r = f.fetch(url)
-        html = (r.html or "")
+        # Two attempts: under heavy local load (a concurrent deploy pegging the
+        # CPU) the WAF fetch returns a short challenge page instead of the act,
+        # which is transient. 39 of 40 failures in the 26 Aug backlog run were
+        # this, and every one succeeded on a quiet retry.
+        html = ""
+        for attempt in (1, 2):
+            with WafBrowserFetcher() as f:
+                r = f.fetch(url)
+            html = (r.html or "")
+            if "Article" in html and len(html) >= 5000:
+                break
+            # Say WHY, or this returns None indistinguishably from "no such act"
+            # and the caller reports the useless "Cellar + EUR-Lex both failed".
+            print(f"  [WARN] EUR-Lex attempt {attempt}: {len(html)} bytes, "
+                  f"Article={'Article' in html} (WAF challenge or empty)", flush=True)
+            if attempt == 1:
+                time.sleep(20)
         if "Article" not in html or len(html) < 5000:
             return None
         tmp = f"/tmp/{celex}_eurlex.html"
@@ -172,6 +186,45 @@ def _eurlex_fallback(celex: str) -> str | None:
     except Exception as e:
         print(f"  [WARN] EUR-Lex fallback error: {str(e)[:80]}", flush=True)
         return None
+
+
+def _ojid_fallback(oj_id: str, celex: str) -> str | None:
+    """Translate an act by its OJ id when its CELEX does not resolve.
+
+    derive_celex() builds a sector-3 CELEX (3{year}{letter}{num}) from the OJ
+    number, which is right for ordinary EU legislation but WRONG for acts of
+    bodies that live in other CELEX sectors: CETA / EEA / Association Committee
+    decisions, EFTA Surveillance Authority decisions, decisions of the
+    Representatives of the Governments of the Member States. EUR-Lex answers
+    those fabricated CELEXes with a ~95KB "The requested document does not
+    exist" page, which is why they failed both paths and looked like fetch
+    errors (26-27 Aug: 12 of 12 skips were this family).
+
+    Every one of them does carry a real oj_id, and OJ:{oj_id} resolves. Keying
+    the page on the oj_id also means the page's own "original text" link points
+    at a URL that exists, instead of a dead CELEX link.
+    """
+    sys.path.insert(0, str(BACKEND))
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:{oj_id}"
+    print(f"  [INFO] CELEX did not resolve; trying OJ id {oj_id}", flush=True)
+    for attempt in (1, 2):
+        with WafBrowserFetcher() as f:
+            r = f.fetch(url)
+        html = r.html or ""
+        if len(html) >= 5000 and "does not exist" not in html[:20000]:
+            tmp = f"/tmp/{oj_id}_oj.html"
+            with open(tmp, "w", encoding="utf-8") as fh:
+                fh.write(html)
+            p = subprocess.run(
+                [sys.executable, "scripts/catalan_translate.py", "--html", tmp,
+                 "--celex", celex, "--ref", oj_id],
+                cwd=BACKEND, capture_output=True, text=True, timeout=3600)
+            return (p.stdout + p.stderr) if p.returncode == 0 else None
+        print(f"  [WARN] OJ-id attempt {attempt}: {len(html)} bytes", flush=True)
+        if attempt == 1:
+            time.sleep(15)
+    return None
 
 
 def run(limit: int, date: str | None):
@@ -199,6 +252,12 @@ def run(limit: int, date: str | None):
                 # Fresh acts 404 on Cellar for days; EUR-Lex HTML via the WAF
                 # browser fetcher is available from day one.
                 out = _eurlex_fallback(celex)
+                if (out is None or not html_path.exists()) and r.get("oj_id"):
+                    # CELEX is likely fabricated (wrong sector). Re-key on oj_id.
+                    # Storage key stays the CELEX so every existing lookup
+                    # (api/oj.py, carriages, the deploy loop) keeps matching;
+                    # only the page's shown reference and link use the oj_id.
+                    out = _ojid_fallback(r["oj_id"], celex)
                 if out is None or not html_path.exists():
                     reason = [l for l in (out or "").splitlines()
                               if "ERROR" in l or "raise" in l][-1:] or ["Cellar + EUR-Lex both failed"]
