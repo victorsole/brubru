@@ -2,6 +2,42 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-28",
+      "action": "updated",
+      "guide": "ema_scientific_committees",
+      "title": "EMA scientific committees",
+      "summary": "Removed the bare 'comp' trigger, which fired inside 'company' and 'companies'; the spelled-out committee name already covered the true positives.",
+      "refs": []
+    },
+    {
+      "date": "2026-08-28",
+      "action": "updated",
+      "guide": "council_guide",
+      "title": "Council of the EU",
+      "summary": "Removed the bare 'gac' trigger, which fired inside the Catalan 'obligacions' and Spanish 'obligaciones' and missed the spelled-out question; replaced with the General Affairs Council name in six languages.",
+      "refs": []
+    },
+    {
+      "date": "2026-08-28",
+      "action": "updated",
+      "guide": "cyber_resilience_act",
+      "title": "Cyber Resilience Act",
+      "summary": "Added 11 triggers: accented French and Catalan forms that could not fire, first Italian and Dutch coverage, and the Article 14 reporting phrasings a manufacturer types with the 11 September deadline two weeks out.",
+      "refs": [
+        "32024R2847"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "action": "updated",
+      "guide": "cyber_resilience_act",
+      "title": "Cyber Resilience Act",
+      "summary": "Removed the hardcoded countdown that had gone stale by 11 days; the Article 14 reporting deadline is now stated by date only (11 September 2026).",
+      "refs": [
+        "32024R2847"
+      ]
+    },
+    {
       "date": "2026-08-27",
       "action": "added",
       "guide": "eu_minors_social_media_age_limits",

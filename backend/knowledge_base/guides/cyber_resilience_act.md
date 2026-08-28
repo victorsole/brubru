@@ -1,7 +1,7 @@
 # Cyber Resilience Act (Regulation (EU) 2024/2847)
 
 ## QUICK FACTS
-- **LATEST (Monday 17 August 2026 — 25 DAYS TO THE FIRST BINDING DEADLINE):** **Article 14 reporting obligations start applying on 11 September 2026.** From that date a manufacturer must notify actively exploited vulnerabilities and severe incidents to the coordinating CSIRT **and** ENISA simultaneously, via the single reporting platform in Article 16, on a **24 hour / 72 hour / 14 day** clock. Article 69(3) makes this bite on **products already on the market** — it is not a new-products-only duty. Everything else in the Regulation waits until 11 December 2027.
+- **LATEST (reviewed Friday 28 August 2026):** **Article 14 reporting obligations start applying on Friday 11 September 2026** — the first binding deadline in the Regulation. From that date a manufacturer must notify actively exploited vulnerabilities and severe incidents to the coordinating CSIRT **and** ENISA simultaneously, via the single reporting platform in Article 16, on a **24 hour / 72 hour / 14 day** clock. Article 69(3) makes this bite on **products already on the market** — it is not a new-products-only duty. Everything else in the Regulation waits until 11 December 2027.
 - Full name: Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 on horizontal cybersecurity requirements for products with digital elements and amending Regulations (EU) No 168/2013 and (EU) 2019/1020 and Directive (EU) 2020/1828 (Cyber Resilience Act)
 - Common name: Cyber Resilience Act (CRA)
 - CELEX: 32024R2847
@@ -20,10 +20,10 @@
 Article 71 staggers the Regulation deliberately, so that the reporting pipeline and the
 conformity-assessment infrastructure exist before the substantive product requirements bite.
 
-| Date | What starts | Status today (17 Aug 2026) |
+| Date | What starts | Status |
 |---|---|---|
 | 11 June 2026 | Chapter IV (Arts 35-51): notification of conformity assessment bodies | **already applying** |
-| **11 September 2026** | **Article 14: manufacturer reporting of actively exploited vulnerabilities and severe incidents** | **25 days away** |
+| **11 September 2026** | **Article 14: manufacturer reporting of actively exploited vulnerabilities and severe incidents** | **the next deadline to fall** |
 | 11 December 2026 | Member States "shall strive to ensure" enough notified bodies exist (Art 43(2)) — a best-efforts target, not an obligation on companies | pending |
 | 11 December 2027 | The Regulation as a whole: Annex I essential requirements, conformity assessment, CE marking, support period, technical documentation | pending |
 

@@ -74,6 +74,58 @@ def normalise(txt: str) -> str:
     return t.rstrip("…. ")
 
 
+# ---------------------------------------------------------------------------
+# Section C, added 28 August 2026 (/social-eu).
+#
+# Sections A and B group by CONTENT TEXT. That misses the larger and more
+# damaging half of the problem, because it can only see posts whose text was
+# stored identically. Grouping by the platform's OWN post id finds the rest.
+#
+# A platform post id is globally unique: one X status id belongs to exactly one
+# tweet by exactly one account, and one YouTube video id to one video. So the
+# SAME id under two different handles is not ambiguous the way identical text
+# is -- at most one of them can be right, and the others carry a URL that was
+# SYNTHESISED as `<platform>/<account being fetched>/<id>` and will not resolve
+# to the account it names.
+#
+# Measured on the day this was written: 601 X status ids claimed by up to
+# TWELVE handles each (1,564 rows), and 732 shared urls overall (1,924 of them
+# YouTube). 1,560 of the 1,564 X rows carried `is_repost = False` and
+# `original_author = NULL`, so the migration-219 repost guard did not fire on
+# any of them -- which means every downstream surface that trusts that flag,
+# including this skill's own pulse query, reads them as ORIGINAL statements.
+# Roberta Metsola and Susana Solis Perez are both recorded as having written
+# the same sentence at the same second under the same id.
+#
+# Still REPORT ONLY. The overwhelming pattern is institutional amplification
+# (one Commission tweet across twelve delegation accounts, one EP tweet across
+# every language account), which is a re-attribution job, not a deletion job.
+# Deciding which handle is the true author needs the platform, not this script.
+# ---------------------------------------------------------------------------
+NATIVE_ID_SQL = """
+    SELECT native_id, platform,
+           count(*)                        AS rows,
+           count(DISTINCT account_id)      AS accounts,
+           count(*) FILTER (WHERE NOT is_repost) AS unflagged,
+           string_agg(DISTINCT entity_name, ' | ' ORDER BY entity_name) AS who
+    FROM (
+      SELECT p.id, p.account_id, p.platform, p.is_repost, a.entity_name,
+             CASE
+               WHEN p.post_url ~ 'status/[0-9]+'  THEN substring(p.post_url from 'status/([0-9]+)')
+               WHEN p.post_url ~ '[?&]v=[A-Za-z0-9_-]+' THEN substring(p.post_url from '[?&]v=([A-Za-z0-9_-]+)')
+               ELSE NULL
+             END AS native_id
+      FROM social_posts p
+      JOIN social_accounts a ON a.id = p.account_id
+      WHERE p.posted_at >= now() - (:d || ' days')::interval
+    ) t
+    WHERE native_id IS NOT NULL
+    GROUP BY 1, 2
+    HAVING count(DISTINCT account_id) > 1
+    ORDER BY count(DISTINCT account_id) DESC, count(*) DESC
+"""
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -139,11 +191,30 @@ def main() -> int:
     if len(cross_actor) > 20:
         print(f"   ... and {len(cross_actor) - 20} more")
 
+    dupes = db.execute(text(NATIVE_ID_SQL), {"d": args.days}).mappings().all()
+    total_rows = sum(d["rows"] for d in dupes)
+    unflagged = sum(d["unflagged"] for d in dupes)
+    print()
+    print(f"C. SAME PLATFORM POST ID, different actors ({len(dupes)} ids / "
+          f"{total_rows} rows) -- NOT ambiguous.")
+    print("   A platform post id is globally unique, so at most ONE handle per")
+    print("   group is the real author and the rest carry a synthesised URL.")
+    print(f"   {unflagged} of {total_rows} are NOT flagged is_repost, so every")
+    print("   surface trusting that flag reads them as original statements.")
+    for d in dupes[:15]:
+        print(f"   - [{d['platform']}] id {d['native_id']}  "
+              f"{d['accounts']} accounts / {d['rows']} rows")
+        print(f"       {d['who'][:110]}")
+    if len(dupes) > 15:
+        print(f"   ... and {len(dupes) - 15} more")
+
     print()
     print("REPORT ONLY -- nothing written. Identical text has several innocent")
     print("causes; only a human can tell a copied post from a co-signed one.")
+    print("Section C is not ambiguous about the FACT, only about the REMEDY:")
+    print("the right fix is re-attribution to the true author, not deletion.")
     db.close()
-    return 0
+    return 1 if dupes else 0
 
 
 if __name__ == "__main__":
