@@ -22,7 +22,7 @@ and double every page's analytics payload. If the property ever changes again,
 update CURRENT_TAG_ID and add the old value to SUPERSEDED_TAG_IDS, then re-run
 without --check to migrate every page in one pass.
 
-CONSENT (changed 10 Aug 2026)
+CONSENT (changed 28 Aug 2026)
 -----------------------------
 Consent-gating is now IMPLEMENTED, and this script enforces it. Pages no longer
 carry a tracker `<script src>` directly. They carry the shared consent-gated

@@ -44,7 +44,7 @@ CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_created
 -- Converge a table that create_all() may have built first. SQLAlchemy's
 -- `default=` is applied in Python, not as a DDL DEFAULT, so a table born from
 -- create_all() has created_at NOT NULL with nothing to fill it and any raw SQL
--- INSERT fails. Confirmed on production 10 Aug 2026. The CREATE TABLE above
+-- INSERT fails. Confirmed on production 28 Aug 2026. The CREATE TABLE above
 -- gets this right, but it is skipped when the table already exists.
 ALTER TABLE public.password_reset_tokens
     ALTER COLUMN created_at SET DEFAULT now();
@@ -57,7 +57,7 @@ ALTER TABLE public.password_reset_tokens ENABLE ROW LEVEL SECURITY;
 -- authenticated full CRUD. On this table that is an account-takeover primitive:
 -- anyone able to INSERT can write token_hash = sha256(value-they-chose) against
 -- any user_id and then redeem it at /api/auth/reset-password. Confirmed present
--- on 10 Aug 2026, which is why these lines exist.
+-- on 28 Aug 2026, which is why these lines exist.
 REVOKE ALL ON public.password_reset_tokens FROM anon;
 REVOKE ALL ON public.password_reset_tokens FROM authenticated;
 REVOKE ALL ON SEQUENCE public.password_reset_tokens_id_seq FROM anon;

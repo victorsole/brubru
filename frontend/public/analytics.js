@@ -27,7 +27,7 @@
 
   var CONTENTSQUARE_TAG = 'https://t.contentsquare.net/uxa/f2e32d332b6a1.js';
 
-  // Brubru's own Clarity project, created 10 Aug 2026. It briefly reused
+  // Brubru's own Clarity project, created 28 Aug 2026. It briefly reused
   // Beresol's project (y8zjfhmyoa); that is superseded, and with it the caveat
   // that every read had to be filtered by URL host to stop the two sites
   // blending. Brubru's data now stands alone.
