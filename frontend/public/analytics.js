@@ -27,14 +27,13 @@
 
   var CONTENTSQUARE_TAG = 'https://t.contentsquare.net/uxa/f2e32d332b6a1.js';
 
-  // Beresol's Clarity project, reused for Brubru by decision (10 Aug 2026)
-  // rather than creating a separate brubru.beresol.eu project. The consequence
-  // is that Brubru and beresol.eu data land in ONE project, so every read must
-  // filter by URL host or the two sites blend. Clarity's Data Export takes a URL
-  // dimension and the dashboard takes a URL filter, so this is a discipline
-  // problem, not a blocker. The ID is public by design: it ships in the page.
-  // Source of truth: beresol-eu-advocacy-hub/src/components/ClarityAnalytics.tsx:9
-  var CLARITY_PROJECT_ID = 'y8zjfhmyoa';
+  // Brubru's own Clarity project, created 10 Aug 2026. It briefly reused
+  // Beresol's project (y8zjfhmyoa); that is superseded, and with it the caveat
+  // that every read had to be filtered by URL host to stop the two sites
+  // blending. Brubru's data now stands alone.
+  // The ID is public by design: it ships in the page. The API token is not,
+  // and lives only in the shell env.
+  var CLARITY_PROJECT_ID = 'y9d0jw5ety';
 
   var loaded = false;
 
