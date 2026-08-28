@@ -42,6 +42,7 @@ from api.v1 import citations as _v1_citations
 from api.v1 import cellar_discover as _v1_cellar
 from api.v1._body import body_threshold_param
 from api.v1._deps import api_user_with_rate_limit
+from api.v2._body_sources import body_select
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.laws import LawItem, LawTextResponse
 from api.v1.identify import IdentifyResult
@@ -420,8 +421,8 @@ async def list_summaries(
         total = int(db.execute(text(f"SELECT COUNT(*) FROM public.legissum_summaries {where}"), params).scalar() or 0)
         rows = db.execute(
             text(
-                f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at"
-                + (", summary_text, summary_html" if include_body else "")
+                f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at, "
+                + body_select("legissum_summaries", include_body)
                 + f" FROM public.legissum_summaries {where} ORDER BY title LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
@@ -439,8 +440,10 @@ async def list_summaries(
             title=r["title"],
             lsu_url=r["url"],
             public_url=r["url"],
-            body_txt=(r["summary_text"] if include_body else None),
-            body_html=(r["summary_html"] if include_body else None),
+            # body_select() already aliased these to the contract's names, so the
+            # physical column can be renamed without touching this mapper.
+            body_txt=r["body_txt"],
+            body_html=r["body_html"],
             # The row's own creation, not this response's. utcnow() here made
             # every one of the 4,457 summaries look minted on the spot.
             creation_date=r["created_at"],
@@ -494,8 +497,9 @@ async def get_summary(
     try:
         row = db.execute(
             text(
-                "SELECT slug, title, celex, url, summary_text, summary_html, created_at "
-                "FROM public.legissum_summaries WHERE slug = :s OR celex = :s LIMIT 1"
+                "SELECT slug, title, celex, url, created_at, "
+                + body_select("legissum_summaries", True)
+                + " FROM public.legissum_summaries WHERE slug = :s OR celex = :s LIMIT 1"
             ),
             {"s": sid},
         ).mappings().first()
@@ -512,8 +516,8 @@ async def get_summary(
             title=row["title"],
             lsu_url=row["url"],
             public_url=row["url"],
-            body_txt=row["summary_text"],
-            body_html=row["summary_html"],
+            body_txt=row["body_txt"],
+            body_html=row["body_html"],
             creation_date=row["created_at"],
         )
     # Fallback when the catalogue has no row: construct the LSU URL.
