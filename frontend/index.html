@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Contentsquare (Hotjar) product-analytics tag - Beresol project 929752 -->
     <!-- Material Design Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
     <meta name="description" content="Brubru - Your AI multiagent companion for navigating the EU bubble in Brussels" />
@@ -28,7 +27,11 @@
     <meta name="twitter:description" content="AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, and navigate EU institutional processes." />
     <meta name="twitter:image" content="https://brubru.beresol.eu/assets/brubru_og_image.png" />
     <title>Brubru - AI Companion for EU Advocacy</title>
-      <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
+    <!-- Analytics is consent-gated. The React banner (cookie_consent.tsx) owns
+         the UI here and signals brubru-consent-accepted; analytics.js does the
+         loading. Nothing that sets a cookie loads before acceptance. -->
+    <script>window.__BRUBRU_CONSENT_UI__ = 'react';</script>
+    <script src="/analytics.js" defer></script>
 </head>
   <body>
     <div id="root"></div>

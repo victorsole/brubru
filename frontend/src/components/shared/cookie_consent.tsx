@@ -27,11 +27,16 @@ export const CookieConsent = () => {
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
     setConsentStatus('accepted');
+    // Tell analytics.js it may load now. Without this the banner was decorative:
+    // it wrote localStorage and nothing read it, while the tracker had already
+    // fired on first paint.
+    window.dispatchEvent(new Event('brubru-consent-accepted'));
   };
 
   const handleDecline = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'declined');
     setConsentStatus('declined');
+    window.dispatchEvent(new Event('brubru-consent-declined'));
   };
 
   // Don't render anything while checking localStorage or if consent already given

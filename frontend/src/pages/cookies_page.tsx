@@ -151,8 +151,29 @@ export const CookiesPage = () => {
             <strong>Legal Basis:</strong> Consent (opt-in required)
           </p>
           <p>
-            <strong>Current Status:</strong> Analytics cookies are currently NOT active on Brubru.
-            If we decide to implement them, we will request your consent via a cookie banner.
+            <strong>Current Status:</strong> Analytics cookies are active, and they load only
+            after you accept them. If you decline, or before you have chosen, no analytics
+            script is loaded and no analytics cookie is set. You can change your mind by
+            clearing this site's data in your browser, which makes the banner appear again.
+          </p>
+          <p>We use two analytics services, both consent-gated:</p>
+          <ul>
+            <li>
+              <strong>Contentsquare (formerly Hotjar):</strong> product analytics and session
+              replay. Records how pages are used: clicks, scrolling, navigation and errors.
+              Form inputs are masked.
+            </li>
+            <li>
+              <strong>Microsoft Clarity:</strong> behavioural analytics (heatmaps and session
+              replay) and AI-visibility reporting, which tells us which AI assistants reach
+              the site and which of our pages they cite. Data is processed by Microsoft under
+              the Microsoft Privacy Statement, including international transfers under
+              standard contractual clauses. Form inputs are masked by default.
+            </li>
+          </ul>
+          <p>
+            Neither service is used to identify you personally, and neither is loaded on any
+            page until you have accepted analytics cookies.
           </p>
 
           <h3>3.4 Third-Party Cookies</h3>

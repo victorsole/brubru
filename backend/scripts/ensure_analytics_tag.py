@@ -22,13 +22,18 @@ and double every page's analytics payload. If the property ever changes again,
 update CURRENT_TAG_ID and add the old value to SUPERSEDED_TAG_IDS, then re-run
 without --check to migrate every page in one pass.
 
-CONSENT
--------
-The tag currently loads unconditionally. `cookie_consent.tsx` records the
-user's choice in localStorage but gates nothing. Consent-gating is a tracked
-follow-up (see the /hotjar skill); this script deliberately does not implement
-it, so that when it is implemented it happens in one place rather than being
-half-applied here.
+CONSENT (changed 10 Aug 2026)
+-----------------------------
+Consent-gating is now IMPLEMENTED, and this script enforces it. Pages no longer
+carry a tracker `<script src>` directly. They carry the shared consent-gated
+loader `/analytics.js`, which reads `brubru_cookie_consent` and only then loads
+Contentsquare and Microsoft Clarity.
+
+So the thing this script keeps in sync is the LOADER, not the tag. A raw
+`t.contentsquare.net` script found on a page is now a REGRESSION, not the goal:
+it would collect before consent. This script migrates any such tag to the
+loader. Do not reintroduce the raw tag here; changing the tracker means editing
+`frontend/public/analytics.js`, which is the one place both trackers live.
 
 USAGE
 -----
@@ -46,9 +51,13 @@ import sys
 CURRENT_TAG_ID = "f2e32d332b6a1"
 SUPERSEDED_TAG_IDS = ["83b75f68fc18e"]
 
-TAG = (
-    f'<script src="https://t.contentsquare.net/uxa/{CURRENT_TAG_ID}.js" defer></script>'
-)
+# The consent-gated loader every page must carry. Both trackers (Contentsquare
+# and Clarity) are loaded from inside it, only after the visitor accepts.
+LOADER_SRC = "/analytics.js"
+TAG = f'<script src="{LOADER_SRC}" defer></script>'
+
+# The loader itself is allowed to name the tracker hosts; it is not a page.
+LOADER_FILE = "frontend/public/analytics.js"
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SPA_SHELL = REPO / "frontend" / "index.html"
@@ -58,7 +67,10 @@ PUBLIC_DIR = REPO / "frontend" / "public"
 # a second tag to these would double-count the pageview.
 EXCLUDE_SUFFIXES = ("_assets/nav.html",)
 
-ANY_TAG_RE = re.compile(r'\s*<script[^>]*t\.contentsquare\.net/uxa/[a-z0-9]+\.js[^>]*>\s*</script>')
+# Any direct tracker script, in any attribute order, Contentsquare or Clarity.
+ANY_TAG_RE = re.compile(
+    r'\s*<script[^>]*(?:t\.contentsquare\.net/uxa/[a-z0-9]+\.js|clarity\.ms/tag/[A-Za-z0-9]+)[^>]*>\s*</script>'
+)
 
 
 def targets() -> list[pathlib.Path]:
@@ -66,6 +78,8 @@ def targets() -> list[pathlib.Path]:
     for path in sorted(PUBLIC_DIR.rglob("*.html")):
         rel = path.relative_to(REPO).as_posix()
         if any(rel.endswith(s) for s in EXCLUDE_SUFFIXES):
+            continue
+        if rel == LOADER_FILE:
             continue
         # Stale Finder-style duplicates ("es 2.html"). Left untouched by
         # explicit decision on 21 July 2026: they are not canonical pages.
@@ -76,12 +90,20 @@ def targets() -> list[pathlib.Path]:
 
 
 def classify(text: str) -> str:
-    if f"uxa/{CURRENT_TAG_ID}.js" in text:
+    """A page is 'current' when it carries the consent-gated loader.
+
+    Any direct tracker script is 'superseded' regardless of which property it
+    names, because loading a tracker straight from the page defeats the gate.
+    """
+    has_loader = f'src="{LOADER_SRC}"' in text
+    has_raw = "t.contentsquare.net" in text or "clarity.ms/tag/" in text
+
+    if has_loader and not has_raw:
         return "current"
-    if any(f"uxa/{old}.js" in text for old in SUPERSEDED_TAG_IDS):
+    if has_loader and has_raw:
+        return "double"  # loader plus a raw tag: would double-count and pre-consent
+    if has_raw:
         return "superseded"
-    if "t.contentsquare.net" in text:
-        return "unknown-tag"
     return "missing"
 
 
@@ -91,11 +113,14 @@ def apply_tag(text: str) -> tuple[str, str]:
     if state == "current":
         return text, "ok"
 
-    if state in ("superseded", "unknown-tag"):
+    if state in ("superseded", "double"):
         cleaned = ANY_TAG_RE.sub("", text)
-        if "t.contentsquare.net" in cleaned:
+        if "t.contentsquare.net" in cleaned or "clarity.ms/tag/" in cleaned:
             return text, "manual"  # unrecognised form; do not guess
         text = cleaned
+        if state == "double":
+            # Loader was already there; removing the raw tag is the whole fix.
+            return text, "migrated"
 
     if "</head>" not in text:
         return text, "no-head"
@@ -104,7 +129,7 @@ def apply_tag(text: str) -> tuple[str, str]:
     idx = text.index("</head>")
     indent = "    " if "\n    " in text[max(0, idx - 200):idx] else "  "
     return text[:idx] + f"{indent}{TAG}\n" + text[idx:], (
-        "migrated" if state in ("superseded", "unknown-tag") else "added"
+        "migrated" if state in ("superseded", "double") else "added"
     )
 
 
@@ -134,7 +159,7 @@ def main() -> int:
             problems.append(f"  {action:9} {rel}")
 
     total = sum(counts.values())
-    print(f"[{'CHECK' if args.check else 'APPLY'}] tag {CURRENT_TAG_ID} over {total} page(s)")
+    print(f"[{'CHECK' if args.check else 'APPLY'}] consent-gated loader {LOADER_SRC} over {total} page(s)")
     for action in sorted(counts):
         print(f"    {action:10} {counts[action]}")
 

@@ -1135,7 +1135,7 @@ def generate_html(translated: dict, celex: str) -> str:
     html {{ scroll-behavior: smooth; }}
   </style>
   <!-- Contentsquare (Hotjar) analytics. Kept in sync by scripts/ensure_analytics_tag.py -->
-  <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
+  <script src="/analytics.js" defer></script>
 </head>
 <body>
 
