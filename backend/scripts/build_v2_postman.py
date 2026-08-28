@@ -348,7 +348,24 @@ def _to_postman_url(path: str, query_params: list) -> dict:
     if variables:
         url["variable"] = variables
 
-    query = [{"key": p["name"], "value": _query_value(p), "disabled": not p.get("required", False)} for p in query_params]
+    # Carry each parameter's description across. Postman renders it beside the
+    # parameter in the published docs, and without it a partner sees a bare name
+    # and has to guess. That is not hypothetical: `include_body` was added on
+    # 28 Aug 2026 precisely because a partner reported "no parameter to force
+    # the content", and shipping it undocumented would have reproduced the same
+    # complaint one level down. FastAPI puts Query(description=...) on the
+    # parameter; a few land on its schema instead, so check both.
+    query = [
+        {
+            "key": p["name"],
+            "value": _query_value(p),
+            "disabled": not p.get("required", False),
+            "description": (p.get("description")
+                            or (p.get("schema") or {}).get("description")
+                            or ""),
+        }
+        for p in query_params
+    ]
     if query:
         url["query"] = query
         enabled = [q for q in query if not q["disabled"]]
