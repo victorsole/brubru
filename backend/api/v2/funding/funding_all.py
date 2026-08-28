@@ -20,7 +20,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
-from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _ORDER_SQL,
+from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
                                   _ORDERS, build_envelope)
 
 router = APIRouter()
@@ -33,10 +33,10 @@ _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_pa
 # allocations, (c) EU Solidarity Fund disaster cases, and (d) the CAP fund
 # payments (EAGF/EAFRD), all mapped to the same EconomyItem shape. The agency
 # side is pre-filtered to funding item_types; the rest are mapped on the fly.
-_UNION_CTE = """
+_UNION_CTE_TMPL = """
 WITH all_funding AS (
     SELECT id, body_code, item_type, title, summary, public_url,
-           document_date, creation_date, source_kind
+           {b}document_date, creation_date, source_kind
     FROM economy_items
     WHERE item_type = ANY(:ftypes)
     UNION ALL
@@ -45,7 +45,7 @@ WITH all_funding AS (
            (upper(fund) || ' · ' || coalesce(ms, '') || ' · '
              || coalesce(financial_allocation_category, '')
              || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
-           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
     FROM eu_cohesion_finances
     UNION ALL
     SELECT id, 'eusf' AS body_code, 'solidarity_case' AS item_type,
@@ -53,16 +53,22 @@ WITH all_funding AS (
            (coalesce(applicant_country, '') || ' · ' || coalesce(year_of_occurrence::text, '')
              || ' · ' || coalesce(disaster_type, '')
              || ' · EUSF paid EUR ' || coalesce(round(eusf_grant_paid_meur)::text, '0') || 'm') AS summary,
-           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
     FROM eu_solidarity_fund
     UNION ALL
     SELECT id, lower(fund) AS body_code, 'cap_payment' AS item_type,
            (upper(fund) || ' — ' || coalesce(ms, '')) AS title,
            (coalesce(ms, '') || ' · total EUR ' || coalesce(round(total_eur)::text, '0')) AS summary,
-           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
     FROM eu_cap_payments
 )
 """
+
+
+def _union_cte(include_body: bool) -> str:
+    """The body columns are projected only when the caller wants them."""
+    return _UNION_CTE_TMPL.format(b="body_txt, body_html, " if include_body else "")
+
 
 _DESC = """**What it does**
 One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**), the per-programme grant calls ingested for their own endpoints (Justice `body=just`, Innovation Fund `body=innovfund`), AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF), the EU Solidarity Fund and the CAP funds (EAGF, EAFRD) — across every body, in one call.
@@ -103,6 +109,15 @@ async def funding_all(
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because bodies dominate the payload, but without it the "
+            "only route to the text is one detail call PER ITEM, which is not "
+            "a usable way to ingest a feed."
+        ),
+    ),
 ):
     if order not in _ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
@@ -124,10 +139,10 @@ async def funding_all(
         where.append("document_date <= :until"); params["until"] = until
     clause = (" WHERE " + " AND ".join(where)) if where else ""
     total = db.execute(
-        text(f"{_UNION_CTE} SELECT count(*) FROM all_funding{clause}"), params
+        text(f"{_union_cte(False)} SELECT count(*) FROM all_funding{clause}"), params
     ).scalar() or 0
     rows = db.execute(
-        text(f"{_UNION_CTE} SELECT {_LIST_COLS} FROM all_funding{clause} "
+        text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM all_funding{clause} "
              f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return build_envelope([_row_to_item(r, with_body=False) for r in rows], total, page, limit)
+    return build_envelope([_row_to_item(r, with_body=include_body) for r in rows], total, page, limit)

@@ -57,8 +57,13 @@ router.include_router(_agency_procurement.router)
 router.include_router(_funding_all.router)
 router.include_router(_startups.router)
 router.include_router(_entrepreneur_instruments.router)
-router.include_router(_cohesion_finances.router)
+# Outcomes FIRST: it registers the literal `/{fund}/outcomes`, while finances
+# registers `/{fund}/{row_id}`. FastAPI matches in registration order, so with
+# finances first the literal path was swallowed by the int path param and every
+# per-fund outcomes list answered 422 `row_id: unable to parse 'outcomes'`.
+# All 8 outcomes endpoints were unreachable while being advertised in the schema.
 router.include_router(_cohesion_outcomes.router)
+router.include_router(_cohesion_finances.router)
 router.include_router(_cohesion_eusf.router)
 router.include_router(_funding_programmes.router)
 router.include_router(_cohesion_cap.router)

@@ -114,6 +114,15 @@ async def list_programmes(
     coverage: Optional[str] = Query(None, description="covered | gap | skipped"),
     q: Optional[str] = Query(None, description="Substring on programme name / acronym / body"),
     limit: int = Query(100, ge=1, le=200),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because bodies dominate the payload, but without it the "
+            "only route to the text is one detail call PER ITEM, which is not "
+            "a usable way to ingest a feed."
+        ),
+    ),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -130,7 +139,7 @@ async def list_programmes(
         progs = [p for p in progs if ql in p["programme"].lower() or ql in p["acronym"].lower() or ql in p["source"].lower()]
     total = len(progs)
     window = progs[(page - 1) * limit: (page - 1) * limit + limit]
-    items = [_to_item(p, with_body=False) for p in window]
+    items = [_to_item(p, with_body=include_body) for p in window]
     return build_envelope(
         items, total=total, page=page, limit=limit,
         op_core_title="EU funding programmes directory (EC classification)",

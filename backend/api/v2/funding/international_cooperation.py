@@ -172,6 +172,15 @@ async def list_intl_cooperation(
     order: str = Query("recent", description="recent | oldest | year."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because bodies dominate the payload, but without it the "
+            "only route to the text is one detail call PER ITEM, which is not "
+            "a usable way to ingest a feed."
+        ),
+    ),
 ):
     if order not in _ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
@@ -200,7 +209,7 @@ async def list_intl_cooperation(
         text(f"SELECT {_COLS} FROM economy_items WHERE {clause} "
              f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return build_envelope([_parse(r, with_body=False) for r in rows], total, page, limit)
+    return build_envelope([_parse(r, with_body=include_body) for r in rows], total, page, limit)
 
 
 @router.get("/international-cooperation/{item_id}", response_model=IntlCoopItem, tags=["v2-funding"],

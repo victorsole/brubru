@@ -100,6 +100,15 @@ async def list_eusf(
     q: Optional[str] = Query(None, description="Substring on the disaster name or body"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because bodies dominate the payload, but without it the "
+            "only route to the text is one detail call PER ITEM, which is not "
+            "a usable way to ingest a feed."
+        ),
+    ),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[EUSFCase]:
@@ -120,11 +129,11 @@ async def list_eusf(
     total = db.execute(text(f"SELECT COUNT(*) FROM eu_solidarity_fund{clause}"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(
-        text(f"SELECT {_LIST_COLS} FROM eu_solidarity_fund{clause} "
+        text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_solidarity_fund{clause} "
              f"ORDER BY eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC LIMIT :limit OFFSET :offset"),
         params2,
     ).mappings().all()
-    items = [_row_to_item(r, with_body=False) for r in rows]
+    items = [_row_to_item(r, with_body=include_body) for r in rows]
     return build_envelope(
         items, total=total, page=page, limit=limit,
         op_core_title="EU Solidarity Fund disaster cases 2002-2021",

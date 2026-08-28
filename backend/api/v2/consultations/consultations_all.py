@@ -224,13 +224,22 @@ async def consultations_all(
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    include_body: bool = Query(
+        False,
+        description=(
+            "Return `body_txt` / `body_html` on every item in the list. Off by "
+            "default because bodies dominate the payload, but without it the "
+            "only route to the text is one detail call PER ITEM, which is not "
+            "a usable way to ingest a feed."
+        ),
+    ),
 ):
     if status and status not in _WHENS:
         raise HTTPException(400, f"status must be one of {sorted(_WHENS)}")
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
     codes = _resolve_scope(body, family)
-    items = _fetch(db, codes=codes, institution=institution, status=status, since=from_, until=to, q=q)
+    items = _fetch(db, codes=codes, institution=institution, status=status, since=from_, until=to, q=q, with_body=include_body)
     far_past = datetime(1, 1, 1, tzinfo=timezone.utc); far_future = datetime(9999, 1, 1, tzinfo=timezone.utc)
     if order == "title":
         items.sort(key=lambda it: (it["title"] or "").lower())
@@ -241,7 +250,7 @@ async def consultations_all(
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
     names = _body_names(db)
-    return build_envelope([_to_item(it, names, with_body=False) for it in window], total, page, limit)
+    return build_envelope([_to_item(it, names, with_body=include_body) for it in window], total, page, limit)
 
 
 @router.get("/bodies", response_model=dict, tags=["v2-consultations"],
