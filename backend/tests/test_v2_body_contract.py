@@ -150,3 +150,31 @@ def test_the_generated_economy_routes_all_carry_it(spec):
         if "include_body" not in {p["name"] for p in get.get("parameters", [])}:
             missing.append(path)
     assert not missing, f"{len(missing)} EconomyItem list routes lost include_body: {missing[:10]}"
+
+
+# ---------------------------------------------------------------------------
+# The other half: bodies that are null because nobody ever fetched them
+# ---------------------------------------------------------------------------
+
+def test_health_reports_body_coverage():
+    """The defects above are fixed and guarded. What remains is scraper gaps --
+    slices holding a title and a URL and no document. Those must be countable,
+    because a null body from a thin corpus looks exactly like a null body from a
+    broken handler, and that ambiguity is what let 350 endpoints stay dark."""
+    from fastapi.testclient import TestClient
+    from main import app
+    body = TestClient(app).get("/api/sync/health").json()
+    assert "bodies" in body, "/api/sync/health does not report body coverage"
+    b = body["bodies"]
+    assert b.get("slices", 0) > 0
+    # Three-state, like the tier flags: a count, or None when it could not run --
+    # never a 0 that reads as "nothing missing".
+    assert b.get("empty_slices") is None or isinstance(b["empty_slices"], int)
+
+
+def test_reference_data_is_not_counted_as_a_missing_body():
+    """A topic is a taxonomy label and a dataset is a numeric series. Counting
+    them as missing bodies would make the report permanently red, which is how a
+    monitor gets ignored."""
+    from scripts.api_body_coverage import NO_BODY_TYPES
+    assert {"topic", "dataset"} <= NO_BODY_TYPES

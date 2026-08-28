@@ -181,6 +181,33 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         corpora = {"checks": 0, "gaps": None, "healthy": None,
                    "error": f"{type(exc).__name__}: {exc}"}
 
+    # --- body coverage --------------------------------------------------
+    # A null body_txt is either an API defect (the data exists and the handler
+    # hides it) or a scraper gap (it was never fetched). They look identical from
+    # outside, which is how 350 v2 endpoints served a null body over a corpus
+    # that was 99.6% populated without anyone noticing. The defects are fixed and
+    # guarded by tests/test_v2_body_contract.py; this counts the remaining gaps
+    # so they stay visible instead of silent.
+    #
+    # Reported, never failed: a thin slice is a scraper backlog, and making the
+    # health endpoint red until every agency body is fetched would train everyone
+    # to ignore it.
+    try:
+        from scripts.api_body_coverage import coverage
+        cov = coverage(db.connection())
+        empty = [c for c in cov if c["empty"]]
+        bodies = {
+            "slices": len(cov),
+            "empty_slices": len(empty),
+            "worst": [{"slice": c["slice"], "rows": c["rows"], "pct": c["pct"]}
+                      for c in cov[:8]],
+            "detail": [c["slice"] for c in empty],
+        }
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[sync-health] body coverage failed: %s", exc)
+        bodies = {"slices": 0, "empty_slices": None,
+                  "error": f"{type(exc).__name__}: {exc}"}
+
     return {
         "dispatcher": {
             "last_seen": last_seen.isoformat() if last_seen else None,
@@ -190,4 +217,5 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         "tiers": tiers,
         "scrapers": scrapers,
         "corpora": corpora,
+        "bodies": bodies,
     }
