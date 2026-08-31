@@ -228,6 +228,7 @@ Seed script: `backend/scripts/seed_test_users.py`
 
 **Always-on critical rules** (most common pitfalls — full detail in `memory/learned_rules.md`):
 
+- **Never test ONE dimension and state it as universal (hard rule, 31 Aug 2026).** Enumerate the axis from the system, test every point, print the table, say how many you tested. Two wrong calls in one session on the four Python interpreters here. `memory/feedback_never_generalise_from_one_dimension.md`.
 - **Audit every implementation (set 27 June 2026).** After shipping any code change, script, migration, scraper edit, prompt rewrite, deploy — run a self-audit pass for inconsistencies, bugs, false positives, edge cases the prompt didn't name. Document the lesson. Two steps: ship + audit; never combine. Full pattern: `memory/feedback_audit_implementation_after_every_change.md`.
 - **Learn the EU, teach Brubru (set 27 June 2026).** The strategic posture every session: deepen Claude's own EU expertise (treaties, institutions, files, actors, jurisprudence, OJ, OEIL, doceo, EUR-Lex, Cellar, EuroVoc) and feed every learning back into Brubru via knowledge guides + triggers + API endpoints + MEUB surfaces. If Claude's EU knowledge plateaus, Brubru plateaus. Read primary sources, never paraphrase press as primary. Full pattern: `memory/feedback_learn_eu_teach_brubru.md`.
 - **Brubru = 6 languages** (EN, FR, NL, ES, CA, IT). Never claim 23.

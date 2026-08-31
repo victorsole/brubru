@@ -380,7 +380,24 @@ Keep the ledger append-only by run (newest block on top). It is the primary inpu
 
 ## Important Notes
 
-- Use `python3.12` (not `python3`) -- python3 defaults to 3.14 which lacks dependencies
+- **Check which interpreter actually has the dependencies before running anything.** The old rule here
+  (prefer `python3.12` over `python3`, on the grounds that the latter resolved to 3.14) was measured false on 31 August
+  2026: on this Mac `python3` is a **symlink to `python3.12`** (python.org 3.12.5 — same binary, so the
+  distinction the old rule drew does not exist), and of the **60** packages in `backend/requirements.txt`
+  that interpreter has **35 installed at any version, only 4 at the pinned version, and 25 missing
+  entirely** — `pytest` and `python-multipart` among them. The provisioned
+  environment is the unversioned **`python`** -> `/opt/anaconda3/bin/python` (3.12.2), with **58 of 60**
+  requirements installed, `pytest` at its pinned 7.4.4 and `playwright` at its pinned 1.58.0.
+  Enumerate before you choose, and never conclude "X is not installed" from one interpreter:
+  ```bash
+  for P in python python3 python3.12 python3.13 python3.14; do
+    command -v $P >/dev/null || continue
+    echo "$P $($P -c 'import sys;print(sys.version.split()[0])') $($P -c 'import pytest;print("pytest")' 2>/dev/null || echo '-')"
+  done
+  ```
+  DB/scraper scripts run fine on python3.12 because they need only the installed subset; anything that
+  imports the app or runs the tests needs the anaconda interpreter.
+  [[feedback_never_generalise_from_one_dimension]]
 - **Latency is 8-13 seconds, not minutes** (was 130.9s before 6 August 2026). A slow answer is now a defect worth investigating, not the normal cost of a knowledge query. Almost all of the old 126-second latency was the Anthropic SDK retrying a Cerebras 429 internally; every client now sets `max_retries=0` because the chain IS the retry.
 - **Follow-up turns are still ~4x slower than first turns** (12s → 42-47s). Conversation history pushes the request past the fast providers' rate limits and down onto Mistral. Open and unmeasured — where the ~12,000 context tokens go has not been established, and one attempt to measure it was wrong. If you audit a slow multi-turn conversation, this is the likely cause; do not diagnose it as a retrieval problem.
 - **There is no Anthropic in the chat chain.** Removed 6 August 2026 by explicit decision (too expensive: 12% of traffic at ~37,352 tokens an answer). Chain order in `services/ai/multi_provider_service.py`: **Cerebras gpt-oss-120b → Gemini 2.5-flash → Groq llama-3.3-70b → NVIDIA llama-3.3-70b → Mistral → OpenAI**. `prefer_claude` still appears in call signatures but is a **no-op** — do not read it as routing. An `AnthropicProvider` class survives for NON-chat services (AI summaries, content analysis, proactive notifications) via `get_extended_provider_service()`, placed last after every free tier; it must never be added to `get_multi_provider_service()`.

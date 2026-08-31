@@ -4,6 +4,18 @@
     {
       "date": "2026-08-31",
       "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "Recovery and Resilience Facility (RRF)",
+      "summary": "The final milestone and target deadline of 31 August 2026 was absent from the guide on the day it fell; added with Articles 18(4)(i), 20(5)(d) and 24(1), corrected the envelope to the Article 6 figures, and recorded that the RRF binds Member States and the Commission, not companies",
+      "refs": [
+        "32021R0241",
+        "32023R0435",
+        "32024R0795"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "action": "updated",
       "guide": "digital_markets_act",
       "title": "Digital Markets Act (DMA)",
       "summary": "Flagged the pending Microsoft Edge gatekeeper judgment in Case T-357/24, expected 2 to 3 September 2026, as expected rather than decided",

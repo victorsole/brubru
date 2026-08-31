@@ -1371,7 +1371,6 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'rrp absorption': ['eu_recovery_resilience_facility'],
     'rrf payment request': ['eu_recovery_resilience_facility'],
     'rrf milestone': ['eu_recovery_resilience_facility'],
-    'rrf': ['eu_recovery_resilience_facility'],
     'recovery and resilience facility': ['eu_recovery_resilience_facility'],
     'recovery resilience facility': ['eu_recovery_resilience_facility'],
     'nrrp': ['eu_recovery_resilience_facility'],
@@ -2202,7 +2201,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # European Semester Communication
     'european semester': ['european_semester_communication', 'european_semester_annual_report_2026'],
     'economic forecast': ['european_semester_communication'],
-    'rrf': ['european_semester_communication', 'eu_budget_emu_law'],
+    # 31 Aug 2026: 'rrf' was declared TWICE. The earlier declaration pointing at
+    # eu_recovery_resilience_facility was DEAD (a later key wins), so typing "RRF"
+    # returned the Semester and budget guides and never the RRF guide itself -- on the
+    # day the Facility's final milestone deadline fell. Dead duplicate removed above;
+    # this canonical entry now leads with the guide that owns the subject.
+    'rrf': ['eu_recovery_resilience_facility', 'european_semester_communication', 'eu_budget_emu_law'],
     'recovery and resilience': ['eu_recovery_resilience_facility', 'european_semester_communication', 'eu_budget_emu_law'],
     'recovery and resilience plan': ['eu_recovery_resilience_facility'],
     'recovery and resilience facility': ['eu_recovery_resilience_facility'],
