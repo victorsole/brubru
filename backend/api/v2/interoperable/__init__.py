@@ -245,9 +245,25 @@ async def collection_footprint(collection_key: str = PathParam(..., description=
                                limit: int = Query(15, ge=1, le=50),
                                include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."),
                                db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
-    snap = db.execute(text(f"SELECT {_DETAIL_COLS} FROM economy_items "
-                           "WHERE body_code=:bc AND item_type='collection' AND public_url ILIKE '%/collection/' || :k"),
-                      {"bc": _BODY, "k": collection_key}).fetchone()
+    # Accepts the `id` the /collections list publishes as well as the slug.
+    # This resource's key lives only inside public_url -- there is no
+    # collection_key column -- so before 31 Aug 2026 a client following `id`
+    # from the collection had no way in at all.
+    snap = None
+    if str(collection_key).isdigit():
+        snap = db.execute(text(f"SELECT {_DETAIL_COLS} FROM economy_items "
+                               "WHERE id = :i AND body_code = :bc AND item_type = 'collection'"),
+                          {"i": int(collection_key), "bc": _BODY}).fetchone()
+    if snap is None:
+        snap = db.execute(text(f"SELECT {_DETAIL_COLS} FROM economy_items "
+                               "WHERE body_code=:bc AND item_type='collection' AND public_url ILIKE '%/collection/' || :k"),
+                          {"bc": _BODY, "k": collection_key}).fetchone()
+    # The slug is what filters the member items, so recover it from the snapshot
+    # when the caller arrived by id.
+    if snap is not None and str(collection_key).isdigit():
+        url = (dict(snap._mapping).get("public_url") or "")
+        if "/collection/" in url:
+            collection_key = url.rsplit("/collection/", 1)[-1].strip("/")
     def recent(itype):
         cols = _DETAIL_COLS if include_body else _LIST_COLS
         rows = db.execute(text(f"SELECT {cols} FROM economy_items "

@@ -28,6 +28,7 @@ from sqlalchemy import and_, not_, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
+from core.identifiers import resolve_row
 from models.funding_tenders import FtCallForProposals
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
@@ -239,9 +240,8 @@ async def get_startup_funding(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> StartupFundingItem:
-    r = (db.query(FtCallForProposals)
-         .filter(FtCallForProposals.is_test == False, FtCallForProposals.topic_id == topic_id)  # noqa: E712
-         .first())
+    r = resolve_row(db, FtCallForProposals, topic_id, natural_keys=("topic_id",),
+                    extra_filters=(FtCallForProposals.is_test == False,))  # noqa: E712
     if r is None:
         raise HTTPException(status_code=404, detail=f"No startup-funding call with topic_id {topic_id}")
     return _to_item(r, body_threshold)

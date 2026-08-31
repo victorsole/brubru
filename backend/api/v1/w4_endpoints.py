@@ -31,6 +31,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 logger = logging.getLogger(__name__)
 
@@ -242,7 +243,7 @@ async def get_parl_question_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ParliamentaryQuestionItem:
-    r = db.query(ParliamentaryQuestion).filter(ParliamentaryQuestion.question_reference == question_reference).first()
+    r = resolve_row(db, ParliamentaryQuestion, question_reference, natural_keys=("question_reference",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Parliamentary question {question_reference} not found",
@@ -625,7 +626,7 @@ async def get_rsb_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> RSBOpinionItem:
-    r = db.query(RSBOpinion).filter(RSBOpinion.opinion_reference == opinion_reference).first()
+    r = resolve_row(db, RSBOpinion, opinion_reference, natural_keys=("opinion_reference",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"RSB opinion {opinion_reference} not found",
@@ -881,7 +882,7 @@ def _secondary_act_detail(
     db: Session, reference: str, expected_type: str,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> SecondaryActItem:
-    r = db.query(SecondaryAct).filter(SecondaryAct.reference == reference).first()
+    r = resolve_row(db, SecondaryAct, reference, natural_keys=("reference",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Secondary act {reference} not found",
@@ -1204,7 +1205,7 @@ async def get_tris_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> TRISNotificationItem:
-    r = db.query(TRISNotification).filter(TRISNotification.notification_number == notification_number).first()
+    r = resolve_row(db, TRISNotification, notification_number, natural_keys=("notification_number",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"TRIS notification {notification_number} not found",

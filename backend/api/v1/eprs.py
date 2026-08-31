@@ -16,6 +16,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 router = APIRouter(prefix="/eprs", tags=["v1-eprs"])
 
@@ -232,11 +233,8 @@ async def get_eprs_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> EPRSItem:
-    r = (
-        db.query(EPRSPublication)
-        .filter(EPRSPublication.publication_id == publication_id)
-        .first()
-    )
+    r = resolve_row(db, EPRSPublication, publication_id,
+                    natural_keys=("publication_id",))
     if not r:
         raise HTTPException(
             status_code=404,

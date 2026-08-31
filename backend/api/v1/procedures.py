@@ -21,6 +21,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 from ._curated_procedures import BrubruCuration, get_curation
 
 logger = logging.getLogger(__name__)
@@ -439,18 +440,12 @@ async def get_procedure_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ProcedureDetail:
-    # Try OEIL procedure_ref first (most common partner usage), then file_id
-    r = (
-        db.query(LegislativeCarriage)
-        .filter(LegislativeCarriage.oeil_procedure_ref == reference)
-        .first()
-    )
-    if not r:
-        r = (
-            db.query(LegislativeCarriage)
-            .filter(LegislativeCarriage.file_id == reference)
-            .first()
-        )
+    # Accepts the `id` the collection publishes, then the OEIL procedure ref,
+    # then file_id. The surrogate has to be tried: oeil_procedure_ref is present
+    # on only 1,440 of 2,789 carriages and repeats three times, so it cannot be
+    # this resource's identifier even though it is the one people cite.
+    r = resolve_row(db, LegislativeCarriage, reference,
+                    natural_keys=("oeil_procedure_ref", "file_id"))
     if not r:
         raise HTTPException(
             status_code=404,

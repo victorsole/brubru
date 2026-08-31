@@ -23,6 +23,7 @@ from models.user import User
 from ._body import body_from_pdf_text, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 logger = logging.getLogger(__name__)
 
@@ -314,10 +315,13 @@ async def get_text_adopted_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> TextItem:
-    r = db.query(TextAdopted).filter(TextAdopted.ta_reference == ta_reference).first()
+    # Accepts EITHER the `id` this resource's own collection publishes, or the
+    # TA reference. Before 31 Aug 2026 only the reference worked, so following
+    # `id` from the list -- the thing every REST client does -- returned 404.
+    r = resolve_row(db, TextAdopted, ta_reference, natural_keys=("ta_reference",))
     if not r:
         raise HTTPException(status_code=404, detail={
-            "error": f"TA reference {ta_reference} not found",
+            "error": f"No adopted text with id or TA reference {ta_reference}",
             "reason_code": "not_found",
             "resource": "text_adopted",
             "id": ta_reference,

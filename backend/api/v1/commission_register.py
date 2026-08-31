@@ -30,6 +30,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 from core.body_sources import read_body
 
 logger = logging.getLogger(__name__)
@@ -300,7 +301,7 @@ async def get_commission_register_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> CommissionRegisterItem:
-    r = db.query(CommissionDocument).filter(CommissionDocument.reference == reference).first()
+    r = resolve_row(db, CommissionDocument, reference, natural_keys=("reference",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Commission document {reference} not found",

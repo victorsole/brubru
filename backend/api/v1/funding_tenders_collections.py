@@ -35,6 +35,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 
 # ============================================================================
@@ -200,11 +201,8 @@ async def get_call_for_proposals(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtCallProposalItem:
-    r = (
-        db.query(FtCallForProposals)
-        .filter(FtCallForProposals.topic_id == topic_id, FtCallForProposals.is_test == False)  # noqa: E712
-        .first()
-    )
+    r = resolve_row(db, FtCallForProposals, topic_id, natural_keys=("topic_id",),
+                    extra_filters=(FtCallForProposals.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,
@@ -399,14 +397,9 @@ async def get_call_for_tenders(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtCallTenderItem:
-    r = (
-        db.query(FtCallForTenders)
-        .filter(
-            FtCallForTenders.tender_reference == tender_reference,
-            FtCallForTenders.is_test == False,  # noqa: E712
-        )
-        .first()
-    )
+    r = resolve_row(db, FtCallForTenders, tender_reference,
+                    natural_keys=("tender_reference",),
+                    extra_filters=(FtCallForTenders.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,
@@ -585,11 +578,8 @@ async def get_funded_project(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtFundedProjectItem:
-    r = (
-        db.query(FtFundedProject)
-        .filter(FtFundedProject.project_id == project_id, FtFundedProject.is_test == False)  # noqa: E712
-        .first()
-    )
+    r = resolve_row(db, FtFundedProject, project_id, natural_keys=("project_id",),
+                    extra_filters=(FtFundedProject.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,

@@ -28,6 +28,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 
 # ============================================================================
@@ -191,14 +192,9 @@ async def get_infringement(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> InfringementItem:
-    r = (
-        db.query(InfringementProcedure)
-        .filter(
-            InfringementProcedure.inf_reference == inf_reference,
-            InfringementProcedure.is_test == False,  # noqa: E712
-        )
-        .first()
-    )
+    r = resolve_row(db, InfringementProcedure, inf_reference,
+                    natural_keys=("inf_reference",),
+                    extra_filters=(InfringementProcedure.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,
@@ -402,14 +398,9 @@ async def get_funding_opportunity(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FundingItem:
-    r = (
-        db.query(FundingOpportunity)
-        .filter(
-            FundingOpportunity.topic_id == topic_id,
-            FundingOpportunity.is_test == False,  # noqa: E712
-        )
-        .first()
-    )
+    r = resolve_row(db, FundingOpportunity, topic_id,
+                    natural_keys=("topic_id",),
+                    extra_filters=(FundingOpportunity.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,

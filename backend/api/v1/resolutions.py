@@ -23,6 +23,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 logger = logging.getLogger(__name__)
 
@@ -392,7 +393,7 @@ async def get_resolution_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ResolutionItem:
-    r = db.query(EPResolution).filter(EPResolution.procedure_ref == procedure_ref).first()
+    r = resolve_row(db, EPResolution, procedure_ref, natural_keys=("procedure_ref",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Resolution {procedure_ref} not found",

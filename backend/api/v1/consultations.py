@@ -28,6 +28,7 @@ from ._body import (
 )
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from core.identifiers import resolve_row
 
 logger = logging.getLogger(__name__)
 
@@ -445,7 +446,7 @@ async def get_consultation_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ConsultationItem:
-    r = db.query(PublicConsultation).filter(PublicConsultation.initiative_id == initiative_id).first()
+    r = resolve_row(db, PublicConsultation, initiative_id, natural_keys=("initiative_id",))
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Consultation initiative_id={initiative_id} not found",
