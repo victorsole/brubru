@@ -100,8 +100,19 @@ def commission_doc_enrichment(db: Session) -> Dict[str, dict]:
 
 # Routing groups (the kinds each surface displays).
 KINDS_IN_COMMITTEE = ("opinion", "draft_opinion")
+# NOTE (31 Aug 2026): KINDS_ADOPTED_TEXT and KINDS_CATCHALL were declared here and
+# imported by nothing -- a constant that looks like a route but is not one. Their
+# kinds are now carried by KINDS_DOSSIER below. Kept only for backwards
+# compatibility; do not add to them without also wiring a caller.
 KINDS_ADOPTED_TEXT = ("adopted_text",)
 KINDS_COMMISSION = ("commission_document",)
+# DELIBERATELY NOT ROUTED to a dossier surface (decision recorded 31 Aug 2026):
+#   miscellaneous (3,811) -- the DV catch-all. Genuinely heterogeneous; putting it
+#     on a tracked file would bury the negotiating layer under background paper.
+#     It stays queryable via /api/v1/emeeting-documents?doc_kind=miscellaneous.
+#   presentation (23), oral_question (3) -- oral questions belong to the
+#     Parliamentary Questions surface, not to the dossier view.
+# This is a decision, not an oversight. Revisit only with a UI that can collapse it.
 KINDS_CATCHALL = ("notice_to_members", "miscellaneous")
 KINDS_POSITION = ("draft_report", "amendment", "compromise_amendments",
                   "opinion", "draft_opinion", "reasoned_opinion")
@@ -118,6 +129,14 @@ KINDS_DOSSIER = (
     "draft_report", "amendment", "compromise_amendments",
     "opinion", "draft_opinion", "reasoned_opinion",
     "agreed_text", "letter_of_agreement", "draft_resolution", "working_document",
+    # Added 31 Aug 2026. Both were classified, stored with live PDF URLs, and
+    # reachable from NO MEUB surface: `adopted_text` had a KINDS_ADOPTED_TEXT
+    # constant that nothing ever imported, and `notice_to_members` sat in
+    # KINDS_CATCHALL, likewise unimported. 2,526 documents were ingested and
+    # invisible. They go at the END of the reading order: the committee's
+    # adopted text closes the dossier, and notices to members are context
+    # around it rather than the negotiating layer.
+    "adopted_text", "notice_to_members", "report",
 )
 
 # Plain-language labels for each dossier kind (British English, no codes).
@@ -132,6 +151,9 @@ DOSSIER_LABELS = {
     "letter_of_agreement": "Letter of agreement",
     "draft_resolution": "Draft resolution",
     "working_document": "Working document",
+    "adopted_text": "Text adopted in committee",
+    "notice_to_members": "Notice to members",
+    "report": "Committee report",
 }
 
 

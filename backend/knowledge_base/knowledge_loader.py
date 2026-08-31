@@ -2109,8 +2109,66 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'cisaf': ['industrial_accelerator_act'],
     'industrial decarbonisation bank': ['industrial_accelerator_act'],
     'permitting bottleneck': ['industrial_accelerator_act'],
-    'net-zero industry act': ['industrial_accelerator_act'],
-    'nzia': ['industrial_accelerator_act'],
+    'net-zero industry act': ['net_zero_industry_act'],
+    'nzia': ['net_zero_industry_act'],
+    # /news 31 Aug 2026 - NZIA gets its own guide. Art 25 procurement guidance C/2026/4623
+    # published in OJ C on 31 Aug 2026. Accented AND unaccented forms per
+    # feedback_triggers_no_accent_folding: matching is plain substring, no accent folding.
+    # 'nzia' is 4 chars so it is word-bounded by the loader and cannot fire inside the
+    # Italian -nzia- family (agenzia, garanzia, finanziario); verified 31 Aug 2026.
+    'net zero industry act': ['net_zero_industry_act'],
+    'regulation 2024/1735': ['net_zero_industry_act'],
+    'reglamento 2024/1735': ['net_zero_industry_act'],
+    'reglament 2024/1735': ['net_zero_industry_act'],
+    'regolamento 2024/1735': ['net_zero_industry_act'],
+    'verordening 2024/1735': ['net_zero_industry_act'],
+    'reglement 2024/1735': ['net_zero_industry_act'],
+    'article 25 nzia': ['net_zero_industry_act'],
+    'articulo 25 nzia': ['net_zero_industry_act'],
+    'art\u00edculo 25 nzia': ['net_zero_industry_act'],
+    'articolo 25 nzia': ['net_zero_industry_act'],
+    'artikel 25 nzia': ['net_zero_industry_act'],
+    'nzia public procurement': ['net_zero_industry_act'],
+    'net-zero technology procurement': ['net_zero_industry_act'],
+    'sustainability and resilience contribution': ['net_zero_industry_act'],
+    'main specific components': ['net_zero_industry_act'],
+    'dominant source of supply': ['net_zero_industry_act'],
+    'resilience requirements procurement': ['net_zero_industry_act'],
+    # ES
+    'ley de industria de cero emisiones netas': ['net_zero_industry_act'],
+    'industria de cero emisiones netas': ['net_zero_industry_act'],
+    'contratacion publica tecnologias cero emisiones': ['net_zero_industry_act'],
+    'contrataci\u00f3n p\u00fablica tecnolog\u00edas cero emisiones': ['net_zero_industry_act'],
+    # CA
+    'llei d\'industria de zero emissions netes': ['net_zero_industry_act'],
+    'ind\u00fastria de zero emissions netes': ['net_zero_industry_act'],
+    'industria de zero emissions netes': ['net_zero_industry_act'],
+    'contractacio publica tecnologies zero emissions': ['net_zero_industry_act'],
+    'contractaci\u00f3 p\u00fablica tecnologies zero emissions': ['net_zero_industry_act'],
+    # FR
+    'industrie zero emission nette': ['net_zero_industry_act'],
+    'industrie z\u00e9ro \u00e9mission nette': ['net_zero_industry_act'],
+    'marches publics technologies zero emission': ['net_zero_industry_act'],
+    'march\u00e9s publics technologies z\u00e9ro \u00e9mission': ['net_zero_industry_act'],
+    # IT
+    'appalti pubblici tecnologie net-zero': ['net_zero_industry_act'],
+    'industria a zero emissioni nette': ['net_zero_industry_act'],
+    # NL
+    'netto-nul industrie verordening': ['net_zero_industry_act'],
+    'aanbesteding netto-nul technologie': ['net_zero_industry_act'],
+    # Connector-robust short forms: the full phrase misses when the user writes a
+    # linking word ("contratacion publica DE tecnologias..."). Matching is plain
+    # substring with no connector tolerance, so the distinctive fragment is added
+    # as well as - never instead of - the long form. Added after a live ES miss, 31 Aug 2026.
+    'tecnologias cero emisiones': ['net_zero_industry_act'],
+    'tecnolog\u00edas cero emisiones': ['net_zero_industry_act'],
+    'industria cero emisiones netas': ['net_zero_industry_act'],
+    'tecnologies zero emissions': ['net_zero_industry_act'],
+    'technologies zero emission': ['net_zero_industry_act'],
+    'technologies z\u00e9ro \u00e9mission': ['net_zero_industry_act'],
+    'tecnologie net-zero': ['net_zero_industry_act'],
+    'tecnologie a zero emissioni': ['net_zero_industry_act'],
+    'netto-nul technologie': ['net_zero_industry_act'],
     # Multilingual
     'accelerateur industriel': ['industrial_accelerator_act'],
     'acelerador industrial': ['industrial_accelerator_act'],
@@ -5451,7 +5509,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     '32026r0718': ['industrial_accelerator_act'],
     'reg 2026/718': ['industrial_accelerator_act'],
     '2026/718': ['industrial_accelerator_act'],
-    'nzia implementing': ['industrial_accelerator_act'],
+    'nzia implementing': ['net_zero_industry_act'],
     # ETS for Buildings and Transport (Market Stability Reserve)
     'ets buildings': ['eu_water_legislation', 'european_climate_law'],
     'ets transport': ['eu_water_legislation', 'european_climate_law'],

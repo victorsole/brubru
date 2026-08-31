@@ -25,7 +25,7 @@
 - **LATEST (Tuesday 5 May 2026)**: **Joint IMCO + INTA + ITRE draft reports tabled** under Rule 58 enhanced cooperation, procedure 2026/0068(COD). Rapporteur (LEAD, ITRE): **Christophe Grudler (Renew, France)**. Joint-committee rapporteur (IMCO): **Adnan Dibrani (S&D, Sweden)**. ITRE remains the LEAD committee — IMCO is joint, NOT lead (recurring confusion source: keep clear in answers). First concrete EP committee step on the file.
 - Amends: Regulation (EU) 2018/1724 (Single Digital Gateway), Regulation (EU) 2024/3110 (Construction Products), Regulation (EU) 2024/1735 (NZIA)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
-- Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735)
+- Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735). **Brubru now has a dedicated NZIA guide — `net_zero_industry_act.md` — which owns the Article 25 public-procurement regime (sustainability and resilience requirements) and the Commission's Article 25 guidance of 31 August 2026 (C/2026/4623). Route NZIA procurement questions there; this guide covers the Industrial Accelerator Act's own procurement chapter (Chapter III), which is a separate instrument.**
 - Ambition: increase EU manufacturing share from 14.3% to 20% of GDP by 2035
 - Chapter I (Articles 1-5): scope, definitions, strategic sectors (EIIs, automotive, net-zero tech)
 - Chapter II (Articles 6-16): permitting acceleration: "one project, one submission", single permit-granting procedure, Industrial Acceleration Areas with area-wide permits and tacit approval, digital permitting via European Business Wallet

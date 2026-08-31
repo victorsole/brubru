@@ -2,6 +2,50 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-31",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act (DMA)",
+      "summary": "Flagged the pending Microsoft Edge gatekeeper judgment in Case T-357/24, expected 2 to 3 September 2026, as expected rather than decided",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "action": "updated",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "Cross-reference added: NZIA Article 25 procurement questions now route to the dedicated net_zero_industry_act guide",
+      "refs": [
+        "32024R1735"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "action": "updated",
+      "guide": "cpr_construction_products_regulation",
+      "title": "Construction Products Regulation (CPR)",
+      "summary": "Added Commission Delegated Regulation (EU) 2026/1310, the Article 10(2) act setting assessment and verification systems by product family; published 28 August 2026, not yet in force",
+      "refs": [
+        "32026R1310",
+        "32024R3110"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "action": "added",
+      "guide": "net_zero_industry_act",
+      "title": "Net-Zero Industry Act (NZIA)",
+      "summary": "New guide: Regulation (EU) 2024/1735 and the Commission's Article 25 public-procurement guidance published in the OJ C series on 31 August 2026",
+      "refs": [
+        "32024R1735",
+        "52026XC04623",
+        "32026R0718",
+        "32025R1178"
+      ]
+    },
+    {
       "date": "2026-08-28",
       "action": "updated",
       "guide": "ema_scientific_committees",

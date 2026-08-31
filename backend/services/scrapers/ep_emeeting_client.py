@@ -112,7 +112,16 @@ def doc_kind(gepro_code: Optional[str], reference: Optional[str],
             return "written_question"
     if code in _BASE_KIND:
         return _BASE_KIND[code]
-    return code.lower() or "other"
+    # Fall-through, fixed 31 Aug 2026. This used to `return code.lower()`, which
+    # emitted the RAW EP code as if it were a classified kind: 'cls', 'cr', 'a7',
+    # 'com_2', 'stud', 're', 'aa', 'swd2', 'ab', 'qe' -- about 353 rows. Those
+    # values are in no consumer's vocabulary, so such a document was invisible to
+    # every surface and to the `doc_kind` filter on /api/v1/emeeting-documents:
+    # a passthrough looks like a classification and behaves like a hole.
+    # Nothing is lost by normalising, because the raw code is ALREADY persisted
+    # in its own `gepro_code` column -- the passthrough was pure redundancy.
+    # 'miscellaneous' is the documented catch-all (it is what DV already returns).
+    return "miscellaneous"
 
 
 def _clean_procedure_ref(raw: str) -> Optional[str]:

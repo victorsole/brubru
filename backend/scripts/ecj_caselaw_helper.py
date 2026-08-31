@@ -21,6 +21,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PR_LIST_URL = "https://curia.europa.eu/jcms/upload/docs/application/pdf/../../../../site/jcms/d2_5158/en/press-releases"
 PR_LIST_URL = "https://curia.europa.eu/site/jcms/d2_5158/en/press-releases"
 PR_BASE = "https://curia.europa.eu/site/"
+# A realistic, current desktop UA. Bump this when it ages: an implausible or stale
+# UA is served 503 by CURIA (and 403 by op.europa.eu's minimum-browser-version rule).
+_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+       "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")
 
 
 def fetch_press_releases(days):
@@ -28,11 +32,44 @@ def fetch_press_releases(days):
     plain-language summaries. A case with a PR is, by definition, one the Court
     considers important AND for which a ready-made summary exists (use it to seed
     a KB guide / deep-dive). Newest first."""
-    req = urllib.request.Request(PR_LIST_URL, headers={"User-Agent": "Mozilla/5.0 Chrome/151"})
+    # Transport, fixed 31 Aug 2026. This fetch had NEVER succeeded on a dev Mac and
+    # failed as a one-line [warn], so the Court's own "this case matters" signal was
+    # silently absent from every /news run. Two stacked faults, both real:
+    #   1. urllib's DEFAULT SSL context fails cert verification wherever TLS is
+    #      intercepted locally ("self-signed certificate in certificate chain").
+    #      requests + certifi's CA bundle is immune to that.
+    #   2. the old User-Agent, "Mozilla/5.0 Chrome/151", is MALFORMED -- no platform
+    #      token and a Chrome version that does not exist -- and CURIA answers it 503.
+    #      A realistic current UA is served normally (measured: 200, 224 PR links).
+    # See feedback_stale_browser_ua_is_a_time_bomb: an implausible UA is a time bomb
+    # in exactly the same way a stale one is.
+    html = None
+    errors = []
     try:
-        html = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "ignore")
+        import requests, certifi
+        r = requests.get(PR_LIST_URL, headers={"User-Agent": _UA,
+                                               "Accept": "text/html,application/xhtml+xml"},
+                         timeout=40, verify=certifi.where())
+        if r.status_code == 200 and r.text:
+            html = r.text
+        else:
+            errors.append(f"requests HTTP {r.status_code}")
     except Exception as e:
-        return [], f"press-release fetch failed: {e}"
+        errors.append(f"requests {type(e).__name__}: {e}")
+    if html is None:
+        # Fallback: curl uses the system trust store and its own UA, which CURIA
+        # has also served. Kept because the block is fingerprint-sensitive and flaky.
+        try:
+            out = subprocess.run(["curl", "-sL", "--max-time", "40", PR_LIST_URL],
+                                 capture_output=True, timeout=60)
+            if out.returncode == 0 and b"cp" in out.stdout and len(out.stdout) > 10000:
+                html = out.stdout.decode("utf-8", "ignore")
+            else:
+                errors.append(f"curl rc={out.returncode} bytes={len(out.stdout)}")
+        except Exception as e:
+            errors.append(f"curl {type(e).__name__}: {e}")
+    if html is None:
+        return [], "press-release fetch failed: " + "; ".join(errors)
     items = re.findall(
         r'No\.\s*(\d{1,3}/\d{4}).*?datetime="(\d{2}/\d{2}/\d{4})".*?'
         r'href="(upload/[^"]+?/(cp\d{6})en\.pdf)"[^>]*>\s*<h3>(.*?)</h3>',
@@ -183,8 +220,16 @@ def main():
 
     # CURIA press releases first: the Court's curated notable cases WITH summaries.
     if pr_err:
-        print(f"[warn] {pr_err}\n")
-    elif prs:
+        # LOUD. A dead source must not read like a quiet week: this is the
+        # difference between "the Court flagged nothing" and "we cannot see what
+        # the Court flagged". Three-state, per feedback_silent_failure_reports_success.
+        print(f"[FAIL] CURIA press releases UNAVAILABLE -- {pr_err}")
+        print("       This is a BROKEN SOURCE, not an empty one. Every [PR] mark below")
+        print("       is therefore unproven: a case may be Court-flagged and show as not.\n")
+    elif not prs:
+        print(f"[ok] CURIA press releases fetched, none published in the last {a.days} day(s). "
+              f"Source healthy, window genuinely empty.\n")
+    else:
         print(f"=== CURIA PRESS RELEASES ({len(prs)}) — Court-curated, plain-language "
               f"summary in the PDF (seed a KB guide / deep-dive from these) ===")
         for p in prs:
