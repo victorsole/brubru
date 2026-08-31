@@ -170,3 +170,75 @@ def test_composite_key_tables_are_not_public_resources():
     from core.identifiers import _pk_column
     from models.text_adopted import TextAdopted
     assert _pk_column(TextAdopted) is not None
+
+
+# ---------------------------------------------------------------------------
+# `self` links -- the half of the fix that removes the guessing entirely
+# ---------------------------------------------------------------------------
+
+SELF_COLLECTIONS = [
+    "/api/v2/parliament/texts-adopted",
+    "/api/v2/parliament/resolutions",
+    "/api/v2/commission/commissioners",
+    "/api/v2/funding/programmes",
+    "/api/v2/news/all",
+    "/api/v2/legislative/eur-lex/laws/summaries",
+    "/api/v2/transparency-register",
+    "/api/v2/open-data/eurostat-series",
+]
+
+
+@pytest.mark.parametrize("collection", SELF_COLLECTIONS)
+def test_every_item_carries_a_self_link_that_resolves(api_client, collection):
+    """A client should never have to choose a field or think about escaping.
+
+    Following `id` only works where the item route keys on `id`; twelve routes
+    key on something else (`slug`, `acronym`, `case_number`, `socrata_id`...).
+    `self` removes the question, and — because the server builds the URL —
+    removes URL-encoding from the client's problem too.
+    """
+    listing = api_client.get(f"{collection}?limit=1")
+    if listing.status_code != 200:
+        pytest.skip(f"{collection} returned {listing.status_code}")
+    rows = listing.json().get("data") or []
+    if not rows:
+        pytest.skip(f"{collection} is empty")
+    link = rows[0].get("self")
+    assert link, f"{collection} emits no `self` on its items"
+    from urllib.parse import urlparse
+    got = api_client.get(urlparse(link).path)
+    assert got.status_code == 200, f"self link does not resolve: {link} -> {got.status_code}"
+
+
+def test_self_escapes_identifiers_the_client_would_get_wrong():
+    """`2025/2211(INI)` in a path segment has to become `2025%2F2211%28INI%29`.
+    This is the case a client hand-building the URL is most likely to break."""
+    from core.self_links import self_url
+    url = self_url("https://x.eu", "/api/v2/parliament/resolutions/{procedure_ref}",
+                   "2025/2211(INI)")
+    assert url == "https://x.eu/api/v2/parliament/resolutions/2025%2F2211%28INI%29"
+
+
+def test_the_route_map_is_built_from_the_live_route_table():
+    """A hand-written map drifts. This one is derived from what is served, and
+    the parameter name tells us which field to read."""
+    from main import app
+    from core.self_links import build_route_map
+    m = build_route_map(app)
+    assert len(m) > 400, f"only {len(m)} collections mapped"
+    assert m["/api/v2/commission/commissioners"][1] == "slug"
+    # An aggregator's items belong to the item route one level up.
+    assert m["/api/v2/news/all"][0] == "/api/v2/news/{item_id}"
+    # FastAPI's `:path` converter must not leak into the field name.
+    assert not [f for _, f in m.values() if ":" in f]
+
+
+def test_a_collection_with_no_item_route_gets_no_self():
+    """Twenty collections have no item route at all — /parliament/ep-documents,
+    /funding/all and the EuroVoc taxonomies among them. Inventing a link there
+    would produce a URL that 404s, which is worse than no link."""
+    from main import app
+    from core.self_links import build_route_map
+    m = build_route_map(app)
+    for path in ("/api/v2/parliament/ep-documents", "/api/v2/funding/all"):
+        assert path not in m, f"{path} has no item route; it must not get a self link"

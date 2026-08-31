@@ -167,11 +167,22 @@ app.add_middleware(
 from api.v1._billing_middleware import BillingRefundMiddleware  # noqa: E402
 app.add_middleware(BillingRefundMiddleware)
 
+# `self` links on v2 collection items. Registered BEFORE the export middleware so
+# it sits INSIDE it and runs first on the way out -- the field is therefore
+# present in a CSV/Excel export too, not just in JSON. Fixing the 18 broken
+# identifier pairs made `id` work where it is published; this removes the
+# remaining question of WHICH field belongs in the URL, and escapes the
+# references containing "/" or "(" on the client's behalf.
+from api.self_link_middleware import SelfLinkMiddleware  # noqa: E402
+from core.self_links import build_route_map  # noqa: E402
+app.add_middleware(SelfLinkMiddleware, route_map_factory=lambda: build_route_map(app))
+
 # Tabular export — ?format=csv|xlsx turns any JSON list response into a CSV/Excel download.
 # Added LAST so it is outermost and transforms the FINAL response (after CORS + billing);
 # it only acts when the caller sets the format param, so normal traffic is untouched.
 from api.export_middleware import TabularExportMiddleware  # noqa: E402
 app.add_middleware(TabularExportMiddleware)
+
 
 # ---------------------------------------------------------------------------
 # Brand favicon at the backend origin. MCP hosts (Claude, ChatGPT, Gemini,
