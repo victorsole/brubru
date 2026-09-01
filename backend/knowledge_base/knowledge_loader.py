@@ -41,6 +41,16 @@ _WORD_BOUNDED_TRIGGERS = frozenset({
                  # question about stakeholder outreach. Word-bounding also stops
                  # "the proposal reaches plenary", which is the right call: the
                  # trigger is an acronym, not the English verb.
+    # Added /news 1 Sep 2026. search_guides() auto-word-bounds triggers of <=4 chars;
+    # these are FIVE chars, so they escaped it and matched inside a longer word. Each was
+    # reproduced on an ordinary question that returned the wrong guide as its ONLY hit.
+    "rearm",     # inside "fi-REARM-s": "EU rules on firearms trafficking" -> the defence
+                 # spending guide. "ReArm Europe" as a phrase still matches.
+    "ecall",     # inside "r-ECALL": "how do I handle a product recall" -> autonomous vehicles.
+    "rente",     # inside "f-RENTE" (ES/CA "frente"): "brecha de proteccion frente a
+                 # catastrofes" -> ECB monetary policy.
+    "grant",     # inside "permit-GRANT-ing": renewables permitting -> Horizon grant
+                 # management. Plural "grants" is covered by "grant funding" etc. below.
     "cultura",   # a deliberate ES/CA/IT key, but as a substring it matches the
                  # ENGLISH "cultural" and "agri-CULTURA-l"; 5 of 6 sample matches
                  # were English words. Bounding keeps the Spanish, drops the rest.
@@ -2281,7 +2291,18 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'statistics': ['eurostat_statistics_production'],
     'asymmetry': ['eurostat_statistics_production'],
     'data quality': ['eurostat_statistics_production'],
+    # 'nsi' RESTORED /news 1 Sep 2026. It was briefly removed on the belief that a bare
+    # acronym matches as a plain substring. It does NOT: search_guides() word-bounds every
+    # trigger of <=4 chars, so 'nsi' never fired inside a longer word in production. The
+    # multilingual names below are kept -- they were genuinely missing.
     'nsi': ['eurostat_statistics_production'],
+    'national statistical institute': ['eurostat_statistics_production'],
+    'national statistical institutes': ['eurostat_statistics_production'],
+    'instituto nacional de estadística': ['eurostat_statistics_production'],
+    "institut nacional d'estadística": ['eurostat_statistics_production'],
+    'institut national de la statistique': ['eurostat_statistics_production'],
+    'istituto nazionale di statistica': ['eurostat_statistics_production'],
+    'nationaal statistisch instituut': ['eurostat_statistics_production'],
     'trade in services': ['eurostat_statistics_production'],
 
     # Knowledge Valorisation and Technology Transfer
@@ -2618,7 +2639,26 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'energy task force': ['eu_energy_policy'],
     'energy union task force': ['eu_energy_policy'],
     'dg ener': ['eu_energy_policy'],
+    # 'acer' RESTORED /news 1 Sep 2026. It was briefly removed on the belief that a bare
+    # acronym matches as a plain substring. It does NOT: search_guides() word-bounds every
+    # trigger of <=4 chars, so 'acer' never fired inside a longer word in production. The
+    # multilingual names below are kept -- they were genuinely missing.
     'acer': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer agency': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer review': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer decision': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer report': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer regulator': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer energy': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer network code': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer opinion': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'acer framework guideline': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'agency for the cooperation of energy regulators': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'agencia de cooperación de los reguladores de la energía': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    "agència de cooperació dels reguladors de l'energia": ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'agence de coopération des régulateurs': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'agenzia per la cooperazione fra i regolatori': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
+    'agentschap voor de samenwerking tussen energieregulators': ['acer_european_agency_cooperation_energy_regulators', 'eu_energy_policy'],
     'remit': ['remit_ii_wholesale_energy_market_integrity_transparency', 'eu_energy_policy'],
     'remit ii': ['eu_energy_policy'],
     'energy market integrity': ['eu_energy_policy'],
@@ -5454,7 +5494,19 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'finanzas sostenibles': ['eu_taxonomy_sustainable_finance'],
     'finances durables': ['eu_taxonomy_sustainable_finance'],
     'duurzame financiering': ['eu_taxonomy_sustainable_finance'],
+    # 'esg' RESTORED /news 1 Sep 2026. It was briefly removed on the belief that a bare
+    # acronym matches as a plain substring. It does NOT: search_guides() word-bounds every
+    # trigger of <=4 chars, so 'esg' never fired inside a longer word in production. The
+    # multilingual names below are kept -- they were genuinely missing.
     'esg': ['eu_taxonomy_sustainable_finance'],
+    'esg reporting': ['eu_taxonomy_sustainable_finance'],
+    'esg criteria': ['eu_taxonomy_sustainable_finance'],
+    'esg rating': ['eu_taxonomy_sustainable_finance'],
+    'criterios esg': ['eu_taxonomy_sustainable_finance'],
+    'criteris esg': ['eu_taxonomy_sustainable_finance'],
+    'critères esg': ['eu_taxonomy_sustainable_finance'],
+    'criteri esg': ['eu_taxonomy_sustainable_finance'],
+    'esg-criteria': ['eu_taxonomy_sustainable_finance'],
     'greenwashing': ['eu_taxonomy_sustainable_finance'],
     'platform sustainable finance': ['eu_taxonomy_sustainable_finance'],
     # Banking Union Reform (CMDI Package)
@@ -6782,7 +6834,19 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # Entry/Exit System (31 Mar 2026)
     'entry exit system': ['eu_entry_exit_system_ees_2017_2226', 'eu_migration_asylum_pact'],
     'entry/exit system': ['eu_migration_asylum_pact'],
+    # 'ees' RESTORED /news 1 Sep 2026. It was briefly removed on the belief that a bare
+    # acronym matches as a plain substring. It does NOT: search_guides() word-bounds every
+    # trigger of <=4 chars, so 'ees' never fired inside a longer word in production. The
+    # multilingual names below are kept -- they were genuinely missing.
     'ees': ['eu_migration_asylum_pact'],
+    'entry/exit system': ['eu_migration_asylum_pact'],
+    'entry exit system': ['eu_migration_asylum_pact'],
+    'ees border system': ['eu_migration_asylum_pact'],
+    'sistema de entradas y salidas': ['eu_migration_asylum_pact'],
+    "sistema d'entrades i sortides": ['eu_migration_asylum_pact'],
+    'système entrée/sortie': ['eu_migration_asylum_pact'],
+    'sistema di ingressi e uscite': ['eu_migration_asylum_pact'],
+    'inreis-uitreissysteem': ['eu_migration_asylum_pact'],
     'ees operational': ['eu_migration_asylum_pact'],
     'smart borders': ['eu_migration_asylum_pact'],
     'etias': ['eu_etias_travel_authorisation_2018_1240', 'eu_migration_asylum_pact'],
@@ -13928,6 +13992,56 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'la linea de la concepcion': ['eu_uk_gibraltar_agreement'],
     'verja de gibraltar': ['eu_uk_gibraltar_agreement'],
 
+
+    # /news 1 September 2026 -- Commission designates ChatGPT (VLOSE) + Reddit and Roblox (VLOPs), 31 Aug 2026.
+    # Accented and in the phrasing people actually type; every key >=6 chars to avoid substring false positives.
+    'chatgpt vlose': ['dsa_enforcement', 'digital_services_act'],
+    'chatgpt dsa': ['dsa_enforcement', 'digital_services_act'],
+    'chatgpt designated': ['dsa_enforcement'],
+    'chatgpt designado': ['dsa_enforcement'],
+    'chatgpt designat': ['dsa_enforcement'],
+    'chatgpt d\u00e9sign\u00e9': ['dsa_enforcement'],
+    'chatgpt designato': ['dsa_enforcement'],
+    'chatgpt aangewezen': ['dsa_enforcement'],
+    'reddit vlop': ['dsa_enforcement'],
+    'roblox vlop': ['dsa_enforcement'],
+    'reddit roblox': ['dsa_enforcement'],
+    'vlose designation': ['dsa_enforcement'],
+    'vlop designation': ['dsa_enforcement'],
+    'designated vlops': ['dsa_enforcement'],
+    'list of vlops': ['dsa_enforcement'],
+    'tr\u00e8s grandes plateformes en ligne': ['dsa_enforcement', 'digital_services_act'],
+    'tr\u00e8s grand moteur de recherche': ['dsa_enforcement'],
+    'plataformas en l\u00ednea de muy gran tama\u00f1o': ['dsa_enforcement', 'digital_services_act'],
+    'motor de b\u00fasqueda en l\u00ednea de muy gran tama\u00f1o': ['dsa_enforcement'],
+    'plataformes en l\u00ednia de molt grans dimensions': ['dsa_enforcement', 'digital_services_act'],
+    'motor de cerca en l\u00ednia de molt grans dimensions': ['dsa_enforcement'],
+    'piattaforme online di dimensioni molto grandi': ['dsa_enforcement', 'digital_services_act'],
+    'zeer grote onlineplatforms': ['dsa_enforcement', 'digital_services_act'],
+    'zeer grote onlinezoekmachine': ['dsa_enforcement'],
+
+    # /news 1 September 2026 -- steel 'melt and pour' evidence act (applies 1 Oct 2026),    # NGT secondary-legislation call for evidence (closes 28 Sep 2026), 2026 CSRs published in the OJ.
+    'melt and pour': ['eu_trade_policy'],
+    'country of melt and pour': ['eu_trade_policy'],
+    'mill test certificate': ['eu_trade_policy'],
+    'heat number steel': ['eu_trade_policy'],
+    'colada y vertido': ['eu_trade_policy'],
+    'pa\xeds de colada': ['eu_trade_policy'],
+    'colada i abocament': ['eu_trade_policy'],
+    'lieu de coul\xe9e': ['eu_trade_policy'],
+    'pays de coul\xe9e': ['eu_trade_policy'],
+    'colata e versamento': ['eu_trade_policy'],
+    'gesmolten en gegoten': ['eu_trade_policy'],
+    'ngt call for evidence': ['new_genomic_techniques_plant_breeding'],
+    'ngt delegated act': ['new_genomic_techniques_plant_breeding'],
+    'ngt implementing act': ['new_genomic_techniques_plant_breeding'],
+    'convocatoria de datos ngt': ['new_genomic_techniques_plant_breeding'],
+    'country-specific recommendations 2026': ['eu_economic_governance_reform_2024', 'european_semester_annual_report_2026'],
+    'recomendaciones espec\xedficas por pa\xeds': ['eu_economic_governance_reform_2024'],
+    'recomanacions espec\xedfiques per pa\xeds': ['eu_economic_governance_reform_2024'],
+    'recommandations par pays': ['eu_economic_governance_reform_2024'],
+    'raccomandazioni specifiche per paese': ['eu_economic_governance_reform_2024'],
+    'landspecifieke aanbevelingen': ['eu_economic_governance_reform_2024'],
 }
 
 

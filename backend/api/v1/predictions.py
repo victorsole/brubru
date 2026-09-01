@@ -128,11 +128,31 @@ async def get_timeline(
             "creation_date": datetime.utcnow(),
         }
 
+    ml_unavailable_reason = None
     try:
         if use_ml:
-            from services.predictions import get_ml_timeline_predictor
-            predictor = get_ml_timeline_predictor()
-            pred = await predictor.predict_with_ml(procedure_ref)
+            # The ML branch is OPTIONAL. On 1 September 2026 it returned 502 on every
+            # real procedure in production (51 of 51 calls over three procedures) while
+            # working locally, because the ML stack is absent from the deployed image and
+            # the import raised inside the outer `except Exception`, which turned a missing
+            # optional dependency into a hard upstream error. `use_ml=false` returned 200
+            # from the baseline predictor the whole time. Degrade to the baseline instead
+            # of failing the request, and SAY SO in `prediction_method` -- a silent
+            # downgrade would be worse than the 502.
+            try:
+                from services.predictions import get_ml_timeline_predictor
+                predictor = get_ml_timeline_predictor()
+                pred = await predictor.predict_with_ml(procedure_ref)
+            except Exception as ml_exc:  # noqa: BLE001
+                logger.warning(
+                    "timeline ML path unavailable for %s (%s: %s) -- falling back to baseline",
+                    procedure_ref, type(ml_exc).__name__, ml_exc, exc_info=True,
+                )
+                ml_unavailable_reason = f"ml_unavailable:{type(ml_exc).__name__}"
+                pred = None
+            if pred is None:
+                use_ml = False
+        if use_ml:
             return TimelinePrediction(
                 procedure_ref=pred.procedure_ref,
                 current_status=pred.current_status,
@@ -159,14 +179,17 @@ async def get_timeline(
             predicted_days_remaining=pred.predicted_days_remaining or 0,
             confidence=pred.confidence,
             model_version="baseline",
-            prediction_method=pred.based_on,
+            prediction_method=(f"{pred.based_on} ({ml_unavailable_reason})"
+                               if ml_unavailable_reason else pred.based_on),
             **_compose(pred, days_remaining=pred.predicted_days_remaining or 0,
                        model_ver="baseline", method=pred.based_on),
         )
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001
-        logger.exception(f"timeline prediction failed for {procedure_ref}: {exc}")
+        logger.exception(
+            "timeline prediction failed for %s (%s: %s)", procedure_ref, type(exc).__name__, exc
+        )
         raise HTTPException(
             status_code=502,
             detail={"error": "Prediction service error", "reason_code": "upstream_error", "source": "brubru-predictions"},

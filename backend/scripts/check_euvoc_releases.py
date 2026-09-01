@@ -149,7 +149,14 @@ def main() -> int:
         return 2
 
     snapshot = _load_snapshot()
-    diff = _diff(snapshot.get("releases", []), curr)
+    prior = snapshot.get("releases", [])
+    # COLD START is not change. With no baseline every release reads as "new": the first
+    # run of this check on 1 September 2026 reported 2,364 "new releases" and exited 1,
+    # which /news treats as "surface these and queue a sync per affected NAL". Two of the
+    # 2,364 were the page's own furniture ("Newsletter", "available") with empty dates.
+    # Seed the baseline, say so, and exit 0 -- there is nothing to compare against yet.
+    cold_start = not prior
+    diff = {"new": [], "updated": []} if cold_start else _diff(prior, curr)
 
     snapshotted_at = snapshot.get("snapshotted_at")
     age_days = None
@@ -166,6 +173,7 @@ def main() -> int:
         "updated_releases": diff["updated"],
         "total_seen": len(curr),
         "snapshot_age_days": age_days,
+        "cold_start": cold_start,
     }
 
     # Always update the snapshot if we got a clean parse.
@@ -176,6 +184,9 @@ def main() -> int:
     if diff["new"] or diff["updated"]:
         log.info(f"Found {len(diff['new'])} new, {len(diff['updated'])} updated")
         return 1
+    if cold_start:
+        log.info(f"Cold start: baseline seeded with {len(curr)} releases, nothing to compare yet")
+        return 0
     log.info(f"No changes ({len(curr)} releases tracked)")
     return 0
 

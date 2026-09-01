@@ -2,6 +2,44 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-01",
+      "action": "updated",
+      "guide": "eu_economic_governance_reform_2024",
+      "title": "Economic Governance Reform (April 2024)",
+      "summary": "The 2026 country-specific recommendations of 10 July 2026 published in the OJ C series on 1 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-01",
+      "action": "updated",
+      "guide": "new_genomic_techniques_plant_breeding",
+      "title": "New Genomic Techniques (NGT) for Plant Breeding",
+      "summary": "Call for evidence on the NGT delegated and implementing acts opened 31 Aug 2026, closes 28 Sep 2026",
+      "refs": [
+        "32026R1388"
+      ]
+    },
+    {
+      "date": "2026-09-01",
+      "action": "updated",
+      "guide": "eu_trade_policy",
+      "title": "EU Trade Policy",
+      "summary": "Steel 'melt and pour' evidence implementing act adopted 31 Aug 2026, applies 1 Oct 2026: Mill Test Certificate plus heat number on the customs declaration",
+      "refs": [
+        "32026R1384"
+      ]
+    },
+    {
+      "date": "2026-09-01",
+      "action": "updated",
+      "guide": "dsa_enforcement",
+      "title": "Digital Services Act: Enforcement and Cases",
+      "summary": "ChatGPT designated a VLOSE, Reddit and Roblox VLOPs (31 Aug 2026); VLOP count corrected from 19 to 26 against the Commission's own list",
+      "refs": [
+        "32022R2065"
+      ]
+    },
+    {
       "date": "2026-08-31",
       "action": "updated",
       "guide": "eu_recovery_resilience_facility",

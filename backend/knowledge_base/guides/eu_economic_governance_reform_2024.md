@@ -1,6 +1,7 @@
 # Economic Governance Reform (April 2024): Reformed Stability and Growth Pact
 
 ## QUICK FACTS
+- **LATEST (Tuesday 1 September 2026 — the 2026 country-specific recommendations are published in the Official Journal)**: The **Council Recommendations of 10 July 2026 on the economic, social, employment, structural and budgetary policies** of the Member States were published in the **OJ C series on 1 September 2026**. Confirmed present for at least Belgium (32026H03914), Bulgaria (32026H03915), Estonia (32026H03919), Croatia (32026H03924), Cyprus (32026H03926), Latvia (32026H03927), Lithuania (32026H03928), Hungary (32026H03930), the Netherlands (32026H03932) and Poland (32026H03934). Published alongside them: the **Council Recommendation of 10 July 2026 with a view to bringing an end to the situation of an excessive deficit in Bulgaria** (32026H03913). Note the sequence — the Council **adopted** these on 10 July; OJ publication on 1 September is the formal record, not a new decision. Source: Cellar OJ C-series listing, 1 September 2026.
 - **What it is**: the reformed EU economic-governance framework (informally, the "new Stability and Growth Pact"), the largest overhaul of EU fiscal-surveillance rules since the Six-Pack/Two-Pack of 2011-2013.
 - **In force since**: 30 April 2024.
 - **Three legal acts** (the reform package):

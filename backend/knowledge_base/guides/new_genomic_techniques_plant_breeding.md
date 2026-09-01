@@ -1,6 +1,7 @@
 # New Genomic Techniques (NGT) for Plant Breeding
 
 ## QUICK FACTS
+- **LATEST (Monday 31 August 2026 — call for evidence on the NGT secondary legislation opens)**: DG SANTE published a **call for evidence in preparation for one delegated act and one implementing act** under **Regulation (EU) 2026/1388**. The two acts will lay down the **procedural and information requirements** for (a) the **verification** procedure, (b) the **notification for deliberate release**, and (c) the **application for placing on the market** of NGT plants and of food and feed containing, consisting of, or produced from NGT plants. **Feedback closes 28 September 2026.** This is the first concrete step of the two-year transition the implementation strategy set out on 16 July 2026. A separate DG SANTE conference, *Innovation and Resilience in the Agrifood Chain*, is scheduled for **3 December 2026** to feed the same preparatory work. Sources: food.ec.europa.eu food-safety news, 31 August 2026 (two items).
 - Topic: EU regulatory framework for **new genomic techniques (NGTs)** in plant breeding -- targeted mutagenesis, cisgenesis, and related precision breeding methods. Establishes a tiered regime (NGT Category 1 and NGT Category 2) distinct from the 2001 GMO Directive
 - **Commission proposal**: COM(2023) 411 of 5 July 2023 -- "Proposal for a Regulation on plants obtained by certain new genomic techniques and their food and feed"
 - **Procedure**: 2023/0226(COD) -- ordinary legislative procedure
