@@ -17,6 +17,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -95,6 +96,7 @@ def list_meps(
             if len(a["subjects"]) < 3:
                 a["subjects"].append(r.subject)
     meps = sorted(agg.items(), key=lambda kv: kv[1]["count"], reverse=True)[:limit]
+    social = _latest_social(db, [a["id"] for _, a in meps if a["id"]])
     return {
         "pi_active": pi_active,
         "total_meps": len(agg),
@@ -105,8 +107,51 @@ def list_meps(
             "question_count": a["count"],
             "latest_date": a["latest"],
             "sample_subjects": a["subjects"],
+            # What the MEP SAID lately, from the social directory (Phase 4). A post is
+            # a signal about a position, never the citable fact: the UI labels it as
+            # social and unverified. Reposts are excluded -- an amplification is not
+            # this MEP's statement (migration 219).
+            "latest_social": social.get(str(a["id"]), []),
         } for name, a in meps],
     }
+
+
+_LATEST_SOCIAL_DAYS = 14
+_LATEST_SOCIAL_PER_MEP = 2
+
+
+def _latest_social(db: Session, mep_ids: list) -> dict:
+    """{mep_id: [{platform, posted_at, text, url}]} -- newest original posts, capped per MEP.
+
+    social_accounts.entity_key holds the EP person id for entity_type='mep', the same id
+    parliamentary_questions.asking_mep_ids carries, so the join needs no name matching.
+    One query for the whole page; the window is short so the answer is fresh or empty.
+    """
+    if not mep_ids:
+        return {}
+    rows = db.execute(text("""
+        SELECT a.entity_key, p.platform, p.posted_at, p.post_url,
+               left(regexp_replace(coalesce(p.content, ''), '\\s+', ' ', 'g'), 220) AS txt
+        FROM social_posts p
+        JOIN social_accounts a ON a.id = p.account_id
+        WHERE a.entity_type = 'mep'
+          AND a.entity_key = ANY(:ids)
+          AND NOT p.is_repost
+          AND p.posted_at >= now() - make_interval(days => :days)
+        ORDER BY a.entity_key, p.posted_at DESC
+    """), {"ids": [str(i) for i in mep_ids], "days": _LATEST_SOCIAL_DAYS}).mappings().all()
+    out: dict = {}
+    for r in rows:
+        bucket = out.setdefault(r["entity_key"], [])
+        if len(bucket) >= _LATEST_SOCIAL_PER_MEP:
+            continue
+        bucket.append({
+            "platform": r["platform"],
+            "posted_at": r["posted_at"].isoformat() if r["posted_at"] else None,
+            "text": r["txt"],
+            "url": r["post_url"],
+        })
+    return out
 
 
 @router.get("/questions")

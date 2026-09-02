@@ -164,18 +164,69 @@ def fetch_mastodon(instance, user, n=10):
 
 
 def resolve_youtube_channel_id(url):
-    """Resolve a YouTube /@handle, /user/X or /c/X URL to its channel id (UC...).
-    Fetches the page and reads the canonical channel id. Cached by the caller into
-    social_accounts.platform_account_id so it runs once per account."""
+    """Resolve a YouTube /@handle, /user/X, /c/X or bare /X URL to its channel id (UC...).
+
+    Reads the page's OWN identity only: the canonical <link> (always /channel/UC...)
+    or the `externalId` inside `channelMetadataRenderer`. Never the first
+    `"channelId"` on the page: on the European Parliament's own page that key
+    belongs to the European Commission (related channels are serialised before the
+    page's metadata), which is how 19 EU handles collapsed onto one channel and
+    every EC video was stored as 19 "original" statements (found 2 Sep 2026).
+    Cached by the caller into social_accounts.platform_account_id, so a wrong answer
+    here is permanent; when in doubt return None and let the account skip."""
+    html = _youtube_page(url)
+    if html is None:
+        return None
+    cid = _own_channel_id(html)
+    if cid:
+        # The canonical link of the page served for the account's OWN URL is the
+        # account's identity. Do NOT additionally require the modern @handle to equal
+        # the legacy /user/ or /c/ name: `/user/eutube` legitimately serves the channel
+        # whose vanity handle is @EuropeanCommission, and an equality gate cleared the
+        # Commission itself on the 2 Sep 2026 dry run.
+        return cid
+    # No canonical link: a dead legacy name (404) or a redirect page. Retry once
+    # through the modern handle form before giving up.
+    handle = re.search(r'/(?:@|user/|c/)([^/?#]+)', url) or re.search(r'youtube\.com/([^/?#@]+)/?$', url)
+    if handle and not url.startswith("https://www.youtube.com/@"):
+        return resolve_youtube_channel_id(f"https://www.youtube.com/@{handle.group(1)}")
+    return None
+
+
+def _youtube_page(url):
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": _BROWSER_UA})
-        html = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+        req = urllib.request.Request(url, headers={"User-Agent": _BROWSER_UA, "Accept-Language": "en-GB,en;q=0.9"})
+        return urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
     except Exception:
         return None
-    m = (re.search(r'"channelId":"(UC[\w-]+)"', html)
-         or re.search(r'<link rel="canonical" href="https://www\.youtube\.com/channel/(UC[\w-]+)"', html)
-         or re.search(r'youtube\.com/channel/(UC[\w-]+)', html))
-    return m.group(1) if m else None
+
+
+def _own_channel_id(html):
+    m = re.search(r'<link rel="canonical" href="https://www\.youtube\.com/channel/(UC[\w-]+)"', html)
+    if m:
+        return m.group(1)
+    i = html.find('"channelMetadataRenderer"')
+    if i >= 0:
+        m = re.search(r'"externalId":"(UC[\w-]+)"', html[i:i + 6000])
+        if m:
+            return m.group(1)
+    return None
+
+
+def _own_handle(html):
+    """The page's own vanity handle, lower-cased, or None. The FIRST vanityChannelUrl on
+    the page is the page's own; related channels' entries come later."""
+    m = re.search(r'"vanityChannelUrl":"[^"]*?/(?:@|user/|c/)([^"/?#]+)"', html)
+    return m.group(1).lower() if m else None
+
+
+def _channel_matches_handle(channel_id, handle):
+    """True when the channel page for `channel_id` declares `handle` as its own vanity
+    handle. Used by the collision backfill; any fetch failure counts as a mismatch."""
+    html = _youtube_page(f"https://www.youtube.com/channel/{channel_id}")
+    if html is None:
+        return False
+    return _own_handle(html) == handle.lower().lstrip("@")
 
 
 def fetch_youtube(channel_id, n=10):

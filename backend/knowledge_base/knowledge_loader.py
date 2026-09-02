@@ -14042,6 +14042,27 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'recommandations par pays': ['eu_economic_governance_reform_2024'],
     'raccomandazioni specifiche per paese': ['eu_economic_governance_reform_2024'],
     'landspecifieke aanbevelingen': ['eu_economic_governance_reform_2024'],
+    # Shadow fleet / Operation IRINI (2 Sep 2026, /social-eu: MV SUN boarding). Six languages, accented AND unaccented.
+    'shadow fleet': ['eu_sanctions_implementation_framework'],
+    'russian shadow fleet': ['eu_sanctions_implementation_framework'],
+    "russia's shadow fleet": ['eu_sanctions_implementation_framework'],
+    'mv sun': ['eu_sanctions_implementation_framework'],
+    'flota fantasma': ['eu_sanctions_implementation_framework'],
+    'flota fantasma rusa': ['eu_sanctions_implementation_framework'],
+    'flota fantasma russa': ['eu_sanctions_implementation_framework'],
+    'operación irini': ['eu_sanctions_implementation_framework'],
+    'operacion irini': ['eu_sanctions_implementation_framework'],
+    'operació irini': ['eu_sanctions_implementation_framework'],
+    'flotte fantôme': ['eu_sanctions_implementation_framework'],
+    'flotte fantome': ['eu_sanctions_implementation_framework'],
+    'flotte fantôme russe': ['eu_sanctions_implementation_framework'],
+    'opération irini': ['eu_sanctions_implementation_framework'],
+    'flotta ombra': ['eu_sanctions_implementation_framework'],
+    'flotta ombra russa': ['eu_sanctions_implementation_framework'],
+    'operazione irini': ['eu_sanctions_implementation_framework'],
+    'schaduwvloot': ['eu_sanctions_implementation_framework'],
+    'russische schaduwvloot': ['eu_sanctions_implementation_framework'],
+    'operatie irini': ['eu_sanctions_implementation_framework'],
 }
 
 
