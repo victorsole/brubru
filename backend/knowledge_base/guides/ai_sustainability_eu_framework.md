@@ -1,6 +1,8 @@
 # AI and Sustainability: the EU Regulatory Framework
 
 ## QUICK FACTS
+
+- **Data centre specifics (reporting duty, PUE/WUE/ERF/REF, EU stock, Spain and Catalonia) live in `eu_data_centres_energy_sustainability`.** This guide keeps the AI framing.
 - **Topic**: How EU law treats the environmental impact of artificial intelligence — energy use, water use, hardware footprint, data-centre obligations, GPAI sustainability disclosures, and the upcoming Cloud and AI Development Act
 - **The compatibility question is settled in policy.** The EU has moved past asking whether AI and sustainability are compatible. The legislative architecture below operationalises the compatibility — what remains for industry is compliance, not philosophical debate.
 - **Anchor instruments (already in force or adopted)**:
@@ -66,3 +68,9 @@ For policy professionals attending events that frame AI & sustainability as an o
 - The EU regulatory package answers the compatibility question with operational obligations, not philosophical positions.
 - The work-to-do is mapping each user's exposure to the 9 instruments above, and preparing for the 27 May Cloud and AI Development Act.
 - Networking events that ignore the legislative anchor leave attendees with talking points but no compliance clarity. The opportunity is to be the room's policy backbone, not to relitigate settled questions.
+
+## Data centres: where the detail lives
+
+This guide covers what AI demand does to EU energy and sustainability policy. The data centres themselves have their own guide, `eu_data_centres_energy_sustainability`, which carries the Energy Efficiency Directive reporting duty and its 500 kW floor, the four indicators and their EU values, the first-cycle coverage result (770 facilities, about 36%, six Member States silent), the EU stock and installed capacity, the Spanish and Catalan build-out, and the siting politics.
+
+Deliberately not restated here: any data centre figure. Two guides holding the same number is two guides that disagree the moment one is updated.

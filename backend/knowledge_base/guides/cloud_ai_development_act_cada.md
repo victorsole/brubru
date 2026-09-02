@@ -1,6 +1,8 @@
 # Cloud and AI Development Act / CADA (COM(2026) 502)
 
 ## QUICK FACTS
+
+- **AI gigafactory funding: 18 of 27 governments pledged, nine did not, about €3bn committed, public funding capped at 35%. Detail in the body; data centres themselves in `eu_data_centres_energy_sustainability`.**
 - **ADOPTED by the College on 3 June 2026** as the centrepiece of the European Technological Sovereignty Package (with Chips Act 2.0, the EU Open Source Strategy, and the Strategic Roadmap for Digitalisation and AI in Energy).
 - Full name: Proposal for a Regulation establishing a framework of measures for strengthening Europe's cloud and AI ecosystem (Cloud and AI Development Act). Reference **COM(2026) 502 final**; procedure **2026/0138(COD)**; proposal CELEX 52026PC0502. Accompanying: ANNEXES 1-3, IA SWD(2026) 502 (Parts 1-2), IA executive summary SWD(2026) 503, SEC(2026) 502.
 - Status: PROPOSAL (ordinary legislative procedure). Goes to EP (lead committee ITRE expected) + Council. Lead: EVP Henna Virkkunen; DG CNECT (+ DG DIGIT). "Text with EEA relevance".
@@ -107,3 +109,28 @@ A Union establishment; B location of infrastructure/assets/personnel; C data loc
 - eu_chips_act_2_0 (companion act)
 - ai_continent_action_plan, apply_ai_strategy_public_sector, ai_act_regulation
 - eu_data_act, nis2_directive, eu_cybersecurity_certification
+
+## AI gigafactories: who is actually paying (state of play, 31 August 2026)
+
+Seven gigafactories are planned, three large and four smaller. Governments must commit to buying compute from their national project before development starts, and the commitment must match or exceed EU funding.
+
+**Eighteen of twenty-seven governments pledged; nine did not.** About **€3 billion** was committed in total, and **public funding is capped at 35%** of total investment, so industry supplies the rest.
+
+| Member State | Pledge |
+|---|---|
+| Germany | **€1 billion** (€200m plus an additional €800m) |
+| Portugal, Spain, Italy, Greece | around €200m each, for a large site |
+| France, Denmark, Poland, Czechia | €100m each, for a smaller site |
+| Sweden | €50m |
+| Croatia, Hungary, Lithuania | €36m combined, backing Poland's bid |
+| Ireland | €10m, to a French-hosted site |
+| Lithuania | €1m |
+| Netherlands | declined, citing budget |
+
+Selection is expected early 2027, construction over the following eighteen months, and most public payments begin in **2028**, spread over five years. The investment lands only when a facility is operational and the government becomes a guaranteed customer.
+
+The industry association describes the programme as backed by up to €10bn in EU and national funding, expected to unlock at least €20bn privately. That is programme ambition, not money pledged; do not conflate the two.
+
+Related: a **€180 million sovereign cloud tender** was awarded to four European providers in April 2026, and **EURO-3C**, a €75 million federated telco-edge-cloud project, was announced in March 2026.
+
+Source: Politico Europe, 31 August 2026; Commission green cloud pages.

@@ -1,6 +1,8 @@
 # AI Continent Action Plan
 
 ## QUICK FACTS
+
+- **The "triple data centre capacity" target has a horizon: by 2035 (Politico, 31 Aug 2026). Cite it with that date. Base and detail in `eu_data_centres_energy_sustainability`.**
 - Adopted: 9 April 2025 by the European Commission
 - Announced by President von der Leyen at the AI Action Summit (Paris, February 2025)
 - Goal: make Europe a global leader in artificial intelligence
@@ -150,3 +152,9 @@ Expected H2 2025. Building on the Data Act and Data Governance Act:
 - **Chips Act:** Semiconductor production (Regulation (EU) 2023/1781)
 - **EuroHPC JU:** Joint Undertaking managing EU supercomputers
 - **Tech Sovereignty Package:** Expected 27 May 2026 (Cloud/AI Act, Chips Act 2, Open Source strategy)
+
+## The data centre capacity target, anchored
+
+The commitment to triple EU data centre capacity is reported with a horizon of **2035**. Cite it that way rather than as an open-ended ambition, and date the citation, because a target without a horizon rots into a claim nobody can check.
+
+For the base it triples from: EU installed IT power grew from **10,539 MW in 2023 to 14,784 MW in 2025**, and roughly **600 of the ~2,800** recorded EU facilities are not yet operational. Full detail, including the reporting duty and the constraint that growth is now limited by power availability, grid readiness and permitting rather than capital, is in `eu_data_centres_energy_sustainability`.
