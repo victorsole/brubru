@@ -533,7 +533,9 @@
       "questionsOnYours": "Questions sur vos intérêts",
       "allQuestions": "Questions récentes",
       "noQ": "Aucune question trouvée.",
-      "toQuestions": "Parcourir les questions individuelles dans Questions parlementaires"
+      "toQuestions": "Parcourir les questions individuelles dans Questions parlementaires",
+      "latestSocial": "Dernières publications",
+      "socialUnverified": "réseaux sociaux, non vérifié"
     },
     "plen": {
       "title": "Ordre du jour de la plénière",

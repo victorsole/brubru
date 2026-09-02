@@ -533,7 +533,9 @@
       "questionsOnYours": "Questions on your interests",
       "allQuestions": "Recent questions",
       "noQ": "No questions found.",
-      "toQuestions": "Browse the individual questions in Parliamentary Questions"
+      "toQuestions": "Browse the individual questions in Parliamentary Questions",
+      "latestSocial": "Latest posts",
+      "socialUnverified": "social, unverified"
     },
     "plen": {
       "title": "Plenary - Order of Business",

@@ -533,7 +533,9 @@
       "questionsOnYours": "Vragen over jouw interesses",
       "allQuestions": "Recente vragen",
       "noQ": "Geen vragen gevonden.",
-      "toQuestions": "Blader door de afzonderlijke vragen in Parlementaire Vragen"
+      "toQuestions": "Blader door de afzonderlijke vragen in Parlementaire Vragen",
+      "latestSocial": "Laatste berichten",
+      "socialUnverified": "sociale media, niet geverifieerd"
     },
     "plen": {
       "title": "Plenaire agenda",

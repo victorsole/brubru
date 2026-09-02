@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api/mep-watch`;
 function authHeaders() { const t = useAuth.getState().token; return t ? { Authorization: `Bearer ${t}` } : {}; }
-export interface MepRow { name: string; mep_id: string | null; profile_url: string | null; question_count: number; latest_date: string | null; sample_subjects: string[]; }
+export interface MepSocialPost { platform: string; posted_at: string | null; text: string; url: string; }
+export interface MepRow { name: string; mep_id: string | null; profile_url: string | null; question_count: number; latest_date: string | null; sample_subjects: string[]; latest_social?: MepSocialPost[]; }
 export interface MepQuestion { reference: string; type: string; subject: string; submitted_date: string | null; answered: boolean; source_url: string; }
 export const mepWatchService = {
   list: async (myInterests: boolean, search?: string): Promise<{ pi_active: boolean; total_meps: number; items: MepRow[] }> => {

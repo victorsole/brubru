@@ -533,7 +533,9 @@
       "questionsOnYours": "Preguntes sobre els teus interessos",
       "allQuestions": "Preguntes recents",
       "noQ": "No s'han trobat preguntes.",
-      "toQuestions": "Explora les preguntes individuals a Preguntes Parlamentàries"
+      "toQuestions": "Explora les preguntes individuals a Preguntes Parlamentàries",
+      "latestSocial": "Últimes publicacions",
+      "socialUnverified": "xarxes socials, sense verificar"
     },
     "plen": {
       "title": "Ordre del dia del Ple",

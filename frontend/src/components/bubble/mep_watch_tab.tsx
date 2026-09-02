@@ -94,6 +94,11 @@ export function MepWatchTab() {
                   {m.latest_date && <> · {t('bubble.mepw.latest', 'latest')} {fmtDate(m.latest_date)}</>}
                 </div>
                 {m.sample_subjects[0] && <div className="mepw-card__subj">{m.sample_subjects[0]}</div>}
+                {m.latest_social && m.latest_social[0] && (
+                  <div className="mepw-card__social" title={t('bubble.mepw.socialUnverified', 'Social post, unverified') as string}>
+                    <span className="mepw-social__badge">{m.latest_social[0].platform}</span> {m.latest_social[0].text}
+                  </div>
+                )}
               </div>
             </button>
           ))}
@@ -111,6 +116,20 @@ export function MepWatchTab() {
               <button className="mepw-modal__close" onClick={() => setOpen(null)}><Icon path={mdiClose} size={0.9} /></button>
             </header>
             <div className="mepw-modal__body">
+              {open.latest_social && open.latest_social.length > 0 && (
+                <>
+                  <h5>{t('bubble.mepw.latestSocial', 'Latest posts')} <span className="mepw-muted">({t('bubble.mepw.socialUnverified', 'social, unverified')})</span></h5>
+                  <ul className="mepw-social">
+                    {open.latest_social.map((p) => (
+                      <li key={p.url}>
+                        <span className="mepw-social__badge">{p.platform}</span>
+                        <a href={p.url} target="_blank" rel="noopener noreferrer">{p.text}</a>
+                        {p.posted_at && <span className="mepw-qdate">{fmtDate(p.posted_at)}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
               <h5><Icon path={mdiCommentQuestionOutline} size={0.7} /> {myInterests ? t('bubble.mepw.questionsOnYours', 'Questions on your interests') : t('bubble.mepw.allQuestions', 'Recent questions')}</h5>
               {questions === null ? (
                 <div className="mepw-tab__empty"><Icon path={mdiLoading} size={0.9} spin /></div>

@@ -52,3 +52,12 @@
   .mepw-modal { padding: 0; }
   .mepw-modal__panel { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; }
 }
+
+/* Latest social posts (Phase 4 social directory). A post is a signal, never the citable fact. */
+.mepw-card__social { font-size: 0.74rem; color: #64748b; margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mepw-social__badge { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0 0.35rem; border-radius: 3px; background: #e2e8f0; color: #334155; margin-right: 0.35rem; vertical-align: middle; }
+.mepw-social { list-style: none; margin: 0 0 1rem; padding: 0; }
+.mepw-social li { display: flex; gap: 0.5rem; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; }
+.mepw-social li a { flex: 1; min-width: 0; color: #1e293b; text-decoration: none; overflow-wrap: break-word; }
+.mepw-social li a:hover { text-decoration: underline; }
+@media (max-width: 767px) { .mepw-social li { flex-wrap: wrap; } }

@@ -533,7 +533,9 @@
       "questionsOnYours": "Interrogazioni sui tuoi interessi",
       "allQuestions": "Interrogazioni recenti",
       "noQ": "Nessuna interrogazione trovata.",
-      "toQuestions": "Sfoglia le singole interrogazioni in Interrogazioni parlamentari"
+      "toQuestions": "Sfoglia le singole interrogazioni in Interrogazioni parlamentari",
+      "latestSocial": "Ultimi post",
+      "socialUnverified": "social, non verificato"
     },
     "plen": {
       "title": "Ordine del giorno della plenaria",

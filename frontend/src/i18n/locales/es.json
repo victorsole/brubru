@@ -533,7 +533,9 @@
       "questionsOnYours": "Preguntas sobre tus intereses",
       "allQuestions": "Preguntas recientes",
       "noQ": "No se han encontrado preguntas.",
-      "toQuestions": "Explora las preguntas individuales en Preguntas Parlamentarias"
+      "toQuestions": "Explora las preguntas individuales en Preguntas Parlamentarias",
+      "latestSocial": "Últimas publicaciones",
+      "socialUnverified": "redes sociales, sin verificar"
     },
     "plen": {
       "title": "Orden del día del Pleno",
