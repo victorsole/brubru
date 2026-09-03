@@ -507,6 +507,29 @@ _NAMED_ROLE_RE = re.compile(
 )
 _CAP_NAME_RE = re.compile(r"\b[A-ZÀ-Þ][a-zà-ÿ]+\s+[A-ZÀ-Þ][A-Za-zÀ-ÿ'\-]+")  # First Last
 
+# Title-Case phrases this pattern matches that are NOT people (audit V2,
+# 3 Sep 2026). `_CAP_NAME_RE` carries no name-ness at all: on the 27 Aug
+# answer to "Has the EU banned social media for children?" it matched
+# "Member State", which paired with the word "rapporteur" elsewhere in the
+# text to fire a validator pass on a coincidence. Of the three validations
+# logged in fourteen days, that was one of them.
+_NOT_A_PERSON_RE = re.compile(
+    r"^(?:Member\s+States?|European\s+\w+|Digital\s+\w+|Cyber\s+\w+|Data\s+\w+"
+    r"|Official\s+Journal|Court\s+of|General\s+Court|Union\s+\w+|Council\s+\w+"
+    r"|Commission\s+\w+|Parliament\s+\w+|Regulation\s+\w+|Directive\s+\w+"
+    r"|Article\s+\w+|Annex\s+\w+|Chapter\s+\w+)$",
+    re.IGNORECASE,
+)
+
+
+def _looks_like_a_person(text: str) -> bool:
+    """True if some First-Last match in `text` is plausibly a person's name
+    rather than a Title-Case institutional term (audit V2, 3 Sep 2026)."""
+    for m in _CAP_NAME_RE.finditer(text):
+        if not _NOT_A_PERSON_RE.match(m.group(0)):
+            return True
+    return False
+
 
 def _response_needs_validation(response: str) -> bool:
     """True if the response has a checkable-fabrication surface worth the second
@@ -516,7 +539,7 @@ def _response_needs_validation(response: str) -> bool:
     if _VALIDATE_TRIGGER_RE.search(response):
         return True
     # A role claim is risky only when a specific name is attached.
-    if _NAMED_ROLE_RE.search(response) and _CAP_NAME_RE.search(response):
+    if _NAMED_ROLE_RE.search(response) and _looks_like_a_person(response):
         return True
     return False
 
@@ -681,6 +704,56 @@ _IT_DECISIVE = frozenset({
     "tramite", "piattaforme", "aspetti", "premesse", "difesa",
 })
 
+# Spanish- and Dutch-exclusive tokens, same contract as _CA_DECISIVE and
+# _IT_DECISIVE (audit D1 + D3, 3 Sep 2026).
+#
+# Why these exist. CA and IT already had a decisive pass that runs before the
+# bag-of-words scorer; ES and NL did not, and both lost queries to it:
+#
+#   "Cuantos centros de datos hay en Espana?"  -> NL, because ES scored
+#       LITERALLY ZERO (cuantos/centros/datos/hay/espana are all absent from
+#       the ES marker set) while "de" is an NL marker and scored 0.143.
+#   "Cuantas VLOP ha designado la Comision?"   -> FR, on a four-way 0.167 tie
+#       where every language matched only "la" and FR is declared first.
+#   "Wat is de Cyber Resilience Act?"          -> EN, because "is" is an EN
+#       marker and Dutch owns only "de". Every Dutch question about an
+#       English-titled act loses the same way -- and NL is one of the six.
+#
+# Construction rules, per feedback_language_detector_acronym_collisions:
+# every token was checked against the other five marker sets and against
+# _CA_DECISIVE / _IT_DECISIVE (0 collisions), and tokens that are ordinary
+# words in Catalan or Italian too were DROPPED even though no table held
+# them -- "norma", "vigor" and "entrada" are all Catalan, and CA "esta"
+# (from "està") folds onto the Spanish form. The ≤3-char acronym guard in
+# _detect_query_language applies to these tables as it does to the others,
+# so a capitalised EU acronym can never count as a word here.
+_ES_DECISIVE = frozenset({
+    # interrogatives and quantifiers -- the class that was missing entirely
+    "cuantos", "cuantas", "cuanto", "cuanta", "cual", "cuales", "donde",
+    "quienes", "cuando", "como",
+    # verbs and function words with no cross-language collision after folding
+    "hay", "segun", "desde", "sus", "ellos", "muy", "tambien", "porque", "asi",
+    "debe", "deben", "tiene", "tienen",
+    # articles/determiners that are ES-only against the other five
+    "los", "las",
+    # nouns whose CA/IT/FR forms differ after folding
+    "datos", "centros", "obligaciones", "empresas", "fabricante", "plazo",
+    "ley", "leyes",
+})
+
+_NL_DECISIVE = frozenset({
+    # interrogatives -- Dutch had none, which is why it only ever scored "de"
+    "wat", "wanneer", "hoeveel", "welke", "waarom", "hoe",
+    # auxiliaries and modals
+    "heeft", "hebben", "wordt", "worden", "moet", "moeten", "zijn", "treedt",
+    # function words with no collision after folding ("over" and "in" are
+    # deliberately absent: both are English words and would invert D3)
+    "het", "een", "niet", "ook", "van", "naar", "maar", "vanaf", "volgens",
+    # domain nouns and participles
+    "werking", "aangewezen", "geldt", "gelden", "bedrijven", "verplicht",
+    "regels", "wetgeving",
+})
+
 
 # Language NAMES, accent-folded, mapped to the Brubru code they request. Used
 # only by _detect_language_request below -- never by the bag-of-words scorer,
@@ -843,14 +916,20 @@ def _detect_query_language(text: str) -> str:
         1 for w in words if w.endswith(_CA_DECISIVE_SUFFIX)
     )
     _it_hits = sum(1 for w in words if _decisive(w, _IT_DECISIVE))
+    _es_hits = sum(1 for w in words if _decisive(w, _ES_DECISIVE))
+    _nl_hits = sum(1 for w in words if _decisive(w, _NL_DECISIVE))
     # Compared rather than short-circuited: an Italian sentence can clip a
     # single word from the Catalan list, and returning on first hit handed it
-    # to Catalan outright.
-    if _ca_hits or _it_hits:
-        if _ca_hits > _it_hits:
-            return "CA"
-        if _it_hits > _ca_hits:
-            return "IT"
+    # to Catalan outright. ES and NL joined the same comparison on 3 Sep 2026
+    # (audit D1 + D3); a STRICT majority is required, so a sentence that ties
+    # two decisive tables falls through to the bag-of-words scorer exactly as
+    # before rather than being decided by declaration order here.
+    _decisive_tally = {"CA": _ca_hits, "IT": _it_hits, "ES": _es_hits, "NL": _nl_hits}
+    _top = max(_decisive_tally.values())
+    if _top:
+        _leaders = [lang for lang, n in _decisive_tally.items() if n == _top]
+        if len(_leaders) == 1:
+            return _leaders[0]
 
     scores = {lang: sum(1 for w in words if w in markers) / len(words)
               for lang, markers in _LANG_MARKERS.items()}
@@ -4912,7 +4991,17 @@ USER QUESTION: {user_message}
                 name, asserted, canonical,
             )
             result = result[:a_start] + result[a_end:]
-        return re.sub(r"\s{2,}", " ", result).replace(" .", ".").replace(" ,", ",")
+        # HORIZONTAL whitespace only (audit W1, 3 Sep 2026). This tidy exists
+        # solely to close the gap a deleted apposition leaves behind, and that
+        # gap is never a newline. The old form was `\s{2,}`, and `\s` includes
+        # `\n`, so EVERY blank line in EVERY answer collapsed to a space --
+        # markdown tables welded onto the preceding sentence and the first item
+        # of every list was swallowed. Nothing above returns early when zero
+        # deletions occurred, and essentially every answer contains a "(" via a
+        # markdown link, so this ran on the whole corpus, not on the rare
+        # apposition. Reproduced on a normal answer: 11 newlines in, 5 out.
+        result = re.sub(r"[ \t]{2,}", " ", result)
+        return re.sub(r" +([.,])", r"\1", result)
 
     def _record_act_number_deletion(self, name: str, asserted: str, canonical: str) -> None:
         """

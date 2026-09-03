@@ -68,6 +68,70 @@ class ScrapedEuAgendaEvent:
 
 
 # --------------------------------------------------------------------------
+# euagenda topic badges that appear as the FIRST line of a listing card and are
+# NOT the event name (calendar audit, 3 September 2026). In --no-details mode the
+# title was taken as card_lines[0] with only the "BOOSTED" marker skipped, so
+# 126 rows landed in My EU Calendar titled "Agriculture", "Energy", "Regions"...
+# Two genuinely different events on 5 May 2026 were BOTH stored as "Agriculture",
+# which also made them look like duplicates to any (title, date) grouping.
+_EUAGENDA_TOPIC_BADGES = {
+    "agriculture", "aviation", "cities", "climate", "digital", "employment",
+    "energy", "environment", "home affairs", "regions", "renewable energy",
+    "science", "trade", "health", "transport", "justice", "security",
+    "economy", "finance", "research", "innovation", "education", "culture",
+    "defence", "migration", "enlargement", "budget", "fisheries", "maritime",
+    "consumers", "competition", "taxation", "social", "development",
+}
+
+
+def _title_from_slug(slug: str) -> str:
+    """Humanise a euagenda URL slug into a readable event title."""
+    if not slug:
+        return ""
+    words = [w for w in slug.replace("_", "-").split("-") if w]
+    if not words:
+        return ""
+    small = {"a", "an", "the", "of", "for", "and", "to", "in", "on", "from", "with", "at", "by"}
+    # A slug lower-cases acronyms, and "Eu Rural Innovation Forum" reads wrong
+    # in a calendar. Restore the ones that actually occur in EU event names.
+    acronyms = {
+        "eu", "ec", "ep", "eeas", "ecb", "eib", "eea", "efsa", "ema", "esma",
+        "eba", "eiopa", "enisa", "eppo", "olaf", "jrc", "cor", "eesc", "ecj",
+        "cjeu", "nato", "un", "oecd", "wto", "ilo", "who", "ai", "ict", "sme",
+        "smes", "co2", "esg", "gdpr", "dsa", "dma", "cbam", "espr", "ets",
+        "mff", "cap", "rrf", "stem", "r&d", "hpc", "5g", "6g",
+    }
+    def _cap(w: str, first: bool) -> str:
+        if w.lower() in acronyms:
+            return w.upper()
+        if not first and w in small:
+            return w
+        return w.capitalize()
+    out = [_cap(words[0], True)]
+    out += [_cap(w, False) for w in words[1:]]
+    joined = " ".join(out)
+    # A slug flattens the possessive: "europe-s-twin-transition" came back as
+    # "Europe S Twin Transition". Re-attach a lone "s" to the word before it.
+    joined = re.sub(r"\b(\w+) [Ss]\b", r"\1's", joined)
+    return joined
+
+
+def _best_card_title(title_preview: str, slug: str) -> str:
+    """Prefer the slug-derived title when the card's first line is a topic badge.
+
+    A badge is short and is the whole line, so a length test alone would eat
+    legitimately short event names; the badge set is checked explicitly and the
+    slug is only used when it actually yields something longer.
+    """
+    preview = (title_preview or "").strip()
+    if preview and preview.lower() not in _EUAGENDA_TOPIC_BADGES:
+        return preview
+    from_slug = _title_from_slug(slug)
+    if from_slug and len(from_slug) > len(preview):
+        return from_slug
+    return preview
+
+
 # Event type inference from title / subtitle
 # --------------------------------------------------------------------------
 
@@ -443,7 +507,7 @@ class EuAgendaScraper(BaseScraper):
                     )
                 else:
                     external_id = f"euagenda:{card['detail_url']}"
-                title = card["title_preview"] or card["slug"] or "(untitled event)"
+                title = _best_card_title(card["title_preview"], card["slug"]) or card["slug"] or "(untitled event)"
                 events.append(ScrapedEuAgendaEvent(
                     external_id=external_id,
                     source_url=card["detail_url"],

@@ -12,6 +12,7 @@ files you track).
 
 import logging
 import re
+from datetime import date as _date
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -29,6 +30,8 @@ from knowledge_base.eu_calendar_institutions import COMMISSION_DG_NAME
 from .auth_optional import get_current_user_optional
 
 logger = logging.getLogger(__name__)
+
+_EPOCH = _date(1970, 1, 1)  # sort sentinel for a row with neither date
 
 router = APIRouter(prefix="/api/eu-news", tags=["EU News"])
 
@@ -69,6 +72,10 @@ def _item_dict(e: EuNewsItem, interests: set, dgs: set, keywords: List[str], tra
         "title": e.title,
         "summary": e.summary,
         "news_date": e.news_date.isoformat() if e.news_date else None,
+        # Internal ordering key ONLY -- mirrors the coalesce the list query uses.
+        # Not a publication date and never rendered: `news_date` stays null when
+        # the upstream feed carried no date (feedback_backfill_no_hallucination).
+        "_order_date": (e.news_date or (e.created_at.date() if e.created_at else None)),
         "institution": e.institution,
         "commission_dg": e.commission_dg,
         "dg_name": COMMISSION_DG_NAME.get(e.commission_dg) if e.commission_dg else None,
@@ -179,7 +186,11 @@ def list_news(
 
         # Featured: most recent items with an image, PI-matching first.
         featured = [i for i in items if i["image_url"]]
-        featured = sorted(featured, key=lambda i: (i["matches_interests"], i["news_date"] or ""), reverse=True)[:5]
+        featured = sorted(
+            featured,
+            key=lambda i: (i["matches_interests"], i["_order_date"] or _EPOCH),
+            reverse=True,
+        )[:5]
 
         dg_counts = dict(db.query(EuNewsItem.commission_dg, func.count(EuNewsItem.id))
                          .filter(EuNewsItem.commission_dg.isnot(None))
@@ -189,6 +200,11 @@ def list_news(
         inst_counts = dict(db.query(EuNewsItem.institution, func.count(EuNewsItem.id))
                            .filter(EuNewsItem.institution.isnot(None))
                            .group_by(EuNewsItem.institution).all())
+
+        for _i in items:
+            _i.pop("_order_date", None)
+        for _i in featured:
+            _i.pop("_order_date", None)
 
         return {
             "items": items,

@@ -2079,7 +2079,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # Employment and Future of Work
     'platform work': ['employment_future_of_work'],
-    'right to disconnect': ['employment_future_of_work'],
+    'right to disconnect': ['employment_future_of_work', 'occupational_health_safety'],
     'youth guarantee': ['employment_future_of_work'],
     'esf+': ['employment_future_of_work', 'cohesion_policy_audit'],
     'algorithmic management': ['employment_future_of_work'],
@@ -4501,10 +4501,129 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'duty of vigilance': ['csddd_corporate_sustainability_due_diligence'],
     'supply chain liability': ['csddd_corporate_sustainability_due_diligence'],
     'adverse impacts value chain': ['csddd_corporate_sustainability_due_diligence'],
-    'forced labour regulation': ['csddd_corporate_sustainability_due_diligence'],
+    # 'forced labour regulation' used to point HERE, at the CSDDD guide. It is a
+    # different act -- Regulation (EU) 2024/3015, not Directive (EU) 2024/1760 --
+    # so the route did not merely miss, it answered confidently about the wrong
+    # instrument. Re-pointed 3 Sep 2026, the day the Commission published the
+    # FLR application guidelines (C/2026/4637). See the FLR trigger block below.
     'deforestation due diligence': ['csddd_corporate_sustainability_due_diligence'],
+
+    # --- Psychosocial risks at work (EMPL Art. 225 request, 2 Sep 2026) --------
+    # Added 3 Sep 2026. Before today NOT ONE of the 12,254 trigger keys contained
+    # the word "psychosocial", in any language, so the EMPL demand for a
+    # psychosocial-risks law had no retrieval path at all.
+    #
+    # Accented AND unaccented forms are both listed, never one instead of the
+    # other: matching is plain substring with NO accent folding. ES 'estrés' and
+    # CA 'estrès' are DIFFERENT strings and each needs its own key; the shared
+    # unaccented 'estres laboral' covers users who type without accents.
+    # 'mental health' (-> eu_pharmaceutical_framework) and 'algorithmic
+    # management' (-> employment_future_of_work) sit inside two of these keys;
+    # both co-fire deliberately, and the longer key is matched first because
+    # search_guides() sorts triggers by length.
+    'psychosocial risks': ['occupational_health_safety'],
+    'psychosocial risk': ['occupational_health_safety'],
+    'psychosocial risk assessment': ['occupational_health_safety'],
+    'work-related stress': ['occupational_health_safety'],
+    'work related stress': ['occupational_health_safety'],
+    'burnout at work': ['occupational_health_safety'],
+    'mental health at work': ['occupational_health_safety'],
+    'workplace harassment': ['occupational_health_safety'],
+    'algorithmic management workers': ['occupational_health_safety'],
+    'return to work plan': ['occupational_health_safety'],
+    # ES
+    'riesgos psicosociales': ['occupational_health_safety'],
+    'estrés laboral': ['occupational_health_safety'],
+    'estres laboral': ['occupational_health_safety'],
+    'salud mental en el trabajo': ['occupational_health_safety'],
+    'derecho a la desconexión': ['occupational_health_safety'],
+    'derecho a la desconexion': ['occupational_health_safety'],
+    # CA
+    'riscos psicosocials': ['occupational_health_safety'],
+    'estrès laboral': ['occupational_health_safety'],
+    'salut mental a la feina': ['occupational_health_safety'],
+    'dret a la desconnexió': ['occupational_health_safety'],
+    'dret a la desconnexio': ['occupational_health_safety'],
+    # FR
+    'risques psychosociaux': ['occupational_health_safety'],
+    'stress au travail': ['occupational_health_safety'],
+    'santé mentale au travail': ['occupational_health_safety'],
+    'sante mentale au travail': ['occupational_health_safety'],
+    'droit à la déconnexion': ['occupational_health_safety'],
+    'droit a la deconnexion': ['occupational_health_safety'],
+    # IT
+    'rischi psicosociali': ['occupational_health_safety'],
+    'stress lavoro correlato': ['occupational_health_safety'],
+    'salute mentale sul lavoro': ['occupational_health_safety'],
+    'diritto alla disconnessione': ['occupational_health_safety'],
+    # NL
+    'psychosociale risico': ['occupational_health_safety'],
+    'psychosociale arbeidsbelasting': ['occupational_health_safety'],
+    'mentale gezondheid op het werk': ['occupational_health_safety'],
+    'recht op onbereikbaarheid': ['occupational_health_safety'],
     'conflict minerals due diligence': ['csddd_corporate_sustainability_due_diligence'],
     'corporate sustainability directive': ['csddd_corporate_sustainability_due_diligence'],
+
+    # --- Forced Labour Regulation (EU) 2024/3015 -------------------------------
+    # Added 3 Sep 2026, the day the Commission published its application
+    # guidelines (Commission Notice C/2026/4637, OJ C 3.9.2026).
+    #
+    # Before today the ONLY forced-labour trigger in the corpus was
+    # 'forced labour regulation', and it pointed at the CSDDD guide -- a
+    # different instrument. That is a wrong-act answer, not a coverage gap,
+    # and it is the failure mode `legislation_acronyms` guards against in the
+    # linkifier but nothing guards against in the trigger map.
+    #
+    # Non-English keys are written ACCENTED and in the phrasing people actually
+    # type, with the unaccented form added AS WELL, never instead: matching is
+    # plain substring with NO accent folding, so an unaccented key can never
+    # fire on accented input (feedback_triggers_no_accent_folding).
+    # 'sifl' is 4 chars and is therefore auto-word-bounded by search_guides().
+    'forced labour regulation': ['forced_labour_regulation_2024_3015'],
+    'forced labor regulation': ['forced_labour_regulation_2024_3015'],
+    'forced labour ban': ['forced_labour_regulation_2024_3015'],
+    'forced labor ban': ['forced_labour_regulation_2024_3015'],
+    'eu forced labour ban': ['forced_labour_regulation_2024_3015'],
+    'products made with forced labour': ['forced_labour_regulation_2024_3015'],
+    'forced labour single portal': ['forced_labour_regulation_2024_3015'],
+    'forced labour risk database': ['forced_labour_regulation_2024_3015'],
+    'forced labour due diligence': ['forced_labour_regulation_2024_3015'],
+    'state-imposed forced labour': ['forced_labour_regulation_2024_3015'],
+    'state imposed forced labour': ['forced_labour_regulation_2024_3015'],
+    'sifl': ['forced_labour_regulation_2024_3015'],
+    'icsms forced labour': ['forced_labour_regulation_2024_3015'],
+    'regulation 2024/3015': ['forced_labour_regulation_2024_3015'],
+    '2024/3015': ['forced_labour_regulation_2024_3015'],
+    # ES
+    'reglamento sobre trabajo forzoso': ['forced_labour_regulation_2024_3015'],
+    'trabajo forzoso': ['forced_labour_regulation_2024_3015'],
+    'prohibición trabajo forzoso': ['forced_labour_regulation_2024_3015'],
+    'prohibicion trabajo forzoso': ['forced_labour_regulation_2024_3015'],
+    'productos fabricados con trabajo forzoso': ['forced_labour_regulation_2024_3015'],
+    # CA
+    'reglament sobre treball forçós': ['forced_labour_regulation_2024_3015'],
+    'treball forçós': ['forced_labour_regulation_2024_3015'],
+    'treball forcos': ['forced_labour_regulation_2024_3015'],
+    'prohibició treball forçós': ['forced_labour_regulation_2024_3015'],
+    'prohibicio treball forcos': ['forced_labour_regulation_2024_3015'],
+    'productes fabricats amb treball forçós': ['forced_labour_regulation_2024_3015'],
+    # FR
+    'règlement travail forcé': ['forced_labour_regulation_2024_3015'],
+    'reglement travail force': ['forced_labour_regulation_2024_3015'],
+    'travail forcé': ['forced_labour_regulation_2024_3015'],
+    'travail force': ['forced_labour_regulation_2024_3015'],
+    'interdiction travail forcé': ['forced_labour_regulation_2024_3015'],
+    'produits issus du travail forcé': ['forced_labour_regulation_2024_3015'],
+    # IT
+    'regolamento lavoro forzato': ['forced_labour_regulation_2024_3015'],
+    'lavoro forzato': ['forced_labour_regulation_2024_3015'],
+    'divieto lavoro forzato': ['forced_labour_regulation_2024_3015'],
+    'prodotti realizzati con lavoro forzato': ['forced_labour_regulation_2024_3015'],
+    # NL
+    'verordening dwangarbeid': ['forced_labour_regulation_2024_3015'],
+    'dwangarbeid': ['forced_labour_regulation_2024_3015'],
+    'verbod op dwangarbeid': ['forced_labour_regulation_2024_3015'],
+    'producten gemaakt met dwangarbeid': ['forced_labour_regulation_2024_3015'],
     # CSDDD multilingual
     'devoir de vigilance': ['csddd_corporate_sustainability_due_diligence'],
     'debida diligencia empresarial': ['csddd_corporate_sustainability_due_diligence'],

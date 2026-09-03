@@ -174,7 +174,17 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                     if day_date is None:
                         continue
 
-                    ext_id = f"ep_{year}_w{week_num}_plenary_{day_name.lower()}"
+                    # Identity is the DATE, not the upstream week label
+                    # (calendar audit, 3 Sep 2026). This used to be
+                    # f"ep_{year}_w{week_num}_plenary_{day_name.lower()}", and
+                    # `week_num` comes from the source JSON rather than from the
+                    # date. When the EP relabelled the September plenary week
+                    # 37 -> 38 between the 21 July and 24 August runs, every day
+                    # of that session got a NEW external_id, the
+                    # uq_calendar_source_external_id index saw an unseen key,
+                    # and My EU Calendar showed the plenary twice. 28 rows.
+                    # A date is stable; a week label upstream is not.
+                    ext_id = f"ep_{year}_plenary_{day_date.isoformat()}"
                     if ext_id in seen_external_ids:
                         continue
                     seen_external_ids.add(ext_id)
