@@ -43,6 +43,7 @@ Usage:
     python3.12 scripts/backfill_carriages_from_emeeting.py --dry-run          # default
     python3.12 scripts/backfill_carriages_from_emeeting.py --min-docs 5 --apply
 """
+
 import argparse
 import os
 import pathlib
@@ -52,15 +53,12 @@ import uuid
 _REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
-sys.path.insert(0, os.path.join(_REPO_ROOT, "backend"))
 
-from dotenv import load_dotenv  # noqa: E402
+import psycopg2
+import psycopg2.extras
+from dotenv import load_dotenv
 
 load_dotenv(os.path.join(_REPO_ROOT, "backend", ".env"))
-
-from sqlalchemy import text  # noqa: E402
-from core.database import SessionLocal  # noqa: E402
-
 
 SELECT_GAP = """
 SELECT d.procedure_ref,
@@ -74,78 +72,93 @@ FROM ep_emeeting_documents d
 LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = d.procedure_ref
 WHERE d.procedure_ref IS NOT NULL AND c.id IS NULL
 GROUP BY d.procedure_ref
-HAVING count(*) >= :min_docs
+HAVING count(*) >= %(min_docs)s
 ORDER BY count(*) DESC
 """
+
+# Column names and enum CASE both come from the live schema, not from memory.
+# The first --apply died on `created_at` (this table has first_seen /
+# last_updated) and on lower-case enum values (they are TABLED / OEIL_DIRECT).
+# A dry-run that returns before the INSERT cannot catch either, so the dry-run
+# below actually runs the statement and rolls it back.
+INSERT_SQL = """
+INSERT INTO legislative_carriages
+    (id, file_id, title, current_status, immc_tags,
+     oeil_procedure_ref, lead_committee, source, first_seen, last_updated)
+VALUES
+    (%(id)s, %(file_id)s, %(title)s, 'TABLED', '{}'::jsonb,
+     %(ref)s, %(committee)s, 'OEIL_DIRECT', now(), now())
+ON CONFLICT DO NOTHING
+"""
+
+
+def params_for(r):
+    return {"id": str(uuid.uuid4()), "file_id": r["procedure_ref"],
+            "title": r["best_title"][:2000], "ref": r["procedure_ref"],
+            "committee": r["committee"]}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="perform the writes (default is dry-run)")
     ap.add_argument("--dry-run", action="store_true", default=True)
-    ap.add_argument("--min-docs", type=int, default=1,
-                    help="only create a carriage for procedures with at least this many documents")
-    ap.add_argument("--limit", type=int, default=0, help="cap the number created (0 = no cap)")
+    ap.add_argument("--min-docs", type=int, default=1)
+    ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()
 
-    db = SessionLocal()
-    try:
-        rows = db.execute(text(SELECT_GAP), {"min_docs": args.min_docs}).mappings().all()
-        print(f"procedures with eMeeting documents and no carriage (>= {args.min_docs} docs): {len(rows)}")
-        total_docs = sum(r["doc_count"] for r in rows)
-        print(f"documents they carry: {total_docs}")
+    url = os.environ.get("DATABASE_URL")
+    if not url:
+        print("[ERROR] DATABASE_URL not set; aborting rather than guessing.")
+        return 2
 
-        skipped_untitled = [r for r in rows if not r["best_title"]]
-        usable = [r for r in rows if r["best_title"]]
-        print(f"  usable (eMeeting supplied a title): {len(usable)}")
-        print(f"  SKIPPED, no title in eMeeting:      {len(skipped_untitled)}"
-              f"  -- a carriage with no title is worse than no carriage")
+    conn = psycopg2.connect(url)
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(SELECT_GAP, {"min_docs": args.min_docs})
+    rows = cur.fetchall()
 
-        if args.limit:
-            usable = usable[: args.limit]
+    print(f"procedures with eMeeting documents and no carriage (>= {args.min_docs} docs): {len(rows)}")
+    print(f"documents they carry: {sum(r['doc_count'] for r in rows)}")
+    usable = [r for r in rows if r["best_title"]]
+    skipped = [r for r in rows if not r["best_title"]]
+    print(f"  usable (eMeeting supplied a title): {len(usable)}")
+    print(f"  SKIPPED, no title in eMeeting:      {len(skipped)}  -- a carriage with no title is worse than none")
+    if args.limit:
+        usable = usable[: args.limit]
 
-        print("\ntop of the list:")
-        for r in usable[:12]:
-            print(f"   {r['procedure_ref']:22} {r['doc_count']:4} docs  {r['committee'] or '-':6} "
-                  f"{r['newest_meeting']}  {(r['best_title'] or '')[:56]}")
+    for r in usable[:10]:
+        print(f"   {r['procedure_ref']:22} {r['doc_count']:4} docs  {(r['committee'] or '-'):6} "
+              f"{r['newest_meeting']}  {(r['best_title'] or '')[:52]}")
 
-        if not args.apply:
-            print("\n[DRY-RUN] nothing written. Re-run with --apply to create these carriages.")
-            return 0
+    if usable:
+        try:
+            cur.execute(INSERT_SQL, params_for(usable[0]))
+            conn.rollback()
+            print("  [OK] INSERT validated against the live schema, then rolled back")
+        except Exception as exc:                                  # noqa: BLE001
+            conn.rollback()
+            print(f"  [ABORT] INSERT does not match the schema: {type(exc).__name__}: {str(exc)[:170]}")
+            return 2
 
-        created = 0
-        for r in usable:
-            db.execute(text("""
-                INSERT INTO legislative_carriages
-                    (id, file_id, title, current_status, immc_tags,
-                     oeil_procedure_ref, lead_committee, source, created_at, updated_at)
-                VALUES
-                    (:id, :file_id, :title, 'tabled', '{}'::jsonb,
-                     :ref, :committee, 'oeil_direct', now(), now())
-                ON CONFLICT DO NOTHING
-            """), {
-                "id": str(uuid.uuid4()),
-                "file_id": r["procedure_ref"],
-                "title": r["best_title"][:500],
-                "ref": r["procedure_ref"],
-                "committee": r["committee"],
-            })
-            created += 1
-        db.commit()
-
-        # Verify by query, not by the counter. Silence is not success.
-        remaining = db.execute(text("""
-            SELECT count(DISTINCT d.procedure_ref)
-            FROM ep_emeeting_documents d
-            LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = d.procedure_ref
-            WHERE d.procedure_ref IS NOT NULL AND c.id IS NULL
-        """)).scalar()
-        print(f"[OK] created {created} carriages. Procedures still without one: {remaining}")
-        print("     Next: run enrich_carriages.py / update_carriage_statuses_from_oeil.py "
-              "to fill status and rapporteur from OEIL.")
+    if not args.apply:
+        print("\n[DRY-RUN] nothing written. Re-run with --apply to create these carriages.")
         return 0
-    finally:
-        db.close()
+
+    created = 0
+    for r in usable:
+        cur.execute(INSERT_SQL, params_for(r))
+        created += cur.rowcount
+    conn.commit()
+
+    cur.execute("""SELECT count(DISTINCT d.procedure_ref) AS n
+                   FROM ep_emeeting_documents d
+                   LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = d.procedure_ref
+                   WHERE d.procedure_ref IS NOT NULL AND c.id IS NULL""")
+    remaining = cur.fetchone()["n"]
+    cur.execute("SELECT count(*) AS n FROM legislative_carriages")
+    total = cur.fetchone()["n"]
+    print(f"[OK] created {created} carriages (table now {total}). Procedures still without one: {remaining}")
+    print("     Next: enrich_carriages.py / update_carriage_statuses_from_oeil.py for status and rapporteur.")
+    return 0
 
 
 if __name__ == "__main__":

@@ -217,7 +217,9 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                     if day_date is None:
                         continue
 
-                    ext_id = f"ep_{year}_w{week_num}_{day_name.lower()}_{day_activity}"
+                    # Date-derived, same reason as the plenary branch above:
+                    # week_num comes from the source JSON and is not stable.
+                    ext_id = f"ep_{year}_{day_date.isoformat()}_{day_activity}"
                     if ext_id in seen_external_ids:
                         continue
                     seen_external_ids.add(ext_id)
@@ -243,7 +245,9 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                     })
             else:
                 # Single multi-day event for the week
-                ext_id = f"ep_{year}_w{week_num}_{activity}"
+                # Date-derived: a whole-week event is identified by the week's
+                # START DATE, never by the upstream week label.
+                ext_id = f"ep_{year}_{start_date.isoformat()}_{activity}"
                 if ext_id in seen_external_ids:
                     continue
                 seen_external_ids.add(ext_id)
