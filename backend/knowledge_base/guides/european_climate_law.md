@@ -1,8 +1,9 @@
 # European Climate Law
 
 ## QUICK FACTS
-**LATEST (Monday 11 May 2026)**: **Commission presents updated EU ETS benchmarks for consultation** (press release IP/26/1044). DG CLIMA opens consultation on the revised free-allocation benchmarks for installations covered by the EU ETS; the revision feeds into the broader ETS Review legislative timetable. Cross-link to today's (12 May) High-Level Stakeholder Roundtable on EU ETS Review (Brussels). The benchmarks consultation is the technical layer underneath the political review architecture. Source: ec.europa.eu/commission/presscorner/detail/en/ip_26_1044 (11 May 2026).
-**LATEST (Tuesday 12 May 2026 — TODAY)**: **High-Level Stakeholder Roundtable on EU ETS Review** — convened by Commission building on the **March 2026 European Council Conclusions** in which President von der Leyen announced the initiative. Roundtable format gathers industry, civil-society, Member State representatives to feed into the ETS Review legislative timetable (Commission proposal expected late 2026 / early 2027). Topics: ETS price stability mechanisms post-2030, Market Stability Reserve adjustments, free-allocation phase-out trajectory, ETS2 (buildings + road transport) entry-into-force preparation, Carbon Border Adjustment Mechanism interaction. Cross-link: `accelerateeu_fossil_energy_crisis` (price-shock cushioning), `eu_emissions_trading_system` if exists. Source: euagenda.eu listing for 12 May 2026; building on EUCO conclusions March 2026.
+- **LATEST (2 September 2026 — AN AARHUS REVIEW REQUEST CANNOT REOPEN THE CLIMATE LAW'S TARGETS):** in **Case T-120/24, Global Legal Action Network and CAN-Europe v Commission**, the **General Court dismissed the action in its entirety**, upholding the Commission's refusal to internally review the implementing decision setting Member States' annual greenhouse gas emission allocations for **2023-2030**. **Practical effect: the Aarhus internal-review route reaches implementing acts, not the legislative targets behind them.** Detail in 'The 2026 Aarhus review judgment' below. Source: CJEU press release No 114/26, https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260114en.pdf
+**PRIOR (11 May 2026):** Commission presented updated EU ETS benchmarks for consultation.
+**PRIOR (12 May 2026):** High-Level Stakeholder Roundtable on the EU ETS review.
 Full title: Regulation (EU) 2021/1119 establishing the framework for achieving climate neutrality (European Climate Law)
 CELEX: 32021R1119
 2040 amendment: Regulation (EU) 2026/667 amending Regulation (EU) 2021/1119 (published in OJ 18 March 2026)
@@ -24,7 +25,7 @@ ESABCC recommendation: 90-95% net reduction by 2040
 ETS emissions trend (10 April 2026): DG CLIMA confirms EU ETS sustains downward trend in covered emissions. Supports trajectory toward 2030 and 2040 targets.
 Energy Union Task Force (10 April 2026): Calls for enhanced EU-wide coordination to safeguard energy security
 EPRS Briefing (13 April 2026): "The First Conference on Transitioning Away from Fossil Fuels - 24-29 April 2026, Santa Marta, Colombia" -- follow-up to COP28 UAE Consensus, EU delegation preparatory position, fossil fuel phase-down roadmaps, finance for developing countries. Ref: EPRS_UNK_5ff48ae0d309
-**LATEST (28 April 2026, DG DEFIS / Copernicus)**: **"Europe's warming accelerates beyond global trend, new Copernicus data shows"** -- the European State of the Climate report (joint Copernicus Climate Change Service C3S + WMO) confirms Europe is warming faster than the global average. Reinforces the empirical case for the 2040 -90% target (Reg. 2026/667) and the urgency of ETS2 buildings/road-transport implementation in 2028. Source: ec.europa.eu/commission/presscorner/detail/en/.
+**PRIOR (28 April 2026, Copernicus):** Europe's warming is accelerating beyond the global trend.
 EPRS Briefing (16 April 2026): "Certifying EU permanent carbon removals: State of play in implementing the EU's Carbon Removal and Carbon Farming Regulation" -- first delegated regulation (3 Feb 2026) supplementing CRCF certification framework for permanent carbon removals, scrutiny period 2 months + 2 months extension, adoption 20 days after OJ publication. Ref: EPRS_BRI(2026)785709
 
 ## Original Climate Law (2021)
@@ -95,3 +96,33 @@ The Climate Law targets are implemented through the Fit for 55 legislative packa
 - `eu_energy_policy` -- EU energy policy and legislation
 - `ecodesign_digital_product_passport` -- ESPR and circular economy
 - `industrial_accelerator_act` -- Clean Industrial Deal
+
+## The 2026 Aarhus review judgment (T-120/24)
+
+On **2 September 2026** the General Court delivered its judgment in **Case T-120/24, Global Legal Action
+Network and CAN-Europe v Commission**, and **dismissed the action in its entirety**.
+
+**What was challenged.** Two environmental NGOs asked the Commission to carry out an internal review of
+the implementing decision fixing the Member States' **annual greenhouse gas emission allocations for the
+period 2023 to 2030**. They argued the decision rested on emission-reduction targets that were inadequate
+in the light of fundamental rules of EU and international law, in particular the **Paris Agreement**, and
+on an impact assessment they said was vitiated by several shortcomings. The Commission refused the
+request; the NGOs went to the General Court.
+
+**What the Court held.** The criticisms were, in substance, **directed at the reduction targets set by
+the legislature** in EU legislative acts, in particular the **European Climate Law**, and at the impact
+assessment that preceded their adoption — not at any failing specific to the contested implementing
+decision. The contested decision was adopted in the exercise of an **implementing power**: the Commission
+was required to apply the targets the legislature had defined and to set the annual allocations under the
+rules in the basic legislation. It could **neither amend those targets nor replace them with a different
+level of climate ambition**. To accept that an internal-review request could make the Commission reopen
+them would let it **indirectly amend legislative choices adopted by the Parliament and the Council**,
+which is incompatible with the limits on the Commission's implementing power.
+
+**Why it matters.** The Aarhus internal-review mechanism is a real route to challenge EU environmental
+administrative acts, but this judgment marks its ceiling: it reaches the **implementing act**, not the
+**legislative target** behind it. A challenge to the level of EU climate ambition has to be brought
+against the legislative choice, not against the decision that applies it.
+
+Source: Court of Justice of the European Union, press release No 114/26, Luxembourg, 2 September 2026 —
+https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260114en.pdf

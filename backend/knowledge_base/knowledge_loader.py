@@ -4508,6 +4508,50 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # FLR application guidelines (C/2026/4637). See the FLR trigger block below.
     'deforestation due diligence': ['csddd_corporate_sustainability_due_diligence'],
 
+    # --- 2 September 2026 General Court judgments, and the gaps they exposed ---
+    # Added 3 Sep 2026 from /social-eu. Both judgments were announced by the
+    # Court's own Mastodon account and reached NEITHER the /news scrape ledger
+    # NOR any trigger, so Brubru could not answer on either.
+    #
+    # T-357/24 Opera Norway v Commission -- the first successful Article 3(5)
+    # rebuttal: Microsoft met the quantitative thresholds and still escaped
+    # designation for Edge. The DMA guide had PREDICTED this judgment and left
+    # itself an instruction to record the outcome on 3 September; this is it.
+    'opera norway': ['digital_markets_act'],
+    'edge gatekeeper': ['digital_markets_act'],
+    't-357/24': ['digital_markets_act'],
+    'microsoft edge dma': ['digital_markets_act'],
+    'important gateway': ['digital_markets_act'],
+    'gatekeeper rebuttal': ['digital_markets_act'],
+    'rebut gatekeeper presumption': ['digital_markets_act'],
+    # T-120/24 GLAN and CAN-Europe -- the Aarhus internal-review route reaches
+    # an implementing act, not the legislative target behind it. "aarhus" had
+    # ZERO triggers across the whole corpus before today.
+    'aarhus regulation': ['european_climate_law'],
+    'aarhus internal review': ['european_climate_law'],
+    'internal review request': ['european_climate_law'],
+    't-120/24': ['european_climate_law'],
+    'global legal action network': ['european_climate_law'],
+    'can europe': ['european_climate_law'],
+    'annual emission allocations': ['european_climate_law'],
+    # Hybrid threats and sabotage. Ten guides DISCUSS them and not one trigger
+    # pointed at any of them, on the day a Russian sabotage attempt on Leipzig
+    # airport was the single biggest EU story on social media -- von der Leyen
+    # with Chancellor Merz and NATO's Rutte, Kallas calling it state-sponsored
+    # terrorism -- and the /news scrape carried it only as a MEDIUM statement.
+    'hybrid threats': ['eu_nato_southern_neighbourhood', 'eeas_institution_hrvp_kallas'],
+    'hybrid attack': ['eu_nato_southern_neighbourhood', 'eeas_institution_hrvp_kallas'],
+    'hybrid warfare': ['eu_nato_southern_neighbourhood'],
+    'sabotage': ['eu_nato_southern_neighbourhood'],
+    'state-sponsored terrorism': ['eeas_institution_hrvp_kallas'],
+    'amenazas híbridas': ['eu_nato_southern_neighbourhood'],
+    'amenazas hibridas': ['eu_nato_southern_neighbourhood'],
+    'amenaces híbrides': ['eu_nato_southern_neighbourhood'],
+    'amenaces hibrides': ['eu_nato_southern_neighbourhood'],
+    'menaces hybrides': ['eu_nato_southern_neighbourhood'],
+    'minacce ibride': ['eu_nato_southern_neighbourhood'],
+    'hybride dreigingen': ['eu_nato_southern_neighbourhood'],
+
     # --- Psychosocial risks at work (EMPL Art. 225 request, 2 Sep 2026) --------
     # Added 3 Sep 2026. Before today NOT ONE of the 12,254 trigger keys contained
     # the word "psychosocial", in any language, so the EMPL demand for a
