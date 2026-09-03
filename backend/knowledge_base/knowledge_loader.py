@@ -54,6 +54,17 @@ _WORD_BOUNDED_TRIGGERS = frozenset({
     "cultura",   # a deliberate ES/CA/IT key, but as a substring it matches the
                  # ENGLISH "cultural" and "agri-CULTURA-l"; 5 of 6 sample matches
                  # were English words. Bounding keeps the Spanish, drops the rest.
+    # Added /social-eu 3 Sep 2026, caught by the negative tests before shipping.
+    # SIX chars, so also outside the <=4 auto-bounding band.
+    "arctic",    # inside "Ant-ARCTIC": "What is the Antarctic Treaty?" returned the
+                 # EU Arctic policy guide. A 5-char 'artic' key was worse still --
+                 # it sits inside "ARTICle", so "Which article of the GDPR covers
+                 # data portability?" returned the Arctic guide as its TOP hit --
+                 # and was removed rather than bounded.
+    "artico",    # ES/IT, inside "ant-ARTICO".
+    "artic",     # inside "ARTICle" -- the worst of them; bounded, "l'Artic" (CA) works.
+    "artica",    # ES/IT feminine, inside "ant-ARTICA".
+    "artiche",   # IT plural.
 })
 
 GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
@@ -4507,6 +4518,29 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # instrument. Re-pointed 3 Sep 2026, the day the Commission published the
     # FLR application guidelines (C/2026/4637). See the FLR trigger block below.
     'deforestation due diligence': ['csddd_corporate_sustainability_due_diligence'],
+
+    # --- EU Arctic policy (added 3 Sep 2026, /social-eu) ----------------------
+    # "arctic" had ZERO triggers and was a passing mention in five guides, on the
+    # day Commissioner Sikela opened the EU Arctic Forum and said the Commission
+    # is working on an update of the EU Arctic Strategy.
+    'arctic': ['eu_arctic_policy'],
+    # These three are WORD-BOUNDED below, which is what makes them safe:
+    # bare 'artic' sits inside 'ARTICle' and, unbounded, returned this guide
+    # as the top hit for "Which article of the GDPR covers data portability?".
+    'artic': ['eu_arctic_policy'],
+    'artica': ['eu_arctic_policy'],
+    'artiche': ['eu_arctic_policy'],
+    'arctic strategy': ['eu_arctic_policy'],
+    'arctic policy': ['eu_arctic_policy'],
+    'eu arctic': ['eu_arctic_policy'],
+    'arctic forum': ['eu_arctic_policy'],
+    'arctic council': ['eu_arctic_policy'],
+    'indigenous peoples dialogue': ['eu_arctic_policy'],
+    'artico': ['eu_arctic_policy'],
+    'ártico': ['eu_arctic_policy'],
+    'àrtic': ['eu_arctic_policy'],
+    'arctique': ['eu_arctic_policy'],
+    'noordpoolgebied': ['eu_arctic_policy'],
 
     # --- 2 September 2026 General Court judgments, and the gaps they exposed ---
     # Added 3 Sep 2026 from /social-eu. Both judgments were announced by the

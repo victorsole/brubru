@@ -215,6 +215,17 @@ PORTALS = [
     # ── Official Journal C-series (information/notices via EUR-Lex RSS) ─
     {"url": "https://eur-lex.europa.eu/EN/display-feed.rss?rssId=221",
      "source": "Official Journal (C)", "category": "ec", "priority": 2, "type": "oj_rss"},
+
+    # ── Court of Justice of the EU ──────────────────────────────────────────
+    # Added 3 September 2026. The Court was absent from all 50 portals, so every
+    # judgment and Advocate General opinion was invisible to /news; two General
+    # Court judgments on 2 September (T-357/24 Microsoft/Edge under the DMA and
+    # T-120/24 on Aarhus review of climate targets) were found by /social-eu
+    # instead. This is the Court's OWN account, keyless, and its posts link the
+    # press-release PDF. No official curia RSS was found at the paths probed.
+    {"url": "https://curia.social-network.europa.eu/@Curia.rss",
+     "source": "Court of Justice (CJEU)", "category": "ec", "priority": 1,
+     "type": "mastodon_rss"},
 ]
 
 
@@ -242,6 +253,32 @@ PRIORITY_KEYWORDS_HIGH = [
     r'\bcouncil\b.*\b(adopt|agree|approv|position)\b',
     r'\btrilogue\b',
     r'\bpolitical\s+agreement\b',
+    # Security and crisis (added 3 Sep 2026, /social-eu).
+    #
+    # Every pattern above describes the LEGISLATIVE process, so nothing in this
+    # list could ever lift a security story. On 2 September a Russian sabotage
+    # attempt on Leipzig airport was the biggest EU story on social media -- von
+    # der Leyen speaking with Chancellor Merz and meeting NATO's Rutte, Kallas
+    # calling it state-sponsored terrorism -- and the scrape filed the
+    # Commission's own statement at priority 2, below a fisheries release.
+    #
+    # The demotion was not classify_priority's doing: the presscorner path
+    # hardcodes docutype STATEMENT to base 2, and classify_priority can only
+    # LOWER the number. So a statement needs a matching HIGH keyword to climb
+    # back, and there was no keyword class that could match one. This is that
+    # class. It promotes on CONTENT, so a routine statement still sits at 2.
+    r'\bsabotage\b',
+    r'\bhybrid\s+(attack|threat|warfare|campaign)',
+    r'\bstate[-\s]sponsored\b',
+    r'\bterroris(m|t)\b',
+    r'\bdrone\s+(attack|incursion|strike)',
+    r'\bairspace\s+violation',
+    r'\bcyber ?attack\b',
+    r'\bact\s+of\s+(war|aggression)\b',
+    r'\barticle\s+42\(7\)',          # mutual assistance clause
+    r'\bsolidarity\s+clause\b',       # Article 222 TFEU
+    r'\bcritical\s+infrastructure\b.*\b(attack|damage|incident)',
+    r'\bsanctions?\s+package\b',
 ]
 
 PRIORITY_KEYWORDS_MEDIUM = [
@@ -597,6 +634,115 @@ async def scrape_waf_listing(portal: dict) -> List[NewsItem]:
     return items
 
 
+
+
+# The Court's own hashtags, expanded so a post that opens with one still reads
+# as a sentence. Without this "#EUGeneralCourt upholds..." became "upholds...".
+_CURIA_TAG_WORDS = {
+    "EUGeneralCourt": "The EU General Court",
+    "ECJ": "The Court of Justice",
+    "CJEU": "The Court of Justice",
+    "EUlaw": "EU law",
+    "AG": "Advocate General",
+    "TribunalUE": "Le Tribunal de l'UE",
+    "CJUE": "La Cour de justice",
+}
+
+
+_CURIA_MENTIONS = {
+    "@EU_Commission": "European Commission",
+    "@Europarl_EN": "European Parliament",
+    "@EUCouncil": "Council",
+}
+
+
+async def scrape_mastodon_rss(portal: dict) -> List[NewsItem]:
+    """Scrape an EU institution's own Mastodon account via its .rss feed.
+
+    Added 3 September 2026 for the Court of Justice, after /social-eu found two
+    General Court judgments that /news had not carried at all: T-357/24 (Microsoft
+    not a gatekeeper for Edge, the first successful DMA Article 3(5) rebuttal) and
+    T-120/24 (an Aarhus internal review cannot reopen the Climate Law's targets).
+
+    The cause was not the priority classifier. The Court was simply **not among
+    the news portals at all**, so every judgment it delivers was invisible to
+    /news; the OJ handler above even drops anything starting "Case " or
+    "Affaire ". The Court runs this Mastodon account itself, it needs no key and
+    it carries the press-release PDF link in the post.
+
+    Mastodon RSS items have NO <title> element -- only a <description> holding
+    the post's HTML -- so the generic HTML and RSS handlers cannot read this feed
+    and a title has to be built from the post text.
+    """
+    items: List[NewsItem] = []
+    source = portal["source"]
+    try:
+        async with httpx.AsyncClient(timeout=20.0, follow_redirects=True) as client:
+            resp = await client.get(portal["url"], headers={
+                'User-Agent': HEADERS['User-Agent'],
+                'Accept': 'application/rss+xml, text/xml, */*',
+            })
+            if resp.status_code != 200:
+                print(f"  [WARN] {source} RSS returned {resp.status_code}", file=sys.stderr)
+                return items
+
+            from xml.etree import ElementTree as ET
+            root = ET.fromstring(resp.text)
+
+            for item_el in root.findall('.//item'):
+                desc_el = item_el.find('description')
+                if desc_el is None or not desc_el.text:
+                    continue
+                # The post is HTML. Drop the hashtag anchors first: a post that
+                # opens with "#ECJ" would otherwise yield a title of "ECJ".
+                raw = desc_el.text
+                soup = BeautifulSoup(raw, 'html.parser')
+                # A hashtag is often the grammatical SUBJECT of the post
+                # ("#EUGeneralCourt upholds the Commission's decision..."), so
+                # deleting it leaves a headline with no subject. Unwrap it to
+                # readable text instead, and expand the Court's own tags.
+                for a in soup.find_all('a', href=True):
+                    if '/tags/' in a['href']:
+                        tag = a.get_text(strip=True).lstrip('#')
+                        a.replace_with(_CURIA_TAG_WORDS.get(tag, tag))
+                    elif a['href'].startswith('http'):
+                        a.decompose()          # bare trailing link, not prose
+                text = re.sub(r'\s+', ' ', soup.get_text(' ', strip=True)).strip()
+                text = re.sub(r'[\u2192\U0001F449\s]*$', '', text).strip()
+                text = text.lstrip(':\u2013- ').strip()
+                text = re.sub(r'\s+([:,.])', r'\1', text)          # "Court :" -> "Court:"
+                for _h, _n in _CURIA_MENTIONS.items():              # @EU_Commission -> readable
+                    text = text.replace(_h, _n)
+                # Any remaining @handle is a company or person; drop the sigil.
+                text = re.sub(r'@([A-Za-z][A-Za-z0-9_]{2,})', r'\1', text)
+                if len(text) < 25:
+                    continue
+
+                link_el = item_el.find('link')
+                link = (link_el.text or '').strip() if link_el is not None else ''
+                # Prefer the press-release PDF the post links to, when there is
+                # one: it is the primary source, the post is the announcement.
+                for a in BeautifulSoup(raw, 'html.parser').find_all('a', href=True):
+                    if a['href'].lower().endswith('.pdf'):
+                        link = a['href']
+                        break
+
+                pub_el = item_el.find('pubDate')
+                date_str = parse_date_text(pub_el.text) if (pub_el is not None and pub_el.text) else None
+
+                title = text if len(text) <= 200 else text[:197] + '...'
+                items.append(NewsItem(
+                    title=title,
+                    url=link,
+                    date=date_str,
+                    source=source,
+                    category=portal["category"],
+                    priority=classify_priority(title, portal["priority"]),
+                ))
+        print(f"  [OK] {source}: {len(items)} items", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [WARN] {source} failed: {type(e).__name__}: {str(e)[:70]}", file=sys.stderr)
+    return items
 
 
 async def scrape_oj_rss(portal: dict) -> List[NewsItem]:
@@ -1177,6 +1323,8 @@ async def main():
                     result = await scrape_politico_eu(portal)
                 elif portal_type == "oj_rss":
                     result = await scrape_oj_rss(portal)
+                elif portal_type == "mastodon_rss":
+                    result = await scrape_mastodon_rss(portal)
                 elif portal_type == "rss":
                     result = await scrape_rss(client, portal)
                 elif portal_type == "waf_listing":
