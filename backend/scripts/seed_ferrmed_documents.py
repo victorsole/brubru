@@ -20,6 +20,12 @@ row for the FerrMed user.
 
 from __future__ import annotations
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import argparse
 import io
 import logging
@@ -27,8 +33,8 @@ import sys
 import uuid
 from typing import Optional
 
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru/backend")
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru")
+sys.path.insert(0, f"{_REPO_ROOT}/backend")
+sys.path.insert(0, _REPO_ROOT)
 
 import httpx
 from pypdf import PdfReader

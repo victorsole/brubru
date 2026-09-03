@@ -8,13 +8,19 @@ Usage:
     python3.12 -m backend.scripts.seed_test_users
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import sys
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 from passlib.context import CryptContext
 from backend.core.database import SessionLocal

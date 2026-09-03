@@ -28,7 +28,7 @@ The daily brief workflow:
 ## Step 1: Check Headlines
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 scripts/send_daily_brief.py
 ```
 
@@ -64,7 +64,7 @@ Present the suggested items and ask the user to confirm or edit them.
 Send the daily brief ONLY to hello@beresol.eu for review:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 -c "
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath('.')))
@@ -138,14 +138,14 @@ If changes are requested:
 ONLY after explicit user approval:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 scripts/send_daily_brief.py --send \
   --extra raquel.correadomenech@europarl.europa.eu \
   --extra alexander.rudawski@comcast.net \
   --extra david.devantcerezo@efpia.eu \
   --extra sergicorbalan@yahoo.com \
   --extra silvia.gambino@europarl.europa.eu \
-  --extra-file /Users/victorsole/Documents/GitHub/brubru/docs/marketing/campaigns/brussels.md \
+  --extra-file /Users/victorsole/Developer/brubru/docs/marketing/campaigns/brussels.md \
   --news "ITEM_1" "ITEM_2" "ITEM_3"
 ```
 

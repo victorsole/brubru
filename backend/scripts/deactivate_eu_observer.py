@@ -4,11 +4,17 @@ Deactivate EU Observer RSS Feed
 Simple script to deactivate the EU Observer feed from My EU Bubble.
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import sys
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 from dotenv import load_dotenv
-load_dotenv('/Users/victorsole/Documents/GitHub/brubru/.env')
+load_dotenv(f"{_REPO_ROOT}/.env")
 
 from backend.core.database import SessionLocal
 from backend.models.rss_feed import RSSFeed

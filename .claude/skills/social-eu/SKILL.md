@@ -14,7 +14,7 @@ Read `memory/MEMORY.md` for daily context and `memory/reference_eu_social_media_
 ## Step 0: Context check
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 - <<'PY'
 import logging; logging.disable(logging.WARNING)
 from core.database import SessionLocal; from sqlalchemy import text
@@ -32,11 +32,28 @@ Report coverage + freshness to the user before proceeding.
 
 1. **Pull fresh posts** (oldest-checked accounts first; the same fetchers the cron uses):
    ```bash
+   # ABSOLUTE PATHS, always (set 2 Sep 2026). A backgrounded shell does not
+   # inherit the foreground `cd backend`; on 2 Sep both drips ran from the
+   # repo root, printed "can't open file 'scripts/fetch_social_posts.py'",
+   # exited 2, and the day's pulse was nearly reported as "refreshed".
+   B=/Users/victorsole/Developer/brubru/backend
    # open tier (robust, keyless) — a wide batch
-   python3.12 scripts/fetch_social_posts.py --platforms bluesky,mastodon,youtube --per-account 10 --pace 0.4 --limit 200 --apply
+   cd $B && python3.12 $B/scripts/fetch_social_posts.py --platforms bluesky,mastodon,youtube --per-account 10 --pace 0.4 --limit 200 --apply
    # X drip (paced + throttle-stop; the syndication endpoint rate-limits, so a small slow batch)
-   python3.12 scripts/fetch_social_posts.py --platforms x --per-account 10 --pace 5 --empty-streak-stop 8 --limit 40 --apply
+   cd $B && python3.12 $B/scripts/fetch_social_posts.py --platforms x --per-account 10 --pace 5 --empty-streak-stop 8 --limit 40 --apply
    ```
+
+   **Prove the drip happened before quoting it.** The log line is not the proof;
+   the rows are. Run this and require `fetched_this_run > 0` on at least one
+   open-tier platform before writing "refreshed" anywhere:
+
+   ```sql
+   SELECT platform, count(*) AS fetched_this_run,
+          count(*) FILTER (WHERE posted_at >= now()-interval '24 hours') AS of_which_24h
+   FROM social_posts WHERE fetched_at >= now()-interval '30 minutes' GROUP BY 1;
+   ```
+   A zero here with a green-looking log means the script did not run (wrong
+   CWD, wrong interpreter, exit 2 swallowed by `;`), not that the EU was quiet.
 
    **The X backlog does not clear at `--limit 40`** (measured 27 Aug 2026): 719 of
    1,135 fetch-enabled X accounts were stale beyond seven days, which is 18 runs

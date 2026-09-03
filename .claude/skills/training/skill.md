@@ -184,7 +184,7 @@ Present results as:
 #### Slow test (optional, only when user requests): Live backend
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 curl -s -X POST http://localhost:8000/api/chat/message \
   -H "X-Brubru-Probe: 1" \
   -H "Content-Type: application/json" \
@@ -633,7 +633,7 @@ from pathlib import Path
 
 BASE = "https://brubru-production.up.railway.app"
 API_KEY = os.environ.get("BRUBRU_API_KEY") or <load from .env via grep|cut>
-DATASET = Path("/Users/victorsole/Documents/GitHub/brubru/data/training/api_queries_50.json")
+DATASET = Path("/Users/victorsole/Developer/brubru/data/training/api_queries_50.json")
 
 queries = json.loads(DATASET.read_text())["queries"]
 

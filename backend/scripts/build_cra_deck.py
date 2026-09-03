@@ -12,6 +12,12 @@ from the Commission FAQ v1.0 of 3 December 2025.
 """
 from __future__ import annotations
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import base64
 import os
 import sys
@@ -21,7 +27,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-ROOT = Path("/Users/victorsole/Documents/GitHub/brubru")
+ROOT = Path(_REPO_ROOT)
 load_dotenv(ROOT / ".env")
 
 OUT = ROOT / "docs/marketing/designs/cra_deck.html"

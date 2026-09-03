@@ -21,13 +21,19 @@ Usage:
 Idempotent: re-runs skip the user create and skip already-tracked carriages.
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import sys
 import argparse
 import logging
 from typing import List
 
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru")
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru/backend")
+sys.path.insert(0, _REPO_ROOT)
+sys.path.insert(0, f"{_REPO_ROOT}/backend")
 
 from passlib.context import CryptContext
 from sqlalchemy import text

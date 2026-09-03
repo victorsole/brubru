@@ -15,6 +15,12 @@ Usage:
     python3.12 -m backend.scripts.load_demo_data
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import asyncio
 import sys
 from datetime import datetime
@@ -23,7 +29,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 from backend.services.vector_db.vector_store import get_vector_store
 from backend.services.vector_db.embeddings_service import get_embeddings_service

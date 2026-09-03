@@ -302,7 +302,7 @@ Include triggers in English + Catalan + Spanish + French at minimum.
 
 ```bash
 # Start backend if not running
-cd /Users/victorsole/Documents/GitHub/brubru/backend && python3.12 -m uvicorn main:app --reload --port 8000
+cd /Users/victorsole/Developer/brubru/backend && python3.12 -m uvicorn main:app --reload --port 8000
 
 # Test each query on the path users actually hit
 curl -s -N -X POST http://localhost:8000/api/chat/stream \
@@ -320,7 +320,7 @@ traffic from a user's. Omitting it is how 30 of the 33 apparently-real chats in 
 **Then run the regression suite before claiming any fix is done:**
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 scripts/train_chat_regression.py
 ```
 
@@ -342,7 +342,7 @@ After completing the audit, update `memory/query_audit.md` with:
 If any guide was created or updated in Step 3, run:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 scripts/generate_guides_html.py
 ```
 
@@ -353,7 +353,7 @@ This updates BOTH `frontend/public/guides/index.html` AND the hardcoded guide/tr
 For EACH guide created or updated in Step 3, append an entry to the KB changelog so it surfaces in MEUB > Brubru Databases > Knowledge Guides ("What's new in the KB" feed). This is a hard rule: KB content edits are otherwise invisible in the product (the Knowledge Guides sub-tab is count-only).
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/backend
+cd /Users/victorsole/Developer/brubru/backend
 python3.12 scripts/kb_changelog.py --action updated --guide <stem> --title "<Title>" --summary "<one-line what changed>" --refs <CELEX...>
 # --action: added | updated | canon | deep_dive. Idempotent (dedupes), safe to re-run.
 ```

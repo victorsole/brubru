@@ -8,8 +8,14 @@ Usage:
     python -m backend.scripts.fetch_rss_entries_now
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import sys
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 import asyncio
 import feedparser

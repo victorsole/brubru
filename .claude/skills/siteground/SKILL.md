@@ -14,12 +14,12 @@ You are building the Brubru frontend for deployment to SiteGround. This produces
 Run these in parallel:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 node -v && npm -v
 ```
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 git status -- src/ public/ index.html vite.config.ts package.json
 ```
 
@@ -28,7 +28,7 @@ If the argument is "check", skip to Step 4 to verify the existing dist folder.
 Check for any TypeScript or build errors before the full build:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 npx tsc --noEmit 2>&1 | tail -20
 ```
 
@@ -39,7 +39,7 @@ If there are TypeScript errors, report them and ask the user whether to proceed 
 Run the production build with pre-rendering for AI crawlers:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 npm run build:prerender
 ```
 
@@ -58,13 +58,13 @@ If the build fails, diagnose the error:
 Run these checks in parallel:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # Check dist exists and show top-level structure
 ls -la dist/ && echo "---" && ls -la dist/assets/ | head -10
 ```
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # Check pre-rendered pages exist
 for route in about contact cookies login privacy signup subprocessors terms; do
   if [ -f "dist/$route/index.html" ]; then
@@ -76,7 +76,7 @@ done
 ```
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # Check main index.html has content (not empty div)
 if grep -q '<div id="root">' dist/index.html && grep -q '<script' dist/index.html; then
   echo "[OK] dist/index.html has root div and script tag"
@@ -119,7 +119,7 @@ SITEGROUND BUILD COMPLETE
 After the build succeeds, verify the output is actually valid:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # Check that index.html has real content (not a blank page)
 TITLE=$(grep -o '<title>[^<]*</title>' dist/index.html)
 ROOT_SIZE=$(grep -c 'class=' dist/index.html)
@@ -129,7 +129,7 @@ if [ "$ROOT_SIZE" -lt 5 ]; then echo "[WARN] index.html looks empty -- build may
 ```
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # Verify JS bundle is not zero-size and CSS exists
 JS_FILE=$(ls -S dist/assets/index-*.js 2>/dev/null | head -1)
 CSS_FILE=$(ls -S dist/assets/index-*.css 2>/dev/null | head -1)
@@ -138,7 +138,7 @@ if [ -n "$CSS_FILE" ] && [ "$(wc -c < "$CSS_FILE")" -gt 100 ]; then echo "[OK] C
 ```
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+cd /Users/victorsole/Developer/brubru/frontend
 # IMPORTANT (28 July 2026): dist/sitemap.xml is a sitemap INDEX, not a URL list.
 # It legitimately contains exactly 2 <loc> entries (sitemap-pages.xml and
 # sitemap-legislacio.xml). Counting <loc> in the index and reading "2" as a
@@ -152,7 +152,7 @@ if [ "$SITEMAP_URLS" -ge 1000 ]; then echo "[OK] Sitemap has $SITEMAP_URLS URLs"
 Also check if there are uncommitted frontend source changes that should be committed:
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru
+cd /Users/victorsole/Developer/brubru
 git status -- frontend/src/ frontend/public/ frontend/index.html frontend/vite.config.ts
 ```
 
@@ -170,7 +170,7 @@ silently runs old code while `index.html` looks fine. **Always force-push every
 root HTML shell, not just index.html.**
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru
+cd /Users/victorsole/Developer/brubru
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH   # lftp strips PATH
 H=$(grep '^SITEGROUND_FTP_HOST=' .env | cut -d= -f2-)
 U=$(grep '^SITEGROUND_FTP_USER=' .env | cut -d= -f2-)
@@ -198,7 +198,7 @@ lftp -c "set ftp:ssl-allow true; set ssl:verify-certificate no; open -u '$U','$P
 **Verify BOTH shells by content-hash (not just a 200):**
 
 ```bash
-cd /Users/victorsole/Documents/GitHub/brubru
+cd /Users/victorsole/Developer/brubru
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$PATH
 H=$(grep '^SITEGROUND_FTP_HOST=' .env | cut -d= -f2-); U=$(grep '^SITEGROUND_FTP_USER=' .env | cut -d= -f2-); P=$(grep '^SITEGROUND_FTP_PASS=' .env | cut -d= -f2-)
 LOCAL=$(grep -oE 'assets/index-[A-Za-z0-9_-]+\.js' frontend/dist/app.html | head -1)
@@ -274,7 +274,7 @@ flush; trust the FTP content-hash check above as the real success signal.
   ```bash
   curl -s -A "Mozilla/5.0" "https://brubru.beresol.eu/?nocache=$(date +%s)" | grep -oE 'index-[A-Za-z0-9_-]+\.(js|css)' | sort -u
   # Compare with local:
-  grep -oE 'index-[A-Za-z0-9_-]+\.(js|css)' /Users/victorsole/Documents/GitHub/brubru/frontend/dist/index.html | sort -u
+  grep -oE 'index-[A-Za-z0-9_-]+\.(js|css)' /Users/victorsole/Developer/brubru/frontend/dist/index.html | sort -u
   ```
 
   If the two lists match, the deploy is live. If they don't match but `/assets/index-NEW.js` already exists on the server (verify via `lftp ... ls`), it's just CDN staleness -- wait 30-60s and retry with a fresh `nocache=`. Caught 15 April 2026 after Position Analysis deploy.
@@ -282,10 +282,10 @@ flush; trust the FTP content-hash check above as the real success signal.
 ## Recommended FTP mirror command
 
 ```bash
-FTP_HOST=$(grep '^SITEGROUND_FTP_HOST=' /Users/victorsole/Documents/GitHub/brubru/.env | cut -d'=' -f2-)
-FTP_USER=$(grep '^SITEGROUND_FTP_USER=' /Users/victorsole/Documents/GitHub/brubru/.env | cut -d'=' -f2-)
-FTP_PASS=$(grep '^SITEGROUND_FTP_PASS=' /Users/victorsole/Documents/GitHub/brubru/.env | cut -d'=' -f2-)
-cd /Users/victorsole/Documents/GitHub/brubru/frontend
+FTP_HOST=$(grep '^SITEGROUND_FTP_HOST=' /Users/victorsole/Developer/brubru/.env | cut -d'=' -f2-)
+FTP_USER=$(grep '^SITEGROUND_FTP_USER=' /Users/victorsole/Developer/brubru/.env | cut -d'=' -f2-)
+FTP_PASS=$(grep '^SITEGROUND_FTP_PASS=' /Users/victorsole/Developer/brubru/.env | cut -d'=' -f2-)
+cd /Users/victorsole/Developer/brubru/frontend
 lftp -c "set ftp:ssl-allow no; open -u $FTP_USER,$FTP_PASS $FTP_HOST; mirror --reverse --verbose --only-newer --exclude .DS_Store dist/ brubru.beresol.eu/public_html/; bye"
 ```
 

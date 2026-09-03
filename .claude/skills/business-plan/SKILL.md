@@ -36,9 +36,9 @@ const puppeteer = require('puppeteer');
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto('file:///Users/victorsole/Documents/GitHub/brubru/docs/business_plan/brubru_business_plan_print.html', { waitUntil: 'networkidle0', timeout: 30000 });
+  await page.goto('file:///Users/victorsole/Developer/brubru/docs/business_plan/brubru_business_plan_print.html', { waitUntil: 'networkidle0', timeout: 30000 });
   await page.pdf({
-    path: '/Users/victorsole/Documents/GitHub/brubru/docs/business_plan/brubru_business_plan.pdf',
+    path: '/Users/victorsole/Developer/brubru/docs/business_plan/brubru_business_plan.pdf',
     format: 'A4',
     printBackground: true,
     margin: { top: '18mm', bottom: '20mm', left: '20mm', right: '20mm' }

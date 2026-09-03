@@ -4,10 +4,16 @@ Auth is overridden so the test exercises the handlers and the data, not the API-
 plumbing. Asserts the canonical contract: list nulls the body, detail returns it, and
 every law carries full text.
 """
+
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
 import sys
 from pathlib import Path
 
-root = Path("/Users/victorsole/Documents/GitHub/brubru")
+root = Path(_REPO_ROOT)
 sys.path.insert(0, str(root / "backend"))
 
 from dotenv import load_dotenv

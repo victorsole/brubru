@@ -10,7 +10,8 @@
 # already running the same scripts.
 
 set -u
-BACKEND="/Users/victorsole/Documents/GitHub/brubru/backend"
+# Resolved from this script's own location, so a repo move cannot break the job.
+BACKEND="${0:A:h:h}"
 PY="/opt/anaconda3/bin/python3.12"
 LOCK="/tmp/brubru_oj_catalan_daily.lock"
 LOG_DIR="$BACKEND/logs/oj_translate"

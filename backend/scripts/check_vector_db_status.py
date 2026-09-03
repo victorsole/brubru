@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """Check ChromaDB status and collection counts"""
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import sys
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 from backend.services.vector_db.vector_store import get_vector_store
 

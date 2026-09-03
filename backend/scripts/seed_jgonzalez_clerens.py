@@ -20,6 +20,12 @@ Idempotent: re-runs skip rows that already exist for this user.
 
 from __future__ import annotations
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import argparse
 import json
 import logging
@@ -28,13 +34,13 @@ import sys
 import uuid
 from datetime import datetime, timezone
 
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru/backend")
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru")
+sys.path.insert(0, f"{_REPO_ROOT}/backend")
+sys.path.insert(0, _REPO_ROOT)
 
 from sqlalchemy import text
 from dotenv import load_dotenv
 
-load_dotenv("/Users/victorsole/Documents/GitHub/brubru/.env")
+load_dotenv(f"{_REPO_ROOT}/.env")
 
 from core.database import SessionLocal, engine
 
@@ -80,7 +86,7 @@ CARRIAGE_SHORT_IDS = [
 
 
 APIFY_POSTS_FILE = pathlib.Path(
-    "/Users/victorsole/Documents/GitHub/brubru/data/apify/clerens_linkedin_posts_2026_05_21.json"
+    f"{_REPO_ROOT}/data/apify/clerens_linkedin_posts_2026_05_21.json"
 )
 
 

@@ -21,6 +21,12 @@ Examples:
     python3.12 -m backend.scripts.populate_vector_db --limit 10
 """
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import asyncio
 import sys
 import argparse
@@ -36,7 +42,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Add parent directory to path
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+sys.path.insert(0, _REPO_ROOT)
 
 from backend.services.scrapers.scraper_orchestrator import ScraperOrchestrator
 from backend.services.vector_db.vector_store import get_vector_store

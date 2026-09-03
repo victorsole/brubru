@@ -9,15 +9,21 @@ Usage:
 
 from __future__ import annotations
 
+import pathlib
+
+# Repo root derived from this file's location, so a repo move cannot break the script.
+_REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+
+
 import asyncio
 import logging
 import sys
 
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru/backend")
-sys.path.insert(0, "/Users/victorsole/Documents/GitHub/brubru")
+sys.path.insert(0, f"{_REPO_ROOT}/backend")
+sys.path.insert(0, _REPO_ROOT)
 
 from dotenv import load_dotenv
-load_dotenv("/Users/victorsole/Documents/GitHub/brubru/.env")
+load_dotenv(f"{_REPO_ROOT}/.env")
 
 logging.basicConfig(level=logging.WARNING, format="%(message)s")
 

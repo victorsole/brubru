@@ -78,8 +78,11 @@ def main():
     e = create_engine(os.environ['DATABASE_URL'])
     with e.connect() as c:
         rows = c.execute(text(
-            "select celex from catalan_translations "
-            "where deployed_at is null order by celex")).fetchall()
+            # COALESCE: C-series corpus pages are keyed on oj_id and have celex
+            # NULL (migration 223). Selecting celex alone returned None for them
+            # and crashed os.path.join. The page slug is whichever key is set.
+            "select coalesce(celex, oj_id) from catalan_translations "
+            "where deployed_at is null order by 1")).fetchall()
     pending = [r[0] for r in rows]
     print(f"[INFO] {len(pending)} acts pending deploy")
     if not pending:
@@ -99,7 +102,7 @@ def main():
             with e.begin() as c:
                 c.execute(text(
                     "update catalan_translations set deployed_at=:now, updated_at=now() "
-                    "where celex=:celex and deployed_at is null"),
+                    "where coalesce(celex, oj_id)=:celex and deployed_at is null"),
                     {"now": datetime.utcnow(), "celex": celex})
             ok += 1
             if i % 20 == 0 or i == len(pending):
