@@ -36,6 +36,58 @@ from schemas.scrapers.oeil_schemas import (
 logger = logging.getLogger(__name__)
 
 
+# Labels that appear on an OEIL procedure page. A value is the line AFTER a
+# label, so a value that is itself a label means the extraction slipped and the
+# field must stay empty rather than carry the label forward.
+_OEIL_LABELS = frozenset({
+    "Basic information", "Full procedure", "Status", "Subject", "Legal basis",
+    "Other legal basis", "Committee dossier", "Stage reached in procedure",
+    "Key players", "Committee responsible", "Rapporteur", "Appointed",
+    "Shadow rapporteur", "Committee for opinion", "Key events", "Forecasts",
+    "Technical information", "Documentation gateway", "Additional information",
+    "Procedure reference", "Procedure type", "Procedure subtype", "Instrument",
+    "Amendments and repeals", "Mandatory consultation of other institutions",
+    "Document type", "Committee", "Ref", "Date", "Summary", "pdf",
+})
+
+
+def _oeil_lines(soup: BeautifulSoup) -> list:
+    """Every visible line of an OEIL page, in order, blanks removed.
+
+    OEIL renders as label line followed by value line. The page is
+    server-rendered: the data IS in the HTML (verified 3 Sep 2026 against
+    2023/0437(COD), where the raw response carries the committee, the
+    rapporteur and the stage). An earlier reading called it a JS SPA; that was
+    a bad text extraction, not a JS wall.
+    """
+    clone = BeautifulSoup(str(soup), "html.parser")
+    for t in clone(["script", "style", "noscript"]):
+        t.decompose()
+    return [ln.strip() for ln in clone.get_text("\n", strip=True).split("\n") if ln.strip()]
+
+
+def _value_after(lines: list, label: str) -> Optional[str]:
+    """The line following `label`, or None when the next line is another label.
+
+    Why this exists: `_parse_basic_info` used to read the LABEL as the value.
+    It matched a "Stage reached" regex and then assigned group(0), the
+    whole match, so every procedure came back with status
+    "Stage reached in procedure" and title "Procedure File: <ref>". Both are the
+    page furniture, not the data. Callers relying on OEIL for rapporteur
+    identity were reading furniture.
+    """
+    try:
+        i = lines.index(label)
+    except ValueError:
+        return None
+    for candidate in lines[i + 1: i + 3]:
+        if candidate in _OEIL_LABELS:
+            continue
+        return candidate
+    return None
+
+
+
 class OEILScraper(BaseScraper):
     """
     Scraper for OEIL Legislative Observatory.
@@ -300,22 +352,24 @@ class OEILScraper(BaseScraper):
         basic_info = OEILBasicInfo(reference=procedure_ref)
 
         try:
-            # Get page title from <title> tag or first meaningful h1/h2
-            title_tag = soup.find('title')
-            if title_tag:
-                title_text = title_tag.get_text(strip=True)
-                # Clean up title - remove site name suffix
-                if '|' in title_text:
-                    title_text = title_text.split('|')[0].strip()
-                if title_text and not title_text.startswith('20'):
-                    basic_info.title = title_text
-
-            # Also check h1 or first h2 for title
-            h1 = soup.find('h1')
-            if h1:
-                h1_text = h1.get_text(strip=True)
-                if h1_text and len(h1_text) > 10:
-                    basic_info.title = h1_text
+            # Line-based extraction FIRST (fixed 3 Sep 2026). OEIL renders
+            # label-then-value, and the real procedure title is the line after
+            # "Full procedure". The <title> tag is only ever
+            # "Procedure File: <ref> | Legislative Observatory | ...", which is
+            # the page furniture; taking it produced a title of
+            # "Procedure File: 2023/0437(COD)" for every single procedure.
+            lines = _oeil_lines(soup)
+            real_title = _value_after(lines, "Full procedure")
+            if real_title and len(real_title) > 10 and not real_title.startswith("20"):
+                basic_info.title = real_title
+            else:
+                title_tag = soup.find('title')
+                if title_tag:
+                    title_text = title_tag.get_text(strip=True)
+                    if '|' in title_text:
+                        title_text = title_text.split('|')[0].strip()
+                    if title_text and not title_text.startswith('20'):
+                        basic_info.title = title_text
 
             # Search entire page text for key patterns
             page_text = soup.get_text()
@@ -326,18 +380,15 @@ class OEILScraper(BaseScraper):
                 basic_info.procedure_type_code = type_match.group(1)
                 basic_info.procedure_type = f"{type_match.group(1)} - {type_match.group(2).strip()}"
 
-            # Status/Stage
-            stage_patterns = [
-                r'Stage\s*reached[:\s]+([A-Z][^\n]+)',
-                r'Awaiting\s+[a-z]+\s+[a-z]+',
-                r'Procedure\s+completed',
-                r'pending\s+in\s+[^\n]+',
-            ]
-            for pattern in stage_patterns:
-                stage_match = re.search(pattern, page_text, re.IGNORECASE)
-                if stage_match:
-                    basic_info.status = stage_match.group(0).strip()
-                    break
+            # Status: the line after the "Status" label, or after
+            # "Stage reached in procedure" on the technical-information block.
+            # The old code matched a regex and then assigned group(0) -- the
+            # WHOLE match, label included -- so every procedure reported its
+            # status as the literal string "Stage reached in procedure".
+            status = (_value_after(lines, "Status")
+                      or _value_after(lines, "Stage reached in procedure"))
+            if status:
+                basic_info.status = status
 
             # Subjects - look for subject/theme links anywhere in page
             subject_links = soup.find_all('a', href=re.compile(r'subject|theme|policy-area'))
@@ -377,16 +428,48 @@ class OEILScraper(BaseScraper):
             if mep_links:
                 first_mep = self._parse_mep_from_link(mep_links[0])
 
-                # Try to find which committee this is for
+                # The committee RESPONSIBLE is the one printed under that
+                # label, not the first code that happens to appear on the page.
+                #
+                # The old code walked a hardcoded list in fixed order and took
+                # the first member found anywhere in the text. IMCO is first in
+                # that list, so every page mentioning IMCO for any reason -- an
+                # opinion committee, a cross-reference, a related procedure --
+                # reported IMCO as responsible. Measured 3 Sep 2026: passenger
+                # rights came back IMCO when its dossier is TRAN/10/00285, and
+                # the psychosocial-risks file came back JURI when the
+                # responsible committee is EMPL. The rapporteur was right in
+                # both cases, so a correct name was being paired with the wrong
+                # committee. [[feedback_first_match_on_a_page_is_a_related_entity]]
+                lines = _oeil_lines(soup)
                 committee_code = None
-                for code in committee_codes:
-                    if code in page_text:
-                        committee_code = code
-                        break
+                committee_name = None
+                try:
+                    idx = lines.index('Committee responsible')
+                except ValueError:
+                    idx = None
+                if idx is not None:
+                    for j in range(idx + 1, min(idx + 8, len(lines))):
+                        if lines[j] in committee_codes:
+                            committee_code = lines[j]
+                            if j + 1 < len(lines) and lines[j + 1] not in _OEIL_LABELS:
+                                committee_name = lines[j + 1]
+                            break
+                if not committee_code:
+                    # Fall back to the old scan, but say so rather than pass a
+                    # guess off as a reading.
+                    for code in committee_codes:
+                        if code in page_text:
+                            committee_code = code
+                            logger.warning(
+                                "OEIL: no 'Committee responsible' block found; "
+                                "fell back to first code on page (%s)", code)
+                            break
 
                 if first_mep:
                     committee = OEILCommittee(
                         code=committee_code or 'UNKNOWN',
+                        name=committee_name,
                         role='responsible',
                         rapporteur=first_mep,
                         shadow_rapporteurs=[]
