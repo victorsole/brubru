@@ -94,10 +94,19 @@ def _build_where(codes, kinds, since, until, q):
     params = {"types": kinds}
     if codes is not None:
         where.append("body_code = ANY(:codes)"); params["codes"] = list(codes)
+    # 37,573 of 564,719 economy_items rows (6.7%) carry NO document_date,
+    # because the upstream feed published none. A bare `document_date >= :since`
+    # is NULL for those rows, so every dated window silently dropped 6.7% of the
+    # corpus -- including whole bodies whose feeds never carry a date at all.
+    # `creation_date` (when Brubru ingested the row) is a fact we actually know,
+    # so it is safe to FILTER on. It is deliberately not written into
+    # document_date: inventing a publication date we were never given is what
+    # feedback_backfill_no_hallucination forbids. The payload still returns
+    # document_date as NULL, so the caller can see the date is unknown.
     if since:
-        where.append("document_date >= :since"); params["since"] = since
+        where.append("coalesce(document_date, creation_date) >= :since"); params["since"] = since
     if until:
-        where.append("document_date <= :until"); params["until"] = until
+        where.append("coalesce(document_date, creation_date) <= :until"); params["until"] = until
     if q:
         where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     return " AND ".join(where), params

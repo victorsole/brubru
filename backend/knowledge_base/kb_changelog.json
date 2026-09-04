@@ -2,6 +2,76 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "JURI votes its opinion on 2025/0406(COD) on 7 September; lead remains the joint SANT-ITRE referral",
+      "refs": []
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. 28th Regime",
+      "summary": "JURI tabled a draft report, draft opinion and six amendment documents for 7 September; EMPL follows on 10 September",
+      "refs": []
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU Emissions Trading System Review 2026",
+      "summary": "EU-Switzerland ETS linking Joint Committee Decision 1/2026, OJ L 4 September 2026",
+      "refs": [
+        "22026D1993"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "data_retention_extension_2021_1232",
+      "title": "Data Retention / ePrivacy Derogation",
+      "summary": "AG Szpunar opinion in C-661/24 on criteria for national data-retention rules (opinion, not judgment)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Council green-lit the customs reform on 3 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "union_customs_code_reform",
+      "title": "Union Customs Code Reform",
+      "summary": "Council green-lit the customs reform on 3 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "C-147/25 Inter Rao Lietuva: control by a listed person needs sufficiently solid and objective evidence (Reg 269/2014 Art 2(1))",
+      "refs": [
+        "32014R0269"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "Commission adopted the first Guidelines on Article 102 TFEU exclusionary abuses (3 Sep 2026); plus C-60/25 on Article 101(2) nullity",
+      "refs": [
+        "52026XC04637"
+      ]
+    },
+    {
       "date": "2026-09-01",
       "action": "updated",
       "guide": "eu_economic_governance_reform_2024",

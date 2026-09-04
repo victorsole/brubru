@@ -230,8 +230,19 @@ def main():
         print(f"[ok] CURIA press releases fetched, none published in the last {a.days} day(s). "
               f"Source healthy, window genuinely empty.\n")
     else:
-        print(f"=== CURIA PRESS RELEASES ({len(prs)}) — Court-curated, plain-language "
-              f"summary in the PDF (seed a KB guide / deep-dive from these) ===")
+        print(f"=== CURIA PRESS RELEASES ({len(prs)}) — Court-curated: the Court itself "
+              f"flagged these cases as notable ===")
+        # Measured 4 September 2026: the PDF BODY is not retrievable. A bare GET
+        # returns HTTP 200 with a ZERO-BYTE body while HEAD on the same URL reports
+        # a real content-length; a cookie-jar + Referer attempt succeeded exactly
+        # once and never again; Playwright's request API gets HTTP 403 with a block
+        # page; a browser-initiated download is cancelled. So the link below is a
+        # LINK, not a summary you can read. Saying so is the point: this banner used
+        # to promise "plain-language summary in the PDF (seed a KB guide from these)",
+        # which sends the reader to fetch something that cannot be fetched.
+        print("    NOTE: the PDF body is currently UNREACHABLE (a plain GET returns 200 with an")
+        print("    empty body; Playwright gets 403). Treat these as titles + links only, and take")
+        print("    the legal substance from the Cellar subject-matter lines below.")
         for p in prs:
             cs = " ".join(p["cases"]) or "(no case ref in title)"
             print(f"  {p['date']} No {p['no']:<9} {cs:<22} {p['title'][:96]}")

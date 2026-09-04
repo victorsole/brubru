@@ -1,6 +1,7 @@
 # Data Retention / ePrivacy Derogation Extension (Regulation 2021/1232)
 
 ## QUICK FACTS
+- **AG OPINION, NOT A JUDGMENT (Thursday 3 September 2026)**: **Advocate General Szpunar** delivered his opinion in **Case C-661/24 (Academie Fiscale and Others)**, clarifying **the criteria for assessing whether national rules on the retention of electronic communications data are compatible with EU law**. An Advocate General's opinion is a **trailer to the judgment, not the outcome**: the Court follows it in most cases but is not bound by it, and the judgment will follow months later. Do not state the opinion as settled law. Source: Court of Justice press release No 117/2026, 3 September 2026 (CURIA).
 - Current Regulation: Regulation (EU) 2021/1232 of the European Parliament and of the Council of 14 July 2021 on a temporary derogation from certain provisions of Directive 2002/58/EC as regards the use of technologies by providers of number-independent interpersonal communications services for the processing of personal and other data for the purpose of combating online child sexual abuse
 - CELEX: 32021R1232
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1232
@@ -10,8 +11,6 @@
 - **Procedure: [2025/0429(COD)]** -- Amending Regulation (EU) 2021/1232 as regards the extension of its period of application. Commission proposal 19 December 2025.
 - **OEIL status (per Brubru procedure API, as of 20 April 2026): CLOSE_TO_ADOPTION**. Lead committee LIBE.
 - **LATEST (23 April 2026)**: LIBE draft report "Amending Regulation (EU) 2021/1232 as regards the extension of its period of application" [2025/0429(COD)] re-surfaced on EP committees portal during Week 17 Group Week. Confirms procedure remains in committee stage; plenary vote expected late April / May 2026 given 3 April 2026 derogation expiry risk. Procedural urgency: derogation **already expired 3 April 2026** unless extension adopted in time; voluntary CSAM scanning by OTT providers technically in legal limbo.
-- **LATEST (Monday 18 May 2026, Strasbourg plenary week)**: LIBE draft report on 2025/0429(COD) re-surfaced on the LIBE committee portal again. The Strasbourg plenary 19-22 May is the most plausible adoption window given the derogation has now been expired more than 6 weeks (since 3 April 2026). Status remains CLOSE_TO_ADOPTION per Brubru procedure API. Source: EP committees portal scrape, 18 May 2026.
-- **LATEST (Wednesday 6 May 2026)**: LIBE draft report 2025/0429(COD) re-surfaced on the EP committees portal during the 4-8 May committee week, confirming procedure remains active in committee stage. The procedural urgency is now structural — the derogation expired 3 April 2026 and voluntary CSAM scanning by OTT providers has been in legal limbo for over a month. LIBE committee vote expected late May / early June 2026; plenary vote earliest June 2026 Strasbourg. Cross-link `csam_regulation_online` (permanent regulation 2022/0155(COD)).
 - **OEIL key events (authoritative)**:
   - 19 December 2025: Legislative proposal (Commission)
   - 27 January 2026: Legislative proposal milestone
@@ -111,3 +110,8 @@ The framing suggests that the extension of 2021/1232 -- while narrowly about CSA
 - EP LIBE committee page: https://www.europarl.europa.eu/committees/en/libe
 - OEIL procedure 2025/0429(COD): https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0429(COD)
 - Politico EU 21 April 2026 (German): "Das Gespenst Vorratsdatenspeicherung ist zurück"
+
+## Dated record (moved out of QUICK FACTS to respect the 4,000-char injection cap)
+
+- **LATEST (Monday 18 May 2026, Strasbourg plenary week)**: LIBE draft report on 2025/0429(COD) re-surfaced on the LIBE committee portal again. The Strasbourg plenary 19-22 May is the most plausible adoption window given the derogation has now been expired more than 6 weeks (since 3 April 2026). Status remains CLOSE_TO_ADOPTION per Brubru procedure API. Source: EP committees portal scrape, 18 May 2026.
+- **LATEST (Wednesday 6 May 2026)**: LIBE draft report 2025/0429(COD) re-surfaced on the EP committees portal during the 4-8 May committee week, confirming procedure remains active in committee stage. The procedural urgency is now structural — the derogation expired 3 April 2026 and voluntary CSAM scanning by OTT providers has been in legal limbo for over a month. LIBE committee vote expected late May / early June 2026; plenary vote earliest June 2026 Strasbourg. Cross-link `csam_regulation_online` (permanent regulation 2022/0155(COD)).

@@ -1,14 +1,13 @@
 # EU Competition Law Enforcement
 
 ## QUICK FACTS
-- **LATEST (Tuesday 7-8 July 2026 — ANNUAL REPORT ADOPTED + SANOFI MARKET TEST + JULY INFRINGEMENTS)**: The European Parliament **adopted its resolution on Competition policy — annual report 2025** at the July Strasbourg plenary (adopted text in the 7 July 2026 sitting, europarl.europa.eu/doceo, TA-10-2026-07-07). On **8 July 2026** DG COMP opened a **market test on commitments offered by Sanofi** to address possible anti-competitive conduct in the promotion of a flu vaccine for vulnerable patients (Article 102 TFEU concerns; feedback invited from third parties before the Commission decides whether to make the commitments binding). The same day's July infringements package referred several Member States to the Court of Justice (see `nis2_directive` for the NIS2 cybersecurity referrals of IE/ES/FR/NL). Source: EC Press Corner, 7-8 July 2026.
+- **SAME DAY, Court of Justice (3 September 2026)**: **Case C-60/25** (Second Chamber) rules on **Article 101(2) TFEU** — the nullity of agreements caught by Article 101. Read alongside the guidelines: the Commission tightened its exclusionary-abuse framework on the same day the Court spoke on the consequences of a prohibited agreement.
 - Topic: EU antitrust enforcement -- Articles 101 and 102 TFEU
 - Legal basis: TFEU Articles 101-109
 - Article 101: Prohibits anti-competitive agreements (price fixing, market sharing, bid rigging)
 - Article 102: Prohibits abuse of dominant position (predatory pricing, tying, refusal to supply)
 - Procedural framework: Regulation (EC) 1/2003
 - Lead DG: DG Competition (DG COMP)
-- Director-General of DG COMP (from Monday 13 April 2026): **Anthony Whelan** (Irish), appointed by Commission. Seasoned Irish official steeped in tech policy. Previously: adviser to President von der Leyen on digital and competition issues; before that, head of DG COMP State Aid department. Replaces Olivier Guersent (departed summer 2025). Public commitment: "competition enforcement needs to be even-handed, fact-based, constrained by whatever is the legal framework of rules that you're enforcing"; will not be influenced by "noise" around Big Tech cases (Google, Meta, Apple, X). Proximity to von der Leyen signals possible alignment with President's push to leverage competition policy for EU scale-up and competitiveness. Source: FT 13 April 2026 (Barbara Moens).
 - Responsible Commissioner: Teresa Ribera (EVP for Clean, Just and Competitive Transition -- also Competition; Spanish socialist, PSOE/S&D). Reportedly had preferred a woman DG COMP but "warmly welcomed" Whelan, citing his "deep experience in European policymaking and a strong understanding of how our rules serve citizens, innovation and fair markets".
 - Merger guidelines revision (ongoing April 2026): Commission revising EU merger guidelines; political tension between von der Leyen (scale/competitiveness-favouring) and Ribera (single-market-integration-favouring, opposes using competitiveness as pretext for concentration).
 - Max fine: 10% of worldwide annual turnover
@@ -18,7 +17,6 @@
 - Private enforcement: Damages Directive 2014/104/EU
 - Judicial review: General Court (full review + unlimited jurisdiction on fines), Court of Justice (points of law)
 - Largest cartel fine: EUR 2.93 billion (truck cartel, 2016)
-- **DG COMP (7 May 2026)**: **Commission approves EUR 5 billion German State aid scheme to support decarbonisation of industry** — major State aid case under the Clean Industrial Deal State aid framework + the Iran-crisis temporary State aid framework (5 May 2026). Sectors: steel, cement, chemicals, glass, ceramics — energy-intensive industries with electrification + hydrogen-conversion CapEx pipelines. Approval signals the speed of post-AccelerateEU State-aid clearance. Cross-link with `accelerateeu_fossil_energy_crisis` + `iran_strait_hormuz_eu_response`. Source: DG COMP press release, 7 May 2026.
 - DG COMP (13 April 2026): Commission carried out unannounced antitrust inspections at premises of companies active in the chocolate confectionery sector in several Member States. Concerns: possible violation of Article 101 TFEU (cartel prohibition) on market allocation or price coordination. Source: https://ec.europa.eu/commission/presscorner
 - Merger case M.12286 HONDA / ASTEMO (14 April 2026): prior notification of concentration, candidate for simplified procedure (OJ:C_202602183)
 - Merger case M.12295 VALEA / ROCKAWAY MEDIA / ROCKAWAY ARTS (14 April 2026): non-opposition to notified concentration (OJ:C_202602283)
@@ -26,13 +24,8 @@
 - YEL (25 February 2026): "'Naked' and 'by object' restrictions of competition and Article 102 TFEU" by Ioannis Lianos. DOI: 10.1093/yel/yeaf011
 - TTBER revision (16 April 2026, IP/26/809): Commission adopted revised Technology Transfer Block Exemption Regulation (TTBER) + Technology Transfer Guidelines. Replaces Regulation (EU) 316/2014 (expiring 30 April 2026). See dedicated `tech_transfer_block_exemption` guide.
 - Google DMA enforcement (16 April 2026, IP/26/825): Commission proposes measures to Google on sharing search engine data with third parties under DMA Article 6(11). Specific obligations on treatment of query, click, and view data from Google's general search service toward third-party search engines. See `digital_markets_act` guide.
-- Cernavoda 1 nuclear State aid investigation (16 April 2026, IP/26/814): Commission opened in-depth investigation into Romanian State aid to support refurbishment of Cernavoda 1 nuclear reactor. Legal basis assessed under Article 107(3)(c) TFEU and Euratom Treaty; proportionality concerns + impact on EU electricity market. Parallel to Hinkley Point C state aid precedent (C(2014) 7142).
 - BG/DE/SI state aid electricity price relief (16 April 2026): Commission approved Bulgarian, German and Slovenian State aid schemes providing temporary electricity price relief for energy-intensive companies. Legal basis: Article 107(3)(c) TFEU + Temporary Crisis and Transition Framework (TCTF), extended.
 - EPRS Briefing (16 April 2026): "State aid in the EU: State of play" -- EPRS overview of EU state aid framework: General Block Exemption Regulation (GBER), temporary crisis frameworks (TCF, TCTF), State Aid Modernisation, sectoral guidelines (CEEAG, RFEC). Ref: EPRS_UNK_1f041d750f1f
-- **HBOR Croatian state aid approval (20 April 2026, DG COMP)**: Commission approved **EUR 411 million Croatian capital injection into HBOR** (Hrvatska banka za obnovu i razvitak), Croatia's development bank. Assessed under Article 107(3)(c) TFEU and Article 93 TFEU (transport aid principles by analogy for national development banks). Strengthens HBOR's lending capacity for SMEs, green transition, and infrastructure. First large post-crisis capital injection into a national development bank since German KfW facility approval (2023). Source: ec.europa.eu/commission/presscorner/detail/en/IP_26_[TBC].
-- **New CJ19 joint committee amendments (20 April 2026)**: 111 amendments filed on PE784.222 (CJ19-PR-784222), 53 amendments on PE785.274 (ITRE), 12 amendments on PE787.047 (CJ03-PR-787047). Signals active competition-adjacent interinstitutional negotiation on Global Europe + competitiveness files.
-
-Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 
 ## Recent State Aid Decisions (March 2026)
 
@@ -79,6 +72,13 @@ An agreement may be exempted if it:
 ### Article 102 TFEU -- Abuse of Dominant Position
 
 Prohibits unilateral conduct by a dominant undertaking that constitutes an abuse.
+
+**Guidance in force since 3 September 2026:** the Commission's *Guidelines on the application of
+Article 102 TFEU to abusive exclusionary conduct by dominant companies* (adopted 3 September 2026,
+IP/26/1769). They cover dominance assessment **including ecosystems and after-markets**, the
+"competition on the merits" test, per-conduct analytical frameworks, and the objective-necessity and
+efficiency defences. They supersede the 2008 enforcement-priorities communication as the reference
+text for exclusionary conduct.
 
 #### Dominance Assessment
 
@@ -305,3 +305,18 @@ The ECON committee is processing 313 amendments to the 2025 competition policy a
 - See also: `lobbying_methodology.md` for advocacy strategies in competition policy
 - See also: `commission_guide.md` for DG COMP structure and Directorate responsibilities
 - See also: `eu_budget_emu_law.md` for state aid provisions (Art. 107-109 TFEU, related but distinct)
+
+## Dated record (moved out of QUICK FACTS to respect the 4,000-char injection cap)
+
+- Director-General of DG COMP (from Monday 13 April 2026): **Anthony Whelan** (Irish), appointed by Commission. Seasoned Irish official steeped in tech policy. Previously: adviser to President von der Leyen on digital and competition issues; before that, head of DG COMP State Aid department. Replaces Olivier Guersent (departed summer 2025). Public commitment: "competition enforcement needs to be even-handed, fact-based, constrained by whatever is the legal framework of rules that you're enforcing"; will not be influenced by "noise" around Big Tech cases (Google, Meta, Apple, X). Proximity to von der Leyen signals possible alignment with President's push to leverage competition policy for EU scale-up and competitiveness. Source: FT 13 April 2026 (Barbara Moens).
+- **DG COMP (7 May 2026)**: **Commission approves EUR 5 billion German State aid scheme to support decarbonisation of industry** — major State aid case under the Clean Industrial Deal State aid framework + the Iran-crisis temporary State aid framework (5 May 2026). Sectors: steel, cement, chemicals, glass, ceramics — energy-intensive industries with electrification + hydrogen-conversion CapEx pipelines. Approval signals the speed of post-AccelerateEU State-aid clearance. Cross-link with `accelerateeu_fossil_energy_crisis` + `iran_strait_hormuz_eu_response`. Source: DG COMP press release, 7 May 2026.
+- Cernavoda 1 nuclear State aid investigation (16 April 2026, IP/26/814): Commission opened in-depth investigation into Romanian State aid to support refurbishment of Cernavoda 1 nuclear reactor. Legal basis assessed under Article 107(3)(c) TFEU and Euratom Treaty; proportionality concerns + impact on EU electricity market. Parallel to Hinkley Point C state aid precedent (C(2014) 7142).
+- **HBOR Croatian state aid approval (20 April 2026, DG COMP)**: Commission approved **EUR 411 million Croatian capital injection into HBOR** (Hrvatska banka za obnovu i razvitak), Croatia's development bank. Assessed under Article 107(3)(c) TFEU and Article 93 TFEU (transport aid principles by analogy for national development banks). Strengthens HBOR's lending capacity for SMEs, green transition, and infrastructure. First large post-crisis capital injection into a national development bank since German KfW facility approval (2023). Source: ec.europa.eu/commission/presscorner/detail/en/IP_26_[TBC].
+- **New CJ19 joint committee amendments (20 April 2026)**: 111 amendments filed on PE784.222 (CJ19-PR-784222), 53 amendments on PE785.274 (ITRE), 12 amendments on PE787.047 (CJ03-PR-787047). Signals active competition-adjacent interinstitutional negotiation on Global Europe + competitiveness files.
+
+Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
+
+
+
+- **LATEST (Thursday 3 September 2026 — THE ARTICLE 102 EXCLUSIONARY-ABUSE GUIDELINES ARE ADOPTED)**: the Commission adopted **Guidelines on the application of Article 102 TFEU to abusive exclusionary conduct by dominant companies**, closing a process opened by a **Call for evidence in March 2023**. They are the first Commission guidelines on exclusionary abuse; the 2008 text was an enforcement-priorities paper, not guidance on the law. Four things they do: (1) help a company assess whether it is dominant, **including in ecosystems and after-markets**; (2) give the criteria for whether conduct **departs from competition on the merits** and produces exclusionary effects; (3) set the analytical framework for specific conduct types; (4) clarify how a company may justify conduct as **objectively necessary** or as creating **efficiencies that outweigh the harm and benefit consumers**. Named exclusionary abuses: **predatory pricing, margin squeeze, exclusive dealing, refusal to supply**. Enforced by the Commission and the national competition authorities; procedure remains Regulation 1/2003. Source: Commission press release IP/26/1769, 3 September 2026.
+- **PRIOR (Tuesday 7-8 July 2026 — ANNUAL REPORT ADOPTED + SANOFI MARKET TEST + JULY INFRINGEMENTS)**: The European Parliament **adopted its resolution on Competition policy — annual report 2025** at the July Strasbourg plenary (adopted text in the 7 July 2026 sitting, europarl.europa.eu/doceo, TA-10-2026-07-07). On **8 July 2026** DG COMP opened a **market test on commitments offered by Sanofi** to address possible anti-competitive conduct in the promotion of a flu vaccine for vulnerable patients (Article 102 TFEU concerns; feedback invited from third parties before the Commission decides whether to make the commitments binding). The same day's July infringements package referred several Member States to the Court of Justice (see `nis2_directive` for the NIS2 cybersecurity referrals of IE/ES/FR/NL). Source: EC Press Corner, 7-8 July 2026.

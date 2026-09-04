@@ -14383,6 +14383,61 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'centri dati': ['eu_data_centres_energy_sustainability'],
     'rechenzentrum': ['eu_data_centres_energy_sustainability'],
     'rechenzentren': ['eu_data_centres_energy_sustainability'],
+
+    # --- /news 4 September 2026 -----------------------------------------
+    # Article 102 exclusionary-abuse guidelines (adopted 3 Sep 2026). Every
+    # non-English trigger is written ACCENTED and in the phrasing people type;
+    # the unaccented form is added as WELL, never instead
+    # (feedback_triggers_no_accent_folding).
+    "abuse of dominance": ["competition_law_enforcement"],
+    "abuse of a dominant position": ["competition_law_enforcement"],
+    "exclusionary abuse": ["competition_law_enforcement"],
+    "exclusionary conduct": ["competition_law_enforcement"],
+    "predatory pricing": ["competition_law_enforcement"],
+    "margin squeeze": ["competition_law_enforcement"],
+    "refusal to supply": ["competition_law_enforcement"],
+    "exclusive dealing": ["competition_law_enforcement"],
+    "competition on the merits": ["competition_law_enforcement"],
+    "guidelines on exclusionary abuses": ["competition_law_enforcement"],
+    "abus de position dominante": ["competition_law_enforcement"],
+    "abus d'exclusion": ["competition_law_enforcement"],
+    "abuso de posición dominante": ["competition_law_enforcement"],
+    "abuso de posicion dominante": ["competition_law_enforcement"],
+    "abuso de exclusión": ["competition_law_enforcement"],
+    "abuso de exclusion": ["competition_law_enforcement"],
+    "abús de posició dominant": ["competition_law_enforcement"],
+    "abus de posicio dominant": ["competition_law_enforcement"],
+    "abuso di posizione dominante": ["competition_law_enforcement"],
+    "misbruik van machtspositie": ["competition_law_enforcement"],
+    "misbruik van een machtspositie": ["competition_law_enforcement"],
+    # C-147/25 Inter Rao Lietuva -- the evidentiary standard for "control"
+    "inter rao": ["eu_sanctions_implementation_framework"],
+    "owned or controlled": ["eu_sanctions_implementation_framework"],
+    "ownership and control": ["eu_sanctions_implementation_framework"],
+    "propiedad y control sanciones": ["eu_sanctions_implementation_framework"],
+    "propietat i control sancions": ["eu_sanctions_implementation_framework"],
+    "eigendom en zeggenschap sancties": ["eu_sanctions_implementation_framework"],
+    "propriété et contrôle sanctions": ["eu_sanctions_implementation_framework"],
+    "proprieta e controllo sanzioni": ["eu_sanctions_implementation_framework"],
+    # EU-Switzerland ETS linking
+    "ets linking": ["eu_ets_review_2026"],
+    "linking emissions trading": ["eu_ets_review_2026"],
+    "suiza rcde": ["eu_ets_review_2026"],
+    "zwitserland emissiehandel": ["eu_ets_review_2026"],
+    "emissiehandel met zwitserland": ["eu_ets_review_2026"],
+    "koppeling van emissiehandel": ["eu_ets_review_2026"],
+    "emissiehandel zwitserland": ["eu_ets_review_2026"],
+    "comercio de derechos de emisión con suiza": ["eu_ets_review_2026"],
+    "comerç de drets d'emissió amb suïssa": ["eu_ets_review_2026"],
+    "suisse seqe": ["eu_ets_review_2026"],
+    # Effort Sharing Regulation, after T-120/24
+    "effort sharing regulation": ["european_climate_law"],
+    "annual emission allocations": ["european_climate_law"],
+    "reparto del esfuerzo": ["european_climate_law"],
+    "repartiment de l'esforç": ["european_climate_law"],
+    "répartition de l'effort": ["european_climate_law"],
+    "condivisione degli sforzi": ["european_climate_law"],
+    "verdeling van de inspanningen": ["european_climate_law"],
 }
 
 
