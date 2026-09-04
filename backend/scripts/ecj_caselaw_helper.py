@@ -89,6 +89,85 @@ def fetch_press_releases(days):
                         cases=cases, pdf=PR_BASE + href, cp=cp))
     return out, None
 
+def attach_mastodon_holdings(prs):
+    """Fill in the one-sentence HOLDING for each press release from the Court's
+    own Mastodon feed, which Brubru already ingests into `social_posts`.
+
+    Found by /social-eu on 4 September 2026. The press-release PDF body is
+    unreachable (a plain GET returns HTTP 200 with zero bytes, Playwright gets
+    403), but @Curia on curia.social-network.europa.eu posts a plain-language
+    holding for EVERY press release, in EN and FR, and LINKS THE PDF -- which
+    gives an exact join key. So the substance was already in our own database
+    while the helper was telling the reader to go and fetch a blocked file.
+
+    Silent on any failure: this is an enrichment, and a missing holding must
+    never take down the case-law listing.
+    """
+    if not prs:
+        return prs
+    try:
+        import logging
+        import pathlib as _pl
+        # Run as `python3.12 scripts/ecj_caselaw_helper.py` and sys.path[0] is
+        # scripts/, so `core.database` is not importable. Derive the backend
+        # root from THIS file rather than hardcoding it, per
+        # feedback_no_hardcoded_absolute_repo_paths.
+        _backend = str(_pl.Path(__file__).resolve().parents[1])
+        if _backend not in sys.path:
+            sys.path.insert(0, _backend)
+        logging.disable(logging.WARNING)
+        from core.database import SessionLocal
+        from sqlalchemy import text
+    except Exception as exc:
+        # Enrichment only -- never take down the listing. But say WHY, because a
+        # silent return here is exactly how this defect hid for three runs.
+        print(f"    [warn] Mastodon holdings unavailable: {type(exc).__name__}: {exc}")
+        return prs
+    by_cp = {}
+    db = None
+    try:
+        db = SessionLocal()
+        rows = db.execute(text("""
+            SELECT p.content, p.post_url
+              FROM social_posts p JOIN social_accounts a ON a.id = p.account_id
+             WHERE a.entity_name ILIKE '%Court of Justice%'
+               AND p.posted_at >= now() - interval '45 days'
+        """)).fetchall()
+        for content, post_url in rows:
+            txt = content or ""
+            # The post links its own PDF, e.g. .../pdf/2026-09/cp260118en.pdf
+            # Strip ALL whitespace, including the narrow no-break spaces the
+            # Mastodon renderer injects mid-URL, before matching.
+            m = re.search(r"cp(\d{6})en\.pdf", re.sub(r"\s+", "", txt))
+            if not m:
+                continue
+            # Strip the hashtag furniture and the trailing link to leave the holding.
+            # The Mastodon renderer breaks URLs with spaces ("https://  curia.
+            # europa.eu/site/upload/do  cs/..."), so \S* stops at the first gap
+            # and leaves "curia.europa.eu/site" trailing in the holding. Cut
+            # from the link marker or the scheme to end of line instead.
+            holding = re.sub(r"👉.*", "", txt, flags=re.S)
+            holding = re.sub(r"https?\s*:.*", "", holding, flags=re.S)
+            holding = re.sub(r"\b(?:curia|eur-lex)\.europa\.eu\S*.*", "", holding, flags=re.S)
+            holding = re.sub(r"#\s*\w+", "", holding)
+            holding = re.sub(r"[👉⚖️🇮🇹🇪🇺]", "", holding)
+            holding = re.sub(r"\s{2,}", " ", holding).strip(" :-\u00a0")
+            if holding:
+                by_cp.setdefault("cp" + m.group(1), (holding, post_url))
+    except Exception:
+        return prs
+    finally:
+        if db is not None:
+            try:
+                db.close()
+            except Exception:
+                pass
+    for pr in prs:
+        hit = by_cp.get(pr.get("cp"))
+        if hit:
+            pr["holding"], pr["mastodon"] = hit
+    return prs
+
 # CELEX sector-6 descriptor -> (kind, court)
 DESC = {
     "CJ": ("judgment", "Court of Justice"),
@@ -204,6 +283,7 @@ def main():
     a = ap.parse_args()
     acts = fetch(a.days, a.limit)
     prs, pr_err = fetch_press_releases(a.days)
+    prs = attach_mastodon_holdings(prs)
     pr_cases = {c for p in prs for c in p["cases"]}
     for it in acts:
         it["importance"] = rank(it)
@@ -240,12 +320,16 @@ def main():
         # LINK, not a summary you can read. Saying so is the point: this banner used
         # to promise "plain-language summary in the PDF (seed a KB guide from these)",
         # which sends the reader to fetch something that cannot be fetched.
-        print("    NOTE: the PDF body is currently UNREACHABLE (a plain GET returns 200 with an")
-        print("    empty body; Playwright gets 403). Treat these as titles + links only, and take")
-        print("    the legal substance from the Cellar subject-matter lines below.")
+        print("    NOTE: the PDF body is UNREACHABLE (a plain GET returns 200 with an empty body;")
+        print("    Playwright gets 403). The HOLDING line below comes instead from the Court's own")
+        print("    Mastodon account, which posts a plain-language holding for every press release")
+        print("    and links the PDF -- so we already held the substance. Where no HOLDING shows,")
+        print("    take the legal substance from the Cellar subject-matter lines further down.")
         for p in prs:
             cs = " ".join(p["cases"]) or "(no case ref in title)"
             print(f"  {p['date']} No {p['no']:<9} {cs:<22} {p['title'][:96]}")
+            if p.get("holding"):
+                print(f"       HOLDING (from the Court's own Mastodon): {p['holding'][:150]}")
             print(f"       {p['pdf']}")
         print()
 
