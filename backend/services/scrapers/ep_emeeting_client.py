@@ -53,6 +53,14 @@ _BASE_KIND = {
     "TA_PROV": "adopted_text", "TA_A8": "adopted_text",
     "COM": "commission_document", "SEC": "commission_document",
     "SWD": "commission_document", "JOIN": "commission_document",
+    # CLS = a COUNCIL document transmitted to the committee, not (as the bare
+    # code suggests) a legal-service opinion. Verified 4 Sep 2026 by reading the
+    # rows: every PDF sits under AUTRES_INSTITUTIONS/CONS/CLS/ and the reference
+    # is a Council document number (10643/2025, 06435/2026), typically the
+    # Council's own text of an agreement or decision on an NLE consent file.
+    # 198 rows across 72 procedures were landing in `miscellaneous` and had no
+    # MEUB surface at all.
+    "CLS": "council_document",
 }
 _VL_RE = re.compile(r"voting[ _]?list|\bvl[ _]|\bfinal vl\b|_voting_list\b", re.I)
 _CA_RE = re.compile(r"compromise amendment|\bca[s]?\b|_ca[s]?[_ .]|\bca[s]?_", re.I)

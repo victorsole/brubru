@@ -137,10 +137,19 @@ KINDS_DOSSIER = (
     # adopted text closes the dossier, and notices to members are context
     # around it rather than the negotiating layer.
     "adopted_text", "notice_to_members", "report",
+    # Added 4 Sep 2026. `council_document` (geproCode CLS) is the COUNCIL's own
+    # text of the act, transmitted to the committee -- typically the agreement or
+    # decision under an NLE consent procedure. 198 rows across 72 procedures were
+    # sitting in `miscellaneous` with a live PDF and no MEUB surface, so someone
+    # tracking a consent file could see the Parliament's papers and not the text
+    # they are being asked to consent to. It reads last: the Council's text is
+    # the object of the dossier, not a step in it.
+    "council_document",
 )
 
 # Plain-language labels for each dossier kind (British English, no codes).
 DOSSIER_LABELS = {
+    "council_document": "Council text",
     "draft_report": "Draft report",
     "amendment": "Amendments",
     "compromise_amendments": "Compromise amendments",
