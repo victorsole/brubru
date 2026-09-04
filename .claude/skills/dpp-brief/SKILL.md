@@ -12,22 +12,37 @@ product passport and says what it means for a project that has to comply. Built
 for Joana Castella (Terraqui, LIFE DPP-TEX), and usable for any subscriber who
 ticks the ecodesign interest.
 
-**Cadence, set by Joana herself on 19 August 2026: MONTHLY, plus an URGENT brief
-whenever something genuinely new lands.** Not weekly, not "whenever something
-moved". Two tracks:
+**Cadence: the FIRST MONDAY OF EVERY MONTH, plus an URGENT brief whenever
+something genuinely new lands.** Not weekly, not "whenever something moved".
+Two tracks:
 
-- **Monthly**: a scheduled round-up, sent even in a quiet month, because the
-  value is partly the "nothing moved" line. She has been away and wants to know
-  she has not missed anything.
+- **First Monday of the month**: a scheduled round-up on a fixed date, sent even
+  in a quiet month, because the value is partly the "nothing moved" line. She has
+  been away and wants to know she has not missed anything.
+
+  The monthly slot was open-ended ("monthly", set by Joana on 19 August 2026)
+  until **Victor fixed it to the first Monday on 4 September 2026**. A floating
+  monthly has no trigger, so it is only sent when somebody remembers; a fixed
+  weekday is a date `/day-before` can block on. Compute the date, never guess it:
+
+  ```python
+  import calendar
+  from datetime import date
+  def first_monday(y, m):
+      return [d for w in calendar.Calendar().monthdatescalendar(y, m)
+              for d in w if d.month == m and d.weekday() == 0][0]
+  ```
+
+  Next dates: **7 Sep 2026**, 5 Oct, 2 Nov, 7 Dec, 4 Jan 2027, 1 Feb, 1 Mar, 5 Apr.
 - **Urgent**: out of cycle, only when something actually binds, opens or shifts.
   This is where the Step 5 gate applies in full.
 
-**A quiet month is NOT a reason to skip the monthly brief; it IS a reason to skip
-an urgent one.** On 19 August 2026 the gate technically passed (PPWR applicable
+**A quiet month is NOT a reason to skip the first-Monday brief; it IS a reason to
+skip an urgent one.** On 19 August 2026 the gate technically passed (PPWR applicable
 12 Aug, ELV Art 53 amending the Batteries Regulation 13 Aug) and Victor still
 decided not to send, because none of it was significant enough for an out-of-cycle
 mail on the DPP regime specifically. **Her attention is the scarce resource.**
-When in doubt between urgent and monthly, hold it for the monthly.
+When in doubt between urgent and scheduled, hold it for the first Monday.
 
 ## What counts as DPP news
 
