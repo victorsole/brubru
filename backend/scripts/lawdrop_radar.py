@@ -185,6 +185,45 @@ def check_unmarked(db, back: int) -> list[dict]:
     return out
 
 
+def check_calendar_only(db, ahead: int) -> list[dict]:
+    """D. CALENDAR-ONLY -- dated legal milestones Brubru ALREADY HOLDS in
+    `eu_calendar_events` that no cluster requirement covers.
+
+    Why this check exists (found 4 September 2026). Check A reads
+    `law_requirements`, so it can only see a date somebody has entered into a
+    cluster. Brubru holds dated legal milestones in a SECOND store,
+    `eu_calendar_events` (`event_type='special_date'`), and the radar never read
+    it. On 4 September check A reported exactly one upcoming deadline, the Cyber
+    Resilience Act, while the calendar held three more inside ten days:
+
+        06 Sep  Rail interoperability standards: partial application
+        12 Sep  Data Act: partial application
+        14 Sep  Vehicle circularity: delegated-act empowerments start applying
+                (Regulation (EU) 2026/1738 -- the acts that will define
+                 recyclability, recycled content, THE PASSPORT and fee modulation)
+
+    The ELV one was surfaced by a hand sweep of /api/v2/events/all, not by the
+    radar. A radar that reads one of the two stores holding the answer will keep
+    reporting a quiet window while the product knows otherwise.
+
+    A milestone is reported here when NO `law_requirements` row shares its date.
+    Same-date is deliberately coarse: the point is to raise a candidate for a
+    human, not to assert that the cluster is wrong.
+    """
+    rows = db.execute(text("""
+        SELECT e.start_date::date AS milestone, e.title, e.source,
+               e.description, e.institution::text AS institution
+          FROM eu_calendar_events e
+         WHERE e.event_type = 'special_date'
+           AND e.start_date > CURRENT_DATE
+           AND e.start_date <= CURRENT_DATE + make_interval(days => :ahead)
+           AND NOT EXISTS (
+                 SELECT 1 FROM law_requirements r
+                  WHERE r.deadline = e.start_date::date)
+         ORDER BY e.start_date
+    """), {"ahead": ahead}).mappings().all()
+    return [dict(r) for r in rows]
+
 def check_uncovered(db, lo: int, hi: int) -> list[dict]:
     """Substantive acts published lo..hi days ago (so entering force about now,
     on the standard twentieth-day clause) that we hold no cluster for.
@@ -268,11 +307,13 @@ def main() -> int:
         up = check_upcoming(db, a.ahead)
         un = check_unmarked(db, a.back)
         unc = check_uncovered(db, a.force_lo, a.force_hi)
+        cal = check_calendar_only(db, a.ahead)
     finally:
         db.close()
 
     if a.json:
-        print(json.dumps({"upcoming": up, "unmarked": un, "uncovered": unc},
+        print(json.dumps({"upcoming": up, "unmarked": un, "uncovered": unc,
+                          "calendar_only": cal},
                          default=str, indent=2))
         return 0
 
@@ -319,6 +360,14 @@ def main() -> int:
     if len(rest) > 15:
         print(f"   ... and {len(rest)-15} more (use --json for the full list)")
 
+    print(f"\nD. CALENDAR-ONLY -- dated milestones we HOLD in the calendar that no cluster covers")
+    print("   (check A reads law_requirements only; these live in eu_calendar_events)")
+    if not cal:
+        print("   none. Every calendar milestone in the window has a matching requirement.")
+    for r in cal:
+        days = (r["milestone"] - today).days
+        print(f"   {r['milestone']}  (+{days:>3}d)  [{(r['source'] or '')[:22]:22s}] {(r['title'] or '')[:62]}")
+
     print("\nVERDICT")
     if flagged:
         print(f"  {len(flagged)} MISSED law drop(s) -- a passed deadline with nothing shipped.")
@@ -326,7 +375,10 @@ def main() -> int:
         print(f"  {len(up)} upcoming deadline(s) inside {a.ahead} days.")
     if unc:
         print(f"  {len(unc)} uncovered act(s) to triage by hand.")
-    if not (flagged or up or unc):
+    if cal:
+        print(f"  {len(cal)} dated milestone(s) in the calendar with NO cluster requirement "
+              f"-- check A cannot see these.")
+    if not (flagged or up or unc or cal):
         print("  No law drop in the window.")
     return 0
 
