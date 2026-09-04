@@ -407,7 +407,24 @@
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { transform: translateY(-2px); }
       /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
-  </style>
+  
+    /* Section nav, added 4 Sep 2026. Before this the only navigation was the
+       12-chapter TOC, so the amendments analysis, the timeline, the comparison
+       and the sources had no link anywhere on a 26,000px page. */
+    .secnav{position:sticky;top:82px;z-index:40;background:rgba(255,255,255,.94);
+      backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--color-border);
+      margin:0 0 1.5rem;}
+    .secnav__inner{display:flex;gap:.25rem;overflow-x:auto;padding:.55rem .25rem;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .secnav__inner::-webkit-scrollbar{display:none}
+    .secnav a{flex:0 0 auto;padding:.4rem .7rem;border-radius:999px;font-size:.86rem;
+      font-weight:600;color:var(--color-secondary);text-decoration:none;white-space:nowrap;}
+    .secnav a:hover{background:var(--color-bg);color:var(--color-blue);}
+    .secnav a.is-active{background:var(--color-blue);color:#fff;}
+    section[id],nav[id],div[id]{scroll-margin-top:150px}
+    @media(max-width:767px){.secnav{top:70px}.secnav a{font-size:.8rem;padding:.35rem .6rem}
+      section[id],nav[id],div[id]{scroll-margin-top:130px}}
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -449,6 +466,40 @@
   </div>
 </section>
 
+<!-- Section nav -->
+<nav class="secnav" aria-label="Sections of this page">
+  <div class="secnav__inner">
+    <a href="#position">Where it stands</a>
+    <a href="#amendments-2026">1,664 amendments</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#what">What EU Inc. is</a>
+    <a href="#chapters">The 12 chapters</a>
+    <a href="#comparison">vs national law</a>
+    <a href="#impact">Impact</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48h</div>
+    <div class="figure-card__label">Company registration (fast-track)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">EUR 0</div>
+    <div class="figure-card__label">Minimum capital required</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">EUR 100</div>
+    <div class="figure-card__label">Maximum registration cost</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308K</div>
+    <div class="figure-card__label">Estimated companies over 10 years</div>
+  </div>
+</div>
+
 <!-- EP Rapporteur + Parliament's prior work -->
 <section class="card" style="margin: 2rem 0;">
   <h3 style="margin-top: 0;"><i class="mdi mdi-account-tie" style="color: var(--color-red);"></i> European Parliament rapporteur</h3>
@@ -461,7 +512,7 @@
   <p><strong>Previously (week of 13 July 2026, EP committee week):</strong> during the 13-17 July committee week, the last before the summer recess of 27 July to 21 August, EU Inc. reaches <strong>three committees on the same day, Wednesday 15 July 2026</strong>: the lead committee <strong>JURI</strong> for committee consideration, <strong>ECON</strong> as an opinion-giving committee, and <strong>EMPL</strong> for an exchange of views with stakeholders on the 28th regime. This is the first time the file is worked in three committees in the same week, a signal that it is gaining political weight, though it remains a proposal under committee examination rather than adopted law. Source: EP eMeeting committee agendas for 15 July 2026.</p>
   <p>Status on the Legislative Observatory (as of 15 July 2026): <strong>in committee</strong>. The JURI committee referral was announced in plenary on <strong>18 May 2026</strong> (committee dossier JURI/10/05459); no lead-committee report or final committee vote has been tabled yet. The committees for opinion are <strong>ECON</strong> (Aurore Lalucq, S&amp;D, appointed 18 May 2026) and <strong>EMPL</strong> (Johan Danielsson, S&amp;D, appointed 13 May 2026). <strong>BUDG decided not to give an opinion.</strong> On <strong>22 June 2026, EMPL tabled its draft opinion</strong> on EU Inc. (opinion rapporteur Johan Danielsson, S&amp;D), and on <strong>29 June 2026 rapporteur René Repasi tabled the lead JURI draft report (PE790.143, 246 amendments)</strong>, considered by JURI with the shadow rapporteurs on <strong>15 July 2026</strong> (see the comparative and the debate below). The first committee debate was the JURI exchange of views of 4 May 2026 (highlights below).</p>
 
-  <div class="info-box" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
+  <div class="info-box" id="empl-opinion" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
     <h4 style="margin-top:0;"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-purple);"></i> EMPL draft opinion (12 June 2026, PE788.967): a worker-protection rewrite</h4>
     <p>The Employment and Social Affairs Committee's draft opinion for JURI, by rapporteur <strong>Johan Danielsson (S&amp;D, Sweden)</strong>, takes a markedly more protective line than the Commission text. Its core thrust is that the EU Inc. form must not become a vehicle for circumventing labour and social-security law, and it ties the company form firmly to the place where work is actually performed. Main points:</p>
     <ul>
@@ -532,7 +583,7 @@
 </section>
 
 <!-- Repasi JURI draft report: comparative vs the Commission proposal -->
-<section class="card" style="margin: 2rem 0;">
+<section class="card" id="position" style="margin: 2rem 0;">
   <h3 style="margin-top: 0;"><i class="mdi mdi-file-compare" style="color: var(--color-purple);"></i> The Parliament's position: Repasi's draft report (29 June 2026)</h3>
   <p>On 29 June 2026 the lead rapporteur <strong>René Repasi (S&amp;D)</strong> tabled his JURI draft report on EU Inc. (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143v02-00</a>), <strong>246 amendments</strong> to the Commission proposal, on the committee agenda for 15 July 2026. His guiding idea, set out in the Explanatory Statement, is that European competitiveness and the European social dimension are <em>mutually reinforcing</em>: EU Inc. must become an "EU seal of quality". He keeps the Commission's ambition but re-engineers the design around <strong>anti-circumvention and social safeguards</strong>. He is not opposing the file, he is hardening it.</p>
 
@@ -619,44 +670,230 @@
   <p><strong>euinc.me: Independent tracking resource</strong>: <a href="https://euinc.me/en" target="_blank" rel="noopener">euinc.me/en</a>. Not affiliated with the Commission. Neutral framing of the proposal ("a startup expanding from Sweden to Germany needs a new legal entity, a local notary, and months of paperwork"). Tracks OEIL + Council working-party progress, JURI committee milestones, and offers a "2-minute assessment" for founders considering EU Inc. incorporation. Useful companion to Brubru's legislative tracking for founders and VCs tracking incorporation-readiness.</p>
 </section>
 
-<!-- Key figures -->
-<div class="figures">
-  <div class="figure-card fc-blue">
-    <div class="figure-card__number">48h</div>
-    <div class="figure-card__label">Company registration (fast-track)</div>
+<!-- Amendment wave -->
+<section class="section" id="amendments-2026">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-file-document-multiple"></i></div>
+    <h2 class="section__title">1,664 amendments: what Parliament wants to change</h2>
   </div>
-  <div class="figure-card fc-green">
-    <div class="figure-card__number">EUR 0</div>
-    <div class="figure-card__label">Minimum capital required</div>
-  </div>
-  <div class="figure-card fc-purple">
-    <div class="figure-card__number">EUR 100</div>
-    <div class="figure-card__label">Maximum registration cost</div>
-  </div>
-  <div class="figure-card fc-amber">
-    <div class="figure-card__number">308K</div>
-    <div class="figure-card__label">Estimated companies over 10 years</div>
-  </div>
-</div>
+  <p class="section__subtitle">Read from the five JURI amendment documents of 23 July 2026, the EMPL opinion and amendments, and the Bulgarian reasoned opinion, then compared against the rapporteur's draft report</p>
 
-<!-- TOC -->
-<nav class="toc">
-  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure of the Proposal</div>
-  <div class="toc__grid">
-    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> General Principles (Arts 1-12)</a>
-    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registration &amp; Filing (Arts 13-24)</a>
-    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Cross-Border Information (Arts 25-35)</a>
-    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Cross-Border Branches (Arts 36-41)</a>
-    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisation (Arts 42-52)</a>
-    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Shares &amp; Transfers (Arts 53-60)</a>
-    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financing (Arts 61-77)</a>
-    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Employee Stock Options (Arts 78-79)</a>
-    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Closure of Solvent Companies (Arts 80-87)</a>
-    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvency (Arts 88-102)</a>
-    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Prohibited Requirements (Art 103)</a>
-    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Final Provisions (Arts 104-109)</a>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.9rem; margin:1.5rem 0;">
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">1,664</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">amendments in total</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">48</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">members tabling</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">120</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">on preventive control</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">3</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">would end the file</div></div>
   </div>
-</nav>
+
+  <p><strong>In one line:</strong> EU Inc. is not being opposed from one side. It is being pulled apart from both ends at once, while the centre that carries the file argues about who checks a company before it is allowed to exist.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-close-octagon"></i> Finding 1: three amendments would end the file, not amend it</div>
+    <p><strong>Amendment 247</strong>, Arash Saeidi and Manon Aubry <em>on behalf of The Left Group</em>, replaces "Adopts its position at first reading" with <strong>"Rejects the Commission Proposal"</strong>.</p>
+    <p><strong>Amendment 248</strong>, Pascale Piera and Juan Carlos Girauta Vidal (Patriots for Europe), does the same thing in almost identical words.</p>
+    <p><strong>Amendments 249 and 250</strong> would convert the instrument from a <strong>Regulation into a Directive</strong>, applying "throughout the text". That is not a drafting preference. A directive requires national transposition, which removes the single uniform company form that is the entire point of a 28th regime.</p>
+    <p style="margin-top:0.75rem;"><em>The Left and the hard right reach the same destination from opposite directions. That pattern repeats through the whole set.</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check"></i> Finding 2: the biggest fight is about notaries, not startups</div>
+    <p><strong>120 amendments</strong> touch preventive legality control, more than any other theme. Article 14 alone attracts 59 and Article 2 attracts 70. The recurring move is to write <strong>"notarial"</strong> into the chain of authorities that must check a company before registration.</p>
+    <p>This cuts directly against the proposal's digital-only design. Amendment 314 says fully digital procedures "should not prevent competent authorities, including notaries where provided for under national law, from requiring the <strong>physical appearance</strong> of applicants where justified by specific risks relating to identity".</p>
+    <p><strong>The rapporteur is on the same side, for a different reason.</strong> He strengthens preventive control so EU Inc. becomes "a trusted European corporate label" rather than a circumvention vehicle. But he specifies <em>what</em> must be verified, being identity, legal capacity, authenticity and anti-money-laundering compliance, and leaves the choice of authority open. The 120 amendments would put a specific profession into the text.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-speedometer"></i> Finding 3: the speed range runs from 48 hours to 15 working days</div>
+    <p>The <strong>Commission proposed 48 hours</strong> (Article 16(2)), capped at <strong>EUR 100</strong>. The rapporteur's draft report <strong>slows this to two working days</strong> and adds an extension "for the time strictly necessary". Twenty-two amendments then move the deadline again, in both directions.</p>
+    <div style="overflow-x:auto; margin:1rem 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+      <thead><tr style="background:#f5f3ff; text-align:left;">
+        <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Deadline</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Who proposes it</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>48 hours</strong><br><span style="color:#666;">the Commission's own text, restored</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Commission proposal, and amendments from Mario Mantovani (ECR), J&ouml;rgen Warborn (EPP), Victor Negrescu (S&amp;D), Pascal Canfin (Renew), Kira Marie Peter-Hansen and Sergey Lagodinsky (Greens/EFA)</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Two working days</strong><br><span style="color:#666;">the rapporteur's slowdown</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Repasi's draft report, and amendments from Daniel Buda and Lukas Mandl (EPP), Mary Khan</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>15 working days</strong><br><span style="color:#666;">roughly seven times slower</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Arash Saeidi and &Ouml;zlem Demirel (The Left)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>The reading is not that a coalition wants EU Inc. faster than the Commission. It is that an unusually wide coalition, running from ECR through the EPP and S&amp;D to Renew and the Greens, is <strong>defending the Commission's 48 hours against its own rapporteur</strong>. Speed is the one thing the centre and both flanks of the mainstream agree on. Canfin's version adds a decisive word: a maximum <strong>"and total"</strong> cost of EUR 100, closing the gap through which national add-on fees could re-enter.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group"></i> Finding 4: on employee participation, every outcome is on the table</div>
+    <p>Twenty-nine amendments target <strong>Article 12</strong>, and they cover the full range:</p>
+    <ul>
+      <li><strong>Delete it.</strong> Amendments 835, 837 and 838. Mantovani's justification is a <em>competence</em> argument, not a policy one: employee participation belongs to a legal basis on which <strong>the Council acts unanimously</strong>, not to Article 114 TFEU. Bulgaria's parliament raises the same objection from a different direction.</li>
+      <li><strong>Shift the connecting factor.</strong> Repasi's own Amendment 840 and the EMPL draft opinion both move participation from the Member State of the <strong>registered office</strong> to the Member State of <strong>employment</strong>. The draft report goes further: where employees sit in several Member States, the <strong>highest level of protection</strong> applies.</li>
+      <li><strong>Harden it further.</strong> Amendment 839 (Greens/EFA), Amendments 841 and 843 (The Left).</li>
+      <li><strong>Keep the registered-office rule.</strong> Amendment 842 (ECR), Amendment 844 (EPP).</li>
+    </ul>
+    <p style="margin-top:0.75rem;"><em>This is where the lead committee and the opinion committee already agree: JURI's rapporteur and EMPL's rapporteur propose the same change (the EMPL opinion is set out in full <a href="#empl-opinion">above</a>). The opposition to it splits between a competence argument and a business-flexibility one.</em></p>
+  </div>
+
+  <h3>Who tabled what</h3>
+  <p>Forty-eight members tabled amendments. Attributing each by its first identifiable signatory, or by its declared "on behalf of" line:</p>
+  <div style="overflow-x:auto; margin:1.25rem 0;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+    <thead><tr style="background:#f5f3ff; text-align:left;">
+      <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Political family</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Amendments</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">What it targets hardest</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>EPP</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">318</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Digital share register (21), definitions (16), share transfer (16), application form (14)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriots for Europe</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">243</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Preventive control (13), applicable rules (10), definitions (8)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>ECR</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">166</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Definitions (15), preventive control (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriots for Europe</strong> <span style="color:#666;">(Czech members)</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">156</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Company bodies (6), Article 33 (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Greens/EFA</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">147</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Subject matter (9), preventive control (7), digital-only (6), EU-ESO (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>The Left</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">123</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Register disclosure (10), subject matter (7), preventive control (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>S&amp;D</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">112</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Spread across the text</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Renew</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">48</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Spread across the text</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="color:#666; font-size:0.88rem;">A further 105 could not be attributed automatically. Where an amendment is co-signed, the family of the first identifiable signatory is used, so these figures show weight of effort rather than formal group positions.</p>
+
+  <h3>What would be deleted outright</h3>
+  <p>Twenty-nine amendments delete a provision rather than rewrite it, and they cluster in two places:</p>
+  <ul>
+    <li><strong>Article 54, the digital register of shares: 7 deletions</strong>, and it is also the article the EPP amends 21 times. On the numbers, this is the single most contested provision in the regulation.</li>
+    <li><strong>Chapter X, simplified insolvency: 5 deletions</strong>, the chapter Bulgaria's parliament says reaches into national tax, labour and contract law.</li>
+  </ul>
+  <p>The rest are scattered: Article 44 (3 deletions), Articles 17, 59, 61 and 109 (2 each), and single deletions across Articles 8, 20, 46, 67, 70 and 92.</p>
+
+  <h3>Where the amendments and the draft report already agree</h3>
+  <p>Reading the 1,418 against the rapporteur's 246, four things turn out not to be in dispute:</p>
+  <ul>
+    <li><strong>The EUR 100 fee cap</strong> survives in every version that touches it. Nobody proposes a higher ceiling.</li>
+    <li><strong>Preventive control should be stronger</strong> than the Commission proposed. The argument is about who performs it, not whether it happens.</li>
+    <li><strong>Anti-money-laundering checks belong at registration.</strong> 77 amendments raise money laundering or beneficial ownership, and the draft report builds the same requirement in.</li>
+    <li><strong>Letter-box prevention.</strong> Nine amendments raise economic substance, and it is also ECON's third suggestion, asking for "minimum economic substance requirements relating to operational presence, decision-making capacity and economic activity within the EU".</li>
+  </ul>
+  <p>Two of the rapporteur's own ideas stand nearly alone: the steward-owned <strong>"EU Inc. SO"</strong> variant is picked up by only two amendments, and the <strong>Annex II</strong> exclusion list he creates to replace the ambiguous word "innovative" is engaged by ten.</p>
+
+  <h3>The first national-parliament objection</h3>
+  <p>On <strong>18 June 2026</strong> the Bulgarian National Assembly's Committee on European Affairs and Oversight of EU Funds adopted a <strong>reasoned opinion on subsidiarity, unanimously, by 15 votes</strong>. Bulgaria welcomes the objectives and still concludes the proposal complies <strong>only partially</strong> with subsidiarity and <strong>not fully</strong> with proportionality.</p>
+  <p>Its sharpest line is on capital: the zero-capital requirement is <strong>"wholly unacceptable"</strong>, creating risks to creditor protection, money laundering and tax fraud, citing the Financial Action Task Force on low capital thresholds facilitating criminal schemes. It also asks how a <strong>48-hour registration</strong> squares with the anti-money-laundering package, calls the BRIS connection deadlines <strong>"highly unrealistic"</strong> and asks for two years rather than twelve months, warns that the absence of limits on the company's objects will collide with national rules on banking, insurance, pensions and healthcare, and objects that Chapters IX and X reach into national tax, labour and contract law. On <strong>Article 12</strong> it calls the absence of any ex ante assessment a "major deficiency".</p>
+  <p><strong>One absence is worth naming.</strong> No tabled amendment raises the minimum capital above zero. The objection Bulgaria's parliament calls wholly unacceptable is, so far, carried by nobody in the committee.</p>
+
+  <p style="margin-top:1.5rem;"><em>The rapporteur's own design, and a clause-by-clause comparison against the Commission text, is set out in <a href="#position">The Parliament's position</a> above. This section covers only what the <strong>other</strong> members did to it.</em></p>
+
+  <p style="color:#666; font-size:0.88rem; margin-top:1.5rem;">Sources read in full: PE790.143v02-00 (draft report, 151 pp), PE791.127 to PE791.131 (JURI amendments 247 to 1664, 856 pp), PE790.022 (EMPL amendments 133 to 339, 116 pp), PE788.967 (EMPL draft opinion, 27 pp), PE790.116 (Bulgarian reasoned opinion, 8 pp), the ECON opinion letter, and COM(2026) 321. Counts, signatories and targets were extracted programmatically from the published texts and spot-checked by hand.</p>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Legislative Timeline</h2>
+  </div>
+  <p class="section__subtitle">From the Draghi Report to the date of application</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">September 2024</div>
+      <div class="timeline__text">Draghi Competitiveness Report identifies regulatory fragmentation as key barrier</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">January 2025</div>
+      <div class="timeline__text">Competitiveness Compass announces "28th regime" creation</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">March 2025</div>
+      <div class="timeline__text">European Council calls on Commission to propose optional company law regime</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 11 December 2025</div>
+      <div class="timeline__text">JURI committee adopts Repasi's own-initiative legislative report (INL) under Rule 47: 18 for, 4 against, 1 abstention. Legal basis opinion: 22-2-1 in favour of Articles 50 + 114 TFEU (rejecting Article 352 unanimity route)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Wednesday 17 December 2025</div>
+      <div class="timeline__text">Report <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> tabled: "Report with recommendations to the Commission on the 28th Regime: a new legal framework for innovative companies" (procedure 2025/2079(INL)). Parliament proposes name "Societas Europaea Unificata (S.EU)" and EUR 1 minimum capital</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">February-March 2026</div>
+      <div class="timeline__text">Three MEP meetings with Austrian and German business organisations on EU Inc. disclosed via the EU transparency register</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Wednesday 18 March 2026</div>
+      <div class="timeline__text"><strong>Commission adopts EU Inc. proposal (COM(2026) 321)</strong>, procedure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Legal basis: Article 114 TFEU. DG Justice and Consumers (Commissioner Michael McGrath). Commission brands the form "EU Inc." rather than Parliament's "S.EU"; sets minimum capital at EUR 0 (vs EUR 1 proposed by EP)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 19 - Friday 20 March 2026</div>
+      <div class="timeline__text">European Council discusses competitiveness and the "One Europe, One Market" agenda</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Tuesday 31 March 2026</div>
+      <div class="timeline__text">Provisional JURI allocation of the EU Inc. dossier circulates (per euinc.me); the formal OEIL committee referral follows on 18 May 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 23 April 2026</div>
+      <div class="timeline__text"><strong>René Repasi (S&amp;D, Germany) confirmed as EP rapporteur</strong> for the Commission proposal in JURI (decision taken in the in-camera coordinators' meeting that morning, not in the public session). Continuity from the INL phase (he was also rapporteur for A10-0269/2025). Six shadow rapporteurs confirmed across the full spectrum: <strong>Axel Voss</strong> (EPP), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Greens/EFA) and <strong>Arash Saeidi</strong> (The Left). Source: Euractiv, "René Repasi to helm EU Inc in Parliament"</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Monday 4 May 2026</div>
+      <div class="timeline__text"><strong>First JURI engagement: a full exchange of views</strong> on the EU Inc. proposal. Commissioner Michael McGrath presented the framework; rapporteur René Repasi welcomed it "except for the name" and pressed for stronger guardrails; ECR shadow Mario Mantovani warned that fragmentation on tax and insolvency leaves scale-ups underserved; Renew shadow Pascal Canfin reaffirmed support and pressed on employee stock options. See the "JURI debate" section above for the highlights (transcribed from the EP webstream). Source: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">EP webstream, 4 May 2026</a>.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Monday 18 May 2026</div>
+      <div class="timeline__text"><strong>JURI committee referral announced in plenary</strong> (committee dossier JURI/10/05459). Committees for opinion: ECON (Aurore Lalucq, S&amp;D) and EMPL (Johan Danielsson, S&amp;D); BUDG decided not to give an opinion. Status: awaiting committee decision.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Wednesday 3 June 2026</div>
+      <div class="timeline__text"><strong>ECON adopts the "28th tax regime" own-initiative report</strong> (procedure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew), the tax-module companion to EU Inc. Compromise carried by EPP, S&amp;D, Renew and Greens; ECR and PfE amendments fell. Indicative plenary: 6 July 2026.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Monday 22 June 2026</div>
+      <div class="timeline__text"><strong>EMPL tables its draft opinion on EU Inc.</strong> (procedure 2026/0074(COD), opinion rapporteur <strong>Johan Danielsson</strong>, S&amp;D). The document, <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/EMPL/PA/2026/09-10/1344254EN.pdf" target="_blank" rel="noopener">PE788.967</a>, carries a cover date of 12 June 2026 and runs to 27 pages. Its central move is on <strong>Article 12</strong>: employee participation should follow the <strong>Member State of employment</strong> rather than the Member State of the registered office, and applies "if any" such rules exist. A new Article 12(2a) anchors the safeguards to <strong>Article 2(k) of Council Directive 2001/86/EC</strong>, the European Company participation directive. It also narrows Recital 1 from "innovative companies" to "innovative <strong>startups</strong>".</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Monday 29 June 2026</div>
+      <div class="timeline__text"><strong>Rapporteur René Repasi tables the lead JURI draft report</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendments): keeps the Commission's ambition but adds anti-circumvention and social safeguards (place-of-employment participation, sector carve-out, steward ownership, listing restriction, Delaware-style dispute layer).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Wednesday 15 July 2026</div>
+      <div class="timeline__text"><strong>JURI considers the draft report with the shadow rapporteurs.</strong> Repasi: "a highway for startups needs speed limits and guardrails." EPP (Voss) and Renew (Canfin, read by Žalimas) defend the Commission's broad, open design and resist the sector carve-outs, host-state co-determination and the listing ban; the Greens (Peter-Hansen) back the social safeguards and the listed-company exclusion; the Left (Saeidi) warns of fraud risk with ~200 amendments. Amendments due within days.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Wednesday 15 July 2026</div>
+      <div class="timeline__text"><strong>ECON adopts its opinion on EU Inc. by 34 votes to 13, with 9 abstentions</strong> and sends it to JURI as a letter under Rule 57(1) (PE788.878v01-00), signed by ECON Chair Aurore Lalucq. Thirty-one suggestions, sixteen of them on a <strong>tax module</strong> the Commission proposal does not contain: an opt-in or enhanced-cooperation structure to work around unanimity, a single consolidated corporate tax base apportioned by a formula reflecting real economic activity, centralised VAT and withholding procedures, and a mandatory employee stock option scheme taxed at disposal as capital income. Backed by EPP, S&amp;D, Renew and Greens/EFA; opposed by the hard right and The Left simultaneously. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 18 June 2026</div>
+      <div class="timeline__text"><strong>Bulgaria's National Assembly objects on subsidiarity, unanimously.</strong> The Committee on European Affairs and Oversight of EU Funds examined COM(2026)0321 at its sitting of 18 June and adopted a <strong>reasoned opinion by 15 votes in favour, unanimously</strong> (Chair Galin Durev), forwarded to President Metsola on 19 June and circulated in JURI on 24 June as <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/NP/2026/09-07/1346321EN.pdf" target="_blank" rel="noopener">PE790.116</a>. It is the <strong>first national-parliament objection to EU Inc.</strong> Bulgaria welcomes the objectives but finds the proposal complies <strong>only partially with subsidiarity</strong> (Article 5(3) TEU) and <strong>not fully with proportionality</strong> (Article 5(4) TEU). Its specific objections: the <strong>zero-capital requirement is "wholly unacceptable"</strong> on creditor-protection, money-laundering and tax-fraud grounds, citing the FATF on low capital thresholds; the <strong>48-hour registration deadline</strong> needs reconciling with the anti-money-laundering package; the deadlines for connecting national registers to BRIS are <strong>"highly unrealistic"</strong> and the 12-month period should be at least two years; the <strong>absence of limits on the company's objects</strong> risks conflict with national rules on banking, insurance, pensions and healthcare; director liability is <strong>"unduly onerous"</strong> and will make board seats unattractive in startups; the <strong>taxation of warrants</strong> belongs to Member State competence and to the Council's tax bodies; Chapters IX and X on winding-up and insolvency <strong>encroach on national tax, labour and contract law</strong>; and SAFE, KISS and EU-ESO carry direct implications for national tax systems with no impact assessment. It singles out <strong>Article 12 on employee participation</strong> as a "major deficiency" for lacking any ex ante assessment of its effects on national worker-participation models.</div>
+    </div>
+<div class="timeline__item">
+      <div class="timeline__date">Tuesday 23 June 2026</div>
+      <div class="timeline__text"><strong>EMPL amendments tabled</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/EMPL/AM/2026/09-10/1346065EN.pdf" target="_blank" rel="noopener">PE790.022</a>): <strong>207 amendments, numbered 133 to 339</strong>, 116 pages.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 23 July 2026</div>
+      <div class="timeline__text"><strong>1,418 amendments tabled in JURI, across five documents.</strong> Amendments <strong>247 to 1664</strong> were tabled to Repasi's draft report on 23 July 2026 and published as <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/AM/2026/09-07/1348616EN.pdf" target="_blank" rel="noopener">PE791.127</a> (247-426), <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/AM/2026/09-07/1348619EN.pdf" target="_blank" rel="noopener">PE791.128</a> (427-695), <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/AM/2026/09-07/1348620EN.pdf" target="_blank" rel="noopener">PE791.129</a> (696-995), <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/AM/2026/09-07/1348621EN.pdf" target="_blank" rel="noopener">PE791.130</a> (996-1339) and <a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/AM/2026/09-07/1348622EN.pdf" target="_blank" rel="noopener">PE791.131</a> (1340-1664), 856 pages in total. With the rapporteur's own 246, the file now carries <strong>1,664 amendments</strong>. When The Left's Arash Saeidi warned in the 15 July committee consideration about the fraud risk of "around 200 amendments", the eventual figure was roughly eight times that.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Monday 7 September 2026</div>
+      <div class="timeline__text"><strong>EU Inc. returns to JURI, and it is the busiest amendment surface in the Parliament this week.</strong> The JURI agenda for 7 September carries the draft report, a draft opinion, <strong>six amendment documents</strong> and the Bulgarian reasoned opinion on the same file, twenty documents in all. No press outlet carried this when the amendments were tabled. Source: EP eMeeting committee documents.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Thursday 10 September 2026</div>
+      <div class="timeline__text"><strong>EMPL takes the file up again</strong> with its own amendments and draft opinion on the agenda, three days after JURI.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Monday 5 October 2026 (forecast)</div>
+      <div class="timeline__text"><strong>Indicative plenary sitting date, first reading</strong>, per the <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">Legislative Observatory forecast</a> for procedure 2026/0074(COD). Forecast dates shift as committee work progresses.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">End 2026</div>
+      <div class="timeline__text"><strong>Three-institution commitment</strong> (Commission, Parliament, Council) to conclude negotiations by the end of 2026. Aggressive but structurally feasible given the INL-phase consensus already built in JURI</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Adoption of implementing acts (templates, forms, BRIS specifications)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Date of application: EU Inc. becomes available across all Member States</div>
+    </div>
+  </div>
+</section>
 
 <!-- What and Why -->
 <section class="section" id="what">
@@ -694,6 +931,25 @@
     </div>
   </div>
 </section>
+
+<!-- TOC -->
+<nav class="toc" id="chapters">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure of the Proposal</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> General Principles (Arts 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registration &amp; Filing (Arts 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Cross-Border Information (Arts 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Cross-Border Branches (Arts 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisation (Arts 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Shares &amp; Transfers (Arts 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financing (Arts 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Employee Stock Options (Arts 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Closure of Solvent Companies (Arts 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvency (Arts 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Prohibited Requirements (Art 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Final Provisions (Arts 104-109)</a>
+  </div>
+</nav>
 
 <!-- Chapter I -->
 <section class="section" id="ch1">
@@ -1056,102 +1312,6 @@
   </div>
 </section>
 
-<!-- Timeline -->
-<section class="section" id="timeline">
-  <div class="section__header">
-    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
-    <h2 class="section__title">Legislative Timeline</h2>
-  </div>
-  <p class="section__subtitle">From the Draghi Report to the date of application</p>
-
-  <div class="timeline">
-    <div class="timeline__item">
-      <div class="timeline__date">September 2024</div>
-      <div class="timeline__text">Draghi Competitiveness Report identifies regulatory fragmentation as key barrier</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">January 2025</div>
-      <div class="timeline__text">Competitiveness Compass announces "28th regime" creation</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">March 2025</div>
-      <div class="timeline__text">European Council calls on Commission to propose optional company law regime</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Thursday 11 December 2025</div>
-      <div class="timeline__text">JURI committee adopts Repasi's own-initiative legislative report (INL) under Rule 47: 18 for, 4 against, 1 abstention. Legal basis opinion: 22-2-1 in favour of Articles 50 + 114 TFEU (rejecting Article 352 unanimity route)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Wednesday 17 December 2025</div>
-      <div class="timeline__text">Report <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> tabled: "Report with recommendations to the Commission on the 28th Regime: a new legal framework for innovative companies" (procedure 2025/2079(INL)). Parliament proposes name "Societas Europaea Unificata (S.EU)" and EUR 1 minimum capital</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">February-March 2026</div>
-      <div class="timeline__text">Three MEP meetings with Austrian and German business organisations on EU Inc. disclosed via the EU transparency register</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Wednesday 18 March 2026</div>
-      <div class="timeline__text"><strong>Commission adopts EU Inc. proposal (COM(2026) 321)</strong>, procedure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Legal basis: Article 114 TFEU. DG Justice and Consumers (Commissioner Michael McGrath). Commission brands the form "EU Inc." rather than Parliament's "S.EU"; sets minimum capital at EUR 0 (vs EUR 1 proposed by EP)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Thursday 19 - Friday 20 March 2026</div>
-      <div class="timeline__text">European Council discusses competitiveness and the "One Europe, One Market" agenda</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Tuesday 31 March 2026</div>
-      <div class="timeline__text">Provisional JURI allocation of the EU Inc. dossier circulates (per euinc.me); the formal OEIL committee referral follows on 18 May 2026</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Thursday 23 April 2026</div>
-      <div class="timeline__text"><strong>René Repasi (S&amp;D, Germany) confirmed as EP rapporteur</strong> for the Commission proposal in JURI (decision taken in the in-camera coordinators' meeting that morning, not in the public session). Continuity from the INL phase (he was also rapporteur for A10-0269/2025). Six shadow rapporteurs confirmed across the full spectrum: <strong>Axel Voss</strong> (EPP), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Greens/EFA) and <strong>Arash Saeidi</strong> (The Left). Source: Euractiv, "René Repasi to helm EU Inc in Parliament"</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Monday 4 May 2026</div>
-      <div class="timeline__text"><strong>First JURI engagement: a full exchange of views</strong> on the EU Inc. proposal. Commissioner Michael McGrath presented the framework; rapporteur René Repasi welcomed it "except for the name" and pressed for stronger guardrails; ECR shadow Mario Mantovani warned that fragmentation on tax and insolvency leaves scale-ups underserved; Renew shadow Pascal Canfin reaffirmed support and pressed on employee stock options. See the "JURI debate" section above for the highlights (transcribed from the EP webstream). Source: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">EP webstream, 4 May 2026</a>.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Monday 18 May 2026</div>
-      <div class="timeline__text"><strong>JURI committee referral announced in plenary</strong> (committee dossier JURI/10/05459). Committees for opinion: ECON (Aurore Lalucq, S&amp;D) and EMPL (Johan Danielsson, S&amp;D); BUDG decided not to give an opinion. Status: awaiting committee decision.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Wednesday 3 June 2026</div>
-      <div class="timeline__text"><strong>ECON adopts the "28th tax regime" own-initiative report</strong> (procedure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew), the tax-module companion to EU Inc. Compromise carried by EPP, S&amp;D, Renew and Greens; ECR and PfE amendments fell. Indicative plenary: 6 July 2026.</div>
-    </div>
-    <div class="timeline__item timeline__item--active">
-      <div class="timeline__date">Monday 22 June 2026</div>
-      <div class="timeline__text"><strong>EMPL tables its draft opinion on EU Inc.</strong> (procedure 2026/0074(COD), opinion rapporteur Johan Danielsson, S&amp;D).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Monday 29 June 2026</div>
-      <div class="timeline__text"><strong>Rapporteur René Repasi tables the lead JURI draft report</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendments): keeps the Commission's ambition but adds anti-circumvention and social safeguards (place-of-employment participation, sector carve-out, steward ownership, listing restriction, Delaware-style dispute layer).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Wednesday 15 July 2026</div>
-      <div class="timeline__text"><strong>JURI considers the draft report with the shadow rapporteurs.</strong> Repasi: "a highway for startups needs speed limits and guardrails." EPP (Voss) and Renew (Canfin, read by Žalimas) defend the Commission's broad, open design and resist the sector carve-outs, host-state co-determination and the listing ban; the Greens (Peter-Hansen) back the social safeguards and the listed-company exclusion; the Left (Saeidi) warns of fraud risk with ~200 amendments. Amendments due within days.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Wednesday 15 July 2026</div>
-      <div class="timeline__text"><strong>ECON adopts its opinion on EU Inc. by 34 votes to 13, with 9 abstentions</strong> and sends it to JURI as a letter under Rule 57(1) (PE788.878v01-00), signed by ECON Chair Aurore Lalucq. Thirty-one suggestions, sixteen of them on a <strong>tax module</strong> the Commission proposal does not contain: an opt-in or enhanced-cooperation structure to work around unanimity, a single consolidated corporate tax base apportioned by a formula reflecting real economic activity, centralised VAT and withholding procedures, and a mandatory employee stock option scheme taxed at disposal as capital income. Backed by EPP, S&amp;D, Renew and Greens/EFA; opposed by the hard right and The Left simultaneously. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Monday 5 October 2026 (forecast)</div>
-      <div class="timeline__text"><strong>Indicative plenary sitting date, first reading</strong>, per the <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">Legislative Observatory forecast</a> for procedure 2026/0074(COD). Forecast dates shift as committee work progresses.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">End 2026</div>
-      <div class="timeline__text"><strong>Three-institution commitment</strong> (Commission, Parliament, Council) to conclude negotiations by the end of 2026. Aggressive but structurally feasible given the INL-phase consensus already built in JURI</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2027</div>
-      <div class="timeline__text">Adoption of implementing acts (templates, forms, BRIS specifications)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2028</div>
-      <div class="timeline__text">Date of application: EU Inc. becomes available across all Member States</div>
-    </div>
-  </div>
-</section>
-
 <!-- Sources -->
 <section class="section" id="sources">
   <div class="section__header">
@@ -1202,5 +1362,25 @@
   });
 </script>
 
+
+<script>
+/* Highlight the section the reader is actually in. Uses IntersectionObserver so
+   it costs nothing on scroll; falls back to doing nothing if unsupported. */
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.secnav a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var byId = {};
+  links.forEach(function(a){ byId[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(byId).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.remove('is-active'); });
+      var a = byId[e.target.id]; if (a) a.classList.add('is-active');
+    });
+  }, {rootMargin: '-96px 0px -70% 0px', threshold: 0});
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
 </body>
 </html>

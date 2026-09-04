@@ -407,7 +407,24 @@
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { transform: translateY(-2px); }
       /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
-  </style>
+  
+    /* Section nav, added 4 Sep 2026. Before this the only navigation was the
+       12-chapter TOC, so the amendments analysis, the timeline, the comparison
+       and the sources had no link anywhere on a 26,000px page. */
+    .secnav{position:sticky;top:82px;z-index:40;background:rgba(255,255,255,.94);
+      backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--color-border);
+      margin:0 0 1.5rem;}
+    .secnav__inner{display:flex;gap:.25rem;overflow-x:auto;padding:.55rem .25rem;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .secnav__inner::-webkit-scrollbar{display:none}
+    .secnav a{flex:0 0 auto;padding:.4rem .7rem;border-radius:999px;font-size:.86rem;
+      font-weight:600;color:var(--color-secondary);text-decoration:none;white-space:nowrap;}
+    .secnav a:hover{background:var(--color-bg);color:var(--color-blue);}
+    .secnav a.is-active{background:var(--color-blue);color:#fff;}
+    section[id],nav[id],div[id]{scroll-margin-top:150px}
+    @media(max-width:767px){.secnav{top:70px}.secnav a{font-size:.8rem;padding:.35rem .6rem}
+      section[id],nav[id],div[id]{scroll-margin-top:130px}}
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -450,7 +467,41 @@
 </section>
 
 <!-- EP Rapporteur + Parliament's prior work -->
-<section class="card" style="margin: 2rem 0;">
+<!-- Section nav -->
+<nav class="secnav" aria-label="Onderdelen van deze pagina">
+  <div class="secnav__inner">
+    <a href="#position">Stand van het dossier</a>
+    <a href="#amendments-2026">1.664 amendementen</a>
+    <a href="#timeline">Tijdlijn</a>
+    <a href="#what">Wat EU Inc. is</a>
+    <a href="#chapters">De 12 hoofdstukken</a>
+    <a href="#comparison">Tegenover nationaal recht</a>
+    <a href="#impact">Impact</a>
+    <a href="#sources">Bronnen</a>
+  </div>
+</nav>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48u</div>
+    <div class="figure-card__label">Registratie van de onderneming (snelle procedure)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">0 EUR</div>
+    <div class="figure-card__label">Vereist minimumkapitaal</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">100 EUR</div>
+    <div class="figure-card__label">Maximale registratiekosten</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308K</div>
+    <div class="figure-card__label">Geraamde ondernemingen over 10 jaar</div>
+  </div>
+</div>
+
+<section class="card" id="position" style="margin: 2rem 0;">
   <h3 style="margin-top: 0;"><i class="mdi mdi-account-tie" style="color: var(--color-red);"></i> Rapporteur van het Europees Parlement</h3>
   <p><strong>René Repasi</strong> (S&amp;D, Duitsland, SPD) werd op 23 april 2026 bevestigd als EP-rapporteur voor het EU Inc.-voorstel van de Commissie. Hij is lid van de Commissie juridische zaken (JURI, de bevoegde commissie voor dit dossier) en van de Commissie economische en monetaire zaken (ECON), en plaatsvervangend lid van ITRE en de Subcommissie fiscale zaken (FISC). Hij is tevens hoogleraar rechten aan de Erasmus School of Law in Rotterdam. <a href="https://www.europarl.europa.eu/meps/en/229839/RENE_REPASI/home" target="_blank" rel="noopener">MEP-profiel</a>.</p>
   <p>Repasi begeleidde al het voorbereidende <strong>initiatiefverslag</strong> van het Parlement over het 28e stelsel (<a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a>, procedure 2025/2079(INL)), ingediend op 17 december 2025 en aangenomen in JURI met 18 stemmen voor, 4 tegen en 1 onthouding. Zijn INL-verslag noemde de nieuwe rechtsvorm "Societas Europaea Unificata (S.EU)", stelde een minimumkapitaal van 1 EUR voor en pleitte voor uitdrukkelijke waarborgen voor werknemersparticipatie en optionele rentmeesterseigendom/uitsluitingsbepalingen. De Commissie heeft de rechtsvorm uiteindelijk "EU Inc." gedoopt met een minimumkapitaal van 0 EUR. Het Commissievoorstel (procedure <strong>2026/0074(COD)</strong>) is gebaseerd op <strong>artikel 114 VWEU</strong>; het voorgaande INL had artikelen 50 + 114 verdedigd tegenover artikel 352.</p>
@@ -461,7 +512,7 @@
   <p><strong>Laatste ontwikkeling (week van 13 juli 2026, commissieweek van het EP):</strong> tijdens de commissieweek van 13 tot 17 juli, de laatste vóór het zomerreces van 27 juli tot 21 augustus, komt EU Inc. op dezelfde dag, woensdag 15 juli 2026, in <strong>drie commissies</strong>: de bevoegde commissie <strong>JURI</strong> ter behandeling, <strong>ECON</strong> als adviescommissie en <strong>EMPL</strong> voor een gedachtewisseling met belanghebbenden over het 28e regime. Het is de eerste keer dat het dossier in dezelfde week in drie commissies wordt behandeld, een teken dat het aan politiek gewicht wint, al blijft het een voorstel dat in de commissie wordt behandeld en geen aangenomen wet. Bron: eMeeting-commissieagenda's van het EP van 15 juli 2026.</p>
   <p>Status in het Wetgevingsobservatorium (per 15 juli 2026): <strong>in behandeling in de commissie</strong>. De verwijzing naar de JURI-commissie werd op <strong>18 mei 2026</strong> in plenaire zitting aangekondigd (commissiedossier JURI/10/05459); er is nog geen commissieverslag ten gronde of eindstemming in de commissie ingediend. De adviescommissies zijn <strong>ECON</strong> (Aurore Lalucq, S&amp;D, aangewezen op 18 mei 2026) en <strong>EMPL</strong> (Johan Danielsson, S&amp;D, aangewezen op 13 mei 2026). <strong>BUDG heeft besloten geen advies uit te brengen.</strong> Op <strong>22 juni 2026 diende EMPL haar ontwerpadvies</strong> over EU Inc. in (adviesrapporteur Johan Danielsson, S&amp;D), en op <strong>29 juni 2026 diende rapporteur René Repasi het JURI-ontwerpverslag ten gronde in (PE790.143, 246 amendementen)</strong>, behandeld door JURI met de schaduwrapporteurs op <strong>15 juli 2026</strong> (zie de vergelijking en het debat hieronder). Het eerste commissiedebat was de gedachtewisseling in JURI van 4 mei 2026 (hoogtepunten hieronder).</p>
 
-  <div class="info-box" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
+  <div class="info-box" id="empl-opinion" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
     <h4 style="margin-top:0;"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-purple);"></i> EMPL-advies (12 juni 2026, PE788.967): herschrijving ter bescherming van werknemers</h4>
     <p>Het advies van de Commissie Werkgelegenheid en Sociale Zaken voor JURI, van adviesrapporteur <strong>Johan Danielsson (S&amp;D, Zweden)</strong>, volgt een aanzienlijk meer beschermend spoor dan de Commissietekst. De kern is dat de EU Inc.-rechtsvorm niet mag worden gebruikt als voertuig voor het omzeilen van arbeids- en socialezekerheidswetgeving, en koppelt de vennootschapsvorm voertuigvast aan de plaats waar daadwerkelijk wordt gewerkt. Belangrijkste punten:</p>
     <ul>
@@ -620,44 +671,225 @@
   <p><strong>euinc.me: onafhankelijke volginformatie</strong>: <a href="https://euinc.me/en" target="_blank" rel="noopener">euinc.me/en</a>. Niet verbonden met de Commissie. Neutrale omschrijving van het voorstel ("een startup die zich uitbreidt van Zweden naar Duitsland heeft een nieuwe rechtspersoon, een lokale notaris en maanden aan papierwerk nodig"). Volgt OEIL + werkgroepsvoortgang in de Raad, JURI-commissiemijlpalen, en biedt een "beoordeling in 2 minuten" voor oprichters die EU Inc.-oprichting overwegen. Nuttige aanvulling op de wetgevingsopvolging van Brubru voor oprichters en durfkapitaalverstrekkers die de oprichtingsgereedheid volgen.</p>
 </section>
 
-<!-- Key figures -->
-<div class="figures">
-  <div class="figure-card fc-blue">
-    <div class="figure-card__number">48u</div>
-    <div class="figure-card__label">Registratie van de onderneming (snelle procedure)</div>
+<!-- Amendment wave -->
+<section class="section" id="amendments-2026">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-file-document-multiple"></i></div>
+    <h2 class="section__title">1.664 amendementen: wat het Parlement wil veranderen</h2>
   </div>
-  <div class="figure-card fc-green">
-    <div class="figure-card__number">0 EUR</div>
-    <div class="figure-card__label">Vereist minimumkapitaal</div>
-  </div>
-  <div class="figure-card fc-purple">
-    <div class="figure-card__number">100 EUR</div>
-    <div class="figure-card__label">Maximale registratiekosten</div>
-  </div>
-  <div class="figure-card fc-amber">
-    <div class="figure-card__number">308K</div>
-    <div class="figure-card__label">Geraamde ondernemingen over 10 jaar</div>
-  </div>
-</div>
+  <p class="section__subtitle">Gelezen uit de vijf amendementendocumenten van de commissie JURI van 23 juli 2026, uit het advies en de amendementen van de commissie EMPL en uit het Bulgaarse met redenen omkleed advies, en vergeleken met het ontwerpverslag van de rapporteur</p>
 
-<!-- TOC -->
-<nav class="toc">
-  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structuur van het voorstel</div>
-  <div class="toc__grid">
-    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Algemene beginselen (artt. 1-12)</a>
-    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registratie en inschrijving (artt. 13-24)</a>
-    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Grensoverschrijdende informatie (artt. 25-35)</a>
-    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Grensoverschrijdende filialen (artt. 36-41)</a>
-    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisatie (artt. 42-52)</a>
-    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Aandelen en overdrachten (artt. 53-60)</a>
-    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financiering (artt. 61-77)</a>
-    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Personeelsopties (artt. 78-79)</a>
-    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Sluiting van solvente vennootschappen (artt. 80-87)</a>
-    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolventie (artt. 88-102)</a>
-    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Verboden vereisten (art. 103)</a>
-    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Slotbepalingen (artt. 104-109)</a>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.9rem; margin:1.5rem 0;">
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">1.664</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">amendementen in totaal</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">48</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">indienende leden</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">120</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">over preventieve controle</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">3</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">die het dossier zouden beëindigen</div></div>
   </div>
-</nav>
+
+  <p><strong>In één zin:</strong> EU Inc. stuit niet op verzet van één kant. Het wordt van beide uiteinden tegelijk uit elkaar getrokken, terwijl het midden dat het dossier draagt discussieert over wie een onderneming moet controleren voordat zij mag bestaan.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-close-octagon"></i> Bevinding 1: drie amendementen zouden het dossier beëindigen, niet wijzigen</div>
+    <p><strong>Amendement 247</strong>, van Arash Saeidi en Manon Aubry <em>namens de Fractie The Left</em>, vervangt "Stelt zijn standpunt in eerste lezing vast" door <strong>"Verwerpt het Commissievoorstel"</strong>.</p>
+    <p><strong>Amendement 248</strong>, van Pascale Piera en Juan Carlos Girauta Vidal (Patriotten voor Europa), doet precies hetzelfde in vrijwel identieke bewoordingen.</p>
+    <p>De <strong>amendementen 249 en 250</strong> zouden het instrument omzetten van een <strong>verordening in een richtlijn</strong>, met toepassing "op de gehele tekst". Dat is geen redactionele voorkeur: een richtlijn vereist nationale omzetting, waarmee de ene uniforme rechtsvorm verdwijnt die de hele bestaansreden van een 28e regime vormt.</p>
+    <p><em>The Left en radicaal rechts komen langs tegengestelde wegen op dezelfde bestemming uit. Dat patroon herhaalt zich in het hele pakket.</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check"></i> Bevinding 2: de grootste strijd gaat over notarissen, niet over startups</div>
+    <p><strong>120 amendementen</strong> raken de preventieve rechtmatigheidscontrole, meer dan enig ander thema. Artikel 14 alleen al krijgt er 59 en artikel 2 krijgt er 70. De terugkerende zet is het woord <strong>"notarieel"</strong> in te schrijven in de keten van autoriteiten die een onderneming vóór inschrijving moeten controleren.</p>
+    <p>Dat gaat rechtstreeks in tegen het volledig digitale ontwerp van het voorstel. Amendement 314 bepaalt dat volledig digitale procedures "de bevoegde autoriteiten, met inbegrip van notarissen waar het nationale recht daarin voorziet, niet mogen beletten de <strong>fysieke verschijning</strong> van aanvragers te verlangen wanneer specifieke risico's inzake identiteit dat rechtvaardigen".</p>
+    <p><strong>De rapporteur staat aan dezelfde kant, om een andere reden.</strong> Hij versterkt de preventieve controle opdat EU Inc. "een betrouwbaar Europees ondernemingskeurmerk" wordt en geen omzeilingsvehikel. Maar hij specificeert <em>wat</em> moet worden geverifieerd (identiteit, handelingsbekwaamheid, echtheid en naleving van de antiwitwasregels) en laat de keuze van de autoriteit open. De 120 amendementen zouden een bepaald beroep in de tekst opnemen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-speedometer"></i> Bevinding 3: de termijnen lopen uiteen van 48 uur tot 15 werkdagen</div>
+    <p>De <strong>Commissie stelde 48 uur voor</strong> (artikel 16, lid 2), met een maximumkost van <strong>100 euro</strong>. Het ontwerpverslag van de rapporteur <strong>vertraagt dit tot twee werkdagen</strong> en voegt een verlenging toe "voor de strikt noodzakelijke duur". Tweeëntwintig amendementen verschuiven de termijn opnieuw, in beide richtingen.</p>
+    <p><div style="overflow-x:auto; margin:1rem 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+      <thead><tr style="background:#f5f3ff; text-align:left;">
+        <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Termijn</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Wie het voorstelt</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>48 uur</strong><br><span style="color:#666;">de tekst van de Commissie, hersteld</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Commissievoorstel, en amendementen van Mario Mantovani (ECR), Jörgen Warborn (EVP), Victor Negrescu (S&amp;D), Pascal Canfin (Renew), Kira Marie Peter-Hansen en Sergey Lagodinsky (Groenen/EVA)</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Twee werkdagen</strong><br><span style="color:#666;">de vertraging van de rapporteur</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Ontwerpverslag van Repasi, en amendementen van Daniel Buda en Lukas Mandl (EVP), Mary Khan</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>15 werkdagen</strong><br><span style="color:#666;">ongeveer zeven keer trager</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Arash Saeidi en Özlem Demirel (The Left)</td></tr>
+      </tbody>
+    </table>
+    </div></p>
+    <p>De lezing is niet dat een coalitie EU Inc. sneller wil dan de Commissie. Het is dat een ongewoon brede coalitie, van ECR via de EVP en S&amp;D tot Renew en de Groenen, <strong>de 48 uur van de Commissie verdedigt tegen haar eigen rapporteur</strong>. Snelheid is het enige punt waarop het midden en beide flanken van de hoofdstroom het eens zijn. De versie van Canfin voegt één beslissend woord toe: een maximale <strong>"en totale"</strong> kost van 100 euro, waarmee de opening wordt gedicht waarlangs nationale toeslagen weer zouden kunnen binnenkomen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group"></i> Bevinding 4: over werknemersmedezeggenschap liggen alle uitkomsten op tafel</div>
+    <p>Negenentwintig amendementen richten zich op <strong>artikel 12</strong> en bestrijken het volledige spectrum:</p>
+    <p><ul><li><strong>Schrappen.</strong> Amendementen 835, 837 en 838. De motivering van Mantovani is een <em>bevoegdheidsargument</em>, geen beleidsargument: werknemersmedezeggenschap valt onder een rechtsgrondslag waarop <strong>de Raad met eenparigheid van stemmen besluit</strong>, niet onder artikel 114 VWEU. Het Bulgaarse parlement werpt dezelfde bedenking op langs een andere weg.</li><li><strong>Het aanknopingspunt verleggen.</strong> Amendement 840 van Repasi zelf en het ontwerpadvies van EMPL verplaatsen de medezeggenschap van de lidstaat van de <strong>statutaire zetel</strong> naar de lidstaat <strong>van tewerkstelling</strong>. Het ontwerpverslag gaat verder: bevinden de werknemers zich in meerdere lidstaten, dan geldt het <strong>hoogste beschermingsniveau</strong>.</li><li><strong>Het verder aanscherpen.</strong> Amendement 839 (Groenen/EVA), amendementen 841 en 843 (The Left).</li><li><strong>De regel van de statutaire zetel behouden.</strong> Amendement 842 (ECR), amendement 844 (EVP).</li></ul></p>
+    <p><em>Hier zijn de bevoegde commissie en de adviescommissie het al eens: de rapporteur van JURI en de rapporteur van EMPL stellen dezelfde wijziging voor (het EMPL-advies staat <a href="#empl-opinion">hierboven</a> uitgewerkt). Het verzet splitst zich tussen een bevoegdheidsargument en een argument van ondernemersflexibiliteit.</em></p>
+  </div>
+
+  <h3>Wie wat heeft ingediend</h3>
+  <p>Achtenveertig leden hebben amendementen ingediend. Toegewezen op basis van de eerste identificeerbare ondertekenaar of van de vermelding "namens":</p>
+  <div style="overflow-x:auto; margin:1.25rem 0;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+    <thead><tr style="background:#f5f3ff; text-align:left;">
+      <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Politieke familie</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Amendementen</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Waar zij het hardst op inzet</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>EVP</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">318</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Digitaal aandeelhoudersregister (21), definities (16), aandelenoverdracht (16), aanvraagformulier (14)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotten voor Europa</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">243</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Preventieve controle (13), toepasselijke regels (10), definities (8)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>ECR</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">166</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Definities (15), preventieve controle (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotten voor Europa <span style="color:#666;">(Tsjechische leden)</span></strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">156</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Vennootschapsorganen (6), artikel 33 (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Groenen/EVA</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">147</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Onderwerp (9), preventieve controle (7), volledig digitaal (6), EU-ESO (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>The Left</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">123</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Openbaarmaking in het register (10), onderwerp (7), preventieve controle (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>S&amp;D</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">112</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Verspreid over de hele tekst</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Renew</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">48</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Verspreid over de hele tekst</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="color:#666; font-size:0.88rem;">Nog eens 105 amendementen konden niet automatisch worden toegewezen. Bij een mede-ondertekend amendement wordt de familie van de eerste identificeerbare ondertekenaar gebruikt, zodat deze cijfers het gewicht van de inspanning weergeven en geen formele fractiestandpunten.</p>
+
+  <h3>Wat volledig zou worden geschrapt</h3>
+  <p>Negenentwintig amendementen schrappen een bepaling in plaats van haar te herschrijven, en zij concentreren zich op twee punten:</p>
+  <ul>
+    <li><strong>Artikel 54, het digitale aandeelhoudersregister: 7 schrappingen</strong>, en het is tevens het artikel dat de EVP 21 keer amendeert. Cijfermatig is dit de meest betwiste bepaling van de verordening.</li>
+    <li><strong>Hoofdstuk X, vereenvoudigde insolventie: 5 schrappingen</strong>, het hoofdstuk waarvan het Bulgaarse parlement zegt dat het het nationale fiscale, arbeids- en contractenrecht binnendringt.</li>
+  </ul>
+  <p>De overige zijn verspreid: artikel 44 (3 schrappingen), de artikelen 17, 59, 61 en 109 (elk 2) en losse schrappingen bij de artikelen 8, 20, 46, 67, 70 en 92.</p>
+
+  <h3>Waarover de amendementen en het ontwerpverslag het al eens zijn</h3>
+  <p>Leest men de 1.418 amendementen naast de 246 van de rapporteur, dan blijken vier punten niet ter discussie te staan:</p>
+  <ul>
+    <li><strong>Het plafond van 100 euro</strong> overleeft in elke versie die het aanraakt. Niemand stelt een hoger plafond voor.</li>
+    <li><strong>De preventieve controle moet strenger zijn</strong> dan de Commissie voorstelde. De onenigheid gaat over wie haar uitvoert, niet of zij plaatsvindt.</li>
+    <li><strong>Antiwitwascontroles horen bij de inschrijving.</strong> 77 amendementen brengen witwassen of uiteindelijk begunstigden ter sprake, en het ontwerpverslag bouwt hetzelfde vereiste in.</li>
+    <li><strong>Het voorkomen van brievenbusfirma's.</strong> Negen amendementen brengen economische substantie ter sprake, wat ook de derde suggestie van ECON is, die vraagt om "minimumvereisten inzake economische substantie met betrekking tot operationele aanwezigheid, beslissingsbevoegdheid en economische activiteit binnen de EU".</li>
+  </ul>
+  <p>Twee eigen ideeën van de rapporteur staan vrijwel alleen: de variant met rentmeesterseigendom <strong>"EU Inc. SO"</strong> wordt door slechts twee amendementen opgepakt, en de <strong>bijlage II</strong> met uitsluitingen die hij creëert ter vervanging van het dubbelzinnige woord "innovatief" wordt door tien amendementen opgepakt.</p>
+
+  <h3>Het eerste bezwaar van een nationaal parlement</h3>
+  <p>Op <strong>18 juni 2026</strong> heeft de commissie voor Europese Zaken en toezicht op de EU-fondsen van de Nationale Vergadering van Bulgarije een <strong>met redenen omkleed advies over subsidiariteit aangenomen, unaniem, met 15 stemmen</strong>. Bulgarije verwelkomt de doelstellingen en concludeert niettemin dat het voorstel <strong>slechts gedeeltelijk</strong> voldoet aan het subsidiariteitsbeginsel en <strong>niet volledig</strong> aan het evenredigheidsbeginsel.</p>
+  <p>De scherpste passage betreft het kapitaal: het vereiste van nul kapitaal is <strong>"volstrekt onaanvaardbaar"</strong>, omdat het risico's schept voor schuldeisersbescherming, witwassen en belastingfraude, met een verwijzing naar de Financiële Actiegroep over lage kapitaaldrempels die criminele constructies vergemakkelijken. Ook wordt gevraagd hoe een <strong>inschrijving binnen 48 uur</strong> zich verhoudt tot het antiwitwaspakket, worden de termijnen voor aansluiting op het BRIS-systeem <strong>"zeer onrealistisch"</strong> genoemd met een verzoek om twee jaar in plaats van twaalf maanden, wordt gewaarschuwd dat het ontbreken van beperkingen aan het vennootschappelijk doel zal botsen met nationale regels inzake bankwezen, verzekeringen, pensioenen en gezondheidszorg, en wordt tegengeworpen dat de hoofdstukken IX en X het nationale fiscale, arbeids- en contractenrecht binnendringen. Over <strong>artikel 12</strong> wordt het ontbreken van enige voorafgaande beoordeling een "belangrijke tekortkoming" genoemd.</p>
+  <p><strong>Eén afwezigheid is het vermelden waard.</strong> Geen enkel ingediend amendement verhoogt het minimumkapitaal boven nul. Het bezwaar dat het Bulgaarse parlement volstrekt onaanvaardbaar noemt, wordt vooralsnog door niemand in de commissie gedragen.</p>
+
+  <p style="margin-top:1.5rem;"><em>Het eigen ontwerp van de rapporteur, en een clausule-voor-clausule vergelijking met de Commissietekst, staan in <a href="#position">Het standpunt van het Parlement</a> hierboven. Dit onderdeel behandelt uitsluitend wat de <strong>overige</strong> leden ermee hebben gedaan.</em></p>
+
+  <p style="color:#666; font-size:0.88rem; margin-top:1.5rem;">Volledig gelezen bronnen: PE790.143v02-00 (ontwerpverslag, 151 blz.), PE791.127 tot en met PE791.131 (JURI-amendementen 247 tot en met 1664, 856 blz.), PE790.022 (EMPL-amendementen 133 tot en met 339, 116 blz.), PE788.967 (EMPL-ontwerpadvies, 27 blz.), PE790.116 (Bulgaars met redenen omkleed advies, 8 blz.), de adviesbrief van ECON en het document COM(2026) 321. Tellingen, ondertekenaars en geraakte artikelen zijn programmatisch uit de gepubliceerde teksten gehaald en steekproefsgewijs met de hand gecontroleerd.</p>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">Van het rapport-Draghi tot de datum van toepassing</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">September 2024</div>
+      <div class="timeline__text">Het Draghi-rapport over concurrentievermogen identificeert regelgevingsfragmentatie als voornaamste belemmering</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Januari 2025</div>
+      <div class="timeline__text">Het Competitiviteitscompas kondigt de oprichting van het "28e stelsel" aan</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maart 2025</div>
+      <div class="timeline__text">De Europese Raad verzoekt de Commissie een optioneel vennootschapsrechtelijk stelsel voor te stellen</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 11 december 2025</div>
+      <div class="timeline__text">De JURI-commissie keurt het initiatiefwetgevingsverslag (INL) van Repasi goed op grond van Regel 47: 18 voor, 4 tegen, 1 onthouding. Advies rechtsgrondslag: 22-2-1 ten gunste van artikelen 50 + 114 VWEU (met verwerping van de unanimiteitsroute via artikel 352)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Woensdag 17 december 2025</div>
+      <div class="timeline__text">Verslag <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> ingediend: "Verslag met aanbevelingen aan de Commissie over het 28e stelsel: een nieuw rechtskader voor innovatieve vennootschappen" (procedure 2025/2079(INL)). Het Parlement stelt de naam "Societas Europaea Unificata (S.EU)" en een minimumkapitaal van 1 EUR voor</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Februari-maart 2026</div>
+      <div class="timeline__text">Drie EP-vergaderingen met Oostenrijkse en Duitse ondernemersorganisaties over EU Inc. bekendgemaakt via het EU-transparantieregister</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Woensdag 18 maart 2026</div>
+      <div class="timeline__text"><strong>De Commissie neemt het EU Inc.-voorstel aan (COM(2026) 321)</strong>, procedure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Rechtsgrondslag: artikel 114 VWEU. DG Justitie en Consumenten (Commissaris Michael McGrath). De Commissie noemt de rechtsvorm "EU Inc." in plaats van de door het EP voorgestelde "S.EU"; stelt het minimumkapitaal op 0 EUR (tegenover 1 EUR voorgesteld door het EP)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 19 - vrijdag 20 maart 2026</div>
+      <div class="timeline__text">De Europese Raad bespreekt concurrentievermogen en de agenda "One Europe, One Market"</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dinsdag 31 maart 2026</div>
+      <div class="timeline__text">Voorlopige JURI-toewijzing van het EU Inc.-dossier circuleert (via euinc.me); de formele OEIL-commissieverwijzing volgt op 18 mei 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 23 april 2026</div>
+      <div class="timeline__text"><strong>René Repasi (S&amp;D, Duitsland) bevestigd als EP-rapporteur</strong> voor het Commissievoorstel in JURI (beslissing genomen tijdens de besloten coördinatorsvergadering die ochtend, niet in de openbare zitting). Continuïteit vanuit de INL-fase (hij was ook rapporteur voor A10-0269/2025). Zes schaduwrapporteurs bevestigd voor het gehele spectrum: <strong>Axel Voss</strong> (EVP), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Groenen/VEA) en <strong>Arash Saeidi</strong> (The Left). Bron: Euractiv, "René Repasi to helm EU Inc in Parliament"</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maandag 4 mei 2026</div>
+      <div class="timeline__text"><strong>Eerste JURI-behandeling: een uitgebreide gedachtewisseling</strong> over het EU Inc.-voorstel. Commissaris Michael McGrath presenteerde het kader; rapporteur René Repasi verwelkomde het "behalve de naam" en drong aan op sterkere vangrails; ECR-schaduw Mario Mantovani waarschuwde dat fragmentatie op het gebied van belastingen en insolventie scale-ups te kort doet; Renew-schaduw Pascal Canfin bevestigde steun en stelde vragen over personeelsopties. Zie het gedeelte "JURI-debat" hierboven voor de hoogtepunten (uitgeschreven op basis van de EP-webstream). Bron: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">EP-webstream, 4 mei 2026</a>.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maandag 18 mei 2026</div>
+      <div class="timeline__text"><strong>JURI-commissieverwijzing aangekondigd in plenaire zitting</strong> (commissiedossier JURI/10/05459). Adviescommissies: ECON (Aurore Lalucq, S&amp;D) en EMPL (Johan Danielsson, S&amp;D); BUDG besloot geen advies uit te brengen. Status: wachten op beslissing van de commissie.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Woensdag 3 juni 2026</div>
+      <div class="timeline__text"><strong>ECON keurt het initiatiefverslag "28e belastingstelsel" goed</strong> (procedure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew): de belastingmodule die bewust aan EU Inc. is gekoppeld. Compromis gedragen door EVP, S&amp;D, Renew en Groenen; amendementen van ECR en PfE verworpen. Indicatief plenaire vergadering: 6 juli 2026.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Maandag 22 juni 2026</div>
+      <div class="timeline__text"><strong>De EMPL-commissie dient haar ontwerpadvies over EU Inc. in</strong> (procedure 2026/0074(COD), adviesrapporteur Johan Danielsson, S&amp;D).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maandag 29 juni 2026</div>
+      <div class="timeline__text"><strong>Rapporteur René Repasi dient het JURI-ontwerpverslag ten gronde in</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendementen): behoudt de ambitie van de Commissie maar voegt waarborgen tegen misbruik en sociale waarborgen toe (werknemersparticipatie op basis van de werkplek, sectorale uitzondering, rentmeesterseigendom, beperking van beursnotering, Delaware-achtige laag voor geschillenbeslechting).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Woensdag 15 juli 2026</div>
+      <div class="timeline__text"><strong>JURI behandelt het ontwerpverslag met de schaduwrapporteurs.</strong> Repasi: "een snelweg voor startups heeft snelheidslimieten en vangrails nodig." De EVP (Voss) en Renew (Canfin, voorgelezen door Žalimas) verdedigen het brede, open ontwerp van de Commissie en verzetten zich tegen de sectorale uitzonderingen, medezeggenschap in de gastlidstaat en het verbod op beursnotering; de Groenen (Peter-Hansen) steunen de sociale waarborgen en de uitsluiting van beursgenoteerde ondernemingen; The Left (Saeidi) waarschuwt voor fraude-risico met circa 200 amendementen. Amendementen worden binnen enkele dagen verwacht.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maandag 5 oktober 2026 (voorspelling)</div>
+      <div class="timeline__text"><strong>Indicatieve datum van de plenaire vergadering, eerste lezing</strong>, volgens de <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">voorspelling van het Wetgevingsobservatorium</a> voor procedure 2026/0074(COD). Voorspelde data verschuiven naarmate de commissiewerkzaamheden vorderen.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 18 juni 2026</div>
+      <div class="timeline__text"><strong>De Nationale Vergadering van Bulgarije maakt unaniem bezwaar op grond van subsidiariteit.</strong> De commissie voor Europese Zaken en toezicht op de EU-fondsen behandelde document COM(2026)0321 in haar vergadering van 18 juni en nam een <strong>met redenen omkleed advies aan met 15 stemmen voor, unaniem</strong> (voorzitter Galin Durev), op 19 juni toegezonden aan voorzitter Metsola en op 24 juni in de commissie JURI verspreid als PE790.116. Het is het <strong>eerste bezwaar van een nationaal parlement tegen EU Inc.</strong> Bulgarije verwelkomt de doelstellingen maar acht dat het voorstel <strong>slechts gedeeltelijk</strong> aan de subsidiariteit en <strong>niet volledig</strong> aan de evenredigheid voldoet: nul kapitaal is <strong>"volstrekt onaanvaardbaar"</strong>, de aansluittermijnen voor BRIS zijn <strong>"zeer onrealistisch"</strong> en het ontbreken van een voorafgaande beoordeling van <strong>artikel 12</strong> is een "belangrijke tekortkoming".</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dinsdag 23 juni 2026</div>
+      <div class="timeline__text"><strong>De commissie EMPL dient haar amendementen in</strong> (PE790.022): <strong>207 amendementen, genummerd 133 tot en met 339</strong>, 116 bladzijden.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 23 juli 2026</div>
+      <div class="timeline__text"><strong>1.418 amendementen ingediend in de commissie JURI, verdeeld over vijf documenten.</strong> De amendementen <strong>247 tot en met 1664</strong> werden op 23 juli 2026 ingediend op het ontwerpverslag van Repasi en gepubliceerd als PE791.127 (247-426), PE791.128 (427-695), PE791.129 (696-995), PE791.130 (996-1339) en PE791.131 (1340-1664), samen 856 bladzijden. Met de 246 van de rapporteur telt het dossier nu <strong>1.664 amendementen</strong>. Toen Arash Saeidi van The Left op 15 juli waarschuwde voor het fraudingerisico van "ongeveer 200 amendementen", bleek het uiteindelijke cijfer ongeveer acht keer hoger.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Maandag 7 september 2026</div>
+      <div class="timeline__text"><strong>EU Inc. keert terug naar de commissie JURI, en het is deze week het drukste amendementenoppervlak van het Parlement.</strong> De JURI-agenda van 7 september bevat het ontwerpverslag, een ontwerpadvies, <strong>zes amendementendocumenten</strong> en het Bulgaarse met redenen omkleed advies over hetzelfde dossier: twintig documenten in totaal. Geen enkel medium berichtte erover toen de amendementen werden ingediend. Bron: eMeeting-commissiedocumenten van het EP.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Donderdag 10 september 2026</div>
+      <div class="timeline__text"><strong>De commissie EMPL pakt het dossier weer op</strong> met haar eigen amendementen en ontwerpadvies op de agenda, drie dagen na JURI.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Eind 2026</div>
+      <div class="timeline__text"><strong>Toezegging van de drie instellingen</strong> (Commissie, Parlement, Raad) om de onderhandelingen voor het einde van 2026 af te ronden. Ambitieus maar structureel haalbaar gezien de in de INL-fase reeds opgebouwde consensus in JURI</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Vaststelling van uitvoeringshandelingen (modellen, formulieren, BRIS-specificaties)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Datum van toepassing: EU Inc. wordt beschikbaar in alle lidstaten</div>
+    </div>
+<div class="timeline__item">
+      <div class="timeline__date">woensdag 15 juli 2026</div>
+      <div class="timeline__text"><strong>ECON neemt zijn advies over EU Inc. aan met 34 stemmen tegen 13, bij 9 onthoudingen</strong> en stuurt het als brief onder Rule 57(1) (PE788.878v01-00) naar JURI, ondertekend door ECON-voorzitter Aurore Lalucq. Eenendertig suggesties, zestien daarvan over een <strong>belastingmodule</strong> die niet in het voorstel van de Commissie voorkomt: een opt-instructuur of nauwere samenwerking om de unanimiteitseis te omzeilen, één geconsolideerde vennootschapsbelastinggrondslag verdeeld volgens een formule die de reële economische activiteit weerspiegelt, gecentraliseerde btw- en bronbelastingprocedures, en een verplichte aandelenoptieregeling voor werknemers die bij vervreemding wordt belast als vermogensinkomen. Gesteund door EPP, S&amp;D, Renew en Greens/EFA; tegengewerkt door zowel hardrechts als The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
+    </div>
+  </div>
+</section>
 
 <!-- What and Why -->
 <section class="section" id="what">
@@ -695,6 +927,25 @@
     </div>
   </div>
 </section>
+
+<!-- TOC -->
+<nav class="toc" id="chapters">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structuur van het voorstel</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Algemene beginselen (artt. 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registratie en inschrijving (artt. 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Grensoverschrijdende informatie (artt. 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Grensoverschrijdende filialen (artt. 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisatie (artt. 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Aandelen en overdrachten (artt. 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financiering (artt. 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Personeelsopties (artt. 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Sluiting van solvente vennootschappen (artt. 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolventie (artt. 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Verboden vereisten (art. 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Slotbepalingen (artt. 104-109)</a>
+  </div>
+</nav>
 
 <!-- Chapter I -->
 <section class="section" id="ch1">
@@ -1057,102 +1308,6 @@
   </div>
 </section>
 
-<!-- Timeline -->
-<section class="section" id="timeline">
-  <div class="section__header">
-    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
-    <h2 class="section__title">Wetgevingstijdlijn</h2>
-  </div>
-  <p class="section__subtitle">Van het rapport-Draghi tot de datum van toepassing</p>
-
-  <div class="timeline">
-    <div class="timeline__item">
-      <div class="timeline__date">September 2024</div>
-      <div class="timeline__text">Het Draghi-rapport over concurrentievermogen identificeert regelgevingsfragmentatie als voornaamste belemmering</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Januari 2025</div>
-      <div class="timeline__text">Het Competitiviteitscompas kondigt de oprichting van het "28e stelsel" aan</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Maart 2025</div>
-      <div class="timeline__text">De Europese Raad verzoekt de Commissie een optioneel vennootschapsrechtelijk stelsel voor te stellen</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Donderdag 11 december 2025</div>
-      <div class="timeline__text">De JURI-commissie keurt het initiatiefwetgevingsverslag (INL) van Repasi goed op grond van Regel 47: 18 voor, 4 tegen, 1 onthouding. Advies rechtsgrondslag: 22-2-1 ten gunste van artikelen 50 + 114 VWEU (met verwerping van de unanimiteitsroute via artikel 352)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Woensdag 17 december 2025</div>
-      <div class="timeline__text">Verslag <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> ingediend: "Verslag met aanbevelingen aan de Commissie over het 28e stelsel: een nieuw rechtskader voor innovatieve vennootschappen" (procedure 2025/2079(INL)). Het Parlement stelt de naam "Societas Europaea Unificata (S.EU)" en een minimumkapitaal van 1 EUR voor</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Februari-maart 2026</div>
-      <div class="timeline__text">Drie EP-vergaderingen met Oostenrijkse en Duitse ondernemersorganisaties over EU Inc. bekendgemaakt via het EU-transparantieregister</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Woensdag 18 maart 2026</div>
-      <div class="timeline__text"><strong>De Commissie neemt het EU Inc.-voorstel aan (COM(2026) 321)</strong>, procedure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Rechtsgrondslag: artikel 114 VWEU. DG Justitie en Consumenten (Commissaris Michael McGrath). De Commissie noemt de rechtsvorm "EU Inc." in plaats van de door het EP voorgestelde "S.EU"; stelt het minimumkapitaal op 0 EUR (tegenover 1 EUR voorgesteld door het EP)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Donderdag 19 - vrijdag 20 maart 2026</div>
-      <div class="timeline__text">De Europese Raad bespreekt concurrentievermogen en de agenda "One Europe, One Market"</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Dinsdag 31 maart 2026</div>
-      <div class="timeline__text">Voorlopige JURI-toewijzing van het EU Inc.-dossier circuleert (via euinc.me); de formele OEIL-commissieverwijzing volgt op 18 mei 2026</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Donderdag 23 april 2026</div>
-      <div class="timeline__text"><strong>René Repasi (S&amp;D, Duitsland) bevestigd als EP-rapporteur</strong> voor het Commissievoorstel in JURI (beslissing genomen tijdens de besloten coördinatorsvergadering die ochtend, niet in de openbare zitting). Continuïteit vanuit de INL-fase (hij was ook rapporteur voor A10-0269/2025). Zes schaduwrapporteurs bevestigd voor het gehele spectrum: <strong>Axel Voss</strong> (EVP), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Groenen/VEA) en <strong>Arash Saeidi</strong> (The Left). Bron: Euractiv, "René Repasi to helm EU Inc in Parliament"</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Maandag 4 mei 2026</div>
-      <div class="timeline__text"><strong>Eerste JURI-behandeling: een uitgebreide gedachtewisseling</strong> over het EU Inc.-voorstel. Commissaris Michael McGrath presenteerde het kader; rapporteur René Repasi verwelkomde het "behalve de naam" en drong aan op sterkere vangrails; ECR-schaduw Mario Mantovani waarschuwde dat fragmentatie op het gebied van belastingen en insolventie scale-ups te kort doet; Renew-schaduw Pascal Canfin bevestigde steun en stelde vragen over personeelsopties. Zie het gedeelte "JURI-debat" hierboven voor de hoogtepunten (uitgeschreven op basis van de EP-webstream). Bron: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">EP-webstream, 4 mei 2026</a>.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Maandag 18 mei 2026</div>
-      <div class="timeline__text"><strong>JURI-commissieverwijzing aangekondigd in plenaire zitting</strong> (commissiedossier JURI/10/05459). Adviescommissies: ECON (Aurore Lalucq, S&amp;D) en EMPL (Johan Danielsson, S&amp;D); BUDG besloot geen advies uit te brengen. Status: wachten op beslissing van de commissie.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Woensdag 3 juni 2026</div>
-      <div class="timeline__text"><strong>ECON keurt het initiatiefverslag "28e belastingstelsel" goed</strong> (procedure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew): de belastingmodule die bewust aan EU Inc. is gekoppeld. Compromis gedragen door EVP, S&amp;D, Renew en Groenen; amendementen van ECR en PfE verworpen. Indicatief plenaire vergadering: 6 juli 2026.</div>
-    </div>
-    <div class="timeline__item timeline__item--active">
-      <div class="timeline__date">Maandag 22 juni 2026</div>
-      <div class="timeline__text"><strong>De EMPL-commissie dient haar ontwerpadvies over EU Inc. in</strong> (procedure 2026/0074(COD), adviesrapporteur Johan Danielsson, S&amp;D).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Maandag 29 juni 2026</div>
-      <div class="timeline__text"><strong>Rapporteur René Repasi dient het JURI-ontwerpverslag ten gronde in</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendementen): behoudt de ambitie van de Commissie maar voegt waarborgen tegen misbruik en sociale waarborgen toe (werknemersparticipatie op basis van de werkplek, sectorale uitzondering, rentmeesterseigendom, beperking van beursnotering, Delaware-achtige laag voor geschillenbeslechting).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Woensdag 15 juli 2026</div>
-      <div class="timeline__text"><strong>JURI behandelt het ontwerpverslag met de schaduwrapporteurs.</strong> Repasi: "een snelweg voor startups heeft snelheidslimieten en vangrails nodig." De EVP (Voss) en Renew (Canfin, voorgelezen door Žalimas) verdedigen het brede, open ontwerp van de Commissie en verzetten zich tegen de sectorale uitzonderingen, medezeggenschap in de gastlidstaat en het verbod op beursnotering; de Groenen (Peter-Hansen) steunen de sociale waarborgen en de uitsluiting van beursgenoteerde ondernemingen; The Left (Saeidi) waarschuwt voor fraude-risico met circa 200 amendementen. Amendementen worden binnen enkele dagen verwacht.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Maandag 5 oktober 2026 (voorspelling)</div>
-      <div class="timeline__text"><strong>Indicatieve datum van de plenaire vergadering, eerste lezing</strong>, volgens de <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">voorspelling van het Wetgevingsobservatorium</a> voor procedure 2026/0074(COD). Voorspelde data verschuiven naarmate de commissiewerkzaamheden vorderen.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Eind 2026</div>
-      <div class="timeline__text"><strong>Toezegging van de drie instellingen</strong> (Commissie, Parlement, Raad) om de onderhandelingen voor het einde van 2026 af te ronden. Ambitieus maar structureel haalbaar gezien de in de INL-fase reeds opgebouwde consensus in JURI</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2027</div>
-      <div class="timeline__text">Vaststelling van uitvoeringshandelingen (modellen, formulieren, BRIS-specificaties)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2028</div>
-      <div class="timeline__text">Datum van toepassing: EU Inc. wordt beschikbaar in alle lidstaten</div>
-    </div>
-<div class="timeline__item">
-      <div class="timeline__date">woensdag 15 juli 2026</div>
-      <div class="timeline__text"><strong>ECON neemt zijn advies over EU Inc. aan met 34 stemmen tegen 13, bij 9 onthoudingen</strong> en stuurt het als brief onder Rule 57(1) (PE788.878v01-00) naar JURI, ondertekend door ECON-voorzitter Aurore Lalucq. Eenendertig suggesties, zestien daarvan over een <strong>belastingmodule</strong> die niet in het voorstel van de Commissie voorkomt: een opt-instructuur of nauwere samenwerking om de unanimiteitseis te omzeilen, één geconsolideerde vennootschapsbelastinggrondslag verdeeld volgens een formule die de reële economische activiteit weerspiegelt, gecentraliseerde btw- en bronbelastingprocedures, en een verplichte aandelenoptieregeling voor werknemers die bij vervreemding wordt belast als vermogensinkomen. Gesteund door EPP, S&amp;D, Renew en Greens/EFA; tegengewerkt door zowel hardrechts als The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
-    </div>
-  </div>
-</section>
-
 <!-- Sources -->
 <section class="section" id="sources">
   <div class="section__header">
@@ -1203,5 +1358,25 @@
   });
 </script>
 
+
+<script>
+/* Highlight the section the reader is actually in. IntersectionObserver, so it
+   costs nothing on scroll; does nothing at all where unsupported. */
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.secnav a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var byId = {};
+  links.forEach(function(a){ byId[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(byId).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.remove('is-active'); });
+      var a = byId[e.target.id]; if (a) a.classList.add('is-active');
+    });
+  }, {rootMargin: '-96px 0px -70% 0px', threshold: 0});
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
 </body>
 </html>

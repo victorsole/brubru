@@ -417,7 +417,24 @@
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { transform: translateY(-2px); }
       /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
-  </style>
+  
+    /* Section nav, added 4 Sep 2026. Before this the only navigation was the
+       12-chapter TOC, so the amendments analysis, the timeline, the comparison
+       and the sources had no link anywhere on a 26,000px page. */
+    .secnav{position:sticky;top:82px;z-index:40;background:rgba(255,255,255,.94);
+      backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--color-border);
+      margin:0 0 1.5rem;}
+    .secnav__inner{display:flex;gap:.25rem;overflow-x:auto;padding:.55rem .25rem;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .secnav__inner::-webkit-scrollbar{display:none}
+    .secnav a{flex:0 0 auto;padding:.4rem .7rem;border-radius:999px;font-size:.86rem;
+      font-weight:600;color:var(--color-secondary);text-decoration:none;white-space:nowrap;}
+    .secnav a:hover{background:var(--color-bg);color:var(--color-blue);}
+    .secnav a.is-active{background:var(--color-blue);color:#fff;}
+    section[id],nav[id],div[id]{scroll-margin-top:150px}
+    @media(max-width:767px){.secnav{top:70px}.secnav a{font-size:.8rem;padding:.35rem .6rem}
+      section[id],nav[id],div[id]{scroll-margin-top:130px}}
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -465,7 +482,41 @@
 </section>
 
 <!-- Rapporteur du Parlement européen -->
-<section class="card" style="margin: 2rem 0;">
+<!-- Section nav -->
+<nav class="secnav" aria-label="Sections de cette page">
+  <div class="secnav__inner">
+    <a href="#position">Où en est le dossier</a>
+    <a href="#amendments-2026">1 664 amendements</a>
+    <a href="#timeline">Chronologie</a>
+    <a href="#what">Qu'est-ce qu'EU Inc.</a>
+    <a href="#chapters">Les 12 chapitres</a>
+    <a href="#comparison">Face au droit national</a>
+    <a href="#impact">Impact</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48h</div>
+    <div class="figure-card__label">Enregistrement de la société (voie rapide)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">EUR 0</div>
+    <div class="figure-card__label">Capital minimum requis</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">EUR 100</div>
+    <div class="figure-card__label">Coût maximum d'enregistrement</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308 000</div>
+    <div class="figure-card__label">Sociétés estimées sur 10 ans</div>
+  </div>
+</div>
+
+<section class="card" id="position" style="margin: 2rem 0;">
   <h3 style="margin-top: 0;"><i class="mdi mdi-account-tie" style="color: var(--color-red);"></i> Rapporteur du Parlement européen</h3>
   <p><strong>René Repasi</strong> (S&amp;D, Allemagne, SPD) a été confirmé comme rapporteur du Parlement européen pour la proposition EU Inc. le 23 avril 2026. Il est membre de la commission des affaires juridiques (JURI, la commission compétente pour ce dossier) et de la commission des affaires économiques et monétaires (ECON), et suppléant à ITRE et à la sous-commission des affaires fiscales (FISC). Il est également professeur de droit à l'Erasmus School of Law de Rotterdam. <a href="https://www.europarl.europa.eu/meps/en/229839/RENE_REPASI/home" target="_blank" rel="noopener">Profil du député</a>.</p>
   <p>Repasi a déjà piloté le rapport préparatoire du Parlement, un <strong>rapport d'initiative législative</strong> sur le 28<sup>e</sup> régime (<a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a>, procédure 2025/2079(INL)), déposé le 17 décembre 2025 et adopté en JURI par 18 voix pour, 4 contre et 1 abstention. Son rapport INL appelait la nouvelle forme « Societas Europaea Unificata (S.EU) », proposait un capital minimum de 1 euro et des garanties explicites pour la participation des travailleurs, ainsi que des dispositions optionnelles de steward-ownership et d'asset-lock. La Commission a finalement retenu le nom « EU Inc. » avec un capital minimum de 0 euro. La proposition de la Commission (procédure <strong>2026/0074(COD)</strong>) est fondée sur l'<strong>article 114 TFUE</strong> ; le rapport INL antérieur avait défendu les articles 50 et 114 face à l'article 352.</p>
@@ -476,7 +527,7 @@
   <p><strong>Actualité (semaine du 13 juillet 2026, semaine des commissions du PE) :</strong> durant la semaine des commissions du 13 au 17 juillet, la dernière avant la pause estivale du 27 juillet au 21 août, EU Inc. arrive dans <strong>trois commissions le même jour, le mercredi 15 juillet 2026</strong> : la commission compétente au fond <strong>JURI</strong> pour son examen, <strong>ECON</strong> en tant que commission saisie pour avis et <strong>EMPL</strong> pour un échange de vues avec les parties prenantes sur le 28e régime. C'est la première fois que le dossier est travaillé dans trois commissions la même semaine, signe qu'il gagne en poids politique, même s'il reste une proposition en cours d'examen en commission et non une loi adoptée. Source : agendas des commissions eMeeting du PE du 15 juillet 2026.</p>
   <p>Situation à l'Observatoire législatif (au 15 juillet 2026) : <strong>en cours d'examen en commission</strong>. Le renvoi en commission JURI a été annoncé en séance plénière le <strong>18 mai 2026</strong> (dossier JURI/10/05459) ; aucun rapport ni vote de commission n'avait encore été déposé à cette date. Les commissions saisies pour avis sont <strong>ECON</strong> (Aurore Lalucq, S&amp;D, désignée le 18 mai 2026) et <strong>EMPL</strong> (Johan Danielsson, S&amp;D, désigné le 13 mai 2026). <strong>La commission BUDG a décidé de ne pas rendre d'avis.</strong> Le 22 juin 2026, la commission EMPL a déposé son projet d'avis sur EU Inc. (rapporteur pour avis Johan Danielsson, S&amp;D), et le 29 juin 2026 le rapporteur René Repasi a déposé le projet de rapport de la commission compétente au fond, la JURI (PE790.143, 246 amendements), examiné par la JURI avec les rapporteurs fictifs le 15 juillet 2026 (voir le comparatif et le débat ci-dessous). Le premier débat en commission est l'échange de vues de la JURI du 4 mai 2026 (points saillants ci-dessous).</p>
 
-  <div class="info-box" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
+  <div class="info-box" id="empl-opinion" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
     <h4 style="margin-top:0;"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-purple);"></i> Avis de la commission EMPL (12 juin 2026, PE788.967) : une réécriture centrée sur la protection des travailleurs</h4>
     <p>Le projet d'avis de la commission de l'emploi et des affaires sociales pour la JURI, établi par le rapporteur pour avis <strong>Johan Danielsson (S&amp;D, Suède)</strong>, adopte une ligne sensiblement plus protectrice que le texte de la Commission. Son axe principal : la forme EU Inc. ne doit pas devenir un vecteur de contournement du droit du travail et du droit de la sécurité sociale, et elle doit être fermement ancrée au lieu où le travail est réellement effectué. Points clés :</p>
     <ul>
@@ -620,44 +671,225 @@
   <p><strong>Positionnement des groupes politiques :</strong> le compromis a été porté par le <strong>PPE + S&amp;D + Renew + Verts</strong> (avec La Gauche partiellement intégrée), tandis que <strong>tous les amendements ECR et PfE sont tombés</strong>. Renew a poussé l'ambition (assiette consolidée, VMQ) ; le PPE a soutenu la compétitivité tout en défendant le droit des États membres à fixer les taux ; S&amp;D et les Verts ont attaché des garde-fous sociaux et anti-évasion ; La Gauche a tenté de supprimer l'accueil favorable de la proposition mais a obtenu des garanties anti-abus. L'ECR « rejette explicitement » l'utilisation du régime comme vecteur d'intégration fiscale, et PfE défend la fiscalité comme compétence exclusive des États membres sous unanimité. La ligne de fracture à surveiller est l'unanimité contre la VMQ en matière fiscale.</p>
 </section>
 
-<!-- Key figures -->
-<div class="figures">
-  <div class="figure-card fc-blue">
-    <div class="figure-card__number">48h</div>
-    <div class="figure-card__label">Enregistrement de la société (voie rapide)</div>
+<!-- Amendment wave -->
+<section class="section" id="amendments-2026">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-file-document-multiple"></i></div>
+    <h2 class="section__title">1 664 amendements : ce que le Parlement veut changer</h2>
   </div>
-  <div class="figure-card fc-green">
-    <div class="figure-card__number">EUR 0</div>
-    <div class="figure-card__label">Capital minimum requis</div>
-  </div>
-  <div class="figure-card fc-purple">
-    <div class="figure-card__number">EUR 100</div>
-    <div class="figure-card__label">Coût maximum d'enregistrement</div>
-  </div>
-  <div class="figure-card fc-amber">
-    <div class="figure-card__number">308 000</div>
-    <div class="figure-card__label">Sociétés estimées sur 10 ans</div>
-  </div>
-</div>
+  <p class="section__subtitle">Lu dans les cinq documents d'amendements de la commission JURI du 23 juillet 2026, dans l'avis et les amendements de la commission EMPL et dans l'avis motivé bulgare, puis comparé au projet de rapport du rapporteur</p>
 
-<!-- TOC -->
-<nav class="toc">
-  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure de la proposition</div>
-  <div class="toc__grid">
-    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Principes généraux (arts 1-12)</a>
-    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Immatriculation et dépôt (arts 13-24)</a>
-    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Informations transfrontières (arts 25-35)</a>
-    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Succursales transfrontières (arts 36-41)</a>
-    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisation (arts 42-52)</a>
-    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Parts sociales et cessions (arts 53-60)</a>
-    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financement (arts 61-77)</a>
-    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Options sur actions pour salariés (arts 78-79)</a>
-    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Dissolution de sociétés solvables (arts 80-87)</a>
-    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvabilité (arts 88-102)</a>
-    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Exigences interdites (art 103)</a>
-    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Dispositions finales (arts 104-109)</a>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.9rem; margin:1.5rem 0;">
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">1 664</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">amendements au total</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">48</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">députés déposants</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">120</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">sur le contrôle préventif</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">3</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">qui mettraient fin au dossier</div></div>
   </div>
-</nav>
+
+  <p><strong>En une ligne :</strong> EU Inc. ne rencontre pas une opposition d'un seul côté. Le texte est tiré des deux extrémités à la fois, pendant que le centre qui porte le dossier débat de qui doit contrôler une société avant de lui permettre d'exister.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-close-octagon"></i> Constat 1 : trois amendements mettraient fin au dossier, ils ne le modifieraient pas</div>
+    <p>L'<strong>amendement 247</strong>, d'Arash Saeidi et Manon Aubry <em>au nom du groupe The Left</em>, remplace « Arrête sa position en première lecture » par <strong>« Rejette la proposition de la Commission »</strong>.</p>
+    <p>L'<strong>amendement 248</strong>, de Pascale Piera et Juan Carlos Girauta Vidal (Patriotes pour l'Europe), fait exactement la même chose en des termes presque identiques.</p>
+    <p>Les <strong>amendements 249 et 250</strong> transformeraient l'instrument de <strong>règlement en directive</strong>, avec application « à l'ensemble du texte ». Ce n'est pas une préférence rédactionnelle : une directive suppose une transposition nationale, ce qui supprime la forme sociale unique et uniforme qui constitue tout l'intérêt d'un 28e régime.</p>
+    <p><em>The Left et la droite dure parviennent à la même destination par des chemins opposés. Ce schéma se répète dans tout l'ensemble.</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check"></i> Constat 2 : la plus grande bataille porte sur les notaires, pas sur les jeunes pousses</div>
+    <p><strong>120 amendements</strong> touchent au contrôle préventif de légalité, plus que tout autre thème. L'article 14 à lui seul en reçoit 59 et l'article 2 en reçoit 70. Le mouvement récurrent consiste à inscrire le mot <strong>« notarial »</strong> dans la chaîne des autorités qui doivent contrôler une société avant son immatriculation.</p>
+    <p>Cela va directement à l'encontre de la conception exclusivement numérique de la proposition. L'amendement 314 précise que les procédures entièrement numériques « ne devraient pas empêcher les autorités compétentes, y compris les notaires lorsque le droit national le prévoit, d'exiger la <strong>comparution physique</strong> des demandeurs lorsque des risques spécifiques liés à l'identité le justifient ».</p>
+    <p><strong>Le rapporteur est du même côté, pour une autre raison.</strong> Il renforce le contrôle préventif pour qu'EU Inc. devienne « un label d'entreprise européen digne de confiance » et non un véhicule de contournement. Mais il précise <em>ce qui</em> doit être vérifié (identité, capacité juridique, authenticité et respect de la réglementation anti-blanchiment) et laisse ouvert le choix de l'autorité. Les 120 amendements inscriraient dans le texte une profession déterminée.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-speedometer"></i> Constat 3 : l'éventail des délais va de 48 heures à 15 jours ouvrables</div>
+    <p>La <strong>Commission a proposé 48 heures</strong> (article 16, paragraphe 2), pour un coût plafonné à <strong>100 euros</strong>. Le projet de rapport du rapporteur <strong>ralentit ce délai à deux jours ouvrables</strong> et y ajoute une prorogation « pour la durée strictement nécessaire ». Vingt-deux amendements déplacent à nouveau le délai, dans les deux sens.</p>
+    <p><div style="overflow-x:auto; margin:1rem 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+      <thead><tr style="background:#f5f3ff; text-align:left;">
+        <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Délai</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Qui le propose</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>48 heures</strong><br><span style="color:#666;">le texte de la Commission, rétabli</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Proposition de la Commission, et amendements de Mario Mantovani (ECR), Jörgen Warborn (PPE), Victor Negrescu (S&amp;D), Pascal Canfin (Renew), Kira Marie Peter-Hansen et Sergey Lagodinsky (Verts/ALE)</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Deux jours ouvrables</strong><br><span style="color:#666;">le ralentissement du rapporteur</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Projet de rapport de M. Repasi, et amendements de Daniel Buda et Lukas Mandl (PPE), Mary Khan</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>15 jours ouvrables</strong><br><span style="color:#666;">environ sept fois plus lent</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Arash Saeidi et Özlem Demirel (The Left)</td></tr>
+      </tbody>
+    </table>
+    </div></p>
+    <p>La lecture n'est pas qu'une coalition voudrait EU Inc. plus rapide que la Commission. C'est qu'une coalition inhabituellement large, allant de l'ECR au PPE et à S&amp;D jusqu'à Renew et aux Verts, <strong>défend les 48 heures de la Commission contre son propre rapporteur</strong>. La rapidité est le seul point sur lequel s'accordent le centre et les deux flancs du courant principal. La version de Canfin ajoute un mot décisif : un coût maximal <strong>« et total »</strong> de 100 euros, qui ferme la brèche par laquelle des majorations nationales pourraient revenir.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group"></i> Constat 4 : sur la participation des travailleurs, toutes les issues sont sur la table</div>
+    <p>Vingt-neuf amendements visent l'<strong>article 12</strong> et couvrent tout l'éventail :</p>
+    <p><ul><li><strong>Le supprimer.</strong> Amendements 835, 837 et 838. La justification de M. Mantovani est un argument de <em>compétence</em>, non de politique : la participation des travailleurs relève d'une base juridique sur laquelle <strong>le Conseil statue à l'unanimité</strong>, et non de l'article 114 du TFUE. Le parlement bulgare soulève la même objection par une autre voie.</li><li><strong>Changer le facteur de rattachement.</strong> L'amendement 840 du rapporteur lui-même et le projet d'avis d'EMPL font passer la participation de l'État membre du <strong>siège statutaire</strong> à l'État membre <strong>d'emploi</strong>. Le projet de rapport va plus loin : lorsque les travailleurs se trouvent dans plusieurs États membres, c'est le <strong>niveau de protection le plus élevé</strong> qui s'applique.</li><li><strong>Le durcir davantage.</strong> Amendement 839 (Verts/ALE), amendements 841 et 843 (The Left).</li><li><strong>Conserver la règle du siège statutaire.</strong> Amendement 842 (ECR), amendement 844 (PPE).</li></ul></p>
+    <p><em>C'est ici que la commission compétente au fond et la commission saisie pour avis s'accordent déjà : le rapporteur de JURI et le rapporteur d'EMPL proposent le même changement (l'avis d'EMPL est détaillé <a href="#empl-opinion">plus haut</a>). L'opposition se partage entre un argument de compétence et un argument de flexibilité pour les entreprises.</em></p>
+  </div>
+
+  <h3>Qui a déposé quoi</h3>
+  <p>Quarante-huit députés ont déposé des amendements. En les attribuant au premier signataire identifiable ou à la mention déclarée « au nom de » :</p>
+  <div style="overflow-x:auto; margin:1.25rem 0;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+    <thead><tr style="background:#f5f3ff; text-align:left;">
+      <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Famille politique</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Amendements</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Ce qu'elle vise le plus</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>PPE</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">318</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Registre numérique des actions (21), définitions (16), transfert d'actions (16), formulaire de demande (14)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotes pour l'Europe</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">243</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Contrôle préventif (13), règles applicables (10), définitions (8)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>ECR</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">166</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Définitions (15), contrôle préventif (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotes pour l'Europe <span style="color:#666;">(députés tchèques)</span></strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">156</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Organes sociaux (6), article 33 (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Verts/ALE</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">147</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Objet (9), contrôle préventif (7), tout-numérique (6), EU-ESO (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>The Left</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">123</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Publicité au registre (10), objet (7), contrôle préventif (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>S&amp;D</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">112</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Répartis dans tout le texte</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Renew</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">48</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Répartis dans tout le texte</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="color:#666; font-size:0.88rem;">105 amendements supplémentaires n'ont pas pu être attribués automatiquement. Lorsqu'un amendement est cosigné, la famille du premier signataire identifiable est retenue : ces chiffres traduisent donc un poids d'effort et non des positions formelles de groupe.</p>
+
+  <h3>Ce qui serait purement et simplement supprimé</h3>
+  <p>Vingt-neuf amendements suppriment une disposition au lieu de la réécrire, et ils se concentrent sur deux points :</p>
+  <ul>
+    <li><strong>Article 54, le registre numérique des actions : 7 suppressions</strong>, et c'est aussi l'article que le PPE amende 21 fois. En chiffres, c'est la disposition la plus disputée du règlement.</li>
+    <li><strong>Chapitre X, insolvabilité simplifiée : 5 suppressions</strong>, le chapitre dont le parlement bulgare estime qu'il empiète sur le droit fiscal, social et contractuel national.</li>
+  </ul>
+  <p>Les autres sont dispersées : article 44 (3 suppressions), articles 17, 59, 61 et 109 (2 chacun) et suppressions isolées aux articles 8, 20, 46, 67, 70 et 92.</p>
+
+  <h3>Ce sur quoi les amendements et le projet de rapport s'accordent déjà</h3>
+  <p>En lisant les 1 418 amendements au regard des 246 du rapporteur, quatre points ne font en réalité pas débat :</p>
+  <ul>
+    <li><strong>Le plafond de 100 euros</strong> survit dans toutes les versions qui y touchent. Personne ne propose de plafond plus élevé.</li>
+    <li><strong>Le contrôle préventif doit être plus fort</strong> que ce que proposait la Commission. Le désaccord porte sur qui l'exerce, pas sur son principe.</li>
+    <li><strong>Les contrôles anti-blanchiment relèvent du moment de l'immatriculation.</strong> 77 amendements évoquent le blanchiment ou les bénéficiaires effectifs, et le projet de rapport intègre la même exigence.</li>
+    <li><strong>La prévention des sociétés boîtes aux lettres.</strong> Neuf amendements évoquent la substance économique, ce qui est aussi la troisième suggestion d'ECON, qui demande des « exigences minimales de substance économique portant sur la présence opérationnelle, la capacité décisionnelle et l'activité économique au sein de l'UE ».</li>
+  </ul>
+  <p>Deux idées propres au rapporteur restent presque isolées : la variante en propriété fiduciaire <strong>« EU Inc. SO »</strong> n'est reprise que par deux amendements, et l'<strong>annexe II</strong> d'exclusions qu'il crée pour remplacer le terme ambigu « innovante » n'est reprise que par dix.</p>
+
+  <h3>La première objection d'un parlement national</h3>
+  <p>Le <strong>18 juin 2026</strong>, la commission des affaires européennes et du contrôle des fonds de l'UE de l'Assemblée nationale de Bulgarie a adopté un <strong>avis motivé sur la subsidiarité, à l'unanimité, par 15 voix</strong>. La Bulgarie accueille favorablement les objectifs et conclut néanmoins que la proposition ne respecte <strong>que partiellement</strong> le principe de subsidiarité et <strong>pas pleinement</strong> celui de proportionnalité.</p>
+  <p>Sa ligne la plus dure porte sur le capital : l'exigence de capital zéro est <strong>« totalement inacceptable »</strong>, car elle crée des risques pour la protection des créanciers, le blanchiment de capitaux et la fraude fiscale, avec une référence au Groupe d'action financière sur les seuils de capital faibles qui facilitent les montages criminels. Elle demande aussi comment une <strong>immatriculation en 48 heures</strong> s'articule avec le paquet anti-blanchiment, qualifie de <strong>« très peu réalistes »</strong> les délais de raccordement au système BRIS et réclame deux ans au lieu de douze mois, avertit que l'absence de limites à l'objet social entrera en conflit avec les règles nationales sur la banque, l'assurance, les retraites et la santé, et objecte que les chapitres IX et X empiètent sur le droit fiscal, social et contractuel national. Sur l'<strong>article 12</strong>, elle qualifie de « lacune majeure » l'absence de toute analyse préalable.</p>
+  <p><strong>Une absence mérite d'être relevée.</strong> Aucun amendement déposé ne relève le capital minimum au-dessus de zéro. L'objection que le parlement bulgare juge totalement inacceptable n'est, à ce stade, portée par personne en commission.</p>
+
+  <p style="margin-top:1.5rem;"><em>La conception propre du rapporteur, et une comparaison clause par clause avec le texte de la Commission, figurent dans <a href="#position">La position du Parlement</a> plus haut. La présente section ne traite que de ce que les <strong>autres</strong> députés en ont fait.</em></p>
+
+  <p style="color:#666; font-size:0.88rem; margin-top:1.5rem;">Sources lues intégralement : PE790.143v02-00 (projet de rapport, 151 p.), PE791.127 à PE791.131 (amendements JURI 247 à 1664, 856 p.), PE790.022 (amendements EMPL 133 à 339, 116 p.), PE788.967 (projet d'avis EMPL, 27 p.), PE790.116 (avis motivé bulgare, 8 p.), la lettre d'avis d'ECON et le document COM(2026) 321. Les décomptes, les signataires et les articles visés ont été extraits par programme des textes publiés, puis vérifiés manuellement par sondage.</p>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendrier législatif</h2>
+  </div>
+  <p class="section__subtitle">du rapport Draghi à la date d'application</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">Septembre 2024</div>
+      <div class="timeline__text">Le rapport Draghi sur la compétitivité identifie la fragmentation réglementaire comme un obstacle clé</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Janvier 2025</div>
+      <div class="timeline__text">La Boussole de compétitivité annonce la création du « 28e régime »</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mars 2025</div>
+      <div class="timeline__text">Le Conseil européen demande à la Commission de proposer un régime optionnel de droit des sociétés</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 11 décembre 2025</div>
+      <div class="timeline__text">La commission JURI adopte le rapport d'initiative législative (INL) de Repasi au titre de l'article 47 : 18 pour, 4 contre, 1 abstention. Avis sur la base juridique : 22-2-1 en faveur des articles 50 + 114 TFUE (rejetant la voie de l'unanimité de l'article 352)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mercredi 17 décembre 2025</div>
+      <div class="timeline__text">Dépôt du rapport <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> : « Rapport avec recommandations à la Commission sur le 28e régime : un nouveau cadre juridique pour les entreprises innovantes » (procédure 2025/2079(INL)). Le Parlement propose le nom « Societas Europaea Unificata (S.EU) » et un capital minimum de 1 euro</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Février-mars 2026</div>
+      <div class="timeline__text">Trois réunions de députés avec des organisations patronales autrichiennes et allemandes sur EU Inc., déclarées au registre de transparence de l'UE</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mercredi 18 mars 2026</div>
+      <div class="timeline__text"><strong>La Commission adopte la proposition EU Inc. (COM(2026) 321)</strong>, procédure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Base juridique : article 114 TFUE. DG Justice et consommateurs (commissaire Michael McGrath). La Commission retient le nom « EU Inc. » plutôt que le « S.EU » du Parlement ; capital minimum fixé à 0 EUR (contre 1 EUR proposé par le PE)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 19 et vendredi 20 mars 2026</div>
+      <div class="timeline__text">Le Conseil européen débat de la compétitivité et de l'agenda « One Europe, One Market »</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mardi 31 mars 2026</div>
+      <div class="timeline__text">Attribution provisoire du dossier EU Inc. à la commission JURI (selon euinc.me) ; le renvoi officiel à l'OEIL suit le 18 mai 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 23 avril 2026</div>
+      <div class="timeline__text"><strong>René Repasi (S&amp;D, Allemagne) confirmé comme rapporteur du PE</strong> pour la proposition de la Commission en JURI. Six rapporteurs fictifs confirmés sur l'ensemble du spectre : <strong>Axel Voss</strong> (PPE), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Verts/ALE) et <strong>Arash Saeidi</strong> (La Gauche). Source : Euractiv, « René Repasi to helm EU Inc in Parliament »</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Lundi 4 mai 2026</div>
+      <div class="timeline__text"><strong>Premier engagement JURI : un échange de vues complet</strong> sur la proposition EU Inc. Le commissaire Michael McGrath a présenté le cadre ; le rapporteur René Repasi l'a accueilli favorablement « sauf pour le nom » et a insisté sur des garde-fous renforcés ; le rapporteur fictif ECR Mario Mantovani a mis en garde contre l'insuffisance des réponses sur la fiscalité et l'insolvabilité pour les scale-ups ; le rapporteur fictif Renew Pascal Canfin a réaffirmé son soutien et insisté sur les options sur actions. Voir la section « Débat JURI » ci-dessus pour les points saillants (retranscrit depuis le webstream PE). Source : <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">Webstream PE, 4 mai 2026</a>.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Lundi 18 mai 2026</div>
+      <div class="timeline__text"><strong>Renvoi en commission JURI annoncé en séance plénière</strong> (dossier JURI/10/05459). Commissions saisies pour avis : ECON (Aurore Lalucq, S&amp;D) et EMPL (Johan Danielsson, S&amp;D) ; la commission BUDG a décidé de ne pas rendre d'avis. Situation : en attente de décision de la commission.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mercredi 3 juin 2026</div>
+      <div class="timeline__text"><strong>ECON adopte le rapport d'initiative « 28e régime fiscal »</strong> (procédure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew), le volet fiscal parallèle à EU Inc. Compromis porté par PPE, S&amp;D, Renew et Verts ; les amendements ECR et PfE sont tombés. Plénière indicative : 6 juillet 2026.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Lundi 22 juin 2026</div>
+      <div class="timeline__text"><strong>La commission EMPL dépose son projet d'avis sur EU Inc.</strong> (procédure 2026/0074(COD), rapporteur pour avis Johan Danielsson, S&amp;D).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Lundi 29 juin 2026</div>
+      <div class="timeline__text"><strong>Le rapporteur René Repasi dépose le projet de rapport de la JURI</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendements) : il conserve l'ambition de la Commission mais ajoute des garanties anti-contournement et sociales (participation liée au lieu d'emploi, exclusion sectorielle, steward ownership, restriction de cotation en bourse, dispositif de règlement des litiges à l'américaine).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mercredi 15 juillet 2026</div>
+      <div class="timeline__text"><strong>La JURI examine le projet de rapport avec les rapporteurs fictifs.</strong> Repasi : « une autoroute pour les startups a besoin de limitations de vitesse et de garde-fous. » Le PPE (Voss) et Renew (Canfin, lu par Žalimas) défendent la conception large et ouverte de la Commission et s'opposent aux exclusions sectorielles, à la cogestion selon l'État d'accueil et à l'interdiction de cotation ; les Verts (Peter-Hansen) soutiennent les garanties sociales et l'exclusion des sociétés cotées ; La Gauche (Saeidi) met en garde contre le risque de fraude avec environ 200 amendements. Les amendements sont attendus dans les jours suivants.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Lundi 5 octobre 2026 (prévision)</div>
+      <div class="timeline__text"><strong>Date indicative de séance plénière, première lecture</strong>, selon la <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">prévision de l'Observatoire législatif</a> pour la procédure 2026/0074(COD). Les dates prévisionnelles évoluent au fur et à mesure de l'avancement des travaux en commission.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 18 juin 2026</div>
+      <div class="timeline__text"><strong>L'Assemblée nationale de Bulgarie objecte au titre de la subsidiarité, à l'unanimité.</strong> La commission des affaires européennes et du contrôle des fonds de l'UE a examiné le document COM(2026)0321 lors de sa séance du 18 juin et a adopté un <strong>avis motivé par 15 voix pour, à l'unanimité</strong> (président Galin Durev), transmis à la présidente Metsola le 19 juin et diffusé en commission JURI le 24 juin sous la référence PE790.116. Il s'agit de la <strong>première objection d'un parlement national à EU Inc.</strong> La Bulgarie accueille favorablement les objectifs mais estime que la proposition ne respecte <strong>que partiellement</strong> la subsidiarité et <strong>pas pleinement</strong> la proportionnalité : le capital zéro est <strong>« totalement inacceptable »</strong>, les délais de raccordement au BRIS sont <strong>« très peu réalistes »</strong> et l'absence d'analyse préalable de l'<strong>article 12</strong> constitue une « lacune majeure ».</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Mardi 23 juin 2026</div>
+      <div class="timeline__text"><strong>La commission EMPL dépose ses amendements</strong> (PE790.022) : <strong>207 amendements, numérotés de 133 à 339</strong>, 116 pages.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 23 juillet 2026</div>
+      <div class="timeline__text"><strong>1 418 amendements déposés en commission JURI, répartis en cinq documents.</strong> Les amendements <strong>247 à 1664</strong> ont été déposés sur le projet de rapport de M. Repasi le 23 juillet 2026 et publiés sous les références PE791.127 (247-426), PE791.128 (427-695), PE791.129 (696-995), PE791.130 (996-1339) et PE791.131 (1340-1664), soit 856 pages au total. Avec les 246 du rapporteur, le dossier porte désormais <strong>1 664 amendements</strong>. Lorsque Arash Saeidi, de The Left, a mis en garde le 15 juillet contre le risque de fraude lié à « environ 200 amendements », le chiffre final s'est révélé environ huit fois supérieur.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Lundi 7 septembre 2026</div>
+      <div class="timeline__text"><strong>EU Inc. revient en commission JURI, et c'est la surface d'amendements la plus active du Parlement cette semaine.</strong> L'ordre du jour de JURI du 7 septembre comporte le projet de rapport, un projet d'avis, <strong>six documents d'amendements</strong> et l'avis motivé bulgare sur le même dossier, soit vingt documents au total. Aucun média n'en a rendu compte lors du dépôt des amendements. Source : documents de commission eMeeting du PE.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Jeudi 10 septembre 2026</div>
+      <div class="timeline__text"><strong>La commission EMPL reprend le dossier</strong> avec ses propres amendements et son projet d'avis à l'ordre du jour, trois jours après JURI.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Fin 2026</div>
+      <div class="timeline__text"><strong>Engagement des trois institutions</strong> (Commission, Parlement, Conseil) à conclure les négociations d'ici la fin 2026. Ambitieux mais structurellement réalisable compte tenu du consensus déjà bâti lors de la phase INL en JURI</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Adoption des actes d'exécution (modèles, formulaires, spécifications BRIS)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Date d'application : EU Inc. devient disponible dans tous les États membres</div>
+    </div>
+<div class="timeline__item">
+      <div class="timeline__date">Mercredi 15 juillet 2026</div>
+      <div class="timeline__text"><strong>ECON adopte son avis sur EU Inc. par 34 voix contre 13, avec 9 abstentions</strong> et le transmet à JURI sous forme de lettre en vertu de Rule 57(1) (PE788.878v01-00), signée par la présidente d'ECON Aurore Lalucq. Trente et une suggestions, dont seize portent sur un <strong>module fiscal</strong> que la proposition de la Commission ne contient pas&nbsp;: une structure d'adhésion volontaire ou de coopération renforcée pour contourner l'unanimité, une base d'imposition consolidée unique des sociétés répartie selon une formule reflétant l'activité économique réelle, des procédures centralisées de TVA et de retenue à la source, et un régime obligatoire d'options sur actions des salariés imposé à la cession comme revenu du capital. Soutenu par le PPE, S&amp;D, Renew et les Verts/ALE&nbsp;; combattu simultanément par la droite dure et The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
+    </div>
+  </div>
+</section>
 
 <!-- What and Why -->
 <section class="section" id="what">
@@ -695,6 +927,25 @@
     </div>
   </div>
 </section>
+
+<!-- TOC -->
+<nav class="toc" id="chapters">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure de la proposition</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Principes généraux (arts 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Immatriculation et dépôt (arts 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Informations transfrontières (arts 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Succursales transfrontières (arts 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisation (arts 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Parts sociales et cessions (arts 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financement (arts 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Options sur actions pour salariés (arts 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Dissolution de sociétés solvables (arts 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvabilité (arts 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Exigences interdites (art 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Dispositions finales (arts 104-109)</a>
+  </div>
+</nav>
 
 <!-- Chapter I -->
 <section class="section" id="ch1">
@@ -1057,102 +1308,6 @@
   </div>
 </section>
 
-<!-- Timeline -->
-<section class="section" id="timeline">
-  <div class="section__header">
-    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
-    <h2 class="section__title">Calendrier législatif</h2>
-  </div>
-  <p class="section__subtitle">du rapport Draghi à la date d'application</p>
-
-  <div class="timeline">
-    <div class="timeline__item">
-      <div class="timeline__date">Septembre 2024</div>
-      <div class="timeline__text">Le rapport Draghi sur la compétitivité identifie la fragmentation réglementaire comme un obstacle clé</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Janvier 2025</div>
-      <div class="timeline__text">La Boussole de compétitivité annonce la création du « 28e régime »</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mars 2025</div>
-      <div class="timeline__text">Le Conseil européen demande à la Commission de proposer un régime optionnel de droit des sociétés</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Jeudi 11 décembre 2025</div>
-      <div class="timeline__text">La commission JURI adopte le rapport d'initiative législative (INL) de Repasi au titre de l'article 47 : 18 pour, 4 contre, 1 abstention. Avis sur la base juridique : 22-2-1 en faveur des articles 50 + 114 TFUE (rejetant la voie de l'unanimité de l'article 352)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mercredi 17 décembre 2025</div>
-      <div class="timeline__text">Dépôt du rapport <a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a> : « Rapport avec recommandations à la Commission sur le 28e régime : un nouveau cadre juridique pour les entreprises innovantes » (procédure 2025/2079(INL)). Le Parlement propose le nom « Societas Europaea Unificata (S.EU) » et un capital minimum de 1 euro</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Février-mars 2026</div>
-      <div class="timeline__text">Trois réunions de députés avec des organisations patronales autrichiennes et allemandes sur EU Inc., déclarées au registre de transparence de l'UE</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mercredi 18 mars 2026</div>
-      <div class="timeline__text"><strong>La Commission adopte la proposition EU Inc. (COM(2026) 321)</strong>, procédure <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Base juridique : article 114 TFUE. DG Justice et consommateurs (commissaire Michael McGrath). La Commission retient le nom « EU Inc. » plutôt que le « S.EU » du Parlement ; capital minimum fixé à 0 EUR (contre 1 EUR proposé par le PE)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Jeudi 19 et vendredi 20 mars 2026</div>
-      <div class="timeline__text">Le Conseil européen débat de la compétitivité et de l'agenda « One Europe, One Market »</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mardi 31 mars 2026</div>
-      <div class="timeline__text">Attribution provisoire du dossier EU Inc. à la commission JURI (selon euinc.me) ; le renvoi officiel à l'OEIL suit le 18 mai 2026</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Jeudi 23 avril 2026</div>
-      <div class="timeline__text"><strong>René Repasi (S&amp;D, Allemagne) confirmé comme rapporteur du PE</strong> pour la proposition de la Commission en JURI. Six rapporteurs fictifs confirmés sur l'ensemble du spectre : <strong>Axel Voss</strong> (PPE), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Verts/ALE) et <strong>Arash Saeidi</strong> (La Gauche). Source : Euractiv, « René Repasi to helm EU Inc in Parliament »</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Lundi 4 mai 2026</div>
-      <div class="timeline__text"><strong>Premier engagement JURI : un échange de vues complet</strong> sur la proposition EU Inc. Le commissaire Michael McGrath a présenté le cadre ; le rapporteur René Repasi l'a accueilli favorablement « sauf pour le nom » et a insisté sur des garde-fous renforcés ; le rapporteur fictif ECR Mario Mantovani a mis en garde contre l'insuffisance des réponses sur la fiscalité et l'insolvabilité pour les scale-ups ; le rapporteur fictif Renew Pascal Canfin a réaffirmé son soutien et insisté sur les options sur actions. Voir la section « Débat JURI » ci-dessus pour les points saillants (retranscrit depuis le webstream PE). Source : <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">Webstream PE, 4 mai 2026</a>.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Lundi 18 mai 2026</div>
-      <div class="timeline__text"><strong>Renvoi en commission JURI annoncé en séance plénière</strong> (dossier JURI/10/05459). Commissions saisies pour avis : ECON (Aurore Lalucq, S&amp;D) et EMPL (Johan Danielsson, S&amp;D) ; la commission BUDG a décidé de ne pas rendre d'avis. Situation : en attente de décision de la commission.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mercredi 3 juin 2026</div>
-      <div class="timeline__text"><strong>ECON adopte le rapport d'initiative « 28e régime fiscal »</strong> (procédure 2025/2211(INI), rapporteur Ľudovít Ódor, Renew), le volet fiscal parallèle à EU Inc. Compromis porté par PPE, S&amp;D, Renew et Verts ; les amendements ECR et PfE sont tombés. Plénière indicative : 6 juillet 2026.</div>
-    </div>
-    <div class="timeline__item timeline__item--active">
-      <div class="timeline__date">Lundi 22 juin 2026</div>
-      <div class="timeline__text"><strong>La commission EMPL dépose son projet d'avis sur EU Inc.</strong> (procédure 2026/0074(COD), rapporteur pour avis Johan Danielsson, S&amp;D).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Lundi 29 juin 2026</div>
-      <div class="timeline__text"><strong>Le rapporteur René Repasi dépose le projet de rapport de la JURI</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 amendements) : il conserve l'ambition de la Commission mais ajoute des garanties anti-contournement et sociales (participation liée au lieu d'emploi, exclusion sectorielle, steward ownership, restriction de cotation en bourse, dispositif de règlement des litiges à l'américaine).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Mercredi 15 juillet 2026</div>
-      <div class="timeline__text"><strong>La JURI examine le projet de rapport avec les rapporteurs fictifs.</strong> Repasi : « une autoroute pour les startups a besoin de limitations de vitesse et de garde-fous. » Le PPE (Voss) et Renew (Canfin, lu par Žalimas) défendent la conception large et ouverte de la Commission et s'opposent aux exclusions sectorielles, à la cogestion selon l'État d'accueil et à l'interdiction de cotation ; les Verts (Peter-Hansen) soutiennent les garanties sociales et l'exclusion des sociétés cotées ; La Gauche (Saeidi) met en garde contre le risque de fraude avec environ 200 amendements. Les amendements sont attendus dans les jours suivants.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Lundi 5 octobre 2026 (prévision)</div>
-      <div class="timeline__text"><strong>Date indicative de séance plénière, première lecture</strong>, selon la <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">prévision de l'Observatoire législatif</a> pour la procédure 2026/0074(COD). Les dates prévisionnelles évoluent au fur et à mesure de l'avancement des travaux en commission.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Fin 2026</div>
-      <div class="timeline__text"><strong>Engagement des trois institutions</strong> (Commission, Parlement, Conseil) à conclure les négociations d'ici la fin 2026. Ambitieux mais structurellement réalisable compte tenu du consensus déjà bâti lors de la phase INL en JURI</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2027</div>
-      <div class="timeline__text">Adoption des actes d'exécution (modèles, formulaires, spécifications BRIS)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2028</div>
-      <div class="timeline__text">Date d'application : EU Inc. devient disponible dans tous les États membres</div>
-    </div>
-<div class="timeline__item">
-      <div class="timeline__date">Mercredi 15 juillet 2026</div>
-      <div class="timeline__text"><strong>ECON adopte son avis sur EU Inc. par 34 voix contre 13, avec 9 abstentions</strong> et le transmet à JURI sous forme de lettre en vertu de Rule 57(1) (PE788.878v01-00), signée par la présidente d'ECON Aurore Lalucq. Trente et une suggestions, dont seize portent sur un <strong>module fiscal</strong> que la proposition de la Commission ne contient pas&nbsp;: une structure d'adhésion volontaire ou de coopération renforcée pour contourner l'unanimité, une base d'imposition consolidée unique des sociétés répartie selon une formule reflétant l'activité économique réelle, des procédures centralisées de TVA et de retenue à la source, et un régime obligatoire d'options sur actions des salariés imposé à la cession comme revenu du capital. Soutenu par le PPE, S&amp;D, Renew et les Verts/ALE&nbsp;; combattu simultanément par la droite dure et The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
-    </div>
-  </div>
-</section>
-
 <!-- Sources -->
 <section class="section" id="sources">
   <div class="section__header">
@@ -1195,5 +1350,25 @@
   });
 </script>
 
+
+<script>
+/* Highlight the section the reader is actually in. IntersectionObserver, so it
+   costs nothing on scroll; does nothing at all where unsupported. */
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.secnav a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var byId = {};
+  links.forEach(function(a){ byId[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(byId).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.remove('is-active'); });
+      var a = byId[e.target.id]; if (a) a.classList.add('is-active');
+    });
+  }, {rootMargin: '-96px 0px -70% 0px', threshold: 0});
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
 </body>
 </html>

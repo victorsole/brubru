@@ -417,7 +417,24 @@
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { transform: translateY(-2px); }
       /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
-  </style>
+  
+    /* Section nav, added 4 Sep 2026. Before this the only navigation was the
+       12-chapter TOC, so the amendments analysis, the timeline, the comparison
+       and the sources had no link anywhere on a 26,000px page. */
+    .secnav{position:sticky;top:82px;z-index:40;background:rgba(255,255,255,.94);
+      backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--color-border);
+      margin:0 0 1.5rem;}
+    .secnav__inner{display:flex;gap:.25rem;overflow-x:auto;padding:.55rem .25rem;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .secnav__inner::-webkit-scrollbar{display:none}
+    .secnav a{flex:0 0 auto;padding:.4rem .7rem;border-radius:999px;font-size:.86rem;
+      font-weight:600;color:var(--color-secondary);text-decoration:none;white-space:nowrap;}
+    .secnav a:hover{background:var(--color-bg);color:var(--color-blue);}
+    .secnav a.is-active{background:var(--color-blue);color:#fff;}
+    section[id],nav[id],div[id]{scroll-margin-top:150px}
+    @media(max-width:767px){.secnav{top:70px}.secnav a{font-size:.8rem;padding:.35rem .6rem}
+      section[id],nav[id],div[id]{scroll-margin-top:130px}}
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -465,7 +482,41 @@
 </section>
 
 <!-- Ponent del Parlament Europeu -->
-<section class="card" style="margin: 2rem 0;">
+<!-- Section nav -->
+<nav class="secnav" aria-label="Seccions d'aquesta pàgina">
+  <div class="secnav__inner">
+    <a href="#position">On és el fitxer</a>
+    <a href="#amendments-2026">1.664 esmenes</a>
+    <a href="#timeline">Cronologia</a>
+    <a href="#what">Què és EU Inc.</a>
+    <a href="#chapters">Els 12 capítols</a>
+    <a href="#comparison">Enfront del dret nacional</a>
+    <a href="#impact">Impacte</a>
+    <a href="#sources">Fonts</a>
+  </div>
+</nav>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48h</div>
+    <div class="figure-card__label">Registre d'empresa (via ràpida)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">0 EUR</div>
+    <div class="figure-card__label">Capital mínim exigit</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">100 EUR</div>
+    <div class="figure-card__label">Cost màxim de registre</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308K</div>
+    <div class="figure-card__label">Empreses estimades en 10 anys</div>
+  </div>
+</div>
+
+<section class="card" id="position" style="margin: 2rem 0;">
   <h3 style="margin-top: 0;"><i class="mdi mdi-account-tie" style="color: var(--color-red);"></i> Ponent del Parlament Europeu</h3>
   <p><strong>René Repasi</strong> (S&amp;D, Alemanya, SPD) va ser confirmat com a ponent del Parlament Europeu per a la proposta EU Inc. el 23 d'abril de 2026. És membre de la Comissió d'Assumptes Jurídics (JURI, la comissió competent per a aquest expedient) i de la Comissió d'Afers Econòmics i Monetaris (ECON), i suplent a ITRE i a la Subcomissió d'Afers Fiscals (FISC). També és professor de Dret a l'Erasmus School of Law de Rotterdam. <a href="https://www.europarl.europa.eu/meps/en/229839/RENE_REPASI/home" target="_blank" rel="noopener">Perfil MEP</a>.</p>
   <p>Repasi ja va liderar l'informe preparatori del Parlament, un <strong>informe d'iniciativa legislativa</strong> sobre el 28è Règim (<a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a>, procediment 2025/2079(INL)), presentat el 17 de desembre de 2025 i aprovat a JURI amb 18 vots a favor, 4 en contra i 1 abstenció. El seu informe INL proposava el nom "Societas Europaea Unificata (S.EU)", un capital mínim d'1 euro, i salvaguardes explícites per a la participació dels treballadors, així com disposicions opcionals de propietat de custòdia (steward-ownership) i bloqueig d'actius (asset-lock). La Comissió finalment va adoptar la denominació "EU Inc." amb capital mínim de 0 euros. La proposta de la Comissió (procediment <strong>2026/0074(COD)</strong>) es basa en l'<strong>article 114 TFUE</strong>; l'INL predecessor havia defensat els articles 50 + 114 davant l'article 352.</p>
@@ -476,7 +527,7 @@
   <p><strong>Novetat (setmana del 13 de juliol de 2026, setmana de comissions del PE):</strong> durant la setmana de comissions del 13 al 17 de juliol, l'última abans del recés estival del 27 de juliol al 21 d'agost, EU Inc. arriba a <strong>tres comissions el mateix dia, dimecres 15 de juliol de 2026</strong>: la comissió competent <strong>JURI</strong> per al seu examen, <strong>ECON</strong> com a comissió per a opinió i <strong>EMPL</strong> per a un intercanvi de punts de vista amb les parts interessades sobre el 28è règim. És la primera vegada que l'expedient es treballa en tres comissions la mateixa setmana, senyal que guanya pes polític, tot i que continua sent una proposta en examen en comissió i no una llei adoptada. Font: agendes de comissions eMeeting del PE del 15 de juliol de 2026.</p>
   <p>Estat a l'Observatori Legislatiu (a 15 de juliol de 2026): <strong>en fase de comissió</strong>. La remissió a la comissió JURI va ser anunciada en sessió plenària el <strong>18 de maig de 2026</strong> (expedient JURI/10/05459); encara no s'ha presentat cap informe de la comissió competent ni votació final en comissió. Les comissions per a opinió són <strong>ECON</strong> (Aurore Lalucq, S&amp;D, nomenada el 18 de maig de 2026) i <strong>EMPL</strong> (Johan Danielsson, S&amp;D, nomenat el 13 de maig de 2026). <strong>BUDG va decidir no emetre dictamen.</strong> El <strong>22 de juny de 2026, EMPL va presentar el seu projecte d'opinió</strong> sobre EU Inc. (ponent d'opinió Johan Danielsson, S&amp;D), i el <strong>29 de juny de 2026 el ponent René Repasi va presentar el projecte d'informe de la comissió competent, JURI (PE790.143, 246 esmenes)</strong>, examinat per JURI amb els ponents alternatius el <strong>15 de juliol de 2026</strong> (vegeu el quadre comparatiu i el debat més avall). El primer debat en comissió va ser l'intercanvi de punts de vista de JURI del 4 de maig de 2026 (els punts destacats es troben a continuació).</p>
 
-  <div class="info-box" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
+  <div class="info-box" id="empl-opinion" style="margin-top:1.5rem; border-left:4px solid var(--color-purple);">
     <h4 style="margin-top:0;"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-purple);"></i> Projecte d'opinió EMPL (12 de juny de 2026, PE788.967): una reescriptura de protecció dels treballadors</h4>
     <p>El projecte d'opinió de la Comissió d'Ocupació i Afers Socials per a JURI, amb ponent d'opinió <strong>Johan Danielsson (S&amp;D, Suècia)</strong>, adopta una línea notablement més protectora que el text de la Comissió. El seu nucli és que la forma EU Inc. no pot convertir-se en un vehicle per eludir la llei laboral i de seguretat social, i lliga fermament la forma jurídica al lloc on realment es realitza el treball. Punts clau:</p>
     <ul>
@@ -620,44 +671,213 @@
   <p><strong>Com es van posicionar els grups polítics:</strong> el compromís va ser aprovat per <strong>PPE + S&amp;D + Renew + Verds</strong> (amb L'Esquerra integrada parcialment), mentre que <strong>totes les esmenes d'ECR i PfE van caure</strong>. Renew va impulsar l'ambició (base consolidada, MVQ); el PPE va donar suport a la competitivitat però va defensar el dret dels estats membres a fixar els tipus fiscals; S&amp;D i els Verds van afegir salvaguardes socials i antifrau; L'Esquerra va intentar eliminar la benvinguda a la proposta però va aconseguir garanties antiabús. ECR "rebutja explícitament" l'ús del règim com a vehicle d'integració fiscal, i PfE defensa la fiscalitat com a competència exclusiva dels estats membres sota unanimitat. La línia de fractura a seguir és la unanimitat enfront de la majoria qualificada en matèria fiscal.</p>
 </section>
 
-<!-- Key figures -->
-<div class="figures">
-  <div class="figure-card fc-blue">
-    <div class="figure-card__number">48h</div>
-    <div class="figure-card__label">Registre d'empresa (via ràpida)</div>
+<!-- Amendment wave -->
+<section class="section" id="amendments-2026">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-file-document-multiple"></i></div>
+    <h2 class="section__title">1.664 esmenes: què vol canviar el Parlament</h2>
   </div>
-  <div class="figure-card fc-green">
-    <div class="figure-card__number">0 EUR</div>
-    <div class="figure-card__label">Capital mínim exigit</div>
-  </div>
-  <div class="figure-card fc-purple">
-    <div class="figure-card__number">100 EUR</div>
-    <div class="figure-card__label">Cost màxim de registre</div>
-  </div>
-  <div class="figure-card fc-amber">
-    <div class="figure-card__number">308K</div>
-    <div class="figure-card__label">Empreses estimades en 10 anys</div>
-  </div>
-</div>
+  <p class="section__subtitle">Llegit dels cinc documents d'esmenes de la comissió JURI del 23 de juliol de 2026, del dictamen i les esmenes de la comissió EMPL i del dictamen motivat búlgar, i comparat amb el projecte d'informe del ponent</p>
 
-<!-- TOC -->
-<nav class="toc">
-  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Estructura de la proposta</div>
-  <div class="toc__grid">
-    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Principis generals (Arts 1-12)</a>
-    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registre i presentació (Arts 13-24)</a>
-    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Informació transfronterera (Arts 25-35)</a>
-    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Sucursals transfrontereres (Arts 36-41)</a>
-    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organització (Arts 42-52)</a>
-    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Participacions i transferències (Arts 53-60)</a>
-    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Finançament (Arts 61-77)</a>
-    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Opcions sobre accions (Arts 78-79)</a>
-    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Tancament de societats solvents (Arts 80-87)</a>
-    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvència (Arts 88-102)</a>
-    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Requisits prohibits (Art 103)</a>
-    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Disposicions finals (Arts 104-109)</a>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.9rem; margin:1.5rem 0;">
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">1.664</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">esmenes en total</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">48</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">diputats que n'han presentat</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">120</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">sobre el control preventiu</div></div>
+    <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.1rem 1.25rem; text-align:center;"><div style="font-size:1.9rem; font-weight:800; color:var(--color-blue); line-height:1;">3</div><div style="font-size:0.85rem; color:var(--color-secondary); margin-top:0.35rem;">que acabarien amb el fitxer</div></div>
   </div>
-</nav>
+
+  <p><strong>En una línia:</strong> EU Inc. no rep l'oposició d'un sol costat. L'estiren des dels dos extrems alhora, mentre el centre que porta el fitxer discuteix qui ha de comprovar una empresa abans que se li permeti existir.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-close-octagon"></i> Constatació 1: tres esmenes acabarien amb el fitxer, no el modificarien</div>
+    <p>L'<strong>esmena 247</strong>, d'Arash Saeidi i Manon Aubry <em>en nom del Grup The Left</em>, substitueix "Aprova la seva posició en primera lectura" per <strong>"Rebutja la proposta de la Comissió"</strong>.</p>
+    <p>L'<strong>esmena 248</strong>, de Pascale Piera i Juan Carlos Girauta Vidal (Patriotes per Europa), fa exactament el mateix amb paraules gairebé idèntiques.</p>
+    <p>Les <strong>esmenes 249 i 250</strong> convertirien l'instrument de <strong>Reglament en Directiva</strong>, amb aplicació "a tot el text". No és una preferència de redacció: una directiva exigeix transposició nacional, cosa que elimina la forma societària única i uniforme que és tot el sentit d'un 28è règim.</p>
+    <p><em>The Left i la dreta dura arriben al mateix destí des de direccions oposades. Aquest patró es repeteix a tot el conjunt.</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check"></i> Constatació 2: la batalla més gran és sobre els notaris, no sobre les empreses emergents</div>
+    <p><strong>120 esmenes</strong> toquen el control preventiu de legalitat, més que cap altre tema. Només l'article 14 en rep 59 i l'article 2 en rep 70. El moviment recurrent és inscriure la paraula <strong>"notarial"</strong> a la cadena d'autoritats que han de comprovar una empresa abans de registrar-la.</p>
+    <p>Això va directament en contra del disseny només digital de la proposta. L'esmena 314 diu que els procediments plenament digitals "no han d'impedir que les autoritats competents, inclosos els notaris quan la legislació nacional ho prevegi, exigeixin la <strong>compareixença física</strong> dels sol·licitants quan ho justifiquin riscos específics relatius a la identitat".</p>
+    <p><strong>El ponent és al mateix costat, per un motiu diferent.</strong> Reforça el control preventiu perquè EU Inc. esdevingui "una etiqueta corporativa europea de confiança" i no un vehicle d'elusió. Però especifica <em>què</em> s'ha de verificar (identitat, capacitat jurídica, autenticitat i compliment de la normativa contra el blanqueig de capitals) i deixa oberta l'elecció de l'autoritat. Les 120 esmenes hi inscriurien una professió concreta.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-speedometer"></i> Constatació 3: el ventall de terminis va de 48 hores a 15 dies hàbils</div>
+    <p>La <strong>Comissió va proposar 48 hores</strong> (article 16, apartat 2), amb un cost màxim de <strong>100 euros</strong>. El projecte d'informe del ponent ho <strong>alenteix a dos dies hàbils</strong> i hi afegeix una pròrroga "pel temps estrictament necessari". Vint-i-dues esmenes tornen a moure el termini, en totes dues direccions.</p>
+    <p><div style="overflow-x:auto; margin:1rem 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+      <thead><tr style="background:#f5f3ff; text-align:left;">
+        <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Termini</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Qui el proposa</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>48 hores</strong><br><span style="color:#666;">el text de la Comissió, restaurat</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Proposta de la Comissió, i esmenes de Mario Mantovani (ECR), Jörgen Warborn (PPE), Victor Negrescu (S&amp;D), Pascal Canfin (Renew), Kira Marie Peter-Hansen i Sergey Lagodinsky (Verds/ALE)</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Dos dies hàbils</strong><br><span style="color:#666;">l'alentiment del ponent</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Projecte d'informe de Repasi, i esmenes de Daniel Buda i Lukas Mandl (PPE), Mary Khan</td></tr>
+        <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>15 dies hàbils</strong><br><span style="color:#666;">unes set vegades més lent</span></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Arash Saeidi i Özlem Demirel (The Left)</td></tr>
+      </tbody>
+    </table>
+    </div></p>
+    <p>La lectura no és que una coalició vulgui EU Inc. més ràpid que la Comissió. És que una coalició inusualment àmplia, que va des d'ECR passant pel PPE i S&amp;D fins a Renew i els Verds, <strong>defensa les 48 hores de la Comissió contra el seu propi ponent</strong>. La rapidesa és l'única cosa en què coincideixen el centre i tots dos flancs del corrent principal. La versió de Canfin hi afegeix una paraula decisiva: un cost màxim <strong>"i total"</strong> de 100 euros, que tanca l'escletxa per on podrien tornar a entrar recàrrecs nacionals.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group"></i> Constatació 4: sobre la participació dels treballadors hi ha tots els resultats possibles damunt la taula</div>
+    <p>Vint-i-nou esmenes apunten a l'<strong>article 12</strong> i cobreixen tot el ventall:</p>
+    <p><ul><li><strong>Suprimir-lo.</strong> Esmenes 835, 837 i 838. La justificació de Mantovani és un argument de <em>competència</em>, no de política: la participació dels treballadors pertany a una base jurídica en què <strong>el Consell decideix per unanimitat</strong>, no a l'article 114 del TFUE. El parlament búlgar planteja la mateixa objecció des d'una altra direcció.</li><li><strong>Canviar el punt de connexió.</strong> L'esmena 840 del mateix Repasi i el projecte de dictamen d'EMPL traslladen la participació de l'Estat membre del <strong>domicili social</strong> a l'Estat membre <strong>d'ocupació</strong>. El projecte d'informe va més enllà: quan els treballadors són a diversos Estats membres, s'aplica el <strong>nivell de protecció més alt</strong>.</li><li><strong>Endurir-lo encara més.</strong> Esmena 839 (Verds/ALE), esmenes 841 i 843 (The Left).</li><li><strong>Mantenir la regla del domicili social.</strong> Esmena 842 (ECR), esmena 844 (PPE).</li></ul></p>
+    <p><em>Aquí és on la comissió competent i la comissió per a dictamen ja coincideixen: el ponent de JURI i el ponent d'EMPL proposen el mateix canvi (el dictamen d'EMPL es detalla <a href="#empl-opinion">més amunt</a>). L'oposició es divideix entre un argument de competència i un de flexibilitat empresarial.</em></p>
+  </div>
+
+  <h3>Qui ha presentat què</h3>
+  <p>Quaranta-vuit diputats han presentat esmenes. Atribuint-les pel primer signatari identificable o per la menció declarada "en nom de":</p>
+  <div style="overflow-x:auto; margin:1.25rem 0;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+    <thead><tr style="background:#f5f3ff; text-align:left;">
+      <th style="padding:0.6rem; border-bottom:2px solid #ddd;">Família política</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Esmenes</th><th style="padding:0.6rem; border-bottom:2px solid #ddd;">Què ataca amb més força</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>PPE</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">318</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Registre digital d'accions (21), definicions (16), transmissió d'accions (16), formulari de sol·licitud (14)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotes per Europa</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">243</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Control preventiu (13), normes aplicables (10), definicions (8)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>ECR</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">166</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Definicions (15), control preventiu (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Patriotes per Europa <span style="color:#666;">(diputats txecs)</span></strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">156</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Òrgans societaris (6), article 33 (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Verds/ALE</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">147</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Objecte (9), control preventiu (7), només digital (6), EU-ESO (5)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>The Left</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">123</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Publicitat registral (10), objecte (7), control preventiu (7)</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>S&amp;D</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">112</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Repartides per tot el text</td></tr>
+      <tr><td style="padding:0.55rem; border-bottom:1px solid #eee;"><strong>Renew</strong></td><td style="padding:0.55rem; border-bottom:1px solid #eee;">48</td><td style="padding:0.55rem; border-bottom:1px solid #eee;">Repartides per tot el text</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="color:#666; font-size:0.88rem;">Un total de 105 esmenes més no s'han pogut atribuir automàticament. Quan una esmena està cosignada, s'utilitza la família del primer signatari identificable, de manera que aquestes xifres mostren el pes de l'esforç i no pas posicions formals de grup.</p>
+
+  <h3>Què se suprimiria del tot</h3>
+  <p>Vint-i-nou esmenes suprimeixen una disposició en lloc de reescriure-la, i es concentren en dos punts:</p>
+  <ul>
+    <li><strong>Article 54, el registre digital d'accions: 7 supressions</strong>, i és també l'article que el PPE esmena 21 vegades. En xifres, és la disposició més disputada del reglament.</li>
+    <li><strong>Capítol X, insolvència simplificada: 5 supressions</strong>, el capítol que el parlament búlgar diu que envaeix el dret fiscal, laboral i contractual nacional.</li>
+  </ul>
+  <p>La resta són disperses: article 44 (3 supressions), articles 17, 59, 61 i 109 (2 cadascun) i supressions úniques als articles 8, 20, 46, 67, 70 i 92.</p>
+
+  <h3>En què ja coincideixen les esmenes i el projecte d'informe</h3>
+  <p>Llegint les 1.418 esmenes contra les 246 del ponent, resulta que hi ha quatre punts que no estan en disputa:</p>
+  <ul>
+    <li><strong>El límit de 100 euros</strong> sobreviu a totes les versions que el toquen. Ningú no proposa un sostre més alt.</li>
+    <li><strong>El control preventiu ha de ser més fort</strong> del que proposava la Comissió. La discussió és sobre qui l'exerceix, no sobre si s'ha de fer.</li>
+    <li><strong>Les comprovacions contra el blanqueig de capitals pertanyen al moment del registre.</strong> 77 esmenes plantegen el blanqueig o la titularitat real, i el projecte d'informe hi incorpora la mateixa exigència.</li>
+    <li><strong>La prevenció de societats bústia.</strong> Nou esmenes plantegen la substància econòmica, i és també la tercera suggerència d'ECON, que demana "requisits mínims de substància econòmica relatius a presència operativa, capacitat de decisió i activitat econòmica dins de la UE".</li>
+  </ul>
+  <p>Dues idees del ponent queden gairebé soles: la variant de propietat fiduciària <strong>"EU Inc. SO"</strong> només la recullen dues esmenes, i l'<strong>annex II</strong> d'exclusions que crea per substituir l'ambigu terme "innovadora" el recullen deu.</p>
+
+  <h3>La primera objecció d'un parlament nacional</h3>
+  <p>El <strong>18 de juny de 2026</strong> la Comissió d'Afers Europeus i Supervisió dels Fons de la UE de l'Assemblea Nacional de Bulgària va adoptar un <strong>dictamen motivat sobre subsidiarietat, per unanimitat, amb 15 vots</strong>. Bulgària acull favorablement els objectius i tot i així conclou que la proposta compleix <strong>només parcialment</strong> el principi de subsidiarietat i <strong>no del tot</strong> el de proporcionalitat.</p>
+  <p>La seva línia més dura és sobre el capital: el requisit de capital zero és <strong>"totalment inacceptable"</strong>, perquè crea riscos per a la protecció dels creditors, el blanqueig de capitals i el frau fiscal, i cita el Grup d'Acció Financera Internacional sobre els llindars baixos de capital que faciliten esquemes criminals. També pregunta com encaixa un <strong>registre en 48 hores</strong> amb el paquet contra el blanqueig, qualifica de <strong>"molt poc realistes"</strong> els terminis de connexió al sistema BRIS i demana dos anys en lloc de dotze mesos, adverteix que l'absència de límits a l'objecte social xocarà amb les normes nacionals sobre banca, assegurances, pensions i sanitat, i objecta que els capítols IX i X entren en el dret fiscal, laboral i contractual nacional. Sobre l'<strong>article 12</strong> qualifica de "deficiència important" l'absència de qualsevol avaluació prèvia.</p>
+  <p><strong>Val la pena assenyalar una absència.</strong> Cap esmena presentada no eleva el capital mínim per damunt de zero. L'objecció que el parlament búlgar qualifica de totalment inacceptable, de moment, no la sosté ningú a la comissió.</p>
+
+  <p style="margin-top:1.5rem;"><em>El disseny propi del ponent, i una comparació clàusula per clàusula amb el text de la Comissió, es detallen a <a href="#position">La posició del Parlament</a> més amunt. Aquesta secció cobreix només què hi han fet els <strong>altres</strong> diputats.</em></p>
+
+  <p style="color:#666; font-size:0.88rem; margin-top:1.5rem;">Fonts llegides senceres: PE790.143v02-00 (projecte d'informe, 151 pàg.), PE791.127 a PE791.131 (esmenes de JURI 247 a 1664, 856 pàg.), PE790.022 (esmenes d'EMPL 133 a 339, 116 pàg.), PE788.967 (projecte de dictamen d'EMPL, 27 pàg.), PE790.116 (dictamen motivat búlgar, 8 pàg.), la carta de dictamen d'ECON i el document COM(2026) 321. Els recomptes, els signants i els articles afectats s'han extret programàticament dels textos publicats i s'han verificat manualment per mostreig.</p>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendari legislatiu</h2>
+  </div>
+  <p class="section__subtitle">De l'Informe Draghi a la data d'aplicació</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">Setembre de 2024</div>
+      <div class="timeline__text">L'Informe Draghi sobre competitivitat identifica la fragmentació reguladora com a principal obstacle</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Gener de 2025</div>
+      <div class="timeline__text">La Brúixola de Competitivitat anuncia la creació del "28è règim"</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Març de 2025</div>
+      <div class="timeline__text">El Consell Europeu demana a la Comissió que proposi un règim de dret de societats opcional</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">18 de març de 2026</div>
+      <div class="timeline__text"><strong>La Comissió adopta la proposta EU Inc. (COM(2026) 321)</strong>, procediment <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Base jurídica: <strong>article 114 TFUE</strong>. DG de Justícia i Consumidors (comissari Michael McGrath). La Comissió adopta la denominació "EU Inc." en lloc de la "S.EU" proposada pel PE; fixa el capital mínim a 0 EUR (davant l'1 EUR proposat pel PE)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19-20 de març de 2026</div>
+      <div class="timeline__text">El Consell Europeu debat competitivitat i l'agenda "Una Europa, un mercat"</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 de març de 2026</div>
+      <div class="timeline__text">Circula l'assignació provisional de l'expedient EU Inc. a JURI (d'acord amb euinc.me); la remissió formal a la comissió a l'OEIL segueix el 18 de maig de 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">23 d'abril de 2026</div>
+      <div class="timeline__text"><strong>René Repasi (S&amp;D, Alemanya) confirmat com a ponent del PE</strong> per a la proposta de la Comissió a JURI. Sis ponents alternatius confirmats en tot l'espectre: <strong>Axel Voss</strong> (PPE), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Verds/ALE) i <strong>Arash Saeidi</strong> (L'Esquerra). Font: Euractiv</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">4 de maig de 2026</div>
+      <div class="timeline__text"><strong>Primer debat de JURI: intercanvi de punts de vista complet</strong> sobre la proposta EU Inc. El comissari McGrath va presentar el marc; el ponent Repasi el va acollir "excepte pel nom" i va demanar salvaguardes més sòlides; el ponent alternatiu d'ECR Mantovani va advertir que la fragmentació fiscal i concursal deixa les scale-ups mal ateses; el ponent alternatiu de Renew Canfin va reafirmar el suport i va plantejar qüestions sobre les opcions sobre accions. Font: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">retransmissió del PE, 4 de maig de 2026</a></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">18 de maig de 2026</div>
+      <div class="timeline__text"><strong>Remissió a la comissió JURI anunciada en sessió plenària</strong> (expedient JURI/10/05459). Comissions per a opinió: ECON (Aurore Lalucq, S&amp;D) i EMPL (Johan Danielsson, S&amp;D); BUDG va decidir no emetre dictamen. Estat: a l'espera de la decisió de la comissió.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 de juny de 2026</div>
+      <div class="timeline__text"><strong>ECON adopta l'informe d'iniciativa pròpia "28è règim fiscal"</strong> (procediment 2025/2211(INI), ponent Ľudovít Ódor, Renew), el mòdul fiscal complementari a EU Inc. Compromís aprovat per PPE, S&amp;D, Renew i Verds; les esmenes d'ECR i PfE van caure. Plenari indicatiu: 6 de juliol de 2026.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">22 de juny de 2026</div>
+      <div class="timeline__text"><strong>EMPL presenta el seu projecte d'opinió sobre EU Inc.</strong> (procediment 2026/0074(COD), ponent d'opinió Johan Danielsson, S&amp;D).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">29 de juny de 2026</div>
+      <div class="timeline__text"><strong>El ponent René Repasi presenta el projecte d'informe de la comissió competent, JURI</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 esmenes): manté l'ambició de la Comissió però hi afegeix salvaguardes anti-elusió i socials (participació segons el lloc de treball, exclusió de sectors, propietat de custòdia, restricció de cotització en borsa, i un mecanisme de resolució de litigis a l'estil de Delaware).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 de juliol de 2026</div>
+      <div class="timeline__text"><strong>JURI examina el projecte d'informe amb els ponents alternatius.</strong> Repasi: "una autopista per a startups necessita límits de velocitat i baranes de seguretat." El PPE (Voss) i Renew (Canfin, llegit per Žalimas) defensen el disseny obert i ampli de la Comissió i s'oposen a les exclusions sectorials, la cogestió de l'estat d'acollida i la prohibició de cotització; els Verds (Peter-Hansen) donen suport a les salvaguardes socials i a l'exclusió de les empreses cotitzades; L'Esquerra (Saeidi) adverteix del risc de frau amb ~200 esmenes. Les esmenes s'han de presentar en els propers dies.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">5 d'octubre de 2026 (previsió)</div>
+      <div class="timeline__text"><strong>Data indicativa de la sessió plenària, primera lectura</strong>, segons la <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">previsió de l'Observatori Legislatiu</a> per al procediment 2026/0074(COD). Les dates previstes poden variar a mesura que avancin els treballs en comissió.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dijous 18 de juny de 2026</div>
+      <div class="timeline__text"><strong>L'Assemblea Nacional de Bulgària objecta per subsidiarietat, per unanimitat.</strong> La Comissió d'Afers Europeus i Supervisió dels Fons de la UE va examinar el document COM(2026)0321 a la sessió del 18 de juny i va adoptar un <strong>dictamen motivat amb 15 vots a favor, per unanimitat</strong> (president Galin Durev), transmès a la presidenta Metsola el 19 de juny i distribuït a JURI el 24 de juny com a PE790.116. És la <strong>primera objecció d'un parlament nacional a EU Inc.</strong> Bulgària acull favorablement els objectius però considera que la proposta compleix <strong>només parcialment</strong> la subsidiarietat i <strong>no del tot</strong> la proporcionalitat: el capital zero és <strong>"totalment inacceptable"</strong>, els terminis de connexió al BRIS són <strong>"molt poc realistes"</strong> i l'absència d'avaluació prèvia de l'<strong>article 12</strong> és una "deficiència important".</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dimarts 23 de juny de 2026</div>
+      <div class="timeline__text"><strong>La comissió EMPL presenta les seves esmenes</strong> (PE790.022): <strong>207 esmenes, numerades de la 133 a la 339</strong>, 116 pàgines.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dijous 23 de juliol de 2026</div>
+      <div class="timeline__text"><strong>1.418 esmenes presentades a JURI, en cinc documents.</strong> Les esmenes <strong>247 a 1664</strong> es van presentar al projecte d'informe de Repasi el 23 de juliol de 2026 i es van publicar com a PE791.127 (247-426), PE791.128 (427-695), PE791.129 (696-995), PE791.130 (996-1339) i PE791.131 (1340-1664), 856 pàgines en total. Amb les 246 del ponent, el fitxer acumula ara <strong>1.664 esmenes</strong>. Quan Arash Saeidi, de The Left, va advertir el 15 de juliol del risc de frau d'"unes 200 esmenes", la xifra final va acabar essent unes vuit vegades més gran.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">Dilluns 7 de setembre de 2026</div>
+      <div class="timeline__text"><strong>EU Inc. torna a JURI, i és la superfície d'esmenes més activa del Parlament aquesta setmana.</strong> L'ordre del dia de JURI del 7 de setembre inclou el projecte d'informe, un projecte de dictamen, <strong>sis documents d'esmenes</strong> i el dictamen motivat búlgar sobre el mateix fitxer: vint documents en total. Cap mitjà no ho va recollir quan es van presentar les esmenes. Font: documents de comissió eMeeting del PE.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Dijous 10 de setembre de 2026</div>
+      <div class="timeline__text"><strong>La comissió EMPL reprèn el fitxer</strong> amb les seves pròpies esmenes i el projecte de dictamen a l'ordre del dia, tres dies després de JURI.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Finals de 2026</div>
+      <div class="timeline__text"><strong>Compromís de les tres institucions</strong> (Comissió, Parlament, Consell) per concloure les negociacions abans de finals de 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Adopció d'actes d'execució (plantilles, formularis, especificacions del BRIS)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Data d'aplicació: EU Inc. es fa disponible a tots els estats membres</div>
+    </div>
+<div class="timeline__item">
+      <div class="timeline__date">Dimecres 15 de juliol de 2026</div>
+      <div class="timeline__text"><strong>La ECON adopta el seu dictamen sobre EU Inc. per 34 vots a favor i 13 en contra, amb 9 abstencions</strong>, i l'envia a la JURI com una carta d'acord amb la Rule 57(1) (PE788.878v01-00), signada per la presidenta de l'ECON, Aurore Lalucq. Trenta-un suggeriments, setze dels quals sobre un <strong>mòdul fiscal</strong> que la proposta de la Comissió no conté: una estructura d'adhesió voluntària o de cooperació reforçada per esquivar la unanimitat, una base imposable consolidada única de l'impost de societats repartida mitjançant una fórmula que reflecteixi l'activitat econòmica real, procediments centralitzats d'IVA i de retenció, i un règim obligatori d'opcions sobre accions per a empleats tributat en el moment de l'alienació com a renda del capital. Recolzat per EPP, S&amp;D, Renew i Greens/EFA; oposat simultàniament per la dreta dura i The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
+    </div>
+  </div>
+</section>
 
 <!-- What and Why -->
 <section class="section" id="what">
@@ -695,6 +915,25 @@
     </div>
   </div>
 </section>
+
+<!-- TOC -->
+<nav class="toc" id="chapters">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Estructura de la proposta</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Principis generals (Arts 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registre i presentació (Arts 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Informació transfronterera (Arts 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Sucursals transfrontereres (Arts 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organització (Arts 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Participacions i transferències (Arts 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Finançament (Arts 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Opcions sobre accions (Arts 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Tancament de societats solvents (Arts 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvència (Arts 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Requisits prohibits (Art 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Disposicions finals (Arts 104-109)</a>
+  </div>
+</nav>
 
 <!-- Chapter I -->
 <section class="section" id="ch1">
@@ -1057,90 +1296,6 @@
   </div>
 </section>
 
-<!-- Timeline -->
-<section class="section" id="timeline">
-  <div class="section__header">
-    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
-    <h2 class="section__title">Calendari legislatiu</h2>
-  </div>
-  <p class="section__subtitle">De l'Informe Draghi a la data d'aplicació</p>
-
-  <div class="timeline">
-    <div class="timeline__item">
-      <div class="timeline__date">Setembre de 2024</div>
-      <div class="timeline__text">L'Informe Draghi sobre competitivitat identifica la fragmentació reguladora com a principal obstacle</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Gener de 2025</div>
-      <div class="timeline__text">La Brúixola de Competitivitat anuncia la creació del "28è règim"</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Març de 2025</div>
-      <div class="timeline__text">El Consell Europeu demana a la Comissió que proposi un règim de dret de societats opcional</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">18 de març de 2026</div>
-      <div class="timeline__text"><strong>La Comissió adopta la proposta EU Inc. (COM(2026) 321)</strong>, procediment <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">2026/0074(COD)</a>. Base jurídica: <strong>article 114 TFUE</strong>. DG de Justícia i Consumidors (comissari Michael McGrath). La Comissió adopta la denominació "EU Inc." en lloc de la "S.EU" proposada pel PE; fixa el capital mínim a 0 EUR (davant l'1 EUR proposat pel PE)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">19-20 de març de 2026</div>
-      <div class="timeline__text">El Consell Europeu debat competitivitat i l'agenda "Una Europa, un mercat"</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">31 de març de 2026</div>
-      <div class="timeline__text">Circula l'assignació provisional de l'expedient EU Inc. a JURI (d'acord amb euinc.me); la remissió formal a la comissió a l'OEIL segueix el 18 de maig de 2026</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">23 d'abril de 2026</div>
-      <div class="timeline__text"><strong>René Repasi (S&amp;D, Alemanya) confirmat com a ponent del PE</strong> per a la proposta de la Comissió a JURI. Sis ponents alternatius confirmats en tot l'espectre: <strong>Axel Voss</strong> (PPE), <strong>Pascale Piera</strong> (PfE), <strong>Mario Mantovani</strong> (ECR), <strong>Pascal Canfin</strong> (Renew), <strong>Kira Marie Peter-Hansen</strong> (Verds/ALE) i <strong>Arash Saeidi</strong> (L'Esquerra). Font: Euractiv</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">4 de maig de 2026</div>
-      <div class="timeline__text"><strong>Primer debat de JURI: intercanvi de punts de vista complet</strong> sobre la proposta EU Inc. El comissari McGrath va presentar el marc; el ponent Repasi el va acollir "excepte pel nom" i va demanar salvaguardes més sòlides; el ponent alternatiu d'ECR Mantovani va advertir que la fragmentació fiscal i concursal deixa les scale-ups mal ateses; el ponent alternatiu de Renew Canfin va reafirmar el suport i va plantejar qüestions sobre les opcions sobre accions. Font: <a href="https://multimedia.europarl.europa.eu/en/webstreaming/committee-on-legal-affairs-ordinary-meeting_20260504-1545-COMMITTEE-JURI" target="_blank" rel="noopener">retransmissió del PE, 4 de maig de 2026</a></div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">18 de maig de 2026</div>
-      <div class="timeline__text"><strong>Remissió a la comissió JURI anunciada en sessió plenària</strong> (expedient JURI/10/05459). Comissions per a opinió: ECON (Aurore Lalucq, S&amp;D) i EMPL (Johan Danielsson, S&amp;D); BUDG va decidir no emetre dictamen. Estat: a l'espera de la decisió de la comissió.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">3 de juny de 2026</div>
-      <div class="timeline__text"><strong>ECON adopta l'informe d'iniciativa pròpia "28è règim fiscal"</strong> (procediment 2025/2211(INI), ponent Ľudovít Ódor, Renew), el mòdul fiscal complementari a EU Inc. Compromís aprovat per PPE, S&amp;D, Renew i Verds; les esmenes d'ECR i PfE van caure. Plenari indicatiu: 6 de juliol de 2026.</div>
-    </div>
-    <div class="timeline__item timeline__item--active">
-      <div class="timeline__date">22 de juny de 2026</div>
-      <div class="timeline__text"><strong>EMPL presenta el seu projecte d'opinió sobre EU Inc.</strong> (procediment 2026/0074(COD), ponent d'opinió Johan Danielsson, S&amp;D).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">29 de juny de 2026</div>
-      <div class="timeline__text"><strong>El ponent René Repasi presenta el projecte d'informe de la comissió competent, JURI</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf" target="_blank" rel="noopener">PE790.143</a>, 246 esmenes): manté l'ambició de la Comissió però hi afegeix salvaguardes anti-elusió i socials (participació segons el lloc de treball, exclusió de sectors, propietat de custòdia, restricció de cotització en borsa, i un mecanisme de resolució de litigis a l'estil de Delaware).</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">15 de juliol de 2026</div>
-      <div class="timeline__text"><strong>JURI examina el projecte d'informe amb els ponents alternatius.</strong> Repasi: "una autopista per a startups necessita límits de velocitat i baranes de seguretat." El PPE (Voss) i Renew (Canfin, llegit per Žalimas) defensen el disseny obert i ampli de la Comissió i s'oposen a les exclusions sectorials, la cogestió de l'estat d'acollida i la prohibició de cotització; els Verds (Peter-Hansen) donen suport a les salvaguardes socials i a l'exclusió de les empreses cotitzades; L'Esquerra (Saeidi) adverteix del risc de frau amb ~200 esmenes. Les esmenes s'han de presentar en els propers dies.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">5 d'octubre de 2026 (previsió)</div>
-      <div class="timeline__text"><strong>Data indicativa de la sessió plenària, primera lectura</strong>, segons la <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)" target="_blank" rel="noopener">previsió de l'Observatori Legislatiu</a> per al procediment 2026/0074(COD). Les dates previstes poden variar a mesura que avancin els treballs en comissió.</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">Finals de 2026</div>
-      <div class="timeline__text"><strong>Compromís de les tres institucions</strong> (Comissió, Parlament, Consell) per concloure les negociacions abans de finals de 2026</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2027</div>
-      <div class="timeline__text">Adopció d'actes d'execució (plantilles, formularis, especificacions del BRIS)</div>
-    </div>
-    <div class="timeline__item">
-      <div class="timeline__date">2028</div>
-      <div class="timeline__text">Data d'aplicació: EU Inc. es fa disponible a tots els estats membres</div>
-    </div>
-<div class="timeline__item">
-      <div class="timeline__date">Dimecres 15 de juliol de 2026</div>
-      <div class="timeline__text"><strong>La ECON adopta el seu dictamen sobre EU Inc. per 34 vots a favor i 13 en contra, amb 9 abstencions</strong>, i l'envia a la JURI com una carta d'acord amb la Rule 57(1) (PE788.878v01-00), signada per la presidenta de l'ECON, Aurore Lalucq. Trenta-un suggeriments, setze dels quals sobre un <strong>mòdul fiscal</strong> que la proposta de la Comissió no conté: una estructura d'adhesió voluntària o de cooperació reforçada per esquivar la unanimitat, una base imposable consolidada única de l'impost de societats repartida mitjançant una fórmula que reflecteixi l'activitat econòmica real, procediments centralitzats d'IVA i de retenció, i un règim obligatori d'opcions sobre accions per a empleats tributat en el moment de l'alienació com a renda del capital. Recolzat per EPP, S&amp;D, Renew i Greens/EFA; oposat simultàniament per la dreta dura i The Left. <a href="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf" target="_blank" rel="noopener">ECON-AL-788878</a></div>
-    </div>
-  </div>
-</section>
-
 <!-- Sources -->
 <section class="section" id="sources">
   <div class="section__header">
@@ -1183,5 +1338,25 @@
   });
 </script>
 
+
+<script>
+/* Highlight the section the reader is actually in. IntersectionObserver, so it
+   costs nothing on scroll; does nothing at all where unsupported. */
+(function(){
+  var links = [].slice.call(document.querySelectorAll('.secnav a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var byId = {};
+  links.forEach(function(a){ byId[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(byId).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){ a.classList.remove('is-active'); });
+      var a = byId[e.target.id]; if (a) a.classList.add('is-active');
+    });
+  }, {rootMargin: '-96px 0px -70% 0px', threshold: 0});
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
 </body>
 </html>
