@@ -93,17 +93,40 @@ def add_example(celex: str | None, url: str, title: str, description: str | None
             "SELECT COUNT(*) FROM amendator_featured_examples WHERE is_active = TRUE"
         )).scalar() or 0
 
-        # If at cap, soft-deactivate oldest active
+        # If at cap, soft-deactivate the oldest active row that is NOT pinned.
+        #
+        # Why the pin exists (migration 227, 7 September 2026). This used to be a bare
+        # `ORDER BY added_at ASC LIMIT 1`, so age alone decided. Rotating in the Biotech
+        # Act displaced `32024R1689`, the AI Act, purely because it had been added on
+        # 30 April -- the most recognised EU regulation and the best demo in the list.
+        # A curated demo list that silently degrades every week is worse than no
+        # rotation at all.
         displaced = None
         if active_count >= MAX_ACTIVE:
             row = db.execute(text(
                 """
                 SELECT id, title FROM amendator_featured_examples
-                 WHERE is_active = TRUE
+                 WHERE is_active = TRUE AND NOT is_pinned
               ORDER BY added_at ASC
                  LIMIT 1
                 """
             )).first()
+            if not row:
+                # Every active row is pinned. Pinning must not be able to wedge the
+                # rotation shut, so fall back to the oldest row regardless of pin --
+                # and say so loudly, because it means the pin set needs trimming
+                # rather than that the rotation is broken.
+                row = db.execute(text(
+                    """
+                    SELECT id, title FROM amendator_featured_examples
+                     WHERE is_active = TRUE
+                  ORDER BY added_at ASC
+                     LIMIT 1
+                    """
+                )).first()
+                if row:
+                    print("[WARN] every active example is pinned; evicting the oldest "
+                          f"PINNED row anyway: {row[1]!r}. Unpin something.")
             if row:
                 db.execute(text(
                     "UPDATE amendator_featured_examples "

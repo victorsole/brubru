@@ -19,7 +19,7 @@ from typing import Dict, Any, List, Optional, Set
 import uuid
 
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 
 from core.database import SessionLocal
 from models.legislative_train import (
@@ -186,6 +186,62 @@ class EURLexSyncService:
             if self._owns_db and self._db:
                 self._db.close()
 
+    # ------------------------------------------------------------------
+    # CELEX -> OEIL procedure, by LOOKUP in verified EP data. Never derived.
+    # ------------------------------------------------------------------
+    _PROPOSAL_CELEX = re.compile(r"^5(\d{4})PC(\d{4})$")
+
+    def _procedure_ref_for_celex(self, celex: str) -> Optional[str]:
+        """Return the OEIL procedure a proposal CELEX belongs to, or None.
+
+        Why this exists (7 September 2026). Dedup here used to run on
+        `celex_numbers` and `file_id` only. A carriage created by the OEIL or
+        Legislative Train path carries an `oeil_procedure_ref` and often NO celex,
+        so the celex lookup missed it and this service created a SECOND row for the
+        same procedure. Three files ended up duplicated that way -- Digital Networks
+        Act, Industrial Accelerator Act and EU Inc. -- with users tracking both
+        copies and Position Analysis producing two disagreeing snapshots.
+
+        This is a LOOKUP, not a derivation. `feedback_celex_vs_oeil` forbids deriving
+        a CELEX from an OEIL reference because the counters are independent; that is
+        the opposite direction and is not what happens here. The CELEX -> COM step is
+        a mechanical restatement of the same document number (5YYYYPCNNNN is the
+        CELEX form of COM(YYYY)NNNN), and the COM -> procedure step is read from
+        `ep_emeeting_documents`, which is the European Parliament's own committee
+        agenda data. If the store does not hold it, this returns None and the caller
+        behaves exactly as before.
+
+        Verified on the three real duplicates: 3 of 3 resolve correctly.
+        """
+        # Coerce defensively: the try/except below wraps only the DB call, so a
+        # non-string reaching re.match would raise straight past it. Caught by the
+        # hostile-input test, 7 September 2026.
+        if not isinstance(celex, str):
+            return None
+        m = self._PROPOSAL_CELEX.match(celex)
+        if not m:
+            return None
+        year, num = m.group(1), m.group(2)
+        # The store is inconsistent about zero-padding, so try both forms.
+        variants = [f"COM({year}){num}", f"COM({year}){int(num)}"]
+        try:
+            return self.db.execute(text(
+                """
+                SELECT DISTINCT procedure_ref
+                  FROM ep_emeeting_documents
+                 WHERE doc_kind = 'commission_document'
+                   AND reference = ANY(:v)
+                   AND procedure_ref IS NOT NULL
+                 LIMIT 1
+                """
+            ), {"v": variants}).scalar()
+        except Exception as e:  # noqa: BLE001
+            # A lookup failure must never break the sync; it only means we fall
+            # back to the previous celex-only behaviour.
+            logger.warning("[eurlex-sync] procedure lookup failed for %s: %s: %s",
+                           celex, type(e).__name__, e)
+            return None
+
     async def _process_items(
         self,
         items: List[Dict[str, Any]],
@@ -215,6 +271,22 @@ class EURLexSyncService:
                         LegislativeCarriage.file_id == self._celex_to_file_id(celex)
                     )
                 ).first()
+
+                # Second chance: the same procedure may already exist under an OEIL
+                # reference with no celex at all (OEIL_DIRECT and LEGISLATIVE_TRAIN
+                # rows usually have one and not the other). Without this, the celex
+                # lookup above misses it and we create a duplicate carriage.
+                if not existing:
+                    proc_ref = self._procedure_ref_for_celex(celex)
+                    if proc_ref:
+                        existing = self.db.query(LegislativeCarriage).filter(
+                            LegislativeCarriage.oeil_procedure_ref == proc_ref
+                        ).first()
+                        if existing:
+                            logger.info(
+                                "[eurlex-sync] %s belongs to %s, which already has a "
+                                "carriage; updating it instead of creating a duplicate",
+                                celex, proc_ref)
 
                 if existing:
                     if skip_existing:
