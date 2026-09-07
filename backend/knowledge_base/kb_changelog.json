@@ -2,6 +2,70 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-07",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Resolved an internal contradiction: the procedure-status block claimed no amendments had been tabled while the guide's own LATEST recorded the JURI documents and voting list of 7 September 2026",
+      "refs": [
+        "52025PC1022"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "action": "updated",
+      "guide": "eu_equality_antidiscrimination",
+      "title": "EU Equality and Anti-Discrimination Framework",
+      "summary": "Adds the C-320/25 Advocate General opinion of 3 September 2026 on gender-specific police uniforms and a visible-tattoo ban, labelled a trailer not an outcome",
+      "refs": [
+        "62025CC0320",
+        "32006L0054"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "action": "updated",
+      "guide": "eu_omnibus_iv_small_midcap",
+      "title": "Omnibus IV -- Small Mid-Cap",
+      "summary": "Corrected from two instruments to three: adds Directive 2025/0133(COD) / COM(2025) 503 on digitalisation and common specifications, IMCO lead, JURI legal-basis vote 7 September 2026",
+      "refs": [
+        "52025PC0503"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "The Council's first-reading position is now formal (adopted 3 September 2026, COM(2026) 436), replacing the hedged 3 September press-release entry",
+      "refs": [
+        "52026PC0436"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "action": "updated",
+      "guide": "union_customs_code_reform",
+      "title": "Union Customs Code Reform",
+      "summary": "The Council's first-reading position is now formal (adopted 3 September 2026, COM(2026) 436); the superseded Presidency-compromise note was corrected",
+      "refs": [
+        "52026PC0436",
+        "52023PC0258"
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "action": "added",
+      "guide": "eu_company_law_shareholder_disclosure",
+      "title": "Shareholder disclosure, company law and the GDPR (C-798/24)",
+      "summary": "New guide on the 3 September 2026 Court judgment: EU company law does not require publishing all shareholders, and unconditional public access to shareholder data breaches the GDPR read with the Charter",
+      "refs": [
+        "62024CJ0798",
+        "32017L1132",
+        "32016R0679"
+      ]
+    },
+    {
       "date": "2026-09-04",
       "action": "updated",
       "guide": "biotech_act",

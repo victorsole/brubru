@@ -37,7 +37,10 @@ _STRUCTURAL = {"SITT", "HEAD", "SEPA", "CMPR", "DTMT"}
 _DDMMYYYY = re.compile(r"^(\d{2})\.(\d{2})\.(\d{4})$")
 _GROUP_RE = re.compile(r"\(([^)]+)\)\s*$")
 # Clean OEIL procedure ref, e.g. 2026/2013(INI), 2025/0422(COD), 2025/0900(APP).
-_OEIL_RE = re.compile(r"\b\d{4}/\d{3,4}\([A-Z]{2,4}\)")
+# The optional single letter is the OEIL revision/modification suffix: 2018/0902R(NLE),
+# 2022/0184M(NLE). Without it the regex missed 13 of the 833 live references and they
+# reached the column only through the first-token fallback below (audit, 7 Sep 2026).
+_OEIL_RE = re.compile(r"\b\d{4}/\d{3,4}[A-Z]?\([A-Z]{2,4}\)")
 
 
 # Derived document kind — normalises the geproCode taxonomy into the categories
@@ -140,8 +143,16 @@ def _clean_procedure_ref(raw: str) -> Optional[str]:
     m = _OEIL_RE.search(raw)
     if m:
         return m.group(0)
+    # Shape-guard the fallback (audit, 7 Sep 2026). It used to return the first
+    # token unconditionally, so an agenda line beginning with the EP's ordinary-
+    # legislative-procedure marker stored "***I" as a procedure reference on 7
+    # documents. A junk key is worse than no key: it joins to nothing, silently.
+    # Measured over all 833 live values: this guard keeps 832 and rejects only
+    # that one.
     first = raw.replace("\t", " ").split()[0] if raw.strip() else None
-    return first or None
+    if first and _OEIL_RE.fullmatch(first):
+        return first
+    return None
 
 
 def _client(timeout: int = 30):

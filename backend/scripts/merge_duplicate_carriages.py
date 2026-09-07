@@ -35,28 +35,67 @@ from sqlalchemy import create_engine, text
 
 load_dotenv(os.path.join(_REPO_ROOT, "backend", ".env"))
 
-# Tables that carry a carriage_id and must be repointed at the winner.
-CHILD_TABLES = [
-    ("user_carriage_tracks", "carriage_id"),
-    ("file_position_snapshots", "carriage_id"),
-]
+# Child tables are DISCOVERED from the catalogue, never hardcoded.
+#
+# Why (found by the /news audit, 7 September 2026). This script used to carry a
+# hardcoded two-entry list -- user_carriage_tracks and file_position_snapshots.
+# The schema has ELEVEN foreign keys pointing at legislative_carriages, and the
+# nine that were missing are not harmless:
+#
+#   amendments.carriage_id            ON DELETE SET NULL  -> 28 user amendments on
+#                                     the EU Inc. duplicate would have been silently
+#                                     ORPHANED from their file. No error, no crash.
+#   procedure_snapshots.carriage_id   ON DELETE CASCADE   -> 288 daily snapshots
+#                                     silently destroyed.
+#   committee_work_items....          ON DELETE NO ACTION -> the DELETE would simply
+#                                     fail, which is the only reason the damage above
+#                                     had not already happened.
+#
+# A hardcoded list of child tables goes stale the moment someone adds a foreign
+# key. Reading pg_constraint cannot.
+#
+# Two tables are UNIQUE on the carriage column, so their rows cannot be repointed
+# -- they would collide with the winner's own row. Their loser rows are deleted
+# instead; both are derived series that the winner already carries for the same
+# period and that regenerate on the next run.
+DELETE_INSTEAD_OF_REPOINT = {
+    "file_position_snapshots",   # UNIQUE (carriage_id)
+    "procedure_snapshots",       # UNIQUE (carriage_id, snapshot_date)
+}
+
+# For those tables, the rest of the unique key beyond the carriage column. A
+# loser row is MOVED when the winner has no row on the same key, and only
+# DELETED when it genuinely collides.
+UNIQUE_KEY_EXTRA = {
+    "file_position_snapshots": [],                # UNIQUE is the carriage alone
+    "procedure_snapshots": ["snapshot_date"],
+}
 
 
 def _child_tables(conn):
-    """Only touch tables that actually exist and actually have the column."""
-    live = []
-    for tbl, col in CHILD_TABLES:
-        ok = conn.execute(
-            text(
-                "SELECT 1 FROM information_schema.columns "
-                "WHERE table_name = :t AND column_name = :c"
-            ),
-            {"t": tbl, "c": col},
-        ).first()
-        if ok:
-            live.append((tbl, col))
-        else:
-            print(f"  [skip] {tbl}.{col} does not exist")
+    """Every table with a FK to legislative_carriages, read from the catalogue."""
+    rows = conn.execute(
+        text(
+            """
+            SELECT src.relname AS tbl, att.attname AS col,
+                   CASE con.confdeltype WHEN 'c' THEN 'CASCADE' WHEN 'n' THEN 'SET NULL'
+                        WHEN 'r' THEN 'RESTRICT' WHEN 'd' THEN 'SET DEFAULT'
+                        ELSE 'NO ACTION' END AS on_delete
+              FROM pg_constraint con
+              JOIN pg_class src ON src.oid = con.conrelid
+              JOIN pg_class tgt ON tgt.oid = con.confrelid
+              JOIN unnest(con.conkey) WITH ORDINALITY AS k(attnum, ord) ON TRUE
+              JOIN pg_attribute att ON att.attrelid = src.oid AND att.attnum = k.attnum
+             WHERE con.contype = 'f' AND tgt.relname = 'legislative_carriages'
+             ORDER BY src.relname
+            """
+        )
+    ).mappings().all()
+    live = [(r["tbl"], r["col"], r["on_delete"]) for r in rows]
+    print(f"  [schema] {len(live)} table(s) reference legislative_carriages:")
+    for tbl, col, rule in live:
+        how = "DELETE loser rows" if tbl in DELETE_INSTEAD_OF_REPOINT else "repoint"
+        print(f"           {tbl}.{col}  (ON DELETE {rule})  -> {how}")
     return live
 
 
@@ -118,12 +157,39 @@ def main() -> int:
         print("Dry run only. Re-run with --apply to merge.")
         return 0
 
-    moved = {t: 0 for t, _ in children}
+    moved = {t: 0 for t, _, _ in children}
+    collided: dict = {}
     deleted = 0
     with engine.begin() as conn:
         for ref, win, losers in plan:
             for l in losers:
-                for tbl, col in children:
+                for tbl, col, _rule in children:
+                    if tbl in DELETE_INSTEAD_OF_REPOINT:
+                        # UNIQUE on the carriage column, so a blanket repoint would
+                        # collide with the winner's own row -- but a blanket DELETE
+                        # is wrong too. Caught by the audit on 7 September 2026:
+                        # 2026/0068(COD)'s loser held the ONLY file_position_snapshot
+                        # and an unconditional delete destroyed it.
+                        # Correct order: repoint every loser row the winner does NOT
+                        # already cover, then delete only what genuinely collides.
+                        keycols = UNIQUE_KEY_EXTRA.get(tbl, [])
+                        match = " AND ".join([f"k.{c} = l.{c}" for c in keycols]) or "TRUE"
+                        n_moved = conn.execute(
+                            text(
+                                f"UPDATE {tbl} l SET {col} = :win "
+                                f" WHERE l.{col} = :loser "
+                                f"   AND NOT EXISTS (SELECT 1 FROM {tbl} k "
+                                f"                    WHERE k.{col} = :win AND {match})"
+                            ),
+                            {"win": win["id"], "loser": l["id"]},
+                        ).rowcount
+                        n_del = conn.execute(
+                            text(f"DELETE FROM {tbl} WHERE {col} = :loser"),
+                            {"loser": l["id"]},
+                        ).rowcount
+                        moved[tbl] += n_moved
+                        collided[tbl] = collided.get(tbl, 0) + n_del
+                        continue
                     if tbl == "user_carriage_tracks":
                         # A user may already track BOTH copies; repointing would
                         # violate the (user_id, carriage_id) uniqueness, so drop
@@ -153,12 +219,38 @@ def main() -> int:
                         {"t": l["title"], "i": win["id"]},
                     )
                     print(f"  [title] {ref}: kept plain-language name {l['title'][:40]!r}")
+                # Field-level merge. The winner is chosen on user tracks, which
+                # says nothing about which row carries the richer metadata. On
+                # 2026/0013(COD) the winner had NO celex while the loser held
+                # 52026PC0016 -- the identifier that powers the EUR-Lex link and
+                # the Amendator example. Deleting the loser without merging would
+                # have thrown it away silently.
+                conn.execute(
+                    text(
+                        """
+                        UPDATE legislative_carriages w SET
+                          celex_numbers = (SELECT array(SELECT DISTINCT unnest(
+                                             coalesce(w.celex_numbers,'{}') ||
+                                             coalesce(l.celex_numbers,'{}')) ORDER BY 1)),
+                          policy_areas  = (SELECT array(SELECT DISTINCT unnest(
+                                             coalesce(w.policy_areas,'{}') ||
+                                             coalesce(l.policy_areas,'{}')) ORDER BY 1)),
+                          lead_committee = coalesce(w.lead_committee, l.lead_committee)
+                        FROM legislative_carriages l
+                        WHERE w.id = :win AND l.id = :loser
+                        """
+                    ),
+                    {"win": win["id"], "loser": l["id"]},
+                )
                 deleted += conn.execute(
                     text("DELETE FROM legislative_carriages WHERE id = :i"),
                     {"i": l["id"]},
                 ).rowcount
     for tbl, n in moved.items():
-        print(f"[OK] repointed {n} row(s) in {tbl}")
+        # Two tables have their loser rows DELETED, not moved (UNIQUE on the
+        # carriage column). Saying "repointed" for those misreports what happened.
+        print(f"[OK] repointed {n} row(s) in {tbl}"
+              + (f" (+{collided[tbl]} deleted as genuine duplicates)" if collided.get(tbl) else ""))
     print(f"[OK] deleted {deleted} duplicate carriage row(s)")
     print("[INFO] Add a UNIQUE index on legislative_carriages(oeil_procedure_ref) "
           "in a migration so this cannot recur.")

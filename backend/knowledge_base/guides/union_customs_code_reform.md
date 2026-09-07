@@ -1,7 +1,8 @@
 # Union Customs Code Reform (COM(2023)258)
 
 ## QUICK FACTS
-- **LATEST (Thursday 3 September 2026 -- COUNCIL GREEN-LIGHTS THE CUSTOMS REFORM)**: the Council announced it had **greenlit the landmark EU customs reform**. The Council's own framing: the new customs framework "gives authorities a more modern toolbox to deal with emerging challenges and trends, such as the boom in e-commerce". This is the Council step on **COM(2023)258 / procedure 2023/0156(COD)** (Union Customs Code recast plus the **EU Customs Authority**). Source: Council of the EU press release, 3 September 2026, consilium.europa.eu. **Hedge until the OJ text lands**: a Council green light is not the same as publication in the Official Journal, and the application dates are the ones in the act's own final article, not the ones in the press release.
+- **LATEST (Friday 4 September 2026 -- THE COUNCIL'S FIRST-READING POSITION IS NOW FORMAL)**: the Commission published **COM(2026) 436 final** (4 September 2026), its communication to the European Parliament **under Article 294(6) TFEU** on the Council's position on **2023/0156(COD)**. It states the operative facts directly: **the Council adopted its first-reading position on 3 September 2026**, and that position **"fully reflects the political agreement reached between the European Parliament and the Council on 26 March 2026"**. The Commission supports the agreement. The file now returns to Parliament for **second reading**. Main points the Commission highlights: the **EU Customs Authority (EUCA)**, a decentralised agency that will build the **EU Customs Data Hub** replacing the current **111 national customs IT systems**; a new **"Trust and Check trader"** category; and a specific regime for **e-commerce**, including the new concept of **"importer for distance sales"** (the vendor or the platform chooses who acts as importer) and an obligation on all importers to notify customs of suspicious movements or unauthorised handling of goods. Source: COM(2026) 436 final, read in full. EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0436
+- **Still hedge the DATES, not the step.** The Council position is now a documented fact with a date. What is still not fixed is publication in the Official Journal and the application dates, which come from the adopted act's own final article, never from a press release.
 - **PRIOR (Friday 5 June 2026)**: **Temporary EUR 3 customs duty on low-value imported parcels** — Commission Implementing Regulation (EU) 2026/1200 (CELEX: 32026R1200), 5 June 2026, amends UCC Implementing Regulation (EU) 2015/2447 with the rules for a temporary EUR 3 customs duty on distance sales of imported goods of intrinsic value not exceeding EUR 150. Interim e-commerce measure (Shein/Temu low-value-parcels context) ahead of the full reform's planned abolition of the EUR 150 de minimis relief. EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1200
 - Full name: Establishing the Union Customs Code and the European Union Customs Authority
 - Reference: COM(2023)258, procedure 2023/0156(COD)
@@ -17,7 +18,7 @@
 - EP rapporteur: Dirk Gotink (EPP, Netherlands), appointed 27 September 2024. Previous rapporteur: Deirdre Clune (EPP, Ireland)
 - Shadow rapporteurs: Maria Grapini (S&D), Virginie Joron (PfE), Denis Nesci (ECR), Jeannette Baljeu (Renew), Kim Van Sparrentak (Greens/EFA), Leila Chaibi (The Left), Arno Bausemer (ESN)
 - Associated committees: INTA (Saskia Bricmont, Greens), BUDG (Jose Manuel Fernandes, EPP), CONT (Petri Sarvamaa, EPP)
-- Current status: awaiting Council's 1st reading position (Parliament adopted 1st reading 13 March 2024)
+- Current status: **Council first-reading position adopted 3 September 2026** (COM(2026) 436 final, 4 September 2026); Parliament adopted its own 1st reading on 13 March 2024, so the file is now at **second reading in Parliament**
 - Key innovation: EU Customs Data Hub (centralised data platform replacing multiple legacy systems), EU Customs Authority
 - EP 1st reading: 13 March 2024, text T9-0151/2024
 - Committee report: A9-0065/2024, tabled 28 February 2024
@@ -32,7 +33,7 @@
 
 ### Presidency Compromise Text (Partial Mandate)
 - [ST-10462-2025: Presidency compromise text (partial mandate)](https://data.consilium.europa.eu/doc/document/ST-10462-2025-INIT/en/pdf)
-  NOTE: This is the Council's negotiating position. Even though OEIL does not list a formal Council 1st reading position, this Presidency compromise text functions as the Council's mandate for trilogues. Always check for Presidency compromise texts and general approaches on the Council register when a file is in trilogues.
+  NOTE (updated 7 September 2026): this Presidency compromise text was the Council's **negotiating mandate** for the trilogues, which concluded in the political agreement of **26 March 2026**. It has since been **superseded**: the Council adopted its **formal first-reading position on 3 September 2026**, recorded in COM(2026) 436 final. Cite the compromise text only as negotiating history, never as the Council's current position. The general lesson stands: when a file is in trilogues, look for Presidency compromise texts and general approaches on the Council register, because OEIL may not yet show a formal position.
 
 ## Key Documents (Document Gateway)
 

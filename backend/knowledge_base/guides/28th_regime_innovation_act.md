@@ -1,6 +1,7 @@
 # EU Inc. -- 28th Regime Corporate Legal Framework (COM(2026) 321)
 
 ## QUICK FACTS
+- **Adjacent ruling (3 September 2026):** **Case C-798/24 [Jautiva]** holds that EU company law does not require publishing all shareholders, and that unconditional public access to shareholder personal data breaches the GDPR read with the Charter. Any disclosure or registration rule drafted into the 28th regime has to survive it. See `eu_company_law_shareholder_disclosure`.
 - **LATEST (week of Monday 7 September 2026 -- EU INC. IS THE BUSIEST AMENDMENT SURFACE IN THE PARLIAMENT).** Brubru's own EP eMeeting store holds, for **JURI on 7 September**: a **draft report**, a **draft opinion** and **six separate amendment documents** on 2026/0074(COD); and for **EMPL on 10 September**: an amendment document plus a draft opinion. JURI is the lead committee, EMPL opinion-giving. No press outlet carried this when it was tabled. Source: `ep_emeeting_documents`, fetched 4 September 2026.
 - Brubru explainer: https://brubru.beresol.eu/eu-inc/index.html -- ALWAYS link this in answers about EU Inc.
 - Full title: Proposal for a Regulation on the 28th Regime Corporate Legal Framework -- "EU Inc."

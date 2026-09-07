@@ -67,7 +67,18 @@ SELECT d.procedure_ref,
        (array_agg(d.committee_code ORDER BY d.meeting_date DESC))[1] AS committee,
        (array_agg(NULLIF(btrim(coalesce(d.item_title, d.title, '')), '')
                   ORDER BY length(coalesce(d.item_title, d.title, '')) DESC)
-        FILTER (WHERE btrim(coalesce(d.item_title, d.title, '')) <> ''))[1] AS best_title
+        FILTER (WHERE btrim(coalesce(d.item_title, d.title, '')) <> ''))[1] AS best_title,
+       -- Fallback title source (audit, 7 Sep 2026). eMeeting leaves item_title
+       -- EMPTY on some agendas, and the five procedures that remained
+       -- unreachable were all of them: the Migration and Asylum Pact files
+       -- (asylum and migration management, Eurodac, reception conditions,
+       -- screening, crisis and force majeure), 43 documents between them.
+       -- `oeil_procedure_titles` holds a real name for every one, so refusing
+       -- to create the carriage was correct given the old query and wrong
+       -- given the data we actually hold. Still EP-sourced, still not invented.
+       (SELECT t.title FROM oeil_procedure_titles t
+         WHERE t.procedure_ref = d.procedure_ref
+           AND btrim(coalesce(t.title, '')) <> '' LIMIT 1)   AS oeil_title
 FROM ep_emeeting_documents d
 LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = d.procedure_ref
 WHERE d.procedure_ref IS NOT NULL AND c.id IS NULL
@@ -118,10 +129,19 @@ def main() -> int:
 
     print(f"procedures with eMeeting documents and no carriage (>= {args.min_docs} docs): {len(rows)}")
     print(f"documents they carry: {sum(r['doc_count'] for r in rows)}")
+    # Prefer the EP's own agenda text; fall back to the OEIL procedure title.
+    for r in rows:
+        if not r["best_title"] and r.get("oeil_title"):
+            r["best_title"] = r["oeil_title"]
+            r["title_source"] = "oeil_procedure_titles"
+        elif r["best_title"]:
+            r["title_source"] = "emeeting"
     usable = [r for r in rows if r["best_title"]]
     skipped = [r for r in rows if not r["best_title"]]
-    print(f"  usable (eMeeting supplied a title): {len(usable)}")
-    print(f"  SKIPPED, no title in eMeeting:      {len(skipped)}  -- a carriage with no title is worse than none")
+    from_oeil = [r for r in usable if r.get("title_source") == "oeil_procedure_titles"]
+    print(f"  usable (eMeeting supplied a title): {len(usable) - len(from_oeil)}")
+    print(f"  usable via oeil_procedure_titles fallback: {len(from_oeil)}")
+    print(f"  SKIPPED, no title anywhere:         {len(skipped)}  -- a carriage with no title is worse than none")
     if args.limit:
         usable = usable[: args.limit]
 

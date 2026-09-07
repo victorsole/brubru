@@ -3,9 +3,9 @@
 ## QUICK FACTS
 - **LATEST (Monday 7 September 2026 -- JURI VOTES ITS OPINION).** Brubru's EP eMeeting store holds a **final voting list** for **2025/0406(COD)** on the **JURI** agenda of 7 September, alongside a **draft opinion**, an **amendment document**, the Commission document and a **reasoned opinion** (subsidiarity). **This is an opinion vote in an opinion-giving committee, not the lead committee's report vote** -- the lead is the joint **SANT-ITRE** referral under Rule 58, and ITRE tabled a draft report on 28 June 2026. **ENVI** also gave a draft opinion (21 June). So the file now has opinions moving in JURI and ENVI while the lead report is still in the joint committee. Source: `ep_emeeting_documents`, fetched 4 September 2026.
 
-### PROCEDURE STATUS (authoritative, verified against OEIL 9 June 2026)
+### PROCEDURE STATUS (lead-committee facts verified against OEIL 9 June 2026; committee-document facts refreshed 7 September 2026 from `ep_emeeting_documents`)
 
-- **Status**: Referred to a JOINT SANT-ITRE committee under Rule 58. Committee referral announced in plenary on 18 May 2026. Current status: awaiting committee decision. No draft report or amendments have been tabled on the legislative file yet, so it is in its preparatory phase in Parliament.
+- **Status**: Referred to a JOINT SANT-ITRE committee under Rule 58. Committee referral announced in plenary on 18 May 2026. **The lead joint committee has not yet tabled its report**, so the file is still pre-report in the lead. **The opinion-giving committees have moved, however**: ITRE tabled a draft report on 28 June 2026, ENVI a draft opinion on 21 June 2026, and **JURI carries a draft opinion, an amendment document and a final voting list on its agenda of 7 September 2026**. Do not say that no amendments have been tabled: that was true of the lead committee in June 2026 and is no longer true of the file. (Corrected 7 September 2026; the earlier wording contradicted this guide's own LATEST block.)
 - **Lead committees (joint, Rule 58)**: SANT (Public Health) and ITRE (Industry, Research and Energy), internal joint-committee code CJ53.
 - **SANT rapporteur**: Vytenis Povilas Andriukaitis (S&D, Lithuania), appointed 12 February 2026. Former European Commissioner for Health and Food Safety.
 - **ITRE rapporteur**: Wouter Beke (EPP, Belgium), appointed 12 February 2026.
