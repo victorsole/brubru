@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, fetch_detail, snapshot_topics,
+    Item, clean, norm_url, fetch_detail, fetch_detail_dated, snapshot_topics,
 )
 
 _BASE = "https://rail-research.europa.eu"
@@ -80,8 +80,15 @@ async def _ingest_news_async(*, fetch_bodies: bool) -> list[Item]:
         await b.close()
     if fetch_bodies:
         for it in items:
-            body_txt, body_html, kind = fetch_detail(it.public_url)
+            # The listing is a Playwright render of anchor tags only -- it carries no
+            # date, so every rail news row was written with document_date NULL (17
+            # rows, measured 8 Sep 2026). The item pages publish
+            # <meta property="article:published_time">, and fetch_detail_dated reads
+            # it from the fetch this loop already makes.
+            body_txt, body_html, kind, doc_dt, _carrier = fetch_detail_dated(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
+            if it.document_date is None and doc_dt is not None:
+                it.document_date = doc_dt
     return items
 
 

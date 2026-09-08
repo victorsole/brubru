@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from services.scrapers.economy_common import Item, clean, norm_url, fetch_detail, http_get, _BODY_CAP
+from services.scrapers.economy_common import Item, clean, norm_url, fetch_detail, http_get, _BODY_CAP, fetch_detail_dated
 
 _API = "https://www.eib.org/provider-search/search/v2"
 _UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 BrubruBot/1.0"
@@ -99,10 +99,19 @@ def _collect(item_type: str, types, *, fetch_bodies: bool, max_pages: int) -> li
         time.sleep(1.5)
     if fetch_bodies:
         for it in items:
-            body_txt, body_html, kind = fetch_detail(it.public_url)
+            # fetch_detail_dated, not fetch_detail: the SAME fetch also yields the
+            # publication date. The search API's `startDate` (above) is only
+            # populated for EVENTS, so every news and publication row came back
+            # undated -- 247 EIB news rows with document_date NULL, measured
+            # 8 Sep 2026, while the item pages carry a JSON-LD "datePublished"
+            # all along. Only filled when the API gave us nothing, so an existing
+            # startDate always wins.
+            body_txt, body_html, kind, doc_dt, _carrier = fetch_detail_dated(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":
                 it.source_kind = "pdf"
+            if it.document_date is None and doc_dt is not None:
+                it.document_date = doc_dt
     return items
 
 

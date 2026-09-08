@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import Item, clean, norm_url, extract_html
-from services.scrapers.euda_publications import sitemap_urls, fetch_title, _HEADERS
+from services.scrapers.euda_publications import sitemap_urls, fetch_title, fetch_title_and_date, _HEADERS
 
 _SITE = "https://www.euda.europa.eu"
 
@@ -35,7 +35,8 @@ _TOPIC_PATHS = [
 ]
 
 
-def _item(url: str, title: str, item_type: str, now: datetime) -> Item:
+def _item(url: str, title: str, item_type: str, now: datetime,
+          document_date: datetime | None = None) -> Item:
     title = title or clean(url.rsplit("/", 1)[-1].replace("_en", "").replace("-", " ").title())
     noun = "News" if item_type == "news" else "Event"
     return Item(
@@ -43,7 +44,10 @@ def _item(url: str, title: str, item_type: str, now: datetime) -> Item:
         summary=clean(title)[:200],
         body_txt=clean(f"{noun}: {title}\nEUDA page: {url}"),
         body_html=clean(f"<ul><li>{noun}: {title}</li><li>{url}</li></ul>"),
-        document_date=None, creation_date=now, source_kind="euda_sitemap", guid=url)
+        # Was hardcoded None, which is how 978 news rows ended up undated: the
+        # sitemap gives no date, but the item page carries <time datetime>.
+        document_date=document_date, creation_date=now,
+        source_kind="euda_sitemap", guid=url)
 
 
 def _cffi_session():
@@ -60,7 +64,10 @@ def _ingest(substr: str, item_type: str, fetch_bodies: bool) -> list[Item]:
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     for url in sitemap_urls(s, substr):
-        items.append(_item(url, fetch_title(s, url) if fetch_bodies else "", item_type, now))
+        # One fetch yields both the title and the date. When fetch_bodies is off we
+        # do not fetch at all, so the date stays None rather than being guessed.
+        title, doc_dt = fetch_title_and_date(s, url) if fetch_bodies else ("", None)
+        items.append(_item(url, title, item_type, now, document_date=doc_dt))
         time.sleep(0.15)
     return items
 

@@ -60,17 +60,32 @@ def _clean_title(raw: str) -> str:
 
 
 def fetch_title(session: requests.Session, url: str) -> str | None:
+    return fetch_title_and_date(session, url)[0]
+
+
+def fetch_title_and_date(session: requests.Session, url: str):
+    """(title, document_date) from ONE fetch of the item page.
+
+    EUDA items are discovered from the XML sitemap, which gives URLs and a
+    <lastmod> but no publication date, so euda_content.py hardcoded
+    `document_date=None` and 978 news rows carried no date (measured 8 Sep 2026).
+    The item pages have carried <time datetime="..."> all along -- 4 of 4 sampled --
+    and this loop was already fetching every one of them for the title.
+
+    Deliberately NOT the sitemap <lastmod>: a modification date is a different fact
+    from a publication date. See feedback_backfill_no_hallucination.
+    """
+    from services.scrapers.economy_common import extract_item_date
     for attempt in range(2):
         try:
             r = session.get(url, timeout=30)
             if r.status_code == 200:
                 m = _OG.search(r.text) or _TITLE.search(r.text)
-                if m:
-                    return _clean_title(m.group(1))
-                return None
+                doc_dt, _carrier = extract_item_date(r.text)
+                return (_clean_title(m.group(1)) if m else None), doc_dt
         except requests.RequestException:
             time.sleep(1.0)
-    return None
+    return None, None
 
 
 def _slug_title(url: str) -> str:

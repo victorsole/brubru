@@ -11,7 +11,7 @@ import io
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
 from bs4 import BeautifulSoup
@@ -147,18 +147,35 @@ def fetch_detail(url: str) -> tuple[str | None, str | None, str]:
     HTML -> parsed; PDF -> text-extracted; any other type (Office docs, zip,
     images) -> a link wrapper, never fed to the HTML parser as binary.
     """
+    body_txt, body_html, kind, _dt, _carrier = fetch_detail_dated(url)
+    return body_txt, body_html, kind
+
+
+def fetch_detail_dated(url: str):
+    """fetch_detail plus the publication date, from the SAME single fetch.
+
+    Returns (body_txt, body_html, source_kind, document_date, date_carrier).
+
+    Needed because `extract_html` decomposes <script> and reads from
+    <main>/<article>/<body>, so the JSON-LD block and the <head> <meta> tags -- the
+    two carriers the EIB and EU-Rail publish their dates in -- are gone by the time
+    body_html exists. Extracting the date here means one request, not two, on
+    scrapers that already fetch every item page.
+    """
     r = http_get(url)
     if r is None:
-        return None, None, "unreachable"
+        return None, None, "unreachable", None, None
     ctype = (r.headers.get("content-type") or "").lower()
     if "application/pdf" in ctype or url.lower().endswith(".pdf"):
-        return extract_pdf(r.content), f'<p>PDF document: <a href="{url}">{url}</a></p>', "pdf"
+        return (extract_pdf(r.content),
+                f'<p>PDF document: <a href="{url}">{url}</a></p>', "pdf", None, None)
     if "html" not in ctype and "xml" not in ctype:
         # Office docs (.docx/.xlsx), archives, images, etc. — do not parse as HTML.
         kind = (ctype.split(";")[0].split("/")[-1] or "file")[:20] or "file"
-        return None, f'<p>Document: <a href="{url}">{url}</a></p>', kind
+        return None, f'<p>Document: <a href="{url}">{url}</a></p>', kind, None, None
     body_txt, body_html = extract_html(r.text)
-    return body_txt, body_html, "html"
+    doc_dt, carrier = extract_item_date(r.text)
+    return body_txt, body_html, "html", doc_dt, carrier
 
 
 # --- date parsing ----------------------------------------------------------
@@ -212,6 +229,86 @@ def parse_listing_date(text: str) -> datetime | None:
         except ValueError:
             return None
     return None
+
+
+# --- publication date, read off the ITEM'S OWN page -------------------------
+#
+# Why this exists (measured 8 September 2026)
+# -------------------------------------------
+# 1,761 of 12,509 news rows in economy_items carry no document_date, across 17
+# bodies, and for five of them the FETCHER IS ALIVE -- recent creation_date, every
+# row undated. Those are not dead scrapers; they never extracted the date. The
+# worst case hardcoded it: euda_content.py passed `document_date=None` for 978 rows.
+#
+# The three carriers below cover the live sites checked on that date:
+#   euda  <time datetime="2026-06-30T11:50:03+01:00">      4/4 pages
+#   rail  <meta property="article:published_time">         2/2 pages
+#   eib   JSON-LD "datePublished"                           3/4 pages
+#
+# What this must never do
+# -----------------------
+# Read the date the publisher states for THAT item, on THAT item's page, or return
+# None. Specifically NOT the sitemap <lastmod> (a modification date is a different
+# fact), NOT the ingest time, and NOT a date inferred from the URL. Returning None
+# is correct and honest; `/api/v2/news/all` coalesces to creation_date for FILTERING
+# and still reports document_date as null so the caller knows it is unknown.
+# See feedback_backfill_no_hallucination.
+
+_ITEM_DATE_CARRIERS = (
+    ("time_datetime",
+     re.compile(r"<time[^>]*\sdatetime=[\"']([^\"']+)[\"']", re.I)),
+    ("og_published",
+     re.compile(r"property=[\"']article:published_time[\"'][^>]*content=[\"']([^\"']+)[\"']", re.I)),
+    ("og_published_rev",
+     re.compile(r"content=[\"']([^\"']+)[\"'][^>]*property=[\"']article:published_time[\"']", re.I)),
+    ("jsonld_datePublished",
+     re.compile(r'"datePublished"\s*:\s*"([^"]+)"', re.I)),
+)
+
+_LOOSE_YMD_RE = re.compile(
+    r"^\s*(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2})(?::(\d{2}))?)?")
+
+
+def _normalise_dt_string(s: str) -> str:
+    """Zero-pad a loose ISO-ish Y-M-D so fromisoformat will take it.
+
+    The EIB publishes `"datePublished": "2026-09-7 02:30"` -- single-digit day and a
+    space separator. datetime.fromisoformat rejects that outright, so every EIB news
+    row lost its date silently. Verified 8 Sep 2026.
+    """
+    m = _LOOSE_YMD_RE.match(s or "")
+    if not m:
+        return (s or "").strip()
+    y, mo, d, hh, mm, ss = m.groups()
+    out = f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
+    if hh is not None:
+        out += f"T{int(hh):02d}:{mm}:{ss or '00'}"
+    return out + (s[m.end():].strip() if hh is not None else "")
+
+
+def extract_item_date(html: str, *, today: datetime | None = None):
+    """Return (datetime, carrier_name) from an item page, or (None, None).
+
+    Tries each carrier in order and takes the FIRST that parses to a sane date.
+    Sanity bounds are deliberate: a future publication date is not a publication
+    date, and `/api/v2/news/latest` already had to stop a scraped deadline setting
+    the corpus freshness anchor to 2031 and making `stale` False for ever.
+    """
+    if not html:
+        return None, None
+    today = today or datetime.now(timezone.utc)
+    floor = datetime(1990, 1, 1, tzinfo=timezone.utc)
+    ceiling = today + timedelta(days=1)          # tz slop only, not a real window
+    for name, rx in _ITEM_DATE_CARRIERS:
+        for raw in rx.findall(html)[:5]:
+            dt = _iso_dt(_normalise_dt_string(raw)) or parse_listing_date(raw)
+            if dt is None:
+                continue
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            if floor <= dt <= ceiling:
+                return dt, name
+    return None, None
 
 
 # --- generic EU ECL (Europa Component Library) listing scraper --------------
