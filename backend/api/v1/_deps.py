@@ -28,6 +28,7 @@ from services.billing.api_meter import (
     sandbox_consume,
 )
 from services.rate_limiter.global_rate_limiter import get_rate_limiter
+from api.v1._query_guard import check_query_params
 
 
 async def api_user_with_rate_limit(
@@ -47,6 +48,13 @@ async def api_user_with_rate_limit(
         raise HTTPException(status_code=500, detail="api_key missing from request state")
 
     path = request.url.path
+
+    # --- Unknown query parameters ---------------------------------------
+    # FastAPI drops an undeclared query param and answers 200, so a filter that did
+    # nothing looks like a filtered result. Warn by default; 422 when
+    # API_STRICT_QUERY_PARAMS=true. See api/v1/_query_guard.py for the three
+    # measured instances this exists for.
+    check_query_params(request)
 
     # --- Scope check ----------------------------------------------------
     required_scope = resolve_required_scope(path)

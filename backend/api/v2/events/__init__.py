@@ -35,7 +35,14 @@ router = APIRouter(prefix="/events", tags=["v2-events"])
 
 _SOURCES = {"economy", "calendar", "all"}
 _WHENS = {"upcoming", "past", "all"}
-_ORDERS = {"recent", "oldest", "title"}
+# `soonest` is an alias for `oldest`. With when=upcoming a caller almost always
+# wants the NEAREST event first, and `recent` (date DESCENDING, correct for news)
+# puts the most DISTANT event first: measured 8 September 2026, when=upcoming with
+# order=recent returned 2036-09-01, 2032-09-01, 2031-09-01, while order=oldest
+# returned three events dated that same day. Nothing was broken; the parameter name
+# inverted what a caller expects. The alias makes the obvious word work.
+_ORDERS = {"recent", "oldest", "title", "soonest"}
+_ORDER_ALIASES = {"soonest": "oldest"}
 
 
 # --------------------------------------------------------------------------- #
@@ -288,9 +295,13 @@ async def list_events(
     days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand window: with when=upcoming, the next N days; otherwise the last N days. Ignored if `from`/`to` already bound that side."),
     q: Optional[str] = Query(None, description="Free-text search over title and summary."),
     source: str = Query("all", description="economy | calendar | all."),
-    order: str = Query("recent", description="recent | oldest | title."),
+    order: str = Query("recent", description="recent | oldest | title | soonest. With when=upcoming use `soonest` (or `oldest`): `recent` sorts date DESCENDING and returns the most DISTANT event first."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    # See api/v2/economy_endpoints.py: v2 is split between `since`/`until` and
+    # `from`/`to`, and an unknown query param is dropped silently with HTTP 200.
+    since: Optional[date] = Query(None, alias="since", include_in_schema=False),
+    until: Optional[date] = Query(None, alias="until", include_in_schema=False),
 ):
     if when not in _WHENS:
         raise HTTPException(400, f"when must be one of {sorted(_WHENS)}")
@@ -298,6 +309,11 @@ async def list_events(
         raise HTTPException(400, f"source must be one of {sorted(_SOURCES)}")
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
+    order = _ORDER_ALIASES.get(order, order)
+    if from_ is None and since is not None:
+        from_ = since
+    if to is None and until is not None:
+        to = until
     sources = {"economy", "calendar"} if source == "all" else {source}
     # `days` was never declared, so FastAPI dropped it silently and the caller
     # got the entire 7,300-event corpus back believing it was windowed

@@ -35,8 +35,15 @@ _KINDS = {"news", "press_release", "all"}
 # pagination then repeats or skips rows across pages. `title` had no tiebreak; it
 # happened to be stable on today's data, which is luck rather than a guarantee,
 # and the UNION makes ties more likely because two independent tables interleave.
-_ORDERS = {"recent": "document_date DESC NULLS LAST, id DESC",
-           "oldest": "document_date ASC NULLS LAST, id ASC",
+# `_build_where` filters on coalesce(document_date, creation_date) so an item whose
+# upstream feed published no date is still admitted by a dated window. The ORDER BY
+# must use the SAME expression, or those rows are admitted and then sorted behind
+# every dated row. Measured 8 September 2026: 1,761 of 12,509 news rows (14.1%,
+# across 17 bodies) carry no document_date, so a mixed window pushed all of them
+# to the last page while reporting them in `total`.
+_DATE_SORT = "coalesce(document_date, creation_date)"
+_ORDERS = {"recent": f"{_DATE_SORT} DESC NULLS LAST, id DESC",
+           "oldest": f"{_DATE_SORT} ASC NULLS LAST, id ASC",
            "title": "title ASC, id ASC"}
 
 
@@ -135,10 +142,44 @@ def _build_where(codes, kinds, since, until, q):
 # the union double-counts. `tests/test_v2_news_institutional_union.py` asserts it,
 # so if a Commission ingestor is ever added to sync_economy.py the test fails and
 # tells you to remove the entry rather than silently serving every item twice.
+#
+# WHICH bodies belong here, decided 8 September 2026 by reading the rows rather than
+# the counts. Four bodies satisfied the invariant above and were candidates; only one
+# belongs, and the reasons the other three do not are the point:
+#
+#   fra      ADDED. 64 rows of genuine Fundamental Rights Agency news, all dated, zero
+#            news rows in economy_items. (Its scraper is separately broken: newest item
+#            31 Dec 2025 while last ingested 26 Aug 2026, i.e. it runs and fetches
+#            nothing. That is a scraper defect, not a reason to hide the rows.)
+#
+#   OUTLET   EXCLUDED, and must stay excluded. 3,158 rows, the largest and freshest
+#            news store Brubru holds, and every one is THIRD-PARTY JOURNALISM:
+#            Politico Europe 1,691 (including subscriber.politicopro.com, a paid
+#            product), Euractiv 830, EU Observer 637. /api/v2/news/all is a METERED
+#            endpoint sold to third parties, so unioning these in would redistribute
+#            paywalled commercial content to paying customers. A licensing problem, not
+#            a coverage gap. Fine for internal review; not fine on the public API.
+#
+#   FUNDING  EXCLUDED. 773 rows, official EU content from the Funding & Tenders Portal,
+#            but they are funding opportunities and they already have their own folder
+#            at /api/v2/funding/*. Adding them here would create a second source of
+#            truth for the same fact, which is what the union was built to avoid.
+#
+#   EU       EXCLUDED as a body, because it is not one. 33 rows whose `institution` is
+#            the generic literal 'EU' with source_key EC / REGIO / ENV, i.e. Commission
+#            news mislabelled at ingest. The fix is to normalise the label to
+#            COMMISSION in the ingest, not to publish a body called "EU". Filed.
+#
+# CODE NORMALISATION, before anyone extends this dict: the two stores punctuate body
+# codes differently. eu_news_items writes EULISA and EU-OSHA where economy_items writes
+# eu_lisa and eu_osha, so a naive upper() comparison reports "zero economy news rows"
+# for a body that has 55. That produced two false positives when this list was first
+# measured. Compare on the code with '-' and '_' stripped before trusting the invariant.
 _INSTITUTIONAL_NEWS = {
     "commission": "COMMISSION",
     "parliament": "EP",
     "council": "COUNCIL",
+    "fra": "FRA",
 }
 
 # eu_news_items uses its own item_type vocabulary; map it onto the v2 contract
@@ -207,10 +248,18 @@ def _institutional_sql(codes, kinds, since, until, q):
         f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
         f"n.source_url AS public_url, {date_expr} AS document_date, "
         "n.created_at AS creation_date, "
-        # eu_news_items has no body column -- `summary` is the fullest text held
-        # for an institutional item. Serving it beats serving NULL, and the
-        # endpoint description says which is which rather than implying parity.
-        "n.summary AS body_txt, NULL AS body_html "
+        # Migration 228 gave eu_news_items real body columns, composed by
+        # scripts/backfill_eu_news_bodies.py from the title, summary, institution,
+        # date and source link. Before that this served `summary AS body_txt` and a
+        # hardcoded NULL body_html, so two of the five mandatory datapoints were
+        # absent from this whole half of the corpus: body_html NULL on 100% of
+        # 10,143 rows, body_txt empty on 29%.
+        #
+        # coalesce back to `summary` because a row written by the ingest pipeline
+        # since the last backfill run has body_source IS NULL, and serving the
+        # summary beats serving nothing. TODO: compose on write in the eu_news
+        # ingest so the fallback stops being reachable.
+        "coalesce(n.body_txt, n.summary) AS body_txt, n.body_html "
         f"FROM eu_news_items n WHERE {' AND '.join(where)}"
     )
     return sql, params
@@ -294,6 +343,11 @@ async def list_news(
     from_: Optional[date] = Query(None, alias="from", description="Only items on/after this date (YYYY-MM-DD)."),
     to: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD)."),
     days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand for a recent window: only items from the last N days. Ignored if `from` is given."),
+    # See the note in api/v2/economy_endpoints.py: v2 is split between `since`/`until`
+    # (332 operations) and `from`/`to` (the cross-body aggregators). An unknown query
+    # param is dropped SILENTLY with HTTP 200, so accept both spellings here too.
+    since: Optional[date] = Query(None, alias="since", include_in_schema=False),
+    until: Optional[date] = Query(None, alias="until", include_in_schema=False),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
@@ -316,6 +370,15 @@ async def list_news(
     # until 28 July 2026: it was never declared, so FastAPI dropped it and the
     # caller got the whole 11,900-item corpus back believing it was filtered.
     # An explicit `from` always wins, so existing callers are unaffected.
+    # Accept the house `since`/`until` spelling as an alias. An explicit `from`/`to`
+    # still wins, so no existing caller changes behaviour. This is the THIRD instance
+    # of the silent-drop bug on this one endpoint: `days` had it until 28 July 2026,
+    # `since`/`until` had it until 8 September 2026. See fix #2 in the same session
+    # (reject unknown query params) for the systemic answer.
+    if from_ is None and since is not None:
+        from_ = since
+    if to is None and until is not None:
+        to = until
     if from_ is None and days is not None:
         from_ = date.today() - timedelta(days=days)
     kinds = _NEWS_TYPES if kind == "all" else [kind]
@@ -349,12 +412,33 @@ async def list_news(
                 "nothing happened.\n\n**Input**\n`stale_after_days` (optional, default 3) - how many days "
                 "old the newest item may be before this endpoint reports `stale: true`.\n\n**Try it**\n"
                 "```\nGET /api/v2/news/latest\n```\n\n**You get back**\n`latest_date`, `age_days`, "
-                "`stale`, `total_items`, and `by_body` (the ten most recently updated bodies with their "
-                "newest date).\n\n**Data freshness**\nLive."))
+                "`stale`, `total_items`, `future_dated_items`, the estate counts `bodies_total` / "
+                "`bodies_fresh` / `bodies_stale` / `bodies_undated`, `by_body_truncated` (always "
+                "false), and `by_body`: EVERY body, stalest first, never truncated. Each body "
+                "carries `latest_date` + `age_days` (its newest published item) AND `last_ingested` "
+                "+ `ingest_age_days` (when Brubru last wrote a row for it), plus `undated_items`, a "
+                "three-state `state` (fresh | stale | undated) and `likely_cause`. The two dates are "
+                "the point: an old `latest_date` with a RECENT `last_ingested` means the fetcher runs "
+                "and returns nothing new, or loses the dates, which is a different repair from a "
+                "fetcher that has stopped. `likely_cause` is one of date_parser, dead_fetcher, "
+                "fetches_nothing_new, or null.\n\n`stale_after_days` (default 3) governs the CORPUS "
+                "verdict; `body_stale_after_days` (default 30) governs the per-body one. They are "
+                "deliberately different: 3 days answers 'is the feed current', 30 answers 'is this "
+                "body broken', and many EU agencies publish monthly.\n\n**Data freshness**\nLive."))
 async def latest_news(request: Request,
                       stale_after_days: int = Query(
                           3, ge=1, le=60,
-                          description="Age in days beyond which the feed is reported as stale."),
+                          description="Age in days beyond which the CORPUS is reported as stale."),
+                      body_stale_after_days: int = Query(
+                          30, ge=1, le=365,
+                          description=(
+                              "Age in days beyond which an INDIVIDUAL body is reported as stale. "
+                              "Separate from stale_after_days, and much longer, because the two ask "
+                              "different questions: 3 days is right for 'is the whole feed current' "
+                              "and wrong for 'is this agency broken', since plenty of EU agencies "
+                              "publish monthly. Measured 8 September 2026: at 3 days 56 of 78 bodies "
+                              "read as stale; at 30 days 20 do, and 20 is the real number. A check "
+                              "that cries wolf on 72% of the estate gets ignored.")),
                       db: Session = Depends(get_db),
                       user: User = Depends(api_user_with_rate_limit)):
     """Freshness probe for the cross-body news feed.
@@ -393,12 +477,70 @@ async def latest_news(request: Request,
         f"FROM {src} u"), src_params).fetchone()
     latest = _as_date(row.latest) if row and row.latest else None
     age = (date.today() - latest).days if latest else None
+    # EVERY body, stalest first, and NOT a LIMIT 10.
+    #
+    # This used to be `ORDER BY max(document_date) DESC LIMIT 10`, which returns the
+    # ten FRESHEST bodies. It is the one truncation that cannot ever show a problem:
+    # read alone the endpoint reported 0 stale bodies while 20 were over 30 days old,
+    # and it hid 64 of 74 bodies with no marker saying so. Any monitoring built on it
+    # was blind by construction. 77 bodies is a small payload; return all of them.
+    #
+    # `last_ingested` is the second anchor and it is what separates the two failure
+    # modes that were previously one undifferentiated "stale" bucket:
+    #   * old document_date AND old creation_date -> the FETCHER is dead.
+    #   * recent creation_date but every row undated -> the fetcher runs and the DATE
+    #     PARSER is broken.
+    # They need opposite remedies, so the endpoint reports both dates and names the
+    # likely cause rather than making the reader infer it.
     per_body = db.execute(text(
-        f"SELECT body_code, max(document_date) AS latest, count(*) AS n FROM {src} u "
-        "WHERE document_date IS NOT NULL AND document_date <= now() "
-        "GROUP BY body_code ORDER BY max(document_date) DESC LIMIT 10"),
+        "SELECT body_code, "
+        "       max(document_date) FILTER (WHERE document_date <= now()) AS latest, "
+        "       max(creation_date) AS last_ingested, "
+        "       count(*) AS n, "
+        "       count(*) FILTER (WHERE document_date IS NULL) AS undated "
+        f"FROM {src} u GROUP BY body_code "
+        "ORDER BY max(document_date) FILTER (WHERE document_date <= now()) "
+        "         ASC NULLS FIRST"),
         src_params).fetchall()
     names = _body_names(db)
+
+    def _classify(r):
+        """(state, age_days, ingest_age_days, likely_cause). Three states, never two:
+        `undated` is not `stale` and must not be reported as if it were. See
+        feedback_zero_denominator_is_not_a_pass."""
+        latest_b = _as_date(r.latest) if r.latest else None
+        ing = _as_date(r.last_ingested) if r.last_ingested else None
+        age_b = (date.today() - latest_b).days if latest_b else None
+        ing_age = (date.today() - ing).days if ing else None
+        if latest_b is None:
+            state = "undated"
+        elif age_b is not None and age_b > body_stale_after_days:
+            state = "stale"
+        else:
+            state = "fresh"
+        cause = None
+        if state == "undated" and ing_age is not None and ing_age <= body_stale_after_days:
+            cause = "date_parser"          # fetching fine, losing the dates
+        elif state in ("undated", "stale") and ing_age is not None and ing_age > body_stale_after_days:
+            cause = "dead_fetcher"         # nothing ingested for a month
+        elif state == "stale" and ing_age is not None and ing_age <= body_stale_after_days:
+            cause = "fetches_nothing_new"  # runs, returns no new items
+        return state, age_b, ing_age, cause
+
+    body_rows = []
+    counts = {"fresh": 0, "stale": 0, "undated": 0}
+    for r in per_body:
+        state, age_b, ing_age, cause = _classify(r)
+        counts[state] += 1
+        body_rows.append({
+            "code": r.body_code, "name": names.get(r.body_code),
+            "latest_date": (_as_date(r.latest).isoformat() if r.latest else None),
+            "age_days": age_b,
+            "last_ingested": (_as_date(r.last_ingested).isoformat() if r.last_ingested else None),
+            "ingest_age_days": ing_age,
+            "item_count": r.n, "undated_items": r.undated,
+            "state": state, "likely_cause": cause,
+        })
     return {
         "latest_date": latest.isoformat() if latest else None,
         "age_days": age,
@@ -407,12 +549,19 @@ async def latest_news(request: Request,
         "total_items": row.n if row else 0,
         # Non-zero means dates are being scraped from the wrong field somewhere.
         "future_dated_items": (row.future_dated if row else 0),
-        "by_body": [
-            {"code": r.body_code, "name": names.get(r.body_code),
-             "latest_date": _as_date(r.latest).isoformat() if r.latest else None,
-             "item_count": r.n}
-            for r in per_body
-        ],
+        # Estate-level counts, so a caller never has to derive them from a
+        # truncated list. `stale` above is the CORPUS anchor (one fresh body keeps it
+        # false); these are what tell you whether individual bodies are broken.
+        "bodies_total": len(body_rows),
+        "bodies_fresh": counts["fresh"],
+        "bodies_stale": counts["stale"],
+        "bodies_undated": counts["undated"],
+        # False, always, and present so a consumer can assert on it. The previous
+        # LIMIT 10 had no such marker, which is why it read as a complete estate.
+        "by_body_truncated": False,
+        # Every body, STALEST FIRST (was: the 10 freshest). The order changed
+        # deliberately: a monitoring consumer needs the broken ones on top.
+        "by_body": body_rows,
     }
 
 

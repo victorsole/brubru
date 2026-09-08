@@ -224,6 +224,10 @@ async def consultations_all(
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    # See api/v2/economy_endpoints.py: v2 is split between `since`/`until` and
+    # `from`/`to`, and an unknown query param is dropped silently with HTTP 200.
+    since: Optional[date] = Query(None, alias="since", include_in_schema=False),
+    until: Optional[date] = Query(None, alias="until", include_in_schema=False),
     include_body: bool = Query(
         False,
         description=(
@@ -238,6 +242,10 @@ async def consultations_all(
         raise HTTPException(400, f"status must be one of {sorted(_WHENS)}")
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
+    if from_ is None and since is not None:
+        from_ = since
+    if to is None and until is not None:
+        to = until
     codes = _resolve_scope(body, family)
     items = _fetch(db, codes=codes, institution=institution, status=status, since=from_, until=to, q=q, with_body=include_body)
     far_past = datetime(1, 1, 1, tzinfo=timezone.utc); far_future = datetime(9999, 1, 1, tzinfo=timezone.utc)

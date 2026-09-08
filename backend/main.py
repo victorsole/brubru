@@ -159,7 +159,7 @@ app.add_middleware(
     # download button can only read these if they are explicitly exposed.
     # X-Export-Rows tells the user how many rows they actually got (exports are
     # capped per endpoint); Content-Disposition carries the filename.
-    expose_headers=["X-Export-Rows", "Content-Disposition"],
+    expose_headers=["X-Export-Rows", "Content-Disposition", "X-Brubru-Unknown-Params"],
 )
 
 # Billing refund middleware (Phase B — refunds 5xx debits on /api/v1/*).
@@ -351,6 +351,12 @@ async def _v1_rate_limit_headers(request, call_next):
         response.headers["X-Source"] = "brubru.beresol.eu"
         # Phase 3 of docs/applications/euvoc.md — declare OP Core conformance.
         response.headers["X-OP-Core-Conformance"] = "v1.0"
+        # Query params the endpoint does not accept and therefore did NOT apply.
+        # Warn-only by default (API_STRICT_QUERY_PARAMS=true makes it a 422); the
+        # header is what makes a silently-dropped filter visible to the caller.
+        unknown = getattr(request.state, "unknown_query_params", None)
+        if unknown:
+            response.headers["X-Brubru-Unknown-Params"] = ",".join(unknown)
     return response
 
 

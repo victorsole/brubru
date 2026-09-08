@@ -22,10 +22,20 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 
 _ORDERS = {"recent", "oldest", "title"}
+# coalesce(document_date, creation_date), not bare document_date, in BOTH the filter
+# (`_list_items`) and the sort. Measured 8 September 2026: 1,761 news rows across 17
+# bodies carry no document_date because the upstream feed published none, and a bare
+# `document_date >= :since` is NULL for those rows, so every dated window on all ~332
+# factory-generated endpoints dropped them entirely. `creation_date` (when Brubru
+# ingested the row) is a fact we actually know. It is deliberately NOT written into
+# document_date: inventing a publication date we were never given is what
+# feedback_backfill_no_hallucination forbids, and the payload still returns
+# document_date as NULL so the caller can see the date is unknown.
+_DATE_SORT = "coalesce(document_date, creation_date)"
 _ORDER_SQL = {
-    "recent": "document_date DESC NULLS LAST, id DESC",
-    "oldest": "document_date ASC NULLS LAST, id ASC",
-    "title": "title ASC",
+    "recent": f"{_DATE_SORT} DESC NULLS LAST, id DESC",
+    "oldest": f"{_DATE_SORT} ASC NULLS LAST, id ASC",
+    "title": "title ASC, id ASC",
 }
 
 
@@ -70,10 +80,10 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
         where.append("search_vector @@ plainto_tsquery('english', :q)")
         params["q"] = q
     if since:
-        where.append("document_date >= :since")
+        where.append(f"{_DATE_SORT} >= :since")
         params["since"] = since
     if until:
-        where.append("document_date <= :until")
+        where.append(f"{_DATE_SORT} <= :until")
         params["until"] = until
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
@@ -148,8 +158,18 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         db: Session = Depends(get_db),
         user: User = Depends(api_user_with_rate_limit),
         q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
-        since: Optional[date] = Query(None, description="Only items on/after this date (YYYY-MM-DD)."),
-        until: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD)."),
+        since: Optional[date] = Query(None, description="Only items on/after this date (YYYY-MM-DD). `from` is accepted as an alias."),
+        until: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD). `to` is accepted as an alias."),
+        # v2 is split on the date-window vocabulary: 332 operations take
+        # `since`/`until` and the four cross-body aggregators (/news/all,
+        # /events/all, /consultations/all) take `from`/`to`. FastAPI drops an
+        # unknown query param SILENTLY with HTTP 200, so a caller who learned one
+        # spelling gets the UNFILTERED corpus from the other family and no error:
+        # measured 8 September 2026, /api/v2/news/all?since=..&until=.. returned
+        # 14,720 rows where from=..&to=.. returned 152. Accepting both names
+        # everywhere removes the whole failure class and breaks no existing caller.
+        from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
+        to: Optional[date] = Query(None, include_in_schema=False),
         order: str = Query("recent", description="recent | oldest | title."),
         page: int = Query(1, ge=1),
         limit: int = Query(20, ge=1, le=100),
@@ -165,6 +185,8 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     ):
         if order not in _ORDERS:
             raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
+        since = since or from_
+        until = until or to
         items, total = _list_items(db, body_code, item_type, q, since, until, order,
                                    page, limit, include_body=include_body)
         return build_envelope(items, total, page, limit)
