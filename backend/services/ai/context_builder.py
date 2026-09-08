@@ -939,6 +939,7 @@ class ContextData:
     # Constraint injected when the user names a competitor (7 Aug 2026): chat
     # was asserting what rival products lack, with citation markers attached.
     competitor_guard_block: Optional[str] = None
+    alerts_guard_block: Optional[str] = None
 
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
@@ -946,6 +947,44 @@ class ContextData:
     # Rendered FIRST in format_context_for_ai so the "Brubru already knows you"
     # framing survives 32k truncation. Hook for high-value prospects + clients.
     private_guide_block: Optional[str] = None
+
+
+# Queries that will pull a DATE out of the model whether or not one was
+# retrieved: an explicit "when", a scheduling word, or a standing-monitoring
+# request (which is answered with "the next meeting is..."). Six languages,
+# accented and unaccented, because matching here is a plain substring test.
+_WANTS_DATES_RE = re.compile(
+    r"\bwhen\b|\bnext\s+(?:meeting|council|session|vote)|\bupcoming\b|\bschedul"
+    r"|\bcalendar\b|\bagenda\b|\bdiary\b|\bdeadline\b|\bnotify\s+me\b"
+    r"|\bperiodic|\bmonitor(?:ing)?\b|\btrack\b|\balerts?\b"
+    r"|quan\b|quand\b|cuando|cuándo|quando\b|wanneer"
+    r"|calendari|calendrier|calendario|kalender"
+    r"|reuni[oó]|r[eé]union|riunione|vergadering|bijeenkomst"
+    r"|pr[oò]xima|pr[oó]xima|prochaine|prossima|volgende"
+    r"|\bsegui|\bsegue|suivi|monitoraggio|opvolging|\btrack|\bfollow\b"
+    # Naming an institution invites a date even when the question did not ask
+    # for one: "can I follow the Regulation 1/1958 reform" produced two invented
+    # General Affairs Council sittings. Broadening is cheap because this block is
+    # only emitted when the calendar retrieved NOTHING -- the worst case is a
+    # short "do not invent a date" line on an answer that had no date in it.
+    r"|\bcouncil\b|consell|consejo|conseil|consiglio|\braad\b"
+    r"|\bcommittee\b|comissi[oó]|comisi[oó]n|commissione|\bplenar"
+    r"|\bGAC\b|general affairs"
+    r"|peri[oò]dic|peri[oó]dic|p[eé]riodique|periodico|periodiek"
+    r"|avisa|avises|avvisa|waarschuw|pr[eé]viens"
+    r"|termini\b|plazo\b|[eé]ch[eé]ance|scadenza|termijn",
+    re.IGNORECASE,
+)
+
+
+# Synthetic stand-in titles written by the Commission-document sync when it
+# stored a reference without resolving the real title, e.g.
+# "SWD document 52026SC0269". Matched case-insensitively and allowing the
+# CELEX to be absent, because the shape varies slightly by sync generation.
+_PLACEHOLDER_DOC_TITLE_RE = re.compile(
+    r"^(?:COM|SWD|SEC|JOIN|C)\s+document(?:\s+5?\d{4}[A-Z]{2}\d{4})?\s*$",
+    re.IGNORECASE,
+)
 
 
 class ContextBuilder:
@@ -2035,6 +2074,7 @@ class ContextBuilder:
         lobby_meetings_block = self._fetch_lobby_meetings_block(user_message)
         amendment_documents_block = self._fetch_amendment_documents_block(user_message)
         competitor_guard_block = self._build_competitor_guard_block(user_message)
+        alerts_guard_block = self._build_alerts_guard_block(user_message)
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2131,6 +2171,7 @@ class ContextBuilder:
             lobby_meetings_block=lobby_meetings_block,
             amendment_documents_block=amendment_documents_block,
             competitor_guard_block=competitor_guard_block,
+            alerts_guard_block=alerts_guard_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -5456,6 +5497,11 @@ class ContextBuilder:
         'calendari', 'reunio', 'reunió', 'sessio', 'sessió',
         'kalender', 'agenda van', 'vergadering', 'bijeenkomst',
         'riunione', 'riunioni', 'seduta',
+        # Verb forms. The noun lists above miss the way the question is actually
+        # asked: "quan ES REUNEIX el Consell" carries no noun from this tuple.
+        'es reuneix', 'es reuneixen', 'se reune', 'se reúne', 'se reunen',
+        'se réunit', 'se reunit', 'si riunisce', 'komt bijeen', 'vergadert',
+        'quan es', 'when does the council', 'when is the next',
     )
 
     async def _fetch_eu_calendar_events(
@@ -5486,16 +5532,43 @@ class ContextBuilder:
             query_lower = query.lower()
 
             # Detect temporal direction
+            # Both lists are multilingual (audit 8 Sep 2026). They were
+            # English-only, and they decide the DIRECTION of the date window.
+            # "Quan es reuneix el Consell?" is plainly a question about the next
+            # meeting, but with no English keyword it fell to the default
+            # window of past-14/future-14 and returned the General Affairs
+            # Council of 3 SEPTEMBER -- a meeting that had already happened --
+            # ahead of the one on 22 September the user was asking about.
+            # Answering "when is the next X" with a past date is worse than
+            # answering nothing.
             past_keywords = [
                 'last meeting', 'last session', 'previous', 'recent',
                 'what happened', 'what did', 'discussed', 'talked about',
                 'took place', 'was held', 'outcome', 'results of',
                 'latest meeting', 'most recent',
+                'darrera reunio', 'darrera reunió', 'ultima reunio',
+                'última reunió', 'que va passar', 'què va passar', 'anterior',
+                'ultima reunion', 'última reunión', 'que paso', 'qué pasó',
+                'derniere reunion', 'dernière réunion', 'que s est il passe',
+                'ultima riunione', 'cosa e successo', 'laatste vergadering',
+                'wat is er gebeurd', 'va tenir lloc', 'tuvo lugar',
             ]
             future_keywords = [
                 'next', 'upcoming', 'when is', 'when will', 'when does',
                 'scheduled', 'planned', 'agenda for', 'what is on',
                 'calendar', 'coming up',
+                # Catalan
+                'quan', 'proxima', 'pròxima', 'proper', 'propera', 'seguent',
+                'següent', 'es reuneix', 'es reuneixen', 'quan sera', 'quan serà',
+                # Spanish
+                'cuando', 'cuándo', 'proxima reunion', 'próxima reunión',
+                'se reune', 'se reúne', 'siguiente',
+                # French
+                'quand', 'prochaine', 'prochain', 'se reunit', 'se réunit',
+                # Italian
+                'quando', 'prossima', 'prossimo', 'si riunisce',
+                # Dutch
+                'wanneer', 'volgende', 'komt bijeen', 'vergadert',
             ]
 
             look_past = any(kw in query_lower for kw in past_keywords)
@@ -5523,21 +5596,61 @@ class ContextBuilder:
             ]
 
             # Institution filter
+            # Institution names in all six languages Brubru answers in (audit
+            # 8 Sep 2026). This map was English-only, and it is one of the two
+            # gates that decide whether ANY calendar event is returned. So
+            # "Quan es reuneix el Consell d'Afers Generals?" matched nothing,
+            # scored no topical hook, and got ZERO events -- while the identical
+            # English question got the General Affairs Council of 22 September
+            # sitting in the table. A Catalan speaker asking about a Council
+            # meeting was structurally unable to be told when it was, which is
+            # exactly the ground on which the model then invents a date.
             institution_map = {
                 'parliament': InstitutionEnum.EP.value,
                 'plenary': InstitutionEnum.EP.value,
                 'plenaries': InstitutionEnum.EP.value,
                 'mep': InstitutionEnum.EP.value,
                 'committee': InstitutionEnum.EP.value,
+                'parlament': InstitutionEnum.EP.value,
+                'parlamento': InstitutionEnum.EP.value,
+                'parlement': InstitutionEnum.EP.value,
+                'plenari': InstitutionEnum.EP.value,
+                'plenaria': InstitutionEnum.EP.value,
+                'pleni': InstitutionEnum.EP.value,
+                'eurodiputat': InstitutionEnum.EP.value,
+                'eurodiputado': InstitutionEnum.EP.value,
+                'eurodeputato': InstitutionEnum.EP.value,
+                'comissio': InstitutionEnum.COMMISSION.value,
+                'comissió': InstitutionEnum.COMMISSION.value,
                 'council': InstitutionEnum.COUNCIL.value,
                 'councils': InstitutionEnum.COUNCIL.value,
+                'consell': InstitutionEnum.COUNCIL.value,
+                'consejo': InstitutionEnum.COUNCIL.value,
+                'conseil': InstitutionEnum.COUNCIL.value,
+                'consiglio': InstitutionEnum.COUNCIL.value,
+                'raad': InstitutionEnum.COUNCIL.value,
+                'coreper': InstitutionEnum.COUNCIL.value,
                 'european council': InstitutionEnum.EUROPEAN_COUNCIL.value,
                 'summit': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'cimera': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'cumbre': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'sommet': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'vertice': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'top van': InstitutionEnum.EUROPEAN_COUNCIL.value,
                 'commission': InstitutionEnum.COMMISSION.value,
                 'commissioner': InstitutionEnum.COMMISSION.value,
                 'college': InstitutionEnum.COMMISSION.value,
+                'comision': InstitutionEnum.COMMISSION.value,
+                'comisión': InstitutionEnum.COMMISSION.value,
+                'commissione': InstitutionEnum.COMMISSION.value,
+                'commissie': InstitutionEnum.COMMISSION.value,
                 'ecb': InstitutionEnum.ECB.value,
                 'central bank': InstitutionEnum.ECB.value,
+                'banc central': InstitutionEnum.ECB.value,
+                'banco central': InstitutionEnum.ECB.value,
+                'banque centrale': InstitutionEnum.ECB.value,
+                'banca centrale': InstitutionEnum.ECB.value,
+                'centrale bank': InstitutionEnum.ECB.value,
             }
             # Collect ALL institution matches. If the query mentions multiple
             # institutions (e.g. "meetings, plenaries, councils"), drop the filter
@@ -7460,6 +7573,60 @@ class ContextBuilder:
         r"can't get from|cannot get from|why (?:use|choose)|worth switching",
         re.IGNORECASE,
     )
+
+    _ALERTS_INTENT_RE = re.compile(
+        r"alert|notif|avisa|avisis|avises|avvisa|waarschuw|pr[eé]viens|melding"
+        r"|\bsegui|\bsegue|suivi|monitoraggio|monitoring|monitorat"
+        r"|peri[oò]dic|peri[oó]dic|p[eé]riodique|periodico|periodiek"
+        r"|op de hoogte|keep me posted|let me know when|notify me"
+        r"|saved search|cerca guardada|b[uú]squeda guardada"
+        # An email/digest request is an alerts request wearing different words,
+        # and it is the one shape that most needs the "no email" constraint.
+        r"|correu setmanal|correu electr[oò]nic amb|butllet[ií]|bolet[ií]n"
+        r"|newsletter|digest|resum setmanal|resumen semanal|r[eé]sum[eé] hebdo"
+        r"|weekly email|email me|mail me|envia.{0,12}correu|env[ií]a.{0,12}correo",
+        re.IGNORECASE,
+    )
+
+    def _build_alerts_guard_block(self, user_message: str) -> Optional[str]:
+        """Stop chat inventing a scanning cadence for Brubru's alerts.
+
+        Nothing about the alert product runs on a timer, and the guide says so
+        in capitals, twice, inside the injected excerpt. It was ignored twice
+        anyway: one answer said alerts "escanejen cada minut" (misreading the
+        1-per-minute rate limit on the manual trigger as a scan frequency), the
+        next said "escanejarà diariament". The pull of the question -- the user
+        asked to be told PERIODICALLY -- beats a rule sitting thousands of
+        tokens earlier, which is the same failure mode as the competitor table
+        above and takes the same remedy: put the constraint beside the question.
+
+        Only the cadence, delivery and scope facts go here. Everything else
+        about alerts stays in the guide, so this block is small enough to sit at
+        the top of the context without displacing retrieval.
+        """
+        if not user_message or not self._ALERTS_INTENT_RE.search(user_message):
+            return None
+        return (
+            "[ALERTS / MONITORING REQUEST -- ANSWER CONSTRAINT]\n"
+            "The user is asking to be kept informed. These four facts are not "
+            "negotiable and override anything you infer from the question:\n"
+            "1. NO SCHEDULE EXISTS. An alert scans ONLY when a person triggers "
+            "it. Do NOT write that alerts scan every minute, hourly, daily, "
+            "weekly or continuously. The 1-per-minute figure is a rate limit on "
+            "the manual endpoint, not a frequency. If the user wants a rhythm, "
+            "say plainly that automatic scheduling is not live and the Brubru "
+            "team can run it meanwhile.\n"
+            "2. NO EMAIL. Matches appear as a Chat greeting line, a My EU Bubble "
+            "tile and the notification bell. They are NOT delivered to My EU "
+            "Calendar, which is an institutional calendar and carries no alerts. "
+            "Never name an inbox and imply Brubru will write to it.\n"
+            "3. FOUR SCOPES SCAN: eu_laws, texts_adopted, legislative_carriages, "
+            "rss_entries. THREE DO NOT: mep_amendments, parliamentary_questions, "
+            "ep_resolutions. Name the gap when the user's case needs it.\n"
+            "4. NO SELF-SERVE SCREEN yet. A subscription is created through the "
+            "API or by the Brubru team. Do not invent a click-path, a button or "
+            "an 'Add file' dialog you have not been shown.\n"
+        )
 
     def _build_competitor_guard_block(self, user_message: str) -> Optional[str]:
         """Stop chat asserting what a rival product does not do.
@@ -11587,6 +11754,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'competitor_guard_block', None):
             sections.append(context_data.competitor_guard_block)
+
+        if getattr(context_data, 'alerts_guard_block', None):
+            sections.append(context_data.alerts_guard_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
@@ -12280,9 +12450,36 @@ class ContextBuilder:
 
             for item in context_data.commission_documents:
                 doc_type = item.get('doc_type', 'COM')
-                sections.append(f"- [{doc_type}] {item['title']}")
-                if item.get('common_name'):
-                    sections.append(f"  Also known as: {item['common_name']}")
+                # Placeholder-title guard (audit 8 Sep 2026).
+                #
+                # 107 of 1,205 rows carry a synthetic stand-in title of the form
+                # "SWD document 52026SC0269" -- the sync stored the reference and
+                # never resolved the real title. Rendered as an ordinary title it
+                # reads as a description, so the model supplies the subject it
+                # implies. On 7 Sep two such rows, both FISHERIES documents, were
+                # served to a client as the working documents behind the
+                # audiovisual directive review, with confident prose about what
+                # they analysed.
+                #
+                # The row is still useful -- the reference is real and citable --
+                # so it is kept, but labelled as what it is. Compare
+                # feedback_read_the_producer_not_your_assumption: an absent field
+                # must surface as absent, never as a plausible value.
+                title = item.get('title') or ''
+                if _PLACEHOLDER_DOC_TITLE_RE.match(title.strip()):
+                    sections.append(
+                        f"- [{doc_type}] (title not on file -- Brubru holds the reference "
+                        f"but not the title or subject of this document)"
+                    )
+                    sections.append(
+                        "  DO NOT state or infer what this document is about, which file it "
+                        "accompanies, or what it concludes. Cite the reference only, and say "
+                        "the title is not on file."
+                    )
+                else:
+                    sections.append(f"- [{doc_type}] {title}")
+                    if item.get('common_name'):
+                        sections.append(f"  Also known as: {item['common_name']}")
                 sections.append(f"  Reference: {item['reference']}")
                 if item.get('dg_responsible'):
                     sections.append(f"  DG: {item['dg_responsible']}")
@@ -12295,6 +12492,28 @@ class ContextBuilder:
                 sections.append("")
 
         # EU Calendar Events (institutional calendar with exact dates)
+        #
+        # NOT-ON-FILE branch (audit 8 Sep 2026). Until now an empty calendar
+        # result rendered as NOTHING -- the section simply did not appear. Silence
+        # is the one thing the model cannot distinguish from "no meetings", so on
+        # 7 Sep a Catalan monitoring question that retrieved ZERO events was
+        # answered with an invented General Affairs Council on 12 October, while
+        # the real GAC on 22 September sat unretrieved in the table.
+        #
+        # Every retrieval block needs a branch that names what NOT to do when it
+        # comes back empty; this is that branch for the calendar.
+        if not context_data.eu_calendar_events and _WANTS_DATES_RE.search(
+            context_data.query or ""
+        ):
+            sections.append("\nEU INSTITUTIONAL CALENDAR: NO EVENTS RETRIEVED FOR THIS QUERY")
+            sections.append(
+                "No institutional calendar entry was retrieved. DO NOT state, estimate or "
+                "illustrate a meeting date, a Council date, a committee date or a plenary date. "
+                "Do not write an example date. Name the body or configuration that takes the "
+                "file and point the user at My EU Calendar (My EU Bubble) to read the date "
+                "there. Saying the date is not on file is correct; inventing one is not.\n"
+            )
+
         if context_data.eu_calendar_events:
             sections.append(f"\nEU INSTITUTIONAL CALENDAR ({len(context_data.eu_calendar_events)} events):")
             sections.append("Source: Official EU institutional calendars (exact dates -- prioritise over RSS/news)\n")

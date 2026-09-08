@@ -14538,6 +14538,72 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'tutti gli azionisti': ['eu_company_law_shareholder_disclosure'],
     'aandeelhouders publiceren': ['eu_company_law_shareholder_disclosure'],
     'alle aandeelhouders': ['eu_company_law_shareholder_disclosure'],
+
+    # ---- Brubru alerts / standing monitoring (audit 8 Sep 2026) --------------
+    # A client asked "notify me periodically about opportunities" and Chat, with
+    # no guide on the alert feature at all, improvised a set-up procedure and
+    # promised an email digest Brubru cannot send. Retrieval is the fix; these
+    # route the question to the guide that states what actually works.
+    # Accented AND unaccented variants, in the phrasing people actually type.
+    'brubru alerts': ['brubru_alerts_and_monitoring'],
+    'alerts': ['brubru_alerts_and_monitoring'],
+    'alert': ['brubru_alerts_and_monitoring'],
+    'alert subscription': ['brubru_alerts_and_monitoring'],
+    'saved search': ['brubru_alerts_and_monitoring'],
+    'saved searches': ['brubru_alerts_and_monitoring'],
+    'notify me': ['brubru_alerts_and_monitoring'],
+    'notify me when': ['brubru_alerts_and_monitoring'],
+    'let me know when': ['brubru_alerts_and_monitoring'],
+    'keep me posted': ['brubru_alerts_and_monitoring'],
+    'periodic monitoring': ['brubru_alerts_and_monitoring'],
+    'standing monitoring': ['brubru_alerts_and_monitoring'],
+    'monitoring alerts': ['brubru_alerts_and_monitoring'],
+    'email alerts': ['brubru_alerts_and_monitoring'],
+    'email digest': ['brubru_alerts_and_monitoring'],
+    'weekly digest': ['brubru_alerts_and_monitoring'],
+    # Catalan
+    'alertes': ['brubru_alerts_and_monitoring'],
+    "avisa'm": ['brubru_alerts_and_monitoring'],
+    "m'avisis": ['brubru_alerts_and_monitoring'],
+    "que m'avisis": ['brubru_alerts_and_monitoring'],
+    'avisis periodicament': ['brubru_alerts_and_monitoring'],
+    'avisis periòdicament': ['brubru_alerts_and_monitoring'],
+    'seguiment periodic': ['brubru_alerts_and_monitoring'],
+    'seguiment periòdic': ['brubru_alerts_and_monitoring'],
+    'fer un seguiment': ['brubru_alerts_and_monitoring'],
+    'com ho hauria de fer': ['brubru_alerts_and_monitoring'],
+    'notificacions': ['brubru_alerts_and_monitoring'],
+    "subscripcions d'alerta": ['brubru_alerts_and_monitoring'],
+    # Spanish
+    'alertas': ['brubru_alerts_and_monitoring'],
+    'avisame': ['brubru_alerts_and_monitoring'],
+    'avísame': ['brubru_alerts_and_monitoring'],
+    'que me avises': ['brubru_alerts_and_monitoring'],
+    'avises periodicamente': ['brubru_alerts_and_monitoring'],
+    'avises periódicamente': ['brubru_alerts_and_monitoring'],
+    'seguimiento periodico': ['brubru_alerts_and_monitoring'],
+    'seguimiento periódico': ['brubru_alerts_and_monitoring'],
+    'hacer un seguimiento': ['brubru_alerts_and_monitoring'],
+    'notificaciones': ['brubru_alerts_and_monitoring'],
+    # French
+    'alertes email': ['brubru_alerts_and_monitoring'],
+    'previens moi': ['brubru_alerts_and_monitoring'],
+    'préviens-moi': ['brubru_alerts_and_monitoring'],
+    'me prevenir': ['brubru_alerts_and_monitoring'],
+    'suivi periodique': ['brubru_alerts_and_monitoring'],
+    'suivi périodique': ['brubru_alerts_and_monitoring'],
+    'veille reglementaire': ['brubru_alerts_and_monitoring'],
+    'veille réglementaire': ['brubru_alerts_and_monitoring'],
+    # Italian
+    'avvisami': ['brubru_alerts_and_monitoring'],
+    'avvisi periodici': ['brubru_alerts_and_monitoring'],
+    'monitoraggio periodico': ['brubru_alerts_and_monitoring'],
+    'notifiche': ['brubru_alerts_and_monitoring'],
+    # Dutch
+    'waarschuw mij': ['brubru_alerts_and_monitoring'],
+    'meldingen': ['brubru_alerts_and_monitoring'],
+    'periodieke monitoring': ['brubru_alerts_and_monitoring'],
+    'op de hoogte houden': ['brubru_alerts_and_monitoring'],
 }
 
 

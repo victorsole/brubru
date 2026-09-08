@@ -498,9 +498,57 @@ _VALIDATE_TRIGGER_RE = re.compile(
     r"|\bmet\s+with\b|\bmeeting\s+with\b"                  # fabricated meeting
     r"|€\s?\d[\d.,]*\s*(?:million|billion|bn|m)\b"         # fine / figure
     r"|\b(?:Politico|Reuters|Bloomberg|Euractiv|Contexte|Financial\s+Times|Bruegel)\b"  # outlet attribution
-    r"|\btrilogue\b",
+    r"|\btrilogue\b"
+    # Commission document references (audit 8 Sep 2026). An answer that names
+    # SWD(2026) 269 is asserting what that document IS, and 107 of the 1,205
+    # rows Brubru holds carry a placeholder title, so the subject is exactly
+    # what the model is most likely to have supplied itself. Two fisheries
+    # working documents were served to a client as the audiovisual review's
+    # evidence base, and this pre-filter waved the answer through unvalidated.
+    r"|\b(?:SWD|COM|SEC|JOIN)\s*\(\s*\d{4}\s*\)\s*\d{1,4}\b",
     re.IGNORECASE,
 )
+
+# A specific day-level date sitting next to a meeting word. Deliberately NOT
+# "any date": the pre-filter exists to avoid a second provider call on every
+# answer, and dates are everywhere. What is worth the call is the shape that
+# actually fabricates -- "the next General Affairs Council is on 12 October
+# 2026", asserted on 7 Sep 2026 with zero calendar rows retrieved.
+_MEETING_WORD_RE = re.compile(
+    r"council|meeting|session|plenary|committee|summit|vote|reuni|r[eé]union|"
+    r"riunione|vergadering|bijeenkomst|sessi|seduta|consell|consejo|conseil|"
+    r"consiglio|raad|comit|commissione|plen",
+    re.IGNORECASE,
+)
+_SPECIFIC_DAY_RE = re.compile(
+    r"\b\d{4}-\d{2}-\d{2}\b"
+    r"|\b\d{1,2}\s*[/.]\s*\d{1,2}\s*[/.]\s*\d{4}\b"
+    r"|\b\d{1,2}\s+(?:de\s+|d')?(?:January|February|March|April|May|June|July|August|"
+    r"September|October|November|December|gener|febrer|mar[cç]|abril|maig|juny|juliol|"
+    r"agost|setembre|octubre|novembre|desembre|enero|febrero|marzo|mayo|junio|julio|"
+    r"agosto|septiembre|octubre|noviembre|diciembre|janvier|f[eé]vrier|mars|avril|mai|"
+    r"juin|juillet|ao[uû]t|septembre|octobre|novembre|d[eé]cembre|gennaio|febbraio|"
+    r"marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|"
+    r"januari|februari|maart|mei|juni|juli|augustus|september|oktober|november|december)"
+    r"\s+\d{4}\b",
+    re.IGNORECASE,
+)
+
+
+def _asserts_a_meeting_date(response: str) -> bool:
+    """True if some line states a specific day AND names a meeting body.
+
+    Line-scoped rather than whole-answer, so a date in one paragraph and the
+    word "Council" three paragraphs later is not treated as a claim about a
+    meeting -- that coincidence is how `_CAP_NAME_RE` fired the validator on
+    "Member State" and burned one of only three validations in a fortnight.
+    """
+    if not response:
+        return False
+    for line in response.splitlines():
+        if _SPECIFIC_DAY_RE.search(line) and _MEETING_WORD_RE.search(line):
+            return True
+    return False
 _NAMED_ROLE_RE = re.compile(
     r"rapporteur|shadow|ponente|relator[ei]|berichterstatter|coordinator|lead\s+negotiator",
     re.IGNORECASE,
@@ -537,6 +585,8 @@ def _response_needs_validation(response: str) -> bool:
     if not response:
         return False
     if _VALIDATE_TRIGGER_RE.search(response):
+        return True
+    if _asserts_a_meeting_date(response):
         return True
     # A role claim is risky only when a specific name is attached.
     if _NAMED_ROLE_RE.search(response) and _looks_like_a_person(response):
@@ -1785,7 +1835,7 @@ class AIService:
         message = self._sanitise_celex_links(message)
         # After the acronym pass, so an acronym that already became a link is
         # treated as a link segment here and is not touched again.
-        message = self._linkify_references(message)
+        message = self._linkify_references(message, context_str or "")
         return message
 
     async def chat_stream(
@@ -2420,7 +2470,9 @@ You may explain frameworks, mechanisms, processes and history from general knowl
 
 Never fill a gap with a web-search result and present it as Brubru's verified record.
 
-Never fabricate these identifier formats when the value is not in context: PE numbers, A-reports, T-texts and P_TA references, vote tallies, trilogue dates, rapporteur and shadow names. Describe where to find them instead. Do not echo any identifier value unless that exact string is in the context for this query.
+Never fabricate these identifier formats when the value is not in context: PE numbers, A-reports, T-texts and P_TA references, procedure references such as YYYY/NNNN(COD), COM and SWD document numbers, vote tallies, trilogue dates, rapporteur and shadow names. Describe where to find them instead. Do not echo any identifier value unless that exact string is in the context for this query.
+
+This holds for ILLUSTRATIONS too. Never build a worked example, a hypothetical or a "suppose that" around an identifier or a date you made up, however clearly you label it as an example. A reader copies the reference, not the caveat. Illustrate with a file that is in the context, or illustrate with no reference at all.
 
 If a knowledge guide marks a field as NOT YET VERIFIED, TBC, or explicitly says not to cite it, refuse to give a value for that field even if you believe you know it, and say the record is not yet verified. Training memory does not override a guide that says the data is unconfirmed.
 
@@ -3348,6 +3400,16 @@ USER QUESTION: {user_message}
             # matches the rendered References footer.
             return f"{ws}[{num}]"
 
+        # Fold the file-search citation shape 【10†L1-L4】 down to 【10】 first
+        # (audit 8 Sep 2026). Some providers emit a retrieval-tool marker that
+        # carries a line span after a dagger. The A1 pattern below requires the
+        # digits to be followed immediately by the closing bracket, so this shape
+        # slipped past both the orphan check and the CJK normalisation and
+        # reached a client verbatim as 【10†L1-L4】 -- unreadable, and pointing at
+        # line numbers in a file the user cannot see. Folding rather than
+        # deleting keeps a marker that IS backed by a real source.
+        text = re.sub(r'([\[【])(\d+)\s*[†‡]\s*[^\]】]*([\]】])', r'\1\2\3', text)
+
         # Match [N] AND fullwidth CJK 【N】 markers (audit defect A1, 23 Jun 2026).
         # Cerebras/Gemini occasionally emit 【1】 (U+3010/U+3011) which the old
         # ASCII-only regex never touched, so orphans survived with no footer.
@@ -3689,7 +3751,7 @@ USER QUESTION: {user_message}
         "décision": "D", "decisione": "D", "besluit": "D",
     }
 
-    def _linkify_references(self, text: str) -> str:
+    def _linkify_references(self, text: str, context_str: str = "") -> str:
         """Hyperlink COM, procedure and bare CELEX references.
 
         The system prompt has always demanded that every legislative reference
@@ -3705,9 +3767,30 @@ USER QUESTION: {user_message}
 
         Segments that are already a markdown link or a bare URL are left alone,
         so nothing is double-linked and no existing href is rewritten.
+
+        A PROCEDURE reference is only linked when `context_str` corroborates it
+        (audit 8 Sep 2026). OEIL builds a URL for any well-formed reference, so
+        an invented one resolves to a real-looking page and the link reads as
+        verification the system never did. Asked how to monitor language files,
+        Chat produced a worked example around "2026/1234(COD)" and an
+        illustrative "2025/0240(COD)", and both shipped as OEIL hyperlinks --
+        a number the model chose, wearing the Parliament's domain.
+
+        Corroborated means the reference appears in the retrieved context, which
+        includes the knowledge guides, so anything Brubru actually holds still
+        links exactly as before. An uncorroborated reference keeps its text and
+        loses only the hyperlink: the claim stays visible and auditable, it just
+        stops borrowing authority. When no context was retrieved at all the old
+        behaviour is kept, because there is then nothing to check against and
+        stripping every link would be a worse answer.
         """
         if not text:
             return text
+
+        def _corroborated(ref: str) -> bool:
+            if not context_str:
+                return True  # nothing to check against; behave as before
+            return ref in context_str
 
         def _com(m: re.Match) -> str:
             year, num = m.group(1), m.group(2)
@@ -3716,6 +3799,12 @@ USER QUESTION: {user_message}
 
         def _proc(m: re.Match) -> str:
             ref = f"{m.group(1)}/{m.group(2)}({m.group(3)})"
+            if not _corroborated(ref):
+                logger.info(
+                    "[LINKIFY] procedure reference %s not in retrieved context -- "
+                    "left unlinked rather than pointed at OEIL", ref
+                )
+                return m.group(0)
             return (f"[{m.group(0)}](https://oeil.secure.europarl.europa.eu/oeil/en/"
                     f"procedure-file?reference={ref})")
 

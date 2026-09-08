@@ -2,6 +2,14 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-08",
+      "action": "added",
+      "guide": "brubru_alerts_and_monitoring",
+      "title": "Brubru Alerts and Standing Monitoring",
+      "summary": "What Brubru's alert and monitoring features actually do: 4 working scopes, 3 accepted but not scanned, in-product delivery only, no email and no schedule yet.",
+      "refs": []
+    },
+    {
       "date": "2026-09-07",
       "action": "updated",
       "guide": "biotech_act",
