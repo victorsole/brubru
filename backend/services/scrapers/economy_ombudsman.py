@@ -21,13 +21,50 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, extract_html
+from services.scrapers.economy_common import Item, clean, norm_url, extract_html, error_body_reason
 
 _BASE = "https://www.ombudsman.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 NEWS_PAGE = f"{_BASE}/news-documents"
+
+# Canonicalise a news-document URL to the form the SITE ITSELF declares canonical.
+#
+# Why (measured 8 September 2026)
+# -------------------------------
+# The SPA listing emits 11 hrefs for 10 distinct items: ten as
+# `/en/news-document/en/<id>` and one as `/news-document/en/<id>`. The old `seen`
+# set deduped on the URL STRING, so the odd form survived as a SECOND row for an
+# item already collected. Over successive runs different ids came out in the odd
+# form, which is how 21 rows accumulated for 16 real items -- and the two rows
+# disagreed on content, because one render succeeded and the other did not
+# (bodies of 3,642 vs 203 chars, and 6 rows with body_txt NULL).
+#
+# Which form is canonical is not a guess: BOTH variants serve
+#   <link rel="canonical" href="https://www.ombudsman.europa.eu/en/news-document/en/<id>">
+# so the site says the /en/-prefixed form is the one. Dedup on the numeric id and
+# store that form.
+# Only the LEADING LOCALE PREFIX differs between the two variants; the segment after
+# `news-document/` is the DOCUMENT's language and must be preserved. Collapsing that
+# too would map /news-document/fr/231701 onto the English URL and silently claim a
+# French document was the English one.
+_NEWS_ID_RE = re.compile(r"/news-document/([a-z]{2})/(\d+)\b")
+
+
+def canonical_news_url(href: str) -> tuple[str, str] | tuple[None, None]:
+    """(canonical_url, dedup_key) for a news-document href, or (None, None).
+
+    Adds the `/en/` locale prefix the site declares canonical and keeps the
+    document-language segment untouched. The dedup key is (lang, id), so the same
+    item in two languages stays two items while the same item under two locale
+    prefixes collapses to one.
+    """
+    m = _NEWS_ID_RE.search(href or "")
+    if not m:
+        return None, None
+    doc_lang, item_id = m.group(1), m.group(2)
+    return f"{_BASE}/en/news-document/{doc_lang}/{item_id}", f"{doc_lang}:{item_id}"
 
 _TOPIC_PATHS = [
     "/the-ombudsman",
@@ -43,6 +80,40 @@ _TOPIC_PATHS = [
     "/top-inquiries",
     "/publications",
 ]
+
+# The SPA wraps every page -- good ones and error ones -- in this persistent
+# navigation. A body consisting of nothing BUT the wrapper is a render that never
+# settled, not content: row 643471 held 109 chars of exactly this and passed the
+# shared `error_body_reason` floor. Site-specific, so it lives here rather than in
+# economy_common: the generic guard must not reject legitimately short notices.
+_CHROME_FRAGMENTS = (
+    "You have a complaint",
+    "against an EU institution or body?",
+    "Make a complaint",
+    "Contents",
+    "Short link",
+    "Export",
+    "Subscribe to the case",
+    "Get notified by email when the case is updated",
+    "Get notified by RSS when the case",
+    "Take Me Home",
+    "Contact technical support",
+)
+_CHROME_MIN_REMAINDER = 120   # chars of non-boilerplate needed to count as content
+
+
+def chrome_only_reason(body_txt: str | None) -> str | None:
+    """'chrome_only' when stripping the site wrapper leaves almost nothing."""
+    if not body_txt:
+        return None
+    remainder = body_txt
+    for frag in _CHROME_FRAGMENTS:
+        remainder = remainder.replace(frag, " ")
+    remainder = " ".join(remainder.split())
+    if len(remainder) < _CHROME_MIN_REMAINDER:
+        return f"chrome_only(remainder={len(remainder)})"
+    return None
+
 
 _CATEGORY_PREFIX = re.compile(
     r"^(Latest news or press release|Press release|News article|News|Speech|"
@@ -73,24 +144,50 @@ async def _ingest_news_async(*, fetch_bodies: bool) -> list[Item]:
         if html:
             soup = BeautifulSoup(html, "html.parser")
             for a in soup.select('a[href*="/news-document/"]'):
-                href = a.get("href", "")
-                if not re.search(r"/news-document/[a-z]+/\d+", href):
+                url, dedup_key = canonical_news_url(a.get("href", ""))
+                if url is None:
                     continue
-                url = norm_url(href if href.startswith("http") else _BASE + href)
-                if url in seen:
+                # Dedup on the item ID, not the URL string. The listing emits the
+                # same item under two locale-prefix variants; string dedup let both
+                # through and created a duplicate row with disagreeing content.
+                if dedup_key in seen:
                     continue
                 raw = clean(a.get_text(" ", strip=True))
                 title = clean(_CATEGORY_PREFIX.sub("", raw))
                 if not title or len(title) < 10:
                     continue
-                seen.add(url)
+                seen.add(dedup_key)
                 items.append(Item(body_code="ombudsman", item_type="news", title=title[:300],
-                                  public_url=url, creation_date=now, source_kind="html", guid=url))
+                                  public_url=norm_url(url), creation_date=now,
+                                  source_kind="html", guid=norm_url(url)))
         if fetch_bodies:
             for it in items:
                 dhtml = await _render(page, it.public_url, settle=2000)
-                if dhtml:
-                    it.body_txt, it.body_html = extract_html(dhtml)
+                if not dhtml:
+                    continue
+                body_txt, body_html = extract_html(dhtml)
+                # Never store an error page as a body. Before the URL was
+                # canonicalised the scraper fetched a non-existent locale variant,
+                # got a 404 page, and stored ITS text as body_txt on 4 rows -- which
+                # satisfied every "body is not null" check while being false data.
+                # Two more rows held unrendered template placeholders. A non-empty
+                # body is not a valid body.
+                reason = error_body_reason(body_txt) or chrome_only_reason(body_txt)
+                if reason:
+                    print(f"[ombudsman] discarding body for {it.public_url}: {reason}")
+                    continue
+                it.body_txt, it.body_html = body_txt, body_html
+
+        # document_date is deliberately left None. Measured 8 September 2026: the
+        # CANONICAL rendered item page (76KB) carries none of six date carriers --
+        # no <time datetime>, no article:published_time, no JSON-LD datePublished,
+        # no parseable visible date. Dates DO appear on the 404 page for the wrong
+        # URL variant (103KB), but they belong to its "latest news" sidebar and are
+        # other items' dates. Using them would be exactly the fabrication
+        # feedback_backfill_no_hallucination forbids, so these rows stay undated and
+        # /api/v2/news/all coalesces to creation_date for FILTERING while still
+        # reporting document_date as null. /news/latest reports the body as
+        # `undated`, which is the honest state.
         await b.close()
     return items
 

@@ -12,12 +12,13 @@ failures that had been one undifferentiated "stale" bucket:
   * a LIVE FETCHER with a broken DATE PARSER: recent creation_date, every row
     undated. The dates were on the pages all along.
 
-This script handles the second kind, for the three bodies whose item pages were
-confirmed to publish a machine-readable date:
+This script handles the second kind. Four bodies, three of which publish a
+machine-readable date on the item page and one which publishes it only in its feed:
 
     euda   978 rows   <time datetime="...">                     4/4 sampled
     eib    247 rows   JSON-LD "datePublished"                   3/4 sampled
     rail    17 rows   <meta property="article:published_time">  2/2 sampled
+    sesar   23 rows   RSS <pubDate>, looked up by URL           feed-only
 
 The scrapers themselves are fixed too, so new rows arrive dated; this is the
 historical sweep.
@@ -30,10 +31,12 @@ never `creation_date`, never a year inferred from the URL path. A row that canno
 dated stays NULL and is counted as `no_carrier`, which is an honest answer.
 See `feedback_backfill_no_hallucination`.
 
-Two bodies are deliberately NOT here, because their item pages carry no date:
-`sesar` (23 rows, 83KB pages, none of six carriers present) and `ombudsman`
-(21 rows, and a worse defect: every item exists twice under two URL variants and the
-pages return a 3KB stub, so it needs Playwright plus URL canonicalisation first).
+`ombudsman` is deliberately NOT here. Its 16 rows carry no date anywhere: the
+canonical rendered item page (76KB) has none of six carriers, and the dates that DO
+appear on the wrong URL variant belong to that 404 page's "latest news" sidebar, i.e.
+other items. Its separate defect -- every item duplicated across two locale-prefix
+variants, with the non-canonical one 404ing and its error page stored as body_txt --
+is handled by scripts/dedup_ombudsman_news.py.
 
 Usage
 -----
@@ -66,7 +69,7 @@ from sqlalchemy import text  # noqa: E402
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import extract_item_date, http_get  # noqa: E402
 
-BODIES = ("euda", "eib", "rail")
+BODIES = ("euda", "eib", "rail", "sesar")
 BATCH = 50
 DELAY = 0.4          # politeness; these are public agency sites
 
@@ -95,6 +98,23 @@ def _plain_get(url: str):
 
 
 _FETCHERS = {"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get}
+
+# sesar is a MAP body, not a fetch body: neither its item page nor its listing states
+# a date, so the only publisher statement is the <pubDate> in its own RSS feed
+# (services/scrapers/economy_sesar.news_dates). Looked up by URL instead of fetching
+# each page, so it costs one request for the whole body.
+_MAP_BODIES = {"sesar"}
+_MAPS: dict = {}
+
+
+def _map_for(body: str) -> dict:
+    if body not in _MAPS:
+        if body == "sesar":
+            from services.scrapers.economy_sesar import news_dates
+            _MAPS[body] = news_dates()
+        else:
+            _MAPS[body] = {}
+    return _MAPS[body]
 
 
 def _counts(db):
@@ -141,8 +161,17 @@ def main() -> int:
         pending = []
         processed = 0
         for r in rows:
-            html = _FETCHERS[r["body_code"]](r["public_url"])
+            body = r["body_code"]
             processed += 1
+            if body in _MAP_BODIES:
+                dt = _map_for(body).get(r["public_url"])
+                if dt is None:
+                    carriers["not_in_feed"] += 1
+                else:
+                    carriers["rss_pubdate"] += 1
+                    pending.append({"id": r["id"], "d": dt})
+                continue          # no per-item request needed
+            html = _FETCHERS[body](r["public_url"])
             if html is None:
                 carriers["fetch_failed"] += 1
             else:
@@ -182,7 +211,8 @@ def main() -> int:
             total_recovered += (u0 - u1)
             print(f"         {b:10} {n1:5} / {u1:5}   recovered {u0 - u1}")
 
-        dated = sum(v for k, v in carriers.items() if k not in ("fetch_failed", "no_carrier"))
+        dated = sum(v for k, v in carriers.items()
+                    if k not in ("fetch_failed", "no_carrier", "not_in_feed"))
         if total_recovered != dated:
             # Not necessarily a bug: the live cron may have inserted or dated rows
             # while this ran. Say so rather than asserting a clean number.

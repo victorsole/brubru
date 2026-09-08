@@ -231,6 +231,60 @@ def parse_listing_date(text: str) -> datetime | None:
     return None
 
 
+# --- is this "body" actually an error page? ---------------------------------
+#
+# Why (measured 8 September 2026)
+# -------------------------------
+# `extract_html` will happily turn a 404 page into a body_txt, and nothing
+# downstream can tell the difference: the row satisfies "body_txt is not null",
+# passes every five-datapoint check, and feeds chat and RAG as though it were the
+# article. The Ombudsman scraper stored 4 such rows whose entire body was
+#
+#     "You have a complaint against an EU institution or body? ... Oops!
+#      404 Not Found  Sorry, an error has occured. Requested page not found!"
+#
+# plus 2 whose body was unrendered template placeholders
+# (`![template_principal_interactiveguide]`). A non-empty body is not a valid body,
+# and passing a coverage check on junk is worse than failing it honestly.
+#
+# Deliberately conservative: it matches explicit error/placeholder signatures and a
+# hard length floor, NOT "short" in general. Plenty of legitimate agency notices are
+# two sentences long, and suppressing those would trade a false positive for a false
+# negative. Returns a reason string so a caller can log WHY, never a bare bool.
+
+_ERROR_BODY_SIGNATURES = (
+    ("404_not_found", re.compile(r"\b404\s+not\s+found\b", re.I)),
+    ("page_not_found", re.compile(r"requested page not found|page (?:could )?not be found", re.I)),
+    ("error_occurred", re.compile(r"an error has occ?ur+ed", re.I)),
+    ("access_denied", re.compile(r"\b(?:403\s+forbidden|access denied)\b", re.I)),
+    ("server_error", re.compile(r"\b(?:500|502|503)\s+(?:internal server error|bad gateway|service unavailable)\b", re.I)),
+    ("unrendered_template", re.compile(r"!\[template[_.]")),
+    ("js_required", re.compile(r"(?:requires|enable)\s+javascript", re.I)),
+    # WordPress page-builder shortcodes leaking into the text. rail-research.europa.eu
+    # serves some posts' content.rendered as raw Divi markup
+    # (`[et_pb_section fb_built="1" _builder_version="4.16"]...`), which as body_txt is
+    # markup noise, not prose. Measured 8 September 2026.
+    ("page_builder_shortcode", re.compile(r"\[(?:et_pb_|vc_|fusion_)\w+", re.I)),
+)
+
+_BODY_MIN_CHARS = 40
+
+
+def error_body_reason(body_txt: str | None) -> str | None:
+    """Why this body must not be stored, or None if it looks like real content."""
+    if body_txt is None:
+        return None                      # absent is a different state from invalid
+    txt = body_txt.strip()
+    if not txt:
+        return "empty"
+    for name, rx in _ERROR_BODY_SIGNATURES:
+        if rx.search(txt):
+            return name
+    if len(txt) < _BODY_MIN_CHARS:
+        return "below_min_chars"
+    return None
+
+
 # --- publication date, read off the ITEM'S OWN page -------------------------
 #
 # Why this exists (measured 8 September 2026)

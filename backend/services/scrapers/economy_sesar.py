@@ -30,6 +30,72 @@ NEWS_PAGE = f"{_BASE}/news"
 DOCS_PAGE = f"{_BASE}/search-content/documents"
 EVENTS_PAGE = f"{_BASE}/events"
 
+NEWS_FEED = f"{_BASE}/rss.xml"
+
+
+def news_dates() -> dict:
+    """{canonical news URL -> publication datetime} from SESAR's own RSS feed.
+
+    Why the feed (measured 8 September 2026)
+    ----------------------------------------
+    Neither the item page nor the listing states a date. The 83KB item pages carry
+    none of six date carriers (no <time datetime>, no article:published_time, no
+    JSON-LD datePublished, no parseable visible date), and walking five levels of
+    ancestor from each listing link finds nothing either. So every SESAR news row
+    was written undated (23 rows).
+    
+    `/rss.xml` publishes an RFC-822 <pubDate> per item, which IS the publisher's own
+    statement of that item's date. That makes it a legitimate source, unlike a
+    sitemap <lastmod> (a modification date) or the ingest time.
+
+    Two link forms appear in the feed: `/news/<slug>` matching what the scraper
+    collects, and `/node/<id>` (the raw node route). A node link is resolved by
+    reading its page's <link rel="canonical">, which is the site's own mapping to
+    the alias, so the date lands on the right row rather than on a guess.
+
+    The feed holds only the most recent ~10 items, so historical rows stay undated.
+    Returning a partial map is correct; inventing the rest is not.
+    """
+    import email.utils
+    out: dict = {}
+    r = http_get(NEWS_FEED)
+    if r is None:
+        return out
+    try:
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(r.text)
+    except Exception:  # noqa: BLE001
+        return out
+    for it in root.findall(".//item"):
+        link = (it.findtext("link") or "").strip()
+        pub = (it.findtext("pubDate") or "").strip()
+        if not link or not pub:
+            continue
+        try:
+            dt = email.utils.parsedate_to_datetime(pub)
+        except Exception:  # noqa: BLE001
+            continue
+        if dt is None:
+            continue
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        if "/news/" not in link:
+            # /node/<id> -> follow it and take the canonical alias the site declares.
+            nr = http_get(link)
+            if nr is None:
+                continue
+            m = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']',
+                          nr.text, re.I) or re.search(
+                r'<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']', nr.text, re.I)
+            if not m:
+                continue
+            link = m.group(1)
+            if "/news/" not in link:
+                continue
+        out[norm_url(link)] = dt
+    return out
+
+
 _TOPIC_PATHS = [
     "/discover-sesar", "/approach", "/what-is-smart-atm", "/sustainability",
     "/MasterPlan2025", "/innovation-pipeline", "/approach/deployment",
@@ -72,7 +138,15 @@ def _scrape(url: str, href_re: str, item_type: str, *, fetch_bodies: bool) -> li
 
 
 def ingest_sesar_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return _scrape(NEWS_PAGE, r"/news/[a-z0-9-]{6,}", "news", fetch_bodies=fetch_bodies)
+    items = _scrape(NEWS_PAGE, r"/news/[a-z0-9-]{6,}", "news", fetch_bodies=fetch_bodies)
+    # Neither the item page nor the listing carries a date, so take it from SESAR's
+    # own RSS <pubDate>. Only the ~10 most recent items are in the feed; anything
+    # older keeps document_date None rather than acquiring a made-up one.
+    dates = news_dates()
+    for it in items:
+        if it.document_date is None:
+            it.document_date = dates.get(it.public_url)
+    return items
 
 
 def ingest_sesar_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
