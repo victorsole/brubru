@@ -320,11 +320,22 @@ def main():
         # LINK, not a summary you can read. Saying so is the point: this banner used
         # to promise "plain-language summary in the PDF (seed a KB guide from these)",
         # which sends the reader to fetch something that cannot be fetched.
-        print("    NOTE: the PDF body is UNREACHABLE (a plain GET returns 200 with an empty body;")
-        print("    Playwright gets 403). The HOLDING line below comes instead from the Court's own")
-        print("    Mastodon account, which posts a plain-language holding for every press release")
-        print("    and links the PDF -- so we already held the substance. Where no HOLDING shows,")
-        print("    take the legal substance from the Cellar subject-matter lines further down.")
+        # CORRECTED 8 September 2026. The banner used to say the PDF body is
+        # UNREACHABLE. It is not: a plain GET with a real browser User-Agent AND
+        # a `Referer: https://curia.europa.eu/` returns the full PDF. Both
+        # cp260119en.pdf and cp260120en.pdf were fetched that way and parsed with
+        # pdftotext, and each carries several hundred words of reasoning that the
+        # one-line Mastodon holding cannot. Telling the reader a source cannot be
+        # fetched, when it can, is worse than saying nothing -- it stops them
+        # reading the best source there is.
+        print("    The PDF IS fetchable. Use a browser User-Agent AND a Referer header:")
+        print("      curl -sL -A 'Mozilla/5.0 ... Chrome/141.0 Safari/537.36' \\")
+        print("        -H 'Referer: https://curia.europa.eu/' <pdf-url> -o cp.pdf && pdftotext -layout cp.pdf -")
+        print("    It carries the full reasoning; the HOLDING line below is only the Court's own")
+        print("    one-line Mastodon summary, useful as a headline, never as the whole substance.")
+        print("    ORDERING: the holdings come from `social_posts`, so run the /social-eu drip")
+        print("    BEFORE this helper. Run it first and every HOLDING line is empty, which reads")
+        print("    as 'the Court said nothing' when it simply had not been fetched yet.")
         for p in prs:
             cs = " ".join(p["cases"]) or "(no case ref in title)"
             print(f"  {p['date']} No {p['no']:<9} {cs:<22} {p['title'][:96]}")

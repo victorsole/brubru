@@ -21,7 +21,7 @@
 | 2 September 2026 | Rail telematics interoperability (TSI), Commission Implementing Regulation (EU) 2026/253 | Application (partial) |
 | 6 September 2026 | Rail interoperability standards, Commission Implementing Decision (EU) 2025/424 | Application (partial) |
 | **11 September 2026** | **Cyber Resilience Act**, Regulation (EU) 2024/2847 | Application (partial) |
-| **12 September 2026** | **Data Act**, Regulation (EU) 2023/2854 | Application (partial) |
+| **12 September 2026** | **Data Act**, Regulation (EU) 2023/2854 | Article 3(1) only — new placements |
 
 ## What each date type means
 
@@ -51,13 +51,24 @@ Regulation (EU) 2023/1543 lets judicial authorities in one EU country request el
 ### Cyber Resilience Act, partial application from 11 September 2026
 Regulation (EU) 2024/2847 sets cybersecurity requirements for "products with digital elements", meaning connected devices and software. Manufacturers must build in security by design and handle vulnerability reporting. From this date, **reporting obligations concerning actively exploited vulnerabilities and severe incidents start applying**, ahead of full application in 2027.
 
-### Data Act, partial application from 12 September 2026
+### Data Act, Article 3(1) from 12 September 2026
 Regulation (EU) 2023/2854 governs fairness in how the value of data is allocated among stakeholders in the data economy, clarifying who can use what data and under which conditions, with fair access and user rights and continued personal-data protection.
+
+**Do not call this the Data Act's application date. The Data Act has applied since 12 September 2025**
+(Article 50, second sentence). What starts on 12 September 2026 is **one obligation**: Article 3(1),
+the requirement that connected products and their related services be designed and manufactured so
+that product data and related service data are accessible to the user by default. It applies **only to
+connected products and related services placed on the market after** that date, so it is a design duty
+on new placements, not a retrofit duty on the installed base.
+
+A third date follows: from **12 September 2027** Chapter IV (unfair contract terms) reaches contracts
+concluded on or before 12 September 2025 that are of indefinite duration or due to expire at least ten
+years from 11 January 2024. Full detail in `eu_data_act`.
 
 ## How to answer questions about these dates
 
 - Always say **which type** of date it is. "The AI Act applies from 2 August 2026" is right; "the AI Act enters into force on 2 August 2026" is wrong, because it entered into force on 1 August 2024.
-- For a **partial** application, say so explicitly and name which part starts. The Cyber Resilience Act and Data Act entries above are both partial.
+- For a **partial** application, say so explicitly and name which part starts. The Cyber Resilience Act entry above is partial. The Data Act entry is **not a partial application at all** — the Regulation already applies in full since 12 September 2025, and 12 September 2026 adds a single design obligation for new placements.
 - The window in this guide closes on **15 September 2026**. For anything after that, do not extrapolate from this factsheet; check the act itself.
 
 ## Useful references

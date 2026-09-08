@@ -7888,9 +7888,15 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'empl committee': ['employment_future_of_work'],
     'inta committee': ['eu_trade_policy'],
     # Digital: Data Act, algorithmic accountability
-    'data act': ['ecodesign_digital_product_passport'],
-    'eu data act': ['ecodesign_digital_product_passport'],
-    'regulation 2023/2854': ['ecodesign_digital_product_passport'],
+    # Repointed 8 Sep 2026. These three sent every Data Act question to the
+    # product-passport guide, because no Data Act guide existed -- so "Data Act"
+    # ranked `ecodesign_digital_product_passport` first, four days before the
+    # Article 3(1) obligation started applying. The DPP target is KEPT (that
+    # guide does discuss the Data Act) and unioned, never replaced: an appended
+    # key wins outright, and dropping the old target silently deletes routing.
+    'data act': ['eu_data_act', 'ecodesign_digital_product_passport'],
+    'eu data act': ['eu_data_act', 'ecodesign_digital_product_passport'],
+    'regulation 2023/2854': ['eu_data_act', 'ecodesign_digital_product_passport'],
     'data sharing': ['ecodesign_digital_product_passport'],
     'data access rights': ['ecodesign_digital_product_passport'],
     'iot data': ['ecodesign_digital_product_passport'],
@@ -14604,6 +14610,127 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'meldingen': ['brubru_alerts_and_monitoring'],
     'periodieke monitoring': ['brubru_alerts_and_monitoring'],
     'op de hoogte houden': ['brubru_alerts_and_monitoring'],
+
+    # ---- EU Data Act, Regulation (EU) 2023/2854 (added 8 Sep 2026) ----------
+    # Article 3(1) starts applying 12 Sep 2026 to new placements; the act itself
+    # has applied since 12 Sep 2025. Accented AND unaccented forms.
+    'llei de dades': ['eu_data_act'],
+    'ley de datos': ['eu_data_act'],
+    'reglament de dades': ['eu_data_act'],
+    'reglamento de datos': ['eu_data_act'],
+    'reglement sur les donnees': ['eu_data_act'],
+    'règlement sur les données': ['eu_data_act'],
+    'regolamento sui dati': ['eu_data_act'],
+    'datawet': ['eu_data_act'],
+    'dades connectades': ['eu_data_act'],
+    'datos conectados': ['eu_data_act'],
+    'connected products data': ['eu_data_act'],
+    'product data access': ['eu_data_act'],
+    'cloud switching': ['eu_data_act'],
+    'canvi de proveidor al nuvol': ['eu_data_act'],
+    'canvi de proveïdor al núvol': ['eu_data_act'],
+    'article 3(1) data act': ['eu_data_act'],
+    'quan s aplica la llei de dades': ['eu_data_act'],
+    'cuando se aplica la ley de datos': ['eu_data_act'],
+
+    # ---- State liability for a court's breach of EU law (added 8 Sep 2026) ---
+    # C-163/24 + C-293/24, 8 September 2026. The Kobler line.
+    'c-163/24': ['cjeu_state_liability_judicial_breach'],
+    'c-293/24': ['cjeu_state_liability_judicial_breach'],
+    'state liability': ['cjeu_state_liability_judicial_breach'],
+    'kobler': ['cjeu_state_liability_judicial_breach'],
+    'köbler': ['cjeu_state_liability_judicial_breach'],
+    'responsabilitat de l estat': ['cjeu_state_liability_judicial_breach'],
+    "responsabilitat de l'estat": ['cjeu_state_liability_judicial_breach'],
+    'responsabilidad del estado': ['cjeu_state_liability_judicial_breach'],
+    "responsabilite de l'etat": ['cjeu_state_liability_judicial_breach'],
+    "responsabilité de l'état": ['cjeu_state_liability_judicial_breach'],
+    'responsabilita dello stato': ['cjeu_state_liability_judicial_breach'],
+    'responsabilità dello stato': ['cjeu_state_liability_judicial_breach'],
+    'staatsaansprakelijkheid': ['cjeu_state_liability_judicial_breach'],
+    'obligation to refer': ['cjeu_state_liability_judicial_breach'],
+    'failure to refer': ['cjeu_state_liability_judicial_breach'],
+    'questio prejudicial': ['cjeu_state_liability_judicial_breach'],
+    'qüestió prejudicial': ['cjeu_state_liability_judicial_breach'],
+    'cuestion prejudicial': ['cjeu_state_liability_judicial_breach'],
+    'cuestión prejudicial': ['cjeu_state_liability_judicial_breach'],
+    'renvoi prejudiciel': ['cjeu_state_liability_judicial_breach'],
+    'renvoi préjudiciel': ['cjeu_state_liability_judicial_breach'],
+    'rinvio pregiudiziale': ['cjeu_state_liability_judicial_breach'],
+    'prejudiciele vraag': ['cjeu_state_liability_judicial_breach'],
+    'sufficiently serious breach': ['cjeu_state_liability_judicial_breach'],
+
+    # ---- C-298/23 Inter IKEA Systems: trade mark vs political speech (8 Sep 2026)
+    'c-298/23': ['cjeu_trade_mark_reputation_political_use'],
+    'inter ikea systems': ['cjeu_trade_mark_reputation_political_use'],
+    'ikea vlaams belang': ['cjeu_trade_mark_reputation_political_use'],
+    'vlaams belang ikea': ['cjeu_trade_mark_reputation_political_use'],
+    'trade mark political party': ['cjeu_trade_mark_reputation_political_use'],
+    'trade mark with a reputation': ['cjeu_trade_mark_reputation_political_use'],
+    'due cause trade mark': ['cjeu_trade_mark_reputation_political_use'],
+    'marca amb reputacio': ['cjeu_trade_mark_reputation_political_use'],
+    'marca amb reputació': ['cjeu_trade_mark_reputation_political_use'],
+    'marca de renom': ['cjeu_trade_mark_reputation_political_use'],
+    'marca renombrada': ['cjeu_trade_mark_reputation_political_use'],
+    'marca de renombre': ['cjeu_trade_mark_reputation_political_use'],
+    'marque de renommee': ['cjeu_trade_mark_reputation_political_use'],
+    'marque de renommée': ['cjeu_trade_mark_reputation_political_use'],
+    'marchio che gode di notorieta': ['cjeu_trade_mark_reputation_political_use'],
+    'marchio notorio': ['cjeu_trade_mark_reputation_political_use'],
+    'bekend merk': ['cjeu_trade_mark_reputation_political_use'],
+    'llibertat expressio marca': ['cjeu_trade_mark_reputation_political_use'],
+    'libertad de expresion marca': ['cjeu_trade_mark_reputation_political_use'],
+    'political parody trade mark': ['cjeu_trade_mark_reputation_political_use'],
+
+    # ---- Dutch COMPOUND legal names (added 8 Sep 2026) ----------------------
+    # Dutch forms legal titles as single compounds, so the natural way a Dutch
+    # speaker types an act is exactly the form the corpus did not hold:
+    #   'digitaledienstenverordening'   -> 0 candidates
+    #   'digitale diensten verordening' -> 7 candidates
+    # Measured on the untouched search_guides(), so this is a corpus gap in one
+    # of Brubru's six languages, not a ranking artefact. Hyphenated forms
+    # ('AI-verordening') failed the same way.
+    'digitaledienstenverordening': ['digital_services_act', 'dsa_enforcement'],
+    'digitale dienstenverordening': ['digital_services_act', 'dsa_enforcement'],
+    'digitalemarktenverordening': ['digital_markets_act'],
+    'digitale marktenverordening': ['digital_markets_act'],
+    'ai-verordening': ['ai_act_regulation'],
+    'ai verordening': ['ai_act_regulation'],
+    'aiverordening': ['ai_act_regulation'],
+    'ontbossingsverordening': ['eu_deforestation_regulation'],
+    'ontbossingswet': ['eu_deforestation_regulation'],
+    'avg': ['gdpr_data_protection'],
+    'algemene verordening gegevensbescherming': ['gdpr_data_protection'],
+    'gegevensbeschermingsverordening': ['gdpr_data_protection'],
+    'dataverordening': ['eu_data_act'],
+    'batterijenverordening': ['batteries_regulation'],
+
+    # ---- Platform Work Directive: reachable in EN only (fixed 8 Sep 2026) ----
+    # `platform_work_directive` existed and answered well in English, and was
+    # UNREACHABLE in Italian and Catalan (0 candidates) while Spanish returned
+    # the wrong guides entirely. The regression suite's Italian case probes
+    # exactly this. Same class as the Dutch compound gap found the same day.
+    'lavoro tramite piattaforme': ['platform_work_directive'],
+    'lavoro tramite piattaforme digitali': ['platform_work_directive'],
+    'direttiva sul lavoro tramite piattaforme': ['platform_work_directive'],
+    'lavoro su piattaforma': ['platform_work_directive'],
+    'trabajo en plataformas': ['platform_work_directive'],
+    'trabajo en plataformas digitales': ['platform_work_directive'],
+    'directiva de trabajo en plataformas': ['platform_work_directive'],
+    'treball en plataformes': ['platform_work_directive'],
+    'treball en plataformes digitals': ['platform_work_directive'],
+    'directiva del treball en plataformes': ['platform_work_directive'],
+    'travail via une plateforme': ['platform_work_directive'],
+    'travail de plateforme': ['platform_work_directive'],
+    'platformwerk': ['platform_work_directive'],
+    'platformwerkrichtlijn': ['platform_work_directive'],
+    'falsos autonomos': ['platform_work_directive'],
+    'falsos autónomos': ['platform_work_directive'],
+    'fals autonom': ['platform_work_directive'],
+    'bogus self-employment': ['platform_work_directive'],
+    'presunzione di rapporto di lavoro': ['platform_work_directive'],
+    'presuncion de laboralidad': ['platform_work_directive'],
+    'presunción de laboralidad': ['platform_work_directive'],
 }
 
 

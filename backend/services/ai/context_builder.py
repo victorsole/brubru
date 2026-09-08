@@ -3939,14 +3939,60 @@ class ContextBuilder:
         Inspired by Claude Code's memory relevance selector pattern.
         """
         query_lower = query.lower()
-        # Extract meaningful words (>3 chars, no stopwords)
+        # Extract meaningful words (>3 chars, no stopwords).
+        #
+        # THREE BUGS FIXED HERE, 8 September 2026, all found on one Catalan query
+        # ("Quan s'aplica la llei de dades europea i quan va entrar en vigor?"),
+        # which ranked EuroHPC, IRIS2, STEP and Chips JU above the Data Act guide
+        # whose curated trigger had already matched:
+        #
+        #   1. The stopword list was ENGLISH-ONLY, so every other language's
+        #      question word scored as content. "quan", "quand", "cuando",
+        #      "wanneer" are exactly as meaningless as "when".
+        #   2. Matching was `word in quick_facts`, a bare SUBSTRING test.
+        #      "quan" is inside "QUANtum" and "europea" is inside "EUROPEAn", so
+        #      every technology guide matched a Catalan question word and every
+        #      EU guide matched "europea". Same family as `rearm` inside
+        #      fi-REARM-s. Now word-bounded.
+        #   3. Duplicate query words were counted once per occurrence, so the
+        #      two "quan"s in that query scored twice. Now deduped.
+        #
+        # Net effect on that query: EuroHPC fell from 13.5 to its real score and
+        # the trigger-matched guide won, which is the whole point of a curated
+        # trigger. See feedback_language_detector_acronym_collisions for the
+        # sibling defect in the language detector.
         stopwords = {
+            # English
             'what', 'when', 'where', 'which', 'that', 'this', 'these', 'those',
             'have', 'does', 'will', 'would', 'could', 'should', 'about', 'with',
             'from', 'they', 'their', 'there', 'been', 'being', 'some', 'more',
             'also', 'than', 'then', 'very', 'just', 'like', 'tell', 'explain',
+            # Catalan
+            'quan', 'quin', 'quina', 'quins', 'quines', 'aquest', 'aquesta',
+            'aixo', 'això', 'perque', 'perquè', 'sobre', 'entre', 'amb',
+            'vull', 'pots', 'puc', 'hauria', 'seva', 'seves', 'meva',
+            # Spanish
+            'cuando', 'cuándo', 'cual', 'cuál', 'como', 'cómo', 'donde',
+            'dónde', 'esta', 'este', 'estos', 'estas', 'porque', 'porqué',
+            'sobre', 'entre', 'para', 'puedo', 'puede', 'quiero',
+            # French
+            'quand', 'quel', 'quelle', 'quels', 'quelles', 'comment', 'pourquoi',
+            'cette', 'cettes', 'pour', 'avec', 'dans', 'veux', 'peux',
+            # Italian
+            'quando', 'quale', 'quali', 'come', 'perche', 'perché', 'questo',
+            'questa', 'questi', 'queste', 'sopra', 'voglio', 'posso',
+            # Dutch
+            'wanneer', 'welke', 'welk', 'waarom', 'hoe', 'deze', 'dit',
+            'over', 'voor', 'met', 'kan', 'wil', 'moet',
         }
-        query_words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
+        query_words = list(dict.fromkeys(  # dedupe, preserve order
+            w for w in re.findall(r"[\w'’-]+", query_lower)
+            if len(w) > 3 and w not in stopwords
+        ))
+
+        def _hits(word: str, haystack: str) -> bool:
+            """Word-bounded containment, so "quan" does not match "quantum"."""
+            return re.search(r'(?<!\w)' + re.escape(word) + r'(?!\w)', haystack) is not None
 
         scored = []
         for guide in guides:
@@ -3954,11 +4000,11 @@ class ContextBuilder:
             qf = (guide.get('quick_facts') or '').lower()
             title = (guide.get('title') or '').lower()
 
-            # Query word hits in quick_facts (3x weight)
+            # Query word hits in quick_facts (3x weight), WORD-BOUNDED.
             for word in query_words:
-                if word in qf:
+                if _hits(word, qf):
                     score += 3.0
-                if word in title:
+                if _hits(word, title):
                     score += 2.0
 
             # Full query phrase match bonus

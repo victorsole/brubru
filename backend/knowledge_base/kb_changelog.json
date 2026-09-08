@@ -3,6 +3,66 @@
   "entries": [
     {
       "date": "2026-09-08",
+      "action": "updated",
+      "guide": "digital_services_act",
+      "title": "Digital Services Act",
+      "summary": "Dutch compound name (digitaledienstenverordening) returned zero candidates; Dutch compound and hyphenated forms added for the DSA, DMA, AI Act, GDPR, deforestation and batteries guides.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-08",
+      "action": "updated",
+      "guide": "platform_work_directive",
+      "title": "Platform Work Directive",
+      "summary": "Reachable in English only. Italian and Catalan returned zero candidates and Spanish returned the wrong guides; 21 multilingual triggers added, now 7/7 at rank 1 across six languages.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-08",
+      "action": "added",
+      "guide": "cjeu_trade_mark_reputation_political_use",
+      "title": "Trade marks with a reputation and political speech (C-298/23 Inter IKEA Systems)",
+      "summary": "New guide. Invoking freedom of expression is not on its own enough to establish due cause for a political party's use of a famous mark; the Court set the balancing test and left the decision to the national court.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-08",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Added the verified JURI document references for the 7 September opinion vote so they can be cited rather than guessed.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-08",
+      "action": "updated",
+      "guide": "eu_legislation_milestones_aug_sep_2026",
+      "title": "EU legislation milestones August-September 2026",
+      "summary": "Corrected the Data Act entry: it is not a partial application. The Act has applied since 12 Sep 2025; 12 Sep 2026 is Article 3(1) for new placements only.",
+      "refs": [
+        "32023R2854"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "action": "added",
+      "guide": "cjeu_state_liability_judicial_breach",
+      "title": "State liability for a court's breach of EU law (C-163/24, C-293/24)",
+      "summary": "New guide. Failing to make a preliminary reference is not on its own enough to trigger State liability; it must accompany breach of a rights-conferring rule.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-08",
+      "action": "added",
+      "guide": "eu_data_act",
+      "title": "EU Data Act (Regulation (EU) 2023/2854)",
+      "summary": "New guide. The Act has applied since 12 Sep 2025; 12 Sep 2026 adds Article 3(1) only, for connected products placed on the market after that date.",
+      "refs": [
+        "32023R2854"
+      ]
+    },
+    {
+      "date": "2026-09-08",
       "action": "added",
       "guide": "brubru_alerts_and_monitoring",
       "title": "Brubru Alerts and Standing Monitoring",

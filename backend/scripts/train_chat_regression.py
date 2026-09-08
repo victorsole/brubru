@@ -144,8 +144,25 @@ def invented(ans: str):
 
 
 async def main() -> int:
+    # Optional pacing between cases (added 8 September 2026, default 0 = unchanged).
+    #
+    # The suite fires 23 large-context queries back to back. Cerebras rate-limits
+    # on TOKENS PER MINUTE, so a fast run exhausts the primary, cascades down a
+    # chain whose remaining links are also throttled, and returns "no-citations"
+    # for answers that were never generated. On 8 September that read as 10/23
+    # clean against 21/23 earlier the same day, and looked exactly like a
+    # retrieval regression it was not. A paced run measures the model; an
+    # unpaced one measures the rate limiter.
+    import argparse, asyncio as _asyncio
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pace", type=float, default=0.0,
+                    help="seconds to wait between cases; use 20-30 when the chain is rate-limited")
+    args, _ = ap.parse_known_args()
+
     rows = []
-    for cluster, q, want_lang in CASES:
+    for idx, (cluster, q, want_lang) in enumerate(CASES):
+        if args.pace and idx:
+            await _asyncio.sleep(args.pace)
         try:
             ans, cits = await run(q)
         except Exception as e:  # noqa: BLE001
