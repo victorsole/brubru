@@ -18,6 +18,8 @@ No LLM is used.
 """
 from __future__ import annotations
 
+import logging
+
 from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
@@ -25,6 +27,8 @@ from bs4 import BeautifulSoup
 from services.scrapers.economy_common import (
     Item, clean, norm_url, http_get, fetch_detail,
 )
+
+logger = logging.getLogger(__name__)
 
 _BASE = "https://www.esm.europa.eu"
 _MONTHS = {
@@ -43,8 +47,19 @@ def _iso(dt_attr: str | None) -> datetime | None:
 
 
 def _title(row) -> str | None:
-    el = (row.select_one(".event-title a") or row.select_one("h2 a, h3 a")
-          or row.select_one(".field--name-title") or row.select_one("h2, h3"))
+    """The row's title, preferring a HEADING over a wrapper field.
+
+    Order matters and was wrong (fixed 8 September 2026). `.field--name-title` used
+    to be checked before the bare heading, and on ESM's new node cards that field
+    wraps the WHOLE card, so every news title came out as
+        "25/08/2026 Press releases ESM raises $2 billion with 5-year maturity..."
+    with the date and category glued to the front. The card's <h3> carries the clean
+    title on its own. A heading IS the title, so it wins; `.field--name-title` stays
+    as a fallback for any listing that has no heading.
+    """
+    el = (row.select_one(".event-title a") or row.select_one("h2 a, h3 a, h4 a")
+          or row.select_one("h2, h3, h4")
+          or row.select_one(".field--name-title"))
     if el:
         return clean(el.get_text(" ", strip=True))
     a = row.find("a", href=True)
@@ -90,8 +105,31 @@ def _scrape(item_type: str, path: str, *, date_mode: str,
         if r is None:
             break
         soup = BeautifulSoup(r.text, "html.parser")
-        rows = soup.select(".views-row")
+        # ESM's Drupal markup changed and `.views-row` no longer exists on
+        # /newsroom (measured 8 September 2026: the page fetches fine, 200 and
+        # ~160KB, but `.views-row` matches ZERO elements). The loop hit
+        # `if not rows: break` on page 0 and returned an empty list in under a
+        # second, so `esm` looked like a dead fetcher when the fetch was healthy
+        # and only the selector had rotted.
+        #
+        # `.views-row` is tried FIRST so any ESM listing still on the old markup
+        # keeps working, then the node-card form. `article.node--type-news` is
+        # deliberately narrow: the page also renders one `article.node--type-page`
+        # for itself, whose <time> is the PAGE's timestamp, and a bare `article`
+        # selector would turn that into a bogus dated item.
+        rows = (soup.select(".views-row")
+                or soup.select("article.node--type-news")
+                or soup.select("article.node--type-publication")
+                or soup.select("article.node--type-event"))
         if not rows:
+            # Reaching here means the listing rendered but matched no known row
+            # shape, i.e. the markup moved again. Say so: a silent empty return is
+            # what let this rot for weeks (feedback_silent_failure_reports_success).
+            logger.warning(
+                "[esm] %s page %s: fetched %s bytes but matched no known row selector "
+                "(.views-row / article.node--type-*). Markup has changed again.",
+                path, page, len(r.text),
+            )
             break
         new = 0
         for row in rows:

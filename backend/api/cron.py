@@ -715,20 +715,46 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
     started = datetime.now(timezone.utc)
     results: dict = {}
     ok_count = 0
-    first_fail: str = ""  # "body: <stderr/return summary>" for the first non-success body
+    failures: list[str] = []   # every non-success body, not just the first
     try:
         for body in bodies:
+            body_started = datetime.now(timezone.utc)
             res = await _run_script_async(
                 f"economy_{body}", "scripts/sync_economy.py",
                 ["--body", body, "--type", "all"], timeout=600,
             )
-            results[body] = res.get("status")
-            if res.get("status") == "success":
+            status = res.get("status")
+            results[body] = status
+            detail = None
+            if status == "success":
                 ok_count += 1
-            elif not first_fail:
-                _detail = (res.get("stderr_tail") or res.get("error")
-                           or res.get("reason") or f"rc={res.get('returncode')}")
-                first_fail = f"{body}: {str(_detail)[:400]}"
+            else:
+                detail = str(res.get("stderr_tail") or res.get("error")
+                             or res.get("reason") or f"rc={res.get('returncode')}")[:400]
+                failures.append(f"{body}: {detail}")
+
+            # Record a run PER BODY, not only per batch.
+            #
+            # Why (found 8 September 2026). This loop is fail-soft by design -- one
+            # body's scraper must never block the other 25 -- but the only run it
+            # recorded was a single batch-level row, and its status was
+            #     status=("success" if ok_count else "failed")
+            # so the batch reported SUCCESS if any ONE of 26 bodies succeeded. 25
+            # could fail silently and /api/sync/health showed green. That is the
+            # `ok = count == 0 or cond` shape in
+            # feedback_zero_denominator_is_not_a_pass: a check that can barely fail.
+            # A per-body row makes an individual failing scraper visible on the same
+            # dashboard, which is the only way the next one gets noticed.
+            _db = SessionLocal()
+            try:
+                record_run(
+                    _db, source_key=f"economy_{body}", tier=f"economy_b{batch}",
+                    status=("success" if status == "success" else "failed"),
+                    error=detail, started_at=body_started,
+                    finished_at=datetime.now(timezone.utc),
+                )
+            finally:
+                _db.close()
 
         # Tenderator translations for economy_items funding rows, AFTER all
         # bodies so freshly-arrived foreign agency rows get their 6-language
@@ -744,12 +770,22 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
 
         db = SessionLocal()
         try:
+            # Three states, not two. "success if ok_count" made a 1-of-26 batch
+            # look identical to a 26-of-26 batch.
+            if ok_count == len(bodies):
+                batch_status = "success"
+            elif ok_count:
+                batch_status = "degraded"
+            else:
+                batch_status = "failed"
             record_run(
                 db, source_key="cron_dispatch", tier=f"economy_b{batch}",
-                status=("success" if ok_count else "failed"),
+                status=batch_status,
                 items_added=ok_count, started_at=started,
                 finished_at=datetime.now(timezone.utc),
-                error=(None if ok_count else f"{ok_count}/{len(bodies)} bodies ok; first_fail {first_fail}"),
+                error=(None if batch_status == "success"
+                       else f"{ok_count}/{len(bodies)} bodies ok; failed: "
+                            + "; ".join(failures)[:900]),
             )
         finally:
             db.close()

@@ -197,7 +197,7 @@ _EU_NEWS_SOURCE_TYPES = ["news", "press", "story"]
 # depend on. (A first cut negated the id to disambiguate, which cannot work on a
 # UUID -- `operator does not exist: - uuid`.)
 _ECONOMY_COLS = ("id::text AS id, body_code, item_type, title, summary, public_url, "
-                 "document_date, creation_date, body_txt, body_html")
+                 "document_date, creation_date, fetched_at, body_txt, body_html")
 
 
 def _coerce_id(raw):
@@ -248,6 +248,13 @@ def _institutional_sql(codes, kinds, since, until, q):
         f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
         f"n.source_url AS public_url, {date_expr} AS document_date, "
         "n.created_at AS creation_date, "
+        # eu_news_items has NO last-fetch column. `scraped_at` exists but the
+        # upsert in scripts/sync_dg_news.py only sets it on INSERT and returns
+        # "skipped" without touching an unchanged row, so it is first-seen again --
+        # the very column confusion this endpoint was corrected for. NULL is the
+        # honest answer: we do not know when these bodies were last fetched, and
+        # `_classify` must treat unknown as unknown, never as "not fetched".
+        "NULL::timestamptz AS fetched_at, "
         # Migration 228 gave eu_news_items real body columns, composed by
         # scripts/backfill_eu_news_bodies.py from the title, summary, institution,
         # date and source link. Before that this served `summary AS body_txt` and a
@@ -415,13 +422,18 @@ async def list_news(
                 "`stale`, `total_items`, `future_dated_items`, the estate counts `bodies_total` / "
                 "`bodies_fresh` / `bodies_stale` / `bodies_undated`, `by_body_truncated` (always "
                 "false), and `by_body`: EVERY body, stalest first, never truncated. Each body "
-                "carries `latest_date` + `age_days` (its newest published item) AND `last_ingested` "
-                "+ `ingest_age_days` (when Brubru last wrote a row for it), plus `undated_items`, a "
-                "three-state `state` (fresh | stale | undated) and `likely_cause`. The two dates are "
-                "the point: an old `latest_date` with a RECENT `last_ingested` means the fetcher runs "
-                "and returns nothing new, or loses the dates, which is a different repair from a "
-                "fetcher that has stopped. `likely_cause` is one of date_parser, dead_fetcher, "
-                "fetches_nothing_new, or null.\n\n`stale_after_days` (default 3) governs the CORPUS "
+                "carries `latest_date` + `age_days` (its newest published item), `last_fetched` "
+                "+ `fetch_age_days` (when the cron last touched the body, from `fetched_at`), "
+                "`first_seen` (when its newest item was first captured), `undated_items`, a "
+                "three-state `state` (fresh | stale | undated) and `likely_cause`.\n\n"
+                "The two dates are the point, and `likely_cause` says WHOSE problem it is: "
+                "`not_fetched` means the cron is not reaching the body (ours to fix); "
+                "`undated_items` means it fetches fine but the items carry no date (ours to fix); "
+                "`publisher_quiet` means it fetches fine, the dates are fine, and the SOURCE has "
+                "simply published nothing newer (not a defect); `fetch_time_unknown` means the store "
+                "behind that body records no last-fetch time, so no verdict is possible. A quiet "
+                "agency must not be reported as a broken scraper: read `fetch_age_days` before "
+                "debugging anything.\n\n`stale_after_days` (default 3) governs the CORPUS "
                 "verdict; `body_stale_after_days` (default 30) governs the per-body one. They are "
                 "deliberately different: 3 days answers 'is the feed current', 30 answers 'is this "
                 "body broken', and many EU agencies publish monthly.\n\n**Data freshness**\nLive."))
@@ -485,17 +497,27 @@ async def latest_news(request: Request,
     # and it hid 64 of 74 bodies with no marker saying so. Any monitoring built on it
     # was blind by construction. 77 bodies is a small payload; return all of them.
     #
-    # `last_ingested` is the second anchor and it is what separates the two failure
-    # modes that were previously one undifferentiated "stale" bucket:
-    #   * old document_date AND old creation_date -> the FETCHER is dead.
-    #   * recent creation_date but every row undated -> the fetcher runs and the DATE
-    #     PARSER is broken.
-    # They need opposite remedies, so the endpoint reports both dates and names the
-    # likely cause rather than making the reader infer it.
+    # `last_fetched` is the second anchor: `fetched_at`, NOT `creation_date`.
+    #
+    # CORRECTED 8 September 2026, same day this endpoint shipped. The first version
+    # read `creation_date` and reported 17 bodies as `dead_fetcher`. That was wrong.
+    # `scripts/sync_economy.py` upserts with
+    #     creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
+    #     fetched_at    = now()
+    # so `creation_date` is FIRST-SEEN and deliberately preserved on conflict, while
+    # `fetched_at` is the last time the cron touched the row. An old creation_date
+    # therefore means "no NEW item has appeared since then", which is a statement
+    # about the PUBLISHER, not about our scraper.
+    #
+    # Proved by running all 17 ingestors: 16 returned items (cert_eu 27, eismea 60,
+    # f4e 157, eea 465, euaa 572) matching the stored row counts, and their
+    # `fetched_at` was 0-16 days old. Only `esm` was genuinely broken. Labelling a
+    # quiet agency "dead_fetcher" sends someone to debug a scraper that works.
     per_body = db.execute(text(
         "SELECT body_code, "
         "       max(document_date) FILTER (WHERE document_date <= now()) AS latest, "
-        "       max(creation_date) AS last_ingested, "
+        "       max(fetched_at) AS last_fetched, "
+        "       max(creation_date) AS first_seen, "
         "       count(*) AS n, "
         "       count(*) FILTER (WHERE document_date IS NULL) AS undated "
         f"FROM {src} u GROUP BY body_code "
@@ -505,13 +527,22 @@ async def latest_news(request: Request,
     names = _body_names(db)
 
     def _classify(r):
-        """(state, age_days, ingest_age_days, likely_cause). Three states, never two:
-        `undated` is not `stale` and must not be reported as if it were. See
-        feedback_zero_denominator_is_not_a_pass."""
+        """(state, age_days, fetch_age_days, likely_cause).
+
+        Three states, never two: `undated` is not `stale` and must not be reported as
+        if it were (feedback_zero_denominator_is_not_a_pass).
+
+        The cause names say who has the problem, which the first version got wrong:
+          not_fetched     the CRON has not reached this body -> ours to fix
+          undated_items   fetched fine, items carry no date  -> ours to fix
+          publisher_quiet fetched fine, dates fine, the SOURCE has published
+                          nothing newer -> NOT a defect, do not send anyone to
+                          debug a working scraper
+        """
         latest_b = _as_date(r.latest) if r.latest else None
-        ing = _as_date(r.last_ingested) if r.last_ingested else None
+        fetched = _as_date(r.last_fetched) if r.last_fetched else None
         age_b = (date.today() - latest_b).days if latest_b else None
-        ing_age = (date.today() - ing).days if ing else None
+        fetch_age = (date.today() - fetched).days if fetched else None
         if latest_b is None:
             state = "undated"
         elif age_b is not None and age_b > body_stale_after_days:
@@ -519,25 +550,39 @@ async def latest_news(request: Request,
         else:
             state = "fresh"
         cause = None
-        if state == "undated" and ing_age is not None and ing_age <= body_stale_after_days:
-            cause = "date_parser"          # fetching fine, losing the dates
-        elif state in ("undated", "stale") and ing_age is not None and ing_age > body_stale_after_days:
-            cause = "dead_fetcher"         # nothing ingested for a month
-        elif state == "stale" and ing_age is not None and ing_age <= body_stale_after_days:
-            cause = "fetches_nothing_new"  # runs, returns no new items
-        return state, age_b, ing_age, cause
+        if fetch_age is None:
+            # UNKNOWN, not failing. The institutional half of the union carries no
+            # last-fetch column at all, so claiming "not_fetched" here would invent
+            # a defect -- the same error, in the other direction, as reading
+            # creation_date as an ingestion anchor.
+            if state != "fresh":
+                cause = "fetch_time_unknown"
+        elif fetch_age > body_stale_after_days:
+            # The only cause that means OUR ingestion is failing.
+            if state != "fresh":
+                cause = "not_fetched"
+        elif state == "undated":
+            cause = "undated_items"
+        elif state == "stale":
+            cause = "publisher_quiet"
+        return state, age_b, fetch_age, cause
 
     body_rows = []
     counts = {"fresh": 0, "stale": 0, "undated": 0}
     for r in per_body:
-        state, age_b, ing_age, cause = _classify(r)
+        state, age_b, fetch_age, cause = _classify(r)
         counts[state] += 1
         body_rows.append({
             "code": r.body_code, "name": names.get(r.body_code),
             "latest_date": (_as_date(r.latest).isoformat() if r.latest else None),
             "age_days": age_b,
-            "last_ingested": (_as_date(r.last_ingested).isoformat() if r.last_ingested else None),
-            "ingest_age_days": ing_age,
+            "last_fetched": (_as_date(r.last_fetched).isoformat() if r.last_fetched else None),
+            "fetch_age_days": fetch_age,
+            # first_seen is when the NEWEST row was first captured. Kept because it
+            # answers "when did this body last publish something new", but it is NOT
+            # the ingestion anchor -- reading it as one is what produced the false
+            # "17 dead fetchers".
+            "first_seen": (_as_date(r.first_seen).isoformat() if r.first_seen else None),
             "item_count": r.n, "undated_items": r.undated,
             "state": state, "likely_cause": cause,
         })
