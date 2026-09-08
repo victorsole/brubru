@@ -21,7 +21,9 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, extract_html, error_body_reason
+from services.scrapers.economy_common import (
+    Item, clean, norm_url, extract_html, error_body_reason, http_get,
+)
 
 _BASE = "https://www.ombudsman.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -162,20 +164,28 @@ async def _ingest_news_async(*, fetch_bodies: bool) -> list[Item]:
                                   source_kind="html", guid=norm_url(url)))
         if fetch_bodies:
             for it in items:
-                dhtml = await _render(page, it.public_url, settle=2000)
-                if not dhtml:
+                # Retry with a longer settle before giving up. The SPA hydrates the
+                # article after networkidle, so a single 2s settle produced a
+                # chrome-only shell on roughly 4 of 10 items -- which is how rows
+                # ended up holding nothing but site navigation. Escalating settles
+                # cost time only on the items that need it.
+                body_txt = body_html = None
+                for settle in (2000, 5000, 9000):
+                    dhtml = await _render(page, it.public_url, settle=settle)
+                    if not dhtml:
+                        continue
+                    cand_txt, cand_html = extract_html(dhtml)
+                    if not (error_body_reason(cand_txt) or chrome_only_reason(cand_txt)):
+                        body_txt, body_html = cand_txt, cand_html
+                        break
+                if body_txt is None:
+                    print(f"[ombudsman] no usable body after 3 renders: {it.public_url}")
                     continue
-                body_txt, body_html = extract_html(dhtml)
-                # Never store an error page as a body. Before the URL was
-                # canonicalised the scraper fetched a non-existent locale variant,
-                # got a 404 page, and stored ITS text as body_txt on 4 rows -- which
-                # satisfied every "body is not null" check while being false data.
-                # Two more rows held unrendered template placeholders. A non-empty
-                # body is not a valid body.
-                reason = error_body_reason(body_txt) or chrome_only_reason(body_txt)
-                if reason:
-                    print(f"[ombudsman] discarding body for {it.public_url}: {reason}")
-                    continue
+                # Only a body that passed the guards above reaches here. Before the
+                # URL was canonicalised the scraper fetched a non-existent locale
+                # variant, got a 404 page, and stored ITS text as body_txt on 4 rows,
+                # which satisfied every "body is not null" check while being false
+                # data. A non-empty body is not a valid body.
                 it.body_txt, it.body_html = body_txt, body_html
 
         # document_date is deliberately left None. Measured 8 September 2026: the
@@ -220,9 +230,134 @@ async def _ingest_topics_async(*, fetch_bodies: bool) -> list[Item]:
     return items
 
 
-def ingest_ombudsman_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    import asyncio
-    return asyncio.run(_ingest_news_async(fetch_bodies=fetch_bodies))
+# --- the SPA's own REST API, found by capturing its network calls 8 Sep 2026 -----
+#
+# The rendered listing was never the right source. It yields TEN items, and the
+# reason is that the page is a client-rendered shell over this API:
+#
+#   /rest/documents?onlyTitle=false&year=&format=PRESSRELEASE,NEWSDOCUMENT
+#                  &page=N&lang=en
+#       -> pageItem.totalResult = 627, ten per page (no page-size override works),
+#          63 pages, page 64 empty. Each document carries `techKey` (the same
+#          numeric id the canonical URL uses), `documentClass`
+#          (NEWSDOCUMENT | PRESSRELEASE) and **`documentDate`** -- the publication
+#          date, which nothing on the rendered item page ever exposed.
+#          Dates span 1998-10-05 to today, i.e. the whole archive.
+#
+#   /rest/docVersionContents/langDocument/en?docIds=a,b,c
+#       -> per doc: `title` and `content` (clean article HTML), several ids per call.
+#
+# So this replaces Playwright for news entirely: 63 HTTP calls instead of 627 page
+# renders, dates for every item, real bodies, and no Chromium at all -- which matters
+# on a memory-constrained machine (feedback_mac_has_8gb_never_fan_out_local_workers).
+# The rendered path stays as a fallback so an API change cannot silently zero the feed.
+_REST = f"{_BASE}/rest"
+_DOC_FORMATS = "PRESSRELEASE,NEWSDOCUMENT"
+_CLASS_TO_KIND = {"NEWSDOCUMENT": "news", "PRESSRELEASE": "press_release"}
+_CONTENT_BATCH = 10
+
+
+def _rest_documents(max_pages: int) -> list[dict]:
+    import json as _json
+    out: list[dict] = []
+    for page in range(1, max_pages + 1):
+        url = (f"{_REST}/documents?onlyTitle=false&year=&format={_DOC_FORMATS}"
+               f"&page={page}&lang=en")
+        r = http_get(url)
+        if r is None:
+            break
+        try:
+            payload = _json.loads(r.text)
+        except Exception:  # noqa: BLE001
+            break
+        docs = payload.get("documents") or []
+        if not docs:
+            break
+        out.extend(docs)
+    return out
+
+
+def _rest_contents(tech_keys: list[int]) -> dict:
+    """{techKey: docVersionContent} for a batch of ids."""
+    import json as _json
+    got: dict = {}
+    for i in range(0, len(tech_keys), _CONTENT_BATCH):
+        batch = tech_keys[i:i + _CONTENT_BATCH]
+        ids = ",".join(str(k) for k in batch)
+        r = http_get(f"{_REST}/docVersionContents/langDocument/en?docIds={ids}")
+        if r is None:
+            continue
+        try:
+            payload = _json.loads(r.text)
+        except Exception:  # noqa: BLE001
+            continue
+        entries = payload if isinstance(payload, list) else [payload]
+        for e in entries:
+            tk = e.get("techKey")
+            dvc = e.get("docVersionContent") or {}
+            if tk is not None and dvc:
+                got[int(tk)] = dvc
+    return got
+
+
+def ingest_ombudsman_news(*, fetch_bodies: bool = True, max_pages: int = 10,
+                          **_) -> list[Item]:
+    """News + press releases from the Ombudsman's own REST API.
+
+    max_pages defaults to 10 (the ~100 most recent of 627). Raise it to 63 for a
+    full-archive sweep; the corpus jump is deliberate rather than accidental.
+    """
+    from datetime import datetime as _dt
+
+    docs = _rest_documents(max_pages)
+    if not docs:
+        import asyncio
+        return asyncio.run(_ingest_news_async(fetch_bodies=fetch_bodies))
+
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set[str] = set()
+    for d in docs:
+        tk = d.get("techKey")
+        kind = _CLASS_TO_KIND.get(d.get("documentClass") or "")
+        if tk is None or kind is None:
+            continue
+        url = f"{_BASE}/en/news-document/en/{tk}"
+        if url in seen:
+            continue
+        seen.add(url)
+        title = clean((d.get("docVersionContent") or {}).get("title") or "")
+        doc_dt = None
+        raw = (d.get("documentDate") or "").strip()
+        if raw:
+            try:
+                doc_dt = _dt.fromisoformat(raw)
+                if doc_dt.tzinfo is None:
+                    doc_dt = doc_dt.replace(tzinfo=timezone.utc)
+            except ValueError:
+                doc_dt = None
+        items.append(Item(body_code="ombudsman", item_type=kind,
+                          title=(title or f"Ombudsman document {tk}")[:300],
+                          public_url=norm_url(url), document_date=doc_dt,
+                          creation_date=now, source_kind="rest", guid=norm_url(url)))
+
+    if fetch_bodies and items:
+        keys = [int(i.public_url.rsplit("/", 1)[-1]) for i in items]
+        contents = _rest_contents(keys)
+        for it in items:
+            dvc = contents.get(int(it.public_url.rsplit("/", 1)[-1])) or {}
+            html_body = dvc.get("content") or ""
+            if not html_body:
+                continue
+            body_txt, body_html = extract_html(html_body)
+            reason = error_body_reason(body_txt) or chrome_only_reason(body_txt)
+            if reason:
+                print(f"[ombudsman] discarding body for {it.public_url}: {reason}")
+                continue
+            it.body_txt, it.body_html = body_txt, body_html
+            if not clean(it.title) and dvc.get("title"):
+                it.title = clean(dvc["title"])[:300]
+    return items
 
 
 def ingest_ombudsman_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:

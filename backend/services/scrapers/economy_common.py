@@ -252,14 +252,13 @@ def parse_listing_date(text: str) -> datetime | None:
 # two sentences long, and suppressing those would trade a false positive for a false
 # negative. Returns a reason string so a caller can log WHY, never a bare bool.
 
-_ERROR_BODY_SIGNATURES = (
+# STRONG signatures: phrases and markup that effectively never appear in EU-body
+# prose, so they are decisive at any body length.
+_ERROR_BODY_STRONG = (
     ("404_not_found", re.compile(r"\b404\s+not\s+found\b", re.I)),
-    ("page_not_found", re.compile(r"requested page not found|page (?:could )?not be found", re.I)),
+    ("page_not_found", re.compile(r"requested page not found", re.I)),
     ("error_occurred", re.compile(r"an error has occ?ur+ed", re.I)),
-    ("access_denied", re.compile(r"\b(?:403\s+forbidden|access denied)\b", re.I)),
-    ("server_error", re.compile(r"\b(?:500|502|503)\s+(?:internal server error|bad gateway|service unavailable)\b", re.I)),
     ("unrendered_template", re.compile(r"!\[template[_.]")),
-    ("js_required", re.compile(r"(?:requires|enable)\s+javascript", re.I)),
     # WordPress page-builder shortcodes leaking into the text. rail-research.europa.eu
     # serves some posts' content.rendered as raw Divi markup
     # (`[et_pb_section fb_built="1" _builder_version="4.16"]...`), which as body_txt is
@@ -267,7 +266,31 @@ _ERROR_BODY_SIGNATURES = (
     ("page_builder_shortcode", re.compile(r"\[(?:et_pb_|vc_|fusion_)\w+", re.I)),
 )
 
+# WEAK signatures: real error-page wording that ALSO occurs in legitimate prose, so
+# they only count on a body too short to be an article.
+#
+# Why this split exists (measured 8 September 2026)
+# ------------------------------------------------
+# The first version treated "access denied" as decisive and threw away 2,612 chars of
+# a genuine Ombudsman article -- "Ombudsman asks Commission to deal urgently with
+# systemic delays in processing public access to documents requests" -- because it
+# quoted the idiom *"access delayed is access denied"*. Access-to-documents complaints
+# are the Ombudsman's single most characteristic subject, so that guard would have
+# silently suppressed exactly the content the body is known for.
+#
+# An error page is defined by having NO CONTENT; the phrase only tells you why. So a
+# weak signature is decisive below _WEAK_MAX_CHARS and ignored above it.
+_ERROR_BODY_WEAK = (
+    ("access_denied", re.compile(r"\b(?:403\s+forbidden|access denied)\b", re.I)),
+    ("page_not_found_loose", re.compile(r"page (?:could )?not be found", re.I)),
+    ("server_error", re.compile(r"\b(?:500|502|503)\s+(?:internal server error|bad gateway|service unavailable)\b", re.I)),
+    ("js_required", re.compile(r"(?:requires|enable)\s+javascript", re.I)),
+)
+
 _BODY_MIN_CHARS = 40
+# A real error page is short. The ones measured: 404 panel 203 chars, template
+# placeholders 130, chrome-only 109. Real articles ran 1,714 to 8,305.
+_WEAK_MAX_CHARS = 600
 
 
 def error_body_reason(body_txt: str | None) -> str | None:
@@ -277,9 +300,13 @@ def error_body_reason(body_txt: str | None) -> str | None:
     txt = body_txt.strip()
     if not txt:
         return "empty"
-    for name, rx in _ERROR_BODY_SIGNATURES:
+    for name, rx in _ERROR_BODY_STRONG:
         if rx.search(txt):
             return name
+    if len(txt) < _WEAK_MAX_CHARS:
+        for name, rx in _ERROR_BODY_WEAK:
+            if rx.search(txt):
+                return name
     if len(txt) < _BODY_MIN_CHARS:
         return "below_min_chars"
     return None
