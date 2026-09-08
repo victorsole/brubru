@@ -80,6 +80,9 @@ def invariants(db):
         "count(DISTINCT substring(public_url from '/news-document/[a-z]{2}/(\\d+)')) AS distinct_ids, "
         "count(*) FILTER (WHERE public_url NOT LIKE '%/en/news-document/%') AS non_canonical, "
         "count(*) FILTER (WHERE body_txt ILIKE '%404 Not Found%') AS body_is_404, "
+        "count(*) FILTER (WHERE body_txt ILIKE '%404 Not Found%' "
+        "               OR body_txt ILIKE '%Requested page not found%' "
+        "               OR body_txt LIKE '%![template\\_%' ESCAPE '\\') AS invalid_bodies, "
         "count(*) FILTER (WHERE body_txt IS NOT NULL) AS with_body, "
         "(SELECT count(*) FROM economy_items_translations t JOIN economy_items e2 ON e2.id=t.item_id "
         " WHERE e2.body_code='ombudsman') AS translations "
@@ -140,14 +143,29 @@ def main() -> int:
                             "h": best["body_html"] if best else None})
             deletes.extend(m["id"] for m in losers)
 
-        # Canonicalise the URL on non-duplicated rows too.
+        # Singletons: canonicalise the URL AND validate the body.
+        #
+        # The first version of this script only cleaned bodies INSIDE duplicate
+        # groups, so a non-duplicated row kept whatever it had. Row 524596 survived
+        # with 130 chars of unrendered template placeholders
+        # (`![template_principal_interactiveguide]`) and was still there after the
+        # dedup reported success. A body guard that only runs on some rows is not a
+        # body guard.
         for key, members in groups.items():
-            if len(members) == 1 and not key.startswith("UNPARSED:"):
-                m = members[0]
-                cu, _ = canonical_news_url(m["public_url"])
-                if cu and cu != m["public_url"]:
-                    updates.append({"id": m["id"], "url": cu,
-                                    "t": m["body_txt"], "h": m["body_html"]})
+            if len(members) != 1 or key.startswith("UNPARSED:"):
+                continue
+            m = members[0]
+            cu, _ = canonical_news_url(m["public_url"])
+            reason = (error_body_reason(m["body_txt"])
+                      or chrome_only_reason(m["body_txt"]))
+            url_changed = bool(cu and cu != m["public_url"])
+            if not url_changed and not reason:
+                continue
+            if reason:
+                print(f"  singleton {m['id']}: dropping body ({reason})")
+            updates.append({"id": m["id"], "url": cu or m["public_url"],
+                            "t": None if reason else m["body_txt"],
+                            "h": None if reason else m["body_html"]})
 
         print(f"[INFO] {len(updates)} rows to update, {len(deletes)} to delete"
               + (f", {len(refused)} REFUSED (would cascade translations): {refused}" if refused else ""))
@@ -180,6 +198,9 @@ def main() -> int:
             ok = False
         if after["body_is_404"]:
             print(f"[ERROR] {after['body_is_404']} rows still hold a 404 body")
+            ok = False
+        if after["invalid_bodies"]:
+            print(f"[ERROR] {after['invalid_bodies']} rows still hold an invalid body")
             ok = False
         if after["translations"] != before["translations"]:
             print(f"[ERROR] translations changed: {before['translations']} -> {after['translations']}")
