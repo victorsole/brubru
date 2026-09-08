@@ -250,8 +250,12 @@ def oj_entries(
                  "the first call.\n\n**When to use it**\nWhen a user clicks 'Explain with "
                  "AI' on an act with no explanation yet.\n\n**Input**\nThe entry id.\n\n"
                  "**You get back**\n`{explanation, available, cached}`. `available=false` "
-                 "means the cost-capped provider (Mistral) is temporarily unreachable — "
-                 "no Anthropic fallback is used."))
+                 "means either that no cost-capped provider could serve the request "
+                 "(Cerebras is tried first, then Mistral; Anthropic is never used), or "
+                 "that the act's title is only a reference to another act and carries no "
+                 "subject matter to explain. The second case is deliberate: a title such "
+                 "as \"DECISION UNDER REGULATION (EU) 2023/2411\" gives a model nothing "
+                 "to work from, and it invents rather than declines."))
 async def explain_entry(entry_id: str, db: Session = Depends(get_db)):
     try:
         e = db.query(OjEntry).filter(OjEntry.id == entry_id).first()
@@ -267,7 +271,8 @@ async def explain_entry(entry_id: str, db: Session = Depends(get_db)):
             e.plain_explanation = text
             db.commit()
             return {"explanation": text, "available": True, "cached": False}
-        # Mistral unavailable (e.g. key 401) — graceful, no Anthropic fallback.
+        # Either no cheap provider is usable, or the title is reference-only and
+        # was deliberately skipped. Both are graceful; no Anthropic fallback.
         return {"explanation": None, "available": False, "cached": False}
     except HTTPException:
         raise
