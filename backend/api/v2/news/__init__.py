@@ -448,9 +448,11 @@ async def latest_news(request: Request,
                               "Separate from stale_after_days, and much longer, because the two ask "
                               "different questions: 3 days is right for 'is the whole feed current' "
                               "and wrong for 'is this agency broken', since plenty of EU agencies "
-                              "publish monthly. Measured 8 September 2026: at 3 days 56 of 78 bodies "
-                              "read as stale; at 30 days 20 do, and 20 is the real number. A check "
-                              "that cries wolf on 72% of the estate gets ignored.")),
+                              "publish monthly. Measured in production on 8 September 2026: at 3 days 57 "
+                              "of 78 bodies read as stale, at 30 days 18 do, and 18 is the real "
+                              "number. A check that cries wolf on 73% of the estate gets ignored. "
+                              "Those counts move daily, so treat them as the reason for the default, "
+                              "not as a current reading.")),
                       db: Session = Depends(get_db),
                       user: User = Depends(api_user_with_rate_limit)):
     """Freshness probe for the cross-body news feed.
@@ -591,6 +593,10 @@ async def latest_news(request: Request,
         "age_days": age,
         "stale": (age is None or age > stale_after_days),
         "stale_after_days": stale_after_days,
+        # Echo BOTH thresholds: `stale` above is judged by the first,
+        # every per-body `state`/`likely_cause` by the second. A verdict whose
+        # threshold the caller cannot read is not a reproducible verdict.
+        "body_stale_after_days": body_stale_after_days,
         "total_items": row.n if row else 0,
         # Non-zero means dates are being scraped from the wrong field somewhere.
         "future_dated_items": (row.future_dated if row else 0),
