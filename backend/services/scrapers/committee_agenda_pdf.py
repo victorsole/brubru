@@ -44,7 +44,7 @@ _MONTHS = {
 # Time-block header: "2 June 2026, 9.00 – 12.30"  (en dash or hyphen; . or :)
 _BLOCK = re.compile(
     r"^(\d{1,2})\s+(" + "|".join(m.capitalize() for m in _MONTHS) + r")\s+(\d{4}),\s*"
-    r"(\d{1,2})[.:](\d{2})\s*[–--]\s*(\d{1,2})[.:](\d{2})", re.I)
+    r"(\d{1,2})[.:](\d{2})\s*[-–—]\s*(\d{1,2})[.:](\d{2})", re.I)
 # Numbered item start: "6. Amending Regulation ..."
 _ITEM = re.compile(r"^(\d{1,2})\.\s+(.*\S)")
 # Dossier ref on its own line: "AGRI/10/03690"

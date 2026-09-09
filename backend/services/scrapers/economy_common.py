@@ -10,8 +10,10 @@ from __future__ import annotations
 import io
 import re
 import time
+import unicodedata
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -744,3 +746,164 @@ def ingest_xlsx_dataset(xlsx_url, body_code, item_type, *,
                           document_date=doc_dt, creation_date=now,
                           source_kind="dataset", guid=guid))
     return items
+
+# --- Multilingual dateline parsing -------------------------------------------
+# Press-release PDFs open with a dateline -- "22 May 2014, Barcelona",
+# "Barcelone, le 22 mai 2014", "Barcelona, 17 de marc de 2014" -- which is the
+# publisher's own statement of the publication date and the only date carrier some
+# bodies expose. f4e publishes 157 press releases as PDFs with no date anywhere in
+# the listing markup, no <time>, and no date in the link text.
+#
+# Six languages, matching what Brubru supports (EN, FR, ES, CA, IT, NL) plus DE,
+# because F4E publishes German copies too. Accent-folded so "marc"/"marc" and
+# "Marz"/"Marz" both resolve.
+_MONTHS: dict[str, int] = {}
+for _i, _names in enumerate((
+    ("january", "januar", "janvier", "enero", "gener", "gennaio", "januari", "jan"),
+    ("february", "februar", "fevrier", "febrero", "febrer", "febbraio", "februari", "feb"),
+    ("march", "marz", "mars", "marzo", "marc", "maart", "mar"),
+    ("april", "avril", "abril", "aprile", "apr"),
+    ("may", "mai", "mayo", "maig", "maggio", "mei"),
+    ("june", "juni", "juin", "junio", "juny", "giugno", "jun"),
+    ("july", "juli", "juillet", "julio", "juliol", "luglio", "jul"),
+    ("august", "aout", "agosto", "agost", "augustus", "aug"),
+    ("september", "septembre", "septiembre", "setembre", "settembre", "sep", "sept"),
+    ("october", "oktober", "octobre", "octubre", "ottobre", "oct", "okt"),
+    ("november", "novembre", "noviembre", "novembre", "nov"),
+    ("december", "dezember", "decembre", "diciembre", "desembre", "dicembre", "december", "dec", "dez"),
+), start=1):
+    for _n in _names:
+        _MONTHS[_n] = _i
+
+# "22 May 2014" / "le 22 mai 2014" / "17 de marc de 2014" / "22. Mai 2014"
+_DATELINE = re.compile(
+    r"\b(\d{1,2})\s*\.?\s*(?:de\s+|d'|dei\s+)?"
+    r"([A-Za-z\u00C0-\u024F]{3,12})\.?"
+    r"\s*(?:de\s+|del\s+|dell'|)\s*(\d{4})\b",
+    re.I | re.U,
+)
+
+
+def _fold(t: str) -> str:
+    """Strip accents so month tables need one spelling per language, not four."""
+    return "".join(c for c in unicodedata.normalize("NFKD", t)
+                   if not unicodedata.combining(c)).lower()
+
+
+def extract_dateline_date(text: str, *, window: int = 400) -> Optional[datetime]:
+    """First plausible day-precision date in the opening `window` chars of `text`.
+
+    Scoped to the opening deliberately: a press release states its own date at the
+    top, while the body may quote other years ("the 2035 target", "since 1998") and
+    a whole-document scan would pick those up. Returns None rather than a guess --
+    an undated row is honest, a wrong date is not (feedback_backfill_no_hallucination).
+    """
+    if not text:
+        return None
+    head = text[:window]
+    for m in _DATELINE.finditer(head):
+        day, name, year = m.group(1), _fold(m.group(2)), m.group(3)
+        month = _MONTHS.get(name)
+        if not month:
+            continue
+        try:
+            dt = datetime(int(year), month, int(day), tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        # Same guards as extract_item_date: no future news, nothing pre-1990.
+        if dt > datetime.now(timezone.utc) + timedelta(days=1):
+            continue
+        if dt.year < 1990:
+            continue
+        return dt
+    return None
+
+
+# Eight-digit date runs in a filename: Press_release_20070628_english.pdf,
+# Press_release_TB06_ES_070420151200.pdf. Language-independent, which is why it
+# backs up the dateline parser rather than the reverse -- F4E publishes copies in
+# Finnish and other languages whose month names no table here covers.
+# F4E appends a 4-digit time to most filenames -- `..._070420151200.pdf` is
+# 07/04/2015 + 1200 -- so an 8-digit run is frequently EMBEDDED in a 12-digit one.
+# An `(?<!\d)(\d{8})(?!\d)` pattern therefore matched none of them: 17 of the 21
+# f4e rows still undated after the first pass failed for exactly this reason.
+# Longest-first, so the 12-digit form is tried before its 8-digit prefix.
+_URL_RUNS = re.compile(r"(?<!\d)(\d{12}|\d{8})(?!\d)")
+_URL_FORMATS = {12: ("%d%m%Y%H%M", "%Y%m%d%H%M"), 8: ("%Y%m%d", "%d%m%Y")}
+
+
+def extract_url_date(url: str, *, prefer: Optional[datetime] = None) -> Optional[datetime]:
+    """A date embedded in the URL/filename, read as YYYYMMDD then DDMMYYYY.
+
+    `prefer` is a partial date already read from the document itself (typically a
+    dateline missing its year). When given, the interpretation landing closest to it
+    wins, which resolves the genuinely ambiguous filenames -- one F4E release is
+    published at `..._240320151200_080420151200.pdf`, carrying two date runs.
+
+    Returns None when nothing parses to a plausible date. A filename is weaker
+    evidence than the document's own dateline, so it is only ever a fallback.
+    """
+    if not url:
+        return None
+    now = datetime.now(timezone.utc)
+    cands: list[datetime] = []
+    for run in _URL_RUNS.findall(url):
+        for fmt in _URL_FORMATS[len(run)]:
+            try:
+                dt = datetime.strptime(run, fmt).replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+            if dt.year < 1990 or dt > now + timedelta(days=1):
+                continue
+            cands.append(dt)
+    if not cands:
+        return None
+    if prefer is not None:
+        # Closest to the document's own partial date, so a two-date filename cannot
+        # pick the wrong run. Compare DAY-OF-YEAR, not absolute days: a yearless
+        # dateline is anchored to an assumed year, and measuring against that let
+        # the year dominate -- for `..._240320151200_080420151200.pdf` with a
+        # "26 March" dateline it chose 8 April over 24 March.
+        def _md_gap(d: datetime) -> int:
+            same_year = prefer.replace(year=d.year)
+            return abs((d - same_year).days)
+        return min(cands, key=_md_gap)
+    return min(cands)
+
+
+def extract_dateline_or_url_date(text: str, url: str) -> tuple[Optional[datetime], str]:
+    """(date, provenance). The document's own dateline first, the filename second.
+
+    Provenance is returned rather than inferred later so a consumer can tell a date
+    the publisher printed on the page from one read off a filename.
+    """
+    d = extract_dateline_date(text)
+    if d is not None:
+        # Cross-validate against the filename when it also carries one. A large
+        # disagreement means one of the two is a misparse; keep the dateline (the
+        # document's own statement) and say so.
+        u = extract_url_date(url, prefer=d)
+        if u is not None and abs((u - d).days) > 120:
+            return d, "dateline_url_disagree"
+        return d, "dateline"
+    # No usable dateline: try day+month without a year, then the filename alone.
+    m = re.search(r"\b(\d{1,2})\s*\.?\s*(?:de\s+|d')?([A-Za-z\u00C0-\u024F]{3,12})\b",
+                  (text or "")[:200])
+    partial = None
+    if m and _MONTHS.get(_fold(m.group(2))):
+        # The year here is a placeholder only: extract_url_date compares month/day.
+        partial = datetime(2000, _MONTHS[_fold(m.group(2))],
+                           min(int(m.group(1)), 28), tzinfo=timezone.utc)
+    u = extract_url_date(url, prefer=partial)
+    if u is not None:
+        if partial is not None:
+            # Best of both: the DAY AND MONTH the document prints, the YEAR only
+            # the filename knows. Taking the filename wholesale lost two days on
+            # the F4E/DAHER release -- filename 24 March, dateline "26 March".
+            try:
+                return (datetime(u.year, partial.month, partial.day,
+                                 tzinfo=timezone.utc), "dateline_day_url_year")
+            except ValueError:
+                pass
+        return u, "url_filename"
+    return None, "none"

@@ -25,6 +25,7 @@ from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
     Item, clean, norm_url, http_get, fetch_detail, snapshot_topics,
+    extract_dateline_or_url_date, extract_url_date,
 )
 
 _LANG_SUFFIX = re.compile(r"[ _-]+(EN|ES|FR|IT|DE)$", re.I)
@@ -81,14 +82,30 @@ def _scrape_pdfs(url: str, item_type: str, *, fetch_bodies: bool, en_only: bool)
             continue
         seen.add(u)
         seen.add(key)
+        # F4E's listing markup carries NO date: no <time>, no date in the link
+        # text (which is often just "EN"), nothing in the surrounding block. All
+        # 157 stored press releases were therefore undated. The filename usually
+        # embeds one, so set that here -- it is the only date available on a
+        # discovery run -- and refine it below from the PDF's own dateline, which
+        # is what the publisher actually printed.
         items.append(Item(body_code="f4e", item_type=item_type, title=title[:300],
-                          public_url=u, creation_date=now, source_kind="pdf", guid=u))
+                          public_url=u, document_date=extract_url_date(u),
+                          creation_date=now, source_kind="pdf", guid=u))
     if fetch_bodies:
         for it in items:
             body_txt, body_html, kind = fetch_detail(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             if kind in ("pdf", "html"):
                 it.source_kind = kind
+            # The dateline in the PDF beats the filename: five releases carry
+            # `140620101200` (14 June 2010) in the name, which is when F4E
+            # migrated the file, while the documents say 2006, 2007 and 2008.
+            # Measured across all 157: 157/157 dated, 126 from the dateline,
+            # 6 from a yearless dateline plus the filename's year, 19 from the
+            # filename alone, and 6 where the two disagreed and the dateline won.
+            dt, _prov = extract_dateline_or_url_date(body_txt or "", it.public_url)
+            if dt is not None:
+                it.document_date = dt
     return items
 
 

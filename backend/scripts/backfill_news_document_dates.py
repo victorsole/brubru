@@ -67,9 +67,11 @@ if _BACKEND not in sys.path:
 from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
-from services.scrapers.economy_common import extract_item_date, http_get  # noqa: E402
+from services.scrapers.economy_common import (  # noqa: E402
+    extract_item_date, extract_dateline_or_url_date, http_get,
+)
 
-BODIES = ("euda", "eib", "rail", "sesar")
+BODIES = ("euda", "eib", "rail", "sesar", "f4e")
 BATCH = 50
 DELAY = 0.4          # politeness; these are public agency sites
 
@@ -105,6 +107,15 @@ _FETCHERS = {"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get}
 # each page, so it costs one request for the whole body.
 _MAP_BODIES = {"sesar"}
 _MAPS: dict = {}
+
+# f4e is a STORED body: a third class again. Its releases are PDFs, its listing
+# markup carries no date at all (no <time>, link text is often just "EN"), and the
+# PDF text is ALREADY in body_txt -- so the date comes from the row itself and the
+# backfill needs no network. The publisher's own dateline wins; the filename is the
+# fallback, and where they disagree the dateline is kept, because five releases
+# carry `140620101200` (14 June 2010, a file migration) while the documents say
+# 2006, 2007 and 2008.
+_STORED_BODIES = {"f4e"}
 
 
 def _map_for(body: str) -> dict:
@@ -145,7 +156,7 @@ def main() -> int:
             n, u = before.get(b, (0, 0))
             print(f"         {b:10} {n:5} / {u:5}")
 
-        sql = ("SELECT id, body_code, public_url FROM economy_items "
+        sql = ("SELECT id, body_code, public_url, body_txt FROM economy_items "
                "WHERE item_type IN ('news','press_release') AND document_date IS NULL "
                "AND public_url IS NOT NULL AND body_code = ANY(:b) "
                "ORDER BY body_code, creation_date DESC")
@@ -163,6 +174,13 @@ def main() -> int:
         for r in rows:
             body = r["body_code"]
             processed += 1
+            if body in _STORED_BODIES:
+                dt, prov = extract_dateline_or_url_date(r["body_txt"] or "",
+                                                        r["public_url"] or "")
+                carriers[prov] += 1
+                if dt is not None:
+                    pending.append({"id": r["id"], "d": dt})
+                continue          # no request at all: the text is already stored
             if body in _MAP_BODIES:
                 dt = _map_for(body).get(r["public_url"])
                 if dt is None:
@@ -212,7 +230,8 @@ def main() -> int:
             print(f"         {b:10} {n1:5} / {u1:5}   recovered {u0 - u1}")
 
         dated = sum(v for k, v in carriers.items()
-                    if k not in ("fetch_failed", "no_carrier", "not_in_feed"))
+                    if k not in ("fetch_failed", "no_carrier", "not_in_feed",
+                                 "none"))
         if total_recovered != dated:
             # Not necessarily a bug: the live cron may have inserted or dated rows
             # while this ran. Say so rather than asserting a clean number.
