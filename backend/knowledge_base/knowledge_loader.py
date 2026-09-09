@@ -14912,6 +14912,35 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'aanbeveling van de commissie over betaalbare huisvesting': ['affordable_housing_recommendation'],
     'aanbeveling over betaalbare huisvesting': ['affordable_housing_recommendation'],
     'aankoop van woningen door niet-ingezetenen': ['affordable_housing_act'],
+
+    # --- Affordable Housing Recommendation: its distinctive supply-side content had no
+    # trigger at all, so 'what does the Commission recommend on permitting timeframes?'
+    # reached no housing guide (found by live retrieval test, 9 Sep 2026).
+    'permitting timeframe': ['affordable_housing_recommendation'],
+    'permitting timeframes': ['affordable_housing_recommendation'],
+    '60-day permitting': ['affordable_housing_recommendation'],
+    'housing permitting': ['affordable_housing_recommendation'],
+    'faster housing permits': ['affordable_housing_recommendation'],
+    'tacit approval permit': ['affordable_housing_recommendation'],
+    'modern methods of construction': ['affordable_housing_recommendation'],
+    'off-site construction housing': ['affordable_housing_recommendation'],
+    'housing acceleration plans': ['affordable_housing_recommendation'],
+    'land bank housing': ['affordable_housing_recommendation'],
+    'public land agency': ['affordable_housing_recommendation'],
+    'public leasehold housing': ['affordable_housing_recommendation'],
+    'revolving fund housing': ['affordable_housing_recommendation'],
+    'pan-european investment platform housing': ['european_affordable_housing_plan', 'affordable_housing_recommendation'],
+    'inclusive zoning': ['affordable_housing_recommendation'],
+    'density bonus housing': ['affordable_housing_recommendation'],
+    'right-sizing housing': ['affordable_housing_recommendation'],
+    'openbim': ['affordable_housing_recommendation'],
+    'build-to-rent': ['affordable_housing_recommendation'],
+    '20-year minimum affordable housing': ['affordable_housing_recommendation'],
+    'twenty-year minimum affordable housing': ['affordable_housing_recommendation'],
+
+    'land bank': ['affordable_housing_recommendation'],
+    'land banks': ['affordable_housing_recommendation'],
+    'development corporation housing': ['affordable_housing_recommendation'],
 }
 
 

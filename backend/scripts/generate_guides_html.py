@@ -259,6 +259,8 @@ def generate_html(guides: list[dict]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brubru Knowledge Guide Library | {len(guides)} EU Policy Guides</title>
   <meta name="description" content="Browse all {len(guides)} Brubru knowledge guides covering EU policy, legislation, and institutional processes. {total_triggers:,} keyword triggers, updated {today}.">
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
   <style>
     @font-face {{ font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }}
