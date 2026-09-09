@@ -1,6 +1,7 @@
 # Single Resolution Board and MREL: Resolution Planning under SRMR/BRRD
 
 ## QUICK FACTS
+- **WATCH, NOT YET LAW (8 September 2026)**: AG **Spielmann** proposes the Court **dismiss the appeals** in *SRB v Dexia* (C-454/24 P) and five joined appeals, leaving the SRB decisions of 11 April 2022 and 2 May 2023 on the **2022 and 2023 ex ante contributions to the Single Resolution Fund annulled** for those banks. Ground: conferring implementing powers on the **Council** is an exception needing specific reasons, and Regulation 806/2014 gives none — which is what **Implementing Regulation (EU) 2015/81** rests on. An AG opinion is a trailer, not the outcome. Detail below under *Ex ante contributions*.
 - Body: Single Resolution Board (SRB) -- the central resolution authority of the Banking Union
 - Seat: Brussels (Treurenberg 22, 1049 Brussels)
 - Chair: Dominique Laboureix (since January 2023, succeeded Elke Koenig)
@@ -95,3 +96,32 @@ The **ESM common backstop** is a credit line from the European Stability Mechani
 - `financial_supervision_eba` -- European Banking Authority, technical standards and stress tests
 - `esrb_macroprudential_framework` -- systemic risk oversight alongside resolution
 - `eu_anti_money_laundering` -- AML obligations that interact with bank authorisation and resolution
+
+## Ex ante contributions to the Single Resolution Fund: the 2022 and 2023 appeals (AG opinion, 8 September 2026)
+
+**Not yet law.** Advocate General **Dean Spielmann** delivered Opinions on 8 September 2026 in
+**C-454/24 P *SRB v Dexia***, **C-529/24 P *Council v Hypo Vorarlberg Bank***, **C-536/24 P *SRB v
+Hypo Vorarlberg Bank***, **C-537/24 P *SRB v Volkskreditbank***, **C-585/24 P *Council v
+Volkskreditbank*** and **C-705/24 P *SRB v BAWAG P.S.K.***
+
+**How the cases arose.** The SRF is fed by ex ante contributions paid annually by participating credit
+institutions, calculated under **Implementing Regulation (EU) 2015/81**. By decisions of **11 April
+2022** and **2 May 2023** the SRB set the contributions for 2022 and 2023. The General Court annulled
+those decisions as they concerned Dexia, Hypo Vorarlberg Bank, Volkskreditbank and BAWAG. The SRB and
+the Council appealed.
+
+**The Opinion: dismiss the appeals.** The central ground is institutional. The Treaties confer
+implementing powers on the **Commission** as a rule; conferral on the **Council** is an exception that
+must be **duly and specifically reasoned**, and the Court must satisfy itself that the substance and
+purpose of that requirement are not negated. **Regulation (EU) No 806/2014 contains no justification**
+for giving the Council the power to determine the methodology for calculating individual contributions
+during the initial period. Arguments from financial stability, Member State budgetary sovereignty, the
+specific features of the Banking Union, and the composition and role of the Council do not, in the
+AG's view, make up for that absence.
+
+**What it would mean if followed.** The legal basis of the contribution methodology for the initial
+period would be in question, not merely the four banks' individual bills. **The Court usually but not
+always follows the Advocate General, and until judgment none of this is law.**
+
+Source: CURIA press release No 121/26, 8 September 2026,
+https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260121en.pdf

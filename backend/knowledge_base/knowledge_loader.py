@@ -14731,6 +14731,102 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'presunzione di rapporto di lavoro': ['platform_work_directive'],
     'presuncion de laboralidad': ['platform_work_directive'],
     'presunción de laboralidad': ['platform_work_directive'],
+
+    # --- Agri-food R&I: AgRI 2040 / Food 2040 (COM(2026) 453, 8 Sep 2026) ---
+    # Six languages. Non-English keys are written ACCENTED, in the phrasing people
+    # actually type, with the unaccented form added AS WELL, never instead --
+    # search_guides() does no accent folding.
+    "agri 2040": ["agri_food_research_innovation_strategy"],
+    "agri2040": ["agri_food_research_innovation_strategy"],
+    "food 2040": ["agri_food_research_innovation_strategy"],
+    "food2040": ["agri_food_research_innovation_strategy"],
+    "agri-food research": ["agri_food_research_innovation_strategy"],
+    "agrifood research": ["agri_food_research_innovation_strategy"],
+    "agri-food innovation": ["agri_food_research_innovation_strategy"],
+    "agrifood innovation": ["agri_food_research_innovation_strategy"],
+    "agri-food strategy": ["agri_food_research_innovation_strategy"],
+    "agri-food r&i": ["agri_food_research_innovation_strategy"],
+    "agri-food digital": ["agri_food_research_innovation_strategy"],
+    "edic for agri-food": ["agri_food_research_innovation_strategy"],
+    "edic agri-food": ["agri_food_research_innovation_strategy"],
+    "european digital infrastructure consortium": ["agri_food_research_innovation_strategy"],
+    "science for policy centre": ["agri_food_research_innovation_strategy"],
+    "recherche agroalimentaire": ["agri_food_research_innovation_strategy"],
+    "innovation agroalimentaire": ["agri_food_research_innovation_strategy"],
+    "strat\u00e9gie agroalimentaire": ["agri_food_research_innovation_strategy"],
+    "strategie agroalimentaire": ["agri_food_research_innovation_strategy"],
+    "investigaci\u00f3n agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "investigacion agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "innovaci\u00f3n agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "innovacion agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "recerca agroaliment\u00e0ria": ["agri_food_research_innovation_strategy"],
+    "recerca agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "innovaci\u00f3 agroaliment\u00e0ria": ["agri_food_research_innovation_strategy"],
+    "innovacio agroalimentaria": ["agri_food_research_innovation_strategy"],
+    "ricerca agroalimentare": ["agri_food_research_innovation_strategy"],
+    "innovazione agroalimentare": ["agri_food_research_innovation_strategy"],
+    "agrovoedingsonderzoek": ["agri_food_research_innovation_strategy"],
+    "agri-food onderzoek": ["agri_food_research_innovation_strategy"],
+    "onderzoek en innovatie landbouw": ["agri_food_research_innovation_strategy"],
+
+    # --- Serbia accession + war-crimes conditionality (Sep 2026) ---
+    # NOTE: a bare "mladic"/"mladi\u0107" trigger is NOT used. "mladi\u0107" is the
+    # ordinary Croatian/Serbian word for "young man", so it would fire on any
+    # text about young people. The full name is unambiguous.
+    "ratko mladic": ["serbia_eu_accession_and_conditionality"],
+    "ratko mladi\u0107": ["serbia_eu_accession_and_conditionality"],
+    "serbia accession": ["serbia_eu_accession_and_conditionality"],
+    "serbia eu accession": ["serbia_eu_accession_and_conditionality"],
+    "serbian accession": ["serbia_eu_accession_and_conditionality"],
+    "serbia candidate country": ["serbia_eu_accession_and_conditionality"],
+    "srebrenica": ["serbia_eu_accession_and_conditionality"],
+    "srebrenica genocide": ["serbia_eu_accession_and_conditionality"],
+    "glorification of war criminals": ["serbia_eu_accession_and_conditionality"],
+    "genocide denial": ["serbia_eu_accession_and_conditionality"],
+    "western balkans accession": ["serbia_eu_accession_and_conditionality"],
+    "negotiating framework serbia": ["serbia_eu_accession_and_conditionality"],
+    "accession chapter 23": ["serbia_eu_accession_and_conditionality"],
+    "accession chapter 24": ["serbia_eu_accession_and_conditionality"],
+    "fundamentals cluster": ["serbia_eu_accession_and_conditionality"],
+    "adhesion de la serbie": ["serbia_eu_accession_and_conditionality"],
+    "adh\u00e9sion de la serbie": ["serbia_eu_accession_and_conditionality"],
+    "adhesion de serbia": ["serbia_eu_accession_and_conditionality"],
+    "adhesi\u00f3n de serbia": ["serbia_eu_accession_and_conditionality"],
+    "adhesio de serbia": ["serbia_eu_accession_and_conditionality"],
+    "adhesi\u00f3 de s\u00e8rbia": ["serbia_eu_accession_and_conditionality"],
+    "adesione della serbia": ["serbia_eu_accession_and_conditionality"],
+    "toetreding servie": ["serbia_eu_accession_and_conditionality"],
+    "toetreding servi\u00eb": ["serbia_eu_accession_and_conditionality"],
+
+    # --- Israeli settlements: NATIONAL trade measures, not EU sanctions ---
+    "israeli settlements": ["eu_sanctions_implementation_framework"],
+    "illegal settlements west bank": ["eu_sanctions_implementation_framework"],
+    "settlement trade sanctions": ["eu_sanctions_implementation_framework"],
+    "colonies israeliennes": ["eu_sanctions_implementation_framework"],
+    "colonies isra\u00e9liennes": ["eu_sanctions_implementation_framework"],
+    "asentamientos israelies": ["eu_sanctions_implementation_framework"],
+    "asentamientos israel\u00edes": ["eu_sanctions_implementation_framework"],
+    "assentaments israelians": ["eu_sanctions_implementation_framework"],
+    "insediamenti israeliani": ["eu_sanctions_implementation_framework"],
+    "israelische nederzettingen": ["eu_sanctions_implementation_framework"],
+
+    # --- Serbia: connector-tolerant + UNIONED generic keys ---
+    # "Is Serbia still a candidate country for EU accession?" ranked SEVENTH on the
+    # first retrieval test: "serbia candidate country" is not a substring of
+    # "serbia still a candidate country", and the generic keys below already existed
+    # pointing only at the funding guide. An appended key WINS, so each of these
+    # carries the UNION of every earlier occurrence's targets -- dropping
+    # eu_funding_ipa_enlargement here would silently delete its routing.
+    "serbia": ["eu_funding_ipa_enlargement", "serbia_eu_accession_and_conditionality"],
+    "candidate country": ["eu_funding_ipa_enlargement", "serbia_eu_accession_and_conditionality"],
+    "eu accession": ["eu_funding_ipa_enlargement", "serbia_eu_accession_and_conditionality"],
+    "serbia candidate": ["serbia_eu_accession_and_conditionality"],
+    "serbia membership": ["serbia_eu_accession_and_conditionality"],
+    "serbia eu membership": ["serbia_eu_accession_and_conditionality"],
+    "servia": ["serbia_eu_accession_and_conditionality"],
+    "s\u00e8rbia": ["serbia_eu_accession_and_conditionality"],
+    "serbie": ["serbia_eu_accession_and_conditionality"],
+    "servi\u00eb": ["serbia_eu_accession_and_conditionality"],
 }
 
 

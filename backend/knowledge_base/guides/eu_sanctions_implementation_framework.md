@@ -1,6 +1,7 @@
 # EU Sanctions Implementation Framework
 
 ## QUICK FACTS
+- **WATCH — NOT EU MEASURES (8 September 2026)**: the **UK and 11 other countries, including France and Canada, announced trade sanctions on illegal Israeli settlements**. These are **national measures outside the EU framework; the EU has adopted none.** If asked whether the EU has sanctioned the settlements, the answer is **no**. Detail below under *Israeli settlements*.
 - **LATEST (Thursday 3 September 2026 -- THE COURT SETS THE EVIDENTIARY STANDARD FOR "CONTROL")**: in **Case C-147/25, Inter Rao Lietuva** (Fifth Chamber, preliminary ruling), the Court of Justice held that the existence of **control over a company by a person subject to EU restrictive measures must be supported by sufficiently solid and objective evidence**. The provision interpreted is **Article 2(1) of Regulation (EU) No 269/2014** (Ukraine territorial integrity regime), whose asset freeze reaches entities "owned or controlled" by a listed person. Practical effect: a bank, counterparty or authority may not infer control from suspicion, association or an unverified ownership chain; the finding must rest on solid, objective evidence. This is the operative standard for every ownership-and-control assessment under the Russia and Ukraine regimes. Source: Court of Justice press release No 116/2026, 3 September 2026 (CURIA).
 - **PRIOR (Monday 31 August 2026 -- SHADOW FLEET BOARDING, HR/VP statement, not an act)**: HR/VP **Kaja Kallas** stated that the oil tanker **MV SUN**, suspected of sailing under a **false flag** in breach of international maritime law, was **boarded on 30 August 2026 in the Mediterranean by Operation EUNAVFOR MED IRINI for flag verification** -- the **sixth suspected shadow-fleet vessel boarded by EU operations in recent months**. Shadow-fleet measures were on the agenda of the **informal defence ministers' meeting in Ireland on 1 September**. Status: an operational boarding under IRINI's mandate + an HR/VP statement; **no Council decision, no listing, no OJ act** flows from it. Do not state a new package, vessel count or CELEX on this basis. Sources: Kallas (X + Bluesky, 31 Aug 2026), @EUNAVFOR_MED (X, 31 Aug 2026); surfaced by /social-eu.
 - Topic: EU restrictive measures (sanctions) framework — adoption, implementation, coordination, and enforcement
@@ -107,3 +108,26 @@ A corrigendum to Reg 2024/1745 (further amending Reg 833/2014) was published in 
 - **LATEST (Friday 8 May 2026)**: **19th Russia sanctions package — shadow fleet focus** signalled by EU diplomats. Politico Brussels Playbook (8 May 2026): Putin's shadow fleet faces fresh EU sanctions blitz — 100+ additional tanker vessels expected to be listed in the next package, with new flag-state due-diligence requirements and EU-port denial-of-service rules. The package builds on the 18th package (March 2026) which had already listed 74 vessels. Lead Commissioner: Kaja Kallas (HR/VP). Expected formal Council adoption: late May / early June 2026. Cross-link to `russia_ukraine_war_eu_response` and `eu_maritime_security`. Source: politico.eu Brussels Playbook 8 May 2026.
 - **LATEST (Friday 8 May 2026)**: **Information Note Reg (EU) 2021/821 dual-use export controls** published in OJ-C series, CELEX **52026XC02595**. The information note covers the Union regime for the control of exports, brokering, technical assistance, transit and transfer of dual-use items. Companies in scope of the dual-use list must align internal compliance programmes with the latest clarifications. **EU Law Comply candidate**: review of dual-use compliance documentation may be needed for any company handling listed items. Source: eur-lex.europa.eu CELEX:52026XC02595.
 - **LATEST (Friday 8 May 2026)**: **Frontex official warns of post-war Ukraine arms-smuggling danger** — Politico interview flags risk of weapon diversion to organised crime networks once active hostilities end. Cross-link to sanctions enforcement (Article 215 TFEU) and the future Russia-property reconstruction mechanism. Source: politico.eu/article/frontex-official-warns-of-post-war-ukraine-arms-smuggling-danger (8 May 2026).
+
+## Israeli settlements: national trade measures, not EU restrictive measures (8 September 2026)
+
+On **Tuesday 8 September 2026** the **United Kingdom and 11 other countries, among them France and
+Canada**, announced support for **trade sanctions targeting illegal Israeli settlements in the West
+Bank**.
+
+**These are not EU measures.** They were taken by individual states outside the EU's
+restrictive-measures framework. Several of those states are EU members, which is precisely why the
+distinction has to be made explicitly rather than assumed:
+
+- **Nothing here appears in `eu_sanctions`**, in an OJ CFSP decision, or in a Council regulation.
+- **The EU itself has adopted no such measure.** Contemporaneous reporting framed the national
+  announcements as *pressure on* the EU, not action *by* it.
+- What every EU Member State does agree, per High Representative **Kaja Kallas** on 8 September 2026,
+  is that **Israeli settlements in the West Bank are illegal under international law**. That is a
+  **legal position, not a sanction**, and the two must not be merged.
+
+**If asked whether the EU has sanctioned the settlements, the answer is no.** Say which states acted,
+say they acted nationally, and say the EU has not.
+
+Source: HR/VP Kallas, 8 September 2026,
+https://bsky.app/profile/kajakallas.bsky.social/post/3muzofzp3m22l

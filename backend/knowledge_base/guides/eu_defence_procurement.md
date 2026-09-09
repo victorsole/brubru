@@ -1,6 +1,7 @@
 # EU Defence Procurement
 
 ## QUICK FACTS
+- **WATCH, NOT YET LAW (8 September 2026)**: AG **Biondi**, Joined Cases **C-271/25 *Autovici*** and **C-334/25 *Skinest Baltija*** — excluding a bidder from public procurement on **national-security** grounds is compatible with EU law if the EU-law guarantees are respected. An AG opinion is a trailer, not the outcome. Detail below under *National-security exclusion from procurement*.
 - **LATEST (Wednesday 8 June 2026 — provisional agreement)**: **Parliament and Council negotiators strike a provisional political agreement on the "Omnibus V" defence simplification package** (EP press 20260608IPR44910, 8 June 2026). Three linked files, all ordinary legislative procedure: **permit-granting acceleration for defence-readiness projects — 2025/0172(COD)** (EU-wide default decision deadline of **42 working days**, extendable twice by up to 60 days, capped at 102 working days; rapporteurs Lucia Yar + Henrik Dahl); **simplification of intra-EU transfers of defence-related products and of procurement — 2025/0177(COD)** (rapporteurs Pekka Toveri + Anna-Maja Henriksson); and **facilitating defence investments and conditions for the defence industry — 2025/0176(COD)** (rapporteurs Sven Mikser, Aura Salla, Pierfrancesco Maran). The package removes regulatory obstacles to support up to **EUR 800 billion** of defence investment over four years under the **ReArm Europe / Readiness 2030** framework. Both Parliament and Council must still formally adopt the provisional agreements before entry into force — never assert final adoption yet. Cross-link: `european_defence_union`, `eu_us_trade_deal_2026` (security-economic nexus).
 - Full name: EU Joint Defence Procurement Framework
 - Key instruments: EDIP (Regulation (EU) 2025/2643, CELEX 32025R2643), EDF (Regulation (EU) 2021/697), SAFE (Article 122 TFEU)
@@ -279,3 +280,38 @@ This work programme operationalises the EDIP Regulation (EU) 2025/2643 adopted i
 - **eu_space_programme** -- EU Space Programme (Galileo, Copernicus, IRIS2), same DG DEFIS and Commissioner Kubilius, defence-space synergies
 - **mff_2028_2034** -- Next Multiannual Financial Framework negotiations, where the successor to EDIP/AGILE and the future of EU defence funding will be decided
 - **iran_strait_hormuz_eu_response** -- Geopolitical context driving EU defence rearmament and the urgency behind SAFE/AGILE
+
+## National-security exclusion from procurement (C-271/25 and C-334/25, AG opinion 8 September 2026)
+
+**Not yet law.** Advocate General **Andrea Biondi** delivered his Opinion on 8 September 2026 in
+Joined Cases **C-271/25 *Autovici*** and **C-334/25 *Skinest Baltija***, on a reference from the
+Lithuanian Supreme Court.
+
+**Background.** Lithuania legislated in 2022, after the Russian invasion of Ukraine, to permit the
+exclusion of undertakings or tenders from public procurement on national-security grounds. Autovici
+was excluded from a passenger-car procurement and Skinest Baltija from a railway-equipment tender,
+both after the competent authority reported connections with foreign actors regarded as a threat.
+
+**The Opinion.** Such legislation is compatible with EU law provided the general principles and
+guarantees of EU law are respected. The reasoning matters more than the headline:
+
+- These grounds are **distinct from the exclusion grounds in the EU procurement directives**, so that
+  legislation does not govern them — but they are **not thereby outside EU law**.
+- Member States choose the competent security body; its binding opinions must respect EU-law
+  requirements: a **specific and individual assessment** of all relevant circumstances, proportionate
+  and consistent with fundamental rights.
+- The decision must be **reasoned** and **challengeable before a court or tribunal**.
+- The evidence must be **sufficiently recent** to reflect the current nature of the threat and its
+  relevance to that procurement procedure.
+- The **duration** of the exclusion is assessed case by case, per Member State, per contract, per
+  operator.
+- The excluded operator's **rights of defence** must be observed, including the right to express its
+  views.
+
+**Scope note for Brubru.** This concerns **national** procurement under the EU public procurement
+directives — not EU-institutional procurement (`eu_financial_regulation_procurement`) and not the
+defence-industrial instruments in this guide. Brubru has **no dedicated guide on Directives
+2014/24/EU, 2014/25/EU and 2014/23/EU**; this section is the nearest home until one exists.
+
+Source: CURIA press release No 122/26, 8 September 2026,
+https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260122en.pdf

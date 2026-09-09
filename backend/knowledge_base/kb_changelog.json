@@ -2,6 +2,76 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "Records that the 8 September trade measures on Israeli settlements are national measures by twelve states, not EU restrictive measures.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "added",
+      "guide": "serbia_eu_accession_and_conditionality",
+      "title": "Serbia's EU Accession and the Conditionality on War-Crimes Accountability",
+      "summary": "New guide: Serbia's accession state (22 of 35 chapters open, two provisionally closed), the fundamentals-cluster conditionality, and the dated sequence around the Ratko Mladic funeral with the EEAS statement of 7 September 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "eu_defence_procurement",
+      "title": "EU Defence Procurement",
+      "summary": "AG Biondi's 8 September opinion on excluding a bidder from procurement on national-security grounds added as a watch item plus a full body section.",
+      "refs": [
+        "32025R2643"
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "srb_resolution_framework_mrel",
+      "title": "Single Resolution Board and MREL",
+      "summary": "AG Spielmann's 8 September opinion on the 2022 and 2023 ex ante contributions to the Single Resolution Fund added as a watch item plus a full body section.",
+      "refs": [
+        "32014R0806"
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "single_use_plastics_directive",
+      "title": "Single-Use Plastics Directive (SUPD)",
+      "summary": "Commission guidelines on single-use plastic products updated, replacing the 2021 text; scope, definitions and the category-boundary criteria summarised.",
+      "refs": [
+        "52026XC04813",
+        "32019L0904"
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "Article 102 exclusionary-abuse guidelines published in the Official Journal; the citable CELEX and ELI added.",
+      "refs": [
+        "52026XC04675"
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "action": "added",
+      "guide": "agri_food_research_innovation_strategy",
+      "title": "Agri-Food Research and Innovation: AgRI 2040 and Food 2040",
+      "summary": "New guide on the Commission's agri-food R&I strategy of 8 September 2026, its six cross-cutting priorities, the twelve AgRI 2040 and Food 2040 areas of action, the 19 dated actions, and the EDIC for Agri-Food.",
+      "refs": [
+        "52026DC0453",
+        "52026SC0271",
+        "32026D1978",
+        "32022D2481"
+      ]
+    },
+    {
       "date": "2026-09-08",
       "action": "updated",
       "guide": "digital_services_act",
