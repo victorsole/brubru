@@ -19,6 +19,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 from core.database import SessionLocal
 from models.eu_news_item import EuNewsItem
+from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.ep_news_scraper import ep_sources, scrape_ep_source
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
@@ -61,6 +62,7 @@ def main():
                 try:
                     for it in items:
                         counts[_upsert(db, it)] += 1
+                    stamp_fetched(db, [i["entry_key"] for i in items])
                     db.commit()
                 except Exception as e:
                     db.rollback(); print(f"  commit failed {src['url']}: {e}"); counts["errors"] += 1

@@ -21,6 +21,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 from core.database import SessionLocal
 from models.eu_news_item import EuNewsItem
+from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.dg_news_sources import DG_NEWS_SOURCES, EU_BODY_FEEDS, OUTLET_FEEDS
 from services.scrapers.dg_news_scraper import scrape_source
@@ -67,6 +68,8 @@ def main():
             try:
                 for it in items:
                     counts[_upsert(db, it)] += 1
+                # Every key SEEN, not only the changed ones: a sighting is a fetch.
+                stamp_fetched(db, [i["entry_key"] for i in items])
                 db.commit()
             except Exception as e:
                 db.rollback()

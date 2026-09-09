@@ -248,13 +248,21 @@ def _institutional_sql(codes, kinds, since, until, q):
         f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
         f"n.source_url AS public_url, {date_expr} AS document_date, "
         "n.created_at AS creation_date, "
-        # eu_news_items has NO last-fetch column. `scraped_at` exists but the
-        # upsert in scripts/sync_dg_news.py only sets it on INSERT and returns
-        # "skipped" without touching an unchanged row, so it is first-seen again --
-        # the very column confusion this endpoint was corrected for. NULL is the
-        # honest answer: we do not know when these bodies were last fetched, and
-        # `_classify` must treat unknown as unknown, never as "not fetched".
-        "NULL::timestamptz AS fetched_at, "
+        # The real last-fetch anchor, added by migration 229 and stamped by all four
+        # writers on every SIGHTING -- including rows they leave unchanged, which is
+        # the case `scraped_at` could never cover (it is `default=` only, so
+        # first-seen, and the upserts return "skipped" without touching the row).
+        #
+        # Until 9 Sep 2026 this projected NULL, which was honest but useless: the
+        # institutional half could only ever read `fetch_time_unknown`, so when
+        # Council news went 70 days without a row the endpoint could not say whether
+        # that was our cron or the Council's silence. It was our cron.
+        #
+        # Still NULL on rows no sync has touched since the migration -- deliberately
+        # not backfilled, because inventing a fetch time would fabricate the reading
+        # this column exists to make trustworthy. `_classify` maps NULL to
+        # `fetch_time_unknown`, never to `not_fetched`.
+        "n.fetched_at AS fetched_at, "
         # Migration 228 gave eu_news_items real body columns, composed by
         # scripts/backfill_eu_news_bodies.py from the title, summary, institution,
         # date and source link. Before that this served `summary AS body_txt` and a

@@ -44,8 +44,24 @@ class EuNewsItem(Base):
     body_html = Column(Text)
     body_source = Column(Text)
 
+    # FIRST-SEEN, both of them: `default=` fires on INSERT and never again. Neither
+    # is an ingestion anchor, and reading one as such is what invented 17 dead
+    # fetchers on 8 Sep 2026 (feedback_two_date_anchors_diagnose_scrapers).
     scraped_at = Column(DateTime, default=datetime.now)
     created_at = Column(DateTime, default=datetime.now)
+
+    # LAST-FETCH anchor (migration 229). Stamped on every sighting, including rows a
+    # sync leaves otherwise unchanged, because a sighting is a fetch even when
+    # nothing changed. This is what lets /api/v2/news/latest tell `not_fetched`
+    # (ours) from `publisher_quiet` (not a defect) for the institutional half; before
+    # it existed the endpoint could only say `fetch_time_unknown`, which is how
+    # Council news went 70 days dead without the instrument being able to say whose
+    # fault it was.
+    #
+    # Stamp it through services.news.fetch_anchor.stamp_fetched, never by hand: the
+    # "unchanged" path in every writer returns early without touching the object, so
+    # an ORM listener cannot see it.
+    fetched_at = Column(DateTime(timezone=True))
 
     def __repr__(self):
         return f"<EuNewsItem {self.commission_dg or self.institution} {self.title[:40]}>"
@@ -54,7 +70,8 @@ class EuNewsItem(Base):
 # ---------------------------------------------------------------------------
 # Compose the body datapoints on every write, for every writer
 # ---------------------------------------------------------------------------
-# There are THREE ORM writers (sync_dg_news, sync_bespoke_news, sync_ft_news) and a
+# There are FOUR ORM writers (sync_dg_news, sync_ep_news, sync_bespoke_news,
+# sync_ft_news -- this list said THREE and omitted sync_ep_news until 9 Sep 2026) and a
 # raw-SQL insert in publish_dpp_to_meub. Composing in each would guarantee the fourth
 # writer forgets -- the failure in feedback_cli_wrapper_parity. A model-level listener
 # means an author who has never heard of body_source still produces a compliant row.

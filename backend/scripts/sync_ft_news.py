@@ -25,6 +25,7 @@ from sqlalchemy import text
 
 from core.database import SessionLocal
 from models.eu_news_item import EuNewsItem
+from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 
 
@@ -63,14 +64,18 @@ def _upsert(db, r) -> str:
 def main():
     db = SessionLocal()
     counts = {"added": 0, "updated": 0, "skipped": 0, "errors": 0}
+    seen_keys: list = []
     try:
         rows = _rows(db)
         print(f"[ft_news] {len(rows)} ftportal news rows in economy_items")
         for r in rows:
             try:
                 counts[_upsert(db, r)] += 1
+                seen_keys.append(f"ft_portal_news:{r['id']}")
             except Exception as e:
                 db.rollback(); print(f"  upsert failed {r['id']}: {e}"); counts["errors"] += 1
+        # Every key SEEN, not only the changed ones: a sighting is a fetch.
+        stamp_fetched(db, seen_keys)
         db.commit()
     finally:
         db.close()

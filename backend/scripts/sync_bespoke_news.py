@@ -20,6 +20,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 from core.database import SessionLocal
 from models.eu_news_item import EuNewsItem
+from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.bespoke_news_scraper import BESPOKE_SOURCES, BespokeFetchError, scrape_bespoke, scrape_eeas
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
@@ -72,6 +73,7 @@ def main():
                 try:
                     for it in items:
                         counts[_upsert(db, it)] += 1
+                    stamp_fetched(db, [i["entry_key"] for i in items])
                     db.commit()
                 except Exception as e:
                     db.rollback(); print(f"  commit failed {cfg['institution']}: {e}"); counts["errors"] += 1
@@ -85,6 +87,7 @@ def main():
                 print(f"  {'EEAS':10s} {len(eeas_items)} items")
                 for it in eeas_items:
                     counts[_upsert(db, it)] += 1
+                stamp_fetched(db, [i["entry_key"] for i in eeas_items])
                 db.commit()
             except Exception as e:
                 db.rollback(); print(f"  source failed EEAS: {e}"); counts["errors"] += 1
