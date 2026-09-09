@@ -479,14 +479,31 @@ VALUES
   (%(body_code)s, %(item_type)s, %(title)s, %(summary)s, %(public_url)s, %(body_txt)s,
    %(body_html)s, %(document_date)s, %(creation_date)s, %(source_kind)s, %(guid)s)
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
-  title         = EXCLUDED.title,
-  summary       = EXCLUDED.summary,
-  body_txt      = EXCLUDED.body_txt,
-  body_html     = EXCLUDED.body_html,
-  document_date = EXCLUDED.document_date,
-  source_kind   = EXCLUDED.source_kind,
-  guid          = EXCLUDED.guid,
+  -- Content columns NEVER regress to empty. A scrape that comes back without a
+  -- body or a date is almost always a transient fetch failure, a PDF we cannot
+  -- parse, or a fetch_bodies=False discovery run -- not the publisher retracting
+  -- the text. Overwriting unconditionally made every backfill temporary: the
+  -- 8 Sep run composed 215 bodies and one night of crons had already destroyed
+  -- 18 of them, and it silently re-nulled document_date on rows whose date had
+  -- been recovered from the item's own page.
+  --
+  -- COALESCE keeps the stored value when the incoming one is empty; a scrape that
+  -- HAS a value still overwrites normally, so genuine updates are not blocked.
+  -- creation_date was already protected this way; the content columns were the gap.
+  title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
+  summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
+  body_txt      = COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), economy_items.body_txt),
+  body_html     = COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), economy_items.body_html),
+  document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
+  -- Keep source_kind describing the body we actually hold: if we retained the
+  -- stored body, relabelling it with this run's kind would misreport provenance.
+  source_kind   = CASE WHEN NULLIF(btrim(EXCLUDED.body_txt), '') IS NOT NULL
+                       THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
+  guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
+  -- fetched_at is the INGESTION anchor and must still move every run, even when
+  -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
+  -- body" from "publisher has gone quiet".
   fetched_at    = now();
 """
 
@@ -497,14 +514,31 @@ INSERT INTO economy_items
    document_date, creation_date, source_kind, guid)
 VALUES %s
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
-  title         = EXCLUDED.title,
-  summary       = EXCLUDED.summary,
-  body_txt      = EXCLUDED.body_txt,
-  body_html     = EXCLUDED.body_html,
-  document_date = EXCLUDED.document_date,
-  source_kind   = EXCLUDED.source_kind,
-  guid          = EXCLUDED.guid,
+  -- Content columns NEVER regress to empty. A scrape that comes back without a
+  -- body or a date is almost always a transient fetch failure, a PDF we cannot
+  -- parse, or a fetch_bodies=False discovery run -- not the publisher retracting
+  -- the text. Overwriting unconditionally made every backfill temporary: the
+  -- 8 Sep run composed 215 bodies and one night of crons had already destroyed
+  -- 18 of them, and it silently re-nulled document_date on rows whose date had
+  -- been recovered from the item's own page.
+  --
+  -- COALESCE keeps the stored value when the incoming one is empty; a scrape that
+  -- HAS a value still overwrites normally, so genuine updates are not blocked.
+  -- creation_date was already protected this way; the content columns were the gap.
+  title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
+  summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
+  body_txt      = COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), economy_items.body_txt),
+  body_html     = COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), economy_items.body_html),
+  document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
+  -- Keep source_kind describing the body we actually hold: if we retained the
+  -- stored body, relabelling it with this run's kind would misreport provenance.
+  source_kind   = CASE WHEN NULLIF(btrim(EXCLUDED.body_txt), '') IS NOT NULL
+                       THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
+  guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
+  -- fetched_at is the INGESTION anchor and must still move every run, even when
+  -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
+  -- body" from "publisher has gone quiet".
   fetched_at    = now();
 """
 

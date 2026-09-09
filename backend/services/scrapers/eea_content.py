@@ -19,6 +19,19 @@ _NEWS = _BASE + "/en/newsroom/news/@search"
 _EVENTS = _BASE + "/en/@search"
 _SITE = "https://www.eea.europa.eu"
 
+# Plone returns EVERY content object under the searched path, not just articles.
+# `/en/newsroom/news/` holds each article's attachments as CHILD objects, so an
+# unfiltered @search walk returned 466 rows for 194 articles: 223 Images (all
+# carrying Plone's 1969-12-30 null-date sentinel), 47 Files (ONE press release as
+# 47 language PDFs), the newsroom folder itself and a Link. Those 223 images were
+# the entire "eea has 223 undated items" signal in /api/v2/news/latest.
+#
+# `portal_type` filters server-side (and shrinks the walk from 466 rows to 194).
+# _KEEP_TYPES re-checks client-side from the same constant, so if a future Plone
+# version ignores the parameter the assets do not silently return.
+_NEWS_TYPE = "News Item"
+_EVENT_TYPE = "Event"
+
 # Curated about + thematic in-depth landing pages, snapshotted as topics.
 _IN_DEPTH = [
     "agriculture-and-food", "air-pollution", "bathing-water", "biodiversity",
@@ -71,6 +84,11 @@ def _walk(session: requests.Session, url: str, extra: dict, item_type: str,
             title = clean(r.get("title") or "")
             if not u or not title or u in out:
                 continue
+            want = extra.get("portal_type")
+            if want and r.get("@type") not in (None, want):
+                # Attachment, folder or Link, not an article. Belt and braces:
+                # portal_type should already have excluded it server-side.
+                continue
             desc = clean(r.get("Description") or r.get("description") or "")
             dt = _date(r.get(date_field)) or _date(r.get("effective"))
             lines = [f"{title}", f"Date: {dt.date()}" if dt else "", desc or ""]
@@ -90,13 +108,13 @@ def _walk(session: requests.Session, url: str, extra: dict, item_type: str,
 def ingest_eea_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
-    return _walk(s, _NEWS, {}, "news", "effective")
+    return _walk(s, _NEWS, {"portal_type": _NEWS_TYPE}, "news", "effective")
 
 
 def ingest_eea_events(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
-    return _walk(s, _EVENTS, {"portal_type": "Event"}, "event", "start")
+    return _walk(s, _EVENTS, {"portal_type": _EVENT_TYPE}, "event", "start")
 
 
 def ingest_eea_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
