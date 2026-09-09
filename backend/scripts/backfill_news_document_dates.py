@@ -71,6 +71,13 @@ from services.scrapers.economy_common import (  # noqa: E402
     extract_item_date, extract_dateline_or_url_date, http_get,
 )
 
+# Bodies with a KNOWN bespoke path (a WAF-aware fetcher, an RSS map, or stored PDF
+# text). Everything else falls through to the generic path below, which is the point:
+# on 9 Sep 2026 four bodies -- eige 31, euiss 10, aviation 9, europol 4 -- were sitting
+# on 54 undated rows whose pages already carried a <time datetime> or a JSON-LD
+# datePublished. extract_item_date found every one of them on the first try. Nothing
+# needed writing; their scrapers simply never called it. Hardcoding a fifth, sixth and
+# seventh body here would have hidden the next four the same way.
 BODIES = ("euda", "eib", "rail", "sesar", "f4e")
 BATCH = 50
 DELAY = 0.4          # politeness; these are public agency sites
@@ -128,13 +135,20 @@ def _map_for(body: str) -> dict:
     return _MAPS[body]
 
 
-def _counts(db):
+def _counts(db, bodies=None):
+    """Row / undated counts for the bodies THIS RUN is touching.
+
+    Took `BODIES` before, which silently reported `eige 0 / 0` the moment --body
+    accepted a code outside that tuple: the before/after report showed a zero for a
+    body holding 31 undated rows. A counter that cannot see what the run is changing
+    is worse than no counter (feedback_verify_the_instrument_before_the_reading).
+    """
     rows = db.execute(text(
         "SELECT body_code, count(*) AS n, "
         "count(*) FILTER (WHERE document_date IS NULL) AS undated "
         "FROM economy_items WHERE item_type IN ('news','press_release') "
         "AND body_code = ANY(:b) GROUP BY body_code ORDER BY body_code"),
-        {"b": list(BODIES)}).mappings().all()
+        {"b": list(bodies or BODIES)}).mappings().all()
     return {r["body_code"]: (r["n"], r["undated"]) for r in rows}
 
 
@@ -143,14 +157,30 @@ def main() -> int:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--dry-run", action="store_true")
     g.add_argument("--apply", action="store_true")
-    ap.add_argument("--body", choices=BODIES, help="Restrict to one body.")
+    ap.add_argument("--body", help="Restrict to one body_code. Any body works, not "
+                                   "only the ones with a bespoke fetcher.")
+    ap.add_argument("--all-undated", action="store_true",
+                    help="Every body with at least one undated news row.")
     ap.add_argument("--limit", type=int, default=0, help="Cap rows processed (0 = all).")
     args = ap.parse_args()
 
-    bodies = [args.body] if args.body else list(BODIES)
+    db_probe = SessionLocal()
+    try:
+        if args.body:
+            bodies = [args.body]
+        elif args.all_undated:
+            bodies = [r[0] for r in db_probe.execute(text(
+                "SELECT body_code FROM economy_items "
+                "WHERE item_type IN ('news','press_release') AND document_date IS NULL "
+                "GROUP BY body_code ORDER BY count(*) DESC")).all()]
+        else:
+            bodies = list(BODIES)
+    finally:
+        db_probe.close()
+    print(f"[INFO] bodies: {bodies}")
     db = SessionLocal()
     try:
-        before = _counts(db)
+        before = _counts(db, bodies)
         print("[INFO] before (rows / undated):")
         for b in bodies:
             n, u = before.get(b, (0, 0))
@@ -189,7 +219,10 @@ def main() -> int:
                     carriers["rss_pubdate"] += 1
                     pending.append({"id": r["id"], "d": dt})
                 continue          # no per-item request needed
-            html = _FETCHERS[body](r["public_url"])
+            # Generic path for any body with no bespoke fetcher: a plain GET and
+            # extract_item_date, which reads <time datetime>, article:published_time
+            # and JSON-LD datePublished. Most agency pages carry one of the three.
+            html = _FETCHERS.get(body, _plain_get)(r["public_url"])
             if html is None:
                 carriers["fetch_failed"] += 1
             else:
@@ -220,7 +253,7 @@ def main() -> int:
             print("[DRY-RUN] nothing written")
             return 0
 
-        after = _counts(db)
+        after = _counts(db, bodies)
         print("[INFO] after (rows / undated):")
         total_recovered = 0
         for b in bodies:
