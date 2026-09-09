@@ -88,6 +88,82 @@ class TestStripContextMarkers:
         result = service._strip_context_markers(text)
         assert "EU context of this regulation" in result
 
+    # -- emphasis residue (production defect, 9 September 2026) ---------------
+    # A Catalan rapporteur answer shipped "al bloc ** **." because the marker
+    # was removed from inside its bold and the asterisks were left behind. An
+    # empty bold is more visible garbage than the leak this function hides.
+
+    @pytest.mark.parametrize("emphasis", ["**", "*", "__", "_"])
+    def test_strips_emphasis_wrapping_a_marker(self, service, emphasis):
+        text = f"no figura al bloc {emphasis}LEGISLATIVE FILES{emphasis}."
+        result = service._strip_context_markers(text)
+        assert "LEGISLATIVE FILES" not in result
+        assert emphasis not in result, f"left empty emphasis: {result!r}"
+        assert "no figura al bloc" in result
+
+    def test_no_empty_paired_emphasis_survives_any_marker(self, service):
+        markers = [
+            "EU LAW SNAPSHOT", "EU INSTITUTIONAL CALENDAR", "LEGISLATIVE FILES",
+            "COMMISSION DOCUMENTS", "COMMITTEE WORK IN PROGRESS",
+            "EPRS PUBLICATIONS", "EU CONTEXT",
+        ]
+        for marker in markers:
+            for emphasis in ("**", "*", "__", "_"):
+                result = service._strip_context_markers(
+                    f"See {emphasis}{marker}{emphasis} for detail."
+                )
+                assert marker not in result
+                assert "**  **" not in result and "* *" not in result
+                assert result.count("*") == 0 and result.count("_") == 0, (
+                    f"{marker!r}/{emphasis!r} left {result!r}"
+                )
+
+    def test_real_emphasis_is_never_touched(self, service):
+        text = "A **real bold** and an *italic* survive."
+        assert service._strip_context_markers(text) == text
+
+    def test_markdown_bullets_are_never_touched(self, service):
+        # "* *italic*" is a bullet whose content starts italic. A blanket
+        # "empty emphasis" rule on single asterisks would eat it.
+        text = "Bullet:\n* *italic bullet* stays\n* item two"
+        assert service._strip_context_markers(text) == text
+
+    # -- title-cased leaks (found end-to-end, 9 September 2026) --------------
+    # The unit tests above all used ALL CAPS, which is how the block headers are
+    # written -- but a model writing prose TITLE-CASES. A local /api/chat/stream
+    # run shipped "al bloc *Legislative Files*" and 'la seccio "Legislative
+    # Files"' in one Catalan answer, and the case-sensitive bare-marker strip
+    # matched neither. Only a WRAPPED label is matched case-insensitively.
+
+    @pytest.mark.parametrize("wrapped", [
+        "*Legislative Files*",
+        "**Legislative Files**",
+        "_Legislative Files_",
+        "__Legislative Files__",
+        '"Legislative Files"',
+        "\u201cLegislative Files\u201d",
+        "\u00abLegislative Files\u00bb",
+    ])
+    def test_strips_title_cased_label_when_wrapped(self, service, wrapped):
+        result = service._strip_context_markers(f"mostren al bloc {wrapped} tenen ponents.")
+        assert "Legislative Files" not in result
+        assert "mostren al bloc" in result and "tenen ponents." in result
+
+    def test_lowercase_prose_survives_even_when_wrapped(self, service):
+        # The wrapped path is case-insensitive, so it must refuse an
+        # all-lowercase match or it would eat ordinary quoted prose.
+        for text in [
+            'The "eu context" of this regulation is important.',
+            "The *eu context* of this regulation is important.",
+        ]:
+            assert service._strip_context_markers(text) == text
+
+    def test_bare_title_case_is_left_alone(self, service):
+        # Unwrapped and title-cased is prose, not a label reference: "the
+        # Commission Documents are public" must not lose its subject.
+        text = "The Commission Documents are public."
+        assert service._strip_context_markers(text) == text
+
 
 # ---------------------------------------------------------------------------
 # _strip_orphan_citations

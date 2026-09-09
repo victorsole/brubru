@@ -115,13 +115,73 @@ _OVERRIDE_VIOLATION_TYPES = frozenset({
 })
 
 
+# Brubru's own products and My EU Bubble sub-tabs. These are defined in the
+# SYSTEM PROMPT, which the validator has never been shown -- it receives only
+# CONTEXT, QUERY and RESPONSE. Naming a Brubru feature is MANDATORY for the
+# generator (`_correct_invented_features` enforces the canonical spelling in
+# post-processing), so before this block existed every correct cross-link was
+# unverifiable to the validator and could be scored as a fabrication.
+#
+# Measured on 8 September 2026: "Can you do summaries of debates in the european
+# parliament?" was flagged three times for "fabricating" My EU Bubble and the
+# AI-transcribed committee transcript. Both are real (Transcripts is sub-tab
+# 1.12; services/committee_transcription_service.py exists). Two of the three
+# verdicts were `critical` with type `hallucination`, which is in
+# _OVERRIDE_VIOLATION_TYPES -- so outside shadow mode a correct answer would
+# have been replaced by the safe-refusal template.
+#
+# Built FROM the canonical tuples rather than retyped, so a renamed sub-tab
+# cannot drift out of the validator's ground truth. Imported lazily: ai_service
+# imports this module, so a module-level import would be circular.
+_PRODUCT_FACTS_CACHE: Optional[str] = None
+
+
+def _brubru_product_facts() -> str:
+    """The authoritative list of Brubru's own products and sub-tabs.
+
+    Fails soft: if the canonical tuples cannot be imported the validator simply
+    runs without this section, exactly as it did before.
+    """
+
+    global _PRODUCT_FACTS_CACHE
+    if _PRODUCT_FACTS_CACHE is not None:
+        return _PRODUCT_FACTS_CACHE
+
+    try:
+        from services.ai_service import BRUBRU_PRODUCTS, MEUB_SUBTABS
+    except Exception as exc:  # noqa: BLE001 -- never break validation over this
+        logger.warning("validator product facts unavailable: %s", exc)
+        _PRODUCT_FACTS_CACHE = ""
+        return _PRODUCT_FACTS_CACHE
+
+    _PRODUCT_FACTS_CACHE = (
+        "Brubru's six products: " + ", ".join(BRUBRU_PRODUCTS) + ".\n"
+        "My EU Bubble's " + str(len(MEUB_SUBTABS)) + " sub-tabs: "
+        + ", ".join(MEUB_SUBTABS) + ".\n"
+        "Tab names are translated in the interface, so the same sub-tab may be "
+        "named in Catalan, Spanish, French, Italian or Dutch."
+    )
+    return _PRODUCT_FACTS_CACHE
+
+
 _VALIDATOR_SYSTEM = (
     "You are a strict fact-checker for an EU policy assistant. Your only job is to "
     "detect hallucinations, incomplete answers, and user-claim capitulations by comparing "
     "the assistant's RESPONSE against the CONTEXT that was retrieved for this query.\n\n"
-    "You will receive three inputs: CONTEXT (the data retrieved from Brubru's "
-    "database), QUERY (what the user asked), and RESPONSE (what the assistant "
-    "said).\n\n"
+    "You will receive four inputs: CONTEXT (the data retrieved from Brubru's "
+    "database), BRUBRU PRODUCT FACTS (the authoritative list of Brubru's own "
+    "products and sub-tabs), QUERY (what the user asked), and RESPONSE (what "
+    "the assistant said).\n\n"
+    "PRODUCT FACTS ARE GROUND TRUTH, EXACTLY AS CONTEXT IS. Claims about Brubru "
+    "ITSELF are OUT OF YOUR REMIT: CONTEXT holds retrieved EU data and is never "
+    "expected to describe Brubru's own features, so you have no evidence either "
+    "way and must not treat their absence as fabrication. Do NOT flag a statement "
+    "about what Brubru does, what one of its products or sub-tabs offers, or a "
+    "pointer telling the user where in Brubru to look. Naming a listed product or "
+    "sub-tab is CORRECT and REQUIRED behaviour. The ONE thing you may flag here is "
+    "a NAMED product or sub-tab appearing in NEITHER list, and that is a warning, "
+    "never critical -- a product name is not a named person, a meeting, a future "
+    "date, a quote or a citation.\n\n"
     "Guiding principle: you are catching FABRICATIONS that would mislead a specialist "
     "reader, not policing every sentence. General EU legal and procedural background, "
     "explanations of how a mechanism works, and reasonable inferences that are consistent "
@@ -184,10 +244,17 @@ _VALIDATOR_SYSTEM = (
 
 
 def _build_user_message(query: str, context_blocks: str, response: str) -> str:
+    facts = _brubru_product_facts()
+    facts_section = (
+        "BRUBRU PRODUCT FACTS (authoritative, always true):\n"
+        f"{facts}\n\n"
+        "---\n\n"
+    ) if facts else ""
     return (
         "CONTEXT:\n"
         f"{context_blocks}\n\n"
         "---\n\n"
+        f"{facts_section}"
         "QUERY:\n"
         f"{query}\n\n"
         "---\n\n"

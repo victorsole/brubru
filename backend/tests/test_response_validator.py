@@ -179,3 +179,59 @@ class TestViolationSerialization:
         result = asyncio.run(v.validate("q", "ctx", "r"))
         assert len(result.violations) == 1
         assert len(result.violations[0].evidence) <= 1000
+
+
+class TestBrubruProductFacts:
+    """The validator is handed Brubru's own product vocabulary.
+
+    It receives only CONTEXT, QUERY and RESPONSE, and CONTEXT holds retrieved EU
+    data -- it never describes Brubru itself. But naming a Brubru feature is
+    MANDATORY for the generator and enforced by _correct_invented_features. So
+    before PRODUCT FACTS existed, every correct cross-link was unverifiable and
+    could be scored as a fabrication: on 8 September 2026 the same answer was
+    flagged `critical` twice and `warning` once, with type `hallucination`,
+    which is in _OVERRIDE_VIOLATION_TYPES -- outside shadow mode a correct
+    answer would have been replaced by the safe-refusal template.
+    """
+
+    def test_facts_are_built_from_the_canonical_tuples(self):
+        from services.ai.response_validator import _brubru_product_facts
+        from services.ai_service import BRUBRU_PRODUCTS, MEUB_SUBTABS
+
+        facts = _brubru_product_facts()
+        assert facts, "product facts must not be empty"
+        # Built FROM the tuples, never retyped, so a rename cannot drift out.
+        for product in BRUBRU_PRODUCTS:
+            assert product in facts, f"missing product: {product}"
+        for subtab in MEUB_SUBTABS:
+            assert subtab in facts, f"missing sub-tab: {subtab}"
+        assert str(len(MEUB_SUBTABS)) in facts
+
+    def test_facts_reach_the_user_message(self):
+        from services.ai.response_validator import _build_user_message
+
+        msg = _build_user_message("q", "ctx", "r")
+        assert "BRUBRU PRODUCT FACTS" in msg
+        assert "Transcripts" in msg
+        # The four labelled inputs, in order.
+        assert msg.index("CONTEXT:") < msg.index("BRUBRU PRODUCT FACTS")
+        assert msg.index("BRUBRU PRODUCT FACTS") < msg.index("QUERY:")
+        assert msg.index("QUERY:") < msg.index("RESPONSE:")
+
+    def test_system_prompt_states_the_remit(self):
+        from services.ai.response_validator import _VALIDATOR_SYSTEM
+
+        assert "four inputs" in _VALIDATOR_SYSTEM
+        assert "BRUBRU PRODUCT FACTS" in _VALIDATOR_SYSTEM
+        assert "OUT OF YOUR REMIT" in _VALIDATOR_SYSTEM
+
+    def test_missing_tuples_fail_soft(self, monkeypatch):
+        # If the canonical tuples cannot be imported the validator must run
+        # exactly as it did before, not raise.
+        import services.ai.response_validator as rv
+
+        monkeypatch.setattr(rv, "_PRODUCT_FACTS_CACHE", None)
+        monkeypatch.setitem(__import__("sys").modules, "services.ai_service", None)
+        assert rv._brubru_product_facts() == ""
+        assert "BRUBRU PRODUCT FACTS" not in rv._build_user_message("q", "c", "r")
+        rv._PRODUCT_FACTS_CACHE = None  # do not poison other tests

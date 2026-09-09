@@ -136,6 +136,23 @@ _CONTEXT_BLOCK_LABEL_RE = re.compile(
     flags=re.IGNORECASE,
 )
 
+# Quote characters a model may put around a leaked label. Open and close are
+# matched independently because models pair them inconsistently.
+_QUOTE_CHARS = r'["\u201c\u201d\u00ab\u00bb\u2018\u2019\']'
+
+
+def _drop_unless_lowercase(match: "re.Match") -> str:
+    """Delete a wrapped context-block label unless it is written all-lowercase.
+
+    Wrapped labels are matched case-insensitively so a title-cased leak is
+    caught, but an all-lowercase hit is ordinary prose ("the eu context of this
+    regulation") and is left exactly as written.
+    """
+
+    label = match.group(1)
+    return " " if label != label.lower() else match.group(0)
+
+
 # The canonical product tree, in code so it can be enforced and not merely
 # asked for. _build_system_prompt states this list in prose and
 # _correct_invented_features rewrites anything that does not match, so a
@@ -3100,8 +3117,30 @@ USER QUESTION: {user_message}
         ]
         cleaned = text
         for marker in markers:
-            # Remove standalone markers (with optional surrounding whitespace)
-            cleaned = re.sub(rf'\s*{re.escape(marker)}\s*', ' ', cleaned)
+            esc = re.escape(marker)
+
+            # A marker the model has WRAPPED -- in markdown emphasis or in
+            # quotes -- is being referred to as a label, never used as prose,
+            # so it is safe to match case-insensitively. That matters because
+            # a model writing prose title-cases: production shipped
+            # "al bloc *Legislative Files*" and 'la seccio "Legislative Files"'
+            # on 9 September 2026, and the ALL-CAPS list matched neither.
+            # An all-lowercase match is still refused, so the ordinary phrase
+            # "the eu context of this regulation" survives whatever wraps it.
+            for emphasis in ('**', '__', '*', '_'):
+                ee = re.escape(emphasis)
+                cleaned = re.sub(
+                    rf'\s*{ee}\s*({esc})\s*{ee}\s*',
+                    _drop_unless_lowercase, cleaned, flags=re.IGNORECASE,
+                )
+            cleaned = re.sub(
+                rf'\s*{_QUOTE_CHARS}\s*({esc})\s*{_QUOTE_CHARS}\s*',
+                _drop_unless_lowercase, cleaned, flags=re.IGNORECASE,
+            )
+
+            # Bare marker, ALL CAPS only. Deliberately case-sensitive: "EU
+            # context" is ordinary prose and must survive (a test asserts it).
+            cleaned = re.sub(rf'\s*{esc}\s*', ' ', cleaned)
 
         # Strip bracketed INTERNAL source tags that leak from retrieval, e.g.
         # [DG_MOVE_ORGANIGRAMME], [LEGISLATIVE_FILES], [COM_2025_847.pdf]
@@ -3130,6 +3169,10 @@ USER QUESTION: {user_message}
         # pattern-matched: a blanket "bracketed ALL-CAPS words" rule would eat
         # legitimate prose such as [AI ACT] or [EU INC].
         cleaned = _CONTEXT_BLOCK_LABEL_RE.sub(' ', cleaned)
+        # Safety net: an empty PAIRED emphasis run can only be the residue of a
+        # label removed from inside it, never legitimate markdown. Restricted to
+        # the two-character forms, because a bare "* *" is a plausible bullet.
+        cleaned = re.sub(r'(\*\*|__)\s*\1', ' ', cleaned)
         # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
         # Collapse repeated commas/periods left by truncated enumerations
         # ("2 December 2027,,,." -> "2 December 2027.") -- audit defect D4, 22 Jun 2026.
