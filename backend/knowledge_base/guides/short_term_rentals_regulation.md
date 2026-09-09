@@ -1,6 +1,7 @@
 # EU Short-Term Rentals Transparency Regulation (Reg (EU) 2024/1028)
 
 ## QUICK FACTS
+- **Affordable Housing Act package (9 Sep 2026)**: see `affordable_housing_act` and `affordable_housing_recommendation`. Deep dive: https://brubru.beresol.eu/affordable-housing-act/
 - **LATEST (Wednesday 20 May 2026, DG GROW)**: **Regulation (EU) 2024/1028 on the collection and sharing of data on short-term accommodation rental services starts applying across the EU**. After a 24-month transition since adoption (11 April 2024), the new transparency framework is now operational. Online platforms must verify host registration numbers, conduct random checks against unlawful listings, and share monthly stay+nights data with Member States via Single Digital Entry Points (SDEPs). Hosts must complete a fully online registration procedure and receive a unique registration number per property. Smaller (micro) platforms benefit from a lighter regime. Source: single-market-economy.ec.europa.eu/news/new-rules-bring-increased-transparency-short-term-rentals-sector-2026-05-20_en
 - **Regulation reference**: **Regulation (EU) 2024/1028** of the European Parliament and of the Council of 11 April 2024 on data collection and sharing relating to short-term accommodation rental services (CELEX **32024R1028**, OJ L of 29 April 2024)
 - **Application date**: 20 May 2026 (general application across all Member States); see Article 22 transitional rules for legacy listings

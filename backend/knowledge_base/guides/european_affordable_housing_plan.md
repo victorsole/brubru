@@ -1,6 +1,7 @@
 # European Affordable Housing Plan (EAHP)
 
 ## QUICK FACTS
+- **Affordable Housing Act package (9 Sep 2026)**: see `affordable_housing_act` and `affordable_housing_recommendation`. Deep dive: https://brubru.beresol.eu/affordable-housing-act/
 
 - Initiative: European Affordable Housing Plan -- the EU's first-ever dedicated plan to support all governance levels in delivering affordable housing
 - Commission Communication: COM(2025) 1025 final

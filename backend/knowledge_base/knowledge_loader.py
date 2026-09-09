@@ -9931,7 +9931,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'commissioner jorgensen housing': ['european_affordable_housing_plan'],
     'short-term rentals eu legislation': ['european_affordable_housing_plan'],
     'short term rentals housing eu': ['european_affordable_housing_plan'],
-    'citizens energy package': ['european_affordable_housing_plan', 'accelerateeu_fossil_energy_crisis'],
+    'citizens energy package': ['citizens_energy_package', 'eu_energy_policy', 'european_affordable_housing_plan', 'accelerateeu_fossil_energy_crisis'],
     # FR
     'plan europeen logement abordable': ['european_affordable_housing_plan'],
     'plan européen logement abordable': ['european_affordable_housing_plan'],
@@ -14827,6 +14827,91 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     "s\u00e8rbia": ["serbia_eu_accession_and_conditionality"],
     "serbie": ["serbia_eu_accession_and_conditionality"],
     "servi\u00eb": ["serbia_eu_accession_and_conditionality"],
+
+    # --- Affordable Housing Act package, proposed 9 September 2026 ---
+    # Two instruments, two guides. The Regulation guide answers "what must a city
+    # prove"; the Recommendation guide answers "what should it build". Several keys
+    # point at BOTH, because a reader asking about "the Affordable Housing Act"
+    # usually means the package.
+    # "habitatge assequible" already existed pointing at eu_housing_crisis: the entry
+    # below carries the UNION, because an appended key wins and dropping the earlier
+    # target would silently delete that routing.
+    "affordable housing act": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "housing affordability act": ["affordable_housing_act"],
+    "area under housing stress": ["affordable_housing_act"],
+    "areas under housing stress": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "housing stress": ["affordable_housing_act"],
+    "housing acceleration plan": ["affordable_housing_recommendation"],
+    "price-to-income ratio": ["affordable_housing_act"],
+    "price to income ratio": ["affordable_housing_act"],
+    "llei d'habitatge assequible": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "habitatge assequible": ["eu_housing_crisis", "affordable_housing_act", "affordable_housing_recommendation"],
+    "zona en tensi\u00f3 residencial": ["affordable_housing_act"],
+    "zona en tensio residencial": ["affordable_housing_act"],
+    "ley de vivienda asequible": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "vivienda asequible": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "zona tensionada": ["affordable_housing_act"],
+    "zonas tensionadas": ["affordable_housing_act"],
+    "acte sur le logement abordable": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "logement abordable": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "zone tendue": ["affordable_housing_act"],
+    "abitare accessibile": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "alloggi accessibili": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "tensione abitativa": ["affordable_housing_act"],
+    "wet betaalbaar wonen": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "betaalbaar wonen": ["affordable_housing_act", "affordable_housing_recommendation"],
+    "woningdruk": ["affordable_housing_act"],
+
+    # --- Affordable Housing Act + Recommendation: multilingual gap-fill (9 Sep 2026).
+    # Added after a live 6-language retrieval test failed 7/13: Italian uses the
+    # SINGULAR 'alloggio', Dutch says 'betaalbare huisvesting' not 'betaalbaar wonen',
+    # and no key in any language routed the word 'recommendation' to the Recommendation.
+    # Accented AND unaccented forms, connectors included, per the no-accent-folding rule.
+    'housing acquisition': ['affordable_housing_act'],
+    'acquisition of housing': ['affordable_housing_act'],
+    'restrict housing acquisition': ['affordable_housing_act'],
+    'non-resident buyers': ['affordable_housing_act'],
+    'buyers who are not residents': ['affordable_housing_act'],
+    'second homes restrictions': ['affordable_housing_act'],
+    'restrictions on second homes': ['affordable_housing_act'],
+    'short-term rental restrictions': ['affordable_housing_act'],
+    'vacancy measures housing': ['affordable_housing_act'],
+    'vacant dwellings measures': ['affordable_housing_act'],
+    'recommendation on affordable housing': ['affordable_housing_recommendation'],
+    'commission recommendation on affordable housing': ['affordable_housing_recommendation'],
+    'affordable housing recommendation': ['affordable_housing_recommendation'],
+    'recommandation de la commission sur le logement abordable': ['affordable_housing_recommendation'],
+    'recommandation sur le logement abordable': ['affordable_housing_recommendation'],
+    'reglement sur le logement abordable': ['affordable_housing_act'],
+    'règlement sur le logement abordable': ['affordable_housing_act'],
+    'acquisition de logements par des non-residents': ['affordable_housing_act'],
+    'acquisition de logements par des non-résidents': ['affordable_housing_act'],
+    'recomendacion de la comision sobre vivienda asequible': ['affordable_housing_recommendation'],
+    'recomendación de la comisión sobre vivienda asequible': ['affordable_housing_recommendation'],
+    'recomendacion sobre vivienda asequible': ['affordable_housing_recommendation'],
+    'recomendación sobre vivienda asequible': ['affordable_housing_recommendation'],
+    'reglamento de vivienda asequible': ['affordable_housing_act'],
+    'adquisicion de vivienda por no residentes': ['affordable_housing_act'],
+    'adquisición de vivienda por no residentes': ['affordable_housing_act'],
+    'recomanacio de la comissio sobre habitatge assequible': ['affordable_housing_recommendation'],
+    'recomanació de la comissió sobre habitatge assequible': ['affordable_housing_recommendation'],
+    'recomanacio sobre habitatge assequible': ['affordable_housing_recommendation'],
+    'recomanació sobre habitatge assequible': ['affordable_housing_recommendation'],
+    "reglament d'habitatge assequible": ['affordable_housing_act'],
+    "adquisicio d'habitatge per no residents": ['affordable_housing_act'],
+    "adquisició d'habitatge per no residents": ['affordable_housing_act'],
+    'alloggio accessibile': ['affordable_housing_act', 'affordable_housing_recommendation'],
+    "legge sull'alloggio accessibile": ['affordable_housing_act'],
+    "regolamento sull'alloggio accessibile": ['affordable_housing_act'],
+    "raccomandazione della commissione sull'alloggio accessibile": ['affordable_housing_recommendation'],
+    "raccomandazione sull'alloggio accessibile": ['affordable_housing_recommendation'],
+    'acquisto di alloggi da parte di non residenti': ['affordable_housing_act'],
+    'betaalbare huisvesting': ['affordable_housing_act', 'affordable_housing_recommendation'],
+    'wet betaalbare huisvesting': ['affordable_housing_act'],
+    'verordening betaalbare huisvesting': ['affordable_housing_act'],
+    'aanbeveling van de commissie over betaalbare huisvesting': ['affordable_housing_recommendation'],
+    'aanbeveling over betaalbare huisvesting': ['affordable_housing_recommendation'],
+    'aankoop van woningen door niet-ingezetenen': ['affordable_housing_act'],
 }
 
 

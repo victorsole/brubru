@@ -1,6 +1,7 @@
 # EU Housing Crisis: EP Special Committee Report
 
 ## QUICK FACTS
+- **Affordable Housing Act package (9 Sep 2026)**: see `affordable_housing_act` and `affordable_housing_recommendation`. Deep dive: https://brubru.beresol.eu/affordable-housing-act/
 Report: A10-0025/2026
 Procedure: 2025/2070(INI) (own-initiative report)
 Committee: HOUS (Special Committee on the Housing Crisis)

@@ -4,6 +4,54 @@
     {
       "date": "2026-09-09",
       "action": "updated",
+      "guide": "european_affordable_housing_plan",
+      "title": "European Affordable Housing Plan",
+      "summary": "Cross-linked to the Affordable Housing Act package and its public deep dive.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "short_term_rentals_regulation",
+      "title": "Short-Term Rentals Regulation",
+      "summary": "Cross-linked to the Affordable Housing Act package and its public deep dive.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
+      "guide": "eu_housing_crisis",
+      "title": "The EU Housing Crisis",
+      "summary": "Cross-linked to the Affordable Housing Act package and its public deep dive.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "deep_dive",
+      "guide": "affordable_housing_act",
+      "title": "Deep dive: the Affordable Housing Act",
+      "summary": "Public deep dive in six languages at /affordable-housing-act/, built from the proposal, annex, recommendation, impact assessment and subsidiarity grid.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "added",
+      "guide": "affordable_housing_recommendation",
+      "title": "Commission Recommendation on housing affordability and supply",
+      "summary": "New guide on the non-binding Recommendation adopted the same day: housing acceleration plans, 60-day permitting, openBIM, the 20-year affordability minimum, and the EUR 150 billion annual gap against EUR 47.7 billion mobilised.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "added",
+      "guide": "affordable_housing_act",
+      "title": "Affordable Housing Act (proposed Regulation)",
+      "summary": "New guide on the Regulation proposed 9 September 2026: the price-to-income housing stress test, the conditions a city must satisfy before restricting non-primary use, and the hard limit that a host's own home can never be restricted.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-09",
+      "action": "updated",
       "guide": "eu_sanctions_implementation_framework",
       "title": "EU Sanctions Implementation Framework",
       "summary": "Records that the 8 September trade measures on Israeli settlements are national measures by twelve states, not EU restrictive measures.",
