@@ -956,3 +956,41 @@ def extract_dateline_or_url_date(text: str, url: str) -> tuple[Optional[datetime
                 pass
         return u, "url_filename"
     return None, "none"
+
+
+# --- last resort: the ONLY date on the page ---------------------------------
+# Deliberately NOT part of _ITEM_DATE_CARRIERS. A date in running text is not
+# self-describing -- the SESAR Innovation Days page carries an EVENT date twice in
+# its body, and a page-wide scan would have stored that as the publication date. So
+# this is opt-in per body, for pages that expose no carrier at all.
+#
+# The safety is the refusal, not the match: it answers only when the whole page
+# contains exactly ONE distinct date. Two dates mean the page is ambiguous and it
+# declines; zero means there is nothing to find. Measured across chips-ju and satcen
+# item pages on 9 Sep 2026: 5 of 6 carried exactly one, the sixth carried none.
+_TEXT_DATE_RE = re.compile(
+    r"\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September"
+    r"|October|November|December)\s+\d{4})\b", re.I)
+
+
+def sole_text_date(html: str, *, today: datetime | None = None):
+    """(datetime, "sole_text_date") when the page's text holds exactly one date.
+
+    Returns (None, None) when there are none, when there are two or more, or when the
+    one found fails the same sanity bounds every other carrier applies.
+    """
+    if not html:
+        return None, None
+    text_only = BeautifulSoup(html, "html.parser").get_text(" ", strip=True)
+    found = {m.group(1) for m in _TEXT_DATE_RE.finditer(text_only)}
+    if len(found) != 1:
+        return None, None
+    dt = parse_listing_date(found.pop())
+    if dt is None:
+        return None, None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    today = today or datetime.now(timezone.utc)
+    if not (datetime(1990, 1, 1, tzinfo=timezone.utc) <= dt <= today + timedelta(days=1)):
+        return None, None
+    return dt, "sole_text_date"

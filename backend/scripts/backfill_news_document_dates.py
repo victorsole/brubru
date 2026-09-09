@@ -68,7 +68,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import (  # noqa: E402
-    extract_item_date, extract_dateline_or_url_date, http_get,
+    extract_item_date, extract_dateline_or_url_date, http_get, sole_text_date,
 )
 
 # Bodies with a KNOWN bespoke path (a WAF-aware fetcher, an RSS map, or stored PDF
@@ -106,7 +106,36 @@ def _plain_get(url: str):
     return r.text
 
 
-_FETCHERS = {"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get}
+def _browser_get(url: str):
+    """Playwright. chips-ju renders its item pages client-side (NewsDetails?id=<guid>)
+    and satcen serves a 1.7KB stub to a plain GET, so both came back `fetch_failed`
+    on every attempt -- 18 rows. At a WAF or a JS app, use the browser rather than
+    tuning headers (feedback_waf_walled_use_playwright)."""
+    import importlib.util
+    import pathlib as _pl
+    global _BROWSER
+    if _BROWSER is None:
+        f = _pl.Path(__file__).resolve().parents[1] / "services/scrapers/waf_browser_fetcher.py"
+        spec = importlib.util.spec_from_file_location("waf_browser_fetcher", f)
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules["waf_browser_fetcher"] = mod
+        spec.loader.exec_module(mod)
+        _BROWSER = mod
+    try:
+        return (_BROWSER.fetch_one(url).html or "") or None
+    except Exception:
+        return None
+
+
+_BROWSER = None
+
+_FETCHERS = {"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get,
+             "chips": _browser_get, "satcen": _browser_get}
+
+# Bodies whose item pages expose NO date carrier at all, where the only remaining
+# evidence is the page holding exactly one date. Opt-in per body on purpose: see
+# sole_text_date's docstring for why this must never apply corpus-wide.
+_SOLE_DATE_BODIES = {"chips", "satcen"}
 
 # sesar is a MAP body, not a fetch body: neither its item page nor its listing states
 # a date, so the only publisher statement is the <pubDate> in its own RSS feed
@@ -232,6 +261,8 @@ def main() -> int:
                 carriers["fetch_failed"] += 1
             else:
                 dt, carrier = extract_item_date(html)
+                if dt is None and body in _SOLE_DATE_BODIES:
+                    dt, carrier = sole_text_date(html)
                 if dt is None:
                     carriers["no_carrier"] += 1
                 else:
