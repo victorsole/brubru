@@ -27,6 +27,18 @@ import time
 import psycopg2
 import psycopg2.extras
 
+# Derived from this file's own location so the script runs from any CWD and
+# under `python3.12 -m backend.scripts.<name>`. Without "backend" on the path,
+# the deferred `from scripts._db_url import ...` inside _db() raises
+# ModuleNotFoundError at RUNTIME -- after the model has loaded -- which reads
+# as "nothing to translate" rather than as a crash.
+import pathlib as _pathlib
+_BACKEND = _pathlib.Path(__file__).resolve().parent.parent
+for _p in (str(_BACKEND / "scripts"), str(_BACKEND)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+
 SIX = ["en", "es", "ca", "fr", "it", "nl"]
 SIX_SET = set(SIX)
 ENGINE = "m2m100_418M"

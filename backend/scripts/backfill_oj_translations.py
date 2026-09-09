@@ -29,7 +29,17 @@ from pathlib import Path
 import psycopg2
 import psycopg2.extras
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+# Two entries, both derived from this file's own location so the script works
+# from any CWD and under `python3.12 -m backend.scripts.<name>`:
+#   backend/scripts -> sibling modules below (softcatala_translate_text, ...)
+#   backend         -> the "scripts._db_url" package import inside _db()
+# Without the second, running it the way oj_catalan_daily.sh does dies with
+# ModuleNotFoundError: No module named 'scripts' AFTER the model has loaded,
+# so the failure looks like "no entries to translate" rather than a crash.
+_HERE = Path(__file__).resolve().parent
+for _p in (str(_HERE), str(_HERE.parent)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 from softcatala_translate_text import ensure_model, load_translator, _tr_span, PROTECT, _POSTFIX
 from catalan_translate import _apply_glossary
 
