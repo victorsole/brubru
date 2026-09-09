@@ -467,6 +467,23 @@ def _parse_generic_c_html(soup, html_path: str, celex: str = '') -> dict:
             title = ' '.join(node.get_text(' ', strip=True).split())
             if title:
                 break
+    # UN/ECE documents open with the Formex filename ("L_202601086EN.000101
+    # .fmx.xml"), which would become the page title. Reject filename-shaped
+    # titles and take the first paragraph that reads like one instead.
+    if re.search(r'\.xml\b|^L_\d+|^C_\d+', title or ''):
+        title = ''
+    if not title:
+        # The instrument's own opening line, e.g. "UN Regulation No. 83 –
+        # Uniform provisions concerning ...". Anchored at the START so the
+        # standing UN/ECE disclaimer ("Only the original UN/ECE texts have
+        # legal effect ...", which also contains the word Regulation) cannot
+        # win the match.
+        for cand in paragraphs[:12]:
+            if 20 < len(cand) < 500 and re.match(
+                    r'^(Amendments? to\s+)?(UN\s+)?(ECE\s+)?(Regulation|Decision|'
+                    r'Directive|Recommendation|Agreement)\b', cand, re.I):
+                title = cand
+                break
     return {
         'source_file': html_path,
         'metadata': {'celex': celex, 'language': 'EN'},
@@ -479,6 +496,30 @@ def _parse_generic_c_html(soup, html_path: str, celex: str = '') -> dict:
 
 
 def parse_oj_html(html_path: str, celex: str = '') -> dict:
+    """Wrapper: parse, and flatten if the document has no act skeleton.
+
+    UN/ECE Regulations annexed to EU law are valid OJ HTML but carry NO articles
+    and NO recitals (numbered technical prose + test tables), so the L-series
+    parser returned 0/0 and the caller aborted with "may not be OJ format" —
+    every UN Regulation was untranslatable. _parse_generic_c_html already
+    handles skeleton-less documents for the C-series; reuse it.
+    """
+    parsed = _parse_oj_html_inner(html_path, celex)
+    # Judge on CONTENT, not on the shape of the containers. An exchange of
+    # letters (OJ L_202601998, 8 Sep 2026) parses as 8 article headings with
+    # ZERO paragraphs, so an "articles is non-empty" test passes it through and
+    # renders an empty page. Count the actual body text instead.
+    body = sum(len(a.get('paragraphs') or []) for a in (parsed.get('articles') or []))
+    if body or parsed.get('recitals'):
+        return parsed
+    from bs4 import BeautifulSoup
+    with open(html_path, 'r', encoding='utf-8') as _f:
+        _soup = BeautifulSoup(_f.read(), 'html.parser')
+    print(f'[INFO] {celex or html_path}: no act skeleton, using generic flattener')
+    return _parse_generic_c_html(_soup, html_path, celex)
+
+
+def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
     """
     Parse an OJ-format HTML file (from EUR-Lex or Cellar XHTML) and extract
     the same structure as parse_formex(). This enables translating legislation
@@ -855,6 +896,53 @@ def _apply_glossary(text: str) -> str:
     return text
 
 
+
+# Characters the Softcatala eng-cat model CANNOT emit: it returns the unknown
+# marker U+2047 instead. Measured empirically against the model on 7 Sep 2026
+# (44 dropped, 7 kept) rather than taken from documentation, which had "$" and
+# "&" the wrong way round. Losing these silently corrupts legal text: a "±2 %"
+# tolerance became "⁇ 2 %" in a UN vehicle regulation, and every euro amount in
+# the corpus loses its "€".
+_SC_LOST = "±≤≥×÷°µ→←↔≠€£¥§¶‰…—|_=©®™@#<>~^ºª$"
+_SC_DIACRITICS = "ñäößåøæšžčćłđ"
+# Symbols are protected per character; a WORD carrying a foreign diacritic is
+# protected whole, or a name like "Muñoz" would be split into three fragments
+# and translated piecemeal.
+_SC_PROTECT = re.compile(
+    r"(https?://\S+"
+    r"|[^\s<>]*[" + re.escape(_SC_DIACRITICS) + r"][^\s<>]*"
+    r"|[" + re.escape(_SC_LOST) + r"])"
+)
+
+
+def _sc_protected(text, translate_fn):
+    """Swap unemittable characters for placeholders, translate, swap back.
+
+    Splitting the string on them instead (the canon translator's approach)
+    protects the symbols but fragments the sentence: each span is translated in
+    isolation, so spacing collapses ("Signat perMuñoziWölken") and fragments get
+    re-capitalised ("±Un 10%"). "QQZnQQ" survives the model verbatim — verified
+    against it — so the sentence reaches the translator whole.
+    """
+    tokens = []
+
+    def _stash(m):
+        tokens.append(m.group(0))
+        return f" QQZ{len(tokens) - 1}QQ "
+
+    stashed = _SC_PROTECT.sub(_stash, text)
+    if not stashed.strip():
+        return text
+    out = translate_fn(stashed)
+    for i, original in enumerate(tokens):
+        # Replace ONLY the placeholder: consuming the surrounding whitespace
+        # welds words together ("Signat perMuñoziWölkena Brussel·les").
+        out = out.replace(f"QQZ{i}QQ", original, 1)
+    out = re.sub(r"[ \t]{2,}", " ", out)
+    # Any placeholder the model dropped: fall back to the untouched source.
+    return text if re.search(r"QQZ\d+QQ", out) else out
+
+
 def translate_segments_softcatala(parsed: dict, output_dir: str = '', celex: str = '') -> dict:
     """
     Translate all segments using Softcatala NMT (CTranslate2, local, free).
@@ -875,20 +963,21 @@ def translate_segments_softcatala(parsed: dict, output_dir: str = '', celex: str
     sp = spm.SentencePieceProcessor(model_file=sp_path)
     translator = ctranslate2.Translator(ct2_dir)
 
+    def _raw(text: str) -> str:
+        tokens = sp.encode(text, out_type=str)
+        result = translator.translate_batch([tokens], beam_size=5, max_decoding_length=1024)
+        return sp.decode(result[0].hypotheses[0])
+
     def translate_text(text: str) -> str:
         if not text.strip():
             return text
-        tokens = sp.encode(text, out_type=str)
-        result = translator.translate_batch([tokens], beam_size=5, max_decoding_length=1024)
-        translated = sp.decode(result[0].hypotheses[0])
-        return _apply_glossary(translated)
+        return _apply_glossary(_sc_protected(text, _raw))
 
     def translate_batch(texts: list, label: str) -> list:
         if not texts:
             return []
-        all_tokens = [sp.encode(t, out_type=str) for t in texts]
-        results = translator.translate_batch(all_tokens, beam_size=5, max_decoding_length=1024)
-        translated = [_apply_glossary(sp.decode(r.hypotheses[0])) for r in results]
+        translated = [_apply_glossary(_sc_protected(t, _raw)) if t.strip() else t
+                      for t in texts]
         print(f'  [{label}] Translated {len(translated)}/{len(texts)}')
         return translated
 

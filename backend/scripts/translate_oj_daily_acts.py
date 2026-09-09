@@ -77,28 +77,42 @@ def _db():
 
 
 def _pending(limit: int, date: str | None):
-    """L-series OJ acts with a CELEX and no catalan_translations row, newest first."""
+    """L-series OJ acts with no catalan_translations row, newest first.
+
+    Keyed on COALESCE(celex, oj_id). International agreements, exchanges of
+    letters and similar instruments carry NO CELEX, and the old
+    "celex IS NOT NULL" filter made them invisible to this job forever — 127 of
+    them had accumulated unseen by 8 Sep 2026. They resolve fine on
+    /resource/oj/{oj_id}, so translate them keyed on the OJ id instead.
+    """
     conn = _db()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         q = """
-            SELECT DISTINCT ON (e.celex) e.celex, e.oj_id, e.oj_date, e.title
+            SELECT DISTINCT ON (COALESCE(e.celex, e.oj_id))
+                   COALESCE(e.celex, e.oj_id) AS key, e.celex, e.oj_id,
+                   e.oj_date, e.title
               FROM oj_entries e
-             WHERE e.series = 'L' AND e.celex IS NOT NULL
+             WHERE e.series = 'L'
+               AND COALESCE(e.celex, e.oj_id) IS NOT NULL
                -- EEA Joint Committee decisions carry scraper-derived CELEXes in
                -- the wrong sector (32026R... instead of 22026D...) and 404
                -- everywhere; their cards keep the (working) OJ-id EUR-Lex link.
                AND e.title NOT ILIKE '%%EEA Joint Committee%%'
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.celex = e.celex)
+                                WHERE ct.celex = COALESCE(e.celex, e.oj_id))
         """
         params: list = []
         if date:
             q += " AND e.oj_date = %s"
             params.append(date)
-        q += " ORDER BY e.celex, e.oj_date DESC"
+        q += " ORDER BY COALESCE(e.celex, e.oj_id), e.oj_date DESC"
         cur.execute(q, params)
         rows = sorted(cur.fetchall(), key=lambda r: r["oj_date"], reverse=True)
+        # Downstream keys everything (page dir, DB row, deploy) on "celex";
+        # for a CELEX-less act that key IS the OJ id.
+        for r in rows:
+            r["celex"] = r["key"]
         return rows[:limit]
     finally:
         conn.close()
@@ -147,6 +161,41 @@ def _register(celex: str, html_path: Path, articles: int, recitals: int):
         conn.commit()
     finally:
         conn.close()
+
+
+def _cellar_ojid_fallback(celex: str, oj_id: str) -> str | None:
+    """Fetch from Cellar by OJ id when the CELEX 404s, then translate.
+
+    UN/ECE Regulations annexed to EU law 404 on /resource/celex/ but are served
+    in full on /resource/oj/{oj_id}. Before this, every UN Regulation fell
+    through to the Playwright fallbacks, which EUR-Lex answers with 202/0 bytes
+    behind its WAF — so they looked permanently unreachable when they were one
+    URL away. Plain HTTP, no browser, so it is tried BEFORE Chromium.
+    """
+    if not oj_id:
+        return None
+    import httpx
+    url = f"https://publications.europa.eu/resource/oj/{oj_id}"
+    print(f"  [INFO] Cellar CELEX miss; trying Cellar OJ id {oj_id}", flush=True)
+    try:
+        r = httpx.get(url, headers={
+            "User-Agent": "Brubru/1.0 (EU Policy Assistant; +https://brubru.eu)",
+            "Accept": "application/xhtml+xml, text/html",
+            "Accept-Language": "eng"}, follow_redirects=True, timeout=180)
+    except Exception as e:
+        print(f"  [WARN] Cellar OJ-id error: {str(e)[:80]}", flush=True)
+        return None
+    if r.status_code != 200 or len(r.text) < 5000:
+        print(f"  [WARN] Cellar OJ id {oj_id}: HTTP {r.status_code}, {len(r.text)} bytes", flush=True)
+        return None
+    tmp = f"/tmp/{celex}_ojid.html"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(r.text)
+    p = subprocess.run(
+        [sys.executable, "scripts/catalan_translate.py", "--html", tmp,
+         "--celex", celex, "--ref", oj_id],
+        cwd=BACKEND, capture_output=True, text=True, timeout=7200)
+    return (p.stdout + p.stderr) if p.returncode == 0 else None
 
 
 def _eurlex_fallback(celex: str) -> str | None:
@@ -251,7 +300,9 @@ def run(limit: int, date: str | None):
             if p.returncode != 0 or not html_path.exists():
                 # Fresh acts 404 on Cellar for days; EUR-Lex HTML via the WAF
                 # browser fetcher is available from day one.
-                out = _eurlex_fallback(celex)
+                out = _cellar_ojid_fallback(celex, r.get("oj_id") or "")
+                if out is None or not html_path.exists():
+                    out = _eurlex_fallback(celex)
                 if (out is None or not html_path.exists()) and r.get("oj_id"):
                     # CELEX is likely fabricated (wrong sector). Re-key on oj_id.
                     # Storage key stays the CELEX so every existing lookup
