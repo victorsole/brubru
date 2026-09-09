@@ -128,6 +128,16 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#0693e3',
     icon: 'mdi-chip',
   },
+  {
+    title: 'Affordable Housing Act: the Regulation and the Recommendation',
+    shortTitle: 'Affordable Housing Act',
+    comReference: 'COM(2026) 599',
+    procedureRef: '2026/0268(COD)',
+    basePath: '/affordable-housing-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#d97706',
+    icon: 'mdi-home-city-outline',
+  },
 ];
 
 /**
