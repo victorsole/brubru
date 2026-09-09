@@ -116,6 +116,60 @@ def list_meps(
     }
 
 
+# Procedural asks an MEP announces on social before any document exists.
+# Added 9 September 2026 after /social-eu found Sander Smit (BBB) announcing on X
+# that he and MEP Storm had requested an urgent debate -- a real procedural event
+# that MEP Watch showed as an ordinary post, indistinguishable from a domestic
+# political comment. The tabled document, when it appears, is the citable fact;
+# this only makes the announcement findable.
+#
+# Deliberately narrow. Each pattern is a PHRASE, not a bare word, in all six
+# Brubru languages plus the accent-free variants, because nothing here folds
+# accents. A post that matches nothing gets signal=None, which is the common case.
+_MEP_SIGNAL_PATTERNS: tuple = (
+    ("urgent_debate", (
+        "urgent debate", "urgency debate", "requested an urgent debate",
+        "urgentiedebat", "spoeddebat",
+        "debat d'urgence", "débat d'urgence", "debat d urgence",
+        "debate de urgencia", "debat d'urgencia", "debat d'urgència",
+        "dibattito d'urgenza", "dibattito d urgenza",
+    )),
+    ("written_question", (
+        "written question", "tabled a question", "parliamentary question",
+        "schriftelijke vraag", "question ecrite", "question écrite",
+        "pregunta escrita", "pregunta escrita al", "interrogazione scritta",
+    )),
+    ("amendment_tabled", (
+        "tabled an amendment", "tabled amendments", "amendment tabled",
+        "amendement depose", "amendement déposé", "enmienda presentada",
+        "esmena presentada", "emendamento presentato", "amendement ingediend",
+    )),
+    ("resolution_filed", (
+        "motion for a resolution", "resolution filed", "tabled a resolution",
+        "proposition de resolution", "proposition de résolution",
+        "propuesta de resolucion", "propuesta de resolución",
+        "proposta di risoluzione", "ontwerpresolutie",
+    )),
+)
+
+
+def _detect_mep_signal(text_value: str) -> "Optional[str]":
+    """Name the procedural ask a post announces, or None.
+
+    Returns the FIRST matching signal only. This is a text heuristic on what the
+    MEP wrote, never a claim that the procedural step happened -- the UI must
+    label it as announced-on-social, exactly as the post itself is labelled.
+    """
+
+    if not text_value:
+        return None
+    low = text_value.lower()
+    for name, phrases in _MEP_SIGNAL_PATTERNS:
+        if any(ph in low for ph in phrases):
+            return name
+    return None
+
+
 _LATEST_SOCIAL_DAYS = 14
 _LATEST_SOCIAL_PER_MEP = 2
 
@@ -150,6 +204,10 @@ def _latest_social(db: Session, mep_ids: list) -> dict:
             "posted_at": r["posted_at"].isoformat() if r["posted_at"] else None,
             "text": r["txt"],
             "url": r["post_url"],
+            # None for an ordinary post; a named procedural ask when the MEP says
+            # they requested one. Detected from the post text, so it is a signal
+            # the MEP announced, never a confirmation that the step was taken.
+            "signal": _detect_mep_signal(r["txt"]),
         })
     return out
 

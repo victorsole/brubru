@@ -326,6 +326,125 @@ def _stakeholder_dict(r, interests: set, keywords: List[str], trans: Optional[di
     }
 
 
+_SOCIAL_ENTITY_LABEL = {
+    "commissioner": "Commissioners",
+    "institution": "Institutions",
+    "eu_agency": "Agencies",
+    "mep": "MEPs",
+    "eu_influencer": "EU-affairs journalists",
+    "ec_official": "Commission officials",
+}
+
+
+@router.get("/social", summary="EU social pulse feed",
+            description=(
+                "**What it does**\nReturns what EU actors are SAYING on social media — "
+                "Commissioners, MEPs, institutions, agencies and EU-affairs journalists — "
+                "newest-first, in the same card shape as the institutional and stakeholder "
+                "feeds. It is the third face of 'News': institutions publish, stakeholders "
+                "react, and actors speak. On 8 September 2026 the EU's response to the "
+                "Ratko Mladic funeral existed only here: ten Commissioner posts, and not "
+                "one line in any institutional feed that day.\n\n"
+                "**When to use it**\nThe MEUB 'News' tab, 'EU social pulse' segment. The "
+                "raw developer surface is `/api/v2/social/posts`.\n\n"
+                "**Input**\n`my_interests=true` keeps only posts matching your declared "
+                "policy interests; `institution` filters by actor type (commissioner, mep, "
+                "institution, eu_agency, eu_influencer, ec_official); `search`; "
+                "`limit`/`offset`.\n\n"
+                "**You get back**\nNews-card items (actor as source, post text as summary, "
+                "permalink, platform, engagement), each flagged against your interests, plus "
+                "an actor-type facet. Reposts are excluded: an amplification is not this "
+                "actor's statement. A post is a SIGNAL, never a citable fact."))
+async def list_social_news(
+    my_interests: bool = Query(False),
+    institution: Optional[str] = Query(None, description="Actor type (commissioner, mep, institution, eu_agency, eu_influencer, ec_official)."),
+    search: Optional[str] = Query(None),
+    days: int = Query(7, ge=1, le=90, description="Look-back window in days."),
+    limit: int = Query(60, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    current_user: Optional[User] = Depends(get_current_user_optional),
+    db: Session = Depends(get_db),
+):
+    try:
+        interests = set(_interest_list(current_user)) if current_user else set()
+        keywords = sorted(keywords_for_interests(interests))
+
+        # A repost is evidence of what an actor AMPLIFIED, never of what they said
+        # (migration 219). Empty posts carry no signal and are dropped here rather
+        # than rendered as blank cards.
+        where = ["NOT p.is_repost", "p.content IS NOT NULL", "length(p.content) >= 20",
+                 "p.posted_at >= now() - make_interval(days => :days)"]
+        params: dict = {"days": days}
+        if institution:
+            where.append("a.entity_type = :etype"); params["etype"] = institution
+        if search:
+            where.append("p.content ILIKE :s"); params["s"] = f"%{search}%"
+        if my_interests and keywords:
+            where.append("p.content ILIKE ANY(:kw)"); params["kw"] = [f"%{k}%" for k in keywords]
+        where_sql = "WHERE " + " AND ".join(where)
+
+        total = int(db.execute(text(
+            f"""SELECT COUNT(*) FROM social_posts p
+                JOIN social_accounts a ON a.id = p.account_id {where_sql}"""), params).scalar() or 0)
+
+        rows = db.execute(text(f"""
+            SELECT p.id, p.platform, p.content, p.post_url, p.posted_at,
+                   coalesce(p.like_count, 0) + coalesce(p.repost_count, 0) AS engagement,
+                   a.entity_type, a.entity_name, a.verified
+              FROM social_posts p
+              JOIN social_accounts a ON a.id = p.account_id
+              {where_sql}
+             ORDER BY p.posted_at DESC, p.id DESC
+             LIMIT :limit OFFSET :offset
+        """), {**params, "limit": limit, "offset": offset}).mappings().all()
+
+        items = []
+        for r in rows:
+            body = " ".join((r["content"] or "").split())
+            matched = sorted({k for k in keywords if k.lower() in body.lower()})
+            items.append({
+                "id": str(r["id"]),
+                "title": (body[:110] + "...") if len(body) > 110 else body,
+                "summary": body[:600],
+                "url": r["post_url"],
+                "date": r["posted_at"].isoformat() if r["posted_at"] else None,
+                "source": r["entity_name"],
+                "institution": r["entity_type"],
+                "platform": r["platform"],
+                "engagement": int(r["engagement"] or 0),
+                "verified": bool(r["verified"]),
+                "matches_interests": bool(matched),
+                "matched_keywords": matched[:5],
+                # Loud, because the card looks like a news card and is not one.
+                "is_signal_not_source": True,
+            })
+
+        type_rows = db.execute(text("""
+            SELECT a.entity_type, COUNT(*) AS n
+              FROM social_posts p JOIN social_accounts a ON a.id = p.account_id
+             WHERE NOT p.is_repost AND p.posted_at >= now() - interval '7 days'
+             GROUP BY a.entity_type ORDER BY n DESC
+        """)).mappings().all()
+
+        return {
+            "items": items,
+            "featured": [],
+            "total": total,
+            "pi_active": bool(my_interests and keywords),
+            "files_active": False,
+            "has_tracked_files": False,
+            "facets": {
+                "institution": {r["entity_type"]: int(r["n"]) for r in type_rows if r["entity_type"]},
+                "commission_dg": {},
+                "item_type": {},
+            },
+            "org_type_labels": _SOCIAL_ENTITY_LABEL,
+        }
+    except Exception as e:
+        logger.exception(f"social news list failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load social feed")
+
+
 @router.get("/stakeholders", summary="Brussels stakeholders news feed",
             description=(
                 "**What it does**\nReturns what the Brussels advocacy ecosystem is "
