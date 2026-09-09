@@ -221,6 +221,14 @@ def parse_listing_date(text: str) -> datetime | None:
             return datetime(year, month, day, tzinfo=timezone.utc)
         except ValueError:
             return None
+    m = _US_NAME_DATE_RE.search(text)            # Jun. 22, 2026 / June 22, 2026
+    if m:
+        month = _MONTHS.get(m.group(1).lower().rstrip("."))
+        if month:
+            try:
+                return datetime(int(m.group(3)), month, int(m.group(2)), tzinfo=timezone.utc)
+            except ValueError:
+                return None
     m = _NAME_DATE_RE.search(text)               # 8 June 2026 / 8 Dec 2026 / 18-19 Nov 2026
     if m:
         month = _MONTHS.get(m.group(2).lower().rstrip("."))
@@ -337,6 +345,9 @@ def error_body_reason(body_txt: str | None) -> str | None:
 # and still reports document_date as null so the caller knows it is unknown.
 # See feedback_backfill_no_hallucination.
 
+# Month-first, as SESAR JU renders it: "Jun. 22, 2026".
+_US_NAME_DATE_RE = re.compile(r"\b([A-Z][a-z]{2,8})\.?\s+(\d{1,2}),\s*(\d{4})\b")
+
 _ITEM_DATE_CARRIERS = (
     ("time_datetime",
      re.compile(r"<time[^>]*\sdatetime=[\"']([^\"']+)[\"']", re.I)),
@@ -346,6 +357,15 @@ _ITEM_DATE_CARRIERS = (
      re.compile(r"content=[\"']([^\"']+)[\"'][^>]*property=[\"']article:published_time[\"']", re.I)),
     ("jsonld_datePublished",
      re.compile(r'"datePublished"\s*:\s*"([^"]+)"', re.I)),
+    # LAST on purpose: a class-named element is weaker evidence than a machine-readable
+    # meta tag, so this only fires when none of the above matched. SESAR JU publishes no
+    # <time>, no article:published_time and no JSON-LD -- its date lives in
+    # `<div class="published-date">Jun. 22, 2026</div>` and nowhere else, which is why 18
+    # rows sat undated. Scoped to that element's own text, never the page: the same items
+    # carry an EVENT date ("21 September 2026" on the Innovation Days page) that a
+    # whole-page scan would store as the publication date.
+    ("published_date_class",
+     re.compile(r'class=["\']?[^"\'>]*published-date[^"\'>]*["\']?[^>]*>\s*([^<]{4,40})<', re.I)),
 )
 
 _LOOSE_YMD_RE = re.compile(
@@ -757,7 +777,7 @@ def ingest_xlsx_dataset(xlsx_url, body_code, item_type, *,
 # Six languages, matching what Brubru supports (EN, FR, ES, CA, IT, NL) plus DE,
 # because F4E publishes German copies too. Accent-folded so "marc"/"marc" and
 # "Marz"/"Marz" both resolve.
-_MONTHS: dict[str, int] = {}
+_DATELINE_MONTHS: dict[str, int] = {}
 for _i, _names in enumerate((
     ("january", "januar", "janvier", "enero", "gener", "gennaio", "januari", "jan"),
     ("february", "februar", "fevrier", "febrero", "febrer", "febbraio", "februari", "feb"),
@@ -773,7 +793,7 @@ for _i, _names in enumerate((
     ("december", "dezember", "decembre", "diciembre", "desembre", "dicembre", "december", "dec", "dez"),
 ), start=1):
     for _n in _names:
-        _MONTHS[_n] = _i
+        _DATELINE_MONTHS[_n] = _i
 
 # "22 May 2014" / "le 22 mai 2014" / "17 de marc de 2014" / "22. Mai 2014"
 _DATELINE = re.compile(
@@ -803,7 +823,7 @@ def extract_dateline_date(text: str, *, window: int = 400) -> Optional[datetime]
     head = text[:window]
     for m in _DATELINE.finditer(head):
         day, name, year = m.group(1), _fold(m.group(2)), m.group(3)
-        month = _MONTHS.get(name)
+        month = _DATELINE_MONTHS.get(name)
         if not month:
             continue
         try:
@@ -890,9 +910,9 @@ def extract_dateline_or_url_date(text: str, url: str) -> tuple[Optional[datetime
     m = re.search(r"\b(\d{1,2})\s*\.?\s*(?:de\s+|d')?([A-Za-z\u00C0-\u024F]{3,12})\b",
                   (text or "")[:200])
     partial = None
-    if m and _MONTHS.get(_fold(m.group(2))):
+    if m and _DATELINE_MONTHS.get(_fold(m.group(2))):
         # The year here is a placeholder only: extract_url_date compares month/day.
-        partial = datetime(2000, _MONTHS[_fold(m.group(2))],
+        partial = datetime(2000, _DATELINE_MONTHS[_fold(m.group(2))],
                            min(int(m.group(1)), 28), tzinfo=timezone.utc)
     u = extract_url_date(url, prefer=partial)
     if u is not None:

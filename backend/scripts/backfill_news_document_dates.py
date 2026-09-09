@@ -213,12 +213,17 @@ def main() -> int:
                 continue          # no request at all: the text is already stored
             if body in _MAP_BODIES:
                 dt = _map_for(body).get(r["public_url"])
-                if dt is None:
-                    carriers["not_in_feed"] += 1
-                else:
+                if dt is not None:
                     carriers["rss_pubdate"] += 1
                     pending.append({"id": r["id"], "d": dt})
-                continue          # no per-item request needed
+                    continue      # free: no per-item request needed
+                # A MISS is not an answer. sesar's RSS window holds 6 entries, so all
+                # 18 undated rows had scrolled off it and were being counted
+                # `not_in_feed` and abandoned -- the map treated as the only source
+                # rather than the cheap shortcut it is. Fall through to the page,
+                # which is where the date actually lives
+                # (<div class="published-date">).
+                carriers["not_in_feed_fell_through"] += 1
             # Generic path for any body with no bespoke fetcher: a plain GET and
             # extract_item_date, which reads <time datetime>, article:published_time
             # and JSON-LD datePublished. Most agency pages carry one of the three.
