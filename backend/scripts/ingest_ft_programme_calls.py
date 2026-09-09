@@ -153,13 +153,43 @@ VALUES
      %(indicative_budget)s, %(budget_currency)s, %(source_url)s, %(documents_url)s,
      %(keywords)s, %(target_audience)s, %(published_at)s, NOW(), NOW())
 ON CONFLICT (topic_id) DO UPDATE SET
-    framework_programme = EXCLUDED.framework_programme,
-    title = EXCLUDED.title,
-    description = EXCLUDED.description,
-    status = EXCLUDED.status,
-    type_of_action = EXCLUDED.type_of_action,
-    deadline = EXCLUDED.deadline,
-    keywords = EXCLUDED.keywords,
+    -- SEDIA returns the SAME topic as several records -- one per language, and in
+    -- more than one record type -- and this script upserts them one at a time in a
+    -- loop, so the LAST record to arrive used to win regardless of quality. A record
+    -- carrying no status and no deadline therefore erased the good values a richer
+    -- record had just written.
+    --
+    -- Measured 9 September 2026: 772 of 1,881 calls sat at status='unknown' and 771
+    -- of those had no deadline, yet SEDIA holds both. SMP-COSME-2026-TOURSME-01 is
+    -- status 31094503 (closed) with deadline 2026-05-21, and
+    -- HORIZON-EIC-2025-UKRAINIANTECH-01 is closed with deadline 2025-11-26. Neither
+    -- was missing upstream; both had been overwritten with nothing.
+    --
+    -- So a poorer record may no longer erase a better one. A genuine transition
+    -- still lands: 'closed' is not 'unknown', so it overwrites normally.
+    framework_programme = COALESCE(NULLIF(btrim(EXCLUDED.framework_programme), ''),
+                                   ft_calls_for_proposals.framework_programme),
+    -- normalise_row falls back to the topic_id when SEDIA gives no title, so that
+    -- placeholder must not displace a real one.
+    title = CASE
+        WHEN NULLIF(btrim(EXCLUDED.title), '') IS NULL
+          OR btrim(EXCLUDED.title) = ft_calls_for_proposals.topic_id
+        THEN ft_calls_for_proposals.title ELSE EXCLUDED.title END,
+    description = COALESCE(NULLIF(btrim(EXCLUDED.description), ''),
+                           ft_calls_for_proposals.description),
+    -- 'unknown' is what normalise_row writes when SEDIA's status code is absent or
+    -- unmapped. It is the ABSENCE of a status, not a status, so it never overwrites.
+    status = CASE
+        WHEN EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
+        THEN ft_calls_for_proposals.status ELSE EXCLUDED.status END,
+    type_of_action = COALESCE(NULLIF(btrim(EXCLUDED.type_of_action), ''),
+                              ft_calls_for_proposals.type_of_action),
+    deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_proposals.deadline),
+    keywords = CASE
+        WHEN EXCLUDED.keywords IS NULL OR cardinality(EXCLUDED.keywords) = 0
+        THEN ft_calls_for_proposals.keywords ELSE EXCLUDED.keywords END,
+    -- last_updated must still move every run: it is how we tell "the ingest reached
+    -- this row" from "nothing changed upstream".
     last_updated = NOW()
 """
 
