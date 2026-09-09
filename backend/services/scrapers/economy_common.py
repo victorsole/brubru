@@ -358,14 +358,32 @@ _ITEM_DATE_CARRIERS = (
     ("jsonld_datePublished",
      re.compile(r'"datePublished"\s*:\s*"([^"]+)"', re.I)),
     # LAST on purpose: a class-named element is weaker evidence than a machine-readable
-    # meta tag, so this only fires when none of the above matched. SESAR JU publishes no
-    # <time>, no article:published_time and no JSON-LD -- its date lives in
-    # `<div class="published-date">Jun. 22, 2026</div>` and nowhere else, which is why 18
-    # rows sat undated. Scoped to that element's own text, never the page: the same items
-    # carry an EVENT date ("21 September 2026" on the Innovation Days page) that a
-    # whole-page scan would store as the publication date.
-    ("published_date_class",
-     re.compile(r'class=["\']?[^"\'>]*published-date[^"\'>]*["\']?[^>]*>\s*([^<]{4,40})<', re.I)),
+    # meta tag, so this only fires when none of the above matched. Two agencies publish
+    # their date ONLY this way and nowhere else -- SESAR JU in
+    # `<div class="published-date">Jun. 22, 2026</div>` (18 rows undated) and the EIF in
+    # `<span class="eif-inner-date">4 Sept 2026</span>` (37 rows undated).
+    #
+    # Matches any class ending in `-date` or named exactly `date`, so a third site does
+    # not need a fourth entry here -- minus the suffixes that mean something OTHER than
+    # publication. That exclusion is the important half: these pages are full of dates
+    # that are not the publication date. The SESAR Innovation Days item carries
+    # "21 September 2026" twice as the EVENT date, which is why this reads the matched
+    # element's own text and never the page.
+    # Loose here, precise in Python: the regex only requires "date" somewhere in the
+    # class attribute (which keeps the candidate list short), and extract_item_date
+    # then checks the individual class TOKENS. Trying to express "a class token that
+    # is `date` or ends in -date, anywhere in a multi-class attribute" as one regex
+    # produced a pattern that silently missed both `class="date"` and
+    # `class="field eif-inner-date field__item"`.
+    ("date_class",
+     re.compile(r'class=["\']([^"\']*date[^"\']*)["\'][^>]*>\s*([^<]{4,40})<', re.I)),
+)
+
+# Class suffixes that end in -date but do not mean "published on". Checked against the
+# matched class attribute before the value is trusted.
+_NON_PUBLICATION_DATE_CLASSES = (
+    "event-date", "deadline-date", "expiry-date", "end-date", "start-date",
+    "update-date", "updated-date", "modified-date", "closing-date", "due-date",
 )
 
 _LOOSE_YMD_RE = re.compile(
@@ -403,7 +421,18 @@ def extract_item_date(html: str, *, today: datetime | None = None):
     floor = datetime(1990, 1, 1, tzinfo=timezone.utc)
     ceiling = today + timedelta(days=1)          # tz slop only, not a real window
     for name, rx in _ITEM_DATE_CARRIERS:
-        for raw in rx.findall(html)[:5]:
+        for raw in rx.findall(html)[:12]:
+            if name == "date_class":
+                # (class_attr, text). Skip classes that end in -date but mean
+                # something other than "published on"; an event or deadline date is
+                # often in the past and would be stored as a publication date without
+                # anything looking wrong.
+                cls, raw = raw
+                tokens = [t.lower() for t in cls.split()]
+                if any(bad in t for t in tokens for bad in _NON_PUBLICATION_DATE_CLASSES):
+                    continue
+                if not any(t == "date" or t.endswith("-date") for t in tokens):
+                    continue
             dt = _iso_dt(_normalise_dt_string(raw)) or parse_listing_date(raw)
             if dt is None:
                 continue
