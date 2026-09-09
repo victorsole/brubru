@@ -268,8 +268,14 @@ def main() -> int:
             print(f"         {b:10} {n1:5} / {u1:5}   recovered {u0 - u1}")
 
         dated = sum(v for k, v in carriers.items()
+                    # Keys that are NOT a recovered date. `not_in_feed_fell_through`
+                    # is the important one: it is incremented for the same row that
+                    # a carrier key then counts, so leaving it in double-counted
+                    # every map-body row -- 36 "dates" for 18 rows -- and tripped
+                    # the concurrency warning below on a run that was perfectly
+                    # clean. A tally that counts one row twice is not a tally.
                     if k not in ("fetch_failed", "no_carrier", "not_in_feed",
-                                 "none"))
+                                 "not_in_feed_fell_through", "none"))
         if total_recovered != dated:
             # Not necessarily a bug: the live cron may have inserted or dated rows
             # while this ran. Say so rather than asserting a clean number.
