@@ -114,7 +114,7 @@ Each item carries a derived **`programme`**, **`instrument_family`** and **`inte
 For an accelerator, incubator, business angel or ecosystem builder (like KinEtix Impact) that wants the intermediated-instrument list in one call, to pull into its own systems. The Tenderator is the profile-matched day-to-day view; this is the machine-readable equivalent.
 
 **Input**
-- `status` — comma list, default `open,forthcoming` (also `closed`, `under-evaluation`; `all` for every status).
+- `status` — comma list, default `open,forthcoming` (also `closed`, `unknown`; `all` for every status). There is no `under-evaluation` value in the data; `unknown` is the one to add if you want rows whose source feed stated no status.
 - `programme` — one of the coarse labels (e.g. `HORIZON (EIC)`, `Digital Europe`, `Single Market Programme`).
 - `deadline_before` — only calls closing on/before this date.
 - `q` — free text over title / description.
@@ -146,7 +146,7 @@ Daily sync from the EU Funding & Tenders Portal (SEDIA). Reads existing data —
 )
 async def entrepreneur_instruments(
     request: Request,
-    status: str = Query("open,forthcoming", description="Comma list: open,forthcoming (default) | closed | under-evaluation | all"),
+    status: str = Query("open,forthcoming", description="Comma list: open,forthcoming (default) | closed | unknown | all. No `under-evaluation` value exists in the data."),
     programme: Optional[str] = Query(None, description="Coarse programme label, e.g. 'HORIZON (EIC)', 'Digital Europe', 'Single Market Programme'"),
     deadline_before: Optional[date] = Query(None, description="Only calls closing on/before this date (YYYY-MM-DD)"),
     q: Optional[str] = Query(None, description="Substring match on title / description"),

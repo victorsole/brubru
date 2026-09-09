@@ -102,14 +102,14 @@ def _proposal_to_item(
     response_model=PaginatedResponse[FtCallProposalItem],
     summary="EU funding calls for proposals — Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+",
     description="""**What it does**
-Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (open / forthcoming / closed / under-evaluation), the deadline, the budget, and a body composed from title + objective + scope.
+Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope.
 
 **When to use it**
 For consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see "what's been funded under this programme" → "what's currently open". Default ordering puts most recent deadlines first so partners land on actionable opportunities.
 
 **Input**
 - `framework_programme` — substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).
-- `status` — `open` / `forthcoming` / `closed` / `under-evaluation`.
+- `status` — `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data. `unknown` is the absence of a status from the source feed, not a state of the call, and it is a large share of the corpus — read it as "not stated", never as "closed".
 - `type_of_action` — substring (e.g. `RIA`, `IA`, `CSA`).
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — deadline window (use to find calls closing in your bidding-feasible range).
@@ -131,7 +131,7 @@ Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-ten
 async def list_calls_for_proposals(
     request: Request,
     framework_programme: Optional[str] = Query(None),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed | under-evaluation"),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     type_of_action: Optional[str] = Query(None),
     q: Optional[str] = Query(None, description="Substring match on title/description"),
     deadline_from: Optional[date] = Query(None),

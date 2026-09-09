@@ -146,7 +146,7 @@ Each item is tagged with a derived **`stage`** (idea / seed / growth / scale-up 
 For a founder, scale-up or SME (or an advisor / accelerator) who wants the EU money they can apply to, in one call, instead of digging through the whole portal. Combine `stage=growth&status=open` to find, say, the open Accelerator round.
 
 **Input**
-`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | under-evaluation), `q` (free text), `deadline_from` / `deadline_to`, `page`, `limit`.
+`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | unknown), `q` (free text), `deadline_from` / `deadline_to`, `page`, `limit`.
 
 **Try it**
 ```
@@ -172,7 +172,7 @@ async def funding_startups(
     request: Request,
     stage: Optional[str] = Query(None, description="idea | seed | growth | scale-up | sme"),
     instrument: Optional[str] = Query(None, description="grant | blended | equity | prize"),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed | under-evaluation"),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     q: Optional[str] = Query(None, description="Substring match on title/description."),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
