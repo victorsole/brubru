@@ -84,16 +84,26 @@ def _translator():
 
 
 def _fetch_pending(batch: int):
-    """Short read connection: next chunk of entries with no cached translation."""
+    """Next chunk: no cached translation, OR a cached row whose explanation is stale.
+
+    The AI plain_explanation is generated AFTER an entry is first synced, so the
+    original "no ca row at all" predicate closed the door too early: the title
+    backfill cached a row with a NULL explanation, the English explanation
+    landed later, and the entry was never revisited. My OJ then showed a Catalan
+    title above an English explanation -- 0 of 46 entries had a translated
+    explanation across 8-9 Sep 2026. The upsert is ON CONFLICT DO UPDATE, so
+    re-selecting an entry is safe and idempotent.
+    """
     conn = _db()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute("""
             SELECT e.id, e.title, e.plain_explanation
               FROM oj_entries e
-             WHERE NOT EXISTS (
-                     SELECT 1 FROM oj_entry_translations t
-                      WHERE t.oj_entry_id = e.id AND t.lang = %s)
+              LEFT JOIN oj_entry_translations t
+                     ON t.oj_entry_id = e.id AND t.lang = %s
+             WHERE t.id IS NULL
+                OR (e.plain_explanation IS NOT NULL AND t.plain_explanation IS NULL)
              ORDER BY e.oj_date DESC, e.series, e.oj_number
              LIMIT %s
         """, (LANG, batch))

@@ -771,6 +771,18 @@ def find_xml(search_term: str, base_dir: str = 'docs/LEG_2025-11') -> list:
 # Post-processing corrections applied after any engine.
 # When in doubt, check Spanish EUR-Lex and assess Catalan equivalent.
 GLOSSARY_CORRECTIONS = [
+    # Elision after a preposition when PROTECT kept "Article N" verbatim
+    # (9 Sep 2026). PROTECT stops the model corrupting article numbers, but it
+    # also blocks the contraction Catalan requires, so "application of Article
+    # 101" came out "aplicació de Article 101" and "under Articles 107 and 108"
+    # as "en virtut de Articles 107 i 108". 254 live OJ cards carried this.
+    # Catalan lowercases "article" in running prose; the number is untouched.
+    ("de Articles", "dels articles"),
+    ("de Article", "de l'article"),
+    ("a Articles", "als articles"),
+    ("a Article", "a l'article"),
+    ("en Articles", "en els articles"),
+    ("en Article", "en l'article"),
     # Wrong AINA outputs (Brubru Catalan standard, 24 March 2026)
     ("HA ACONSEGUIT", "HA ADOPTAT"),
     ("ha aconseguit", "ha adoptat"),
