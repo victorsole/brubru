@@ -909,22 +909,75 @@ def _apply_glossary(text: str) -> str:
 
 
 
-# Characters the Softcatala eng-cat model CANNOT emit: it returns the unknown
-# marker U+2047 instead. Measured empirically against the model on 7 Sep 2026
-# (44 dropped, 7 kept) rather than taken from documentation, which had "$" and
-# "&" the wrong way round. Losing these silently corrupts legal text: a "±2 %"
-# tolerance became "⁇ 2 %" in a UN vehicle regulation, and every euro amount in
-# the corpus loses its "€".
-_SC_LOST = "±≤≥×÷°µ→←↔≠€£¥§¶‰…—|_=©®™@#<>~^ºª$"
-_SC_DIACRITICS = "ñäößåøæšžčćłđ"
-# Symbols are protected per character; a WORD carrying a foreign diacritic is
-# protected whole, or a name like "Muñoz" would be split into three fragments
-# and translated piecemeal.
-_SC_PROTECT = re.compile(
-    r"(https?://\S+"
-    r"|[^\s<>]*[" + re.escape(_SC_DIACRITICS) + r"][^\s<>]*"
-    r"|[" + re.escape(_SC_LOST) + r"])"
+# What the Softcatala eng-cat model can actually emit, MEASURED against the model
+# itself on 9 September 2026 rather than listed by hand: of 234 probed characters
+# in Latin-1 Supplement and Latin Extended-A, it can emit exactly TWENTY-SIX --
+# the Catalan repertoire plus the guillemets and the interpunct. Everything else
+# comes back as U+2047, the unknown marker.
+#
+# This replaced two hand-typed allow-lists (34 symbols + 13 diacritics = 47
+# characters) that between them missed roughly 200. The cost of the gap was real:
+# the PGI name "Branza framantata de Teaca" shipped to production as
+# "Br <U+2047> nz <U+2047> fr <U+2047> m <U+2047> ntat <U+2047> de Teaca" because
+# Romanian a-circumflex and a-breve were in neither list, and 767 of 41,322 stored
+# Catalan titles carried the marker. Spanish a-acute was missing too, so
+# "trafico" corrupted as well.
+#
+# A COMPLEMENT rule cannot develop that kind of hole: anything outside the
+# measured repertoire is protected, whatever alphabet it comes from.
+_SC_EMITTABLE = frozenset(
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "0123456789"
+    " \t\n\r\x0b\x0c"
+    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    # the 26 non-ASCII characters the model demonstrably emits
+    "\u00e0\u00e7\u00e8\u00e9\u00ed\u00ef\u00f2\u00f3\u00fa\u00fc"
+    "\u00c0\u00c7\u00c8\u00c9\u00cd\u00cf\u00d2\u00d3\u00da\u00dc"
+    "\u00ab\u00bb\u00b7"
+    "\u201c\u201d"
 )
+
+
+def _sc_unemittable(ch: str) -> bool:
+    return ch not in _SC_EMITTABLE
+
+
+def _sc_spans(text: str):
+    """Yield (start, end) spans to protect, in order.
+
+    Letters and symbols are treated differently on purpose, which the old regex
+    also did and which matters:
+
+    - a word carrying an unemittable LETTER is protected WHOLE, or a name like
+      "Munoz" or "Branza" would be split into fragments and translated piecemeal;
+    - an unemittable SYMBOL is protected per CHARACTER, so an em-dash inside an
+      otherwise translatable word does not freeze the whole word in English.
+    """
+
+    import unicodedata as _ud
+
+    # URLs first: they are full of unemittable characters and must survive intact.
+    for m in re.finditer(r"https?://\S+", text):
+        yield m.span()
+    covered = [m.span() for m in re.finditer(r"https?://\S+", text)]
+
+    def _inside(i):
+        return any(a <= i < b for a, b in covered)
+
+    for m in re.finditer(r"[^\s<>]+", text):
+        a, b = m.span()
+        if _inside(a):
+            continue
+        word = m.group(0)
+        bad = [c for c in word if _sc_unemittable(c)]
+        if not bad:
+            continue
+        if any(_ud.category(c).startswith("L") for c in bad):
+            yield (a, b)                      # whole word: it is a name
+        else:
+            for i, c in enumerate(word):      # per character: it is punctuation
+                if _sc_unemittable(c):
+                    yield (a + i, a + i + 1)
 
 
 def _sc_protected(text, translate_fn):
@@ -936,13 +989,23 @@ def _sc_protected(text, translate_fn):
     re-capitalised ("±Un 10%"). "QQZnQQ" survives the model verbatim — verified
     against it — so the sentence reaches the translator whole.
     """
+    spans = sorted(set(_sc_spans(text)))
+    # Drop spans nested inside an earlier one (a URL swallowing a word).
+    merged = []
+    for a, b in spans:
+        if merged and a < merged[-1][1]:
+            continue
+        merged.append((a, b))
+
     tokens = []
-
-    def _stash(m):
-        tokens.append(m.group(0))
-        return f" QQZ{len(tokens) - 1}QQ "
-
-    stashed = _SC_PROTECT.sub(_stash, text)
+    out_parts, cursor = [], 0
+    for a, b in merged:
+        out_parts.append(text[cursor:a])
+        tokens.append(text[a:b])
+        out_parts.append(f" QQZ{len(tokens) - 1}QQ ")
+        cursor = b
+    out_parts.append(text[cursor:])
+    stashed = "".join(out_parts)
     if not stashed.strip():
         return text
     out = translate_fn(stashed)

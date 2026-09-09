@@ -41,7 +41,7 @@ for _p in (str(_HERE), str(_HERE.parent)):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 from softcatala_translate_text import ensure_model, load_translator, _tr_span, PROTECT, _POSTFIX
-from catalan_translate import _apply_glossary
+from catalan_translate import _apply_glossary, _sc_protected
 
 LANG = "ca"
 ENGINE = "softcatala-eng-cat"
@@ -74,9 +74,24 @@ def _translator():
         if not text or not text.strip():
             return text
         parts = PROTECT.split(text)
-        rebuilt = [p if (j % 2 == 1) else _tr_span(p, tr, sp) for j, p in enumerate(parts)]
+        # PROTECT guards IDENTIFIERS (CELEX, ECLI, case numbers, brand names). It
+        # does nothing about characters, so every foreign letter used to reach the
+        # model raw and come back as U+2047. _sc_protected is the CHARACTER guard,
+        # measured against the model: it can emit 26 non-ASCII characters and
+        # destroys everything else. Both are needed; neither substitutes for the
+        # other. Added 9 September 2026.
+        rebuilt = [p if (j % 2 == 1) else _sc_protected(p, lambda t: _tr_span(t, tr, sp))
+                   for j, p in enumerate(parts)]
         out = _apply_glossary("".join(rebuilt))
-        out = out.replace('⁇', '·').replace(' — ', ', ').replace('—', ', ')
+        # The U+2047 -> "·" substitution that used to sit here is DELETED, and this
+        # comment is here so it does not come back. It did not fix anything: it
+        # laundered destroyed text into a character that looks like legitimate
+        # Catalan punctuation, so "Höldermann" shipped as "H · ldermann" and
+        # "Sociálna poisťovňa" as "Soci · lna pois · ov · a" -- 283 of 2,608 rows,
+        # 11% of My OJ -- while a search for the marker returned ZERO and read as
+        # a clean bill of health. A visible marker is a bug report; an interpunct
+        # is a silent corruption of a party name.
+        out = out.replace(' — ', ', ').replace('—', ', ')
         for a, b in _POSTFIX + _OJ_POSTFIX:
             out = out.replace(a, b)
         return out.strip()
