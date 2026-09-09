@@ -25,6 +25,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._search import text_match
 
 logger = logging.getLogger(__name__)
 
@@ -521,18 +522,19 @@ async def list_tenders(
     if updated_from:
         filters.append(Tender.updated_at >= updated_from)
     if q:
-        like = f"%{q}%"
         # official_name is the CONTRACTING AUTHORITY, and profiling by organisation is
         # the commonest thing a caller does with a tender API. It was returned in every
         # response but not searchable, so q="High-Performance Computing Joint
-        # Undertaking" found 0 while both of that body's notices sat in the corpus --
-        # indistinguishable, to the caller, from an absence of data. Measured 9 Sep
-        # 2026: 8,510 of 9,146 notices (93%) had a buyer name reachable by no other
-        # field, across 6,016 distinct buyers.
-        filters.append(or_(
-            Tender.title.ilike(like), Tender.description.ilike(like),
-            Tender.summary.ilike(like), Tender.official_name.ilike(like),
-        ))
+        # Undertaking" found 0 while both of that body's notices sat in the corpus.
+        #
+        # text_match adds the other half: accent-folding (4,158 of 9,146 buyer names
+        # carry diacritics, so an unaccented spelling found nothing) and word
+        # boundaries for short terms (q=CAD returned 280 ACCORD-CADRE and Fassade
+        # hits, none of them about CAD). See api/v1/_search.py.
+        cond = text_match(q, Tender.title, Tender.description, Tender.summary,
+                          Tender.official_name)
+        if cond is not None:
+            filters.append(cond)
     if filters:
         query = query.filter(and_(*filters))
 
