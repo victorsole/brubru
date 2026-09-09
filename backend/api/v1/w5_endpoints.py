@@ -522,8 +522,16 @@ async def list_tenders(
         filters.append(Tender.updated_at >= updated_from)
     if q:
         like = f"%{q}%"
+        # official_name is the CONTRACTING AUTHORITY, and profiling by organisation is
+        # the commonest thing a caller does with a tender API. It was returned in every
+        # response but not searchable, so q="High-Performance Computing Joint
+        # Undertaking" found 0 while both of that body's notices sat in the corpus --
+        # indistinguishable, to the caller, from an absence of data. Measured 9 Sep
+        # 2026: 8,510 of 9,146 notices (93%) had a buyer name reachable by no other
+        # field, across 6,016 distinct buyers.
         filters.append(or_(
-            Tender.title.ilike(like), Tender.description.ilike(like), Tender.summary.ilike(like),
+            Tender.title.ilike(like), Tender.description.ilike(like),
+            Tender.summary.ilike(like), Tender.official_name.ilike(like),
         ))
     if filters:
         query = query.filter(and_(*filters))
