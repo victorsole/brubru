@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { MeubHeader } from './meub_header';
 import {
+  mdiForumOutline,
   mdiNewspaperVariantMultipleOutline, mdiStar, mdiStarOutline, mdiOpenInNew,
   mdiBookmarkCheck, mdiBookmarkCheckOutline,
   mdiMagnify, mdiImageOutline,
@@ -92,7 +93,7 @@ const INST_LABELS: Record<string, string> = {
 const instLabel = (code: string) => INST_LABELS[code] || code;
 interface NewsResponse { items: NewsItem[]; featured: NewsItem[]; total: number; pi_active: boolean; files_active?: boolean; has_tracked_files?: boolean; facets: Facets; org_type_labels?: Record<string, string>; }
 
-type NewsSource = 'institutions' | 'stakeholders';
+type NewsSource = 'institutions' | 'stakeholders' | 'social';
 
 const authCfg = () => {
   const token = useAuth.getState().token;
@@ -201,6 +202,9 @@ export const NewsTab = () => {
   const [hasPi, setHasPi] = useState(false);
 
   const stakeholders = source === 'stakeholders';
+  const social = source === 'social';
+  // Both alternative sources share the institutional feed's DG/item-type blindness.
+  const altSource = stakeholders || social;
 
   useEffect(() => {
     axios.get<{ keywords: string[] }>(`${API_BASE}/eu-news/my-keywords`, authCfg())
@@ -212,7 +216,7 @@ export const NewsTab = () => {
     if (next === source) return;
     setSource(next);
     setInstitution(''); setDg(''); setItemType('');
-    if (next === 'stakeholders' && mode === 'files') setMode('all');
+    if (next !== 'institutions' && mode === 'files') setMode('all');
   };
 
   useEffect(() => {
@@ -220,14 +224,14 @@ export const NewsTab = () => {
     setError(false);
     const p = new URLSearchParams();
     if (mode === 'pi') p.set('my_interests', 'true');
-    if (mode === 'files' && !stakeholders) p.set('my_files', 'true');
+    if (mode === 'files' && !altSource) p.set('my_files', 'true');
     if (institution) p.set('institution', institution);
-    if (dg && !stakeholders) p.set('commission_dg', dg);
-    if (itemType && !stakeholders) p.set('item_type', itemType);
+    if (dg && !altSource) p.set('commission_dg', dg);
+    if (itemType && !altSource) p.set('item_type', itemType);
     if (search.trim()) p.set('search', search.trim());
     if (stakeholders) p.set('lang', uiLang);
     p.set('limit', '80');
-    const endpoint = stakeholders ? 'stakeholders' : 'items';
+    const endpoint = stakeholders ? 'stakeholders' : social ? 'social' : 'items';
     axios.get<NewsResponse>(`${API_BASE}/eu-news/${endpoint}?${p.toString()}`, authCfg())
       .then((r) => setData(r.data))
       .catch(() => { setData(null); setError(true); })
@@ -249,9 +253,11 @@ export const NewsTab = () => {
         title={t('news.title', 'News')}
         subtitle={stakeholders
           ? t('news.introStakeholders', 'What the Brussels advocacy ecosystem is publishing, in one feed.')
-          : t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
+          : social
+            ? t('news.introSocial', 'What EU actors are saying: Commissioners, MEPs, institutions and EU-affairs journalists. A post is a signal, not a source.')
+            : t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
         aside={data && (
-          <div className="news-head__count"><b>{data.total}</b> {stakeholders ? t('news.updates', 'updates') : t('news.stories', 'stories')}</div>
+          <div className="news-head__count"><b>{data.total}</b> {stakeholders ? t('news.updates', 'updates') : social ? t('news.posts', 'posts') : t('news.stories', 'stories')}</div>
         )}
       />
 
@@ -262,6 +268,9 @@ export const NewsTab = () => {
         </button>
         <button className={stakeholders ? 'is-active' : ''} onClick={() => switchSource('stakeholders')}>
           <Icon path={mdiAccountTieVoiceOutline} size={0.7} /> {t('news.srcStakeholders', 'Brussels stakeholders')}
+        </button>
+        <button className={social ? 'is-active' : ''} onClick={() => switchSource('social')}>
+          <Icon path={mdiForumOutline} size={0.7} /> {t('news.srcSocial', 'EU social pulse')}
         </button>
       </div>
 
@@ -283,15 +292,15 @@ export const NewsTab = () => {
         )}
         {facets && (
           <select className="news-select" value={institution} onChange={(e) => { setInstitution(e.target.value); setDg(''); }}>
-            <option value="">{stakeholders ? t('news.allTypesStk', 'All types') : t('news.allInstitutions', 'All institutions')}</option>
+            <option value="">{altSource ? t('news.allTypesStk', 'All types') : t('news.allInstitutions', 'All institutions')}</option>
             {Object.entries(facets.institution).map(([code, n]) => (
               <option key={code} value={code}>
-                {stakeholders ? t(`news.orgType.${code}`, data?.org_type_labels?.[code] || code) : instLabel(code)} ({n})
+                {altSource ? t(`news.orgType.${code}`, data?.org_type_labels?.[code] || code) : instLabel(code)} ({n})
               </option>
             ))}
           </select>
         )}
-        {!stakeholders && facets && (!institution || institution === 'COMMISSION') && (
+        {!altSource && facets && (!institution || institution === 'COMMISSION') && (
           <select className="news-select" value={dg} onChange={(e) => setDg(e.target.value)}>
             <option value="">{t('news.allDgs', 'All departments')}</option>
             {Object.entries(facets.commission_dg).map(([code, n]) => (

@@ -4962,7 +4962,10 @@
     "translated": "Traduït",
     "translatedFrom": "Traduït del {{lang}}",
     "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment.",
-    "emptyFiles": "Cap notícia relacionada amb els expedients que segueixes ara mateix."
+    "emptyFiles": "Cap notícia relacionada amb els expedients que segueixes ara mateix.",
+    "srcSocial": "Pols social de la UE",
+    "posts": "publicacions",
+    "introSocial": "Què diuen els actors de la UE: comissaris, eurodiputats, institucions i periodistes especialitzats. Una publicació és un senyal, no pas una font."
   },
   "db": {
     "subtitle": "Les biblioteques de coneixement de Brubru i un mapa de qui fa què a la UE, adaptat als teus interessos.",

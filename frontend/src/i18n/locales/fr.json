@@ -4962,7 +4962,10 @@
     "translated": "Traduit",
     "translatedFrom": "Traduit du {{lang}}",
     "error": "Nous n'avons pas pu charger les actualités pour le moment. Veuillez réessayer dans un instant.",
-    "emptyFiles": "Aucune actualité liée aux dossiers que vous suivez pour le moment."
+    "emptyFiles": "Aucune actualité liée aux dossiers que vous suivez pour le moment.",
+    "srcSocial": "Pouls social de l’UE",
+    "posts": "publications",
+    "introSocial": "Ce que disent les acteurs de l’UE : commissaires, députés européens, institutions et journalistes spécialisés. Une publication est un signal, pas une source."
   },
   "db": {
     "subtitle": "Les bibliothèques de connaissances de Brubru et une carte de qui fait quoi dans l'UE, adaptée à vos intérêts.",

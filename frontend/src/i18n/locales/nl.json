@@ -3911,7 +3911,10 @@
     "translated": "Vertaald",
     "translatedFrom": "Vertaald uit {{lang}}",
     "error": "We konden het nieuws nu niet laden. Probeer het zo opnieuw.",
-    "emptyFiles": "Geen nieuws over de dossiers die je volgt op dit moment."
+    "emptyFiles": "Geen nieuws over de dossiers die je volgt op dit moment.",
+    "srcSocial": "Sociale pols van de EU",
+    "posts": "berichten",
+    "introSocial": "Wat EU-actoren zeggen: commissarissen, Europarlementariërs, instellingen en EU-journalisten. Een bericht is een signaal, geen bron."
   },
   "db": {
     "subtitle": "Brubru’s kennisbibliotheken en een kaart van wie wat doet in de EU, afgestemd op jouw interesses.",

@@ -4962,7 +4962,10 @@
     "translated": "Traducido",
     "translatedFrom": "Traducido del {{lang}}",
     "error": "No hemos podido cargar las noticias ahora mismo. Inténtalo de nuevo en un momento.",
-    "emptyFiles": "Ninguna noticia relacionada con los expedientes que sigues ahora mismo."
+    "emptyFiles": "Ninguna noticia relacionada con los expedientes que sigues ahora mismo.",
+    "srcSocial": "Pulso social de la UE",
+    "posts": "publicaciones",
+    "introSocial": "Lo que dicen los actores de la UE: comisarios, eurodiputados, instituciones y periodistas especializados. Una publicación es una señal, no una fuente."
   },
   "db": {
     "subtitle": "Las bibliotecas de conocimiento de Brubru y un mapa de quién hace qué en la UE, adaptado a tus intereses.",

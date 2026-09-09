@@ -4962,7 +4962,10 @@
     "translated": "Translated",
     "translatedFrom": "Translated from {{lang}}",
     "error": "We could not load the news right now. Please try again in a moment.",
-    "emptyFiles": "No news related to the files you track right now."
+    "emptyFiles": "No news related to the files you track right now.",
+    "srcSocial": "EU social pulse",
+    "posts": "posts",
+    "introSocial": "What EU actors are saying: Commissioners, MEPs, institutions and EU-affairs journalists. A post is a signal, not a source."
   },
   "db": {
     "subtitle": "Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.",
