@@ -94,7 +94,13 @@ t "DB: no error page stored as a body" "0" "$(q "SELECT count(*) FROM economy_it
 
 echo ""
 echo "--- FIX 3: fra in, outlet/funding out ---"
-t "fra reachable, not doubled" "64" "$(tot '/api/v2/news/all?body=fra&limit=1')"
+# "not doubled" is the real property: fra is served out of eu_news_items and the
+# union must not count it twice. A hardcoded 64 tested the row count of one
+# afternoon instead, and failed on 9 Sep at 65 -- legitimate growth (65 rows, 65
+# distinct entry_keys, 0 duplicates), the same mistake as the old ombudsman
+# "deduped 21->16" assertion.
+ge "fra reachable"                    1 "$(tot '/api/v2/news/all?body=fra&limit=1')"
+t  "fra not doubled (no dup keys)" "0" "$(q "SELECT count(*) - count(DISTINCT entry_key) FROM eu_news_items WHERE institution='FRA'")"
 t "fra carries body_html"      "yes" "$(jq_ '/api/v2/news/all?body=fra&include_body=true&limit=1' "'yes' if d['data'][0].get('body_html') else 'no'")"
 t "outlet still excluded"      "0" "$(tot '/api/v2/news/all?body=outlet&limit=1')"
 t "funding still excluded"     "0" "$(tot '/api/v2/news/all?body=funding&limit=1')"
