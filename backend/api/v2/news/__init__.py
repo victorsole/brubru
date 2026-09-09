@@ -420,7 +420,10 @@ async def list_news(
                 "old the newest item may be before this endpoint reports `stale: true`.\n\n**Try it**\n"
                 "```\nGET /api/v2/news/latest\n```\n\n**You get back**\n`latest_date`, `age_days`, "
                 "`stale`, `total_items`, `future_dated_items`, the estate counts `bodies_total` / "
-                "`bodies_fresh` / `bodies_stale` / `bodies_undated`, `by_body_truncated` (always "
+                "`bodies_fresh` / `bodies_stale` / `bodies_undated`, plus "
+                "`bodies_with_undated_items` and `undated_items_total` (a body with SOME "
+                "undated items is not counted by `bodies_undated`, which is a state, so use "
+                "these two to see the whole date gap), `by_body_truncated` (always "
                 "false), and `by_body`: EVERY body, stalest first, never truncated. Each body "
                 "carries `latest_date` + `age_days` (its newest published item), `last_fetched` "
                 "+ `fetch_age_days` (when the cron last touched the body, from `fetched_at`), "
@@ -606,7 +609,19 @@ async def latest_news(request: Request,
         "bodies_total": len(body_rows),
         "bodies_fresh": counts["fresh"],
         "bodies_stale": counts["stale"],
+        # A STATE count: bodies where EVERY item lacks a date. It is not the number
+        # of bodies with a date problem, and reading it as one understates the
+        # estate badly -- measured 9 Sep 2026 it was 3 while 13 bodies held undated
+        # rows and 126 of the 154 undated rows sat in bodies this count ignores,
+        # because a body with 37 undated rows out of 249 is `stale` or `fresh`, not
+        # `undated`, and its likely_cause names the publisher rather than the gap.
         "bodies_undated": counts["undated"],
+        # The two counts the state figure cannot express. `undated_items` is already
+        # on every by_body row; these save a consumer from summing it, and give a
+        # monitor something to alert on that does not go quiet the moment a body
+        # acquires its first dated item.
+        "bodies_with_undated_items": sum(1 for b in body_rows if b["undated_items"]),
+        "undated_items_total": sum(b["undated_items"] or 0 for b in body_rows),
         # False, always, and present so a consumer can assert on it. The previous
         # LIMIT 10 had no such marker, which is why it read as a complete estate.
         "by_body_truncated": False,
