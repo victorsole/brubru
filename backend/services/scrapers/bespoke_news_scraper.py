@@ -181,15 +181,36 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
     return out
 
 
+class BespokeFetchError(RuntimeError):
+    """The listing page could not be fetched at all.
+
+    Distinct from "fetched fine and parsed to zero", and the distinction is the
+    whole point: this function used to swallow a fetch failure, log a warning and
+    return [], which is indistinguishable from a quiet source. COUNCIL news went
+    70 days without a single row while the nightly job recorded `success` 352
+    times, because an empty list is not an error anywhere up the chain.
+    """
+
+
 def scrape_bespoke(cfg: Dict, fetcher) -> List[Dict]:
+    """Items from one bespoke listing page.
+
+    Raises BespokeFetchError when the page cannot be fetched, so the caller can
+    report an unreachable source rather than an empty one. Returns [] only when
+    the page really did fetch and yield nothing.
+    """
     try:
         res = fetcher.fetch(cfg["url"], expand_accordions=False, strip_chrome=False)
     except Exception as e:
         logger.warning(f"[BESPOKE-NEWS] fetch failed {cfg['url']}: {e}")
-        return []
-    items = parse_bespoke(res.html or "", cfg)
+        raise BespokeFetchError(f"{cfg['institution']}: {type(e).__name__}: {e}") from e
+    html = res.html or ""
+    if not html:
+        raise BespokeFetchError(f"{cfg['institution']}: empty response body")
+    items = parse_bespoke(html, cfg)
     if not items:
-        logger.info(f"[BESPOKE-NEWS] 0 items {cfg['institution']} {cfg['url']}")
+        logger.info(f"[BESPOKE-NEWS] 0 items {cfg['institution']} {cfg['url']} "
+                    f"({len(html)} chars fetched, so this is a PARSE result, not a fetch failure)")
     return items
 
 
