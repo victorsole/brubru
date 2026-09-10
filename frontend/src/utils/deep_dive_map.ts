@@ -138,6 +138,16 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#d97706',
     icon: 'mdi-home-city-outline',
   },
+  {
+    title: 'European Innovation Act: the Regulation and the sandboxes Recommendation',
+    shortTitle: 'European Innovation Act',
+    comReference: 'COM(2026) 567',
+    procedureRef: '2026/0264(COD)',
+    basePath: '/european-innovation-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#9b51e0',
+    icon: 'mdi-lightbulb-on-outline',
+  },
 ];
 
 /**

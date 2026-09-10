@@ -218,9 +218,17 @@ and shocks phased in linearly over ten years. Administrative costs were computed
 Cost Model** over the **economically affected population** rather than the legally eligible one, which
 is why the numbers are lower than a naive reading would give.
 
-Costs, precisely: EUIPO set-up **EUR 2.42m to 2.57m** (17 to 18 FTE over two years) and **EUR 736,000 a
-year** recurring (10.3 FTE); public-buyer training **EUR 26.1m** for M2 and **EUR 19.6m** for M3. IP
-administrative effort for firms falls **75%**, from 40 to 80 hours a year to 10 to 20.
+Costs, precisely: EUIPO set-up **EUR 2,423,520 to EUR 2,566,080** (17 to 18 FTE over two years) and
+**EUR 736,000 a year** recurring (about 10.3 FTE). Public authorities face **EUR 45 million** of
+additional adjustment costs, driven by the training needed to run R&D procurement and apply the EU
+preference, plus **EUR 2.4 million** for the public sector to build the valuation framework, the
+centre and the marketplace. Inside the JRC model public buyers carry **EUR 26.1 million a year** of
+adjustment costs, netted against efficiency gains of EUR 64.8m to EUR 1,166.4m a year. IP
+administrative effort for IP-rich firms falls **about 75%**, from 40 to 80 hours a year to 10 to 20.
+
+**Do not split the EUR 45 million between measures.** The Act's explanatory memorandum states it as a
+single figure covering both R&D procurement techniques and EU preference. Any per-measure split is
+unsourced.
 
 ## Status and what to watch
 

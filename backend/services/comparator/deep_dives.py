@@ -34,7 +34,7 @@ class DeepDive(TypedDict):
 
 
 # --- BEGIN GENERATED (scripts/generate_deep_dive_map.py) ---
-# 12 deep-dives, generated from frontend/src/utils/deep_dive_map.ts.
+# 13 deep-dives, generated from frontend/src/utils/deep_dive_map.ts.
 # Do NOT edit by hand: run scripts/generate_deep_dive_map.py --write.
 DEEP_DIVES: List[DeepDive] = [
     {
@@ -132,6 +132,14 @@ DEEP_DIVES: List[DeepDive] = [
         'procedure_ref': '2026/0268(COD)',
         'base_path': '/affordable-housing-act',
         'celex_candidates': ['52026PC0599'],
+    },
+    {
+        'short_title': 'European Innovation Act',
+        'title': 'European Innovation Act: the Regulation and the sandboxes Recommendation',
+        'com_reference': 'COM(2026) 567',
+        'procedure_ref': '2026/0264(COD)',
+        'base_path': '/european-innovation-act',
+        'celex_candidates': ['52026PC0567'],
     },
 ]
 # --- END GENERATED ---
