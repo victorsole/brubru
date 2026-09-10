@@ -104,8 +104,12 @@
      ------------------------------------------------------------------ */
   .footer { width:100%; background-color:#f9fafb; border-top:1px solid #e5e7eb; margin-top:auto;
     position:relative; z-index:10;
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px);
-    font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif; }
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px); }
+  /* NO font-family here, deliberately. footer.css sets none either, so in the app
+     the footer INHERITS 'Adobe Caslon Pro' from body. The deep-dive body is already
+     Caslon, so inheriting is what makes the two identical. An explicit sans-serif
+     stack here was wrong (10 Sep 2026) and made the footer the one part of the page
+     not in the canonical font. */
   .footer__container { max-width:100%; width:100%; margin:0; padding:2rem 1.5rem 1.5rem; }
   .footer__content { display:flex; flex-direction:column; gap:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
   .footer__section { display:flex; flex-direction:column; gap:.5rem; min-width:0; }
