@@ -1,12 +1,18 @@
 """
 Brubru deep-dive mapping (procedure ref + CELEX -> deep-dive URL).
 
-Source of truth lives in `frontend/src/utils/deep_dive_map.ts`. This module
-is the Python mirror used by /search, /my-files, /resolve, and any future
-backend surface that needs to remind users a Brubru deep-dive exists for a
-given law.
+Source of truth is `frontend/src/utils/deep_dive_map.ts`. The list below is
+GENERATED from it by scripts/generate_deep_dive_map.py -- do not edit it by hand.
+Used by /search, /my-files, /resolve, and any backend surface that needs to
+remind users a Brubru deep-dive exists for a given law.
 
-Keep this list in sync manually until we wire a build-time exporter.
+It stays a committed artefact rather than a parse-at-import because
+backend/railway.json sets the Docker build context to `backend/`, so `frontend/`
+is NOT in the production image; reading the TS file at import would raise on
+boot. Drift is prevented by tests/test_deep_dive_map_sync.py instead, which is
+where the previous hand-kept mirror should have been guarded: it had silently
+fallen to 8 entries against the TS map's 12, and /search, /my-files and /resolve
+therefore never mentioned the four newest deep-dives.
 """
 
 from __future__ import annotations
@@ -27,73 +33,108 @@ class DeepDive(TypedDict):
     celex_candidates: List[str]
 
 
-# 8 deep-dives, mirrored from frontend/src/utils/deep_dive_map.ts (May 2026)
+# --- BEGIN GENERATED (scripts/generate_deep_dive_map.py) ---
+# 12 deep-dives, generated from frontend/src/utils/deep_dive_map.ts.
+# Do NOT edit by hand: run scripts/generate_deep_dive_map.py --write.
 DEEP_DIVES: List[DeepDive] = [
     {
-        "short_title": "EU Inc.",
-        "title": "EU Inc. — the 28th Regime for European Companies",
-        "com_reference": "COM(2026) 321",
-        "procedure_ref": "2026/0074(COD)",
-        "base_path": "/eu-inc",
-        "celex_candidates": ["52026PC0321"],
+        'short_title': 'EU Inc.',
+        'title': 'EU Inc.: the 28th Regime for European Companies',
+        'com_reference': 'COM(2026) 321',
+        'procedure_ref': '2026/0074(COD)',
+        'base_path': '/eu-inc',
+        'celex_candidates': ['52026PC0321'],
     },
     {
-        "short_title": "Biotech Act",
-        "title": "European Biotech Act",
-        "com_reference": "COM(2025) 1022",
-        "procedure_ref": "2025/0406(COD)",
-        "base_path": "/biotech-act",
-        "celex_candidates": ["52025PC1022"],
+        'short_title': 'Biotech Act',
+        'title': 'European Biotech Act',
+        'com_reference': 'COM(2025) 1022',
+        'procedure_ref': '2025/0406(COD)',
+        'base_path': '/biotech-act',
+        'celex_candidates': ['52025PC1022'],
     },
     {
-        "short_title": "Industrial Accelerator",
-        "title": "Industrial Accelerator Act",
-        "com_reference": "COM(2026) 100",
-        "procedure_ref": "2026/0068(COD)",
-        "base_path": "/industrial-accelerator-act",
-        "celex_candidates": ["52026PC0100"],
+        'short_title': 'Industrial Accelerator',
+        'title': 'Industrial Accelerator Act',
+        'com_reference': 'COM(2026) 100',
+        'procedure_ref': '2026/0068(COD)',
+        'base_path': '/industrial-accelerator-act',
+        'celex_candidates': ['52026PC0100'],
     },
     {
-        "short_title": "Late Payments",
-        "title": "Late Payments Regulation",
-        "com_reference": "COM(2023) 533",
-        "procedure_ref": "2023/0323(COD)",
-        "base_path": "/late-payments",
-        "celex_candidates": ["52023PC0533"],
+        'short_title': 'Late Payments',
+        'title': 'Late Payments Regulation',
+        'com_reference': 'COM(2023) 533',
+        'procedure_ref': '2023/0323(COD)',
+        'base_path': '/late-payments',
+        'celex_candidates': ['52023PC0533'],
     },
     {
-        "short_title": "EU Pharma Laws",
-        "title": "EU Pharmaceutical Laws — The Complete Framework",
-        "com_reference": "COM(2023) 192 + COM(2023) 193",
-        "procedure_ref": "2023/0131(COD)",
-        "base_path": "/pharma-laws",
-        "celex_candidates": ["52023PC0192", "52023PC0193"],
+        'short_title': 'EU Pharma Laws',
+        'title': 'EU Pharmaceutical Laws: The Complete Framework',
+        'com_reference': 'COM(2023) 192 + COM(2023) 193',
+        'procedure_ref': '2023/0131(COD)',
+        'base_path': '/pharma-laws',
+        'celex_candidates': ['52023PC0192', '52023PC0193'],
     },
     {
-        "short_title": "Digital Networks Act",
-        "title": "Digital Networks Act — Rewiring Europe's Telecoms",
-        "com_reference": "COM(2026) 16",
-        "procedure_ref": "2026/0013(COD)",
-        "base_path": "/digital-networks-act",
-        "celex_candidates": ["52026PC0016"],
+        'short_title': 'Digital Networks Act',
+        'title': 'Digital Networks Act: Rewiring Europe\\',
+        'com_reference': 'COM(2026) 16',
+        'procedure_ref': '2026/0013(COD)',
+        'base_path': '/digital-networks-act',
+        'celex_candidates': ['52026PC0016'],
     },
     {
-        "short_title": "CSAM Regulation",
-        "title": "CSAM Regulation — Combating Child Sexual Abuse Online",
-        "com_reference": "COM(2022) 209",
-        "procedure_ref": "2022/0155(COD)",
-        "base_path": "/csam-regulation",
-        "celex_candidates": ["52022PC0209"],
+        'short_title': 'CSAM Regulation',
+        'title': 'Combating Child Sexual Abuse Online (CSAM Regulation)',
+        'com_reference': 'COM(2022) 209',
+        'procedure_ref': '2022/0155(COD)',
+        'base_path': '/csam-regulation',
+        'celex_candidates': ['52022PC0209'],
     },
     {
-        "short_title": "EU-Andorra Agreement",
-        "title": "EU-Andorra Association Agreement",
-        "com_reference": "COM(2024) 191",
-        "procedure_ref": "2024/0102(NLE)",
-        "base_path": "/legislacio-ue-catala/eu-andorra",
-        "celex_candidates": ["52024PC0191"],
+        'short_title': 'EU-Andorra AA',
+        'title': 'EU-Andorra Association Agreement',
+        'com_reference': 'COM(2024) 191',
+        'procedure_ref': '2024/0102(NLE)',
+        'base_path': '/legislacio-ue-catala/eu-andorra',
+        'celex_candidates': ['52024PC0191'],
+    },
+    {
+        'short_title': 'Critical Medicines Act',
+        'title': 'Critical Medicines Act',
+        'com_reference': 'COM(2025) 102',
+        'procedure_ref': '2025/0102(COD)',
+        'base_path': '/critical-medicines-act',
+        'celex_candidates': ['52025PC0102'],
+    },
+    {
+        'short_title': 'Cloud and AI Act',
+        'title': 'Cloud and AI Development Act (CADA)',
+        'com_reference': 'COM(2026) 502',
+        'procedure_ref': '2026/0138(COD)',
+        'base_path': '/cloud-ai-act',
+        'celex_candidates': ['52026PC0502'],
+    },
+    {
+        'short_title': 'Chips Act 2.0',
+        'title': 'Chips Act 2.0',
+        'com_reference': 'COM(2026) 504',
+        'procedure_ref': '2026/0139(COD)',
+        'base_path': '/chips-act-2',
+        'celex_candidates': ['52026PC0504'],
+    },
+    {
+        'short_title': 'Affordable Housing Act',
+        'title': 'Affordable Housing Act: the Regulation and the Recommendation',
+        'com_reference': 'COM(2026) 599',
+        'procedure_ref': '2026/0268(COD)',
+        'base_path': '/affordable-housing-act',
+        'celex_candidates': ['52026PC0599'],
     },
 ]
+# --- END GENERATED ---
 
 
 # Index built once at import time
