@@ -595,9 +595,9 @@ def seed_carriage_tracks(db, user_id: str, apply: bool):
                     INSERT INTO user_carriage_tracks (
                         id, user_id, carriage_id,
                         notify_on_status_change, notify_on_blocking, notify_on_new_documents,
-                        tracked_since
+                        tracked_since, source
                     ) VALUES (
-                        :id, :u, :c, true, true, true, NOW()
+                        :id, :u, :c, true, true, true, NOW(), 'provisioned'
                     )
                     """
                 ),
@@ -623,9 +623,9 @@ def seed_adopted_tracks(db, user_id: str, apply: bool):
                 text(
                     """
                     INSERT INTO user_text_adopted_tracks (
-                        id, user_id, text_adopted_id, tracked_since
+                        id, user_id, text_adopted_id, tracked_since, source
                     ) VALUES (
-                        :id, :u, :t, NOW()
+                        :id, :u, :t, NOW(), 'provisioned'
                     )
                     """
                 ),

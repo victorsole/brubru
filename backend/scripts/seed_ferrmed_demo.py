@@ -210,8 +210,8 @@ def seed_tracks(db, user_id: str, apply: bool) -> int:
         """
         INSERT INTO user_carriage_tracks (id, user_id, carriage_id, tracked_since,
                                           notify_on_status_change, notify_on_blocking,
-                                          notify_on_new_documents)
-        VALUES (gen_random_uuid(), :u, CAST(:c AS uuid), NOW(), TRUE, TRUE, TRUE)
+                                          notify_on_new_documents, source)
+        VALUES (gen_random_uuid(), :u, CAST(:c AS uuid), NOW(), TRUE, TRUE, TRUE, 'provisioned')
         """
     )
     for r in selected:
@@ -287,8 +287,8 @@ def seed_text_adopted_tracks(db, user_id: str, apply: bool) -> int:
     )
     insert_sql = text(
         """
-        INSERT INTO user_text_adopted_tracks (id, user_id, text_adopted_id, tracked_since)
-        VALUES (gen_random_uuid(), :u, CAST(:t AS uuid), NOW())
+        INSERT INTO user_text_adopted_tracks (id, user_id, text_adopted_id, tracked_since, source)
+        VALUES (gen_random_uuid(), :u, CAST(:t AS uuid), NOW(), 'provisioned')
         """
     )
     inserted = 0

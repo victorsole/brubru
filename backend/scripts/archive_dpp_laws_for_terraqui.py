@@ -175,8 +175,8 @@ def main() -> int:
                 if args.apply:
                     db.execute(
                         text("INSERT INTO user_carriage_tracks "
-                             "(id, user_id, carriage_id, tracked_since, archived_at, archived_reason) "
-                             "VALUES (:id, :u, :c, now(), now(), :r)"),
+                             "(id, user_id, carriage_id, tracked_since, archived_at, archived_reason, source) "
+                             "VALUES (:id, :u, :c, now(), now(), :r, 'provisioned')"),
                         {"id": str(uuid.uuid4()), "u": uid, "c": cid, "r": reason},
                     )
 

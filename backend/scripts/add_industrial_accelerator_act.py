@@ -151,6 +151,7 @@ def main():
             track = UserCarriageTrack(
                 user_id=user_id,
                 carriage_id=carriage.id,
+                source="provisioned",  # migration 230: a script wrote this, not the user
             )
             db.add(track)
             tracked_count += 1

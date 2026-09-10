@@ -151,8 +151,8 @@ def main() -> int:
                 if args.apply:
                     db.execute(
                         text("INSERT INTO user_consultation_tracks "
-                             "(user_id, consultation_id, notify_on_deadline, notify_on_outcome, notes) "
-                             "VALUES (:u, :c, true, true, :n)"),
+                             "(user_id, consultation_id, notify_on_deadline, notify_on_outcome, notes, source) "
+                             "VALUES (:u, :c, true, true, :n, 'provisioned')"),
                         {"u": uid, "c": cid, "n": f"LIFE DPP-TEX: {why}"},
                     )
 

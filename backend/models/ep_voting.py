@@ -362,6 +362,14 @@ class UserVoteTrack(Base):
 
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
+    # Migration 230. Who created this row: 'user' (they chose this item),
+    # 'provisioned' (we wrote it -- dormant-claim provisioning, or the
+    # Policy-Interest auto-populate that picks the items by algorithm), NULL
+    # (written before migration 230, provenance unknown). NEVER read NULL as
+    # 'user': 81% of tracked items on 10 Sep 2026 turned out to be our own
+    # writes, and no engagement metric may count 'provisioned'.
+    source = Column(Text, nullable=True, server_default="user")
+
     __table_args__ = (
         Index("ix_user_vote_tracks_user", "user_id"),
         Index("ix_user_vote_tracks_procedure", "procedure_reference"),

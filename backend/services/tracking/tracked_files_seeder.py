@@ -153,7 +153,13 @@ def sync_tracked_files_from_interests(
             continue
         if not _matches_interest_topic(carriage, keywords):
             continue
-        db.add(UserCarriageTrack(user_id=user.id, carriage_id=carriage.id))
+        # Migration 230: this seeder picks the items by algorithm from the
+        # user's Policy Interests. The user asked for a populated list; they
+        # did NOT choose this carriage. Stamp it so no engagement metric can
+        # ever count it as one of their own tracking decisions.
+        db.add(UserCarriageTrack(
+            user_id=user.id, carriage_id=carriage.id, source="provisioned"
+        ))
         already.add(carriage.id)
         seeded += 1
 

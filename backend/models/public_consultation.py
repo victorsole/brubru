@@ -313,6 +313,14 @@ class UserConsultationTrack(Base):
     tracked_since = Column(DateTime, default=datetime.now, nullable=False)
     last_notified_at = Column(DateTime, nullable=True)
 
+    # Migration 230. Who created this row: 'user' (they chose this item),
+    # 'provisioned' (we wrote it -- dormant-claim provisioning, or the
+    # Policy-Interest auto-populate that picks the items by algorithm), NULL
+    # (written before migration 230, provenance unknown). NEVER read NULL as
+    # 'user': 81% of tracked items on 10 Sep 2026 turned out to be our own
+    # writes, and no engagement metric may count 'provisioned'.
+    source = Column(Text, nullable=True, server_default="user")
+
     # Archive (migration 041): NULL = active, non-null = archived at that moment.
     archived_at = Column(DateTime(timezone=True), nullable=True)
     archived_reason = Column(Text, nullable=True)

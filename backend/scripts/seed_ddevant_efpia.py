@@ -433,9 +433,9 @@ def seed_carriage_tracks(db, user_id: str, apply: bool):
                     INSERT INTO user_carriage_tracks (
                         id, user_id, carriage_id,
                         notify_on_status_change, notify_on_blocking, notify_on_new_documents,
-                        tracked_since
+                        tracked_since, source
                     ) VALUES (
-                        :id, :u, :c, true, true, true, NOW()
+                        :id, :u, :c, true, true, true, NOW(), 'provisioned'
                     )
                 """),
                 {"id": str(uuid.uuid4()), "u": user_id, "c": uid},

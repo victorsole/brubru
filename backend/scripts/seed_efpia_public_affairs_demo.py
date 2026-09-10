@@ -145,12 +145,14 @@ def copy_carriages(db, apply: bool) -> None:
         INSERT INTO user_carriage_tracks (
             id, user_id, carriage_id,
             notify_on_status_change, notify_on_blocking, notify_on_new_documents,
-            tracked_since, last_notified_at, user_position, archived_at, archived_reason
+            tracked_since, last_notified_at, user_position, archived_at, archived_reason,
+            source
         )
         SELECT
             gen_random_uuid(), (SELECT id FROM users WHERE email=:demo), carriage_id,
             notify_on_status_change, notify_on_blocking, notify_on_new_documents,
-            NOW(), NULL, user_position, archived_at, archived_reason
+            NOW(), NULL, user_position, archived_at, archived_reason,
+            'provisioned'   -- migration 230: a demo copy is ours, never engagement
         FROM user_carriage_tracks
         WHERE user_id = (SELECT id FROM users WHERE email=:src)
           AND carriage_id NOT IN (
