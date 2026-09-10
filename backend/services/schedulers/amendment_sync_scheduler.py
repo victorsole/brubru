@@ -64,7 +64,12 @@ def start_amendment_sync_scheduler():
     # Daily at 04:00 UTC
     _amendment_scheduler.add_job(
         _daily_amendment_sync,
-        trigger=CronTrigger(hour=4, minute=0),
+    # timezone pinned explicitly (10 Sep 2026). A bare `hour=` resolves against
+    # the scheduler's default timezone, which is the HOST's local zone, while
+    # this file has always documented and logged UTC. Production is a
+    # python:3.11-slim container with no TZ set, so it is UTC and this was
+    # accidentally correct there; on any other host it silently shifts.
+        trigger=CronTrigger(hour=4, minute=0, timezone="UTC"),
         id="daily_amendment_sync",
         name="Daily EP Amendment Sync",
         replace_existing=True,

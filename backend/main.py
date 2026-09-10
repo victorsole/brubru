@@ -24,6 +24,9 @@ from services.email_scheduler import start_email_scheduler, stop_email_scheduler
 from services.schedulers.amendment_sync_scheduler import (
     start_amendment_sync_scheduler, stop_amendment_sync_scheduler
 )
+from services.schedulers.notification_scheduler import (
+    start_notification_scheduler, stop_notification_scheduler
+)
 
 # Import routers
 from api import (
@@ -95,6 +98,17 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Amendment sync scheduler failed to start (non-fatal): {str(e)}")
 
+    # Start notification delivery (U3, 10 Sep 2026). Both producers existed,
+    # were tested, and had no caller in the running app -- so the notifications
+    # table went 84 days without a row while 69 of 70 accounts holding tracked
+    # items had never received one. Jobs run off the event loop via
+    # asyncio.to_thread, unlike the RSS scheduler above.
+    try:
+        start_notification_scheduler()
+        print("[OK] Notification scheduler started")
+    except Exception as e:
+        print(f"[WARN] Notification scheduler failed to start (non-fatal): {str(e)}")
+
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:
         from services.toolbox_service import get_toolbox_service
@@ -136,6 +150,13 @@ async def lifespan(app: FastAPI):
         print("[OK] Amendment sync scheduler stopped")
     except Exception as e:
         print(f"[WARN] Amendment sync scheduler shutdown error: {str(e)}")
+
+    # Stop notification scheduler
+    try:
+        stop_notification_scheduler()
+        print("[OK] Notification scheduler stopped")
+    except Exception as e:
+        print(f"[WARN] Notification scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app

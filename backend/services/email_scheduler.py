@@ -110,7 +110,12 @@ def start_email_scheduler():
     # Every Monday at 09:00 UTC
     _email_scheduler.add_job(
         _send_reengagement_emails,
-        trigger=CronTrigger(day_of_week="mon", hour=9, minute=0),
+    # timezone pinned explicitly (10 Sep 2026). A bare `hour=` resolves against
+    # the scheduler's default timezone, which is the HOST's local zone, while
+    # this file has always documented and logged UTC. Production is a
+    # python:3.11-slim container with no TZ set, so it is UTC and this was
+    # accidentally correct there; on any other host it silently shifts.
+        trigger=CronTrigger(day_of_week="mon", hour=9, minute=0, timezone="UTC"),
         id="weekly_reengagement_email",
         name="Weekly Re-engagement Emails",
         replace_existing=True,

@@ -281,8 +281,15 @@ def _create_notification(cur, user_id: str, payload: dict) -> None:
     )
 
 
-def _run_one_subscription(cur, sub: dict, dry_run: bool = False) -> int:
-    """Run one subscription. Returns number of new notifications created."""
+def _run_one_subscription(cur, sub: dict, dry_run: bool = False,
+                          unknown_scopes: Optional[set] = None) -> int:
+    """Run one subscription. Returns number of new notifications created.
+
+    `unknown_scopes` collects any subscribed scope with no handler, so the
+    caller can escalate. Defaults to a throwaway set for existing callers.
+    """
+    if unknown_scopes is None:
+        unknown_scopes = set()
     user_id = str(sub['user_id'])
     label = sub['label']
     scopes = sub['scopes'] or ['eu_laws', 'texts_adopted', 'legislative_carriages', 'rss_entries']
@@ -295,7 +302,14 @@ def _run_one_subscription(cur, sub: dict, dry_run: bool = False) -> int:
     for scope in scopes:
         q = _SCOPE_QUERIES.get(scope)
         if not q:
+            # A subscribed scope with no handler delivers NOTHING, silently: the
+            # user asked to be told about parliamentary questions and the run
+            # still reports success. Measured 10 Sep 2026: 3 of the 7 scopes in
+            # use (ep_resolutions, mep_amendments, parliamentary_questions) have
+            # no entry in _SCOPE_QUERIES. Counted and returned in the summary so
+            # a caller can escalate it -- silence is not success.
             logger.warning('Unknown scope %s for subscription %s', scope, sub['id'])
+            unknown_scopes.add(scope)
             continue
 
         for term in or_terms:
@@ -371,13 +385,21 @@ def run_all(user_email: Optional[str] = None, dry_run: bool = False) -> dict:
         params,
     )
     subs = cur.fetchall()
-    summary = {'subscriptions_run': 0, 'notifications_created': 0, 'by_subscription': []}
+    # `unknown_scopes` and `subscriptions_failed` exist because this function
+    # used to report success no matter what: a scope with no handler and a
+    # subscription that raised both left the summary looking like a clean run.
+    # A job that can fail must say so -- feedback_silent_failure_reports_success.
+    unknown_scopes: set = set()
+    summary = {'subscriptions_run': 0, 'notifications_created': 0,
+               'subscriptions_failed': 0, 'unknown_scopes': [], 'by_subscription': []}
     for sub in subs:
         try:
-            n = _run_one_subscription(cur, sub, dry_run=dry_run)
+            n = _run_one_subscription(cur, sub, dry_run=dry_run,
+                                      unknown_scopes=unknown_scopes)
         except Exception as e:
-            logger.error('Subscription %s failed: %s', sub['id'], e)
+            logger.error('Subscription %s failed: %s: %s', sub['id'], type(e).__name__, e)
             conn.rollback()
+            summary['subscriptions_failed'] += 1
             continue
         if not dry_run:
             conn.commit()
@@ -389,6 +411,7 @@ def run_all(user_email: Optional[str] = None, dry_run: bool = False) -> dict:
             'label': sub['label'],
             'new_notifications': n,
         })
+    summary['unknown_scopes'] = sorted(unknown_scopes)
     cur.close()
     conn.close()
     return summary
