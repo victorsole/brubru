@@ -94,8 +94,47 @@ INTERNAL_USER_SQL = """
         OR u.email ILIKE 'prospect+%'
         OR u.email ILIKE 'v2_%'
         OR u.email ILIKE 'v2sec_%'
+        -- U4 (10 Sep 2026). Hellobo 2025 SL is the founder's own company, and
+        -- vsoleferioli@ is his personal account. Neither is a customer.
+        --
+        -- The account this rule was PROPOSED for, victor@hellobo.eu, was already
+        -- caught by `is_trainer IS TRUE` above -- verified by running this very
+        -- predicate against it. The finding that put it here came from a
+        -- hand-typed ad-hoc filter in the morning's analysis, not from this
+        -- report, and was wrongly attributed to the report. What the domain rule
+        -- actually adds is the three OTHER hellobo.eu rows (Sergi Duarte,
+        -- Meritxell Vicheto, Bo), which are seeded test users.
+        OR u.email ILIKE '%@hellobo.eu'
+        OR u.email = 'vsoleferioli@gmail.com'
     )
 """
+
+# The 13 seeded test users (backend/scripts/seed_test_users.py, password test123)
+# are NOT filtered here, and 7 of them currently read as customers. Listed rather
+# than silently applied, because the call is a product judgement and not mine:
+#
+#   margapayola@gmail.com   blue,   8 tracks -- and the ONLY account that has ever
+#                           received a notification (103 of them, 0 read). Today's
+#                           /users run named her as a real actor with self-chosen
+#                           tracking. She is a fixture.
+#   j.gonzalez@bepassociation.eu   blue -- reported this morning as one of the six
+#                           accounts "past expiry, still fully served".
+#   danielroldan1989@gmail.com, aleixsarri@gmail.com, marc.desmond10@gmail.com,
+#   andres.lopez1@alumni.esade.edu  -- blue/yellow, little or no activity.
+#
+# Some of these are real people who were given a seeded account, so filtering them
+# would erase genuine usage; some are pure fixtures whose rows have already been
+# read as customer engagement. Deciding which is which needs Victor.
+# See memory/feedback_seed_fixtures_contaminate_prod.md -- same defect class as the
+# synthetic transcript that fed the chatbot in April 2026.
+SEEDED_TEST_USER_EMAILS_PENDING_DECISION = (
+    "margapayola@gmail.com",
+    "j.gonzalez@bepassociation.eu",
+    "danielroldan1989@gmail.com",
+    "aleixsarri@gmail.com",
+    "marc.desmond10@gmail.com",
+    "andres.lopez1@alumni.esade.edu",
+)
 
 # Our own traffic, two ways.
 #
