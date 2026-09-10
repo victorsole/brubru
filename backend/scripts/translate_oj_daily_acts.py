@@ -276,6 +276,51 @@ def _ojid_fallback(oj_id: str, celex: str) -> str | None:
     return None
 
 
+
+# --- content gate (added 10 September 2026, after the incident) -------------
+# 52 pages were generated for the day's OJ and 44 reached the live site. NONE
+# contained the act: 49 were the EUR-Lex WEBSITE -- cookie notice, language
+# picker, "Inicia la sessio" -- translated into Catalan and published under the
+# banner "Aquesta traduccio ha estat preparada per Brubru", and 3 were
+# correct-titled empty shells.
+#
+# The pipeline had already said so. `_eurlex_fallback` logs
+# `Article=False (WAF challenge or empty)` when the fetched page has no article
+# structure, and the run then printed `[OK] registered` anyway. The signal
+# existed and nothing acted on it.
+#
+# Nor did file size catch it: a chrome page is ~15KB, so "no file under 6KB"
+# passes happily. Only reading the BODY distinguishes an act from a cookie
+# banner, so that is what this does. A page that fails is left on disk for
+# inspection but never registered, so `catalan_url` never appears on the card
+# and the reader keeps the EUR-Lex link -- the C-series behaviour, which is
+# honest.
+_CHROME_MARKERS = (
+    "Inicia la sessió", "Les meves cerques recents", "EUR-Lex home",
+    "cookies al nostre lloc web", "característiques experimentals",
+)
+
+
+def _page_has_act_text(path: Path) -> tuple[bool, str]:
+    """True when the generated page really holds the act. Reads the body."""
+    import html as _html
+    try:
+        t = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError as exc:
+        return False, f"unreadable: {exc}"
+    paras = re.findall(r'<p class="article-text">(.*?)</p>', t, re.S)
+    clean = [_html.unescape(re.sub(r"<[^>]+>", "", x)).strip() for x in paras]
+    joined = " ".join(clean)
+    for marker in _CHROME_MARKERS:
+        if marker in joined:
+            return False, "EUR-Lex site chrome, not the act"
+    substantive = [c for c in clean if len(c) > 200]
+    chars = sum(len(c) for c in clean)
+    if len(substantive) < 3 or chars <= 1500:
+        return False, f"thin body ({chars} chars, {len(substantive)} substantive paragraphs)"
+    return True, f"{chars} chars, {len(substantive)} substantive paragraphs"
+
+
 def run(limit: int, date: str | None):
     fails = _load_failures()
     rows = _pending(limit + len(fails), date)
@@ -321,10 +366,17 @@ def run(limit: int, date: str | None):
                 articles, recitals = int(mc.group(1)), int(mc.group(2))
         else:
             print("  [INFO] HTML already present, registering only", flush=True)
+        good, why = _page_has_act_text(html_path)
+        if not good:
+            # Never register a page that does not contain the act.
+            print(f"  [REJECT] {why}; not registered, card keeps its EUR-Lex link", flush=True)
+            _record_failure(celex)
+            failed += 1
+            continue
         try:
             _register(celex, html_path, articles, recitals)
             ok += 1
-            print(f"  [OK] registered ({(time.time()-t0)/i:.0f}s/act avg)", flush=True)
+            print(f"  [OK] registered ({why}) ({(time.time()-t0)/i:.0f}s/act avg)", flush=True)
         except Exception as e:
             failed += 1
             print(f"  [SKIP] db register failed: {str(e)[:100]}", flush=True)
