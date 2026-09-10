@@ -343,13 +343,34 @@ def main() -> int:
             # Generic path for any body with no bespoke fetcher: a plain GET and
             # extract_item_date, which reads <time datetime>, article:published_time
             # and JSON-LD datePublished. Most agency pages carry one of the three.
-            html = _FETCHERS.get(body, _escalating_get)(r["public_url"])
+            fetcher = _FETCHERS.get(body, _escalating_get)
+            html = fetcher(r["public_url"])
             if html is None:
                 carriers["fetch_failed"] += 1
             else:
                 dt, carrier = extract_item_date(html)
                 if dt is None and body in _SOLE_DATE_BODIES:
                     dt, carrier = sole_text_date(html)
+                if dt is None and fetcher is not _browser_get:
+                    # ESCALATE ON EXTRACTION FAILURE, not only on fetch failure
+                    # (10 September 2026). `_escalating_get` decides "wall" from
+                    # the status and the size, so a 200 serving 157KB of shell
+                    # looked healthy and the browser was never tried. The ECA
+                    # renders its date client-side: the static HTML carries no
+                    # <time>, no meta, no JSON-LD and no date class, while the
+                    # rendered page opens with
+                    #     <time class="date" datetime="09/09/2026">
+                    # Sixteen rows, including the REPowerEU special report the
+                    # /social-eu pulse found the same morning, were being written
+                    # off as `no_carrier` on a page that has the date.
+                    #
+                    # The test has to be "did we get the thing we came for",
+                    # not "did the request look fine".
+                    rendered = _browser_get(r["public_url"])
+                    if rendered:
+                        dt, carrier = extract_item_date(rendered)
+                        if dt is not None:
+                            carrier = f"{carrier}_rendered"
                 if dt is None:
                     carriers["no_carrier"] += 1
                 else:
