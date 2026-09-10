@@ -471,27 +471,69 @@ def section_api(conn, start, end, include_internal):
     return {"by_caller": by_caller, "by_endpoint": by_endpoint}
 
 
+# The six tables that carry `source` (migration 230). The other four tracking
+# surfaces have no provenance column yet, so they report "n/a" rather than a
+# blank -- a missing split must be visible, not silently read as "all user".
+SOURCED_TRACK_TABLES = {
+    "user_carriage_tracks",
+    "user_commission_doc_tracks",
+    "user_committee_work_tracks",
+    "user_consultation_tracks",
+    "user_text_adopted_tracks",
+    "user_vote_tracks",
+}
+
+MEUB_TRACK_TABLES = [
+    ("My Tracked Files", "user_carriage_tracks", "tracked_since"),
+    ("Commission docs", "user_commission_doc_tracks", "tracked_since"),
+    ("Committee work", "user_committee_work_tracks", "tracked_since"),
+    ("Consultations", "user_consultation_tracks", "tracked_since"),
+    ("Texts adopted", "user_text_adopted_tracks", "tracked_since"),
+    # `user_vote_tracks` has created_at, not tracked_since, and
+    # `user_feed_subscriptions` has subscribed_at, not created_at. Both were
+    # wrong from the start, so both queries errored and both surfaces printed
+    # "-" -- which reads as "nobody used it". 359 feed subscriptions were
+    # invisible in every run before 10 Sep 2026. An empty output is never
+    # absence: feedback_empty_result_is_a_broken_instrument.
+    ("Votes", "user_vote_tracks", "created_at"),
+    ("Calendar subs", "user_calendar_subscriptions", "created_at"),
+    ("Saved entries", "user_saved_entries", "saved_at"),
+    ("Feed subs", "user_feed_subscriptions", "subscribed_at"),
+    ("Comparator grids", "comparator_grids", "created_at"),
+]
+
+
 def section_meub_tracking(conn, start, end, include_internal):
-    """What users put under watch in My EU Bubble."""
+    """What users put under watch in My EU Bubble, SPLIT BY WHO PUT IT THERE.
+
+    U2 (10 Sep 2026). A single `n` per surface is not reportable. On 10 September
+    755 of 932 non-internal tracked items -- 81% -- turned out to be our own
+    writes (dormant-claim provisioning and the Policy-Interest auto-populate),
+    and reporting them as one number had already been read as engagement in at
+    least two previous runs.
+
+    Columns are three-state, never two:
+      chosen       source='user'         the user picked this item
+      provisnd     source='provisioned'  we wrote it on their behalf
+      unknown      source IS NULL        written before migration 230
+
+    `unknown` is NOT folded into `chosen`. That fold is the entire defect.
+    """
     filt = "" if include_internal else f"AND NOT {INTERNAL_USER_SQL}"
-    tables = [
-        ("My Tracked Files", "user_carriage_tracks", "tracked_since"),
-        ("Commission docs", "user_commission_doc_tracks", "tracked_since"),
-        ("Committee work", "user_committee_work_tracks", "tracked_since"),
-        ("Consultations", "user_consultation_tracks", "tracked_since"),
-        ("Texts adopted", "user_text_adopted_tracks", "tracked_since"),
-        ("Votes", "user_vote_tracks", "tracked_since"),
-        ("Calendar subs", "user_calendar_subscriptions", "created_at"),
-        ("Saved entries", "user_saved_entries", "saved_at"),
-        ("Feed subs", "user_feed_subscriptions", "created_at"),
-        ("Comparator grids", "comparator_grids", "created_at"),
-    ]
     out = []
-    for label, table, ts in tables:
+    for label, table, ts in MEUB_TRACK_TABLES:
+        sourced = table in SOURCED_TRACK_TABLES
+        split = (
+            """,
+                   count(*) FILTER (WHERE t.source = 'user') AS chosen,
+                   count(*) FILTER (WHERE t.source = 'provisioned') AS provisnd,
+                   count(*) FILTER (WHERE t.source IS NULL) AS unknown"""
+            if sourced else ""
+        )
         rows = q(
             conn,
             f"""
-            SELECT count(*) AS n, count(DISTINCT t.user_id) AS actors
+            SELECT count(*) AS n, count(DISTINCT t.user_id) AS actors{split}
             FROM {table} t
             LEFT JOIN users u ON u.id = t.user_id
             WHERE t.{ts} >= :start AND t.{ts} < :end {filt}
@@ -500,10 +542,81 @@ def section_meub_tracking(conn, start, end, include_internal):
             end=end,
         )
         if errored(rows):
-            out.append({"surface": label, "n": None, "actors": None, "note": rows[0]["__error__"]})
+            out.append({"surface": label, "n": None, "actors": None,
+                        "chosen": None, "provisnd": None, "unknown": None,
+                        "note": rows[0]["__error__"]})
+            continue
+        row = {"surface": label, "n": rows[0]["n"], "actors": rows[0]["actors"]}
+        if sourced:
+            row.update(chosen=rows[0]["chosen"], provisnd=rows[0]["provisnd"],
+                       unknown=rows[0]["unknown"])
         else:
-            out.append({"surface": label, "n": rows[0]["n"], "actors": rows[0]["actors"]})
+            # No provenance column on this surface. Say so; never leave it blank.
+            row.update(chosen="n/a", provisnd="n/a", unknown="n/a")
+        out.append(row)
     return out
+
+
+def section_tracking_provenance(conn, include_internal):
+    """Corpus-level provenance of every tracked item. Deliberately ALL-TIME.
+
+    Provenance is a property of the corpus, not of a window: a window with no
+    tracking activity would print zeros and say nothing about the 932 rows that
+    already exist. So this section ignores start/end, and says so in its header.
+
+    For rows written before migration 230 (`source IS NULL`) the provenance is
+    genuinely unknown, and it is NOT guessed here. A write-shape ESTIMATE is
+    reported alongside, clearly labelled: an account whose entire tracking landed
+    in <=2 distinct minutes was almost certainly bulk-written. That heuristic is
+    decisive at 104-rows-in-one-minute and merely suggestive at 30, so it is
+    printed as an estimate with its own rule stated, never merged into a count.
+    """
+    filt = "" if include_internal else f"AND NOT {INTERNAL_USER_SQL}"
+    # All six sourced tables carry archived_at (verified against
+    # information_schema, not assumed -- the first draft of this function
+    # special-cased user_vote_tracks on the guess that it had none).
+    union = "\n            UNION ALL\n            ".join(
+        f"SELECT user_id, source, {ts} AS ts FROM {tbl} WHERE archived_at IS NULL"
+        for _, tbl, ts in MEUB_TRACK_TABLES
+        if tbl in SOURCED_TRACK_TABLES
+    )
+
+    totals = q(
+        conn,
+        f"""
+        WITH t AS ({union})
+        SELECT coalesce(t.source, 'unknown (pre-230)') AS provenance,
+               count(*) AS items,
+               count(DISTINCT t.user_id) AS holders
+        FROM t LEFT JOIN users u ON u.id = t.user_id
+        WHERE true {filt}
+        GROUP BY 1 ORDER BY 2 DESC
+        """,
+    )
+
+    # The write-shape estimate, over the UNKNOWN bucket only. Known rows need no
+    # guessing, so guessing about them would only add noise.
+    shape = q(
+        conn,
+        f"""
+        WITH t AS ({union}),
+        per_user AS (
+            SELECT t.user_id,
+                   count(*) AS items,
+                   count(DISTINCT date_trunc('minute', t.ts)) AS write_minutes
+            FROM t LEFT JOIN users u ON u.id = t.user_id
+            WHERE t.source IS NULL {filt}
+            GROUP BY 1
+        )
+        SELECT
+            count(*) FILTER (WHERE write_minutes <= 2) AS bulk_holders,
+            count(*) FILTER (WHERE write_minutes > 2) AS accrued_holders,
+            coalesce(sum(items) FILTER (WHERE write_minutes <= 2), 0) AS bulk_items,
+            coalesce(sum(items) FILTER (WHERE write_minutes > 2), 0) AS accrued_items
+        FROM per_user
+        """,
+    )
+    return {"totals": totals, "shape_estimate": shape}
 
 
 def section_feedback(conn, start, end):
@@ -928,7 +1041,17 @@ def render(report):
         _fmt(report["api"]["by_endpoint"]),
         "",
         "-- 9. MY EU BUBBLE TRACKING ----------------------------------------------",
-        _fmt(report["meub"], ["surface", "n", "actors"]),
+        "  (in window; chosen = the user picked it, provisnd = we wrote it,",
+        "   unknown = pre-migration-230 rows whose provenance is not recorded)",
+        _fmt(report["meub"], ["surface", "n", "actors", "chosen", "provisnd", "unknown"]),
+        "",
+        "-- 9b. TRACKING PROVENANCE (ALL TIME, not the window) ---------------------",
+        _fmt(report["tracking_provenance"]["totals"], ["provenance", "items", "holders"]),
+        "",
+        "  Write-shape ESTIMATE for the `unknown` bucket only -- a guess, not a count.",
+        "  Rule: an account whose entire tracking landed in <=2 distinct minutes was",
+        "  bulk-written by us. Decisive at 104-rows-in-one-minute, only suggestive at 30.",
+        _fmt(report["tracking_provenance"]["shape_estimate"]),
         "",
         "-- 10. FEEDBACK + NOTIFICATIONS ------------------------------------------",
         _fmt(report["feedback"]["feedback"], ["created", "feedback_type", "affected_feature", "status", "answered", "title"]),
@@ -1009,6 +1132,7 @@ def main():
             "documents": section_documents(conn, start, end_excl, args.include_internal),
             "api": section_api(conn, start, end_excl, args.include_internal),
             "meub": section_meub_tracking(conn, start, end_excl, args.include_internal),
+            "tracking_provenance": section_tracking_provenance(conn, args.include_internal),
             "feedback": section_feedback(conn, start, end_excl),
             "blind_spots": section_blind_spots(conn, start, end_excl),
         }
