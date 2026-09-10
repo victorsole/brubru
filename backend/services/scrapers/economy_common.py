@@ -381,6 +381,21 @@ _ITEM_DATE_CARRIERS = (
 
 # Class suffixes that end in -date but do not mean "published on". Checked against the
 # matched class attribute before the value is trusted.
+# Publication-date classes that do NOT end in "-date" and so fail the generic
+# shape test above. Added 10 September 2026: EIT publishes its date inside
+# `<div class="metadata"> ... <div class="date-place">17/12/2025</div>`, which is
+# a byline element, not body prose -- verified by reading the surrounding HTML,
+# not inferred from the text containing a date.
+#
+# The DD/MM order was DERIVED, not assumed: across 14 EIT pages the first field
+# ranged 3-29 and the second never exceeded 12. `01/04/2026` alone would have
+# been ambiguous and was not parsed on its own.
+#
+# This is an ALLOWLIST on purpose. Relaxing the shape test to `startswith("date")`
+# would have re-admitted every event and deadline class the blocklist below exists
+# to keep out.
+_PUBLICATION_DATE_CLASSES = ("date-place",)
+
 _NON_PUBLICATION_DATE_CLASSES = (
     "event-date", "deadline-date", "expiry-date", "end-date", "start-date",
     "update-date", "updated-date", "modified-date", "closing-date", "due-date",
@@ -431,7 +446,8 @@ def extract_item_date(html: str, *, today: datetime | None = None):
                 tokens = [t.lower() for t in cls.split()]
                 if any(bad in t for t in tokens for bad in _NON_PUBLICATION_DATE_CLASSES):
                     continue
-                if not any(t == "date" or t.endswith("-date") for t in tokens):
+                if not any(t == "date" or t.endswith("-date") or t in _PUBLICATION_DATE_CLASSES
+                           for t in tokens):
                     continue
             dt = _iso_dt(_normalise_dt_string(raw)) or parse_listing_date(raw)
             if dt is None:

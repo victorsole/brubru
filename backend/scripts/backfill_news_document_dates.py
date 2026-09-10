@@ -96,6 +96,11 @@ def _cffi_get(url: str):
         return None
 
 
+# WAF / rate-limit statuses. A 403 is a wall, a 429 is us going too fast, and a
+# 503 is either. None of the three means "this page has no date".
+_WALL_STATUSES = {403, 406, 429, 503}
+
+
 def _plain_get(url: str):
     r = http_get(url)
     if r is None:
@@ -104,6 +109,44 @@ def _plain_get(url: str):
     if "html" not in ctype and "xml" not in ctype:
         return None
     return r.text
+
+
+def _escalating_get(url: str):
+    """Plain GET, then a real TLS fingerprint, then a real browser.
+
+    Added 10 September 2026 after the first eu_news_items sweep reported
+    `fetch_failed` on 360 of 589 rows and the number was taken at face value for
+    about a minute. Sampling the failures showed THREE different things wearing
+    one label:
+
+      * HTTP 200 with a full page (EIT, EEAS, CNECT) -- the page was fine and the
+        sweep had simply outrun the host. That is the rate limiter being measured,
+        not the site (feedback_paced_regression_measures_the_model).
+      * HTTP 403 (EUIPO, ECHA) -- a WAF. Use a browser, never tune headers
+        (feedback_waf_walled_use_playwright).
+      * HTTP 429 (EEAS) -- explicitly us, going too fast.
+
+    So a wall or an empty 200 escalates instead of being recorded as an absent
+    date. An empty result is not absence; it is usually the instrument
+    (feedback_empty_result_is_a_broken_instrument).
+    """
+    r = http_get(url)
+    walled = r is None or getattr(r, "status_code", 0) in _WALL_STATUSES
+    if not walled:
+        ctype = (r.headers.get("content-type") or "").lower()
+        if ("html" in ctype or "xml" in ctype) and len(r.text) > 2000:
+            return r.text
+        walled = True          # a 200 with nothing parseable is also a wall
+    try:
+        html = _cffi_get(url)
+        if html and len(html) > 2000:
+            return html
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        return _browser_get(url)
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def _browser_get(url: str):
@@ -164,7 +207,37 @@ def _map_for(body: str) -> dict:
     return _MAPS[body]
 
 
-def _counts(db, bodies=None):
+
+# --------------------------------------------------------------------------
+# Two news stores, one recovery path (10 September 2026).
+#
+# `economy_items` is the economy/agency half; `eu_news_items` is the
+# institutional half. On 10 September the institutional half held 475 rows
+# across 16 source keys with NO date at all -- EIT, COR, ESMA, EUROJUST,
+# EU-OSHA, EUIPO, OMBUDSMAN, ACER, EUAA, ECDC, CEPOL, ENISA, CPVO, ECHA, CDT
+# and DG REFORM -- and every one of them read as "publisher_quiet" in
+# /api/v2/news/latest, which is the wrong verdict for a row nobody dated.
+#
+# The extraction, the guards and the honesty rules are identical; only the
+# column names differ. So the profile is data and the logic is not duplicated.
+# Writing a second script would have meant a second place for the
+# no-hallucination rules to drift out of.
+_TABLES = {
+    "economy_items": dict(
+        table="economy_items", pk="id", date_col="document_date",
+        url_col="public_url", body_col="body_code", text_col="body_txt",
+        order_col="creation_date",
+        where_extra="item_type IN ('news','press_release')",
+    ),
+    "eu_news_items": dict(
+        table="eu_news_items", pk="id", date_col="news_date",
+        url_col="source_url", body_col="source_key", text_col="body_txt",
+        order_col="fetched_at",
+        where_extra="TRUE",
+    ),
+}
+
+def _counts(db, bodies=None, prof=None):
     """Row / undated counts for the bodies THIS RUN is touching.
 
     Took `BODIES` before, which silently reported `eige 0 / 0` the moment --body
@@ -172,13 +245,14 @@ def _counts(db, bodies=None):
     body holding 31 undated rows. A counter that cannot see what the run is changing
     is worse than no counter (feedback_verify_the_instrument_before_the_reading).
     """
+    p = prof or _TABLES["economy_items"]
     rows = db.execute(text(
-        "SELECT body_code, count(*) AS n, "
-        "count(*) FILTER (WHERE document_date IS NULL) AS undated "
-        "FROM economy_items WHERE item_type IN ('news','press_release') "
-        "AND body_code = ANY(:b) GROUP BY body_code ORDER BY body_code"),
+        f"SELECT {p['body_col']} AS body, count(*) AS n, "
+        f"count(*) FILTER (WHERE {p['date_col']} IS NULL) AS undated "
+        f"FROM {p['table']} WHERE {p['where_extra']} "
+        f"AND {p['body_col']} = ANY(:b) GROUP BY 1 ORDER BY 1"),
         {"b": list(bodies or BODIES)}).mappings().all()
-    return {r["body_code"]: (r["n"], r["undated"]) for r in rows}
+    return {r["body"]: (r["n"], r["undated"]) for r in rows}
 
 
 def main() -> int:
@@ -191,7 +265,17 @@ def main() -> int:
     ap.add_argument("--all-undated", action="store_true",
                     help="Every body with at least one undated news row.")
     ap.add_argument("--limit", type=int, default=0, help="Cap rows processed (0 = all).")
+    ap.add_argument("--pace", type=float, default=None,
+                    help="Seconds between requests. Raise it for hosts that 429; "
+                         "an unpaced sweep measures the rate limiter, not the site.")
+    ap.add_argument("--table", choices=sorted(_TABLES), default="economy_items",
+                    help="Which news store to repair. eu_news_items is the "
+                         "institutional half (see _TABLES).")
     args = ap.parse_args()
+    prof = _TABLES[args.table]
+    global DELAY
+    if args.pace is not None:
+        DELAY = args.pace
 
     db_probe = SessionLocal()
     try:
@@ -199,9 +283,10 @@ def main() -> int:
             bodies = [args.body]
         elif args.all_undated:
             bodies = [r[0] for r in db_probe.execute(text(
-                "SELECT body_code FROM economy_items "
-                "WHERE item_type IN ('news','press_release') AND document_date IS NULL "
-                "GROUP BY body_code ORDER BY count(*) DESC")).all()]
+                f"SELECT {prof['body_col']} FROM {prof['table']} "
+                f"WHERE {prof['where_extra']} AND {prof['date_col']} IS NULL "
+                f"AND {prof['url_col']} IS NOT NULL "
+                f"GROUP BY 1 ORDER BY count(*) DESC")).all()]
         else:
             bodies = list(BODIES)
     finally:
@@ -209,16 +294,18 @@ def main() -> int:
     print(f"[INFO] bodies: {bodies}")
     db = SessionLocal()
     try:
-        before = _counts(db, bodies)
+        before = _counts(db, bodies, prof)
         print("[INFO] before (rows / undated):")
         for b in bodies:
             n, u = before.get(b, (0, 0))
             print(f"         {b:10} {n:5} / {u:5}")
 
-        sql = ("SELECT id, body_code, public_url, body_txt FROM economy_items "
-               "WHERE item_type IN ('news','press_release') AND document_date IS NULL "
-               "AND public_url IS NOT NULL AND body_code = ANY(:b) "
-               "ORDER BY body_code, creation_date DESC")
+        sql = (f"SELECT {prof['pk']} AS id, {prof['body_col']} AS body_code, "
+               f"{prof['url_col']} AS public_url, {prof['text_col']} AS body_txt "
+               f"FROM {prof['table']} WHERE {prof['where_extra']} "
+               f"AND {prof['date_col']} IS NULL AND {prof['url_col']} IS NOT NULL "
+               f"AND {prof['body_col']} = ANY(:b) "
+               f"ORDER BY {prof['body_col']}, {prof['order_col']} DESC NULLS LAST")
         if args.limit:
             sql += f" LIMIT {int(args.limit)}"
         rows = db.execute(text(sql), {"b": bodies}).mappings().all()
@@ -256,7 +343,7 @@ def main() -> int:
             # Generic path for any body with no bespoke fetcher: a plain GET and
             # extract_item_date, which reads <time datetime>, article:published_time
             # and JSON-LD datePublished. Most agency pages carry one of the three.
-            html = _FETCHERS.get(body, _plain_get)(r["public_url"])
+            html = _FETCHERS.get(body, _escalating_get)(r["public_url"])
             if html is None:
                 carriers["fetch_failed"] += 1
             else:
@@ -271,8 +358,8 @@ def main() -> int:
             time.sleep(DELAY)
 
             if args.apply and len(pending) >= BATCH:
-                db.execute(text("UPDATE economy_items SET document_date = :d WHERE id = :id"),
-                           pending)
+                db.execute(text(f"UPDATE {prof['table']} SET {prof['date_col']} = :d "
+                                f"WHERE {prof['pk']} = :id"), pending)
                 db.commit()
                 print(f"[INFO] committed {len(pending)}  ({processed}/{len(rows)} processed)")
                 pending = []
@@ -280,7 +367,8 @@ def main() -> int:
                 print(f"[INFO] {processed}/{len(rows)} processed  {dict(carriers)}")
 
         if args.apply and pending:
-            db.execute(text("UPDATE economy_items SET document_date = :d WHERE id = :id"), pending)
+            db.execute(text(f"UPDATE {prof['table']} SET {prof['date_col']} = :d "
+                            f"WHERE {prof['pk']} = :id"), pending)
             db.commit()
             print(f"[INFO] committed final {len(pending)}")
 
@@ -289,7 +377,7 @@ def main() -> int:
             print("[DRY-RUN] nothing written")
             return 0
 
-        after = _counts(db, bodies)
+        after = _counts(db, bodies, prof)
         print("[INFO] after (rows / undated):")
         total_recovered = 0
         for b in bodies:
