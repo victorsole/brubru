@@ -113,15 +113,62 @@
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; }
-    .footer__logo { height: 30px; margin-bottom: 1rem; }
-    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
-    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .pm { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; }
+    .pm__logo { height: 30px; margin-bottom: 1rem; }
+    .pm__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .pm__text a { color: var(--color-blue); text-decoration: none; }
 
     @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 767px) { .hero__title { font-size: 2rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .pipeline { flex-direction: column; } .pipeline__arrow { transform: rotate(90deg); justify-content: center; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } .lang-bar { padding: 0.5rem 1rem; } }
       /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
-  </style>
+  
+  /* ---- CANONICAL BRUBRU FOOTER (mirrors frontend/src/components/shared/footer.css,
+     tokens resolved because a standalone page never loads globals.css). Do not restyle. ---- */
+  .footer { width:100%; background-color:#f9fafb; border-top:1px solid #e5e7eb; margin-top:auto;
+    position:relative; z-index:10; text-align:left;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px); }
+  .footer__container { max-width:100%; width:100%; margin:0; padding:2rem 1.5rem 1.5rem; }
+  .footer__content { display:flex; flex-direction:column; gap:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
+  .footer__section { display:flex; flex-direction:column; gap:.5rem; min-width:0; }
+  .footer__section--brand { gap:.75rem; flex-shrink:0; padding-right:1.5rem; position:relative; }
+  .footer__section:last-child { flex-shrink:0; min-width:fit-content; }
+  .footer__section--nav { gap:.75rem; }
+  .footer__nav-title { font-size:.8125rem; font-weight:600; color:#111827; margin-bottom:0;
+    text-transform:uppercase; letter-spacing:.5px; }
+  .footer__brand { display:flex; align-items:center; gap:1rem; }
+  .footer__logo { height:48px; width:auto; transition:all .3s cubic-bezier(.34,1.56,.64,1); cursor:pointer; }
+  .footer__logo:hover { transform:scale(1.08) rotate(-2deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.15)); }
+  .footer__brand-info { display:flex; flex-direction:column; gap:.25rem; }
+  .footer__copyright { font-size:.8125rem; color:#111827; margin-bottom:0; }
+  .footer__trademark { font-size:.75rem; color:#6b7280; margin-bottom:0; }
+  .footer__beresol-link { color:#111827; text-decoration:none; font-weight:600; transition:all .3s ease; position:relative; }
+  .footer__beresol-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s ease; }
+  .footer__beresol-link:hover { color:#0693e3; text-decoration:none; }
+  .footer__beresol-link:hover::after { width:100%; }
+  .footer__nav { display:flex; flex-wrap:wrap; gap:.75rem 1rem; align-items:flex-start; row-gap:.5rem; }
+  .footer__link { font-size:.8125rem; color:#111827; font-weight:500; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; position:relative; display:inline-block; }
+  .footer__link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s cubic-bezier(.4,0,.2,1); }
+  .footer__link:hover { color:#0693e3; text-decoration:none; transform:translateX(4px); }
+  .footer__link:hover::after { width:100%; }
+  .footer__link--social { display:inline-flex; align-items:center; gap:.35rem; }
+  .footer__link--social svg { flex:0 0 auto; }
+  @media (min-width:768px) {
+    .footer__section--brand::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, #e5e7eb 20%, #e5e7eb 80%, transparent); opacity:.5; }
+    .footer__content { flex-direction:row; justify-content:flex-start; align-items:flex-start; gap:2rem; flex-wrap:wrap; }
+    .footer__section--brand { flex:0 0 auto; max-width:500px; }
+    .footer__section--nav { flex:0 0 auto; min-width:300px; }
+  }
+  @media (max-width:767px) {
+    .footer { margin-left:0 !important; width:100% !important; }
+    .footer__container { padding:1.5rem 1rem 1rem; }
+    .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .footer__logo { height:40px; }
+    .footer__nav { gap:.75rem; }
+  }</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -573,10 +620,11 @@
 
 </div>
 
-<footer class="footer">
-  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="footer__logo"><br>
-  <p class="footer__text" data-i18n="footer_text">EU Pharmaceutical Laws deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Updated 10 April 2026 &middot; With feedback from David Devant Cerezo (EFPIA)</p>
-</footer>
+<div class="pm">
+  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="pm__logo"><br>
+  <p class="pm__text" data-i18n="footer_text">EU Pharmaceutical Laws deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Updated 10 April 2026 &middot; With feedback from David Devant Cerezo (EFPIA)</p>
+</div>
+<footer class="footer  "><div class="footer__container"><div class="footer__content"><div class="footer__section footer__section--brand"><div class="footer__brand"><img alt="Beresol BV" class="footer__logo" src="/assets/beresol-logo.png"><div class="footer__brand-info"><p class="footer__copyright">&copy; 2026 <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV</p><p class="footer__trademark" data-i18n="ft_trademark">Brubru's trademark belongs to <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV and is registered at EUIPO</p></div></div></div><div class="footer__section footer__section--nav"><h4 class="footer__nav-title" data-i18n="ft_links">Links</h4><nav class="footer__nav"><a class="footer__link" href="/about" data-discover="true" data-i18n="ft_about">About</a><a href="mailto:hello@beresol.eu" class="footer__link" data-i18n="ft_contact">Contact</a><a class="footer__link" href="/privacy" data-discover="true" data-i18n="ft_privacy">Privacy Policy</a><a class="footer__link" href="/terms" data-discover="true" data-i18n="ft_terms">Terms of Service</a><a class="footer__link" href="/cookies" data-discover="true" data-i18n="ft_cookies">Cookies</a><a class="footer__link" href="/subprocessors" data-discover="true" data-i18n="ft_subproc">Subprocessors</a><a href="https://www.instagram.com/beresolbv/" target="_blank" rel="noopener noreferrer" aria-label="Beresol on Instagram" class="footer__link footer__link--social"><svg viewBox="0 0 24 24" role="presentation" style="width: 1.275rem; height: 1.275rem;"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" style="fill: currentcolor;"></path></svg><span class="footer__link-label">Instagram</span></a></nav></div></div></div></footer>
 
 <script>
 // Fade-in on scroll
@@ -588,6 +636,7 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 // i18n translations
 const translations = {
   es: {
+      ft_trademark: 'La marca Brubru pertenece a <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV y est&aacute; registrada en la EUIPO', ft_links: 'Enlaces', ft_about: 'Acerca de', ft_contact: 'Contacto', ft_privacy: 'Pol&iacute;tica de privacidad', ft_terms: 'T&eacute;rminos de servicio', ft_cookies: 'Cookies', ft_subproc: 'Subprocesadores',
     // Hero
     hero_title: 'Legislaci&oacute;n farmac&eacute;utica de la UE: <span>El marco completo</span>',
     hero_subtitle: 'Desde la autorizaci&oacute;n de comercializaci&oacute;n hasta la farmacovigilancia, desde los medicamentos hu&eacute;rfanos hasta la reforma de 2023: todas las leyes que regulan los medicamentos en la Uni&oacute;n Europea, explicadas.',
@@ -696,6 +745,7 @@ const translations = {
     footer_text: 'An&aacute;lisis en profundidad de la legislaci&oacute;n farmac&eacute;utica de la UE por <a href="https://brubru.beresol.eu">Brubru</a>, el asistente de pol&iacute;tica de la UE de <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Actualizado abril 2026 &middot; Con feedback de David Devant Cerezo (EFPIA)',
   },
   ca: {
+      ft_trademark: 'La marca Brubru pertany a <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV i est&agrave; registrada a l&rsquo;EUIPO', ft_links: 'Enlla&ccedil;os', ft_about: 'Sobre nosaltres', ft_contact: 'Contacte', ft_privacy: 'Pol&iacute;tica de privacitat', ft_terms: 'Condicions del servei', ft_cookies: 'Galetes', ft_subproc: 'Subprocessadors',
     // Hero
     hero_title: 'Legislaci&oacute; farmac&egrave;utica de la UE: <span>El marc complet</span>',
     hero_subtitle: "Des de l'autoritzaci&oacute; de comercialitzaci&oacute; fins a la farmacovigil&agrave;ncia, des dels medicaments orfes fins a la reforma de 2023: totes les lleis que regulen els medicaments a la Uni&oacute; Europea, explicades.",
@@ -804,6 +854,7 @@ const translations = {
     footer_text: "An&agrave;lisi en profunditat de la legislaci&oacute; farmac&egrave;utica de la UE per <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistent de pol&iacute;tica de la UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Actualitzat abril 2026 &middot; Amb feedback de David Devant Cerezo (EFPIA)",
   },
   fr: {
+      ft_trademark: 'La marque Brubru appartient &agrave; <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV et est enregistr&eacute;e &agrave; l&rsquo;EUIPO', ft_links: 'Liens', ft_about: '&Agrave; propos', ft_contact: 'Contact', ft_privacy: 'Politique de confidentialit&eacute;', ft_terms: 'Conditions d&rsquo;utilisation', ft_cookies: 'Cookies', ft_subproc: 'Sous-traitants',
     // Hero
     hero_title: 'L&eacute;gislation pharmaceutique de l\'UE : <span>Le cadre complet</span>',
     hero_subtitle: "De l'autorisation de mise sur le march&eacute; &agrave; la pharmacovigilance, des m&eacute;dicaments orphelins &agrave; la r&eacute;forme de 2023 : toutes les lois r&eacute;gissant les m&eacute;dicaments dans l'Union europ&eacute;enne, expliqu&eacute;es.",
@@ -912,6 +963,7 @@ const translations = {
     footer_text: "Analyse approfondie de la l&eacute;gislation pharmaceutique de l'UE par <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistant politique de l'UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Mis &agrave; jour avril 2026 &middot; Avec les retours de David Devant Cerezo (EFPIA)",
   },
   it: {
+      ft_trademark: 'Il marchio Brubru appartiene a <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV ed &egrave; registrato presso l&rsquo;EUIPO', ft_links: 'Link', ft_about: 'Informazioni', ft_contact: 'Contatti', ft_privacy: 'Informativa sulla privacy', ft_terms: 'Condizioni di servizio', ft_cookies: 'Cookie', ft_subproc: 'Sub-responsabili',
     // Hero
     hero_title: 'Legislazione farmaceutica UE: <span>Il quadro completo</span>',
     hero_subtitle: "Dall'autorizzazione all'immissione in commercio alla farmacovigilanza, dai medicinali orfani alla riforma del 2023: tutte le leggi che regolano i medicinali nell'Unione Europea, spiegate.",
@@ -1020,6 +1072,7 @@ const translations = {
     footer_text: "Analisi approfondita della legislazione farmaceutica dell'UE di <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistente per le politiche UE di <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Aggiornato aprile 2026 &middot; Con feedback di David Devant Cerezo (EFPIA)",
   },
   nl: {
+      ft_trademark: 'Het merk Brubru is eigendom van <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV en is geregistreerd bij EUIPO', ft_links: 'Links', ft_about: 'Over', ft_contact: 'Contact', ft_privacy: 'Privacybeleid', ft_terms: 'Servicevoorwaarden', ft_cookies: 'Cookies', ft_subproc: 'Subverwerkers',
     // Hero
     hero_title: 'EU-farmaceutische wetgeving: <span>Het volledige kader</span>',
     hero_subtitle: 'Van handelsvergunning tot geneesmiddelenbewaking, van weesgeneesmiddelen tot de hervorming van 2023: alle wetten die geneesmiddelen in de Europese Unie reguleren, uitgelegd.',
