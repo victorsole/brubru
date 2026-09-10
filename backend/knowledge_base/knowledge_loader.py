@@ -68,6 +68,43 @@ _WORD_BOUNDED_TRIGGERS = frozenset({
 })
 
 GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
+    # --- Public Procurement Act + European Innovation Act (proposed 9 Sep 2026) ---
+    # Added 10 September 2026. `public procurement` had NO trigger at all, so the
+    # week's largest single-market proposal was unreachable from the plain term.
+    # Triggers are PLAIN SUBSTRING with NO accent folding, so every non-English
+    # form is written accented AND unaccented, in the phrasing people actually
+    # type, connectors included.
+    'public procurement': ['public_procurement_act'],
+    'public contracts': ['public_procurement_act'],
+    'concessions directive': ['public_procurement_act'],
+    'procurement reform': ['public_procurement_act'],
+    'procurement act': ['public_procurement_act'],
+    'com(2026) 590': ['public_procurement_act'],
+    '2026/0265': ['public_procurement_act'],
+    'contratación pública': ['public_procurement_act'],
+    'contratacion publica': ['public_procurement_act'],
+    'ley de contratación pública': ['public_procurement_act'],
+    'contractació pública': ['public_procurement_act'],
+    'contractacio publica': ['public_procurement_act'],
+    'llei de contractació pública': ['public_procurement_act'],
+    'marchés publics': ['public_procurement_act'],
+    'marches publics': ['public_procurement_act'],
+    'commande publique': ['public_procurement_act'],
+    'appalti pubblici': ['public_procurement_act'],
+    'contratti pubblici': ['public_procurement_act'],
+    'overheidsopdrachten': ['public_procurement_act'],
+    'aanbesteding': ['public_procurement_act'],
+    'com(2026) 567': ['european_innovation_act'],
+    '2026/0264': ['european_innovation_act'],
+    'r&d procurement': ['european_innovation_act'],
+    'pre-commercial procurement': ['european_innovation_act'],
+    'ip valuation': ['european_innovation_act'],
+    'ip-backed finance': ['european_innovation_act'],
+    'ley de innovación europea': ['european_innovation_act'],
+    'llei d\'innovació europea': ['european_innovation_act'],
+    'acte européen sur l\'innovation': ['european_innovation_act'],
+    'legge europea sull\'innovazione': ['european_innovation_act'],
+
     # /news 13 July 2026 — EP committee week (13-17 Jul): EU Inc. active in ECON+JURI+EMPL, BUDG on MFF successor programmes, long-term CSA Reg back at LIBE
     'eu inc empl': ['28th_regime_innovation_act'],
     'eu inc econ opinion': ['28th_regime_innovation_act'],
@@ -5387,8 +5424,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     '28e regime': ['28th_regime_innovation_act'],
     '28. regime': ['28th_regime_innovation_act'],
     'twenty-eighth regime': ['28th_regime_innovation_act'],
-    'european innovation act': ['28th_regime_innovation_act'],
-    'innovation act': ['28th_regime_innovation_act'],
+    # Two different instruments answer to this name: EU Inc. / the 28th Regime
+    # (COM(2026) 321, adopted 18 March 2026) and the European Innovation Act
+    # (COM(2026) 567, proposed 9 September 2026). Both targets are listed and
+    # the mediation picks; dropping either would make one unreachable.
+    'european innovation act': ['european_innovation_act', '28th_regime_innovation_act'],
+    'innovation act': ['european_innovation_act', '28th_regime_innovation_act'],
     'merger guidelines': ['28th_regime_innovation_act', 'competition_law_enforcement'],
     'merger guidelines review': ['28th_regime_innovation_act', 'competition_law_enforcement'],
     'eu corporate law': ['28th_regime_innovation_act'],
@@ -5405,7 +5446,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'acte innovation europeen': ['28th_regime_innovation_act'],
     'acta innovacion europea': ['28th_regime_innovation_act'],
     'atto innovazione europea': ['28th_regime_innovation_act'],
-    'europese innovatiewet': ['28th_regime_innovation_act'],
+    'europese innovatiewet': ['european_innovation_act', '28th_regime_innovation_act'],
     'eu company form': ['28th_regime_innovation_act'],
     'eu-eso': ['28th_regime_innovation_act'],
     'eu employee stock option': ['28th_regime_innovation_act'],
@@ -9574,7 +9615,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'regulatory deep cleaning action plan': ['better_regulation_enforcement_communication'],
     'simplicity by design': ['better_regulation_enforcement_communication'],
     'european product act': ['better_regulation_enforcement_communication'],
-    'public procurement act': ['better_regulation_enforcement_communication'],
+    'public procurement act': ['public_procurement_act', 'better_regulation_enforcement_communication'],
     'banking competitiveness report': ['better_regulation_enforcement_communication'],
     'state aid banking communication': ['better_regulation_enforcement_communication'],
     # ES
