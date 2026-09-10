@@ -117,3 +117,7 @@ and communicated between Member States through the Article 34 system of Regulati
 
 `cybersecurity_act`, `nis2_directive`, `ai_act_regulation`, `enisa_european_cybersecurity_agency`,
 `ai_agents_compliance_architecture_eu`, `eu_legislation_milestones_aug_sep_2026`
+
+`european_innovation_act.md`: its **Article 30** imports this Regulation's **Annex I** essential
+requirements wholesale into R&D procurement, and requires buyers to exclude high-risk suppliers of
+ICT components in key ICT assets. Brubru deep dive: https://brubru.beresol.eu/european-innovation-act/

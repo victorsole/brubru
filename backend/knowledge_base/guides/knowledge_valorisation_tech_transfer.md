@@ -237,3 +237,6 @@ Commission platform for sharing valorisation best practices:
 - See also: `horizon_europe_grant_management.md` for MGA IP provisions and grant management
 - See also: `eu_financial_regulation_procurement.md` for innovation procurement
 - See also: `commission_guide.md` for DG RTD and DG GROW structures
+- See also: `european_innovation_act.md` for the proposed EU framework to **value** intellectual
+  property, the EUIPO marketplace for buying, selling and licensing it, and the voluntary
+  certification of IP valuators. Brubru deep dive: https://brubru.beresol.eu/european-innovation-act/

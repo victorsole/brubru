@@ -49,3 +49,12 @@ amendment is in force.
 - Publications page: https://single-market-economy.ec.europa.eu/publications/proposal-regulation-public-contracts-and-concessions_en
 - Press release: https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_26_1817/IP_26_1817_EN.pdf
 - EP reaction: https://www.europarl.europa.eu/news/en/press-room/20260908IPR47428/
+
+## Related Brubru Guides
+
+- `european_innovation_act.md`: the sibling instrument that regulates R&D services procurement,
+  including pre-commercial procurement, excluded from this Act to avoid overlaps.
+- `regulatory_sandboxes_recommendation.md`: COM(2026) 568, the third instrument of the
+  9 September 2026 package.
+- Brubru deep dive on the Innovation Act and the sandboxes Recommendation:
+  https://brubru.beresol.eu/european-innovation-act/

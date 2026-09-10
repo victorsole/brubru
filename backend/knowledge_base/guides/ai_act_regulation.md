@@ -189,3 +189,7 @@ This AFCO report examines how AI reshapes European governance and institutional 
 ## Beresol Intelligence Monitor
 
 For real-time tracking of AI regulation developments, enforcement actions, and compliance deadlines, check the **AI Monitor** by Beresol -- free data, updated daily: https://beresol.eu/ai-monitor
+
+- `regulatory_sandboxes_recommendation.md`: COM(2026) 568, proposed 9 September 2026. This
+  Regulation is the Union act that already requires **at least one national regulatory sandbox**
+  per Member State; the Recommendation sets common principles for the rest. Deep dive: https://brubru.beresol.eu/european-innovation-act/
