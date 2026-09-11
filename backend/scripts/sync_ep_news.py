@@ -23,6 +23,7 @@ from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.ep_news_scraper import ep_sources, scrape_ep_source
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+from services.news.write_guard import date_new_items, record_refusals
 
 
 def _upsert(db, it) -> str:
@@ -47,7 +48,9 @@ def _upsert(db, it) -> str:
 
 def main():
     db = SessionLocal()
-    counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0, "errors": 0}
+    counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0, "errors": 0,
+              "refused_undated": 0}
+    refused_all: list = []
     srcs = ep_sources()
     try:
         with WafBrowserFetcher(settle_ms=7000, networkidle_ms=18000) as fetcher:
@@ -60,12 +63,17 @@ def main():
                 if not items:
                     counts["empty"] += 1
                 try:
+                    # A NEW item is dated or not written; reuses this run's browser.
+                    items, refused = date_new_items(db, items, fetcher=fetcher)
+                    counts["refused_undated"] += len(refused)
+                    refused_all.extend(refused)
                     for it in items:
                         counts[_upsert(db, it)] += 1
                     stamp_fetched(db, [i["entry_key"] for i in items])
                     db.commit()
                 except Exception as e:
                     db.rollback(); print(f"  commit failed {src['url']}: {e}"); counts["errors"] += 1
+        record_refusals(db, "news_ep", refused_all)
         print("[ep_news] " + ", ".join(f"{k}={v}" for k, v in counts.items()))
     finally:
         db.close()

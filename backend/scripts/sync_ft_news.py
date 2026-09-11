@@ -26,6 +26,7 @@ from sqlalchemy import text
 from core.database import SessionLocal
 from models.eu_news_item import EuNewsItem
 from services.news.fetch_anchor import stamp_fetched
+from services.news.write_guard import date_new_items, record_refusals
 from services.tracking.policy_area_classifier import classify
 
 
@@ -38,9 +39,9 @@ def _rows(db):
     )).mappings().all()
 
 
-def _upsert(db, r) -> str:
+def _upsert(db, r, news_date=None) -> str:
     entry_key = f"ft_portal_news:{r['id']}"
-    news_date = r["document_date"].date() if r.get("document_date") else None
+    news_date = news_date or (r["document_date"].date() if r.get("document_date") else None)
     existing = db.query(EuNewsItem).filter(EuNewsItem.entry_key == entry_key).first()
     if existing:
         changed = False
@@ -68,15 +69,24 @@ def main():
     try:
         rows = _rows(db)
         print(f"[ft_news] {len(rows)} ftportal news rows in economy_items")
-        for r in rows:
+        # A NEW item is dated or not written (services/news/write_guard.py).
+        cands = [{"entry_key": f"ft_portal_news:{r['id']}",
+                  "news_date": r["document_date"].date() if r.get("document_date") else None,
+                  "source_url": r.get("public_url"), "source_key": "F&T Portal", "row": r}
+                 for r in rows]
+        cands, refused = date_new_items(db, cands)
+        counts["refused_undated"] = len(refused)
+        for c in cands:
+            r = c["row"]
             try:
-                counts[_upsert(db, r)] += 1
-                seen_keys.append(f"ft_portal_news:{r['id']}")
+                counts[_upsert(db, r, news_date=c["news_date"])] += 1
+                seen_keys.append(c["entry_key"])
             except Exception as e:
                 db.rollback(); print(f"  upsert failed {r['id']}: {e}"); counts["errors"] += 1
         # Every key SEEN, not only the changed ones: a sighting is a fetch.
         stamp_fetched(db, seen_keys)
         db.commit()
+        record_refusals(db, "news_ft", refused)
     finally:
         db.close()
     print("[ft_news]", " ".join(f"{k}={v}" for k, v in counts.items()))

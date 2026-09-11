@@ -25,6 +25,7 @@ from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.dg_news_sources import DG_NEWS_SOURCES, EU_BODY_FEEDS, OUTLET_FEEDS
 from services.scrapers.dg_news_scraper import scrape_source
+from services.news.write_guard import date_new_items, record_refusals
 
 ALL_SOURCES = DG_NEWS_SOURCES + EU_BODY_FEEDS + OUTLET_FEEDS
 
@@ -53,7 +54,9 @@ def _upsert(db, it) -> str:
 
 def main():
     db = SessionLocal()
-    counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0, "errors": 0}
+    counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0, "errors": 0,
+              "refused_undated": 0}
+    refused_all: list = []
     try:
         for src in ALL_SOURCES:
             try:
@@ -66,6 +69,10 @@ def main():
             # Commit per source; a transient Supabase drop rolls back THIS source
             # only (NullPool hands a fresh connection next use) and we continue.
             try:
+                # A NEW item is dated or not written (services/news/write_guard.py).
+                items, refused = date_new_items(db, items)
+                counts["refused_undated"] += len(refused)
+                refused_all.extend(refused)
                 for it in items:
                     counts[_upsert(db, it)] += 1
                 # Every key SEEN, not only the changed ones: a sighting is a fetch.
@@ -75,6 +82,7 @@ def main():
                 db.rollback()
                 print(f"  source commit failed {src['url']}: {e}")
                 counts["errors"] += 1
+        record_refusals(db, "news_dg", refused_all)
         print("[dg_news] " + ", ".join(f"{k}={v}" for k, v in counts.items()))
     finally:
         db.close()

@@ -377,6 +377,20 @@ _ITEM_DATE_CARRIERS = (
     # `class="field eif-inner-date field__item"`.
     ("date_class",
      re.compile(r'class=["\']([^"\']*date[^"\']*)["\'][^>]*>\s*([^<]{4,40})<', re.I)),
+    # LABELLED carriers, added 11 September 2026 and appended AFTER everything above,
+    # so no page that was already dated can get a different date. Both are the
+    # publisher naming the date as the publication date, in words:
+    #   * the Europa Component Library page header, "Publication 12 June 2026"
+    #     (digital-strategy.ec.europa.eu: agreed with the item's listing card on 39 of
+    #     39 comparable items, none disagreed);
+    #   * "Published: 10 September 2026" (EUAA item pages: 24 of 24 agreed).
+    # The label must be followed directly by the date, so "Published: 3 reports"
+    # or a "Publication" heading over a document list cannot match.
+    ("ecl_publication_header",
+     re.compile(r'ecl-page-header__meta-item["\'][^>]*>\s*Publication\s+'
+                r'(\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4})\s*<', re.I)),
+    ("published_label",
+     re.compile(r'\bPublished:\s*(?:<[^>]+>\s*)*(\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4})\b')),
 )
 
 # Class suffixes that end in -date but do not mean "published on". Checked against the

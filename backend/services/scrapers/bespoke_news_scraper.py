@@ -15,14 +15,20 @@ and are not captured). EDPS, EUAA, CdT use the slug/attr fallback.
 
 from __future__ import annotations
 
+import copy
 import html as _html
 import logging
 import re
-from datetime import date
-from typing import Dict, List
+from datetime import date, timedelta
+from typing import Dict, List, Optional
 from urllib.parse import urljoin, urlparse, unquote
 
+from bs4 import BeautifulSoup
+
 from services.scrapers.dg_news_scraper import _clean, _canon_url, _slug_id
+from services.scrapers.economy_common import (
+    _NON_PUBLICATION_DATE_CLASSES, extract_item_date, parse_listing_date,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -78,8 +84,11 @@ BESPOKE_SOURCES: List[Dict] = [
      "link_re": r"/en/news/[A-Za-z0-9][A-Za-z0-9_-]{4,}", "date_re": r"NEWS(\d{4})[_-](\d{2})", "type": "news"},
     {"institution": "EIB", "url": "https://www.eib.org/en/press/all/index.htm",
      "link_re": r"/en/press/(?:all|news)/[a-z0-9][a-z0-9-]{8,}", "type": "press"},
+    # `exclude` added 11 Sep 2026: "Access all stories" links to the stories hub and
+    # was stored as a news row.
     {"institution": "COR", "url": "https://www.cor.europa.eu/en/news",
-     "link_re": r"/en/news/(?:stories/)?[a-z0-9][a-z0-9-]{8,}", "type": "news"},
+     "link_re": r"/en/news/(?:stories/)?[a-z0-9][a-z0-9-]{8,}",
+     "exclude": ["/en/news/all-stories"], "type": "news"},
     {"institution": "OMBUDSMAN", "url": "https://www.ombudsman.europa.eu/en/news-documents",
      "link_re": r"/en/news-document/en/\d+", "type": "news"},
     {"institution": "ECHA", "url": "https://echa.europa.eu/news",
@@ -88,8 +97,11 @@ BESPOKE_SOURCES: List[Dict] = [
      "link_re": r"/news/[a-z][a-z0-9-]{9,}", "type": "news"},
     {"institution": "EUIPO", "url": "https://www.euipo.europa.eu/en/news-and-events",
      "link_re": r"/en/news/(?:podcasts/)?[a-z][a-z0-9-]{9,}", "type": "news"},
+    # `exclude` added 11 Sep 2026: without it this rule matched the listing page's own
+    # URL, which was stored as a news row titled "Press Releases and News".
     {"institution": "EUAA", "url": "https://www.euaa.europa.eu/news-events/press-releases",
-     "link_re": r"/news-events/[a-z][a-z0-9-]{9,}", "type": "news"},
+     "link_re": r"/news-events/[a-z][a-z0-9-]{9,}",
+     "exclude": ["/news-events/press-releases", "/news-events/news", "/news-events/events"], "type": "news"},
     {"institution": "EUROJUST", "url": "https://www.eurojust.europa.eu/media-and-events/press-releases-and-news",
      "link_re": r"/news/[a-z][a-z0-9-]{9,}", "type": "news"},
     {"institution": "FRA", "url": "https://fra.europa.eu/en/news-and-events/news",
@@ -128,21 +140,120 @@ BESPOKE_SOURCES: List[Dict] = [
 _A = re.compile(r'<a\b([^>]*)\bhref="([^"#?]+)"([^>]*)>(.*?)</a>', re.S)
 
 
+# ---------------------------------------------------------------------------
+# Dates from the item's own LISTING CARD (11 September 2026)
+# ---------------------------------------------------------------------------
+# Measured that day with this parser on the live listings, no database writes: 17
+# of the 20 configs above dated few or none of their items (EIT 0 of 49, EIB 0 of
+# 17, ENISA 0 of 14, ...). Only `date_re` read a date, and only from the URL. The
+# date was printed on the listing all along -- ACER `related-new-date`, EIB
+# `card-row-date`, a <time datetime> on EUAA and EU-OSHA, plain "September 09,
+# 2026" text on EUIPO -- and rows were dated at all only because a backfill later
+# read each item page.
+#
+# Why the CARD and not the item page: a card belongs to its item by construction.
+# An item page can carry OTHER items' dates -- related publications, "latest news"
+# rails -- and the first <time> on it is not guaranteed to be the page's own.
+#
+# Checked before trusting it: across ENISA, EUROJUST, OSHA, ACER, ECDC, EIT, COR,
+# CEPOL, CDT and EUAA, the card date and the item page's own date agreed on every
+# item where both existed (about 25), none disagreed.
+#
+# The card is the largest ancestor of the item's link that contains no OTHER item
+# link (by the config's own link rule). Capped, so a page listing a single item
+# cannot hand its whole body over as "the card".
+_CARD_MAX_HTML = 20000
+# Any 3-9 letter word in the month slot, abbreviations included ("01 Sept 2026" on
+# CEPOL, "Jun. 22, 2026"): parse_listing_date then keeps only real month names, and
+# its table knows "sept", which a full-names-only pattern and strptime's %b do not.
+_CARD_DAY_FIRST = re.compile(r"\b\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4}\b")
+_CARD_MONTH_FIRST = re.compile(r"\b[A-Za-z]{3,9}\.?\s+\d{1,2},\s*\d{4}\b")
+
+
+def _card_text_date(card) -> Optional[date]:
+    """The card's only written-out date, or None.
+
+    EUIPO prints "September 09, 2026" in a styling span with no date class, so no
+    structured carrier sees it. Taken only when the card holds exactly ONE distinct
+    date, after removing elements whose class says the date is something other than
+    publication (a deadline, an event) -- a card announcing "apply by 30 September
+    2026" must not be stored as published on 30 September.
+    """
+    c = copy.copy(card)
+    for el in c.find_all(class_=True):
+        tokens = [t.lower() for t in (el.get("class") or [])]
+        if any(bad in t for t in tokens for bad in _NON_PUBLICATION_DATE_CLASSES):
+            el.decompose()
+    text = c.get_text(" ", strip=True)
+    found = set()
+    for rx in (_CARD_DAY_FIRST, _CARD_MONTH_FIRST):
+        for m in rx.finditer(text):
+            dt = parse_listing_date(m.group(0))
+            if dt is not None:
+                found.add(dt.date())
+    if len(found) != 1:
+        return None
+    nd = found.pop()
+    if not (date(1990, 1, 1) <= nd <= date.today() + timedelta(days=1)):
+        return None
+    return nd
+
+
+def _card_date(soup, key: str, is_item_link, absolute) -> Optional[date]:
+    """Publication date from the listing card of the item whose canonical URL is `key`."""
+    for a in soup.find_all("a", href=True):
+        if _canon_url(absolute(a["href"])) != key:
+            continue
+        card = a
+        while card.parent is not None and card.parent.name not in ("body", "html", "[document]"):
+            items_in_parent = {_canon_url(absolute(x["href"]))
+                               for x in card.parent.find_all("a", href=True)
+                               if is_item_link(x["href"])}
+            if len(items_in_parent) > 1:
+                break
+            card = card.parent
+        card_html = str(card)
+        if len(card_html) > _CARD_MAX_HTML:
+            continue
+        dt, _carrier = extract_item_date(card_html)
+        if dt is not None:
+            return dt.date()
+        nd = _card_text_date(card)
+        if nd is not None:
+            return nd
+    return None
+
+
 def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
     # Relative hrefs resolve against a page's <base href> if present (CJEU sets
     # <base href=".../site/">), otherwise against the page URL.
     bm = re.search(r'<base[^>]+href="([^"]+)"', html or "", re.I)
-    resolve_base = bm.group(1) if bm else cfg["url"]
+    # The base itself may be relative: the Ombudsman declares `<base href="/">`, and
+    # joining a link against "/" produced `/en/news-document/en/231701` -- a URL
+    # nothing can fetch, stored for 17 rows beside absolute twins of 9 of them.
+    resolve_base = urljoin(cfg["url"], bm.group(1)) if bm else cfg["url"]
     link_re = re.compile(cfg["link_re"])
     date_re = re.compile(cfg["date_re"]) if cfg.get("date_re") else None
     exclude = set(cfg.get("exclude") or [])
     limit = cfg.get("limit")
     out: List[Dict] = []
     seen: set = set()
+    soup = None      # parsed once, and only if some item needs its card read
+
+    def _absolute(href: str) -> str:
+        href = href.strip()
+        return href if href.startswith("http") else urljoin(resolve_base, href)
+
+    def _is_item_link(href: str) -> bool:
+        p = urlparse(href.strip()).path
+        return p.rstrip("/") not in exclude and bool(link_re.search(p))
     for m in _A.finditer(html or ""):
         if limit and len(out) >= limit:
             break
         pre, href, post, inner = m.group(1), m.group(2), m.group(3), m.group(4)
+        # ENISA writes `href="/news/slug "`. The space went into source_url AND
+        # entry_key, so the same article was stored once with it and once without.
+        href = href.strip()
         attrs = pre + post
         path = urlparse(href).path
         if path.rstrip("/") in exclude:
@@ -158,6 +269,7 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
             continue
         seen.add(key)
         nd = None
+        day_precise = False
         if date_re:
             dm = date_re.search(url)
             if dm:
@@ -165,12 +277,24 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
                 try:
                     if len(g) >= 3:
                         nd = date(int(g[0]), int(g[1]), int(g[2]))
+                        day_precise = True
                     elif len(g) == 2:
                         nd = date(int(g[0]), int(g[1]), 1)
                     elif len(g) == 1:
                         nd = date(int(g[0]), 1, 1)
                 except ValueError:
                     nd = None
+        if not day_precise:
+            # A URL that names only a year or a month is not a publication date:
+            # FRA's /news/2026/ stored 1 January on all 66 rows, EDPS's on all 24.
+            # The card's real date replaces it. Where the card has none, the old
+            # placeholder is left as it was (CJEU's PDF links, part of EDPS) -- that
+            # is a separate, reported defect, not something to hide by dropping rows.
+            if soup is None:
+                soup = BeautifulSoup(html or "", "html.parser")
+            card_nd = _card_date(soup, key, _is_item_link, _absolute)
+            if card_nd is not None:
+                nd = card_nd
         out.append({
             "title": title[:480], "summary": None, "news_date": nd, "image_url": None,
             "source_url": url, "external_id": _slug_id(url), "item_type": cfg.get("type", "news"),

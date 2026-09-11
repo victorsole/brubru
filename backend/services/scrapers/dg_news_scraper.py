@@ -15,7 +15,7 @@ from __future__ import annotations
 import html as _html
 import logging
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 
@@ -31,6 +31,53 @@ _TIME = re.compile(r'<time[^>]*\sdatetime="(\d{4}-\d{2}-\d{2})', re.S)
 _TITLE = re.compile(r'ecl-content-block__title"[^>]*>\s*<a\s+href="([^"]+)"[^>]*>(.*?)</a>', re.S)
 _DESC = re.compile(r'ecl-content-block__description"[^>]*>\s*(?:<p[^>]*>)?(.*?)(?:</p>|</div>)', re.S)
 _META = re.compile(r'ecl-content-block__primary-meta-item">\s*([^<]+?)\s*</li>', re.S)
+
+# Every primary-meta item's plain text, whatever element carries it. Some ECL
+# listings date a card ONLY here, as text, with no <time datetime>: CNECT puts
+# "31 August 2026" in an <li>, the Reform task force "7 September 2026" in a <div>.
+# _TIME missed both, so all 13 CNECT and all 10 REFORM cards arrived undated
+# (measured 11 Sep 2026). Checked against an independent carrier before trusting
+# it: 19 of 19 comparable items agreed (the CNECT article's own "Publication"
+# header, and the Press Corner API eventDate for REFORM), none disagreed.
+_META_ITEMS = re.compile(
+    r'ecl-content-block__primary-meta-item"[^>]*>\s*([^<]+?)\s*</(?:li|div|span)>', re.S)
+# The WHOLE meta text must be a date. A meta item reading "Deadline 30 September
+# 2026" contains a date that is not the publication date, and a search() would
+# take it.
+_META_DATE_ONLY = re.compile(r"^\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4}$")
+
+# Undated cards that link to a LISTING rather than an article: a faceted search
+# (`?f[0]=...`) or the Press Corner home. Read on the live pages, 11 Sep 2026:
+# "Visit the Press corner" on commission.europa.eu/news-and-media/news_en, and
+# "Press releases" on the R&I news-alerts page. They are navigation, not news, and
+# both were stored as undated news rows. Only skipped when the card is ALSO
+# undated: SANTE announces a real, dated item with a link to a filtered listing.
+_NAV_HREF = re.compile(r"(?:[?&]f(?:%5B|\[)\d+(?:%5D|\])=|/presscorner/home(?:/|$))", re.I)
+
+
+def _meta_text_date(block: str) -> Optional[date]:
+    """The card's date from primary-meta TEXT, or None.
+
+    None unless exactly one meta item is a bare date: two would mean a range or an
+    event and a publication date side by side, and picking one is a guess.
+    """
+    # Parsed through economy_common's month table, NOT strptime: %b knows "Sep" but
+    # not "Sept", the one month whose natural abbreviation is four letters. Europol's
+    # cards read "11 Sept 2026" and lost every September date that way (fixed in
+    # economy_europol the same day); strptime here would have repeated it.
+    from services.scrapers.economy_common import parse_listing_date
+    found = []
+    for raw in _META_ITEMS.findall(block):
+        txt = _html.unescape(raw).strip()
+        if _META_DATE_ONLY.match(txt):
+            dt = parse_listing_date(txt)
+            if dt is not None:
+                found.append(dt.date())
+    if len(found) != 1:
+        return None
+    nd = found[0]
+    # A publication date cannot be in the future; one day of timezone slack.
+    return nd if nd <= date.today() + timedelta(days=1) else None
 
 
 # Article subdomain -> canonical DG. An article's TRUE department is its home
@@ -148,6 +195,10 @@ def parse_ecl_news(html: str, base_url: str, default_type: str) -> List[Dict]:
                 nd = datetime.strptime(dm.group(1), "%Y-%m-%d").date()
             except ValueError:
                 nd = None
+        if nd is None:
+            nd = _meta_text_date(block)
+        if nd is None and _NAV_HREF.search(href):
+            continue
         img = _IMG.search(block)
         desc = _DESC.search(block)
         meta = _META.search(block)
@@ -161,6 +212,28 @@ def parse_ecl_news(html: str, base_url: str, default_type: str) -> List[Dict]:
             "item_type": _item_type(meta.group(1) if meta else None, default_type),
         })
     return out
+
+
+# ESMA's feed has no <pubDate> at all: each item is title, link and a description
+# that embeds the Drupal node's rendered fields, including
+# `<span class="field--name-created"><time datetime="2026-09-10T10:25:31+02:00">`.
+# All 10 items dated 0 of 10 before this. Scoped to the `created` field, never any
+# <time> in the description, because a description can quote an event date.
+# `created` was verified as the publication date, not assumed: it matched the
+# article page's own date on 10 of 10 items (11 Sep 2026).
+_RSS_CREATED = re.compile(
+    r'field--name-created[^>]*>\s*<time[^>]*\sdatetime="(\d{4}-\d{2}-\d{2})', re.S)
+
+
+def _rss_created_date(description: str) -> Optional[date]:
+    m = _RSS_CREATED.search(description or "")
+    if not m:
+        return None
+    try:
+        nd = datetime.strptime(m.group(1), "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    return nd if nd <= date.today() + timedelta(days=1) else None
 
 
 def parse_rss(xml_text: str, base_url: str, default_type: str) -> List[Dict]:
@@ -207,6 +280,8 @@ def parse_rss(xml_text: str, base_url: str, default_type: str) -> List[Dict]:
                     nd = datetime.fromisoformat(ds[:10]).date()
                 except Exception:
                     nd = None
+        if nd is None:
+            nd = _rss_created_date(e.findtext("description") or "")
         img = None
         enc = e.find("enclosure")
         if enc is not None and enc.get("url"):

@@ -56,6 +56,7 @@ def main() -> int:
         ).fetchall()
         print(f"=== news: {len(news)} item(s) in the DPP folder ===")
         added = 0
+        refused = 0
         for n in news:
             key = f"dpp:{n.public_url.rstrip('/').rsplit('/', 1)[-1][:100]}"
             exists = db.execute(
@@ -63,6 +64,13 @@ def main() -> int:
             ).scalar()
             if exists:
                 print(f"  [OK]  {n.title[:62]}")
+                continue
+            if n.document_date is None:
+                # A NEW news row is dated or not written (11 Sep 2026; the rule and
+                # its reasons live in services/news/write_guard.py). This raw INSERT
+                # bypasses the ORM writers, so it states the rule itself.
+                refused += 1
+                print(f"  [REFUSED] no document_date, not published: {n.title[:48]}")
                 continue
             added += 1
             print(f"  [ADD] {str(n.document_date)} {n.title[:56]}")
@@ -137,8 +145,8 @@ def main() -> int:
                 text("SELECT count(*) FROM eu_calendar_events "
                      "WHERE :i = ANY(policy_areas)"), {"i": INTEREST}
             ).scalar()
-            print(f"  eu_news_items tagged dpp     : {n}/{len(news)} "
-                  f"{'OK' if n == len(news) else 'FAIL'}")
+            print(f"  eu_news_items tagged dpp     : {n}/{len(news) - refused} "
+                  f"{'OK' if n == len(news) - refused else 'FAIL'}")
             print(f"  eu_calendar_events tagged dpp: {e}/{len(events)} "
                   f"{'OK' if e == len(events) else 'FAIL'}")
             # do they carry the interest that makes them reachable?
@@ -148,10 +156,14 @@ def main() -> int:
             ).scalar()
             print(f"  news missing the interest tag: {bad} "
                   f"{'OK' if bad == 0 else 'FAIL'}")
-            if n != len(news) or e != len(events) or bad:
+            if n != len(news) - refused or e != len(events) or bad:
                 rc = 1
         else:
             print(f"\n[DRY-RUN] would add {added} news, {added_ev} events")
+        if refused:
+            print(f"[FAIL] {refused} undated news item(s) refused; date them in the DPP "
+                  "folder first", file=sys.stderr)
+            rc = 1
         return rc
     finally:
         db.close()

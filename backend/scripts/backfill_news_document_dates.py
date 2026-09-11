@@ -56,6 +56,7 @@ import pathlib
 import sys
 import time
 from collections import Counter
+from urllib.parse import urljoin
 
 _REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
 if _REPO_ROOT not in sys.path:
@@ -71,6 +72,13 @@ from services.scrapers.economy_common import (  # noqa: E402
     extract_item_date, extract_dateline_or_url_date, http_get, sole_text_date,
     extract_brussels_dateline,
 )
+# The fetch chain moved to a service on 11 Sep 2026 so the news WRITERS run the same
+# one this sweep proved: the question "stop new rows arriving undated" needs it at
+# write time. The underscore names are kept so the body tables below read as before.
+from services.news.item_date import (  # noqa: E402
+    MISS_PROVENANCES, LazyBrowser, browser_get as _browser_get, cffi_get as _cffi_get,
+    escalating_get as _escalating_get, resolve_item_date,
+)
 
 # Bodies with a KNOWN bespoke path (a WAF-aware fetcher, an RSS map, or stored PDF
 # text). Everything else falls through to the generic path below, which is the point:
@@ -80,26 +88,11 @@ from services.scrapers.economy_common import (  # noqa: E402
 # needed writing; their scrapers simply never called it. Hardcoding a fifth, sixth and
 # seventh body here would have hidden the next four the same way.
 BODIES = ("euda", "eib", "rail", "sesar", "f4e")
-BATCH = 50
+# 20, not 50: on 11 Sep 2026 the OS killed an eu_news_items sweep for memory before
+# its first 50-row commit, losing every date it had read. A kill cannot be caught,
+# so the only defence is committing often.
+BATCH = 20
 DELAY = 0.4          # politeness; these are public agency sites
-
-
-def _cffi_get(url: str):
-    """EUDA sits behind a WAF that 403s a plain requests UA, so its own scraper uses
-    a curl_cffi Chrome TLS fingerprint. Reuse that rather than re-tuning headers,
-    per feedback_waf_walled_use_playwright."""
-    from curl_cffi import requests as creq
-    s = creq.Session(impersonate="chrome131")
-    try:
-        r = s.get(url, timeout=40)
-        return r.text if r.status_code == 200 else None
-    except Exception:  # noqa: BLE001
-        return None
-
-
-# WAF / rate-limit statuses. A 403 is a wall, a 429 is us going too fast, and a
-# 503 is either. None of the three means "this page has no date".
-_WALL_STATUSES = {403, 406, 429, 503}
 
 
 def _plain_get(url: str):
@@ -112,68 +105,10 @@ def _plain_get(url: str):
     return r.text
 
 
-def _escalating_get(url: str):
-    """Plain GET, then a real TLS fingerprint, then a real browser.
-
-    Added 10 September 2026 after the first eu_news_items sweep reported
-    `fetch_failed` on 360 of 589 rows and the number was taken at face value for
-    about a minute. Sampling the failures showed THREE different things wearing
-    one label:
-
-      * HTTP 200 with a full page (EIT, EEAS, CNECT) -- the page was fine and the
-        sweep had simply outrun the host. That is the rate limiter being measured,
-        not the site (feedback_paced_regression_measures_the_model).
-      * HTTP 403 (EUIPO, ECHA) -- a WAF. Use a browser, never tune headers
-        (feedback_waf_walled_use_playwright).
-      * HTTP 429 (EEAS) -- explicitly us, going too fast.
-
-    So a wall or an empty 200 escalates instead of being recorded as an absent
-    date. An empty result is not absence; it is usually the instrument
-    (feedback_empty_result_is_a_broken_instrument).
-    """
-    r = http_get(url)
-    walled = r is None or getattr(r, "status_code", 0) in _WALL_STATUSES
-    if not walled:
-        ctype = (r.headers.get("content-type") or "").lower()
-        if ("html" in ctype or "xml" in ctype) and len(r.text) > 2000:
-            return r.text
-        walled = True          # a 200 with nothing parseable is also a wall
-    try:
-        html = _cffi_get(url)
-        if html and len(html) > 2000:
-            return html
-    except Exception:  # noqa: BLE001
-        pass
-    try:
-        return _browser_get(url)
-    except Exception:  # noqa: BLE001
-        return None
-
-
-def _browser_get(url: str):
-    """Playwright. chips-ju renders its item pages client-side (NewsDetails?id=<guid>)
-    and satcen serves a 1.7KB stub to a plain GET, so both came back `fetch_failed`
-    on every attempt -- 18 rows. At a WAF or a JS app, use the browser rather than
-    tuning headers (feedback_waf_walled_use_playwright)."""
-    import importlib.util
-    import pathlib as _pl
-    global _BROWSER
-    if _BROWSER is None:
-        f = _pl.Path(__file__).resolve().parents[1] / "services/scrapers/waf_browser_fetcher.py"
-        spec = importlib.util.spec_from_file_location("waf_browser_fetcher", f)
-        mod = importlib.util.module_from_spec(spec)
-        sys.modules["waf_browser_fetcher"] = mod
-        spec.loader.exec_module(mod)
-        _BROWSER = mod
-    try:
-        return (_BROWSER.fetch_one(url).html or "") or None
-    except Exception:
-        return None
-
-
-_BROWSER = None
-
-_FETCHERS = {"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get,
+# chips-ju renders its item pages client-side (NewsDetails?id=<guid>) and satcen
+# serves a 1.7KB stub to a plain GET, so both came back `fetch_failed` on every
+# attempt -- 18 rows -- until they were routed straight to the browser.
+_FETCHERS ={"euda": _cffi_get, "eib": _plain_get, "rail": _plain_get,
              "chips": _browser_get, "satcen": _browser_get}
 
 # Bodies whose item pages expose NO date carrier at all, where the only remaining
@@ -202,6 +137,32 @@ _MAPS: dict = {}
 # 2026), so the stored PDF text is the only place their date will ever be read from.
 _STORED_BODIES = {"f4e": extract_dateline_or_url_date,
                   "edps": extract_brussels_dateline}
+
+
+_LISTING_URLS: dict = {}
+
+
+def _absolute_url(body: str, url: str) -> str:
+    """A stored URL made fetchable: whitespace stripped, a relative path joined to its
+    source's own listing URL.
+
+    eu_news_items holds 17 Ombudsman rows stored as `/en/news-document/en/<id>` (the
+    listing declares `<base href="/">`) and 18 ENISA rows ending in a space. As
+    stored, neither can be fetched, so the sweep would have written them off as
+    undatable when the page carries the date.
+    """
+    url = (url or "").strip()
+    if not url or url.startswith("http"):
+        return url
+    if not _LISTING_URLS:
+        from services.scrapers.bespoke_news_scraper import BESPOKE_SOURCES
+        from services.scrapers.dg_news_sources import DG_NEWS_SOURCES, EU_BODY_FEEDS, OUTLET_FEEDS
+        for s in list(BESPOKE_SOURCES) + DG_NEWS_SOURCES + EU_BODY_FEEDS + OUTLET_FEEDS:
+            for k in (s.get("source_key"), s.get("dg"), s.get("institution")):
+                if k:
+                    _LISTING_URLS.setdefault(k, s["url"])
+    base = _LISTING_URLS.get(body)
+    return urljoin(base, url) if base else url
 
 
 def _map_for(body: str) -> dict:
@@ -275,6 +236,9 @@ def main() -> int:
     ap.add_argument("--pace", type=float, default=None,
                     help="Seconds between requests. Raise it for hosts that 429; "
                          "an unpaced sweep measures the rate limiter, not the site.")
+    ap.add_argument("--no-render", action="store_true",
+                    help="Never open a browser. For server-rendered sites whose date is in "
+                         "the static HTML (EEAS); keeps an 8GB machine alive.")
     ap.add_argument("--table", choices=sorted(_TABLES), default="economy_items",
                     help="Which news store to repair. eu_news_items is the "
                          "institutional half (see _TABLES).")
@@ -300,6 +264,8 @@ def main() -> int:
         db_probe.close()
     print(f"[INFO] bodies: {bodies}")
     db = SessionLocal()
+    # ONE browser for the whole run, opened only if a page needs rendering.
+    browser = LazyBrowser(settle_ms=6000, networkidle_ms=15000)
     try:
         before = _counts(db, bodies, prof)
         print("[INFO] before (rows / undated):")
@@ -347,42 +313,40 @@ def main() -> int:
                 # which is where the date actually lives
                 # (<div class="published-date">).
                 carriers["not_in_feed_fell_through"] += 1
-            # Generic path for any body with no bespoke fetcher: a plain GET and
-            # extract_item_date, which reads <time datetime>, article:published_time
-            # and JSON-LD datePublished. Most agency pages carry one of the three.
-            fetcher = _FETCHERS.get(body, _escalating_get)
-            html = fetcher(r["public_url"])
-            if html is None:
-                carriers["fetch_failed"] += 1
-            else:
-                dt, carrier = extract_item_date(html)
-                if dt is None and body in _SOLE_DATE_BODIES:
-                    dt, carrier = sole_text_date(html)
-                if dt is None and fetcher is not _browser_get:
-                    # ESCALATE ON EXTRACTION FAILURE, not only on fetch failure
-                    # (10 September 2026). `_escalating_get` decides "wall" from
-                    # the status and the size, so a 200 serving 157KB of shell
-                    # looked healthy and the browser was never tried. The ECA
-                    # renders its date client-side: the static HTML carries no
-                    # <time>, no meta, no JSON-LD and no date class, while the
-                    # rendered page opens with
-                    #     <time class="date" datetime="09/09/2026">
-                    # Sixteen rows, including the REPowerEU special report the
-                    # /social-eu pulse found the same morning, were being written
-                    # off as `no_carrier` on a page that has the date.
-                    #
-                    # The test has to be "did we get the thing we came for",
-                    # not "did the request look fine".
-                    rendered = _browser_get(r["public_url"])
-                    if rendered:
-                        dt, carrier = extract_item_date(rendered)
-                        if dt is not None:
-                            carrier = f"{carrier}_rendered"
-                if dt is None:
-                    carriers["no_carrier"] += 1
-                else:
-                    carriers[carrier] += 1
+            # Generic path for any body with no bespoke fetcher: the shared resolver,
+            # the SAME chain the news writers run at write time. Press Corner API for
+            # presscorner items, then the page (escalating past walls), then the
+            # rendered page when the static one carries no date -- the ECA renders
+            # its date client-side, and sixteen rows including the REPowerEU special
+            # report were written off as `no_carrier` before that step existed.
+            if body not in _FETCHERS and body not in _SOLE_DATE_BODIES:
+                dt, carrier = resolve_item_date(_absolute_url(body, r["public_url"]),
+                                                fetcher=browser, render=not args.no_render)
+                carriers[carrier] += 1
+                if dt is not None:
                     pending.append({"id": r["id"], "d": dt})
+            else:
+                fetcher = _FETCHERS.get(body, _escalating_get)
+                html = fetcher(r["public_url"])
+                if html is None:
+                    carriers["fetch_failed"] += 1
+                else:
+                    dt, carrier = extract_item_date(html)
+                    if dt is None and body in _SOLE_DATE_BODIES:
+                        dt, carrier = sole_text_date(html)
+                    if dt is None and fetcher is not _browser_get:
+                        # Escalate on EXTRACTION failure, not only fetch failure;
+                        # see resolve_item_date.
+                        rendered = _browser_get(r["public_url"])
+                        if rendered:
+                            dt, carrier = extract_item_date(rendered)
+                            if dt is not None:
+                                carrier = f"{carrier}_rendered"
+                    if dt is None:
+                        carriers["no_carrier"] += 1
+                    else:
+                        carriers[carrier] += 1
+                        pending.append({"id": r["id"], "d": dt})
             time.sleep(DELAY)
 
             if args.apply and len(pending) >= BATCH:
@@ -421,7 +385,7 @@ def main() -> int:
                     # every map-body row -- 36 "dates" for 18 rows -- and tripped
                     # the concurrency warning below on a run that was perfectly
                     # clean. A tally that counts one row twice is not a tally.
-                    if k not in ("fetch_failed", "no_carrier", "not_in_feed",
+                    if k not in (*MISS_PROVENANCES, "not_in_feed",
                                  "not_in_feed_fell_through", "none",
                                  "brussels_dateline_multi", "brussels_dateline_out_of_bounds",
                                  "brussels_dateline_folder_mismatch",
@@ -433,8 +397,10 @@ def main() -> int:
             print(f"[WARN] extracted {dated} dates but undated fell by {total_recovered}; "
                   "the ingest cron may have written rows concurrently. Re-run to converge.")
         print(f"[OK] {total_recovered} rows now carry a document_date read from their own page")
+        print(f"[INFO] browser launches this run: {browser.launches}")
         return 0
     finally:
+        browser.close()
         db.close()
 
 

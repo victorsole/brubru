@@ -24,6 +24,7 @@ from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.bespoke_news_scraper import BESPOKE_SOURCES, BespokeFetchError, scrape_bespoke, scrape_eeas
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+from services.news.write_guard import date_new_items, record_refusals
 
 
 def _upsert(db, it) -> str:
@@ -49,7 +50,8 @@ def _upsert(db, it) -> str:
 def main():
     db = SessionLocal()
     counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0,
-              "errors": 0, "unreachable": 0}
+              "errors": 0, "unreachable": 0, "refused_undated": 0}
+    refused_all: list = []
     empty: list = []
     unreachable: list = []
     failed: list = []
@@ -71,6 +73,10 @@ def main():
                     empty.append(cfg["institution"])
                 print(f"  {cfg['institution']:10s} {len(items)} items")
                 try:
+                    # A NEW item is dated or not written; reuses this run's browser.
+                    items, refused = date_new_items(db, items, fetcher=fetcher)
+                    counts["refused_undated"] += len(refused)
+                    refused_all.extend(refused)
                     for it in items:
                         counts[_upsert(db, it)] += 1
                     stamp_fetched(db, [i["entry_key"] for i in items])
@@ -85,12 +91,16 @@ def main():
                 if not eeas_items:
                     counts["empty"] += 1
                 print(f"  {'EEAS':10s} {len(eeas_items)} items")
+                eeas_items, refused = date_new_items(db, eeas_items, fetcher=fetcher)
+                counts["refused_undated"] += len(refused)
+                refused_all.extend(refused)
                 for it in eeas_items:
                     counts[_upsert(db, it)] += 1
                 stamp_fetched(db, [i["entry_key"] for i in eeas_items])
                 db.commit()
             except Exception as e:
                 db.rollback(); print(f"  source failed EEAS: {e}"); counts["errors"] += 1
+        record_refusals(db, "news_bespoke", refused_all)
         print("[bespoke_news] " + ", ".join(f"{k}={v}" for k, v in counts.items()))
 
         # A run that reaches nothing, or reaches a source it cannot fetch, is NOT a

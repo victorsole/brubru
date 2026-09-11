@@ -574,6 +574,60 @@ def _reject_future_news_date(it) -> None:
         pass
 
 
+# A NEW news row is dated or not written (11 September 2026). Same rule, same
+# resolver, as the eu_news_items writers: services/news/write_guard.py explains why
+# a refusal goes to the sync_runs ledger instead of the exit code. News types only;
+# publications, events and tenders are outside this rule.
+_NEWS_TYPES = {"news", "press_release"}
+_UNDATED_REFUSED: list = []
+
+
+def _existing_urls(keys) -> set:
+    """(body_code, item_type, public_url) triples already stored.
+
+    A fresh SQLAlchemy session rather than the run's ChunkedDb cursor: the upsert
+    below reconnects on a dropped Supabase connection, and a query issued on that
+    cursor before the upsert would not."""
+    from sqlalchemy import text as _text
+    from core.database import SessionLocal
+    urls = sorted({k[2] for k in keys})
+    s = SessionLocal()
+    try:
+        rows = s.execute(_text("SELECT body_code, item_type, public_url FROM economy_items "
+                               "WHERE public_url = ANY(:u)"), {"u": urls}).all()
+    finally:
+        s.close()
+    return {(r[0], r[1], r[2]) for r in rows}
+
+
+def _refuse_undated_new_news(by_url: dict, *, existing_fn=_existing_urls, resolve=None) -> list:
+    """Date NEW undated news items from their own page; drop the ones that stay undated.
+
+    Mutates `by_url`. Stock rows (already stored) pass untouched, as do dated items
+    and non-news types. Returns the refusals and appends them to _UNDATED_REFUSED,
+    which main() records once at the end of the run.
+    """
+    undated = [k for k, it in by_url.items() if k[1] in _NEWS_TYPES and not it.document_date]
+    if not undated:
+        return []
+    if resolve is None:
+        from services.news.item_date import resolve_item_date as resolve
+    existing = existing_fn(undated)
+    refused = []
+    for k in undated:
+        if k in existing:
+            continue
+        dt, why = resolve(k[2])
+        if dt is not None:
+            by_url[k].document_date = dt
+        else:
+            by_url.pop(k)
+            refused.append({"source_key": f"{k[0]}/{k[1]}", "undated_reason": why,
+                            "source_url": k[2]})
+    _UNDATED_REFUSED.extend(refused)
+    return refused
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
     if itype == "legal":
@@ -588,6 +642,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
         if it.public_url:
             _reject_future_news_date(it)
             by_url[(it.body_code, it.item_type, it.public_url)] = it
+    _refuse_undated_new_news(by_url)
     rows = [(it.body_code, it.item_type, it.title, it.summary, it.public_url, it.body_txt,
              it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid)
             for it in by_url.values()]
@@ -654,6 +709,21 @@ def main() -> None:
                 db.rollback()
                 print(f"[ERROR] {body}/{itype}: {exc}", flush=True)
         print(f"[DONE] total upserted: {total}", flush=True)
+
+        # New news items nobody could date were NOT upserted. Record them in the
+        # ledger (never the exit code; see services/news/write_guard.py).
+        if _UNDATED_REFUSED:
+            try:
+                from core.database import SessionLocal
+                from services.news.write_guard import record_refusals
+                s = SessionLocal()
+                try:
+                    record_refusals(s, f"economy_{args.body or 'all_ecb'}", _UNDATED_REFUSED)
+                finally:
+                    s.close()
+            except Exception as exc:  # noqa: BLE001 - reporting must never break a sync
+                print(f"[WARN] could not record {len(_UNDATED_REFUSED)} undated refusal(s): "
+                      f"{type(exc).__name__}", flush=True)
 
         # Say what was DROPPED, not only what was upserted. The Interoperable /
         # EU GovTech listings fall back to "the first date-shaped string in the
