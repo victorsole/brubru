@@ -22,6 +22,7 @@ Usage (from backend/):
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 import time
 from pathlib import Path
@@ -49,6 +50,9 @@ ENGINE = "softcatala-eng-cat"
 # OJ-title fixes on top of the shared glossary. EU institutional opinions
 # (EESC, CoR, ECB, Court of Auditors) are "dictamen" in EU Catalan, not "opinió".
 _OJ_POSTFIX = [
+    # Merger notices: "Case M.12161" is a case, not a house (80 titles, 11 Sep 2026).
+    ("(Casa M.", "(Cas M."),
+    ("(Case M.", "(Cas M."),
     ("Opinió del Comitè", "Dictamen del Comitè"),
     ("Opinió del Banc Central Europeu", "Dictamen del Banc Central Europeu"),
     ("Opinió del Tribunal de Comptes", "Dictamen del Tribunal de Comptes"),
@@ -73,6 +77,9 @@ def _translator():
     def translate(text: str) -> str:
         if not text or not text.strip():
             return text
+        # Typographic quotes, apostrophes and non-breaking hyphens are normalised
+        # inside _sc_protected (11 Sep 2026), shared with the act pages; do not
+        # pre-normalise here, or paired quotes lose their Catalan « ».
         parts = PROTECT.split(text)
         # PROTECT guards IDENTIFIERS (CELEX, ECLI, case numbers, brand names). It
         # does nothing about characters, so every foreign letter used to reach the
@@ -178,11 +185,66 @@ def run(limit: int, batch: int):
     print(f"[DONE] {done} entries -> '{LANG}' in {(time.time()-t0)/60:.1f}min", flush=True)
 
 
+# Debris the pre-normalisation translate() left in stored rows: a restored
+# typographic character (the model never emits one itself) or a merger case
+# rendered as a house. Re-translating through the CURRENT translate() repairs it.
+# ⁇ added the same day: 61 EP adopted-text titles translated on 9 Sep carried
+# "P10 ⁇ TA(2026)0089", the underscore destroyed before the character guard.
+_DEBRIS_SQL = r"[’‘‑‐⁇]|\((Casa|Case) M\."
+_DEBRIS = re.compile(r"[’‘‑‐⁇]|\((?:Casa|Case) M\.")
+
+
+def repair_typography(limit: int, apply: bool):
+    conn = _db()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute("""
+            SELECT e.id, e.title, e.plain_explanation,
+                   t.title AS ca_title, t.plain_explanation AS ca_expl
+              FROM oj_entries e
+              JOIN oj_entry_translations t ON t.oj_entry_id = e.id AND t.lang = %s
+             WHERE t.title ~ %s OR t.plain_explanation ~ %s
+             ORDER BY e.oj_date DESC
+             LIMIT %s
+        """, (LANG, _DEBRIS_SQL, _DEBRIS_SQL, limit))
+        rows = cur.fetchall()
+    finally:
+        conn.close()
+    print(f"[INFO] {len(rows)} row(s) carry typographic debris (apply={apply})", flush=True)
+    if not rows:
+        return 0
+    translate = _translator()
+    writes, kept = [], 0
+    for r in rows:
+        t_title = translate(r["title"])
+        t_expl = translate(r["plain_explanation"]) if r["plain_explanation"] else None
+        # Never write back something still broken; that only moves the damage.
+        if _DEBRIS.search(t_title or "") or _DEBRIS.search(t_expl or ""):
+            kept += 1
+            print(f"  [KEEP] {r['id']}: still carries debris after re-translation", flush=True)
+            continue
+        writes.append((r["id"], t_title, t_expl))
+        if not apply or len(writes) <= 5:
+            # Dry run prints every pair, so the whole repair can be read before it is applied.
+            print(f"  [{r['id']}]\n  title before: {r['ca_title']}\n  title after : {t_title}"
+                  f"\n  expl  before: {r['ca_expl']}\n  expl  after : {t_expl}", flush=True)
+    if apply:
+        for i in range(0, len(writes), 25):
+            _write_batch(writes[i:i + 25])
+    print(f"[DONE] repaired={len(writes) if apply else 0} would_repair={len(writes)} kept={kept}", flush=True)
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=100000)
     ap.add_argument("--batch", type=int, default=25)
+    ap.add_argument("--repair-typography", action="store_true",
+                    help="Re-translate stored rows carrying ’/‑ debris or 'Casa M.' (dry run without --apply).")
+    ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
+    if args.repair_typography:
+        return repair_typography(args.limit, args.apply)
     run(args.limit, args.batch)
 
 

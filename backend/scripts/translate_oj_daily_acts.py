@@ -302,18 +302,41 @@ _CHROME_MARKERS = (
 
 
 def _page_has_act_text(path: Path) -> tuple[bool, str]:
-    """True when the generated page really holds the act. Reads the body."""
+    """True when the generated page really holds the act. Reads the body.
+
+    Two routes, because only one of them can carry EUR-Lex chrome (11 Sep 2026):
+
+    - STRUCTURED pages carry `visa`/`recital` paragraphs. Only the structured
+      parser emits those classes, and it fills them from OJ act markup, so a
+      cookie banner cannot produce one. An act here is short by nature: the
+      length thresholds below rejected 5 of 16 complete, source-faithful acts
+      of 11 Sep (an ECB decision at 1,480 chars while its twin passed at 1,549;
+      a 141-paragraph list of projects with no paragraph over 200 chars). Here
+      the test is only "more than an empty shell".
+    - FLATTENED pages (the generic parser) are where chrome lands, so they keep
+      the strict thresholds. All 122 flattened acts of 10 Sep clear them.
+    """
     import html as _html
     try:
         t = path.read_text(encoding="utf-8", errors="ignore")
     except OSError as exc:
         return False, f"unreadable: {exc}"
-    paras = re.findall(r'<p class="article-text">(.*?)</p>', t, re.S)
-    clean = [_html.unescape(re.sub(r"<[^>]+>", "", x)).strip() for x in paras]
-    joined = " ".join(clean)
+
+    def _texts(cls):
+        return [_html.unescape(re.sub(r"<[^>]+>", "", x)).strip()
+                for x in re.findall(r'<p class="%s">(.*?)</p>' % cls, t, re.S)]
+
+    clean = _texts("article-text")
+    skeleton = _texts("visa") + _texts("recital")
+    joined = " ".join(clean + skeleton)
     for marker in _CHROME_MARKERS:
         if marker in joined:
             return False, "EUR-Lex site chrome, not the act"
+    if skeleton and any(clean):
+        chars = sum(len(c) for c in clean + skeleton)
+        if chars <= 300:
+            return False, f"thin body ({chars} chars in a structured page)"
+        return True, f"structured, {chars} chars, {len(skeleton)} citations/recitals"
     substantive = [c for c in clean if len(c) > 200]
     chars = sum(len(c) for c in clean)
     if len(substantive) < 3 or chars <= 1500:

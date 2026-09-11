@@ -481,7 +481,9 @@ def _parse_generic_c_html(soup, html_path: str, celex: str = '') -> dict:
         for cand in paragraphs[:12]:
             if 20 < len(cand) < 500 and re.match(
                     r'^(Amendments? to\s+)?(UN\s+)?(ECE\s+)?(Regulation|Decision|'
-                    r'Directive|Recommendation|Agreement)\b', cand, re.I):
+                    r'Directive|Recommendation|Agreement|Resolution)\b', cand, re.I):
+                # Resolution added 11 Sep 2026: the 13 EP discharge resolutions
+                # of 10 Sep otherwise took the bare key "202601577" as title.
                 title = cand
                 break
     return {
@@ -510,13 +512,26 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
     # ZERO paragraphs, so an "articles is non-empty" test passes it through and
     # renders an empty page. Count the actual body text instead.
     body = sum(len(a.get('paragraphs') or []) for a in (parsed.get('articles') or []))
-    if body or parsed.get('recitals'):
+    if body:
         return parsed
     from bs4 import BeautifulSoup
     with open(html_path, 'r', encoding='utf-8') as _f:
         _soup = BeautifulSoup(_f.read(), 'html.parser')
+    generic = _parse_generic_c_html(_soup, html_path, celex)
+    if parsed.get('recitals'):
+        # Recitals alone are not proof the skeleton was read. The 109 EP
+        # discharge decisions of 10 Sep 2026 have no articles; the parser kept
+        # their 2-3 operative points as "recitals" and dropped every "having
+        # regard to" citation, 6-18% of the text. Every act with real recitals
+        # and no articles kept far more, so compare against the flattened text.
+        kept = sum(len(x) for k in ('recitals', 'visas') for x in (parsed.get(k) or []))
+        full = sum(len(p) for a in generic['articles'] for p in a['paragraphs'])
+        if full and kept >= 0.5 * full:
+            return parsed
+        print(f'[INFO] {celex or html_path}: skeleton kept {kept}/{full} chars, using generic flattener')
+        return generic
     print(f'[INFO] {celex or html_path}: no act skeleton, using generic flattener')
-    return _parse_generic_c_html(_soup, html_path, celex)
+    return generic
 
 
 def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
@@ -929,7 +944,10 @@ _SC_EMITTABLE = frozenset(
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789"
     " \t\n\r\x0b\x0c"
-    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    # ASCII punctuation MEASURED 11 Sep 2026 (two probes per character): the
+    # model destroys # < = > @ ^ _ ` | ~, so they are NOT listed. The old line
+    # listed all 32, so "P10_TA(2026)0089" shipped as "P10 ⁇ TA" on 61 titles.
+    "!\"$%&'()*+,-./:;?[\\]{}"
     # the 26 non-ASCII characters the model demonstrably emits
     "\u00e0\u00e7\u00e8\u00e9\u00ed\u00ef\u00f2\u00f3\u00fa\u00fc"
     "\u00c0\u00c7\u00c8\u00c9\u00cd\u00cf\u00d2\u00d3\u00da\u00dc"
@@ -980,6 +998,21 @@ def _sc_spans(text: str):
                     yield (a + i, a + i + 1)
 
 
+def _sc_typographic(text: str) -> str:
+    """Map typographic characters that HAVE an emittable equivalent, before protecting.
+
+    A placeholder is for a character with no equivalent. Placeholdering ’ ‘ ‑
+    breaks the SENTENCE the model sees ("banks QQZ0QQ group recovery plans"), and
+    on 11 Sep 2026 that emptied defined terms ("(l'Acord d'Associació ‘ ’)"),
+    dropped a whole clause, and garbled 124 My OJ explanations. Paired single
+    quotes become the Catalan « », which the model emits; an apostrophe becomes '.
+    """
+    text = text.replace("‑", "-").replace("‐", "-")
+    text = re.sub(r"(?<=\w)’(?=\w)", "'", text)
+    text = re.sub(r"‘([^‘’]*)’", r"«\1»", text)
+    return text.replace("‘", "'").replace("’", "'")
+
+
 def _sc_protected(text, translate_fn):
     """Swap unemittable characters for placeholders, translate, swap back.
 
@@ -989,6 +1022,7 @@ def _sc_protected(text, translate_fn):
     re-capitalised ("±Un 10%"). "QQZnQQ" survives the model verbatim — verified
     against it — so the sentence reaches the translator whole.
     """
+    text = _sc_typographic(text)
     spans = sorted(set(_sc_spans(text)))
     # Drop spans nested inside an earlier one (a URL swallowing a word).
     merged = []
@@ -997,11 +1031,14 @@ def _sc_protected(text, translate_fn):
             continue
         merged.append((a, b))
 
-    tokens = []
+    tokens, glue = [], []
     out_parts, cursor = [], 0
     for a, b in merged:
         out_parts.append(text[cursor:a])
         tokens.append(text[a:b])
+        # Was the span glued to text in the SOURCE? "P10_TA", "name@ec.europa.eu"
+        glue.append((a > 0 and not text[a - 1].isspace(),
+                     b < len(text) and not text[b].isspace()))
         out_parts.append(f" QQZ{len(tokens) - 1}QQ ")
         cursor = b
     out_parts.append(text[cursor:])
@@ -1011,9 +1048,17 @@ def _sc_protected(text, translate_fn):
     out = translate_fn(stashed)
     for i, original in enumerate(tokens):
         # Replace ONLY the placeholder: consuming the surrounding whitespace
-        # welds words together ("Signat perMuñoziWölkena Brussel·les").
-        out = out.replace(f"QQZ{i}QQ", original, 1)
+        # welds words together ("Signat perMuñoziWölkena Brussel·les"). The one
+        # exception is a side that was glued in the source, where the padding
+        # space is ours: "P10 _ TA" and "REGISTRATION @ ec.europa.eu" (11 Sep 2026).
+        left, right = glue[i]
+        pat = (r"[ \t]?" if left else "") + f"QQZ{i}QQ" + (r"[ \t]?" if right else "")
+        out = re.sub(pat, lambda _m, o=original: o, out, count=1)
     out = re.sub(r"[ \t]{2,}", " ", out)
+    # The model keeps "el" before an opening « ("el «Acord d'Associació»"), where
+    # Catalan elides. Masculine only: "la" does not elide before unstressed i/u.
+    out = re.sub(r"\b([Ee])l «(?=[AEIOUÀÈÉÍÒÓÚHaeiouàèéíòóúh])",
+                 lambda m: ("L" if m.group(1) == "E" else "l") + "'«", out)
     # Any placeholder the model dropped: fall back to the untouched source.
     return text if re.search(r"QQZ\d+QQ", out) else out
 
