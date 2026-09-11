@@ -69,6 +69,7 @@ from sqlalchemy import text  # noqa: E402
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import (  # noqa: E402
     extract_item_date, extract_dateline_or_url_date, http_get, sole_text_date,
+    extract_brussels_dateline,
 )
 
 # Bodies with a KNOWN bespoke path (a WAF-aware fetcher, an RSS map, or stored PDF
@@ -194,7 +195,13 @@ _MAPS: dict = {}
 # fallback, and where they disagree the dateline is kept, because five releases
 # carry `140620101200` (14 June 2010, a file migration) while the documents say
 # 2006, 2007 and 2008.
-_STORED_BODIES = {"f4e"}
+# body -> resolver(stored_body_txt, public_url) -> (date, provenance). A dict, not a
+# set: each stored-body source prints its date differently. edps added 11 Sep 2026 --
+# its 20 press releases are a frozen pre-migration cohort (ingest_edps_press_releases
+# is @intentionally_empty since EDPS merged press releases into the news feed in Aug
+# 2026), so the stored PDF text is the only place their date will ever be read from.
+_STORED_BODIES = {"f4e": extract_dateline_or_url_date,
+                  "edps": extract_brussels_dateline}
 
 
 def _map_for(body: str) -> dict:
@@ -321,8 +328,8 @@ def main() -> int:
             body = r["body_code"]
             processed += 1
             if body in _STORED_BODIES:
-                dt, prov = extract_dateline_or_url_date(r["body_txt"] or "",
-                                                        r["public_url"] or "")
+                dt, prov = _STORED_BODIES[body](r["body_txt"] or "",
+                                                r["public_url"] or "")
                 carriers[prov] += 1
                 if dt is not None:
                     pending.append({"id": r["id"], "d": dt})
@@ -415,7 +422,11 @@ def main() -> int:
                     # the concurrency warning below on a run that was perfectly
                     # clean. A tally that counts one row twice is not a tally.
                     if k not in ("fetch_failed", "no_carrier", "not_in_feed",
-                                 "not_in_feed_fell_through", "none"))
+                                 "not_in_feed_fell_through", "none",
+                                 "brussels_dateline_multi", "brussels_dateline_out_of_bounds",
+                                 "brussels_dateline_folder_mismatch",
+                                 "brussels_dateline_yearless_month_mismatch",
+                                 "brussels_dateline_yearless_unanchored"))
         if total_recovered != dated:
             # Not necessarily a bug: the live cron may have inserted or dated rows
             # while this ran. Say so rather than asserting a clean number.

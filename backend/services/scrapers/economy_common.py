@@ -1010,3 +1010,102 @@ def sole_text_date(html: str, *, today: datetime | None = None):
     if not (datetime(1990, 1, 1, tzinfo=timezone.utc) <= dt <= today + timedelta(days=1)):
         return None, None
     return dt, "sole_text_date"
+
+
+# --- EDPS / EDPB press-release dateline -------------------------------------------
+# EDPS press releases print their official date in a fixed template block, just
+# before the "Background information" boilerplate:
+#
+#     PRESS RELEASE  EDPS/2025/10  Brussels, 24 October 2025
+#
+# and joint EDPB-EDPS releases open with "Brussels, 12 March 2026 -". The opening
+# lines are NOT the date: the Entry/Exit System release opens "entered into operation
+# on 12 October 2025" and is dated 24 October; the UN Convention release opens "On
+# 4 September 2025, the EDPS issued an Opinion" and is dated 9 September. So this
+# anchors on the Brussels token, never on position.
+#
+# PDF extraction splits glyphs -- "Brusse ls", "1 2 March", "202 5" -- so the token is
+# matched space-tolerantly and the 40 characters after it are read with ALL
+# whitespace removed. Verified against the raw text on 11 Sep 2026: "1 2 March 2026"
+# is day 12 (not a page number fused onto "2"), and a plain contiguous date scan
+# truncated it to 2 March.
+#
+# Two refusals make that safe:
+#   * more than one distinct Brussels date -> refuse, the document is ambiguous;
+#   * the date must fall in the Drupal upload-folder month (/system/files/YYYY-MM/),
+#     which the CMS stamps at upload and the text cannot influence. All 18 resolved
+#     EDPS rows passed it; a fused digit that moved the day across a month boundary,
+#     or a wrong year, is refused rather than stored.
+# Joint EDPB-EDPS releases sometimes print NO year ("Brussels, 21 January -"). The day
+# and month are then taken from the document and the year from the upload folder, but
+# only when the dateline MONTH equals the folder month -- otherwise a "28 December"
+# release uploaded in January would be stored a year out. Verified on 11 Sep 2026
+# against the EDPB's own pages: 21 January 2026 and 11 February 2026, both matching.
+#
+# Deliberately NOT a resolver on the EDPB page's article-date metadata. For the NIS2 /
+# Cybersecurity Act release that field reads 19 May 2026 while the release text on the
+# same EDPB page, the EDPS PDF and the March upload folder all say 19 March 2026. The
+# document's printed dateline outranks a CMS field that can record a later edit.
+_BRUSSELS_TOKEN_RE = re.compile(r"B\s*r\s*u\s*s\s*s\s*e\s*l\s*s\s*,?", re.I)
+_STRIPPED_DAY_MONTH_YEAR_RE = re.compile(r"^(\d{1,2})([A-Za-z]{3,9})(\d{4})")
+_UPLOAD_FOLDER_MONTH_RE = re.compile(r"/system/files/(\d{4})-(\d{2})/")
+# Day + an explicit month NAME with no year after it. Month names are spelled out
+# (longest first) rather than [A-Za-z]{3,9}, because the stripped tail runs straight
+# into the next word -- "21January-TheEuropean" -- and a greedy letter class would
+# swallow "JanuaryTh".
+_STRIPPED_DAY_MONTH_ONLY_RE = re.compile(
+    r"^(\d{1,2})(" + "|".join(sorted(_MONTHS, key=len, reverse=True)) + r")", re.I)
+
+
+def extract_brussels_dateline(text: str, url: str = "") -> tuple[Optional[datetime], str]:
+    """(date, provenance) from a `Brussels, <day> <Month> <year>` dateline.
+
+    Provenance on success is `brussels_dateline` (the document printed day, month and
+    year) or `brussels_dateline_day_folder_year` (yearless dateline, year from the
+    upload folder, months agreeing). On refusal it names the reason -- `none`,
+    `brussels_dateline_multi`, `brussels_dateline_out_of_bounds`,
+    `brussels_dateline_folder_mismatch`, `brussels_dateline_yearless_month_mismatch`
+    or `brussels_dateline_yearless_unanchored` -- so a backfill can count why rows
+    stayed undated instead of reporting a bare miss.
+    """
+    if not text:
+        return None, "none"
+    found: set[datetime] = set()
+    yearless: set[tuple[int, int]] = set()          # (month, day)
+    for m in _BRUSSELS_TOKEN_RE.finditer(text):
+        tail = re.sub(r"\s+", "", text[m.end():m.end() + 40])
+        d = _STRIPPED_DAY_MONTH_YEAR_RE.match(tail)
+        if d and _MONTHS.get(d.group(2).lower()):
+            try:
+                found.add(datetime(int(d.group(3)), _MONTHS[d.group(2).lower()],
+                                   int(d.group(1)), tzinfo=timezone.utc))
+            except ValueError:
+                pass
+            continue
+        y = _STRIPPED_DAY_MONTH_ONLY_RE.match(tail)
+        if y:
+            yearless.add((_MONTHS[y.group(2).lower()], int(y.group(1))))
+    if len(found) > 1:
+        return None, "brussels_dateline_multi"
+    folder = _UPLOAD_FOLDER_MONTH_RE.search(url or "")
+    if found:
+        dt, prov = found.pop(), "brussels_dateline"
+    elif len(yearless) == 1 and folder:
+        month, day = yearless.pop()
+        if month != int(folder.group(2)):
+            return None, "brussels_dateline_yearless_month_mismatch"
+        try:
+            dt = datetime(int(folder.group(1)), month, day, tzinfo=timezone.utc)
+        except ValueError:
+            return None, "none"
+        prov = "brussels_dateline_day_folder_year"
+    elif yearless:
+        # Several yearless datelines, or one with no upload folder to anchor a year.
+        return None, "brussels_dateline_yearless_unanchored"
+    else:
+        return None, "none"
+    if dt.year < 1990 or dt > datetime.now(timezone.utc) + timedelta(days=1):
+        return None, "brussels_dateline_out_of_bounds"
+    if folder and (dt.year, dt.month) != (int(folder.group(1)), int(folder.group(2))):
+        return None, "brussels_dateline_folder_mismatch"
+    return dt, prov
