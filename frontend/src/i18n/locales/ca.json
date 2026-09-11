@@ -4579,7 +4579,27 @@
       "yourOrganisation": "Organització *",
       "yourPhone": "El vostre telèfon",
       "yourTitle": "El vostre títol"
-    }
+    },
+    "typeCommitteeVoteBriefTitle": "Nota sobre votació en comissió",
+    "typeCommitteeVoteBriefDesc": "Reacciona a una votació en comissió sobre un expedient que segueixes: què ha canviat, què significa i què cal fer ara",
+    "kindCommitteeVoteBrief": "Nota sobre votació en comissió",
+    "committeeVoteBriefDetails": "Dades de la votació en comissió",
+    "cvbCommittee": "Comissió",
+    "cvbCommitteePlaceholder": "p. ex. EMPL, ITRE, ENVI",
+    "cvbVoteDate": "Data de la votació",
+    "cvbVoteDatePlaceholder": "p. ex. 10 de setembre de 2026",
+    "cvbFileTitle": "Expedient",
+    "cvbFileTitlePlaceholder": "Nom de l'expedient en llenguatge clar",
+    "cvbProcedurePlaceholder": "p. ex. 2026/0074(COD)",
+    "cvbOutcome": "Resultat, si s'ha publicat",
+    "cvbOutcomePlaceholder": "Què va decidir la comissió",
+    "cvbOutcomeHint": "Deixa-ho buit si el resultat encara no s'ha publicat. La nota ho dirà en comptes d'inventar-s'ho.",
+    "cvbCompromise": "Esmenes de compromís",
+    "cvbUnknown": "No se sap",
+    "cvbYes": "Sí",
+    "cvbNo": "No",
+    "cvbNextStep": "Pas següent",
+    "cvbNextStepPlaceholder": "p. ex. votació al ple, trìleg"
   },
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",

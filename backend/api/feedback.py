@@ -410,15 +410,30 @@ async def submit_chat_feedback(
                 detail="Rating must be 'positive', 'negative', or 'hallucination'"
             )
 
-        # Determine feedback type and title based on rating
+        # Determine feedback type and title based on rating.
+        #
+        # Plain-text markers, not emoji (11 September 2026). Every one of the
+        # seven rows in `feedback_submissions` carried a title like
+        # "Chat Message 👍 Positive", so the no-emoji house rule was being
+        # broken at the writing path and the glyphs were sitting in the
+        # database, not merely on a screen.
+        #
+        # The backend convention is a bracketed word marker, the same shape as
+        # [OK] / [INFO] / [ERROR] in logs. It survives a terminal, a CSV export,
+        # a psql session and an email digest, none of which an emoji reliably
+        # does, and it sorts and greps predictably.
+        #
+        # Nothing parses this field: the admin panel renders it raw at
+        # frontend/src/components/admin/feedback_management.tsx:147, so the
+        # change is display-only and safe. Existing rows are left alone; they
+        # are a true record of what was written at the time.
         if feedback.rating == 'hallucination':
-            rating_emoji = "⚠️"
-            title = f"Chat Message {rating_emoji} Incorrect Information Report"
+            title = "Chat message [REPORT] incorrect information"
             feedback_type = 'hallucination'
             priority = 'medium'  # Hallucination reports are higher priority
         else:
-            rating_emoji = "👍" if feedback.rating == "positive" else "👎"
-            title = f"Chat Message {rating_emoji} {feedback.rating.capitalize()}"
+            marker = "[POSITIVE]" if feedback.rating == "positive" else "[NEGATIVE]"
+            title = f"Chat message {marker}"
             feedback_type = 'chat_rating'
             priority = 'low'
 

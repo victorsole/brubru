@@ -222,6 +222,58 @@ Make the ask crystal clear.
 Tailor arguments to their known priorities.
 """
 
+    COMMITTEE_VOTE_BRIEF_PROMPT = """Write a committee-vote reaction brief for an EU public-affairs team.
+
+A committee has just voted on a file this organisation follows. The reader needs, in under two
+minutes: what happened, what it changes for them, and what they do next.
+
+THE VOTE
+Committee: {committee}
+File: {file_title}
+Procedure: {procedure_reference}
+Date of vote: {vote_date}
+Outcome as known: {outcome}
+Compromise amendments on the table: {compromise_amendments}
+Substantive changes reported: {key_changes}
+
+THE READER
+Organisation: {organisation_name}
+Their position on the file: {our_position}
+What this touches for them: {affected_interests}
+
+WHAT COMES NEXT
+Next procedural step: {next_step}
+Expected date: {next_step_date}
+
+STRUCTURE
+
+Use EXACTLY these five headings, each on its own line, with two hash marks and a
+space and NO numbering. The application splits the document on this format to
+make each section separately editable; "### 1. What the committee did" is not
+recognised and collapses the whole brief into one uneditable block.
+
+## What the committee did
+## What changed in the text
+## What it means for {organisation_name}
+## What to do next
+## What we do not yet know
+
+RULES THAT MATTER MORE THAN STYLE
+
+1. NEVER state a vote outcome that is not given above. A voting list proves a vote was SCHEDULED,
+   not how it went. If "Outcome as known" is empty or says the outcome is unpublished, say so plainly
+   in "What we do not yet know" and write the rest around it. An invented tally is the worst possible
+   failure in this document.
+2. NEVER invent amendment numbers, vote counts, rapporteur names or political-group positions. Use
+   only what is given above.
+3. If "What changed in the text" cannot be answered from the input, say that the text of the adopted
+   amendments is not yet available and what to watch for instead.
+4. "What to do next" must be specific and doable inside a week. No "continue to monitor".
+5. Distinguish clearly between what the committee decided and what it merely discussed.
+
+{style_guidelines}
+"""
+
     TALKING_POINTS_PROMPT = """Generate professional talking points for an EU advocacy meeting.
 
 MEETING WITH: {meeting_with}
@@ -820,6 +872,56 @@ NOW WRITE THE EMAIL.
         return GeneratedDocument(
             document_type="talking_points",
             title=f"Talking Points: Meeting with {request.meeting_with}",
+            content=content,
+            sections=sections,
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=legislative_context,
+            editable_sections=list(sections.keys())
+        )
+
+    async def generate_committee_vote_brief(
+        self,
+        request,
+        legislative_context: Optional[Dict[str, Any]] = None
+    ) -> GeneratedDocument:
+        """Generate a reaction brief for a committee vote that has just happened."""
+        logger.info(
+            "Generating committee-vote brief for %s on %s",
+            request.committee, request.procedure_reference or request.file_title,
+        )
+
+        def _listed(items, empty):
+            return "\n".join(f"- {i}" for i in items) if items else empty
+
+        # The empty-value wording is deliberate. "Not specified" invites the
+        # model to fill the gap; naming the gap as a gap does not.
+        prompt = self.COMMITTEE_VOTE_BRIEF_PROMPT.format(
+            committee=request.committee,
+            file_title=request.file_title,
+            procedure_reference=request.procedure_reference or "not given",
+            vote_date=request.vote_date,
+            outcome=request.outcome or "NOT YET PUBLISHED -- do not state an outcome",
+            compromise_amendments=(
+                "yes" if request.compromise_amendments is True
+                else "no" if request.compromise_amendments is False
+                else "unknown"
+            ),
+            key_changes=_listed(request.key_changes, "none reported -- do not invent any"),
+            organisation_name=request.organisation_name,
+            our_position=request.our_position or "not stated",
+            affected_interests=_listed(request.affected_interests, "not stated"),
+            next_step=request.next_step or "not stated",
+            next_step_date=request.next_step_date or "not stated",
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+
+        content = await self._generate(prompt)
+        sections = self._parse_sections(content)
+
+        return GeneratedDocument(
+            document_type="committee_vote_brief",
+            title=f"{request.committee} vote: {request.file_title}",
             content=content,
             sections=sections,
             word_count=len(content.split()),

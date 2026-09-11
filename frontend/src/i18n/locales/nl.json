@@ -3528,7 +3528,27 @@
       "yourOrganisation": "Organisatie *",
       "yourPhone": "Uw telefoonnummer",
       "yourTitle": "Uw titel"
-    }
+    },
+    "typeCommitteeVoteBriefTitle": "Nota over een commissiestemming",
+    "typeCommitteeVoteBriefDesc": "Reageer op een commissiestemming over een dossier dat u volgt: wat is er veranderd, wat betekent het, wat nu",
+    "kindCommitteeVoteBrief": "Nota over een commissiestemming",
+    "committeeVoteBriefDetails": "Gegevens van de commissiestemming",
+    "cvbCommittee": "Commissie",
+    "cvbCommitteePlaceholder": "bv. EMPL, ITRE, ENVI",
+    "cvbVoteDate": "Datum van de stemming",
+    "cvbVoteDatePlaceholder": "bv. 10 september 2026",
+    "cvbFileTitle": "Dossier",
+    "cvbFileTitlePlaceholder": "Naam van het dossier in gewone taal",
+    "cvbProcedurePlaceholder": "bv. 2026/0074(COD)",
+    "cvbOutcome": "Uitslag, indien gepubliceerd",
+    "cvbOutcomePlaceholder": "Wat de commissie heeft besloten",
+    "cvbOutcomeHint": "Laat leeg als de uitslag nog niet is gepubliceerd. De nota zegt dat dan, in plaats van te gokken.",
+    "cvbCompromise": "Compromisamendementen",
+    "cvbUnknown": "Onbekend",
+    "cvbYes": "Ja",
+    "cvbNo": "Nee",
+    "cvbNextStep": "Volgende stap",
+    "cvbNextStepPlaceholder": "bv. plenaire stemming, triloog"
   },
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",

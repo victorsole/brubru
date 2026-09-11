@@ -12,6 +12,7 @@ Status inference rules (strongest signal wins):
   - "Legislative proposal" or "Committee referral" -> TABLED (only if currently ANNOUNCED)
 """
 
+import argparse
 import asyncio
 import sys
 from pathlib import Path
@@ -27,6 +28,18 @@ from sqlalchemy.exc import OperationalError, DBAPIError
 from core.database import SessionLocal
 from models.legislative_train import LegislativeCarriage, CarriageStatusEnum
 from services.scrapers.oeil_scraper import OEILScraper
+
+
+_ap = argparse.ArgumentParser(description="Update carriage statuses from OEIL key events")
+# action="append", never nargs="+": a repeated flag with nargs silently
+# overwrites earlier values, which this repo has hit three times.
+_ap.add_argument("--refs", action="append", default=None,
+                 help="Procedure ref to refresh, e.g. --refs '2026/0074(COD)'. Repeatable. "
+                      "Omit to sweep every non-adopted carriage.")
+_ap.add_argument("--limit", type=int, default=None, help="Cap the number of carriages checked.")
+_args, _ = _ap.parse_known_args()
+REFS = _args.refs
+LIMIT = _args.limit
 
 
 def log(msg):
@@ -97,14 +110,36 @@ async def update_statuses():
         log("=" * 60)
 
         # Get all carriages with OEIL procedure refs that are not already ADOPTED
-        carriages = db.query(LegislativeCarriage).filter(
+        q = db.query(LegislativeCarriage).filter(
             LegislativeCarriage.oeil_procedure_ref != None,
             LegislativeCarriage.oeil_procedure_ref != '',
             LegislativeCarriage.current_status != CarriageStatusEnum.ADOPTED,
             LegislativeCarriage.current_status != CarriageStatusEnum.WITHDRAWN
-        ).all()
+        )
 
-        log(f"\n1. Found {len(carriages)} carriages to check")
+        # --refs narrows the sweep to named procedures (11 September 2026).
+        #
+        # Without it this is all-or-nothing: 1,903 carriages at 0.5s of pacing
+        # plus a fetch each, which is hours of sustained requests to an EU server.
+        # The routine need is far smaller -- after a committee week, refresh the
+        # dozen or so files that actually reached a vote -- and firing the whole
+        # sweep for fourteen of them is not proportionate to what changed.
+        if REFS:
+            q = q.filter(LegislativeCarriage.oeil_procedure_ref.in_(REFS))
+        carriages = q.all()
+        if LIMIT:
+            carriages = carriages[:LIMIT]
+
+        if REFS:
+            found = {c.oeil_procedure_ref for c in carriages}
+            missing = [r for r in REFS if r not in found]
+            log(f"\n1. --refs: {len(REFS)} requested, {len(carriages)} matched")
+            # Say which refs matched nothing. Silently checking 12 of 14 and
+            # reporting success is the shape of defect this repo keeps finding.
+            if missing:
+                log(f"   NOT FOUND as carriages (no row, or already ADOPTED/WITHDRAWN): {', '.join(missing)}")
+        else:
+            log(f"\n1. Found {len(carriages)} carriages to check")
 
         updated_count = 0
         updated_key_events = 0

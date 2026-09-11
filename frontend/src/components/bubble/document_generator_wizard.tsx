@@ -46,6 +46,7 @@ type DocumentType =
   | 'position_paper'
   | 'mep_briefing'
   | 'talking_points'
+  | 'committee_vote_brief'
   | 'resolution'
   | 'ep_question'
   | 'petition'
@@ -107,6 +108,13 @@ const DOCUMENT_TYPES = [
     descriptionKey: 'docGen.typeTalkingPointsDesc',
     icon: mdiMessageText,
     color: '#7b1fa2',
+  },
+  {
+    id: 'committee_vote_brief' as DocumentType,
+    titleKey: 'docGen.typeCommitteeVoteBriefTitle',
+    descriptionKey: 'docGen.typeCommitteeVoteBriefDesc',
+    icon: mdiClipboardListOutline,
+    color: '#00695c',
   },
   {
     id: 'resolution' as DocumentType,
@@ -184,6 +192,7 @@ const KIND_KEY: Record<DocumentType, string> = {
   position_paper: 'docGen.kindPositionPaper',
   mep_briefing: 'docGen.kindMepBriefing',
   talking_points: 'docGen.kindTalkingPoints',
+  committee_vote_brief: 'docGen.kindCommitteeVoteBrief',
   resolution: 'docGen.kindResolution',
   eu_email: 'docGen.kindEuEmail',
   ep_question: 'docGen.kindEpQuestion',
@@ -664,6 +673,7 @@ export const DocumentGeneratorWizard = ({
       'position_paper',
       'mep_briefing',
       'talking_points',
+      'committee_vote_brief',
       'resolution',
       'ep_question',
       'eu_email',
@@ -683,6 +693,8 @@ export const DocumentGeneratorWizard = ({
           setLegislationTitle(presetTopic);
         } else if (typed === 'talking_points') {
           setTopic(presetTopic);
+        } else if (typed === 'committee_vote_brief') {
+          setCvbFileTitle(presetTopic);
         } else if (typed === 'resolution') {
           setResolutionTopic(presetTopic);
         } else if (typed === 'ep_question') {
@@ -928,6 +940,21 @@ export const DocumentGeneratorWizard = ({
           key_asks: meetingKeyAsks.filter(a => a.trim()),
           organisation_name: organisationName,
         };
+      } else if (selectedType === 'committee_vote_brief') {
+        endpoint = '/generate/committee-vote-brief';
+        payload = {
+          committee: cvbCommittee,
+          file_title: cvbFileTitle,
+          vote_date: cvbVoteDate,
+          procedure_reference: procedureReference || undefined,
+          // Left undefined when unknown, never sent as an empty string: the
+          // prompt keys off a missing outcome to say so rather than guess.
+          outcome: cvbOutcome.trim() || undefined,
+          compromise_amendments:
+            cvbCompromise === 'yes' ? true : cvbCompromise === 'no' ? false : undefined,
+          next_step: cvbNextStep.trim() || undefined,
+          organisation_name: organisationName,
+        };
       } else if (selectedType === 'resolution') {
         endpoint = '/generate/resolution';
         const filteredRefs = additionalReferences.filter(r => r.trim());
@@ -1118,6 +1145,14 @@ export const DocumentGeneratorWizard = ({
   };
 
   // Check if current step is valid
+  // Committee-vote reaction brief (11 September 2026).
+  const [cvbCommittee, setCvbCommittee] = useState('');
+  const [cvbFileTitle, setCvbFileTitle] = useState('');
+  const [cvbVoteDate, setCvbVoteDate] = useState('');
+  const [cvbOutcome, setCvbOutcome] = useState('');
+  const [cvbCompromise, setCvbCompromise] = useState('');
+  const [cvbNextStep, setCvbNextStep] = useState('');
+
   const isStepValid = () => {
     if (step === 1) return selectedType !== null;
     if (step === 2) {
@@ -1129,6 +1164,9 @@ export const DocumentGeneratorWizard = ({
       }
       if (selectedType === 'talking_points') {
         return meetingWith.trim() && meetingPurpose.trim() && topic.trim() && organisationName.trim();
+      }
+      if (selectedType === 'committee_vote_brief') {
+        return cvbCommittee.trim() && cvbFileTitle.trim() && cvbVoteDate.trim() && organisationName.trim();
       }
       if (selectedType === 'petition') {
         return resolutionTopic.trim().length > 0;
@@ -1567,6 +1605,99 @@ export const DocumentGeneratorWizard = ({
                   {meetingKeyAsks.length < 3 && (
                     <button type="button" onClick={() => addListItem(meetingKeyAsks, setMeetingKeyAsks, 3)} className="doc-generator__add-btn">{t('docGen.addAsk')}</button>
                   )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && selectedType === 'committee_vote_brief' && (
+            <div className="doc-generator__step">
+              <h3>{t('docGen.committeeVoteBriefDetails')}</h3>
+              <div className="doc-generator__form">
+                <div className="doc-generator__form-row">
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.cvbCommittee')}</label>
+                    <input
+                      type="text"
+                      value={cvbCommittee}
+                      onChange={(e) => setCvbCommittee(e.target.value)}
+                      placeholder={t('docGen.cvbCommitteePlaceholder')}
+                    />
+                  </div>
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.cvbVoteDate')}</label>
+                    <input
+                      type="text"
+                      value={cvbVoteDate}
+                      onChange={(e) => setCvbVoteDate(e.target.value)}
+                      placeholder={t('docGen.cvbVoteDatePlaceholder')}
+                    />
+                  </div>
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>{t('docGen.cvbFileTitle')}</label>
+                  <input
+                    type="text"
+                    value={cvbFileTitle}
+                    onChange={(e) => setCvbFileTitle(e.target.value)}
+                    placeholder={t('docGen.cvbFileTitlePlaceholder')}
+                  />
+                </div>
+
+                <div className="doc-generator__form-row">
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.procedureReference')}</label>
+                    <input
+                      type="text"
+                      value={procedureReference}
+                      onChange={(e) => setProcedureReference(e.target.value)}
+                      placeholder={t('docGen.cvbProcedurePlaceholder')}
+                    />
+                  </div>
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.organisationName')}</label>
+                    <input
+                      type="text"
+                      value={organisationName}
+                      onChange={(e) => setOrganisationName(e.target.value)}
+                      placeholder={t('docGen.organisationPlaceholder')}
+                    />
+                  </div>
+                </div>
+
+                {/* Outcome is optional ON PURPOSE. A voting list proves a vote was
+                    scheduled, not how it went, so leaving this empty makes the brief
+                    say the result is not yet published instead of inventing one. */}
+                <div className="doc-generator__form-group">
+                  <label>{t('docGen.cvbOutcome')}</label>
+                  <textarea
+                    value={cvbOutcome}
+                    onChange={(e) => setCvbOutcome(e.target.value)}
+                    placeholder={t('docGen.cvbOutcomePlaceholder')}
+                    rows={2}
+                  />
+                  <small>{t('docGen.cvbOutcomeHint')}</small>
+                </div>
+
+                <div className="doc-generator__form-row">
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.cvbCompromise')}</label>
+                    <select value={cvbCompromise} onChange={(e) => setCvbCompromise(e.target.value)}>
+                      <option value="">{t('docGen.cvbUnknown')}</option>
+                      <option value="yes">{t('docGen.cvbYes')}</option>
+                      <option value="no">{t('docGen.cvbNo')}</option>
+                    </select>
+                  </div>
+                  <div className="doc-generator__form-group">
+                    <label>{t('docGen.cvbNextStep')}</label>
+                    <input
+                      type="text"
+                      value={cvbNextStep}
+                      onChange={(e) => setCvbNextStep(e.target.value)}
+                      placeholder={t('docGen.cvbNextStepPlaceholder')}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

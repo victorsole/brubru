@@ -520,7 +520,18 @@ class CerebrasProvider(_OpenAICompatibleProvider):
 
 
 class NvidiaProvider(_OpenAICompatibleProvider):
-    """NVIDIA NIM free tier — strong OPEN fallback (Llama-3.3-70B-Instruct,
+    """NVIDIA NIM. NOT IN THE CHAT CHAIN since 11 September 2026.
+
+    Kept so it can be revived if NVIDIA's entitlements change, and so the
+    removal is documented where somebody looking at this class will see it.
+    Do not re-register it in MultiProviderService without repeating the
+    catalogue measurement recorded there: the configured model is 410 Gone
+    (EOL 26 August 2026), our key can invoke 11 of 63 catalogue chat models,
+    and none of those 11 streams usable content.
+
+    Original note follows.
+
+    NVIDIA NIM free tier — strong OPEN fallback (Llama-3.3-70B-Instruct,
     128K context so it comfortably fits Brubru's ~19K-token prompt; permanent
     free tier, no card). OpenAI-compatible at integrate.api.nvidia.com. Sits
     right below Cerebras as the second big-context open model — if Cerebras
@@ -534,6 +545,38 @@ class NvidiaProvider(_OpenAICompatibleProvider):
         super().__init__(
             api_key=api_key or getattr(settings, 'NVIDIA_API_KEY', None),
             model=model or getattr(settings, 'NVIDIA_MODEL', None) or self.MODEL,
+        )
+
+
+class ScalewayProvider(_OpenAICompatibleProvider):
+    """Scaleway Generative APIs -- EU-hosted (Paris), OpenAI-compatible.
+
+    The reliable lane beneath the two free fast ones. Added 11 September 2026,
+    after a morning on which a single request failed on EVERY provider in the
+    chain: Cerebras 429, Gemini 429, Groq structurally, NVIDIA 410 end-of-life,
+    Mistral 429, OpenAI out of credits. A chain of six with nothing that answers
+    is not a chain.
+
+    Paid, but per-token and cheap, and it is the EU-hosted open-weight lane the
+    19 August decision said should replace OpenAI as the backstop. It sits ABOVE
+    the degraded and dead free tiers rather than at the bottom, because the
+    failure this fixes is "nothing answered", not "the cheap ones were slow".
+
+    Auth is the Scaleway IAM secret key as a bearer token. Model default and the
+    measurements behind it are documented on SCALEWAY_MODEL in core/config.py.
+    Read that note before changing the model: the most ACCURATE candidate is not
+    the right one, because it streams reasoning and never reaches content, and
+    generate_stream() rightly refuses to render chain-of-thought to a user.
+    """
+
+    BASE_URL = "https://api.scaleway.ai/v1"
+    MODEL = "qwen3-235b-a22b-instruct-2507"
+    _NAME = "Scaleway"
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        super().__init__(
+            api_key=api_key or getattr(settings, 'SCW_SECRET_KEY', None),
+            model=model or getattr(settings, 'SCALEWAY_MODEL', None) or self.MODEL,
         )
 
 
@@ -921,29 +964,90 @@ class MultiProviderService:
             self.providers.append(gemini)
             logger.info("Gemini provider available (full-context fast catch)")
 
-        # 3. Groq llama-3.3-70b (OPEN, fast, full-context) — second fast catch.
-        #    Its free TPM 413'd on the old ~19K prompt; the 11 June prompt trim
-        #    (-25.7%, ~14K) brought it under the limit (measured: accepts the
-        #    trimmed prompt), so it is promoted from last-resort to a fast lane.
-        groq = GroqProvider()
-        if groq.is_available:
-            self.providers.append(groq)
-            logger.info(f"Groq provider available (open fast full-context lane, model={groq.model})")
+        # 3. Scaleway (EU-hosted, OpenAI-compatible, paid but cheap) — the lane
+        #    that actually answers when the two free ones are rate-limited.
+        #
+        #    Added 11 September 2026 for a measured reason. On that morning a
+        #    single request failed on ALL SIX providers in the chain: Cerebras
+        #    429, Gemini 429, Groq structurally (below), NVIDIA 410 end-of-life,
+        #    Mistral 429, OpenAI out of credits. The user got the graceful
+        #    "providers are temporarily unavailable" message, which is the right
+        #    behaviour and still a total outage. Six slots with nothing behind
+        #    them is not a fallback chain.
+        #
+        #    It is placed HERE, above the degraded and dead free tiers, rather
+        #    than at the bottom next to OpenAI, because the failure being fixed
+        #    is "nothing answered at all", not "the free ones were slow". A
+        #    backstop reached only after four hopeless hops is not a backstop.
+        scaleway = ScalewayProvider()
+        if scaleway.is_available:
+            self.providers.append(scaleway)
+            logger.info(f"Scaleway provider available (EU-hosted reliable lane, model={scaleway.model})")
 
-        # 4. NVIDIA NIM (OPEN Llama-3.3-70B, 128K ctx) — full-context backstop,
-        #    reached only when the three fast lanes are all saturated. Its free
-        #    tier can queue to ~165s, so it sits below them.
-        nvidia = NvidiaProvider()
-        if nvidia.is_available:
-            self.providers.append(nvidia)
-            logger.info(f"NVIDIA provider available (open full-context backstop, model={nvidia.model})")
+        # 4. NVIDIA NIM — REMOVED FROM THE CHAIN on 11 September 2026, on evidence.
+        #
+        # The class is kept, not deleted, so this can be revived if NVIDIA's
+        # entitlements change. It must NOT be re-added without repeating the
+        # measurement below.
+        #
+        # The configured model has been permanently retired:
+        #   410 Gone: "The model 'meta/llama-3.3-70b-instruct' has reached its
+        #              end of life on 2026-08-26T09:00:00Z"
+        # That is not a quota to wait out, so "keep it until the quota returns"
+        # never applied to this slot.
+        #
+        # The question was whether ANOTHER model could take its place. Measured
+        # across NVIDIA's whole catalogue with our key:
+        #
+        #   * /v1/models lists 80 models, 63 of them plausible chat models.
+        #     That listing is the CATALOGUE, not our entitlements, and the two
+        #     errors look nothing alike:
+        #       404 "Function '<id>': Not found for account '<ours>'"  -> not entitled
+        #       410 "reached its end of life"                          -> dead globally
+        #   * Of the 63: 44 not entitled, 4 timed out, 2 internal errors,
+        #     2 not found. ELEVEN were invocable.
+        #   * Of those 11, most are not chat at all (riva-translate x2,
+        #     nemotron-parse, ising-calibration, poolside/laguna). Of the rest:
+        #       nemotron-3-super-120b, kimi-k3  -- this file already records, on
+        #         28 July 2026, that both emit "We need to answer..." preambles
+        #       nemotron-3.5-lightning-30b      -- 1,154 reasoning deltas, ONE
+        #         content delta, 62s to first content, "Here's a thinking process:"
+        #       deepseek-v4-flash-0731          -- reasoning-only on stream,
+        #         proved separately on Scaleway the same day
+        #       openai/gpt-oss-20b              -- timed out at 150s, twice, and
+        #         would duplicate the Cerebras family anyway
+        #       meta/muse-glimmer-30b           -- 0/5 EU act numbers, 231
+        #         reasoning deltas against 7 content
+        #
+        # So there is no NVIDIA model our account can invoke that streams usable
+        # content. Leaving the slot in place cost a guaranteed failed hop on
+        # every traversal that got past Scaleway, which now fills the
+        # full-context backstop role this provider was added for.
 
-        # 5. Mistral (free, EU) — DEGRADED last-resort: fast but reads only ~30%
-        #    of the injected context. Below all full-context readers.
+        # 5. Mistral (free, EU) — DEGRADED: fast but reads only ~30% of the
+        #    injected context. Below all full-context readers.
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
             logger.info("Mistral provider available (DEGRADED: ~30% context, last-resort)")
+
+        # 6. Groq — LOWERED from the fast lanes on 11 September 2026, because its
+        #    free tier cannot serve a Brubru answer at all. The error is not a
+        #    load 429, it is a structural ceiling:
+        #      "Request too large for model `qwen/qwen3.6-27b` ... on output
+        #       tokens per minute (OTPM): Limit 1000, Requested 1246."
+        #    A normal answer wants more output tokens than the tier permits, so
+        #    the request is refused before any generation happens. It was
+        #    promoted to a fast lane in June on the basis that the trimmed prompt
+        #    fit the INPUT limit; the binding constraint turned out to be OUTPUT.
+        #
+        #    Left in the chain rather than removed: it costs nothing until
+        #    everything above it has failed, and it becomes useful again the
+        #    moment the tier is raised or max_tokens is capped under 1000.
+        groq = GroqProvider()
+        if groq.is_available:
+            self.providers.append(groq)
+            logger.info(f"Groq provider available (LOWERED: free-tier OTPM ceiling 1000, model={groq.model})")
 
         # NO Anthropic. Removed from the chain on 6 August 2026 by explicit
         # decision: it is too expensive, and the open-model chain above is what
@@ -954,7 +1058,10 @@ class MultiProviderService:
         # returning 404. Do not re-add it. The provider class is gone, not just
         # unregistered, so it cannot be revived by setting an env var.
 
-        # 6. OpenAI (paid last resort).
+        # 7. OpenAI (paid last resort). NOTE: as of 11 Sep 2026 the configured
+        #    key reports "You have no credits remaining", so this slot refuses
+        #    every request. Retained by explicit decision; Scaleway is now the
+        #    lane that carries the load this one was meant to.
         openai_provider = OpenAIProvider(openai_key)
         if openai_provider.is_available:
             self.providers.append(openai_provider)

@@ -522,6 +522,12 @@ ACTION_WORD_MAP = {
     'position paper': 'position_paper', 'draft a position': 'position_paper',
     'amendment': 'amendment', 'amend': 'amendment',
     'talking points': 'talking_points',
+    'committee vote brief': 'committee_vote_brief',
+    'vote brief': 'committee_vote_brief',
+    'committee vote reaction': 'committee_vote_brief',
+    'nota sobre votacion en comision': 'committee_vote_brief',
+    'nota sobre votació en comissió': 'committee_vote_brief',
+    'note sur un vote en commission': 'committee_vote_brief',
     'summarise': 'summary', 'summarize': 'summary',
     'draft a note': 'briefing', 'write a note': 'briefing', 'prepare a note': 'briefing',
     'memo': 'briefing', 'memorandum': 'briefing',
@@ -7769,6 +7775,85 @@ class ContextBuilder:
             return None
 
         what = proc.group(1) if proc else f"PE{pe.group(1)}.{pe.group(2)}"
+
+        # FALLBACK TO eMEETING (11 September 2026). `amendment_documents` holds
+        # 1,338 rows and NOTHING newer than 7 April 2026, while
+        # `ep_emeeting_documents` holds 165 amendment documents for September
+        # alone. Both tables are ours and they disagree by five months.
+        #
+        # Measured that day: asked about EU Inc (2026/0074(COD)), the busiest
+        # amendment file in the Parliament, this block returned "No amendment
+        # document on file" while eMeeting held six JURI amendment documents,
+        # an EMPL amendment and two EMPL compromise sets. The guard was telling
+        # the truth about the wrong table, which reads to a user exactly like
+        # Brubru not having the data.
+        #
+        # eMeeting is the fallback rather than the primary because the two
+        # stores carry different things: amendment_documents has
+        # `total_amendments` and the rapporteur, which eMeeting does not. So the
+        # richer source is tried first and this fills the gap it leaves.
+        if not rows and proc:
+            try:
+                db = SessionLocal()
+                try:
+                    em = db.execute(_sql_text(
+                        """
+                        SELECT committee_code, doc_kind, reference, meeting_date, pdf_url
+                        FROM ep_emeeting_documents
+                        WHERE procedure_ref = :p
+                          AND doc_kind IN ('amendment','compromise_amendments')
+                        ORDER BY meeting_date DESC NULLS LAST, reference
+                        LIMIT 10
+                        """
+                    ), {"p": proc.group(1)}).fetchall()
+                finally:
+                    db.close()
+            except Exception as e:  # noqa: BLE001
+                logger.warning("[AMDT] eMeeting fallback failed: %s", e)
+                em = []
+
+            if em:
+                out = ["[COMMITTEE AMENDMENT DOCUMENTS]",
+                       f"From Brubru's EP eMeeting store for {what}. "
+                       "These are the documents TABLED. This source does NOT carry a "
+                       "count of amendments inside each document, so state the "
+                       "documents and their references and do NOT state how many "
+                       "amendments they contain."]
+                # Two accuracy traps in this source, both found by reading the
+                # output rather than trusting it:
+                #
+                #  - `committee_code` is the committee on whose AGENDA the
+                #    document appeared, NOT its author. TEN-E returns rows
+                #    labelled ITRE whose URL is .../COMMITTEES/ENVI/AM/...,
+                #    i.e. ENVI's opinion amendments taken up at ITRE. Writing
+                #    "ITRE amendments" would misattribute them, so the wording
+                #    is "on ITRE's agenda".
+                #  - `reference` is not always a PE number. Compromise sets
+                #    carry filenames such as "ITEM 5_TEN-E_consolidated_CA_060926"
+                #    and "CAs TEN-E Opinion.". Presenting those as a document
+                #    reference invites the model to repeat them as though they
+                #    were citable, so only a well-formed PE number is shown.
+                _PE_OK = re.compile(r"^PE\s?\d{3}[.,]?\d{3}", re.IGNORECASE)
+                for committee, kind, ref, mdate, url in em:
+                    label = ("compromise amendments" if kind == "compromise_amendments"
+                             else "amendments")
+                    bits = [f"- {label}"]
+                    if committee:
+                        bits.append(f"on {committee}'s agenda")
+                    if ref and _PE_OK.match(str(ref).strip()):
+                        bits.append(f"ref {str(ref).strip()}")
+                    if mdate:
+                        bits.append(f"tabled for {mdate}")
+                    line = ", ".join(bits)
+                    if url:
+                        line += f" — {url}"
+                    out.append(line)
+                out.append(
+                    "A compromise amendments document carries no PE reference of its "
+                    "own; do not invent one."
+                )
+                return "\n".join(out) + "\n"
+
         if not rows:
             return (
                 "[COMMITTEE AMENDMENT DOCUMENTS]\n"

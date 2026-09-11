@@ -15049,6 +15049,92 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # Re-declared LAST so the appended entry wins, carrying the earlier targets forward.
     'regulatory sandbox': ['28th_regime_innovation_act', 'pharma_sector_regulatory_landscape', 'regulatory_sandboxes_recommendation'],
     'regulatory sandboxes': ['28th_regime_innovation_act', 'pharma_sector_regulatory_landscape', 'regulatory_sandboxes_recommendation'],
+
+    # --- State of the Union + "when is the next plenary", six languages.
+    # Audit of 11 September 2026. 82 trigger keys already reached the plenary
+    # guide, and NOT ONE of them was 'state of the union' or 'soteu' -- with the
+    # address five days away, the single most likely question could not reach
+    # the only guide that holds the date. Accented and unaccented forms are both
+    # listed because trigger matching is plain substring with NO accent folding,
+    # so 'estat de la unio' can never fire on "l'estat de la unio".
+    # Appended LAST so they win over any duplicate key above them.
+    'state of the union': ['ep_plenary_march_2026'],
+    'state of the union address': ['ep_plenary_march_2026'],
+    'soteu': ['ep_plenary_march_2026'],
+    "etat de l'union": ['ep_plenary_march_2026'],
+    "état de l'union": ['ep_plenary_march_2026'],
+    "discours sur l'état de l'union": ['ep_plenary_march_2026'],
+    'estado de la union': ['ep_plenary_march_2026'],
+    'estado de la unión': ['ep_plenary_march_2026'],
+    'discurso sobre el estado de la unión': ['ep_plenary_march_2026'],
+    'estat de la unio': ['ep_plenary_march_2026'],
+    'estat de la unió': ['ep_plenary_march_2026'],
+    "discurs de l'estat de la unió": ['ep_plenary_march_2026'],
+    "stato dell'unione": ['ep_plenary_march_2026'],
+    "discorso sullo stato dell'unione": ['ep_plenary_march_2026'],
+    'staat van de unie': ['ep_plenary_march_2026'],
+    'toestand van de unie': ['ep_plenary_march_2026'],
+    'september plenary': ['ep_plenary_march_2026'],
+    'plenary september': ['ep_plenary_march_2026'],
+    'next plenary agenda': ['ep_plenary_march_2026'],
+    'when is the next plenary': ['ep_plenary_march_2026'],
+    'proper ple': ['ep_plenary_march_2026'],
+    'ple de setembre': ['ep_plenary_march_2026'],
+    'plenari de setembre': ['ep_plenary_march_2026'],
+    'proximo pleno': ['ep_plenary_march_2026'],
+    'próximo pleno': ['ep_plenary_march_2026'],
+    'pleno de septiembre': ['ep_plenary_march_2026'],
+    'prochaine pleniere': ['ep_plenary_march_2026'],
+    'prochaine plénière': ['ep_plenary_march_2026'],
+    'prossima plenaria': ['ep_plenary_march_2026'],
+    'volgende plenaire': ['ep_plenary_march_2026'],
+
+    # --- /news of 11 September 2026. Appended LAST so they win over duplicates.
+    #
+    # TWO candidates were DROPPED here after a substring check, not shipped and
+    # regretted later:
+    #   'ervi'  sits inside "commission SERVIces", "payment SERVIce providers",
+    #           "board for digital SERVIces" -- it would fire on any query that
+    #           mentions services.
+    #   'haleu' sits inside the French "cHALEUr fatale" (waste heat), so it
+    #           would fire on French energy queries about nothing of the kind.
+    # The 4-to-5 character band is where this keeps happening; the long forms
+    # below carry the same meaning without the collision.
+    'radioisotope': ['eu_medical_radioisotopes_ervi'],
+    'radioisotopes': ['eu_medical_radioisotopes_ervi'],
+    'medical radioisotopes': ['eu_medical_radioisotopes_ervi'],
+    'radioisotope valley': ['eu_medical_radioisotopes_ervi'],
+    'radiopharmaceutical': ['eu_medical_radioisotopes_ervi'],
+    'radiopharmaceuticals': ['eu_medical_radioisotopes_ervi'],
+    'nuclear medicine': ['eu_medical_radioisotopes_ervi'],
+    'high assay low enriched uranium': ['eu_medical_radioisotopes_ervi'],
+    'samira': ['eu_medical_radioisotopes_ervi'],
+    'medicina nuclear': ['eu_medical_radioisotopes_ervi'],
+    'radioisotopos': ['eu_medical_radioisotopes_ervi'],
+    'radioisòtops': ['eu_medical_radioisotopes_ervi'],
+    'radioisotops': ['eu_medical_radioisotopes_ervi'],
+    'medecine nucleaire': ['eu_medical_radioisotopes_ervi'],
+    "médecine nucléaire": ['eu_medical_radioisotopes_ervi'],
+    'medicina nucleare': ['eu_medical_radioisotopes_ervi'],
+    'nucleaire geneeskunde': ['eu_medical_radioisotopes_ervi'],
+    'isotopos medicos': ['eu_medical_radioisotopes_ervi'],
+    'isótopos médicos': ['eu_medical_radioisotopes_ervi'],
+    'isòtops mèdics': ['eu_medical_radioisotopes_ervi'],
+
+    'market stability reserve': ['eu_ets_review_2026'],
+    'reserva de estabilidad del mercado': ['eu_ets_review_2026'],
+    "reserva d'estabilitat del mercat": ['eu_ets_review_2026'],
+    'reserve de stabilite du marche': ['eu_ets_review_2026'],
+    'réserve de stabilité du marché': ['eu_ets_review_2026'],
+    'marktstabiliteitsreserve': ['eu_ets_review_2026'],
+    'riserva stabilizzatrice del mercato': ['eu_ets_review_2026'],
+
+    # Re-declared LAST, carrying the EARLIER target forward. Appending these
+    # with only the new guide would have silently orphaned digital_omnibus_package,
+    # which is the duplicate-key trap this file is full of.
+    'european business wallet': ['digital_omnibus_package', 'energy_grids_package'],
+    'european business wallets': ['digital_omnibus_package', 'energy_grids_package'],
+    'business wallet': ['digital_omnibus_package', 'energy_grids_package'],
 }
 
 

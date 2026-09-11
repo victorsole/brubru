@@ -157,10 +157,30 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
     }
   };
 
+  // Record that this match was opened. Until 11 September 2026 nothing in
+  // Brubru wrote `is_viewed`: the field was declared on the model, typed here,
+  // filtered on in the admin panel, and set by no code path at all, so every
+  // one of the 902 matches ever created read "never seen" whatever users did.
+  //
+  // Fire-and-forget on purpose. This is telemetry attached to a navigation: if
+  // it fails, the user must still get the detail view they asked for, so the
+  // error is logged and swallowed rather than surfaced. It is also not awaited,
+  // so a slow write never delays the transition.
+  const markMatchViewed = (matchId: number) => {
+    fetch(`${API_URL}/api/tenders/matches/${matchId}/view`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+    }).catch((err) => console.error('Error marking match viewed:', err));
+  };
+
   const handleSelectTender = (tender: Tender, match?: TenderMatch) => {
     setSelectedTender(tender);
     setSelectedMatch(match || null);
     setViewState('detail');
+    // Only a match can be viewed; a tender opened without one has nothing to mark.
+    if (match && !match.is_viewed) {
+      markMatchViewed(match.id);
+    }
   };
 
   const handleViewChecklist = (tender: Tender) => {

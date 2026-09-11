@@ -38,8 +38,11 @@ _DAILY = OJ_BASE + "/oj/daily-view/{series}-series/default.html?ojDate={d}"
 
 _TAG_RE = re.compile(r"<[^>]+>")
 # One act row: OJ number cell + linked title cell.
+# Level 2 as well as 3 (11 Sep 2026): an item in a section with no sub-heading
+# ("Notices from Member States") carries its number in `section-level-2`, so
+# C/2026/4362 was on EUR-Lex's C-series page and never reached My OJ.
 _ROW_RE = re.compile(
-    r'<div class="section-level-3">\s*((?:[A-Z]/)?[0-9]{4}/[0-9]+)\s*</div>.*?'
+    r'<div class="section-level-[23]">\s*((?:[A-Z]/)?[0-9]{4}/[0-9]+)\s*</div>.*?'
     r'<a\s+href="([^"]+)"[^>]*>(.*?)</a>',
     re.S,
 )

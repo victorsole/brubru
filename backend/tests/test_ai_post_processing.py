@@ -15,6 +15,8 @@ Quality Framework: Week 1 playbook item C. Great Audit: F013 addresses the
 Run: cd backend && python3.12 -m pytest tests/test_ai_post_processing.py -v
 """
 
+import re
+
 import pytest
 from unittest.mock import MagicMock
 
@@ -978,3 +980,59 @@ class TestCitationOrderingAndBinding:
             {'file_title': 'Neither', 'oeil_ref': '', 'celex_numbers': []},
         ])
         assert service._build_citations_from_context(ctx)[0]['url'] == ''
+
+
+# ---------------------------------------------------------------------------
+# _linkify_references -- the SUFFIX act-citation form
+#
+# Audit of 11 September 2026. Chat was asked which directives the Public
+# Procurement Act repeals. It named the right three and then invented all three
+# links: CELEX:32023L2014, CELEX:32024L2014, CELEX:32025L2014, the year and the
+# number transposed. The linkifier only ever matched the parenthesised form
+# "Directive (EU) 2024/1760", so for "Directive 2014/24/EU" it built nothing and
+# the model filled the silence.
+#
+# Verified against Cellar before the fix shipped: the three generated below
+# answer HTTP 400 (the resource exists, the Accept header is the quarrel) while
+# the two the model invented answer HTTP 404.
+# ---------------------------------------------------------------------------
+class TestLinkifySuffixActForm:
+
+    def _celex(self, service, text):
+        return re.findall(r'CELEX:([0-9A-Z]+)',
+                          service._linkify_references(text, context_str=""))
+
+    def test_the_three_directives_the_model_got_wrong(self, service):
+        text = ("The Act repeals Directive 2014/23/EU, Directive 2014/24/EU "
+                "and Directive 2014/25/EU.")
+        assert self._celex(service, text) == ['32014L0023', '32014L0024', '32014L0025']
+
+    def test_the_parenthesised_form_is_untouched_by_the_addition(self, service):
+        text = "Directive (EU) 2024/1760 and Regulation (EU) 2022/1031."
+        assert self._celex(service, text) == ['32024L1760', '32022R1031']
+
+    @pytest.mark.parametrize("text,expected", [
+        ("Directiva 2014/24/UE", '32014L0024'),
+        ("Richtlijn 2014/24/EU", '32014L0024'),
+        ("Direttiva 2014/24/UE", '32014L0024'),
+        ("Directive 2009/28/EC", '32009L0028'),
+        ("Decision 2010/87/EU", '32010D0087'),
+        ("Regulation 2018/1999/EU", '32018R1999'),
+    ])
+    def test_every_language_and_act_kind(self, service, text, expected):
+        assert self._celex(service, text) == [expected]
+
+    def test_the_old_number_first_form_is_left_alone(self, service):
+        """"Regulation (EC) No 1049/2001" is NUMBER/year, the reverse order.
+        Linking it with the same rule would produce CELEX:31049R2001. The
+        suffix regex requires a trailing treaty suffix precisely so it cannot
+        reach this form."""
+        assert self._celex(service, "Regulation (EC) No 1049/2001 on access") == []
+
+    def test_a_bare_year_pair_is_not_an_act(self, service):
+        assert self._celex(service, "the 2014/24 budget line") == []
+
+    def test_an_existing_link_is_not_nested(self, service):
+        text = "See [Directive 2014/24/EU](https://example.org/x) already."
+        out = service._linkify_references(text, context_str="")
+        assert out == text

@@ -421,31 +421,106 @@ def section_comply(conn, start, end, include_internal):
 
 
 def section_tenderator(conn, start, end, include_internal):
-    """Matches Brubru computed vs whether any human reacted to them.
+    """What users DID in Tenderator, not only what the matcher produced.
 
-    Reactions are cumulative flags, not timestamped, so the reaction counts are
-    all-time for matches created in the window. Zero across the board means the
-    matcher is talking to nobody.
+    Rewritten 11 September 2026. The previous version read `tender_matches`
+    alone, which measures the matcher's OUTPUT and calls it usage. Three
+    consequences, all of them measured that morning:
+
+      - `tender_profiles` holds 29 profiles from 29 distinct users. Building a
+        profile is a deliberate, effortful user action and it was invisible
+        here, so the report said "none" while 29 people had set the tool up.
+      - `tender_files` (11 rows, 4 users) and `tender_pipeline` were never read
+        at all.
+      - A user who ran Tenderator and got zero matches looked identical to a
+        user who never opened it.
+
+    Every engagement column on `tender_matches` -- is_viewed, is_saved,
+    is_dismissed, is_applied, user_notes, user_rating, notified_at -- reads 0
+    across all 902 matches ever created. That is NOT low engagement: grep finds
+    ZERO assignments to `is_viewed` anywhere in api/ or services/, so no code
+    path can set it. The reaction columns are reported here for continuity and
+    must be read as "not instrumented", never as "nobody looked".
     """
     filt = "" if include_internal else f"AND NOT {INTERNAL_USER_SQL}"
-    return q(
-        conn,
-        f"""
-        SELECT u.email, count(*) AS matches,
-               round(avg(m.match_score)::numeric, 1) AS avg_score,
-               count(*) FILTER (WHERE m.is_viewed) AS viewed,
-               count(*) FILTER (WHERE m.is_saved) AS saved,
-               count(*) FILTER (WHERE m.is_dismissed) AS dismissed,
-               count(*) FILTER (WHERE m.is_applied) AS applied,
-               count(*) FILTER (WHERE m.notified_at IS NOT NULL) AS notified
-        FROM tender_matches m
-        LEFT JOIN users u ON u.id = m.user_id
-        WHERE m.created_at >= :start AND m.created_at < :end {filt}
-        GROUP BY 1 ORDER BY 2 DESC
-        """,
-        start=start,
-        end=end,
-    )
+    return {
+        # Profiles: the setup action, and the one the report used to miss.
+        "profiles": q(
+            conn,
+            f"""
+            SELECT u.email, p.company_name, p.is_active,
+                   cardinality(coalesce(p.cpv_codes, '{{}}')) AS cpv_codes,
+                   cardinality(coalesce(p.countries_of_interest, '{{}}')) AS countries,
+                   p.notification_frequency,
+                   p.created_at::date AS created,
+                   p.last_matched_at::date AS last_matched
+            FROM tender_profiles p
+            LEFT JOIN users u ON u.id = p.user_id
+            WHERE p.created_at >= :start AND p.created_at < :end {filt}
+            ORDER BY p.created_at DESC
+            """,
+            start=start, end=end,
+        ),
+        # Matches produced in the window, with the reaction columns.
+        "matches": q(
+            conn,
+            f"""
+            SELECT u.email, count(*) AS matches,
+                   round(avg(m.match_score)::numeric, 1) AS avg_score,
+                   count(*) FILTER (WHERE m.is_viewed) AS viewed,
+                   count(*) FILTER (WHERE m.is_saved) AS saved,
+                   count(*) FILTER (WHERE m.is_dismissed) AS dismissed,
+                   count(*) FILTER (WHERE m.is_applied) AS applied,
+                   count(*) FILTER (WHERE m.notified_at IS NOT NULL) AS notified
+            FROM tender_matches m
+            LEFT JOIN users u ON u.id = m.user_id
+            WHERE m.created_at >= :start AND m.created_at < :end {filt}
+            GROUP BY 1 ORDER BY 2 DESC
+            """,
+            start=start, end=end,
+        ),
+        # Tender files drafted, and pipeline rows worked.
+        "files": q(
+            conn,
+            f"""
+            SELECT u.email, f.programme, f.stage, f.status, count(*) AS files
+            FROM tender_files f
+            LEFT JOIN users u ON u.id = f.user_id
+            WHERE f.created_at >= :start AND f.created_at < :end {filt}
+            GROUP BY 1, 2, 3, 4 ORDER BY 5 DESC
+            """,
+            start=start, end=end,
+        ),
+        "pipeline": q(
+            conn,
+            f"""
+            SELECT u.email, pl.status, count(*) AS rows_
+            FROM tender_pipeline pl
+            LEFT JOIN users u ON u.id = pl.user_id
+            WHERE pl.created_at >= :start AND pl.created_at < :end {filt}
+            GROUP BY 1, 2 ORDER BY 3 DESC
+            """,
+            start=start, end=end,
+        ),
+        # ALL-TIME health, so a quiet window cannot hide a stalled matcher.
+        # This is the row that would have surfaced the 81-day stall on any day
+        # since June, instead of reporting "unproven -- no data in window".
+        "health": q(
+            conn,
+            """
+            SELECT
+              (SELECT count(*) FROM tender_profiles WHERE is_active) AS active_profiles,
+              (SELECT count(*) FROM tenders) AS tenders_held,
+              (SELECT max(created_at)::date FROM tenders) AS newest_tender,
+              (SELECT max(created_at)::date FROM tender_matches) AS newest_match,
+              (SELECT EXTRACT(DAY FROM now() - max(created_at))::int
+                 FROM tender_matches) AS days_since_match,
+              (SELECT count(*) FROM tender_matches) AS matches_all_time,
+              (SELECT count(*) FROM tender_matches WHERE is_viewed) AS viewed_all_time,
+              (SELECT count(*) FROM tender_matches WHERE notified_at IS NOT NULL) AS notified_all_time
+            """,
+        ),
+    }
 
 
 def section_documents(conn, start, end, include_internal):
@@ -688,6 +763,95 @@ def section_feedback(conn, start, end):
     return {"feedback": fb, "notifications": notif}
 
 
+def section_would_be_wapu(conn, end):
+    """WAPU with the payment test removed, and nothing else changed.
+
+    Added 11 September 2026. WAPU requires `stripe_subscription_id IS NOT NULL`
+    -- tightened deliberately on 27 August after a pre-provisioned demo shell
+    reported itself as a weekly active paid user. That guard is right and stays.
+
+    But no account has EVER paid through Stripe, so WAPU reads 0 whatever anyone
+    does, and on 11 September it read 0 on a week in which a client used the DPP
+    MCP on three separate days. The north star cannot tell "nobody used Brubru"
+    from "nobody pays by Stripe", and those demand opposite responses.
+
+    This is a companion line, NOT a second north star. WAPU is untouched.
+
+    The bulk-write marker matters as much as the count. WAPU's U1 guard drops
+    actions that predate a claim, which caught provisioning written BEFORE the
+    prospect claimed. It cannot catch the reverse: on 7 September a claim landed
+    at 13:59 and the provisioning script wrote 104 tracked carriages at 14:00,
+    one minute AFTER, so the guard passes them and the holder looks like the
+    busiest user on the platform. `user_carriage_tracks.source` (migration 230)
+    is the real fix and is not usable yet: all 722 rows read NULL, and nothing
+    has been tracked since the column shipped on 10 September, so it is
+    UNTESTED rather than broken. Until it carries data, the shape of the write
+    is the only signal available -- an account whose entire tracking landed in
+    one or two distinct minutes was written by us.
+    """
+    return q(
+        conn,
+        f"""
+        WITH eligible AS (
+            SELECT u.id, u.email, u.subscription_tier, u.claimed_at, u.pre_provisioned_at,
+                   (u.stripe_subscription_id IS NOT NULL) AS pays
+            FROM users u
+            WHERE u.subscription_tier IN ('yellow', 'blue')
+              AND u.is_active IS NOT FALSE
+              AND NOT {INTERNAL_USER_SQL}
+        ),
+        acted AS (
+            SELECT user_id, 'chat' AS action, created_at AS acted_at FROM chats
+                WHERE created_at >= :start AND created_at < :end
+            UNION ALL
+            SELECT user_id, 'document', created_at FROM user_documents
+                WHERE created_at >= :start AND created_at < :end
+            UNION ALL
+            SELECT user_id, 'tracked file', tracked_since FROM user_carriage_tracks
+                WHERE tracked_since >= :start AND tracked_since < :end
+            UNION ALL
+            SELECT user_id, 'amendment', created_at FROM amendments
+                WHERE created_at >= :start AND created_at < :end
+            UNION ALL
+            SELECT user_id, 'compliance run', created_at FROM compliance_analyses
+                WHERE created_at >= :start AND created_at < :end
+            UNION ALL
+            SELECT user_id, 'api', created_at FROM api_usage_events
+                WHERE created_at >= :start AND created_at < :end
+                  AND NOT is_probe
+        ),
+        -- How many distinct MINUTES did this actor's tracking land in, ever?
+        -- One or two means a script wrote it, not a person.
+        track_shape AS (
+            SELECT user_id,
+                   count(DISTINCT date_trunc('minute', tracked_since)) AS distinct_minutes
+            FROM user_carriage_tracks GROUP BY 1
+        )
+        SELECT e.email, e.subscription_tier,
+               e.pays AS pays_stripe,
+               count(a.action) AS actions,
+               string_agg(DISTINCT a.action, ', ') AS surfaces,
+               CASE
+                 WHEN string_agg(DISTINCT a.action, ',') = 'tracked file'
+                      AND coalesce(ts.distinct_minutes, 0) <= 2
+                   THEN 'NOT engagement: tracking bulk-written by us'
+                 ELSE ''
+               END AS note
+        FROM eligible e
+        LEFT JOIN acted a
+               ON a.user_id = e.id
+              AND (e.pre_provisioned_at IS NULL
+                   OR (e.claimed_at IS NOT NULL AND a.acted_at >= e.claimed_at))
+        LEFT JOIN track_shape ts ON ts.user_id = e.id
+        GROUP BY 1, 2, 3, ts.distinct_minutes
+        HAVING count(a.action) > 0
+        ORDER BY 4 DESC
+        """,
+        start=end - timedelta(days=7),
+        end=end,
+    )
+
+
 def section_wapu(conn, end):
     """WAPU = paid subscriber + >=1 core action in the trailing 7 days.
 
@@ -813,6 +977,53 @@ def section_blind_spots(conn, start, end):
             }
         )
 
+    # 1b. JOINABILITY. Recency and row counts say the table is being written;
+    #     they say nothing about whether a row can be tied to the answer it
+    #     describes. Until 11 September 2026 message_id and conversation_id
+    #     were NULL on 100% of rows -- 217 of 217 in the week measured -- so
+    #     chat_analytics held provider, latency and citation counts for answers
+    #     nobody could identify, and the pace check above passed throughout.
+    #
+    #     Scoped to rows created AFTER the fix: every historic row is an orphan
+    #     by construction and cannot be backfilled, so including them would
+    #     leave this check failing forever and teach everyone to ignore it.
+    rows = q(
+        conn,
+        """
+        SELECT count(*) AS rows_since_fix,
+               count(*) FILTER (WHERE a.message_id IS NOT NULL) AS have_msg_id,
+               count(*) FILTER (WHERE m.id IS NOT NULL) AS msg_resolves,
+               count(*) FILTER (WHERE a.conversation_id IS NOT NULL) AS have_conv_id,
+               count(*) FILTER (WHERE c.id IS NOT NULL) AS conv_resolves
+        FROM chat_analytics a
+        LEFT JOIN chat_messages m ON m.id = a.message_id
+        LEFT JOIN chats c ON c.id = a.conversation_id
+        WHERE a.created_at >= TIMESTAMP '2026-09-11 12:00:00'
+        """,
+    )
+    if not errored(rows):
+        r = rows[0]
+        n = r["rows_since_fix"] or 0
+        resolves = r["msg_resolves"] or 0
+        checks.append(
+            {
+                "check": "chat_analytics rows join to the answer they describe",
+                # A row whose message_id does not resolve is not merely untidy:
+                # it marks a generation that was measured and never persisted,
+                # which is the 185-rows-vs-71-messages shape seen on 8 Sept.
+                "ok": n == 0 or resolves == n,
+                "unproven": n == 0,
+                "detail": (
+                    f"{n} rows since the fix, {r['have_msg_id']} carry a message_id, "
+                    f"{resolves} resolve to a message, {r['conv_resolves']} resolve to a chat"
+                ),
+                "means": "A row that cannot be joined to its message cannot be used for "
+                "per-query analysis: provider, latency and citation counts float free of "
+                "the answer they measure. Rows that carry an id which does not resolve are "
+                "generations that were measured but never saved; count them, do not hide them.",
+            }
+        )
+
     # 2. api_usage_events.status_code -- if always NULL, API health is unmeasured.
     rows = q(
         conn,
@@ -880,28 +1091,88 @@ def section_blind_spots(conn, start, end):
             }
         )
 
-    # 4. Tenderator: matches computed but never surfaced to a human.
+    # 4. Tenderator: TWO checks, because the old single one could not fail.
+    #
+    # It asked "did matches created in this window reach a human", and marked
+    # itself `unproven` whenever the window held no matches. From 22 June 2026
+    # the matcher produced nothing at all, so every run for eighty-one days
+    # reported "unproven -- no data in this window" and nobody learned that a
+    # feature had stopped. A check that goes quiet exactly when the thing it
+    # watches dies is not a check. [[feedback_zero_denominator_is_not_a_pass]]
+    #
+    # 4a. IS THE MATCHER STILL RUNNING AT ALL? Deliberately all-time, not
+    #     windowed, so a quiet week cannot mask a dead scheduler.
     rows = q(
         conn,
         """
-        SELECT count(*) AS matches,
-               count(*) FILTER (WHERE is_viewed) AS viewed,
-               count(*) FILTER (WHERE notified_at IS NOT NULL) AS notified
-        FROM tender_matches WHERE created_at >= :start AND created_at < :end
+        SELECT (SELECT count(*) FROM tender_profiles WHERE is_active) AS active_profiles,
+               (SELECT max(created_at)::date FROM tender_matches) AS newest_match,
+               (SELECT EXTRACT(DAY FROM now() - max(created_at))::int
+                  FROM tender_matches) AS days_since,
+               (SELECT max(created_at)::date FROM tenders) AS newest_tender
         """,
-        start=start,
-        end=end,
     )
     if not errored(rows):
         r = rows[0]
+        days = r["days_since"]
+        profiles = r["active_profiles"] or 0
+        # Only meaningful when somebody is actually waiting for a match.
         checks.append(
             {
-                "check": "tender matches reach a human",
-                "ok": r["matches"] == 0 or r["viewed"] > 0 or r["notified"] > 0,
-                "unproven": r["matches"] == 0,
-                "detail": f"{r['matches']} matches, {r['viewed']} viewed, {r['notified']} notified",
-                "means": "Matches with no views and no notifications: compute is running "
-                "into a void. Either the digest is not sending or the tab is not wired.",
+                "check": "the tender matcher is still producing matches",
+                "ok": profiles == 0 or (days is not None and days <= 14),
+                "unproven": profiles == 0,
+                "detail": (
+                    f"{profiles} active profiles, newest match {r['newest_match']} "
+                    f"({days} days ago), newest tender {r['newest_tender']}"
+                ),
+                "means": "Active profiles and fresh tenders but no recent match means the "
+                "matcher is not running. It has NO scheduler: the only triggers are the "
+                "admin-only POST /run-matching and POST /match, so it runs when somebody "
+                "remembers. Same defect class as the notification scheduler.",
+            }
+        )
+
+    # 4b. CAN a reaction even be recorded? Separate from whether one happened,
+    #     because those are different failures with opposite fixes. Every
+    #     engagement column reads 0 across all 902 matches ever created, and
+    #     grep finds ZERO assignments to `is_viewed` in api/ or services/:
+    #     the column cannot become true. Reporting that as "low engagement"
+    #     would blame users for a missing writing path.
+    rows = q(
+        conn,
+        """
+        SELECT count(*) AS matches_all_time,
+               count(*) FILTER (WHERE is_viewed) AS viewed,
+               count(*) FILTER (WHERE is_saved OR is_dismissed OR is_applied) AS acted,
+               count(*) FILTER (WHERE notified_at IS NOT NULL) AS notified
+        FROM tender_matches
+        """,
+    )
+    if not errored(rows):
+        r = rows[0]
+        total = r["matches_all_time"] or 0
+        any_reaction = (r["viewed"] or 0) + (r["acted"] or 0) + (r["notified"] or 0)
+        checks.append(
+            {
+                "check": "tender match reactions are instrumented",
+                # A large history with not one reaction of any kind is evidence
+                # about the CODE, not about the users.
+                "ok": total == 0 or any_reaction > 0,
+                "unproven": total == 0,
+                "detail": (
+                    f"{total} matches all time, {r['viewed']} viewed, "
+                    f"{r['acted']} saved/dismissed/applied, {r['notified']} notified"
+                ),
+                "means": "Read this per column, not as one number -- the first version "
+                "of this check said 'nothing writes these', which was true of is_viewed "
+                "and WRONG of the rest. save_match() and dismiss_match() have written "
+                "is_saved and is_dismissed since they were built, update_match() writes "
+                "is_applied, user_notes and user_rating, and the Tenderator tab calls "
+                "save and dismiss. Those zeros are genuine non-use. is_viewed had no "
+                "writer at all until 11 Sep 2026 and is now set by POST "
+                "/matches/{id}/view. notified_at has a writer but no scheduler: it fires "
+                "only from an admin endpoint, the same defect the matcher had.",
             }
         )
 
@@ -923,8 +1194,13 @@ def section_blind_spots(conn, start, end):
                 "ok": r["sent"] == 0 or r["read"] > 0,
                 "unproven": r["sent"] == 0,
                 "detail": f"{r['sent']} sent, {r['read']} read",
-                "means": "Sent but never read: check the bell renders and that is_read "
-                "is actually persisted on open.",
+                "means": "Sent but never read. The WRITING PATH IS INTACT, verified end "
+                "to end on 11 Sep 2026: the bell calls markAsRead, the hook posts "
+                "/notifications/{id}/read, and the model sets is_read AND read_at. A zero "
+                "here is genuine non-use, not a missing writer -- do not repeat the 11 Sep "
+                "error of reading one zero as a broken column. Until 10 Sep there was "
+                "nothing recent to open: 103 notifications, one recipient, none since "
+                "18 June.",
             }
         )
 
@@ -1041,6 +1317,16 @@ def render(report):
         f"  WAPU = {len(report['wapu']) if not errored(report['wapu']) else '?'}"
         "   (targets: 10 Phase A / 25 Phase B / 50 Phase C)",
         _fmt(report["wapu"]),
+        # Companion line, not a second north star. WAPU above is untouched.
+        # It requires evidence of payment and nobody has ever paid through
+        # Stripe, so it reads 0 whatever anyone does. This says how many would
+        # qualify on activity alone, which is the number that distinguishes
+        # "nobody used Brubru" from "nobody pays us yet".
+        f"  would-be WAPU = "
+        f"{len(report['would_be_wapu']) if not errored(report['would_be_wapu']) else '?'}"
+        "   (same test, payment evidence removed -- NOT the north star)",
+        _fmt(report["would_be_wapu"],
+             ["email", "subscription_tier", "pays_stripe", "actions", "surfaces", "note"]),
         "",
         "-- 1. ACTORS ------------------------------------------------------------",
         _fmt(report["actors"]["segments"]),
@@ -1068,7 +1354,16 @@ def render(report):
         _fmt(report["comply"]["findings"]),
         "",
         "-- 6. TENDERATOR ---------------------------------------------------------",
-        _fmt(report["tenderator"]),
+        "  Profiles built (the setup action):",
+        _fmt(report["tenderator"]["profiles"]),
+        "  Matches produced (reaction columns are NOT instrumented -- see below):",
+        _fmt(report["tenderator"]["matches"]),
+        "  Tender files drafted:",
+        _fmt(report["tenderator"]["files"]),
+        "  Pipeline rows:",
+        _fmt(report["tenderator"]["pipeline"]),
+        "  All-time health (a quiet window cannot hide a stalled matcher):",
+        _fmt(report["tenderator"]["health"]),
         "",
         "-- 7. DOCUMENTS ----------------------------------------------------------",
         _fmt(report["documents"]),
@@ -1162,6 +1457,7 @@ def main():
                 "include_internal": args.include_internal,
             },
             "wapu": section_wapu(conn, end_excl),
+            "would_be_wapu": section_would_be_wapu(conn, end_excl),
             "actors": section_actors(conn, start, end_excl, args.include_internal),
             "chat": section_chat(conn, start, end_excl, args.include_internal),
             "preuser_funnel": section_preuser_funnel(conn, start, end_excl),

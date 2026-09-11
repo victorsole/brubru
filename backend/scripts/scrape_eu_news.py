@@ -153,7 +153,12 @@ PORTALS = [
      "source": "HaDEA", "category": "agency", "priority": 5},
     {"url": "https://eismea.ec.europa.eu/news_en",
      "source": "EISMEA", "category": "agency", "priority": 5},
-    {"url": "https://eu-careers.europa.eu/en/about-epso",
+    # /en/news, not /en/about-epso (fixed 11 September 2026). This source
+    # returned 0 items on every run because it pointed at EPSO's ABOUT page,
+    # which has no articles on it. Verified: /en/news answers 200 with 10 news
+    # links; /en/about-epso has none. The v2 fetcher services/scrapers/
+    # economy_epso.py has always used /en/news and holds 67 rows.
+    {"url": "https://eu-careers.europa.eu/en/news",
      "source": "EPSO", "category": "agency", "priority": 5},
     {"url": "https://rea.ec.europa.eu/news_en",
      "source": "REA", "category": "agency", "priority": 5},

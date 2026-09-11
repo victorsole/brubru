@@ -4579,7 +4579,27 @@
       "yourOrganisation": "Organisation *",
       "yourPhone": "Votre téléphone",
       "yourTitle": "Votre titre"
-    }
+    },
+    "typeCommitteeVoteBriefTitle": "Note sur un vote en commission",
+    "typeCommitteeVoteBriefDesc": "Réagir à un vote en commission sur un dossier que vous suivez: ce qui a changé, ce que cela signifie, quoi faire ensuite",
+    "kindCommitteeVoteBrief": "Note sur un vote en commission",
+    "committeeVoteBriefDetails": "Détails du vote en commission",
+    "cvbCommittee": "Commission",
+    "cvbCommitteePlaceholder": "p. ex. EMPL, ITRE, ENVI",
+    "cvbVoteDate": "Date du vote",
+    "cvbVoteDatePlaceholder": "p. ex. 10 septembre 2026",
+    "cvbFileTitle": "Dossier",
+    "cvbFileTitlePlaceholder": "Nom du dossier en langage clair",
+    "cvbProcedurePlaceholder": "p. ex. 2026/0074(COD)",
+    "cvbOutcome": "Résultat, s'il est publié",
+    "cvbOutcomePlaceholder": "Ce que la commission a décidé",
+    "cvbOutcomeHint": "Laissez vide si le résultat n'est pas encore publié. La note le dira plutôt que de le deviner.",
+    "cvbCompromise": "Amendements de compromis",
+    "cvbUnknown": "Inconnu",
+    "cvbYes": "Oui",
+    "cvbNo": "Non",
+    "cvbNextStep": "Étape suivante",
+    "cvbNextStepPlaceholder": "p. ex. vote en plénière, trilogue"
   },
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",

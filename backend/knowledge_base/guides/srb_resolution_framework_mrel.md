@@ -1,6 +1,11 @@
 # Single Resolution Board and MREL: Resolution Planning under SRMR/BRRD
 
 ## QUICK FACTS
+- **LATEST (8 September 2026 — AG opinion against the SRB on ex ante contributions).** **AG
+  Spielmann, in C-454/24 P *SRB v Dexia* and five joined cases, finds that the decisions calculating
+  the 2022 and 2023 ex ante contributions to the Single Resolution Fund contain errors of law**
+  (CURIA press release No 121/26). An opinion is a forecast, not the judgment; if the Court follows,
+  the contribution calculations for those two years are exposed.
 - **WATCH, NOT YET LAW (8 September 2026)**: AG **Spielmann** proposes the Court **dismiss the appeals** in *SRB v Dexia* (C-454/24 P) and five joined appeals, leaving the SRB decisions of 11 April 2022 and 2 May 2023 on the **2022 and 2023 ex ante contributions to the Single Resolution Fund annulled** for those banks. Ground: conferring implementing powers on the **Council** is an exception needing specific reasons, and Regulation 806/2014 gives none — which is what **Implementing Regulation (EU) 2015/81** rests on. An AG opinion is a trailer, not the outcome. Detail below under *Ex ante contributions*.
 - Body: Single Resolution Board (SRB) -- the central resolution authority of the Banking Union
 - Seat: Brussels (Treurenberg 22, 1049 Brussels)

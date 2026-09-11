@@ -49,6 +49,50 @@ class Settings(BaseSettings):
     CEREBRAS_MODEL: str = "gpt-oss-120b"  # high TPD; reasoning model (reasoning_effort=low, content/<think> handled)
     NVIDIA_API_KEY: str | None = None  # NVIDIA NIM free tier (Llama-3.3-70B, 128K ctx) — 2nd open fallback below Cerebras
     NVIDIA_MODEL: str = "meta/llama-3.3-70b-instruct"  # permanent free; fits the ~19K-token Brubru prompt
+    # Scaleway Generative APIs -- EU-hosted (Paris), OpenAI-compatible, paid but
+    # cheap. Introduced 11 September 2026 as the reliable lane beneath the two
+    # free fast ones, after a morning on which every provider in the chain failed
+    # a single request: Cerebras and Gemini 429, Groq structurally (below),
+    # NVIDIA 410 EOL, Mistral 429, OpenAI out of credits.
+    #
+    # Auth is the IAM secret key as a bearer token; SCW_SECRET_KEY is already in
+    # .env for the Scaleway CLI, so no new credential was minted.
+    #
+    # Model chosen by measurement on the path users actually hit (11 Sep 2026).
+    #
+    # THE FIRST ANSWER WAS WRONG, AND THE WAY IT WAS WRONG IS THE POINT.
+    # Scored on accuracy alone, deepseek-v4-flash-0731 won: 5/5 EU act numbers
+    # and 4/4 needles in a 21K-token context. It is unusable here. On Scaleway
+    # it is a REASONING model that emits its chain of thought into the `reasoning`
+    # delta and only then produces content, and at max_tokens=1200 it never got
+    # there: 339 reasoning deltas, ZERO content deltas, 43.9 seconds.
+    # qwen3.5-397b-a17b does the same (1,200 reasoning deltas, zero content).
+    #
+    # generate_stream() deliberately refuses to stream reasoning deltas, because
+    # doing so renders raw chain-of-thought into the user's chat window. So a
+    # reasoning-only model yields nothing and falls through every single time.
+    # Picking on accuracy would have wired in a provider that is dead on
+    # /api/chat/stream, which is the only path the UI calls.
+    #
+    # Rescored over the STREAM-CAPABLE models only, two runs each:
+    #
+    #   model                          acts     needles@21K  1st token  stream
+    #   qwen3-235b-a22b-instruct-2507  4,4 /5   4,4 /4       0.8s       clean     <- chosen
+    #   gemma-4-26b-a4b-it             5,4 /5   4,4 /4       7.8s       971 reasoning deltas
+    #   llama-3.3-70b-instruct         2,2 /5   4,4 /4       0.2s       clean, fabricated 3 numbers
+    #   mistral-medium-3.5-128b        2,2 /5   4,4 /4       0.2s       clean, fabricated 1
+    #
+    # qwen wins on the axis that has always decided this: it does not invent act
+    # numbers (one fabrication across two runs, against three for llama), it
+    # reads the whole injected context, and being an *instruct* variant it cannot
+    # regress into reasoning-only output the way the two rejects did. gemma edged
+    # it once on acts but streams reasoning and takes ten times longer to the
+    # first token.
+    #
+    # Note on provenance: the weights are Alibaba's Qwen, the hosting is
+    # Scaleway's in the EU. That satisfies EU hosting, not EU model provenance.
+    SCW_SECRET_KEY: str | None = None
+    SCALEWAY_MODEL: str = "qwen3-235b-a22b-instruct-2507"
     MISTRAL_API_KEY: str | None = None  # Mistral (free tier, EU, open-weight) — fallback
     ANTHROPIC_API_KEY: str  # Claude (opportunistic — used only when free chain exhausted AND funded)
     OPENAI_API_KEY: str  # GPT-4 (paid last resort)

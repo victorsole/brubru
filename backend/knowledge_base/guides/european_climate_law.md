@@ -1,6 +1,10 @@
 # European Climate Law
 
 ## QUICK FACTS
+- **LATEST (10 September 2026 — observed temperature).** Commissioner **Wopke Hoekstra**, citing the
+  **Copernicus C3S Climate Bulletin**: **August 2026 was the warmest August on record globally**, with
+  a global average surface air temperature of **16.96 degrees Celsius**. Cite C3S as the source, not
+  the Commissioner's post, which is where Brubru picked it up.
 - **LATEST (2 September 2026 — AN AARHUS REVIEW REQUEST CANNOT REOPEN THE CLIMATE LAW'S TARGETS):** in **Case T-120/24, Global Legal Action Network and CAN-Europe v Commission**, the **General Court dismissed the action in its entirety**, upholding the Commission's refusal to internally review the implementing decision setting Member States' annual greenhouse gas emission allocations for **2023-2030**. **Practical effect: the Aarhus internal-review route reaches implementing acts, not the legislative targets behind them.** Detail in 'The 2026 Aarhus review judgment' below. Source: CJEU press release No 114/26, https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260114en.pdf
 **PRIOR (11 May 2026):** Commission presented updated EU ETS benchmarks for consultation.
 **PRIOR (12 May 2026):** High-Level Stakeholder Roundtable on the EU ETS review.

@@ -256,8 +256,23 @@ class OutcomePredictor:
         # Default probabilities
         probs = {'adopted': 0.6, 'blocked': 0.25, 'withdrawn': 0.15}
 
-        # Adjust based on current status
-        if current_status in ('close_to_adoption', 'completed'):
+        # Adjust based on current status.
+        #
+        # TERMINAL STATUSES FIRST (added 11 September 2026). `adopted` and
+        # `withdrawn` were not handled at all, so both fell through to the 0.6
+        # default and the output inverted: a file already ADOPTED was reported
+        # as 60% likely to be adopted, LESS certain than one merely
+        # close_to_adoption at 85%. Measured on 2016/0207(COD), status ADOPTED,
+        # confidence 0.6, against 2025/2097(IMM), close_to_adoption, 0.85.
+        #
+        # These are not forecasts. The outcome has happened, so the honest
+        # answer is near-certainty, and the small residual leaves room for a
+        # stale or wrong status rather than claiming 1.0 from a database field.
+        if current_status == 'adopted':
+            probs = {'adopted': 0.98, 'blocked': 0.01, 'withdrawn': 0.01}
+        elif current_status == 'withdrawn':
+            probs = {'adopted': 0.01, 'blocked': 0.01, 'withdrawn': 0.98}
+        elif current_status in ('close_to_adoption', 'completed'):
             probs = {'adopted': 0.85, 'blocked': 0.10, 'withdrawn': 0.05}
         elif current_status == 'blocked':
             probs = {'adopted': 0.20, 'blocked': 0.60, 'withdrawn': 0.20}
@@ -265,7 +280,11 @@ class OutcomePredictor:
             # Early stage - higher withdrawal risk
             probs = {'adopted': 0.50, 'blocked': 0.25, 'withdrawn': 0.25}
 
-        # Adjust for stagnation
+        # Adjust for stagnation. Skipped for terminal statuses: a file adopted
+        # three years ago has by definition been "in status" a long time, and
+        # penalising it would re-create the inversion this block just fixed.
+        if current_status in ('adopted', 'withdrawn'):
+            days_in_status = 0
         if days_in_status > 365:
             probs['blocked'] += 0.15
             probs['adopted'] -= 0.10

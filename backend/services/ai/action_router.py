@@ -95,6 +95,7 @@ def compute_actions(
             'briefing': 'mep_briefing',
             'mep_briefing': 'mep_briefing',
             'talking_points': 'talking_points',
+            'committee_vote_brief': 'committee_vote_brief',
             'resolution': 'resolution',
             'ep_question': 'ep_question',
             'position_paper': 'position_paper',
@@ -105,6 +106,7 @@ def compute_actions(
             'position_paper': 'Position paper',
             'mep_briefing': 'MEP briefing',
             'talking_points': 'Talking points',
+            'committee_vote_brief': 'Committee vote brief',
             'resolution': 'EP resolution',
             'ep_question': 'EP question',
         }

@@ -4181,6 +4181,62 @@ async def save_match(
 
 
 @router.post(
+    "/matches/{match_id}/view",
+    response_model=TenderMatchResponse,
+    summary="Mark a match as opened",
+    description="""**What it does**
+
+Records that you opened this tender match, setting its `is_viewed` flag.
+
+**When to use it**
+
+Call it when a user opens a match's detail view. It is the only way `is_viewed`
+becomes true: until 11 September 2026 nothing in Brubru wrote that column, so
+every match in the system read "never seen" regardless of what users did, and
+"did our matches reach a human" was unanswerable.
+
+**Input**
+
+`match_id` in the path. No body. The match must belong to you.
+
+**Try it**
+
+`POST /api/tenders/matches/1234/view`
+
+**You get back**
+
+The updated match, with `is_viewed` true. Calling it again is a no-op: opening
+a match twice is one view, and `updated_at` stays meaningful.
+"""
+)
+async def mark_match_viewed(
+    match_id: int,
+    current_user: User = Depends(require_blue_tier),
+    service: TenderService = Depends(get_tender_service)
+) -> TenderMatchResponse:
+    """Record that the user opened this match."""
+    try:
+        match = service.mark_match_viewed(match_id, str(current_user.id))
+
+        if not match:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Match {match_id} not found"
+            )
+
+        return TenderMatchResponse.model_validate(match)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to mark match {match_id} viewed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to mark match viewed: {str(e)}"
+        )
+
+
+@router.post(
     "/matches/{match_id}/dismiss",
     response_model=TenderMatchResponse,
     summary="Dismiss a match",

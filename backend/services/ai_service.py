@@ -20,6 +20,7 @@ import os
 import re
 import base64
 import unicodedata
+import uuid
 from pathlib import Path
 from typing import List, Dict, Any, Optional, AsyncGenerator
 from datetime import datetime
@@ -77,6 +78,26 @@ _LINKIFY_ACRONYM_DENYLIST = frozenset({
 # acts and corrigenda (corrigendum CELEX == base CELEX) still linkify.
 # See memory/feedback_linkify_override_celex.md.
 _NON_BASE_ACT_MARKERS = ("Implementing ", "Delegated ")
+
+
+def _as_uuid(value: Optional[str]):
+    """Coerce an id to UUID for the analytics row, or None if it is not one.
+
+    Deliberately forgiving. These two ids are TELEMETRY, so a malformed one
+    must degrade to NULL and let the row write; raising here would lose the
+    whole analytics record inside the fire-and-forget task, trading a missing
+    join for a missing row. That is strictly worse, and it is the failure the
+    surrounding try/except would have swallowed silently.
+    """
+    if not value:
+        return None
+    if isinstance(value, uuid.UUID):
+        return value
+    try:
+        return uuid.UUID(str(value))
+    except (ValueError, AttributeError, TypeError):
+        logger.debug("[analytics] id %r is not a UUID; stored as NULL", value)
+        return None
 
 
 def _is_linkify_safe_act(full_title: Optional[str]) -> bool:
@@ -1171,7 +1192,12 @@ class AIService:
         document_ids: Optional[List[str]] = None,
         use_context: bool = True,
         stream: bool = False,
-        is_pre_user: bool = False
+        is_pre_user: bool = False,
+        # Same joinability pair as chat_stream. /message is not the path the UI
+        # calls, but leaving it half-instrumented would mean the two paths
+        # disagree about what a row means.
+        conversation_id: Optional[str] = None,
+        message_id: Optional[str] = None
     ) -> ChatResponse:
         """
         Send chat message and get AI response.
@@ -1500,7 +1526,9 @@ class AIService:
                 citation_count=len(citations),
                 context_sources_count=len(citations),
                 query_length=len(user_message),
-                response_length=len(assistant_message)
+                response_length=len(assistant_message),
+                message_id=message_id,
+                conversation_id=conversation_id,
             )
         )
 
@@ -1864,6 +1892,12 @@ class AIService:
         document_ids: Optional[List[str]] = None,
         nav_context: Optional[str] = None,
         user_id: Optional[str] = None,
+        # The ids this answer will be stored under. The API layer knows the
+        # chat before a token is generated and PRE-GENERATES the assistant
+        # message id, so the analytics row and the message row can agree
+        # without a second write. See _log_analytics.
+        conversation_id: Optional[str] = None,
+        message_id: Optional[str] = None,
     ) -> AsyncGenerator[str, None]:
         """
         Stream chat response with dynamic status events.
@@ -2288,6 +2322,8 @@ class AIService:
                     context_sources_count=len(stream_citations),
                     query_length=len(user_message),
                     response_length=len("".join(streamed_parts)),
+                    message_id=message_id,
+                    conversation_id=conversation_id,
                 )
             )
         except Exception as e:
@@ -3784,6 +3820,36 @@ USER QUESTION: {user_message}
         r"\s+\((?:EU|EC|CE|UE)(?:,\s?Euratom)?\)\s+(\d{4})/(\d{1,4})\b",
         re.IGNORECASE,
     )
+    # The SUFFIX citation form -- "Directive 2014/24/EU" -- which the
+    # parenthesised regex above cannot see, because there is no parenthesis.
+    # Every act numbered before the 2015 convention change is cited this way,
+    # and that is most of the acquis a procurement, utilities, energy or
+    # consumer question touches.
+    #
+    # Found by the 11 September 2026 audit. Chat was asked which directives the
+    # Public Procurement Act repeals. It named the right three -- 2014/23/EU,
+    # 2014/24/EU, 2014/25/EU -- and because nothing here built the links, the
+    # model built them itself and produced CELEX:32023L2014, CELEX:32024L2014
+    # and CELEX:32025L2014: the year and the number transposed, three URLs
+    # pointing at acts that do not exist. The validator caught it as a critical
+    # hallucination and it was right.
+    #
+    # The lesson is the standing one: a URL has a deterministic correct form,
+    # so it is generated here, never asked for. The order is unambiguous in
+    # this form because the FOUR-digit group comes first and the trailing
+    # treaty suffix confirms the shape -- which is exactly what distinguishes
+    # it from the older number-first form ("Regulation (EC) No 1049/2001"),
+    # deliberately NOT matched here.
+    _ACT_NAME_SUFFIX_RE = re.compile(
+        r"\b(Regulation|Directive|Decision"
+        r"|Reglamento|Directiva|Decisi[oó]n"
+        r"|Reglament|Decisi[oó]"
+        r"|R[eè]glement|D[eé]cision"
+        r"|Regolamento|Direttiva|Decisione"
+        r"|Verordening|Richtlijn|Besluit)"
+        r"\s+(\d{4})/(\d{1,4})/(?:EU|EC|EEC|CE|CEE|UE|Euratom)\b",
+        re.IGNORECASE,
+    )
     _ACT_LETTER = {
         "regulation": "R", "reglamento": "R", "reglament": "R",
         "règlement": "R", "reglement": "R", "regolamento": "R",
@@ -3872,6 +3938,7 @@ USER QUESTION: {user_message}
             seg = self._COM_REF_RE.sub(_com, seg)
             seg = self._PROC_REF_RE.sub(_proc, seg)
             seg = self._ACT_NAME_RE.sub(_act, seg)
+            seg = self._ACT_NAME_SUFFIX_RE.sub(_act, seg)
             seg = self._BARE_CELEX_RE.sub(_celex, seg)
             parts[i] = seg
         return "".join(parts)
@@ -4831,7 +4898,12 @@ USER QUESTION: {user_message}
         citation_count: int,
         context_sources_count: int,
         query_length: int,
-        response_length: int
+        response_length: int,
+        # Joinability, added 11 September 2026. Keyword-only in practice: every
+        # caller passes by name. Defaulted so a caller that genuinely has no id
+        # (a background path with no conversation) still logs its metrics.
+        message_id: Optional[str] = None,
+        conversation_id: Optional[str] = None,
     ) -> None:
         """
         Log analytics for monitoring dashboard (Phase E1).
@@ -4844,6 +4916,25 @@ USER QUESTION: {user_message}
                 db = SessionLocal()
                 try:
                     analytics = ChatAnalytics(
+                        # Joinability (11 September 2026). The columns existed
+                        # from the start and NOTHING ever wrote them: 217 rows
+                        # in a week, message_id NULL on 100% of them and
+                        # conversation_id NULL on 100%. The table recorded
+                        # provider, latency and citation counts for answers it
+                        # could not be joined back to, so no per-query analysis
+                        # was possible and the blind-spot check passed anyway,
+                        # because it compared only counts and recency.
+                        #
+                        # The assistant message id is PRE-GENERATED by the API
+                        # layer and handed to both this row and the message
+                        # row, so the two agree with no second write and no
+                        # correlation key. An id here that resolves to no
+                        # message is meaningful rather than broken: it marks a
+                        # generation that was measured but never persisted,
+                        # which is exactly the 185-rows-vs-71-messages gap seen
+                        # on 8 September.
+                        message_id=_as_uuid(message_id),
+                        conversation_id=_as_uuid(conversation_id),
                         user_id=user_id if user_id else None,
                         provider=provider,
                         model=model,

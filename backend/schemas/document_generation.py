@@ -395,6 +395,50 @@ class GenerateTalkingPointsRequest(BaseModel):
     language: str = Field("EN")
 
 
+class GenerateCommitteeVoteBriefRequest(BaseModel):
+    """Request to generate a committee-vote reaction brief.
+
+    Added 11 September 2026. The week of 7 to 11 September produced FIFTEEN
+    committee voting lists across eight EP committees, and the document a
+    public-affairs desk actually writes that afternoon -- what the committee
+    decided, what it changes for us, what we do on Monday -- had no template.
+    A position paper states our stance and an MEP briefing addresses a Member;
+    neither is a reaction to a vote that has just happened.
+    """
+    # What was voted
+    committee: str = Field(..., description="Committee that voted, e.g. EMPL, ITRE, ENVI")
+    procedure_reference: Optional[str] = Field(None, description="OEIL reference, e.g. 2026/0074(COD)")
+    file_title: str = Field(..., description="Plain-language name of the file")
+    vote_date: str = Field(..., description="Date of the committee vote")
+    legislative_file_id: Optional[str] = Field(None)
+
+    # The outcome, as known. Deliberately optional and free-text: a voting list
+    # tells you a vote was scheduled, not how it went, and the brief must be
+    # honest when the outcome is not yet published.
+    outcome: Optional[str] = Field(
+        None, description="What the committee decided, if known. Leave empty if not yet published."
+    )
+    compromise_amendments: Optional[bool] = Field(
+        None, description="Whether compromise amendments were on the table"
+    )
+    key_changes: Optional[List[str]] = Field(
+        None, max_length=6, description="Substantive changes the vote introduced"
+    )
+
+    # Why it matters to the reader
+    organisation_name: str = Field(...)
+    our_position: Optional[str] = Field(None, description="Our position on the file")
+    affected_interests: Optional[List[str]] = Field(
+        None, max_length=5, description="What this touches for us"
+    )
+
+    # What happens next
+    next_step: Optional[str] = Field(None, description="Next procedural step, e.g. plenary, trilogue")
+    next_step_date: Optional[str] = Field(None)
+
+    language: str = Field("EN")
+
+
 class GenerateResolutionRequest(BaseModel):
     """Request to generate a European Parliament Resolution draft"""
     # Topic

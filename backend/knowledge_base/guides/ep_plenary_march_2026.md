@@ -1,24 +1,48 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
-**LATEST (Wednesday 27 May 2026 — EPRS AT A GLANCE: MAY 2026 PLENARY ROUND-UP (EPRS_ATA(2026)789306))**: EPRS published its "At a Glance" round-up of the May 2026 EP plenary session (Ref: EPRS_ATA(2026)789306, 22 May 2026). Covers the key votes and debates from the **18-21 May** Strasbourg plenary (round-up published Friday 22 May): industrial competitiveness resolutions, rights-related urgency resolutions, and committee-work mandates. Source: EPRS, EP Think Tank.
+**LATEST (Friday 11 September 2026)** — this is the block that answers "what is the next EP plenary",
+"what is on the agenda next week" and "when is the State of the Union". Week types are taken from the
+EP's own 2026 Calendar of Parliamentary Activities PDF, whose week type is encoded as a cell COLOUR and
+is not recoverable from the text layer; the derived table lives at
+`backend/knowledge_base/calendars/ep_calendar_2026.json`.
 
-**LATEST (Tuesday 12 May 2026)** — answering "what is the next EP plenary" (verified against `memory/ep_calendar_2026.md` and the official EP 2026 Calendar of Parliamentary Activities PDF):
+- **CURRENT week (week 37, 7-11 September 2026): NOT a plenary week.** Committee meetings Monday and
+  Thursday, political group meetings Tuesday and Wednesday.
+- **The committee cycle restarted hard in the week before it.** Between 7 and 11 September 2026,
+  **fifteen committee voting lists** were tabled across **eight committees** (JURI, SANT, BUDG, ECON,
+  EMPL, ENVI, ITRE, FEMM) — including EU Inc at EMPL with compromise amendments, the Biotech Act at
+  JURI, TEN-E and European Business Wallets at ITRE, the ECHA Basic Regulation and the ETS market
+  stability reserve at ENVI, SFDR at ECON, and the 2027 budget. Source: Brubru's own
+  `ep_emeeting_documents`, which carries these days before OEIL publishes them.
+- **NEXT PLENARY: Monday 14 to Thursday 17 September 2026, Strasbourg** (week 38). The first part-session
+  of the parliamentary season.
+- **STATE OF THE UNION ADDRESS: Wednesday 16 September 2026**, Strasbourg, during that part-session. The
+  High Representative and Vice-President attends; the debate on the address follows it the same morning.
+- **PREVIOUS MULTI-DAY PLENARY: 6-9 July 2026, Strasbourg** (week 28). Summer recess ran from mid-July to
+  the end of August; week 35 (24-28 August) was external parliamentary activities and week 36
+  (31 August to 3 September) was the first committee week back.
+- **AFTER SEPTEMBER: 5-8 October 2026** (week 41) and **19-22 October 2026** (week 43), both Strasbourg,
+  Monday to Thursday.
 
 | Week | Dates | Type |
 |------|-------|------|
-| 18 | 27 Apr-3 May 2026 | **Plenary Strasbourg (27-30 Apr)** — CONCLUDED |
-| 19 | 4-10 May 2026 | Committee week — Europe Day (Sat 9 May) |
-| **20** | **11-17 May 2026** | **Mon 11 May = Brussels mini-plenary (single day)** + rest of week = committee week |
-| 21 | 18-22 May 2026 | **Plenary Strasbourg (18-21 May)** — NEXT MULTI-DAY PLENARY |
+| 36 | 31 Aug-4 Sep 2026 | Committee week — the first back from recess |
+| **37** | **7-11 Sep 2026** | **Committee Mon + Thu, political groups Tue + Wed — CURRENT** |
+| **38** | **14-20 Sep 2026** | **PLENARY Strasbourg (14-17 Sep) — State of the Union Wed 16 Sep** |
+| 39 | 21-25 Sep 2026 | External parliamentary activities |
+| 40 | 28-30 Sep 2026 | Committee Mon, political groups Tue + Wed |
+| 41 | 5-11 Oct 2026 | **PLENARY Strasbourg (5-8 Oct)** |
+| 43 | 19-25 Oct 2026 | **PLENARY Strasbourg (19-22 Oct)** |
 
-- **CURRENT week (12 May 2026)**: Brussels mini-plenary just concluded yesterday (Mon 11 May, single-day session). Tue-Fri this week = committee week.
-- **NEXT MULTI-DAY PLENARY: 18-21 May 2026, Strasbourg.** Draft agenda being prepared by Conference of Presidents (COP meeting Thursday 14 May 2026). Expected items based on EPRS May at-a-glance series (10-11 May 2026): EU-Cook Islands sustainable fisheries protocol (consent), EU-São Tomé and Príncipe fisheries agreement protocol (consent), **UN Convention against Cybercrime conclusion** (consent, 2025/0231(NLE)), global steel over-capacity regulation (provisional agreement vote), revised Victims' Rights Directive, EU-Uzbekistan Enhanced Partnership and Cooperation Agreement (consent), Single European railway area, forest reproductive material, **Comprehensive AI strategy for EU trade** (INI), ECI 'Stop Destroying Videogames' (debate), Draghi/Letta investment-needs study tabling (BUDG).
-- **AFTER 18-21 MAY**: 8-11 June 2026 Strasbourg (per EP 2026 calendar PDF).
-- **PREVIOUS PLENARY (multi-day)**: 27-30 April 2026 Strasbourg — concluded.
-LATEST SESSION: 25-26 March 2026, Brussels mini-plenary (NOT Strasbourg). CONCLUDED.
-Previous session: 9-12 March 2026, Strasbourg (CONCLUDED)
-April plenary (27-30 April 2026, Strasbourg): CONCLUDED.
+**All 2026 part-sessions** (Monday to Thursday unless noted): 19-22 Jan; 27 Jan (single day); 9-12 Feb;
+9-12 Mar; 25-26 Mar (Wed-Thu, Brussels mini-plenary); 27-30 Apr; 18-21 May; 15-18 Jun; 6-9 Jul;
+**14-17 Sep**; 5-8 Oct; 19-22 Oct; 11-12 Nov (Wed-Thu); 23-26 Nov; 14-17 Dec.
+
+**A DATED BLOCK IN THIS GUIDE IS A SNAPSHOT, NOT THE PRESENT.** Everything below this point describes
+sessions that have already concluded. Read the week table above for what is happening now, and never
+present a session dated earlier in this guide as the most recent one.
+
 **LATEST (24 April 2026)**: Tuesday 28 April agenda verified via doceo primary source. Confirmed items: 09:00-11:50 **MFF 2028-2034 interim report** (Item 81, Muresan + Tavares, 2025/0571R(APP)) + World Day for Safety and Health at Work (Item 101). 12:00 voting block: Rule 170 urgent procedure + **Convention establishing International Claims Commission for Ukraine** (consent) + Items 81, 91, 110, 40, 57, 61, 85, 50, 34, 87, 27, 86, 106, 17. 13:00-15:00 joint debate **Discharge 2024** (Item 66, Daniel Freund lead, Commission section). 15:00-22:00 debates: **Better Regulation and Enforcement Communication** (Item 109, Commission statement), **Enforcement of DMA** (Item 119, Cavazzini + Schwab), **Fundamental rights 2024-2025** (Item 26, Anna Strolenberg), **Commission's 2025 Rule of Law report** (Item 88, Konstantinos Arvanitis), **EU law application monitoring 2023-2025** (Item 111, Dainius Zalimas), **Russia's attacks on Ukraine civilians -- accountability** (Item 112), **Armenia democratic resilience** (Item 8). Wed 29 / Thu 30 agenda not yet on doceo at time of check.
 **LATEST (22 April 2026)**: Conference of Presidents met and adopted the final 27-30 April plenary agenda. Central item: MFF 2028-2034 EP negotiating mandate vote (expected 29 April, BUDG co-rapporteurs Siegfried Muresan + Eero Heinaluoma). Also confirmed: Defence Union debate (AFCO 2025/2212(INI) tabling), air passenger rights vote, EU-US trade deal follow-up.
 Type: Plenary sessions of the European Parliament (10th legislature)

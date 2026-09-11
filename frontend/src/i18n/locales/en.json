@@ -4579,7 +4579,27 @@
       "logoHintAlt": "PNG / JPG / SVG, up to 5 MB. Embedded in the export.",
       "headlineAskAddCounter": "Headline ask *",
       "procedureRef": "Procedure reference"
-    }
+    },
+    "typeCommitteeVoteBriefTitle": "Committee vote brief",
+    "typeCommitteeVoteBriefDesc": "React to a committee vote on a file you follow: what changed, what it means, what to do next",
+    "kindCommitteeVoteBrief": "Committee vote brief",
+    "committeeVoteBriefDetails": "Committee vote details",
+    "cvbCommittee": "Committee",
+    "cvbCommitteePlaceholder": "e.g. EMPL, ITRE, ENVI",
+    "cvbVoteDate": "Date of the vote",
+    "cvbVoteDatePlaceholder": "e.g. 10 September 2026",
+    "cvbFileTitle": "File",
+    "cvbFileTitlePlaceholder": "Plain-language name of the file",
+    "cvbProcedurePlaceholder": "e.g. 2026/0074(COD)",
+    "cvbOutcome": "Outcome, if published",
+    "cvbOutcomePlaceholder": "What the committee decided",
+    "cvbOutcomeHint": "Leave empty if the result is not published yet. The brief will say so rather than guess.",
+    "cvbCompromise": "Compromise amendments",
+    "cvbUnknown": "Not known",
+    "cvbYes": "Yes",
+    "cvbNo": "No",
+    "cvbNextStep": "Next step",
+    "cvbNextStepPlaceholder": "e.g. plenary vote, trilogue"
   },
   "mcp": {
     "eyebrow": "MCP - Model Context Protocol",

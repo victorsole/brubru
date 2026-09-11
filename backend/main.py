@@ -24,6 +24,9 @@ from services.email_scheduler import start_email_scheduler, stop_email_scheduler
 from services.schedulers.amendment_sync_scheduler import (
     start_amendment_sync_scheduler, stop_amendment_sync_scheduler
 )
+from services.schedulers.tender_match_scheduler import (
+    start_tender_match_scheduler, stop_tender_match_scheduler
+)
 from services.schedulers.notification_scheduler import (
     start_notification_scheduler, stop_notification_scheduler
 )
@@ -109,6 +112,17 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Notification scheduler failed to start (non-fatal): {str(e)}")
 
+    # Tender matching. Same defect as the notifications above, found on
+    # 11 September: the matcher works, 29 active profiles were waiting, tenders
+    # ingest daily, and the newest match was 81 days old because nothing in the
+    # running application ever called it. Runs off the event loop via
+    # asyncio.to_thread; a run takes minutes and must never block the worker.
+    try:
+        start_tender_match_scheduler()
+        print("[OK] Tender match scheduler started")
+    except Exception as e:
+        print(f"[WARN] Tender match scheduler failed to start (non-fatal): {str(e)}")
+
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:
         from services.toolbox_service import get_toolbox_service
@@ -157,6 +171,13 @@ async def lifespan(app: FastAPI):
         print("[OK] Notification scheduler stopped")
     except Exception as e:
         print(f"[WARN] Notification scheduler shutdown error: {str(e)}")
+
+    # Stop tender match scheduler
+    try:
+        stop_tender_match_scheduler()
+        print("[OK] Tender match scheduler stopped")
+    except Exception as e:
+        print(f"[WARN] Tender match scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app

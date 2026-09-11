@@ -458,7 +458,11 @@ class LegislativeTrainScheduler:
                     notification_service.create_notification(
                         user_id=str(track.user_id),
                         notification_type="status_change",
-                        title=f"⚠️ File Blocked: {carriage.title[:80]}",
+                        # Plain-text marker, not an emoji (11 Sep 2026). This
+                        # title is PERSISTED on the notification row and is read
+                        # back in the bell, in digests and in psql, so the glyph
+                        # was a database value rather than a piece of styling.
+                        title=f"[BLOCKED] {carriage.title[:80]}",
                         message=f"This file has been stuck in {carriage.current_status} for {carriage.days_in_current_status} days and appears blocked.",
                         priority="urgent",
                         action_url=f"/bubble?tab=legislative-trains&file={carriage.file_id}",

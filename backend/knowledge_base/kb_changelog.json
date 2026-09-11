@@ -2,6 +2,86 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "ep_plenary_march_2026",
+      "title": "EP Plenary Sessions: 2026",
+      "summary": "The committee week of 7-11 September: fifteen voting lists across eight committees, recorded before OEIL published them",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "european_climate_law",
+      "title": "European Climate Law",
+      "summary": "August 2026 was the warmest August on record globally at 16.96C, per the Copernicus C3S Climate Bulletin",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "Energy grids package",
+      "summary": "ITRE voted the TEN-E revision 2025/0399(COD) and European Business Wallets 2025/0358(COD) on 10 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU ETS review 2026",
+      "summary": "ENVI voted 2026/0085(COD) on ceasing invalidation of allowances in the market stability reserve",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "srb_resolution_framework_mrel",
+      "title": "SRB resolution framework and MREL",
+      "summary": "AG Spielmann finds errors of law in the 2022 and 2023 ex ante Single Resolution Fund contributions",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. 28th regime",
+      "summary": "EMPL voted the file on 10 September 2026 with compromise amendments, the first committee vote on 2026/0074(COD)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "public_procurement_act",
+      "title": "Public Procurement Act",
+      "summary": "AG Biondi on national-security exclusion (C-271/25, C-334/25) and the Commissioner's 900-to-200 pages framing",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions implementation framework",
+      "summary": "Abramovich dismissed (T-358/25) and Hungary v European Peace Facility dismissed (T-457/24), both 9 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "added",
+      "guide": "eu_medical_radioisotopes_ervi",
+      "title": "European Radioisotope Valley Initiative (ERVI)",
+      "summary": "New guide on the Commission Communication C/2026/6132 of 10 September 2026: five priorities, 10 actions, HALEU and stable-isotope localisation, reducing dependence on Russia",
+      "refs": []
+    },
+    {
+      "date": "2026-09-11",
+      "action": "updated",
+      "guide": "ep_plenary_march_2026",
+      "title": "EP Plenary Sessions: 2026",
+      "summary": "QUICK FACTS rewritten to September: the 14-17 September Strasbourg part-session, the State of the Union address on Wednesday 16 September, and all fifteen 2026 part-sessions. The block had been frozen on 12 May and was telling Chat the current week was May.",
+      "refs": []
+    },
+    {
       "date": "2026-09-09",
       "action": "updated",
       "guide": "european_affordable_housing_plan",

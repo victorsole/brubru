@@ -700,7 +700,23 @@ async def get_hot_this_week_carriages(
         # so they must not surface in the widget.
         PROC_FILE_PATTERN = re.compile(r"^Procedure File:\s*\d{4}/\d+\([A-Z]+\)", re.IGNORECASE)
 
-        def is_meaningful(title: str | None) -> bool:
+        # Council-decision boilerplate (11 September 2026). Measured on that
+        # date: FIVE of the twelve slots were items like "Proposal for a COUNCIL
+        # DECISION on the position to be taken on behalf of the European Union
+        # in the ... Committee", with no procedure reference, while the Biotech
+        # Act -- voted in JURI that week -- fell outside the limit.
+        #
+        # These are routine international-agreement positions. They are real
+        # documents, so they are NOT dropped from the corpus, only from a widget
+        # whose entire job is to show a visitor what is worth clicking. The
+        # existing filters caught CELEX-only and "Procedure File:" placeholders
+        # and could not see this shape.
+        COUNCIL_BOILERPLATE = re.compile(
+            r"^(Proposal for a |Recommendation for a )?COUNCIL (IMPLEMENTING )?DECISION\b",
+            re.IGNORECASE,
+        )
+
+        def is_meaningful(title: str | None, proc_ref: str | None = None) -> bool:
             if not title:
                 return False
             t = title.strip()
@@ -710,11 +726,17 @@ async def get_hot_this_week_carriages(
                 return False
             if PROC_FILE_PATTERN.match(t):
                 return False
+            # Deliberately requires BOTH conditions. A Council decision that
+            # carries a procedure reference is a file a user can actually track
+            # and follow, so it stays; it is the untraceable boilerplate that
+            # goes. Dropping on the title alone would have hidden real files.
+            if COUNCIL_BOILERPLATE.match(t) and not (proc_ref or "").strip():
+                return False
             return True
 
         items = []
         for c in carriages:
-            if not is_meaningful(c.title):
+            if not is_meaningful(c.title, c.oeil_procedure_ref):
                 continue
             items.append({
                 "id": str(c.id),

@@ -128,7 +128,8 @@ async def mark_as_read(
     service = NotificationService(db)
 
     try:
-        success = service.mark_as_read(notification_id)
+        # user id is REQUIRED: without it this marked any user's notification read.
+        success = service.mark_as_read(notification_id, str(current_user.id))
 
         if not success:
             raise HTTPException(
@@ -189,7 +190,8 @@ async def delete_notification(
     service = NotificationService(db)
 
     try:
-        success = service.delete_notification(notification_id)
+        # user id is REQUIRED: without it this deleted any user's notification.
+        success = service.delete_notification(notification_id, str(current_user.id))
 
         if not success:
             raise HTTPException(

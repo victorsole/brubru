@@ -32,6 +32,7 @@ from schemas.document_generation import (
     GenerateEventPosterRequest,
     GeneratedDocument,
     ExportDocumentRequest,
+    GenerateCommitteeVoteBriefRequest,
 )
 from services.ai.document_generator import get_document_generator
 
@@ -226,6 +227,99 @@ async def generate_talking_points(
 
     except Exception as e:
         logger.error(f"Error generating talking points: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post(
+    "/committee-vote-brief",
+    response_model=GeneratedDocument,
+    summary="Generate a committee-vote reaction brief",
+    description="""**What it does**
+
+Writes the short brief a public-affairs team produces the afternoon a committee
+votes on a file they follow: what the committee did, what changed in the text,
+what it means for the organisation, and what to do next.
+
+**When to use it**
+
+After an EP committee votes on a file you track. It is not a position paper
+(your stance) and not an MEP briefing (addressed to a Member): it is a reaction
+to something that has just happened.
+
+**Input**
+
+`committee`, `file_title` and `vote_date` are required. Everything else is
+optional and the brief degrades honestly without it. Leave `outcome` empty when
+the result is not yet published: the brief will say so rather than guess, because
+a voting list proves a vote was scheduled, not how it went.
+
+**Try it**
+
+`POST /api/generate/committee-vote-brief` with
+`{"committee": "EMPL", "file_title": "EU Inc, the 28th regime",
+"procedure_reference": "2026/0074(COD)", "vote_date": "10 September 2026",
+"compromise_amendments": true, "organisation_name": "Your organisation"}`
+
+**You get back**
+
+The brief in markdown with five sections, its word count, the id it was saved
+under in My Documents, and the list of sections you can edit.
+"""
+)
+async def generate_committee_vote_brief(
+    request: GenerateCommitteeVoteBriefRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> JSONResponse:
+    """Generate a reaction brief for a committee vote."""
+    try:
+        logger.info(
+            f"User {current_user.id} generating committee-vote brief: "
+            f"{request.committee} / {request.procedure_reference or request.file_title}"
+        )
+
+        generator = get_document_generator()
+        document = await generator.generate_committee_vote_brief(request=request)
+
+        user_doc = UserDocument(
+            user_id=current_user.id,
+            document_type="note",
+            title=document.title,
+            content=document.content,
+            procedure_reference=request.procedure_reference,
+            policy_areas=[],
+            tags=["committee_vote_brief", "generated", request.committee.lower()],
+            doc_metadata={
+                "generated": True,
+                "generator_version": "1.0",
+                "committee": request.committee,
+                "vote_date": request.vote_date,
+                # Recorded so a later reader can tell a brief written without a
+                # published outcome from one written with it.
+                "outcome_known": bool(request.outcome),
+            }
+        )
+        db.add(user_doc)
+        db.commit()
+
+        logger.info(f"Committee-vote brief generated and saved: {user_doc.id}")
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "document_type": document.document_type,
+                "title": document.title,
+                "content": document.content,
+                "sections": document.sections,
+                "word_count": document.word_count,
+                "language": document.language,
+                "document_id": str(user_doc.id),
+                "editable_sections": document.editable_sections,
+            }
+        )
+
+    except Exception as e:
+        logger.error(f"Error generating committee-vote brief: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

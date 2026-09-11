@@ -62,6 +62,18 @@ for _i, _full in enumerate(
      "september", "october", "november", "december"], start=1):
     _MONTH_IDX[_full] = _i
     _MONTH_IDX[_full[:3]] = _i
+# "Sept" (11 September 2026). Europol's newsroom cards render the month as
+# "11 Sept 2026", and SEPTEMBER IS THE ONLY MONTH WHOSE NATURAL ABBREVIATION IS
+# FOUR LETTERS -- every other one is exactly three ("Jan", "Feb", "Aug", "Oct"),
+# and "May" is already whole. So the `_full[:3]` rule above covers eleven months
+# and quietly drops the twelfth.
+#
+# _DMY accepts [A-Za-z]{3,9}, so "Sept" MATCHED the regex and then missed the
+# lookup, and _text_date returned None rather than raising. Every Europol
+# listing date in September failed, in every year, and was masked because the
+# detail-page fallback reads the long form "9 September 2026" -- so the bug only
+# surfaced on items whose body fetch did not run.
+_MONTH_IDX["sept"] = 9
 _DMY = re.compile(r"(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})")
 
 

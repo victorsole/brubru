@@ -17,7 +17,7 @@ from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
 from enum import Enum
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 from sqlalchemy import and_, or_
 
 from models.tender import Tender, TenderProfile, TenderMatch
@@ -106,6 +106,11 @@ class TenderMatcher:
         self.db = db
         self.score_threshold = score_threshold
 
+        # (cpv_category, buyer_country) -> DG GROW regulatory risk, computed
+        # once per run rather than once per (profile, tender) pair. See the
+        # note at the call site in _calculate_match.
+        self._risk_cache: Dict[tuple, Dict[str, Any]] = {}
+
         # Default weights from enum, can be overridden
         self.weights = weights or {
             "cpv_match": MatchWeight.CPV_MATCH.value,
@@ -144,8 +149,23 @@ class TenderMatcher:
             logger.info("No active profiles to match")
             return 0
 
-        # Get open tenders with valid deadlines
-        tender_query = self.db.query(Tender).filter(
+        # Get open tenders with valid deadlines.
+        #
+        # xml_content and raw_json are DEFERRED (11 September 2026). Measured
+        # against production: the 8,513 open tenders total **150 MB**, of which
+        # **132 MB is xml_content** -- the raw TED notice, which no scoring
+        # function reads. Pulling it made this query marginal against the 2
+        # minute statement_timeout: it succeeded once and then failed with
+        # `canceling statement due to statement timeout` on the very next run.
+        # A query that only sometimes completes is not a base to schedule on.
+        #
+        # defer() rather than load_only(): a deferred column still loads on
+        # access, so if some scorer does touch one it costs a query instead of
+        # raising. load_only() would turn a missed attribute into a lazy load
+        # per row, which is the N+1 this same commit removed elsewhere.
+        tender_query = self.db.query(Tender).options(
+            defer(Tender.xml_content), defer(Tender.raw_json)
+        ).filter(
             and_(
                 Tender.status == "open",
                 or_(
@@ -166,17 +186,37 @@ class TenderMatcher:
 
         matches_created = 0
 
+        # Every (profile, tender) pair we already hold, in ONE query.
+        #
+        # This loop previously issued a SELECT per pair to ask "does this match
+        # exist". Measured 11 September 2026 against production: 29 active
+        # profiles x 8,522 open tenders = **247,138 round trips** for a single
+        # run, and it never gets cheaper, because a pair scoring BELOW the
+        # threshold creates no row and is therefore re-queried and re-scored on
+        # every subsequent run.
+        #
+        # That mattered the moment this was put on a scheduler: a nightly job
+        # holding a Session open across a quarter of a million remote round
+        # trips is not a fix, it is a new incident, and a Session held that long
+        # is exactly what `pool_pre_ping` cannot protect (it fires on CHECKOUT).
+        #
+        # One query, one set, membership in memory.
+        existing_pairs = {
+            (pid, tid)
+            for pid, tid in self.db.query(
+                TenderMatch.profile_id, TenderMatch.tender_id
+            ).filter(
+                TenderMatch.profile_id.in_([p.id for p in profiles])
+            ).all()
+        }
+        logger.info(
+            "Loaded %d existing match pairs in one query (was one per pair)",
+            len(existing_pairs),
+        )
+
         for profile in profiles:
             for tender in tenders:
-                # Skip if match already exists
-                existing = self.db.query(TenderMatch).filter(
-                    and_(
-                        TenderMatch.profile_id == profile.id,
-                        TenderMatch.tender_id == tender.id
-                    )
-                ).first()
-
-                if existing:
+                if (profile.id, tender.id) in existing_pairs:
                     continue
 
                 # Calculate match
@@ -398,19 +438,48 @@ class TenderMatcher:
             scores["procedure_match"] = 0  # Penalize frameworks if excluded
 
         # 8. DG GROW regulatory risk bonus/penalty (not weighted, direct adjustment)
+        #
+        # MEMOISED per matcher instance (11 September 2026). This was the real
+        # cost of a matching run, and it was invisible because it hides behind a
+        # bare `except`.
+        #
+        # `get_regulatory_risk_score` takes only the CPV category and the buyer
+        # country, so its answer does not depend on the profile at all -- yet it
+        # was called once per (profile, tender) PAIR and hit the database each
+        # time. Across 29 active profiles and 8,522 open tenders that is 247,138
+        # calls computing a few hundred distinct answers, and it made a single
+        # profile take four and a half minutes.
+        #
+        # The cache key is (cpv_category, country), matching what the function
+        # actually reads. Scoped to the instance, so a long-lived process never
+        # serves a stale risk score: a new run builds a new matcher.
+        cache_key = ((tender.cpv_main or "")[:2], tender.buyer_country)
+        if cache_key in self._risk_cache:
+            risk_data = self._risk_cache[cache_key]
+        else:
+            try:
+                from services.tenders.dg_grow_enrichment import DGGrowEnrichment
+                enrichment = DGGrowEnrichment(self.db)
+                risk_data = enrichment.get_regulatory_risk_score(
+                    tender.cpv_main or "", tender.buyer_country
+                )
+            except Exception:
+                risk_data = {"score_adjustment": 0}
+            self._risk_cache[cache_key] = risk_data
+        # Message building only. A missing count must not discard the score
+        # adjustment we just computed, so this no longer reassigns risk_data
+        # (the original single try/except did, which silently threw the
+        # adjustment away whenever the wording raised a KeyError).
         try:
-            from services.tenders.dg_grow_enrichment import DGGrowEnrichment
-            enrichment = DGGrowEnrichment(self.db)
-            risk_data = enrichment.get_regulatory_risk_score(
-                tender.cpv_main or "", tender.buyer_country
-            )
             if risk_data.get("risk_level") == "high":
-                barriers.append(f"High regulatory risk: {risk_data['tris_count']} active technical regulations, "
-                                f"{risk_data['tbt_count']} trade barriers in this sector")
+                barriers.append(
+                    f"High regulatory risk: {risk_data.get('tris_count', 0)} active technical "
+                    f"regulations, {risk_data.get('tbt_count', 0)} trade barriers in this sector"
+                )
             elif risk_data.get("risk_level") == "low" and risk_data.get("score_adjustment", 0) > 0:
                 opportunities.append("Stable regulatory environment in this sector")
-        except Exception:
-            risk_data = {"score_adjustment": 0}
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("risk message build failed (score kept): %s", type(exc).__name__)
 
         # Weighted aggregate over the dimensions that produced a real signal
         # (None = absent). Re-weight the remaining dimensions to sum to the

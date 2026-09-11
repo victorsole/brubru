@@ -637,6 +637,37 @@ class TenderService:
             Tender.publication_number == publication_number
         ).first()
 
+    def mark_match_viewed(self, match_id: int, user_id: str) -> Optional[TenderMatch]:
+        """Record that the user opened this match.
+
+        Added 11 September 2026. `is_viewed` was declared on the model, read by
+        the admin filters, typed in the frontend as `is_viewed: boolean` -- and
+        assigned by NOTHING. Across all 902 matches ever created it read 0, and
+        the only honest way to report that was "not instrumented", because no
+        code path could make it true.
+
+        Ownership is enforced in the query, not after it: a match_id belonging
+        to somebody else must be indistinguishable from one that does not exist.
+
+        Idempotent by intent. Opening a match twice is one view, so the write is
+        skipped when the flag is already set -- that keeps `updated_at` honest
+        as "when this match last changed" rather than "when it was last
+        rendered".
+        """
+        match = self.db.query(TenderMatch).filter(
+            and_(
+                TenderMatch.id == match_id,
+                TenderMatch.user_id == user_id
+            )
+        ).first()
+
+        if match and not match.is_viewed:
+            match.is_viewed = True
+            match.updated_at = datetime.utcnow()
+            self.db.commit()
+
+        return match
+
     def save_match(self, match_id: int, user_id: str) -> Optional[TenderMatch]:
         """Save a tender match for a user"""
         match = self.db.query(TenderMatch).filter(

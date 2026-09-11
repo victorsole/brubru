@@ -418,18 +418,35 @@ class NotificationService:
         notifications = self.db.execute(stmt).scalars().all()
         return list(notifications)
 
-    def mark_as_read(self, notification_id: str) -> bool:
+    def mark_as_read(self, notification_id: str, user_id: str) -> bool:
         """
         Mark notification as read.
 
+        OWNERSHIP IS ENFORCED IN THE QUERY (11 September 2026). This took only a
+        notification_id and selected on it alone. The endpoint resolved
+        `current_user` and then never used it, so any authenticated caller could
+        mark ANY user's notification read by id. `mark_all_as_read` two methods
+        below has always filtered on user_id; the pattern existed and was simply
+        not applied to the single-id operations.
+
+        A notification belonging to somebody else returns False, exactly like one
+        that does not exist: the caller must not be able to tell the difference,
+        or the 404 becomes an existence oracle.
+
         Args:
             notification_id: Notification UUID
+            user_id: The owner. Required.
 
         Returns:
             True if successful
         """
         try:
-            stmt = select(Notification).where(Notification.id == notification_id)
+            stmt = select(Notification).where(
+                and_(
+                    Notification.id == notification_id,
+                    Notification.user_id == user_id,
+                )
+            )
             notification = self.db.execute(stmt).scalar_one_or_none()
 
             if notification:
@@ -478,18 +495,29 @@ class NotificationService:
             self.db.rollback()
             return 0
 
-    def delete_notification(self, notification_id: str) -> bool:
+    def delete_notification(self, notification_id: str, user_id: str) -> bool:
         """
         Delete a notification.
 
+        OWNERSHIP IS ENFORCED IN THE QUERY (11 September 2026), same defect as
+        mark_as_read above and materially worse here: this one DESTROYS the row,
+        so any authenticated caller could delete any other user's notification by
+        id. Found while fixing the unread-state half; nothing had reported it.
+
         Args:
             notification_id: Notification UUID
+            user_id: The owner. Required.
 
         Returns:
             True if successful
         """
         try:
-            stmt = select(Notification).where(Notification.id == notification_id)
+            stmt = select(Notification).where(
+                and_(
+                    Notification.id == notification_id,
+                    Notification.user_id == user_id,
+                )
+            )
             notification = self.db.execute(stmt).scalar_one_or_none()
 
             if notification:
