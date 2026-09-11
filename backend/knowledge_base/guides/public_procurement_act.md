@@ -1,6 +1,15 @@
 # Public Procurement Act (COM(2026) 590)
 
 ## QUICK FACTS
+- **LATEST (8-9 September 2026).** **AG Biondi, Joined Cases C-271/25 and C-334/25 *Autovici***:
+  excluding an operator from public procurement **on national security grounds is compatible with EU
+  law, provided the principles and safeguards are respected** (CURIA press release No 122/26). An
+  Advocate General's opinion is a **forecast, not the ruling** — the Court usually follows but is not
+  bound.
+- **The Commissioner's own framing of the reform**, from Stéphane Séjourné on 9 September 2026:
+  **"900 pages today, about 200 tomorrow"**, and in the same thread **three directives becoming one
+  regulation, five procedures becoming three, and more than 26 sectoral texts consolidated**. Quote
+  it as the Commissioner's stated ambition, not as an enacted figure.
 - **Proposed 9 September 2026.** COM(2026) 590 final, procedure **2026/0265 (COD)**. Accompanying documents SEC(2026) 590, SWD(2026) 590 (subsidiarity grid), SWD(2026) 591 (impact assessment), SWD(2026) 592 (executive summary). Press release IP/26/1817.
 - **It is a Regulation replacing three Directives.** Full short title: Regulation **on public contracts and concessions**, **repealing Directives 2014/23/EU (concessions), 2014/24/EU (public sector) and 2014/25/EU (utilities)**. Moving from directive to regulation removes national transposition — that is the central design choice.
 - **Legal basis: Article 114 TFEU.** Ordinary legislative procedure. It is a **proposal**: not adopted, not in force, no application date. It "will be negotiated by the European Parliament and the Council before its adoption and entry into force".

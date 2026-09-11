@@ -148,6 +148,16 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#9b51e0',
     icon: 'mdi-lightbulb-on-outline',
   },
+  {
+    title: 'Public Procurement Act',
+    shortTitle: 'Procurement Act',
+    comReference: 'COM(2026) 590',
+    procedureRef: '2026/0265(COD)',
+    basePath: '/public-procurement-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#d97706',
+    icon: 'mdi-gavel',
+  },
 ];
 
 /**
