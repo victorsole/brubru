@@ -73,8 +73,10 @@ def residue(segments):
     return flagged, hits
 
 
-_PLACEHOLDER = re.compile(r"^\s*[\[<(]?\s*(ERROR|TODO|N/?A|PLACEHOLDER|UNTRANSLATED|FIXME)\b",
-                          re.I)
+# Case-SENSITIVE (11 Sep 2026): agent placeholders are written in capitals, and
+# with re.I the ordinary Catalan word "error" at the start of a sentence ("error
+# de classificació d'ingressos: ...") rejected a correct 663-segment resolution.
+_PLACEHOLDER = re.compile(r"^\s*[\[<(]?\s*(ERROR|TODO|N/?A|PLACEHOLDER|UNTRANSLATED|FIXME)\b")
 
 
 def quality_fail(src, tgt):
@@ -218,22 +220,26 @@ def _pending(limit, before_date, only=None):
     conn = _db()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        # Keyed on COALESCE(celex, oj_id), and EEA Joint Committee decisions are
+        # IN (11 Sep 2026). Their exclusion dated from July, when the scraper
+        # gave them wrong-sector CELEXes that 404ed; derive_celex now returns
+        # None for them, they resolve on Cellar by OJ id, and 98 sat untranslated.
         q = """
-            SELECT DISTINCT ON (e.celex) e.celex, e.oj_id, e.oj_date, e.title
+            SELECT DISTINCT ON (COALESCE(e.celex, e.oj_id))
+                   COALESCE(e.celex, e.oj_id) AS celex, e.oj_id, e.oj_date, e.title
               FROM oj_entries e
-             WHERE e.series = 'L' AND e.celex IS NOT NULL
-               AND e.title NOT ILIKE '%%EEA Joint Committee%%'
+             WHERE e.series = 'L' AND COALESCE(e.celex, e.oj_id) IS NOT NULL
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.celex = e.celex)
+                                WHERE ct.celex = COALESCE(e.celex, e.oj_id))
         """
         params = []
         if only:
-            q += " AND e.celex = ANY(%s)"
+            q += " AND COALESCE(e.celex, e.oj_id) = ANY(%s)"
             params.append(list(only))
         if before_date:
             q += " AND e.oj_date < %s"
             params.append(before_date)
-        q += " ORDER BY e.celex, e.oj_date DESC"
+        q += " ORDER BY COALESCE(e.celex, e.oj_id), e.oj_date DESC"
         cur.execute(q, params)
         rows = sorted(cur.fetchall(), key=lambda r: r['oj_date'])
         return [dict(r) for r in rows][:limit]
@@ -422,11 +428,21 @@ def cmd_render(args):
         with open(os.path.join(out_dir, 'index.html'), 'w', encoding='utf-8') as f:
             f.write(html)
 
+        # Same content gate as the daily driver: never register a page that
+        # does not hold the act (11 Sep 2026).
+        from pathlib import Path as _P
+        from scripts.translate_oj_daily_acts import _page_has_act_text
+        good, why = _page_has_act_text(_P(out_dir) / 'index.html')
+        if not good:
+            print(f'[SKIP] {celex}: content gate: {why}')
+            failed += 1
+            continue
+
         import_to_db(
             celex=celex, title_ca=translated.get('title', '') or celex,
             articles=len(parsed.get('articles', [])),
             recitals=len(parsed.get('recitals', [])),
-            size=len(html.encode('utf-8')), engine=ENGINE,
+            size=len(html.encode('utf-8')), engine=args.engine,
             file_type='main', oj_ref=meta.get('oj_id', ''), deployed=False,
         )
         rendered += 1
@@ -452,6 +468,8 @@ def main():
     r.add_argument('--jobs', default='/tmp/oj_cat_jobs')
     r.add_argument('--max-residue', type=float, default=0.05,
                    help='max fraction of segments carrying untranslated English')
+    r.add_argument('--engine', default=ENGINE,
+                   help="engine label stored on the row, e.g. 'sonnet-subagent'")
     r.set_defaults(func=cmd_render)
     a = ap.parse_args()
     return a.func(a)

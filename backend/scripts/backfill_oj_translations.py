@@ -53,6 +53,9 @@ _OJ_POSTFIX = [
     # Merger notices: "Case M.12161" is a case, not a house (80 titles, 11 Sep 2026).
     ("(Casa M.", "(Cas M."),
     ("(Case M.", "(Cas M."),
+    # The model writes (PESC) for 138 of 156 CFSP titles and keeps the English
+    # acronym on the rest (11 Sep 2026).
+    ("(CFSP)", "(PESC)"),
     ("Opinió del Comitè", "Dictamen del Comitè"),
     ("Opinió del Banc Central Europeu", "Dictamen del Banc Central Europeu"),
     ("Opinió del Tribunal de Comptes", "Dictamen del Tribunal de Comptes"),

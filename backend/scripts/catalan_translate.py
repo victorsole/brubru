@@ -798,6 +798,9 @@ GLOSSARY_CORRECTIONS = [
     ("a Article", "a l'article"),
     ("en Articles", "en els articles"),
     ("en Article", "en l'article"),
+    # The model keeps the English acronym on some CFSP titles: 119 act pages
+    # read "(CFSP)" against 1,371 with "(PESC)" (11 Sep 2026).
+    ("(CFSP)", "(PESC)"),
     # Wrong AINA outputs (Brubru Catalan standard, 24 March 2026)
     ("HA ACONSEGUIT", "HA ADOPTAT"),
     ("ha aconseguit", "ha adoptat"),
@@ -916,10 +919,20 @@ def _ensure_softcatala_model() -> str:
     return SOFTCATALA_MODEL_DIR
 
 
+# Preposition rules must start at a word boundary. As plain substrings, "a Articles"
+# also matched the tail of "referènci-a Articles", so a card read "es fa
+# referèncials articles 7 i 20" (C/2026/4362, 11 Sep 2026).
+_GLOSSARY_WORD_START = frozenset({"de Articles", "de Article", "a Articles", "a Article",
+                                  "en Articles", "en Article"})
+
+
 def _apply_glossary(text: str) -> str:
     """Apply Brubru Catalan legal glossary corrections."""
     for wrong, correct in GLOSSARY_CORRECTIONS:
-        text = text.replace(wrong, correct)
+        if wrong in _GLOSSARY_WORD_START:
+            text = re.sub(r"(?<![^\W\d_])" + re.escape(wrong), correct, text)
+        else:
+            text = text.replace(wrong, correct)
     return text
 
 

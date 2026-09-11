@@ -95,10 +95,10 @@ def _pending(limit: int, date: str | None):
               FROM oj_entries e
              WHERE e.series = 'L'
                AND COALESCE(e.celex, e.oj_id) IS NOT NULL
-               -- EEA Joint Committee decisions carry scraper-derived CELEXes in
-               -- the wrong sector (32026R... instead of 22026D...) and 404
-               -- everywhere; their cards keep the (working) OJ-id EUR-Lex link.
-               AND e.title NOT ILIKE '%%EEA Joint Committee%%'
+               -- EEA Joint Committee decisions are IN again (11 Sep 2026). They
+               -- were excluded in July for wrong-sector scraper CELEXes that
+               -- 404ed; derive_celex has returned None for them since 23 Jul, so
+               -- they key on oj_id and resolve on Cellar. 98 sat untranslated.
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
                                 WHERE ct.celex = COALESCE(e.celex, e.oj_id))
         """
