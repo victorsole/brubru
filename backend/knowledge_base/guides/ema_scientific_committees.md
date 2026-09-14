@@ -1,6 +1,7 @@
 # EMA Scientific Committees — 2026 Meeting Calendar
 
-QUICK FACTS:
+## QUICK FACTS
+
 - The European Medicines Agency (EMA), based in Amsterdam, runs monthly plenary meetings of its scientific committees. The three most relevant to the research-based pharmaceutical industry are CHMP, PRAC and COMP.
 - **CHMP** (Committee for Medicinal Products for Human Use) adopts opinions on marketing-authorisation applications, line extensions and safety referrals for human medicines, which the European Commission turns into EU-wide authorisations. **2026 plenary dates:** 26-29 January, 23-26 February, 23-26 March, 20-23 April, 18-21 May, 22-25 June, 20-23 July, 17-20 August (run by written procedure), 14-17 September, 12-15 October, 9-12 November, 7-10 December.
 - **PRAC** (Pharmacovigilance Risk Assessment Committee) assesses safety signals, periodic safety update reports, post-authorisation safety studies and referrals, and recommends EU-wide risk-minimisation measures. **2026 plenary dates:** 12-15 January, 9-12 February, 9-12 March, 7-10 April, 4-7 May, 8-11 June, 6-9 July, 3-6 August (written procedure), 31 August-3 September, 28 September-1 October, 26-29 October, 23-26 November.

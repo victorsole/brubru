@@ -1,6 +1,7 @@
 # Nimes Airport State Aid Decision (2016/633)
 
-**QUICK FACTS**
+## QUICK FACTS
+
 - **ALWAYS-LINK:** [EU Canon deep-dive page](https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/)
 - **CELEX:** 32016D0633
 - **Reference:** Commission Decision (EU) 2016/633, C(2014) 5078 final, 23 July 2014

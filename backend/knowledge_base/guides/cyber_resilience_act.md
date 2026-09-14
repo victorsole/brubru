@@ -1,7 +1,7 @@
 # Cyber Resilience Act (Regulation (EU) 2024/2847)
 
 ## QUICK FACTS
-- **LATEST (reviewed Friday 28 August 2026):** **Article 14 reporting obligations start applying on Friday 11 September 2026** — the first binding deadline in the Regulation. From that date a manufacturer must notify actively exploited vulnerabilities and severe incidents to the coordinating CSIRT **and** ENISA simultaneously, via the single reporting platform in Article 16, on a **24 hour / 72 hour / 14 day** clock. Article 69(3) makes this bite on **products already on the market** — it is not a new-products-only duty. Everything else in the Regulation waits until 11 December 2027.
+- **LATEST (reviewed Monday 14 September 2026):** **The Article 16 single reporting platform is LIVE.** ENISA deployed the initial operating capability of its CRA Single Reporting Platform on **Friday 11 September 2026**, the same day **Article 14 reporting obligations started applying**, the first binding deadline in the Regulation. From that date a manufacturer must notify actively exploited vulnerabilities and severe incidents to the coordinating CSIRT **and** ENISA simultaneously, through that platform, on a **24 hour / 72 hour / 14 day** clock. Article 69(3) makes this bite on **products already on the market**: it is not a new-products-only duty. Everything else in the Regulation waits until 11 December 2027. The platform is reached at https://portal.cra-srp.enisa.europa.eu/
 - Full name: Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 on horizontal cybersecurity requirements for products with digital elements and amending Regulations (EU) No 168/2013 and (EU) 2019/1020 and Directive (EU) 2020/1828 (Cyber Resilience Act)
 - Common name: Cyber Resilience Act (CRA)
 - CELEX: 32024R2847
@@ -11,7 +11,8 @@
 - Entry into force: the twentieth day following publication (10 December 2024)
 - **Applies from: 11 December 2027** (Article 71(2))
 - **Article 14 applies from: 11 September 2026** (Article 71(2), second subparagraph)
-- **Chapter IV, Articles 35 to 51, applied from: 11 June 2026** — notification of conformity assessment bodies, already live
+- **Chapter IV, Articles 35 to 51, applied from: 11 June 2026**, notification of conformity assessment bodies, already live
+- **Article 16 single reporting platform: operational since 11 September 2026**, established, operated and maintained by ENISA, at https://portal.cra-srp.enisa.europa.eu/
 - Type: Regulation (directly applicable, no transposition)
 - Sister acts: Cybersecurity Act (Reg (EU) 2019/881, ENISA + certification), NIS2 (Dir (EU) 2022/2555), AI Act (Reg (EU) 2024/1689)
 
@@ -23,8 +24,8 @@ conformity-assessment infrastructure exist before the substantive product requir
 | Date | What starts | Status |
 |---|---|---|
 | 11 June 2026 | Chapter IV (Arts 35-51): notification of conformity assessment bodies | **already applying** |
-| **11 September 2026** | **Article 14: manufacturer reporting of actively exploited vulnerabilities and severe incidents** | **the next deadline to fall** |
-| 11 December 2026 | Member States "shall strive to ensure" enough notified bodies exist (Art 43(2)) — a best-efforts target, not an obligation on companies | pending |
+| **11 September 2026** | **Article 14: manufacturer reporting of actively exploited vulnerabilities and severe incidents** | **applying; the Article 16 platform went live the same day** |
+| 11 December 2026 | Member States "shall strive to ensure" enough notified bodies exist (Art 43(2)), a best-efforts target, not an obligation on companies | pending |
 | 11 December 2027 | The Regulation as a whole: Annex I essential requirements, conformity assessment, CE marking, support period, technical documentation | pending |
 
 **The trap.** Article 69(2) says products placed on the market before 11 December 2027 are only
@@ -33,12 +34,22 @@ caught by the Regulation if they undergo a substantial modification after that d
 products already on the market**. A company that reads only Article 69(2) will conclude it has
 until December 2027 and will be wrong by fifteen months.
 
-## Article 14 — what actually has to be done from 11 September 2026
+## Article 14: what actually has to be done from 11 September 2026
 
 Two reportable events: an **actively exploited vulnerability** in the product, and a **severe
 incident having an impact on the security of the product**. Both go **simultaneously** to the
 CSIRT designated as coordinator and to **ENISA**, through the **single reporting platform**
 established under Article 16.
+
+That platform now exists. ENISA deployed the initial operating capability of the CRA Single
+Reporting Platform on 11 September 2026, the same day the Article 14 duties began to apply. A
+manufacturer files one notification: the CSIRT designated as coordinator that receives it passes
+the information to the national CSIRTs of the other Member States where the product is also
+available, and the notification is made available to ENISA at the same time. Reporting once
+replaces notifying each national authority separately. Open-source software stewards are brought in
+by Article 24(3), which applies from 11 December 2027, and voluntary reporting under Article 15 is
+planned for a later phase of the platform. Article 16(2) allows dissemination of a notification to
+be delayed in particularly exceptional circumstances.
 
 Three-stage clock, per event:
 
@@ -50,17 +61,17 @@ Three-stage clock, per event:
 
 "Becoming aware" starts the clock, not publication and not confirmation.
 
-## Scope — products with digital elements
+## Scope: products with digital elements
 
 The Regulation applies to products with digital elements made available on the market whose
 intended or reasonably foreseeable use includes a direct or indirect data connection to a device
 or network. It grades them:
 
-- **Default class** — self-assessment against the Annex I essential requirements.
-- **Important products with digital elements** — a higher cybersecurity risk because of the
+- **Default class**: self-assessment against the Annex I essential requirements.
+- **Important products with digital elements**: a higher cybersecurity risk because of the
   function they perform; split into Class I and Class II with progressively stricter conformity
   assessment routes.
-- **Critical products with digital elements** — the strictest route, capable of being made
+- **Critical products with digital elements**: the strictest route, capable of being made
   subject to mandatory European cybersecurity certification.
 
 **Open-source software stewards** are a distinct actor with a lighter regime, and are **exempt
@@ -85,13 +96,13 @@ and communicated between Member States through the Article 34 system of Regulati
 
 ## How it sits beside the neighbouring acts
 
-- **Cybersecurity Act, Reg (EU) 2019/881** — a *different* Regulation. It governs ENISA's mandate
+- **Cybersecurity Act, Reg (EU) 2019/881**: a *different* Regulation. It governs ENISA's mandate
   and the European cybersecurity certification framework. It does not carry the CRA's product
   obligations. See `cybersecurity_act`.
-- **NIS2, Dir (EU) 2022/2555** — obliges *entities* operating essential and important services;
+- **NIS2, Dir (EU) 2022/2555**: obliges *entities* operating essential and important services;
   the CRA obliges *products*. An organisation can be in scope of both, reporting an incident
   under NIS2 as an operator and under CRA Article 14 as a manufacturer.
-- **AI Act, Reg (EU) 2024/1689** — Article 15 cybersecurity requirements for high-risk AI systems
+- **AI Act, Reg (EU) 2024/1689**: Article 15 cybersecurity requirements for high-risk AI systems
   interact with the CRA where the AI system is itself a product with digital elements.
 - **Directive (EU) 2020/1828** (representative actions) is amended by the CRA; collective redress
   for CRA infringements starts 11 December 2027.
@@ -112,6 +123,11 @@ and communicated between Member States through the Article 34 system of Regulati
 - Regulation (EU) 2024/2847, Articles 13, 14, 16, 43, 64, 69, 71 and Annex I, read from the act
   itself via EUR-Lex CELEX 32024R2847 (verified 17 August 2026).
 - ELI permalink: http://data.europa.eu/eli/reg/2024/2847/oj
+- ENISA press release, "The CRA Single Reporting Platform is launched", 11 September 2026:
+  https://www.enisa.europa.eu/news/the-cra-single-reporting-platform-is-launched (read 14 September 2026)
+- ENISA single reporting platform topic page and guidance, including the FAQ updated 12 September
+  2026: https://www.enisa.europa.eu/topics/product-security/single-reporting-platform-srp
+- The platform itself: https://portal.cra-srp.enisa.europa.eu/
 
 ## Related Brubru guides
 

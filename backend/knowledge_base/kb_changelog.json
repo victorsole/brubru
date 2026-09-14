@@ -2,6 +2,94 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "eu_islands_insular_territories",
+      "title": "EU Islands and Insular Territories",
+      "summary": "The new outermost regions strategy adopted on 10 September 2026 under Article 349.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "latin_america_eu_relations",
+      "title": "EU-Latin America and Caribbean Relations",
+      "summary": "The EU-Ecuador sustainable investment facilitation agreement presented to the Council.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "GDPR and Data Protection",
+      "summary": "A national enforcement example: the French authority fined a company for failing to answer erasure requests.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "frontex_agency_overview",
+      "title": "Frontex",
+      "summary": "Irregular crossing detections fell 35 per cent year on year in the first eight months of 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "eu_energy_policy",
+      "title": "EU Energy Policy Framework",
+      "summary": "The auditors' findings on REPowerEU investment and renewable capacity delivery.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "european_court_of_auditors",
+      "title": "European Court of Auditors",
+      "summary": "Special report 21/2026 finds REPowerEU implementation needs a boost.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "batteries_regulation",
+      "title": "Batteries Regulation",
+      "summary": "Commission review concludes the waste battery recycling and material recovery targets remain fit for purpose.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "enisa_european_cybersecurity_agency",
+      "title": "ENISA",
+      "summary": "ENISA deployed and now operates the Cyber Resilience Act single reporting platform.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "cyber_resilience_act",
+      "title": "Cyber Resilience Act",
+      "summary": "The Article 16 single reporting platform went live on 11 September 2026, the day Article 14 began applying.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Interim review of the citric acid anti-dumping measures opened, running alongside the existing expiry review.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-14",
+      "action": "added",
+      "guide": "eu_india_trade_agreement",
+      "title": "EU-India Trade Agreement",
+      "summary": "New guide: the agreement presented to the Council for signature on 11 September 2026, with the full institutional path still pending.",
+      "refs": []
+    },
+    {
       "date": "2026-09-11",
       "action": "updated",
       "guide": "ep_plenary_march_2026",

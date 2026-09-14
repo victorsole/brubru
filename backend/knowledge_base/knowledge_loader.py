@@ -15135,6 +15135,55 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'european business wallet': ['digital_omnibus_package', 'energy_grids_package'],
     'european business wallets': ['digital_omnibus_package', 'energy_grids_package'],
     'business wallet': ['digital_omnibus_package', 'energy_grids_package'],
+
+    # --- EU-India trade agreement (presented to the Council 11 Sep 2026) ---
+    # Added 14 September 2026 with the new `eu_india_trade_agreement` guide.
+    # EVERY key here is MULTI-WORD by design. Matching is plain substring with no
+    # accent folding and no word boundaries, so a bare 'india' or 'inde' would be
+    # reckless: 'inde' alone hides inside independent, independence, index,
+    # indemnity, indemnisation, independiente, indeling and indiening across the
+    # six languages. Measured before adding, not assumed.
+    # Non-English forms are written BOTH accented and unaccented, in the phrasing
+    # people actually type, connectors included.
+    'eu india trade': ['eu_india_trade_agreement'],
+    'eu-india trade': ['eu_india_trade_agreement'],
+    'india trade agreement': ['eu_india_trade_agreement'],
+    'india trade deal': ['eu_india_trade_agreement'],
+    'india free trade agreement': ['eu_india_trade_agreement'],
+    'india fta': ['eu_india_trade_agreement'],
+    'eu india agreement': ['eu_india_trade_agreement'],
+    'accord commercial inde': ['eu_india_trade_agreement'],
+    'accord ue-inde': ['eu_india_trade_agreement'],
+    'accord de libre-echange inde': ['eu_india_trade_agreement'],
+    'accord de libre-échange inde': ['eu_india_trade_agreement'],
+    'acuerdo comercial india': ['eu_india_trade_agreement'],
+    'acuerdo ue-india': ['eu_india_trade_agreement'],
+    'acuerdo de libre comercio india': ['eu_india_trade_agreement'],
+    'acord comercial india': ['eu_india_trade_agreement'],
+    'acord ue-india': ['eu_india_trade_agreement'],
+    'acord de lliure comerc india': ['eu_india_trade_agreement'],
+    'acord de lliure comerç india': ['eu_india_trade_agreement'],
+    'accordo commerciale india': ['eu_india_trade_agreement'],
+    'accordo ue-india': ['eu_india_trade_agreement'],
+    'accordo di libero scambio india': ['eu_india_trade_agreement'],
+    'handelsakkoord india': ['eu_india_trade_agreement'],
+    'handelsovereenkomst india': ['eu_india_trade_agreement'],
+    'eu-india handelsakkoord': ['eu_india_trade_agreement'],
+    # --- EU Transparency Register: registration mechanics (added 14 Sep 2026) ---
+    # The parent guide transparency_register_eu is 15,889 chars against a 4,000
+    # injection cap, so Parts II and III of the official Guidelines (eligibility,
+    # how to register, responsibilities) never reached the model. Split into
+    # transparency_register_registration. Appended at the END deliberately: these
+    # two keys already exist earlier in the dict and the LAST occurrence wins,
+    # so this is a re-point, not a duplicate.
+    'transparency register': ['transparency_register_eu', 'transparency_register_registration', 'lobbying_methodology'],
+    'lobby register': ['transparency_register_registration', 'lobbying_methodology'],
+    'single registration principle': ['transparency_register_registration'],
+    'who must register eu lobby': ['transparency_register_registration'],
+    'reg number lobby': ['transparency_register_registration'],
+    'how to register as a lobbyist': ['transparency_register_registration'],
+    'transparency register guidelines': ['transparency_register_registration', 'transparency_register_eu'],
+    'interest representative eligibility': ['transparency_register_registration'],
 }
 
 

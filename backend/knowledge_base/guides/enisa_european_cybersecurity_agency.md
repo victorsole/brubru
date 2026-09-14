@@ -1,6 +1,7 @@
 # ENISA: European Union Agency for Cybersecurity
 
 ## QUICK FACTS
+- **LATEST (reviewed Monday 14 September 2026):** **ENISA's CRA Single Reporting Platform went live on Friday 11 September 2026**, the day Article 14 of the Cyber Resilience Act (Regulation (EU) 2024/2847) started applying. Article 16 of that Regulation makes ENISA responsible for establishing the platform and for managing and maintaining its day-to-day operation: a manufacturer reports once, the CSIRT designated as coordinator passes the notification to the other Member States concerned, and ENISA receives it at the same time. Reporting portal: https://portal.cra-srp.enisa.europa.eu/
 - **Full name:** European Union Agency for Cybersecurity (ENISA) -- the acronym is retained from the agency's original 2004 name (European Network and Information Security Agency)
 - **Founding act:** Regulation (EU) 2019/881 of 17 April 2019 (the Cybersecurity Act) gave ENISA a **permanent mandate** and a new role in EU cybersecurity certification; CELEX 32019R0881
 - **Predecessor mandate:** Regulation (EC) No 460/2004 (established the agency, 2004); most recently renewed under Regulation (EU) No 526/2013 before the 2019 Cybersecurity Act made the mandate permanent and repealed 526/2013
@@ -14,7 +15,7 @@
 - **ENISA Threat Landscape (ETL):** flagship annual report, most recent edition ENISA Threat Landscape 2025 (published October 2025), analysing thousands of reported incidents over the preceding 12 months; also publishes sectoral threat landscapes (e.g. public administration, health, transport)
 - **Cyber Europe exercises:** ENISA has organised the biennial "Cyber Europe" cross-border crisis-management exercise series since 2010, alongside smaller exercises such as BlueOLEx for executive-level crisis coordination
 - **Related bodies ENISA works alongside:** ECCC (European Cybersecurity Industrial, Technology and Research Competence Centre, Bucharest, Regulation (EU) 2021/887) runs cybersecurity funding programmes; CERT-EU protects EU institutions; ENISA itself has no funding-disbursement role
-- **Underpins:** NIS2 Directive implementation, the Cyber Resilience Act (Regulation (EU) 2024/2847, product security), the Cyber Solidarity Act (Regulation (EU) 2025/38, in force 4 February 2025, European Cybersecurity Alert System of national/cross-border cyber hubs), and DORA (Regulation (EU) 2022/2554, financial-sector operational resilience)
+- **Underpins:** NIS2 Directive implementation, the Cyber Resilience Act (Regulation (EU) 2024/2847, product security, whose Article 16 single reporting platform ENISA built and runs), the Cyber Solidarity Act (Regulation (EU) 2025/38, in force 4 February 2025, European Cybersecurity Alert System of national/cross-border cyber hubs), and DORA (Regulation (EU) 2022/2554, financial-sector operational resilience)
 - **Cybersecurity Act 2 (pending):** Commission proposal COM(2026)11, published 20 January 2026, to revise the 2019 Cybersecurity Act, including ENISA's mandate; procedure 2026/0011(COD); EP lead committee ITRE, rapporteur Marketa Gregorova (Greens/EFA, Czechia) -- see `cybersecurity_act` guide for the full legislative file
 
 ENISA is the EU's standing technical agency for cybersecurity. It does not regulate directly (it has no enforcement powers over companies or Member States) but it is the operational backbone that makes NIS2, the Cyber Resilience Act, the Cyber Solidarity Act and the EU cybersecurity certification framework function day to day: running the CSIRT secretariat, publishing the threat intelligence the rest of the EU cybersecurity architecture relies on, drafting certification schemes, and coordinating cross-border exercises.
@@ -38,18 +39,29 @@ ENISA advises the Commission, Council and Parliament on cybersecurity legislatio
 - Support to **EU-CyCLONe** (the European cyber crisis liaison network organisation for large-scale incident and crisis management at operational/political level).
 - Support to the **NIS Cooperation Group**, the strategic body steering NIS2 implementation across Member States.
 
-### 3. EU Cybersecurity Certification Framework (ECCF)
+### 3. The CRA Single Reporting Platform (Article 16)
+Article 16(1) of the Cyber Resilience Act requires a single reporting platform to be established by ENISA for the notifications under Articles 14 and 15, and puts the day-to-day management and maintenance of that platform with ENISA as well. ENISA is also responsible for the platform's security and for the technical and organisational measures protecting the information submitted. The architecture has to let Member States and ENISA run their own electronic notification end-points.
+
+ENISA deployed the initial operating capability on 11 September 2026, the day the Article 14 reporting obligations started to apply, and has said it will keep expanding the functionality over the following months on the basis of operational experience and user needs.
+
+How it works in practice: a manufacturer submits a single notification about an actively exploited vulnerability or a severe incident affecting a product with digital elements. The CSIRT designated as coordinator that first receives it disseminates the information to the other national CSIRTs in the Member States where the product is also available, and the notification is made available to ENISA simultaneously. Reporting once therefore replaces notifying each national authority separately. Article 16(2) allows dissemination to be delayed in particularly exceptional circumstances.
+
+Phasing at launch: manufacturers are covered from 11 September 2026. Open-source software stewards come in through Article 24(3), which applies from 11 December 2027. Voluntary reporting under Article 15 is planned for a later phase. ENISA publishes an FAQ, user manuals, registration and interface guidance for assigned representatives, a glossary, a tutorial video and a factsheet, the last of these in English and several other EU languages, and runs a dedicated help desk. Guidance sits at https://www.enisa.europa.eu/topics/product-security/single-reporting-platform-srp and the platform itself at https://portal.cra-srp.enisa.europa.eu/
+
+This is a rare case of ENISA operating a compliance system rather than advising on one: the agency has no enforcement power over manufacturers, but every Article 14 notification in the EU passes through infrastructure it builds and runs.
+
+### 4. EU Cybersecurity Certification Framework (ECCF)
 Title II of the Cybersecurity Act tasks ENISA with preparing candidate European cybersecurity certification schemes at the request of the Commission or the EU Cybersecurity Certification Group (composed of national certification authorities). Certified schemes create EU-wide recognised certificates for ICT products, services and processes, replacing fragmented national schemes. The first scheme adopted under this framework was **EUCC** (Common Criteria-based scheme for ICT products); work on a cloud services scheme (**EUCS**) and, since the 2025 amendment, managed security services has followed.
 
-### 4. Capacity building
+### 5. Capacity building
 Training, awareness campaigns (European Cybersecurity Month, run jointly with the Commission each October), support for national cybersecurity strategies, and skills initiatives connected to the Commission's Cybersecurity Skills Academy.
 
-### 5. Knowledge consolidation and foresight
+### 6. Knowledge consolidation and foresight
 - **ENISA Threat Landscape (ETL):** the agency's flagship annual report, drawing on open-source intelligence, anonymised Member State data and the ENISA Cyber Threat Landscape methodology to map the year's incident trends (e.g. ransomware, hacktivism, supply-chain attacks, AI-enabled phishing).
 - Sectoral threat landscape reports (public administration, health, transport, telecom, space).
 - Foresight work on emerging technologies (AI, post-quantum cryptography, 5G/6G).
 
-### 6. Exercises
+### 7. Exercises
 - **Cyber Europe:** biennial, large-scale, cross-border cyber crisis simulation series since 2010, involving public and private-sector participants from the EU and EFTA states plus EU institutions/agencies.
 - **BlueOLEx:** shorter executive-level exercise testing EU cybersecurity crisis-management coordination at the political/strategic tier.
 
@@ -86,6 +98,9 @@ Training, awareness campaigns (European Cybersecurity Month, run jointly with th
 
 - [ENISA: What We Do](https://www.enisa.europa.eu/about-enisa/what-we-do)
 - [ENISA: Topics](https://www.enisa.europa.eu/topics)
+- [ENISA: CRA Single Reporting Platform, topic page and guidance](https://www.enisa.europa.eu/topics/product-security/single-reporting-platform-srp)
+- [ENISA press release: The CRA Single Reporting Platform is launched, 11 September 2026](https://www.enisa.europa.eu/news/the-cra-single-reporting-platform-is-launched)
+- [CRA Single Reporting Platform, the reporting portal](https://portal.cra-srp.enisa.europa.eu/)
 - [Regulation (EU) 2019/881 (Cybersecurity Act) -- EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)
 - [ENISA Threat Landscape 2025](https://www.enisa.europa.eu/publications/enisa-threat-landscape-2025)
 - [Cyber Europe exercise series](https://www.enisa.europa.eu/topics/skills-and-competences-for-companies/cyber-europe)

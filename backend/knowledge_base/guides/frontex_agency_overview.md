@@ -1,6 +1,7 @@
 # Frontex: European Border and Coast Guard Agency
 
 ## QUICK FACTS
+- **LATEST (Monday 14 September 2026: IRREGULAR CROSSING DETECTIONS DOWN 35% IN JANUARY TO AUGUST 2026):** Frontex reported on 11 September 2026 that **detections of irregular border crossings** at the EU external borders fell by **35%** year on year in the first eight months of 2026, to **nearly 75 000**. These are preliminary detection counts and not a count of individual people: Frontex states that the same person may be detected several times, at different locations or on different occasions. August alone recorded some **10 700** detections, 38% fewer than August 2025. The Eastern Mediterranean (more than 24 200, down 25%) and the Central Mediterranean (around 19 400, down 55%) together accounted for almost 60% of all irregular entries. The Western Mediterranean was the only major route to rise (around 15 900, up 34%), and the Western African route fell most steeply (around 5 100, down 58%). Channel attempts detected on exit towards the United Kingdom, counted separately and not part of the EU entry total, fell by 43% to some 26 600. The totals exclude the large-scale movement of people from Morocco into Ceuta at the end of July 2026, most of whom returned without being registered. Source: https://www.frontex.europa.eu/media-centre/news/news-release/frontex-irregular-border-crossings-into-the-eu-down-1-3-in-first-8-months-of-2026-WWxc7M
 - Agency: Frontex, formally the European Border and Coast Guard Agency
 - Headquarters: Warsaw, Poland (Article 93(5) of the founding Regulation, per a formal Headquarters Agreement with Poland)
 - Legal basis: Regulation (EU) 2019/1896 of the European Parliament and of the Council of 13 November 2019 on the European Border and Coast Guard (OJ L 295, 14.11.2019, p. 1), repealing Regulations (EU) No 1052/2013 and (EU) 2016/1624
@@ -18,6 +19,34 @@
 - Accountability debates: Frontex has faced sustained scrutiny over alleged involvement in or awareness of pushbacks at external borders (notably the Aegean and Balkan routes), the adequacy of its fundamental rights safeguards, and the balance between its search-and-rescue notification duties and its border-control mandate. These are live, contested issues -- present multiple perspectives and avoid stating contested allegations as settled fact
 
 Frontex supports EU Member States and Schengen-associated countries in managing the external borders of the Schengen area and in tackling cross-border crime, while national authorities retain primary responsibility for their own stretches of border.
+
+## Irregular Crossing Detections, January to August 2026
+
+Frontex publishes monthly preliminary figures on irregular crossings at the external borders. The release of 11 September 2026 covers the first eight months of 2026.
+
+The unit of measurement matters when citing these numbers. Frontex counts **detections of irregular border crossings**, not persons: the Agency's own note states that the same person may cross the external border several times, in different locations or on different occasions, and each detection is counted. A Brubru answer should therefore say "detections of irregular crossings" rather than treating the figure as a headcount of arrivals. The data are preliminary, are compiled from what national authorities report, and are subject to later revision.
+
+| Route (1 January to 31 August 2026) | Detections | Change year on year |
+|---|---|---|
+| Total, entry into the EU | Nearly 75 000 | Down 35% |
+| Eastern Mediterranean | More than 24 200 | Down 25% |
+| Central Mediterranean | Around 19 400 | Down 55% |
+| Western Mediterranean | Around 15 900 | Up 34% |
+| Western African | Around 5 100 | Down 58% |
+| The Channel, on exit towards the UK (not in the EU entry total) | Some 26 600 | Down 43% |
+
+Route detail from the same release:
+
+- **Eastern Mediterranean**, the busiest route. The corridor from Libya to the Greek island of Crete was the most active over the period as a whole, but by July the land border with Türkiye had become the busiest section, ahead of the Aegean islands. Some 3 000 detections were recorded in August. Main nationalities detected: Afghan, Sudanese and Bangladeshi.
+- **Central Mediterranean**, the second-steepest fall of all routes. Libya remained the main departure hub at around two thirds of arrivals on the route, ahead of the Algerian and Tunisian corridors, with enforcement operations, detention campaigns and returns by the Libyan and Tunisian authorities suppressing departures. Main nationalities detected: Bangladeshi, Somali and Algerian.
+- **Western Mediterranean**, the only major route to increase. Algeria remained the main departure country, with the Balearic Islands and the Spanish mainland the principal destinations. Pressure surged in July to a three-year monthly high before easing in August, reflecting a shift of smuggling routes towards Algerian shores as controls tightened in Morocco and on neighbouring routes.
+- **Western African**, the steepest decline of all routes. Preventive measures by Mauritania, and more recently by Senegal in cooperation with Spain and the EU, have significantly reduced departures, though the flow remains volatile and an increasing share of boats set out from The Gambia, Senegal and Guinea-Bissau on longer and more dangerous journeys towards the Canary Islands.
+
+Three caveats belong with any citation of these figures. First, the totals **exclude** the large-scale movement of people from Morocco into Ceuta at the end of July 2026: Frontex expects no definitive total, because most of those who crossed returned to Morocco without being registered. Second, the Channel figure counts attempts detected on exit towards the United Kingdom, including both those who reached the UK and those prevented from leaving, so it does not form part of the EU entry total. Third, falling detections do not mean falling risk: the International Organization for Migration recorded more than 1 800 deaths in the Mediterranean so far in 2026.
+
+The period covered the first full summer under the Pact on Migration and Asylum, which introduces a single standardised screening process at the external borders. Frontex officers support Member States in establishing the nationality of arrivals, collecting biometric data and verifying documents. Some 3 800 officers were present at the external borders.
+
+Executive Director Hans Leijtens framed the trend as fragile rather than settled, noting that a quiet border can change within hours and that smuggling networks move and wait for an opening rather than disappearing when numbers fall.
 
 ## What Frontex Is and Is Not
 

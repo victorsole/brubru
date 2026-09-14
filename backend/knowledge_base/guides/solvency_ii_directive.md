@@ -1,30 +1,30 @@
 # Solvency II Directive
 
-<!-- QUICK FACTS
-instrument: Directive 2009/138/EC — Solvency II
-celex: 32009L0138
-oj: OJ L 335, 17.12.2009, p. 1
-legal_base: Articles 47(2) and 55 EC Treaty (now Articles 53(1) and 62 TFEU)
-type: Directive (recast)
-adopter: European Parliament and Council
-adopted: 25 November 2009
-transposition_original: 31 October 2012
-transposition_omnibus_ii: 31 March 2015 (Directive 2014/51/EU)
-application_date: 1 January 2016
-scope: all EU insurance and reinsurance undertakings (except grandfathered small undertakings and statutory social security schemes)
-pillar_1: Quantitative requirements -- technical provisions, own funds, SCR, MCR, investment rules
-pillar_2: Governance and supervisory requirements -- system of governance, ORSA, fit-and-proper, supervisory review
-pillar_3: Transparency and reporting -- SFCR (public annual report) and RSR (supervisory reporting)
-scr: Solvency Capital Requirement -- 99.5% Value-at-Risk over one-year period (Article 101(3))
-mcr: Minimum Capital Requirement -- 85% VaR one-year; linear function; must stay between 25% and 45% of SCR
-own_funds_tiering: Tier 1 (permanent + subordinate) must exceed 1/3 of SCR own funds and 1/2 of MCR own funds; Tier 3 capped at 1/3
-orsa: Own Risk and Solvency Assessment -- undertaking's own prospective assessment of overall solvency needs (Article 45)
-sfcr: Solvency and Financial Condition Report -- public annual disclosure (Article 51)
-eiopa: European Insurance and Occupational Pensions Authority (successor to CEIOPS)
-group_supervision: college of supervisors; group supervisor; Method 1 (consolidation) or Method 2 (deduction-aggregation)
-recast: replaces 13 directives repealed by Article 310 plus Directive 64/225/EEC on reinsurance freedom of establishment
-deep_dive_url: https://brubru.beresol.eu/eucanon/2009-138_solvency2/
--->
+## QUICK FACTS
+
+- **instrument:** Directive 2009/138/EC — Solvency II
+- **celex:** 32009L0138
+- **oj:** OJ L 335, 17.12.2009, p. 1
+- **legal_base:** Articles 47(2) and 55 EC Treaty (now Articles 53(1) and 62 TFEU)
+- **type:** Directive (recast)
+- **adopter:** European Parliament and Council
+- **adopted:** 25 November 2009
+- **transposition_original:** 31 October 2012
+- **transposition_omnibus_ii:** 31 March 2015 (Directive 2014/51/EU)
+- **application_date:** 1 January 2016
+- **scope:** all EU insurance and reinsurance undertakings (except grandfathered small undertakings and statutory social security schemes)
+- **pillar_1:** Quantitative requirements -- technical provisions, own funds, SCR, MCR, investment rules
+- **pillar_2:** Governance and supervisory requirements -- system of governance, ORSA, fit-and-proper, supervisory review
+- **pillar_3:** Transparency and reporting -- SFCR (public annual report) and RSR (supervisory reporting)
+- **scr:** Solvency Capital Requirement -- 99.5% Value-at-Risk over one-year period (Article 101(3))
+- **mcr:** Minimum Capital Requirement -- 85% VaR one-year; linear function; must stay between 25% and 45% of SCR
+- **own_funds_tiering:** Tier 1 (permanent + subordinate) must exceed 1/3 of SCR own funds and 1/2 of MCR own funds; Tier 3 capped at 1/3
+- **orsa:** Own Risk and Solvency Assessment -- undertaking's own prospective assessment of overall solvency needs (Article 45)
+- **sfcr:** Solvency and Financial Condition Report -- public annual disclosure (Article 51)
+- **eiopa:** European Insurance and Occupational Pensions Authority (successor to CEIOPS)
+- **group_supervision:** college of supervisors; group supervisor; Method 1 (consolidation) or Method 2 (deduction-aggregation)
+- **recast:** replaces 13 directives repealed by Article 310 plus Directive 64/225/EEC on reinsurance freedom of establishment
+- **deep_dive_url:** https://brubru.beresol.eu/eucanon/2009-138_solvency2/
 
 ## Context
 

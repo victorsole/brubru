@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 - **Topic:** European Court of Auditors -- external auditor of the EU, Statement of Assurance (DAS), special reports, discharge procedure
+- **LATEST (Monday 14 September 2026, THE REPOWEREU AUDIT IS PUBLISHED):** the ECA published **Special report 21/2026, "Implementation of the REPowerEU plan needs a boost"** on its own site on 9 September 2026 and in the Official Journal C series on **11 September 2026** (OJ reference C/2026/4844, CELEX 52026SA0021(01)). The auditors concluded that the EU has significantly reduced its dependence on Russian fossil fuels, but that the investment mobilised falls far short of the estimated EUR 300 billion needed by 2030, and that the plan lacks the governance tools and performance data needed to show reliably what it achieved. Five recommendations, all addressed to the Commission. Remember what this document is: a performance audit with non-binding recommendations, not a legal act, and it changes no obligation in EU law. Full entry under "Special Reports" below.
 - **Treaty basis:** Articles 285-287 TFEU; established by the Treaty of Brussels 1975, elevated to full EU institution status by the Maastricht Treaty 1992
 - **Seat:** Luxembourg, 12 rue Alcide De Gasperi, L-1615
 - **Composition:** College of 27 Members, one per Member State; appointed by Council (qualified majority) after consulting the European Parliament; renewable 6-year terms
@@ -157,6 +158,47 @@ Special Reports are the ECA's flagship performance audit product. Approximately 
 Special Reports are increasingly cited in EP legislative debates, Council working party discussions, stakeholder advocacy, and academic analysis. They represent first-rank independent intelligence on EU programme effectiveness and implementation gaps. Each Special Report is freely available in all official EU languages.
 
 **Finding Special Reports:** https://www.eca.europa.eu/en/search-publications -- filter by "Special Report" plus topic area plus year.
+
+#### Special report 21/2026: Implementation of the REPowerEU plan needs a boost
+
+The most recent Special Report of direct interest to energy and budget practitioners. It audits how the REPowerEU plan, the EU's May 2022 response to the energy crisis caused by Russia's invasion of Ukraine, has been managed and implemented across three strands: diversifying oil and gas supplies away from Russia, speeding up renewable production capacity, and strengthening cross-border interconnection. Be precise about what the document is. It is a performance audit carrying five non-binding recommendations addressed to the Commission. It amends no act, it creates no obligation for Member States, and it does not change the law.
+
+| Fact | Value |
+|------|-------|
+| Title | Special report 21/2026, "Implementation of the REPowerEU plan needs a boost" |
+| Published by the ECA | 9 September 2026 |
+| Published in the Official Journal, C series | 11 September 2026 |
+| OJ reference | C/2026/4844 |
+| CELEX | 52026SA0021(01) |
+| ELI | http://publications.europa.eu/resource/eli/C/2026/4844/oj |
+| Audit chamber | Chamber IV, regulation of markets and competitive economy, headed by ECA Member Petri Sarvamaa |
+| Audit led by | ECA Member Mihails Kozlovs |
+| Audit timeline | task adopted 11 July 2024; draft report sent to the Commission 30 April 2026; final report adopted after the adversarial procedure 24 June 2026; Commission replies received in all languages 27 July 2026 |
+| Audit scope | revised national energy and climate plans of 11 Member States, plus a sample of 27 recovery-plan measures (6 reforms, 21 investments) in Belgium, Italy, Lithuania, Poland and Romania |
+| Report page | https://www.eca.europa.eu/en/publications/SR-2026-21 |
+| Full report (EN, 40 pages) | https://www.eca.europa.eu/ECAPublications/SR-2026-21/SR-2026-21_EN.pdf |
+
+**What the auditors found**
+
+- Dependence on Russian fossil fuels has fallen significantly, driven by sanctions covering every fossil fuel except natural gas. Challenges persist: some Russian oil still reaches the EU indirectly through third countries, and some Member States still import non-negligible volumes of natural gas. The report notes that the new regulation it cites as Regulation 261/2026 establishes a legally binding progressive ban on Russian gas imports leading to a complete phase-out from the end of 2027, but imposes no direct penalty on Member States that fail to comply.
+- The money mobilised falls far short of the need. The Commission estimated in May 2022 that around EUR 300 billion of additional investment would be needed by 2030. Of the amount made available through the recovery facility, Member States committed only EUR 65 billion (22%) in their REPowerEU chapters, being EUR 25 billion in grants from ETS allowance auctions and EUR 40 billion in loans. No transfers were made from cohesion or rural development funds. After the last wave of plan amendments the committed total stood at EUR 54.3 billion (18%) in April 2026.
+- Neither the Commission nor the Member States could produce evidence to substantiate the assumption that national public and private investment will bridge the gap between what is committed and what is needed.
+- The contribution to renewable capacity is small. Recovery-facility measures in the REPowerEU chapters are expected to deliver at least 20 GW of additional renewable capacity, less than 20% of the additional 103 GW the plan envisaged (41 GW wind, 62 GW solar). Only 12 of 45 renewable measures had clear and measurable targets, totalling roughly 1.6 GW, about 1.6% of the 103 GW. Milestones and targets often track expenditure or numbers of contracts rather than capacity delivered. Funding went mainly to solar, with wind under-represented because of long permitting and delivery lead times.
+- Cross-border interconnection was largely a missed opportunity. The auditors identified only three interconnector measures across two Member States, one of which was later withdrawn, and eight Member States that had received a country-specific recommendation on interconnectors included no such measure. At the same time a broad definition of the criterion allowed Member States to classify 76% of their REPowerEU measures as cross-border or multi-country, far above the 30% target set by the amended recovery facility regulation.
+- Governance tools are too weak to steer delivery. Revised national energy and climate plans did not identify the investments needed or their funding sources, Commission recommendations on the draft plans are non-binding and were only partially addressed, and Poland had still not revised its plan. Four Member States had not submitted their full second biennial progress report, due in March 2025, by the end of 2025, and the Commission is not legally required to verify the reliability of the data Member States report.
+- The evidence base for judging achievement is weak. Two core objectives, reducing dependence on Russian fossil fuels and increasing interconnection capacity, are covered by no common indicator, so it remains unclear how the Commission intends to attribute any measured progress to the plan rather than to measures predating or unrelated to it.
+
+**The five recommendations, all addressed to the Commission**
+
+| No. | Recommendation | Target implementation date |
+|-----|----------------|---------------------------|
+| 1 | Strengthen the delivery tools of the Energy Union and Climate Action framework, so that national plans identify needed investments and funding sources with clear performance indicators, and so the Commission can enforce compliance and verify the reliability of reported information | when the Governance Regulation is revised |
+| 2 | Obtain comprehensive, timely and reliable annual information from Member States on the budgets and financing sources of all actions implementing the plan, so the financing gap is known | by the end of 2026 |
+| 3 | Ensure future EU funding for clean energy generation or grid reinforcement carries clear results-oriented targets explicitly linked to those objectives, realistic timelines and sufficient follow-up funding | when proposing future instruments of that kind |
+| 4 | Define clearly what makes a project genuinely multi-country, set individual targets for each participating Member State, and improve the management of key cross-border investments | when proposing future instruments supporting cross-border measures |
+| 5 | Develop performance indicators explicitly linked to the plan's objectives and ensure Member States apply them and report data meeting high quality and reliability standards | when amending the Governance Regulation, when proposing future instruments, or when adjusting the relevant reporting tools |
+
+**Advocacy angle:** recommendations 1 and 5 both point at the revision of the Governance Regulation, which makes that file the place where this audit becomes binding text, if it ever does. Recommendation 2 carries the only near-term date, the end of 2026. Clients in renewables, grids and interconnection now have an independent, citable source for the argument that the funding and the measurement of REPowerEU never matched its targets. Expect the report to surface in CONT scrutiny and in ITRE debates on post-2027 energy funding.
 
 ### Opinions
 

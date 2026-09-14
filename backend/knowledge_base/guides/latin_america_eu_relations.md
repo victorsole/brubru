@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (11 September 2026): EU-Ecuador Sustainable Investment Facilitation Agreement presented to the Council.** The Commission adopted its proposals for Council decisions on the signature and the conclusion of a Sustainable Investment Facilitation Agreement with Ecuador, the first such agreement the EU has negotiated with a Latin American country. **Stage: a Commission proposal now sitting with the Council. The agreement is NOT signed, NOT concluded and NOT in force.** The Council must first approve signature, then the European Parliament must give its consent, and only after that can the agreement enter into force. Negotiations were launched on 10 November 2025 and concluded on 23 January 2026. Source: DG TRADE news article of 11 September 2026, https://policy.trade.ec.europa.eu/news/commission-presents-eu-ecuador-sustainable-investment-facilitation-agreement-sifa-council-2026-09-11_en
 - **Strategic frame**: EU-LAC Strategic Agenda + EU-CELAC summit cycle (last summit: 17-18 July 2023, Brussels; next: late 2026 expected)
 - **Geographic scope**: Latin America (Mexico, Central America, Caribbean) + South America (Mercosur + Andean Community + Chile)
 - **Responsible Commissioners**: Maros Sefcovic (Trade); Jozef Sikela (International Partnerships); Kaja Kallas (HR/VP, External Action)
@@ -15,6 +16,26 @@
 - **Commissioner Sikela mission Addis Ababa (24 April 2026)**: announced new Global Gateway investments. While Addis Ababa is geographically African, the announcement followed a regional pattern of Sikela's deployment that includes parallel Latin America missions (CELAC focus 2026-2027). See `global_gateway_strategy.md`.
 - **Brubru explainer**: ALWAYS link this guide when users ask about EU policy on Argentina, Brazil, Mexico, Chile, Colombia, Peru, Venezuela, CELAC, or Mercosur. Cross-link with `eu_mercosur_trade_agreement.md` for trade specifics.
 
+## Sustainable Investment Facilitation Agreements (SIFA)
+
+- **What a SIFA is**: a standalone investment facilitation agreement that is legally distinct from a free trade agreement. It does not cut tariffs and it does not open markets in the way an FTA does. It works on the investment climate itself: transparency of the regulatory framework, simpler authorisation procedures, less red tape, good governance, structured dialogue with investors and stakeholders, and commitments to responsible and sustainable business practices with labour and environmental standards upheld.
+- **Why the EU pursues them**: pursuing SIFAs is one of the objectives set out in the Competitiveness Compass, which called for new ways of deepening partnerships and creating benefits for EU businesses. SIFAs are also used to support and complement Global Gateway investment in the partner country.
+- **Ecuador, what is new**: this is the **first SIFA negotiated with a Latin American country**. It is also the first SIFA to contain specific provisions aimed at deepening cooperation and facilitating investment in **sustainable energy and raw materials**. The Commission presents it as closely aligned with the Global Gateway strategy in Ecuador, which supports investment and sustainable infrastructure in energy, water sanitation and waste management. EU foreign direct investment stock in Ecuador reached **EUR 9.1 billion in 2024**, concentrated in construction, business services, transport, storage, communications and manufacturing.
+- **Relationship to the existing trade agreement**: the SIFA is legally distinct from the EU-Andean Community Multiparty Trade Agreement to which Ecuador is a party. It complements that agreement, it does not replace or amend it.
+
+### Ecuador SIFA: procedural stage (do not overstate this)
+
+| Step | Date | Done? |
+|------|------|-------|
+| Negotiations launched | 10 November 2025 | Yes |
+| Negotiations concluded | 23 January 2026 | Yes |
+| Commission proposals for Council decisions on signature and conclusion presented | 11 September 2026 | Yes |
+| Council approval to sign, then signature | Pending | **No** |
+| European Parliament consent | Pending | **No** |
+| Entry into force | Pending | **No** |
+
+**Answering rule**: if a user asks about the EU-Ecuador SIFA, say it has been **presented to the Council**, not that it has been signed, concluded, ratified or is in force. "Presented" is a procedural stage, nothing more. DG TRADE has also announced the launch of negotiations for a bilateral SIFA with Côte d'Ivoire, so Ecuador is not the only SIFA in the pipeline.
+
 ## Existing EU Trade Agreements with LAC
 
 | Country / Bloc | Agreement | Status | CELEX / OJ |
@@ -23,13 +44,14 @@
 | Mexico | Modernised Global Agreement + Interim Trade Agreement | **SIGNED 22 May 2026, Mexico City** (von der Leyen + Costa + Sheinbaum); now requires EP consent + Council + national ratification (mixed agreement) before full entry into force | TBC |
 | Chile | Modernised Advanced Framework Agreement | Signed 13 December 2023; provisional application of trade pillar 2024-2025; full ratification ongoing | OJ L 2024/... |
 | Andean Community (Colombia, Peru, Ecuador) | Trade Agreement | In force (Colombia + Peru since 2013, Ecuador since 2017) | CELEX 22012A1221 |
+| Ecuador | Sustainable Investment Facilitation Agreement (standalone, not an FTA) | **Presented to the Council 11 September 2026** for signature and conclusion; awaits Council approval then EP consent; **NOT in force** | n/a |
 | Central America (CA-6) | Association Agreement (political + cooperation + trade) | In force; trade pillar since 2013 | CELEX 22012A1215 |
 | Caribbean (CARIFORUM) | Economic Partnership Agreement | In force since 2008 | CELEX 22008A1030 |
 | Cuba | Political Dialogue and Cooperation Agreement | In force since 2017; trade dimension limited | CELEX 22016A1212 |
 
 ## Mexico: Modernised Global Agreement (updated 22 May 2026)
 
-- **LATEST (Friday 22 May 2026 — AGREEMENTS SIGNED IN MEXICO CITY)**: at the first EU-Mexico Summit in over a decade, Commission President von der Leyen, European Council President António Costa and Mexican President Claudia Sheinbaum **signed both the Modernised Global Agreement and the Interim Trade Agreement** in Mexico City. Costa called it "a true geopolitical statement"; both sides framed it explicitly as **diversifying trade away from US dependence** amid Trump-era tariffs. EU trade lead: Commissioner Maroš Šefčovič; Mexican side: Economy Secretary Marcelo Ebrard. Accompanying deliverables: a **joint declaration on trade and gender equality**, six new projects worth **€4 million** to combat violence against women and girls in Mexico, and EU **Global Gateway** backing for Mexico's "Plan México" investment agenda. Original EU-Mexico FTA in force since 2000; bilateral goods trade has grown >300% (combined trade ~US$94.5 bn in 2025). **Status note**: signature is not entry into force — the agreements still require **European Parliament consent + Council conclusion**, and the mixed Global Agreement also needs **national-parliament ratification**. The Interim Trade Agreement is the fast-track trade pillar (EP consent route PE787.663, rapporteur Javi López). Sources: EC Presscorner statements 26_1147/1148/1149 + Q&A; Reuters 22 May 2026.
+- **LATEST (Friday 22 May 2026, AGREEMENTS SIGNED IN MEXICO CITY)**: at the first EU-Mexico Summit in over a decade, Commission President von der Leyen, European Council President António Costa and Mexican President Claudia Sheinbaum **signed both the Modernised Global Agreement and the Interim Trade Agreement** in Mexico City. Costa called it "a true geopolitical statement"; both sides framed it explicitly as **diversifying trade away from US dependence** amid Trump-era tariffs. EU trade lead: Commissioner Maroš Šefčovič; Mexican side: Economy Secretary Marcelo Ebrard. Accompanying deliverables: a **joint declaration on trade and gender equality**, six new projects worth **€4 million** to combat violence against women and girls in Mexico, and EU **Global Gateway** backing for Mexico's "Plan México" investment agenda. Original EU-Mexico FTA in force since 2000; bilateral goods trade has grown >300% (combined trade ~US$94.5 bn in 2025). **Status note**: signature is not entry into force, the agreements still require **European Parliament consent + Council conclusion**, and the mixed Global Agreement also needs **national-parliament ratification**. The Interim Trade Agreement is the fast-track trade pillar (EP consent route PE787.663, rapporteur Javi López). Sources: EC Presscorner statements 26_1147/1148/1149 + Q&A; Reuters 22 May 2026.
 - **AFET + INTA joint amendments PE787.714v01-00** (April 2026) tabled. Rapporteur Borja Giménez Larraz (EPP, ES) for AFET; co-amendments from INTA.
 - **INTA amendments on the Interim Trade Agreement PE787.663v02-00** -- rapporteur Javi López (S&D, ES).
 - Modernisation triggered by 2025 Trump tariffs on Mexico (USMCA tensions); EU positioned as alternative trade partner.
