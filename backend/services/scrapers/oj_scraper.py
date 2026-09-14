@@ -41,8 +41,10 @@ _TAG_RE = re.compile(r"<[^>]+>")
 # Level 2 as well as 3 (11 Sep 2026): an item in a section with no sub-heading
 # ("Notices from Member States") carries its number in `section-level-2`, so
 # C/2026/4362 was on EUR-Lex's C-series page and never reached My OJ.
+# Level 1 too (14 Sep 2026): an act directly under "II Non-legislative acts",
+# with no sub-heading at all, carries it in `section-level-1` (L 2026/2081).
 _ROW_RE = re.compile(
-    r'<div class="section-level-[23]">\s*((?:[A-Z]/)?[0-9]{4}/[0-9]+)\s*</div>.*?'
+    r'<div class="section-level-[123]">\s*((?:[A-Z]/)?[0-9]{4}/[0-9]+)\s*</div>.*?'
     r'<a\s+href="([^"]+)"[^>]*>(.*?)</a>',
     re.S,
 )
@@ -231,7 +233,9 @@ def parse_daily_view(html: str, series: str) -> List[OjAct]:
     for m in _ROW_RE.finditer(html or ""):
         oj_number, href, title_html = m.group(1), m.group(2), m.group(3)
         title = _clean(title_html)
-        if not title:
+        # A corrigendum with no English change has that sentence as its only
+        # "title": nothing to show or translate.
+        if not title or re.fullmatch(r"The corrigendum does not concern the English version\.?", title):
             continue
         oj_id_m = _OJID_RE.search(href)
         oj_id = oj_id_m.group(1) if oj_id_m else None

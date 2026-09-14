@@ -115,7 +115,7 @@ async def _explain_pending(db, apply, only_dates=None):
             n += 1
     if apply:
         db.commit()
-    print(f"[EXPLAIN] generated {n}/{len(pending)} explanations via Mistral (cached)")
+    print(f"[EXPLAIN] generated {n}/{len(pending)} explanations via the cheap provider chain (see [OJ-EXPLAIN] log)")
     return n
 
 

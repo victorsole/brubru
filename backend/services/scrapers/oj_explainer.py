@@ -132,7 +132,7 @@ async def explain_batch(items: List[Dict[str, str]]) -> Dict[str, str]:
         return {}
     try:
         from services.ai.multi_provider_service import (
-            CerebrasProvider, MistralProvider,
+            CerebrasProvider, GeminiProvider, GroqProvider, MistralProvider,
         )
     except Exception as e:  # pragma: no cover
         logger.warning(f"[OJ-EXPLAIN] cannot import providers: {e}")
@@ -140,36 +140,43 @@ async def explain_batch(items: List[Dict[str, str]]) -> Dict[str, str]:
 
     # Cheap, open providers only. NEVER add Anthropic here: this runs over every
     # OJ act published and the whole point of the module is a capped cost.
-    candidates = [CerebrasProvider, MistralProvider]
-    provider = None
-    for P in candidates:
-        try:
-            cand = P()
-        except Exception as e:  # pragma: no cover
-            logger.warning(f"[OJ-EXPLAIN] {P.__name__} construct failed: {e}")
-            continue
-        if not cand.is_available:
-            logger.warning(f"[OJ-EXPLAIN] {P.__name__} has no key configured, trying next")
-            continue
-        # is_available only proves a key EXISTS. Mistral's key was valid while its
-        # per-minute allowance was zero, so the only honest test is a real call.
-        try:
-            probe = await cand.generate(
-                system_prompt="Reply with the single word OK.",
-                messages=[{"role": "user", "content": "ping"}],
-                max_tokens=8, temperature=0,
-            )
-        except Exception as e:
-            logger.warning(f"[OJ-EXPLAIN] {P.__name__} unusable ({type(e).__name__}: "
-                           f"{str(e)[:120]}), trying next")
-            continue
-        if probe is None or probe.message is None:
-            logger.warning(f"[OJ-EXPLAIN] {P.__name__} returned no message, trying next")
-            continue
-        provider = cand
-        logger.info(f"[OJ-EXPLAIN] using {P.__name__}")
-        break
+    # Cerebras LAST (14 Sep 2026): it is the chat's primary, and a 60-entry OJ day
+    # spent its per-minute quota and stopped the batch half done. A failure
+    # mid-batch now moves to the next provider instead of stopping.
+    candidates = [MistralProvider, GeminiProvider, GroqProvider, CerebrasProvider]
+    remaining = list(candidates)
 
+    async def _next_provider():
+        while remaining:
+            P = remaining.pop(0)
+            try:
+                cand = P()
+            except Exception as e:  # pragma: no cover
+                logger.warning(f"[OJ-EXPLAIN] {P.__name__} construct failed: {e}")
+                continue
+            if not cand.is_available:
+                logger.warning(f"[OJ-EXPLAIN] {P.__name__} has no key configured, trying next")
+                continue
+            # is_available only proves a key EXISTS. Mistral's key was valid while its
+            # per-minute allowance was zero, so the only honest test is a real call.
+            try:
+                probe = await cand.generate(
+                    system_prompt="Reply with the single word OK.",
+                    messages=[{"role": "user", "content": "ping"}],
+                    max_tokens=8, temperature=0,
+                )
+            except Exception as e:
+                logger.warning(f"[OJ-EXPLAIN] {P.__name__} unusable ({type(e).__name__}: "
+                               f"{str(e)[:120]}), trying next")
+                continue
+            if probe is None or probe.message is None:
+                logger.warning(f"[OJ-EXPLAIN] {P.__name__} returned no message, trying next")
+                continue
+            logger.info(f"[OJ-EXPLAIN] using {P.__name__}")
+            return cand
+        return None
+
+    provider = await _next_provider()
     if provider is None:
         logger.error("[OJ-EXPLAIN] no cheap provider usable (tried %s) — returning {} so acts "
                      "keep a null explanation; re-run sync_oj.py --explain once one recovers",
@@ -190,15 +197,23 @@ async def explain_batch(items: List[Dict[str, str]]) -> Dict[str, str]:
     for start in range(0, len(items), BATCH):
         chunk = items[start:start + BATCH]
         numbered = "\n".join(f"{i + 1}. {it['title']}" for i, it in enumerate(chunk))
-        try:
-            resp = await provider.generate(
-                system_prompt=_SYS,
-                messages=[{"role": "user", "content": numbered}],
-                max_tokens=60 * len(chunk) + 60,
-                temperature=0.3,
-            )
-        except Exception as e:
-            logger.warning(f"[OJ-EXPLAIN] {type(provider).__name__} generate failed ({e}); stopping batch")
+        resp = None
+        while provider is not None:
+            try:
+                resp = await provider.generate(
+                    system_prompt=_SYS,
+                    messages=[{"role": "user", "content": numbered}],
+                    max_tokens=60 * len(chunk) + 60,
+                    temperature=0.3,
+                )
+                break
+            except Exception as e:
+                logger.warning(f"[OJ-EXPLAIN] {type(provider).__name__} generate failed "
+                               f"({type(e).__name__}: {str(e)[:120]}); trying the next provider")
+                provider = await _next_provider()
+        if resp is None:
+            logger.error("[OJ-EXPLAIN] every provider failed; %d of %d titles left unexplained",
+                         len(items) - start, len(items))
             break
         text = resp.message or ""
         # Strict numbered-list parse (multi-item batches need this to map back).
