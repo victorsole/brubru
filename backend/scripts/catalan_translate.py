@@ -481,7 +481,8 @@ def _parse_generic_c_html(soup, html_path: str, celex: str = '') -> dict:
         for cand in paragraphs[:12]:
             if 20 < len(cand) < 500 and re.match(
                     r'^(Amendments? to\s+)?(UN\s+)?(ECE\s+)?(Regulation|Decision|'
-                    r'Directive|Recommendation|Agreement|Resolution)\b', cand, re.I):
+                    r'Directive|Recommendation|Agreement|Resolution|Information concerning|'
+                    r'Notice|Protocol|Corrigendum|Exchange of Letters)\b', cand, re.I):
                 # Resolution added 11 Sep 2026: the 13 EP discharge resolutions
                 # of 10 Sep otherwise took the bare key "202601577" as title.
                 title = cand
@@ -511,7 +512,11 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
     # letters (OJ L_202601998, 8 Sep 2026) parses as 8 article headings with
     # ZERO paragraphs, so an "articles is non-empty" test passes it through and
     # renders an empty page. Count the actual body text instead.
-    body = sum(len(a.get('paragraphs') or []) for a in (parsed.get('articles') or []))
+    # Real articles only: the annex and footnote pseudo-articles (ANX_*, NOTES) do
+    # not prove the act skeleton was read, and counting them sent the EP discharge
+    # decisions down the structured route with their citations lost.
+    body = sum(len(a.get('paragraphs') or []) for a in (parsed.get('articles') or [])
+               if a.get('identifier', '').startswith('ART_'))
     if body:
         return parsed
     from bs4 import BeautifulSoup
@@ -532,6 +537,45 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
         return generic
     print(f'[INFO] {celex or html_path}: no act skeleton, using generic flattener')
     return generic
+
+
+def _flatten_annex(anx) -> list:
+    """An OJ annex as ordered text lines: free paragraphs, and one line per LEAF
+    table row with its cells joined by " | ". Annexes nest layout tables inside
+    tables, so only rows without a nested row are emitted, and a paragraph is
+    emitted by itself only when it is not inside a leaf row."""
+    out = []
+
+    def leaf_row(tag):
+        return tag.name == 'tr' and tag.find('tr') is None
+
+    for el in anx.find_all(['p', 'tr']):
+        if el.name == 'tr':
+            if not leaf_row(el):
+                continue
+            cells = [c.get_text(' ', strip=True) for c in el.find_all(['td', 'th'], recursive=False)]
+            cells = [c for c in cells if c]
+            if cells:
+                out.append(' | '.join(cells))
+            continue
+        if 'oj-doc-ti' in (el.get('class') or []):
+            continue
+        row = el.find_parent('tr')
+        if row is not None and leaf_row(row):
+            continue
+        text = el.get_text(' ', strip=True)
+        if text:
+            out.append(text)
+    # Merge standalone point labels ("(a)", "1.") with the line that follows.
+    merged, i = [], 0
+    while i < len(out):
+        if re.fullmatch(r'\(?[a-z0-9ivx]{1,4}[.)]', out[i]) and i + 1 < len(out):
+            merged.append(f'{out[i]} {out[i + 1]}')
+            i += 2
+            continue
+        merged.append(out[i])
+        i += 1
+    return merged
 
 
 def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
@@ -577,19 +621,28 @@ def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
     if is_treaty:
         return _parse_treaty_html(soup, html_path, celex)
 
-    # Title: <p class="oj-doc-ti"> elements
-    title_els = soup.select('p.oj-doc-ti')
+    # Title: <p class="oj-doc-ti"> elements of the TITLE block only. Annex headings
+    # use the same class, so selecting every one glued "ANNEX I ..." onto the act's
+    # title on 228+ pages (14 Sep 2026).
+    title_els = soup.select('div[id^="tit_"] p.oj-doc-ti') or soup.select('p.oj-doc-ti')
     if title_els:
         result['title'] = ' '.join(el.get_text(strip=True) for el in title_els)
 
     # Preamble init: text before visas (usually "THE EUROPEAN PARLIAMENT AND THE COUNCIL...")
     # Look for the institutional formula
+    # The formula is an ALL-CAPS line ending in a comma, before the first "Having
+    # regard". The old test (text CONTAINS "European Parliament") matched title
+    # lines such as "... of the European Parliament and of the Council", so a title
+    # fragment was printed twice and "THE EUROPEAN COMMISSION," never (14 Sep 2026).
     for p in soup.find_all('p'):
-        text = p.get_text(strip=True)
-        if text and ('EUROPEAN PARLIAMENT' in text.upper() or 'THE COUNCIL' in text.upper()):
-            if 'Having regard' not in text and 'Whereas' not in text:
-                result['preamble_init'] = text
-                break
+        text = p.get_text(' ', strip=True)
+        if not text or p.find_parent('div', id=re.compile(r'^(tit|anx)_')):
+            continue
+        if text.startswith('Having regard'):
+            break
+        if text.endswith(',') and text.upper() == text and re.search(r'[A-Z]{4}', text) and len(text) < 200:
+            result['preamble_init'] = text
+            break
 
     # Visas: "Having regard to..." paragraphs
     for p in soup.find_all('p'):
@@ -609,6 +662,8 @@ def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
                 text = div.get_text(strip=True)
             if text:
                 result['recitals'].append(text)
+        if any(p.get_text(strip=True).rstrip(':') == 'Whereas' for p in soup.find_all('p')):
+            result['recitals_init'] = 'Whereas:'
     else:
         # Fallback: look for numbered paragraphs (1), (2), etc. after "Whereas:"
         in_recitals = False
@@ -634,7 +689,19 @@ def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
                 break
 
     # Articles: <p class="oj-ti-art"> within <div class="eli-subdivision">
-    article_headers = soup.select('p.oj-ti-art')
+    # Article headings QUOTED inside an annex (amending text, an annexed agreement)
+    # belong to the annex, which is flattened below; parsing them here too printed
+    # that text twice.
+    article_headers = [h for h in soup.select('p.oj-ti-art')
+                       if not h.find_parent('div', id=re.compile(r'^anx_'))]
+    # Likewise articles QUOTED inside an amending article ("the following Articles
+    # 495i to 495v are inserted") share the outer article's container; treated as
+    # articles, each received all of its paragraphs and 32026R1221 printed the same
+    # 61 paragraphs 15 times. A heading counts only if it opens its own container.
+    def _opens_container(h):
+        c = h.find_parent('div', class_='eli-subdivision')
+        return c is None or c.select_one('p.oj-ti-art') is h
+    article_headers = [h for h in article_headers if _opens_container(h)]
     for art_header in article_headers:
         art_text = art_header.get_text(strip=True)
         # Extract article number
@@ -685,6 +752,51 @@ def _parse_oj_html_inner(html_path: str, celex: str = '') -> dict:
         if text and text.startswith('Done at'):
             result['final'] = text
             break
+    # The signatory ("For the Commission / The President / Ursula VON DER LEYEN")
+    # sits in div.oj-signatory and was dropped (14 Sep 2026).
+    sig = soup.select_one('div.oj-signatory')
+    if result['final'] and sig:
+        lines = [p.get_text(' ', strip=True) for p in sig.find_all('p')]
+        lines = [l for l in lines if l]
+        if lines:
+            result['final'] = result['final'] + '\n' + '\n'.join(lines)
+    # "This Regulation shall be binding in its entirety ..." sits in the closing
+    # block before "Done at", outside every article, and was dropped.
+    if result['final']:
+        closing = soup.select_one('div.oj-final')
+        lead = []
+        if closing:
+            for p in closing.find_all('p'):
+                if p.find_parent('div', class_='oj-signatory'):
+                    continue
+                t = p.get_text(' ', strip=True)
+                if t.startswith('Done at'):
+                    break
+                if t:
+                    lead.append(t)
+        if lead:
+            result['final'] = '\n'.join(lead) + '\n' + result['final']
+
+    # Annexes: appended as pseudo-articles so the existing translate + render path
+    # carries them. They were never parsed: 9 of 16 acts on 14 Sep 2026 published
+    # 6-39% of their text, with no warning, the annex being the operative content.
+    for anx in soup.select('div[id^="anx_"]'):
+        if anx.find_parent('div', id=re.compile(r'^anx_')):
+            continue
+        heads = [p.get_text(' ', strip=True) for p in anx.select('p.oj-doc-ti')]
+        paras = _flatten_annex(anx)
+        if heads or paras:
+            result['articles'].append({
+                'identifier': f"ANX_{anx.get('id', '')[4:] or len(result['articles'])}",
+                'title': ' '.join(h for h in heads if h),
+                'paragraphs': paras,
+            })
+
+    # Footnotes (p.oj-note): the references the recitals cite. Never parsed.
+    notes = [p.get_text(' ', strip=True) for p in soup.select('p.oj-note')]
+    notes = [n for n in notes if n]
+    if notes:
+        result['articles'].append({'identifier': 'NOTES', 'title': 'Notes', 'paragraphs': notes})
 
     return result
 
@@ -1331,7 +1443,9 @@ def generate_html(translated: dict, celex: str, display_ref: str = '') -> str:
     # Build visas HTML
     visas_html = ''
     for visa in translated['visas']:
-        visas_html += f'<p class="visa">{visa},</p>\n'
+        # The source clause already ends in a comma; appending one printed ",," on
+        # every act page (14 Sep 2026).
+        visas_html += f'<p class="visa">{visa.rstrip().rstrip(",;")},</p>\n'
 
     # Build recitals HTML (with explicit numbering)
     recitals_html = ''
@@ -1480,7 +1594,7 @@ def generate_html(translated: dict, celex: str, display_ref: str = '') -> str:
 
 {articles_html}
 
-<div class="final-block">{translated['final']}</div>
+<div class="final-block">{translated['final'].replace(chr(10), '<br>')}</div>
 
 </div>
 

@@ -66,7 +66,10 @@ def residue(segments):
     """
     flagged = hits = 0
     for s in segments:
-        n = len(_EN_ONLY.findall(s or ""))
+        # Parenthetical English and URLs come from the source: "Αντιδήμαρχος
+        # Αμμοχώστου (Deputy Mayor of Famagusta)" held back a correct act (14 Sep 2026).
+        s = re.sub(r"\([^()]*\)|https?://\S+", " ", s or "")
+        n = len(_EN_ONLY.findall(s))
         if n:
             flagged += 1
             hits += n
@@ -106,10 +109,16 @@ def quality_fail(src, tgt):
         caps = sum(1 for w in words if w[:1].isupper())
         return caps / len(words) >= 0.6 or 'http' in t
 
+    # Letter-less rows (rate tables) are not prose. And an identical segment only
+    # counts as an untranslated COPY if it carries English-only words: biocide
+    # trade names in other EU languages ("Swing Color Odstranjivač plijesni bez
+    # klora") must stay identical, and 1,793 figure rows in one Solvency II annex
+    # plus 296 trade names in one biocide act were read as untranslated (14 Sep 2026).
     subst = [(a, b) for a, b in zip(src, tgt)
-             if len((a or '').split()) > 3 and not _is_name(a)]
+             if len((a or '').split()) > 3 and not _is_name(a) and re.search(r'[^\W\d_]', a or '')]
     if subst:
-        same = sum(1 for a, b in subst if a.strip() == (b or '').strip())
+        same = sum(1 for a, b in subst
+                   if a.strip() == (b or '').strip() and _EN_ONLY.search(a))
         if same / len(subst) > 0.20:
             return f'{same}/{len(subst)} segments identical to the English source'
 
@@ -229,10 +238,13 @@ def _pending(limit, before_date, only=None):
                    COALESCE(e.celex, e.oj_id) AS celex, e.oj_id, e.oj_date, e.title
               FROM oj_entries e
              WHERE e.series = 'L' AND COALESCE(e.celex, e.oj_id) IS NOT NULL
-               AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.celex = COALESCE(e.celex, e.oj_id))
         """
         params = []
+        # An explicit --only list is a request to (re)translate those acts, so it
+        # includes ones already registered (re-translation after an audit).
+        if not only:
+            q += """ AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
+                                      WHERE ct.celex = COALESCE(e.celex, e.oj_id))"""
         if only:
             q += " AND COALESCE(e.celex, e.oj_id) = ANY(%s)"
             params.append(list(only))

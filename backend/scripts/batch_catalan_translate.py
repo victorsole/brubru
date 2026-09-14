@@ -419,8 +419,13 @@ def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: 
                 existing.parent_celex = parent_celex
             if annex_label:
                 existing.annex_label = annex_label
-            if deployed:
-                existing.deployed_at = datetime.utcnow()
+            # A re-render replaces the page: record who translated it, and mark the
+            # deployed copy stale so the deploy loop pushes the new one. Neither was
+            # done, so the 14 Sep 2026 Haiku re-translation of 16 acts registered as
+            # "softcatala, already deployed" and would never have reached the site.
+            if engine:
+                existing.engine = engine
+            existing.deployed_at = datetime.utcnow() if deployed else None
         else:
             db.add(CatalanTranslation(
                 celex=celex, title_en=title_ca, title_ca=title_ca,

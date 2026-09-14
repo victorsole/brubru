@@ -339,7 +339,11 @@ def _page_has_act_text(path: Path) -> tuple[bool, str]:
         return True, f"structured, {chars} chars, {len(skeleton)} citations/recitals"
     substantive = [c for c in clean if len(c) > 200]
     chars = sum(len(c) for c in clean)
-    if len(substantive) < 3 or chars <= 1500:
+    # 2 x >200 and >800 chars (14 Sep 2026): the old 3 / 1,500 held back genuine
+    # short notices ("Information concerning the entry into force of ..."). Chrome
+    # is caught by the markers above whatever its length: 0 flattened pages carry
+    # them, and the lower bar admits 98 short protocols, corrigenda and notices.
+    if len(substantive) < 2 or chars <= 800:
         return False, f"thin body ({chars} chars, {len(substantive)} substantive paragraphs)"
     return True, f"{chars} chars, {len(substantive)} substantive paragraphs"
 
