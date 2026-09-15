@@ -357,7 +357,7 @@ async def cron_sync_hot_6h(
 ):
     """
     Hot-tier sync (every 6 hours): OEIL + EUR-Lex + Texts Adopted/Submitted + Commission Docs +
-    College agendas + Calendar + Cellar /recent.
+    College agendas + Calendar + Cellar /recent + eu_laws from Cellar.
 
     Cadence: 00:00 / 06:00 / 12:00 / 18:00 UTC. Sources where same-day freshness is a conversion lever.
     """
@@ -394,6 +394,8 @@ async def cron_sync_hot_6h(
     results["college_agendas"] = await _run_script_async("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
     results["calendar"] = await _run_script_async("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
     results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
+    # eu_laws had no recurring ingest until 15 Sep 2026 (the script above writes legislative_carriages).
+    results["eu_laws_cellar"] = await _run_script_async("eu_laws_cellar", "scripts/sync_eu_laws_from_cellar.py", ["--days", "14", "--apply"], timeout=900)
 
     logger.info(f"[CRON] hot-6h tier sync complete: {results}")
     return {"status": "success", "tier": "hot_6h", "results": results}
