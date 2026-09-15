@@ -2,8 +2,9 @@
 /api/v2/news — every EU body's news in one folder.
 
 A cross-body AGGREGATOR (ingests nothing): a query-time view over the news Brubru
-already keeps fresh in economy_items (agencies) and eu_news_items (Commission,
-Parliament, Council -- see _INSTITUTIONAL_NEWS), where "News" bundles item_type 'news' and
+already keeps fresh in economy_items (agencies) and eu_news_items (the institutions, the
+EEAS and the bodies' own newsrooms -- see _INSTITUTIONAL_NEWS; an item whose URL is
+already in economy_items is served once, from there), where "News" bundles item_type 'news' and
 'press_release' (latest news, press releases, stories, speeches and statements are
 all folded into 'news' at ingest). Same proprietary body/family picker as the
 events folder. The 5 mandatory datapoints. Scope: read:economy.
@@ -50,8 +51,9 @@ _ORDERS = {"recent": f"{_DATE_SORT} DESC NULLS LAST, id DESC",
 class NewsItem(BaseModel):
     id: Union[int, str] = Field(..., description=(
         "Stable Brubru item id (use on the detail endpoint). An INTEGER for agency "
-        "items and a UUID STRING for Commission / Parliament / Council items, which "
-        "live in a different store. Pass whichever you got through unchanged."))
+        "items and a UUID STRING for items from the institutional news store (the "
+        "Commission, Parliament, Council, EEAS and other bodies' own newsrooms). Pass "
+        "whichever you got through unchanged."))
     body_code: str = Field(..., description="Canonical body code the item belongs to.")
     body_name: Optional[str] = Field(None, description="Human-readable body name.")
     families: List[str] = Field(default_factory=list, description="Brubru policy families this body belongs to.")
@@ -61,7 +63,10 @@ class NewsItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical URL on the source website.")
     body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
-    document_date: Optional[datetime] = Field(None, description="The item's own published date.")
+    document_date: Optional[datetime] = Field(None, description=(
+        "The item's own published date, as the publisher states it. Null when the publisher "
+        "states none; it is never filled with the date Brubru captured the item (that is "
+        "`creation_date`)."))
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the item.")
 
 
@@ -113,7 +118,13 @@ def _build_where(codes, kinds, since, until, q):
     if since:
         where.append("coalesce(document_date, creation_date) >= :since"); params["since"] = since
     if until:
-        where.append("coalesce(document_date, creation_date) <= :until"); params["until"] = until
+        # `to` is "on/before this DATE", so the whole day is in. `<= :until` compared a
+        # timestamp with midnight at the START of that day and dropped everything later
+        # that day: measured 11 Sep 2026, 4,853 news rows carry a time of day, the ECB
+        # published 8 items on 24 Jul 2026 and `from=to=2026-07-24` returned 0, and the
+        # Commission's 26 items of 1 Jun returned 14.
+        where.append("coalesce(document_date, creation_date) < CAST(:until AS date) + 1")
+        params["until"] = until
     if q:
         where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     return " AND ".join(where), params
@@ -138,14 +149,23 @@ def _build_where(codes, kinds, since, until, q):
 # same fact, and `dpp_watch.py` already reports the same item appearing three
 # times across these two stores.
 #
-# INVARIANT: only bodies with ZERO news rows in economy_items may appear here, or
-# the union double-counts. `tests/test_v2_news_institutional_union.py` asserts it,
-# so if a Commission ingestor is ever added to sync_economy.py the test fails and
-# tells you to remove the entry rather than silently serving every item twice.
+# INVARIANT (replaced 15 September 2026): no URL is served by both halves.
 #
-# WHICH bodies belong here, decided 8 September 2026 by reading the rows rather than
-# the counts. Four bodies satisfied the invariant above and were candidates; only one
-# belongs, and the reasons the other three do not are the point:
+# The first invariant was per BODY: only bodies with zero news rows in economy_items
+# could appear here. Measured 11 Sep 2026 it did neither job. It served 274 duplicates
+# anyway (Commission-tagged rows whose URL is an economy_items news row of HaDEA 124,
+# CINEA 58, REA 47, EACEA 24), and it kept 2,077 official items out of the API because
+# their body also had SOME rows in economy_items (EEAS 719, EEA 500, EESC 343, ECB 89,
+# EASA 78...). So the rule is now per URL: `_DEDUP_SQL` drops an institutional row whose
+# `news_url_key` matches an economy_items news row (migration 232 adds the function and
+# the index that makes the lookup an index probe). The agency copy wins because it
+# carries the full scraped article; the institutional one carries a summary.
+# `tests/test_v2_news_institutional_union.py` asserts no URL is served twice.
+#
+# WHICH bodies belong here. Every official body in eu_news_items is admitted (15 Sep
+# 2026), keyed by its economy_bodies code so body_name, families and the `body` filter
+# work. The 8 September decision still stands for the three stores that are NOT
+# official news, and the reasons are the point:
 #
 #   fra      ADDED. 64 rows of genuine Fundamental Rights Agency news, all dated, zero
 #            news rows in economy_items. (Its scraper is separately broken: newest item
@@ -176,19 +196,53 @@ def _build_where(codes, kinds, since, until, q):
 # for a body that has 55. That produced two false positives when this list was first
 # measured. Compare on the code with '-' and '_' stripped before trusting the invariant.
 _INSTITUTIONAL_NEWS = {
+    # The first four, admitted 25 Aug and 8 Sep 2026 under the per-body rule.
     "commission": "COMMISSION",
     "parliament": "EP",
     "council": "COUNCIL",
     "fra": "FRA",
+    # Every other official body in eu_news_items, admitted 15 Sep 2026 under the per-URL
+    # rule. Codes follow economy_bodies, which punctuates differently (EU-OSHA -> eu_osha,
+    # EULISA -> eu_lisa). A body whose items are all in economy_items already (CEDEFOP
+    # 88/88, CJEU 110/110) adds nothing and costs nothing: the dedup removes every row.
+    "eeas": "EEAS", "eea": "EEA", "eesc": "EESC", "eib": "EIB", "cjeu": "CJEU",
+    "ecb": "ECB", "cedefop": "CEDEFOP", "easa": "EASA", "eit": "EIT",
+    "europol": "EUROPOL", "cor": "COR", "eiopa": "EIOPA", "esma": "ESMA",
+    "eppo": "EPPO", "frontex": "FRONTEX", "eba": "EBA", "euda": "EUDA",
+    "eurojust": "EUROJUST", "eu_osha": "EU-OSHA", "amla": "AMLA", "eige": "EIGE",
+    "ema": "EMA", "eu_lisa": "EULISA", "enisa": "ENISA", "eca": "ECA",
+    "euipo": "EUIPO", "ombudsman": "OMBUDSMAN", "srb": "SRB", "acer": "ACER",
+    "efca": "EFCA", "euaa": "EUAA", "cepol": "CEPOL", "ecdc": "ECDC",
+    "edps": "EDPS", "emsa": "EMSA", "efsa": "EFSA", "berec": "BEREC",
+    "etf": "ETF", "cpvo": "CPVO", "ela": "ELA", "cdt": "CDT", "echa": "ECHA",
+    "euspa": "EUSPA", "era": "ERA",
 }
 
+# eu_news_items stores that are NOT official news and must never be unioned in (see the
+# 8 September reasons above). Named so a test can assert they stay out.
+_EXCLUDED_EU_NEWS_INSTITUTIONS = ("OUTLET", "FUNDING", "EU")
+
 # eu_news_items uses its own item_type vocabulary; map it onto the v2 contract
-# (`news` | `press_release`). 'publication' is deliberately excluded: it is a
-# document, not news, and belongs to the publications endpoints.
+# (`news` | `press_release`). 'publication', 'report' and 'campaign' are deliberately
+# excluded: they are documents or campaign hubs, not news, and belong elsewhere.
+# 'statement' and 'speech' ARE news -- this module's docstring has always said so -- but
+# were missing from the list, which dropped the EEAS's 303 statements and 85 speeches
+# (15 Sep 2026). 'oped' stays out: an opinion piece is not in the documented contract.
 _EU_NEWS_KIND_SQL = (
     "CASE WHEN n.item_type = 'press' THEN 'press_release' ELSE 'news' END"
 )
-_EU_NEWS_SOURCE_TYPES = ["news", "press", "story"]
+_EU_NEWS_SOURCE_TYPES = ["news", "press", "story", "statement", "speech"]
+
+# An institutional row is served only if the agency half does not already serve its URL.
+# The item_type predicate is LITERAL on purpose: the index is partial on exactly this
+# predicate, and a bound parameter would not let the planner prove the match. It covers
+# BOTH agency news types whatever `kind` the caller asked for, so a row is either served
+# once or not at all and `kind=all` stays the sum of `kind=news` and `kind=press_release`.
+_DEDUP_SQL = (
+    "NOT EXISTS (SELECT 1 FROM economy_items e "
+    "WHERE e.item_type IN ('news', 'press_release') "
+    "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url))"
+)
 
 # Both halves must expose the SAME column types for UNION ALL, and the two id
 # spaces are different types: economy_items.id is an integer, eu_news_items.id is
@@ -223,7 +277,7 @@ def _institutional_sql(codes, kinds, since, until, q):
     ) + " END"
 
     where = ["n.institution = ANY(:i_insts)", "n.item_type = ANY(:i_srctypes)",
-             f"({_EU_NEWS_KIND_SQL}) = ANY(:i_kinds)"]
+             f"({_EU_NEWS_KIND_SQL}) = ANY(:i_kinds)", _DEDUP_SQL]
     params = {"i_insts": list(wanted.values()),
               "i_srctypes": _EU_NEWS_SOURCE_TYPES,
               "i_kinds": list(kinds)}
@@ -235,7 +289,9 @@ def _institutional_sql(codes, kinds, since, until, q):
     if since:
         where.append(f"{date_expr} >= :i_since"); params["i_since"] = since
     if until:
-        where.append(f"{date_expr} <= :i_until"); params["i_until"] = until
+        # Whole day inclusive, as in _build_where: an undated item falls back to
+        # created_at, a timestamp, which `<= :i_until` excluded on its own day.
+        where.append(f"{date_expr} < CAST(:i_until AS date) + 1"); params["i_until"] = until
     if q:
         # eu_news_items has no tsvector column, so this is ILIKE rather than
         # the FTS the economy half uses. Deliberately not silent about it: see
@@ -246,7 +302,18 @@ def _institutional_sql(codes, kinds, since, until, q):
     sql = (
         f"SELECT n.id::text AS id, {case_body} AS body_code, "
         f"{_EU_NEWS_KIND_SQL} AS item_type, n.title, n.summary, "
-        f"n.source_url AS public_url, {date_expr} AS document_date, "
+        # The publisher's date, or NULL. NOT `date_expr`, which is for filtering only.
+        #
+        # Until 11 Sep 2026 this projected COALESCE(news_date, created_at) AS
+        # document_date. Two consequences, both silent: /news/latest counts
+        # `document_date IS NULL` over this union, so it reported 13 undated items
+        # while eu_news_items held hundreds; and /news/all handed callers Brubru's
+        # INGEST time as the item's published date (131 of 460 undated rows that day).
+        # The economy half has always done this right: `_build_where` and `_DATE_SORT`
+        # fall back to creation_date to FILTER and SORT, and the payload reports
+        # document_date exactly as stored. The outer ORDER BY applies `_DATE_SORT` to
+        # both halves, and creation_date here IS created_at, so ordering is unchanged.
+        f"n.source_url AS public_url, n.news_date::timestamptz AS document_date, "
         "n.created_at AS creation_date, "
         # The real last-fetch anchor, added by migration 229 and stamped by all four
         # writers on every SIGHTING -- including rows they leave unchanged, which is
@@ -344,10 +411,10 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
                 "GET /api/v2/news/all?family=finance-economy&order=recent\n"
                 "GET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated "
-                "envelope. Each item carries the 5 datapoints. **`body_txt` / `body_html` are null on the list by default — pass `include_body=true` to get them in bulk**, or call `/api/v2/news/{id}` for one item. Agency items carry the full scraped article; Commission / Parliament / Council items carry the summary the institutional feed publishes, which is the fullest text held for them. "
+                "envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are null on the list by default — pass `include_body=true` to get them in bulk**, or call `/api/v2/news/{id}` for one item. Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them."
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
-                "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; Commission, Parliament and Council news is unioned in from the institutional news store, so this feed covers both. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
+                "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; the Commission, Parliament, Council, EEAS and 44 other bodies' own newsroom items are unioned in from the institutional news store, so this feed covers both; an article held in both stores is served once, from the economy store, which carries the full article. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
 async def list_news(
     request: Request,
     db: Session = Depends(get_db),
@@ -677,8 +744,8 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
                 "Live."))
 async def get_news(request: Request,
                    item_id: str = PathParam(..., description=(
-                       "Brubru item id from the list endpoint: an integer for an agency "
-                       "item, a UUID for a Commission / Parliament / Council item.")),
+                       "Brubru item id from the list endpoint: an integer for an item from "
+                       "the agency store, a UUID for an item from the institutional news store.")),
                    db: Session = Depends(get_db),
                    user: User = Depends(api_user_with_rate_limit)):
     # `item_id` is typed str, not int, because the institutional half of the feed
@@ -700,13 +767,17 @@ async def get_news(request: Request,
             r = db.execute(text(
                 f"SELECT n.id::text AS id, {case_body} AS body_code, {_EU_NEWS_KIND_SQL} AS item_type, "
                 "n.title, n.summary, n.source_url AS public_url, "
-            # `summary` is the fullest text eu_news_items holds; hardcoding NULL
-            # here meant a Commission item could never return a body from ANY
-            # route, list or detail. Reported by a partner integrating v2.
-            "n.summary AS body_txt, NULL AS body_html, "
-                "COALESCE(n.news_date::timestamptz, n.created_at) AS document_date, "
+            # The SAME body columns as the list (_institutional_sql). This read
+            # `summary` and a hardcoded NULL body_html, so one item showed a composed
+            # body with include_body=true on /all and a bare summary here (found in the
+            # 15 Sep 2026 audit). Migration 228 composed the body; serve it.
+            "coalesce(n.body_txt, n.summary) AS body_txt, n.body_html, "
+                # The publisher's date or NULL, never created_at: see _institutional_sql.
+                "n.news_date::timestamptz AS document_date, "
                 "n.created_at AS creation_date FROM eu_news_items n "
-                "WHERE n.id = :id AND n.institution = ANY(:i) AND n.item_type = ANY(:t)"),
+                # The same dedup as the list: an id the list never hands out must not
+                # resolve here either, or one article has two ids.
+                f"WHERE n.id = :id AND n.institution = ANY(:i) AND n.item_type = ANY(:t) AND {_DEDUP_SQL}"),
                 {"id": item_id, "i": list(_INSTITUTIONAL_NEWS.values()),
                  "t": _EU_NEWS_SOURCE_TYPES}).fetchone()
         except Exception:

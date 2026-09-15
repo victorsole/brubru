@@ -136,7 +136,7 @@ async def list_documents(
     if meeting_from:
         where.append("meeting_start_date >= :meeting_from"); params["meeting_from"] = meeting_from
     if meeting_to:
-        where.append("meeting_start_date <= :meeting_to"); params["meeting_to"] = meeting_to
+        where.append("meeting_start_date < CAST(:meeting_to AS date) + 1"); params["meeting_to"] = meeting_to
     where_sql = "WHERE " + " AND ".join(where) if where else ""
 
     total = int(db.execute(text(f"SELECT COUNT(*) FROM eu_comitology_documents {where_sql}"), params).scalar() or 0)

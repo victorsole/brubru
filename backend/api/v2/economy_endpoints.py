@@ -83,7 +83,7 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
         where.append(f"{_DATE_SORT} >= :since")
         params["since"] = since
     if until:
-        where.append(f"{_DATE_SORT} <= :until")
+        where.append(f"{_DATE_SORT} < CAST(:until AS date) + 1")
         params["until"] = until
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0

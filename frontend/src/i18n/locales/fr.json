@@ -4954,6 +4954,10 @@
       "oped": "Tribune",
       "report": "Rapport",
       "campaign": "Campagne",
+      "event": "Événement",
+      "video": "Vidéo",
+      "podcast": "Podcast",
+      "consultation": "Consultation",
       "other": "Autre"
     },
     "allInstitutions": "Toutes les institutions",

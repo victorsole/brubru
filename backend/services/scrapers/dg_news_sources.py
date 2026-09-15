@@ -109,21 +109,31 @@ EU_BODY_FEEDS = [
     {"institution": "EUROPOL", "url": "https://www.europol.europa.eu/rss"},
     {"institution": "FRONTEX", "url": "https://frontex.europa.eu/media-centre/news/news-release/feed"},
     {"institution": "EASA", "url": "https://www.easa.europa.eu/en/newsroom-and-events/news/feed.xml"},
-    {"institution": "ERA", "url": "https://www.era.europa.eu/rss.xml"},
     {"institution": "EUSPA", "url": "https://www.euspa.europa.eu/pressroom/press-releases/rss.xml"},
     {"institution": "EUDA", "url": "https://www.euda.europa.eu/news/home/rss.xml"},
     {"institution": "EIGE", "url": "https://eige.europa.eu/newsroom/news/rss.xml"},
     {"institution": "CEDEFOP", "url": "https://www.cedefop.europa.eu/en/news.rss"},
+    # ETF, ELA, EU-LISA, EFSA and SRB offer only a site-wide feed: every item is typed by
+    # services/news/feed_item_types.py (vacancies and procurement notices dropped).
     {"institution": "ETF", "url": "https://www.etf.europa.eu/rss.xml"},
     {"institution": "ELA", "url": "https://www.ela.europa.eu/rss.xml"},
-    {"institution": "EFCA", "url": "https://www.efca.europa.eu/rss.xml"},
-    {"institution": "EBA", "url": "https://www.eba.europa.eu/rss.xml"},
+    # ERA, EFCA and EBA removed 15 Sep 2026: their site-wide feeds carried no news at all
+    # (ERA section landing pages; EFCA videos, vacancies and tenders; EBA e-mail alert
+    # digests). Their news reaches /api/v2/news from economy_items.
     {"institution": "ESMA", "url": "https://www.esma.europa.eu/rss.xml"},
     {"institution": "EIOPA", "url": "https://www.eiopa.europa.eu/node/4816/rss_en"},
     {"institution": "EULISA", "url": "https://www.eulisa.europa.eu/news-and-events.rss"},
-    {"institution": "BEREC", "url": "https://www.berec.europa.eu/rss.xml"},
+    # BEREC: its two news section feeds, not the site-wide rss.xml (consultations, events,
+    # board composition pages).
+    {"institution": "BEREC", "url": "https://www.berec.europa.eu/en/export_news.xml/371"},
+    {"institution": "BEREC", "url": "https://www.berec.europa.eu/en/export_news.xml/378", "default_type": "press"},
     {"institution": "SRB", "url": "https://www.srb.europa.eu/en/rss"},
-    {"institution": "EESC", "url": "https://www.eesc.europa.eu/en/recent-content.rss"},
+    # EESC: the two SECTION feeds, never /en/recent-content.rss. That feed carries every
+    # content type on the site (events, agenda items, opinions, presentations, newsletters,
+    # a "test r" page) and holds only the last 20 of them, about one day, so it stored
+    # ~320 non-news rows as news (15 Sep 2026) while real news could scroll off before a sync.
+    {"institution": "EESC", "url": "https://www.eesc.europa.eu/en/news-media/news.rss"},
+    {"institution": "EESC", "url": "https://www.eesc.europa.eu/en/news-media/press-releases.rss", "default_type": "press"},
     {"institution": "EPPO", "url": "https://www.eppo.europa.eu/en/news.xml"},
     {"institution": "EMA", "url": "https://www.ema.europa.eu/en/news.xml"},
     {"institution": "EMSA", "url": "https://www.emsa.europa.eu/newsroom/latest-news.html?format=feed&type=rss"},

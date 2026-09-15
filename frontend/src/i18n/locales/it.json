@@ -4954,6 +4954,10 @@
       "oped": "Editoriale",
       "report": "Rapporto",
       "campaign": "Campagna",
+      "event": "Evento",
+      "video": "Video",
+      "podcast": "Podcast",
+      "consultation": "Consultazione",
       "other": "Altro"
     },
     "allInstitutions": "Tutte le istituzioni",

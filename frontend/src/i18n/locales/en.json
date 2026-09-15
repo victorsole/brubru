@@ -4954,6 +4954,10 @@
       "oped": "Op-ed",
       "report": "Report",
       "campaign": "Campaign",
+      "event": "Event",
+      "video": "Video",
+      "podcast": "Podcast",
+      "consultation": "Consultation",
       "other": "Other"
     },
     "allInstitutions": "All institutions",

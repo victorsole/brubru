@@ -43,7 +43,7 @@ def _list(db, item_type, *, q, since, until, order, collection, page, limit,
     if since:
         where.append("document_date >= :since"); params["since"] = since
     if until:
-        where.append("document_date <= :until"); params["until"] = until
+        where.append("document_date < CAST(:until AS date) + 1"); params["until"] = until
     if collection:
         where.append(_COLL_LIKE); params["coll"] = collection
     clause = " AND ".join(where)

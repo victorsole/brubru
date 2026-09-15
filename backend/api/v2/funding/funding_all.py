@@ -136,7 +136,7 @@ async def funding_all(
     if since:
         where.append("document_date >= :since"); params["since"] = since
     if until:
-        where.append("document_date <= :until"); params["until"] = until
+        where.append("document_date < CAST(:until AS date) + 1"); params["until"] = until
     clause = (" WHERE " + " AND ".join(where)) if where else ""
     total = db.execute(
         text(f"{_union_cte(False)} SELECT count(*) FROM all_funding{clause}"), params

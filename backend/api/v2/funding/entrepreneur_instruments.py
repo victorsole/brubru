@@ -18,7 +18,7 @@ derived `programme`, `instrument_family` and — the whole point — the
 from __future__ import annotations
 
 import fnmatch
-from datetime import date
+from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -172,7 +172,7 @@ async def entrepreneur_instruments(
     if programme:
         filters.append(_programme_condition(programme))
     if deadline_before:
-        filters.append(FtCallForProposals.deadline <= deadline_before)
+        filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_before, time.max))
     if q:
         like = f"%{q}%"
         filters.append((FtCallForProposals.title.ilike(like)) | (FtCallForProposals.description.ilike(like)))

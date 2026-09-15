@@ -13,7 +13,7 @@ W3 P2 — EP entity endpoints not yet exposed in v1.
 """
 
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -221,7 +221,7 @@ async def list_amendments(
     if published_from:
         filters.append(MEPAmendment.document_date >= published_from)
     if published_to:
-        filters.append(MEPAmendment.document_date <= published_to)
+        filters.append(MEPAmendment.document_date <= datetime.combine(published_to, time.max))
     if updated_from:
         filters.append(MEPAmendment.scraped_at >= updated_from)
     if q:
@@ -705,7 +705,7 @@ async def list_ep_documents(
     if published_from:
         aq = aq.filter(AmendmentDocument.document_date >= published_from)
     if published_to:
-        aq = aq.filter(AmendmentDocument.document_date <= published_to)
+        aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
     if updated_from:
         aq = aq.filter(AmendmentDocument.scraped_at >= updated_from)
 
@@ -741,6 +741,12 @@ async def list_ep_documents(
         cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if updated_from:
         cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
+    # The window applies to the date this branch serves as document_date. It was
+    # missing, so every published_from/published_to call returned all 575 work items.
+    if published_from:
+        cq = cq.filter(CommitteeWorkItem.vote_date >= published_from)
+    if published_to:
+        cq = cq.filter(CommitteeWorkItem.vote_date <= datetime.combine(published_to, time.max))
     c_total = cq.count()
     c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(limit * 4).all()
     for r in c_rows:
@@ -960,7 +966,7 @@ async def list_reports(
     if published_from:
         aq = aq.filter(AmendmentDocument.document_date >= published_from)
     if published_to:
-        aq = aq.filter(AmendmentDocument.document_date <= published_to)
+        aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
 
     total = aq.count()
     rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
@@ -1035,7 +1041,7 @@ async def list_opinions(
     if published_from:
         aq = aq.filter(AmendmentDocument.document_date >= published_from)
     if published_to:
-        aq = aq.filter(AmendmentDocument.document_date <= published_to)
+        aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
 
     total = aq.count()
     rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()

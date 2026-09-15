@@ -9,7 +9,7 @@ W5 P2 endpoints: /research-publications (unified), /officials, /tenders.
 """
 
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -123,7 +123,7 @@ async def list_research_publications(
     if published_from:
         filters.append(EPRSPublication.publication_date >= published_from)
     if published_to:
-        filters.append(EPRSPublication.publication_date <= published_to)
+        filters.append(EPRSPublication.publication_date <= datetime.combine(published_to, time.max))
     if updated_from:
         filters.append(EPRSPublication.last_updated >= updated_from)
     if q:
@@ -516,11 +516,11 @@ async def list_tenders(
     if deadline_from:
         filters.append(Tender.submission_deadline >= deadline_from)
     if deadline_to:
-        filters.append(Tender.submission_deadline <= deadline_to)
+        filters.append(Tender.submission_deadline <= datetime.combine(deadline_to, time.max))
     if published_from:
         filters.append(Tender.publication_date >= published_from)
     if published_to:
-        filters.append(Tender.publication_date <= published_to)
+        filters.append(Tender.publication_date <= datetime.combine(published_to, time.max))
     if updated_from:
         filters.append(Tender.updated_at >= updated_from)
     if q:

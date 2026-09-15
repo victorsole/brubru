@@ -137,7 +137,7 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
     if since:
         ew.append("document_date >= :since"); ep["since"] = since
     if until:
-        ew.append("document_date <= :until"); ep["until"] = until
+        ew.append("document_date < CAST(:until AS date) + 1"); ep["until"] = until
     if q:
         ew.append("search_vector @@ plainto_tsquery('english', :q)"); ep["q"] = q
     if specific_status:

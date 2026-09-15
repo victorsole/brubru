@@ -20,7 +20,7 @@ Not yet covered (no data source held): EaSI Microfinance, InvestEU.
 from __future__ import annotations
 
 import fnmatch
-from datetime import date
+from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -204,7 +204,7 @@ async def funding_startups(
     if deadline_from:
         filters.append(FtCallForProposals.deadline >= deadline_from)
     if deadline_to:
-        filters.append(FtCallForProposals.deadline <= deadline_to)
+        filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_to, time.max))
 
     query = db.query(FtCallForProposals).filter(and_(*filters))
     total = query.count()

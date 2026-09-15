@@ -9,7 +9,7 @@ Source-URL discipline: every row is required to have a row-specific source_url
 query layer so they cannot leak into responses.
 """
 
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -345,7 +345,7 @@ async def list_funding_opportunities(
     if deadline_from:
         filters.append(FundingOpportunity.deadline >= deadline_from)
     if deadline_to:
-        filters.append(FundingOpportunity.deadline <= deadline_to)
+        filters.append(FundingOpportunity.deadline <= datetime.combine(deadline_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
 

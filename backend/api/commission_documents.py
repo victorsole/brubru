@@ -135,7 +135,7 @@ def get_items(
         if date_to:
             try:
                 to_dt = datetime.strptime(date_to, "%Y-%m-%d")
-                query = query.filter(CommissionDocument.publication_date <= to_dt)
+                query = query.filter(CommissionDocument.publication_date <= to_dt.replace(hour=23, minute=59, second=59, microsecond=999999))
                 filters_applied['date_to'] = date_to
             except ValueError:
                 pass

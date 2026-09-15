@@ -124,7 +124,7 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
         if since:
             where.append("document_date >= :since"); params["since"] = since
         if until:
-            where.append("document_date <= :until"); params["until"] = until
+            where.append("document_date < CAST(:until AS date) + 1"); params["until"] = until
         if when == "upcoming":
             where.append("document_date >= :now"); params["now"] = now
         elif when == "past":

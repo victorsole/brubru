@@ -302,6 +302,41 @@ def parse_rss(xml_text: str, base_url: str, default_type: str) -> List[Dict]:
     return out
 
 
+def _fetch_page_text(url: str) -> Optional[str]:
+    try:
+        import httpx
+        r = httpx.get(url, timeout=30, follow_redirects=True, headers={"User-Agent": _UA})
+        return r.text if r.status_code == 200 else None
+    except Exception as e:
+        logger.info(f"[DG-NEWS] item page fetch failed {url}: {type(e).__name__}")
+        return None
+
+
+def _type_feed_items(institution: Optional[str], items: List[Dict]) -> List[Dict]:
+    """Type each item of a site-wide feed from services/news/feed_item_types.py: set the
+    type, drop what is not content (vacancies, procurement notices), and keep an item no
+    rule knows under the feed default, logged, rather than guess."""
+    from services.news.feed_item_types import SKIP, UNKNOWN, has_rules, item_type_for
+
+    if not has_rules(institution):
+        return items
+    kept, skipped, unknown = [], 0, []
+    for it in items:
+        outcome, how = item_type_for(institution, it["source_url"], fetch=_fetch_page_text)
+        if outcome == SKIP:
+            skipped += 1
+            continue
+        if outcome == UNKNOWN:
+            unknown.append(f"{it['source_url']} ({how})")
+        else:
+            it["item_type"] = outcome
+        kept.append(it)
+    if skipped or unknown:
+        logger.info(f"[DG-NEWS] {institution}: {skipped} non-content items dropped, "
+                    f"{len(unknown)} untyped kept as feed default: {unknown[:3]}")
+    return kept
+
+
 def scrape_source(src: Dict) -> List[Dict]:
     """Fetch + parse one news source into tagged item dicts."""
     kind = src.get("kind", "ecl")
@@ -320,7 +355,7 @@ def scrape_source(src: Dict) -> List[Dict]:
             it["entry_key"] = _canon_url(it["source_url"])
         if not items:
             logger.info(f"[DG-NEWS] 0 RSS items from {src['url']}")
-        return items
+        return _type_feed_items(src.get("institution"), items)
 
     spa = src.get("default_type") == "press" or "presscorner" in src["url"]
     html = fetch_html(src["url"], spa=spa)

@@ -47,25 +47,70 @@ def db():
 # The invariant that keeps the union honest
 # ---------------------------------------------------------------------------
 
-def test_no_body_is_served_from_both_stores(db):
-    """A body in _INSTITUTIONAL_NEWS must have ZERO news rows in economy_items.
+def test_no_url_is_served_by_both_stores(db):
+    """The invariant, per URL since 15 Sep 2026 (it was per body, and served 274
+    duplicates while hiding 2,077 official items). A URL may come from the agency
+    half OR the institutional half, never both. Fix a failure in _DEDUP_SQL or in
+    news_url_key (migration 232), not by removing bodies."""
+    from api.v2.news import _news_source_sql, _NEWS_TYPES
+    src, params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
+    both = db.execute(text(
+        f"SELECT count(*) FROM (SELECT public.news_url_key(public_url) k, "
+        "bool_or(id ~ '^[0-9]+$') AS agency, bool_or(id !~ '^[0-9]+$') AS inst "
+        f"FROM {src} u GROUP BY 1) s WHERE agency AND inst"), params).scalar()
+    assert both == 0, f"{both} URL(s) served by both stores"
 
-    The union does not deduplicate -- it cannot, because the two stores share no
-    key. Safety comes entirely from the two halves being disjoint. If someone
-    adds a Commission news ingestor to sync_economy.py, every Commission item
-    starts appearing twice, and this test is the thing that says so.
 
-    Fix by REMOVING the body from _INSTITUTIONAL_NEWS, not by weakening this.
-    """
-    rows = db.execute(text(
-        "SELECT body_code, count(*) n FROM economy_items "
-        "WHERE item_type IN ('news','press_release') AND body_code = ANY(:c) "
-        "GROUP BY body_code"), {"c": INSTITUTIONS}).fetchall()
-    assert rows == [], (
-        f"{[(r.body_code, r.n) for r in rows]} now have news in economy_items AND are "
-        "unioned in from eu_news_items, so those items are served twice. Remove them "
-        "from _INSTITUTIONAL_NEWS."
-    )
+def test_the_274_executive_agency_duplicates_are_gone(db):
+    """The concrete case the per-body rule missed: Commission-tagged rows whose URL is
+    an economy_items news row of an executive agency (HaDEA, CINEA, REA, EACEA)."""
+    from api.v2.news import _news_source_sql, _NEWS_TYPES
+    src, params = _news_source_sql({"commission"}, _NEWS_TYPES, None, None, None)
+    dup = db.execute(text(
+        f"SELECT count(*) FROM {src} u WHERE EXISTS (SELECT 1 FROM economy_items e "
+        "WHERE e.item_type IN ('news','press_release') "
+        "AND public.news_url_key(e.public_url) = public.news_url_key(u.public_url))"), params).scalar()
+    assert dup == 0, f"{dup} commission item(s) are still copies of agency news"
+
+
+def test_non_official_stores_stay_out():
+    """OUTLET is paywalled third-party journalism on a metered API; FUNDING has its own
+    folder; EU is a mislabel. See the 8 September reasons in the module."""
+    from api.v2.news import _EXCLUDED_EU_NEWS_INSTITUTIONS
+    assert not set(_INSTITUTIONAL_NEWS.values()) & set(_EXCLUDED_EU_NEWS_INSTITUTIONS)
+
+
+def test_every_official_institution_is_in_the_union(db):
+    """A body scraped into eu_news_items but not listed here is silently invisible to
+    the API. This fails when a new one appears, so it is added on purpose."""
+    from api.v2.news import _EXCLUDED_EU_NEWS_INSTITUTIONS
+    present = {r[0] for r in db.execute(text("SELECT DISTINCT institution FROM eu_news_items")).all()}
+    missing = present - set(_INSTITUTIONAL_NEWS.values()) - set(_EXCLUDED_EU_NEWS_INSTITUTIONS) - {None}
+    assert not missing, f"institutions in eu_news_items but not in the union: {sorted(missing)}"
+
+
+def test_statements_and_speeches_are_served_as_news(client, db):
+    from api.v2.news import _EU_NEWS_SOURCE_TYPES
+    assert {"statement", "speech"} <= set(_EU_NEWS_SOURCE_TYPES)
+    row = db.execute(text(
+        "SELECT n.id::text FROM eu_news_items n WHERE n.institution = 'EEAS' AND n.item_type = 'statement' "
+        "AND NOT EXISTS (SELECT 1 FROM economy_items e WHERE e.item_type IN ('news','press_release') "
+        "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url)) LIMIT 1")).fetchone()
+    if row is None:
+        pytest.skip("no EEAS statement outside economy_items")
+    d = client.get(f"/api/v2/news/{row[0]}")
+    assert d.status_code == 200 and d.json()["kind"] == "news" and d.json()["body_code"] == "eeas"
+
+
+def test_a_duplicate_id_is_not_served_by_the_detail_route(client, db):
+    """One article, one id: the institutional copy of an agency item must 404."""
+    row = db.execute(text(
+        "SELECT n.id::text FROM eu_news_items n WHERE n.institution = 'COMMISSION' "
+        "AND EXISTS (SELECT 1 FROM economy_items e WHERE e.item_type IN ('news','press_release') "
+        "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url)) LIMIT 1")).fetchone()
+    if row is None:
+        pytest.skip("no duplicate left to probe")
+    assert client.get(f"/api/v2/news/{row[0]}").status_code == 404
 
 
 def test_the_institutions_are_registered_bodies(db):
@@ -330,6 +375,115 @@ def test_the_detail_route_always_serves_a_body(client, scope):
         pytest.skip(f"no {scope} items")
     d = client.get(f"/api/v2/news/{lst[0]['id']}").json()
     assert (d.get("body_txt") or "").strip(), f"{scope} detail returns no body_txt"
+
+
+# ---------------------------------------------------------------------------
+# document_date is the publisher's date or null -- never the ingest time
+# ---------------------------------------------------------------------------
+# Found 11 Sep 2026: the institutional half projected COALESCE(news_date, created_at)
+# AS document_date. /api/v2/news/latest counts `document_date IS NULL` over the union,
+# so it reported 13 undated items while eu_news_items held hundreds, and /news/all
+# handed callers Brubru's ingest time as the item's published date.
+
+def test_the_institutional_projection_does_not_fill_the_date():
+    """Holds even on a day with no undated rows, when the data tests below can't bite."""
+    from api.v2.news import _institutional_sql, _NEWS_TYPES
+    sql, _ = _institutional_sql(None, _NEWS_TYPES, None, None, None)
+    projection = sql.split(" FROM eu_news_items", 1)[0]
+    assert "n.news_date::timestamptz AS document_date" in projection
+    assert "created_at) AS document_date" not in projection
+
+
+def test_the_union_never_serves_an_undated_row_with_a_date(db):
+    from api.v2.news import _news_source_sql, _NEWS_TYPES
+    src, params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
+    filled = db.execute(text(
+        f"SELECT count(*) FROM {src} u JOIN eu_news_items n ON n.id::text = u.id "
+        "WHERE n.news_date IS NULL AND u.document_date IS NOT NULL"), params).scalar()
+    assert filled == 0, f"{filled} undated institutional row(s) served with a date"
+
+
+def test_latest_counts_undated_rows_in_both_halves(client, db):
+    """Reconciled against the RAW columns, not against the union's own projection."""
+    from api.v2.news import _INSTITUTIONAL_NEWS, _EU_NEWS_SOURCE_TYPES
+    eco = db.execute(text(
+        "SELECT count(*) FROM economy_items WHERE item_type IN ('news','press_release') "
+        "AND document_date IS NULL")).scalar()
+    inst = db.execute(text(
+        "SELECT count(*) FROM eu_news_items WHERE news_date IS NULL "
+        "AND institution = ANY(:i) AND item_type = ANY(:t)"),
+        {"i": list(_INSTITUTIONAL_NEWS.values()), "t": _EU_NEWS_SOURCE_TYPES}).scalar()
+    lat = client.get("/api/v2/news/latest").json()
+    # A sync writing between the two reads can move this by a row or two; a gap the
+    # size of the institutional half is the defect.
+    assert abs(lat["undated_items_total"] - (eco + inst)) <= 2, (
+        f"/latest says {lat['undated_items_total']} undated; the stores hold "
+        f"{eco} (economy) + {inst} (institutional)")
+
+
+def test_an_undated_institutional_item_has_a_null_date_and_is_still_findable(client, db):
+    from api.v2.news import _INSTITUTIONAL_NEWS, _EU_NEWS_SOURCE_TYPES
+    code_for = {inst: code for code, inst in _INSTITUTIONAL_NEWS.items()}
+    row = db.execute(text(
+        "SELECT id::text AS id, institution, title, created_at FROM eu_news_items "
+        "WHERE news_date IS NULL AND institution = ANY(:i) AND item_type = ANY(:t) "
+        "ORDER BY created_at DESC LIMIT 1"),
+        {"i": list(_INSTITUTIONAL_NEWS.values()), "t": _EU_NEWS_SOURCE_TYPES}).fetchone()
+    if row is None:
+        pytest.skip("no undated institutional item in the store today")
+    detail = client.get(f"/api/v2/news/{row.id}").json()
+    assert detail["document_date"] is None, "the detail route fills the date"
+    assert detail["creation_date"] is not None
+    day = row.created_at.date().isoformat()
+    found = client.get("/api/v2/news/all", params={
+        "body": code_for[row.institution], "from": day, "to": day,
+        "q": row.title[:40], "limit": 100}).json()["data"]
+    match = [i for i in found if str(i["id"]) == row.id]
+    assert match, "an undated item is no longer found by a date window"
+    assert match[0]["document_date"] is None, "the list route fills the date"
+
+
+def test_to_includes_the_whole_day_for_items_with_a_time(client, db):
+    """`to` is documented as "on/before this date". A document_date of 10:25 on the day
+    was excluded by `<= :until`, which is midnight at the START of the day: the ECB's 8
+    items of 24 Jul 2026 came back as 0 for from=to=2026-07-24."""
+    row = db.execute(text(
+        "SELECT body_code, document_date::date AS d FROM economy_items "
+        "WHERE item_type IN ('news','press_release') AND document_date IS NOT NULL "
+        "AND document_date::time <> '00:00' ORDER BY document_date DESC LIMIT 1")).fetchone()
+    if row is None:
+        pytest.skip("no timed agency item")
+    from api.v2.news import _DEDUP_SQL, _EU_NEWS_SOURCE_TYPES
+    on_day = db.execute(text(
+        "SELECT count(*) FROM economy_items WHERE body_code = :b "
+        "AND item_type IN ('news','press_release') "
+        "AND coalesce(document_date, creation_date)::date = :d"), {"b": row.body_code, "d": row.d}).scalar()
+    # Since 15 Sep 2026 most bodies ALSO contribute their own newsroom rows from
+    # eu_news_items, so the day's total spans both halves. The first version of this
+    # test counted economy_items only and failed the moment EESC joined the union
+    # (2 agency + 2 institutional items on 15 Sep). Dedup reuses the production
+    # predicate on purpose: this test is about the date boundary, not dedup.
+    inst = _INSTITUTIONAL_NEWS.get(row.body_code)
+    if inst:
+        on_day += db.execute(text(
+            "SELECT count(*) FROM eu_news_items n WHERE n.institution = :i AND n.item_type = ANY(:t) "
+            f"AND {_DEDUP_SQL} AND COALESCE(n.news_date::timestamptz, n.created_at)::date = :d"),
+            {"i": inst, "t": _EU_NEWS_SOURCE_TYPES, "d": row.d}).scalar()
+    got = client.get("/api/v2/news/all", params={
+        "body": row.body_code, "from": row.d.isoformat(), "to": row.d.isoformat()}).json()["total"]
+    assert got == on_day, f"{row.body_code} {row.d}: {on_day} items on the day, from=to returned {got}"
+
+
+@pytest.mark.parametrize("scope", ["commission", "eeas"])
+def test_detail_and_list_serve_the_same_body(client, scope):
+    """One item, one body: the detail route read `summary` and NULL body_html while the
+    list (include_body=true) served the composed body."""
+    lst = client.get(f"/api/v2/news/all?body={scope}&days=3650&limit=20&include_body=true").json()["data"]
+    inst = [i for i in lst if isinstance(i["id"], str)]
+    if not inst:
+        pytest.skip(f"no institutional {scope} item")
+    d = client.get(f"/api/v2/news/{inst[0]['id']}").json()
+    assert (d["body_txt"], d["body_html"]) == (inst[0]["body_txt"], inst[0]["body_html"])
 
 
 def test_the_description_tells_callers_how_to_get_the_body():

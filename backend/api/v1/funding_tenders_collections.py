@@ -12,7 +12,7 @@ ships, these endpoints return honest empty (no fixtures).
 All queries filter is_test=False so any future fixture row never leaks.
 """
 
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -156,7 +156,7 @@ async def list_calls_for_proposals(
     if deadline_from:
         filters.append(FtCallForProposals.deadline >= deadline_from)
     if deadline_to:
-        filters.append(FtCallForProposals.deadline <= deadline_to)
+        filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
 
@@ -353,7 +353,7 @@ async def list_calls_for_tenders(
     if deadline_from:
         filters.append(FtCallForTenders.deadline >= deadline_from)
     if deadline_to:
-        filters.append(FtCallForTenders.deadline <= deadline_to)
+        filters.append(FtCallForTenders.deadline <= datetime.combine(deadline_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
 

@@ -3903,6 +3903,10 @@
       "oped": "Opinie",
       "report": "Rapport",
       "campaign": "Campagne",
+      "event": "Evenement",
+      "video": "Video",
+      "podcast": "Podcast",
+      "consultation": "Raadpleging",
       "other": "Overig"
     },
     "allInstitutions": "Alle instellingen",
