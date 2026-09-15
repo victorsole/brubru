@@ -2,6 +2,234 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "union_customs_code_reform",
+      "title": "Union Customs Code Reform",
+      "summary": "Council Position 10/2026 published OJ C 15 Sep; IMCO second-reading recommendation 38-2-5; plenary vote 16 Sep",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_commission_priorities_2024_2029",
+      "title": "European Commission Priorities 2024-2029",
+      "summary": "International Day of Democracy: joint Virkkunen-Kallas-McGrath statement and citizens' democratic resilience debate and panel",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "ela_agency_overview",
+      "title": "ELA: European Labour Authority",
+      "summary": "Fair labour mobility package (Social Security Pass, ELA strengthening, skills portability) on College tentative agenda 15 Sep 2026, hedged as planned",
+      "refs": [
+        "32019R1149"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "csam_regulation_online",
+      "title": "Combating Child Sexual Abuse Online",
+      "summary": "Watch line: child safety online item on College agenda 15 Sep 2026, not linked until published",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "Children, Social Media and Age Limits in the EU",
+      "summary": "Child safety online on College tentative agenda 15 Sep 2026 (hedged, not yet adopted); Manon Aubry position signal attributed",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "added",
+      "guide": "industrial_emissions_directive",
+      "title": "Industrial Emissions Directive 2.0",
+      "summary": "New guide on Directive (EU) 2024/1785 (scope, BAT-AEL and performance limits, transformation plans, penalties, compensation, transitional dates) and the Commission Q&A of 15 Sep 2026",
+      "refs": [
+        "32024L1785",
+        "32010L0075",
+        "31999L0031",
+        "32024R1244",
+        "52026XC04834",
+        "52025PC0986"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Expiry reviews on cold-rolled stainless steel (India/Indonesia; China/Taiwan), registration of Chinese alkaline battery imports, bioethanol surveillance extended to 2029",
+      "refs": [
+        "52026XC04857",
+        "52026XC04830",
+        "32026R2049",
+        "32026R2047"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Council Position (EU) No 10/2026 and statement of reasons in OJ C (15 Sep 2026), IMCO second-reading recommendation 38-2-5, plenary vote scheduled 16 Sep, staged Hub dates, second-reading rules",
+      "refs": [
+        "52026AG0010(01)",
+        "52026AG0010(02)",
+        "2023/0156(COD)"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "affordable_housing_recommendation",
+      "title": "Commission Recommendation on housing affordability and supply",
+      "summary": "OJ publication as Recommendation (EU) 2026/2069 (15 Sep 2026) with a point-by-point table of the 16 operative recommendations",
+      "refs": [
+        "32026H2069"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "PCI/PMI call opened 14 Sep 2026 (deadlines 13 Nov and 4 Dec), webinar 30 Sep, Council working-party pushback reported",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "ep_plenary_march_2026",
+      "title": "EP Plenary Sessions: 2026",
+      "summary": "14-17 Sep part-session: opening agenda changes, day-by-day highlights, Carney formal sitting Thu 11:30",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_commission_transparency_and_college_agenda",
+      "title": "EU Commission Transparency: College Agenda",
+      "summary": "College pipeline refreshed from SEC(2026) 2578 and 2577 and OJ(2026) 2577: 15 Sep to 28 Oct items, 9 Sep adoptions, slippage",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_arctic_policy",
+      "title": "EU Arctic Policy and the 2026 Strategy Update",
+      "summary": "European Arctic Summit Rovaniemi 14 Sep; Kallas: new strategy with security at its core in October; College agenda lists New Arctic Strategy 20 Oct (tbc); EU-Greenland declaration",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_canada_relations",
+      "title": "EU-Canada Relations",
+      "summary": "Carney formal address to Parliament confirmed Thu 17 Sep 11:30; EP Ottawa antenna office; von der Leyen meeting 16 Sep; next Canada-EU Summit 29-30 Oct",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_corporate_tax_policy_2026",
+      "title": "EU Corporate Tax Policy 2026",
+      "summary": "JRC article (10 Sep 2026): public country-by-country reporting cut banks' tax haven subsidiaries by about a third",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_clp_regulation_classification_labelling",
+      "title": "CLP Regulation",
+      "summary": "JRC article (9 Sep 2026) on the metal release protocol for grouping and read-across of metals",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "reach_chemicals_regulation",
+      "title": "REACH and EU Chemicals Regulation",
+      "summary": "JRC article (9 Sep 2026) on the life cycle perspective for safety in the SSbD framework",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_livestock_strategy_protein_plan",
+      "title": "EU Livestock Strategy and Protein Action Plan",
+      "summary": "JRC study (8 Sep 2026): limits of legume-based protein self-sufficiency in the EU and UK",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_e_evidence_regulation",
+      "title": "E-Evidence Regulation and Directive",
+      "summary": "JRC and Europol horizon scan (8 Sep 2026) of privacy enhancing technologies and lawful access to e-evidence",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "EU Pact on Migration and Asylum",
+      "summary": "JRC methodological note (9 Sep 2026): migration futures scenarios to 2030 and 2045",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "affordable_housing_act",
+      "title": "Affordable Housing Act",
+      "summary": "JRC brief on the two-tier housing stress method and the Mapadomo housing database (Sep 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "regulatory_sandboxes_recommendation",
+      "title": "Regulatory Sandboxes Recommendation",
+      "summary": "JRC brief (Sep 2026) on experimental multilevel governance and experimental clauses in public administrations",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "european_education_area_2021_2030",
+      "title": "European Education Area 2021-2030",
+      "summary": "JRC brief (9 Sep 2026): purpose of digital use matters more than screen time for academic performance",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "social_climate_fund",
+      "title": "Social Climate Fund",
+      "summary": "JRC brief on transport poverty in EU research projects and household consumption footprint datasets (Sep 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "eu_humanitarian_aid_reform_2026",
+      "title": "EU Humanitarian Aid Reform 2026",
+      "summary": "JRC review (14 Sep 2026): a very strong El Nino threatens food security into 2027",
+      "refs": []
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
+      "guide": "batteries_regulation",
+      "title": "EU Batteries Regulation",
+      "summary": "JRC report (14 Sep 2026): no immediate need to amend the lithium battery recycling efficiency and material recovery targets",
+      "refs": []
+    },
+    {
       "date": "2026-09-14",
       "action": "updated",
       "guide": "eu_islands_insular_territories",

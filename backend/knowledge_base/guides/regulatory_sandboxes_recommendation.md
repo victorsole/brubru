@@ -17,6 +17,7 @@
 - **Results must be published (point 11)**, protecting business secrets and confidential information, unless publication would harm national or Union security interests.
 - **It covers national sandboxes**, including in areas where no Union legislation exists. Where Union law already provides for sandboxes, those rules apply and this Recommendation defers to them.
 - **Track it** in My EU Bubble, My Tracked Files, under procedure **2026/0267(NLE)**.
+- JRC Science for Policy Brief (4 September 2026): "Navigating uncertainty and complexity in public administrations: making the case for experimental multilevel governance" (JRC147951): regions with higher quality of government attract more innovation funding and achieve better outcomes; the JRC recommends giving administrations tools to experiment, including support for experimental clauses, shared repositories and in-house innovation capacity, and cites the Interoperable Europe Act and AI Act sandboxes as existing footholds. URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC147951
 
 ## Point-by-point overview
 

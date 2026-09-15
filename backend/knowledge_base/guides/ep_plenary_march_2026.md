@@ -1,35 +1,86 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
-**LATEST (Friday 11 September 2026)** — this is the block that answers "what is the next EP plenary",
+**LATEST (Tuesday 15 September 2026): THE 14-17 SEPTEMBER STRASBOURG PART-SESSION IS IN PROGRESS.**
+Primary sources: EP agenda synthesis (last updated 14 Sep 2026)
+https://www.europarl.europa.eu/doceo/document/OJ-10-2026-09-14-SYN_EN.html and the EP opening press
+release 20260911IPR47447 (14 Sep 2026)
+https://www.europarl.europa.eu/news/en/press-room/20260911IPR47447/opening-14-17-september-plenary-session
+
+- **Opening (Monday 14 Sep)**: President Metsola spoke on the summer's heatwaves and wildfires and on Iran,
+  and led **a minute of silence for Emma Bonino** (former MEP and Commissioner) **and Klaus Hänsch**
+  (former President of the European Parliament).
+- **EU Electoral Act, proxy voting for pregnant and new-mother MEPs**: four months after the Council
+  adopted Parliament's proposal, **four Member States have ratified: Bulgaria, Denmark, Luxembourg and
+  Greece**; several others are close. It is not in force until all Member States approve it.
+- **Agenda changes announced Monday**: (1) a **Commission statement on the government crackdown on the
+  LGBTIQ+ community in Türkiye** added on Monday before the one-minute speeches, sitting extended to
+  21:00; (2) an **objection under Rule 115(2), (3) and (4)(c) on maximum residue levels for
+  flupyradifurone** (a pesticide) added to **Wednesday's votes**; (3) an **ENVI request for urgent
+  procedure (Rule 170) on revised ETS heat and fuel benchmark values for 2026-2030**, voted **Tuesday
+  15 Sep in the 12:00 voting session**. **Outcome not yet published at the time of writing**: check
+  the Tuesday minutes or votes page before stating it.
+- **Immunity**: Spain asked to waive the immunity of Alvise Pérez (NI) and Greece that of Nikos
+  Papandreou (S&D), both referred to JURI. Four committees (ECON, JURI, AGRI, ITRE) announced decisions
+  to enter trilogues; a plenary vote could be requested by midnight Tuesday 15 Sep (Rule 72(2)).
+- **Monday debates**: joint debate on emissions trading (CBAM extension to downstream goods, Chahim;
+  Temporary Decarbonisation Fund, Canfin; ETS market stability reserve, Maran); **Public Procurement Act**
+  (Commission statement, proposal adopted by the College on 9 Sep); **Union Customs Code and EU Customs
+  Authority** (second reading, IMCO, rapporteur Dirk Gotink). The customs reform creates an EU Customs
+  Authority based in Lille and an EU customs data hub, and a handling fee on low-value e-commerce
+  parcels; the Council has already approved it, and approval is announced in plenary on Wednesday.
+  For the Commission, **Commissioner Maroš Šefčovič** (whose portfolio covers the customs union) was
+  due to speak in the debate; the verbatim record and minutes for Monday were not yet online on the
+  morning of 15 Sep, so hedge his participation and do not attribute quotes until they are.
+- **Tuesday 15 Sep**: heatwaves, wildfires and droughts debate; **European Democracy Shield special
+  committee findings** (Tomas Tobé) debate and vote; votes at 12:00 on the three ETS/CBAM files, the
+  market stability reserve for ETS2 (buildings, road transport and additional sectors), Armenia trade liberalisation, draft amending budget 2/2026, the
+  **appointments of the ESMA Chair and the EBA Executive Director**, Youth Guarantee, EU Youth Strategy
+  and the global role of the euro; Ceuta hybrid attacks debate; Ratko Mladić funeral debate;
+  **15:00-16:00 scrutiny session: presentation of the Fair Labour Mobility Package** by the Commission;
+  joint debate on Russia's hybrid attacks; **Omnibus V defence readiness** joint debate; Middle East.
+- **Wednesday 16 Sep**: **State of the Union, 09:00-12:20**; votes include the Customs Code (second
+  reading), the three **Omnibus V defence** files, Single Market and Customs Programme 2028-2034,
+  EU-Switzerland PNR, EU-UK competition cooperation, Iceland and Norway in GOVSATCOM/IRIS², the Instrument
+  for Nuclear Safety Cooperation and the Ignalina decommissioning programme, the Court of Auditors nominee, cardiovascular strategy, and GMO objections;
+  afternoon: EPP topical debate on gold-plating, Council's position on the 2027 budget, PPWR impact on
+  SMEs, Ukraine, Rule 150 urgencies (Hong Kong, Cuba, Zambia), Nepal floods.
+- **Thursday 17 Sep**: health workforce crisis plan; global health resilience; **FORMAL SITTING
+  11:30-12:00: address by Mark Carney, Prime Minister of Canada** (see `eu_canada_relations`); votes
+  12:00 including the report on the **impact of social media on young people** (CULT, Sandro Ruotolo)
+  and the CFP evaluation; 15:00 Commission statement on protecting health against toxic substances.
+- **MEP changes**: out Sebastian Everding (The Left, DE, 13 Sep) and Pál Szekeres (PfE, HU, 14 Sep); in
+  Norbert Herhammer (EPP, DE) and Ufuk Kâhya (Greens/EFA, NL).
+
+**PREVIOUS BLOCK (Friday 11 September 2026)**: this is the block that answers "what is the next EP plenary",
 "what is on the agenda next week" and "when is the State of the Union". Week types are taken from the
 EP's own 2026 Calendar of Parliamentary Activities PDF, whose week type is encoded as a cell COLOUR and
 is not recoverable from the text layer; the derived table lives at
 `backend/knowledge_base/calendars/ep_calendar_2026.json`.
 
-- **CURRENT week (week 37, 7-11 September 2026): NOT a plenary week.** Committee meetings Monday and
+- **Week 37 (7-11 September 2026, now past): NOT a plenary week.** Committee meetings Monday and
   Thursday, political group meetings Tuesday and Wednesday.
 - **The committee cycle restarted hard in the week before it.** Between 7 and 11 September 2026,
   **fifteen committee voting lists** were tabled across **eight committees** (JURI, SANT, BUDG, ECON,
-  EMPL, ENVI, ITRE, FEMM) — including EU Inc at EMPL with compromise amendments, the Biotech Act at
+  EMPL, ENVI, ITRE, FEMM): including EU Inc at EMPL with compromise amendments, the Biotech Act at
   JURI, TEN-E and European Business Wallets at ITRE, the ECHA Basic Regulation and the ETS market
   stability reserve at ENVI, SFDR at ECON, and the 2027 budget. Source: Brubru's own
   `ep_emeeting_documents`, which carries these days before OEIL publishes them.
-- **NEXT PLENARY: Monday 14 to Thursday 17 September 2026, Strasbourg** (week 38). The first part-session
+- **CURRENT PLENARY: Monday 14 to Thursday 17 September 2026, Strasbourg** (week 38). The first part-session
   of the parliamentary season.
 - **STATE OF THE UNION ADDRESS: Wednesday 16 September 2026**, Strasbourg, during that part-session. The
   High Representative and Vice-President attends; the debate on the address follows it the same morning.
 - **PREVIOUS MULTI-DAY PLENARY: 6-9 July 2026, Strasbourg** (week 28). Summer recess ran from mid-July to
   the end of August; week 35 (24-28 August) was external parliamentary activities and week 36
   (31 August to 3 September) was the first committee week back.
-- **AFTER SEPTEMBER: 5-8 October 2026** (week 41) and **19-22 October 2026** (week 43), both Strasbourg,
+- **NEXT PLENARY: 5-8 October 2026** (week 41) and **19-22 October 2026** (week 43), both Strasbourg,
   Monday to Thursday.
 
 | Week | Dates | Type |
 |------|-------|------|
-| 36 | 31 Aug-4 Sep 2026 | Committee week — the first back from recess |
-| **37** | **7-11 Sep 2026** | **Committee Mon + Thu, political groups Tue + Wed — CURRENT** |
-| **38** | **14-20 Sep 2026** | **PLENARY Strasbourg (14-17 Sep) — State of the Union Wed 16 Sep** |
+| 36 | 31 Aug-4 Sep 2026 | Committee week: the first back from recess |
+| 37 | 7-11 Sep 2026 | Committee Mon + Thu, political groups Tue + Wed |
+| **38** | **14-20 Sep 2026** | **PLENARY Strasbourg (14-17 Sep), State of the Union Wed 16 Sep: CURRENT** |
 | 39 | 21-25 Sep 2026 | External parliamentary activities |
 | 40 | 28-30 Sep 2026 | Committee Mon, political groups Tue + Wed |
 | 41 | 5-11 Oct 2026 | **PLENARY Strasbourg (5-8 Oct)** |
@@ -167,7 +218,7 @@ DEBATES 26 MARCH (09:00-10:50): EU-US trade deal joint debate, Global Gateway (A
 
 ### Votes (12:30-13:30)
 - EP-Commission Framework Agreement (A10-0031/2026)
-- Extension of Regulation 2021/1232 (procedure 2025/0429(COD), LIBE — committee stage; no plenary vote yet recorded per OEIL 23 April 2026)
+- Extension of Regulation 2021/1232 (procedure 2025/0429(COD), LIBE: committee stage; no plenary vote yet recorded per OEIL 23 April 2026)
 - Council of Europe AI Convention (A10-0007/2026, IMCO/LIBE)
 - EU-Ecuador Europol agreement (A10-0028/2026)
 - 2027 budget guidelines (BUDG)

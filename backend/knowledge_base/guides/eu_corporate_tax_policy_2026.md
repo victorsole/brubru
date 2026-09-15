@@ -11,6 +11,7 @@
 - Responsible Commissioner: Wopke Hoekstra (Climate, Net Zero and Clean Growth) + Maria Luís Albuquerque (Financial Services) -- corporate tax sits between climate transition financing and financial-services oversight
 - Responsible DG: DG TAXUD (Taxation and Customs Union)
 - Council configuration: ECOFIN (Economic and Financial Affairs) -- corporate tax requires unanimity under Article 113 TFEU (indirect taxation) or Article 115 TFEU (direct taxation, internal market)
+- JRC Scientific Article (10 September 2026): "Banks' tax disclosure, financial secrecy, and tax haven heterogeneity" (JRC143189, Journal of International Accounting, Auditing and Taxation) -- after public country-by-country reporting was imposed on European banks, they cut tax haven subsidiaries by about one third relative to exempt insurers, mostly by leaving small "dot" havens and places that are both tax and secrecy havens; public CbCR works only where secrecy and reputational risk combine and may not curb haven use on its own. doi: 10.1016/j.intaccaudtax.2026.100759
 
 ## Context: What "Changing Environment" Means
 

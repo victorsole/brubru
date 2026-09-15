@@ -1,6 +1,7 @@
 # Combating Child Sexual Abuse Online: EU Regulatory Framework
 
 ## QUICK FACTS
+- **Watch (15 September 2026)**: "Child safety online" is listed under the President on the Commission's tentative agenda SEC(2026) 2577 for the College meeting of 15 September 2026 in Strasbourg. Its content and whether it touches child sexual abuse material were not published at the time of writing; do not link it to this Regulation until the adopted text is available. See `eu_minors_social_media_age_limits`.
 - Permanent regulation proposal: COM(2022) 209, procedure 2022/0155(COD)
 - Proposed: 11 May 2022
 - Legal basis: Article 114 TFEU (internal market)

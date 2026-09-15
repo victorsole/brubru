@@ -15,6 +15,7 @@
 - Lead EP committee: ENVI (Environment, Public Health and Food Safety)
 - Interacts directly with REACH (Regulation (EC) 1907/2006): a substance's CLP classification triggers REACH duties (SVHC identification, Safety Data Sheets, restrictions); also interacts with the Cosmetics Regulation (EC) 1223/2009, the Biocidal Products Regulation (EU) 528/2012 and the Plant Protection Products Regulation (EC) 1107/2009, all of which reference CLP hazard classifications
 - Part of the wider chemicals simplification agenda: CLP is one of the acts targeted by the Commission's Omnibus VI chemicals simplification package alongside REACH, the Biocidal Products Regulation and the POPs Regulation
+- JRC Scientific Article (9 September 2026): "Tracing progress: The evolution of a protocol for relative metal release in surrogate gastric fluid" (JRC144731, ALTEX) -- traces 15 years of review (EURL ECVAM, ESAC, OECD) of the bioelution method used for grouping and read-across of metals under REACH; the 2025 protocol is clearer and more robust and can refine the classification of alloys and other metal materials with a matrix effect while reducing animal testing. doi: 10.14573/altex.2512181
 
 Guide for professionals working on EU chemicals policy, product compliance and chemical hazard communication. Covers the CLP framework, the 2023 new hazard classes, the December 2024 CLP revision, and the institutional and legislative landscape around it.
 

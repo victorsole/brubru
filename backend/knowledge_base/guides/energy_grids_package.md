@@ -1,7 +1,21 @@
 # European Grids Package
 
 ## QUICK FACTS
-- **LATEST (10 September 2026 — ITRE voted the TEN-E revision).** ITRE voted on **2025/0399(COD)**,
+- **LATEST (15 September 2026, PCI/PMI CALL OPEN AND COUNCIL PUSHBACK).** The Commission opened the
+  **call for candidate Projects of Common Interest and Projects of Mutual Interest** under the TEN-E
+  Regulation on **14 September 2026**: electricity transmission and storage close **13 November 2026**
+  (midnight); smart electricity grids, smart gas grids and Article 24 projects close **4 December 2026**.
+  Information webinar **30 September 2026, 09:30-12:30**. Projects are screened and ranked by the TEN-E
+  Regional Groups (system needs Nov 2026-Mar 2027, consultations Dec 2026-Mar 2027, ACER opinion
+  Jun-Sep 2027); the **3rd Union list** is due as a delegated act **by end of 2027**, in force early
+  2028. Source: DG ENER news, 14 Sep 2026,
+  https://energy.ec.europa.eu/news/call-applications-candidate-energy-infrastructure-projects-common-and-mutual-interest-electricity-2026-09-14_en
+  **Council side (press signal, not a Council position):** Contexte Energy reported on 14 Sep 2026 that
+  member states in the Council working party resisted the Commission's proposals to reorder grid
+  connection queues and to address national taxes in network charges, one delegation arguing the
+  system operator should not decide whether to prioritise a data centre or a hydrogen project. Treat as
+  reporting until a Council text (general approach or Presidency compromise) is published.
+- **PRIOR (10 September 2026, ITRE voted the TEN-E revision).** ITRE voted on **2025/0399(COD)**,
   guidelines for **trans-European energy infrastructure**, amending Regulations (EU) 2019/942 and
   others. The Parliament's own framing on 7 September was **"MEPs upgrade EU energy infrastructure
   rules to lower energy prices"**. ITRE also voted **2025/0358(COD)**, establishing **European

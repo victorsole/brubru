@@ -15,6 +15,7 @@
 - **Response deadlines**: 10 days for a standard Production Order, 8 hours in emergencies
 - **Decentralised IT system**: e-CODEX, used for authenticated exchanges between issuing authorities and service providers; still under active development as of mid-2026
 - **State of play (July 2026)**: only a handful of Member States had transposed the Directive by the 18 February 2026 deadline (Croatia, Italy, Lithuania, Slovakia, Germany completed in March); on 27 March 2026 the Commission sent letters of formal notice to 22 Member States for incomplete transposition, opening infringement proceedings four months before the Regulation's 18 August 2026 application date
+- JRC Science for Policy Report (8 September 2026): "Horizon scanning on emerging privacy enhancement technologies" (EUR 40795): a joint exercise by the JRC EU Policy Lab and the Europol Innovation Lab on 10 emerging technologies (including AI, distributed ledgers, fully homomorphic encryption, quantum and 6G) that can help law enforcement or hide criminal traces; it calls lawful access to electronic evidence one of the most critical issues for European law enforcement and urges investment in skills, digital forensics and post-quantum cryptography. doi: 10.2760/6084454
 
 ## What the e-Evidence package does
 

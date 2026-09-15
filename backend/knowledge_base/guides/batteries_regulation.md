@@ -19,6 +19,7 @@
 - **OEIL procedure file:** https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2020/0353(COD)
 - **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2023-1542_batteries/index.html
 - **Family:** `eu_circular_economy_and_critical_raw_materials` (sibling of the Waste Framework Directive 2008/98/EC, the Critical Raw Materials Act (EU) 2024/1252, the End-of-Life Vehicles framework, and the Ecodesign for Sustainable Products Regulation)
+- JRC Science for Policy Report (14 September 2026): "JRC technical assessment in relation to Article 71(5) of the Batteries Regulation" (EUR 40843): reviewing the Annex XII Part B recycling-efficiency and Part C material-recovery targets for lithium-based batteries after a January 2026 stakeholder consultation, the JRC finds no immediate need to amend any target, because the calculation methodology already lets recyclers exclude certain fractions temporarily, but says progress on recovering graphite and on industrial-scale lithium recovery must be monitored closely. doi: 10.2760/0167414
 
 ## Overview
 

@@ -15,6 +15,7 @@
 - Microplastics restriction: Regulation (EU) 2023/2055 (CELEX 32023R2055), first restrictions October 2023
 - Policy framework: Chemicals Strategy for Sustainability (COM(2020) 667, October 2020)
 - SSbD framework: Recommendation (EU) 2026/510 (CELEX 32026H0510), published 10 March 2026
+- JRC Scientific Article (9 September 2026): "The importance of the life cycle perspective for safety assessment in the European Commission's Safe and Sustainable by Design Framework" (JRC147115, Frontiers in Toxicology) -- argues that safety under the revised SSbD framework must cover every chemical, process, product and receptor across the value chain rather than substance, process or product safety in isolation, and presents the Scoping Analysis as the method that anchors life cycle thinking. doi: 10.3389/ftox.2026.1909986
 
 Guide for professionals working on EU chemicals policy, REACH compliance, and related environmental regulations. Covers the REACH framework, ongoing reform, key restriction proposals, and institutional landscape.
 

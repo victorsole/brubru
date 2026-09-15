@@ -9,6 +9,7 @@
 - Context: EU is the world's largest humanitarian donor (EUR 1.4 billion+ annually via ECHO); 2025-2026 marked by record humanitarian needs (Gaza, Sudan, Ukraine, DRC, Myanmar)
 - Legal basis: Article 214 TFEU (humanitarian aid — exclusive EU competence alongside Member States)
 - ECHO budget 2026: Part of NDICI-Global Europe instrument (Heading 6 of MFF 2021-2027)
+- JRC Knowledge Review (14 September 2026): "The effects of El Niño on global food security and nutrition" (JRC148207): with the WMO forecasting a very strong El Niño lasting through February 2027, on top of the fertiliser and fuel disruption from the Strait of Hormuz closure, the JRC flags likely drought in Southern Africa, Central America, northern South America, the Sahel and India, and warns that hunger and nutrition impacts from failed harvests may only peak in early to mid 2027, so monitoring and preparedness must run beyond the current season. doi: 10.2760/8595389
 
 ## Why This Reform
 

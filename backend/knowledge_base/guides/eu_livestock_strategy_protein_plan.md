@@ -6,6 +6,7 @@
 - **Lead DG**: DG AGRI (Agriculture and Rural Development), with DG SANTE (animal health and welfare) on the livestock file.
 - **Policy families**: Common Agricultural Policy; food security and open strategic autonomy; sustainability and climate; animal health and welfare.
 - **Why now**: feed-protein import dependency (the EU imports a large share of its high-protein feed, historically soybean/soymeal from the Americas), livestock-sector viability and generational renewal, methane and sustainability pressures, and the wider "resilience and strategic autonomy" framing that runs through the von der Leyen II Commission.
+- JRC Scientific Article (8 September 2026): "Legume-based pathways reveal opportunities and limits of protein self-sufficiency in the EU and UK" (JRC145987, Communications Sustainability): even a complete halt to protein imports adds about 1.5 million hectares of legumes without fully replacing imports, lifting soybean prices by 150% and cutting livestock output by 3%; policy support raises legume area only moderately, while dietary shift doubles pulse imports but cuts global greenhouse gas emissions more than supply-side measures. doi: 10.1038/s44458-026-00144-5
 
 ## What the Livestock Strategy (52026DC0576) does
 

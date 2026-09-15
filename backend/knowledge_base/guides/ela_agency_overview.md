@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Tuesday 15 September 2026): FAIR LABOUR MOBILITY PACKAGE PLANNED FOR TODAY'S COLLEGE MEETING, NOT YET CONFIRMED AS ADOPTED.** The Commission's tentative agenda **SEC(2026) 2577 final** (8 September 2026) lists a **"Fair labour mobility package"** under Executive Vice-President **Roxana Mînzatu** for the College meeting of **15 September 2026 (Strasbourg)**, with three items: (1) a **proposal for a European Social Security Pass**, (2) **strengthening the European Labour Authority**, and (3) a **skills portability initiative**. The agenda is **indicative**. At the time of writing (mid-morning, 15 September) nothing on the package had been published on the Commission's press corner or the DG EMPL news page. **Do not describe the content of the ELA reform (new mandate, powers, budget, legal form) until the adopted text is published.** Until then the ELA facts below, under Regulation (EU) 2019/1149, remain the law in force. Source: EC Documents Register, tentative agendas, SEC(2026) 2577.
 - **Full name**: European Labour Authority (ELA).
 - **Seat**: Bratislava, Slovakia (permanent seat since 1 September 2021; premises formally inaugurated November 2021).
 - **Legal basis**: Regulation (EU) 2019/1149 of the European Parliament and of the Council of 20 June 2019 establishing a European Labour Authority (CELEX 32019R1149).

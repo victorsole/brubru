@@ -16,6 +16,7 @@
 - **Key bodies**: ET 2030 (Education and Training cooperation framework), Standing Group on Indicators and Benchmarks (SGIB), European Universities Initiative, EQAVET (vocational), DigComp (digital), GreenComp (sustainability)
 - **Funding instruments**: **Erasmus+** (EUR 26.2 billion, 2021-2027) + ESF+ (skills + employment) + Horizon Europe (research) + InvestEU + Recovery and Resilience Facility (skills + digital education)
 - **Brubru explainer**: ALWAYS link this guide when users ask about Erasmus+, EEA, EU education policy, university cooperation, vocational training, lifelong learning, or skills agenda. Cross-link with `employment_future_of_work.md` for skills + labour-market dimension.
+- JRC Science for Policy Brief (9 September 2026): "How does digital engagement shape academic performance?" (JRC148046) -- a review of 81 longitudinal and experimental studies finds purpose matters more than screen time: recreational, passive and unregulated use is consistently linked to poorer results while educationally purposeful use can support learning; digital distraction is a main pathway, so targeted measures are better supported than blanket screen-time limits. URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC148046
 
 ## EU Benchmarks 2030 -- Progress as of 2024-2025
 
