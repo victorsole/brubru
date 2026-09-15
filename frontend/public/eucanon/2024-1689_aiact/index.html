@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The EU AI Act explained: Regulation (EU) 2024/1689 | Brubru</title>
-  <meta name="description" content="Complete guide to Regulation (EU) 2024/1689 (AI Act): the world's first comprehensive AI law, covering prohibited practices, high-risk systems, general-purpose AI models, governance, penalties and the staggered application timeline.">
+  <meta name="description" content="Complete guide to Regulation (EU) 2024/1689 (AI Act) as amended by the Digital Omnibus on AI (Regulation (EU) 2026/1744): prohibited practices, high-risk systems, general-purpose AI models, governance, penalties and the revised application timeline.">
   <meta property="og:title" content="The EU AI Act: Regulation (EU) 2024/1689 | Brubru EU Canon">
   <meta property="og:locale" content="en_GB">
-  <meta property="og:description" content="Risk-based rules for AI across the EU: 4 tiers, 8 prohibited practices, 6 high-risk requirements, systemic-risk duties for large models trained above 10^25 FLOPs, and fines up to EUR 35 million or 7% of global turnover.">
+  <meta property="og:description" content="Risk-based rules for AI across the EU, as amended by the Digital Omnibus on AI: 4 tiers, 10 prohibited practices, 6 high-risk requirements, systemic-risk duties for large models trained above 10^25 FLOPs, and fines up to EUR 35 million or 7% of global turnover.">
   <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html">
   <meta property="og:type" content="article">
   <meta property="og:image" content="https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="EU AI Act (Reg 2024/1689): risk-based rules for artificial intelligence | Brubru EU Canon">
-  <meta name="twitter:description" content="113 articles, 180 recitals, 4 risk tiers, fines up to EUR 35M / 7%. Prohibitions from Feb 2025; GPAI rules from Aug 2025; high-risk from Aug 2026.">
+  <meta name="twitter:description" content="4 risk tiers, fines up to EUR 35M / 7%. Prohibitions from Feb 2025 (two new bans from Dec 2026); GPAI rules from Aug 2025; high-risk from Dec 2027 (Annex III) and Aug 2028 (Annex I).">
   <meta name="twitter:image" content="https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
   <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html">
   <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html">
@@ -39,7 +39,7 @@
     "legislationType": "Regulation",
     "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
     "datePublished": "2024-06-13",
-    "dateModified": "2026-05-26",
+    "dateModified": "2026-09-15",
     "jurisdiction": {
       "@type": "AdministrativeArea",
       "name": "European Union"
@@ -538,6 +538,7 @@
       border: 3px solid var(--color-blue);
       background: white;
     }
+    .timeline__item--active::before { background: var(--color-blue); }
     .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
     .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
     .timeline__text a { color: var(--color-blue); text-decoration: none; }
@@ -732,11 +733,11 @@
   </div>
   <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language">
     <option value="index.html" selected>English</option>
-    <option value="fr.html">Francais</option>
-    <option value="es.html">Espanol</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html">Español</option>
     <option value="it.html">Italiano</option>
     <option value="nl.html">Nederlands</option>
-    <option value="ca.html">Catala</option>
+    <option value="ca.html">Català</option>
   </select>
   <a href="https://brubru.beresol.eu/signup" class="header__cta">Try Brubru free</a>
 </header>
@@ -774,12 +775,18 @@
   </figcaption>
 </figure>
 
+<!-- Dated amendment note -->
+<div class="info-box info-box--green">
+  <h3><i class="mdi mdi-update" style="color: var(--color-green);"></i> Updated 15 September 2026: now reflects the Digital Omnibus on AI</h3>
+  <p>This page describes the AI Act as amended by <strong>Regulation (EU) 2026/1744 of 8 July 2026</strong> (the Digital Omnibus on AI), published in the Official Journal on 24 July 2026 and in force since <strong>27 July 2026</strong>. The headline changes: two new prohibited practices from 2 December 2026, high-risk rules postponed to 2 December 2027 (Annex III) and 2 August 2028 (Annex I), a four-month extra period for marking synthetic content, lighter duties for SMEs and small mid-caps, and direct AI Office supervision of certain AI systems. See <a href="#timeline-section" style="color: var(--color-blue);">the application timeline</a> for the full list.</p>
+</div>
+
 <!-- Key figures strip -->
 <div class="figures">
   <div class="figure-card fc-blue">
     <div class="figure-card__number">113</div>
     <div class="figure-card__label">Articles</div>
-    <div class="figure-card__context">Across 13 Chapters and 180 recitals, with 13 Annexes. The world's first comprehensive horizontal AI regulation.</div>
+    <div class="figure-card__context">Across 13 Chapters and 180 recitals. Since 27 July 2026, six inserted articles (4a, 60a, 75a to 75d) and a fourteenth Annex.</div>
   </div>
   <div class="figure-card fc-green">
     <div class="figure-card__number">180</div>
@@ -846,8 +853,14 @@
   </div>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-cog-outline" style="color: var(--color-amber);"></i> Structure: 13 Chapters, 13 Annexes</div>
-    <p>The AI Act contains <strong>113 articles</strong> arranged in <strong>13 Chapters</strong>, plus <strong>180 recitals</strong> and <strong>13 Annexes</strong>. The Annexes carry most of the technical and operational detail: Annex I lists the Union harmonisation legislation that triggers the Annex I high-risk route; Annex II provides the list of Annex II legislation; Annex III lists the eight Annex III high-risk use-case areas; Annex IV specifies the mandatory content of technical documentation; Annexes XI and XII set out documentation requirements for GPAI models; and Annex XIII sets out the criteria for designating systemic risk in GPAI models. The Regulation also amends nine existing instruments (regulations and directives in the product-safety and transport-safety acquis), listed in Articles 102 to 110.</p>
+    <div class="card__title"><i class="mdi mdi-cog-outline" style="color: var(--color-amber);"></i> Structure: 13 Chapters, 14 Annexes</div>
+    <p>The AI Act contains <strong>113 numbered articles</strong> arranged in <strong>13 Chapters</strong>, plus <strong>180 recitals</strong>. The Digital Omnibus on AI inserted six further articles (4a, 60a and 75a to 75d) and a fourteenth Annex, bringing the total to <strong>14 Annexes</strong>. The Annexes carry most of the technical and operational detail: Annex I lists the Union harmonisation legislation that triggers the Annex I high-risk route; Annex II lists the criminal offences relevant to the remote biometric identification exceptions; Annex III lists the eight Annex III high-risk use-case areas; Annex IV specifies the mandatory content of technical documentation; Annexes XI and XII set out documentation requirements for GPAI models; Annex XIII sets out the criteria for designating systemic risk in GPAI models; and the new Annex XIV lists the codes, categories and types of AI systems that define the scope of a notified body's designation. The Regulation also amends nine existing instruments (regulations and directives in the product-safety and transport-safety acquis), listed in Articles 102 to 110, which apply from 27 July 2026.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-school-outline" style="color: var(--color-green);"></i> AI literacy and bias detection (Articles 4 and 4a)</div>
+    <p><strong>AI literacy (Article 4):</strong> the original duty to ensure a sufficient level of AI literacy became, from 27 July 2026, a duty on providers and deployers to <em>"take measures to support the development of AI literacy"</em> of their staff and other persons operating AI systems on their behalf. It expressly does not require them to guarantee any specific level of AI literacy of any individual. The Commission and the Member States must support providers and deployers, in particular SMEs, and the Commission publishes practical examples on the single information platform. The AI Board adopts recommendations, taking into account European competence frameworks, setting common objectives.</p>
+    <p><strong>Bias detection (Article 4a):</strong> a new legal basis replaces the former Article 10(5). Providers of high-risk AI systems may exceptionally process special categories of personal data where strictly necessary for bias detection and correction, subject to six cumulative safeguards (no effective alternative such as synthetic or anonymised data, pseudonymisation and security measures, strict access controls, no transmission to other parties, deletion once the bias is corrected, and documented reasons in the records of processing). The same basis now extends to providers and deployers of <strong>other AI systems and models</strong> and to deployers of high-risk systems, without creating any obligation to carry out bias detection.</p>
   </div>
 </section>
 
@@ -867,12 +880,12 @@
     <div class="pyramid-card pyramid-card--prohibited">
       <div class="pyramid-card__tier pyramid-card__tier--prohibited"><i class="mdi mdi-cancel"></i> Tier 1: Unacceptable risk</div>
       <div class="pyramid-card__title">Prohibited practices</div>
-      <div class="pyramid-card__desc">Eight specific uses of AI are banned outright under Article 5 because their potential for harm is judged unacceptable in a democratic society governed by the rule of law: subliminal manipulation, exploitation of vulnerabilities, social scoring, predictive policing by profiling, untargeted facial scraping, emotion recognition at work and school, biometric categorisation by sensitive attributes, and real-time remote biometric identification by law enforcement in public spaces (with three narrow exceptions). Penalty: up to EUR 35 million or 7% of global turnover.</div>
+      <div class="pyramid-card__desc">Ten specific uses of AI are banned outright under Article 5 because their potential for harm is judged unacceptable in a democratic society governed by the rule of law: subliminal manipulation, exploitation of vulnerabilities, non-consensual intimate imagery and child sexual abuse material (both added by the Digital Omnibus on AI, applicable from 2 December 2026), social scoring, predictive policing by profiling, untargeted facial scraping, emotion recognition at work and school, biometric categorisation by sensitive attributes, and real-time remote biometric identification by law enforcement in public spaces (with three narrow exceptions). Penalty: up to EUR 35 million or 7% of global turnover.</div>
     </div>
     <div class="pyramid-card pyramid-card--high">
       <div class="pyramid-card__tier pyramid-card__tier--high"><i class="mdi mdi-alert-outline"></i> Tier 2: High risk</div>
       <div class="pyramid-card__title">Permitted, subject to requirements</div>
-      <div class="pyramid-card__desc">High-risk AI systems are permitted but must meet six mandatory requirements (risk management, data governance, technical documentation, logging, transparency, human oversight) plus accuracy, robustness and cybersecurity. They must undergo a conformity assessment, bear the CE mark and be registered in the EU database before deployment. Two routes to classification: Annex I (safety component in a product subject to Union harmonisation legislation with third-party conformity assessment) and Annex III (eight use-case areas including biometrics, critical infrastructure, education, employment, essential services, law enforcement, migration and justice).</div>
+      <div class="pyramid-card__desc">High-risk AI systems are permitted but must meet six mandatory requirements (risk management, data governance, technical documentation, logging, transparency, human oversight) plus accuracy, robustness and cybersecurity. They must undergo a conformity assessment, bear the CE mark and be registered in the EU database before deployment. Two routes to classification: Annex I (safety component in a product subject to Union harmonisation legislation with third-party conformity assessment) and Annex III (eight use-case areas including biometrics, critical infrastructure, education, employment, essential services, law enforcement, migration and justice). These rules apply from 2 December 2027 for Annex III systems and 2 August 2028 for Annex I systems.</div>
     </div>
     <div class="pyramid-card pyramid-card--limited">
       <div class="pyramid-card__tier pyramid-card__tier--limited"><i class="mdi mdi-eye-outline"></i> Tier 3: Limited risk</div>
@@ -882,7 +895,7 @@
     <div class="pyramid-card pyramid-card--minimal">
       <div class="pyramid-card__tier pyramid-card__tier--minimal"><i class="mdi mdi-check-circle-outline"></i> Tier 4: Minimal risk</div>
       <div class="pyramid-card__title">No mandatory obligations</div>
-      <div class="pyramid-card__desc">The vast majority of AI systems, including spam filters, recommendation engines for non-sensitive content and AI-enabled video games, fall here. The Regulation imposes no obligations. Providers and deployers are encouraged to adopt voluntary codes of conduct (recital 165), but there is no conformity assessment, CE mark or registration requirement. Innovation is supported through AI regulatory sandboxes (Chapter VI), which must be operational in each Member State by 2 August 2026.</div>
+      <div class="pyramid-card__desc">The vast majority of AI systems, including spam filters, recommendation engines for non-sensitive content and AI-enabled video games, fall here. The Regulation imposes no obligations. Providers and deployers are encouraged to adopt voluntary codes of conduct (recital 165), but there is no conformity assessment, CE mark or registration requirement. Innovation is supported through AI regulatory sandboxes (Chapter VI), which must be operational in each Member State by 2 August 2027.</div>
     </div>
   </div>
 </section>
@@ -895,13 +908,13 @@
 <section class="section" id="prohibited">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-cancel"></i></div>
-    <h2 class="section__title">The eight prohibited practices</h2>
+    <h2 class="section__title">The ten prohibited practices</h2>
   </div>
-  <p class="section__subtitle">Article 5: AI uses that are banned outright from 2 February 2025</p>
+  <p class="section__subtitle">Article 5: AI uses that are banned outright, eight since 2 February 2025 and two more from 2 December 2026</p>
 
   <div class="info-box info-box--red">
     <h3><i class="mdi mdi-information-outline" style="color: var(--color-red);"></i> When prohibitions apply</h3>
-    <p>Chapter II of the Regulation, which contains Article 5, began applying on <strong>2 February 2025</strong>, six months after entry into force. Breaching any of the eight prohibitions carries the highest penalty tier: up to <strong>EUR 35,000,000 or 7%</strong> of total worldwide annual turnover, whichever is higher. SMEs and start-ups pay the lower of the percentage or the fixed amount.</p>
+    <p>Chapter II of the Regulation, which contains Article 5, began applying on <strong>2 February 2025</strong>, six months after entry into force. The Digital Omnibus on AI added two prohibitions, points (ba) and (bb), together with the scope rules in Article 5(1a) and (1b); these apply from <strong>2 December 2026</strong> (Article 113, third paragraph, point (a)). Breaching any of the prohibitions carries the highest penalty tier: up to <strong>EUR 35,000,000 or 7%</strong> of total worldwide annual turnover, whichever is higher. SMEs and start-ups pay the lower of the percentage or the fixed amount.</p>
   </div>
 
   <div class="two-col-grid">
@@ -912,6 +925,15 @@
     <div class="card">
       <div class="card__title"><i class="mdi mdi-account-alert" style="color: var(--color-red);"></i> (b) Exploitation of vulnerabilities</div>
       <p>AI systems that exploit specific vulnerabilities of a person or group due to their age, disability or a specific social or economic situation, to materially distort their behaviour in a manner likely to cause significant harm to that person or another person.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-image-off-outline" style="color: var(--color-red);"></i> (ba) Non-consensual intimate imagery (from 2 December 2026)</div>
+      <p>AI systems that generate or manipulate <em>"realistic images, videos, audio or similar material of an identifiable natural person's intimate parts, or of an identifiable natural person engaged in sexually explicit activities"</em> without that person's freely given, specific, informed, unambiguous and explicit consent. Manipulation that does not increase the exposure of intimate parts or alter the nature of the depicted activity (for example changing the background or brightness) is not covered (Art 5(1b)). Recital 12 excludes cartoonish or physically impossible depictions and consented uses such as try-on and medical applications.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-red);"></i> (bb) Child sexual abuse material (from 2 December 2026)</div>
+      <p>AI systems that generate or manipulate child sexual abuse material or performance within the meaning of Directive 2011/93/EU, except where a "without right" defence applies under national law (for example authorities acting in criminal proceedings, or red-teaming to test compliance with the ban, recital 13).</p>
+      <p><strong>Scope for both new bans (Art 5(1a)):</strong> providers are caught only where that generation is the system's intended purpose, or where it is a reasonably foreseeable and reproducible outcome and the system lacks reasonable and adequate technical safeguards to prevent it and correct misuse. Deployers are caught only where they use the system for the purpose of generating such material.</p>
     </div>
     <div class="card">
       <div class="card__title"><i class="mdi mdi-account-star" style="color: var(--color-red);"></i> (c) Social scoring</div>
@@ -955,7 +977,8 @@
   <div class="two-col-grid">
     <div class="info-box">
       <h3><i class="mdi mdi-cog-outline" style="color: var(--color-amber);"></i> Annex I route (Article 6(1)): product-safety legislation</h3>
-      <p>An AI system is high-risk under this route if it is a safety component of a product covered by Union harmonisation legislation listed in Annex I, and that product undergoes third-party conformity assessment. Annex I Section A covers New Legislative Framework legislation including machinery, toys, recreational craft, lifts, ATEX equipment, radio equipment, pressure equipment, personal protective equipment, gas appliances, medical devices and in-vitro diagnostic medical devices. Section B covers civil aviation security, two- and three-wheel vehicles, agricultural and forestry vehicles, marine equipment, rail interoperability, motor vehicles and EASA aviation. Application of this route is deferred to <strong>2 August 2027</strong>.</p>
+      <p>An AI system is high-risk under this route if it is a safety component of a product covered by Union harmonisation legislation listed in Annex I, and that product undergoes third-party conformity assessment. Annex I Section A covers New Legislative Framework legislation including toys, recreational craft, lifts, ATEX equipment, radio equipment, pressure equipment, personal protective equipment, gas appliances, medical devices and in-vitro diagnostic medical devices. Section B covers civil aviation security, two- and three-wheel vehicles, agricultural and forestry vehicles, marine equipment, rail interoperability, motor vehicles, EASA aviation and, since the Digital Omnibus on AI, <strong>machinery</strong> (Regulation (EU) 2023/1230, moved from Section A), so AI in machinery will be regulated through the Machinery Regulation itself. Application of this route is deferred to <strong>2 August 2028</strong>.</p>
+      <p>The <strong>safety component</strong> definition is narrower (Art 3(14)): a component fulfils a safety function only where its intended purpose is to prevent or mitigate risks to the health and safety of persons or property. AI used solely for non-safety user assistance, performance optimisation, service efficiency, automation, convenience or quality control does not qualify (Art 6(1a)), unless its failure would endanger health and safety (Art 6(1b)). A product needing third-party assessment only for non-safety reasons, such as radio-spectrum interference, does not meet the route's second condition (Art 6(1c)).</p>
     </div>
     <div class="info-box info-box--amber">
       <h3><i class="mdi mdi-view-list-outline" style="color: var(--color-amber);"></i> Annex III route (Article 6(2)): eight use-case areas</h3>
@@ -969,7 +992,7 @@
         <li><strong>Migration, asylum and border control management</strong></li>
         <li><strong>Administration of justice and democratic processes,</strong> including systems influencing elections and referenda</li>
       </ol>
-      <p style="margin-top:0.75rem;">A derogation (Art 6(3)) lets an Annex III system escape high-risk status where it does not perform profiling of natural persons and poses no significant risk. The Commission must publish guidelines with practical examples by 2 February 2026 (Art 6(5)).</p>
+      <p style="margin-top:0.75rem;">A derogation (Art 6(3)) lets an Annex III system escape high-risk status where it does not perform profiling of natural persons and poses no significant risk. The Commission must publish guidelines with practical examples by 2 February 2026 (Art 6(5)). The obligations for Annex III systems apply from <strong>2 December 2027</strong>.</p>
     </div>
   </div>
 
@@ -978,8 +1001,8 @@
     <p>Providers of high-risk AI systems must ensure their systems meet six requirements, applied throughout the entire lifecycle:</p>
     <ol>
       <li style="margin-bottom:0.5rem;"><strong>Risk-management system (Article 9):</strong> a documented, iterative process run across the whole lifecycle, identifying and mitigating foreseeable risks to health, safety or fundamental rights.</li>
-      <li style="margin-bottom:0.5rem;"><strong>Data and data governance (Article 10):</strong> training, validation and testing data sets must be relevant, representative, sufficiently free of errors and, to the best extent possible, complete, and must address applicable biases that could affect health, safety or fundamental rights.</li>
-      <li style="margin-bottom:0.5rem;"><strong>Technical documentation (Article 11, Annex IV):</strong> comprehensive documentation prepared before placing on the market, kept up to date, demonstrating compliance with all requirements.</li>
+      <li style="margin-bottom:0.5rem;"><strong>Data and data governance (Article 10):</strong> training, validation and testing data sets must be relevant, representative, sufficiently free of errors and, to the best extent possible, complete, and must address applicable biases that could affect health, safety or fundamental rights. Processing of special categories of personal data for this purpose now rests on Article 4a.</li>
+      <li style="margin-bottom:0.5rem;"><strong>Technical documentation (Article 11, Annex IV):</strong> comprehensive documentation prepared before placing on the market, kept up to date, demonstrating compliance with all requirements. SMEs, including start-ups, and small mid-caps may use a simplified form established by the Commission, which notified bodies must accept.</li>
       <li style="margin-bottom:0.5rem;"><strong>Automatic record-keeping (logging) (Article 12):</strong> high-risk AI systems must log events automatically to the extent technically feasible, enabling post-market monitoring and traceability.</li>
       <li style="margin-bottom:0.5rem;"><strong>Transparency and information to deployers (Article 13):</strong> the system must be transparent and accompanied by instructions for use enabling deployers to interpret outputs and apply appropriate human oversight.</li>
       <li style="margin-bottom:0.5rem;"><strong>Human oversight (Article 14):</strong> systems must be designed to allow natural persons to effectively oversee, intervene, interrupt and override the system during the period of use.</li>
@@ -990,11 +1013,30 @@
   <div class="two-col-grid">
     <div class="card">
       <div class="card__title"><i class="mdi mdi-certificate-outline" style="color: var(--color-green);"></i> CE marking and EU database registration</div>
-      <p>High-risk AI systems bear the <strong>CE marking</strong> (recital 129, Articles 47 to 48), signifying conformity with the Regulation. Most high-risk systems must also be registered in a <strong>public EU database</strong> (Article 49, recital 131) before deployment. The EU database is operated by the Commission. Entry includes the provider's identity, the system name and version, a description of its intended purpose, the conformity-assessment procedure used, and information about the post-market monitoring plan.</p>
+      <p>High-risk AI systems bear the <strong>CE marking</strong> (recital 129, Articles 47 to 48), signifying conformity with the Regulation. Most high-risk systems must also be registered in a <strong>public EU database</strong> (Article 49, recital 131) before deployment. The EU database is operated by the Commission. Entry includes the provider's identity, the system name and version, a description of its intended purpose, the conformity-assessment procedure used, and information about the post-market monitoring plan. Registration of Annex III systems that the provider has assessed as not high-risk under Article 6(3) is lighter, with two items removed from Annex VIII, Section B.</p>
+      <p><strong>Notified bodies:</strong> a body already designated under Annex I, Section A legislation (such as the medical devices rules) can file a <strong>single application</strong> with a unified assessment (Art 28(8)). Designations use the new Annex XIV codes, which cover product-related, biometric and technology-specific types of AI system, including generative and agentic AI. Bodies notified under Section A legislation must apply for designation under the AI Act by 28 January 2028 (Art 43(3)).</p>
     </div>
     <div class="card">
       <div class="card__title"><i class="mdi mdi-account-check-outline" style="color: var(--color-purple);"></i> Fundamental rights impact assessment (Article 27)</div>
-      <p>Deployers that are public bodies, providers of public services, and banking or insurance deployers of Annex III high-risk AI systems must carry out a <strong>fundamental rights impact assessment</strong> before deployment (Art 27, recital 96). The assessment must identify the rights at risk, the expected harm, the measures to mitigate harm and, where residual risk is identified, consult affected persons or their representatives where feasible. The results must be registered in the EU database (for systems covered by that obligation).</p>
+      <p>Deployers that are public bodies, providers of public services, and banking or insurance deployers of Annex III high-risk AI systems must carry out a <strong>fundamental rights impact assessment</strong> before deployment (Art 27, recital 96). The assessment must identify the rights at risk, the expected harm, the measures to mitigate harm and, where residual risk is identified, consult affected persons or their representatives where feasible. The results must be registered in the EU database (for systems covered by that obligation). Where a GDPR or law-enforcement data protection impact assessment already covers part of the work, the deployer may cross-refer to it or reuse it (Art 27(4)), and the AI Office will provide a questionnaire template, including an automated tool (Art 27(5)).</p>
+    </div>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-store-outline" style="color: var(--color-green);"></i> SMEs and small mid-caps</div>
+      <p>The Digital Omnibus on AI defines an <strong>SME</strong> by reference to Recommendation 2003/361/EC (Art 3(14a)) and a <strong>small mid-cap enterprise (SMC)</strong> by reference to Recommendation (EU) 2025/1099 (Art 3(14b)), and extends several proportionality measures to SMCs:</p>
+      <ul>
+        <li><strong>Simplified technical documentation</strong> for SMEs, including start-ups, and SMCs, using a Commission form (Art 11(1)).</li>
+        <li><strong>Simplified quality management system</strong> now open to all SMEs, including start-ups, that have no partner or linked enterprises, not only microenterprises (Art 63(1)); quality management must be proportionate for SMEs and SMCs (Art 17(2)).</li>
+        <li><strong>Lower fines:</strong> SMCs pay the lower of the percentage or fixed amount for the Article 99(4) and (5) tiers (Art 99(6a)), and Member States must consider the economic viability of SMEs and SMCs when setting penalties (Art 99(1)).</li>
+        <li><strong>Priority access</strong> to the Union-level sandbox run by the AI Office, and targeted guidance from national authorities (Arts 57(3a) and 70(8)).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-purple);"></i> Value-chain cooperation (Article 25)</div>
+      <p>Where a distributor, importer, deployer or other third party becomes the provider of a high-risk system (for example by substantially modifying it), the <strong>initial provider</strong> must cooperate closely: make available technical documentation, inform the new provider of known limitations and failure modes, and give targeted technical access for testing and validation (Art 25(2)). This does not apply where the initial provider clearly specified that its system is not to be changed into a high-risk system.</p>
+      <p>Providers of high-risk systems and the third parties supplying AI systems, models, tools or components must specify, by written agreement, the information, capabilities and technical access needed for compliance (Art 25(4)); suppliers of free and open-source components other than general-purpose AI models are exempt. Both duties are now <strong>sanctionable</strong> under Article 99(4), point (da).</p>
     </div>
   </div>
 </section>
@@ -1069,7 +1111,7 @@
     </div>
     <div class="card">
       <div class="card__title"><i class="mdi mdi-watermark" style="color: var(--color-purple);"></i> Machine-readable marking of synthetic content (Art 50(2))</div>
-      <p>Providers of AI systems that generate synthetic audio, image, video or text must ensure outputs are marked in a <strong>machine-readable format</strong> as artificially generated or manipulated, using technical solutions such as watermarking. This obligation supports downstream detection and disclosure by deployers and platforms. The Commission is responsible for specifying technical standards. The watermarking deadline was subject to a short extension under the 2025/0359 Digital Omnibus.</p>
+      <p>Providers of AI systems that generate synthetic audio, image, video or text must ensure outputs are marked in a <strong>machine-readable format</strong> as artificially generated or manipulated, using technical solutions such as watermarking. This obligation supports downstream detection and disclosure by deployers and platforms. The duty applies from 2 August 2026; providers whose systems, including general-purpose AI systems, were placed on the market before that date have until <strong>2 December 2026</strong> to comply (Art 111(4), added by the Digital Omnibus on AI). The Commission facilitates codes of practice on detecting, marking and labelling such content and, if it deems them inadequate, may adopt an implementing act with common rules (Art 50(7)).</p>
     </div>
     <div class="card">
       <div class="card__title"><i class="mdi mdi-emoticon-outline" style="color: var(--color-amber);"></i> Emotion recognition and biometric categorisation notice (Art 50(3))</div>
@@ -1098,7 +1140,7 @@
     <div class="card">
       <div class="card__title"><i class="mdi mdi-office-building" style="color: var(--color-blue);"></i> Union-level bodies</div>
       <ul>
-        <li><strong>AI Office</strong> (within the Commission, established 24 January 2024): develops Union expertise in AI; supervises GPAI models; monitors market developments; coordinates enforcement; issues guidelines and codes of practice; manages the EU database.</li>
+        <li><strong>AI Office</strong> (within the Commission, established 24 January 2024): develops Union expertise in AI; supervises GPAI models and, since 27 July 2026, certain AI systems directly (see below); monitors market developments; coordinates enforcement; issues guidelines and codes of practice; manages the EU database. It must be allocated adequate resources for enforcement (Art 64(3)).</li>
         <li><strong>European Artificial Intelligence Board</strong> (Member State representatives): ensures consistent application of the Regulation; advises the Commission; facilitates cross-border cooperation; contributes to the development of standards and guidance.</li>
         <li><strong>Advisory forum</strong>: stakeholder advisory body including CEN, CENELEC, ETSI, ENISA, the Fundamental Rights Agency, industry, civil society and academia.</li>
         <li><strong>Scientific panel</strong>: independent experts who can issue qualified alerts to the AI Board about potential systemic risks in GPAI models and advise on technical matters.</li>
@@ -1111,13 +1153,26 @@
         <li>The <strong>European Data Protection Supervisor (EDPS)</strong> acts as the market surveillance authority for Union institutions, bodies and agencies when they deploy AI systems.</li>
         <li>For AI systems used by regulated <strong>financial institutions</strong> (banks, insurers, investment firms), the relevant financial-services supervisors act as market surveillance authorities, consistent with the CRR, CRD, Solvency II and insurance-distribution frameworks (recital 158).</li>
         <li>Supervision of <strong>GPAI models</strong> is centralised at Union level: the AI Office is the lead authority, with national authorities supporting cross-border enforcement.</li>
+        <li><strong>Fundamental-rights bodies</strong> (national public authorities or bodies enforcing Union law protecting fundamental rights, including non-discrimination) may request information and documentation from the competent market surveillance authority, which must grant access without undue delay and, where necessary, obtain it from the provider or deployer; both sides owe each other mutual assistance (Art 77(1), (1a) and (1b)).</li>
       </ul>
     </div>
   </div>
 
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-shield-account-outline" style="color: var(--color-purple);"></i> AI Office exclusive supervision of AI systems (Articles 75 to 75d)</h3>
+    <p>From 27 July 2026 the AI Office is <strong>exclusively competent</strong> to supervise and enforce the Regulation for two groups of AI systems (Art 75(1)):</p>
+    <ul>
+      <li><strong>AI systems based on general-purpose AI models</strong> where the model and the system are developed by the same provider or by providers forming part of the same undertaking. Excluded: AI in Annex I products, critical-infrastructure systems (Annex III, point 2), systems of law enforcement, border management authorities and financial institutions falling under Article 74(6), and administration-of-justice systems (Annex III, point 8).</li>
+      <li><strong>AI systems that constitute or are integrated into a very large online platform or very large online search engine</strong> designated under the Digital Services Act.</li>
+    </ul>
+    <p>The competence covers the providers of those systems, and their deployers only where they are the provider or part of the same undertaking. Providers of high-risk systems in scope report <strong>serious incidents to the AI Office</strong>, which passes them to the national authority (Art 75(1a)). The AI Office also carries out third-party conformity assessments for these systems, which the Commission entrusts to notified bodies (Art 75(1e)). National authorities may ask it to act and must receive an answer within four months (Art 75(2a)).</p>
+    <p>The AI Office holds all the powers of a market surveillance authority, including information requests, remote and on-site inspections and cost recovery (Art 75a); may make an operator's <strong>commitments</strong> binding (Art 75b); may find non-compliance, impose fines under Article 99(3) to (7) and periodic penalty payments of up to 5% of average daily income or worldwide annual turnover per day (Art 75c); and is bound by rights of defence, access to the file and publication of decisions (Art 75d). Its fines and penalty decisions are subject to unlimited review by the Court of Justice.</p>
+  </div>
+
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-flask-outline" style="color: var(--color-green);"></i> AI regulatory sandboxes (Article 57)</div>
-    <p>Each Member State must establish at least one <strong>AI regulatory sandbox</strong>, operational by <strong>2 August 2026</strong>, to facilitate the development, testing and validation of innovative AI systems in a controlled environment before their placing on the market. Sandboxes must provide priority and simplified access conditions for SMEs and start-ups. The Regulation also provides for real-world testing of AI systems outside sandboxes under conditions ensuring adequate protection (Articles 58 to 60). EPRS research (April 2026) identified design, fragmentation and timing challenges in Member State sandbox implementation.</p>
+    <div class="card__title"><i class="mdi mdi-flask-outline" style="color: var(--color-green);"></i> AI regulatory sandboxes and real-world testing (Articles 57 to 60a)</div>
+    <p>Each Member State must ensure at least one national <strong>AI regulatory sandbox</strong>, operational by <strong>2 August 2027</strong> (moved from 2 August 2026 by the Digital Omnibus on AI), to facilitate the development, training, testing and validation of innovative AI systems in a controlled environment before their placing on the market. It may be set up jointly with other Member States. The <strong>AI Office may establish a Union-level sandbox</strong> for the AI systems under its exclusive supervision, with priority access for SMEs, including start-ups, and SMCs (Art 57(3a)); the EDPS may run one for Union institutions (Art 57(3)). The Commission adopts implementing acts on sandbox arrangements, now including governance (Art 58(1)).</p>
+    <p><strong>Real-world testing</strong> outside sandboxes, previously limited to Annex III systems, is extended to high-risk systems covered by Annex I, Section A legislation (Art 60). For products under Annex I, Section B legislation (vehicles, aviation, rail, marine equipment, machinery), Member States may allow real-world testing through notified national frameworks (new Art 60a). EPRS research (April 2026) identified design, fragmentation and timing challenges in Member State sandbox implementation.</p>
   </div>
 </section>
 
@@ -1154,7 +1209,7 @@
         <td><strong>Other obligations</strong> (providers, deployers, importers, distributors, notified bodies, transparency duties)</td>
         <td>Art 99(4)</td>
         <td class="rate-amber">EUR 15,000,000 or 3% of worldwide annual turnover</td>
-        <td>Applies to the full range of high-risk AI requirements and GPAI obligations other than Art 5.</td>
+        <td>Applies to operator obligations other than Art 5, including transparency duties. Since 27 July 2026 it also covers the value-chain duties in Article 25(2) and (4) (Art 99(4), point (da)).</td>
       </tr>
       <tr>
         <td><strong>Incorrect, incomplete or misleading information</strong> provided to notified bodies or national competent authorities</td>
@@ -1169,10 +1224,22 @@
         <td>Proportionality: for each tier, SMEs and start-ups pay whichever is smaller of the percentage of turnover or the fixed ceiling.</td>
       </tr>
       <tr>
+        <td><strong>Small mid-cap enterprises (SMCs)</strong></td>
+        <td>Art 99(6a)</td>
+        <td class="rate-green">Lower of percentage or fixed amount (Art 99(4) and (5) tiers only)</td>
+        <td>Added by the Digital Omnibus on AI. The cap does not extend to the prohibited-practices tier, where SMCs remain subject to the higher amount.</td>
+      </tr>
+      <tr>
         <td><strong>GPAI model providers</strong></td>
         <td>Art 101</td>
         <td class="rate-purple">EUR 15,000,000 or 3% of worldwide annual turnover</td>
-        <td>Commission may fine GPAI providers directly. Applicable from 2 August 2025.</td>
+        <td>Commission may fine GPAI providers directly. Article 101 was excluded from the 2 August 2025 phase and applies from 2 August 2026 (Art 113, third paragraph, point (b)).</td>
+      </tr>
+      <tr>
+        <td><strong>AI systems under AI Office supervision</strong></td>
+        <td>Art 75c</td>
+        <td class="rate-purple">Art 99(3) to (7) amounts, plus periodic penalty payments up to 5% of average daily income or turnover per day</td>
+        <td>Fines imposed by the AI Office on operators within Art 75(1). Any infringement of the Regulation, breach of AI Office decisions or binding commitments falls in the Art 99(4) tier.</td>
       </tr>
       <tr>
         <td><strong>Union institutions, bodies and agencies</strong></td>
@@ -1186,7 +1253,7 @@
 
   <div class="info-box info-box--amber">
     <h3><i class="mdi mdi-information-outline" style="color: var(--color-amber);"></i> General calculation rules</h3>
-    <p>In all cases, the applicable penalty is the higher of the fixed ceiling and the percentage-of-turnover figure, except for SMEs and start-ups (where it is the lower). Competent authorities must take into account the nature, gravity, duration and effects of the infringement; the degree of responsibility of the person concerned; and mitigating or aggravating circumstances. Repeated breaches within five years raise the upper limit. The European Data Protection Board may also impose fines through the GDPR where AI processing implicates personal data.</p>
+    <p>In all cases, the applicable penalty is the higher of the fixed ceiling and the percentage-of-turnover figure, except for SMEs and start-ups (where it is the lower) and, for the Article 99(4) and (5) tiers, SMCs. Member States may also provide for warnings and non-monetary measures, and must take into account the interests of SMEs, including start-ups, and SMCs and their economic viability when imposing penalties (Art 99(1)). Competent authorities must take into account the nature, gravity, duration and effects of the infringement; the degree of responsibility of the person concerned; and mitigating or aggravating circumstances. Repeated breaches within five years raise the upper limit. The European Data Protection Board may also impose fines through the GDPR where AI processing implicates personal data.</p>
   </div>
 </section>
 
@@ -1200,7 +1267,7 @@
     <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-timeline-outline"></i></div>
     <h2 class="section__title">The staggered application timeline</h2>
   </div>
-  <p class="section__subtitle">Article 113 and recital 179: a phased rollout from entry into force to full application</p>
+  <p class="section__subtitle">Article 113 and recital 179, as amended by the Digital Omnibus on AI: a phased rollout from entry into force to full application</p>
 
   <div class="timeline">
     <div class="timeline__item">
@@ -1209,7 +1276,7 @@
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2 February 2025 (6 months)</div>
-      <div class="timeline__text">Chapters I (general provisions) and II (<strong>prohibited practices, Article 5</strong>) begin to apply, along with the AI literacy duty. The eight prohibited uses of AI are enforceable from this date. National competent authorities must also be designated by this point (Art 70(1)).</div>
+      <div class="timeline__text">Chapters I (general provisions) and II (<strong>prohibited practices, Article 5</strong>) begin to apply, along with the AI literacy duty (reframed in 2026 as a duty to take measures to support AI literacy). The original eight prohibited uses of AI are enforceable from this date.</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2 May 2025</div>
@@ -1217,25 +1284,46 @@
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2 August 2025 (12 months)</div>
-      <div class="timeline__text">Chapter III Section 4 (notifying authorities and notified bodies), <strong>Chapter V (GPAI models)</strong>, Chapter VII (governance), Chapter XII (penalties) and Article 78 (confidentiality) begin to apply. GPAI providers are subject to all Article 53 duties, systemic-risk obligations (Art 55), and the AI Office may impose GPAI fines. Member States must designate national AI authorities. The general prohibition on Article 101 fines does not yet apply.</div>
+      <div class="timeline__text">Chapter III Section 4 (notifying authorities and notified bodies), <strong>Chapter V (GPAI models)</strong>, Chapter VII (governance), Chapter XII (penalties) and Article 78 (confidentiality) begin to apply. GPAI providers are subject to all Article 53 duties and the systemic-risk obligations (Art 55). Member States must designate national competent authorities (Art 70(2)). Article 101 (fines for GPAI providers) was excluded from this phase.</div>
     </div>
     <div class="timeline__item">
+      <div class="timeline__date">27 July 2026</div>
+      <div class="timeline__text">The <strong>Digital Omnibus on AI</strong> (<a href="http://data.europa.eu/eli/reg/2026/1744/oj" target="_blank" rel="noopener">Regulation (EU) 2026/1744</a>, OJ L, 24.7.2026) enters into force on the third day after publication. From this date: the reframed AI literacy duty and the Article 4a bias-detection legal basis, the narrower safety-component definition, SME and SMC simplifications, AI Office exclusive supervision (Arts 75 to 75d), single applications for notified bodies and Annex XIV. Articles 102 to 110 (amendments to sectoral legislation) apply from this date (Art 113, point (d)).</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
       <div class="timeline__date">2 August 2026 (24 months)</div>
-      <div class="timeline__text"><strong>General date of application.</strong> The bulk of the Regulation applies, including the Annex III high-risk system obligations, transparency duties (Art 50), sandboxes (Art 57), conformity assessments, CE marking, EU database registration and fundamental-rights impact assessments. AI regulatory sandboxes must be operational in each Member State.</div>
+      <div class="timeline__text"><strong>General date of application.</strong> The remaining provisions apply, including the transparency duties (Art 50), market surveillance (Chapter IX) and GPAI fines (Art 101). The high-risk obligations in Chapter III, Sections 1 to 3, which were originally due on this date, are postponed (see below).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 December 2026</div>
+      <div class="timeline__text">The two new <strong>prohibited practices</strong> apply: non-consensual intimate imagery and child sexual abuse material (Art 5(1), points (ba) and (bb), with Art 5(1a) and (1b)). Providers of generative AI systems placed on the market before 2 August 2026 must comply with the <strong>marking of synthetic content</strong> (Art 50(2)) by this date (Art 111(4)).</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2 August 2027 (36 months)</div>
-      <div class="timeline__text">Article 6(1) and the corresponding obligations for <strong>Annex I product-related high-risk AI systems</strong> begin to apply. GPAI models placed on the market before 2 August 2025 must be brought into compliance by this date (Art 111(3)).</div>
+      <div class="timeline__text">National <strong>AI regulatory sandboxes</strong> must be operational (Art 57(1)). GPAI models placed on the market before 2 August 2025 must be brought into compliance by this date (Art 111(3)). The Commission must adopt delegated acts limiting duplicated requirements for Annex I, Section A products (Art 2(13)) and publish guidelines on combining AI Act and sectoral compliance by 1 August 2027 (Art 96(1), point (g)).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 December 2027</div>
+      <div class="timeline__text">Chapter III, Sections 1 to 3 (classification, requirements and operator obligations, including fundamental-rights impact assessments) apply to <strong>Annex III high-risk AI systems</strong> (Art 113, point (c)(i)).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 August 2028</div>
+      <div class="timeline__text">Chapter III, Sections 1 to 3 apply to <strong>Annex I product-related high-risk AI systems</strong> (Art 113, point (c)(ii)). Delegated acts adding AI requirements to the Machinery Regulation must apply by this date.</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2 August 2030 / 31 December 2030</div>
-      <div class="timeline__text">Compliance deadlines for <strong>legacy public-authority high-risk AI systems</strong> (Art 111) and certain large-scale IT systems listed in Annex X (including Eurodac, VIS, SIS II, EES and ETIAS) that were already in operation before the general application date.</div>
+      <div class="timeline__text">High-risk AI systems <strong>intended to be used by public authorities</strong> must comply by 2 August 2030 (Art 111(2)); certain large-scale IT systems listed in Annex X (including Eurodac, VIS, SIS II, EES and ETIAS) by 31 December 2030 (Art 111(1)).</div>
     </div>
   </div>
 
   <div class="info-box info-box--amber" style="margin-top:1.5rem;">
-    <h3><i class="mdi mdi-note-edit-outline" style="color: var(--color-amber);"></i> Note on the Digital Omnibus (2025/0359)</h3>
-    <p><strong>Update (16 June 2026):</strong> the European Parliament <strong>adopted the AI Act simplification omnibus (2025/0359(COD)) at first reading on 16 June 2026 by 423 votes to 57, with 174 abstentions</strong>, following the provisional inter-institutional agreement of 7 May 2026 (Coreper cleared the deal on 13 May 2026). The adopted text makes the revised dates binding: a new Article 5 ban on AI systems creating non-consensual intimate imagery and child sexual abuse material (compliance by 2 December 2026); watermarking of AI-generated content from 2 December 2026; standalone high-risk AI (Annex III) from 2 December 2027; and high-risk AI embedded in regulated products from 2 August 2028. Most other AI Act provisions continue to apply from 2 August 2026. <strong>Only the Council's formal adoption now remains</strong>; the existing text of Regulation (EU) 2024/1689 remains in force until the amending act is published in the Official Journal. Joint EP rapporteurs (IMCO and LIBE): Arba Kokalari (EPP, Sweden) and Michael McNamara (Renew, Ireland). Source: EP press release 20260611IPR45207.</p>
+    <h3><i class="mdi mdi-note-edit-outline" style="color: var(--color-amber);"></i> Status: what the Digital Omnibus on AI changed</h3>
+    <p>The European Parliament adopted its first-reading position on <strong>16 June 2026</strong> (423 votes to 57, with 174 abstentions) and the Council approved it on <strong>29 June 2026</strong>. Regulation (EU) 2026/1744 was signed on 8 July 2026, published in the Official Journal on 24 July 2026 and entered into force on <strong>27 July 2026</strong>. Joint EP rapporteurs (IMCO and LIBE): Arba Kokalari (EPP, Sweden) and Michael McNamara (Renew, Ireland).</p>
+    <ul>
+      <li><strong>Grace period for existing high-risk systems (Art 111(2)):</strong> the Regulation applies to high-risk systems placed on the market before the new Chapter III dates only if their design changes significantly afterwards. Recital 39 clarifies that the grace period attaches to the <em>type and model</em>: if one unit was lawfully placed on the market in time, further units of the same unchanged design are covered. Systems used by public authorities must comply by 2 August 2030 in any case.</li>
+      <li><strong>Codes of practice:</strong> the Commission no longer approves GPAI and content-marking codes by implementing act; it assesses their adequacy and publishes the assessment (Arts 50(7) and 56(6)). Post-market monitoring guidance, with a template, is due by 2 September 2027 (Art 72(3)).</li>
+      <li><strong>Interplay with other laws:</strong> high-risk systems meeting the Cyber Resilience Act's essential requirements are deemed to meet the Article 15 cybersecurity requirement (Art 42(3)), and the Commission must request European standardisation deliverables that facilitate joint compliance with the AI Act and the Annex I legislation (Art 40(2)).</li>
+    </ul>
   </div>
 </section>
 
@@ -1266,7 +1354,11 @@
     </div>
     <div class="glossary-card">
       <div class="glossary-card__term">High-risk AI system</div>
-      <div class="glossary-card__def">An AI system classified as high-risk under Article 6: either a safety component of a product covered by Union harmonisation legislation in Annex I that requires third-party conformity assessment (Art 6(1)), or an AI system falling in one of the eight use-case areas listed in Annex III (Art 6(2)). Subject to the full Chapter III requirements.</div>
+      <div class="glossary-card__def">An AI system classified as high-risk under Article 6: either a safety component of a product covered by Union harmonisation legislation in Annex I that requires third-party conformity assessment (Art 6(1)), or an AI system falling in one of the eight use-case areas listed in Annex III (Art 6(2)). Subject to the full Chapter III requirements from 2 December 2027 (Annex III) or 2 August 2028 (Annex I).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Safety component</div>
+      <div class="glossary-card__def">A component of a product or AI system which fulfils a safety function, or whose failure or malfunctioning endangers the health and safety of persons or property; a component fulfils a safety function where its intended purpose is to prevent or mitigate such risks (Article 3(14), as amended in 2026). AI used solely for non-safety user assistance, optimisation, efficiency, automation, convenience or quality control does not qualify (Art 6(1a)).</div>
     </div>
     <div class="glossary-card">
       <div class="glossary-card__term">General-purpose AI model</div>
@@ -1278,7 +1370,11 @@
     </div>
     <div class="glossary-card">
       <div class="glossary-card__term">Prohibited practice</div>
-      <div class="glossary-card__def">One of the eight AI uses listed in Article 5 that are banned outright from 2 February 2025: subliminal or manipulative techniques, exploitation of vulnerabilities, social scoring, predictive policing by profiling, untargeted facial scraping, emotion recognition at work and school, biometric categorisation by sensitive attributes, and (with limited exceptions) real-time RBI by law enforcement in public spaces.</div>
+      <div class="glossary-card__def">One of the ten AI uses listed in Article 5 that are banned outright: subliminal or manipulative techniques, exploitation of vulnerabilities, social scoring, predictive policing by profiling, untargeted facial scraping, emotion recognition at work and school, biometric categorisation by sensitive attributes, and (with limited exceptions) real-time RBI by law enforcement in public spaces, all from 2 February 2025; plus non-consensual intimate imagery and child sexual abuse material from 2 December 2026.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">SME and small mid-cap (SMC)</div>
+      <div class="glossary-card__def">An SME is a micro, small or medium-sized enterprise as defined in Recommendation 2003/361/EC (Article 3(14a)); an SMC is a small mid-cap enterprise as defined in Recommendation (EU) 2025/1099 (Article 3(14b)). Both definitions were added in 2026 so that simplified documentation, lighter fines and priority sandbox access can extend to firms that outgrow SME status.</div>
     </div>
   </div>
 </section>
@@ -1298,11 +1394,11 @@
   <div class="glossary-grid">
     <div class="glossary-card">
       <div class="glossary-card__term">AI Act</div>
-      <div class="glossary-card__def">Regulation (EU) 2024/1689 of the European Parliament and of the Council laying down harmonised rules on artificial intelligence. The world's first comprehensive horizontal AI regulation. Entry into force 1 August 2024; general application 2 August 2026.</div>
+      <div class="glossary-card__def">Regulation (EU) 2024/1689 of the European Parliament and of the Council laying down harmonised rules on artificial intelligence. The world's first comprehensive horizontal AI regulation. Entry into force 1 August 2024; general application 2 August 2026. Amended by the Digital Omnibus on AI, Regulation (EU) 2026/1744, in force 27 July 2026.</div>
     </div>
     <div class="glossary-card">
       <div class="glossary-card__term">AI Office</div>
-      <div class="glossary-card__def">The body within the European Commission responsible for Union-level expertise in AI and the supervision of GPAI models. Established by Commission Decision of 24 January 2024 ahead of the Regulation's entry into force. Manages the EU database and codes of practice.</div>
+      <div class="glossary-card__def">The body within the European Commission responsible for Union-level expertise in AI and the supervision of GPAI models. Established by Commission Decision of 24 January 2024 ahead of the Regulation's entry into force. Since 27 July 2026 it also exclusively supervises AI systems built on a provider's own GPAI models and AI systems in very large online platforms and search engines (Articles 75 to 75d).</div>
     </div>
     <div class="glossary-card">
       <div class="glossary-card__term">GPAI</div>
@@ -1353,7 +1449,9 @@
       <ul>
         <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" style="color: var(--color-blue);">Regulation (EU) 2024/1689 on EUR-Lex (CELEX 32024R1689)</a></li>
         <li><a href="http://data.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener" style="color: var(--color-blue);">ELI: http://data.europa.eu/eli/reg/2024/1689/oj</a></li>
-        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689&from=EN" target="_blank" rel="noopener" style="color: var(--color-blue);">Full consolidated text with recitals and all Chapters</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R1689-20260727" target="_blank" rel="noopener" style="color: var(--color-blue);">Consolidated text as amended, version of 27 July 2026</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202601744" target="_blank" rel="noopener" style="color: var(--color-blue);">Regulation (EU) 2026/1744 (Digital Omnibus on AI) on EUR-Lex, OJ L, 24.7.2026</a></li>
+        <li><a href="http://data.europa.eu/eli/reg/2026/1744/oj" target="_blank" rel="noopener" style="color: var(--color-blue);">ELI: http://data.europa.eu/eli/reg/2026/1744/oj</a></li>
       </ul>
     </div>
     <div class="card">
@@ -1480,6 +1578,7 @@
         <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
         <ul class="footer__nav">
           <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">Reg 2024/1689 on EUR-Lex</a></li>
+          <li><a href="http://data.europa.eu/eli/reg/2026/1744/oj" target="_blank" rel="noopener">Digital Omnibus on AI (Reg 2026/1744)</a></li>
           <li><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">DG CNECT AI Act page</a></li>
           <li><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-office" target="_blank" rel="noopener">AI Office official page</a></li>
         </ul>
@@ -1491,7 +1590,7 @@
         <p style="font-weight:700;">Built by Beresol BV</p>
         <p>Apeldoorn, Netherlands</p>
         <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
-        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Regulation (EU) 2024/1689 and official EUR-Lex sources.</p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Regulation (EU) 2024/1689, as amended by Regulation (EU) 2026/1744, and official EUR-Lex sources.</p>
       </div>
     </div>
   </div>
