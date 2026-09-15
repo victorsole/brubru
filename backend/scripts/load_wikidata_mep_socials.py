@@ -19,7 +19,8 @@ logging.disable(logging.INFO)
 
 from core.database import SessionLocal, engine  # noqa: E402
 engine.echo = False
-from services.social.wikidata_mep_loader import fetch_mep_socials, load  # noqa: E402
+from services.social.wikidata_mep_loader import (  # noqa: E402
+    ep_display_name, fetch_ep_current, fetch_mep_socials, load, needs_name_fallback)
 
 
 def main() -> int:
@@ -36,12 +37,25 @@ def main() -> int:
         if args.cache:
             json.dump(bindings, open(args.cache, "w"))
             print(f"cached {len(bindings)} bindings -> {args.cache}")
+    ep_names = None
+    if needs_name_fallback(bindings):
+        # Some MEPs have no Wikidata label in any requested language: fall back to the EP
+        # directory name via P1186. Never store a bare QID as a name.
+        try:
+            ep_names = {eid: ep_display_name(m) for eid, m in fetch_ep_current().items()}
+            print(f"EP directory loaded for name fallback: {len(ep_names)} current MEPs")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[ERROR] EP directory fetch failed ({type(exc).__name__}); "
+                  "unlabelled MEPs will get entity_name NULL")
     db = SessionLocal()
     try:
-        stats = load(db, bindings, dry_run=not args.apply)
+        stats = load(db, bindings, dry_run=not args.apply, ep_names=ep_names)
     finally:
         db.close()
     print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] MEPs={stats['meps']} accounts_written={stats['written']}")
+    if stats["unnamed_meps"]:
+        print(f"[ERROR] {len(stats['unnamed_meps'])} MEP(s) with no name anywhere "
+              f"(entity_name NULL): {', '.join(stats['unnamed_meps'])}")
     print("by_platform:", dict(sorted(stats["by_platform"].items(), key=lambda x: -x[1])))
     return 0
 

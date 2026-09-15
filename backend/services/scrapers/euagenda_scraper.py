@@ -228,6 +228,45 @@ def _parse_detail_url(href: str) -> Tuple[Optional[date], Optional[str], str]:
 
 
 # --------------------------------------------------------------------------
+# Listing helpers: card detection, WAF detection, browser fallback
+# --------------------------------------------------------------------------
+
+_WAF_STATUS_RE = re.compile(r"HTTP (202|403|429|503)\b")
+_CHALLENGE_MARKERS = ("Just a moment...", "challenges.cloudflare.com", "cf-chl-")
+
+
+def _find_cards(html: str):
+    soup = BeautifulSoup(html or "", "html.parser")
+    return soup.find_all("div", class_=re.compile(r"\bevent-box\b"))
+
+
+def _needs_browser(http_error: Optional[str], html: str) -> bool:
+    """True on a WAF status, a challenge page, or a 200 with nothing parseable."""
+    if http_error:
+        return bool(_WAF_STATUS_RE.search(http_error)) or "timeout" in http_error.lower()
+    # A 200 that parsed to zero cards (challenge page or JS-rendered listing) is
+    # a wall until the browser proves otherwise.
+    return True
+
+
+def _browser_fetch(url: str) -> Tuple[str, Optional[str]]:
+    """Render one URL with the Playwright WAF fetcher. Returns (html, error)."""
+    try:
+        from services.scrapers.waf_browser_fetcher import fetch_one
+    except Exception as exc:  # pragma: no cover - host dependent
+        return "", f"{type(exc).__name__}: {exc}"
+    try:
+        res = fetch_one(url, expand_accordions=False, strip_chrome=False, settle_ms=8000)
+    except Exception as exc:  # pragma: no cover - network dependent
+        return "", f"{type(exc).__name__}: {exc}"
+    if res.error:
+        return "", res.error
+    if any(m in (res.html or "") for m in _CHALLENGE_MARKERS):
+        return res.html, f"challenge page still served (status={res.nav_status}, title={res.title!r})"
+    return res.html, None
+
+
+# --------------------------------------------------------------------------
 # Scraper
 # --------------------------------------------------------------------------
 
@@ -259,6 +298,17 @@ class EuAgendaScraper(BaseScraper):
             timeout=30,
             max_retries=3,
         )
+        # Three-state fetch report for the last listing call, read by the sync
+        # service and by scripts/sync_euagenda.py. Before 15 Sep 2026 a blocked
+        # listing returned [] and the run printed added/updated/skipped/errors all
+        # 0 in 0.5s with exit 0: nothing FETCHED was indistinguishable from
+        # nothing PUBLISHED (feedback_silent_failure_reports_success).
+        #   listing_via      "http" | "browser" | None (nothing fetched)
+        #   listing_cards    number of event cards parsed
+        #   listing_error    why nothing was fetched, or None
+        self.listing_via: Optional[str] = None
+        self.listing_cards: int = 0
+        self.listing_error: Optional[str] = None
 
     # ------------------------------------------------------------------
     # Listing page
@@ -279,15 +329,44 @@ class EuAgendaScraper(BaseScraper):
         if policy_area and policy_area in self.POLICY_URLS:
             url = f"{self.base_url}/events/{policy_area}"
 
+        self.listing_via = None
+        self.listing_cards = 0
+        self.listing_error = None
+
+        html = ""
+        http_error: Optional[str] = None
         try:
             html = await self._fetch(url, use_cache=False)
         except ScraperError as exc:
-            logger.error("euagenda: listing fetch failed: %s", exc)
-            return []
+            http_error = str(exc)
+            logger.warning("euagenda: plain listing fetch failed: %s", exc)
 
-        soup = BeautifulSoup(html, "html.parser")
-        cards = soup.find_all("div", class_=re.compile(r"\bevent-box\b"))
-        logger.info("euagenda: found %d event cards on %s", len(cards), url)
+        cards = _find_cards(html) if html else []
+        via = "http" if cards else None
+        if not cards and _needs_browser(http_error, html):
+            # euagenda.eu went behind a Cloudflare managed challenge (seen 15 Sep
+            # 2026: every path, robots.txt excepted, answers 403 "Just a
+            # moment..."). Hard rule: at a WAF switch to the Playwright fetcher,
+            # never tune headers.
+            logger.info("euagenda: WAF/JS wall on %s, retrying with browser", url)
+            b_html, b_err = await asyncio.to_thread(_browser_fetch, url)
+            if b_html:
+                cards = _find_cards(b_html)
+                if cards:
+                    via = "browser"
+            if not cards:
+                http_error = (
+                    f"{http_error or 'no event cards in HTML'}; browser fallback: "
+                    f"{b_err or 'no event cards after render (challenge not cleared)'}"
+                )
+
+        self.listing_via = via
+        self.listing_cards = len(cards)
+        if not cards:
+            self.listing_error = http_error or "listing parsed but held zero event cards"
+            logger.error("euagenda: nothing fetched from %s: %s", url, self.listing_error)
+            return []
+        logger.info("euagenda: found %d event cards on %s (via %s)", len(cards), url, via)
 
         results: List[Dict] = []
         for card in cards[:limit]:
@@ -483,6 +562,12 @@ class EuAgendaScraper(BaseScraper):
         cards = await self.scrape_listing(limit=max_events)
         if not cards:
             return []
+        if include_details and self.listing_via == "browser":
+            # The detail pages sit behind the same wall; one plain fetch per card
+            # would log 100 403s. Use the card-only path when the listing itself
+            # needed a browser.
+            logger.info("euagenda: listing needed a browser, using card-only path")
+            include_details = False
 
         events: List[ScrapedEuAgendaEvent] = []
         for i, card in enumerate(cards):

@@ -34,6 +34,8 @@ def _upsert(db, it) -> str:
         for f in ("title", "news_date", "source_url", "item_type"):
             if it.get(f) and getattr(existing, f) != it.get(f):
                 setattr(existing, f, it.get(f)); changed = True
+        if it.get("summary") and not existing.summary:
+            existing.summary = it["summary"]; changed = True
         if changed:
             existing.policy_areas = classify(existing.title or "", existing.summary or "")
         return "updated" if changed else "skipped"
@@ -110,12 +112,19 @@ def main():
         # failed with stderr_tail), so the verdict has to be an exit code and the
         # culprits have to be on stderr to be visible at all.
         if unreachable:
-            print(f"[bespoke_news] FAILED: unreachable sources: {', '.join(unreachable)}",
+            print(f"[ERROR] bespoke_news FAILED: unreachable sources: {', '.join(unreachable)}",
                   file=sys.stderr)
             return 1
         if failed:
             print(f"[bespoke_news] FAILED: errored sources: {', '.join(failed)}",
                   file=sys.stderr)
+            return 1
+        required_empty = [c["institution"] for c in BESPOKE_SOURCES
+                          if c.get("required") and c["institution"] in empty]
+        if required_empty:
+            print(f"[ERROR] bespoke_news FAILED: required institutional source(s) parsed "
+                  f"0 items: {', '.join(required_empty)} (block page, consent wall or "
+                  "changed markup; these publish every working day)", file=sys.stderr)
             return 1
         if counts["sources"] and counts["empty"] == counts["sources"]:
             print("[bespoke_news] FAILED: every source parsed to zero -- that is the "

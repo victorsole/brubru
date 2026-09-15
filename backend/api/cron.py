@@ -479,7 +479,14 @@ async def cron_build_procedure_snapshots(
 async def cron_fetch_social_posts(
     authorization: str = Header(...),
     mode: str = Query("open", description="'open' = Bluesky/Mastodon/YouTube batch; 'x' = paced X drip"),
-    limit: int = Query(None, ge=1, description="cap accounts this run (drip size)"),
+    limit: int = Query(None, ge=1, le=300, description="cap accounts this run (drip size)"),
+    per_account: int = Query(None, ge=1, le=20, description="posts per account (x default 10)"),
+    pace: float = Query(None, ge=3.0, le=30.0,
+                        description="seconds between X accounts (x default 5.0; floor 3.0, never faster)"),
+    empty_streak_stop: int = Query(None, ge=1, le=20,
+                                   description="stop the X run after this many consecutive empty fetches (default 8)"),
+    order: str = Query("verified_first", pattern="^(verified_first|oldest)$",
+                       description="x only: 'verified_first' (default) or 'oldest' (pure oldest-checked-first)"),
 ):
     """
     Fetch recent posts from mapped social accounts (Phase 4.2 content layer). Oldest-checked
@@ -500,10 +507,19 @@ async def cron_fetch_social_posts(
             # more often. Spending the scarce budget on the 464 verified
             # accounts first cycles institutions, Commissioners and confirmed
             # MEPs in ~6.6 days and lets the unverified tail lag.
+            #
+            # order='oldest' added 15 Sep 2026 for the daily TAIL window (see
+            # scripts/cron_dispatch.py, social_x_tail). verified_first starves the
+            # unverified accounts outright: on 15 Sep all 466 verified X accounts were
+            # fresh (oldest 9 Sep) while 618 of 689 unverified had not been checked in
+            # over 7 days (oldest 12 Aug), because a throttled run never gets past the
+            # verified group. The tail window reads the same queue oldest-first, which
+            # today IS the unverified backlog. Same pacing floor, same throttle-stop.
             result = await run_in_threadpool(
                 run, db, platforms=("x",), limit_accounts=limit or 40,
-                per_account=10, pace=5.0, empty_streak_stop=8,
-                prioritise_verified=True)
+                per_account=per_account or 10, pace=pace or 5.0,
+                empty_streak_stop=empty_streak_stop or 8,
+                prioritise_verified=(order == "verified_first"))
         else:
             result = await run_in_threadpool(
                 run, db, platforms=("bluesky", "mastodon", "youtube"),
@@ -578,7 +594,13 @@ async def cron_sync_daily(
     results["tenders_fetch"] = await _run_script_async(
         "tenders_fetch",
         "scripts/fetch_tenders.py",
-        ["--days", "2", "--max-results", "400"], timeout=1500,
+        # NO --max-results. The cap of 400 (with the fetcher returning the
+        # window oldest-day-first) stored exactly 400 of ~1,100-1,600 matching
+        # notices a day from 8 to 11 Sep 2026. The script now scans each day in
+        # full, verifies it against TED's totalNoticeCount and exits non-zero on
+        # an incomplete day. Timeout sized for one new day of XML (~1,600 at
+        # <= 8 req/s, plus 429 back-off measured at ~10 min under contention).
+        ["--days", "2"], timeout=2700,
     )
     # Enrichment pass over whatever is now in the table, including what the
     # fetch just added.
@@ -609,7 +631,10 @@ async def cron_sync_daily(
     results["ft_funding_opportunities"] = await _run_script_async(
         "ft_funding_opportunities",
         "scripts/ingest_funding_sedia.py",
-        ["--apply", "--limit", "500", "--write-ft"], timeout=900,
+        # 1800 s: since 15 Sep 2026 the job pages through EVERY open/forthcoming
+        # call and tender (~30 SEDIA pages at ~10 s each) instead of a 500-row
+        # budget that never reached tenders or the English records.
+        ["--apply", "--limit", "500", "--write-ft"], timeout=1800,
     )
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang
@@ -1106,7 +1131,11 @@ async def cron_sync_weekly(
         ["--apply"], timeout=1800,
     )
     results["fta"] = await _run_script_async("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
-    results["trade_defence"] = await _run_script_async("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
+    # --days, not --limit: --limit only caps a DRY run, so "--apply --limit 20" re-walked
+    # 1995-now and re-hydrated every known act oldest-first, timing out before 2026.
+    # The table stopped at 12 May 2026 (15 Sep 2026 finding). A 21-day window covers a
+    # missed weekly run; a full walk is a manual backfill (memory/specialised_backfill_queue.md).
+    results["trade_defence"] = await _run_script_async("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--days", "21"], timeout=1800)
     results["gi"] = await _run_script_async("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
     results["cohesion"] = await _run_script_async("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
     # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].

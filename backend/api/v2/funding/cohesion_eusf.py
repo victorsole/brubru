@@ -130,7 +130,7 @@ async def list_eusf(
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(
         text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_solidarity_fund{clause} "
-             f"ORDER BY eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC LIMIT :limit OFFSET :offset"),
+             f"ORDER BY eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC LIMIT :limit OFFSET :offset"),
         params2,
     ).mappings().all()
     items = [_row_to_item(r, with_body=include_body) for r in rows]

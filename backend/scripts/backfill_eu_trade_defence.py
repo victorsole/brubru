@@ -28,7 +28,7 @@ import io
 import re
 import sys
 import time
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any, Optional
 from urllib import error as urllib_error
@@ -87,7 +87,10 @@ def classify_duty_status(title: str) -> str:
     t = title.lower()
     if "initiating an investigation" in t or "initiation" in t:
         return "initiation"
-    if "registration of imports" in t:
+    # "making imports of X ... subject to registration" is the phrasing every
+    # registration regulation uses in 2026 (2026/1747, 1824, 2022, 2023, 2049);
+    # only "registration of imports" was recognised, so they classified "other".
+    if "registration of imports" in t or "subject to registration" in t:
         return "registration"
     if "expiry review" in t or "expiry" in t:
         return "expiry_review"
@@ -120,11 +123,30 @@ _PRODUCT_PATTERN = re.compile(
 )
 
 
+# The lazy match above runs to "and"/end-of-title, so it swallowed the rest of
+# the title whenever the country was followed by a clause: measured 15 Sep 2026,
+# 497 of 1,500 rows held values like "People's Republic of China following an
+# expiry review pursuant to Article 11(2)..." or "...China subject to
+# registration with a view to allowing the levy of anti-dumping duties". Cut at
+# the first clause marker. Commas stay, so country LISTS survive.
+_TARGET_CLAUSE_CUT = re.compile(
+    r"\s+(?:following|subject to|by |from the extension|as regards|or not|as well as|for (?:one|two|three|four|five|\w+) (?:\w+ )?exporting|for the period|for one|for certain|for a|by imports|"
+    r"to imports|as extended|as amended|with regard|with a view|pursuant|in so far|insofar|"
+    r"after|and (?:terminating|repealing|collecting|definitively|amending|extending|imposing))\b"
+    r"|,\s*(?:imposing|repealing|terminating|amending|and|following|as|for)\b",
+    re.IGNORECASE,
+)
+
+
 def extract_target_country(title: str) -> Optional[str]:
     m = _TARGET_PATTERN.search(title)
     if not m:
         return None
     raw = m.group(1).strip()
+    raw = re.sub(r"^(?:or consigned from|and consigned from)\s+(?:the\s+)?", "", raw, flags=re.IGNORECASE)
+    cut = _TARGET_CLAUSE_CUT.search(raw)
+    if cut:
+        raw = raw[: cut.start()]
     raw = re.sub(r"\s*\(.*\)\s*$", "", raw)
     raw = raw.strip(" ,;:.")
     return raw[:120] if raw else None
@@ -233,12 +255,33 @@ def strip_html_to_text(html: str) -> str:
 # ─────────────────────── Universe enumeration ────────────────────────────
 
 
-async def fetch_trade_defence_universe() -> list[dict]:
+def discovery_windows(days: Optional[int], today: Optional[date] = None) -> list[tuple[date, date, str]]:
+    """Date windows to list from Cellar.
+
+    Full walk: one bucket per year, 1995 to the CURRENT year (was a hardcoded
+    range(1995, 2027), which would silently stop discovering acts on 1 Jan 2027).
+
+    Delta (``days``): a single window ending today. Added 15 Sep 2026: before it
+    the weekly cron (`--apply --limit 20`) re-walked every year from 1995 and
+    re-hydrated all ~1,500 known acts oldest-first, because `--limit` only applies
+    to a dry run. Inside its 1,800 s timeout it never reached 2026, so the table
+    stopped at 12 May 2026 while Cellar held dozens of newer measures
+    (e.g. 2026/2049, alkaline batteries registration, 14 Sep 2026).
+    """
+    today = today or date.today()
+    if days:
+        start = today - timedelta(days=days)
+        return [(start, today, f"{start}..{today}")]
+    return [(date(y, 1, 1), date(y, 12, 31), str(y)) for y in range(1995, today.year + 1)]
+
+
+async def fetch_trade_defence_universe(days: Optional[int] = None) -> list[dict]:
     """All sector-3 regulations with trade-defence keywords in their title.
 
     Cellar's 10k cap is a real constraint here — sector-3 has 250k+ rows
     so we shard by 1-year buckets back to 1995 (the year the Anti-Dumping
     Regulation 384/96 came into effect, predecessor to 1225/2009 → 2016/1036).
+    With ``days`` only the recent window is listed (the delta).
     """
     sys.path.insert(0, str(ROOT / "backend"))
     from services.api_clients.cellar_sparql_client import CellarSPARQLClient
@@ -246,18 +289,18 @@ async def fetch_trade_defence_universe() -> list[dict]:
     matches: list[dict] = []
     seen: set[str] = set()
     async with CellarSPARQLClient() as client:
-        for year in range(1995, 2027):
+        for w_from, w_to, label in discovery_windows(days):
             offset = 0
             year_match = 0  # init before the loop so exception path is safe
             while True:
                 try:
                     rows = await client.discover_by_date_range(
-                        date_from=date(year, 1, 1), date_to=date(year, 12, 31),
+                        date_from=w_from, date_to=w_to,
                         sectors=["3"], language="ENG",
                         limit=1000, offset=offset,
                     )
                 except Exception as exc:
-                    print(f"[warn]   {year}@{offset}: {exc!s}", flush=True)
+                    print(f"[warn]   {label}@{offset}: {exc!s}", flush=True)
                     break
                 if not rows:
                     break
@@ -278,7 +321,7 @@ async def fetch_trade_defence_universe() -> list[dict]:
                 offset += 1000
                 if offset >= 10000:
                     break
-            print(f"[INFO]   {year}: +{year_match} trade-defence matches (running total {len(matches)})", flush=True)
+            print(f"[INFO]   {label}: +{year_match} trade-defence matches (running total {len(matches)})", flush=True)
     return matches
 
 
@@ -376,7 +419,7 @@ def _open_db():
 
 async def main_async(args):
     print("[INFO] Listing trade-defence universe via Cellar SPARQL...", flush=True)
-    universe = await fetch_trade_defence_universe()
+    universe = await fetch_trade_defence_universe(days=args.days)
     print(f"[INFO] {len(universe):,} trade-defence regulations identified", flush=True)
 
     conn = _open_db(); cur = conn.cursor()
@@ -500,6 +543,8 @@ def main():
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
     ap.add_argument("--refresh-bodies", action="store_true")
+    ap.add_argument("--days", type=int, default=None,
+                    help="Delta: only list acts dated in the last N days (default: full 1995-now walk)")
     args = ap.parse_args()
     asyncio.run(main_async(args))
 

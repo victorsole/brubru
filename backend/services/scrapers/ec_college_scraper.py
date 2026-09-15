@@ -11,7 +11,7 @@ Created: February 2026
 
 import logging
 from datetime import date, timedelta
-from typing import List, Dict, Any
+from typing import Any, Dict, Iterable, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,10 @@ EC_DOC_REGISTER_OJ_URL = (
 )
 
 
-def generate_college_meetings(months_ahead: int = 6) -> List[Dict[str, Any]]:
+def generate_college_meetings(
+    months_ahead: int = 6,
+    strasbourg_plenary_dates: Optional[Iterable[date]] = None,
+) -> List[Dict[str, Any]]:
     """
     Generate Commission college meeting events.
 
@@ -35,8 +38,21 @@ def generate_college_meetings(months_ahead: int = 6) -> List[Dict[str, Any]]:
     exceptions during recess periods). This generates events for
     the specified number of months ahead.
 
+    In an EP Strasbourg plenary week the College meets on TUESDAY in Strasbourg,
+    not Wednesday (SEC(2026)2578 lists 6 and 20 October 2026 "(Str)", both
+    Tuesdays). Pass the plenary sitting dates and those weeks move to Tuesday;
+    without them the generator used to place a phantom Wednesday meeting beside
+    the real one (15 Sep 2026: Tuesday on the Commission agenda, Wednesday here).
+
     Returns list of event dicts ready for the sync service.
     """
+    # A Strasbourg part-session sits Monday to Thursday; a Brussels mini-session
+    # sits Wednesday and Thursday only, and the College keeps its Wednesday then.
+    # So only a week with a Monday or Tuesday sitting counts.
+    strasbourg_mondays = {
+        d - timedelta(days=d.weekday())
+        for d in (strasbourg_plenary_dates or []) if d.weekday() <= 1
+    }
     events = []
     today = date.today()
     end_date = today + timedelta(days=months_ahead * 30)
@@ -63,17 +79,23 @@ def generate_college_meetings(months_ahead: int = 6) -> List[Dict[str, Any]]:
         )
 
         if not in_recess:
-            ext_id = f"ec_college_{current.isoformat()}"
+            week_monday = current - timedelta(days=current.weekday())
+            in_strasbourg = week_monday in strasbourg_mondays
+            meeting_day = week_monday + timedelta(days=1) if in_strasbourg else current
+            ext_id = f"ec_college_{meeting_day.isoformat()}"
             events.append({
                 "institution": "COMMISSION",
                 "event_type": "commission_college_meeting",
-                "title": "College of Commissioners \u2014 Weekly Meeting",
+                "title": (
+                    "College of Commissioners: Weekly Meeting (Strasbourg)"
+                    if in_strasbourg else "College of Commissioners: Weekly Meeting"
+                ),
                 "description": (
                     "Weekly meeting of the College of Commissioners. "
                     "The agenda (OJ document) and minutes (PV document) "
                     "are published in the EC Register of Commission Documents."
                 ),
-                "start_date": current,
+                "start_date": meeting_day,
                 "all_day": True,
                 "status": "scheduled",
                 "source": "ec_college",

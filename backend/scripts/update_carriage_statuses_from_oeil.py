@@ -1,15 +1,23 @@
 """
 Update Legislative Carriage Statuses Based on OEIL Key Events
 
-This script fetches OEIL data for carriages with procedure refs and updates
-their status based on key events detected on the OEIL procedure page.
+This script fetches each carriage's live OEIL procedure page and writes what the
+page states: key events, forecasts, rapporteur, committee responsible, opinion
+committees, the cleaned page body, and the status those events prove.
 
-Status inference rules (strongest signal wins):
-  - "Final act signed" or "Final act published" or "Entry into force" -> ADOPTED
-  - "Act adopted by Council" or "Decision by Parliament" (both present) -> COMPLETED
-  - "Act adopted by Council" alone -> COMPLETED
-  - "Vote in committee" or "Committee report" -> CLOSE_TO_ADOPTION (only if currently ANNOUNCED/TABLED)
-  - "Legislative proposal" or "Committee referral" -> TABLED (only if currently ANNOUNCED)
+Status inference rules (strongest signal wins; status only ever ADVANCES):
+  - "Final act signed" / "Final act published" / "Entry into force" -> ADOPTED
+  - "Act adopted by Council", or OEIL stage "Procedure completed" -> COMPLETED
+  - "Decision by Parliament", "Vote in committee", "Committee report",
+    "Committee recommendation tabled", "Approval in committee of the text
+    agreed" -> CLOSE_TO_ADOPTION
+  - "Legislative proposal" or "Committee referral" -> TABLED
+
+Every page that cannot be fetched or parses to nothing is an ERROR (counted,
+listed, exit code 1), never a skip. Until 15 Sep 2026 the parser returned one
+guessed event per page, forecasts never, opinion committees never, and the
+script persisted only key events + status, so a run "changed nothing" while
+OEIL had moved on.
 """
 
 import argparse
@@ -25,9 +33,15 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent.parent / '.env')
 
 from sqlalchemy.exc import OperationalError, DBAPIError
+from sqlalchemy.orm.attributes import flag_modified
 from core.database import SessionLocal
 from models.legislative_train import LegislativeCarriage, CarriageStatusEnum
-from services.scrapers.oeil_scraper import OEILScraper
+from services.scrapers.oeil_scraper import OEILScraper, OEILFetchError
+from services.scrapers.oeil_body_scraper import parse_body
+from services.scrapers.oeil_procedure_parser import (
+    STATUS_RANK as _PARSER_STATUS_RANK, advance_status, carriage_fields_from_procedure,
+    infer_carriage_status,
+)
 
 
 _ap = argparse.ArgumentParser(description="Update carriage statuses from OEIL key events")
@@ -47,62 +61,26 @@ def log(msg):
     print(msg, flush=True)
 
 
-# Status progression order (higher index = further along)
-STATUS_RANK = {
-    CarriageStatusEnum.ANNOUNCED: 0,
-    CarriageStatusEnum.LEGISLATIVE_INITIATIVE: 1,
-    CarriageStatusEnum.TABLED: 2,
-    CarriageStatusEnum.CLOSE_TO_ADOPTION: 3,
-    CarriageStatusEnum.COMPLETED: 4,
-    CarriageStatusEnum.ADOPTED: 5,
-    # BLOCKED and WITHDRAWN are not in the progression
-}
+# Status rules and the progression live in services/scrapers/oeil_procedure_parser.py
+# (infer_carriage_status / advance_status) so this script and the OEIL feed sync
+# cannot drift apart. See that docstring for why "Decision by Parliament" no
+# longer means COMPLETED (15 Sep 2026).
+STATUS_RANK = {CarriageStatusEnum(k): v for k, v in _PARSER_STATUS_RANK.items()}
 
 
-def infer_status_from_events(events) -> CarriageStatusEnum | None:
-    """
-    Infer the most advanced status from a list of OEIL key events.
-    Returns None if no status can be inferred.
-    """
-    event_types_lower = [(e.event_type or '').lower() for e in events]
-
-    # Strongest signal: final act
-    if any('final act signed' in et for et in event_types_lower):
-        return CarriageStatusEnum.ADOPTED
-    if any('final act published' in et for et in event_types_lower):
-        return CarriageStatusEnum.ADOPTED
-    if any('entry into force' in et for et in event_types_lower):
-        return CarriageStatusEnum.ADOPTED
-
-    # Strong signal: adopted by Council
-    if any('act adopted by council' in et for et in event_types_lower):
-        return CarriageStatusEnum.COMPLETED
-
-    # Medium signal: both Parliament decision and committee report
-    has_parliament_decision = any('decision by parliament' in et for et in event_types_lower)
-    has_committee_report = any('committee report' in et for et in event_types_lower)
-    has_vote_in_committee = any('vote in committee' in et for et in event_types_lower)
-
-    if has_parliament_decision:
-        return CarriageStatusEnum.COMPLETED
-
-    if has_committee_report or has_vote_in_committee:
-        return CarriageStatusEnum.CLOSE_TO_ADOPTION
-
-    # Weak signal: at least tabled
-    if any('legislative proposal' in et for et in event_types_lower):
-        return CarriageStatusEnum.TABLED
-    if any('committee referral' in et for et in event_types_lower):
-        return CarriageStatusEnum.TABLED
-
-    return None
+def infer_status_from_events(events, stage=None) -> CarriageStatusEnum | None:
+    """Infer the most advanced status from OEIL key events (+ OEIL stage)."""
+    value = infer_carriage_status([e.event_type for e in events], stage)
+    return CarriageStatusEnum(value) if value else None
 
 
 async def update_statuses():
     """Update carriage statuses based on OEIL key events."""
 
     db = SessionLocal()
-    scraper = OEILScraper()
+    # Browser fallback on: a walled/empty OEIL answer is retried in one reused
+    # headless browser (closed in the finally below).
+    scraper = OEILScraper(allow_browser_fallback=True)
 
     try:
         log("=" * 60)
@@ -126,7 +104,11 @@ async def update_statuses():
         # sweep for fourteen of them is not proportionate to what changed.
         if REFS:
             q = q.filter(LegislativeCarriage.oeil_procedure_ref.in_(REFS))
-        carriages = q.all()
+        # Only the columns the loop needs: loading every full row (page bodies
+        # included) for a 1,900-row sweep was tens of MB for three fields.
+        carriages = q.with_entities(
+            LegislativeCarriage.id, LegislativeCarriage.oeil_procedure_ref, LegislativeCarriage.title,
+        ).order_by(LegislativeCarriage.oeil_procedure_ref).all()
         if LIMIT:
             carriages = carriages[:LIMIT]
 
@@ -145,55 +127,96 @@ async def update_statuses():
         updated_key_events = 0
         errors = 0
         reconnects = 0
+        rows_changed = 0
         status_changes = []
+        failed_refs = []
 
-        for i, carriage in enumerate(carriages):
-            procedure_ref = carriage.oeil_procedure_ref
-            log(f"\n[{i+1}/{len(carriages)}] {procedure_ref}: {carriage.title[:50]}...")
+        # Plain tuples, then re-load each row by id AFTER its fetch: ORM objects
+        # from a session that was replaced on reconnect are detached, and writes
+        # to them were silently never persisted. Loading after the fetch also
+        # keeps the pooled connection idle during the network wait.
+        targets = [(c.id, c.oeil_procedure_ref, c.title or "") for c in carriages]
+        db.commit()
+
+        for i, (carriage_id, procedure_ref, title) in enumerate(targets):
+            log(f"\n[{i+1}/{len(targets)}] {procedure_ref}: {title[:50]}...")
 
             try:
-                # Fetch OEIL data
-                data = await scraper.get_procedure_full(procedure_ref)
+                try:
+                    data, page = await scraper.get_procedure_with_page(procedure_ref)
+                except OEILFetchError as fe:
+                    errors += 1
+                    failed_refs.append(f"{procedure_ref}: {fe.reason}")
+                    log(f"   -> [ERROR] FETCH/PARSE FAILED: {fe}")
+                    await asyncio.sleep(0.5)
+                    continue
 
-                if data and data.key_events and data.key_events.events:
-                    # Convert events to JSON-serializable format
-                    events_json = [
-                        {
-                            'date': e.date.isoformat() if e.date else None,
-                            'event_type': e.event_type,
-                            'description': e.description
-                        }
-                        for e in data.key_events.events
-                    ]
+                fields = carriage_fields_from_procedure(data)
+                if not fields.get("oeil_key_events"):
+                    # get_procedure_with_page refuses a page with no title and
+                    # no events, so a titled page with zero events still lands
+                    # here: record it rather than let it pass as "nothing new".
+                    errors += 1
+                    failed_refs.append(f"{procedure_ref}: page has no key events")
+                    log("   -> [ERROR] page parsed but carries no key events")
+                    await asyncio.sleep(0.5)
+                    continue
 
-                    # Update oeil_key_events
-                    carriage.oeil_key_events = events_json
-                    updated_key_events += 1
+                carriage = db.get(LegislativeCarriage, carriage_id)
+                if carriage is None:
+                    errors += 1
+                    failed_refs.append(f"{procedure_ref}: row vanished during the run")
+                    continue
+                changed = []
+                for col, val in fields.items():
+                    if col in ("rapporteur_name", "rapporteur_mep_id", "rapporteur_appointed") and val is None:
+                        continue   # never blank a known rapporteur from a page that omits one
+                    if getattr(carriage, col) != val:
+                        setattr(carriage, col, val)
+                        changed.append(col)
 
-                    # Infer status from events
-                    inferred = infer_status_from_events(data.key_events.events)
+                body = parse_body(page.html)
+                now = datetime.now(timezone.utc)
+                if body is not None:
+                    if carriage.oeil_text_body != body.text_body:
+                        carriage.oeil_html_body = body.html_body
+                        carriage.oeil_text_body = body.text_body
+                        changed.append("oeil_body")
+                    carriage.oeil_body_fetched_at = now.replace(tzinfo=None)
+                carriage.oeil_roles_parsed_at = now
 
-                    if inferred:
-                        current_rank = STATUS_RANK.get(carriage.current_status, -1)
-                        inferred_rank = STATUS_RANK.get(inferred, -1)
-
-                        # Only advance status forward, never regress
-                        if inferred_rank > current_rank:
-                            old_status = carriage.current_status.value
-                            carriage.current_status = inferred
-                            carriage.last_updated = datetime.now(timezone.utc)
-                            updated_count += 1
-                            status_changes.append(f"{procedure_ref}: {old_status} -> {inferred.value}")
-                            log(f"   -> Status updated: {old_status} -> {inferred.value}")
-                        else:
-                            log(f"   -> Status already at {carriage.current_status.value} (inferred: {inferred.value})")
-                    else:
-                        log(f"   -> No status signal from events")
+                # Infer status from events (+ OEIL's own stage line)
+                inferred_value = infer_carriage_status(
+                    [e.event_type for e in data.key_events.events], data.basic_info.status)
+                current_value = carriage.current_status.value if carriage.current_status else None
+                new_value = advance_status(current_value, inferred_value)
+                if new_value:
+                    carriage.current_status = CarriageStatusEnum(new_value)
+                    log(f"   -> Status advancing: {current_value} -> {new_value}")
+                    changed.append("current_status")
+                elif inferred_value:
+                    log(f"   -> Status stays {current_value} (events prove: {inferred_value})")
                 else:
-                    log(f"   -> No key events found")
+                    log("   -> No status signal from events")
+
+                if not changed:
+                    # The stamps above would otherwise fire last_updated's
+                    # onupdate and make an unchanged row look freshly updated.
+                    flag_modified(carriage, "last_updated")
+                log(f"   -> via {page.route}: {len(fields['oeil_key_events'])} events, "
+                    f"{len(fields['oeil_forecasts'])} forecasts, rapporteur={fields.get('rapporteur_name')}, "
+                    f"opinions={fields.get('opinion_committees')}; changed={changed or 'nothing'}")
 
                 # Commit after each successful update to avoid losing progress
                 db.commit()
+                # Count only what is now PERSISTED.
+                if changed:
+                    rows_changed += 1
+                if "oeil_key_events" in changed:
+                    updated_key_events += 1
+                if new_value:
+                    updated_count += 1
+                    status_changes.append(f"{procedure_ref}: {current_value} -> {new_value}")
 
                 # Rate limiting
                 await asyncio.sleep(0.5)
@@ -227,11 +250,17 @@ async def update_statuses():
 
         log("\n" + "=" * 60)
         log("Summary:")
-        log(f"  Total checked: {len(carriages)}")
+        log(f"  Total checked: {len(targets)}")
         log(f"  Reconnects after a dropped connection: {reconnects}")
+        log(f"  Rows with any field changed: {rows_changed}")
         log(f"  Key events updated: {updated_key_events}")
         log(f"  Status changes: {updated_count}")
         log(f"  Errors: {errors}")
+        log(f"  Fetch routes: {dict(scraper.fetch_stats)}")
+        if failed_refs:
+            log("\nFailed refs (fetch/parse):")
+            for fr in failed_refs:
+                log(f"  [ERROR] {fr}")
 
         if status_changes:
             log("\nAll status changes:")

@@ -134,7 +134,8 @@ async def list_research_publications(
 
     total = query.count()
     rows = (
-        query.order_by(EPRSPublication.publication_date.desc().nullslast())
+        # id breaks ties: 521 rows share 255 dates, and OFFSET over a tie is unstable.
+        query.order_by(EPRSPublication.publication_date.desc().nullslast(), EPRSPublication.id.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [
@@ -332,7 +333,8 @@ async def list_officials(
         query = query.filter(and_(*filters))
 
     total = query.count()
-    rows = query.order_by(EUOfficial.name.asc()).offset((page - 1) * limit).limit(limit).all()
+    # id breaks ties: names repeat (7,898 rows, 7,491 names); OFFSET over a tie is unstable.
+    rows = query.order_by(EUOfficial.name.asc(), EUOfficial.id.asc()).offset((page - 1) * limit).limit(limit).all()
     now = datetime.utcnow()
     data: list = []
     for r in rows:
@@ -540,7 +542,9 @@ async def list_tenders(
 
     total = query.count()
     rows = (
-        query.order_by(Tender.publication_date.desc().nullslast())
+        # id breaks ties. TED stamps a whole day with one publication_date, so
+        # without it OFFSET pages overlapped: a 2,014-row harvest held 1,446 ids.
+        query.order_by(Tender.publication_date.desc().nullslast(), Tender.id.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [

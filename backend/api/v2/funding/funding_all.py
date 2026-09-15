@@ -141,8 +141,10 @@ async def funding_all(
     total = db.execute(
         text(f"{_union_cte(False)} SELECT count(*) FROM all_funding{clause}"), params
     ).scalar() or 0
+    # `id` alone is not unique across the UNION (the four tables' id ranges
+    # overlap), so item_type completes the key and OFFSET pages cannot overlap.
     rows = db.execute(
         text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM all_funding{clause} "
-             f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
+             f"ORDER BY {_ORDER_SQL[order]}, item_type LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     return build_envelope([_row_to_item(r, with_body=include_body) for r in rows], total, page, limit)

@@ -51,6 +51,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+from datetime import datetime, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -77,14 +78,29 @@ def _run_carriage_notifier() -> dict:
     from core.database import SessionLocal
     from services.notifications.carriage_status_notifier import CarriageStatusNotifier
 
+    from services.sync.freshness import record_run
+
     db = SessionLocal()
+    started = datetime.now(timezone.utc)
     try:
         run = CarriageStatusNotifier(db).run()
         # Count what was persisted, never what was attempted.
         logger.info("[NOTIFY-SCHED] carriage: %s", run.summary())
         for err in run.errors:
             logger.error("[NOTIFY-SCHED] carriage track failed: %s", err)
+        # Durable run record (15 Sep 2026): a log line alone could not prove the
+        # job ran on a day that produced no notification, so "0 sent" was
+        # indistinguishable from "never ran".
+        record_run(db, source_key="notifications_carriage", tier="notifications",
+                   status="success" if run.ok else "failed", items_added=run.created,
+                   error="; ".join(str(e) for e in run.errors[:5]) or None,
+                   started_at=started)
         return {"created": run.created, "ok": run.ok, "errors": len(run.errors)}
+    except Exception as exc:
+        db.rollback()
+        record_run(db, source_key="notifications_carriage", tier="notifications",
+                   status="failed", error=f"{type(exc).__name__}: {exc}", started_at=started)
+        raise
     finally:
         db.close()
 
@@ -92,7 +108,27 @@ def _run_carriage_notifier() -> dict:
 def _run_saved_searches() -> dict:
     from services.alerts.saved_search_runner import run_all
 
-    summary = run_all()
+    from core.database import SessionLocal
+    from services.sync.freshness import record_run
+
+    started = datetime.now(timezone.utc)
+    try:
+        summary = run_all()
+    except Exception as exc:
+        db = SessionLocal()
+        try:
+            record_run(db, source_key="notifications_saved_searches", tier="notifications",
+                       status="failed", error=f"{type(exc).__name__}: {exc}", started_at=started)
+        finally:
+            db.close()
+        raise
+    db = SessionLocal()
+    try:
+        record_run(db, source_key="notifications_saved_searches", tier="notifications",
+                   status="success", items_added=summary.get("notifications_created"),
+                   started_at=started)
+    finally:
+        db.close()
     logger.info(
         "[NOTIFY-SCHED] saved searches: subscriptions_run=%s notifications_created=%s",
         summary.get("subscriptions_run"), summary.get("notifications_created"),

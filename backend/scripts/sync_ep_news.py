@@ -30,9 +30,19 @@ def _upsert(db, it) -> str:
     existing = db.query(EuNewsItem).filter(EuNewsItem.entry_key == it["entry_key"]).first()
     if existing:
         changed = False
-        for f in ("title", "news_date", "source_url", "item_type"):
+        for f in ("title", "source_url", "item_type"):
             if it.get(f) and getattr(existing, f) != it.get(f):
                 setattr(existing, f, it.get(f)); changed = True
+        # news_date: the press-room card's datePublished beats the date encoded in
+        # the release ID (committee pages), never the reverse. Letting whichever
+        # source ran last win flipped the date on every run for any release listed
+        # on both a committee page and the press room.
+        nd = it.get("news_date")
+        if nd and existing.news_date != nd and (
+                existing.news_date is None or it.get("date_source") == "published"):
+            existing.news_date = nd; changed = True
+        if it.get("summary") and not existing.summary:
+            existing.summary = it["summary"]; changed = True
         if changed:
             existing.policy_areas = classify(existing.title or "", existing.summary or "")
         return "updated" if changed else "skipped"
@@ -52,6 +62,7 @@ def main():
               "refused_undated": 0}
     refused_all: list = []
     srcs = ep_sources()
+    press_room_items = None  # None = never fetched, 0 = fetched and parsed nothing
     try:
         with WafBrowserFetcher(settle_ms=7000, networkidle_ms=18000) as fetcher:
             for src in srcs:
@@ -60,6 +71,8 @@ def main():
                 except Exception as e:
                     print(f"  source failed {src['url']}: {e}"); counts["errors"] += 1; continue
                 counts["sources"] += 1
+                if src["source_key"] == "EP":
+                    press_room_items = len(items)
                 if not items:
                     counts["empty"] += 1
                 try:
@@ -77,7 +90,17 @@ def main():
         print("[ep_news] " + ", ".join(f"{k}={v}" for k, v in counts.items()))
     finally:
         db.close()
+    # Silence is not success. The press room is the one EP source that always
+    # carries releases; for months it parsed 0 items on every run while the committee
+    # pages kept the counts non-zero, so nothing ever flagged it. A 0 there is a
+    # broken parser or fetch, not a quiet Parliament.
+    if not press_room_items:
+        state = "not fetched" if press_room_items is None else "fetched but parsed 0 items"
+        print(f"[ERROR] ep_news: press room {state}; EP releases outside committee pages "
+              "are not being ingested", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

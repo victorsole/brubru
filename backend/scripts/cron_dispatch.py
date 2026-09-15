@@ -159,6 +159,22 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour in (1, 5, 9, 13, 17, 21):
         fires.append(("social_x_drip", "/api/cron/fetch-social-posts?mode=x&limit=40"))
 
+    # Social posts — X TAIL window, once a day at 03:00 UTC (quiet hour: only the
+    # authority-labels sync fires). Added 15 Sep 2026. The 4-hourly drip above
+    # orders verified accounts first, and because every run hits the syndication
+    # throttle within a handful of accounts it never reaches the unverified group:
+    # 618 of 1,155 fetch-enabled X accounts (all unverified) were stale beyond 7
+    # days, oldest last checked 12 Aug. This window reads the queue purely
+    # oldest-checked-first, so it works that backlog. Same polite parameters as the
+    # drip -- slower pace, smaller per-account pull, the same throttle-stop -- and a
+    # larger cap that only matters on a night the endpoint is not throttling.
+    # Worst case ~150 x (4s + fetch) is well inside the 1800s fire timeout. No
+    # proxies, no evasion: when X throttles, the run stops.
+    if hour == 3:
+        fires.append(("social_x_tail",
+                      "/api/cron/fetch-social-posts?mode=x&order=oldest&limit=150"
+                      "&per_account=5&pace=4&empty_streak_stop=10"))
+
     # Economy folders (v2 institutional/agency/database endpoints backed by
     # economy_items: per-body news, events, publications, databases, tenders,
     # grants, calls, consultations). Daily, split into three batches on quiet

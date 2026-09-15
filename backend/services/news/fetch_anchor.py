@@ -47,6 +47,12 @@ def stamp_fetched(db: Session, entry_keys: Iterable[str]) -> int:
     keys = [k for k in (entry_keys or []) if k]
     if not keys:
         return 0
+    # Flush FIRST. `Session.execute(text(...))` does not autoflush pending ORM
+    # objects, so rows the writer just `db.add()`-ed were INSERTed at commit, AFTER
+    # this UPDATE, and every NEW row landed with fetched_at NULL until the next run
+    # sighted it. Measured 15 Sep 2026: 83 rows created since 9 Sep had no stamp,
+    # which /news/latest reads as `fetch_time_unknown` for a body fetched minutes ago.
+    db.flush()
     res = db.execute(
         text("UPDATE eu_news_items SET fetched_at = now() WHERE entry_key = ANY(:keys)"),
         {"keys": keys},

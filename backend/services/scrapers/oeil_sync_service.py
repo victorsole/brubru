@@ -382,24 +382,14 @@ class OEILSyncService:
         if not events:
             return False
 
-        event_types_lower = [(e.get('event_type') or '').lower() for e in events]
-
-        # Infer status from strongest to weakest signal
-        inferred = None
-        if any('final act signed' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.ADOPTED
-        elif any('final act published' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.ADOPTED
-        elif any('entry into force' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.ADOPTED
-        elif any('act adopted by council' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.COMPLETED
-        elif any('decision by parliament' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.COMPLETED
-        elif any('committee report' in et or 'vote in committee' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.CLOSE_TO_ADOPTION
-        elif any('legislative proposal' in et or 'committee referral' in et for et in event_types_lower):
-            inferred = CarriageStatusEnum.TABLED
+        # Shared with scripts/update_carriage_statuses_from_oeil.py so the two
+        # cannot drift. Since 15 Sep 2026 the procedure parser stores OEIL's real
+        # event table, and the old local rule "Decision by Parliament ->
+        # COMPLETED" would have permanently promoted every file with a
+        # first-reading vote (status never regresses). See infer_carriage_status.
+        from services.scrapers.oeil_procedure_parser import infer_carriage_status
+        value = infer_carriage_status([e.get('event_type') for e in events if isinstance(e, dict)])
+        inferred = CarriageStatusEnum(value) if value else None
 
         if not inferred:
             return False

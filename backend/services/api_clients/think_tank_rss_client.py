@@ -85,9 +85,15 @@ class ThinkTankRSSClient:
             cache_ttl: Cache time-to-live in seconds
             timeout: Request timeout
         """
+        # The Think Tank host answers any non-browser User-Agent with HTTP 202 and
+        # an empty body, which feedparser reads as zero items (15 Sep 2026: EPRS had
+        # not synced since 23 July). Send the maintained browser UA.
+        from services.scrapers.user_agent import BROWSER_UA
+
         self.rss_client = BaseRSSClient(
             cache_ttl=cache_ttl,
-            timeout=timeout
+            timeout=timeout,
+            user_agent=BROWSER_UA,
         )
 
         logger.info("Initialized Think Tank RSS client")

@@ -145,7 +145,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
         rows = db.execute(
             text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_cohesion_finances WHERE {where_sql} "
-                 f"ORDER BY total DESC NULLS LAST, cci LIMIT :limit OFFSET :offset"), params2,
+                 f"ORDER BY total DESC NULLS LAST, cci, id LIMIT :limit OFFSET :offset"), params2,
         ).mappings().all()
         items = [_row_to_item(r, with_body=include_body) for r in rows]
         return build_envelope(

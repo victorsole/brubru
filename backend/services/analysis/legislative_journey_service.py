@@ -168,11 +168,12 @@ def _build_messages(procedure_ref: str, is_legislative: bool, layers: List[dict]
 
 
 async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
-                    ) -> tuple[Optional[dict], Optional[str], Optional[str]]:
+                    ) -> tuple[Optional[dict], Optional[str], Optional[str], Optional[BaseException]]:
     """Non-Anthropic. Primary = HF Qwen3-30B (256K ctx, big source budget);
     fallbacks = GPT-4o then Mistral (smaller budget). Messages are reassembled
     per engine so each gets as much text as its window allows. Returns
-    (parsed_json, engine, model)."""
+    (parsed_json, engine, model, last_error); last_error is set only on failure,
+    so the caller can say WHY a regeneration failed instead of failing silently."""
     last_err = None
 
     # 1. HF Qwen (open-source, cheap, long context) - the sanctioned OSS path.
@@ -189,9 +190,10 @@ async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
             )
             parsed = _parse_json(raw or "")
             if parsed is not None:
-                return parsed, "HuggingFace", _HF_MODEL
+                return parsed, "HuggingFace", _HF_MODEL, None
             if attempt < 2:
                 await asyncio.sleep(5 * (attempt + 1))  # 5s, 10s backoff
+        last_err = ValueError("HF Qwen returned no parseable JSON after 3 attempts")
         logger.warning("[journey] HF Qwen exhausted retries, falling back")
     except Exception as e:
         last_err = e
@@ -212,13 +214,16 @@ async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
             raw = (resp.message or "").strip() if resp else ""
             parsed = _parse_json(raw)
             if parsed is not None:
-                return parsed, getattr(provider, "name", Provider.__name__), getattr(Provider, "MODEL", None)
+                return parsed, getattr(provider, "name", Provider.__name__), getattr(Provider, "MODEL", None), None
+            last_err = ValueError(f"{Provider.__name__} returned no parseable JSON")
         except Exception as e:
             last_err = e
             logger.warning("[journey] %s failed: %s", Provider.__name__, e)
 
     logger.error("[journey] all engines failed: %s", last_err)
-    return None, None, None
+    if last_err is None:
+        last_err = RuntimeError("no engine available")
+    return None, None, None, last_err
 
 
 def _parse_json(raw: str) -> Optional[dict]:
@@ -270,8 +275,10 @@ async def generate_journey(db: Session, carriage) -> Optional[dict]:
     if not docs:
         return None
 
-    parsed, engine, model = await _call_llm(procedure_ref, is_legislative, docs)
+    parsed, engine, model, err = await _call_llm(procedure_ref, is_legislative, docs)
     if parsed is None:
+        logger.warning("[WARN] journey regen failed for %s: %s: %s",
+                       procedure_ref, type(err).__name__, err)
         _mark_error(db, procedure_ref, carriage)
         return None
 
@@ -333,17 +340,32 @@ def _upsert(db, procedure_ref, carriage, is_legislative, doc_hash, layers,
     return get_journey(db, procedure_ref)
 
 
+# A failed RE-run must not hide a good analysis. The cron regenerates a file
+# whenever its doc set changes (a new voting list, say); if the AI call then
+# fails, the previous analysis is still the best one we have. The old statement
+# set status='error' unconditionally, and 'error' renders as "no analysis" in
+# the UI, so three good analyses vanished on 15 Sep 2026. Now the conflict
+# branch only fires when the stored row is NOT ready: a ready row keeps its
+# status, its generated_at and its old doc_set_hash (so it still reads as stale
+# and the next run retries it). The table has no column for the last failure,
+# so the failure is logged by the caller instead.
+_MARK_ERROR_SQL = """
+    INSERT INTO file_journey_analyses (procedure_ref, carriage_id, doc_set_hash, status)
+    VALUES (:p, :cid, 'error', 'error')
+    ON CONFLICT (procedure_ref) DO UPDATE SET status = 'error', generated_at = NOW()
+    WHERE file_journey_analyses.status IS DISTINCT FROM 'ready'
+"""
+
+
 def _mark_error(db, procedure_ref, carriage) -> None:
     try:
-        db.execute(text(
-            """
-            INSERT INTO file_journey_analyses (procedure_ref, carriage_id, doc_set_hash, status)
-            VALUES (:p, :cid, 'error', 'error')
-            ON CONFLICT (procedure_ref) DO UPDATE SET status = 'error', generated_at = NOW()
-            """
-        ), {"p": procedure_ref, "cid": str(getattr(carriage, "id", None)) if getattr(carriage, "id", None) else None})
+        db.execute(text(_MARK_ERROR_SQL),
+                   {"p": procedure_ref,
+                    "cid": str(getattr(carriage, "id", None)) if getattr(carriage, "id", None) else None})
         db.commit()
-    except Exception:
+    except Exception as e:
+        logger.warning("[WARN] journey _mark_error failed for %s: %s: %s",
+                       procedure_ref, type(e).__name__, e)
         db.rollback()
 
 

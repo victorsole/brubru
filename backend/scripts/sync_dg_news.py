@@ -26,6 +26,7 @@ from services.tracking.policy_area_classifier import classify
 from services.scrapers.dg_news_sources import DG_NEWS_SOURCES, EU_BODY_FEEDS, OUTLET_FEEDS
 from services.scrapers.dg_news_scraper import scrape_source
 from services.news.write_guard import date_new_items, record_refusals
+from services.news.same_story import find_same_story
 
 ALL_SOURCES = DG_NEWS_SOURCES + EU_BODY_FEEDS + OUTLET_FEEDS
 
@@ -41,6 +42,15 @@ def _upsert(db, it) -> str:
             existing.policy_areas = classify(existing.title or "", existing.summary or "",
                                              dg=existing.commission_dg)
         return "updated" if changed else "skipped"
+    # Same story already stored under ANOTHER URL (presscorner vs the DG's own site).
+    # Point the item at the stored row so stamp_fetched records the sighting there,
+    # and write nothing. See services/news/same_story.py.
+    twin = find_same_story(db, institution=it.get("institution", "COMMISSION"),
+                           title=it.get("title"), news_date=it.get("news_date"),
+                           exclude_entry_key=it["entry_key"])
+    if twin:
+        it["entry_key"] = twin
+        return "same_story"
     db.add(EuNewsItem(
         entry_key=it["entry_key"], title=it["title"], summary=it.get("summary"),
         news_date=it.get("news_date"), institution=it.get("institution", "COMMISSION"),
@@ -54,8 +64,8 @@ def _upsert(db, it) -> str:
 
 def main():
     db = SessionLocal()
-    counts = {"added": 0, "updated": 0, "skipped": 0, "sources": 0, "empty": 0, "errors": 0,
-              "refused_undated": 0}
+    counts = {"added": 0, "updated": 0, "skipped": 0, "same_story": 0, "sources": 0, "empty": 0,
+              "errors": 0, "refused_undated": 0}
     refused_all: list = []
     try:
         for src in ALL_SOURCES:

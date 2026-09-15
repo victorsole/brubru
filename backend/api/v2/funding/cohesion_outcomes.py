@@ -134,7 +134,7 @@ Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-
         params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
         rows = db.execute(
             text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_cohesion_outcomes WHERE {where_sql} "
-                 f"ORDER BY implemented_value DESC NULLS LAST, cci, ind_code LIMIT :limit OFFSET :offset"), params2,
+                 f"ORDER BY implemented_value DESC NULLS LAST, cci, ind_code, id LIMIT :limit OFFSET :offset"), params2,
         ).mappings().all()
         items = [_row_to_item(r, with_body=include_body) for r in rows]
         return build_envelope(

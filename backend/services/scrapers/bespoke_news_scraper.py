@@ -78,8 +78,16 @@ def _resolve_title(attrs: str, inner: str, path: str) -> str | None:
 # Per-site config: institution, source_key, url (news page), link_re (matched
 # against the href PATH), optional date_re (groups -> y[,m[,d]]), item_type.
 BESPOKE_SOURCES: List[Dict] = [
+    # `required`: an institution that publishes every working day. Parsing ZERO items
+    # from it is a failure of ours (block page, consent wall, changed markup), never a
+    # quiet publisher, so sync_bespoke_news exits non-zero instead of DEGRADED/0.
     {"institution": "COUNCIL", "url": "https://www.consilium.europa.eu/en/press/press-releases/",
-     "link_re": r"/en/press/press-releases/\d{4}/\d{2}/\d{2}/[^/]+", "date_re": r"/press-releases/(\d{4})/(\d{2})/(\d{2})/", "type": "press"},
+     "link_re": r"/en/press/press-releases/\d{4}/\d{2}/\d{2}/[^/]+", "date_re": r"/press-releases/(\d{4})/(\d{2})/(\d{2})/", "type": "press",
+     "required": True,
+     # Read FIRST, before the browser. The listing page sits behind a WAF (403 to a
+     # plain client) while this feed answers 200 with real titles, summaries and
+     # timestamps (measured 15 Sep 2026). The Playwright listing stays as fallback.
+     "rss": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx"},
     {"institution": "ECA", "url": "https://www.eca.europa.eu/en/all-news",
      "link_re": r"/en/news/[A-Za-z0-9][A-Za-z0-9_-]{4,}", "date_re": r"NEWS(\d{4})[_-](\d{2})", "type": "news"},
     {"institution": "EIB", "url": "https://www.eib.org/en/press/all/index.htm",
@@ -305,6 +313,81 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
     return out
 
 
+_ATOM_NS = "{http://www.w3.org/2005/Atom}"
+
+
+def parse_rss_items(xml: bytes | str, cfg: Dict) -> List[Dict]:
+    """Items from an RSS 2.0 feed, shaped exactly like parse_bespoke's output.
+
+    entry_key is `_canon_url(link)`, the same identity the listing parser writes, so
+    a row first seen on the listing page and later in the feed is one row. Links not
+    matching the source's `link_re` are dropped for the same reason the listing
+    parser drops them. Date: the URL's own date (`date_re`), else the item's
+    `a10:updated` / `pubDate`; never the fetch time.
+    """
+    import xml.etree.ElementTree as ET
+    from email.utils import parsedate_to_datetime
+    try:
+        root = ET.fromstring(xml if isinstance(xml, (bytes, bytearray)) else xml.encode("utf-8"))
+    except ET.ParseError:
+        return []
+    link_re = re.compile(cfg["link_re"])
+    date_re = re.compile(cfg["date_re"]) if cfg.get("date_re") else None
+    out: List[Dict] = []
+    seen: set = set()
+    for item in root.iter("item"):
+        url = (item.findtext("link") or "").strip()
+        title = _clean(item.findtext("title") or "")
+        if not url or not title or not link_re.search(urlparse(url).path):
+            continue
+        key = _canon_url(url)
+        if key in seen:
+            continue
+        seen.add(key)
+        nd = None
+        dm = date_re.search(url) if date_re else None
+        if dm and len(dm.groups()) >= 3:
+            try:
+                nd = date(int(dm.group(1)), int(dm.group(2)), int(dm.group(3)))
+            except ValueError:
+                nd = None
+        if nd is None:
+            raw = (item.findtext(f"{_ATOM_NS}updated") or "").strip()
+            if len(raw) >= 10 and re.match(r"\d{4}-\d{2}-\d{2}", raw):
+                nd = date(int(raw[:4]), int(raw[5:7]), int(raw[8:10]))
+            else:
+                try:
+                    nd = parsedate_to_datetime(item.findtext("pubDate") or "").date()
+                except (TypeError, ValueError):
+                    nd = None
+        summary = _clean(item.findtext("description") or "") or None
+        out.append({
+            "title": title[:480], "summary": summary, "news_date": nd, "image_url": None,
+            "source_url": url, "external_id": _slug_id(url), "item_type": cfg.get("type", "news"),
+            "institution": cfg["institution"], "commission_dg": None,
+            "source_key": cfg.get("source_key") or cfg["institution"],
+            "entry_key": key,
+        })
+    return out
+
+
+def _fetch_rss(cfg: Dict) -> List[Dict]:
+    """The source's RSS feed, or [] on any failure (the caller then renders the page)."""
+    import requests
+    try:
+        r = requests.get(cfg["rss"], timeout=30)
+    except Exception as e:
+        logger.warning(f"[BESPOKE-NEWS] rss fetch failed {cfg['rss']}: {type(e).__name__}: {e}")
+        return []
+    if r.status_code != 200:
+        logger.warning(f"[BESPOKE-NEWS] rss HTTP {r.status_code} {cfg['rss']}")
+        return []
+    items = parse_rss_items(r.content, cfg)
+    if not items:
+        logger.warning(f"[BESPOKE-NEWS] rss parsed 0 items {cfg['rss']} ({len(r.content)} bytes)")
+    return items
+
+
 class BespokeFetchError(RuntimeError):
     """The listing page could not be fetched at all.
 
@@ -323,6 +406,10 @@ def scrape_bespoke(cfg: Dict, fetcher) -> List[Dict]:
     report an unreachable source rather than an empty one. Returns [] only when
     the page really did fetch and yield nothing.
     """
+    if cfg.get("rss"):
+        rss_items = _fetch_rss(cfg)
+        if rss_items:
+            return rss_items
     try:
         res = fetcher.fetch(cfg["url"], expand_accordions=False, strip_chrome=False)
     except Exception as e:
@@ -332,6 +419,18 @@ def scrape_bespoke(cfg: Dict, fetcher) -> List[Dict]:
     if not html:
         raise BespokeFetchError(f"{cfg['institution']}: empty response body")
     items = parse_bespoke(html, cfg)
+    # A WAF answers with a real, non-empty HTML page and an HTTP error status.
+    # consilium.europa.eu returns 403 to a non-browser client (measured 15 Sep 2026),
+    # and such a page parsed to zero items, which the caller could only report as a
+    # quiet publisher: Council news last landed 9 Sep while every run said success.
+    # Only an error status WITH nothing parsed is unreachable. ECHA's first response
+    # is also a 403, yet its JS challenge clears and the rendered page carries the
+    # listing, so a status check on its own would fail a source that works.
+    status = getattr(res, "nav_status", None)
+    if not items and isinstance(status, int) and status >= 400:
+        raise BespokeFetchError(
+            f"{cfg['institution']}: HTTP {status} from {cfg['url']} and 0 items parsed "
+            f"({len(html)} chars: a block/challenge page, not a listing)")
     if not items:
         logger.info(f"[BESPOKE-NEWS] 0 items {cfg['institution']} {cfg['url']} "
                     f"({len(html)} chars fetched, so this is a PARSE result, not a fetch failure)")

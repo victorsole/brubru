@@ -7,29 +7,27 @@ public search API at api.tech.ec.europa.eu — that's what the SPA calls under
 the hood. We use it directly here.
 
 Endpoint:
-    POST https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA
-    Content-Type: application/json
-    Body:
-        {"sort":{"field":"sortStatus","order":"asc"},
-         "pageNumber": N, "pageSize": 100, "languages":["en"]}
+    POST https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text=***
+         &pageNumber=N&pageSize=100
+    multipart/form-data parts (JSON blobs): query (bool filter on type/status/
+    identifier), languages (["en"]), sort.
 
-Returns up to 100 topics per page; total ~640k across all programmes/years.
-We restrict to recent (programmePeriod 2021+, status forthcoming/open) and to
-a few principal programmes (Horizon Europe, Digital Europe, CEF, EIC, EIE).
+Passes (see main):
+    1. every open/forthcoming grant topic (type 1, 8) and, with --write-ft,
+       every open/forthcoming call for tenders (type 0), English, uncapped;
+    2. re-read by identifier of stored rows that can still be wrong;
+    3. optional (--discover / --text) full-text prefix discovery;
+    then a date-derived status pass over all three tables.
 
-Each result row maps to the funding_opportunities schema:
+Mapping:
     topic_id      = identifier (e.g. "HORIZON-CL5-2026-D2-01-04")
     call_id       = callIdentifier
-    programme     = derived from frameworkProgramme + programmeDivision
-    title         = title
-    short_summary = first <p> from descriptionByte (HTML stripped)
-    description   = full descriptionByte (HTML stripped)
-    status        = forthcoming | open | closed (decoded from status code)
-    deadline      = deadlineDate
-    type_of_action= typesOfAction[0]
-    source_url    = portal URL (https://ec.europa.eu/info/funding-tenders/.../topic-details/{topic_id})
-    documents_url = SEDIA topicDetails JSON URL
-    keywords      = keywords array
+    programme     = frameworkProgramme code -> label (facet), NEVER programmePeriod
+    title         = title (English record)
+    status        = derived from startDate + deadlineDate, SEDIA status as fallback
+    deadline      = next cut-off still to come, else the last one
+    tenders       = contracting_authority from cftLeadContractingAuthorityCode,
+                    value from cftEstimatedOverallContractAmount
 
 UPSERT on topic_id. Run:
     python3.12 backend/scripts/ingest_funding_sedia.py [--limit 200] [--apply]
@@ -108,32 +106,85 @@ def html_strip(html: str, max_len: int = 4000) -> str:
     return (text[:max_len] + "…") if len(text) > max_len else text
 
 
+# SEDIA record types (from the facet endpoint, 15 Sep 2026):
+#   0 Tender, 1 Grant (a call topic), 2 Calls for proposals (external action),
+#   8 Cascade funding calls.
+# Type 6 is NOT in that list and is the trap: it is a topic UPDATE / announcement
+# record that reuses the topic identifier and title but carries no status and no
+# deadline, and whose startDate is the time the update was posted. Ingesting it is
+# how 700 calls ended at status 'unknown' and how HORIZON-MISS-2026-02-CANCER-04
+# acquired a published_at two days after the call actually opened.
+TENDER_TYPES = ["0"]
+GRANT_TYPES = ["1", "8"]
+OPEN_STATUS_CODES = ["31094501", "31094502"]  # forthcoming, open
+
+
+def _multipart(fields: Dict[str, Any]) -> tuple[bytes, str]:
+    """Encode SEDIA's multipart form. Each part is a JSON blob, as the portal SPA sends."""
+    boundary = "----brubru" + os.urandom(8).hex()
+    out = []
+    for name, value in fields.items():
+        out.append(f"--{boundary}\r\n".encode())
+        out.append(
+            f'Content-Disposition: form-data; name="{name}"; filename="blob"\r\n'
+            "Content-Type: application/json\r\n\r\n".encode()
+        )
+        out.append(json.dumps(value).encode())
+        out.append(b"\r\n")
+    out.append(f"--{boundary}--\r\n".encode())
+    return b"".join(out), f"multipart/form-data; boundary={boundary}"
+
+
 def fetch_sedia_page(page: int, page_size: int = 100, status_filter: Optional[str] = None,
-                     text: str = "*") -> Dict[str, Any]:
+                     text: str = "***", *, query: Optional[Dict[str, Any]] = None,
+                     languages: Optional[List[str]] = ("en",),
+                     sort: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """One page of SEDIA results.
 
     Pagination MUST go in the URL — the API ignores pageNumber/pageSize in the
-    POST body. The body can stay empty (or '{}'). status_filter is currently
-    not effective at this layer (the API doesn't honour body-level filters
-    either) — we filter client-side after parsing.
+    body.
 
-    `text` is a SEDIA full-text query. Use '*' for all, '2026' to pull only
-    calls whose identifiers / descriptions reference 2026 (covers Horizon
-    2026 work programmes, EIC 2026, Digital Europe 2026, etc.).
+    Filters DO work, but only as a multipart form (parts `query`, `languages`,
+    `sort`, each a JSON blob), which is what the portal SPA sends. The previous
+    version POSTed a JSON body `{}`, concluded "the API doesn't honour body-level
+    filters", and therefore received every topic once per EU language, interleaved.
+    With a `--limit 500` budget the English record often never arrived, which is
+    why the Tenderator served "Frühere und präzisere Palliativpflege" and "Skalowanie
+    EIC STEP" for calls SEDIA holds in English. `languages=["en"]` is now the
+    default; pass `languages=None` to get every language.
+
+    `text` is a SEDIA full-text query ('***' = everything). `query` is an
+    Elasticsearch-style bool filter, e.g.
+    {"bool": {"must": [{"terms": {"type": ["1"]}}, {"terms": {"status": [...]}}]}}.
+    `status_filter` (a single SEDIA status code) is folded into `query`.
     """
     url = SEDIA_URL_TEMPLATE.format(text=urllib_request.quote(text, safe="*")) + f"&pageNumber={page}&pageSize={page_size}"
+    must = list(((query or {}).get("bool") or {}).get("must") or [])
+    if status_filter:
+        must.append({"terms": {"status": [status_filter]}})
+    fields: Dict[str, Any] = {}
+    if must:
+        fields["query"] = {"bool": {"must": must}}
+    if languages:
+        fields["languages"] = list(languages)
+    if sort:
+        fields["sort"] = sort
+    if fields:
+        body, ctype = _multipart(fields)
+    else:
+        body, ctype = b"{}", "application/json"
     req = urllib_request.Request(
         url,
-        data=b"{}",
+        data=body,
         method="POST",
         headers={
-            "Content-Type": "application/json",
+            "Content-Type": ctype,
             "Accept": "application/json",
             "User-Agent": USER_AGENT,
         },
     )
     try:
-        with urllib_request.urlopen(req, timeout=30) as r:
+        with urllib_request.urlopen(req, timeout=60) as r:
             return json.loads(r.read())
     except urllib_error.HTTPError as e:
         print(f"  [HTTP {e.code}] page={page}: {e.read()[:200]}")
@@ -141,6 +192,169 @@ def fetch_sedia_page(page: int, page_size: int = 100, status_filter: Optional[st
     except Exception as e:  # noqa: BLE001
         print(f"  [{type(e).__name__}] page={page}: {str(e)[:80]}")
         return {}
+
+
+# ---------------------------------------------------------------------------
+# Programme labels
+# ---------------------------------------------------------------------------
+# `programme` / `framework_programme` used to hold `programmePeriod`, i.e. the
+# literal "2021 - 2027" on 1,314 calls and "2014 - 2020" on 534, so a filter such
+# as framework_programme=Horizon matched nothing SEDIA wrote. The programme is
+# `frameworkProgramme`, a numeric code whose labels come from SEDIA's facet
+# endpoint. Fetched once per run; this static copy (the facet as read on 15 Sep
+# 2026, the programmes Brubru ingests) is the fallback when the facet call fails.
+_STATIC_PROGRAMME_LABELS = {
+    "31045243": "Horizon 2020 Framework Programme (H2020 - 2014-2020)",
+    "43108390": "Horizon Europe (HORIZON)",
+    "43152860": "Digital Europe Programme (DIGITAL)",
+    "43251567": "Connecting Europe Facility (CEF)",
+    "43353764": "Erasmus+ (ERASMUS+)",
+    "44181033": "European Defence Fund (EDF)",
+    "43252405": "Programme for the Environment and Climate Action (LIFE)",
+    "43252476": "Single Market Programme (SMP)",
+    "43251814": "Creative Europe Programme (CREA)",
+    "43251589": "Citizens, Equality, Rights and Values Programme (CERV)",
+    "31059643": "Programme for the Competitiveness of Enterprises and small and medium-sized enterprises (COSME - 2014-2020)",
+    "43332642": "EU4Health Programme (EU4H)",
+    "43298916": "Euratom Research and Training Programme (EURATOM)",
+    "43089234": "Innovation Fund (INNOVFUND)",
+    "43252368": "Internal Security Fund (ISF)",
+    "43252386": "Justice Programme (JUST)",
+    "43251447": "Asylum, Migration and Integration Fund (AMIF)",
+    "43251530": "Border Management and Visa Policy Instrument (BMVI)",
+    "44416173": "Interregional Innovation Investments Instrument (I3)",
+    "43254019": "European Social Fund+ (ESF+)",
+    "43392145": "European Maritime, Fisheries and Aquaculture Fund (EMFAF)",
+    "43252449": "Research Fund for Coal & Steel (RFCS)",
+    "43298203": "Union Civil Protection Mechanism (UCPM)",
+    "43252517": "Social Prerogative and Specific Competencies Lines (SOCPL)",
+    "43637601": "Pilot Projects & Preparation Actions (PPPA)",
+    "43254037": "European Solidarity Corps (ESC)",
+    "44773066": "Just Transition Mechanism (JTM)",
+}
+
+# Last resort when a record carries no frameworkProgramme code: the identifier
+# prefix. Longest prefix first. Never falls back to the programme PERIOD.
+_PREFIX_PROGRAMME = [
+    ("HORIZON-", "43108390"), ("H2020-", "31045243"), ("DIGITAL-", "43152860"),
+    ("CEF-", "43251567"), ("ERASMUS-", "43353764"), ("EDF-", "44181033"),
+    ("LIFE-", "43252405"), ("SMP-", "43252476"), ("CREA-", "43251814"),
+    ("CERV-", "43251589"), ("COS-", "31059643"), ("EU4H-", "43332642"),
+    ("EURATOM-", "43298916"), ("INNOVFUND-", "43089234"), ("ISF-", "43252368"),
+    ("JUST-", "43252386"), ("AMIF-", "43251447"), ("BMVI-", "43251530"),
+    ("I3-", "44416173"), ("ESF-", "43254019"), ("EMFAF-", "43392145"),
+    ("RFCS-", "43252449"), ("UCPM-", "43298203"), ("SOCPL-", "43252517"),
+    ("PPPA-", "43637601"), ("ESC-", "43254037"), ("JTM-", "44773066"),
+]
+
+_PROGRAMME_LABELS: Dict[str, str] = dict(_STATIC_PROGRAMME_LABELS)
+_PERIOD_RE = re.compile(r"^\s*\d{4}\s*-\s*\d{4}\s*$")
+
+
+def clean_facet_label(raw: str) -> str:
+    """SEDIA's facet labels arrive half URL-encoded ('Coal %26 Steel') and with
+    '+' decoded to a space ('Erasmus  (ERASMUS )')."""
+    from urllib.parse import unquote
+    label = unquote(raw or "")
+    label = re.sub(r"\bErasmus\s{2,}\(ERASMUS\s*\)", "Erasmus+ (ERASMUS+)", label)
+    label = re.sub(r"\bErasmus\s{2,}Programme", "Erasmus+ Programme", label)
+    label = re.sub(r"\s+", " ", label).strip()
+    label = label.replace("European Social Fund (ESF)", "European Social Fund+ (ESF+)")
+    return label
+
+
+_PARTY_LABELS: Dict[str, str] = {}
+_CONTRACT_TYPE_LABELS: Dict[str, str] = {
+    "31095498": "Services", "31095499": "Supplies", "31095501": "Works",
+    "42893160": "Grants", "42958121": "Twinning",
+}
+
+
+def load_programme_labels() -> int:
+    """Refresh the code->label maps (programme, buying DG/agency, contract type)
+    from SEDIA's facet endpoint. Returns how many programme labels loaded."""
+    url = "https://api.tech.ec.europa.eu/search-api/prod/rest/facet?apiKey=SEDIA&text=***"
+    body, ctype = _multipart({
+        "query": {"bool": {"must": [{"terms": {"type": ["0", "1", "2", "8"]}}]}},
+        "languages": ["en"],
+    })
+    req = urllib_request.Request(url, data=body, method="POST",
+                                 headers={"Content-Type": ctype, "Accept": "application/json",
+                                          "User-Agent": USER_AGENT})
+    try:
+        with urllib_request.urlopen(req, timeout=60) as r:
+            data = json.loads(r.read())
+    except Exception as e:  # noqa: BLE001
+        print(f"  [WARN] programme facet unavailable ({type(e).__name__}); using static labels")
+        return 0
+    n = 0
+    targets = {"frameworkProgramme": _PROGRAMME_LABELS, "cftPartyLegalEntityId": _PARTY_LABELS,
+               "contractType": _CONTRACT_TYPE_LABELS}
+    for facet in data.get("facets") or []:
+        target = targets.get(facet.get("name"))
+        if target is None:
+            continue
+        for v in facet.get("values") or []:
+            code, label = str(v.get("rawValue") or ""), clean_facet_label(v.get("value") or "")
+            if code and label and label != code:
+                target[code] = label
+                if target is _PROGRAMME_LABELS:
+                    n += 1
+    return n
+
+
+def programme_label(md: Dict[str, Any], identifier: str) -> Optional[str]:
+    """The programme NAME for a record, or None. Never the programme period."""
+    code = str(first_or_none(md.get("frameworkProgramme")) or "")
+    if code and code in _PROGRAMME_LABELS:
+        return _PROGRAMME_LABELS[code][:120]
+    ident = (identifier or "").upper()
+    for prefix, pcode in sorted(_PREFIX_PROGRAMME, key=lambda p: -len(p[0])):
+        if ident.startswith(prefix):
+            return _PROGRAMME_LABELS.get(pcode, _STATIC_PROGRAMME_LABELS[pcode])[:120]
+    return None
+
+
+def is_programme_period(value: Optional[str]) -> bool:
+    return bool(value) and bool(_PERIOD_RE.match(value))
+
+
+# ---------------------------------------------------------------------------
+# Status from dates
+# ---------------------------------------------------------------------------
+def pick_deadlines(values, today: dt.date) -> tuple[Optional[dt.datetime], Optional[dt.datetime]]:
+    """(deadline, final_deadline) from SEDIA's deadlineDate list.
+
+    Multi-cut-off and rolling topics carry several dates.
+    ERASMUS-EDU-2022-ECHE-CERT-FP lists 2022-05-03 ... 2027-01-26; taking the
+    FIRST stored 2022-05-03 against an 'open' status, i.e. an open call whose
+    deadline had passed four years ago. `deadline` is the next cut-off still to
+    come (else the last one); `final_deadline` is the last, which decides closure.
+    """
+    parsed = sorted(d for d in (parse_iso_date(v) for v in (values or [])) if d)
+    if not parsed:
+        return None, None
+    upcoming = [d for d in parsed if d.date() >= today]
+    return (upcoming[0] if upcoming else parsed[-1]), parsed[-1]
+
+
+def derive_status(sedia_status: Optional[str], opening: Optional[dt.datetime],
+                  final_deadline: Optional[dt.datetime], today: dt.date) -> str:
+    """forthcoming | open | closed | unknown, with the DATES winning over SEDIA.
+
+    SEDIA's status field lags its own dates: topics opening on 15 Sep were still
+    'forthcoming' in the 04:00 UTC sync, and 'open' rows kept deadlines that had
+    passed. A deadline DATE equal to today still counts as open, because SEDIA
+    stores the day at 00:00 while the real cut-off is 17:00 Brussels time.
+    """
+    if final_deadline is not None and final_deadline.date() < today:
+        return "closed"
+    if opening is not None and final_deadline is not None:
+        return "forthcoming" if opening.date() > today else "open"
+    # No deadline: nothing to derive from. A prior information notice or a
+    # rolling call can be 'forthcoming' long after its publication date, so the
+    # opening date alone must not promote it to 'open'.
+    return sedia_status or "unknown"
 
 
 def first_or_none(arr) -> Optional[Any]:
@@ -158,20 +372,58 @@ def parse_iso_date(s: str) -> Optional[dt.datetime]:
         return None
 
 
-def normalise_row(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+TENDER_PORTAL_BASE = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details"
+
+
+def _lead_authority(md: Dict[str, Any]) -> Optional[str]:
+    """The buying institution of a call for tenders.
+
+    `cftLeadContractingAuthorityCode` is a list of JSON strings such as
+    '[{"name":"European Union Agency for Fundamental Rights","isLeadAuthority":true}]'.
+    Falls back to the DG / agency label of `cftPartyLegalEntityId`.
+    """
+    for raw in md.get("cftLeadContractingAuthorityCode") or []:
+        try:
+            parties = json.loads(raw) if isinstance(raw, str) else raw
+        except (TypeError, ValueError):
+            continue
+        if isinstance(parties, dict):
+            parties = [parties]
+        names = [p.get("name") for p in parties or [] if isinstance(p, dict) and p.get("name")]
+        lead = [p.get("name") for p in parties or []
+                if isinstance(p, dict) and p.get("isLeadAuthority") and p.get("name")]
+        if lead or names:
+            return (lead or names)[0].strip()
+    party = str(first_or_none(md.get("cftPartyLegalEntityId")) or "")
+    return _PARTY_LABELS.get(party) or None
+
+
+def _to_number(value) -> Optional[float]:
+    try:
+        return float(str(value).strip()) if value not in (None, "") else None
+    except ValueError:
+        return None
+
+
+def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Optional[Dict[str, Any]]:
+    today = today or dt.date.today()
     md = result.get("metadata") or {}
     topic_id = first_or_none(md.get("identifier"))
     title = first_or_none(md.get("title")) or result.get("content")
     if not topic_id or not title:
         return None
-    description_html = first_or_none(md.get("descriptionByte")) or ""
+    record_type = str(first_or_none(md.get("type")) or "")
+    is_tender = record_type in TENDER_TYPES or str(topic_id).endswith(("-CN", "-PIN"))
+    description_html = (first_or_none(md.get("descriptionByte"))
+                        or first_or_none(md.get("description")) or "")
     short_html = (description_html or "").split("</p>", 1)[0] + "</p>" if "</p>" in description_html else description_html[:600]
 
     status_code = first_or_none(md.get("status"))
-    status = STATUS_MAP.get(str(status_code), "unknown")
+    sedia_status = STATUS_MAP.get(str(status_code))
 
-    deadline = parse_iso_date(first_or_none(md.get("deadlineDate")))
+    deadline, final_deadline = pick_deadlines(md.get("deadlineDate"), today)
     published = parse_iso_date(first_or_none(md.get("startDate"))) or parse_iso_date(first_or_none(md.get("es_SortDate")))
+    status = derive_status(sedia_status, published, final_deadline, today)
     types = md.get("typesOfAction") or []
     type_of_action = types[0] if types else None
 
@@ -179,28 +431,30 @@ def normalise_row(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not isinstance(keywords, list):
         keywords = [keywords]
 
-    portal_url = f"{PORTAL_BASE}/{topic_id}"
+    portal_url = f"{TENDER_PORTAL_BASE if is_tender else PORTAL_BASE}/{topic_id}"
     documents_url = first_or_none(md.get("url")) or first_or_none(md.get("esST_URL"))
 
-    programme_period = first_or_none(md.get("programmePeriod")) or ""
     call_id = first_or_none(md.get("callIdentifier"))
-    # SEDIA publishes the SAME topic once per EU language, and the search
-    # returns them interleaved. Carried here so the caller can prefer English
-    # rather than whichever record happened to arrive first.
+    # SEDIA publishes the SAME topic once per EU language. fetch_sedia_page now
+    # asks for English only, but the language is still carried so a caller that
+    # opts into every language can prefer English.
     record_lang = (first_or_none(md.get("language")) or "").lower()
 
-    return {
+    row = {
         "record_lang": record_lang,
+        "record_type": record_type,
+        "is_tender": is_tender,
         "topic_id": topic_id,
         "call_id": call_id,
-        "programme": programme_period,
+        # The programme NAME ("Horizon Europe (HORIZON)"), never programmePeriod.
+        "programme": None if is_tender else programme_label(md, topic_id),
         "title": title,
         "short_summary": html_strip(short_html, 600),
         "description": html_strip(description_html, 8000),
         "status": status,
         "type_of_action": type_of_action,
         "deadline": deadline,
-        "deadline_secondary": None,
+        "deadline_secondary": final_deadline if final_deadline and final_deadline != deadline else None,
         "indicative_budget": None,
         "budget_currency": "EUR",
         "source_url": portal_url,
@@ -209,6 +463,15 @@ def normalise_row(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "target_audience": None,
         "published_at": published,
     }
+    if is_tender:
+        ct = str(first_or_none(md.get("contractType")) or "")
+        row.update({
+            "contracting_authority": _lead_authority(md),
+            "contract_type": _CONTRACT_TYPE_LABELS.get(ct) or type_of_action,
+            "indicative_budget": _to_number(first_or_none(md.get("cftEstimatedOverallContractAmount"))),
+            "budget_currency": first_or_none(md.get("cftEstimatedOverallContractCurrency")) or "EUR",
+        })
+    return row
 
 
 def upsert(cur, row: Dict[str, Any]) -> None:
@@ -239,6 +502,14 @@ def upsert(cur, row: Dict[str, Any]) -> None:
             status = CASE WHEN EXCLUDED.status = 'unknown'
                           THEN funding_opportunities.status ELSE EXCLUDED.status END,
             type_of_action = COALESCE(EXCLUDED.type_of_action, funding_opportunities.type_of_action),
+            -- The programme NAME. Until 15 Sep 2026 this column held the programme
+            -- PERIOD ("2021 - 2027") and was never updated on conflict, so the
+            -- period is cleared here whenever no name is available.
+            programme = COALESCE(EXCLUDED.programme,
+                                 CASE WHEN funding_opportunities.programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
+                                      THEN NULL ELSE funding_opportunities.programme END),
+            published_at = COALESCE(EXCLUDED.published_at, funding_opportunities.published_at),
+            deadline_secondary = COALESCE(EXCLUDED.deadline_secondary, funding_opportunities.deadline_secondary),
             -- Never let an absent field erase a present one. The SEDIA search
             -- record carries no deadline for many topics, so EXCLUDED.deadline
             -- is NULL and a plain assignment wiped the real date: one run
@@ -263,12 +534,14 @@ def upsert(cur, row: Dict[str, Any]) -> None:
 def is_call_for_tenders(row: Dict[str, Any]) -> bool:
     """True when a SEDIA row is a call for TENDERS, not a call for proposals.
 
-    SEDIA returns both through the same search index. Calls for tenders carry a
-    UUID identifier suffixed "-CN" (contract notice) rather than a programme
-    topic id like HORIZON-EIC-2026-ACCELERATOR-01. That suffix is the only
-    reliable discriminator in the payload.
+    SEDIA returns both through the same search index. The discriminator is the
+    record `type` ("0" = Tender); a UUID identifier suffixed "-CN" (contract
+    notice) or "-PIN" (prior information notice) is the fallback for callers that
+    built the row without it.
     """
-    return str(row.get("topic_id") or "").endswith("-CN")
+    if row.get("is_tender") is not None:
+        return bool(row["is_tender"])
+    return str(row.get("topic_id") or "").endswith(("-CN", "-PIN"))
 
 
 def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
@@ -286,8 +559,12 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
         "description": row.get("description"),
         "status": row.get("status"),
         "deadline": row.get("deadline"),
-        "contracting_authority": row.get("programme"),
-        "contract_type": row.get("type_of_action"),
+        # The BUYER. This was row["programme"], which held the programme period,
+        # so 46 of 46 SEDIA tenders named "2014 - 2020" as their contracting
+        # authority. The period is never a buyer: store NULL rather than that.
+        "contracting_authority": (None if is_programme_period(row.get("contracting_authority"))
+                                  else row.get("contracting_authority")),
+        "contract_type": row.get("contract_type") or row.get("type_of_action"),
         "estimated_value": row.get("indicative_budget"),
         "value_currency": row.get("budget_currency"),
         # source_url is NOT NULL; the portal URL is always derivable.
@@ -309,12 +586,17 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
         ON CONFLICT (tender_reference) DO UPDATE SET
             title = EXCLUDED.title,
             description = EXCLUDED.description,
-            status = EXCLUDED.status,
+            status = CASE WHEN EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
+                          THEN ft_calls_for_tenders.status ELSE EXCLUDED.status END,
             deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_tenders.deadline),
-            contracting_authority = EXCLUDED.contracting_authority,
-            contract_type = EXCLUDED.contract_type,
-            estimated_value = EXCLUDED.estimated_value,
-            value_currency = EXCLUDED.value_currency,
+            contracting_authority = COALESCE(EXCLUDED.contracting_authority,
+                CASE WHEN ft_calls_for_tenders.contracting_authority ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
+                     THEN NULL ELSE ft_calls_for_tenders.contracting_authority END),
+            contract_type = COALESCE(EXCLUDED.contract_type, ft_calls_for_tenders.contract_type),
+            estimated_value = COALESCE(EXCLUDED.estimated_value, ft_calls_for_tenders.estimated_value),
+            value_currency = COALESCE(EXCLUDED.value_currency, ft_calls_for_tenders.value_currency),
+            source_url = COALESCE(NULLIF(EXCLUDED.source_url, ''), ft_calls_for_tenders.source_url),
+            published_at = COALESCE(EXCLUDED.published_at, ft_calls_for_tenders.published_at),
             documents_url = COALESCE(EXCLUDED.documents_url, ft_calls_for_tenders.documents_url),
             scraped_at = NOW(),
             last_updated = NOW()
@@ -367,6 +649,12 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             status = CASE WHEN EXCLUDED.status = 'unknown'
                           THEN ft_calls_for_proposals.status ELSE EXCLUDED.status END,
             type_of_action = COALESCE(EXCLUDED.type_of_action, ft_calls_for_proposals.type_of_action),
+            -- See funding_opportunities.programme: the period is not a programme.
+            framework_programme = COALESCE(EXCLUDED.framework_programme,
+                CASE WHEN ft_calls_for_proposals.framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
+                     THEN NULL ELSE ft_calls_for_proposals.framework_programme END),
+            published_at = COALESCE(EXCLUDED.published_at, ft_calls_for_proposals.published_at),
+            deadline_secondary = COALESCE(EXCLUDED.deadline_secondary, ft_calls_for_proposals.deadline_secondary),
             deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_proposals.deadline),
             keywords = EXCLUDED.keywords,
             -- scraped_at on the conflict path too, so "when did we last SEE
@@ -409,22 +697,114 @@ DEFAULT_QUERIES: list[str] = [
 ]
 
 
+def _write(cur, row: Dict[str, Any], write_ft: bool) -> None:
+    """One row, inside a savepoint so a bad row cannot roll back its neighbours.
+
+    Before this, a DB error called conn.rollback(), silently discarding every
+    upsert since the last page commit while rows_written had already counted them.
+    """
+    cur.execute("SAVEPOINT sedia_row")
+    try:
+        if is_call_for_tenders(row):
+            # A call for tenders is not a funding opportunity; it belongs to
+            # ft_calls_for_tenders only.
+            if write_ft:
+                upsert_ft_tenders(cur, row)
+        else:
+            upsert(cur, row)
+            if write_ft:
+                upsert_ft_calls(cur, row)
+        cur.execute("RELEASE SAVEPOINT sedia_row")
+    except Exception:
+        cur.execute("ROLLBACK TO SAVEPOINT sedia_row")
+        raise
+
+
+def iter_structured(query: Dict[str, Any], page_size: int = 100, max_pages: int = 60,
+                    pause: float = 0.4):
+    """Every record of a filtered SEDIA query, English only, page by page.
+
+    Yields (page_number, results). Stops on an empty page, a short page, or a
+    failed fetch; a failed fetch yields (page, None) so the caller can count it.
+    """
+    for page in range(1, max_pages + 1):
+        data = fetch_sedia_page(page, page_size=page_size, query=query)
+        if not data:
+            # One retry: under load SEDIA times out on the odd page, and a lost
+            # page silently drops up to 100 calls.
+            time.sleep(5)
+            data = fetch_sedia_page(page, page_size=page_size, query=query)
+        if not data:
+            yield page, None
+            return
+        results = data.get("results") or []
+        yield page, results
+        if len(results) < page_size:
+            return
+        time.sleep(pause)
+
+
+def prefer(existing: Optional[Dict[str, Any]], row: Dict[str, Any]) -> Dict[str, Any]:
+    """Pick the better of two records for one identifier.
+
+    SEDIA can hold several type-1 records for one topic (ERASMUS-EDU-2022-ECHE-CERT-FP
+    has two, with different deadline lists). Prefer a real status, then the later
+    final deadline.
+    """
+    if existing is None:
+        return row
+    def key(r):
+        final = r.get("deadline_secondary") or r.get("deadline")
+        return (r.get("status") != "unknown", final.timestamp() if final else 0.0)
+    return row if key(row) > key(existing) else existing
+
+
+def refresh_status_from_dates(cur, today_sql: str = "CURRENT_DATE") -> Dict[str, int]:
+    """Date-derived status for EVERY row, including rows SEDIA no longer returns.
+
+    Mirrors derive_status(): a deadline before today closes the call; a
+    forthcoming call whose opening date has arrived and whose deadline has not
+    passed is open. Rows without a deadline are never guessed at.
+    """
+    changed = {}
+    for table in ("ft_calls_for_proposals", "funding_opportunities", "ft_calls_for_tenders"):
+        final = ("GREATEST(deadline, COALESCE(deadline_secondary, deadline))"
+                 if table != "ft_calls_for_tenders" else "deadline")
+        cur.execute(f"""
+            UPDATE {table} SET status = 'closed', last_updated = now()
+             WHERE status IN ('open', 'forthcoming', 'unknown')
+               AND deadline IS NOT NULL AND ({final})::date < {today_sql}""")
+        closed = cur.rowcount
+        cur.execute(f"""
+            UPDATE {table} SET status = 'open', last_updated = now()
+             WHERE status IN ('forthcoming', 'unknown')
+               AND published_at IS NOT NULL AND published_at::date <= {today_sql}
+               AND deadline IS NOT NULL AND ({final})::date >= {today_sql}""")
+        changed[table] = closed + cur.rowcount
+    return changed
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=2000, help="Max rows to ingest across all queries (default 2000)")
+    ap.add_argument("--limit", type=int, default=2000,
+                    help="Max rows for the legacy prefix-discovery pass (default 2000). "
+                         "The open/forthcoming and refresh passes are not capped.")
     ap.add_argument("--apply", action="store_true", help="Write to DB. Default is dry-run.")
     ap.add_argument("--page-size", type=int, default=100)
     ap.add_argument("--status", choices=["forthcoming", "open", "closed", "any"], default="any")
     ap.add_argument("--text", default=None,
-                    help="SEDIA full-text query. If omitted, iterates over the "
-                         "DEFAULT_QUERIES programme prefixes (Horizon, EIC, "
-                         "Digital Europe, CEF, Erasmus+, CREA, CERV, EU4H, "
-                         "LIFE, JUST, AMIF, BMVI, ISF, Innovation Fund, ESF+, "
-                         "EUDF, EISMEA). Override with a single string to "
-                         "pull just that prefix (e.g. '2026').")
+                    help="SEDIA full-text query for the prefix-discovery pass. If "
+                         "omitted, iterates over the DEFAULT_QUERIES programme prefixes.")
     ap.add_argument("--write-ft", action="store_true",
-                    help="Also write the same rows to ft_calls_for_proposals "
-                         "(the sibling table backing /api/v1/ft-calls-for-proposals).")
+                    help="Also write ft_calls_for_proposals and ft_calls_for_tenders "
+                         "(the tables the Tenderator and /api/v2/funding/ft-* read).")
+    ap.add_argument("--discover", action="store_true",
+                    help="Also run the legacy full-text prefix queries to find closed "
+                         "historical topics never stored (slow; implied by --text).")
+    ap.add_argument("--dump-json", default=None,
+                    help="Write the normalised rows to this JSON file (for verification).")
+    ap.add_argument("--skip-refresh", action="store_true",
+                    help="Skip re-reading every stored topic by identifier.")
     args = ap.parse_args()
 
     db = get_env("DATABASE_URL")
@@ -432,98 +812,155 @@ def main():
         print("[FATAL] DATABASE_URL missing")
         sys.exit(1)
 
+    n_labels = load_programme_labels()
+    print(f"[INFO] programme labels from SEDIA facet: {n_labels} "
+          f"(static fallback {len(_STATIC_PROGRAMME_LABELS)})")
+
+    stats = {"fetched": 0, "written": 0, "errors": 0, "fetch_failures": 0}
+    # identifier -> best row seen this run
+    rows: Dict[str, Dict[str, Any]] = {}
+
+    def collect(results, allow_tenders: bool) -> int:
+        n = 0
+        for r in results:
+            row = normalise_row(r)
+            if row is None:
+                continue
+            if row["record_type"] and row["record_type"] not in GRANT_TYPES + TENDER_TYPES + ["2"]:
+                continue  # type 6 update records and other noise
+            if row["is_tender"] and not allow_tenders:
+                continue
+            rows[row["topic_id"]] = prefer(rows.get(row["topic_id"]), row)
+            n += 1
+        return n
+
+    # Pass 1: every OPEN or FORTHCOMING call topic, English, uncapped (~1,400).
+    # This is the pass that answers "what can I apply to"; it used to depend on
+    # a 500-row budget shared with 19 full-text prefix queries.
+    for label, types, allow_tenders in (("grants", GRANT_TYPES, False),
+                                        ("tenders", TENDER_TYPES, True)):
+        if label == "tenders" and not args.write_ft:
+            continue
+        q = {"bool": {"must": [{"terms": {"type": types}},
+                               {"terms": {"status": OPEN_STATUS_CODES}}]}}
+        got = 0
+        for page, results in iter_structured(q, page_size=args.page_size):
+            if results is None:
+                stats["fetch_failures"] += 1
+                break
+            got += collect(results, allow_tenders)
+        print(f"[PASS 1] open/forthcoming {label}: {got} records")
+        stats["fetched"] += got
+
+    # Pass 2: re-read every topic we already store, by identifier, so titles,
+    # programme, dates and status of CLOSED and historical rows get corrected too
+    # (the rows pass 1 cannot see). ~20 requests for ~2,000 topics.
+    if not args.skip_refresh:
+        # Short-lived connection: the SEDIA passes take minutes and the Supabase
+        # session pooler is shared with production, so no connection is held
+        # across network work.
+        conn = psycopg2.connect(db)
+        try:
+            cur = conn.cursor()
+            # Only rows that can still be wrong: anything not closed, plus closed
+            # rows still carrying a programme PERIOD, a non-English title or no
+            # status. Settled closed rows do not change upstream, and re-reading all
+            # ~2,000 daily pushed the job past its cron timeout (SEDIA ~10 s/page).
+            cur.execute("""
+                SELECT topic_id FROM ft_calls_for_proposals
+                 WHERE NOT is_test AND (status IS DISTINCT FROM 'closed'
+                       OR framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
+                       OR COALESCE(detected_lang, 'en') <> 'en')
+                UNION SELECT topic_id FROM funding_opportunities
+                 WHERE NOT is_test AND (status IS DISTINCT FROM 'closed'
+                       OR programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$')
+                UNION SELECT tender_reference FROM ft_calls_for_tenders
+                 WHERE tender_reference ~ '-(CN|PIN)$'
+                   AND (status IS DISTINCT FROM 'closed'
+                        OR contracting_authority ~ '^ *[0-9]{4} *- *[0-9]{4} *$')""")
+            stored = sorted({r[0] for r in cur.fetchall()} - set(rows))
+        finally:
+            conn.close()
+        got = 0
+        for i in range(0, len(stored), 100):
+            batch = stored[i:i + 100]
+            q = {"bool": {"must": [{"terms": {"identifier": batch}},
+                                   {"terms": {"type": GRANT_TYPES + TENDER_TYPES + ["2"]}}]}}
+            for page, results in iter_structured(q, page_size=100, max_pages=5, pause=0.3):
+                if results is None:
+                    stats["fetch_failures"] += 1
+                    break
+                got += collect(results, allow_tenders=args.write_ft)
+        print(f"[PASS 2] refresh of {len(stored)} stored identifiers: {got} records")
+        stats["fetched"] += got
+
+    # Pass 3: legacy prefix discovery of topics not yet stored, capped by --limit.
     status_filter = None
     if args.status != "any":
         status_filter = next((k for k, v in STATUS_MAP.items() if v == args.status), None)
-
-    queries = [args.text] if args.text else DEFAULT_QUERIES
-
-    conn = psycopg2.connect(db)
-    cur = conn.cursor()
-
-    rows_seen = 0
-    rows_written = 0
-    seen_topic_ids: set[str] = set()
-    # topic_id -> the language we stored it in, so a later English record can
-    # replace a Polish or German one instead of being discarded as a duplicate.
-    seen_lang: dict[str, str] = {}
-    upgraded = 0
-
+    # Opt-in: pass 1 already sees every call while it is forthcoming or open, so a
+    # new call can no longer be missed without it, and SEDIA answers ~10 s a page.
+    queries = [args.text] if args.text else (DEFAULT_QUERIES if args.discover else [])
+    discovered = 0
     for query in queries:
-        if rows_seen >= args.limit:
+        if discovered >= args.limit:
             break
-        print(f"\n[QUERY] text={query!r}")
-        page = 1
-        per_query_seen = 0
-        # Cap pagination per query so one query can't monopolise the budget.
-        max_pages = 25
-        while rows_seen < args.limit and page <= max_pages:
-            data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter, text=query)
+        q = {"bool": {"must": [{"terms": {"type": GRANT_TYPES}}]}}
+        for page in range(1, 11):
+            data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter,
+                                    text=query, query=q)
+            results = (data or {}).get("results") or []
             if not data:
-                break
-            results = data.get("results") or []
+                stats["fetch_failures"] += 1
             if not results:
                 break
-            page_valid = 0
-            # English first, so the first record kept for a topic is the
-            # portal's own English wording. Without this the Tenderator stored
-            # "Kreislaufwirtschaft und Null-Schadstoff-Belastung" for a call
-            # whose English title, present in the very same response, is
-            # "Circular Economy and Zero Pollution", and then paid to machine
-            # translate it back.
-            results = sorted(
-                results,
-                key=lambda x: ((first_or_none((x.get("metadata") or {}).get("language"))
-                                or "").lower() != "en"),
-            )
-            for r in results:
-                row = normalise_row(r)
-                if row is None:
-                    continue
-                tid = row["topic_id"]
-                lang = row.get("record_lang") or ""
-                if tid in seen_topic_ids:
-                    # Only reason to look again: we stored a non-English record
-                    # and the English one has now turned up.
-                    if not (lang == "en" and seen_lang.get(tid) != "en"):
-                        continue
-                    upgraded += 1
-                seen_topic_ids.add(tid)
-                seen_lang[tid] = lang
-                rows_seen += 1
-                per_query_seen += 1
-                page_valid += 1
-                print(f"  [{row['status']:11s}] {tid:35s}  {(row['title'] or '')[:60]}")
-                if args.apply:
-                    try:
-                        upsert(cur, row)
-                        if args.write_ft:
-                            # Calls for tenders and calls for proposals arrive
-                            # through one SEDIA index but are different things
-                            # to a bidder, and the Tenderator reads them from
-                            # different tables. Route on the -CN suffix.
-                            if is_call_for_tenders(row):
-                                upsert_ft_tenders(cur, row)
-                            else:
-                                upsert_ft_calls(cur, row)
-                        rows_written += 1
-                    except Exception as exc:  # noqa: BLE001
-                        print(f"    [DB ERR] {exc}")
-                        conn.rollback()
-                if rows_seen >= args.limit:
-                    break
-            if args.apply:
-                conn.commit()
-            # Early-exit if a page returned only noise — no point burning more
-            # pages on the same query.
-            if page_valid == 0 and per_query_seen > 0:
+            before = len(rows)
+            collect(results, allow_tenders=False)
+            discovered += len(rows) - before
+            if len(rows) == before or discovered >= args.limit:
                 break
-            page += 1
             time.sleep(0.4)
-        print(f"  [QUERY DONE] {query!r}: {per_query_seen} valid rows")
+    print(f"[PASS 3] prefix discovery: {discovered} new identifiers")
 
-    print(f"\n[DONE] seen={rows_seen} written={rows_written} "
-          f"upgraded_to_english={upgraded} apply={args.apply}")
+    if args.dump_json:
+        with open(args.dump_json, "w") as fh:
+            json.dump(rows, fh, default=str, ensure_ascii=False, indent=1)
+    if args.apply and rows:
+        conn = psycopg2.connect(db)
+        try:
+            cur = conn.cursor()
+            for tid, row in sorted(rows.items()):
+                try:
+                    _write(cur, row, args.write_ft)
+                    stats["written"] += 1
+                except Exception as exc:  # noqa: BLE001
+                    stats["errors"] += 1
+                    print(f"    [DB ERR] {tid}: {type(exc).__name__}: {str(exc)[:160]}")
+            conn.commit()
+            changed = refresh_status_from_dates(cur)
+            conn.commit()
+            print(f"[STATUS] date-derived status changes: {changed}")
+        finally:
+            conn.close()
+
+    by_status: Dict[str, int] = {}
+    for row in rows.values():
+        by_status[row["status"]] = by_status.get(row["status"], 0) + 1
+    print(f"\n[DONE] identifiers={len(rows)} tenders={sum(1 for r in rows.values() if r['is_tender'])} "
+          f"by_status={by_status} written={stats['written']} errors={stats['errors']} "
+          f"fetch_failures={stats['fetch_failures']} apply={args.apply}")
+
+    # Silence is not success: an empty run or a run that could not write must not exit 0.
+    if not rows:
+        print("[ERROR] SEDIA returned no call records; nothing was ingested")
+        sys.exit(2)
+    if args.apply and stats["errors"]:
+        print(f"[ERROR] {stats['errors']} row(s) failed to write")
+        sys.exit(3)
+    if stats["fetch_failures"]:
+        print(f"[ERROR] {stats['fetch_failures']} SEDIA page fetch(es) failed after retry; "
+              "the run is incomplete")
+        sys.exit(4)
 
 
 if __name__ == "__main__":

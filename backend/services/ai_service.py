@@ -5034,11 +5034,22 @@ USER QUESTION: {user_message}
         re.IGNORECASE,
     )
 
-    # A spaced em/en dash used as an appositive or parenthetical break. Folding
-    # it to a comma is grammatical in all six Brubru languages ("X — the Y — is
-    # Z" becomes "X, the Y, is Z"). Digit-flanked dashes are ranges and are left
-    # alone, as are dashes already adjacent to a comma.
-    _PROSE_DASH_RE = re.compile(r"(?<![\d,])\s*[—–]\s*(?![\d,])")
+    # Em/en dashes, folded in two passes (audit F1, 15 Sep 2026).
+    #
+    # 1. A dash between two digits is a RANGE ("14 – 20 September", "5—7",
+    #    "2024–2027") and becomes a plain unspaced hyphen.
+    # 2. Every other dash is an appositive or parenthetical break and becomes a
+    #    comma, which is grammatical in all six Brubru languages ("X — the Y —
+    #    is Z" becomes "X, the Y, is Z").
+    #
+    # The previous single regex tried to skip ranges with digit lookarounds, but
+    # `\s*` let the match start AT the dash, so the lookbehind saw the space, not
+    # the digit: "Week 38 (14 – 20 September)" shipped as "(14 ,  20 September)"
+    # and "adopted 2024 — applies" as "adopted 2024 , applies".
+    _NUMERIC_RANGE_DASH_RE = re.compile(r"(\d)[ \t]*[—–][ \t]*(?=\d)")
+    _LEADING_DASH_RE = re.compile(r"^([ \t]*)[—–][ \t]+")
+    _TRAILING_DASH_RE = re.compile(r"[ \t]*[—–][ \t]*$")
+    _PROSE_DASH_RE = re.compile(r"[ \t]*[—–][ \t]*")
 
     def _fold_prose_dashes(self, text: str) -> str:
         """
@@ -5074,15 +5085,28 @@ USER QUESTION: {user_message}
                 return f"\x00{len(urls) - 1}\x00"
 
             protected = re.sub(r"https?://[^\s\)\]]+", _stash, line)
-            folded = self._PROSE_DASH_RE.sub(", ", protected)
+            if "—" not in protected and "–" not in protected:
+                out_lines.append(line)
+                continue
+            folded = self._NUMERIC_RANGE_DASH_RE.sub(r"\1-", protected)
+            # A dash opening a line is a list bullet, not a break.
+            folded = self._LEADING_DASH_RE.sub(r"\1- ", folded)
+            # A dash closing a line has nothing to separate: drop it.
+            folded = self._TRAILING_DASH_RE.sub("", folded)
+            folded = self._PROSE_DASH_RE.sub(", ", folded)
+            # Debris, cleaned only on lines that were folded: a comma after a
+            # space or an opening bracket, a comma before punctuation, runs of
+            # and runs of spaces inside the line (trailing double spaces are a
+            # Markdown hard break and stay).
+            folded = re.sub(r"[ \t]+,", ",", folded)
+            folded = re.sub(r"([(\[])[ \t]*,[ \t]*", r"\1", folded)
+            folded = re.sub(r",[ \t]*([.,;:!?)\]])", r"\1", folded)
+            folded = re.sub(r"(?<=\S)[ \t]{2,}(?=\S)", " ", folded)
             for idx, url in enumerate(urls):
                 folded = folded.replace(f"\x00{idx}\x00", url)
             out_lines.append(folded)
 
-        result = "\n".join(out_lines)
-        # A folded dash before punctuation leaves ", ." style debris.
-        result = re.sub(r",\s*([.,;:!?])", r"\1", result)
-        return result
+        return "\n".join(out_lines)
 
     # Catalan forms the models get wrong most often. Applied only when the query
     # language is Catalan (audit defect D7, 28 Jul 2026: "per a que" and

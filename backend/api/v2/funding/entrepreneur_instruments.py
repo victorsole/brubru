@@ -50,12 +50,17 @@ _FAMILIES = [
     ("HORIZON-EIC%TRANSITION%",  "HORIZON (EIC)", "EIC Transition",         "EISMEA (grant)"),
     ("HORIZON-EIC%PATHFINDER%",  "HORIZON (EIC)", "EIC Pathfinder",         "EISMEA (grant)"),
     ("HORIZON-EIC%",             "HORIZON (EIC)", "EIC (other)",            "EISMEA / EIC Fund"),
+    # Erasmus for Young Entrepreneurs is a COSME / Single Market Programme action
+    # (COS-EYE-2019-4-01, SMP-COSME-...-EYE-...), NOT an Erasmus+ topic. It must
+    # sit BEFORE "SMP-%" or the SMP catch-all claims it. The previous rule,
+    # "ERASMUS%", matched Erasmus+ education calls instead, so the Erasmus Charter
+    # for Higher Education was served to entrepreneurs as an EYE instrument.
+    ("%-EYE-%",                  "Erasmus for Young Entrepreneurs (SMP / COSME)", "Erasmus for Young Entrepreneurs", "EYE intermediary organisations"),
     ("SMP-%",                    "Single Market Programme", "SMP SME strand", "EISMEA + Enterprise Europe Network"),
     ("I3-%",                     "Interregional Innovation Investments (I3)", "I3 Instrument", "Regional innovation ecosystems (managing authorities)"),
     ("DIGITAL-%",                "Digital Europe", "European Digital Innovation Hubs", "EDIH platforms"),
     ("ESF-%",                    "ESF+ / EaSI", "EaSI microfinance / social entrepreneurship", "National managing authorities / EaSI intermediaries"),
     ("SOCPL%",                   "ESF+ / EaSI", "EaSI microfinance / social entrepreneurship", "National managing authorities / EaSI intermediaries"),
-    ("ERASMUS%",                 "Erasmus+ (EYE)", "Erasmus for Young Entrepreneurs", "EYE intermediary organisations"),
 ]
 
 # Valid `programme` filter values (the coarse labels above).

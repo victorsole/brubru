@@ -154,6 +154,7 @@ SEEDED_TEST_USER_EMAILS_PENDING_DECISION = (
 # `AND NOT <synthetic>` silently drops every row it was meant to keep. Adding
 # the probe clause without this turned the orphaned-anonymous-chat check from
 # "51/60 FAIL" into "0/0 OK" -- a real defect reported as fixed.
+WIDEN_DAYS = 30  # blind-spot checks widen an empty window to this many days
 SYNTHETIC_PRE_USER_SQL = r"""
     (
         COALESCE((c.chat_metadata ->> 'is_probe') = 'true', false)
@@ -794,7 +795,8 @@ def section_would_be_wapu(conn, end):
         f"""
         WITH eligible AS (
             SELECT u.id, u.email, u.subscription_tier, u.claimed_at, u.pre_provisioned_at,
-                   (u.stripe_subscription_id IS NOT NULL) AS pays
+                   (u.stripe_subscription_id IS NOT NULL) AS pays,
+                   (u.off_stripe_paid_until IS NOT NULL AND u.off_stripe_paid_until >= :end) AS pays_off_stripe
             FROM users u
             WHERE u.subscription_tier IN ('yellow', 'blue')
               AND u.is_active IS NOT FALSE
@@ -828,7 +830,7 @@ def section_would_be_wapu(conn, end):
             FROM user_carriage_tracks GROUP BY 1
         )
         SELECT e.email, e.subscription_tier,
-               e.pays AS pays_stripe,
+               e.pays AS pays_stripe, e.pays_off_stripe,
                count(a.action) AS actions,
                string_agg(DISTINCT a.action, ', ') AS surfaces,
                CASE
@@ -843,9 +845,47 @@ def section_would_be_wapu(conn, end):
               AND (e.pre_provisioned_at IS NULL
                    OR (e.claimed_at IS NOT NULL AND a.acted_at >= e.claimed_at))
         LEFT JOIN track_shape ts ON ts.user_id = e.id
-        GROUP BY 1, 2, 3, ts.distinct_minutes
+        GROUP BY 1, 2, 3, 4, ts.distinct_minutes
         HAVING count(a.action) > 0
-        ORDER BY 4 DESC
+        ORDER BY 5 DESC
+        """,
+        start=end - timedelta(days=7),
+        end=end,
+    )
+
+
+def section_paid_inactive(conn, end):
+    """Accounts with payment EVIDENCE (Stripe or migration 231) and no core action
+    in the trailing 7 days, with their last recorded action ever.
+
+    Added 15 Sep 2026 after GovClipping (annual, paid off Stripe) was named as a
+    WAPU while its last recorded action was a single MCP call on 4 Sep: a paying
+    customer who drops out of the 7-day window must be visible, not silently absent.
+    """
+    return q(
+        conn,
+        f"""
+        WITH paid AS (
+            SELECT u.id, u.email, u.off_stripe_paid_until
+            FROM users u
+            WHERE u.is_active IS NOT FALSE AND NOT {INTERNAL_USER_SQL}
+              AND (u.stripe_subscription_id IS NOT NULL
+                   OR (u.off_stripe_paid_until IS NOT NULL AND u.off_stripe_paid_until >= :end))
+        ),
+        acted AS (
+            SELECT user_id, created_at AS acted_at FROM chats
+            UNION ALL SELECT user_id, created_at FROM user_documents
+            UNION ALL SELECT user_id, tracked_since FROM user_carriage_tracks
+            UNION ALL SELECT user_id, created_at FROM amendments
+            UNION ALL SELECT user_id, created_at FROM compliance_analyses
+            UNION ALL SELECT user_id, created_at FROM api_usage_events WHERE NOT is_probe
+        )
+        SELECT p.email, p.off_stripe_paid_until::date AS paid_until,
+               max(a.acted_at)::date AS last_action
+        FROM paid p LEFT JOIN acted a ON a.user_id = p.id AND a.acted_at < :end
+        GROUP BY 1, 2
+        HAVING max(a.acted_at) IS NULL OR max(a.acted_at) < :start
+        ORDER BY 3 NULLS FIRST
         """,
         start=end - timedelta(days=7),
         end=end,
@@ -875,7 +915,10 @@ def section_wapu(conn, end):
                    -- On 27 Aug all three blue rows carried stripe_customer_id
                    -- NULL and stripe_subscription_id NULL: nobody had paid us
                    -- anything, and the north star said 1.
-                   (u.stripe_subscription_id IS NOT NULL) AS has_stripe_sub
+                   (u.stripe_subscription_id IS NOT NULL) AS has_stripe_sub,
+                   -- Migration 231 (15 Sep 2026): payment outside Stripe, recorded by a
+                   -- human from a real payment. Still evidence, never the tier string.
+                   (u.off_stripe_paid_until IS NOT NULL AND u.off_stripe_paid_until >= :end) AS paid_off_stripe
             FROM users u
             WHERE u.subscription_tier IN ('yellow', 'blue')
               AND u.is_active IS NOT FALSE
@@ -917,7 +960,7 @@ def section_wapu(conn, end):
                ON a.user_id = p.id
               AND (p.pre_provisioned_at IS NULL
                    OR (p.claimed_at IS NOT NULL AND a.acted_at >= p.claimed_at))
-        WHERE p.has_stripe_sub          -- U2: paid means paid
+        WHERE (p.has_stripe_sub OR p.paid_off_stripe)   -- U2: paid means paid
         GROUP BY 1, 2
         HAVING count(a.action) > 0
         ORDER BY 3 DESC
@@ -1034,6 +1077,21 @@ def section_blind_spots(conn, start, end):
         start=start,
         end=end,
     )
+    widened_api = ""
+    if not errored(rows) and rows[0]["calls"] == 0:
+        # An empty window proves nothing. Widen to 30 days rather than report
+        # UNPROVEN on a quiet weekend (15 Sep 2026: a 3-day window read UNPROVEN
+        # while the trailing 30 days held 8,352 calls at 99.99% coverage).
+        rows = q(
+            conn,
+            """
+            SELECT count(*) AS calls, count(status_code) AS with_status
+            FROM api_usage_events WHERE created_at >= :start AND created_at < :end
+            """,
+            start=end - timedelta(days=WIDEN_DAYS),
+            end=end,
+        )
+        widened_api = f" (window empty; widened to trailing {WIDEN_DAYS} days)"
     if not errored(rows):
         r = rows[0]
         checks.append(
@@ -1045,7 +1103,7 @@ def section_blind_spots(conn, start, end):
                 # 1,292 calls carried no status code at all.
                 "ok": r["calls"] == 0 or (r["with_status"] / r["calls"]) >= 0.99,
                 "unproven": r["calls"] == 0,
-                "detail": f"{r['with_status']}/{r['calls']} calls carry a status_code",
+                "detail": f"{r['with_status']}/{r['calls']} calls carry a status_code{widened_api}",
                 "means": "Under 99% coverage: the error rate is computed over calls whose "
                 "outcome was never recorded, so a low count is partly an artefact. The "
                 "metering path writes the row before the response is known.",
@@ -1186,6 +1244,18 @@ def section_blind_spots(conn, start, end):
         start=start,
         end=end,
     )
+    widened_notif = ""
+    if not errored(rows) and rows[0]["sent"] == 0:
+        rows = q(
+            conn,
+            """
+            SELECT count(*) AS sent, count(*) FILTER (WHERE is_read) AS read
+            FROM notifications WHERE created_at >= :start AND created_at < :end
+            """,
+            start=end - timedelta(days=WIDEN_DAYS),
+            end=end,
+        )
+        widened_notif = f" (window empty; widened to trailing {WIDEN_DAYS} days)"
     if not errored(rows):
         r = rows[0]
         checks.append(
@@ -1193,7 +1263,7 @@ def section_blind_spots(conn, start, end):
                 "check": "notifications get read",
                 "ok": r["sent"] == 0 or r["read"] > 0,
                 "unproven": r["sent"] == 0,
-                "detail": f"{r['sent']} sent, {r['read']} read",
+                "detail": f"{r['sent']} sent, {r['read']} read{widened_notif}",
                 "means": "Sent but never read. The WRITING PATH IS INTACT, verified end "
                 "to end on 11 Sep 2026: the bell calls markAsRead, the hook posts "
                 "/notifications/{id}/read, and the model sets is_read AND read_at. A zero "
@@ -1201,6 +1271,41 @@ def section_blind_spots(conn, start, end):
                 "error of reading one zero as a broken column. Until 10 Sep there was "
                 "nothing recent to open: 103 notifications, one recipient, none since "
                 "18 June.",
+            }
+        )
+
+    # 5b. The notification scheduler must leave a durable trace every day. "0 sent"
+    #     cannot tell a quiet day from a scheduler that never fired; sync_runs can
+    #     (rows written from 15 Sep 2026 by services/schedulers/notification_scheduler.py).
+    rows = q(
+        conn,
+        """
+        SELECT source_key, max(started_at) AS last_run,
+               count(*) FILTER (WHERE status <> 'success') AS failed
+        FROM sync_runs
+        WHERE source_key IN ('notifications_carriage', 'notifications_saved_searches')
+          AND started_at >= :since
+        GROUP BY source_key
+        """,
+        since=end - timedelta(days=2),
+    )
+    if not errored(rows):
+        got = {r["source_key"]: r for r in rows}
+        missing = [k for k in ("notifications_carriage", "notifications_saved_searches") if k not in got]
+        failed = sum((r["failed"] or 0) for r in rows)
+        checks.append(
+            {
+                "check": "notification scheduler ran in the last 48h",
+                "ok": not missing and failed == 0,
+                "unproven": False,
+                "detail": (
+                    ", ".join(f"{k} last {got[k]['last_run']:%Y-%m-%d %H:%M}" for k in got)
+                    or "no recorded run"
+                ) + (f"; missing: {', '.join(missing)}" if missing else "")
+                  + (f"; {failed} failed run(s)" if failed else ""),
+                "means": "No sync_runs row means the daily delivery job did not run (or ran "
+                "before the recorder shipped on 15 Sep 2026). Tracked items then promise "
+                "notifications nobody sends; a zero in 'notifications get read' is meaningless.",
             }
         )
 
@@ -1318,15 +1423,17 @@ def render(report):
         "   (targets: 10 Phase A / 25 Phase B / 50 Phase C)",
         _fmt(report["wapu"]),
         # Companion line, not a second north star. WAPU above is untouched.
-        # It requires evidence of payment and nobody has ever paid through
-        # Stripe, so it reads 0 whatever anyone does. This says how many would
+        # It requires evidence of payment (Stripe, or an off-Stripe payment
+        # recorded under migration 231 since 15 Sep 2026). This says how many would
         # qualify on activity alone, which is the number that distinguishes
         # "nobody used Brubru" from "nobody pays us yet".
         f"  would-be WAPU = "
         f"{len(report['would_be_wapu']) if not errored(report['would_be_wapu']) else '?'}"
         "   (same test, payment evidence removed -- NOT the north star)",
         _fmt(report["would_be_wapu"],
-             ["email", "subscription_tier", "pays_stripe", "actions", "surfaces", "note"]),
+             ["email", "subscription_tier", "pays_stripe", "pays_off_stripe", "actions", "surfaces", "note"]),
+        "  paying (Stripe or off-Stripe) but NO core action in the trailing 7d:",
+        _fmt(report["paid_inactive"], ["email", "paid_until", "last_action"]),
         "",
         "-- 1. ACTORS ------------------------------------------------------------",
         _fmt(report["actors"]["segments"]),
@@ -1458,6 +1565,7 @@ def main():
             },
             "wapu": section_wapu(conn, end_excl),
             "would_be_wapu": section_would_be_wapu(conn, end_excl),
+            "paid_inactive": section_paid_inactive(conn, end_excl),
             "actors": section_actors(conn, start, end_excl, args.include_internal),
             "chat": section_chat(conn, start, end_excl, args.include_internal),
             "preuser_funnel": section_preuser_funnel(conn, start, end_excl),

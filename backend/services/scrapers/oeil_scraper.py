@@ -16,15 +16,20 @@ PHASE 5 UPGRADE: Full web scraping implementation
 Scrapes EU legislative procedures, timelines, and status updates
 """
 
+import asyncio
 import logging
 import re
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from datetime import datetime, timedelta, date
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urljoin, urlparse, parse_qs
 
+import aiohttp
 from bs4 import BeautifulSoup, Tag
 
-from .base_scraper import BaseScraper, ScraperError
+from .base_scraper import BaseScraper, ScraperError, _extract_domain
 from services.api_clients.oeil_client import OEILClient
 from schemas.scrapers.oeil_schemas import (
     OEILProcedure, OEILBasicInfo, OEILKeyPlayers, OEILKeyEvents,
@@ -87,6 +92,150 @@ def _value_after(lines: list, label: str) -> Optional[str]:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Fetch classification (15 Sep 2026)
+# ---------------------------------------------------------------------------
+# What OEIL actually answers, measured 15 Sep 2026 with a Chrome/141 UA:
+#
+#   oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=...
+#       -> 307, 164-byte nginx body, Location: the SAME path on
+#          oeil.europarl.europa.eu. No cookie, no challenge script: a moved
+#          host, not a WAF.
+#   oeil.europarl.europa.eu/oeil/en/procedure-file?reference=...
+#       -> 200, ~140 KB, server-rendered, every section in the HTML
+#          (div#section1..8), including rapporteur, shadows, opinion
+#          committees, key events and forecasts.
+#
+# So the plain HTTP route works and stays primary. The browser is kept for the
+# day it stops working: a WAF status (202, 403), a redirect that leaves the
+# OEIL procedure page, or a 200 that carries nothing parseable. Any of those
+# without a usable browser result is a counted, raised error, never an empty
+# procedure that the caller reads as "no events".
+
+_OEIL_HOSTS = frozenset({"oeil.europarl.europa.eu", "oeil.secure.europarl.europa.eu"})
+_WAF_STATUSES = frozenset({202, 403})
+
+
+class OEILFetchError(ScraperError):
+    """OEIL gave us nothing we could parse. Always counted by the caller."""
+
+    def __init__(self, reference: str, reason: str, status: Optional[int] = None,
+                 route: Optional[str] = None):
+        self.reference = reference
+        self.reason = reason
+        self.status = status
+        self.route = route
+        super().__init__(f"OEIL {reference}: {reason}"
+                         + (f" (HTTP {status})" if status is not None else "")
+                         + (f" [route={route}]" if route else ""))
+
+
+@dataclass
+class OEILPage:
+    reference: str
+    url: str
+    html: str
+    route: str               # "http" or "browser"
+    http_status: Optional[int]
+
+
+def looks_like_procedure_page(html: Optional[str]) -> bool:
+    """True when the HTML carries the OEIL procedure sections."""
+    if not html or len(html) < 2000:
+        return False
+    return ('id="section1"' in html or "id='section1'" in html
+            or ("Key players" in html and "Key events" in html))
+
+
+def classify_oeil_response(status: Optional[int], body: Optional[str],
+                           location: Optional[str] = None) -> str:
+    """Decide what a raw OEIL HTTP answer means.
+
+    Returns one of:
+      "ok"        200 with the procedure sections present
+      "redirect"  3xx to another OEIL procedure-file URL (follow it)
+      "waf"       a WAF status, a redirect away from the procedure page, or a
+                  200 carrying nothing parseable -> try the browser
+      "not_found" 404: the reference does not exist on OEIL
+      "error"     anything else (5xx, 429...): raise, the browser cannot help
+    """
+    if status == 200:
+        return "ok" if looks_like_procedure_page(body) else "waf"
+    if status in _WAF_STATUSES:
+        return "waf"
+    if status is not None and 300 <= status < 400:
+        if location:
+            p = urlparse(location)
+            host_ok = (not p.netloc) or p.netloc.lower() in _OEIL_HOSTS
+            if host_ok and "/procedure-file" in p.path and "reference=" in (p.query or ""):
+                return "redirect"
+        return "waf"
+    if status == 404:
+        return "not_found"
+    return "error"
+
+
+class _BrowserLane:
+    """One headless browser, reused for every ref, confined to ONE thread.
+
+    Playwright's sync API is thread-affine (greenlet), and it refuses to run
+    inside a running asyncio loop, so every call -- launch, fetch, close -- is
+    submitted to the same single-worker executor.
+    """
+
+    def __init__(self):
+        self._pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="oeil-browser")
+        self._fetcher = None
+
+    def _fetch_sync(self, url: str):
+        if self._fetcher is None:
+            from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+            f = WafBrowserFetcher(settle_ms=1500, networkidle_ms=8000)
+            f.__enter__()
+            self._fetcher = f
+        return self._fetcher.fetch(url, expand_accordions=False, strip_chrome=False,
+                                   wait_for_selector="#section3")
+
+    async def fetch(self, url: str):
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(self._pool, self._fetch_sync, url)
+
+    def _close_sync(self):
+        if self._fetcher is not None:
+            try:
+                self._fetcher.__exit__(None, None, None)
+            finally:
+                self._fetcher = None
+
+    async def close(self):
+        loop = asyncio.get_running_loop()
+        try:
+            await loop.run_in_executor(self._pool, self._close_sync)
+        finally:
+            self._pool.shutdown(wait=False)
+
+
+def _clean_group(raw: str) -> Tuple[str, Optional[str]]:
+    """'CANFIN Pascal (Renew)' -> ('CANFIN Pascal', 'Renew').
+
+    The old pattern only allowed capitals, '&' and '/', so Renew, PfE, The Left
+    and Greens/EFA stayed glued to the surname.
+    """
+    m = re.search(r"\(([^()]{2,30})\)\s*$", raw)
+    if m:
+        return raw[:m.start()].strip(), m.group(1).strip()
+    return raw.strip(), None
+
+
+def _dmy(text: str) -> Optional[date]:
+    m = re.search(r"(\d{2})/(\d{2})/(\d{4})", text or "")
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+    except ValueError:
+        return None
+
 
 class OEILScraper(BaseScraper):
     """
@@ -111,13 +260,14 @@ class OEILScraper(BaseScraper):
     - Committee opinions and amendments
     """
 
-    # URL patterns (updated January 2025)
+    # URL patterns. oeil.europarl.europa.eu is the canonical host: since at least
+    # 15 Sep 2026 oeil.secure.* answers a 307 to it (see classify_oeil_response).
     PROCEDURE_URL = "https://oeil.europarl.europa.eu/oeil/en/procedure-file"
     PROCEDURE_URL_LEGACY = "https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do"
     MEP_URL_PATTERN = re.compile(r'/meps/en/(\d+)')
     DATE_PATTERN = re.compile(r'(\d{2})/(\d{2})/(\d{4})')
 
-    def __init__(self, use_api: bool = True, **kwargs):
+    def __init__(self, use_api: bool = True, allow_browser_fallback: bool = False, **kwargs):
         # use_api is consumed HERE and never forwarded. BaseScraper does not
         # accept it, so while it rode in **kwargs any caller writing the
         # apparently-harmless OEILScraper(use_api=True) got a TypeError -- and
@@ -125,7 +275,7 @@ class OEILScraper(BaseScraper):
         # builder, lost its entire legislative-files block to the outer
         # handler (audit 17 Aug 2026).
         super().__init__(
-            base_url="https://oeil.secure.europarl.europa.eu/oeil/en",
+            base_url="https://oeil.europarl.europa.eu/oeil/en",
             name="OEIL",
             rate_limit_delay=2.0,
             **kwargs
@@ -134,6 +284,17 @@ class OEILScraper(BaseScraper):
         # PHASE 4: Initialize API client
         self.api_client = OEILClient()
         self.use_api = use_api
+
+        # Procedure-page fetching: which route served each page, and how many
+        # failed. Callers print this so "0 updated" can never hide "0 fetched".
+        # The browser fallback is OPT-IN: batch jobs that close() the scraper
+        # turn it on; request-path callers (chat context builder, API routes)
+        # construct OEILScraper() per request without closing it, and must not
+        # launch Chromium there. With it off a walled page still raises
+        # OEILFetchError rather than returning an empty procedure.
+        self.allow_browser_fallback = allow_browser_fallback
+        self._browser: Optional[_BrowserLane] = None
+        self.fetch_stats: Counter = Counter()
 
         logger.info("OEIL Scraper initialized with API client")
 
@@ -275,7 +436,13 @@ class OEILScraper(BaseScraper):
             return None
 
     async def close(self):
-        """Close API client connections"""
+        """Close API client connections and the fallback browser, if launched."""
+        if getattr(self, '_browser', None) is not None:
+            try:
+                await self._browser.close()
+            except Exception as e:
+                logger.warning(f"OEIL: browser close failed: {type(e).__name__}: {e}")
+            self._browser = None
         if hasattr(self, 'api_client'):
             await self.api_client.close()
             logger.info("Closed OEIL API client")
@@ -306,42 +473,143 @@ class OEILScraper(BaseScraper):
         Raises:
             ScraperError: On fetch or parse failure
         """
+        procedure, _page = await self.get_procedure_with_page(procedure_ref)
+        return procedure
+
+    async def get_procedure_with_page(self, procedure_ref: str) -> Tuple[OEILProcedure, OEILPage]:
+        """Fetch, parse and VALIDATE a procedure page; also return the raw page.
+
+        Raises OEILFetchError when neither route yields a page with a title or
+        a key event. It never returns an empty procedure: an empty result used
+        to be indistinguishable from "OEIL lists no events", and the update
+        script counted it as a skip, not an error.
+        """
         logger.info(f"Fetching full procedure: {procedure_ref}")
-
-        # Build URL (new format as of January 2025)
         url = f"{self.PROCEDURE_URL}?reference={procedure_ref}"
-
         try:
-            # Fetch page
-            html = await self._fetch(url)
-            soup = self._parse_html(html)
+            page = await self._fetch_procedure_page(procedure_ref, url)
+            procedure = self.parse_procedure_html(page.html, procedure_ref, page.url)
 
-            # Parse all sections
-            basic_info = self._parse_basic_info(soup, procedure_ref)
-            key_players = self._parse_key_players(soup)
-            key_events = self._parse_key_events(soup)
-            forecasts = self._parse_forecasts(soup)
-            technical_info = self._parse_technical_info(soup, procedure_ref)
-            documentation = self._parse_documentation(soup)
-            additional_info = self._parse_additional_info(soup)
+            if not self._has_substance(procedure) and page.route == "http" \
+                    and self.allow_browser_fallback:
+                # A 200 that parses to nothing is the other face of a WAF.
+                logger.warning(f"OEIL {procedure_ref}: HTTP 200 parsed to nothing; "
+                               f"retrying through the browser")
+                page = await self._browser_fetch(procedure_ref, url, page.http_status)
+                procedure = self.parse_procedure_html(page.html, procedure_ref, page.url)
 
-            procedure = OEILProcedure(
-                source_url=url,
-                basic_info=basic_info,
-                key_players=key_players,
-                key_events=key_events,
-                forecasts=forecasts,
-                technical_info=technical_info,
-                documentation=documentation,
-                additional_info=additional_info
-            )
+            if not self._has_substance(procedure):
+                raise OEILFetchError(procedure_ref, "page parsed to no title and no key events",
+                                     status=page.http_status, route=page.route)
 
-            logger.info(f"Successfully parsed procedure {procedure_ref}")
-            return procedure
+            self.fetch_stats[f"ok_{page.route}"] += 1
+            logger.info(f"Successfully parsed procedure {procedure_ref} via {page.route} "
+                        f"({len(procedure.key_events.events)} events, "
+                        f"{len(procedure.forecasts.forecasts)} forecasts)")
+            return procedure, page
 
+        except OEILFetchError as e:
+            self.fetch_stats["failed"] += 1
+            logger.error(f"[ERROR] {e}")
+            raise
         except Exception as e:
-            logger.error(f"Failed to parse procedure {procedure_ref}: {str(e)}")
+            self.fetch_stats["failed"] += 1
+            logger.error(f"Failed to parse procedure {procedure_ref}: {type(e).__name__}: {e}")
             raise ScraperError(f"Failed to parse procedure {procedure_ref}: {str(e)}") from e
+
+    @staticmethod
+    def _has_substance(procedure: OEILProcedure) -> bool:
+        return bool(procedure.key_events.events or procedure.basic_info.title)
+
+    def parse_procedure_html(self, html: str, procedure_ref: str, url: str) -> OEILProcedure:
+        """Parse all 7 sections of an OEIL procedure page (no network)."""
+        soup = self._parse_html(html)
+        return OEILProcedure(
+            source_url=url,
+            basic_info=self._parse_basic_info(soup, procedure_ref),
+            key_players=self._parse_key_players(soup),
+            key_events=self._parse_key_events(soup),
+            forecasts=self._parse_forecasts(soup),
+            technical_info=self._parse_technical_info(soup, procedure_ref),
+            documentation=self._parse_documentation(soup),
+            additional_info=self._parse_additional_info(soup),
+        )
+
+    async def _http_get_no_redirect(self, url: str) -> Tuple[int, str, Optional[str]]:
+        """One GET, redirects NOT followed, so the caller sees what OEIL said."""
+        domain = _extract_domain(url)
+        if self._coordinator:
+            await self._coordinator.acquire(domain)
+        else:
+            await self._rate_limit()
+        try:
+            headers = {
+                'User-Agent': self.user_agent,
+                'Accept': 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+            }
+            async with aiohttp.ClientSession(timeout=self.timeout) as session:
+                async with session.get(url, headers=headers, allow_redirects=False) as resp:
+                    body = await resp.text(errors="replace")
+                    self.stats['requests_made'] += 1
+                    self.stats['total_bytes'] += len(body)
+                    return resp.status, body, resp.headers.get('Location')
+        finally:
+            if self._coordinator:
+                self._coordinator.release(domain)
+
+    async def _fetch_procedure_page(self, procedure_ref: str, url: str) -> OEILPage:
+        status: Optional[int] = None
+        current = url
+        for _hop in range(3):
+            try:
+                status, body, location = await self._http_get_no_redirect(current)
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                # One retry on transport failure; the browser would not help.
+                logger.warning(f"OEIL {procedure_ref}: transport error {type(e).__name__}; retrying once")
+                await asyncio.sleep(2.0)
+                try:
+                    status, body, location = await self._http_get_no_redirect(current)
+                except (aiohttp.ClientError, asyncio.TimeoutError) as e2:
+                    raise OEILFetchError(procedure_ref, f"transport error {type(e2).__name__}: {e2}",
+                                         route="http") from e2
+
+            verdict = classify_oeil_response(status, body, location)
+            if verdict == "ok":
+                return OEILPage(procedure_ref, current, body, "http", status)
+            if verdict == "redirect":
+                nxt = urljoin(current, location)
+                logger.info(f"OEIL {procedure_ref}: HTTP {status} moved to {nxt}")
+                current = nxt
+                continue
+            if verdict == "not_found":
+                raise OEILFetchError(procedure_ref, "no such procedure on OEIL", status=status, route="http")
+            if verdict == "waf":
+                logger.warning(f"OEIL {procedure_ref}: HTTP {status} ({len(body or '')} bytes"
+                               f"{', Location ' + location if location else ''}) looks walled; "
+                               f"falling back to the browser")
+                if not self.allow_browser_fallback:
+                    raise OEILFetchError(procedure_ref, "walled response and browser fallback disabled",
+                                         status=status, route="http")
+                return await self._browser_fetch(procedure_ref, current, status)
+            raise OEILFetchError(procedure_ref, "unexpected HTTP answer", status=status, route="http")
+        raise OEILFetchError(procedure_ref, "too many redirects", status=status, route="http")
+
+    async def _browser_fetch(self, procedure_ref: str, url: str, http_status: Optional[int]) -> OEILPage:
+        self.fetch_stats["browser_attempts"] += 1
+        try:
+            if self._browser is None:
+                self._browser = _BrowserLane()
+            result = await self._browser.fetch(url)
+        except ImportError as e:
+            raise OEILFetchError(procedure_ref, f"browser fallback unavailable: {e}",
+                                 status=http_status, route="browser") from e
+        if result.error or not looks_like_procedure_page(result.html):
+            raise OEILFetchError(
+                procedure_ref,
+                f"browser fallback got nothing parseable ({result.error or f'{len(result.html)} bytes of HTML'})",
+                status=result.nav_status or http_status, route="browser")
+        return OEILPage(procedure_ref, result.url, result.html, "browser", result.nav_status)
 
     # =========================================================================
     # Section Parsers
@@ -410,7 +678,20 @@ class OEILScraper(BaseScraper):
         return basic_info
 
     def _parse_key_players(self, soup: BeautifulSoup) -> OEILKeyPlayers:
-        """Parse Section 2: Key Players - Direct search approach"""
+        """Parse Section 2: Key Players.
+
+        Table-first (15 Sep 2026): OEIL renders each role as its own table whose
+        header cell names the role ("Committee responsible", "Committee for
+        opinion", ...). The old code treated the first MEP link on the page as
+        the rapporteur and EVERY other MEP link as a shadow, so opinion
+        rapporteurs became shadows of the lead committee and no opinion
+        committee was ever returned. The line-based code below stays as the
+        fallback for pages without those tables.
+        """
+        dom = self._parse_key_players_tables(soup)
+        if dom is not None:
+            return dom
+
         key_players = OEILKeyPlayers()
 
         try:
@@ -546,104 +827,193 @@ class OEILScraper(BaseScraper):
 
         return key_players
 
+    @staticmethod
+    def _section_table(soup: BeautifulSoup, section_id: str, headers: Tuple[str, ...]) -> Optional[Tag]:
+        """The table of an OEIL section: inside div#sectionN when present, else
+        any table whose leading header cells read `headers` (the Forecasts
+        table also starts with "Date", so one header is not enough)."""
+        div = soup.find('div', id=section_id)
+        candidates = div.find_all('table') if div else soup.find_all('table')
+        want = [h.lower() for h in headers]
+        for t in candidates:
+            got = [th.get_text(strip=True).lower() for th in t.find_all('th')[:len(want)]]
+            if got == want:
+                return t
+        return None
+
     def _parse_key_events(self, soup: BeautifulSoup) -> OEILKeyEvents:
-        """Parse Section 3: Key Events - Direct search approach"""
+        """Parse Section 3: Key Events from the Date / Event / Reference table.
+
+        Rewritten 15 Sep 2026. The old version scanned every date on the page
+        and guessed an event type from the 250 characters around the FIRST
+        occurrence of that date, then de-duplicated by date. On 2026/0074(COD)
+        the referral date 18/05/2026 first appears as an opinion rapporteur's
+        appointment date, so the referral was lost and only 1 of 2 events came
+        back; on busier pages it minted "Committee report" events out of
+        appointment dates. Every row is now read from the table, in order,
+        with OEIL's own event wording (callers match by substring).
+        """
         key_events = OEILKeyEvents()
-
-        try:
-            page_text = soup.get_text()
-
-            # Find all dates in the page (DD/MM/YYYY format)
-            date_pattern = re.compile(r'(\d{2}/\d{2}/\d{4})')
-            dates_found = date_pattern.findall(page_text)
-
-            # Common event types to look for
-            event_types = [
-                'Legislative proposal',
-                'Committee referral',
-                'Vote in committee',
-                'Committee report',
-                'Debate in plenary',
-                'Decision by Parliament',
-                'Act adopted by Council',
-                'Final act signed',
-                'Final act published',
-                'Entry into force',
-            ]
-
-            # Search for events near dates
-            for date_str in dates_found[:20]:  # Limit to first 20 dates
-                try:
-                    d, m, y = date_str.split('/')
-                    event_date = date(int(y), int(m), int(d))
-
-                    # Look for context around this date
-                    date_idx = page_text.find(date_str)
-                    if date_idx >= 0:
-                        # Get surrounding text
-                        context_start = max(0, date_idx - 100)
-                        context_end = min(len(page_text), date_idx + 150)
-                        context = page_text[context_start:context_end]
-
-                        # Try to identify event type
-                        event_type = 'Event'
-                        for etype in event_types:
-                            if etype.lower() in context.lower():
-                                event_type = etype
-                                break
-
-                        # Create event if we found something meaningful
-                        if event_type != 'Event' or len(dates_found) <= 10:
-                            event = OEILEvent(
-                                date=event_date,
-                                event_type=event_type,
-                                description=context.strip()[:100] if event_type == 'Event' else None
-                            )
-                            key_events.events.append(event)
-
-                except ValueError:
-                    continue
-
-            # Remove duplicates by date
-            seen_dates = set()
-            unique_events = []
-            for event in key_events.events:
-                if event.date not in seen_dates:
-                    seen_dates.add(event.date)
-                    unique_events.append(event)
-            key_events.events = sorted(unique_events, key=lambda x: x.date)
-
-        except Exception as e:
-            logger.warning(f"Error parsing key events: {e}")
-
+        table = self._section_table(soup, 'section3', ('Date', 'Event'))
+        if table is None:
+            logger.warning("OEIL: no Key events table on the page")
+            return key_events
+        rows = table.find('tbody').find_all('tr') if table.find('tbody') else table.find_all('tr')[1:]
+        for tr in rows:
+            cells = tr.find_all('td')
+            if len(cells) < 2:
+                continue
+            ev_date = _dmy(cells[0].get_text(" ", strip=True))
+            ev_type = cells[1].get_text(" ", strip=True)
+            if not ev_date or not ev_type:
+                continue
+            event = OEILEvent(date=ev_date, event_type=ev_type)
+            if len(cells) > 2:
+                for a in cells[2].find_all('a'):
+                    text = a.get_text(" ", strip=True)
+                    if text and a.get('href'):
+                        event.documents.append(OEILDocument(
+                            reference=text, url=self._make_absolute_url(a['href'])))
+                ref_text = cells[2].get_text(" ", strip=True)
+                if ref_text:
+                    event.description = ref_text
+            if len(cells) > 3:
+                link = cells[3].find('a', href=True)
+                if link:
+                    event.summary = self._make_absolute_url(link['href'])
+            key_events.events.append(event)
         return key_events
 
     def _parse_forecasts(self, soup: BeautifulSoup) -> OEILForecasts:
-        """Parse Section 4: Forecasts"""
+        """Parse Section 4: Forecasts from the Date / Subject table.
+
+        The old version called _find_section, whose text fallback matched the
+        word "Forecasts" in the page navigation and returned a container with
+        no table, so no forecast was ever read (0 of 6 test refs).
+        """
         forecasts = OEILForecasts()
-
-        try:
-            forecast_section = self._find_section(soup, 'Forecasts')
-            if not forecast_section:
-                return forecasts
-
-            # Find forecast table
-            forecast_table = forecast_section.find('table')
-            if not forecast_table:
-                return forecasts
-
-            rows = forecast_table.find_all('tr')
-            for row in rows:
-                cells = row.find_all('td')
-                if len(cells) >= 2:
-                    forecast = self._parse_forecast_row(cells)
-                    if forecast:
-                        forecasts.forecasts.append(forecast)
-
-        except Exception as e:
-            logger.warning(f"Error parsing forecasts: {e}")
-
+        div = soup.find('div', id='section4')
+        table = None
+        if div is not None:
+            table = div.find('table')
+        else:
+            for t in soup.find_all('table'):
+                heads = [th.get_text(strip=True).lower() for th in t.find_all('th')[:2]]
+                if heads == ['date', 'subject']:
+                    table = t
+                    break
+        if table is None:
+            return forecasts   # many procedures legitimately have no forecast
+        rows = table.find('tbody').find_all('tr') if table.find('tbody') else table.find_all('tr')[1:]
+        for tr in rows:
+            cells = tr.find_all('td')
+            if len(cells) < 2:
+                continue
+            subject = cells[1].get_text(" ", strip=True)
+            if not subject:
+                continue
+            fc = OEILForecast(event_type=subject, forecast_date=_dmy(cells[0].get_text(" ", strip=True)))
+            if 'plenary' in subject.lower():
+                fc.location = 'Plenary'
+            else:
+                comm = re.search(r'\b([A-Z]{4})\b', subject)
+                if comm:
+                    fc.committee = comm.group(1)
+                    fc.location = 'Committee'
+            forecasts.forecasts.append(fc)
         return forecasts
+
+    # Header of each Key players table -> role. "Former ..." tables are history
+    # and must not overwrite the current roles.
+    _ROLE_HEADERS = {
+        'committee responsible': 'responsible',
+        'committee for opinion': 'opinion',
+        'committee for budgetary assessment': 'budgetary_assessment',
+        'joint committee responsible': 'responsible',
+    }
+
+    def _parse_key_players_tables(self, soup: BeautifulSoup) -> Optional[OEILKeyPlayers]:
+        """Table-based Key players parse. None when the page has no such tables."""
+        div = soup.find('div', id='section2')
+        tables = div.find_all('table') if div else []
+        role_tables = []
+        for t in tables:
+            th = t.find('th')
+            head = th.get_text(" ", strip=True).lower() if th else ''
+            role_tables.append((head, t))
+        if not any(h in self._ROLE_HEADERS or h.startswith('former committee') for h, _ in role_tables):
+            return None
+
+        kp = OEILKeyPlayers()
+        for head, table in role_tables:
+            if head == 'commission dg':
+                body = table.find('tbody') or table
+                tr = body.find('tr')
+                if tr:
+                    cells = tr.find_all(['th', 'td'])
+                    if cells:
+                        kp.commission_dg = cells[0].get_text(" ", strip=True) or None
+                    if len(cells) > 1:
+                        kp.commissioner = cells[1].get_text(" ", strip=True) or None
+                continue
+            role = self._ROLE_HEADERS.get(head)
+            if role is None:
+                continue   # "Former committee ..." and anything unknown
+            for committee in self._committee_rows(table, role):
+                if committee.role == 'responsible' and kp.committee_responsible is None:
+                    kp.committee_responsible = committee
+                elif 'associated' in committee.role:
+                    kp.committees_associated.append(committee)
+                else:
+                    kp.committees_opinion.append(committee)
+
+        page_text = soup.get_text(" ")
+        if 'European Economic and Social Committee' in page_text:
+            kp.eesc = OEILConsultativeBody(body='EESC')
+        if 'European Committee of the Regions' in page_text or 'Committee of the Regions' in page_text:
+            kp.cor = OEILConsultativeBody(body='CoR')
+        return kp
+
+    def _committee_rows(self, table: Tag, role: str) -> List[OEILCommittee]:
+        out: List[OEILCommittee] = []
+        body = table.find('tbody') or table
+        for tr in body.find_all('tr', recursive=False):
+            badge = tr.find(class_=re.compile(r'es_badge-committee'))
+            cells = tr.find_all(['th', 'td'], recursive=False)
+            if badge is None:
+                # The "Shadow rapporteur" row belongs to the committee above it.
+                if out:
+                    for a in tr.find_all('a', href=self.MEP_URL_PATTERN):
+                        mep = self._parse_mep_from_link(a)
+                        if mep:
+                            out[-1].shadow_rapporteurs.append(mep)
+                continue
+            code = badge.get_text(strip=True)
+            name_el = cells[0].find('span', class_=re.compile(r'font-weight-normal')) if cells else None
+            name_cell_text = cells[0].get_text(" ", strip=True) if cells else ''
+            this_role = role
+            if 'associated committee' in name_cell_text.lower():
+                this_role = f"{role}_associated"
+            rap_cell = cells[1] if len(cells) > 1 else None
+            if rap_cell is not None and 'decided not to give an opinion' in rap_cell.get_text(" ", strip=True).lower():
+                this_role = f"{this_role}_declined"
+            committee = OEILCommittee(
+                code=code,
+                name=name_el.get_text(" ", strip=True) if name_el else None,
+                role=this_role,
+            )
+            if rap_cell is not None:
+                links = rap_cell.find_all('a', href=self.MEP_URL_PATTERN)
+                if links:
+                    committee.rapporteur = self._parse_mep_from_link(links[0])
+                    for extra in links[1:]:   # co-rapporteurs
+                        mep = self._parse_mep_from_link(extra)
+                        if mep:
+                            committee.shadow_rapporteurs.append(mep)
+            if len(cells) > 2:
+                committee.date_announced = _dmy(cells[2].get_text(" ", strip=True))
+            out.append(committee)
+        return out
 
     def _parse_technical_info(self, soup: BeautifulSoup, procedure_ref: str) -> OEILTechnicalInfo:
         """Parse Section 5: Technical Information"""
@@ -934,14 +1304,9 @@ class OEILScraper(BaseScraper):
 
             # Clean name: remove political group if it's in the name text
             # Format is often "SURNAME Name (GROUP)" or just "SURNAME Name"
-            name = raw_name
-            political_group = None
-
-            # Extract political group from name if present
-            group_match = re.search(r'\(([A-Z&/]+(?:/[A-Z]+)?)\)$', raw_name)
-            if group_match:
-                political_group = group_match.group(1)
-                name = raw_name[:group_match.start()].strip()
+            # Any parenthesised tail is the group: Renew, PfE, The Left and
+            # Greens/EFA all failed the old capitals-only pattern (15 Sep 2026).
+            name, political_group = _clean_group(raw_name)
 
             mep = OEILMep(name=name, political_group=political_group)
 

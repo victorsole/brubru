@@ -61,6 +61,11 @@ class User(Base):
     stripe_customer_id = Column(String(255), nullable=True, unique=True)
     stripe_subscription_id = Column(String(255), nullable=True)
 
+    # Payment made outside Stripe (invoice/transfer), set by a human from a real
+    # payment (migration 231, 15 Sep 2026). Evidence for WAPU; never inferred from tier.
+    off_stripe_paid_until = Column(DateTime(timezone=True), nullable=True)
+    billing_note = Column(Text, nullable=True)
+
     # API vertical billing (Phase B, 21 May 2026). Amounts stored as
     # BIGINT micro-euros (6dp) to avoid float drift. 1 EUR = 1_000_000.
     # Default 0 — no free signup credit; users top up via Stripe.

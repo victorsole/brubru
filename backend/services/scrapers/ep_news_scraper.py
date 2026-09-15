@@ -35,6 +35,39 @@ DELEGATIONS = ["d-af", "d-al", "d-br", "d-by", "d-ca", "d-cl", "d-cn", "d-il", "
 _ITEM = re.compile(r'es_document-title[^>]*>\s*<a\s+href="([^"]+)"[^>]*>(.*?)</a>', re.S)
 _DATE = re.compile(r'/(\d{4})(\d{2})(\d{2})[A-Z]{2,5}\d+')
 
+# The PRESS ROOM does not use `es_document`. It renders `ep-m_product` article
+# cards: <div class="ep_title"><a href=".../press-room/<ID>/<slug>"> ... <span
+# class="ep_name">Title</span>. parse_ep() only knew the committee/delegation
+# markup, so the press-room source returned 0 items on EVERY run since it was
+# added: eu_news_items held 407 EP rows, all tagged with a committee source_key
+# and not one with source_key 'EP'. Every release a committee page does not
+# carry (plenary openings, press briefings, "EP Today", the President's office,
+# antenna offices) was never ingested, which read as "EP news stops at 11 Sep"
+# on 15 Sep 2026 while the press room had published three releases since.
+_PRODUCT_CARD = re.compile(
+    r'<article[^>]*ep-m_product[^>]*>(.*?)</article>', re.S)
+_CARD_LINK = re.compile(
+    r'class="ep_title"[^>]*>\s*<a\s+href="([^"]+)"[^>]*>(.*?)</a>', re.S)
+_CARD_SUMMARY = re.compile(r'class="ep-a_text"[^>]*>(.*?)</div>', re.S)
+# The card's own publication time. Preferred over the ID date, which is when the
+# document was CREATED: "EP TODAY | Tuesday 15 September" carries ID 20260910IPR47441
+# but datePublished 2026-09-15. Committee pages show the ID date, so a card date is
+# marked date_source='published' and the sync lets it override an ID date, never
+# the reverse (otherwise the two sources flip the stored date on every run).
+_CARD_PUBLISHED = re.compile(r'itemprop="datePublished"\s+datetime="(\d{4})-(\d{2})-(\d{2})')
+# A press-room URL with its slug: .../press-room/20260914IPR47510/european-...
+# The committee pages link the SAME release as .../press-room/20260914IPR47510/
+# (no slug). Both must reduce to one identity or every release a committee page
+# also lists is stored twice under two entry_keys.
+_PRESS_ID_URL = re.compile(
+    r'^(https?://www\.europarl\.europa\.eu/news/[a-z]{2}/press-room/\d{8}[A-Z]{2,5}\d+)(?:/.*)?$')
+
+
+def canonical_ep_url(url: str) -> str:
+    """Strip the slug from a press-room URL so both EP markups share one identity."""
+    m = _PRESS_ID_URL.match(url or "")
+    return (m.group(1) + "/") if m else url
+
 
 def ep_sources() -> List[Dict]:
     """Every EP news surface: press room + committees + delegations."""
@@ -52,27 +85,41 @@ def parse_ep(html: str) -> List[Dict]:
     """Parse EP `es_document` search-results items into normalised dicts."""
     out: List[Dict] = []
     seen: set = set()
-    for m in _ITEM.finditer(html or ""):
-        href, title_html = m.group(1), m.group(2)
+    matches = [(m.group(1), m.group(2), None, None) for m in _ITEM.finditer(html or "")]
+    for card in _PRODUCT_CARD.finditer(html or ""):
+        lm = _CARD_LINK.search(card.group(1))
+        if not lm:
+            continue
+        sm = _CARD_SUMMARY.search(card.group(1))
+        pm = _CARD_PUBLISHED.search(card.group(1))
+        published = None
+        if pm:
+            try:
+                published = date(int(pm.group(1)), int(pm.group(2)), int(pm.group(3)))
+            except ValueError:
+                published = None
+        matches.append((lm.group(1), lm.group(2), _clean(sm.group(1)) if sm else None, published))
+    for href, title_html, summary, published in matches:
         title = _clean(title_html)
         if not title or "/press-room/contacts/" in href or "press-officers" in href:
             continue
-        url = href if href.startswith("http") else EP_BASE + href
+        url = canonical_ep_url(href if href.startswith("http") else EP_BASE + href)
         key = _canon_url(url)
         if key in seen:
             continue
         seen.add(key)
-        nd = None
-        dm = _DATE.search(url)
+        nd = published
+        dm = None if nd else _DATE.search(url)
         if dm:
             try:
                 nd = date(int(dm.group(1)), int(dm.group(2)), int(dm.group(3)))
             except ValueError:
                 nd = None
         out.append({
-            "title": title[:480], "summary": None, "news_date": nd,
+            "title": title[:480], "summary": (summary or None), "news_date": nd,
             "image_url": None, "source_url": url, "external_id": _slug_id(url),
             "item_type": "press",
+            "date_source": "published" if published else ("id" if nd else None),
         })
     return out
 

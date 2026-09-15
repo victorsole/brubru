@@ -12,6 +12,7 @@ Rate Limits:
 - Recommended: 10 requests/second with backoff
 """
 
+import asyncio
 import logging
 from typing import Optional, Dict, Any, List
 from datetime import datetime, date, timedelta
@@ -48,6 +49,10 @@ class SortField(Enum):
     PUBLICATION_DATE = "PD"  # Publication date
     DEADLINE = "TD"  # Tender deadline
     COUNTRY = "CY"  # Country
+
+
+# Fields requested on every search. TW is the buyer's TOWN in v3, not a value.
+SEARCH_FIELDS = ["ND", "TI", "CY", "DD", "PD", "PC", "PR", "TD", "OL", "AU", "TW"]
 
 
 # ISO 3166-1 alpha-2 to alpha-3 country code mapping for TED API v3
@@ -129,6 +134,62 @@ class TEDClient(BaseAPIClient):
             logger.error(f"TED API health check failed: {e}")
             return False
 
+    # TED v3 rejects limit > 250 with HTTP 400 (measured 15 Sep 2026).
+    MAX_PAGE_SIZE = 250
+
+    @staticmethod
+    def _build_query(
+        query: Optional[str] = None,
+        cpv_codes: Optional[List[str]] = None,
+        countries: Optional[List[str]] = None,
+        procedure_types: Optional[List["ProcedureType"]] = None,
+        publication_date_from: Optional[date] = None,
+        publication_date_to: Optional[date] = None,
+        deadline_from: Optional[date] = None,
+        deadline_to: Optional[date] = None,
+    ) -> str:
+        """Build a TED v3 expert-search query string from the filters."""
+        # Build query filter parts
+        query_parts = []
+
+        if query:
+            query_parts.append(f'FT="{query}"')
+
+        if cpv_codes:
+            cpv_filter = " OR ".join([f'PC="{code}"' for code in cpv_codes])
+            query_parts.append(f"({cpv_filter})")
+
+        if countries:
+            # Convert 2-letter to 3-letter country codes for TED API v3
+            country_codes_3 = [COUNTRY_CODE_MAP.get(c.upper(), c) for c in countries]
+            country_filter = " OR ".join([f'CY={code}' for code in country_codes_3])
+            query_parts.append(f"({country_filter})")
+
+        if procedure_types:
+            proc_filter = " OR ".join([f'PR="{pt.value}"' for pt in procedure_types])
+            query_parts.append(f"({proc_filter})")
+
+        # Note: TD (notice type) filter values changed in TED API v3
+        # Old values like "cn-standard" no longer work
+        # Skip this filter for now - we filter by procedure type instead
+        # if notice_types:
+        #     type_filter = " OR ".join([f'TD="{nt.value}"' for nt in notice_types])
+        #     query_parts.append(f"({type_filter})")
+
+        if publication_date_from:
+            query_parts.append(f'PD>={publication_date_from.strftime("%Y%m%d")}')
+
+        if publication_date_to:
+            query_parts.append(f'PD<={publication_date_to.strftime("%Y%m%d")}')
+
+        if deadline_from:
+            query_parts.append(f'DT>={deadline_from.strftime("%Y%m%d")}')
+
+        if deadline_to:
+            query_parts.append(f'DT<={deadline_to.strftime("%Y%m%d")}')
+
+        return " AND ".join(query_parts) if query_parts else "*"
+
     async def search_notices(
         self,
         query: Optional[str] = None,
@@ -178,50 +239,19 @@ class TEDClient(BaseAPIClient):
                 "total_pages": 13
             }
         """
-        # Build query filter parts
-        query_parts = []
-
-        if query:
-            query_parts.append(f'FT="{query}"')
-
-        if cpv_codes:
-            cpv_filter = " OR ".join([f'PC="{code}"' for code in cpv_codes])
-            query_parts.append(f"({cpv_filter})")
-
-        if countries:
-            # Convert 2-letter to 3-letter country codes for TED API v3
-            country_codes_3 = [COUNTRY_CODE_MAP.get(c.upper(), c) for c in countries]
-            country_filter = " OR ".join([f'CY={code}' for code in country_codes_3])
-            query_parts.append(f"({country_filter})")
-
-        if procedure_types:
-            proc_filter = " OR ".join([f'PR="{pt.value}"' for pt in procedure_types])
-            query_parts.append(f"({proc_filter})")
-
-        # Note: TD (notice type) filter values changed in TED API v3
-        # Old values like "cn-standard" no longer work
-        # Skip this filter for now - we filter by procedure type instead
-        # if notice_types:
-        #     type_filter = " OR ".join([f'TD="{nt.value}"' for nt in notice_types])
-        #     query_parts.append(f"({type_filter})")
-
-        if publication_date_from:
-            query_parts.append(f'PD>={publication_date_from.strftime("%Y%m%d")}')
-
-        if publication_date_to:
-            query_parts.append(f'PD<={publication_date_to.strftime("%Y%m%d")}')
-
-        if deadline_from:
-            query_parts.append(f'DT>={deadline_from.strftime("%Y%m%d")}')
-
-        if deadline_to:
-            query_parts.append(f'DT<={deadline_to.strftime("%Y%m%d")}')
+        query_string = self._build_query(
+            query=query, cpv_codes=cpv_codes, countries=countries,
+            procedure_types=procedure_types,
+            publication_date_from=publication_date_from,
+            publication_date_to=publication_date_to,
+            deadline_from=deadline_from, deadline_to=deadline_to,
+        )
 
         # Build TED API v3 request body
         request_body = {
-            "query": " AND ".join(query_parts) if query_parts else "*",
-            "fields": ["ND", "TI", "CY", "DD", "PD", "PC", "PR", "TD", "OL", "AU", "TW"],
-            "limit": min(page_size, 100),
+            "query": query_string,
+            "fields": SEARCH_FIELDS,
+            "limit": min(page_size, self.MAX_PAGE_SIZE),
             "page": page,
         }
 
@@ -247,6 +277,79 @@ class TEDClient(BaseAPIClient):
         except httpx.HTTPError as e:
             logger.error(f"TED search failed: {e}")
             raise
+
+    async def fetch_all_notices(
+        self,
+        query_string: str,
+        fields: Optional[List[str]] = None,
+        page_size: int = MAX_PAGE_SIZE,
+        pause_seconds: float = 0.3,
+        max_batches: int = 400,
+    ) -> Dict[str, Any]:
+        """Fetch EVERY notice matching `query_string`, with a completeness verdict.
+
+        Uses TED v3 ITERATION pagination (a server-side cursor via
+        `iterationNextToken`), which is the mode TED documents for full scans;
+        PAGE mode stops at 15,000 results. Measured 15 Sep 2026: for
+        `PD=20260914 AND PR="open" AND DT>=20260924` both modes returned the
+        same 1,607 distinct notices, in 7 requests of 250.
+
+        Returns {"notices", "total", "distinct", "complete", "timed_out"}.
+        `complete` is False when TED says it timed out, when the cursor
+        loop hit `max_batches`, or when fewer distinct notices arrived than
+        TED's own `totalNoticeCount`. The caller must treat an incomplete
+        scan as a failure, never as "that is all TED published".
+
+        Rate limiting: every request goes through BaseAPIClient.post (600
+        calls/min limiter + 429 Retry-After handling) plus `pause_seconds`.
+        """
+        fields = fields or SEARCH_FIELDS
+        size = max(1, min(page_size, self.MAX_PAGE_SIZE))
+        notices: List[Dict[str, Any]] = []
+        seen: set = set()
+        total = None
+        timed_out = False
+        token = None
+        batches = 0
+        exhausted = False
+        while batches < max_batches:
+            body: Dict[str, Any] = {
+                "query": query_string,
+                "fields": fields,
+                "limit": size,
+                "paginationMode": "ITERATION",
+            }
+            if token:
+                body["iterationNextToken"] = token
+            response = await self.post("notices/search", json=body)
+            data = response.json()
+            batches += 1
+            if total is None:
+                total = int(data.get("totalNoticeCount") or 0)
+            timed_out = timed_out or bool(data.get("timedOut"))
+            batch = data.get("notices") or []
+            for n in batch:
+                nd = n.get("ND") or n.get("publication-number")
+                if nd and nd in seen:
+                    continue
+                if nd:
+                    seen.add(nd)
+                notices.append(n)
+            token = data.get("iterationNextToken")
+            if not batch or not token:
+                exhausted = True
+                break
+            if pause_seconds:
+                await asyncio.sleep(pause_seconds)
+        total = total or 0
+        complete = exhausted and not timed_out and len(seen) >= total
+        return {
+            "notices": notices,
+            "total": total,
+            "distinct": len(seen),
+            "complete": complete,
+            "timed_out": timed_out,
+        }
 
     async def search_sme_friendly(
         self,
@@ -346,7 +449,8 @@ class TEDClient(BaseAPIClient):
                 return None
             raise
 
-    async def get_notice_xml(self, publication_number: str) -> Optional[str]:
+    async def get_notice_xml(self, publication_number: str,
+                             raise_on_rate_limit: bool = False) -> Optional[str]:
         """
         Get full notice XML content (eForms format).
 
@@ -373,6 +477,11 @@ class TEDClient(BaseAPIClient):
             if e.response.status_code == 404:
                 logger.warning(f"XML for notice {publication_number} not found")
                 return None
+            # A 429 returned as None is indistinguishable from "no XML" and
+            # silently stored tenders without their eForms body (15 Sep 2026:
+            # 566 of 803 in one burst). Bulk callers opt in to retry it.
+            if e.response.status_code == 429 and raise_on_rate_limit:
+                raise
             logger.error(f"Failed to fetch XML for {publication_number}: {e}")
             return None
         except Exception as e:

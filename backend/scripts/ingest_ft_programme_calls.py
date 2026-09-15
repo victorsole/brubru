@@ -235,6 +235,11 @@ def ingest_programme(cur, slug: str, *, apply: bool) -> int:
                 row = normalise_row(r)
                 if row is None:
                     continue
+                # Type 6 is a topic UPDATE record: same identifier and title, no
+                # status, no deadline, and a startDate that is the update time.
+                # Letting it win `seen[...]` below overwrote the real topic record.
+                if row.get("record_type") and row["record_type"] not in ("1", "2", "8"):
+                    continue
                 if not _matches(row["topic_id"], prefixes):
                     continue
                 seen[row["topic_id"]] = row

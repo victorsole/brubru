@@ -22,7 +22,7 @@ import asyncio
 import argparse
 import logging
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date as date_cls, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
@@ -36,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core.database import SessionLocal  # noqa: E402
 from models.tender import Tender, TenderFetchJob  # noqa: E402
-from services.tenders.ted_client import TEDClient  # noqa: E402
+from services.tenders.ted_client import TEDClient, ProcedureType  # noqa: E402
 from services.tenders.eforms_parser import EFormsParser  # noqa: E402
 from services.tenders.sme_scorer import SMEScorer  # noqa: E402
 from services.tenders.country_codes import normalise_country  # noqa: E402
@@ -87,12 +87,19 @@ class TenderFetcher:
         max_value: float = DEFAULT_MAX_VALUE,
         min_deadline_days: int = DEFAULT_MIN_DEADLINE_DAYS,
         include_framework: bool = False,
-        dry_run: bool = False
+        dry_run: bool = False,
+        xml_concurrency: int = 4,
+        xml_rate: float = 8.0,
     ):
         self.max_value = max_value
         self.min_deadline_days = min_deadline_days
         self.include_framework = include_framework
         self.dry_run = dry_run
+        # ted.europa.eu XML: at most `xml_rate` requests/second (default 8 =
+        # 480/min, under TED's documented 700/min per IP), `xml_concurrency`
+        # in flight. ~1,600 notices (a full day) take ~3.5 minutes.
+        self.xml_concurrency = xml_concurrency
+        self.xml_rate = xml_rate
 
         self.parser = EFormsParser()
         self.scorer = SMEScorer()
@@ -114,101 +121,105 @@ class TenderFetcher:
         days_back: int = DEFAULT_DAYS_BACK,
         countries: Optional[List[str]] = None,
         cpv_codes: Optional[List[str]] = None,
-        max_results: int = 1000
+        max_results: int = 0,
+        dates: Optional[List["date_cls"]] = None,
     ) -> Dict[str, Any]:
         """
-        Fetch tenders from TED API with SME-friendly filters.
+        Fetch EVERY matching TED notice published in the window, one day at a time.
+
+        Why per day and uncapped (fixed 15 Sep 2026): the daily cron ran
+        `--days 2 --max-results 400`, and this loop requested 50 a page and
+        stopped at `len >= max_results` (and at 10 pages regardless). TED returns
+        the window oldest day first, so each run took the first 400 notices of
+        the OLDEST day and never reached the rest: the table held exactly 400
+        rows for 8, 9, 10 and 11 Sep while TED published 1,124 / 1,235 / 1,305 /
+        1,297 matching notices on those days (open procedure, deadline >= 14 days
+        out; 3,100-3,650 notices of every kind a day).
+
+        Each day is now a separate `PD=YYYYMMDD` query scanned to exhaustion
+        with TED's ITERATION cursor, checked against TED's own totalNoticeCount,
+        and committed on its own, so one bad day cannot roll back the others.
+        An incomplete day is recorded in stats["incomplete_days"] and makes the
+        script exit non-zero (silence is not success).
 
         Args:
-            days_back: Number of days to look back
+            days_back: days before today to include (today is always included)
             countries: Filter by country codes (e.g., ['BE', 'FR', 'DE'])
             cpv_codes: Filter by CPV code prefixes
-            max_results: Maximum number of results to fetch
-
-        Returns:
-            Statistics dictionary with fetch results
+            max_results: 0 (default) = no cap. A positive value is a deliberate
+                truncation for ad-hoc runs; it is logged as such, and the days
+                it cuts short are reported as incomplete.
         """
         logger.info(f"Starting tender fetch: days_back={days_back}, max_value={self.max_value}")
 
-        # Create fetch job record
         job = self._create_fetch_job(days_back, countries, cpv_codes)
+        self.stats.setdefault("days", {})
+        self.stats.setdefault("incomplete_days", [])
+        failed = False
 
         try:
             async with TEDClient() as client:
-                # Use SME-friendly search
-                all_notices = []
-                page = 1
+                today = datetime.now(timezone.utc).date()
+                deadline_from = today + timedelta(days=self.min_deadline_days)
+                days = dates or [today - timedelta(days=i) for i in range(days_back, -1, -1)]
+                remaining = max_results if max_results and max_results > 0 else None
 
-                while len(all_notices) < max_results:
-                    logger.info(f"Fetching page {page}...")
-
-                    result = await client.search_sme_friendly(
+                for day in days:
+                    query_string = client._build_query(
                         cpv_codes=cpv_codes,
                         countries=countries,
-                        max_value=self.max_value,
-                        min_deadline_days=self.min_deadline_days,
-                        # `days_back` used to reach only the fetch-job record,
-                        # never the query, so every run swept the same open
-                        # backlog regardless of what the caller asked for.
-                        published_since_days=days_back,
-                        page=page,
-                        page_size=50  # Reduced page size to avoid rate limits
+                        procedure_types=[ProcedureType.OPEN],
+                        publication_date_from=day,
+                        publication_date_to=day,
+                        deadline_from=deadline_from,
                     )
+                    scan = await client.fetch_all_notices(query_string)
+                    notices = scan["notices"]
+                    truncated = False
+                    if remaining is not None and len(notices) > remaining:
+                        logger.warning(
+                            f"[WARN] --max-results truncates {day}: keeping {remaining} of {len(notices)}")
+                        notices = notices[:remaining]
+                        truncated = True
+                    if remaining is not None:
+                        remaining -= len(notices)
 
-                    notices = result.get("notices", [])
-                    if not notices:
+                    day_stats = {"ted_total": scan["total"], "fetched": len(notices),
+                                 "complete": scan["complete"] and not truncated}
+                    self.stats["days"][day.isoformat()] = day_stats
+                    self.stats["fetched"] += len(notices)
+                    logger.info(
+                        f"[INFO] {day}: TED total {scan['total']}, fetched {len(notices)}"
+                        f"{'' if day_stats['complete'] else ' (INCOMPLETE)'}")
+                    if not day_stats["complete"]:
+                        self.stats["incomplete_days"].append(day.isoformat())
+
+                    await self._process_day(notices, client)
+                    if not self.dry_run:
+                        self.db.commit()
+
+                    if remaining == 0:
                         break
 
-                    all_notices.extend(notices)
-                    self.stats["fetched"] = len(all_notices)
-
-                    total_pages = result.get("total_pages", 1)
-                    if page >= total_pages or page >= 10:  # Max 10 pages
-                        break
-
-                    page += 1
-                    await asyncio.sleep(2.0)  # More conservative rate limiting to avoid 429
-
-                logger.info(f"Fetched {len(all_notices)} notices from TED API")
-
-                # Process each notice
-                for i, notice in enumerate(all_notices):
-                    try:
-                        await self._process_notice(notice, client)
-
-                        if (i + 1) % 50 == 0:
-                            logger.info(f"Processed {i + 1}/{len(all_notices)} notices")
-
-                    except Exception as e:
-                        self.stats["errors"] += 1
-                        self.stats["error_details"].append(str(e))
-                        logger.error(f"Error processing notice: {e}")
-
-                # Commit all changes
-                if not self.dry_run:
-                    self.db.commit()
-
-                # Update job status
-                job.status = "completed"
+                job.status = "completed" if not self.stats["incomplete_days"] else "incomplete"
                 job.tenders_found = self.stats["fetched"]
                 job.tenders_new = self.stats["new"]
                 job.tenders_updated = self.stats["updated"]
 
         except Exception as e:
-            logger.error(f"Fetch job failed: {e}")
+            failed = True
+            logger.error(f"[ERROR] Fetch job failed: {e}")
+            if not self.dry_run:
+                self.db.rollback()
             job.status = "failed"
             job.errors = [str(e)]
             self.stats["error_details"].append(str(e))
 
         finally:
-            from datetime import timezone
             job.completed_at = datetime.now(timezone.utc)
             if job.started_at:
-                # Make started_at timezone-aware if it isn't
-                if job.started_at.tzinfo is None:
-                    started = job.started_at.replace(tzinfo=timezone.utc)
-                else:
-                    started = job.started_at
+                started = (job.started_at.replace(tzinfo=timezone.utc)
+                           if job.started_at.tzinfo is None else job.started_at)
                 job.duration_seconds = (job.completed_at - started).total_seconds()
 
             if not self.dry_run:
@@ -216,65 +227,168 @@ class TenderFetcher:
 
             self.db.close()
 
+        self.stats["failed"] = failed
         self._log_summary()
         return self.stats
 
-    async def _process_notice(self, notice: Dict[str, Any], client: TEDClient):
-        """Process a single notice from the API."""
-        # TED API v3 uses different field names
-        publication_number = (
-            notice.get("publication-number") or
-            notice.get("ND") or
-            notice.get("publicationNumber")
-        )
+    async def _process_day(self, notices: List[Dict[str, Any]], client: TEDClient):
+        """Upsert one day's notices, fetching the XML they need in parallel.
+
+        XML used to be fetched one notice at a time with a 0.5 s sleep, about
+        0.75 s a notice, i.e. ~20 minutes for one full day of ~1,600 notices,
+        which would not fit the cron's timeout once the cap was removed. The
+        fetch is now bounded-concurrent (`xml_concurrency`, default 4) against
+        ted.europa.eu, and the DB writes stay sequential on the one Session.
+        """
+        pubs = [self._publication_number(n) for n in notices]
+        pubs = [p for p in pubs if p]
+        has_xml: Dict[str, bool] = {}
+        if pubs:
+            for pub, xml_present in self.db.query(
+                Tender.publication_number, Tender.xml_content.isnot(None)
+            ).filter(Tender.publication_number.in_(pubs)).all():
+                has_xml[pub] = bool(xml_present)
+        # Hand the connection back BEFORE the XML downloads. A full day is
+        # minutes of network work, and a Session held idle across it died on
+        # 15 Sep 2026 with "SSL connection has been closed unexpectedly" at the
+        # day's commit, losing the whole day (pool_pre_ping only runs on
+        # checkout). Ending the transaction here makes the re-query below check
+        # out a fresh, pinged connection.
+        self.db.rollback()
+        need_xml = [p for p in pubs if not has_xml.get(p)]
+        xml_cache = await self._fetch_xml_batch(need_xml, client)
+
+        existing: Dict[str, Tender] = {}
+        if pubs:
+            for t in self.db.query(Tender).filter(Tender.publication_number.in_(pubs)).all():
+                existing[t.publication_number] = t
+
+        for i, notice in enumerate(notices):
+            try:
+                await self._process_notice(notice, client, xml_cache=xml_cache, existing=existing)
+                if (i + 1) % 250 == 0:
+                    logger.info(f"Processed {i + 1}/{len(notices)} notices")
+            except Exception as e:
+                self.stats["errors"] += 1
+                self.stats["error_details"].append(str(e))
+                logger.error(f"Error processing notice: {e}")
+
+    async def _fetch_xml_batch(self, pubs: List[str], client: TEDClient) -> Dict[str, Optional[str]]:
+        """Download eForms XML for `pubs`, paced and retried on HTTP 429.
+
+        ted.europa.eu rate-limits the XML endpoint: an unpaced burst of 4 in
+        flight (~18 req/s) got 566 x 429 out of 803 on 15 Sep 2026. Requests
+        are therefore spaced to `xml_rate` per second across all workers, and a
+        429 backs off (Retry-After, else 5/10/20/40 s) before retrying. A notice
+        whose XML still cannot be fetched is counted in stats["xml_failed"]
+        rather than stored silently as if TED had no XML for it.
+        """
+        import httpx
+
+        sem = asyncio.Semaphore(max(1, self.xml_concurrency))
+        lock = asyncio.Lock()
+        interval = 1.0 / self.xml_rate if self.xml_rate and self.xml_rate > 0 else 0.0
+        next_slot = [0.0]
+        out: Dict[str, Optional[str]] = {}
+        loop = asyncio.get_running_loop()
+
+        async def paced():
+            if not interval:
+                return
+            async with lock:
+                now = loop.time()
+                wait = next_slot[0] - now
+                next_slot[0] = max(now, next_slot[0]) + interval
+            if wait > 0:
+                await asyncio.sleep(wait)
+
+        async def one(pub: str):
+            async with sem:
+                for attempt in range(5):
+                    await paced()
+                    try:
+                        out[pub] = await client.get_notice_xml(pub, raise_on_rate_limit=True)
+                        return
+                    except httpx.HTTPStatusError as e:
+                        retry_after = e.response.headers.get("Retry-After")
+                        try:
+                            delay = float(retry_after) if retry_after else 5.0 * (2 ** attempt)
+                        except ValueError:
+                            delay = 5.0 * (2 ** attempt)
+                        self.stats["xml_rate_limited"] = self.stats.get("xml_rate_limited", 0) + 1
+                        await asyncio.sleep(delay)
+                    except Exception as e:
+                        logger.warning(f"Could not fetch XML for {pub}: {type(e).__name__}: {e}")
+                        break
+                out[pub] = None
+                self.stats["xml_failed"] = self.stats.get("xml_failed", 0) + 1
+
+        await asyncio.gather(*(one(p) for p in pubs))
+        return out
+
+    @staticmethod
+    def _publication_number(notice: Dict[str, Any]) -> Optional[str]:
+        return (notice.get("publication-number") or notice.get("ND")
+                or notice.get("publicationNumber"))
+
+    async def _process_notice(
+        self,
+        notice: Dict[str, Any],
+        client: TEDClient,
+        xml_cache: Optional[Dict[str, Optional[str]]] = None,
+        existing: Optional[Dict[str, Tender]] = None,
+    ):
+        """Process a single notice from the API.
+
+        `xml_cache` / `existing` are pre-fetched by `_process_day`; without them
+        (a single-notice call) this falls back to a DB lookup and a direct fetch.
+        """
+        publication_number = self._publication_number(notice)
 
         if not publication_number:
             self.stats["skipped"] += 1
             return
 
-        # Check if already exists
-        existing = self.db.query(Tender).filter(
-            Tender.publication_number == publication_number
-        ).first()
+        async def _xml() -> Optional[str]:
+            if xml_cache is not None and publication_number in xml_cache:
+                return xml_cache[publication_number]
+            try:
+                return await client.get_notice_xml(publication_number)
+            except Exception as e:
+                logger.warning(f"Could not fetch XML for {publication_number}: {e}")
+                return None
 
-        if existing:
-            # Update existing tender
-            self._update_tender(existing, notice)
+        if existing is not None:
+            row = existing.get(publication_number)
+        else:
+            row = self.db.query(Tender).filter(
+                Tender.publication_number == publication_number
+            ).first()
+
+        if row:
+            self._update_tender(row, notice)
             self.stats["updated"] += 1
 
             # Backfill XML if missing
-            if not existing.xml_content:
-                try:
-                    xml_content = await client.get_notice_xml(publication_number)
-                    if xml_content:
-                        existing.xml_content = xml_content
-                        # Re-parse to extract award criteria
-                        try:
-                            parsed = self.parser.parse_to_tender_dict(xml_content, publication_number)
-                            if parsed.get("award_criteria"):
-                                existing.award_criteria = parsed.get("award_criteria")
-                                existing.award_criteria_type = parsed.get("award_criteria_type")
-                            if parsed.get("description") and not existing.description:
-                                existing.description = parsed.get("description")
-                            if parsed.get("selection_criteria"):
-                                existing.selection_criteria = parsed.get("selection_criteria")
-                            if parsed.get("minimum_requirements"):
-                                existing.minimum_requirements = parsed.get("minimum_requirements")
-                        except Exception as e:
-                            logger.warning(f"XML parsing failed for backfill {publication_number}: {e}")
-                    await asyncio.sleep(0.5)  # Rate limit
-                except Exception as e:
-                    logger.debug(f"Could not backfill XML for {publication_number}: {e}")
+            if not row.xml_content:
+                xml_content = await _xml()
+                if xml_content:
+                    row.xml_content = xml_content
+                    try:
+                        parsed = self.parser.parse_to_tender_dict(xml_content, publication_number)
+                        if parsed.get("award_criteria"):
+                            row.award_criteria = parsed.get("award_criteria")
+                            row.award_criteria_type = parsed.get("award_criteria_type")
+                        if parsed.get("description") and not row.description:
+                            row.description = parsed.get("description")
+                        if parsed.get("selection_criteria"):
+                            row.selection_criteria = parsed.get("selection_criteria")
+                        if parsed.get("minimum_requirements"):
+                            row.minimum_requirements = parsed.get("minimum_requirements")
+                    except Exception as e:
+                        logger.warning(f"XML parsing failed for backfill {publication_number}: {e}")
         else:
-            # Fetch full XML for new tenders
-            xml_content = None
-            try:
-                xml_content = await client.get_notice_xml(publication_number)
-                await asyncio.sleep(0.5)  # Rate limit XML fetches
-            except Exception as e:
-                logger.warning(f"Could not fetch XML for {publication_number}: {e}")
-
-            # Create new tender
+            xml_content = await _xml()
             tender = self._create_tender(notice, xml_content)
 
             if not self.dry_run:
@@ -532,6 +646,8 @@ class TenderFetcher:
         logger.info(f"Updated:        {self.stats['updated']}")
         logger.info(f"Skipped:        {self.stats['skipped']}")
         logger.info(f"Errors:         {self.stats['errors']}")
+        logger.info(f"XML 429 retries:{self.stats.get('xml_rate_limited', 0)}")
+        logger.info(f"XML failed:     {self.stats.get('xml_failed', 0)}")
 
         if self.stats["error_details"]:
             logger.info("Error details:")
@@ -539,6 +655,17 @@ class TenderFetcher:
                 logger.info(f"  - {err}")
 
         logger.info("=" * 60)
+
+
+def _date_range(from_date: Optional[str], to_date: Optional[str]) -> Optional[List[date_cls]]:
+    """Inclusive list of dates for a backfill, or None to use --days."""
+    if not from_date:
+        return None
+    start = date_cls.fromisoformat(from_date)
+    end = date_cls.fromisoformat(to_date) if to_date else start
+    if end < start:
+        raise SystemExit("[ERROR] --to-date is before --from-date")
+    return [start + timedelta(days=i) for i in range((end - start).days + 1)]
 
 
 async def main():
@@ -571,8 +698,31 @@ async def main():
     parser.add_argument(
         "--max-results", "-m",
         type=int,
-        default=1000,
-        help="Maximum number of results to fetch (default: 1000)"
+        default=0,
+        help="Cap on notices fetched across the whole window (default: 0 = no cap). "
+             "A cap truncates days and makes the run exit non-zero."
+    )
+    parser.add_argument(
+        "--from-date",
+        type=str,
+        help="Backfill: first publication date YYYY-MM-DD (overrides --days)"
+    )
+    parser.add_argument(
+        "--to-date",
+        type=str,
+        help="Backfill: last publication date YYYY-MM-DD (default: --from-date)"
+    )
+    parser.add_argument(
+        "--xml-concurrency",
+        type=int,
+        default=4,
+        help="Parallel XML downloads from ted.europa.eu (default: 4)"
+    )
+    parser.add_argument(
+        "--xml-rate",
+        type=float,
+        default=8.0,
+        help="Max XML requests per second across all workers (default: 8)"
     )
     parser.add_argument(
         "--include-framework",
@@ -613,18 +763,25 @@ async def main():
     fetcher = TenderFetcher(
         max_value=args.max_value,
         include_framework=args.include_framework,
-        dry_run=args.dry_run
+        dry_run=args.dry_run,
+        xml_concurrency=args.xml_concurrency,
+        xml_rate=args.xml_rate,
     )
 
     stats = await fetcher.fetch_tenders(
         days_back=args.days,
         countries=countries,
         cpv_codes=cpv_codes,
-        max_results=args.max_results
+        max_results=args.max_results,
+        dates=_date_range(args.from_date, args.to_date),
     )
 
-    # Exit with error code if there were failures
-    if stats["errors"] > 0:
+    # Non-zero on ANY failure: a crashed job, per-notice errors, or a day that
+    # was not fetched in full. Until 15 Sep 2026 a failed TED search set
+    # job.status="failed" and still exited 0, so the cron reported success.
+    if stats.get("failed") or stats["errors"] > 0 or stats.get("incomplete_days"):
+        if stats.get("incomplete_days"):
+            logger.error(f"[ERROR] Incomplete TED days: {', '.join(stats['incomplete_days'])}")
         sys.exit(1)
 
 

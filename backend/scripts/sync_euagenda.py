@@ -44,10 +44,29 @@ async def main() -> int:
     print(f"  updated: {result.get('updated', 0)}")
     print(f"  skipped: {result.get('skipped', 0)}")
     print(f"  errors:  {result.get('errors', 0)}")
+    print(f"  fetched: {result.get('fetched', 0)} (cards {result.get('listing_cards', 0)}, "
+          f"via {result.get('listing_via')})")
     print(f"  time:    {result.get('elapsed_seconds', '?')}s")
     print("=" * 60)
 
-    return 0 if result.get("errors", 0) == 0 else 1
+    return exit_code(result)
+
+
+def exit_code(result: dict) -> int:
+    """0 only when something was fetched and nothing errored.
+
+    Silence is not success: on 15 Sep 2026 euagenda.eu answered 403 (Cloudflare
+    challenge) and this script printed added/updated/skipped/errors all 0 and
+    exited 0, so the cron recorded a healthy run that fetched nothing.
+    """
+    if not result.get("fetched"):
+        print(f"[ERROR] euagenda: zero events fetched -- "
+              f"{result.get('fetch_error') or 'no events returned by the scraper'}")
+        return 2
+    if result.get("errors", 0):
+        print(f"[ERROR] euagenda: {result['errors']} error(s) during sync")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

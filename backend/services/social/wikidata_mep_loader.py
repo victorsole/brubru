@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 import urllib.parse
 import urllib.request
@@ -39,15 +40,91 @@ PLATFORMS = [
 _PROPS = {"x": "P2002", "ig": "P2003", "fb": "P2013", "li": "P6634",
           "tt": "P7085", "yt": "P2397", "ma": "P4033", "bs": "P12361"}
 
-_REFRESH = ["entity_type", "entity_key", "entity_name", "platform", "scope", "handle",
-            "discovery_source", "extra"]
+_REFRESH = ["entity_type", "entity_key", "platform", "scope", "handle",
+             "discovery_source", "extra"]
+
+# Label fallback order. Wikidata moved many people's names from per-language labels to the
+# language-neutral `mul` label, so an "en"-only label service returns the bare QID as the
+# label for them (Bernd Lange Q65437 holds ONLY a `mul` label). That is how 18 rows / 8 MEPs
+# ended up named 'Q65437' etc. on 29 Jun 2026. en, then mul, then every EU language.
+_EU_LANGS = ["fr", "de", "es", "it", "nl", "pl", "pt", "hu", "cs", "sk", "sl", "hr", "ro",
+             "bg", "el", "sv", "da", "fi", "et", "lv", "lt", "ga", "mt"]
+LABEL_LANGS = ["en", "mul"] + _EU_LANGS
+# EP country-of-representation -> the MEP's own label language (tried right after en, mul).
+COUNTRY_LANG = {"AT": "de", "BE": "nl", "BG": "bg", "HR": "hr", "CY": "el", "CZ": "cs",
+                "DK": "da", "EE": "et", "FI": "fi", "FR": "fr", "DE": "de", "GR": "el",
+                "HU": "hu", "IE": "ga", "IT": "it", "LV": "lv", "LT": "lt", "LU": "fr",
+                "MT": "mt", "NL": "nl", "PL": "pl", "PT": "pt", "RO": "ro", "SK": "sk",
+                "SI": "sl", "ES": "es", "SE": "sv"}
+_BARE_QID = re.compile(r"^Q\d+$")
+_EP_MEPS = ("https://data.europarl.europa.eu/api/v2/meps/show-current"
+            "?format=application%2Fld%2Bjson")
+
+
+def is_bare_qid(name) -> bool:
+    return bool(name) and bool(_BARE_QID.match(str(name).strip()))
+
+
+def clean_name(name):
+    """A usable display name, or None. Never a bare QID, never blank."""
+    n = (name or "").strip()
+    return None if not n or is_bare_qid(n) else n
+
+
+def pick_label(labels: dict, own_lang: str | None = None):
+    """First usable label from a Wikidata EntityData `labels` dict: en, mul, the MEP's own
+    language, the other EU languages, then any label at all."""
+    order = ["en", "mul"] + ([own_lang] if own_lang else []) + _EU_LANGS
+    for lang in order:
+        v = clean_name((labels.get(lang) or {}).get("value"))
+        if v:
+            return v, lang
+    for lang, lv in sorted(labels.items()):
+        v = clean_name((lv or {}).get("value"))
+        if v:
+            return v, lang
+    return None, None
+
+
+def ep_display_name(m: dict):
+    """'Bernd Lange' from an EP show-current record (its `label` is 'Bernd LANGE')."""
+    gn, fn = (m.get("givenName") or "").strip(), (m.get("familyName") or "").strip()
+    return clean_name(f"{gn} {fn}".strip()) or clean_name(m.get("label"))
+
+
+def fetch_ep_current() -> dict:
+    """EP Open Data current-MEP directory: {ep_id: record}. Raises on failure (callers decide)."""
+    req = urllib.request.Request(_EP_MEPS, headers={"User-Agent": _UA,
+                                                    "Accept": "application/ld+json"})
+    data = json.loads(urllib.request.urlopen(req, timeout=60).read().decode())
+    return {m["identifier"]: m for m in data.get("data", [])}
+
+
+def fetch_entity(qid: str) -> dict:
+    url = f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json"
+    req = urllib.request.Request(url, headers={"User-Agent": _UA, "Accept": "application/json"})
+    data = json.loads(urllib.request.urlopen(req, timeout=30).read().decode())
+    ents = data.get("entities", {})
+    return ents.get(qid) or (next(iter(ents.values())) if ents else {})
+
+
+def entity_ep_ids(entity: dict) -> list[str]:
+    """P1186 (MEP directory ID) values on a Wikidata entity."""
+    out = []
+    for c in entity.get("claims", {}).get("P1186", []):
+        v = c.get("mainsnak", {}).get("datavalue", {}).get("value")
+        if v:
+            out.append(str(v))
+    return out
 
 
 def fetch_mep_socials(position=MEP_POSITION, term=TERM10) -> list[dict]:
     opt = "\n".join(f"  OPTIONAL {{ ?mep wdt:{p} ?{v}. }}" for v, p in _PROPS.items())
-    q = (f"SELECT ?mep ?mepLabel " + " ".join(f"?{v}" for v in _PROPS) + " WHERE {\n"
+    opt += "\n  OPTIONAL { ?mep wdt:P1186 ?epid. }"
+    langs = ",".join(LABEL_LANGS)
+    q = (f"SELECT ?mep ?mepLabel ?epid " + " ".join(f"?{v}" for v in _PROPS) + " WHERE {\n"
          f"  ?mep p:P39 ?st. ?st ps:P39 wd:{position}. ?st pq:P2937 wd:{term}.\n{opt}\n"
-         '  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }\n}')
+         f'  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "{langs}". }}\n}}')
     url = _ENDPOINT + "?format=json&query=" + urllib.parse.quote(q)
     req = urllib.request.Request(url, headers={"User-Agent": _UA,
                                  "Accept": "application/sparql-results+json"})
@@ -64,9 +141,28 @@ def fetch_mep_socials(position=MEP_POSITION, term=TERM10) -> list[dict]:
             raise
 
 
-def _rows_from_binding(b: dict) -> list[dict]:
+def binding_name(b: dict, ep_names: dict | None = None):
+    """Display name for a binding: the Wikidata label, else the EP directory name via P1186,
+    else None. The WDQS label service returns the QID itself when no label exists in the
+    requested languages, so a bare QID is treated as "no label", never stored as a name."""
+    name = clean_name(b.get("mepLabel", {}).get("value"))
+    if name:
+        return name
+    epid = (b.get("epid") or {}).get("value")
+    if epid and ep_names:
+        return clean_name(ep_names.get(str(epid)))
+    return None
+
+
+def needs_name_fallback(bindings: list[dict]) -> bool:
+    return any(not clean_name(b.get("mepLabel", {}).get("value")) for b in bindings)
+
+
+def _rows_from_binding(b: dict, ep_names: dict | None = None) -> list[dict]:
     qid = b["mep"]["value"].split("/")[-1]
-    name = b.get("mepLabel", {}).get("value")
+    name = binding_name(b, ep_names)
+    if name is None:
+        logger.warning("no label for %s in any language or the EP directory; entity_name left NULL", qid)
     out = []
     for var, platform, tmpl in PLATFORMS:
         if var not in b:
@@ -91,12 +187,16 @@ def _row(qid, name, platform, handle, url):
             "content_fetch_enabled": False, "extra": {"wikidata_qid": qid}}
 
 
-def load(db, bindings: list[dict], *, dry_run: bool = False) -> dict:
+def load(db, bindings: list[dict], *, dry_run: bool = False,
+         ep_names: dict | None = None) -> dict:
     stats = {"meps": len({b["mep"]["value"] for b in bindings}), "written": 0,
-             "by_platform": {}, "dry_run": dry_run}
+             "by_platform": {}, "dry_run": dry_run, "unnamed_meps": set()}
     seen = set()
     for b in bindings:
-        for row in _rows_from_binding(b):
+        rows = _rows_from_binding(b, ep_names)
+        if rows and rows[0]["entity_name"] is None:
+            stats["unnamed_meps"].add(rows[0]["entity_key"])
+        for row in rows:
             u = row["account_url"]
             if u in seen:
                 continue
@@ -107,8 +207,13 @@ def load(db, bindings: list[dict], *, dry_run: bool = False) -> dict:
                 stmt = pg_insert(SocialAccount).values(**row)
                 stmt = stmt.on_conflict_do_update(
                     constraint="social_accounts_url_uq",
-                    set_={c: getattr(stmt.excluded, c) for c in _REFRESH} | {"updated_at": func.now()})
+                    set_={c: getattr(stmt.excluded, c) for c in _REFRESH}
+                    # A missing label this run must not wipe a name we already hold.
+                    | {"entity_name": func.coalesce(stmt.excluded.entity_name,
+                                                    SocialAccount.__table__.c.entity_name),
+                       "updated_at": func.now()})
                 db.execute(stmt)
     if not dry_run:
         db.commit()
+    stats["unnamed_meps"] = sorted(stats["unnamed_meps"])
     return stats

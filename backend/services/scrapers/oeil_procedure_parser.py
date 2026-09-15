@@ -172,3 +172,109 @@ def _parse_rows(chunk: str) -> List[dict]:
         if subject:
             rows.append({"date": d.isoformat(), "event_type": subject})
     return rows
+
+
+# ---------------------------------------------------------------------------
+# Status inference and carriage mapping for a LIVE procedure page (15 Sep 2026)
+# ---------------------------------------------------------------------------
+# Status values are the `CarriageStatusEnum` VALUES, kept as strings so this
+# module stays free of ORM imports.
+STATUS_RANK = {
+    "announced": 0,
+    "legislative_initiative": 1,
+    "tabled": 2,
+    "close_to_adoption": 3,
+    "completed": 4,
+    "adopted": 5,
+    # blocked / withdrawn are outside the progression
+}
+
+
+def infer_carriage_status(event_types, stage: Optional[str] = None) -> Optional[str]:
+    """The most advanced carriage status the OEIL key events (and stage) prove.
+
+    Strongest signal wins. Matching is by substring on OEIL's own wording
+    ("Decision by Parliament, 1st reading", "Final act published in Official
+    Journal", ...).
+
+    One rule changed on 15 Sep 2026: "Decision by Parliament" used to mean
+    COMPLETED. While the parser was reading garbage that rule rarely fired; with
+    the real event table it would have fired on every file with a first-reading
+    vote. That is wrong -- 2025/0207(COD) had its Parliament vote on 29/04/2026
+    and was referred straight back for trilogues; 2023/0156(COD) is in second
+    reading. COMPLETED is the carriage twin of OEIL's "Procedure completed", and
+    the script only ever advances a status, so a false COMPLETED would be
+    permanent. A Parliament decision now proves CLOSE_TO_ADOPTION; COMPLETED
+    needs the Council's adoption of the act or OEIL's own "Procedure completed".
+    """
+    ets = [(e or "").lower() for e in (event_types or [])]
+    st = (stage or "").lower()
+
+    def has(*needles: str) -> bool:
+        return any(n in e for e in ets for n in needles)
+
+    if has("final act signed", "final act published", "entry into force"):
+        return "adopted"
+    if has("act adopted by council") or "procedure completed" in st:
+        return "completed"
+    if has("decision by parliament", "committee report", "vote in committee",
+           "committee recommendation tabled", "approval in committee of the text agreed"):
+        return "close_to_adoption"
+    if has("legislative proposal", "committee referral"):
+        return "tabled"
+    return None
+
+
+def advance_status(current: Optional[str], inferred: Optional[str]) -> Optional[str]:
+    """`inferred` when it is strictly further along than `current`, else None.
+
+    A status outside the progression (blocked, withdrawn) is never overwritten.
+    """
+    if not inferred:
+        return None
+    cur = (current or "").lower()
+    if cur and cur not in STATUS_RANK:
+        return None
+    if STATUS_RANK.get(inferred, -1) > STATUS_RANK.get(cur, -1):
+        return inferred
+    return None
+
+
+_GIVES_OPINION = ("opinion", "budgetary_assessment", "opinion_associated",
+                  "budgetary_assessment_associated", "responsible_associated")
+
+
+def carriage_fields_from_procedure(procedure) -> dict:
+    """Map an `OEILProcedure` (parsed live page) to `legislative_carriages` columns.
+
+    Only fields the page actually states are returned. A committee that "decided
+    not to give an opinion" is not an opinion committee. Former committees are
+    already dropped by the parser.
+    """
+    out: dict = {}
+    kp = procedure.key_players
+    cr = kp.committee_responsible
+    if cr is not None:
+        out["lead_committee"] = cr.code
+        if cr.rapporteur is not None:
+            out["rapporteur_name"] = cr.rapporteur.name
+            out["rapporteur_mep_id"] = cr.rapporteur.mep_id
+            out["rapporteur_appointed"] = cr.date_announced
+        opinions: List[str] = []
+        for c in list(kp.committees_opinion) + list(kp.committees_associated):
+            if c.role in _GIVES_OPINION and c.code != cr.code and c.code not in opinions:
+                opinions.append(c.code)
+        out["opinion_committees"] = opinions
+        out["committees"] = [cr.code] + opinions
+    out["oeil_key_events"] = [
+        {"date": e.date.isoformat() if e.date else None,
+         "event_type": e.event_type,
+         "description": e.description}
+        for e in procedure.key_events.events
+    ]
+    out["oeil_forecasts"] = [
+        {"date": f.forecast_date.isoformat() if f.forecast_date else None,
+         "event_type": f.event_type}
+        for f in procedure.forecasts.forecasts
+    ]
+    return out

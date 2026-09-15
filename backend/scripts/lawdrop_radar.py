@@ -120,6 +120,63 @@ def _slug_tokens(*parts: str) -> set[str]:
     return out
 
 
+_ACRONYMS_PATH = os.path.join(ROOT, "backend", "knowledge_base", "institutions",
+                              "legislation_acronyms.json")
+_short_names_cache: dict[str, list[str]] | None = None
+
+
+def _short_names(celex: str) -> list[str]:
+    """Common short names for an act ("CRA", "Cyber Resilience Act"), read
+    from legislation_acronyms.json reversed CELEX -> names.
+
+    Why (found 15 Sep 2026): the CRA deck is `cra_article14_deck.html`. Its
+    filename carries neither the act number (2847) nor a word of the cluster
+    name ("SaaS & B2B Startup Compliance"), so check B reported the Cyber
+    Resilience Act as NOTHING SHIPPED while the deck and its PDF sat on disk.
+    Decks are named after the law as people say it, so match that too.
+    """
+    global _short_names_cache
+    if _short_names_cache is None:
+        rev: dict[str, list[str]] = {}
+        try:
+            with open(_ACRONYMS_PATH, encoding="utf-8") as fh:
+                data = json.load(fh).get("acronyms", {})
+            for name, meta in data.items():
+                c = (meta or {}).get("celex")
+                if c:
+                    rev.setdefault(c, []).append(name)
+        except Exception as exc:  # noqa: BLE001
+            # Loud: without the file every act falls back to number/cluster
+            # matching, which is how the CRA false positive happened.
+            print(f"[ERROR] lawdrop_radar: cannot read {_ACRONYMS_PATH}: "
+                  f"{type(exc).__name__}", file=sys.stderr)
+        _short_names_cache = rev
+    return _short_names_cache.get(celex or "", [])
+
+
+def _name_tokens(s: str) -> list[str]:
+    return [t for t in re.split(r"[^a-z0-9]+", (s or "").lower()) if t]
+
+
+def _name_in_filename(name: str, fn_tokens: list[str]) -> bool:
+    """Whole-token match of a short name inside a filename.
+
+    "CRA" matches `cra_article14_deck.html` but not `crash_deck`; "Data Act"
+    matches `data_act_deck` or `dataact_deck`, never a lone `data`. A single
+    token shorter than 3 characters is too ambiguous to count.
+    """
+    nt = _name_tokens(name)
+    if not nt:
+        return False
+    if len(nt) == 1 and len(nt[0]) < 3:
+        return False
+    n = len(nt)
+    if any(fn_tokens[i:i + n] == nt for i in range(len(fn_tokens) - n + 1)):
+        return True
+    joined = "".join(nt)
+    return n > 1 and len(joined) >= 4 and joined in fn_tokens
+
+
 def _marked(celex: str, cluster_name: str) -> dict:
     """Has this law been marked with a deck and/or a canon page?
 
@@ -127,20 +184,31 @@ def _marked(celex: str, cluster_name: str) -> dict:
     /lawdrop, so their absence is the thing worth reporting. Matching is
     token-based and therefore fuzzy -- it reports evidence, it does not
     adjudicate. Ambiguity is surfaced, never silently resolved.
+
+    Three signals: the act number as a whole token (2847, never the "40" in
+    "405"), the act's short names from legislation_acronyms.json, and
+    cluster-name tokens.
     """
     toks = _slug_tokens(cluster_name)
     number = ""
     m = re.match(r"^3(\d{4})([RL])(\d{4})$", celex or "")
     if m:
         number = f"{m.group(3).lstrip('0')}"          # 0040 -> 40
+    names = _short_names(celex)
     decks = [os.path.basename(p) for p in glob.glob(os.path.join(DECK_DIR, "*deck*"))]
     canon = [os.path.basename(p) for p in glob.glob(os.path.join(CANON_DIR, "*"))]
 
-    def hits(names: list[str]) -> list[str]:
+    def hits(filenames: list[str]) -> list[str]:
         out = []
-        for n in names:
+        for n in filenames:
             nl = n.lower()
-            if number and number in nl:
+            ft = _name_tokens(n)
+            # Whole-token number: "2025-40_ppwr" is 40, "2026-405_detergents"
+            # is not. A substring match here credited PPWR with the detergents
+            # page, and a false "marked" hides a missed drop.
+            if number and number in ft:
+                out.append(n); continue
+            if any(_name_in_filename(nm, ft) for nm in names):
                 out.append(n); continue
             if any(t in nl for t in toks if len(t) >= 4):
                 out.append(n)

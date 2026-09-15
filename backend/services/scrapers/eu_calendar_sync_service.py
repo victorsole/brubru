@@ -17,6 +17,7 @@ import time
 from datetime import datetime, date, timedelta
 from typing import Dict, Any, List, Optional
 
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import get_db, SessionLocal
@@ -181,10 +182,18 @@ class EUCalendarSyncService:
         result = {"source": "ec_college", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
 
         try:
-            events_data = generate_college_meetings(months_ahead)
-
             db = self._get_db()
             try:
+                # Strasbourg sitting days move that week's College to Tuesday.
+                plenary_dates = [
+                    r[0] for r in db.execute(text(
+                        "SELECT DISTINCT start_date FROM eu_calendar_events "
+                        "WHERE institution = 'EP' AND event_type = 'plenary_session' "
+                        "AND start_date >= CURRENT_DATE - 90"
+                    )).fetchall()
+                ]
+                events_data = generate_college_meetings(months_ahead, plenary_dates)
+                generated_ids = {e["external_id"] for e in events_data}
                 for event_data in events_data:
                     try:
                         self._upsert_event(db, event_data, result)
@@ -192,6 +201,16 @@ class EUCalendarSyncService:
                         logger.warning(f"[WARN] Failed to upsert EC college event: {e}")
                         result["errors"] += 1
 
+                # A generated Wednesday that has moved to Tuesday leaves its old row
+                # behind; mark it cancelled (never delete: audit trail).
+                stale = db.execute(text(
+                    "UPDATE eu_calendar_events SET status = 'cancelled', last_updated = now() "
+                    "WHERE source = 'ec_college' AND start_date >= CURRENT_DATE "
+                    "AND start_date <= :horizon "
+                    "AND status <> 'cancelled' AND NOT (external_id = ANY(:ids))"
+                ), {"ids": list(generated_ids),
+                    "horizon": max((e["start_date"] for e in events_data), default=date.today())})
+                result["cancelled"] = stale.rowcount or 0
                 db.commit()
             finally:
                 if self._should_close_db():
@@ -312,7 +331,8 @@ class EUCalendarSyncService:
         webinars, training). Institution=THIRD_PARTY, source='euagenda'.
         """
         start_time = time.time()
-        result = {"source": "euagenda", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
+        result = {"source": "euagenda", "added": 0, "updated": 0, "skipped": 0, "errors": 0,
+                  "fetched": 0, "listing_cards": 0, "listing_via": None, "fetch_error": None}
         try:
             from services.scrapers.euagenda_scraper import EuAgendaScraper
 
@@ -320,6 +340,12 @@ class EUCalendarSyncService:
             events = await scraper.scrape_upcoming(
                 max_events=max_events, include_details=include_details
             )
+            # What was actually FETCHED, so a blocked source cannot report as a
+            # quiet one (0 added / 0 updated / 0 errors was a 403 on 15 Sep 2026).
+            result["fetched"] = len(events)
+            result["listing_cards"] = scraper.listing_cards
+            result["listing_via"] = scraper.listing_via
+            result["fetch_error"] = scraper.listing_error
 
             db = self._get_db()
             try:
