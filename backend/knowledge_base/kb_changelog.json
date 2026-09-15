@@ -4,6 +4,27 @@
     {
       "date": "2026-09-15",
       "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Amendments 2026",
+      "summary": "Corrected the national AI sandbox deadline to 2 August 2027, as in the adopted Regulation (EU) 2026/1744.",
+      "refs": [
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "added",
+      "guide": "spain_ai_governance_bill_aesia",
+      "title": "Spain's AI Governance Bill and AESIA",
+      "summary": "New guide: the Spanish bill implementing the AI Act (Congreso, 12 June 2026): who supervises what, fine tiers against the EU ceilings, and the Digital Omnibus changes the bill does not yet reflect.",
+      "refs": [
+        "32024R1689",
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "action": "updated",
       "guide": "union_customs_code_reform",
       "title": "Union Customs Code Reform",
       "summary": "Council Position 10/2026 published OJ C 15 Sep; IMCO second-reading recommendation 38-2-5; plenary vote 16 Sep",

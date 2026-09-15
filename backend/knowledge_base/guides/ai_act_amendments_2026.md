@@ -17,7 +17,7 @@
 - Compliance deadline for the new prohibition: 2 December 2026
 - High-risk standalone AI systems: new application date 2 December 2027
 - High-risk AI in products: new application date 2 August 2028
-- AI regulatory sandboxes: deadline extended to 2 December 2027
+- AI regulatory sandboxes: at least one national sandbox must be operational by **2 August 2027** (Article 57(1) as amended by Regulation (EU) 2026/1744; verified against the Spanish OJ text 15 Sep 2026). An earlier draft figure of 2 December 2027 did not survive into the adopted text.
 - Commissioner: Henna Virkkunen (EVP, Tech Sovereignty, Security and Democracy)
 - AI Office: reinforced supervisory powers for AI systems based on general-purpose AI models
 - JRC report (16 April 2026): "Fractured reality: how algorithms fuel polarisation and affect democracy" -- JRC Publications Office study on algorithmic amplification, filter bubbles, echo chambers, platform design and democratic impact. Relevant to AI Act Article 10 (risk management), DSA Article 34 (systemic risk assessment), DSA Article 40 (researcher data access). See also `dsa_enforcement` and `digital_markets_act` guides.

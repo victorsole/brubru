@@ -33,6 +33,7 @@ Schema notes (verified live against the endpoint, May 2026):
 
 import hashlib
 import logging
+import re
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional
 
@@ -66,6 +67,42 @@ RELATIONSHIP_PREDICATES = [
     "cdm:act_consolidated_based_on_resource_legal",
     "cdm:act_consolidated_consolidates_resource_legal",
 ]
+
+
+_CONSOLIDATED_SUFFIX_RE = re.compile(r"^-(\d{4})(\d{2})(\d{2})$")
+
+
+def filter_consolidated_versions(
+    base_celex: str, rows: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """Keep only consolidated versions OF `base_celex`, deduplicated, newest first.
+
+    A consolidated CELEX is sector `0` + the base number + `-YYYYMMDD`
+    (32024R1689 -> 02024R1689-20260727). Anything else (a consolidation of an
+    act the base amends, a CELEX-less layer work) is dropped. A row with no
+    `date` takes the date from its CELEX suffix.
+    """
+    base = (base_celex or "").strip().upper()
+    if len(base) < 2:
+        return []
+    prefix = "0" + base[1:]
+    seen: Dict[str, Dict[str, Any]] = {}
+    for r in rows or []:
+        cc = str(r.get("consolidatedCelex") or "").strip().upper()
+        if not cc.startswith(prefix):
+            continue
+        m = _CONSOLIDATED_SUFFIX_RE.match(cc[len(prefix):])
+        if not m:
+            continue
+        suffix_date = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+        if cc in seen:
+            continue
+        seen[cc] = {
+            "consolidated": r.get("consolidated"),
+            "consolidatedCelex": cc,
+            "date": (str(r.get("date"))[:10] if r.get("date") else suffix_date),
+        }
+    return sorted(seen.values(), key=lambda x: (x["date"], x["consolidatedCelex"]), reverse=True)
 
 
 class _QueryCache:
@@ -369,8 +406,17 @@ class CellarSPARQLClient(BaseSPARQLClient):
 
     async def get_consolidated_versions(self, base_celex: str) -> List[Dict[str, Any]]:
         """
-        Get all consolidated versions of a base act.
+        Get all consolidated versions of a base act, newest first.
         E.g. base_celex = '32016R0679' (GDPR base) returns all dated consolidations.
+
+        `act_consolidated_based_on_resource_legal` names the ONE act a
+        consolidation is a version of. `act_consolidated_consolidates_resource_legal`
+        (used here until 15 Sep 2026) also points at every AMENDING act folded
+        in, so querying it for the AI Act returned the consolidations of the
+        rail directive, the type-approval regulations etc. that the AI Act
+        amends, plus CELEX-less intermediate layer works (`do_not_index`).
+        The result is then filtered again on the CELEX shape
+        (see `filter_consolidated_versions`).
         """
         query = f"""
         PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
@@ -379,18 +425,18 @@ class CellarSPARQLClient(BaseSPARQLClient):
         WHERE {{
             ?base cdm:resource_legal_id_celex ?baseLit .
             FILTER(STR(?baseLit) = "{base_celex}")
-            ?consolidated cdm:act_consolidated_consolidates_resource_legal ?base .
-            OPTIONAL {{ ?consolidated cdm:resource_legal_id_celex ?consolidatedCelex . }}
+            ?consolidated cdm:act_consolidated_based_on_resource_legal ?base .
+            ?consolidated cdm:resource_legal_id_celex ?consolidatedCelex .
             OPTIONAL {{ ?consolidated cdm:work_date_document ?date . }}
         }}
         ORDER BY DESC(?date)
         """
         try:
             results = await self._cached_select(query, cache_ttl=86400)
-            return results
         except Exception as e:
             logger.error(f"Cellar SPARQL consolidations query failed: {e}")
             return []
+        return filter_consolidated_versions(base_celex, results)
 
     async def search_legissum(
         self,
