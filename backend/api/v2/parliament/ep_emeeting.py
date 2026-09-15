@@ -13,6 +13,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import Any, Dict, List, Optional  # noqa: F401
 
 from fastapi import APIRouter, Depends, Path, Query, Request  # noqa: F401
+from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session  # noqa: F401
 
 from core.database import get_db  # noqa: F401
@@ -67,7 +68,7 @@ async def list_emeeting_agendas(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -152,7 +153,7 @@ async def list_emeeting_documents(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),

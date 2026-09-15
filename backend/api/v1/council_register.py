@@ -24,6 +24,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
@@ -217,7 +218,7 @@ async def list_council_meetings(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -265,7 +266,7 @@ async def list_council_voting_results(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -313,7 +314,7 @@ async def list_council_register(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -361,7 +362,7 @@ async def list_council_oj_agendas(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -409,7 +410,7 @@ async def list_council_preparatory_bodies(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -457,7 +458,7 @@ async def list_council_press_releases(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -505,7 +506,7 @@ async def list_council_research_papers(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -553,7 +554,7 @@ async def list_council_treaties_agreements(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),

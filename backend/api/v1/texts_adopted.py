@@ -12,6 +12,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
@@ -209,8 +210,8 @@ async def list_texts_adopted(
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
-    updated_end: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
+    updated_end: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -362,8 +363,8 @@ async def list_texts_submitted(
     parliamentary_term: Optional[int] = Query(None),
     committee: Optional[str] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
-    updated_end: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
+    updated_end: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),

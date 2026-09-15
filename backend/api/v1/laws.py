@@ -10,6 +10,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, case, func, or_, text
 from sqlalchemy.orm import Session
@@ -90,8 +91,8 @@ async def list_laws(
     published_to: Optional[date] = Query(None, description="Upper bound — laws with adoption date <= value (YYYY-MM-DD). Preferred name."),
     published_end: Optional[date] = Query(None, description="Alias of published_to for GovClipping compatibility. If both are sent with different values, returns 422."),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound — rows with updated_at >= value. Returns rows ordered by updated_at desc when set."),
-    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
-    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
     include_orphans: bool = Query(False, description="Include rows that have no CELEX (orphaned annexes / recitals from Formex parsing). Default false — they have no useful identifier and produce all-null rows."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),

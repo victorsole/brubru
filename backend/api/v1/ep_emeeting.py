@@ -15,6 +15,7 @@ from datetime import date, datetime
 from typing import Optional, List, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
@@ -114,7 +115,7 @@ async def list_emeeting_agendas(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -298,7 +299,7 @@ async def list_emeeting_documents(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),

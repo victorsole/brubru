@@ -23,6 +23,10 @@ The chain, in order
 3. **The rendered page**, when the page arrived but carried no date. The ECA renders
    its date client-side: 157KB of static HTML with no carrier, and a rendered page
    that opens with `<time class="date" datetime="09/09/2026">`.
+4. **A PDF item** (the CJEU links its press releases as PDFs): the single
+   `Luxembourg, <day> <Month> <year>` dateline on its first page. Added 15 Sep 2026;
+   until then a PDF answered `pdf_not_read`, and the listing parser filled the gap with
+   the 1st of the upload folder's month (50 CJEU rows).
 
 What it never does
 ------------------
@@ -57,7 +61,7 @@ _PRESSCORNER_API = ("https://ec.europa.eu/commission/presscorner/api/documents"
 
 # Provenances that are NOT a date. Callers that tally outcomes need this list, and
 # it belongs next to the code that produces the strings.
-MISS_PROVENANCES = ("no_url", "pdf_not_read", "fetch_failed", "no_carrier")
+MISS_PROVENANCES = ("no_url", "pdf_not_read", "fetch_failed", "no_carrier", "pdf_dateline_multi")
 
 
 def _in_bounds(dt: datetime) -> bool:
@@ -223,7 +227,54 @@ def _enisa_date(soup, html: str = "", url: str = "") -> Optional[datetime]:
     return _one(found)
 
 
+def _edps_date(soup, html: str = "", url: str = "") -> Optional[datetime]:
+    """EDPS prints the date as plain text at the head of the full-view node:
+    `<article class="node ... node--view-mode-full">8 Jan 2025 Press Release <h1>...`.
+
+    Every <time datetime> on the page belongs to the "latest news" sidebar: the generic
+    first-<time> carrier read 16 August 2026 for a release of 8 January 2025 (15 Sep
+    2026). Only the leading date of the full-view node is the item's own."""
+    art = soup.select_one("article.node--view-mode-full")
+    if art is None:
+        return None
+    m = re.match(r"\s*" + _NAMED_DATE, art.get_text(" ", strip=True).replace("\xa0", " "))
+    if not m:
+        return None
+    dt = parse_listing_date(m.group(1))
+    dt = dt.replace(tzinfo=timezone.utc) if dt and dt.tzinfo is None else dt
+    return dt if dt is not None and _in_bounds(dt) else None
+
+
+def _eca_date(soup, html: str = "", url: str = "") -> Optional[datetime]:
+    """ECA (rendered SharePoint) shows the item's date as `<span class="meta-item">
+    <time>24/04/2026</time>`. The related-news cards below carry `<time datetime=
+    "2020-06-11">` with the visible card date as text, so only `.meta-item time` is
+    read (or a `<time class="date" datetime="09/09/2026">`, the form a report page
+    rendered on 11 Sep), never a time inside a `.card-body`, day-first, and only when
+    they hold exactly one date."""
+    found = set()
+    for t in soup.select(".meta-item time, time.date"):
+        if t.find_parent(class_="card-body"):
+            continue
+        for d, m, y in _DMY_SLASH.findall(f"{t.get('datetime') or ''} {t.get_text(' ', strip=True)}"):
+            found.add(_ymd(y, m, d))
+    return _one(found)
+
+
+def _chips_date(soup, html: str = "", url: str = "") -> Optional[datetime]:
+    """Chips JU item pages print `PUBLICATION DATE: 08/07/2026` (day-first: 18/09/2025
+    cannot be month-first). The body cites call openings and deadlines as other dates,
+    so only the labelled value is read, and only when there is exactly one."""
+    text = soup.get_text(" | ", strip=True)
+    found = {_ymd(y, m, d) for d, m, y in re.findall(
+        r"PUBLICATION DATE:\s*(?:\|\s*)*(\d{1,2})/(\d{1,2})/(\d{4})", text, re.I)}
+    return _one(found)
+
+
 _HOST_RULES = (
+    ("chips-ju.europa.eu", _chips_date, "chips_publication_date_label"),
+    ("edps.europa.eu", _edps_date, "edps_full_node_leading_date"),
+    ("eca.europa.eu", _eca_date, "eca_meta_item_time"),
     ("enisa.europa.eu", _enisa_date, "enisa_events_metadata"),
     ("eeas.europa.eu", _eeas_date, "eeas_node_meta"),
     ("ombudsman.europa.eu", _ombudsman_date, "ombudsman_date_label"),
@@ -267,6 +318,50 @@ def _date_from_page(url: str, html: str):
     if _rule_for(url) is not None:
         return host_item_date(url, html)
     return extract_item_date(html)
+
+
+_PDF_DATELINE = re.compile(r"\b(?:Luxembourg|Brussels|Strasbourg),\s*" + _NAMED_DATE)
+
+
+def pdf_get(url: str) -> Optional[bytes]:
+    """The PDF's bytes, or None when what came back is not a PDF."""
+    try:
+        import httpx
+        r = httpx.get(url, timeout=60, follow_redirects=True, headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                          "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"})
+    except Exception:  # noqa: BLE001
+        return None
+    return r.content if r.status_code == 200 and r.content.startswith(b"%PDF") else None
+
+
+def pdf_first_page_text(data: bytes) -> str:
+    try:
+        import io
+        from pypdf import PdfReader
+        reader = PdfReader(io.BytesIO(data))
+        return (reader.pages[0].extract_text() or "") if reader.pages else ""
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def pdf_dateline_date(text: str) -> Tuple[Optional[datetime], str]:
+    """(date, "pdf_dateline") from the ONE dateline in a PDF's first page text.
+
+    The CJEU extracts as "Luxembourg, 21  April 2026" (double spaces); a second, different
+    dateline on the page (a cited earlier judgment) makes it ambiguous, and it refuses."""
+    text = re.sub(r"\s+", " ", (text or "")[:3000])
+    found = set()
+    for raw in _PDF_DATELINE.findall(text):
+        dt = parse_listing_date(raw)
+        found.add(dt.replace(tzinfo=timezone.utc) if dt and dt.tzinfo is None else dt)
+    found.discard(None)
+    if not found:
+        return None, "no_carrier"
+    if len(found) > 1:
+        return None, "pdf_dateline_multi"
+    dt = found.pop()
+    return (dt, "pdf_dateline") if _in_bounds(dt) else (None, "no_carrier")
 
 
 def cffi_get(url: str) -> Optional[str]:
@@ -417,8 +512,12 @@ def resolve_item_date(url: str, *, fetcher=None, render: bool = True) -> Tuple[O
             return dt, "presscorner_api"
     if url.lower().split("#", 1)[0].split("?", 1)[0].endswith(".pdf"):
         # A PDF is not HTML: extract_item_date on its bytes would be reading noise,
-        # and rendering it twice would cost two browser loads to learn nothing.
-        return None, "pdf_not_read"
+        # and rendering it would cost a browser load to learn nothing. Its own
+        # dateline answers instead.
+        data = pdf_get(url)
+        if data is None:
+            return None, "fetch_failed"
+        return pdf_dateline_date(pdf_first_page_text(data))
     html = escalating_get(url, fetcher=fetcher, render=render)
     if html is None:
         return None, "fetch_failed"

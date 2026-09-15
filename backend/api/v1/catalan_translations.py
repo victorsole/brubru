@@ -35,6 +35,7 @@ from typing import Dict, Optional, Tuple
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import and_, func, or_, text
 from sqlalchemy.orm import Session
@@ -406,7 +407,7 @@ async def list_catalan_translations(
     category_en: Optional[str] = Query(None, description="Brubru category (English name)."),
     engine: Optional[str] = Query(None, description="softcatala | sonnet"),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows with updated_at >= value."),
-    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
     limit: int = Query(50, ge=1, le=200, description="Items per page (default 50, max 200)."),
     page: int = Query(1, ge=1),
     db: Session = Depends(get_db),

@@ -1045,6 +1045,12 @@
                       ],
                       "query": [
                         {
+                          "key": "version",
+                          "value": "latest",
+                          "disabled": true,
+                          "description": "`latest` (default): the newest consolidated text. `original`: the act as adopted."
+                        },
+                        {
                           "key": "force_recompute",
                           "value": "False",
                           "disabled": true,
@@ -1058,7 +1064,7 @@
                         }
                       ]
                     },
-                    "description": "**What it does**\nExtracts the formal definitions article (typically Article 3 or 4) from an EU law \u2014 the terms the law defines authoritatively for its own scope \u2014 with each term + its definition text parsed from the Formex XML.\n\n**When to use it**\nWhen you need to know exactly how a law defines terms like \"very large online platform\" (DSA), \"AI system\" (AI Act), \"personal data\" (GDPR) without reading the full text. Critical for compliance scope analysis.\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n- `force_recompute` (query, default false) \u2014 local dev only.\n- `body_threshold` (default 500) \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32022R2065/defined-terms\n```\n\n**You get back**\nA `DefinedTermsResponse` with `celex`, `terms` (term -> definition), `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nCached deterministically (definitions don't change after adoption)."
+                    "description": "**What it does**\nExtracts the formal definitions article (typically Article 3 or 4) from an EU law \u2014 each defined term and its definition text. By default it reads the **latest consolidated version**, so definitions added or rewritten by later amendments are included.\n\n**When to use it**\nWhen you need to know exactly how a law defines terms like \"very large online platform\" (DSA), \"AI system\" (AI Act), \"personal data\" (GDPR) without reading the full text. Critical for compliance scope analysis.\n\n**Input**\n- `celex` (path) \u2014 legal identifier of the base act.\n- `version` (query, default `latest`) \u2014 `latest` reads the newest consolidated text; `original` reads the act as adopted.\n- `force_recompute` (query, default false) \u2014 bypass the cache.\n- `body_threshold` (default 500) \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32024R1689/defined-terms\nGET /api/v2/legislative/eur-lex/laws/32024R1689/defined-terms?version=original\n```\n\n**You get back**\nA `DefinedTermsResponse` with `celex`, `terms` (term -> definition), `version_requested`, `version_used`, `source_celex` (the consolidated version read, e.g. `02024R1689-20260727`), `version_date`, `source_url`, `fallback_reason`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nDefinitions change when an act is amended. The latest consolidated version is looked up in Cellar (refreshed every six hours) and definitions are cached per consolidated version. An act with no consolidation is answered from its original text, and `fallback_reason` says so."
                   },
                   "response": []
                 },

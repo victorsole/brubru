@@ -18,6 +18,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -99,8 +100,8 @@ async def list_calendar_events(
     date_from: Optional[date] = Query(None),
     date_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync — events last_updated >= value."),
-    updated_to: Optional[datetime] = Query(None),
-    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."),

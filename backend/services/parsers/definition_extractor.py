@@ -53,10 +53,40 @@ _POINT_DEF_RE = re.compile(
     rf"[{_QOPEN_CHARS}]"
     rf"(?P<term>[^{_QCLOSE_CHARS}\n]{{1,100}}?)"
     rf"[{_QCLOSE_CHARS}]"
+    # "(14a) 'micro, small and medium-sized enterprise' or 'SME' means ..." (AI Act,
+    # as amended by Regulation (EU) 2026/1744). Without this the pattern matched from
+    # the SECOND quote, stored only "SME" and lost the point number.
+    rf"(?:\s*(?:or|,)\s*[{_QOPEN_CHARS}](?P<alt>[^{_QCLOSE_CHARS}\n]{{1,40}}?)[{_QCLOSE_CHARS}])?"
     rf"\s*{_MEANS}\s+"
     rf"(?P<body>[^;]{{5,2000}}?);",
     re.IGNORECASE | re.DOTALL,
 )
+
+
+# Point-by-point parsing (15 Sep 2026). The single pattern above needs the term, then
+# "means", then a body ending in ";". Real definitions articles break all three: GDPR
+# Art 4(11) "'consent' of the data subject means", 4(16) "'main establishment' means:
+# (a) ...; (b) ...", and the LAST point ends with "." (4(26)). Splitting the article at
+# its numbered points and reading each point whole got all 26 GDPR definitions where the
+# pattern got 23.
+_POINT_SPLIT_RE = re.compile(rf"(?:^|\s)\((?P<point>\d{{1,3}}[a-z]?)\)\s+(?=[{_QOPEN_CHARS}])")
+_SEGMENT_RE = re.compile(
+    rf"^[{_QOPEN_CHARS}](?P<term>[^{_QCLOSE_CHARS}\n]{{1,100}}?)[{_QCLOSE_CHARS}]"
+    rf"(?:\s*(?:or|,)\s*[{_QOPEN_CHARS}](?P<alt>[^{_QCLOSE_CHARS}\n]{{1,40}}?)[{_QCLOSE_CHARS}])?"
+    rf"(?P<qual>,?\s+[^{_QOPEN_CHARS}{_QCLOSE_CHARS};:\n]{{1,80}}?,?)?"  # "'subject', for the purpose of real-world testing, means"
+    rf"\s*{_MEANS}\s*:?\s+(?P<body>.{{5,3000}})$",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _point_segments(body: str) -> list[tuple[str, str]]:
+    """[(point, text)] for an article whose definitions are numbered points."""
+    marks = list(_POINT_SPLIT_RE.finditer(body))
+    out = []
+    for i, m in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(body)
+        out.append((m.group("point"), body[m.end():end].strip()))
+    return out
 
 
 @dataclass
@@ -152,20 +182,38 @@ def extract_definitions(parsed_law: Any) -> list[DefinitionEntry]:
             continue
         body = _article_text(article)
         akey = _article_key(article)
+        segments = _point_segments(body)
+        parsed = []
+        for point, seg in segments:
+            sm = _SEGMENT_RE.match(seg)
+            if not sm:
+                continue
+            text = re.sub(r"\s+", " ", sm.group("body")).strip()
+            text = re.sub(r"(?:;\s*(?:and|or)?|\.)\s*$", "", text).strip()
+            if len(text) < 5:
+                continue
+            term = sm.group("term").strip().strip(",")
+            parsed.append(DefinitionEntry(term=term, definition=text, article=akey, point=point))
+            alt = (sm.group("alt") or "").strip().strip(",")
+            if alt and alt.lower() != term.lower():
+                parsed.append(DefinitionEntry(term=alt, definition=text, article=akey, point=point))
+        # Use the point parse only when it read the numbered points; an article without
+        # them (or text the split cannot see) keeps the single-pattern path below.
+        if len(parsed) >= 3:
+            out.extend(parsed)
+            continue
         for m in _POINT_DEF_RE.finditer(body):
             term = m.group("term").strip().strip(",")
             body_text = m.group("body").strip().rstrip(";,.")
             body_text = re.sub(r"\s+", " ", body_text)
             if not term or len(body_text) < 5:
                 continue
-            out.append(
-                DefinitionEntry(
-                    term=term,
-                    definition=body_text,
-                    article=akey,
-                    point=(m.group("point") or None),
-                )
-            )
+            point = m.group("point") or None
+            out.append(DefinitionEntry(term=term, definition=body_text, article=akey, point=point))
+            alt = (m.group("alt") or "").strip().strip(",")
+            if alt and alt.lower() != term.lower():
+                # The short form is a defined term in its own right ("SME").
+                out.append(DefinitionEntry(term=alt, definition=body_text, article=akey, point=point))
     return out
 
 

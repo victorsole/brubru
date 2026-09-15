@@ -82,7 +82,7 @@ def test_an_undated_static_page_is_rendered_before_giving_up(monkeypatch):
     monkeypatch.setattr(item_date, "browser_get", lambda u, fetcher=None, **kw:
                         '<time class="date" datetime="09/09/2026">9 September</time>')
     dt, prov = resolve_item_date("https://www.eca.europa.eu/en/news/NEWS-SR-2026-21")
-    assert (dt.date().isoformat(), prov) == ("2026-09-09", "time_datetime_rendered")
+    assert (dt.date().isoformat(), prov) == ("2026-09-09", "eca_meta_item_time_rendered")
 
 
 def test_a_page_with_no_carrier_anywhere_says_so(monkeypatch):
@@ -115,8 +115,49 @@ def test_a_fetch_failure_is_named_not_guessed(monkeypatch):
 
 def test_a_pdf_is_not_parsed_as_html(monkeypatch):
     monkeypatch.setattr(item_date, "escalating_get", _never)
+    monkeypatch.setattr(item_date, "browser_get", _never)
+    monkeypatch.setattr(item_date, "pdf_get", lambda u: None)
     url = "https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260123en.pdf"
-    assert resolve_item_date(url) == (None, "pdf_not_read")
+    assert resolve_item_date(url) == (None, "fetch_failed")
+
+
+def test_a_pdf_is_dated_by_its_own_dateline(monkeypatch):
+    """The CJEU links press releases as PDFs; the listing used to give them the 1st of
+    the upload folder's month (50 rows, 15 Sep 2026)."""
+    monkeypatch.setattr(item_date, "escalating_get", _never)
+    monkeypatch.setattr(item_date, "pdf_get", lambda u: b"%PDF-stub")
+    monkeypatch.setattr(item_date, "pdf_first_page_text", lambda b: (
+        "Court of Justice of the European Union PRESS RELEASE No 59/26 Luxembourg, 21  April 2026 "
+        "Judgment of the Court in Case C-418/24"))
+    dt, how = resolve_item_date("https://curia.europa.eu/site/upload/docs/application/pdf/2026-04/cp260059en.pdf")
+    assert (dt.date().isoformat(), how) == ("2026-04-21", "pdf_dateline")
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("Luxembourg, 16 April  2026 Judgment", ("2026-04-16", "pdf_dateline")),
+    ("no dateline at all", (None, "no_carrier")),
+    ("Luxembourg, 16 April 2026 ... see the order of Luxembourg, 3 March 2025", (None, "pdf_dateline_multi")),
+])
+def test_the_pdf_dateline_refuses_rather_than_guesses(text, expected):
+    dt, how = item_date.pdf_dateline_date(text)
+    assert ((dt.date().isoformat() if dt else None), how) == expected
+
+
+def test_edps_reads_the_full_nodes_leading_date_not_the_sidebar():
+    """Every <time> on an EDPS page is a sidebar item: the generic carrier read 16 Aug
+    2026 for a release of 8 Jan 2025."""
+    html = """<aside><time datetime="2026-08-16T12:00:00Z">16 August 2026</time></aside>
+    <main><article class="node node--type-edpsweb-press-release node--view-mode-full">
+      <div>8 Jan 2025</div><div>Press Release</div><h1>EDPS reprimands Frontex</h1></article></main>"""
+    dt, how = item_date.host_item_date("https://www.edps.europa.eu/press-publications/press-news/press-releases/2025/x", html)
+    assert (dt.date().isoformat(), how) == ("2025-01-08", "edps_full_node_leading_date")
+
+
+def test_eca_reads_its_meta_item_time_not_the_related_cards():
+    html = """<span class="meta-item"><time>24/04/2026</time></span>
+    <div class="card-body"><time datetime="2020-06-11">15/09/2026</time></div>"""
+    dt, how = item_date.host_item_date("https://www.eca.europa.eu/en/news/NEWS2026_05_NEWSLETTER_01", html)
+    assert (dt.date().isoformat(), how) == ("2026-04-24", "eca_meta_item_time")
 
 
 def test_no_url_is_an_answer_not_a_crash():
@@ -197,3 +238,13 @@ def test_the_backfill_runs_the_same_chain():
     assert bf._escalating_get is item_date.escalating_get
     assert bf._browser_get is item_date.browser_get
     assert bf._cffi_get is item_date.cffi_get
+
+
+def test_chips_ju_reads_its_publication_date_label_not_the_deadlines():
+    """Chips JU pages cite call openings and deadlines in the body; a generic carrier
+    stored those (14 July for an item published 26 June). The page labels its own date,
+    and the labelled dates follow the CMS record order on all 9 items (15 Sep 2026)."""
+    html = """<div style="padding-left: 50px;"><b>PUBLICATION DATE:</b></div><div>08/07/2026</div>
+    <div class="ck-content"><p>The calls opened on 7 July 2026.</p><p>- 16 September 2026: Resilience calls</p></div>"""
+    dt, how = item_date.host_item_date("https://www.chips-ju.europa.eu/NewsDetails?id=2e25dc95-c37a-f111-ab0f-7ced8d726cac", html)
+    assert (dt.date().isoformat(), how) == ("2026-07-08", "chips_publication_date_label")

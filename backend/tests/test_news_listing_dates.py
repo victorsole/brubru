@@ -272,6 +272,16 @@ def test_a_year_only_url_date_gives_way_to_the_cards_real_date():
     assert [i["news_date"] for i in items] == [date(2026, 9, 10), date(2026, 9, 9)]
 
 
+def test_a_month_only_url_without_a_card_date_goes_out_undated():
+    """The CJEU's /pdf/2026-04/ gave the 1st of April to 50 rows (15 Sep 2026). Undated,
+    the write guard dates a new item from its PDF, and the upsert leaves a stored
+    (corrected) date alone rather than writing the placeholder back on every sync."""
+    from services.scrapers.bespoke_news_scraper import parse_bespoke
+    listing = """<ul><li><a href="https://curia.europa.eu/site/upload/docs/application/pdf/2026-04/cp260059en.pdf">Judgment of the Court in Case C-418/24 [Obadal]</a></li></ul>"""
+    items = parse_bespoke(listing, _bespoke("CJEU"))
+    assert [i["news_date"] for i in items] == [None]
+
+
 def test_a_day_precise_url_date_is_kept_over_the_card():
     # The Council's URL carries /YYYY/MM/DD/: that is the publisher's own date.
     from services.scrapers.bespoke_news_scraper import parse_bespoke
@@ -371,3 +381,30 @@ def test_europol_feed_has_no_date_and_stays_undated_for_the_write_guard():
             "<description>Europol has supported a major operation.</description></item>")
     items = parse_rss(_rss(item), "https://www.europol.europa.eu/rss", "news")
     assert [i["news_date"] for i in items] == [None]
+
+
+ENISA_CARD = """<div class="publications-item"><div class="publication-image">
+<a href="/news/the-cra-single-reporting-platform-is-launched " title="Acess to the publication: The CRA Single Reporting Platform is launched "><article><img src="/x.png" alt="The CRA Single Reporting Platform is now live" /></article></a></div>
+<div class="publication-content"><h3><a href="/news/the-cra-single-reporting-platform-is-launched " title="Acess to the publication: The CRA Single Reporting Platform is launched ">The CRA Single Reporting Platform is launched </a></h3>
+<p class="metadata"><span class="type">Press Release</span><span class="date"><time datetime="2026-09-11T14:00:26+03:00">11 September, 2026</time></span></p></div></div>
+<div class="publications-item"><div class="publication-image">
+<a href="/news/nis360-the-bigger-picture-on-maturity" title="Banner"><article><img src="/y.png" alt="Banner promoting the ENISA NIS 360 report published in May 2026" /></article></a></div>
+<div class="publication-content"><h3><a href="/news/nis360-the-bigger-picture-on-maturity">NIS360: The bigger picture on maturity</a></h3><a href="/news/nis360-the-bigger-picture-on-maturity">Read more about this story</a></div></div>"""
+
+
+def test_a_card_title_comes_from_its_headline_not_the_image_link():
+    """ENISA links each card twice, the image first: 19 of 20 stored titles were the
+    link's `title` attribute ("Acess to the publication: ...") or the image alt text
+    (15 Sep 2026)."""
+    from services.scrapers.bespoke_news_scraper import parse_bespoke
+    items = parse_bespoke(ENISA_CARD, _bespoke("ENISA"))
+    assert [i["title"] for i in items] == [
+        "The CRA Single Reporting Platform is launched", "NIS360: The bigger picture on maturity"]
+    assert all("_title_source" not in i for i in items)
+
+
+def test_an_attribute_title_loses_its_call_to_action_prefix():
+    from services.scrapers.bespoke_news_scraper import _resolve_title_with_source
+    assert _resolve_title_with_source(
+        'title="Acess to the publication: ENISA scales up its role in the CVE Program"', "<img/>", "/news/x"
+    ) == ("ENISA scales up its role in the CVE Program", "attr")

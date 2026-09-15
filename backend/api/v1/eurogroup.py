@@ -20,6 +20,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -67,7 +68,7 @@ def _params(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(25, ge=1, le=100),
     page: int = Query(1, ge=1),
 ):

@@ -14,6 +14,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
@@ -103,8 +104,8 @@ async def list_publications(
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows fetched_at >= value. Returns rows ordered by fetched_at desc when set."),
-    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows fetched_at <= value."),
-    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows fetched_at <= value."),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),

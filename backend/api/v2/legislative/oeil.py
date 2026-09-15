@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -67,8 +68,8 @@ async def list_procedures(
     rapporteur_mep_id: Optional[str] = Query(None),
     status: Optional[str] = Query(None, description="Carriage status"),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
-    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),

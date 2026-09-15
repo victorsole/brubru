@@ -26,6 +26,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
+from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -572,8 +573,8 @@ async def list_laws(
     published_to: Optional[date] = Query(None, description="Adoption date <= value (YYYY-MM-DD). Preferred name."),
     published_end: Optional[date] = Query(None, description="Alias of published_to (GovClipping-compatible). 422 if it conflicts."),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound (updated_at >= value)."),
-    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound (updated_at <= value)."),
-    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound (updated_at <= value)."),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)."),
     include_orphans: bool = Query(False, description="Include rows with no CELEX (orphaned annexes). Default false."),
     include_body: bool = Query(False, description="Inline each row's full body (Cellar XHTML). Caps the page to 10 to bound latency. Default false — call /laws/{celex}/text for a single body."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
@@ -721,36 +722,40 @@ def recital_article_map(
     response_model=DefinedTermsResponse,
     summary="Legal definitions from one EU act — terms the law itself defines authoritatively",
     description="""**What it does**
-Extracts the formal definitions article (typically Article 3 or 4) from an EU law — the terms the law defines authoritatively for its own scope — with each term + its definition text parsed from the Formex XML.
+Extracts the formal definitions article (typically Article 3 or 4) from an EU law — each defined term and its definition text. By default it reads the **latest consolidated version**, so definitions added or rewritten by later amendments are included.
 
 **When to use it**
 When you need to know exactly how a law defines terms like "very large online platform" (DSA), "AI system" (AI Act), "personal data" (GDPR) without reading the full text. Critical for compliance scope analysis.
 
 **Input**
-- `celex` (path) — legal identifier.
-- `force_recompute` (query, default false) — local dev only.
+- `celex` (path) — legal identifier of the base act.
+- `version` (query, default `latest`) — `latest` reads the newest consolidated text; `original` reads the act as adopted.
+- `force_recompute` (query, default false) — bypass the cache.
 - `body_threshold` (default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
-GET /api/v2/legislative/eur-lex/laws/32022R2065/defined-terms
+GET /api/v2/legislative/eur-lex/laws/32024R1689/defined-terms
+GET /api/v2/legislative/eur-lex/laws/32024R1689/defined-terms?version=original
 ```
 
 **You get back**
-A `DefinedTermsResponse` with `celex`, `terms` (term -> definition), `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.
+A `DefinedTermsResponse` with `celex`, `terms` (term -> definition), `version_requested`, `version_used`, `source_celex` (the consolidated version read, e.g. `02024R1689-20260727`), `version_date`, `source_url`, `fallback_reason`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.
 
 **Data freshness**
-Cached deterministically (definitions don't change after adoption).""",
+Definitions change when an act is amended. The latest consolidated version is looked up in Cellar (refreshed every six hours) and definitions are cached per consolidated version. An act with no consolidation is answered from its original text, and `fallback_reason` says so.""",
 )
 def defined_terms(
     celex: str,
+    version: str = Query("latest", pattern="^(latest|original)$",
+                         description="`latest` (default): the newest consolidated text. `original`: the act as adopted."),
     force_recompute: bool = Query(False),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> DefinedTermsResponse:
     return _v1_legal_text.defined_terms(
-        celex, force_recompute=force_recompute, body_threshold=body_threshold, user=user, db=db
+        celex, version=version, force_recompute=force_recompute, body_threshold=body_threshold, user=user, db=db
     )
 
 

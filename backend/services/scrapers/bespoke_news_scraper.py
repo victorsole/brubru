@@ -57,22 +57,42 @@ def _slug_title(path: str) -> str:
     return (text[:1].upper() + text[1:]) if text else ""
 
 
-def _resolve_title(attrs: str, inner: str, path: str) -> str | None:
-    """Title resolution: anchor text -> aria-label/title attr -> img alt -> slug."""
+# A title attribute that is a call to action, not the item's title. ENISA writes
+# `title="Acess to the publication: <title>"` (sic) on every card link.
+# Link text that is a button, not a headline. Kept out of the "text" source so it can
+# never replace a real title taken from a card's other link.
+_CTA_TEXT = re.compile(r"^\s*(?:read|learn|find out|discover|see|view)\s+(?:more|all|the full)\b|"
+                       r"^\s*acc?ess\s+(?:to\s+)?the\s+(?:publication|article|story)\b", re.I)
+_ATTR_TITLE_PREFIX = re.compile(r"^\s*(?:acc?ess\s+to\s+the\s+publication|read\s+more)\s*:\s*", re.I)
+
+
+def _resolve_title_with_source(attrs: str, inner: str, path: str) -> tuple[str | None, str]:
+    """(title, source): anchor text -> aria-label/title attr -> img alt -> slug.
+
+    The source matters because a card links one item twice: an image link first (no
+    text, so the title comes from an attribute or the image's alt text: "Banner
+    promoting the ENISA NIS 360 report...") and the headline link after it. The caller
+    lets a later anchor-TEXT title replace an earlier fallback (15 Sep 2026: 19 of 20
+    ENISA titles were the attribute or the alt text)."""
     t = _clean(_html.unescape(inner))
-    if 15 <= len(t) <= 220:
-        return t
+    if 15 <= len(t) <= 220 and not _CTA_TEXT.match(t):
+        return t, "text"
     for a in ("aria-label", "title"):
         v = _attr(a, attrs)
         if v:
-            v = _clean(v)
+            v = _ATTR_TITLE_PREFIX.sub("", _clean(_html.unescape(v)))
             if 15 <= len(v) <= 220:
-                return v
+                return v, "attr"
     alt = re.search(r'alt="([^"]{15,220})"', inner)
     if alt:
-        return _clean(alt.group(1))
+        return _clean(alt.group(1)), "alt"
     st = _slug_title(path)
-    return st if len(st) >= 12 else None
+    return (st, "slug") if len(st) >= 12 else (None, "none")
+
+
+def _resolve_title(attrs: str, inner: str, path: str) -> str | None:
+    """Title resolution: anchor text -> aria-label/title attr -> img alt -> slug."""
+    return _resolve_title_with_source(attrs, inner, path)[0]
 
 
 # Per-site config: institution, source_key, url (news page), link_re (matched
@@ -246,6 +266,7 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
     limit = cfg.get("limit")
     out: List[Dict] = []
     seen: set = set()
+    by_key: Dict[str, Dict] = {}
     soup = None      # parsed once, and only if some item needs its card read
 
     def _absolute(href: str) -> str:
@@ -268,48 +289,50 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
             continue
         if not link_re.search(path):
             continue
-        title = _resolve_title(attrs, inner, path)
+        title, title_source = _resolve_title_with_source(attrs, inner, path)
         if not title:
             continue
         url = href if href.startswith("http") else urljoin(resolve_base, href)
         key = _canon_url(url)
         if key in seen:
+            prev = by_key.get(key)
+            if prev is not None and title_source == "text" and prev["_title_source"] != "text":
+                prev["title"], prev["_title_source"] = title[:480], "text"
             continue
         seen.add(key)
         nd = None
         day_precise = False
         if date_re:
             dm = date_re.search(url)
-            if dm:
+            if dm and len(dm.groups()) >= 3:
                 g = dm.groups()
                 try:
-                    if len(g) >= 3:
-                        nd = date(int(g[0]), int(g[1]), int(g[2]))
-                        day_precise = True
-                    elif len(g) == 2:
-                        nd = date(int(g[0]), int(g[1]), 1)
-                    elif len(g) == 1:
-                        nd = date(int(g[0]), 1, 1)
+                    nd = date(int(g[0]), int(g[1]), int(g[2]))
+                    day_precise = True
                 except ValueError:
                     nd = None
         if not day_precise:
-            # A URL that names only a year or a month is not a publication date:
-            # FRA's /news/2026/ stored 1 January on all 66 rows, EDPS's on all 24.
-            # The card's real date replaces it. Where the card has none, the old
-            # placeholder is left as it was (CJEU's PDF links, part of EDPS) -- that
-            # is a separate, reported defect, not something to hide by dropping rows.
+            # A URL that names only a year or a month is not a publication date, and
+            # it is never stored as one: FRA's /news/2026/ became 1 January on 57 rows,
+            # the CJEU's /pdf/2026-04/ the 1st of April on 50 (15 Sep 2026). The card's
+            # real date is used; without one the item goes out UNDATED, so the write
+            # guard dates a new item from its own page (or its PDF's dateline) or
+            # refuses it, and the upsert leaves an existing row's date alone instead of
+            # overwriting a corrected date with the placeholder on every sync.
             if soup is None:
                 soup = BeautifulSoup(html or "", "html.parser")
-            card_nd = _card_date(soup, key, _is_item_link, _absolute)
-            if card_nd is not None:
-                nd = card_nd
-        out.append({
+            nd = _card_date(soup, key, _is_item_link, _absolute)
+        item = {
             "title": title[:480], "summary": None, "news_date": nd, "image_url": None,
             "source_url": url, "external_id": _slug_id(url), "item_type": cfg.get("type", "news"),
             "institution": cfg["institution"], "commission_dg": None,
             "source_key": cfg.get("source_key") or cfg["institution"],
-            "entry_key": key,
-        })
+            "entry_key": key, "_title_source": title_source,
+        }
+        by_key[key] = item
+        out.append(item)
+    for item in out:
+        item.pop("_title_source", None)
     return out
 
 

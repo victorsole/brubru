@@ -13,6 +13,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import Any, Dict, List, Optional  # noqa: F401
 
 from fastapi import APIRouter, Depends, Path, Query, Request  # noqa: F401
+from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session  # noqa: F401
 
 from core.database import get_db  # noqa: F401
@@ -72,8 +73,8 @@ async def list_resolutions(
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
-    updated_to: Optional[datetime] = Query(None),
-    updated_end: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None),
+    updated_end: Optional[UpperBoundDatetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),

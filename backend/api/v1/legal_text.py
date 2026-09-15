@@ -40,6 +40,14 @@ class RecitalArticleMapResponse(BaseModel):
 class DefinedTermsResponse(BaseModel):
     celex: str
     terms: dict = Field(..., description="Term -> {term, definition, article, point}")
+    # Which text the terms were read from (15 Sep 2026). Definitions DO change after
+    # adoption: an amending act adds or rewrites them, so the version is part of the answer.
+    version_requested: str = Field("latest", description="`latest` (the newest consolidated text) or `original` (the act as adopted).")
+    version_used: str = Field("latest", description="The text actually read: `latest` or `original`. Differs from `version_requested` only when `fallback_reason` says why.")
+    source_celex: Optional[str] = Field(None, description="Identifier of the text read: the consolidated version (e.g. `02024R1689-20260727`) or the act itself.")
+    version_date: Optional[str] = Field(None, description="Date of the consolidated version read (YYYY-MM-DD); null for the original.")
+    source_url: Optional[str] = Field(None, description="EUR-Lex page of the text read.")
+    fallback_reason: Optional[str] = Field(None, description="Why `latest` was answered from the original: `no_consolidated_version` (never amended, or none published), `consolidated_text_unavailable` or `consolidated_parse_empty`.")
     # Body fields composed from the concatenated definitions, useful as a
     # standalone glossary view of the law. body_html is a semantic <dl> with
     # one <dt>/<dd> pair per term; body_txt is a plain-text rendering.
@@ -185,51 +193,58 @@ def recital_article_map(
     response_model=DefinedTermsResponse,
     summary="Legal definitions from one EU act — terms the law itself defines authoritatively",
     description="""**What it does**
-Extracts the formal definitions article (typically Article 3 or Article 4) from an EU law — the terms the law defines authoritatively for its own scope. Returns each defined term + its authoritative definition text, parsed from the Formex XML.
+Extracts the formal definitions article (typically Article 3 or Article 4) from an EU law — the terms the law defines authoritatively for its own scope — with each term and its definition text. By default it reads the **latest consolidated version**, so definitions added or rewritten by later amendments are included.
 
 **When to use it**
-When you need to know exactly how a law defines terms like "very large online platform" (DSA), "AI system" (AI Act), "personal data" (GDPR) — without reading the full text. Critical for compliance analysis where the definitions determine the scope of obligations.
+When you need to know exactly how a law defines terms like "very large online platform" (DSA), "AI system" (AI Act), "personal data" (GDPR) without reading the full text. Critical for compliance analysis, where the definitions determine the scope of obligations.
 
 **Input**
-- `celex` (path) — legal identifier of the act.
-- `force_recompute` (query, default false) — set true locally to bypass the cache.
+- `celex` (path) — legal identifier of the act (the base act, e.g. `32024R1689`).
+- `version` (query, default `latest`) — `latest` reads the newest consolidated text; `original` reads the act as adopted.
+- `force_recompute` (query, default false) — bypass the cache.
 - `body_threshold` (default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
-GET /api/v1/legal-text/32022R2065/defined-terms
+GET /api/v1/legal-text/32024R1689/defined-terms
+GET /api/v1/legal-text/32024R1689/defined-terms?version=original
 ```
-Returns 23 DSA definitions (~7.9 KB) including "online platform", "recipient of the service", "illegal content".
+The first returns the AI Act's definitions from its latest consolidated version, including "SME" and "small mid-cap enterprise" added by Regulation (EU) 2026/1744; the second the 65 definitions of the act as adopted.
 
 **You get back**
-A `DefinedTermsResponse` with `celex`, `terms` (dict: term → definition text), `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.
-
-**Production cache state (2 May 2026):** DSA (`32022R2065`) fully cached. GDPR, AI Act, DORA compute on first request but the underlying Formex XML isn't deployed to Railway — backfill queued.
+A `DefinedTermsResponse` with `celex`, `terms` (term → {term, definition, article, point}), `version_requested`, `version_used`, `source_celex` (e.g. `02024R1689-20260727`), `version_date`, `source_url`, `fallback_reason`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.
 
 **Data freshness**
-Cached deterministically (the underlying definitions don't change after adoption). New entries land when an act is added to the cache.""",
+Definitions change when an act is amended. The latest consolidated version is looked up in Cellar (refreshed every six hours) and its definitions are cached per consolidated version, so a new consolidation is read on first request. An act never amended has no consolidation: `latest` then answers from the original text and says so in `fallback_reason`.""",
 )
 def defined_terms(
     celex: str,
+    version: str = Query("latest", pattern="^(latest|original)$",
+                         description="`latest` (default): the newest consolidated text. `original`: the act as adopted."),
     force_recompute: bool = Query(False),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> DefinedTermsResponse:
-    from services.parsers.definition_store import get_or_compute_map as _get_defs
+    from services.parsers.definition_store import get_defined_terms
 
-    mapping = _get_defs(db, celex, force_recompute=force_recompute)
-    if mapping is None:
+    result = get_defined_terms(db, celex, version=version, force_recompute=force_recompute)
+    if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"error": "not_found", "detail": f"CELEX {celex} not available", "resource": "law", "id": celex},
         )
+    mapping = result["terms"]
     body_html, body_text, has_body = _compose_definitions_body(mapping, threshold=body_threshold)
+    computed = result.get("computed_at")
     return DefinedTermsResponse(
-        celex=celex, terms=mapping,
+        celex=celex.upper(), terms=mapping,
+        version_requested=result["version_requested"], version_used=result["version_used"],
+        source_celex=result["source_celex"], version_date=result["version_date"],
+        source_url=result["source_url"], fallback_reason=result["fallback_reason"],
         has_body=has_body, body_html=body_html, body_txt=body_text,
-        public_url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}",
-        creation_date=datetime.utcnow(),
+        public_url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex.upper()}",
+        creation_date=datetime.fromisoformat(computed) if computed else datetime.utcnow(),
     )
 
 
