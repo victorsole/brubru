@@ -559,7 +559,7 @@ async def cron_sync_daily(
 ):
     """
     Daily sync (04:00 UTC): consultations + delegated/implementing acts + TRIS + EU sanctions +
-    transparency register + comitology + JRC + infringements + EESC + CoR + euagenda.
+    transparency register + comitology + JRC + infringements + EESC + CoR (euagenda retired 15 Sep 2026).
 
     Cadence: once per day. Sources that move a few times per week.
     """
@@ -583,7 +583,9 @@ async def cron_sync_daily(
     results["infringements"] = await _run_script_async("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
     results["eesc"] = await _run_script_async("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
     results["cor"] = await _run_script_async("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
-    results["euagenda"] = await _run_script_async("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
+    # euagenda RETIRED 15 Sep 2026 (Victor): the site sits behind a Cloudflare bot
+    # challenge and its robots.txt reserves text-and-data-mining rights (DSM Art. 4),
+    # so Brubru no longer scrapes it. Existing THIRD_PARTY rows stay as history.
     # TED (tenders). This is the INGEST -- it fetches notices published in the
     # last 2 days from api.ted.europa.eu and inserts the new ones. Until 10 Aug
     # 2026 the only job named "tenders" here was the description backfill below,

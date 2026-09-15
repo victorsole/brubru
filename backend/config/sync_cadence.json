@@ -96,8 +96,8 @@
     },
     {
       "path_prefix": "/api/v1/calendar",
-      "source": "Multi-source: EP + Council + Commission + euagenda + College",
-      "script": "scripts/sync_eu_calendar.py + scripts/sync_euagenda.py + scripts/sync_committee_agendas.py + scripts/sync_commission_calendar_urls_all.py",
+      "source": "Multi-source: EP + Council + Commission + College (euagenda retired 15 Sep 2026)",
+      "script": "scripts/sync_eu_calendar.py + scripts/sync_committee_agendas.py + scripts/sync_commission_calendar_urls_all.py",
       "tier": "hot_6h",
       "notes": "Calendar staleness is a conversion-killer. 6h cadence is minimum acceptable."
     },
