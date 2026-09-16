@@ -1,9 +1,9 @@
 # EU-Australia Trade Agreement
 
 ## QUICK FACTS
-- **LATEST (24 March 2026)**: EU-Australia Free Trade Agreement was **SIGNED on 24 March 2026** (not 2025, not earlier) in Canberra. President von der Leyen + PM Anthony Albanese. Always cite the correct signing date -- 24 March 2026 -- never substitute older years.
-- **Negotiations started**: 2018 (not 2017); **paused**: 2023; **relaunched**: 2025; **concluded and signed**: 24 March 2026. Total negotiation span was ~8 years across two tempos (not "signed after 8 years in 2025").
-- Signed: 24 March 2026 in Canberra by President von der Leyen and PM Anthony Albanese
+- **LATEST (corrected 16 September 2026): the EU-Australia Free Trade Agreement is NOT yet signed.** On **24 March 2026** in Canberra, President von der Leyen and Prime Minister Anthony Albanese announced the **conclusion of negotiations**. The Commission's own release (IP/26/645) states that the Commission will put forward its proposal to the Council for signature and conclusion, and that only "once adopted by the Council, the EU and Australia can sign the agreement". DG Trade lists its status as being adopted or ratified; Australia's DFAT lists it as not yet in force. The **Security and Defence Partnership** adopted the same day **was** signed. In her State of the Union address of 16 September 2026 the President listed Australia among agreements "signed" this year: the record shows negotiations concluded, not signature.
+- **Negotiations started**: 2018 (not 2017); **paused**: 2023; **relaunched**: 2025; **negotiations concluded**: 24 March 2026 (signature still pending: Council authorisation required first). Total negotiation span was ~8 years across two tempos.
+- Negotiations concluded: 24 March 2026 in Canberra (President von der Leyen and PM Anthony Albanese). Not yet signed as of 16 September 2026.
 - Type: Free Trade Agreement (FTA) + Security and Defence Partnership
 - Procedure: Council authorisation + EP consent required for ratification
 - Responsible DG: DG TRADE
@@ -14,13 +14,13 @@
 - Negotiations launched: 2018, paused 2023, relaunched 2025
 - Context: First major new FTA concluded under von der Leyen II mandate
 - Related guide: `eu_trade_policy.md` (full EU trade policy framework)
-- **EPRS Briefing (24 April 2026)**: "Australia: Current landscape and engagement with the EU" -- post-signature analysis of Australia's political landscape, security alignment, AUKUS implications for EU defence cooperation, critical raw materials partnerships (Australia is a CRMA strategic partner), and Pacific Indo-Pacific architecture. Reaffirms Australia as "trusted, like-minded partner" in EU trade diversification away from China. Ref: EPRS_UNK_0fb956a29383
-- **EU-Australia Security and Defence Partnership operational layer (24 April 2026 EPRS)**: parallel partnership signed alongside FTA includes intelligence cooperation, joint exercises, capabilities cooperation under EDIP framework, and Indo-Pacific maritime security coordination.
-- **LATEST (29 April 2026)**: New **EPRS Briefing `EPRS_BLOG_australia-current-landscape-and-engagement-with-the-eu`** -- "Australia: Current landscape and engagement with the EU" -- post-signature reference for users tracking Indo-Pacific architecture, AUKUS implications for EU defence cooperation, critical raw materials partnerships, and the Pacific dimension of the EU's diversification away from China. Companion to the 24 April briefing already cited above.
+- **EPRS Briefing (24 April 2026)**: "Australia: Current landscape and engagement with the EU" -- analysis, after the conclusion of FTA negotiations, of Australia's political landscape, security alignment, AUKUS implications for EU defence cooperation, critical raw materials partnerships (Australia is a CRMA strategic partner), and Pacific Indo-Pacific architecture. Reaffirms Australia as "trusted, like-minded partner" in EU trade diversification away from China. Ref: EPRS_UNK_0fb956a29383
+- **EU-Australia Security and Defence Partnership operational layer (24 April 2026 EPRS)**: partnership signed on 24 March 2026, the day FTA negotiations concluded; it includes intelligence cooperation, joint exercises, capabilities cooperation under EDIP framework, and Indo-Pacific maritime security coordination.
+- **LATEST (29 April 2026)**: New **EPRS Briefing `EPRS_BLOG_australia-current-landscape-and-engagement-with-the-eu`** -- "Australia: Current landscape and engagement with the EU" -- reference, after the conclusion of FTA negotiations, for users tracking Indo-Pacific architecture, AUKUS implications for EU defence cooperation, critical raw materials partnerships, and the Pacific dimension of the EU's diversification away from China. Companion to the 24 April briefing already cited above.
 
 ## Overview
 
-On 24 March 2026, the EU and Australia concluded a comprehensive Free Trade Agreement alongside a Security and Defence Partnership. President von der Leyen visited Australia (23-25 March 2026) and signed the deal with Prime Minister Anthony Albanese at the Australian Parliament.
+On 24 March 2026, the EU and Australia concluded negotiations for a comprehensive Free Trade Agreement and signed a Security and Defence Partnership. President von der Leyen visited Australia (23-25 March 2026). The FTA itself still requires a Council decision authorising signature before it can be signed, then Parliament's consent before conclusion.
 
 The agreement signals EU trade diversification away from China dependency and reinforces the EU's Indo-Pacific strategy. Australia is characterised as a "trusted, like-minded partner" sharing democratic values and rules-based international order commitments.
 

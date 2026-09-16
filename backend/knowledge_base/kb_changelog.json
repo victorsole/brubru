@@ -4,6 +4,30 @@
     {
       "date": "2026-09-16",
       "action": "updated",
+      "guide": "eu_islands_insular_territories",
+      "title": "EU Islands and Insular Territories",
+      "summary": "Corrected: EU Water Resilience Strategy adopted 4 June 2025 (was wrongly dated 8 December 2025)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_water_legislation",
+      "title": "EU Water Legislation",
+      "summary": "Corrected: EU Water Resilience Strategy adopted 4 June 2025 (was wrongly dated 8 December 2025)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_australia_trade_agreement",
+      "title": "EU-Australia Trade Agreement",
+      "summary": "Corrected: negotiations concluded 24 March 2026, agreement not yet signed (the guide had wrongly said signed)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
       "guide": "eu_social_dialogue",
       "title": "EU Social Dialogue and Collective Bargaining",
       "summary": "ESSPASS digitalisation of the A1 posted-worker document",

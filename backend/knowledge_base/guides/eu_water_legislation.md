@@ -12,7 +12,7 @@ Groundwater Directive: Directive 2006/118/EC, CELEX 32006L0118
 Environmental Quality Standards Directive: Directive 2008/105/EC, CELEX 32008L0105
 Floods Directive: Directive 2007/60/EC, CELEX 32007L0060
 Urban Wastewater Treatment Directive: Directive 91/271/EEC, CELEX 31991L0271 (revision adopted 2024)
-Water Resilience Strategy: COM(2025)280, launched 8 December 2025
+Water Resilience Strategy: COM(2025)280, adopted 4 June 2025
 March 2026: Commission launched call for evidence on targeted revision of EU water legislation
 Council ART Paper (April 2026): "Bridging Water Extremes: Can floods alleviate droughts?" -- EU strategic framing of water management, flood/drought interlinkages, ambition vs practical limits as water moves up the strategic agenda. URL: https://www.consilium.europa.eu/en/documents-publications/council-research-papers/
 Responsible DG: DG ENV (Environment)
@@ -53,9 +53,9 @@ EP lead committee: ENVI
 - Entered into force: 12 January 2021
 - Updated quality standards, risk-based approach, improved access to water
 
-## Water Resilience Strategy (December 2025)
+## Water Resilience Strategy (June 2025)
 
-COM(2025)280, launched 8 December 2025:
+COM(2025)280, adopted by the Commission on 4 June 2025:
 - Over 50 key actions across 3 pillars:
   1. Restore water cycles source to sea
   2. Build water-smart economy

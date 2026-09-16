@@ -352,6 +352,6 @@ Joint FEMM-LIBE report A10-0047/2026 on the importance of consent-based rape leg
 - `eurodac_asylum_migration` -- Migration and asylum (Iran conflict context)
 - `gender_equality_strategy` -- Gender equality and consent-based rape legislation
 - `eu_water_legislation` -- UWWTD oral question (debate 26 March)
-- `eu_australia_trade_agreement` -- EU-Australia trade deal signed 24 March
+- `eu_australia_trade_agreement` -- EU-Australia trade deal negotiations concluded 24 March (not yet signed)
 - `safe_rearm_europe` -- Defence context (European Council conclusions debate)
 - `iran_strait_hormuz_eu_response` -- Iran death penalty statement context

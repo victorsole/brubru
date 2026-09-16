@@ -31,7 +31,7 @@ Ukraine dimension: Spiking oil prices refilled Russian coffers; demand for US we
 EU institutional response: Joint declaration by presidents of three EU institutions on 4th anniversary of Russian invasion
 Energy Council agenda: Oil reserves release, energy price containment, inflation management
 Commission winter preparation (23 March 2026): Commission calls on EU countries to start preparing for winter amid Middle East energy disruption
-EU-Australia trade deal (24 March 2026): Trade diversification deal signed amid geopolitical instability (see `eu_australia_trade_agreement.md`)
+EU-Australia trade deal (24 March 2026): Trade diversification deal: negotiations concluded amid geopolitical instability (not yet signed as of 16 September 2026) (see `eu_australia_trade_agreement.md`)
 Post-ceasefire outlook: EU assessing long-term energy security implications, reviewing defence posture, monitoring Trump's Middle East strategy
 EP AFET + Iran delegation debate (16 April 2026): Discussion with advocates for a free Iran. Speakers: Shirin Ebadi (Sakharov and Nobel Peace Prize laureate, online), Mustafa Hijri (Democratic Party of Iranian Kurdistan), Saeed Bashirtash (7 Aban Front), Abdullah Mohtadi (Komala Party, online), Sanaz Behzadi (journalist, Open Society)
 Commission fisheries emergency funding (16 April 2026, IP/26/824): Commission activates EU emergency funding (EMFAF mobilisation) to shield fisheries and aquaculture from Middle East crisis. Targeted support for fuel costs, logistics, and affected fleets in Mediterranean / Atlantic fisheries. DG MARE + DG BUDG press release.

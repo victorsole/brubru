@@ -72,7 +72,7 @@ Most outermost regions are islands or archipelagos, but **French Guiana is on th
 
 - **Clean Energy for EU Islands 2.0** -- Secretariat continuation under Horizon Europe cluster "Climate, Energy and Mobility"
 - **Citizens Energy Package (COM(2026) 115)** -- includes provisions on energy communities relevant to small islands
-- **Water Resilience Strategy (COM(2025) 280, launched 8 December 2025)** -- flags island freshwater stress (see `eu_water_legislation.md`)
+- **Water Resilience Strategy (COM(2025) 280, adopted 4 June 2025)** -- flags island freshwater stress (see `eu_water_legislation.md`)
 - **Just Transition Fund mid-term review** -- expected H2 2026; island energy-transition beneficiaries a focus
 
 ## Related Guides
