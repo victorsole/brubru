@@ -3,6 +3,22 @@
   "entries": [
     {
       "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions: Commission's 2025 Israel proposals noted",
+      "summary": "Proposed sanctions on extremist Israeli ministers and violent settlers (17 September 2025) need unanimity and are not adopted",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "European Neighbourhood Policy: EU-Israel record corrected",
+      "summary": "The guide said the Commission had not proposed suspension; it proposed a trade-provision suspension and sanctions on 17 September 2025 and an EIC Accelerator suspension on 28 July 2025, none adopted by the Council",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
       "action": "added",
       "guide": "soteu_2026_debate",
       "title": "State of the Union 2026: the Parliament debate",
