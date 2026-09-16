@@ -1,6 +1,7 @@
 # Digital Fairness Act (DFA)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said addictive design "is harming everyone. This is why we need a wider framework, the Digital Fairness Act. We will propose it in autumn." That matches the Commission's 2026 work programme (fourth quarter). **Still not proposed: no text yet.** She presented it as the wider framework beyond the EU Kids Act for minors, due 17 September 2026. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Status: Commission proposal expected Q4 2026
 - Commission Work Programme: 2026, priority "Protecting our democracy, upholding our values"
 - Commissioner: Michael McGrath (Democracy, Justice, Consumer Rights and Equality)

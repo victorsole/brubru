@@ -1,6 +1,7 @@
 # EU Civil Protection Mechanism and rescEU
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said the Commission has asked "some of Europe's most senior firefighters and emergency responders" to lead work on preparedness and prevention, including new capability needs, and has asked them "to make proposals, including for a future European Firefighting Fleet". **A request for expert proposals, not a proposal: no text, no date.** rescEU already exists and already stations firefighting planes in Portugal, Spain, France, Italy, Croatia and Greece, and helicopters in three more Member States (see below). She paid tribute to the Danish pilot Rune Kyndal, killed with his fire liaison officer in an accident this summer after wildfire missions across Greece. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - **Instrument**: Union Civil Protection Mechanism (UCPM), the EU's joint framework for disaster response, prevention and preparedness
 - **Founding legal act**: **Decision No 1313/2013/EU** of the European Parliament and of the Council of 17 December 2013 on a Union Civil Protection Mechanism (CELEX 32013D1313)
 - **First major amendment**: **Decision (EU) 2019/420** of 13 March 2019, which created **rescEU**, the EU-financed strategic reserve, after the 2017 wildfire season exposed gaps in Member State-only capacity

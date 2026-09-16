@@ -1,6 +1,7 @@
 # Critical Raw Materials Act (CRMA) - Regulation (EU) 2024/1252
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said the EU "will establish a new European Corporation on Critical Raw Materials" that "will help us obtain and stockpile what we need" for electric cars, chips and batteries, clean tech and defence. **Announcement only: no text, no date, and no such corporation exists.** This Regulation already covers supply-risk monitoring and the coordination of Member States' strategic stocks (see Overview). Her dependency claim, exactly as she stated it: "We are more than 80 % dependent on China for many critical raw materials. 90 % for some rare earths." Brubru has not verified those percentages against a primary record: attribute them to her. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - **CELEX:** 32024R1252
 - **Full title:** Regulation (EU) 2024/1252 of the European Parliament and of the Council of 11 April 2024 establishing a framework for ensuring a secure and sustainable supply of critical raw materials and amending Regulations (EU) No 168/2013, (EU) 2018/858, (EU) 2018/1724 and (EU) 2019/1020 (Text with EEA relevance)
 - **Common name:** CRMA (Critical Raw Materials Act)

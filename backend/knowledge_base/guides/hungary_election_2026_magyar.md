@@ -1,6 +1,7 @@
 # Hungary 2026 Election: Orban Defeated, Magyar's Grand Bargain with Brussels
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen cited Hungary as proof that "nothing is inevitable": "The date of 12 April will stay in our memory for a very long time. The day the Hungarian people took their future into their hands." She said years of backsliding "have started to be reversed", that there is "real progress on fundamental rights" and academic freedom, and that "billions of euro of investment in Hungary have been unlocked". **These are her statements. Brubru has not verified the amount or timing of any funds released**, so attribute them to her and do not put a figure on them. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Election date: Sunday 12 April 2026 (parliamentary election)
 - Outcome: Viktor Orban's Fidesz lost majority after 16 years in power (since 2010)
 - Winning challenger: Péter Magyar, Tisza Party (centrist/centre-right, EPP-aligned)

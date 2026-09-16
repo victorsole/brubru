@@ -1,6 +1,7 @@
 # EU-China Relations
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said the EU's trade deficit with China is now €1 billion a day, that it "has reached a tipping point" and that the second China shock is "already here". Eurostat puts the EU's 2025 trade deficit with China at **EUR 359.8 billion** (news article, 10 April 2026), which confirms her figure. She said the dialogue with China "must now lead to results", and: "we will use all the tools at our disposal to rebalance our relationship. Words are good. But deeds are better." On dependence she said the EU is "more than 80 % dependent on China for many critical raw materials. 90 % for some rare earths" (her figures, not verified by Brubru), and announced a European Corporation on Critical Raw Materials (no text, no date). Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Relationship type: "partner, competitor, systemic rival" (2019 EU-China Strategic Outlook, endorsed by European Council)
 - Bilateral trade volume: approx. EUR 750 billion/year (goods + services); China is EU's largest source of imports and second-largest trading partner overall after the US
 - EU-China Comprehensive Agreement on Investment (CAI): concluded December 2020, suspended by EP May 2021 (retaliation for Xinjiang sanctions), not ratified

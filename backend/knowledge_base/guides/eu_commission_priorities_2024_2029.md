@@ -1,6 +1,7 @@
 # European Commission Priorities 2024–2029 (von der Leyen II)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026)**: President von der Leyen delivered the **2026 State of the Union address** in Strasbourg, framing it around "the tipping points of our time: climate change and AI". By Brubru's count it holds 45 commitments, 44 classified: 26 new with no text and no date, 9 scheduled, 6 already existing, 3 proposed. Under priority 5 she said the Commission will step up the Centre for Democratic Resilience, which already operates. Full breakdown, dates to watch and checked figures: `soteu_2026_address`.
 - **What this is**: the **seven priorities** of the von der Leyen II Commission (2024–2029) and the flagship initiatives + lead DGs under each — so Brubru frames any file against the right political objective.
 - **Foundational text**: the **Political Guidelines 2024–2029** (published 18 July 2024), available in all 24 languages. Translated into action via the annual **Work Programme**.
 - **Headline shift from 2019–2024**: the previous Commission had six priorities led by the **European Green Deal**; the new mandate reframes around **competitiveness** (the Competitiveness Compass / Clean Industrial Deal) and **security & defence**.

@@ -1,6 +1,7 @@
 # Global Gateway Strategy
 
 ## QUICK FACTS
+- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen announced "a new international connectivity project" to link the South Caucasus and Central Asia directly to the European market, the Middle Corridor. Through Global Gateway the EU "will aim to crowd in up to €12 billion in public and private investment", with the goal to "diversify routes, triple trade flows and slash freight transit times by 2030". She said the EU will organise a **Regional Connectivity Summit with the Prime Minister of Bulgaria** (no date set). **No text and no date for the project.** The Trans-Caspian strand it extends already exists (Connectivity Agenda Platform, 23 June 2026, below). Brubru has not verified how much of the EUR 12 billion is new money: present it as her stated aim. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Launched: 1 December 2021 by Commission President von der Leyen
 - Investment target: EUR 300 billion (2021-2027) in infrastructure worldwide
 - Type: EU external investment strategy
