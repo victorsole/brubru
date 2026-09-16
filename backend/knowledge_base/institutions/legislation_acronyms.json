@@ -4,7 +4,7 @@
     "description": "Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation",
     "source": "docs/LEG_2025-11/ + manual curation",
     "extraction_date": "2025-11-19",
-    "total_entries": 546,
+    "total_entries": 517,
     "auto_extracted": 658,
     "manually_curated": 20,
     "extraction_stats": {
@@ -52,6 +52,50 @@
           "IMO"
         ],
         "reason": "Victor's ruling: one rule, no exceptions -- organisation acronyms never belong in this file, IMO/UNECE included"
+      },
+      {
+        "date": "2026-09-16",
+        "removed": 29,
+        "repointed": [
+          "ASAP",
+          "EED",
+          "EPBD",
+          "IMI",
+          "NIS",
+          "RED II"
+        ],
+        "reason": "audit A2: 35 entries had been auto-extracted from a parenthetical gloss INSIDE a Council 'position to be taken' decision, so the acronym pointed at the procedural decision rather than the instrument it names. 29 were organisations, international conventions, treaties, UNECE vehicle-system acronyms, an EU agency (CEDEFOP) or non-EU statutes and were removed under the one-rule-no-exceptions ruling of 25 Aug 2026; 6 were genuine EU legislation acronyms and were repointed to the act in force, each target title verified against Cellar.",
+        "keys": [
+          "ADN",
+          "ADR",
+          "AETR",
+          "BAS",
+          "BASAP",
+          "CBERA",
+          "Caribbean Basin Economic Recovery Act",
+          "CCNR",
+          "CDE",
+          "CDNI",
+          "CEDEFOP",
+          "CESNI",
+          "CETA",
+          "CORSIA",
+          "COTIF",
+          "DCAS",
+          "ESC",
+          "FAL",
+          "Geneva Act",
+          "GTR",
+          "HSSC",
+          "ICSID",
+          "LSA",
+          "MARPOL",
+          "OTIF",
+          "PLO",
+          "SOLAS",
+          "STCW",
+          "TPMS"
+        ]
       }
     ]
   },
@@ -274,11 +318,12 @@
       "source_file": "L_2020080EN.01002301.xml"
     },
     "EED": {
-      "celex": "32025D1757",
-      "full_title": "Council Decision (EU) 2025/1757 of 8 July 2025 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning the amendment to Annex II (Technical regulation",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501757EN.000101.fmx.xml"
+      "celex": "32023L1791",
+      "full_title": "Directive (EU) 2023/1791 of the European Parliament and of the Council of 13 September 2023 on energy efficiency and amending Regulation (EU) 2023/955 (recast)",
+      "type": "Directive",
+      "year": 2023,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32025D1757"
     },
     "GAEC": {
       "celex": "32024R1235",
@@ -316,11 +361,12 @@
       "source_file": "L_2019330EN.01008601.xml"
     },
     "RED II": {
-      "celex": "32025D1430",
-      "full_title": "Council Decision (EU) 2025/1430 of 8 July 2025 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Annex IV (Energy) to the EEA Ag",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501430EN.000101.fmx.xml"
+      "celex": "32018L2001",
+      "full_title": "Directive (EU) 2018/2001 of the European Parliament and of the Council of 11 December 2018 on the promotion of the use of energy from renewable sources (recast)",
+      "type": "Directive",
+      "year": 2018,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32025D1430"
     },
     "EGTC": {
       "celex": "32013R1302",
@@ -441,27 +487,6 @@
       "year": 2024,
       "source_file": "L_202402016EN.000101.fmx.xml"
     },
-    "Caribbean Basin Economic Recovery Act": {
-      "celex": "32025D1563",
-      "full_title": "Council Decision (EU) 2025/1563 of 22 July 2025 establishing the position to be taken on behalf of the European Union within the General Council of the World Trade Organization (WTO) as regards the ad",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501563EN.000101.fmx.xml"
-    },
-    "CBERA": {
-      "celex": "32025D1563",
-      "full_title": "Council Decision (EU) 2025/1563 of 22 July 2025 establishing the position to be taken on behalf of the European Union within the General Council of the World Trade Organization (WTO) as regards the ad",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501563EN.000101.fmx.xml"
-    },
-    "Geneva Act": {
-      "celex": "32025D1415",
-      "full_title": "Council Decision (EU) 2025/1415 of 8 July 2025 on the position to be taken on behalf of the Union within the Assembly of the Special Union established by the Lisbon Agreement for the Protection of App",
-      "type": "Regulation",
-      "year": 2025,
-      "source_file": "L_202501415EN.000101.fmx.xml"
-    },
     "Chips Act": {
       "celex": "32023R1781",
       "full_title": "Regulation (EU) 2023/1781 of the European Parliament and of the Council of 13 September 2023 establishing a framework of measures for strengthening Europe’s semiconductor ecosystem and amending Regula",
@@ -512,11 +537,12 @@
       "source_file": "L_2022167EN.01009501.xml"
     },
     "EPBD": {
-      "celex": "32025D1432",
-      "full_title": "Council Decision (EU) 2025/1432 of 8 July 2025 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Annex IV (Energy) to the EEA Ag",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501432EN.000101.fmx.xml"
+      "celex": "32024L1275",
+      "full_title": "Directive (EU) 2024/1275 of the European Parliament and of the Council of 24 April 2024 on the energy performance of buildings (recast)",
+      "type": "Directive",
+      "year": 2024,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32025D1432"
     },
     "CUMYL-4CN-BINACA": {
       "celex": "32018D0748",
@@ -559,13 +585,6 @@
       "type": "Regulation",
       "year": 2020,
       "source_file": "L_2020398EN.01000901.xml"
-    },
-    "OTIF": {
-      "celex": "32018D1875",
-      "full_title": "Council Decision (EU) 2018/1875 of 26 November 2018 establishing the position to be adopted on behalf of the European Union within the Committee of Technical Experts of the Intergovernmental Organisat",
-      "type": "Decision",
-      "year": 2018,
-      "source_file": "L_2018306EN.01005001.xml"
     },
     "FLEGT": {
       "celex": "32025R0530",
@@ -727,27 +746,6 @@
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302816EN.000101.fmx.xml"
-    },
-    "ESC": {
-      "celex": "32016D1123",
-      "full_title": "Council Decision (EU) 2016/1123 of 17 June 2016 establishing the position to be adopted on behalf of the European Union within the relevant Committees of the United Nations Economic Commission for Eur",
-      "type": "Regulation",
-      "year": 2016,
-      "source_file": "L_2016187EN.01000901.xml"
-    },
-    "TPMS": {
-      "celex": "32016D1123",
-      "full_title": "Council Decision (EU) 2016/1123 of 17 June 2016 establishing the position to be adopted on behalf of the European Union within the relevant Committees of the United Nations Economic Commission for Eur",
-      "type": "Regulation",
-      "year": 2016,
-      "source_file": "L_2016187EN.01000901.xml"
-    },
-    "BAS": {
-      "celex": "32016D1123",
-      "full_title": "Council Decision (EU) 2016/1123 of 17 June 2016 establishing the position to be adopted on behalf of the European Union within the relevant Committees of the United Nations Economic Commission for Eur",
-      "type": "Regulation",
-      "year": 2016,
-      "source_file": "L_2016187EN.01000901.xml"
     },
     "ECB/2019/10": {
       "celex": "32019D0685",
@@ -1078,20 +1076,6 @@
       "year": 2020,
       "source_file": "L_2020141EN.01002801.xml"
     },
-    "STCW": {
-      "celex": "32023D1082",
-      "full_title": "Council Decision (EU) 2023/1082 of 30 May 2023 on the position to be taken on behalf of the European Union within the International Maritime Organization’s Maritime Safety Committee during its 107th s",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_2023144EN.01006001.xml"
-    },
-    "SOLAS": {
-      "celex": "32023D1082",
-      "full_title": "Council Decision (EU) 2023/1082 of 30 May 2023 on the position to be taken on behalf of the European Union within the International Maritime Organization’s Maritime Safety Committee during its 107th s",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_2023144EN.01006001.xml"
-    },
     "CARE": {
       "celex": "32022R0562",
       "full_title": "Regulation (EU) 2022/562 of the European Parliament and of the Council of 6 April 2022 amending Regulations (EU) No 1303/2013 and (EU) No 223/2014 as regards Cohesion’s Action for Refugees in Europe (",
@@ -1162,13 +1146,6 @@
       "year": 2016,
       "source_file": "L_2016107EN.01000101.xml"
     },
-    "ICSID": {
-      "celex": "32022D0438",
-      "full_title": "Council Decision (EU) 2022/438 of 14 March 2022 on the position to be adopted on behalf of the European Union within the Administrative Council of the International Centre for Settlement of Investment",
-      "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022089EN.01000801.xml"
-    },
     "ASECNA": {
       "celex": "32018D1603",
       "full_title": "Council Decision (EU) 2018/1603 of 18 September 2018 on the conclusion on behalf of the Union of the Cooperation Agreement between the European Union and the Agency for Aerial Navigation Safety in Afr",
@@ -1232,20 +1209,6 @@
       "year": 2020,
       "source_file": "L_2020206EN.01000301.xml"
     },
-    "ADN": {
-      "celex": "32024D2543",
-      "full_title": "Council Decision (EU) 2024/2543 of 23 September 2024 on the position to be adopted on behalf of the European Union on the amendments to the Annexes to the Agreement concerning the International Carria",
-      "type": "Regulation",
-      "year": 2024,
-      "source_file": "L_202402543EN.000101.fmx.xml"
-    },
-    "ADR": {
-      "celex": "32024D2543",
-      "full_title": "Council Decision (EU) 2024/2543 of 23 September 2024 on the position to be adopted on behalf of the European Union on the amendments to the Annexes to the Agreement concerning the International Carria",
-      "type": "Regulation",
-      "year": 2024,
-      "source_file": "L_202402543EN.000101.fmx.xml"
-    },
     "C76/2002": {
       "celex": "32016D2069",
       "full_title": "Commission Decision (EU) 2016/2069 of 1 October 2014 concerning measures SA.14093 (C76/2002) implemented by Belgium in favour of Brussels South Charleroi Airport and Ryanair (notified under document C",
@@ -1275,11 +1238,12 @@
       "source_file": "L_2018125EN.01000801.xml"
     },
     "NIS": {
-      "celex": "32023D0271",
-      "full_title": "Council Decision (EU) 2023/271 of 30 January 2023 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Annex XI (Electronic communi",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_2023039EN.01004101.xml"
+      "celex": "32022L2555",
+      "full_title": "Directive (EU) 2022/2555 of the European Parliament and of the Council of 14 December 2022 on measures for a high common level of cybersecurity across the Union, amending Regulation (EU) No 910/2014 and Directive (EU) 2018/1972, and repealing Directive (EU) 2016/1148 (NIS 2 Directive)",
+      "type": "Directive",
+      "year": 2022,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32023D0271"
     },
     "Data Act": {
       "celex": "32023R2854",
@@ -1491,13 +1455,6 @@
       "year": 2024,
       "source_file": "L_202402819EN.000101.fmx.xml"
     },
-    "PLO": {
-      "celex": "32024D3025",
-      "full_title": "Council Decision (EU) 2024/3025 of 21 November 2024 on the position to be adopted on behalf of the European Union within the Joint Committee established by the Euro-Mediterranean Interim Association A",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202403025EN.000101.fmx.xml"
-    },
     "ECB/2021/1": {
       "celex": "31998R2531",
       "full_title": "ANNEX II Formula and method for calculating a sanction pursuant to Article 7(3) of Regulation (EC) No 2531/98 for a failure to comply with the requirement to notify the relevant national central bank ",
@@ -1540,13 +1497,6 @@
       "year": 2017,
       "source_file": "L_2017056EN.01021001.xml"
     },
-    "COTIF": {
-      "celex": "32018D1296",
-      "full_title": "Council Decision (EU) 2018/1296 of 18 September 2018 establishing the position to be adopted on behalf of the European Union at the 13th General Assembly of the Intergovernmental Organisation for Inte",
-      "type": "Decision",
-      "year": 2018,
-      "source_file": "L_2018243EN.01001101.xml"
-    },
     "ECB/2016/14": {
       "celex": "32016D0868",
       "full_title": "Decision (EU) 2016/868 of the European Central Bank of 18 May 2016 amending Decision ECB/2014/6 on the organisation of preparatory measures for the collection of granular credit data by the European S",
@@ -1567,20 +1517,6 @@
       "type": "Regulation",
       "year": 2019,
       "source_file": "L_2019028EN.01000101.xml"
-    },
-    "CESNI": {
-      "celex": "32015D2176",
-      "full_title": "Council Decision (EU) 2015/2176 of 23 November 2015 on the position to be adopted on behalf of the European Union within the European Committee for drawing up standards in the field of inland navigati",
-      "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015307EN.01002501.xml"
-    },
-    "CCNR": {
-      "celex": "32015D2176",
-      "full_title": "Council Decision (EU) 2015/2176 of 23 November 2015 on the position to be adopted on behalf of the European Union within the European Committee for drawing up standards in the field of inland navigati",
-      "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015307EN.01002501.xml"
     },
     "ECB/2020/36": {
       "celex": "32020D1143",
@@ -1694,27 +1630,6 @@
       "year": 2020,
       "source_file": "L_2020107EN.01000101.xml"
     },
-    "LSA": {
-      "celex": "32024D0990",
-      "full_title": "Council Decision (EU) 2024/990 of 20 March 2024 on the position to be taken on behalf of the European Union within the International Maritime Organization during the 81st session of the Marine Environ",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400990EN.000101.fmx.xml"
-    },
-    "MARPOL": {
-      "celex": "32024D0990",
-      "full_title": "Council Decision (EU) 2024/990 of 20 March 2024 on the position to be taken on behalf of the European Union within the International Maritime Organization during the 81st session of the Marine Environ",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400990EN.000101.fmx.xml"
-    },
-    "CEDEFOP": {
-      "celex": "32023D0270",
-      "full_title": "Council Decision (EU) 2023/270 of 30 January 2023 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Protocol 31 to the EEA Agree",
-      "type": "Decision",
-      "year": 2023,
-      "source_file": "L_2023039EN.01003601.xml"
-    },
     "ECB/2020/7": {
       "celex": "32020D0141",
       "full_title": "Decision (EU) 2020/141 of the European Central Bank of 22 January 2020 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2020/7)",
@@ -1800,11 +1715,12 @@
       "source_file": "L_2019135EN.01000101.xml"
     },
     "ASAP": {
-      "celex": "32024D0876",
-      "full_title": "Council Decision (EU) 2024/876 of 4 March 2024 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Protocol 31 to the EEA Agreemen",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400876EN.000101.fmx.xml"
+      "celex": "32023R1525",
+      "full_title": "Regulation (EU) 2023/1525 of the European Parliament and of the Council of 20 July 2023 on supporting ammunition production (ASAP)",
+      "type": "Regulation",
+      "year": 2023,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32024D0876"
     },
     "ECB/2023/6": {
       "celex": "32023D0673",
@@ -1974,13 +1890,6 @@
       "year": 2017,
       "source_file": "L_2017016EN.01005701.xml"
     },
-    "AETR": {
-      "celex": "32025D1115",
-      "full_title": "Council Decision (EU) 2025/1115 of 12 May 2025 on the position to be taken on behalf of the European Union within the Group of Experts on the European Agreement concerning the Work of Crews of Vehicle",
-      "type": "Regulation",
-      "year": 2025,
-      "source_file": "L_202501115EN.000101.fmx.xml"
-    },
     "ECB/2013/40": {
       "celex": "32013R1075",
       "full_title": "Regulation (EU) No 1075/2013 of the European Central Bank of 18 October 2013 concerning statistics on the assets and liabilities of financial vehicle corporations engaged in securitisation transaction",
@@ -2072,13 +1981,6 @@
       "year": 2008,
       "source_file": "L_2008157EN.01001501.xml"
     },
-    "CORSIA": {
-      "celex": "32020D0954",
-      "full_title": "Council Decision (EU) 2020/954 of 25 June 2020 on the position to be taken on behalf of the European Union within the International Civil Aviation Organization as regards the notification of voluntary",
-      "type": "Decision",
-      "year": 2020,
-      "source_file": "L_2020212EN.01001401.xml"
-    },
     "ECB/2015/47": {
       "celex": "32016D0188",
       "full_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the natio",
@@ -2141,13 +2043,6 @@
       "type": "Regulation",
       "year": 2025,
       "source_file": "L_202500357EN.000101.fmx.xml"
-    },
-    "DCAS": {
-      "celex": "32024D0784",
-      "full_title": "Council Decision (EU) 2024/784 of 26 February 2024 on the position to be taken on behalf of the European Union in the World Forum for Harmonization of Vehicle Regulations of the United Nations Economi",
-      "type": "Regulation",
-      "year": 2024,
-      "source_file": "L_202400784EN.000101.fmx.xml"
     },
     "ECB/2024/25": {
       "celex": "32024D2546",
@@ -2401,13 +2296,6 @@
       "year": 2023,
       "source_file": "L_2023166EN.01000601.xml"
     },
-    "HSSC": {
-      "celex": "32019D2008",
-      "full_title": "Council Decision (EU) 2019/2008 of 28 November 2019 on the position to be taken on behalf of the European Union at the International Maritime Organization during the 31st session of its Assembly on th",
-      "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019312EN.01004001.xml"
-    },
     "ECB/2017/41": {
       "celex": "32017D2444",
       "full_title": "Decision (EU) 2017/2444 of the European Central Bank of 8 December 2017 amending Decision (EU) 2015/2332 on the procedural framework for the approval of the volume of euro coin issuance (ECB/2017/41)",
@@ -2429,33 +2317,12 @@
       "year": 2015,
       "source_file": "L_2015053EN.01002401.xml"
     },
-    "CDE": {
-      "celex": "32016D0298",
-      "full_title": "Council Decision (EU) 2016/298 of 29 February 2016 on the position to be adopted by the European Union within the ACP-EU Committee of Ambassadors regarding approval of derogations to the Financial Reg",
-      "type": "Regulation",
-      "year": 2016,
-      "source_file": "L_2016057EN.01000401.xml"
-    },
     "ELTIF": {
       "celex": "32024R2759",
       "full_title": "Commission Delegated Regulation (EU) 2024/2759 of 19 July 2024 supplementing Regulation (EU) 2015/760 of the European Parliament and of the Council with regard to regulatory technical standards specif",
       "type": "Regulation",
       "year": 2024,
       "source_file": "L_202402759EN.000101.fmx.xml"
-    },
-    "CETA": {
-      "celex": "32025D0703",
-      "full_title": "Council Decision (EU) 2025/703 of 27 March 2025 on the position to be taken on behalf of the European Union within the CETA Joint Committee established under the Comprehensive Economic and Trade Agree",
-      "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202500703EN.000101.fmx.xml"
-    },
-    "BASAP": {
-      "celex": "32019D1727",
-      "full_title": "Council Decision (EU) 2019/1727 of 7 October 2019 on the position to be adopted on behalf of the European Union at the Second Ministerial Meeting of the Bonn Agreement with regard to the Ministerial D",
-      "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019263EN.01000901.xml"
     },
     "ECB/2013/34": {
       "celex": "32013R1072",
@@ -3164,13 +3031,6 @@
       "year": 2022,
       "source_file": "L_2022263EN.01000601.xml"
     },
-    "FAL": {
-      "celex": "32022D0644",
-      "full_title": "Council Decision (EU) 2022/644 of 12 April 2022 on the position to be adopted on behalf of the European Union within the International Maritime Organization’s Maritime Safety Committee during its 105t",
-      "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022118EN.01005501.xml"
-    },
     "CMS": {
       "celex": "32019D1581",
       "full_title": "Council Decision (EU) 2019/1581 of 16 September 2019 on the submission, on behalf of the European Union, of proposals to amend Appendices I and II to the Convention on the Conservation of Migratory Sp",
@@ -3200,11 +3060,12 @@
       "source_file": "L_2018026EN.01000101.xml"
     },
     "IMI": {
-      "celex": "32022D2197",
-      "full_title": "Council Decision (EU) 2022/2197 of 8 November 2022 on the position to be taken on behalf of the European Union within the Specialised Committee on Road Transport established by the Trade and Cooperati",
-      "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022292EN.01004101.xml"
+      "celex": "32012R1024",
+      "full_title": "Regulation (EU) No 1024/2012 of the European Parliament and of the Council of 25 October 2012 on administrative cooperation through the Internal Market Information System and repealing Commission Decision 2008/49/EC ('the IMI Regulation')",
+      "type": "Regulation",
+      "year": 2012,
+      "source_file": "manual curation 2026-09-16",
+      "repointed_from": "32022D2197"
     },
     "SURE": {
       "celex": "32020R0672",
@@ -3647,13 +3508,6 @@
       "year": 2014,
       "source_file": "L_2014141EN.01000101.xml"
     },
-    "CDNI": {
-      "celex": "32021D1055",
-      "full_title": "Council Decision (EU) 2021/1055 of 21 June 2021 on the position to be taken on behalf of the European Union within the Conference of Contracting Parties to the Convention on the collection, deposit an",
-      "type": "Decision",
-      "year": 2021,
-      "source_file": "L_2021227EN.01003901.xml"
-    },
     "ECB/2023/27": {
       "celex": "32023D2532",
       "full_title": "Decision (EU) 2023/2532 of the European Central Bank of 9 November 2023 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2023/27)",
@@ -3681,13 +3535,6 @@
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021050EN.01002901.xml"
-    },
-    "GTR": {
-      "celex": "32019D1911",
-      "full_title": "Council Decision (EU) 2019/1911 of 8 November 2019 on the position to be taken on behalf of the European Union in the relevant Committees of the United Nations Economic Commission for Europe as regard",
-      "type": "Regulation",
-      "year": 2019,
-      "source_file": "L_2019296EN.01002101.xml"
     },
     "NEP": {
       "celex": "32025R1090",

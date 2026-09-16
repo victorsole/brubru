@@ -1,6 +1,7 @@
 # Pact for Skills
 
 ## QUICK FACTS
+- **LATEST (15 September 2026): the Commission adopted the Fair Labour Mobility Package, which includes a "Skills Portability Act".** It is a **proposal, not law**: Regulation `COM(2026) 992/2` on the portability of qualifications and skills, amending Regulation (EU) 2018/1724. It would issue qualifications in a standardised digital format available in the EU Digital Identity Wallet, create a free **EU qualifications comparison tool** drawing on national qualifications databases, cut recognition in regulated professions from three months to five weeks via a mandatory digital procedure, and extend automatic recognition through **common training frameworks** to a preliminary list of 10 further shortage professions. The **first common training framework was adopted the same day, for physiotherapists**. Separate proposals cover professional qualifications (`COM(2026) 995/2`, amending Directive 2005/36/EC) and third-country nationals' qualifications (`COM(2026) 990/2`), cutting non-EU recognition from about 14 months to four. Full detail: `fair_labour_mobility_package` guide. Source: IP/26/1851, FS/26/1855, OJ(2026) 2578.
 - Initiative: Pact for Skills -- EU-wide shared engagement model for skills development
 - Type: Voluntary, non-binding partnership framework (not a legal instrument)
 - Launched: 10 November 2020 by the European Commission

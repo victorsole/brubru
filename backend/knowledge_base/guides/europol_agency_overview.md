@@ -1,6 +1,7 @@
 # Europol: EU Agency for Law Enforcement Cooperation
 
 ## QUICK FACTS
+- JRC news (10 September 2026): the JRC launched a **Security Research and Innovation Campus**, a test-and-deploy hub for security technologies under the **ProtectEU** internal security strategy. Brubru holds no dedicated security-research guide; this is the nearest home for the fact. Source: JRC news, 10 September 2026.
 - Full name: **Europol, the European Union Agency for Law Enforcement Cooperation**
 - Headquarters: **The Hague, Netherlands**
 - Legal basis: **Regulation (EU) 2016/794** (CELEX 32016R0794), founding regulation of 11 May 2016, as revised by **Regulation (EU) 2022/991** (CELEX 32022R0991, in force 28 June 2022) on data handling and innovation powers. A further revision (the "Strengthening Europol" strand of the Q2 2026 law enforcement and criminal justice package) is expected as a Commission proposal, see the dedicated Brubru guide `europol_regulation_revision_2026.md` for that file's status.

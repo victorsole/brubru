@@ -2,6 +2,62 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_social_dialogue",
+      "title": "EU Social Dialogue and Collective Bargaining",
+      "summary": "ESSPASS digitalisation of the A1 posted-worker document",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "pact_for_skills",
+      "title": "Pact for Skills",
+      "summary": "Skills Portability Act proposal added",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "cbam_downstream_goods_extension",
+      "title": "CBAM Scope Extension to Downstream Goods",
+      "summary": "Parliament adopted its negotiating position 464 to 50 with 159 abstentions",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "Children, Social Media and Age Limits",
+      "summary": "EU Kids Act presented 15 September, written procedure closes 10.00 on 17 September",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "updated",
+      "guide": "ela_agency_overview",
+      "title": "ELA",
+      "summary": "European Labour Authority:ELA reform proposal COM(2026) 985/2 replaces the pre-adoption hedge",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "added",
+      "guide": "european_democracy_shield",
+      "title": "European Democracy Shield",
+      "summary": "New guide: Parliament's EUDS special-committee report adopted 15 September 2026 by 420 to 220 with 26 abstentions",
+      "refs": []
+    },
+    {
+      "date": "2026-09-16",
+      "action": "added",
+      "guide": "fair_labour_mobility_package",
+      "title": "Fair Labour Mobility Package",
+      "summary": "New guide: the Communication and five legislative proposals adopted by the College on 15 September 2026, including ESSPASS, the Skills Portability Act and the ELA reform",
+      "refs": []
+    },
+    {
       "date": "2026-09-15",
       "action": "updated",
       "guide": "ai_act_amendments_2026",

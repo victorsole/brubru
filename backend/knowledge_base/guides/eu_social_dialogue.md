@@ -1,6 +1,7 @@
 # EU Social Dialogue and Collective Bargaining
 
 ## QUICK FACTS
+- **LATEST (15 September 2026): the Fair Labour Mobility Package was adopted and is directly relevant to posted workers.** The **European Social Security Pass (ESSPASS)** proposal (`COM(2026) 980/2`, amending Regs 883/2004, 987/2009 and 2018/1724) would digitalise the **portable document A1 for posted workers one year after entry into force**, and the European Health Insurance Card and other documents within three years, delivered through the EU Digital Identity Wallet. A companion proposal would strengthen the European Labour Authority's enforcement role (`COM(2026) 985/2`). These are **proposals, not law** — Parliament and Council must still adopt them. Full detail: `fair_labour_mobility_package` guide. Source: IP/26/1851, FS/26/1854, OJ(2026) 2578.
 - Topic: European Social Dialogue, collective bargaining, social partner agreements, posted workers
 - Legal basis: Articles 151-155 TFEU
 - Responsible DG: DG EMPL (Employment, Social Affairs and Inclusion)

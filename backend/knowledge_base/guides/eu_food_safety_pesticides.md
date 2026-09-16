@@ -1,6 +1,7 @@
 # EU Food Safety and Pesticide Regulation
 
 ## QUICK FACTS
+- JRC Report (14 September 2026): "Impact-based prioritisation of the EU List of Quarantine Pests" (JRC142065) -- shortlists priority pests by economic, social and environmental impact, the evidence base for plant-health priority-pest designation under Regulation (EU) 2016/2031. Repository: https://publications.jrc.ec.europa.eu/repository/handle/JRC142065
 - **NEXT STEP (Wednesday 2 September 2026)**: the food and feed **simplification package** reaches its first joint committee meeting of the autumn -- **`CJ14(2026)0902_1`, a joint AGRI + ENVI meeting**, the second day of the committee week after the recess. Two ordinary-legislative files are on the agenda together:
   - **`2025/0409(COD)`**, **COM(2025)1021** -- *Proposal for a Directive amending Council Directive 98/58/EC and Directive 2009/128/EC as regards the simplification and strengthening of food and feed safety requirements*. Directive **98/58/EC** is the framework directive on the **protection of animals kept for farming purposes**; Directive **2009/128/EC** is the **sustainable use of pesticides** directive. EP document `C10-0361/2025`.
   - **`2025/0410(COD)`**, **COM(2025)1030** -- amending Regulations (EC) No 999/2001 (TSE), (EC) No 1829/2003 (GM food and feed), (EC) No 1831/2003 (feed additives), (EC) No 852/2004 (food hygiene) and others. EP document `C10-0359/2025`. Covered in detail in `eu_food_feed_simplification_omnibus.md`.
