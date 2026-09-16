@@ -175,6 +175,15 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>16 September 2026: Infringement register (1,002 total)</h3>
+<p><code>/api/v2/commission/infringements</code> now serves the European Commission's register of infringement decisions: every decision adopted against Member States since 1987 (62,610 decisions in 25,658 cases on 16 September 2026), synced daily, plus the statistics of the Commission's 'Implementing EU law' dashboards.</p>
+<ul>
+<li><strong>Cases:</strong> <code>GET /infringements</code>, <code>GET /infringements/INFR(2026)0352</code> (a case with all its decisions), <code>GET /infringements/{case_id}/decisions</code>.</li>
+<li><strong>Decisions:</strong> <code>GET /infringements/decisions?decision_category=RTC&amp;decision_from=2026-07-01</code>, <code>GET /infringements/decisions/{decision_id}</code>.</li>
+<li><strong>Statistics:</strong> <code>GET /infringements/statistics</code> lists 19 datasets on infringement cases, transposition of directives and pre-infringement dialogues; <code>GET /infringements/statistics/transposition-deficit-by-member-state?year=2026&amp;month=9</code>.</li>
+</ul>
+<p><strong>Changed:</strong> this path previously listed Commission press releases about infringements. They are now at <code>/api/v2/commission/infringements/press-releases</code>, and old item URLs such as <code>/infringements/IP_26_838</code> redirect there (HTTP 308).</p>
+
 <h3>4 July 2026: EuroVoc taxonomy tree (966 total)</h3>
 <p>The EuroVoc subject thesaurus, the EU's official multilingual classification, is now walkable as a tree rather than only searchable. Four new routes under <code>/api/v2/legislative/eurovoc/taxonomy</code> expose the full hierarchy: 21 domains, 127 microthesauri and ~7,500 descriptors, each with its <code>skos:broader</code> parent and labels in English, Spanish, French, Italian and Dutch.</p>
 <ul>
