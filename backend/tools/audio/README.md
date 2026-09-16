@@ -7,7 +7,7 @@ sync with the macOS 26 SDK and could not build anything that imports Foundation.
 | Source | What it does |
 |---|---|
 | `bhrec.c` | Records a CoreAudio input device (default `BlackHole 2ch`) to stdout as raw float32 stereo PCM through an AudioQueue. `capture_live_audio.py` pipes it into ffmpeg for resampling and segmenting. |
-| `mkmulti.c` | Creates a Multi-Output Device ("Brubru Capture (Multi-Output)": every real output plus BlackHole) and makes it the default output, so you hear the stream and BlackHole receives a copy. Pass the name of the output you listen on as the clock master, e.g. `mkmulti "MacBook Pro Speakers"`. |
+| `mkmulti.c` | Creates a Multi-Output Device ("Brubru Capture (Multi-Output)": every real output plus BlackHole) and makes it the default output, so you hear the stream and BlackHole receives a copy. Pass the name of the output you listen on as the clock master, e.g. `mkmulti "MacBook Pro Speakers"`. Add `only` to build it from that output and BlackHole alone, so earphones do not also play through the speakers: `mkmulti "External Headphones" only`. |
 | `setout.c` | Sets the default output device by name, e.g. `setout "BlackHole 2ch"` to capture silently. |
 
 **Why `bhrec` exists:** ffmpeg's `avfoundation` audio input silently drops about 12% of the audio

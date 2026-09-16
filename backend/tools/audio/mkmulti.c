@@ -31,6 +31,9 @@ static char *cstr(CFStringRef s, char *buf, size_t n) {
 
 int main(int argc, char **argv) {
     const char *want = (argc > 1) ? argv[1] : "MacBook Pro Speakers";
+    // Optional second argument "only": build the device from the named output and
+    // BlackHole alone, so listening on earphones does not also play through the speakers.
+    int only = (argc > 2) && strcmp(argv[2], "only") == 0;
     AudioObjectPropertyAddress da = {kAudioHardwarePropertyDevices,
                                      kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain};
     UInt32 sz = 0;
@@ -93,7 +96,7 @@ int main(int argc, char **argv) {
             &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
         const void *subs[10]; int nSub = 0;
         subs[nSub++] = subS;                       // the master, first
-        for (int i = 0; i < nReal && nSub < 9; i++) {
+        for (int i = 0; !only && i < nReal && nSub < 9; i++) {
             if (CFStringCompare(realUID[i], speakersUID, 0) == kCFCompareEqualTo) continue;
             const void *ov[] = {realUID[i], cf_one};   // drift-corrected, not master
             subs[nSub++] = CFDictionaryCreate(NULL, sk, ov, 2,
