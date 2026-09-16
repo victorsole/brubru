@@ -403,6 +403,39 @@ def send_welcome_brief(email: str, db_session) -> bool:
     )
 
 
+# Reserved / invalid addresses that will always bounce; never email them.
+# Seed/test fixtures (e.g. v2_parl_*@example.com) leak into the users table and waste
+# sends + risk Gmail throttling. Set 8 June 2026 after a Brubru Brief send produced 6
+# @example.com DSN bounces.
+# brubru.beresol.eu added 19 June 2026: dormant pre-provisioned prospect profiles
+# (dormant-claim flow, migration 148) create users rows with synthetic
+# `prospect+<slug>@brubru.beresol.eu` placeholder emails that have NO mailbox and
+# always bounce "No Such User". (5 DSN bounces on the 19 June Brubru Brief.)
+# Reserved TLDs checked by last label since 16 September 2026: the list used to be
+# compared with the WHOLE domain, so `demo.invalid` passed although `.invalid` can never
+# resolve (RFC 2606 / RFC 6761), and the State of the Union Brief bounced on it.
+RESERVED_EMAIL_DOMAINS = ("example.com", "example.org", "example.net", "brubru.beresol.eu")
+RESERVED_EMAIL_TLDS = ("test", "invalid", "localhost", "example")
+
+
+def is_sendable_address(addr: Optional[str]) -> bool:
+    """False for any address that can never receive mail or is a synthetic placeholder."""
+    if not addr or "@" not in addr:
+        return False
+    local, _, domain = addr.strip().rpartition("@")
+    local = local.strip().lower()
+    domain = domain.strip().lower().rstrip(".")
+    if not local or not domain:
+        return False
+    # Synthetic dormant-prospect placeholder local-parts (`prospect+...`) never have a
+    # real mailbox even if a future profile uses a different domain.
+    if local.startswith("prospect+"):
+        return False
+    if domain.rsplit(".", 1)[-1] in RESERVED_EMAIL_TLDS:
+        return False
+    return not any(domain == d or domain.endswith("." + d) for d in RESERVED_EMAIL_DOMAINS)
+
+
 def _get_all_recipient_emails(db_session) -> tuple:
     """
     Get all daily brief recipients: registered users + pre-user captures.
@@ -412,29 +445,6 @@ def _get_all_recipient_emails(db_session) -> tuple:
     from models.user import User
     from models.pre_user_event import PreUserEvent
     from sqlalchemy import func
-
-    # Reserved / invalid domains that will always bounce (RFC 2606 + local test markers).
-    # Seed/test fixtures (e.g. v2_parl_*@example.com) leak into the users table and waste
-    # sends + risk Gmail throttling; never email them. Set 8 June 2026 after a Brubru Brief
-    # send produced 6 @example.com DSN bounces.
-    # brubru.beresol.eu added 19 June 2026: dormant pre-provisioned prospect profiles
-    # (dormant-claim flow, migration 148) create users rows with synthetic
-    # `prospect+<slug>@brubru.beresol.eu` placeholder emails that have NO mailbox and
-    # always bounce "No Such User" -- they must never be emailed. (5 DSN bounces on the
-    # 19 June Brubru Brief: zeno-nl, wordsmith-uk, saga-nl, + 2 Sifted journalists.)
-    _RESERVED_DOMAINS = ("example.com", "example.org", "example.net",
-                         "test", "invalid", "localhost", "example",
-                         "brubru.beresol.eu")
-
-    def _is_sendable(addr: str) -> bool:
-        if not addr or "@" not in addr:
-            return False
-        local, _, domain = addr.rpartition("@")
-        # Synthetic dormant-prospect placeholder local-parts (`prospect+...`) never have a
-        # real mailbox even if a future profile uses a different domain -- exclude them too.
-        if local.strip().lower().startswith("prospect+"):
-            return False
-        return domain.strip().lower() not in _RESERVED_DOMAINS
 
     # 0. Unsubscribe events apply to BOTH registered users and pre-users (the
     #    pre_user_events unsubscribe table is the single opt-out ledger). Previously
@@ -458,7 +468,7 @@ def _get_all_recipient_emails(db_session) -> tuple:
             continue
         if email.lower() in unsubscribed:
             continue
-        if not _is_sendable(email):
+        if not is_sendable_address(email):
             continue
         registered_emails.add(email)
 
@@ -475,7 +485,7 @@ def _get_all_recipient_emails(db_session) -> tuple:
     # Remove pre-user emails that are already registered (avoid duplicates), any
     # with an unsubscribe event (case-insensitive), and any on a reserved domain.
     preuser_only = {e for e in (preuser_emails - registered_emails)
-                    if e.lower() not in unsubscribed and _is_sendable(e)}
+                    if e.lower() not in unsubscribed and is_sendable_address(e)}
 
     return registered_emails, preuser_only
 
