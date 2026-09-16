@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n995 requests across 49 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1002 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -6337,7 +6337,7 @@
           "name": "Infringements",
           "item": [
             {
-              "name": "Commission infringement decisions \u2014 Member State legal proceedings (LFN, reasoned opinion, CJEU referral, closure)",
+              "name": "Infringement cases against Member States (open and closed, since 1987)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -6363,6 +6363,108 @@
                       "key": "member_state",
                       "value": "",
                       "disabled": true,
+                      "description": "Member State code, e.g. PL, EL (Greece), UK."
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "disabled": true,
+                      "description": "true for open cases, false for closed ones."
+                    },
+                    {
+                      "key": "case_type",
+                      "value": "",
+                      "disabled": true,
+                      "description": "NCM | NCF | BAD | REG."
+                    },
+                    {
+                      "key": "lead_dg",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Commission department code, e.g. ENV."
+                    },
+                    {
+                      "key": "policy_area",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Text contained in a policy area."
+                    },
+                    {
+                      "key": "latest_decision_category",
+                      "value": "",
+                      "disabled": true,
+                      "description": "e.g. LFN, RO, RTC, CLOSURES."
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": "Words in the subject, or an infringement number."
+                    },
+                    {
+                      "key": "decision_from",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Latest decision on or after (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "decision_to",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Latest decision on or before (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists infringement cases: the legal proceedings the European Commission opens when it considers a Member State has failed to apply EU law. One item per case, with the Member State, the type of infringement (non-communication of transposition measures, non-conformity, bad application), the Commission department in charge, the subject, whether the case is still open, and its latest step (letter of formal notice, reasoned opinion, referral to the Court of Justice, closure).\n\n**When to use it**\nTo see which Member States face proceedings on a topic, how far each case has gone, and which are still open. Filter by `member_state`, `active`, `case_type`, `lead_dg` or `policy_area`, search the subject with `q`, or window on the latest decision date.\n\n**Input**\n- `member_state`: code as the Commission writes it, e.g. `PL`, `EL` (Greece; `GR` is accepted), `UK`.\n- `active`: `true` for open cases, `false` for closed ones.\n- `case_type`: `NCM` (non-communication), `NCF` (non-conformity), `BAD` (bad application), `REG` (regulations, Treaties and decisions).\n- `lead_dg`: department code, e.g. `ENV`, `GROW`, `MOVE`.\n- `policy_area`: text contained in a policy area, e.g. `waste`.\n- `latest_decision_category`: e.g. `RTC` for cases whose latest step is a referral to the Court.\n- `q`: words in the subject, or an infringement number.\n- `decision_from`, `decision_to`: bounds on the latest decision date (YYYY-MM-DD).\n- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements?member_state=PL&active=true\nGET /api/v2/commission/infringements?case_type=NCM&lead_dg=ENV&active=true\nGET /api/v2/commission/infringements?q=nitrates\n```\n\n**You get back**\nA paginated list of cases. Each carries `id`, `infringement_number`, `member_state`, `active_case`, `case_type`, `lead_dg`, `title`, `first_decision_date`, `latest_decision_date`, `latest_decision_type`, `decision_count`, `court_cases`, `press_release_urls`, and the five datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`; the bodies are on the detail endpoint).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+              },
+              "response": []
+            },
+            {
+              "name": "Commission press releases about infringement decisions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/press-releases",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    "press-releases"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_state",
+                      "value": "",
+                      "disabled": true,
                       "description": ""
                     },
                     {
@@ -6381,7 +6483,7 @@
                       "key": "q",
                       "value": "data protection",
                       "disabled": true,
-                      "description": "Substring match on title/summary"
+                      "description": ""
                     },
                     {
                       "key": "decision_from",
@@ -6409,12 +6511,12 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns the infringement decisions adopted by the College of Commissioners in the monthly infringement packages \u2014 letters of formal notice (LFN, the first warning), reasoned opinions (the second warning), referrals to the Court of Justice (CJEU litigation), and closures (Member State complied). Each row carries the INF reference, the Member State, the procedure stage, the sector, dates, and the decision summary.\n\n**When to use it**\nFor compliance + risk-monitoring work: which Member States have open infringements on a topic, what stages of proceedings the Commission has reached, and what risks of CJEU litigation exist. Filter by `member_state` for one country, by `sector` for a topic.\n\n**Input**\n- `member_state` \u2014 ISO-2 (exact 2 chars).\n- `procedure_stage` \u2014 substring on stage name (e.g. `formal notice`, `reasoned opinion`).\n- `sector` \u2014 substring on sector.\n- `q` \u2014 substring on title + summary.\n- `decision_from`, `decision_to` \u2014 decision_date filter.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/infringements?member_state=PL&procedure_stage=reasoned%20opinion\nGET /api/v2/commission/infringements?sector=environment&decision_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[InfringementItem]` envelope. Each item carries `inf_reference`, `title`, `summary`, `member_state`, `procedure_stage`, `sector`, `decision_date`, `source_url`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/commission/presscorner. The Commission adopts infringement packages monthly + ad-hoc; daily sync catches them within 24h of adoption. is_test=True fixture rows are filtered out at query time."
+                "description": "**What it does**\nLists the Commission press releases about infringement decisions (monthly infringement packages and individual referrals to the Court). This is the collection `/api/v2/commission/infringements` served before 16 September 2026; the register of cases and decisions now lives at `/api/v2/commission/infringements` and `/decisions`.\n\n**When to use it**\nWhen you want the Commission's press communication about infringements rather than the register itself. Most register decisions that had a press release also carry its link in `press_release_url`.\n\n**Input**\n- `member_state` (ISO-2), `procedure_stage` (e.g. `formal notice`), `sector`, `q`, `decision_from`, `decision_to`, `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/press-releases?member_state=ES\n```\n\n**You get back**\nA paginated list of press-release items: `inf_reference`, `title`, `summary`, `member_state`, `procedure_stage`, `decision_date`, `source_url`, and the five datapoints.\n\n**Data freshness**\nIngested from the Commission's press corner; not updated since 7 May 2026. For current decisions use `/decisions?with_press_release=true`."
               },
               "response": []
             },
             {
-              "name": "Look up one infringement decision by its INF reference",
+              "name": "Infringement decisions adopted by the Commission (letters of formal notice, reasoned opinions, Court referrals, closures)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -6425,7 +6527,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/v2/commission/infringements/:inf_reference",
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/decisions",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -6434,17 +6536,403 @@
                     "v2",
                     "commission",
                     "infringements",
+                    "decisions"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_state",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Member State code, e.g. IT, EL (Greece), UK."
+                    },
+                    {
+                      "key": "infringement_number",
+                      "value": "",
+                      "disabled": true,
+                      "description": "One case, e.g. INFR(2026)0352."
+                    },
+                    {
+                      "key": "decision_category",
+                      "value": "",
+                      "disabled": true,
+                      "description": "LFN, ALFN, RO, ARO, RTC, CLOSURES, ..."
+                    },
+                    {
+                      "key": "decision_type",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Words in the decision name, e.g. 260(3)."
+                    },
+                    {
+                      "key": "case_type",
+                      "value": "",
+                      "disabled": true,
+                      "description": "NCM | NCF | BAD | REG."
+                    },
+                    {
+                      "key": "lead_dg",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Commission department code, e.g. ENV."
+                    },
+                    {
+                      "key": "policy_area",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Text contained in a policy area."
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "disabled": true,
+                      "description": "true for decisions in open cases."
+                    },
+                    {
+                      "key": "with_press_release",
+                      "value": "",
+                      "disabled": true,
+                      "description": "true for decisions announced in a press release."
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": "Words in the subject."
+                    },
+                    {
+                      "key": "decision_from",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Decided on or after (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "decision_to",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Decided on or before (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists every decision the European Commission has adopted in infringement procedures since 1987: letters of formal notice, additional letters, reasoned opinions, referrals to the Court of Justice (with or without financial sanctions) and closures. One item per decision, linked to its case, with the press release, memo or Court case when there is one.\n\n**When to use it**\nTo follow the Commission's monthly infringement packages, list the referrals to the Court for one Member State, or trace how a type of decision has been used over time.\n\n**Input**\n- `member_state`: e.g. `IT`, `EL` (Greece), `UK`.\n- `infringement_number`: one case, e.g. `INFR(2026)0352`.\n- `decision_category`: `LFN` (letter of formal notice), `ALFN`, `RO` (reasoned opinion), `ARO`, `RTC` (referral to Court), `CLOSURES`, `NON_COM_RTC`, `SECOND_RTC`, and others.\n- `decision_type`: words in the decision name, e.g. `260(3)` for referrals with financial sanctions.\n- `case_type`: `NCM` | `NCF` | `BAD` | `REG`. `lead_dg`: e.g. `ENV`. `policy_area`: text.\n- `active`: `true` for decisions in open cases. `with_press_release`: `true` for decisions announced in a press release.\n- `q`: words in the subject. `decision_from`, `decision_to`: decision date bounds (YYYY-MM-DD).\n- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/decisions?decision_from=2026-07-01&decision_category=RTC\nGET /api/v2/commission/infringements/decisions?member_state=DE&decision_category=RO\n```\n\n**You get back**\nA paginated list of decisions: `id`, `case_id`, `infringement_number`, `member_state`, `decision_date`, `decision_type`, `decision_category`, `case_type`, `lead_dg`, `title`, `active_case`, `press_release_url`, `memo_url`, `court_case`, `court_case_url`, `public_url_kind`, and the five datapoints (bodies on the detail endpoint).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+              },
+              "response": []
+            },
+            {
+              "name": "Statistics on infringements, transposition of directives and pre-infringement dialogues",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/statistics",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    "statistics"
+                  ],
+                  "query": [
+                    {
+                      "key": "section",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the statistics datasets published on the Commission's 'Implementing EU law' dashboards, in three sections: infringement cases (active cases per Member State, by type and policy area, decisions per year, trends, durations, time to comply with Court rulings), transposition of directives (transposition and conformity deficits per Member State and over time, directives to transpose), and pre-infringement dialogues (per Member State, by policy area, trends, duration, resolution rate).\n\n**When to use it**\nTo find which dataset answers a question, and which parameters it takes, before calling `/statistics/{dataset}`.\n\n**Input**\n- `section`: `infringements`, `transposition` or `pre_infringement_dialogues` (optional).\n\n**Try it**\n```\nGET /api/v2/commission/infringements/statistics\nGET /api/v2/commission/infringements/statistics?section=transposition\n```\n\n**You get back**\nOne item per dataset: `dataset` (the key for `/statistics/{dataset}`), `section`, `title`, `description`, `unit`, `parameters` (the query parameters it accepts), and the five datapoints (`public_url` is the dashboard page).\n\n**Data freshness**\nThe catalogue is fixed; each dataset's figures are read from the Commission's dashboards when requested and cached for six hours."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one Commission press release about infringements",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/press-releases/:inf_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    "press-releases",
                     ":inf_reference"
                   ],
                   "variable": [
                     {
                       "key": "inf_reference",
-                      "value": "",
+                      "value": "IP_26_838",
                       "description": "(path variable)"
                     }
                   ]
                 },
-                "description": "**What it does**\nFetches a single infringement decision by its INF reference. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating an infringement via the list endpoint, use this for the full record + body composition.\n\n**Input**\n- `inf_reference` (path) \u2014 INF reference (e.g. `INF(2026)123`). The `:path` matcher accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/INF(2026)123\n```\n\n**You get back**\nA single `InfringementItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from ec.europa.eu/commission/presscorner."
+                "description": "**What it does**\nReturns one press release from `/press-releases` by its reference.\n\n**When to use it**\nAfter finding a press release in `/press-releases`.\n\n**Input**\n- `inf_reference` (path): the press release reference, e.g. `IP_26_838`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/press-releases/IP_26_838\n```\n\n**You get back**\nOne press-release item, or 404 with `reason_code: not_found`.\n\n**Data freshness**\nAs `/press-releases`: not updated since 7 May 2026."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one infringement case with all its decisions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/:case_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    ":case_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "case_id",
+                      "value": "INFR(2026)0352",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true,
+                      "description": "Minimum character length of body_text required for has_body=True. Default 500. Lower it (e.g. 200) if the source data has legitimately short bodies (funding-call summaries, infringement summaries). Set 0 to make has_body=True on any non-empty body."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one infringement case with its full composed body and every decision the Commission adopted in it, oldest first: from the letter of formal notice to the reasoned opinion, the referral to the Court of Justice and the closure.\n\n**When to use it**\nTo follow one case from start to finish, or to quote its current state.\n\n**Input**\n- `case_id` (path): the case `id` from the list, or its infringement number, e.g. `INFR(2026)0352`.\n- `body_threshold` (default 500): minimum body length for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/INFR(2026)0352\n```\n\n**You get back**\nThe case's fields as in the list, plus `body_txt`, `body_html`, `body_source`, `has_body` and `decisions` (each decision with its own datapoints), or 404 with `reason_code: not_found`.\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one infringement decision",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/decisions/:decision_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    "decisions",
+                    ":decision_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "decision_id",
+                      "value": "62518",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true,
+                      "description": "Minimum character length of body_text required for has_body=True. Default 500. Lower it (e.g. 200) if the source data has legitimately short bodies (funding-call summaries, infringement summaries). Set 0 to make has_body=True on any non-empty body."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one infringement decision with its full composed body: the decision, its date, the case and Member State, the subject, the department in charge, and links to the press release, memo or Court of Justice case.\n\n**When to use it**\nAfter finding a decision in the decisions list, to read or quote it in full.\n\n**Input**\n- `decision_id` (path): the `id` of a decision from the decisions list.\n- `body_threshold` (default 500): minimum body length for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/decisions/1\n```\n\n**You get back**\nThe decision's fields as in the list, plus `body_txt`, `body_html`, `body_source` and `has_body`, or 404 with `reason_code: not_found`.\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+              },
+              "response": []
+            },
+            {
+              "name": "One statistics dataset on infringements, transposition or pre-infringement dialogues",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/statistics/:dataset",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    "statistics",
+                    ":dataset"
+                  ],
+                  "variable": [
+                    {
+                      "key": "dataset",
+                      "value": "active-cases-by-member-state",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-01",
+                      "disabled": true,
+                      "description": "As of this day (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "year",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "month",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "end_year",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "year_range",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "member_state",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "case_type",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "policy_area",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true,
+                      "description": "Minimum character length of body_text required for has_body=True. Default 500. Lower it (e.g. 200) if the source data has legitimately short bodies (funding-call summaries, infringement summaries). Set 0 to make has_body=True on any non-empty body."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the figures of one dataset from the Commission's 'Implementing EU law' dashboards, for the parameters you choose: for example the number of open infringement cases per Member State today, the transposition deficit of each Member State in a given month, or pre-infringement dialogues opened and closed per year.\n\n**When to use it**\nFor comparisons across Member States and trends over time, where the case and decision lists would need counting. List the datasets first with `/statistics`.\n\n**Input**\n- `dataset` (path): a key from `/statistics`, e.g. `active-cases-by-member-state`, `transposition-deficit-by-member-state`, `dialogues-opened-closed-active`.\n- Only the parameters the dataset accepts (see `/statistics`); any other returns 422:\n  - `date` (YYYY-MM-DD, default today), `year`, `month` (1-12), `end_year` (default last year), `year_range` (1-25, default 5);\n  - `member_state` (e.g. `PL`, `EL`), `case_type` (`NCM`, `NCF`, `BAD`, `REG`; repeatable), `policy_area` (a department code such as `ENV`, or its numeric id; repeatable).\n\n**Try it**\n```\nGET /api/v2/commission/infringements/statistics/active-cases-by-member-state\nGET /api/v2/commission/infringements/statistics/transposition-deficit-by-member-state?year=2026&month=9\nGET /api/v2/commission/infringements/statistics/cases-opened-closed-active?member_state=IT&end_year=2025&year_range=10\n```\n\n**You get back**\n`dataset`, `title`, `unit`, `parameters` (as applied, defaults included), `series` (named series of labelled values), `rows` (the same as flat rows), `source_url`, and the five datapoints: `public_url` (the dashboard page), `body_txt`/`body_html` (the figures as a readable table), `document_date` (the dashboard's own last update), `creation_date` (when Brubru read the figures).\n\n**Data freshness**\nRead from ec.europa.eu/implementing-eu-law when requested and cached for six hours; the Commission updates the dashboards daily."
+              },
+              "response": []
+            },
+            {
+              "name": "The decisions adopted in one infringement case",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/:case_id/decisions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    ":case_id",
+                    "decisions"
+                  ],
+                  "variable": [
+                    {
+                      "key": "case_id",
+                      "value": "INFR(2026)0352",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the decisions adopted in one infringement case, oldest first.\n\n**When to use it**\nWhen you only need a case's procedural steps, paginated.\n\n**Input**\n- `case_id` (path): the case `id`, or its infringement number, e.g. `INFR(2026)0352`.\n- `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/INFR(2026)0352/decisions\n```\n\n**You get back**\nA paginated list of decisions, as in `/decisions`, or 404 when the case does not exist.\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
               },
               "response": []
             }

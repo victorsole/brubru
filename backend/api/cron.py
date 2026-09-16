@@ -583,6 +583,11 @@ async def cron_sync_daily(
     results["transparency_register"] = await _run_script_async("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
     results["jrc"] = await _run_script_async("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)
     results["infringements"] = await _run_script_async("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
+    # The Commission's register of infringement decisions (62,610 decisions, 25,658 cases on
+    # 16 Sep 2026) behind /api/v2/commission/infringements. Reads the whole register in date
+    # windows, reconciles against its total, and records a sync_runs row itself.
+    results["infringement_register"] = await _run_script_async(
+        "infringement_register", "scripts/sync_infringement_register.py", ["--apply"], timeout=1800)
     results["eesc"] = await _run_script_async("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
     results["cor"] = await _run_script_async("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
     # euagenda RETIRED 15 Sep 2026 (Victor): the site sits behind a Cloudflare bot

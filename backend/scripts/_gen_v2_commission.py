@@ -66,10 +66,9 @@ OUTPUTS = {
         "prefix": "/rsb-opinions", "tag": "v2-commission-rsb-opinions",
         "groups": [("w4_endpoints", [("list_rsb_opinions", None), ("get_rsb_detail", None)])],
     },
-    "infringements": {
-        "prefix": "/infringements", "tag": "v2-commission-infringements",
-        "groups": [("infringements_funding", [("list_infringements", None), ("get_infringement", None)])],
-    },
+    # "infringements" is NOT generated since 16 Sep 2026: api/v2/commission/infringements.py
+    # is hand-written over the Commission's infringement register (cases, decisions,
+    # statistics); regenerating it from the v1 press-release surface would erase that.
     "consultations": {
         "prefix": "/consultations", "tag": "v2-commission-consultations",
         "groups": [("consultations", [

@@ -233,6 +233,8 @@ _PARAM_DEFAULTS = {
     "procedure_ref": "2025/2125(INI)",
     # European Commission domain path variables
     "name": "ribera", "initiative_id": "13693", "notification_number": "2026/0123/FR",
+    "case_id": "INFR(2026)0352", "decision_id": "62518", "dataset": "active-cases-by-member-state",
+    "inf_reference": "IP_26_838",
 }
 _QUERY_FALLBACKS = {
     "q": "data protection", "id": "GDPR", "date": "2026-05-01", "published_from": "2026-05-01",

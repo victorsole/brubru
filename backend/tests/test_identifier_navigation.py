@@ -76,7 +76,11 @@ PAIRS = [
     ("/api/v2/parliament/parliamentary-questions", "question_reference"),
     ("/api/v2/commission/commission-register-documents", "reference"),
     ("/api/v2/commission/rsb-opinions", "opinion_reference"),
-    ("/api/v2/commission/infringements", "inf_reference"),
+    # Since 16 Sep 2026 the register's cases; the press releases this path served before
+    # moved to /press-releases (their old URLs redirect there).
+    ("/api/v2/commission/infringements", "infringement_number"),
+    ("/api/v2/commission/infringements/decisions", None),
+    ("/api/v2/commission/infringements/press-releases", "inf_reference"),
     ("/api/v2/commission/consultations", "initiative_id"),
     ("/api/v2/commission/tris-notifications", "notification_number"),
     ("/api/v2/legislative/delegated-acts", "reference"),

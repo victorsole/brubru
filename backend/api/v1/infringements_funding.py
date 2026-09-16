@@ -110,7 +110,7 @@ GET /api/v1/infringements?sector=environment&decision_from=2026-01-01
 A `PaginatedResponse[InfringementItem]` envelope. Each item carries `inf_reference`, `title`, `summary`, `member_state`, `procedure_stage`, `sector`, `decision_date`, `source_url`, plus the 5 envelope-level datapoints.
 
 **Data freshness**
-Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/commission/presscorner. The Commission adopts infringement packages monthly + ad-hoc; daily sync catches them within 24h of adoption. is_test=True fixture rows are filtered out at query time.""",
+Commission press releases about infringements, ingested from ec.europa.eu/commission/presscorner; this collection has not been updated since 7 May 2026. For the Commission's full register of infringement cases and decisions (every decision since 1987, synced daily) use `/api/v2/commission/infringements` and `/api/v2/commission/infringements/decisions`. is_test=True fixture rows are filtered out at query time.""",
 )
 async def list_infringements(
     request: Request,
@@ -185,7 +185,7 @@ GET /api/v1/infringements/INF(2026)123
 A single `InfringementItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
 
 **Data freshness**
-Same as the list endpoint — daily 04:00 UTC sync from ec.europa.eu/commission/presscorner.""",
+Same as the list endpoint: press releases not updated since 7 May 2026; the full register is at `/api/v2/commission/infringements`.""",
 )
 async def get_infringement(
     inf_reference: str,
