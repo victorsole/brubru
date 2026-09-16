@@ -9,7 +9,9 @@ Source: https://commission.europa.eu/strategy-and-policy/decision-making-process
 Created: February 2026
 """
 
+import json
 import logging
+import pathlib
 from datetime import date, timedelta
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -25,6 +27,53 @@ EC_DOC_REGISTER_OJ_URL = (
     "TlRFTlQiLCJzb3J0QnkiOiJET0NVTUVOVF9EQVRFX0RFU0MiLCJpc1JlZ3VsYXIiOnRydWUsImtl"
     "eXdvcmRzIjoiIiwicmVmZXJlbmNlIjoiIiwicGFnZSI6MX0%3D"
 )
+
+
+# Tentative agenda items per meeting date, maintained from the Commission's
+# tentative agenda during /news. Read at generation time so the calendar sync,
+# which overwrites a differing description on every run, writes the items
+# instead of reverting them to the generic text (16 September 2026: a direct
+# database edit would have been silently undone by the next sync).
+TENTATIVE_AGENDA_PATH = (
+    pathlib.Path(__file__).resolve().parents[2] / "data" / "college_tentative_agenda.json"
+)
+
+GENERIC_DESCRIPTION = (
+    "Weekly meeting of the College of Commissioners. "
+    "The agenda (OJ document) and minutes (PV document) "
+    "are published in the EC Register of Commission Documents."
+)
+
+
+def load_tentative_agenda(path: Optional[pathlib.Path] = None) -> Dict[str, Any]:
+    """Return the tentative-agenda file, or an empty mapping if absent or unreadable.
+
+    A missing or malformed file must never stop meeting generation: the meetings
+    still exist, they just carry the generic description.
+    """
+    p = path or TENTATIVE_AGENDA_PATH
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+        return data if isinstance(data.get("meetings"), dict) else {}
+    except (OSError, ValueError) as exc:
+        logger.warning("[WARN] tentative agenda not loaded from %s: %s", p, exc)
+        return {}
+
+
+def describe_meeting(meeting_day: date, agenda: Dict[str, Any]) -> str:
+    """Generic description, plus the planned items when the agenda lists this date."""
+    items = (agenda.get("meetings") or {}).get(meeting_day.isoformat()) or []
+    if not items:
+        return GENERIC_DESCRIPTION
+    lines = [f"{it['item']} ({it['responsible']})" for it in items if it.get("item")]
+    source = agenda.get("source_label") or "the Commission's tentative agenda"
+    heading = agenda.get("responsible_heading") or "responsible"
+    return (
+        "Planned items (tentative, the Commission may change the planning): "
+        + "; ".join(lines)
+        + f". In brackets: {heading}. Source: {source}. "
+        + GENERIC_DESCRIPTION
+    )
 
 
 def generate_college_meetings(
@@ -71,6 +120,8 @@ def generate_college_meetings(
         days_until_wed = (2 - current.weekday()) % 7
         current = current + timedelta(days=days_until_wed)
 
+    agenda = load_tentative_agenda()
+
     while current <= end_date:
         # Skip if in recess
         in_recess = any(
@@ -90,11 +141,7 @@ def generate_college_meetings(
                     "College of Commissioners: Weekly Meeting (Strasbourg)"
                     if in_strasbourg else "College of Commissioners: Weekly Meeting"
                 ),
-                "description": (
-                    "Weekly meeting of the College of Commissioners. "
-                    "The agenda (OJ document) and minutes (PV document) "
-                    "are published in the EC Register of Commission Documents."
-                ),
+                "description": describe_meeting(meeting_day, agenda),
                 "start_date": meeting_day,
                 "all_day": True,
                 "status": "scheduled",

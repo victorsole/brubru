@@ -194,7 +194,11 @@ class EUCalendarSyncService:
                 ]
                 events_data = generate_college_meetings(months_ahead, plenary_dates)
                 generated_ids = {e["external_id"] for e in events_data}
+                today = date.today()
                 for event_data in events_data:
+                    # Held meetings: the College OJ sync owns the description.
+                    if event_data["start_date"] < today:
+                        event_data = {**event_data, "keep_existing_description": True}
                     try:
                         self._upsert_event(db, event_data, result)
                     except Exception as e:
@@ -658,7 +662,15 @@ class EUCalendarSyncService:
             if event_data.get("end_date") and existing.end_date != event_data.get("end_date"):
                 existing.end_date = event_data.get("end_date")
                 changed = True
-            if event_data.get("description") and existing.description != event_data.get("description"):
+            # A generator can mark its description as a placeholder for rows another
+            # sync owns (College meetings already held carry the description built
+            # from the published order of the day). Without this the two syncs
+            # overwrote each other on every run (found 16 September 2026).
+            if (
+                event_data.get("description")
+                and not event_data.get("keep_existing_description")
+                and existing.description != event_data.get("description")
+            ):
                 existing.description = event_data.get("description")
                 changed = True
             if event_data.get("source_url") and existing.source_url != event_data.get("source_url"):
