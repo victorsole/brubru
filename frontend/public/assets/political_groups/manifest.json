@@ -1,0 +1,80 @@
+{
+  "source_page": "https://www.europarl.europa.eu/about-parliament/en/organisation-and-rules/organisation/political-groups",
+  "source_image": "https://www.europarl.europa.eu/resources/library/images/20241015PHT24546/20241015PHT24546-cl.png",
+  "retrieved": "2026-09-16",
+  "note": "Cropped from the European Parliament seat-distribution graphic (1156px, the largest variant). Each tile is about 110px square: fine up to roughly 110px on screen, soft if scaled larger. *_tile.png keeps the seat count printed on the tile, which is the count at the constitutive session of 16 July 2024 and is out of date; *_logo.png is the lower part of the tile without the number, for reuse.",
+  "groups": {
+    "epp": {
+      "abbreviation": "EPP",
+      "name": "Group of the European People's Party (Christian Democrats)",
+      "tile": "/assets/political_groups/epp_tile.png",
+      "logo": "/assets/political_groups/epp_logo.png",
+      "tile_seats_16_july_2024": 188,
+      "tile_colour": "#0055a0"
+    },
+    "sd": {
+      "abbreviation": "S&D",
+      "name": "Group of the Progressive Alliance of Socialists and Democrats",
+      "tile": "/assets/political_groups/sd_tile.png",
+      "logo": "/assets/political_groups/sd_logo.png",
+      "tile_seats_16_july_2024": 136,
+      "tile_colour": "#ff0000"
+    },
+    "patriots": {
+      "abbreviation": "PfE",
+      "name": "Patriots for Europe Group",
+      "tile": "/assets/political_groups/patriots_tile.png",
+      "logo": "/assets/political_groups/patriots_logo.png",
+      "tile_seats_16_july_2024": 84,
+      "tile_colour": "#253080"
+    },
+    "ecr": {
+      "abbreviation": "ECR",
+      "name": "European Conservatives and Reformists Group",
+      "tile": "/assets/political_groups/ecr_tile.png",
+      "logo": "/assets/political_groups/ecr_logo.png",
+      "tile_seats_16_july_2024": 78,
+      "tile_colour": "#196da9"
+    },
+    "renew": {
+      "abbreviation": "Renew",
+      "name": "Renew Europe Group",
+      "tile": "/assets/political_groups/renew_tile.png",
+      "logo": "/assets/political_groups/renew_logo.png",
+      "tile_seats_16_july_2024": 77,
+      "tile_colour": "#0097ff"
+    },
+    "greens_efa": {
+      "abbreviation": "Greens/EFA",
+      "name": "Group of the Greens/European Free Alliance",
+      "tile": "/assets/political_groups/greens_efa_tile.png",
+      "logo": "/assets/political_groups/greens_efa_logo.png",
+      "tile_seats_16_july_2024": 53,
+      "tile_colour": "#008200"
+    },
+    "the_left": {
+      "abbreviation": "The Left",
+      "name": "The Left group in the European Parliament - GUE/NGL",
+      "tile": "/assets/political_groups/the_left_tile.png",
+      "logo": "/assets/political_groups/the_left_logo.png",
+      "tile_seats_16_july_2024": 46,
+      "tile_colour": "#ffffff"
+    },
+    "esn": {
+      "abbreviation": "ESN",
+      "name": "Europe of Sovereign Nations Group",
+      "tile": "/assets/political_groups/esn_tile.png",
+      "logo": "/assets/political_groups/esn_logo.png",
+      "tile_seats_16_july_2024": 25,
+      "tile_colour": "#104475"
+    },
+    "non_attached": {
+      "abbreviation": "NI",
+      "name": "Non-attached Members",
+      "tile": "/assets/political_groups/non_attached_tile.png",
+      "logo": "/assets/political_groups/non_attached_logo.png",
+      "tile_seats_16_july_2024": 32,
+      "tile_colour": "#757570"
+    }
+  }
+}
