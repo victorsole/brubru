@@ -27,8 +27,18 @@ or
 with `Authorization: Bearer $CRON_SECRET`. The backend runs the sync and
 returns a JSON summary.
 
-Fail-soft: one tier failing doesn't stop the next. The dispatcher logs and
-continues. Exit code 0 even on partial failure — the operator reads the log.
+Fail-soft EXECUTION, honest REPORTING (changed 22 September 2026). One tier
+failing still does not stop the next. But the exit code is now 1 whenever any
+tier, or any job inside a tier, failed -- so the Railway job goes red.
+
+It used to exit 0 unconditionally, "the operator reads the log". No operator
+reads a green log: ingestion was dead from 19 to 22 September 2026 and this
+service reported success every hour throughout.
+
+A job recorded as `degraded` does NOT make the run red. That status belongs to
+an AUDIT source (SourceSpec.is_audit), which exits non-zero to report gaps it
+found -- that is the auditor working. Counting it would paint every run red for
+ever and the signal would die again, the other way round.
 
 Usage:
     BACKEND_URL=https://brubru-production.up.railway.app \\
@@ -304,7 +314,12 @@ def main():
     job_failures: list[str] = []
     for label, payload in results.items():
         for job, status in _iter_job_statuses(payload):
-            if status not in ("success", "ok", "skipped"):
+            # "degraded" = an AUDIT source found gaps (it exits non-zero to say
+            # so). That is the auditor working, not a broken job, and counting it
+            # would make the Railway job red on every single run for ever -- which
+            # is how a red build stops meaning anything. It stays visible in
+            # sync_runs and /api/sync/health.
+            if status not in ("success", "ok", "skipped", "degraded"):
                 job_failures.append(f"{label}/{job}={status}")
 
     print(

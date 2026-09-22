@@ -1356,6 +1356,11 @@ async def cron_sync_tier(
             res = await _run_script_async(spec.key, spec.script, list(spec.args), timeout=spec.timeout)
             status = res.get("status", "failed")
             err = res.get("stderr_tail") or res.get("error") or res.get("reason")
+            # An AUDIT source exits non-zero to say "I found gaps", which is it
+            # working. Only a genuine crash (no returncode -- a timeout or a
+            # spawn failure) is a real failure for these. See SourceSpec.is_audit.
+            if getattr(spec, "is_audit", False) and status == "failed" and res.get("returncode"):
+                status = "degraded"
             record_run(
                 db,
                 source_key=spec.key,

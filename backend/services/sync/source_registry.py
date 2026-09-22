@@ -30,6 +30,19 @@ class SourceSpec:
     # Hours after which a missed refresh is considered "stale" (drives the
     # staleness email for fast feeds and the amber chip in the UI).
     stale_after_hours: int = 7
+    # True for a source that AUDITS rather than ingests. An auditor exits
+    # non-zero to mean "I found gaps", which is it working, not it breaking.
+    # `ep_council_gaps` runs ep_council_completeness.py, which by design exits 1
+    # whenever any of its ten checks reports a gap; the tier runner mapped that
+    # to `failed`, so it has been recorded as a failure on every run since
+    # 7 September 2026 while doing its job correctly.
+    #
+    # It matters now because the cron dispatcher went honest on 22 September and
+    # exits non-zero when a child fails. Leaving an auditor in the failure set
+    # makes the Railway job red on EVERY run for ever, which is precisely how a
+    # red build stops meaning anything. Auditors record `degraded`: visible in
+    # /api/sync/health and in sync_runs, but not counted as a broken job.
+    is_audit: bool = False
 
 
 # fmt: off
@@ -97,7 +110,7 @@ MEUB_SOURCES: List[SourceSpec] = [
                timeout=1800, stale_after_hours=48),
     SourceSpec("ep_council_gaps", "EP + Council completeness", "warm",
                "scripts/ep_council_completeness.py", (),
-               timeout=300, stale_after_hours=48),
+               timeout=300, stale_after_hours=48, is_audit=True),
     SourceSpec("oj",           "My OJ (Official Journal)",      "fast", "scripts/sync_oj.py",             ("--apply", "--explain"), timeout=900),
     # Must stay directly after "oj": the tier runs sources in list order, so the
     # ingest lands the day's entries and this translates them in the same pass.
