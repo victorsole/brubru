@@ -457,6 +457,12 @@ async def cron_sync_hot_6h(
     # Script-based syncs (no service wrapper yet)
     results["texts_submitted"] = await _run_script_async("texts_submitted", "scripts/ingest_texts_submitted.py", ["--apply"], timeout=600)
     results["college_agendas"] = await _run_script_async("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
+    # Tentative agendas are a DIFFERENT document from the published order of the
+    # day above: they list what the College is expected to take in the next four
+    # to eight weeks, and they move. Nothing fetched them until 22 Sep 2026, when
+    # commission_documents held zero rows of the type. Page 1 is the newest 20,
+    # which is all a daily run needs; --backfill walks the other 600.
+    results["college_tentative_agendas"] = await _run_script_async("college_tentative_agendas", "scripts/sync_college_tentative_agendas.py", [], timeout=600)
     results["calendar"] = await _run_script_async("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
     results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
     # eu_laws had no recurring ingest until 15 Sep 2026 (the script above writes legislative_carriages).
