@@ -2047,6 +2047,14 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # Industrial Accelerator Act
     'industrial accelerator': ['industrial_accelerator_act'],
     'industrial accelerator act': ['industrial_accelerator_act'],
+    # The bare acronym. Added 22 Sep 2026: a real user wrote "the proposed IAA"
+    # three times on 21 Sep and never once spelled the name out, so no trigger
+    # fired and the guide was never retrieved. Three characters, so the loader
+    # word-bounds it automatically (see the <=4-char branch in the matcher), which
+    # is why 'miaa' / 'Mariaa' / 'asiaa' cannot match it. Verified by negative test.
+    'iaa': ['industrial_accelerator_act'],
+    'iaa proposal': ['industrial_accelerator_act'],
+    'proposed iaa': ['industrial_accelerator_act'],
     'industrial decarbonisation accelerator': ['industrial_accelerator_act'],
     'low-carbon label': ['industrial_accelerator_act'],
     'low carbon label': ['industrial_accelerator_act'],
@@ -2224,7 +2232,16 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'eurostat': ['eurostat_statistics_production'],
     'itss': ['eurostat_statistics_production'],
     'fats': ['eurostat_statistics_production'],
-    'fdi': ['eurostat_statistics_production'],
+    # 'fdi' pointed ONLY at the Eurostat statistics guide until 22 Sep 2026. A real
+    # user asked about "Article 17 (these are certain FDI rules)" of the Industrial
+    # Accelerator Act on 21 Sep; this key fired, pulled the statistics-production
+    # guide, and the model answered from parametric memory about Regulation (EU)
+    # 2019/452 instead -- inventing that its Article 17 imposes mandatory screening
+    # (it is the entry-into-force clause) and that the Commission issues binding
+    # decisions (it issues opinions; Member States keep the final decision).
+    # Order matters: the screening regime is what "FDI" means in ordinary EU policy
+    # usage, so it leads; Eurostat's FDI statistics domain stays reachable last.
+    'fdi': ['eu_fdi_screening_regulation', 'industrial_accelerator_act', 'eurostat_statistics_production'],
     'ebops': ['eurostat_statistics_production'],
     'statistics': ['eurostat_statistics_production'],
     'asymmetry': ['eurostat_statistics_production'],

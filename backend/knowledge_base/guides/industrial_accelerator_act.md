@@ -1,6 +1,7 @@
 # Industrial Accelerator Act (COM(2026)100)
 
 ## QUICK FACTS
+- **ARTICLE NUMBERING — the single most misanswered thing about this file.** The proposal has **six chapters and 36 articles**. **Article 17 is the SCOPE of the FOREIGN DIRECT INVESTMENT chapter (Chapter IV, Articles 17 to 24), NOT a public-procurement article.** Public procurement is **Chapter III, Articles 7 to 16** (Article 11 is the procurement article). A user asking about "Article 17 of the IAA" is asking about FDI screening. Full verified map in the "Article-by-article" section below. Never answer an IAA article question about Regulation (EU) 2019/452 instead: that is a different instrument, and its own Article 17 is only its entry-into-force clause.
 - **LATEST (adopted Wednesday 15 July 2026, announced Monday 20 July 2026 — EESC OPINION):** The **European Economic and Social Committee adopted its mandatory opinion on the Industrial Accelerator Act** at its **607th plenary session on 15 July 2026** (reference **INT/1119-EESC-2026-00379-00-00-AC**; Bureau decision 20 January 2026; section: Single Market, Production and Consumption (INT)). **Rapporteur: Konstantinos Diamantouros** (Employers' Group I, Greece). Referral: **COM(2026) 100 final — 2026/0068(COD)** (this file). The EESC press release of 20 July frames it as backing "Made in Europe" **but calling for stricter safeguards and more focus on workers**. Key points from the adopted opinion:
   - **Welcomes** the IAA as a timely response to declining industrial competitiveness, external economic pressure, and the need to strengthen Europe's strategic industrial base.
   - **Supports the 20%-of-GDP-by-2035 manufacturing objective**, but asks for **complementary indicators** on decarbonisation, electrification, resource efficiency, quality jobs and strategic autonomy — i.e. not a single headline metric.
@@ -27,11 +28,6 @@
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
 - Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735). **Brubru now has a dedicated NZIA guide — `net_zero_industry_act.md` — which owns the Article 25 public-procurement regime (sustainability and resilience requirements) and the Commission's Article 25 guidance of 31 August 2026 (C/2026/4623). Route NZIA procurement questions there; this guide covers the Industrial Accelerator Act's own procurement chapter (Chapter III), which is a separate instrument.**
 - Ambition: increase EU manufacturing share from 14.3% to 20% of GDP by 2035
-- Chapter I (Articles 1-5): scope, definitions, strategic sectors (EIIs, automotive, net-zero tech)
-- Chapter II (Articles 6-16): permitting acceleration: "one project, one submission", single permit-granting procedure, Industrial Acceleration Areas with area-wide permits and tacit approval, digital permitting via European Business Wallet
-- Chapter III (Articles 17-29): public procurement and state aid: low-carbon requirements for steel (25% min), concrete/mortar (5% min, EU origin), aluminium (25% min, EU origin), EU origin for vehicles. Chemical sector delegated acts. Lead markets for EU clean tech.
-- Chapter IV (Articles 30-35): foreign investment conditions: investments >EUR 100M in batteries, EVs, solar PV, critical raw materials must meet conditions on employment (min 50% EU workers), local content, ownership, knowledge transfer, R&D
-- Chapter V (Articles 36-42): governance, delegated acts, committee procedure, reporting, entry into force
 - New (Monday 13 April 2026): Commission launched the EU Critical Raw Materials Demand Aggregation Platform to aggregate buyer demand and boost supply diversification away from third-country dependencies. Operated under the Critical Raw Materials Act (Regulation (EU) 2024/1252, CELEX 32024R1252). Mirrors the AggregateEU model used for natural gas joint purchasing. Covers strategic raw materials (lithium, cobalt, rare earths, magnesium, gallium, germanium, natural graphite). First open call to EU industrial buyers; matches them with diversified suppliers (Australia, Canada, Chile, Africa, EU domestic). Source: https://ec.europa.eu/commission/presscorner (DG ENER + DG GROW press release 13 April 2026), https://single-market-economy.ec.europa.eu/sectors/raw-materials/areas-specific-interest/critical-raw-materials_en
 - Annexes: I (strategic sectors by NACE code), II (low-carbon and EU origin thresholds), III (FDI conditions for emerging strategic sectors), IV (Single Digital Gateway amendment)
 - Impact assessment: SWD(2026)71. Preferred option PO2. Key figures: 148,352 jobs created/maintained by 2030, 30.58 Mt CO2eq reduction (EUR 3,058M savings), EUR 240M permitting cost savings, EUR 10,387M increase in GVA
@@ -97,57 +93,72 @@ The Act targets sectors central to decarbonisation and strategic autonomy:
 
 ## Complete Article-by-Article Overview
 
-### Chapter I: General Provisions (Articles 1-5)
-- **Article 1**: Subject matter and scope: establishes framework for acceleration of industrial capacity and decarbonisation
-- **Article 2**: Definitions: strategic sectors, low-carbon products, Union origin, Industrial Acceleration Areas, emerging strategic sectors
-- **Article 3**: Strategic sectors: energy-intensive industries (EIIs), automotive, net-zero technologies as defined in NZIA
-- **Article 4**: Industrialisation objective: increase manufacturing share of GDP from 14.3% to 20% by 2035
-- **Article 5**: Relationship with other Union law (NZIA, Construction Products Regulation, Single Digital Gateway)
+### Article-by-article — VERIFIED against COM(2026) 100 final on 22 September 2026
 
-### Chapter II: Enabling Conditions (Articles 6-16)
-- **Article 6**: Single permit-granting procedure: "one project, one submission" principle
-- **Article 7**: Contact points and competent authorities: single access points per Member State
-- **Article 8**: Digital permitting: applications via European Business Wallet, machine-readable permits
-- **Article 9**: Timeline for permit-granting: maximum timeframes for industrial projects
-- **Article 10**: Energy-intensive industry decarbonisation projects: dedicated permitting track
-- **Article 11**: Net-zero industry projects: aligned with NZIA permitting provisions
-- **Article 12**: Industrial Acceleration Areas: designated zones with area-wide environmental assessments
-- **Article 13**: Tacit approval: permits deemed granted if authority does not respond within deadline
-- **Article 14**: Area-wide permits within Industrial Acceleration Areas
-- **Article 15**: Designation criteria for Industrial Acceleration Areas (Commission delegated acts)
-- **Article 16**: Priority projects: access to funds and streamlined procedures
+Source read: the proposal PDF itself (Cellar, CELEX 52026PC0100, DOC_1, 96 pages). Everything below is the published text. The numbering that stood here before this date was wrong throughout and is the reason Brubru misanswered a real user question about Article 17 on 21 September 2026; do not reintroduce it from memory.
 
-### Chapter III: Public Procurement and Public Support (Articles 17-29)
-- **Article 17**: Scope: applies to public procurement above EU thresholds and public support schemes
-- **Article 18**: Low-carbon requirements for steel: min 25% of total volume must be low-carbon
-- **Article 19**: Low-carbon and EU origin for concrete/mortar: min 5%, must be EU origin
-- **Article 20**: Low-carbon and EU origin for aluminium: min 25%, must be EU origin
-- **Article 21**: EU origin requirements for vehicles in public procurement
-- **Article 22**: Chemical sector: Commission empowered to adopt delegated acts for demand-side measures
-- **Article 23**: Carbon intensity classification: Class A, B, C labelling system for products
-- **Article 24**: Methodology for calculating carbon intensity (delegated acts)
-- **Article 25**: Lead market provisions: preferential treatment for EU-made clean products
-- **Article 26**: Public support scheme conditions: sustainability criteria as conditions for state aid
-- **Article 27**: WTO GPA and bilateral trade agreement compatibility
-- **Article 28**: Monitoring and reporting of procurement compliance
-- **Article 29**: Review clause: Commission review 3 years after entry into force
+#### Chapter I: General provisions (Articles 1 to 3)
+- **Article 1**: Subject matter and scope
+- **Article 2**: Industrialisation objective
+- **Article 3**: Definitions
 
-### Chapter IV: Foreign Direct Investment Conditions (Articles 30-35)
-- **Article 30**: Scope: investments >EUR 100 million in emerging strategic sectors (batteries, EVs, solar PV, CRM)
-- **Article 31**: Employment condition: minimum 50% of workers must be Union workers
-- **Article 32**: Local content conditions: requirements for use of EU-sourced materials/components
-- **Article 33**: Ownership and knowledge transfer conditions
-- **Article 34**: R&D activity conditions: investment in EU-based research
-- **Article 35**: Notification and assessment procedure for covered investments
+#### Chapter II: Enabling conditions for industrial production and decarbonisation (Articles 4 to 6)
+- **Article 4**: Single access points
+- **Article 5**: Permit-granting procedure
+- **Article 6**: Energy-intensive industry decarbonisation projects
 
-### Chapter V: Final Provisions (Articles 36-42)
-- **Article 36**: Delegated acts: Commission empowerments (carbon intensity methodology, strategic sector updates, chemical sector measures)
-- **Article 37**: Committee procedure (examination procedure)
-- **Article 38**: Reporting: Member States report implementation every 2 years
-- **Article 39**: Review: Commission reviews effectiveness 5 years after entry into force
-- **Article 40**: Amendments to Regulation (EU) 2018/1724 (Single Digital Gateway)
-- **Article 41**: Amendments to Regulation (EU) 2024/1735 (NZIA)
-- **Article 42**: Entry into force and application
+#### Chapter III: Strengthening the Union's strategic industrial value chains (Articles 7 to 16)
+This is where the Union-origin and public-procurement regime lives.
+- **Article 7**: Union origin. Defines what counts as content of Union origin for the purposes of the chapter.
+- **Article 8**: Content equivalent to Union origin in public procurement
+- **Article 9**: Content equivalent to Union origin in other forms of public intervention
+- **Article 10**: Low-carbon products (products covered by Annex II)
+- **Article 11**: Public procurement. Contracting authorities and contracting entities shall exclude from access [the text continues; quote it from the proposal, do not paraphrase the exclusion trigger].
+- **Article 13**: Financial support for corporate vehicles
+- **Article 15**: Certification of a vehicle's compliance with Union origin requirements
+- Articles 12, 14 and 16 were not cleanly resolvable from the PDF layout. Say they are not on file rather than inventing a title.
+
+#### Chapter IV: Foreign investment contribution (Articles 17 to 24) — the FDI chapter
+**If a user asks about "Article 17 of the IAA" they are asking about foreign direct investment, not procurement.**
+- **Article 17 — Scope.** The chapter applies to foreign direct investments **exceeding EUR 100 million** in the emerging strategic manufacturing sectors in paragraph 2, **where more than 40% of global manufacturing capacity is held by the third country of which the foreign investor is a national or undertaking**. Such investments **shall not be implemented unless explicitly approved** by the Investment Authority or the European Commission (Article 19 reference in the text).
+  - Article 17(2) sectors: (a) battery technologies and their value chain for battery energy storage systems; (b) pure electric vehicles, off-vehicle charging hybrid electric vehicles and fuel-cell electric vehicles, including components related to electrification and digitalisation; (c) solar PV technologies; (d) extraction, processing and recycling of critical raw materials.
+  - Article 17(3) carve-outs, the chapter does NOT apply to: (a) investors and investments covered by economic partnership and free trade agreements in force or provisionally applied by the Union, to the extent relevant commitments have been made under those agreements, including investments made by the Union subsidiaries of such foreign investors; (b) investments targeted at providing services, including via Union subsidiaries; (c) portfolio investments.
+- **Article 18 — Value added foreign direct investment criteria.** Member States designate an **Investment Authority** within one month of entry into force. From 12 months after entry into force, Investment Authorities may only approve foreign direct investments that satisfy **four or more of six conditions**, the first of which is that the foreign investor does not acquire, hold or exercise ownership interests representing **more than 49%** of share capital, voting rights or equivalent ownership in a Union target, or equivalent rights conferring control over a Union asset.
+- **Article 19**: Prior notification of planned foreign direct investments (the investor notifies)
+- **Article 20**: Review and approval (the Investment Authority decides on admissibility)
+- **Article 21**: Review of foreign direct investment by the Commission
+- **Article 22**: Monitoring and enforcement by the Investment Authority
+- **Article 23**: Monitoring by the Commission
+- **Article 24**: Delegation of powers
+
+#### Chapter V: Industrial manufacturing acceleration areas (Articles 25 to 27)
+- **Article 26**: Enabling conditions
+- **Article 27**: Permit-granting procedures in acceleration areas
+- Article 25 designates national industrial manufacturing acceleration areas; its exact heading was not cleanly resolvable from the PDF.
+
+#### Chapter VI: Final provisions (Articles 28 to 36)
+- **Article 28**: Evaluation · **Article 29**: Review · **Article 30**: Exercise of the delegation · **Article 31**: Committee procedure · **Article 32**: Penalties · **Article 33**: Amendments to Regulation (EU) 2018/1724 (Single Digital Gateway) · **Article 34**: Amendments to Regulation (EU) 2024/1735 (NZIA) · **Article 36**: Entry into force and application
+
+### Recital 17 — progressive integration of candidate countries and potential candidates
+
+**This recital is quoted here in full because users paste it and ask what it means.** Verified verbatim against COM(2026) 100 final:
+
+> (17) The progressive integration of candidate countries and potential candidates into the Union's internal market, including through their gradual participation in Union policies and programmes, is essential to support their alignment with the acquis, strengthen their competitiveness, promote their deeper integration into Union value chains and enhance the Union's economic security. This Regulation should therefore contribute to fostering such gradual integration, including by facilitating the participation of economic operators from those countries in Union-wide value chains, Union public procurement, public support schemes and auctions where appropriate and in line with the Union's interests and objectives.
+
+How to answer on it, accurately:
+- **A recital is not an operative provision.** It states the reason for the rule and guides interpretation; it creates no right and no obligation on its own. Say this plainly.
+- **Do NOT claim Recital 17 "links to" or "is based on" Article 217 or Article 218 TFEU.** It says nothing of the kind. Brubru asserted this to a real user on 21 September 2026 and it was invented.
+- **"Candidate countries and potential candidates"** is the enlargement-policy term. As of 2026 the candidate countries include Albania, Bosnia and Herzegovina, Georgia, Moldova, Montenegro, North Macedonia, Serbia, Türkiye and Ukraine; Kosovo is a potential candidate. Check the current Commission enlargement page before listing them in an answer.
+- **The rest of the proposal barely operationalises this.** "Candidate countries" appears in the recitals and in the financial statement's standard revenue table, and nowhere in the enacting terms as a distinct access route. So the honest answer to "does this give my Serbian company a legal basis" is: **it is a statement of intent that supports future measures, not a present entitlement.**
+- **Recital 16 (immediately before) is the trade-law frame** and matters for the same question: it records the Union's commitments under the **WTO Agreement on Government Procurement (GPA)** and bilateral trade agreements to open public procurement procedures, while the Union retains general and security exceptions, and says the Commission will regularly assess whether the conditions for excluding a third country from the Union-origin-equivalence provisions are in place.
+
+### What this means for an economic operator from a candidate country (e.g. Serbia)
+
+Answer this from the operative text, not from the recital:
+1. **Procurement access** runs through Chapter III (Articles 7 to 11), specifically the Union-origin requirement and the "content equivalent to Union origin" provisions in Articles 8 and 9. Whether a Serbian supplier benefits depends on whether its content can be deemed equivalent to Union origin under those articles and on the Union's trade-agreement commitments. **Serbia is not a party to the WTO GPA** in its own right; verify its current status before asserting anything about GPA-based access.
+2. **The Chapter IV screening regime is unlikely to catch a Serbian investor on its own terms.** Article 17(1) has a cumulative trigger: over EUR 100 million AND the investor's third country holds more than 40% of global manufacturing capacity in the sector. That 40% test is aimed at concentrated supply chains (batteries, EVs, solar PV, critical raw materials), not at the Western Balkans. Serbia does not meet it. **A Serbian-incorporated subsidiary of an investor from a country that does meet it is a different question** and is the one worth flagging to the user.
+3. **The Article 17(3)(a) carve-out for investors covered by economic partnership and free trade agreements** is the provision to check for Serbia. EU-Serbia relations run through the Stabilisation and Association Agreement. Whether an SAA counts as an "economic partnership and free trade agreement in force" for this carve-out is **an open interpretive question in the proposal as drafted**, not something to assert either way.
+4. **This is a proposal, not law.** Nothing in it applies to anyone yet. Give the procedure state (see the top of this guide) and say what would have to happen first.
 
 ### Annexes
 - **Annex I**: Strategic sectors for Industrial Acceleration Areas (by NACE code): paper (C17), petroleum (C19), chemicals (C20), rubber/plastics (C22), non-metallic minerals (C23), basic metals (C24), automotive (C29), net-zero tech per NZIA

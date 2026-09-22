@@ -3,6 +3,8 @@
 ## QUICK FACTS
 - **What**: the annual State of the Union address of the President of the European Commission to the European Parliament, given by **Ursula von der Leyen** on **Wednesday 16 September 2026** in **Strasbourg**, with Canada's Prime Minister **Mark Carney** in the chamber as her guest. Published text: Commission reference SPEECH/26/1868.
 - **Framing**: "the state of our Union is the strongest it has ever been. The state of our Union can also feel as precarious as it has ever been." She named "the tipping points of our time: **climate change and AI**".
+- **AI COMPUTING CAPACITY — an INTENTION, no figure, no budget, no date. Never supply one.** She said only: *"we need to massively boost our computing capacity"* and that the Commission *"will set out our ideas for how to achieve this"*. Gigafactories and tech sovereignty were cited as ALREADY DONE, not new. **"Nothing concrete was announced on compute" is the CORRECT answer**, not a retrieval failure. (SPEECH/26/1868, checked 22 Sep 2026.)
+- **The five industrial AI sectors she named (November initiatives)**, in her words: **the hospital ward** (health; her worked example was AI-supported mammography screening), **precision agriculture**, **energy grids** ("smart grids"), **autonomous driving**, and **defence**. Her argument: Europe's "world-class industries sit on the highest-quality data", which can power "tailor-made industrial AI models".
 - **A speech, not law**: nothing announced binds anyone. Each item still needs a Commission proposal, and most then need Parliament and Council.
 - **By Brubru's count: 45 commitments, 44 classified**: **26 new** (no legal text, no date), **9 scheduled** (a date, no text), **6 already exist** (law in force or body operating), **3 proposed** (text tabled, not adopted). One (a sanctions regime against smugglers she called already proposed) could not be verified and is left out. The classification is editorial judgement. Security and borders is the most announcement-heavy chapter: 8 of its 11 counted commitments are new.
 - **Trade, "signed" deals: 2 of 5.** She said the EU "signed" free trade agreements this year with India, Mercosur, Mexico, Australia and Indonesia. Signed in 2026: **EU-Mercosur** (17 January 2026 in Paraguay; interim trade agreement provisionally applied since 1 May 2026) and **EU-Mexico** (22 May 2026). Concluded but NOT signed: **India** (Commission proposed signature to the Council on 11 September 2026), **Australia** (negotiations concluded 24 March 2026), **Indonesia** (negotiations concluded 23 September 2025; proposals to the Council 29 June 2026).
@@ -16,11 +18,10 @@
   - **6 October**: European product package.
   - **20 October**: climate resilience framework, enlargement package, new Arctic strategy, 2027 Commission work programme.
   - **28 October**: border and migration package (Frontex, digital returns).
-  - **November**: industrial AI initiatives in five sectors (her date).
+  - **November**: industrial AI initiatives in five sectors (her date; the five are listed near the top of this block).
   - **Autumn**: Digital Fairness Act proposal (her date).
   - **Before the end of the year**: Quality Jobs Act (her date).
 
-- Related guides: `eu_canada_relations`, `european_defence_union`, `eu_migration_asylum_pact`, `eu_minors_social_media_age_limits`, `eu_trade_policy`, `eu_commission_priorities_2024_2029`, `ep_plenary_march_2026`.
 
 ## About this guide
 
@@ -125,3 +126,6 @@ She then called for a wider framework against addictive design for everyone, the
 - **Not a fixed calendar.** Dates she gave ("in November", "in autumn", "before the end of the year") are her own. Dates on the Commission's tentative agenda are marked to be confirmed, and the Commission may change its planning. Say "planned for", never "will be adopted on".
 - **Not a record of what is signed or in force.** Where the address describes something as done, check the record: see the trade row above.
 - **Not the debate.** Replies in the plenary debate that followed are a separate record and are not covered here.
+
+## Related guides
+Related guides: `eu_canada_relations`, `european_defence_union`, `eu_migration_asylum_pact`, `eu_minors_social_media_age_limits`, `eu_trade_policy`, `eu_commission_priorities_2024_2029`, `ep_plenary_march_2026`.

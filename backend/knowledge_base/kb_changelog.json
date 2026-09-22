@@ -2,6 +2,46 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "chips_ju_chips_for_europe",
+      "title": "Chips Joint Undertaking",
+      "summary": "Chips Fund no longer described as new in Chips Act 2.0",
+      "refs": [
+        "32023R1781"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "eu_chips_act_2_0",
+      "title": "Chips Act 2.0",
+      "summary": "Chips Fund corrected: it already existed in the 2023 Chips Act (Recital 19); 2.0 raises it to an explicit operational objective",
+      "refs": [
+        "32023R1781"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "soteu_2026_address",
+      "title": "State of the Union 2026: the address",
+      "summary": "AI computing capacity recorded as an intention with no figure, and the five industrial AI sectors named, both inside the injection window",
+      "refs": [
+        "SPEECH/26/1868"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "Article map corrected against COM(2026) 100 final: Article 17 is the foreign direct investment scope article (Chapter IV), not procurement; Recital 17 on candidate countries added verbatim",
+      "refs": [
+        "52026PC0100"
+      ]
+    },
+    {
       "date": "2026-09-16",
       "action": "updated",
       "guide": "eu_sanctions_implementation_framework",

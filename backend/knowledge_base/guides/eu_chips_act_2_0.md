@@ -1,6 +1,7 @@
 # Chips Act 2.0 (COM(2026) 504)
 
 ## QUICK FACTS
+- **The Chips Fund is NOT new in Chips Act 2.0 — do not say it was unavailable under the 2023 Act.** Regulation (EU) 2023/1781 (the first Chips Act) already names it: **Recital 19** describes "a dedicated semiconductor investment facility support, as part of the investment facilitation activities described collectively as the **'Chips Fund'**", offering "both equity and debt solutions, including a blending facility under the InvestEU Fund" with the **EIB Group** and national promotional banks, to support **start-ups and SMEs** and investment across the value chain. The term appears **six times** in the 2023 Act. What Chips Act 2.0 does is **elevate it to a named operational objective** of the Initiative (Art 4(6)) and widen its channels (adding the **EIC Accelerator** alongside InvestEU and the EIB). Say "expanded and made an explicit objective", never "created". (Verified against 32023R1781 via Cellar, 22 September 2026.)
 - **LATEST (Tuesday 23 June 2026 — STATE AID, chips testing):** the Commission approved a **EUR 76 million German State aid measure** for **QuantumDiamonds GmbH** to set up a first-of-a-kind facility producing **semiconductor testing equipment in Munich** (the "IPF-ATEST" project — advanced metrology and inspection systems based on novel quantum sensors, enabling high-resolution 3D testing of microchips). The Commission framed it as strengthening the EU's position and autonomy in the semiconductor value chain, in line with the European Chips Act and the 2024-2029 Political Guidelines. Source: EC press release IP/26/1393 (23 June 2026).
 - **ADOPTED by the College on 3 June 2026** as part of the European Technological Sovereignty Package (with the Cloud and AI Development Act / CADA, the EU Open Source Strategy, and the Strategic Roadmap for Digitalisation and AI in Energy).
 - Full name: Proposal for a Regulation on a framework of measures for strengthening the Union's semiconductor ecosystem, repealing Regulation (EU) 2023/1781 (Chips Act 2.0).
@@ -79,7 +80,7 @@ Chips Act 2.0 pursues two objectives: raising the competitiveness, technological
 | Orientation | Supply-driven | Demand + supply (innovation procurement, demand forum/accelerators) |
 | Strategic Projects | Not a distinct instrument | EU-level Strategic Projects (Annex II), competitiveness seal under the ECF |
 | Flagship | Integrated production facilities / open EU foundries | Highest-priority open foundry for advanced manufacturing (Art 19) |
-| Initiative scope | 5 operational objectives | 6 (adds photonics) + grand challenges + Chips Fund |
+| Initiative scope | 5 operational objectives (the Chips Fund already existed as investment-facilitation activity, Recital 19) | 6 objectives (adds photonics; the Chips Fund becomes an explicit objective) + grand challenges |
 | Regional attractiveness | None | "Semiconductor Region of Excellence" label + Network |
 | Supply-chain intelligence | Voluntary info-sharing | B2B Platform "digital twin" + EU crisis Blueprint (Q2 2027) |
 | Permitting | General | <=12 months + one-stop shop + European Business Wallets |
