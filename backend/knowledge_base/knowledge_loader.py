@@ -15096,6 +15096,8 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'europese socialezekerheidspas': ['ela_agency_overview'],
     'child safety online commission': ['eu_minors_social_media_age_limits'],
     'kids act': ['eu_minors_social_media_age_limits'],
+    '2026/0286(cod)': ['eu_minors_social_media_age_limits'],
+    '2026/0286': ['eu_minors_social_media_age_limits'],
     # Published proposal, 17 Sep 2026: COM(2026) 681 / CELEX 52026PC0681.
     '52026pc0681': ['eu_minors_social_media_age_limits'],
     'com(2026)681': ['eu_minors_social_media_age_limits'],
