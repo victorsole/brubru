@@ -56,7 +56,13 @@ PUBLIC = _REPO_ROOT / "frontend" / "public"
 BREAKPOINTS = (375, 393, 768, 1024, 1440, 2560)
 
 _TITLE_RE = re.compile(r'<h2[^>]*class="section__title"[^>]*>\s*(\d+)?')
-_ACTIVE_RE = re.compile(r'timeline__item\s+active')
+# Deep-dives use TWO naming conventions for the current timeline stage, and a
+# check that knows only one cannot fail on the other. On 22 September 2026 this
+# regex matched `timeline__item active` only, so the rule was dead on 6 of the
+# 10 deep-dives -- including EU Inc., the reference page -- which all write the
+# BEM modifier `timeline__item--active`. Match both.
+_ACTIVE_RE = re.compile(r'timeline__item(?:\s+active\b|--active\b)')
+_STYLE_RE = re.compile(r'<style\b.*?</style>', re.S | re.I)
 _META_RE = re.compile(r'<meta\s+name="brubru:last-reviewed"\s+content="\d{4}-\d{2}-\d{2}"')
 
 
@@ -75,9 +81,16 @@ def static_checks(path: pathlib.Path) -> List[str]:
             snippet = html[m.start():m.start() + 90].replace("\n", " ")
             fails.append(f"section title NOT inside a section__header: {snippet}")
 
-    n_active = len(_ACTIVE_RE.findall(html))
+    # Count in the BODY only. The stylesheet declares rules for the active
+    # modifier (`.timeline__item--active::before`, `.timeline__item--active
+    # .timeline__date`), and counting those reports three "active items" on a
+    # page that has exactly one.
+    body = _STYLE_RE.sub("", html)
+    n_active = len(_ACTIVE_RE.findall(body))
     if n_active > 1:
         fails.append(f"{n_active} timeline items marked active; exactly one stage can be current")
+    if "timeline__item" in body and n_active == 0:
+        fails.append("a timeline with no active item; the page names no current stage")
 
     nums = [int(n) for n in _TITLE_RE.findall(html) if n]
     if nums and nums != list(range(1, len(nums) + 1)):

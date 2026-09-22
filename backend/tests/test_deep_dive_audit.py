@@ -89,6 +89,40 @@ def test_two_active_timeline_items_are_rejected():
     assert any("marked active" in f for f in fails), fails
 
 
+def test_the_active_rule_covers_both_naming_conventions():
+    """Deep-dives write the current stage two different ways.
+
+    Found 22 September 2026: the rule matched `timeline__item active` only, so
+    it was dead on 6 of the 10 deep-dives that carry a timeline -- EU Inc., the
+    Industrial Accelerator Act, the Critical Medicines Act, Biotech, CSAM and
+    Late Payments all use the BEM modifier `timeline__item--active`. A check
+    that cannot fire on most of its corpus is not a check.
+    """
+    import tempfile
+
+    head = ('<html><head><meta name="brubru:last-reviewed" content="2026-09-22">'
+            # the stylesheet declares the modifier too; counting CSS reported
+            # three "active items" on a page that has exactly one
+            '<style>.timeline__item--active::before{}</style></head><body>'
+            '<div class="section__header"><h2 class="section__title">1. A</h2></div>')
+
+    def check(fragment):
+        with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as fh:
+            fh.write(head + fragment + "</body></html>")
+            tmp = pathlib.Path(fh.name)
+        fails = validate.static_checks(tmp)
+        tmp.unlink()
+        return fails
+
+    one = '<div class="timeline__item--active">x</div>'
+    assert check(one) == [], "one modifier-styled active item is valid"
+    assert any("marked active" in f for f in check(one + one)), "two must fail"
+    assert any("no active item" in f for f in check('<div class="timeline__item">x</div>')), \
+        "a timeline naming no current stage must fail"
+    assert check('<div class="timeline__item active">x</div>') == [], \
+        "the legacy spelling must keep passing"
+
+
 def test_a_well_formed_page_passes():
     """No false positives, or the check will be ignored."""
     import tempfile
