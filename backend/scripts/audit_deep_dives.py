@@ -51,6 +51,7 @@ USAGE
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import pathlib
 import re
@@ -121,8 +122,18 @@ def date_is_on_page(iso: str, page: str) -> bool:
 
 
 def page_text(p: pathlib.Path) -> str:
+    """Page text, tags stripped, entities decoded, accents folded.
+
+    Decoding entities is not cosmetic. The deep-dive pages write non-ASCII names
+    as HTML entities, so the pharma-laws page carries the rapporteur as
+    `W&ouml;lken`. `fold()` normalises Unicode, which does nothing to an entity,
+    so the detector looked for "wolken" in text that read "w&ouml;lken" and
+    reported the rapporteur as missing from all pages of a file that named him
+    correctly. Found 22 September 2026; the same shape as the accent bug, one
+    layer further out.
+    """
     raw = p.read_text(encoding="utf-8", errors="replace")
-    return fold(_TAG_RE.sub(" ", raw))
+    return fold(html.unescape(_TAG_RE.sub(" ", raw)))
 
 
 def pages_for(base_path: str) -> List[pathlib.Path]:

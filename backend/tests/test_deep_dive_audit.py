@@ -55,6 +55,31 @@ def test_matching_folds_accents():
     assert audit.fold("SCHENK") in audit.fold("Rapporteur: Oliver Schenk (EPP)")
 
 
+def test_page_text_decodes_html_entities_before_matching():
+    """Pages write non-ASCII names as entities; folding Unicode does not touch those.
+
+    Found 22 September 2026. The pharma-laws page carries its rapporteur as
+    `W&ouml;lken`, so the detector searched folded text for "wolken" in a string
+    that still read "w&ouml;lken" and reported the rapporteur as missing from
+    ALL pages of a file that named him correctly. Same shape as the accent bug,
+    one layer further out: normalise the encoding before you normalise the
+    letters.
+    """
+    import tempfile
+
+    doc = ('<html><body><p>Rapporteur: Tiemo W&ouml;lken (S&amp;D)</p>'
+           '<p>Shadow: Ond&#345;ej Knotek</p></body></html>')
+    with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as fh:
+        fh.write(doc)
+        tmp = pathlib.Path(fh.name)
+    text = audit.page_text(tmp)
+    tmp.unlink()
+
+    assert "w&ouml;lken" not in text, "the entity must be decoded, not carried through"
+    assert audit.surname("WÖLKEN Tiemo") in text          # named entity
+    assert audit.surname("KNOTEK Ondřej") in text         # numeric entity
+
+
 def test_a_bare_section_title_is_rejected():
     """The defect that rendered as narrow columns.
 
