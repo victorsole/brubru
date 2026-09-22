@@ -214,8 +214,55 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
             "minutes_ago": minutes_ago,
             "alive": alive,
         },
+        "process_limits": _process_limits(),
         "tiers": tiers,
         "scrapers": scrapers,
         "corpora": corpora,
         "bodies": bodies,
     }
+
+
+def _process_limits() -> dict:
+    """How close the container is to being unable to spawn a process.
+
+    Every sync runs as a subprocess of this container, so when the cgroup pid
+    allowance is exhausted the whole ingestion pipeline dies at once with a bare
+    `[Errno 11] Resource temporarily unavailable` -- EAGAIN from the spawn. That
+    happened on 19 September 2026 and ran undetected for 3.5 days, because
+    nothing measured this. It is two file reads; it is now measured.
+
+    Three-state by design: `state` is "unknown" when the counters cannot be read
+    (non-Linux dev machines, cgroup v1 layouts), never a reassuring number.
+    """
+    import os
+
+    def _read_int(path: str):
+        try:
+            with open(path) as fh:
+                raw = fh.read().strip()
+            return None if raw == "max" else int(raw)
+        except (OSError, ValueError):
+            return None
+
+    current = _read_int("/sys/fs/cgroup/pids.current")
+    limit = _read_int("/sys/fs/cgroup/pids.max")
+    try:
+        threads = len(os.listdir("/proc/self/task"))
+    except OSError:
+        threads = None
+
+    out = {"pids_current": current, "pids_max": limit, "threads_in_web_process": threads}
+    if current is None:
+        out["state"] = "unknown"
+        out["note"] = "cgroup pid counters unreadable here (expected off-Linux)"
+        return out
+    if limit:
+        pct = round(100.0 * current / limit, 1)
+        out["pids_used_pct"] = pct
+        # 80% is a warning, not a failure: the ceiling is only reached when a
+        # spawn is attempted, so a high reading is the last chance to act.
+        out["state"] = "critical" if pct >= 90 else ("warn" if pct >= 80 else "ok")
+    else:
+        out["state"] = "ok"
+        out["note"] = "no cgroup pid ceiling set"
+    return out

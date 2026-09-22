@@ -301,8 +301,46 @@ async def _run_async_service(name: str, coro_fn):
         db.close()
 
 
+def _kill_process_group(proc, name: str) -> None:
+    """SIGKILL the child AND every process it spawned.
+
+    The child is a process-group leader (`start_new_session=True`), so one
+    `killpg` reaches its whole descendant tree. This is the entire point: the
+    scripts that time out (`sync_economy.py` for europol/cepol/eeas, `sync_oj.py`,
+    `scrape_eu_news.py`, `sync_ep_votes.py`) launch headless Chromium plus a
+    Playwright driver, and `subprocess.run(timeout=...)` SIGKILLs ONLY the direct
+    child. Chromium survived as an orphan on every timeout.
+
+    Incident (19-22 September 2026): 7 to 11 timeouts a day for ten days orphaned
+    enough processes that the web container could no longer fork at all. Every
+    sync then failed with a bare `[Errno 11] Resource temporarily unavailable`
+    -- EAGAIN from the spawn itself, 479 rows, ingestion dead for 3.5 days. The
+    same ceiling was hit in August (`votes_ep` 49/49 failures, `pthread_create:
+    Resource temporarily unavailable (11)` / `Zygote could not fork`); that round
+    was treated with Chromium flags, which lowered the slope without stopping the
+    accumulation. This function stops the accumulation.
+    """
+    import os
+    import signal
+    try:
+        os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+        logger.error(f"[CRON] Tier sync: {name} process group killed after timeout")
+    except (ProcessLookupError, PermissionError, OSError) as exc:
+        # Already reaped, or the platform refused. Fall back to the single child
+        # so a timeout never leaves the caller holding a live process.
+        logger.warning(f"[CRON] Tier sync: {name} killpg failed ({exc}); killing child only")
+        try:
+            proc.kill()
+        except Exception:
+            pass
+
+
 def _run_script(name: str, script_relpath: str, args: list[str] | None = None, timeout: int = 600):
-    """Run a CLI sync script as a subprocess. Fail-soft + log."""
+    """Run a CLI sync script as a subprocess. Fail-soft + log.
+
+    Uses Popen rather than `subprocess.run` so that a timeout can kill the whole
+    process GROUP -- see `_kill_process_group` for why that matters.
+    """
     import subprocess
     import sys
     import os
@@ -312,23 +350,50 @@ def _run_script(name: str, script_relpath: str, args: list[str] | None = None, t
     if not os.path.exists(script_path):
         logger.warning(f"[CRON] Tier sync: {name} script not found at {script_path}, skipping")
         return {"status": "skipped", "reason": "script_not_found"}
+    proc = None
     try:
         logger.info(f"[CRON] Tier sync: {name} started ({script_relpath})")
-        proc = subprocess.run(
+        proc = subprocess.Popen(
             [sys.executable, script_path, *args],
-            capture_output=True, text=True, timeout=timeout,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
             cwd=backend_root,
+            # Makes the child a session and process-group leader, so every
+            # process it spawns inherits the group and one killpg reaches all
+            # of them. Without this the group is OURS, and killing it would
+            # kill the backend.
+            start_new_session=True,
         )
+        try:
+            stdout, stderr = proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            _kill_process_group(proc, name)
+            # Reap, but never block for ever: the pipes are inherited by the
+            # descendants we just killed, and a wedged grandchild holding the
+            # write end is how a "timeout" used to become a permanent hang.
+            try:
+                stdout, stderr = proc.communicate(timeout=30)
+            except subprocess.TimeoutExpired:
+                logger.error(f"[CRON] Tier sync: {name} did not reap within 30s of SIGKILL")
+                stdout = stderr = ""
+            logger.error(f"[CRON] Tier sync: {name} timed out after {timeout}s")
+            return {"status": "failed", "error": f"timeout_{timeout}s",
+                    "stderr_tail": (stderr or "")[-500:]}
         if proc.returncode == 0:
             logger.info(f"[CRON] Tier sync: {name} done")
-            return {"status": "success", "stdout_tail": (proc.stdout or "")[-500:]}
-        logger.error(f"[CRON] Tier sync: {name} exited {proc.returncode}: {(proc.stderr or '')[-300:]}")
-        return {"status": "failed", "returncode": proc.returncode, "stderr_tail": (proc.stderr or "")[-500:]}
-    except subprocess.TimeoutExpired:
-        logger.error(f"[CRON] Tier sync: {name} timed out after {timeout}s")
-        return {"status": "failed", "error": f"timeout_{timeout}s"}
+            return {"status": "success", "stdout_tail": (stdout or "")[-500:]}
+        logger.error(f"[CRON] Tier sync: {name} exited {proc.returncode}: {(stderr or '')[-300:]}")
+        return {"status": "failed", "returncode": proc.returncode, "stderr_tail": (stderr or "")[-500:]}
     except Exception as e:
+        # Includes the EAGAIN spawn failure itself. Leave a breadcrumb that says
+        # WHAT ran out, because the bare OSError message does not.
         logger.error(f"[CRON] Tier sync: {name} crashed: {e}")
+        if isinstance(e, OSError) and e.errno == 11:
+            logger.error(
+                "[CRON] EAGAIN on spawn: the container is out of processes/threads. "
+                "Check /api/sync/health -> process_limits."
+            )
+        if proc is not None:
+            _kill_process_group(proc, name)
         return {"status": "failed", "error": str(e)}
 
 

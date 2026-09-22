@@ -75,6 +75,48 @@ def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
         return {"status": "failed", "error": str(e)}
 
 
+def _iter_job_statuses(payload) -> list[tuple[str, str]]:
+    """Yield (job_name, status) for every per-job result inside a tier response.
+
+    The cron endpoints do not share one response shape, and the differences are
+    exactly what hid the September 2026 outage:
+
+      * `/api/cron/sync/tier/{tier}` -> {"tier":..., "ran": {"oj": "failed", ...}}
+        (no top-level "status" at all)
+      * economy batches              -> {"ok": 0, "failures": ["eea: ...", ...]}
+      * simple endpoints             -> {"status": "success"}
+
+    Pure function, no I/O -- unit-tested in tests/test_cron_dispatch_exit_code.py.
+    """
+    out: list[tuple[str, str]] = []
+    if not isinstance(payload, dict):
+        return out
+
+    ran = payload.get("ran")
+    if isinstance(ran, dict):
+        for job, status in ran.items():
+            if isinstance(status, str):
+                out.append((str(job), status))
+            elif isinstance(status, dict) and isinstance(status.get("status"), str):
+                out.append((str(job), status["status"]))
+
+    failures = payload.get("failures")
+    if isinstance(failures, list):
+        for item in failures:
+            text = str(item)
+            out.append((text.split(":", 1)[0].strip() or "?", "failed"))
+
+    results = payload.get("results")
+    if isinstance(results, dict):
+        for job, status in results.items():
+            if isinstance(status, str):
+                out.append((str(job), status))
+            elif isinstance(status, dict) and isinstance(status.get("status"), str):
+                out.append((str(job), status["status"]))
+
+    return out
+
+
 def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     """
     Given a UTC timestamp, return the list of (label, endpoint_path) to fire.
@@ -251,12 +293,36 @@ def main():
     # Summary line for log scraping
     succeeded = sum(1 for r in results.values() if r.get("status") == "success")
     failed = sum(1 for r in results.values() if r.get("status") == "failed")
+
+    # Per-job failures INSIDE a 200 response. The top-level count above is not
+    # enough: `/api/cron/sync/tier/{tier}` returns {"tier":..., "ran": {...}} with
+    # NO top-level "status" key at all, so a tier in which every single job failed
+    # scored neither `succeeded` nor `failed` and the dispatcher printed a clean
+    # summary. That is why the 19-22 September 2026 outage ran for 3.5 days with a
+    # green Railway job every hour: the ingestion was dead and nothing here could
+    # say so. Walk the payload.
+    job_failures: list[str] = []
+    for label, payload in results.items():
+        for job, status in _iter_job_statuses(payload):
+            if status not in ("success", "ok", "skipped"):
+                job_failures.append(f"{label}/{job}={status}")
+
     print(
-        f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed}",
+        f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed} "
+        f"job_failures={len(job_failures)}",
         flush=True,
     )
+    if job_failures:
+        print(f"[CRON-DISPATCH] FAILED JOBS: {', '.join(job_failures[:40])}", flush=True)
 
-    # Exit 0 even on partial failure — operator reads the log
+    # Exit NON-ZERO when anything failed, so Railway shows the job red.
+    #
+    # This used to be a hard `sys.exit(0)` with the comment "operator reads the
+    # log". No operator reads a green log. Execution stays fail-soft -- one tier
+    # failing still does not stop the next, which is what matters -- but the
+    # REPORT is now honest. Set 22 September 2026.
+    if failed or job_failures:
+        sys.exit(1)
     sys.exit(0)
 
 
