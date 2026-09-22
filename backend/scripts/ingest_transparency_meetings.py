@@ -119,16 +119,59 @@ def parse_meetings_page(host: Dict[str, str], page: int) -> List[Dict[str, objec
     table = soup.find("table")
     if not table:
         return []
+    # Read the column order from the HEADER instead of assuming it.
+    #
+    # The two tables are NOT the same shape (measured 22 September 2026):
+    #   cabinet      -> Commission Representative(s) | Date | Location |
+    #                   Interest representative(s) | Subject matter
+    #   commissioner -> Date | Location | Interest representative(s) |
+    #                   Subject matter | Minutes        (no representative column)
+    #
+    # The old code hardcoded the cabinet order, so on a commissioner page
+    # cells[1] was Location, `parse_date` returned None and EVERY row hit the
+    # `continue`. The run then printed "0 meetings" per host and moved on, which
+    # is why `transparency_meetings` held 17,188 CABINET rows and not one
+    # COMMISSIONER row -- including none for the Commission President -- while
+    # the scraper reported success for all 54 hosts.
+    # Collapse whitespace: the live header cells carry embedded newlines and tabs
+    # ("interest\n\t\t\trepresentative(s)"), so a contiguous-substring match on the
+    # raw text finds nothing.
+    header_cells = [re.sub(r"\s+", " ", c.get_text(" ", strip=True)).strip().lower()
+                    for c in table.find_all("tr")[0].find_all(["th", "td"])]
+
+    def col(*needles: str) -> Optional[int]:
+        for i, h in enumerate(header_cells):
+            if any(n in h for n in needles):
+                return i
+        return None
+
+    i_date = col("date")
+    i_loc = col("location")
+    i_org = col("interest representative")
+    i_subj = col("subject")
+    i_rep = col("commission representative")
+
+    if i_date is None or i_org is None:
+        # An unrecognised header is a PARSER failure, not an empty agenda.
+        print(f"    [WARN] {host['kind']} {host['uuid'][:8]}: unrecognised table header "
+              f"{header_cells}; skipping rather than silently returning 0 rows")
+        return []
+
     rows = []
     for tr in table.find_all("tr")[1:]:
         cells = tr.find_all(["td", "th"])
-        if len(cells) < 5:
+        needed = max(x for x in (i_date, i_loc, i_org, i_subj, i_rep) if x is not None)
+        if len(cells) <= needed:
             continue
-        rep = cells[0].get_text("\n", strip=True)
-        date_text = cells[1].get_text(" ", strip=True)
-        location = cells[2].get_text(" ", strip=True)
-        organisation = cells[3].get_text(" ", strip=True)
-        subject = cells[4].get_text(" ", strip=True)
+
+        def cell(i: Optional[int], sep: str = " ") -> str:
+            return cells[i].get_text(sep, strip=True) if i is not None else ""
+
+        rep = cell(i_rep, "\n")
+        date_text = cell(i_date)
+        location = cell(i_loc)
+        organisation = cell(i_org)
+        subject = cell(i_subj)
 
         meeting_date = parse_date(date_text)
         if not meeting_date:

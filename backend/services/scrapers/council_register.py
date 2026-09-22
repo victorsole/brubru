@@ -134,6 +134,30 @@ def _fetch_rendered(url: str) -> str:
             f"consilium render returned {len(html)} bytes for {url} -- treat as a "
             "FETCH FAILURE, never as 'no documents'"
         )
+    # A size guard is not a content guard (measured 22 September 2026).
+    #
+    # The register had gone quiet: `ingest_council_documents.py --since-days 30`
+    # inserted 0 and the corpus had not moved since 27 August, through a month
+    # that contained a General Affairs Council. The size check passed, because
+    # what came back was ~15,000 bytes of Cloudflare interstitial whose entire
+    # visible text is "Just a moment... Checking your browser before accessing a
+    # GSC Managed Website ... Enable JavaScript and cookies to continue".
+    # `_parse_results` then found no result items and returned [], and the run
+    # logged "0 document(s)" -- a hard block reported as an empty register.
+    #
+    # Raising longer settle times does not help: tested at 6s and 15s, the
+    # challenge page comes back byte-identical. So this is a genuine block to be
+    # reported, not a timing problem to be tuned around.
+    lowered = html[:4000].lower()
+    if any(m in lowered for m in (
+        "just a moment", "checking your browser", "enable javascript and cookies",
+        "cf-browser-verification", "attention required! | cloudflare",
+    )):
+        raise RuntimeError(
+            f"consilium returned a BROWSER-CHALLENGE page for {url} "
+            f"({len(html)} bytes, no results markup) -- this is a FETCH BLOCK. "
+            "Never record it as 'no documents'."
+        )
     return html
 
 
