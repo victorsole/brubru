@@ -4,6 +4,16 @@
     {
       "date": "2026-09-22",
       "action": "updated",
+      "guide": "cloud_ai_development_act_cada",
+      "title": "Cloud and AI Development Act (CADA)",
+      "summary": "Joint ITRE+IMCO committee file: co-rapporteurs Solier (ECR) and van Lanschot (Greens/EFA) appointed 24 June 2026; JURI opinion Lagodinsky; referral 17 September 2026",
+      "refs": [
+        "52026PC0502"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
       "guide": "gdpr_data_protection",
       "title": "GDPR and data protection",
       "summary": "AG Spielmann's opinion in C-317/25 Groupe Canal+: consent for direct marketing by unnamed partners is invalid; judgment pending",

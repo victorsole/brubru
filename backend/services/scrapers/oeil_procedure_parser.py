@@ -55,6 +55,10 @@ _DATE = re.compile(r"\b(\d{2})/(\d{2})/(\d{4})\b")
 @dataclass
 class ProcedureFacts:
     responsible_committee: Optional[str] = None
+    # True when OEIL heads the block "Joint committee responsible" (Rule 58):
+    # two committees share responsibility and each has its own rapporteur, so
+    # `responsible_committee` is the FIRST of two, not the only one.
+    joint_committee: bool = False
     opinion_committees: List[str] = field(default_factory=list)
     rapporteur_name: Optional[str] = None
     rapporteur_appointed: Optional[date] = None
@@ -116,9 +120,25 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
     # "Committee responsible" runs until "Committee for opinion" (or the next
     # heading). The FIRST committee code inside that block is the responsible
     # one; codes under the opinion heading are opinions.
+    # A Rule 58 file headed "JOINT committee responsible" was invisible here.
+    #
+    # `_section` matches a literal, and the joint heading spells the word with a
+    # lowercase c, so "Committee responsible" never matched. The section came
+    # back "", no responsible committee and no rapporteur were recorded, and the
+    # backfill counted the page under "no heading at all" -- an expected bucket,
+    # so it never looked like a parser failure. Measured 22 September 2026:
+    # **95 carriages** carry the joint heading, among them the Cloud and AI
+    # Development Act (2026/0138(COD)), which has had TWO co-rapporteurs since
+    # 24 June 2026 while Brubru recorded none and its guide said the referral was
+    # still pending.
     resp = _section(flat, "Committee responsible",
                     ("Committee for opinion", "Key events", "Forecasts",
                      "Technical information", "Documentation gateway"))
+    if not resp:
+        resp = _section(flat, "Joint committee responsible",
+                        ("Committee for opinion", "Key events", "Forecasts",
+                         "Technical information", "Documentation gateway"))
+        facts.joint_committee = bool(resp)
     opin = _section(flat, "Committee for opinion",
                     ("Key events", "Forecasts", "Technical information",
                      "Documentation gateway", "European Commission"))

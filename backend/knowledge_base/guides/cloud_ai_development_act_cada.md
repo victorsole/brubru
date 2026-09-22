@@ -2,10 +2,19 @@
 
 ## QUICK FACTS
 
+- **LATEST — PARLIAMENT'S TEAM IS APPOINTED AND THE FILE IS A JOINT-COMMITTEE FILE (read from OEIL on 22 September 2026).**
+  - **This is a Rule 58 JOINT committee file: ITRE and IMCO share responsibility.** Do NOT describe it as an ITRE file with an IMCO opinion, and do not name one rapporteur as "the" rapporteur.
+    - **ITRE — SOLIER Diego (ECR), appointed 24 June 2026.**
+    - **IMCO — VAN LANSCHOT Reinier (Greens/EFA), appointed 24 June 2026.**
+  - **Shadow rapporteurs:** ZINGARETTI Nicola (S&D), DIBRANI Adnan (S&D), NIKOLIC Aleksandar (PfE), GEESE Alexandra (Greens/EFA).
+  - **Committee for opinion: JURI — LAGODINSKY Sergey (Greens/EFA), appointed 15 July 2026.** LIBE is listed as an opinion committee with no rapporteur named yet. BUDG appears under budgetary assessment.
+  - **Committee referral announced in plenary: 17 September 2026.** Key events on the procedure file are therefore exactly two: the legislative proposal published **3 June 2026** (COM(2026)0504 is the Chips Act; CADA is **COM(2026)0502**) and that referral.
+  - **No committee work has started yet.** Checked against Brubru's own eMeeting store on 22 September 2026: it holds 231 ITRE and 86 IMCO documents since 3 June and **not one** for this procedure. There is no draft report, no amendments and no tabled agenda item. Say that plainly rather than implying a stage that has not happened.
+  - **This guide was three months behind until 22 September 2026.** It treated the lead committee as unconfirmed and the parliamentary stage as not yet started. Both facts above are settled and dated: state the two co-rapporteurs and the 17 September referral, and never hedge the committee as merely anticipated.
 - **AI gigafactory funding: 18 of 27 governments pledged, nine did not, about €3bn committed, public funding capped at 35%. Detail in the body; data centres themselves in `eu_data_centres_energy_sustainability`.**
 - **ADOPTED by the College on 3 June 2026** as the centrepiece of the European Technological Sovereignty Package (with Chips Act 2.0, the EU Open Source Strategy, and the Strategic Roadmap for Digitalisation and AI in Energy).
 - Full name: Proposal for a Regulation establishing a framework of measures for strengthening Europe's cloud and AI ecosystem (Cloud and AI Development Act). Reference **COM(2026) 502 final**; procedure **2026/0138(COD)**; proposal CELEX 52026PC0502. Accompanying: ANNEXES 1-3, IA SWD(2026) 502 (Parts 1-2), IA executive summary SWD(2026) 503, SEC(2026) 502.
-- Status: PROPOSAL (ordinary legislative procedure). Goes to EP (lead committee ITRE expected) + Council. Lead: EVP Henna Virkkunen; DG CNECT (+ DG DIGIT). "Text with EEA relevance".
+- Status: PROPOSAL (ordinary legislative procedure). In the EP it is a **JOINT ITRE + IMCO file (Rule 58)**, co-rapporteurs **SOLIER Diego (ECR, ITRE)** and **VAN LANSCHOT Reinier (Greens/EFA, IMCO)**, both appointed 24 June 2026; referral announced 17 September 2026. Then Council. Lead: EVP Henna Virkkunen; DG CNECT (+ DG DIGIT). "Text with EEA relevance".
 - **Dual legal basis = two separate general objectives:** Article 173(3) TFEU (industrial competitiveness, NO harmonisation) underpins the **Cloud and AI Leadership Initiatives**; Article 114 TFEU (internal market, harmonisation) underpins the **cloud sovereignty framework**.
 - **Four policy objectives:** (1) increase EU computing capacity via innovative + sustainable tech; (2) ensure attractive deployment conditions; (3) reduce reliance on non-sovereign cloud/AI services; (4) protect public order by making cloud/AI supply resilient, especially in the public sector.
 - **Hard targets (from the Financial Statement):** at least **TRIPLE EU data-centre capacity by 2030** (intermediate; framed elsewhere as 5-7 years), reach needed capacity by 2035, geographically balanced; **all data-centre permits obtainable in under 18 months by 2030** (Art 13 sets a 12-month cap inside acceleration zones); raise EU providers' market share by 2035; highly critical public-sector use cases on sovereign cloud by 2035.
@@ -94,7 +103,7 @@ A Union establishment; B location of infrastructure/assets/personnel; C data loc
 | Stage | Status |
 |---|---|
 | Commission adoption (College) | Done, 3 June 2026 |
-| EP committee (ITRE expected) + Council | Pending (2026/0138(COD)) |
+| EP: JOINT ITRE + IMCO (Rule 58), co-rapporteurs Solier (ECR) and Van Lanschot (Greens/EFA), both 24 Jun 2026; JURI opinion Lagodinsky (Greens/EFA), 15 Jul 2026 | Referred to committee 17 Sep 2026; no draft report or amendments yet (2026/0138(COD)) |
 | Trilogues | Pending |
 | Entry into force / application | 20 days after OJ; application 1 year later |
 | Review | 4 years after entry into force, then every 5 |
