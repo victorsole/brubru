@@ -173,6 +173,42 @@
   .art__n { font-size:.78rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--blue); }
   .art__t { font-size:1.05rem; font-weight:700; margin:.15rem 0 .45rem; }
   .art p { margin:0; }
+
+    /* brubru:mobile-fix-2026-09-22
+       Phone fixes measured from a real device screenshot. The sticky header was
+       taking 27% of an iPhone SE screen (33% on the Cloud and AI page) because
+       the CTA was never hidden below 767px, leaving 51px for the title. */
+    @media (max-width: 767px) {
+      .header__cta { display: none !important; }
+      .header { gap: 0.75rem; }
+      /* Target the select by POSITION, not by class. On biotech-act and
+         csam-regulation it carries no `lang-select` class, so a class-only rule
+         left the browser default at 109px wide, which starved the title column
+         and kept those headers at 145px and 123px. */
+      .header select, .lang-select {
+        min-height: 44px; padding: 0.4rem 0.4rem; max-width: 72px;
+        font-size: 0.85rem;
+      }
+      .toc__link { min-height: 44px; }
+      /* Long file names wrapped the sticky bar to two lines each and kept the
+         Industrial Accelerator Act and Late Payments headers at 123px. Clamp to
+         one line apiece: the full title sits in the hero immediately below. */
+      /* min-width:0 is NOT optional here. A flex item defaults to
+         min-width:auto, so once the children are `nowrap` its min-content width
+         becomes the whole string and the item refuses to shrink, shoving the
+         language select off the right edge. That is exactly what happened: the
+         clamp alone put 32 pages into horizontal overflow at 375px, caught by
+         validate_deep_dive_html.py --render. */
+      .header__text { min-width: 0; }
+      .header__title, .header__subtitle {
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .back-to-top { width: 40px; height: 40px; bottom: 0.75rem; right: 0.75rem; }
+    }
+    /* The button is only wanted when the reader is heading back up. Hiding it on
+       downward scroll is what stops it sitting on top of the paragraph. */
+    .back-to-top { transition: opacity .2s ease, transform .2s ease; }
+    .back-to-top.btt--away { opacity: 0; pointer-events: none; transform: translateY(6px); }
 </style>
 </head>
 <body>
@@ -395,6 +431,26 @@ function setLang(l){
   });
   document.documentElement.lang = l;
 }
+</script>
+
+<script>
+/* brubru:mobile-fix-2026-09-22 -- additive: toggles its own class only, so it composes with whatever
+   scroll handler this page already has controlling `display`. */
+(function () {
+  var btt = document.querySelector('.back-to-top');
+  if (!btt) return;
+  var last = window.scrollY, ticking = false;
+  function update() {
+    var y = window.scrollY;
+    if (y > last + 4) btt.classList.add('btt--away');        // scrolling down
+    else if (y < last - 4) btt.classList.remove('btt--away'); // scrolling up
+    last = y;
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>

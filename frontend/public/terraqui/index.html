@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brubru per a Terraqui i LIFE DPP-TEX</title>
+<meta name="description" content="Què hem construït a Brubru per al passaport digital de producte, i com fer-lo servir.">
+<link rel="icon" href="/favicon.png">
+<style>
+  :root{--blau:#1e3a8a;--cel:#0693e3;--tinta:#14203a;--gris:#5b6b7a;
+        --linia:#e3e8ef;--fons:#f7fafd;--groc:#d97706}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,'Times New Roman',serif;color:var(--tinta);
+       background:#fff;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+  header.hero{background:linear-gradient(135deg,#12275e 0%,var(--blau) 55%,#1560b8 100%);
+       color:#fff;padding:4.5rem 0 4rem;position:relative;overflow:hidden}
+  .hero__rule{height:5px;background:linear-gradient(90deg,#e94f37,#f6ae2d,#2a9d8f,#0693e3,#7b4bbd);
+       position:absolute;top:0;left:0;right:0}
+  .hero .kicker{font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;
+       color:#a9c6f2;margin-bottom:1rem}
+  .hero h1{font-size:2.9rem;line-height:1.15;font-weight:700;max-width:20ch}
+  .hero p{margin-top:1.2rem;font-size:1.12rem;color:#d6e4fa;max-width:60ch}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.8rem}
+  .kpi{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
+       border-radius:12px;padding:1.1rem 1rem}
+  .kpi b{display:block;font-size:1.85rem;line-height:1.1}
+  .kpi span{font-size:.78rem;color:#bfd5f5;letter-spacing:.04em}
+  section{padding:3.4rem 0;border-bottom:1px solid var(--linia)}
+  h2{font-size:1.75rem;color:var(--blau);margin-bottom:.5rem}
+  h2 + .lede{color:var(--gris);font-size:1.02rem;max-width:70ch;margin-bottom:1.8rem}
+  h3{font-size:1.08rem;margin-bottom:.35rem}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+  .card{border:1px solid var(--linia);border-radius:14px;padding:1.3rem 1.4rem;background:#fff}
+  .card p{font-size:.93rem;color:var(--gris)}
+  .card .tag{display:inline-block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+       color:var(--blau);background:#eef4fd;border-radius:99px;padding:.2rem .6rem;margin-bottom:.6rem}
+  .before-after{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--linia);
+       border-radius:14px;overflow:hidden;margin-bottom:1rem}
+  .before-after>div{padding:1.1rem 1.3rem}
+  .before{background:#fdf6f6}
+  .after{background:#f4faf6;border-left:1px solid var(--linia)}
+  .before h4,.after h4{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+  .before h4{color:#a33}
+  .after h4{color:#2a7a4f}
+  .before p,.after p{font-size:.93rem}
+  table{width:100%;border-collapse:collapse;font-size:.93rem}
+  th{text-align:left;background:var(--fons);padding:.65rem .8rem;border:1px solid var(--linia);
+     font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+  td{padding:.65rem .8rem;border:1px solid var(--linia);vertical-align:top}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .step{display:flex;gap:1rem;padding:1.1rem 0;border-bottom:1px dashed var(--linia)}
+  .step:last-child{border-bottom:0}
+  .step .n{flex:0 0 34px;height:34px;border-radius:50%;background:var(--blau);color:#fff;
+       display:flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:700}
+  .step p{font-size:.95rem;color:var(--gris)}
+  code{background:#f2f5f9;border:1px solid var(--linia);border-radius:5px;
+       padding:.1rem .38rem;font-size:.85em;font-family:ui-monospace,Menlo,monospace}
+  .cta{background:var(--blau);color:#fff;border-radius:16px;padding:2.4rem;margin:2.6rem 0}
+  .cta h2{color:#fff}
+  .cta p{color:#cfe0f8;max-width:64ch}
+  .btn{display:inline-block;background:#fff;color:var(--blau);padding:.75rem 1.4rem;
+       border-radius:8px;text-decoration:none;font-weight:700;margin-top:1.2rem}
+  footer{padding:2.4rem 0 3rem;color:var(--gris);font-size:.86rem;text-align:center}
+  .dates td:first-child{font-weight:700;white-space:nowrap;width:130px}
+  @media (max-width:1024px){.grid3{grid-template-columns:repeat(2,1fr)}
+    .kpis{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:767px){
+    .hero{padding:3rem 0 2.6rem}.hero h1{font-size:1.85rem}
+    .grid2,.grid3,.kpis,.before-after{grid-template-columns:1fr}
+    .after{border-left:0;border-top:1px solid var(--linia)}
+    .wrap{padding:0 1.25rem}section{padding:2.4rem 0}
+    table{display:block;overflow-x:auto}}
+</style>
+    <script src="/analytics.js" defer></script>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero__rule"></div>
+  <div class="wrap">
+    <div class="kicker">Terraqui · LIFE DPP-TEX · Agost 2026</div>
+    <h1>El passaport digital de producte, dins de Brubru</h1>
+    <p>Vas escriure amb quatre preguntes. Cadascuna assenyalava una cosa que
+       Brubru encara no sabia fer. Això és el que hem construït des d'aleshores,
+       i com fer-ho servir.</p>
+    <div class="kpis">
+      <div class="kpi"><b>13</b><span>actes amb text legal complet</span></div>
+      <div class="kpi"><b>71</b><span>punts de dades del passaport de bateries</span></div>
+      <div class="kpi"><b>4.090</b><span>consultes de la Comissió consultables</span></div>
+      <div class="kpi"><b>11</b><span>eines per al teu assistent d'IA</span></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Les teves quatre preguntes</h2>
+    <p class="lede">Cap era una petició de funcionalitat: totes quatre eren
+       defectes. Aquí hi ha què passava i què passa ara.</p>
+
+    <div class="before-after">
+      <div class="before"><h4>Abans</h4>
+        <p>Cercar "Digital Product Passport" no retornava res útil. El règim
+           era mig absent del corpus: tres actes no hi eren i tres més hi
+           constaven amb títols com "ANNEX III" i sense número de referència.</p></div>
+      <div class="after"><h4>Ara</h4>
+        <p>Els 13 actes que imposen un passaport hi són, amb el text legal
+           complet, des del Reglament d'ecodisseny fins al Reglament de
+           detergents. La Directiva de RAP tèxtil, el teu instrument central,
+           tenia la data buida i ara la té.</p></div>
+    </div>
+
+    <div class="before-after">
+      <div class="before"><h4>Abans</h4>
+        <p>No hi havia manera de seguir els actes delegats de l'ecodisseny.
+           La iniciativa 16116, la que decidirà què ha de portar el passaport
+           tèxtil, no era ni a la base de dades.</p></div>
+      <div class="after"><h4>Ara</h4>
+        <p>El escombrat de Have Your Say va passar de 363 a 4.090 iniciatives.
+           Les consultes d'ecodisseny i tèxtil que pots trobar han passat de 10,
+           totes velles i d'energia, a 56.</p></div>
+    </div>
+
+    <div class="before-after">
+      <div class="before"><h4>Abans</h4>
+        <p>Els grups de treball i els fòrums de la Comissió no eren enlloc.</p></div>
+      <div class="after"><h4>Ara</h4>
+        <p>El Fòrum d'Ecodisseny (article 19) i el grup d'experts dels Estats
+           membres (article 20) són al coneixement del xat, amb el paper que
+           tenen en la preparació de cada acte delegat.</p></div>
+    </div>
+
+    <div class="before-after">
+      <div class="before"><h4>Abans</h4>
+        <p>Cap avís quan alguna cosa es movia.</p></div>
+      <div class="after"><h4>Ara</h4>
+        <p>Un resum dedicat al passaport digital, en català, que només arriba
+           quan hi ha novetats reals: el que ja és vinculant, el que es tramita,
+           els diners i les dates. El primer ja està escrit.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>El règim, com a dades</h2>
+    <p class="lede">Hem construït una carpeta pròpia dins de l'API de Brubru,
+       <code>/api/v2/dpp</code>, amb nou recursos i 18 punts d'accés. No és una
+       pàgina: és el règim consultable.</p>
+    <div class="grid3">
+      <div class="card"><span class="tag">Marc legal</span>
+        <h3>13 actes, text complet</h3>
+        <p>De 5.229 a 455.348 caràcters cadascun. Els que la Comissió llista a
+           l'article 1 del Reglament d'execució del registre.</p></div>
+      <div class="card"><span class="tag">Sectors</span>
+        <h3>11 sectors i les seves dates</h3>
+        <p>Quan esdevé obligatori el passaport de cada grup de producte, amb la
+           distinció entre data fixada per llei i planificació indicativa.</p></div>
+      <div class="card"><span class="tag">Registre</span>
+        <h3>Com registrar-s'hi</h3>
+        <p>Entorns de producció i de proves, vies de registre, l'identificador
+           únic de registre i la connexió duanera.</p></div>
+      <div class="card"><span class="tag">Normes</span>
+        <h3>6 normes harmonitzades</h3>
+        <p>EN 18216, 18219, 18220, 18221, 18222 i 18223:2026, amb la presumpció
+           de conformitat que atorguen.</p></div>
+      <div class="card"><span class="tag">Bateries</span>
+        <h3>71 punts de dades</h3>
+        <p>Cadascun amb la seva base legal a l'annex XIII i la seva
+           aplicabilitat per tipus de bateria. És l'únic passaport amb el
+           contingut ja fixat per llei, i per tant el model del que vindrà.</p></div>
+      <div class="card"><span class="tag">Orientació</span>
+        <h3>Guies, notícies i actes</h3>
+        <p>Les orientacions de la Comissió, les guies per públic i el calendari
+           d'esdeveniments del règim.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>La teva Bombolla UE</h2>
+    <p class="lede">Vas rebre un perfil buit. Ara està muntat al voltant del teu
+       encàrrec, i tot penja d'un sol interès polític que hem creat per a tu:
+       ecodisseny de productes sostenibles i passaport digital de producte.</p>
+    <table>
+      <tr><th>On</th><th>Què hi trobaràs</th></tr>
+      <tr><td><strong>Resum</strong></td>
+          <td>El teu tauler: què ha entrat aquesta setmana, quins expedients
+              s'han mogut, quines consultes es tanquen.</td></tr>
+      <tr><td><strong>Els meus expedients</strong></td>
+          <td>Les quatre iniciatives que governen el teu projecte i, a l'arxiu,
+              els 13 actes ja en vigor amb el seu ponent i comissió.</td></tr>
+      <tr><td><strong>Actualitat</strong></td>
+          <td>Les notícies del règim, filtrades pel teu interès i no pel soroll
+              general de la UE.</td></tr>
+      <tr><td><strong>El meu calendari UE</strong></td>
+          <td>Els actes i seminaris del passaport digital.</td></tr>
+      <tr><td><strong>El meu DOUE</strong></td>
+          <td>El diari oficial filtrat per les teves paraules clau.</td></tr>
+      <tr><td><strong>Consultes públiques</strong></td>
+          <td>Les 65 consultes del règim, obertes i previstes.</td></tr>
+      <tr><td><strong>Bases de dades</strong></td>
+          <td>Tot el que Brubru publica com a dades obertes, amb els punts
+              d'accés que pots cridar des del teu propi programari.</td></tr>
+      <tr><td><strong>Tenderator</strong></td>
+          <td>Les convocatòries LIFE obertes, ara amb pressupost i termini.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Brubru DPP al teu assistent d'IA</h2>
+    <p class="lede">És el primer connector que fem per a un sol client. Enganxes
+       una adreça al teu Claude o ChatGPT i el teu assistent pot consultar tot
+       el règim mentre treballes, sense sortir de la conversa.</p>
+    <div class="step"><div class="n">1</div><div>
+      <h3>Onze eines</h3>
+      <p>Pregunta en llenguatge natural, cerca dins del text legal d'un acte
+         concret, consulta els punts de dades del passaport de bateries per
+         tipus, comprova quan li toca a un sector, o llegeix les normes
+         harmonitzades.</p></div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Respon en català</h3>
+      <p>El xat de Brubru també. Fins fa poc una pregunta en català es responia
+         en castellà: el detector de llengua no reconeixia ni una paraula de
+         frases com "Quantes dades ha de portar el passaport de bateries?".
+         Ja està resolt.</p></div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>La teva clau, ja emesa</h3>
+      <p>Amb saldo per a unes 5.000 consultes. Les instruccions de connexió, en
+         català, van a part d'aquesta presentació.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Les dates que et vinculen</h2>
+    <p class="lede">Verificades contra la font primària, no contra la nostra
+       còpia.</p>
+    <table class="dates">
+      <tr><th>Data</th><th>Què passa</th></tr>
+      <tr><td>20.07.2026</td><td>El registre del passaport digital ja funciona.
+        El termini legal era el 19, article 13(1) del Reglament d'ecodisseny.</td></tr>
+      <tr><td>22.09.2026</td><td>Tanquen les convocatòries LIFE 2026 d'economia
+        circular, governança ambiental i prioritats legislatives.</td></tr>
+      <tr><td>18.02.2027</td><td>Primer termini dur del règim: passaport
+        obligatori per a determinades bateries grans.</td></tr>
+      <tr><td>04.03.2027</td><td>Tanquen els projectes integrats estratègics.</td></tr>
+      <tr><td>17.06.2027</td><td>Transposició de la Directiva de responsabilitat
+        ampliada del productor tèxtil.</td></tr>
+      <tr><td>3T-4T 2027</td><td>Passaport obligatori per a tèxtils, confecció i
+        calçat. És la data del teu projecte.</td></tr>
+      <tr><td>17.04.2028</td><td>Sistemes de responsabilitat ampliada del
+        productor operatius.</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<section id="instruccions">
+  <div class="wrap">
+    <h2>Com fer-ho servir, pas a pas</h2>
+    <p class="lede">Tres coses per fer avui, en aquest ordre. Cadascuna et porta
+       cinc minuts.</p>
+
+    <h3 style="margin-top:1.6rem;color:var(--blau);font-size:1.25rem">1. Trobar el règim del passaport digital</h3>
+    <div class="step"><div class="n">a</div><div>
+      <p>Entra a <strong>La Meva Bombolla UE</strong> i obre
+         <strong>Els meus expedients en seguiment</strong>.</p></div></div>
+    <div class="step"><div class="n">b</div><div>
+      <p>Les normes del règim <strong>ja han entrat en vigor</strong>, i per això
+         no surten a la llista activa: són a la pestanya
+         <strong>Arxivats</strong>, dins d'Expedients legislatius seguits. Allà hi
+         tens els 13 actes, cadascun amb el seu ponent, la comissió responsable i
+         l'enllaç al text oficial.</p></div></div>
+    <div class="step"><div class="n">c</div><div>
+      <p>El que encara es tramita és a la llista activa: la iniciativa dels
+         requisits d'ecodisseny per a tèxtils i calçat, els criteris de fi de la
+         condició de residu i el registre de productors tèxtils.</p></div></div>
+
+    <h3 style="margin-top:2rem;color:var(--blau);font-size:1.25rem">2. Preguntar-li al xat, en català</h3>
+    <div class="step"><div class="n">a</div><div>
+      <p>Obre <strong>Xat</strong> i escriu la pregunta tal com la diries. Aquestes
+         quatre estan comprovades i responen amb la font:</p>
+      <ul style="margin:.6rem 0 0 1.1rem;font-size:.95rem;color:var(--gris)">
+        <li>Quins actes de la UE creen obligacions de passaport digital de producte?</li>
+        <li>Quan entra en vigor el passaport digital per als tèxtils?</li>
+        <li>Quantes dades ha de portar el passaport de bateries?</li>
+        <li>Quines normes harmonitzades donen presumpció de conformitat?</li>
+      </ul></div></div>
+    <div class="step"><div class="n">b</div><div>
+      <p>Si una resposta et sembla incompleta, demana-li la font: cada afirmació
+         porta l'enllaç al text oficial, i pots comprovar-la.</p></div></div>
+
+    <h3 style="margin-top:2rem;color:var(--blau);font-size:1.25rem">3. Connectar Brubru DPP al teu Claude o ChatGPT</h3>
+    <p style="color:var(--gris);font-size:.95rem;margin-bottom:.4rem">
+      Això posa tot el règim dins del xat que ja fas servir. Series la primera
+      persona a fer-ho servir. L'adreça és la mateixa en tots dos casos:</p>
+    <p style="margin:.4rem 0 1rem"><code>https://brubru-production.up.railway.app/api/mcp/dpp?key=LA_TEVA_CLAU</code></p>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="tag">Claude</span>
+        <h3>Quatre passos</h3>
+        <p>1. Configuració, després Connectors.<br>
+           2. Afegeix un connector personalitzat.<br>
+           3. Nom: <strong>Brubru DPP</strong>. Enganxa l'adreça de dalt amb la teva
+              clau al final. Deixa els camps d'OAuth buits.<br>
+           4. Connecta. Han d'aparèixer <strong>onze eines</strong>. Obre una
+              conversa nova i pregunta el que vulguis del passaport digital.</p>
+      </div>
+      <div class="card">
+        <span class="tag">ChatGPT</span>
+        <h3>Quatre passos</h3>
+        <p>1. Necessites un pla de pagament i activar el <strong>mode
+              desenvolupador</strong> a Configuració.<br>
+           2. Afegeix un servidor personalitzat, transport
+              <strong>Streamable HTTP</strong>.<br>
+           3. ChatGPT et demanarà iniciar sessió a Brubru amb el teu correu i
+              contrasenya. És normal.<br>
+           4. Si diu "no hi ha accions disponibles", no és un error: les eines
+              viuen dins la conversa. Prova-ho preguntant-li alguna cosa.</p>
+      </div>
+    </div>
+    <p style="margin-top:1rem;font-size:.9rem;color:var(--gris)">La teva clau
+       s'envia en un correu a part, mai dins d'un document que es pugui reenviar.
+       Tracta-la com una contrasenya: qui la tingui consulta amb el teu compte.</p>
+
+    <h3 style="margin-top:2rem;color:var(--blau);font-size:1.25rem">4. Rebre l'avís per correu</h3>
+    <div class="step"><div class="n">a</div><div>
+      <p>Ja tens el primer resum a la bústia. A partir d'ara n'arriba un
+         <strong>només quan hi ha novetats reals</strong>: una norma que entra en
+         vigor, una consulta que s'obre o es tanca, una data que es mou o una
+         convocatòria que afecta el projecte.</p></div></div>
+    <div class="step"><div class="n">b</div><div>
+      <p>Si prefereixes una cadència fixa, digues-ho i el posem mensual, el primer
+         dilluns de cada mes, mantenint l'avís puntual quan passi alguna cosa
+         que no pot esperar.</p></div></div>
+  </div>
+</section>
+
+<section style="border-bottom:0">
+  <div class="wrap">
+    <h2>Els diners oberts ara mateix</h2>
+    <p class="lede">Fins fa uns dies el Tenderator no mostrava cap pressupost:
+       l'API de cerca del portal no en porta cap. Els hem anat a buscar a la
+       fitxa de cada convocatòria.</p>
+    <table>
+      <tr><th>Convocatòria LIFE 2026</th><th>Pressupost</th><th>Termini</th></tr>
+      <tr><td>Economia circular i contaminació zero</td>
+          <td class="num">79.000.000 EUR</td><td>22.09.2026</td></tr>
+      <tr><td>Projectes integrats estratègics, medi ambient</td>
+          <td class="num">58.000.000 EUR</td><td>04.03.2027</td></tr>
+      <tr><td>Prioritats legislatives: natura i economia circular</td>
+          <td class="num">13.500.000 EUR</td><td>22.09.2026</td></tr>
+      <tr><td>Governança ambiental</td>
+          <td class="num">6.500.000 EUR</td><td>22.09.2026</td></tr>
+    </table>
+    <p style="margin-top:1rem;font-size:.9rem;color:var(--gris)">La de
+       prioritats legislatives és la que millor encaixa amb un projecte que
+       treballa la base normativa d'un passaport tèxtil.</p>
+
+    <div class="cta">
+      <h2>Per on començar</h2>
+      <p>Obre la teva Bombolla UE i mira el Resum. Si vols provar el que hem
+         construït, pregunta-li al xat en català: "Quins actes de la UE creen
+         obligacions de passaport digital de producte?" o "Quantes dades ha de
+         portar el passaport de bateries?".</p>
+      <a class="btn" href="https://brubru.beresol.eu/my-eu-bubble">Obre la teva Bombolla UE</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Preparat per a Joana Castella, Terraqui, soci regulatori de LIFE DPP-TEX.</p>
+    <p style="margin-top:.4rem">Brubru, de Beresol. Tota la UE, amb IA.
+       <a href="mailto:hello@beresol.eu" style="color:var(--blau)">hello@beresol.eu</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
