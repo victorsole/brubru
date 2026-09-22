@@ -55,6 +55,48 @@ def test_matching_folds_accents():
     assert audit.fold("SCHENK") in audit.fold("Rapporteur: Oliver Schenk (EPP)")
 
 
+def test_the_oeil_gateway_row_parser_finds_a_tabled_report():
+    """eMeeting alone misses a report until it reaches a committee agenda.
+
+    Found 22 September 2026, by Victor rather than by this script. The
+    Industrial Accelerator Act's joint draft report PE792.067 was dated
+    9 September and entered OEIL's Documentation gateway on 11 September, while
+    `ep_emeeting_documents` held nothing for that procedure newer than 6 July.
+    All six pages still said no draft report had been tabled, and the detector
+    reported the file as current. Both sources, every run.
+
+    This pins the row parser offline, against the gateway's own flattened
+    wording, so it keeps finding reports, opinions and amendment batches, and
+    keeps ignoring the Commission block that follows.
+    """
+    block = (
+        "Documentation gateway European Parliament Document type Committee Reference Date "
+        "Summary Committee draft report PE792.067 11/09/2026 "
+        "Committee opinion ENVI PE789.106 06/07/2026 "
+        "Amendments tabled in committee PE790.005 13/07/2026 "
+        "Committee report tabled for plenary, 1st reading/single reading A9-0141/2024 21/03/2024 "
+        "European Commission Document type Reference Date Summary "
+        "Legislative proposal COM(2026)0100 04/03/2026"
+    )
+    i = block.find("Documentation gateway European Parliament")
+    j = block.find("European Commission Document type", i)
+    rows = [{"kind": m.group(1).strip(), "committee": (m.group(2) or "").strip() or None,
+             "ref": m.group(3), "date": m.group(4)}
+            for m in audit._GATEWAY_ROW.finditer(block[i:j])]
+
+    refs = [r["ref"] for r in rows]
+    assert "PE792.067" in refs, "the draft report that was missed must be found"
+    assert "PE789.106" in refs and "PE790.005" in refs
+    assert "A9-0141/2024" in refs, "plenary reports count too"
+    assert "COM(2026)0100" not in refs, "the Commission block must stay out"
+
+    by_ref = {r["ref"]: r for r in rows}
+    assert by_ref["PE792.067"]["kind"] == "Committee draft report"
+    assert by_ref["PE792.067"]["date"] == "11/09/2026"
+    assert by_ref["PE789.106"]["committee"] == "ENVI"
+    assert by_ref["PE792.067"]["committee"] is None, "a joint report names no committee"
+
+
 def test_page_text_decodes_html_entities_before_matching():
     """Pages write non-ASCII names as entities; folding Unicode does not touch those.
 

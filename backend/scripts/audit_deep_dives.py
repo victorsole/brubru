@@ -17,13 +17,23 @@ parliamentary stage was pending while OEIL had shown two co-rapporteurs since
 
 WHAT THIS DOES
 --------------
-Joins each deep-dive to its procedure and asks two sources, which are the two
-that actually move:
+Joins each deep-dive to its procedure and asks three sources:
 
   * OEIL, via `legislative_carriages` (rapporteur, committee, opinion
-    committees, status), and
+    committees, status),
   * eMeeting, via `ep_emeeting_documents` (draft reports, amendments, voting
-    lists, committee agenda items).
+    lists, committee agenda items), and
+  * OEIL's own Documentation gateway, live, with --oeil.
+
+The third was added on 22 September 2026 because the first two missed a draft
+report. This file said eMeeting "moves first once a committee starts work".
+That is false for the tabling of a report: the Industrial Accelerator Act's
+joint draft report PE792.067 was dated 9 September and entered the gateway on
+11 September, while `ep_emeeting_documents` held nothing for that procedure
+newer than 6 July, because a document only reaches eMeeting when it goes on a
+committee agenda. All six pages were still asserting that no draft report had
+been tabled, and the detector reported the file as current. Victor found it by
+reading the gateway.
 
 Then it checks whether each fact appears in the page text, FOR EVERY LANGUAGE.
 That last part is not decoration: the first hand-update of CADA and the Chips Act
@@ -189,6 +199,55 @@ def fetch_facts(engine, refs: List[str]) -> Dict[str, dict]:
     return out
 
 
+_GATEWAY_ROW = re.compile(
+    r"(Committee draft report|Committee opinion|Amendments tabled in committee|"
+    r"Committee report tabled for plenary[^A-Z]*|Committee recommendation[^A-Z]*|"
+    r"Committee interim report[^A-Z]*)\s+([A-Z]{4}\s+)?(PE\d{3}\.\d{3}|A\d{1,2}-\d+/\d{4})"
+    r"\s+(\d{2}/\d{2}/\d{4})")
+
+
+def fetch_oeil_gateway(refs: List[str]) -> Dict[str, List[dict]]:
+    """Parliament documents listed in OEIL's own Documentation gateway.
+
+    Live fetch, one procedure page each, so it is opt-in: the pages are behind a
+    JS challenge and take seconds apiece. It is the only source that sees a
+    report the moment it is tabled, before any committee has put it on an
+    agenda.
+    """
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "wbf", str(_REPO_ROOT / "backend" / "services" / "scrapers" / "waf_browser_fetcher.py"))
+    wbf = importlib.util.module_from_spec(spec)
+    sys.modules["wbf"] = wbf
+    spec.loader.exec_module(wbf)
+
+    out: Dict[str, List[dict]] = {}
+    for ref in refs:
+        url = ("https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file"
+               f"?reference={ref}")
+        try:
+            res = wbf.fetch_one(url, expand_accordions=True, strip_chrome=True)
+        except Exception as exc:                                   # noqa: BLE001
+            print(f"[WARN] OEIL fetch failed for {ref}: {exc}")
+            continue
+        flat = re.sub(r"\s+", " ", res.text or "")
+        i = flat.find("Documentation gateway European Parliament")
+        if i < 0:
+            continue
+        # stop before the Commission block, or its COM documents come through
+        j = flat.find("European Commission Document type", i)
+        block = flat[i:j if j > i else i + 3000]
+        rows = []
+        for m in _GATEWAY_ROW.finditer(block):
+            rows.append({"kind": m.group(1).strip(),
+                         "committee": (m.group(2) or "").strip() or None,
+                         "ref": m.group(3), "date": m.group(4)})
+        if rows:
+            out[ref] = rows
+    return out
+
+
 def fetch_by_title(engine, dds: List[dict]) -> Dict[str, List[dict]]:
     """Committee documents found by TITLE, for rows with no procedure_ref.
 
@@ -224,7 +283,8 @@ def fetch_by_title(engine, dds: List[dict]) -> Dict[str, List[dict]]:
     return out
 
 
-def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = None) -> dict:
+def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = None,
+              gateway: Optional[List[dict]] = None) -> dict:
     base = dd["base_path"]
     pages = pages_for(base)
     res = {"base_path": base, "title": dd.get("short_title") or dd.get("title"),
@@ -237,6 +297,14 @@ def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = 
     raw0 = pages[0].read_text(encoding="utf-8", errors="replace")
     m = _META_RE.search(raw0)
     res["reviewed"] = m.group(1) if m else None
+
+    # OEIL's Documentation gateway. This is the source that sees a tabled
+    # report first; eMeeting only sees it once it reaches a committee agenda.
+    if gateway:
+        first = page_text(pages[0])
+        unseen = [g for g in gateway if fold(g["ref"]) not in first]
+        if unseen:
+            res["gateway_unseen"] = unseen
 
     # Untagged committee activity found by title: report it whatever the
     # carriage says, because these rows never carry a procedure reference.
@@ -320,6 +388,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--slug", help="only this base_path, e.g. /chips-act-2")
+    ap.add_argument("--no-oeil", action="store_true",
+                    help="skip the live OEIL Documentation gateway check (faster, but "
+                         "eMeeting alone misses a report until it reaches an agenda)")
     a = ap.parse_args()
 
     dds = [d for d in DEEP_DIVES if not a.slug or d["base_path"] == a.slug]
@@ -328,23 +399,30 @@ def main() -> int:
     facts = fetch_facts(engine, refs)
 
     untagged = fetch_by_title(engine, dds)
+    # Both sources, every run. eMeeting sees committee agendas; the gateway sees
+    # a report the day it is tabled. Neither alone is enough.
+    gateway = {} if a.no_oeil else fetch_oeil_gateway(refs)
     results = [audit_one(d, facts.get(d.get("procedure_ref")),
-                         untagged.get(d["base_path"], [])) for d in dds]
+                         untagged.get(d["base_path"], []),
+                         gateway.get(d.get("procedure_ref"), [])) for d in dds]
 
     if a.json:
         print(json.dumps({"results": results, "facts": facts}, indent=1, default=str))
-        return 1 if any(r["missing"] or r.get("emeeting_newer") or r.get("owed") for r in results) else 0
+        return 1 if any(r["missing"] or r.get("emeeting_newer") or r.get("owed")
+                        or r.get("gateway_unseen") for r in results) else 0
 
-    behind = [r for r in results if any((r["missing"], r.get("emeeting_newer"), r.get("owed"), r.get("untagged")))]
+    behind = [r for r in results if any((r["missing"], r.get("emeeting_newer"), r.get("owed"),
+                                        r.get("untagged"), r.get("gateway_unseen")))]
     print(f"DEEP-DIVE AUDIT  {len(results)} deep-dive(s), "
           f"{sum(r['pages'] for r in results)} page(s)")
     print("=" * 78)
     for r in sorted(results, key=lambda x: (not x["missing"], x["base_path"])):
         head = f"{r['base_path']:<34} {str(r['procedure_ref'] or '-'):<18} reviewed {r['reviewed'] or '-'}"
-        if not any((r["missing"], r.get("emeeting_newer"), r.get("owed"), r.get("untagged"))):
+        if not any((r["missing"], r.get("emeeting_newer"), r.get("owed"), r.get("untagged"),
+                    r.get("gateway_unseen"))):
             print(f"[ok  ] {head}")
             continue
-        flag = 'BEHIND' if any((r['missing'], r.get('emeeting_newer'), r.get('owed'), r.get('untagged'))) else 'note '
+        flag = 'BEHIND'
         print(f'[{flag:<6}] {head}')
         for note in r["notes"]:
             print(f"         note: {note}")
@@ -361,6 +439,10 @@ def main() -> int:
             print(f"         NOT ANALYSED: {owed}")
         for u in r.get("untagged", []):
             print(f"         NOT ANALYSED (no procedure ref, found by title): {u}")
+        for g in r.get("gateway_unseen", []):
+            cm = f" {g['committee']}" if g.get("committee") else ""
+            print(f"         NOT ON THE PAGE, from OEIL's gateway: "
+                  f"{g['kind']}{cm} {g['ref']} ({g['date']})")
     print()
     print(f"{len(behind)} of {len(results)} deep-dive(s) are behind their own file.")
     return 1 if behind else 0
