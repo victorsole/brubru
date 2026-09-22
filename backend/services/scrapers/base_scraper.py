@@ -13,6 +13,7 @@ import asyncio
 import hashlib
 import json
 import logging
+import re
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
@@ -391,6 +392,153 @@ class BaseScraper(ABC):
             self.stats['errors'] += 1
             logger.error(f"{self.name}: Stealthy fetch failed for {url}: {e}")
             raise ScraperError(f"Stealthy fetch failed: {str(e)}") from e
+
+    # ---------------------------------------------------------------- walls
+    # A challenge page is a 200 with a body. Tiers 1 to 3 all return it as if it
+    # were content: on 22 September 2026 StealthyFetcher handed back 14,662 bytes
+    # of "Just a moment..." without raising, so the caller parsed zero items and
+    # the result read as "the publisher was quiet" rather than "we were blocked".
+    # Those are opposite conclusions. Every tier is now checked through here.
+    _WALL_MARKERS = re.compile(
+        r"Just a moment|Browser check|Checking your browser|cf-browser-verification|"
+        r"cf_chl_|Attention Required!|Robot Challenge Screen|sgcaptcha|_Incapsula_|"
+        r"Access denied \| .* used Cloudflare",
+        re.I,
+    )
+
+    @classmethod
+    def _is_walled(cls, content: str) -> bool:
+        """True when the body is an anti-bot interstitial rather than the page.
+
+        Only the first 20 KB is examined: the words "challenge" and "checking"
+        appear in ordinary EU prose (a Council press release about "challenges"
+        false-positived during testing), so the markers are deliberately specific
+        phrases and are looked for near the top where interstitials live.
+        """
+        if not content:
+            return False
+        return bool(cls._WALL_MARKERS.search(content[:20000]))
+
+    def _fetch_scrapedo(self, url: str, *, super_proxy: bool = False,
+                        retries: int = 3) -> str:
+        """TIER 4, paid. Fetch through Scrape.do's rotating proxies.
+
+        Reached only when tiers 1 to 3 have failed or returned an interstitial,
+        because every call costs real money. Measured 22 September 2026 against
+        Brubru's actual walls:
+
+        - `consilium.europa.eu` applies an ADAPTIVE IP-REPUTATION block, not a
+          fixed per-URL wall: pages that were 5/5 clean became 403 after a few
+          dozen requests from one address. Scrape.do returned those same pages as
+          real 200s at 1 credit. That is the mechanism that kept Council data out
+          of Brubru from 1 July 2026, and it is what this tier is for.
+        - The Council public register SEARCH is NOT solved by it, nor by any of
+          the other three tiers. Do not keep paying to retry that page.
+
+        Two cost facts, measured by watching the account balance move rather than
+        trusting the `scrape.do-request-cost` header, which reported 0 for calls
+        that did decrement:
+
+        - plain is 1 credit;
+        - `super=true` is 10 credits, so a 250,000 request plan is 25,000
+          residential requests. It is therefore opt-in per call, never default.
+
+        `render=true` is deliberately NOT offered. It returned 502 on a URL that
+        succeeds in plain mode, so it is broken on this account rather than
+        blocked by any target. JS rendering stays with tiers 2 and 3, which do it
+        locally and for free.
+
+        Failed requests are not charged, so ROTATION_FAILED is retried.
+        """
+        import os
+        import urllib.error
+        import urllib.parse
+        import urllib.request
+
+        token = (os.environ.get("SCRAPEDO_API_KEY") or "").strip().strip('"').strip("'")
+        if not token:
+            raise ScraperError(
+                "SCRAPEDO_API_KEY is not set. Tier 4 is unavailable; the caller "
+                "should report this URL as WALLED rather than as empty."
+            )
+
+        params = {"token": token, "url": url}
+        if super_proxy:
+            params["super"] = "true"
+        endpoint = "https://api.scrape.do/?" + urllib.parse.urlencode(params)
+
+        last: str = ""
+        for attempt in range(1, retries + 1):
+            try:
+                req = urllib.request.Request(endpoint, headers={"Accept": "*/*"})
+                with urllib.request.urlopen(req, timeout=180) as resp:
+                    body = resp.read().decode("utf-8", errors="replace")
+                    cost = resp.headers.get("scrape.do-request-cost", "?")
+                    left = resp.headers.get("scrape.do-remaining-credits", "?")
+                self.stats["requests_made"] += 1
+                self.stats["total_bytes"] += len(body)
+                if self._is_walled(body):
+                    raise ScraperError(
+                        f"Scrape.do returned an interstitial for {url}. All four "
+                        f"tiers are blocked; treat this URL as unreachable."
+                    )
+                logger.info(
+                    "%s: scrape.do OK %s (%d bytes, cost=%s, credits left=%s, "
+                    "super=%s)", self.name, url, len(body), cost, left, super_proxy
+                )
+                return body
+            except urllib.error.HTTPError as e:           # noqa: PERF203
+                last = e.read().decode("utf-8", errors="replace")[:400]
+                # ROTATION_FAILED is transient and explicitly not charged.
+                if "ROTATION_FAILED" in last and attempt < retries:
+                    logger.warning("%s: scrape.do rotation failure on %s, retry %d/%d",
+                                   self.name, url, attempt, retries)
+                    continue
+                break
+            except Exception as e:                        # noqa: BLE001
+                last = f"{type(e).__name__}: {e}"
+                break
+
+        self.stats["errors"] += 1
+        raise ScraperError(f"scrape.do failed for {url}: {last}")
+
+    def _fetch_resilient(self, url: str, *, allow_paid: bool = True,
+                         super_proxy: bool = False) -> str:
+        """Try every tier in cost order and stop at the first REAL page.
+
+        Order: fingerprint (free) -> stealthy browser (free) -> scrape.do (paid).
+        A tier that returns an anti-bot interstitial counts as a failure, which is
+        the whole point: without that check the chain stops at tier 2 holding a
+        challenge page and never escalates.
+
+        Raises ScraperError only when every tier failed, so the caller can
+        distinguish "we were blocked" from "the publisher had nothing", which are
+        the two states that used to be conflated.
+        """
+        attempts: List[str] = []
+
+        for label, fn in (("fingerprint", self._fetch_with_fingerprint),
+                          ("stealthy", self._fetch_stealthy)):
+            try:
+                content = fn(url)
+                if content and not self._is_walled(content):
+                    logger.info("%s: %s tier served %s", self.name, label, url)
+                    return content
+                attempts.append(f"{label}: {'interstitial' if content else 'empty'}")
+            except Exception as e:                        # noqa: BLE001
+                attempts.append(f"{label}: {type(e).__name__}")
+
+        if not allow_paid:
+            raise ScraperError(
+                f"WALLED (free tiers only) {url}; tried {'; '.join(attempts)}")
+
+        try:
+            return self._fetch_scrapedo(url, super_proxy=super_proxy)
+        except Exception as e:                            # noqa: BLE001
+            attempts.append(f"scrapedo: {type(e).__name__}")
+            raise ScraperError(
+                f"WALLED after all four tiers: {url}; tried {'; '.join(attempts)}"
+            ) from e
 
     def _make_absolute_url(self, url: str) -> str:
         """Convert relative URL to absolute URL"""
