@@ -41,25 +41,26 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 
 **Input**
 - `framework_programme` — substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).
-- `status` — `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data.
-  `unknown` is the honest absence of a status, not a state of the call: the Funding & Tenders search feed omits the status field on most historical topics, and it is a large share of the corpus (37% when measured on 9 September 2026, 700 of 1,881). It is a real, filterable value — do not read it as "closed".
+- `status` — `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data. `unknown` is the absence of a status from the source feed, not a state of the call, and it is a large share of the corpus — read it as "not stated", never as "closed".
 - `type_of_action` — substring (e.g. `RIA`, `IA`, `CSA`).
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — deadline window (use to find calls closing in your bidding-feasible range).
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `published_from`, `published_to`: date the call was published on the portal.
+- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open
 GET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01
+GET /api/v2/funding/ft-calls-for-proposals?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page).
-
-**What this corpus is, and is not**
-Mostly an ARCHIVE, not a live opportunity board. Measured 9 September 2026 across all 1,881 calls: 1,078 `closed`, 700 `unknown`, 65 `open`, 38 `forthcoming` — and only **75 (4%) carried a future deadline**, of which 54 are also `status=open`. So neither `status` nor `deadline` alone answers "what can I still apply to": filter on BOTH (`status=open` plus `deadline_from=<today>`) and expect a small result set. The counts move with each sync; treat them as the shape of the corpus rather than today's reading.
+A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time.""",
@@ -67,18 +68,26 @@ Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-ten
 async def list_calls_for_proposals(
     request: Request,
     framework_programme: Optional[str] = Query(None),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists. `unknown` means the portal feed gave no status (37% of rows), not that the call is closed."),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     type_of_action: Optional[str] = Query(None),
     q: Optional[str] = Query(None, description="Substring match on title/description"),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
-    limit: int = Query(50, ge=1, le=100),
+    published_from: Optional[date] = Query(None, description="Published on the portal on or after (YYYY-MM-DD)."),
+    published_to: Optional[date] = Query(None, description="Published on the portal on or before (YYYY-MM-DD)."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallProposalItem]:
-    return await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @calls_router.get(
@@ -130,17 +139,22 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 - `contract_type` — substring (e.g. `services`, `supplies`, `works`).
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — submission window.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `published_from`, `published_to`: date the call was published on the portal.
+- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open
 GET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01
+GET /api/v2/funding/ft-calls-for-tenders?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page).
+A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time.""",
@@ -153,13 +167,21 @@ async def list_calls_for_tenders(
     q: Optional[str] = Query(None),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
-    limit: int = Query(50, ge=1, le=100),
+    published_from: Optional[date] = Query(None, description="Published on the portal on or after (YYYY-MM-DD)."),
+    published_to: Optional[date] = Query(None, description="Published on the portal on or before (YYYY-MM-DD)."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallTenderItem]:
-    return await _v1.list_calls_for_tenders(request=request, contracting_authority=contracting_authority, status=status, contract_type=contract_type, q=q, deadline_from=deadline_from, deadline_to=deadline_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_calls_for_tenders(request=request, contracting_authority=contracting_authority, status=status, contract_type=contract_type, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @tenders_router.get(

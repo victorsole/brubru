@@ -66,6 +66,18 @@ def fetch_rows(timeout: int = 180) -> list:
         return r.json().get("results", {}).get("bindings", [])
 
 
+# The directory gives the honorific as an authority URI (.../honorific/MR). Stored raw
+# until 22 Sep 2026, it opened 15,611 of 15,732 official bodies with a URL.
+_HONORIFICS = {"MR": "Mr", "MS": "Ms", "MRS": "Mrs", "DR": "Dr", "PROF": "Prof."}
+
+
+def _honorific(value):
+    if not value:
+        return value
+    code = str(value).rstrip("/").rsplit("/", 1)[-1].upper()
+    return _HONORIFICS.get(code, code.title())
+
+
 def build() -> tuple:
     """Return (departments[], officials[]) ready to upsert."""
     rows = fetch_rows()
@@ -82,7 +94,7 @@ def build() -> tuple:
         org = _v(b, "orgLabel")
         cb = _v(b, "CorporateBody")
         position = _v(b, "position")
-        hon = _v(b, "hon")
+        hon = _honorific(_v(b, "hon"))
         person = _v(b, "person")
         if not org:
             continue

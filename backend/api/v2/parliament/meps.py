@@ -40,21 +40,24 @@ Drive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to o
 **Input**
 - `country` — ISO-3166-1 alpha-2 (exact 2 chars).
 - `group` — political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) — both are accepted.
-- `name` — substring on full name.
+- `name` — part of the full name, accent- and case-insensitive (`sole` finds `Solé`).
 - `term` — parliamentary term (default 10 = current, valid range 1-10).
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `include_former` — current term only. By default the list holds the MEPs sitting today; `true` adds the members elected or seated this term who have since left (`in_office: false`). Any `updated_` window includes them too, so a sync sees a departure as a change.
+""" + SYNC_PARAMS_DOC + """ Change dates are kept for the current term (10) only; a date window on an older term is a 422.
+- `limit` (default 100, max 500), `page` (1-indexed).
 
 **Try it**
 ```
 GET /api/v2/parliament/meps?country=ES&group=RENEW
 GET /api/v2/parliament/meps?name=Sarri
+GET /api/v2/parliament/meps?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[MEPItem]` envelope. Each item carries `mep_id`, `full_name`, `country`, `political_group`, `party_national`, `term`, `photo_url`, `bio_url`, `committee_assignments[]`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[MEPItem]` envelope. Each item carries `id` (the EP's MEP id), `full_name`, `country` (ISO-3 code of citizenship, e.g. `ESP`), `group` (the EP's URI for the political group, e.g. `org/7018`), `role`, `profile_url`, `in_office`, plus the 5 datapoints (`public_url` = the EP profile page; `body_txt`/`body_html` = the MEP's card with membership history; `document_date` = start of the current mandate). """ + SYNC_FIELDS_DOC + """ `in_office` says whether the MEP sits today.
 
 **Data freshness**
-Live pass-through to data.europarl.europa.eu (the EP's Open Data REST API v2), with a 6-hour in-process cache. MEP changes are rare (election cycles + occasional resignations); the 6h cache balances freshness against EP API rate limits.""",
+Read from data.europarl.europa.eu (the EP's Open Data REST API v2). For the current term the list, the sitting-MEP set and each MEP's record come from Brubru's daily snapshot plus a 6-hour cache, because the EP API rate-limits per-MEP profile calls. The change dates come from that daily snapshot of every current-term MEP (group, role, country, membership history), so `updated_date` moves the day after a change reaches the EP's data.""",
 )
 async def list_meps(
     request: Request,
@@ -62,12 +65,19 @@ async def list_meps(
     group: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
     term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),
-    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (current term only)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Record last changed on or after. The incremental-sync filter (current term only)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Record last changed on or before; a bare date covers the whole day."),
+    include_former: bool = Query(False, description="Current term only: also list members who have left Parliament since the election (in_office=false). Always on with an updated_ window, so a sync learns about departures."),
+    order: str = Query("ep", pattern="^(ep|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="ep (default, the EP's own order) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> PaginatedResponse[MEPItem]:
-    # EP API uses offset-based pagination
-    return await _v1.list_meps(request=request, country=country, group=group, name=name, term=term, limit=limit, page=page, user=user)
+    return await _v1.list_meps(request=request, country=country, group=group, name=name, term=term, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, include_former=include_former, order=order, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(
@@ -97,5 +107,6 @@ Live pass-through to data.europarl.europa.eu with a 6-hour in-process cache.""",
 async def get_mep(
     mep_id: str,
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> MEPItem:
-    return await _v1.get_mep(mep_id=mep_id, user=user)
+    return await _v1.get_mep(mep_id=mep_id, user=user, db=db)

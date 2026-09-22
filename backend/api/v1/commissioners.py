@@ -83,13 +83,14 @@ class CommissionerProfileOut(BaseModel):
     # 5 mandatory Brubru v1 datapoints. A profile is a reference object (a
     # person), not a document — public_url maps to the bio page; body_txt
     # and body_html stay null (the agenda has its own endpoint); document_date
-    # is null (a profile has no publication date); creation_date is the
-    # time the API call was served.
+    # is null (a profile has no publication date); creation_date is when
+    # Brubru first recorded the commissioner (daily snapshot, 22 Sep 2026).
     public_url: Optional[str] = None
     body_txt: Optional[str] = None
     body_html: Optional[str] = None
     document_date: Optional[date] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When the record last changed (name, portfolio, country, bio page).")
 
 
 def _build_profile_out(profile) -> CommissionerProfileOut:
@@ -110,7 +111,6 @@ def _build_profile_out(profile) -> CommissionerProfileOut:
         bio_url=profile.bio_url,
         agenda_url=agenda_url,
         public_url=profile.bio_url,
-        creation_date=datetime.utcnow(),
     )
 
 
@@ -143,6 +143,7 @@ async def get_profile(
     request: Request,
     slug: str,
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> CommissionerProfileOut:
     from services.api_clients.commissioner_agenda_client import (
         get_commissioner_agenda_client,
@@ -166,7 +167,15 @@ async def get_profile(
         await client._discover_leader_id(profile)
     except Exception as exc:  # noqa: BLE001
         logger.warning("[v1] leader_id discovery failed for %s: %s", slug, exc)
-    return _build_profile_out(profile)
+    out = _build_profile_out(profile)
+    try:
+        from services import api_snapshots
+        d = api_snapshots.dates_for(db, "commissioners", [profile.slug]).get(profile.slug)
+        if d:
+            out.creation_date, out.updated_date = d[0], d[1]
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[v1] commissioner snapshot dates unavailable: %s", exc)
+    return out
 
 
 @router.get(

@@ -9,11 +9,20 @@ import time
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
+import asyncio
+import unicodedata
+
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 
+from core.database import get_db
 from models.user import User
+from services import api_snapshots
+from ._change_window import (
+    SYNC_FIELDS_DOC, SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, any_window, validate_window,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -43,7 +52,31 @@ class MEPItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text composition: full name, citizenship, active political group + role, mandate start, membership history.")
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields. Includes the MEP portrait when available.")
     document_date: Optional[date] = Field(None, description="Start date of the MEP's current/most-recent MEMBER_PARLIAMENT membership.")
-    creation_date: Optional[datetime] = Field(None, description="Time of this MEP fetch (live endpoint, 6h cache).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this MEP (daily snapshot of the current term; null for older terms).")
+    updated_date: Optional[datetime] = Field(None, description="When this MEP's record last changed: group, role, country, membership history, leaving Parliament. A day with no change does not move it.")
+    in_office: Optional[bool] = Field(None, description="True while the MEP sits in Parliament; false for a member of the current term who has left. Null for older terms.")
+
+
+SNAPSHOT_DATASET = "meps_term_10"
+CURRENT_TERM = 10
+
+
+async def _ep_get(hc: httpx.AsyncClient, path: str, params: Dict[str, Any], patient: bool = False) -> httpx.Response:
+    """GET on the EP Open Data API. The API allows a short burst, then answers 429 with
+    `Retry-After: 60`. A request serving a caller never waits; a background job
+    (`patient=True`) waits as told and retries, up to three times."""
+    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
+    for attempt in range(4):
+        r = await hc.get(f"{EP_API_BASE}{path}", params=params, headers=headers)
+        if r.status_code != 429 or not patient or attempt == 3:
+            return r
+        try:
+            wait = min(int(r.headers.get("retry-after") or 60), 120)
+        except ValueError:
+            wait = 60
+        logger.info("[meps] EP API rate limit, waiting %ss", wait)
+        await asyncio.sleep(wait)
+    return r
 
 
 def _cached(key: str):
@@ -94,21 +127,24 @@ async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, o
 
 
 async def _fetch_total_count(country=None, group=None, name=None, term=10) -> int:
-    """Paginate the EP Open Data /meps endpoint exhaustively to count MEPs
-    matching the given filters. Cached for 6h so it costs ~2-3 upstream
-    requests per cache cycle (current term has ~720 MEPs; EP API caps at
-    limit=500 per call).
+    """Count the MEPs matching the filters (-1 on upstream failure)."""
+    rows = await _fetch_all(country=country, group=group, term=term)
+    return -1 if rows is None else len(rows)
 
-    Returns -1 on upstream failure so callers can fall back to a heuristic.
+
+async def _fetch_all(country=None, group=None, term=10, patient: bool = False) -> Optional[List[Dict[str, Any]]]:
+    """Every MEP matching the filters, paging the EP Open Data /meps endpoint 500 at
+    a time. Cached for 6h, so it costs 2-3 upstream requests per cache cycle.
+
+    Returns None on upstream failure, never a partial list.
     """
-    key = f"total:{country}:{group}:{name}:{term}"
+    key = f"all:{country}:{group}:{term}"
     cached = _cached(key)
     if cached is not None:
         return cached
 
-    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
     PAGE = 500
-    seen = 0
+    collected: List[Dict[str, Any]] = []
     offset = 0
     try:
         async with httpx.AsyncClient(timeout=20.0) as hc:
@@ -123,33 +159,80 @@ async def _fetch_total_count(country=None, group=None, name=None, term=10) -> in
                     params["country-of-representation"] = country.upper()
                 if group:
                     params["political-group"] = group
-                r = await hc.get(f"{EP_API_BASE}/meps", params=params, headers=headers)
+                r = await _ep_get(hc, "/meps", params, patient=patient)
                 r.raise_for_status()
                 data = r.json()
                 rows = data.get("data") if isinstance(data, dict) else []
                 if not isinstance(rows, list) or not rows:
                     break
-                seen += len(rows)
+                collected.extend(rows)
                 if len(rows) < PAGE:
                     break  # last page
                 offset += PAGE
     except Exception as exc:  # noqa: BLE001
-        logger.warning("[meps] total-count fetch failed: %s", exc)
-        return -1
+        logger.warning("[meps] full-list fetch failed: %s", exc)
+        return None
 
-    _put(key, seen)
-    return seen
+    _put(key, collected)
+    return collected
 
 
-async def _fetch_profile(mep_id: str) -> Optional[Dict[str, Any]]:
+async def _fetch_current_ids(patient: bool = False) -> Optional[set]:
+    """Ids of the MEPs sitting today (EP `/meps/show-current`), cached 6h. The term
+    list also holds every member who has left since the election."""
+    cached = _cached("current_ids")
+    if cached is not None:
+        return cached
+    ids: set = set()
+    offset = 0
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as hc:
+            for _ in range(10):
+                r = await _ep_get(hc, "/meps/show-current",
+                                  {"format": "application/ld+json", "limit": 500, "offset": offset}, patient=patient)
+                r.raise_for_status()
+                rows = (r.json() or {}).get("data") or []
+                ids.update(_identifier(x) for x in rows)
+                if len(rows) < 500:
+                    break
+                offset += 500
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] current-MEP list unavailable: %s", exc)
+        return None
+    if not ids:
+        return None
+    _put("current_ids", ids)
+    return ids
+
+
+def _fold(value: Optional[str]) -> str:
+    """Accent- and case-insensitive form, so `name=sole` finds `Solé`."""
+    return "".join(c for c in unicodedata.normalize("NFKD", value or "") if not unicodedata.combining(c)).casefold()
+
+
+def _attach_dates(db: Session, items: List["MEPItem"], term: int) -> None:
+    """creation_date / updated_date from the daily snapshot (current term only)."""
+    if term != CURRENT_TERM or not items:
+        return
+    try:
+        dates = api_snapshots.dates_for(db, SNAPSHOT_DATASET, [i.id for i in items if i.id])
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] snapshot dates unavailable: %s", exc)
+        return
+    for item in items:
+        d = dates.get(item.id or "")
+        if d:
+            item.creation_date, item.updated_date = d[0], d[1]
+
+
+async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[str, Any]]:
     key = f"profile:{mep_id}"
     cached = _cached(key)
     if cached is not None:
         return cached
-    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
     try:
         async with httpx.AsyncClient(timeout=15.0) as hc:
-            r = await hc.get(f"{EP_API_BASE}/meps/{mep_id}", params={"format": "application/ld+json"}, headers=headers)
+            r = await _ep_get(hc, f"/meps/{mep_id}", {"format": "application/ld+json"}, patient=patient)
             if r.status_code == 404:
                 return None
             r.raise_for_status()
@@ -208,7 +291,7 @@ def _extract_role(profile: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-async def _enrich_country_group(items: List["MEPItem"]) -> List["MEPItem"]:
+async def _enrich_country_group(items: List["MEPItem"], patient: bool = False, concurrency: int = 8) -> List["MEPItem"]:
     """Hydrate `country`, `group`, `role` on a LIST of MEPItems.
 
     The EP Open Data /meps LIST endpoint returns identifier + name only. To
@@ -220,18 +303,16 @@ async def _enrich_country_group(items: List["MEPItem"]) -> List["MEPItem"]:
 
     6h cache means most calls become free after the first warmup.
     """
-    import asyncio
-
     if not items:
         return items
 
-    sem = asyncio.Semaphore(8)
+    sem = asyncio.Semaphore(concurrency)
 
     async def _hydrate(item: "MEPItem") -> "MEPItem":
         if not item.id:
             return item
         async with sem:
-            profile = await _fetch_profile(item.id)
+            profile = await _fetch_profile(item.id, patient=patient)
         if not profile:
             return item
         if not item.country:
@@ -379,7 +460,6 @@ def _normalise(raw: Dict[str, Any]) -> MEPItem:
         body_txt=body_txt,
         body_html=body_html,
         document_date=doc_date,
-        creation_date=datetime.utcnow(),
     )
 
 
@@ -396,21 +476,24 @@ Drive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to o
 **Input**
 - `country` — ISO-3166-1 alpha-2 (exact 2 chars).
 - `group` — political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) — both are accepted.
-- `name` — substring on full name.
+- `name` — part of the full name, accent- and case-insensitive (`sole` finds `Solé`).
 - `term` — parliamentary term (default 10 = current, valid range 1-10).
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `include_former` — current term only. By default the list holds the MEPs sitting today; `true` adds the members elected or seated this term who have since left (`in_office: false`). Any `updated_` window includes them too, so a sync sees a departure as a change.
+""" + SYNC_PARAMS_DOC + """ Change dates are kept for the current term (10) only; a date window on an older term is a 422.
+- `limit` (default 100, max 500), `page` (1-indexed).
 
 **Try it**
 ```
 GET /api/v1/meps?country=ES&group=RENEW
 GET /api/v1/meps?name=Sarri
+GET /api/v1/meps?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[MEPItem]` envelope. Each item carries `mep_id`, `full_name`, `country`, `political_group`, `party_national`, `term`, `photo_url`, `bio_url`, `committee_assignments[]`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[MEPItem]` envelope. Each item carries `id` (the EP's MEP id), `full_name`, `country` (ISO-3 code of citizenship, e.g. `ESP`), `group` (the EP's URI for the political group, e.g. `org/7018`), `role`, `profile_url`, `in_office`, plus the 5 datapoints (`public_url` = the EP profile page; `body_txt`/`body_html` = the MEP's card with membership history; `document_date` = start of the current mandate). """ + SYNC_FIELDS_DOC + """ `in_office` says whether the MEP sits today.
 
 **Data freshness**
-Live pass-through to data.europarl.europa.eu (the EP's Open Data REST API v2), with a 6-hour in-process cache. MEP changes are rare (election cycles + occasional resignations); the 6h cache balances freshness against EP API rate limits.""",
+Read from data.europarl.europa.eu (the EP's Open Data REST API v2). For the current term the list, the sitting-MEP set and each MEP's record come from Brubru's daily snapshot plus a 6-hour cache, because the EP API rate-limits per-MEP profile calls. The change dates come from that daily snapshot of every current-term MEP (group, role, country, membership history), so `updated_date` moves the day after a change reaches the EP's data.""",
 )
 async def list_meps(
     request: Request,
@@ -418,10 +501,22 @@ async def list_meps(
     group: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
     term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),
-    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (current term only)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Record last changed on or after. The incremental-sync filter (current term only)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Record last changed on or before; a bare date covers the whole day."),
+    include_former: bool = Query(False, description="Current term only: also list members who have left Parliament since the election (in_office=false). Always on with an updated_ window, so a sync learns about departures."),
+    order: str = Query("ep", pattern="^(ep|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="ep (default, the EP's own order) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> PaginatedResponse[MEPItem]:
+    window = validate_window(created_from, created_to, updated_from, updated_to)
+    if term == CURRENT_TERM or name or any_window(window) or order in SYNC_ORDERS:
+        return await _list_from_full(db, country=country, group=group, name=name, term=term, window=window,
+                                     order=order, include_former=include_former, limit=limit, page=page)
     # EP API uses offset-based pagination
     offset = (page - 1) * limit
     try:
@@ -454,8 +549,75 @@ async def list_meps(
         if len(data) == limit:
             total += 1  # hint there might be more
         coverage_complete = False
+    _attach_dates(db, data, term)
     return build_envelope(data, total=total, page=page, limit=limit, coverage_complete=coverage_complete)
 
+
+async def _list_from_full(db: Session, *, country, group, name, term, window, order, include_former, limit, page):
+    """The list path that needs every matching MEP before it can page.
+
+    The current term always takes it: sitting MEPs are the default (the term list also
+    holds everyone who has left since the election), and each MEP's hydrated record
+    comes from the daily snapshot rather than one profile call per MEP per request,
+    which the EP API rate-limits (429, Retry-After 60) well before a partner has paged
+    through 719 MEPs. Older terms take it for a name search (the EP API has no name
+    filter). Country and group still filter upstream, as on the plain path."""
+    dated = any_window(window) or order in SYNC_ORDERS
+    if dated and term != CURRENT_TERM:
+        raise HTTPException(status_code=422, detail={
+            "reason_code": "dates_current_term_only",
+            "message": f"Change dates are kept for the current term ({CURRENT_TERM}) only; drop the date window or the sync order for term={term}.",
+        })
+    raw = await _fetch_all(country=country, group=group, term=term)
+    if raw is None:
+        raise HTTPException(status_code=502, detail={
+            "error": "Upstream EP Open Data temporarily unavailable",
+            "reason_code": "upstream_error", "source": "europarl.europa.eu"})
+    items = [_normalise(r) for r in raw]
+    stored: Dict[str, Dict[str, Any]] = {}
+    if term == CURRENT_TERM:
+        try:
+            stored = api_snapshots.payloads_for(db, SNAPSHOT_DATASET)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[meps] snapshot unavailable: %s", exc)
+        current = await _fetch_current_ids()
+        for i in items:
+            snap = stored.get(i.id or "")
+            if current is not None:
+                i.in_office = i.id in current
+            elif snap is not None:
+                i.in_office = snap.get("in_office")
+        if not (include_former or window["updated_from"] or window["updated_to"]):
+            items = [i for i in items if i.in_office is not False]
+    if name:
+        needle = _fold(name)
+        items = [i for i in items if needle in _fold(i.full_name)]
+    if dated:
+        dates = api_snapshots.dates_for(db, SNAPSHOT_DATASET)
+        items = [i for i in items if api_snapshots.in_window(dates.get(i.id or ""), window)]
+        if order in SYNC_ORDERS:
+            known = [i for i in items if (i.id or "") in dates]
+            unknown = [i for i in items if (i.id or "") not in dates]
+            known.sort(key=lambda i: api_snapshots.sort_key(order, dates[i.id], i.id), reverse=order.endswith("_desc"))
+            items = known + unknown
+    total = len(items)
+    page_items = items[(page - 1) * limit: page * limit]
+    # The snapshot's hydrated record where there is one; a live profile call only for the rest.
+    out, missing = [], []
+    for i in page_items:
+        snap = stored.get(i.id or "")
+        if snap:
+            out.append(MEPItem(**{**snap, "in_office": i.in_office}))
+        else:
+            out.append(i)
+            missing.append(i)
+    if missing:
+        try:
+            await _enrich_country_group(missing)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[meps] hydration skipped: %s", exc)
+    _attach_dates(db, out, term)
+    return build_envelope(out, total=total, page=page, limit=limit)
 
 @router.get(
     "/{mep_id}",
@@ -484,6 +646,7 @@ Live pass-through to data.europarl.europa.eu with a 6-hour in-process cache.""",
 async def get_mep(
     mep_id: str,
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> MEPItem:
     profile = await _fetch_profile(mep_id)
     if not profile:
@@ -491,4 +654,6 @@ async def get_mep(
             status_code=404,
             detail={"error": f"MEP {mep_id} not found on EP Open Data", "reason_code": "not_found", "resource": "mep", "id": mep_id},
         )
-    return _normalise(profile)
+    item = _normalise(profile)
+    _attach_dates(db, [item], CURRENT_TERM)
+    return item

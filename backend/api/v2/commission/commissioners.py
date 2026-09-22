@@ -41,21 +41,33 @@ Returns all 27 members of the Von der Leyen II College — for each commissioner
 To drive a commissioner dropdown in a UI, fetch a specific commissioner's meeting calendar, or label which commissioner owns a given policy file. The slugs are reused as the `commissioner_slug` filter on `/api/v1/publications`, `/api/v1/calendar`, and `/api/v2/commission/commissioners/{slug}/agenda`.
 
 **Input**
-No parameters. Requires an `X-API-Key` header.
+No parameters are needed: the College is 27 people, returned in one response. For a daily incremental sync:
+- `created_from`, `created_to`: when Brubru first recorded the commissioner.
+- `updated_from`, `updated_to`: when the record last changed (name, portfolio, country, bio page). With an `updated_` window, commissioners who have LEFT the College in that window are included with `removed_date` set, so a sync can delete them.
+- `order`: `name` (default) | `updated_asc` | `updated_desc` | `created_asc` | `created_desc`.
 
 **Try it**
 ```
 GET /api/v2/commission/commissioners
+GET /api/v2/commission/commissioners?updated_from=2026-09-21
 ```
 
 **You get back**
-A `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) — each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+A `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) — each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`, and the change dates `creation_date` (when Brubru first recorded them), `updated_date` (when the record last changed) and `removed_date` (set only on a commissioner who has left). The envelope's `creation_date` is when the call was served.
 
 **Data freshness**
 Reads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration to resolve each commissioner's `leader_id` for the filtered-calendar URL (24h cached client-side). Reshuffles or portfolio changes apply on Brubru redeploy after manual JSON update. Typically refreshed weekly via the Friday sweep.""",
 )
-async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
-    return await _v1_metadata.list_commissioners(user=user)
+async def list_commissioners(
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Record last changed on or after; includes commissioners who left."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Record last changed on or before; a bare date covers the whole day."),
+    order: str = Query("name", pattern="^(name|updated_asc|updated_desc|created_asc|created_desc)$"),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> _GenericListResponse:
+    return await _v1_metadata.list_commissioners(created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, user=user, db=db)
 
 
 @router.get(
@@ -87,8 +99,9 @@ async def get_profile(
     request: Request,
     slug: str,
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> CommissionerProfileOut:
-    return await _v1_commissioners.get_profile(request=request, slug=slug, user=user)
+    return await _v1_commissioners.get_profile(request=request, slug=slug, user=user, db=db)
 
 
 @router.get(

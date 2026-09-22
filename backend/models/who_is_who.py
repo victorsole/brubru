@@ -6,7 +6,7 @@ Who is Who models (migration 113) — the EU interinstitutional directory.
 Ingested by scripts/sync_who_is_who.py from the EU SPARQL endpoint.
 """
 
-from sqlalchemy import Column, String, Text, DateTime, Integer, UniqueConstraint
+from sqlalchemy import Column, FetchedValue, String, Text, DateTime, Integer, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 import uuid
@@ -49,3 +49,6 @@ class WhoIsWhoOfficial(Base):
     body_html = Column(Text)
     first_seen = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     fetched_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    # Migration 234: content change time (trigger ignores fetched_at) and departure time.
+    content_updated_at = Column(DateTime(timezone=True), server_default=FetchedValue(), server_onupdate=FetchedValue())
+    removed_at = Column(DateTime(timezone=True))

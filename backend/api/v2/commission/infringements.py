@@ -32,6 +32,7 @@ from sqlalchemy.orm import Session
 from api.v1 import infringements_funding as _v1_infringements_funding
 from api.v1._body import body_threshold_param
 from api.v1._deps import api_user_with_rate_limit
+from api.v1._change_window import SYNC_FIELDS_DOC, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window, validate_window
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.infringements_funding import InfringementItem
 from core.database import get_db
@@ -57,7 +58,8 @@ class _DataPoints(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text body composed from the record (full on detail endpoints; null on lists).")
     body_html: Optional[str] = Field(None, description="HTML body composed from the record (full on detail endpoints; null on lists).")
     document_date: Optional[date] = Field(None, description="The item's own date: the decision date, or a case's latest decision date.")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the item.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded the item.")
+    updated_date: Optional[datetime] = Field(None, description="When the item's content last changed in Brubru (a new decision in the case, a new press release, a closure...). A daily re-sync that finds the same content does not move it.")
 
 
 class InfringementDecision(_DataPoints):
@@ -161,11 +163,11 @@ class StatisticsDatasetItem(_DataPoints):
 _CASE_COLS = ("id, infringement_number, member_state, member_state_name, active_case, case_type, non_communication, "
               "lead_dg, lead_dg_code, title, first_decision_date, latest_decision_date, latest_decision_type, "
               "latest_decision_category, decision_count, policy_areas, court_cases, press_release_urls, public_url, "
-              "public_url_kind, creation_date")
+              "public_url_kind, creation_date, content_updated_at AS updated_date")
 _DECISION_COLS = ("d.id, c.id AS case_id, d.infringement_number, d.member_state, d.member_state_name, d.decision_date, "
                   "d.decision_type, d.decision_type_code, d.decision_category, d.case_type, d.lead_dg, d.lead_dg_code, "
                   "d.title, d.active_case, d.non_communication, d.policy_areas, d.press_release, d.press_release_url, "
-                  "d.memo, d.memo_url, d.court_case, d.court_case_url, d.public_url, d.public_url_kind, d.creation_date")
+                  "d.memo, d.memo_url, d.court_case, d.court_case_url, d.public_url, d.public_url_kind, d.creation_date, d.content_updated_at AS updated_date")
 
 
 def _bad_request(message: str) -> HTTPException:
@@ -241,17 +243,19 @@ To see which Member States face proceedings on a topic, how far each case has go
 - `latest_decision_category`: e.g. `RTC` for cases whose latest step is a referral to the Court.
 - `q`: words in the subject, or an infringement number.
 - `decision_from`, `decision_to`: bounds on the latest decision date (YYYY-MM-DD).
-- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.
+{SYNC_PARAMS_DOC}
+- `order`: `recent` (default, latest decision first), `oldest`, or a sync order: `updated_asc`, `updated_desc`, `created_asc`, `created_desc`. `limit` (default 100, max 500), `page`.
 
 **Try it**
 ```
 GET /api/v2/commission/infringements?member_state=PL&active=true
 GET /api/v2/commission/infringements?case_type=NCM&lead_dg=ENV&active=true
 GET /api/v2/commission/infringements?q=nitrates
+GET /api/v2/commission/infringements?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A paginated list of cases. Each carries `id`, `infringement_number`, `member_state`, `active_case`, `case_type`, `lead_dg`, `title`, `first_decision_date`, `latest_decision_date`, `latest_decision_type`, `decision_count`, `court_cases`, `press_release_urls`, and the five datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`; the bodies are on the detail endpoint).
+A paginated list of cases. Each carries `id`, `infringement_number`, `member_state`, `active_case`, `case_type`, `lead_dg`, `title`, `first_decision_date`, `latest_decision_date`, `latest_decision_type`, `decision_count`, `court_cases`, `press_release_urls`, and the five datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`; the bodies are on the detail endpoint). {SYNC_FIELDS_DOC}
 
 **Data freshness**
 {_SOURCE}""",
@@ -267,8 +271,12 @@ def list_cases(
     q: Optional[str] = Query(None, description="Words in the subject, or an infringement number."),
     decision_from: Optional[date] = Query(None, description="Latest decision on or after (YYYY-MM-DD)."),
     decision_to: Optional[date] = Query(None, description="Latest decision on or before (YYYY-MM-DD)."),
-    order: str = Query("recent", pattern="^(recent|oldest)$"),
-    limit: int = Query(50, ge=1, le=100),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after. The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("recent", pattern="^(recent|oldest|updated_asc|updated_desc|created_asc|created_desc)$"),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -292,12 +300,16 @@ def list_cases(
         where.append("(title ILIKE :q OR infringement_number ILIKE :qn)")
         params["q"] = f"%{q.strip()}%"; params["qn"] = f"%{_normalise_number(q)}%"
     _range(where, params, "latest_decision_date", decision_from, decision_to)
+    sql_window(where, params, validate_window(created_from, created_to, updated_from, updated_to),
+               "creation_date", "content_updated_at")
     clause = ("WHERE " + " AND ".join(where)) if where else ""
     direction = "DESC" if order == "recent" else "ASC"
+    ordering = sql_order(order, "creation_date", "content_updated_at") \
+        or f"latest_decision_date {direction} NULLS LAST, id {direction}"
     total = int(db.execute(text(f"SELECT count(*) FROM infringement_cases {clause}"), params).scalar() or 0)
     rows = db.execute(text(
         f"SELECT {_CASE_COLS} FROM infringement_cases {clause} "
-        f"ORDER BY latest_decision_date {direction} NULLS LAST, id {direction} LIMIT :limit OFFSET :offset"),
+        f"ORDER BY {ordering} LIMIT :limit OFFSET :offset"),
         {**params, "limit": limit, "offset": (page - 1) * limit}).mappings().all()
     items = []
     for r in rows:
@@ -331,16 +343,18 @@ To follow the Commission's monthly infringement packages, list the referrals to 
 - `case_type`: `NCM` | `NCF` | `BAD` | `REG`. `lead_dg`: e.g. `ENV`. `policy_area`: text.
 - `active`: `true` for decisions in open cases. `with_press_release`: `true` for decisions announced in a press release.
 - `q`: words in the subject. `decision_from`, `decision_to`: decision date bounds (YYYY-MM-DD).
-- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.
+{SYNC_PARAMS_DOC}
+- `order`: `recent` (default), `oldest`, or a sync order: `updated_asc`, `updated_desc`, `created_asc`, `created_desc`. `limit` (default 100, max 500), `page`.
 
 **Try it**
 ```
 GET /api/v2/commission/infringements/decisions?decision_from=2026-07-01&decision_category=RTC
 GET /api/v2/commission/infringements/decisions?member_state=DE&decision_category=RO
+GET /api/v2/commission/infringements/decisions?created_from=2026-09-21&order=created_asc&limit=500
 ```
 
 **You get back**
-A paginated list of decisions: `id`, `case_id`, `infringement_number`, `member_state`, `decision_date`, `decision_type`, `decision_category`, `case_type`, `lead_dg`, `title`, `active_case`, `press_release_url`, `memo_url`, `court_case`, `court_case_url`, `public_url_kind`, and the five datapoints (bodies on the detail endpoint).
+A paginated list of decisions: `id`, `case_id`, `infringement_number`, `member_state`, `decision_date`, `decision_type`, `decision_category`, `case_type`, `lead_dg`, `title`, `active_case`, `press_release_url`, `memo_url`, `court_case`, `court_case_url`, `public_url_kind`, and the five datapoints (bodies on the detail endpoint). {SYNC_FIELDS_DOC}
 
 **Data freshness**
 {_SOURCE}""",
@@ -359,8 +373,12 @@ def list_decisions(
     q: Optional[str] = Query(None, description="Words in the subject."),
     decision_from: Optional[date] = Query(None, description="Decided on or after (YYYY-MM-DD)."),
     decision_to: Optional[date] = Query(None, description="Decided on or before (YYYY-MM-DD)."),
-    order: str = Query("recent", pattern="^(recent|oldest)$"),
-    limit: int = Query(50, ge=1, le=100),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after. The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("recent", pattern="^(recent|oldest|updated_asc|updated_desc|created_asc|created_desc)$"),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -389,13 +407,16 @@ def list_decisions(
     if q:
         where.append("d.title ILIKE :q"); params["q"] = f"%{q.strip()}%"
     _range(where, params, "d.decision_date", decision_from, decision_to)
+    sql_window(where, params, validate_window(created_from, created_to, updated_from, updated_to),
+               "d.creation_date", "d.content_updated_at")
     clause = ("WHERE " + " AND ".join(where)) if where else ""
     direction = "DESC" if order == "recent" else "ASC"
     total = int(db.execute(text(f"SELECT count(*) FROM infringement_decisions d {clause}"), params).scalar() or 0)
     rows = db.execute(text(
         f"SELECT {_DECISION_COLS} FROM infringement_decisions d "
         f"LEFT JOIN infringement_cases c ON c.infringement_number = d.infringement_number {clause} "
-        f"ORDER BY d.decision_date {direction}, d.id {direction} LIMIT :limit OFFSET :offset"),
+        f"ORDER BY {sql_order(order, 'd.creation_date', 'd.content_updated_at', 'd.id') or f'd.decision_date {direction}, d.id {direction}'} "
+        f"LIMIT :limit OFFSET :offset"),
         {**params, "limit": limit, "offset": (page - 1) * limit}).mappings().all()
     return build_envelope([_decision_from_row(r) for r in rows], total=total, page=page, limit=limit,
                           published_from=decision_from, published_to=decision_to,

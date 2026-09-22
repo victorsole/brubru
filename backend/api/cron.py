@@ -670,6 +670,15 @@ async def cron_sync_daily(
     # windows, reconciles against its total, and records a sync_runs row itself.
     results["infringement_register"] = await _run_script_async(
         "infringement_register", "scripts/sync_infringement_register.py", ["--apply"], timeout=1800)
+    # EU officials (Who is Who, ~15,700). Loaded once on 5 June 2026 and never again until
+    # 22 Sep, so the API served a June directory. Marks departures (capped at 10% a run)
+    # and records its own sync_runs row.
+    results["who_is_who"] = await _run_script_async("who_is_who", "scripts/sync_who_is_who.py", [], timeout=900)
+    # Change dates for the registers served live (MEPs, the College): partners syncing
+    # daily filter on updated_from. Pure HTTP (no browser); the EP API rate-limits, so the
+    # job runs two calls at a time and waits when told, ~5 min.
+    results["live_register_snapshots"] = await _run_script_async(
+        "live_register_snapshots", "scripts/snapshot_live_registers.py", ["--apply"], timeout=1800)
     results["eesc"] = await _run_script_async("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
     results["cor"] = await _run_script_async("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
     # euagenda RETIRED 15 Sep 2026 (Victor): the site sits behind a Cloudflare bot

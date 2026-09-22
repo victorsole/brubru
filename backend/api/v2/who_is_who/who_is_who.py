@@ -70,9 +70,13 @@ async def get_department(item_id: str, user: User = Depends(api_user_with_rate_l
     description=_DESC(
         "Returns named EU officials from the official interinstitutional directory — each with their position (job title) and the department they belong to, across all EU institutions.",
         "To find who holds a position (e.g. the Director-General of a DG), or to list the officials of a department.",
-        "- `q` — substring search over the official's name.\n- `department` — substring match on the department name.\n- `mnemonic` — exact department code.\n- `position` — substring match on the position / job title.\n- `limit` (default 25, max 100), `page`.",
-        "A `PaginatedResponse[WhoIsWhoOfficialItem]`.",
-        "GET /api/v2/who-is-who/officials?position=Director-General&mnemonic=AGRI",
+        "- `q` — substring search over the official's name.\n- `department` — substring match on the department name.\n- `mnemonic` — exact department code.\n- `position` — substring match on the position / job title.\n"
+        + SYNC_PARAMS_DOC + " Also `created_desc`, `updated_desc`, `created_asc`; the default is `name`.\n"
+        "- `include_removed`: officials who have left the directory are hidden by default. They are included, with `removed_date` set, "
+        "when you pass `include_removed=true` OR any `updated_from`/`updated_to`, so an incremental sync sees departures and can delete them.\n"
+        "- `limit` (default 100, max 500), `page`.",
+        "A `PaginatedResponse[WhoIsWhoOfficialItem]`. " + SYNC_FIELDS_DOC + " `removed_date` is set once an official is no longer listed.",
+        "GET /api/v2/who-is-who/officials?position=Director-General&mnemonic=AGRI\nGET /api/v2/who-is-who/officials?updated_from=2026-09-21&order=updated_asc&limit=500",
     ),
 )
 async def list_officials(
@@ -81,12 +85,19 @@ async def list_officials(
     department: Optional[str] = Query(None),
     mnemonic: Optional[str] = Query(None),
     position: Optional[str] = Query(None),
-    limit: int = Query(25, ge=1, le=100),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Record last changed on or after. The incremental-sync filter; includes departures."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Record last changed on or before; a bare date covers the whole day."),
+    include_removed: bool = Query(False, description="Include officials no longer in the directory (always on when an updated_ window is given)."),
+    order: str = Query("name", pattern="^(name|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="name (default) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[WhoIsWhoOfficialItem]:
-    return await _v1.list_officials(request=request, q=q, department=department, mnemonic=mnemonic, position=position, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_officials(request=request, q=q, department=department, mnemonic=mnemonic, position=position, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, include_removed=include_removed, order=order, limit=limit, page=page, user=user, db=db)
 
 
 @officials_router.get(

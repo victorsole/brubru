@@ -15,6 +15,7 @@ from sqlalchemy import (
     DateTime,
     Numeric,
     String,
+    FetchedValue,
     Text,
     func,
 )
@@ -47,6 +48,10 @@ class FtCallForProposals(Base):
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
     detected_lang = Column(String(8))  # ISO-639-1; feeds the translation overlay
+    # Migration 234: when Brubru first recorded the row, and when its CONTENT last
+    # changed (a trigger ignores scraped_at/last_updated, which every sync rewrites).
+    first_seen_at = Column(DateTime(timezone=True), server_default=func.now())
+    content_updated_at = Column(DateTime(timezone=True), server_default=FetchedValue(), server_onupdate=FetchedValue())
 
 
 class FtCallForTenders(Base):
@@ -70,6 +75,10 @@ class FtCallForTenders(Base):
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     detected_lang = Column(String(8))
     scraped_at = Column(DateTime, server_default=func.now())
+    # Migration 234: when Brubru first recorded the row, and when its CONTENT last
+    # changed (a trigger ignores scraped_at/last_updated, which every sync rewrites).
+    first_seen_at = Column(DateTime(timezone=True), server_default=func.now())
+    content_updated_at = Column(DateTime(timezone=True), server_default=FetchedValue(), server_onupdate=FetchedValue())
 
 
 class FtFundedProject(Base):

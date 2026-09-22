@@ -24,6 +24,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._change_window import SYNC_FIELDS_DOC, SYNC_PARAMS_DOC, UpperBoundDatetime, orm_order, orm_window, validate_window
 
 departments_router = APIRouter(prefix="/who-is-who/departments", tags=["v1-who-is-who-departments"])
 officials_router = APIRouter(prefix="/who-is-who/officials", tags=["v1-who-is-who-officials"])
@@ -77,7 +78,9 @@ class WhoIsWhoOfficialItem(BaseModel):
     body_txt: Optional[str] = None
     body_html: Optional[str] = None
     document_date: Optional[date] = None
-    creation_date: Optional[datetime] = None
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this official.")
+    updated_date: Optional[datetime] = Field(None, description="When this official's record last changed (position, department, name...). A re-sync with the same content does not move it.")
+    removed_date: Optional[datetime] = Field(None, description="When the official stopped appearing in the EU directory. Null while listed.")
 
 
 def _to_dept(r: WhoIsWhoDepartment) -> WhoIsWhoDepartmentItem:
@@ -92,7 +95,8 @@ def _to_official(r: WhoIsWhoOfficial) -> WhoIsWhoOfficialItem:
         id=str(r.id), name=r.name, honorific=r.honorific, position=r.position,
         department=r.department, mnemonic=r.mnemonic, institution_uri=r.institution_uri,
         person_uri=r.person_uri, public_url=r.public_url,
-        body_txt=r.body_txt, body_html=r.body_html, document_date=None, creation_date=r.first_seen)
+        body_txt=r.body_txt, body_html=r.body_html, document_date=None, creation_date=r.first_seen,
+        updated_date=r.content_updated_at, removed_date=r.removed_at)
 
 
 @departments_router.get(
@@ -153,9 +157,13 @@ async def get_department(item_id: str, user: User = Depends(api_user_with_rate_l
     description=_DESC(
         "Returns named EU officials from the official interinstitutional directory — each with their position (job title) and the department they belong to, across all EU institutions.",
         "To find who holds a position (e.g. the Director-General of a DG), or to list the officials of a department.",
-        "- `q` — substring search over the official's name.\n- `department` — substring match on the department name.\n- `mnemonic` — exact department code.\n- `position` — substring match on the position / job title.\n- `limit` (default 25, max 100), `page`.",
-        "A `PaginatedResponse[WhoIsWhoOfficialItem]`.",
-        "GET /api/v1/who-is-who/officials?position=Director-General&mnemonic=AGRI",
+        "- `q` — substring search over the official's name.\n- `department` — substring match on the department name.\n- `mnemonic` — exact department code.\n- `position` — substring match on the position / job title.\n"
+        + SYNC_PARAMS_DOC + " Also `created_desc`, `updated_desc`, `created_asc`; the default is `name`.\n"
+        "- `include_removed`: officials who have left the directory are hidden by default. They are included, with `removed_date` set, "
+        "when you pass `include_removed=true` OR any `updated_from`/`updated_to`, so an incremental sync sees departures and can delete them.\n"
+        "- `limit` (default 100, max 500), `page`.",
+        "A `PaginatedResponse[WhoIsWhoOfficialItem]`. " + SYNC_FIELDS_DOC + " `removed_date` is set once an official is no longer listed.",
+        "GET /api/v1/who-is-who/officials?position=Director-General&mnemonic=AGRI\nGET /api/v1/who-is-who/officials?updated_from=2026-09-21&order=updated_asc&limit=500",
     ),
 )
 async def list_officials(
@@ -164,12 +172,23 @@ async def list_officials(
     department: Optional[str] = Query(None),
     mnemonic: Optional[str] = Query(None),
     position: Optional[str] = Query(None),
-    limit: int = Query(25, ge=1, le=100),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Record last changed on or after. The incremental-sync filter; includes departures."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Record last changed on or before; a bare date covers the whole day."),
+    include_removed: bool = Query(False, description="Include officials no longer in the directory (always on when an updated_ window is given)."),
+    order: str = Query("name", pattern="^(name|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="name (default) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[WhoIsWhoOfficialItem]:
-    query = db.query(WhoIsWhoOfficial)
+    window = validate_window(created_from, created_to, updated_from, updated_to)
+    query = orm_window(db.query(WhoIsWhoOfficial), window, WhoIsWhoOfficial.first_seen, WhoIsWhoOfficial.content_updated_at)
+    # A sync over an updated_ window must see departures, or it keeps them for ever.
+    if not (include_removed or window["updated_from"] or window["updated_to"]):
+        query = query.filter(WhoIsWhoOfficial.removed_at.is_(None))
     f = []
     if q:
         f.append(WhoIsWhoOfficial.name.ilike(f"%{q}%"))
@@ -182,7 +201,9 @@ async def list_officials(
     if f:
         query = query.filter(and_(*f))
     total = query.count()
-    rows = query.order_by(WhoIsWhoOfficial.name).offset((page - 1) * limit).limit(limit).all()
+    ordering = orm_order(order, WhoIsWhoOfficial.first_seen, WhoIsWhoOfficial.content_updated_at, WhoIsWhoOfficial.id) \
+        or (WhoIsWhoOfficial.name, WhoIsWhoOfficial.id)
+    rows = query.order_by(*ordering).offset((page - 1) * limit).limit(limit).all()
     return build_envelope([_to_official(r) for r in rows], total=total, page=page, limit=limit,
                           op_core_title="EU officials", op_core_type="EU official",
                           op_core_identifier=str(request.url))

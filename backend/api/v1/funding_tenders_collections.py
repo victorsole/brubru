@@ -21,6 +21,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
+from ._change_window import UpperBoundDatetime, orm_order, orm_window, validate_window
 from models.funding_tenders import (
     FtCallForProposals,
     FtCallForTenders,
@@ -69,7 +70,18 @@ class FtCallProposalItem(BaseModel):
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this row's content last changed in Brubru (a re-sync that finds the same content does not move it).")
+
+
+def _call_order(model, order: str):
+    """ORDER BY for the calls lists: a sync order, publication, or (default) deadline."""
+    sync = orm_order(order, model.first_seen_at, model.content_updated_at, model.id)
+    if sync:
+        return sync
+    if order == "published_desc":
+        return (model.published_at.desc().nullslast(), model.id.desc())
+    return (model.deadline.desc().nullslast(), model.id.desc())
 
 
 def _proposal_to_item(
@@ -89,11 +101,12 @@ def _proposal_to_item(
         budget_currency=r.budget_currency, source_url=r.source_url,
         documents_url=r.documents_url,
         keywords=list(r.keywords or []), target_audience=list(r.target_audience or []),
-        published_at=r.published_at, last_updated=r.last_updated,
+        published_at=r.published_at, last_updated=r.content_updated_at or r.last_updated,
         has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
-        creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
+        creation_date=r.first_seen_at,
+        updated_date=r.content_updated_at,
     )
 
 
@@ -113,17 +126,22 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 - `type_of_action` — substring (e.g. `RIA`, `IA`, `CSA`).
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — deadline window (use to find calls closing in your bidding-feasible range).
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `published_from`, `published_to`: date the call was published on the portal.
+- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open
 GET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01
+GET /api/v1/ft-calls-for-proposals?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page).
+A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time.""",
@@ -136,13 +154,27 @@ async def list_calls_for_proposals(
     q: Optional[str] = Query(None, description="Substring match on title/description"),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
-    limit: int = Query(50, ge=1, le=100),
+    published_from: Optional[date] = Query(None, description="Published on the portal on or after (YYYY-MM-DD)."),
+    published_to: Optional[date] = Query(None, description="Published on the portal on or before (YYYY-MM-DD)."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallProposalItem]:
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForProposals).filter(FtCallForProposals.is_test == False)  # noqa: E712
+    query = orm_window(query, window, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at)
+    if published_from:
+        query = query.filter(FtCallForProposals.published_at >= published_from)
+    if published_to:
+        query = query.filter(FtCallForProposals.published_at <= datetime.combine(published_to, time.max))
     filters = []
     if framework_programme:
         filters.append(FtCallForProposals.framework_programme.ilike(f"%{framework_programme}%"))
@@ -165,7 +197,7 @@ async def list_calls_for_proposals(
         # Default: most recent deadlines first (2026 + open calls surface before
         # historic closed calls). Partners exploring the endpoint should land
         # on current opportunities, not on calls that closed a decade ago.
-        query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc())
+        query.order_by(*_call_order(FtCallForProposals, order))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
@@ -240,7 +272,8 @@ class FtCallTenderItem(BaseModel):
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this row's content last changed in Brubru (a re-sync that finds the same content does not move it).")
 
 
 def _tender_to_item(
@@ -286,11 +319,12 @@ def _tender_to_item(
         value_currency=r.value_currency, deadline=r.deadline,
         source_url=r.source_url, documents_url=r.documents_url,
         cpv_codes=list(r.cpv_codes or []),
-        published_at=r.published_at, last_updated=r.last_updated,
+        published_at=r.published_at, last_updated=r.content_updated_at or r.last_updated,
         has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
-        creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
+        creation_date=r.first_seen_at,
+        updated_date=r.content_updated_at,
     )
 
 
@@ -310,17 +344,22 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 - `contract_type` — substring (e.g. `services`, `supplies`, `works`).
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — submission window.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `published_from`, `published_to`: date the call was published on the portal.
+- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open
 GET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01
+GET /api/v1/ft-calls-for-tenders?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page).
+A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time.""",
@@ -333,13 +372,27 @@ async def list_calls_for_tenders(
     q: Optional[str] = Query(None),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
-    limit: int = Query(50, ge=1, le=100),
+    published_from: Optional[date] = Query(None, description="Published on the portal on or after (YYYY-MM-DD)."),
+    published_to: Optional[date] = Query(None, description="Published on the portal on or before (YYYY-MM-DD)."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallTenderItem]:
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForTenders).filter(FtCallForTenders.is_test == False)  # noqa: E712
+    query = orm_window(query, window, FtCallForTenders.first_seen_at, FtCallForTenders.content_updated_at)
+    if published_from:
+        query = query.filter(FtCallForTenders.published_at >= published_from)
+    if published_to:
+        query = query.filter(FtCallForTenders.published_at <= datetime.combine(published_to, time.max))
     filters = []
     if contracting_authority:
         filters.append(FtCallForTenders.contracting_authority.ilike(f"%{contracting_authority}%"))
@@ -361,7 +414,7 @@ async def list_calls_for_tenders(
     rows = (
         # Default: most recent deadlines first (2025-2026 published-at lines
         # up well; partners want active tenders, not historic ones).
-        query.order_by(FtCallForTenders.deadline.desc().nullslast(), FtCallForTenders.id.desc())
+        query.order_by(*_call_order(FtCallForTenders, order))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
