@@ -1345,3 +1345,35 @@
   background: #f2f0fb;
   color: #5a3489;
 }
+
+/* Cancelled events (added 22 September 2026).
+   `status` has always arrived from the API and the tab never read it, so a
+   cancelled meeting rendered identically to a live one. Marked with
+   strike-through AND the word "Cancelled", never colour alone, so it survives
+   greyscale and colour-blindness (WCAG 2.1 AA). */
+.eu-calendar-tab__month-event--cancelled {
+  text-decoration: line-through;
+  opacity: 0.62;
+}
+
+.eu-calendar-tab__cancelled-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid #b42318;
+  border-radius: 4px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .eu-calendar-tab__cancelled-badge {
+    font-size: 0.68rem;
+    margin-left: 0.35rem;
+  }
+}

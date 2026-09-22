@@ -511,15 +511,21 @@ function MonthView() {
                   const pillLabel = event.event_type === 'committee_meeting' && event.ep_committee_code
                     ? event.ep_committee_code
                     : event.title;
+                  // A cancelled meeting used to render identically to a live one.
+                  // The API has always sent `status`; the tab simply never read it,
+                  // so someone could plan a trip around a meeting that is not
+                  // happening. Marked by strike-through AND the word, never colour
+                  // alone.
+                  const isCancelled = event.status === 'cancelled';
                   return (
                     <div
                       key={event.id}
-                      className={`eu-calendar-tab__month-event ${eventTypeClass}`}
+                      className={`eu-calendar-tab__month-event ${eventTypeClass}${isCancelled ? ' eu-calendar-tab__month-event--cancelled' : ''}`}
                       style={{ background: getInstitutionColour(event.institution) }}
                       onClick={(e) => { e.stopPropagation(); selectEvent(event); }}
-                      title={event.title}
+                      title={isCancelled ? `Cancelled: ${event.title}` : event.title}
                     >
-                      {pillLabel}
+                      {isCancelled ? `Cancelled: ${pillLabel}` : pillLabel}
                     </div>
                   );
                 })}
@@ -846,6 +852,9 @@ function EventDetailModal() {
               <span>{getEventTypeLabel(event.event_type)}</span>
               {event.council_configuration && (
                 <span> &mdash; {event.council_configuration}</span>
+              )}
+              {event.status === 'cancelled' && (
+                <span className="eu-calendar-tab__cancelled-badge">Cancelled</span>
               )}
             </div>
             {event.ep_committee_code && (
