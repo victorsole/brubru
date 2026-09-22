@@ -166,3 +166,6 @@ backend/data/dpp_corpus/
 # The one-shot ingest/seed scripts stay ignored; they are not knowledge.
 backend/scripts/_ingest_payments_oneshot.py
 backend/scripts/_seed_payments_cluster.py
+
+# Cached committee PDFs/text for deep_dive_brief.py (re-fetchable, large)
+backend/data/deep_dive_docs/
