@@ -486,7 +486,24 @@ async def cron_sync_warm_12h(
     results["eprs_publications"] = await _run_script_async("eprs_publications", "scripts/sync_eprs_publications.py", ["--days", "3"], timeout=900)
     results["eprs_legislation"] = await _run_script_async("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
     results["committee_minutes"] = await _run_script_async("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
-    results["committee_agendas"] = await _run_script_async("committee_agendas", "scripts/sync_committee_agendas.py", [], timeout=600)
+    # Committee agendas -> My EU Calendar.
+    #
+    # `sync_committee_agendas.py` used to run here. It scrapes the EP "latest
+    # documents" HTML page, and it is DEAD: measured again on 22 September 2026
+    # it finished in 0.3 seconds with added=0, updated=0, skipped=0, errors=0 and
+    # exit code 0. Nothing-fetched reported as nothing-found, on a cron, twice a
+    # day, for weeks -- so the calendar silently lost every committee meeting
+    # while the job stayed green. Eight meetings were missing when this was
+    # found, including SANT on 28 September and AFCO, AFET, EMPL and INTA on
+    # 1 October, all of them days away.
+    #
+    # The data was never missing: Brubru already holds it in `ep_emeeting_agendas`
+    # from the eMeeting open JSON API (no WAF, plain httpx). Feed the calendar
+    # from our own store instead of from a broken HTML scrape.
+    # [[feedback_silent_failure_reports_success]]
+    results["committee_agendas"] = await _run_script_async(
+        "committee_agendas", "scripts/sync_calendar_from_emeeting_agendas.py",
+        ["--back", "14", "--ahead", "45", "--apply"], timeout=600)
     results["committee_transcripts"] = await _run_script_async("committee_transcripts", "scripts/sync_committee_transcripts.py", ["--days", "30", "--max", "50"], timeout=900)
     # Auto-archive items past their lifespan (adopted carriages 90d+, closed
     # consultations 30d+, stale Commission docs 180d+). Idempotent; applies.
