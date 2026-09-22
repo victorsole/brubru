@@ -19,6 +19,16 @@ export interface DeepDive {
 
 export const DEEP_DIVES: DeepDive[] = [
   {
+    title: "EU KIDS Act: Keeping Internet Digital Spaces Accountable and Trustworthy",
+    shortTitle: 'EU KIDS Act',
+    comReference: 'COM(2026) 681',
+    procedureRef: '2026/0286(COD)',
+    basePath: '/kids-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#9b51e0',
+    icon: 'mdi-shield-account-outline',
+  },
+  {
     title: 'EU Inc.: the 28th Regime for European Companies',
     shortTitle: 'EU Inc.',
     comReference: 'COM(2026) 321',

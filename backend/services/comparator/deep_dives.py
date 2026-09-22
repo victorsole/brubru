@@ -34,9 +34,17 @@ class DeepDive(TypedDict):
 
 
 # --- BEGIN GENERATED (scripts/generate_deep_dive_map.py) ---
-# 13 deep-dives, generated from frontend/src/utils/deep_dive_map.ts.
+# 15 deep-dives, generated from frontend/src/utils/deep_dive_map.ts.
 # Do NOT edit by hand: run scripts/generate_deep_dive_map.py --write.
 DEEP_DIVES: List[DeepDive] = [
+    {
+        'short_title': 'EU KIDS Act',
+        'title': '',
+        'com_reference': 'COM(2026) 681',
+        'procedure_ref': '2026/0286(COD)',
+        'base_path': '/kids-act',
+        'celex_candidates': ['52026PC0681'],
+    },
     {
         'short_title': 'EU Inc.',
         'title': 'EU Inc.: the 28th Regime for European Companies',
@@ -140,6 +148,14 @@ DEEP_DIVES: List[DeepDive] = [
         'procedure_ref': '2026/0264(COD)',
         'base_path': '/european-innovation-act',
         'celex_candidates': ['52026PC0567'],
+    },
+    {
+        'short_title': 'Procurement Act',
+        'title': 'Public Procurement Act',
+        'com_reference': 'COM(2026) 590',
+        'procedure_ref': '2026/0265(COD)',
+        'base_path': '/public-procurement-act',
+        'celex_candidates': ['52026PC0590'],
     },
 ]
 # --- END GENERATED ---

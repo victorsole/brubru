@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
+  <title>L'EU KIDS Act explicat: les noves normes d'Europa per als infants en línia | Brubru</title>
+  <meta name="description" content="Guia completa de l'EU KIDS Act (COM(2026) 681, procediment 2026/0286(COD)): l'edat mínima de 15 anys, els comptes tutelats als 13, la seguretat des del disseny, els acompanyants d'IA, la garantia d'edat i la EU Age Verification Solution, l'execució i les sancions. Anàlisi article per article de la proposta presentada el 17 de setembre de 2026.">
+  <meta property="og:title" content="L'EU KIDS Act explicat | Brubru">
+  <meta property="og:description" content="Edat mínima de 15 anys, comptes tutelats als 13, una prohibició del disseny addictiu i una verificació de l'edat que mai no sap qui ets. La proposta, llegida de dalt a baix.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="L'EU KIDS Act explicat | Brubru">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200">
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --color-accent: #9b51e0;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Header ---------- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; min-width: 0; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---------- Hero ---------- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(155,81,224,0.1);
+      color: var(--color-purple);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-purple);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-purple), var(--color-blue), var(--color-green), var(--color-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowShift 9s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--color-secondary);
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+    /* ---------- Figure cards ---------- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 2.5rem 0;
+    }
+    .figure-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(155,81,224,0.04) 0%, rgba(6,147,227,0.04) 100%);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      min-width: 0;
+    }
+    .figure-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--color-purple);
+      box-shadow: 0 12px 28px rgba(155,81,224,0.14);
+    }
+    .figure-card__number {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .figure-card__label {
+      font-size: 0.82rem;
+      color: var(--color-secondary);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    /* ---------- Table of contents ---------- */
+    .toc {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin: 2.5rem 0;
+      background: var(--color-bg-alt);
+    }
+    .toc__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
+    }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem 1.5rem;
+    }
+    .toc__link {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0;
+      transition: color 0.2s ease, transform 0.2s ease;
+      min-width: 0;
+    }
+    .toc__link:hover { color: var(--color-purple); transform: translateX(4px); }
+    .toc__link i { color: var(--color-muted); flex: 0 0 auto; }
+
+    /* ---------- Sections ---------- */
+    .section { margin: 3.5rem 0; }
+    .section__header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
+    .section__icon {
+      flex: 0 0 auto;
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(155,81,224,0.12), rgba(6,147,227,0.12));
+      color: var(--color-purple);
+      font-size: 1.4rem;
+    }
+    .section__title { font-size: 1.75rem; font-weight: 700; line-height: 1.25; }
+    .section__subtitle { font-size: 0.95rem; color: var(--color-secondary); margin-top: 0.2rem; }
+    .section p { margin-bottom: 1rem; }
+    .section ul, .section ol { margin: 0 0 1rem 1.25rem; }
+    .section li { margin-bottom: 0.5rem; }
+
+    /* ---------- Cards ---------- */
+    .card {
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-purple);
+      border-radius: var(--radius-sm);
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      background: var(--color-bg);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      min-width: 0;
+    }
+    .card:hover { box-shadow: 0 8px 22px rgba(0,0,0,0.06); transform: translateX(3px); }
+    .card__title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title i { color: var(--color-purple); }
+
+    .article-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .article-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1.25rem;
+      background: var(--color-bg);
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      min-width: 0;
+    }
+    .article-card:hover { border-color: var(--color-purple); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.06); }
+    .article-card__num {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-purple); margin-bottom: 0.3rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+    .article-card__desc a { color: var(--color-blue); }
+
+    /* ---------- Boxes ---------- */
+    .info-box, .alert-box, .quote-box {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.97rem;
+      min-width: 0;
+    }
+    .info-box { background: rgba(6,147,227,0.06); border-left: 4px solid var(--color-blue); }
+    .alert-box { background: rgba(217,119,6,0.07); border-left: 4px solid var(--color-amber); }
+    .quote-box {
+      background: var(--color-bg-alt);
+      border-left: 4px solid var(--color-muted);
+      font-style: italic;
+    }
+    .quote-box cite { display: block; font-style: normal; font-size: 0.85rem; color: var(--color-secondary); margin-top: 0.6rem; }
+    .box__title { font-weight: 700; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+
+    /* ---------- The age staircase ---------- */
+    .stair {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      align-items: end;
+      margin: 2rem 0 1rem;
+    }
+    .stair__step {
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1rem;
+      color: white;
+      min-width: 0;
+      transform: translateY(24px) scaleY(0.94);
+      transform-origin: bottom;
+      opacity: 0;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, box-shadow 0.3s ease;
+    }
+    .stair.is-visible .stair__step { transform: none; opacity: 1; }
+    .stair.is-visible .stair__step:nth-child(1) { transition-delay: 0.05s; }
+    .stair.is-visible .stair__step:nth-child(2) { transition-delay: 0.20s; }
+    .stair.is-visible .stair__step:nth-child(3) { transition-delay: 0.35s; }
+    .stair.is-visible .stair__step:nth-child(4) { transition-delay: 0.50s; }
+    .stair__step:hover { box-shadow: 0 14px 30px rgba(0,0,0,0.16); }
+    .stair__step--1 { background: linear-gradient(160deg, #b91c1c, #dc2626); min-height: 150px; }
+    .stair__step--2 { background: linear-gradient(160deg, #b45309, #d97706); min-height: 185px; }
+    .stair__step--3 { background: linear-gradient(160deg, #6d28d9, #9b51e0); min-height: 220px; }
+    .stair__step--4 { background: linear-gradient(160deg, #0369a1, #0693e3); min-height: 255px; }
+    .stair__age { font-size: 1.5rem; font-weight: 700; line-height: 1.1; }
+    .stair__rule { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; margin: 0.35rem 0 0.6rem; }
+    .stair__detail { font-size: 0.85rem; line-height: 1.5; opacity: 0.95; }
+    .stair__detail li { margin-bottom: 0.3rem; }
+    .stair__detail ul { margin: 0 0 0 1rem; padding: 0; }
+
+    /* ---------- Tables ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+    th, td { padding: 0.7rem 0.85rem; text-align: left; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    th { background: var(--color-bg-alt); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    tbody tr { transition: background 0.2s ease; }
+    tbody tr:hover { background: rgba(155,81,224,0.04); }
+    .highlight-cell { font-weight: 700; color: var(--color-purple); }
+
+    .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pill--red { background: rgba(220,38,38,0.12); color: var(--color-red); }
+    .pill--green { background: rgba(5,150,105,0.12); color: var(--color-green); }
+    .pill--amber { background: rgba(217,119,6,0.12); color: var(--color-amber); }
+    .pill--blue { background: rgba(6,147,227,0.12); color: var(--color-blue); }
+
+    /* ---------- Timeline ---------- */
+    .timeline { position: relative; margin: 2rem 0 1rem; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0.45rem; top: 0.4rem; bottom: 0.4rem;
+      width: 2px; background: linear-gradient(180deg, var(--color-purple), var(--color-blue), var(--color-border));
+    }
+    .timeline__item { position: relative; padding-bottom: 1.35rem; min-width: 0; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -1.68rem; top: 0.55rem;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--color-bg); border: 2px solid var(--color-muted);
+    }
+    .timeline__item--active::before {
+      background: var(--color-purple); border-color: var(--color-purple);
+      box-shadow: 0 0 0 5px rgba(155,81,224,0.18);
+      animation: pulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 5px rgba(155,81,224,0.18); }
+      50% { box-shadow: 0 0 0 10px rgba(155,81,224,0.05); }
+    }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--color-purple); text-transform: uppercase; letter-spacing: 0.04em; }
+    .timeline__text { font-size: 0.95rem; color: var(--color-text); }
+
+    /* ---------- Hero and inline images ---------- */
+    .hero-image, .inline-image { margin: 2.5rem 0; }
+    .hero-image img, .inline-image img {
+      width: 100%; height: auto; display: block;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.10);
+    }
+    .hero-image figcaption, .inline-image figcaption {
+      font-size: 0.82rem; color: var(--color-secondary);
+      margin-top: 0.6rem; text-align: center; line-height: 1.5;
+    }
+    .hero-image figcaption a, .inline-image figcaption a { color: var(--color-blue); }
+
+    /* ---------- CTA strip ---------- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+      background-size: cover;
+      background-position: center;
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.88); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-purple);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---------- Scroll reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* ---------- Post-matter ---------- */
+    .pm { text-align: center; font-size: 0.85rem; color: var(--color-secondary); padding: 2rem 1.5rem 1rem; }
+    .pm a { color: var(--color-blue); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toc__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .article-grid { grid-template-columns: minmax(0, 1fr); }
+      .stair { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+      .stair__step--1, .stair__step--2, .stair__step--3, .stair__step--4 { min-height: 0; }
+    }
+    @media (max-width: 900px) {
+      table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: calc(100vw - 2.5rem); }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .hero { padding: 2rem 0.5rem 1.5rem; }
+      .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toc__grid { grid-template-columns: minmax(0, 1fr); }
+      .stair { grid-template-columns: minmax(0, 1fr); }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none !important; }
+      .header select, .lang-select { min-height: 44px; padding: 0.4rem 0.4rem; max-width: 72px; font-size: 0.85rem; }
+      .header__text { min-width: 0; }
+      .header__title, .header__subtitle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .toc__link { min-height: 44px; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .section__title { font-size: 1.4rem; }
+      .cta-strip { padding: 2.25rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .back-to-top { width: 40px; height: 40px; bottom: 0.75rem; right: 0.75rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .stair__step { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .header__cta, .hero__title span, .timeline__item--active::before { animation: none !important; }
+      * { scroll-behavior: auto !important; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-purple); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+    .back-to-top.btt--away { opacity: 0; pointer-events: none; }
+
+  /* ---- CANONICAL BRUBRU FOOTER (mirrors frontend/src/components/shared/footer.css,
+     tokens resolved because a standalone page never loads globals.css). Do not restyle. ---- */
+  .footer { width:100%; background-color:#f9fafb; border-top:1px solid #e5e7eb; margin-top:auto;
+    position:relative; z-index:10; text-align:left;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px); }
+  .footer__container { max-width:100%; width:100%; margin:0; padding:2rem 1.5rem 1.5rem; }
+  .footer__content { display:flex; flex-direction:column; gap:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
+  .footer__section { display:flex; flex-direction:column; gap:.5rem; min-width:0; }
+  .footer__section--brand { gap:.75rem; flex-shrink:0; padding-right:1.5rem; position:relative; }
+  .footer__section:last-child { flex-shrink:0; min-width:fit-content; }
+  .footer__section--nav { gap:.75rem; }
+  .footer__nav-title { font-size:.8125rem; font-weight:600; color:#111827; margin-bottom:0;
+    text-transform:uppercase; letter-spacing:.5px; }
+  .footer__brand { display:flex; align-items:center; gap:1rem; }
+  .footer__logo { height:48px; width:auto; transition:all .3s cubic-bezier(.34,1.56,.64,1); cursor:pointer; }
+  .footer__logo:hover { transform:scale(1.08) rotate(-2deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.15)); }
+  .footer__brand-info { display:flex; flex-direction:column; gap:.25rem; }
+  .footer__copyright { font-size:.8125rem; color:#111827; margin-bottom:0; }
+  .footer__trademark { font-size:.75rem; color:#6b7280; margin-bottom:0; }
+  .footer__beresol-link { color:#111827; text-decoration:none; font-weight:600; transition:all .3s ease; position:relative; }
+  .footer__beresol-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s ease; }
+  .footer__beresol-link:hover { color:#0693e3; text-decoration:none; }
+  .footer__beresol-link:hover::after { width:100%; }
+  .footer__nav { display:flex; flex-wrap:wrap; gap:.75rem 1rem; align-items:flex-start; row-gap:.5rem; }
+  .footer__link { font-size:.8125rem; color:#111827; font-weight:500; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; position:relative; display:inline-block; }
+  .footer__link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s cubic-bezier(.4,0,.2,1); }
+  .footer__link:hover { color:#0693e3; text-decoration:none; transform:translateX(4px); }
+  .footer__link:hover::after { width:100%; }
+  .footer__link--social { display:inline-flex; align-items:center; gap:.35rem; }
+  .footer__link--social svg { flex:0 0 auto; }
+  @media (min-width:768px) {
+    .footer__section--brand::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, #e5e7eb 20%, #e5e7eb 80%, transparent); opacity:.5; }
+    .footer__content { flex-direction:row; justify-content:flex-start; align-items:flex-start; gap:2rem; flex-wrap:wrap; }
+    .footer__section--brand { flex:0 0 auto; max-width:500px; }
+    .footer__section--nav { flex:0 0 auto; min-width:300px; }
+  }
+  @media (max-width:767px) {
+    .footer { margin-left:0 !important; width:100% !important; }
+    .footer__container { padding:1.5rem 1rem 1rem; }
+    .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .footer__logo { height:40px; }
+    .footer__nav { gap:.75rem; }
+  }
+  </style>
+</head>
+<body>
+
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Explicació de l'EU KIDS Act</div>
+    <div class="header__subtitle">Keeping Internet Digital Spaces Accountable and Trustworthy</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Language" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html" selected>Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">Proposta presentada el 17 de setembre de 2026</div>
+  <h1 class="hero__title">Europa vol pujar l'edat<br><span>a la qual la infància comença a connectar-se</span></h1>
+  <p class="hero__subtitle">
+    El EU KIDS Act impediria que ningú de menys de 15 anys obrís el seu propi compte de xarxa social a qualsevol lloc de la Unió, permetria
+    als pares obrir-ne un de supervisat des dels 13 anys, i faria que tot servei a l'abast d'un infant fos segur des del disseny. Aquesta és la
+    proposta llegida de dalt a baix: l'esglaonat d'edats, les funcionalitats de disseny prohibides, les comprovacions d'edat que mai no aprenen qui
+    ets, i el debat sobre si el número hauria de ser 13, 15 o 16.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-file-document-outline"></i> Proposta de Reglament (COD)</span>
+    <span><i class="mdi mdi-scale-balance"></i> Article 114 del TFUE</span>
+    <span><i class="mdi mdi-timeline-clock-outline"></i> Primera lectura, encara sense comissió</span>
+  </div>
+</section>
+
+<!-- Figures -->
+<div class="figures reveal">
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="15">15</div>
+    <div class="figure-card__label">Edat mínima per a un compte propi</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="43">43</div>
+    <div class="figure-card__label">Articles repartits en nou capítols</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="6" data-suffix="%">6%</div>
+    <div class="figure-card__label">Multa màxima, facturació anual mundial</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="90">90</div>
+    <div class="figure-card__label">Dies hàbils fins a una decisió final de la Comissió</div>
+  </div>
+</div>
+
+<!-- Table of contents -->
+<nav class="toc reveal">
+  <div class="toc__title">En aquesta pàgina</div>
+  <div class="toc__grid">
+    <a class="toc__link" href="#what"><i class="mdi mdi-chevron-right"></i> Què és el KIDS Act</a>
+    <a class="toc__link" href="#staircase"><i class="mdi mdi-chevron-right"></i> L'esglaonat d'edats</a>
+    <a class="toc__link" href="#scope"><i class="mdi mdi-chevron-right"></i> Quins serveis queden afectats</a>
+    <a class="toc__link" href="#design"><i class="mdi mdi-chevron-right"></i> Seguretat des del disseny</a>
+    <a class="toc__link" href="#ai"><i class="mdi mdi-chevron-right"></i> Acompanyants d'IA i chatbots</a>
+    <a class="toc__link" href="#games"><i class="mdi mdi-chevron-right"></i> Jocs i botigues d'aplicacions</a>
+    <a class="toc__link" href="#age-assurance"><i class="mdi mdi-chevron-right"></i> Com es demostra l'edat</a>
+    <a class="toc__link" href="#parents"><i class="mdi mdi-chevron-right"></i> Què obtenen els pares</a>
+    <a class="toc__link" href="#enforcement"><i class="mdi mdi-chevron-right"></i> Execució i diners</a>
+    <a class="toc__link" href="#timeline"><i class="mdi mdi-chevron-right"></i> Dates que importen</a>
+    <a class="toc__link" href="#the-number"><i class="mdi mdi-chevron-right"></i> 13, 15 o 16</a>
+    <a class="toc__link" href="#cost"><i class="mdi mdi-chevron-right"></i> Què costarà</a>
+    <a class="toc__link" href="#evidence"><i class="mdi mdi-chevron-right"></i> Les proves que hi ha darrere</a>
+    <a class="toc__link" href="#slips"><i class="mdi mdi-chevron-right"></i> Errors en el text publicat</a>
+    <a class="toc__link" href="#documents"><i class="mdi mdi-chevron-right"></i> Els documents</a>
+  </div>
+</nav>
+
+<!-- Hero image -->
+<figure class="hero-image reveal">
+  <img
+    src="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
+    alt="Tres adolescents estirats en un llit fent servir telèfons intel·ligents de nit en una habitació poc il·luminada"
+    loading="lazy">
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@cottonbro" target="_blank" rel="noopener">cottonbro studio</a>
+    via <a href="https://www.pexels.com/photo/5999680/" target="_blank" rel="noopener">Pexels</a>
+    | Els adolescents a Europa declaren 4,5 hores de temps de pantalla els dies de classe i 6,1 hores els caps de setmana
+  </figcaption>
+</figure>
+
+<!-- 1. What it is -->
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-shield-account-outline"></i></div>
+    <div>
+      <h2 class="section__title">Què és el KIDS Act</h2>
+      <p class="section__subtitle">Dues meitats que només funcionen juntes</p>
+    </div>
+  </div>
+
+  <p>
+    El 17 de setembre de 2026 la Comissió va presentar una proposta de Reglament amb un nom pensat per formar un acrònim:
+    l'<strong>EU KIDS Act</strong>, de Keeping Internet Digital Spaces Accountable and Trustworthy. Va anar acompanyada
+    d'una Comunicació que exposa l'estratègia més àmplia i d'un document de treball dels serveis de la Comissió que n'analitza l'impacte. La base
+    jurídica és l'article 114 del TFUE, la clàusula del mercat únic, cosa que importa més del que sembla: la Comissió no
+    reclama una competència de protecció de la infància que no té, sinó que sosté que un mosaic de límits d'edat nacionals
+    està fragmentant el mercat interior.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-numeric-1-circle-outline"></i> Normes d'edat comunes</div>
+    <p style="margin-bottom:0;">
+      Una única edat mínima per a tota la Unió, que substitueix el que altrament esdevindrien 27 edats diferents. Cap compte propi
+      per sota dels 15 anys en els serveis socials i de vídeo més arriscats, un compte tutelat que un tutor pot obrir des dels 13 anys,
+      i res per sota dels 13 anys, llevat d'una excepció estreta, en mans del progenitor, per a serveis pensats per a infants petits.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-numeric-2-circle-outline"></i> Seguretat des del disseny</div>
+    <p style="margin-bottom:0;">
+      Una llista vinculant de coses que un servei no pot fer a un menor: cap desplaçament infinit sense pauses, cap notificació
+      esquer d'engagement, cap mecànica de ratxa, cap sistema de recomanació optimitzat per a l'atenció, cap contacte de
+      desconeguts, cap filtre de bellesa que idealitzi la cara d'un infant, cap caixa de botí. Aquesta meitat s'aplica a tot servei
+      dins l'àmbit, sigui quina sigui la seva mida, fins i tot als que un jove de 16 anys té tot el dret d'utilitzar.
+    </p>
+  </div>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-lightbulb-outline"></i> Per què la segona meitat és la important</div>
+    <p style="margin-bottom:0;">
+      Les mateixes preguntes i respostes de la Comissió ho diuen sense embuts: els límits d'edat, per si sols, deixarien intacte el
+      problema de fons, perquè el problema són els serveis dissenyats per maximitzar el temps i l'atenció d'un infant. Les normes
+      d'edat són el que titularà la premsa. Les normes de disseny són el que realment canviarà els productes.
+    </p>
+  </div>
+
+  <p>
+    Formalment el Reglament no substitueix res. <em>Concreta</em> l'article 28 del Reglament de Serveis Digitals,
+    que ja obliga les plataformes en línia a garantir un alt nivell de privadesa, seguretat i protecció per als menors, i
+    <em>complementa</em> el Reglament d'Intel·ligència Artificial pel que fa als acompanyants d'IA i els chatbots. A la pràctica, converteix
+    les directrius no vinculants de juliol de 2025 de la Comissió sobre la protecció dels menors en dret dur amb sancions associades.
+  </p>
+</section>
+
+<!-- 2. The age staircase -->
+<section class="section" id="staircase">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-stairs"></i></div>
+    <div>
+      <h2 class="section__title">L'esglaonat d'edats</h2>
+      <p class="section__subtitle">Articles 6 i 7. Quatre esglaons, no un únic salt</p>
+    </div>
+  </div>
+
+  <p>
+    L'estructura que tothom entén malament a la primera lectura és que no es tracta d'una única prohibició a una única edat. És una
+    seqüència de quatre règims, i l'infant puja d'esglaó a mesura que creix. Cal notar, en particular, que entre els 13 i els 15 anys
+    el compte pertany al <strong>tutor</strong>, no a l'infant: el menor no és part del contracte
+    amb el proveïdor.
+  </p>
+
+  <div class="stair">
+    <div class="stair__step stair__step--1">
+      <div class="stair__age">Menys de 3 anys</div>
+      <div class="stair__rule">Res</div>
+      <div class="stair__detail">
+        L'accés controlat pel tutor no es pot habilitar en cap cas per sota dels 3 anys. La Comunicació va més enllà i
+        recomana no exposar-los a cap pantalla, tot i que això és una recomanació, no una norma jurídica.
+      </div>
+    </div>
+    <div class="stair__step stair__step--2">
+      <div class="stair__age">De 3 a 12 anys</div>
+      <div class="stair__rule">Cap compte, excepció estreta</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Cap compte de cap mena per a l'infant</li>
+          <li>Un tutor pot permetre un accés limitat a través del seu propi compte, però només en un servei d'intercanvi de vídeos
+              construït específicament per a menors de 13 anys</li>
+          <li>Feeds i cerca personalitzats desactivats i impossibles d'activar</li>
+          <li>Una hora al dia com a màxim, fixada pel tutor</li>
+          <li>El tutor pot suspendre l'accés en qualsevol moment</li>
+          <li>El proveïdor ha de publicar una avaluació d'impacte per a aquesta franja d'edat</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stair__step stair__step--3">
+      <div class="stair__age">De 13 a 14 anys</div>
+      <div class="stair__rule">Compte del tutor, funcionalitats limitades</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Un tutor pot obrir un compte limitat, que li pertany a ell</li>
+          <li>Eines de control parental sempre actives, mai desactivables</li>
+          <li>Una hora al dia com a màxim</li>
+          <li>El tutor aprova prèviament cada contacte nou i en limita el nombre</li>
+          <li>La responsabilitat parental s'ha de verificar primer</li>
+          <li>No disponible si les pròpies condicions del proveïdor fixen una edat més alta</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stair__step stair__step--4">
+      <div class="stair__age">De 15 a 17 anys</div>
+      <div class="stair__rule">El teu propi compte</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Un compte autònom, sense necessitat d'aprovació parental</li>
+          <li>Però totes les obligacions de seguretat des del disseny continuen aplicant-se íntegrament</li>
+          <li>La configuració es manté bloquejada en el valor per defecte protector llevat que el menor tingui més de 15 anys, hagi estat clarament
+              informat i hi hagi consentit expressament</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-account-clock-outline"></i> Comptes que ja existeixen</div>
+    <p style="margin-bottom:0;">
+      En un termini de sis mesos des de l'aplicació de les normes, els proveïdors han de determinar si els titulars de comptes existents tenen menys de
+      15 anys i <strong>desactivar els comptes dels qui en tenen menys, i dels qui no se'ls pugui determinar l'edat</strong>.
+      Aquest segon supòsit és el més delicat. Quan un proveïdor ja pot determinar amb gran confiança que un titular és adult, per exemple a partir de
+      l'any en què es va crear el compte o d'una targeta de crèdit vinculada des de fa temps, no cal cap nova comprovació, de manera que la majoria
+      d'adults no n'haurien de notar res. Les plataformes en línia de molt grans dimensions han de presentar per avançat un pla que expliqui
+      com pensen assolir aquesta confiança, amb l'exactitud, la precisió, la sensibilitat i una matriu de confusió completa per franja d'edat.
+    </p>
+  </div>
+</section>
+
+<!-- 3. Scope -->
+<section class="section" id="scope">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-layers-outline"></i></div>
+    <div>
+      <h2 class="section__title">Quins serveis queden afectats</h2>
+      <p class="section__subtitle">Article 2 per a l'àmbit d'aplicació, article 6, apartat 1, per als cinc factors desencadenants</p>
+    </div>
+  </div>
+
+  <p>
+    Set categories de servei o de sistema queden dins l'àmbit del Reglament, i les microempreses i petites empreses no en queden
+    <strong>pas</strong> exemptes. El raonament de la Comissió és que, en els mercats digitals, el nombre d'empleats és un mal indicador de
+    l'abast, i que eximir les petites empreses simplement empenyeria l'activitat arriscada cap a elles.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletres a) i b)</div>
+      <div class="article-card__title">Xarxes socials i intercanvi de vídeos</div>
+      <div class="article-card__desc">Definicions manllevades del Reglament de Mercats Digitals. Són les úniques dues categories que porten aparellada l'edat mínima.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletra c)</div>
+      <div class="article-card__title">Botigues d'aplicacions informàtiques</div>
+      <div class="article-card__desc">Obligacions de qualificació per edats i l'obligació de donar suport a la solució europea de verificació de l'edat.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletra d)</div>
+      <div class="article-card__title">Jocs en línia</div>
+      <div class="article-card__desc">Tant les plataformes de videojocs com els videojocs individuals, en PC, mòbil o consola. Els jocs venuts únicament en suport físic i sense cap component en línia en queden exclosos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletra e)</div>
+      <div class="article-card__title">Sistemes operatius</div>
+      <div class="article-card__desc">Una única obligació, molt limitada: compartir un senyal d'edat que ja es té, amb el consentiment de l'usuari, perquè ningú no hagi de ser verificat dues vegades.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletra f)</div>
+      <div class="article-card__title">Acompanyants d'IA</div>
+      <div class="article-card__desc">Sistemes que ofereixen una interacció sostinguda i personalitzada que simula una relació social, emocional o interpersonal.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2, apartat 1, lletra g)</div>
+      <div class="article-card__title">Chatbots conversacionals d'ús general</div>
+      <div class="article-card__desc">Assistents d'ús general en múltiples àmbits. En queden expressament exclosos el servei d'atenció al client especialitzat, el suport tècnic, i les aplicacions educatives i industrials.</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.15rem;font-weight:700;margin:2rem 0 0.75rem;">Les cinc funcionalitats que desencadenen l'edat mínima</h3>
+  <p>
+    La norma dels 15 anys no s'aplica a tot servei social o de vídeo. S'aplica a aquell que tingui qualsevol de cinc
+    funcionalitats, enumerades a l'article 6, apartat 1. Aquesta és la disposició a què els lobbistes dedicaran els propers dos anys, perquè un
+    servei capaç de desprendre's de les cinc escapa del tot al límit d'edat tot i continuar vinculat per les normes de disseny.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th style="width:8%;">Núm.</th><th>Funcionalitat</th><th>Per què hi és</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">1</td><td>Transmissió en temps real a un nombre indeterminat de destinataris, inclosa la retransmissió en directe</td><td>Exposició de l'infant, i exposició a contingut pornogràfic o d'altra mena inadequat</td></tr>
+      <tr><td class="highlight-cell">2</td><td>Contacte i interacció amb destinataris fora de les connexions existents de l'usuari</td><td>Grooming, abús i conducta perjudicial per part de desconeguts</td></tr>
+      <tr><td class="highlight-cell">3</td><td>Un sistema de recomanació basat en la definició de perfils en el sentit del RGPD</td><td>Amplificació algorítmica cap a material perjudicial</td></tr>
+      <tr><td class="highlight-cell">4</td><td>Un sistema de recomanació que suggereix contactes o continguts fora de les connexions existents</td><td>Forats de conill i rutes cap a usuaris malintencionats</td></tr>
+      <tr><td class="highlight-cell">5</td><td>Dissenys que permeten un consum ininterromput, que incentiven la interacció, o notificacions que empenyen a tornar</td><td>Patrons d'ús compulsiu i addictiu</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-shield-off-outline"></i> Sis excepcions</div>
+    <p style="margin-bottom:0;">
+      Queden totalment fora de l'àmbit: les enciclopèdies en línia sense ànim de lucre; els repositoris educatius i científics sense ànim de lucre;
+      els serveis dissenyats principalment per a l'educació i gestionats per centres educatius o en el seu nom;
+      les plataformes de desenvolupament i intercanvi de programari de codi obert, llevat que la plataforma sigui ella mateixa un sistema d'IA dins l'àmbit;
+      els serveis destinats únicament a la recerca i el desenvolupament científics; i els serveis dissenyats i explotats per autoritats
+      públiques per a ús exclusiu propi. La Comissió pot ampliar o reduir aquesta llista mitjançant un acte delegat.
+    </p>
+  </div>
+</section>
+
+<!-- 4. Safety by design -->
+<section class="section" id="design">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-palette-outline"></i></div>
+    <div>
+      <h2 class="section__title">Seguretat des del disseny</h2>
+      <p class="section__subtitle">Articles 8 a 13. La llista de coses que un producte ja no pot fer</p>
+    </div>
+  </div>
+
+  <p>
+    L'article 8 fixa el marc general. Tot proveïdor dins l'àmbit ha de dissenyar per garantir un alt nivell de privadesa, seguretat i protecció
+    <strong>per defecte</strong>, tingui l'usuari un compte o no, i només pot rebaixar aquests valors per defecte un cop hagi
+    establert, mitjançant la garantia d'edat, que la persona és adulta. Els visitants que no han iniciat sessió reben la configuració d'infant.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-infinity"></i> Article 9: disseny addictiu</div>
+    <p>Quatre tècniques es consideren per llei que fomenten un ús compulsiu o excessiu, de manera que no s'admet cap argument sobre la intenció:</p>
+    <ul style="margin-bottom:0.75rem;">
+      <li>Reproducció automàtica i consum ininterromput sense punts d'aturada reals i regulars que permetin a l'infant decidir si continua</li>
+      <li>Soscavar la decisió de l'infant d'aturar-se, incloses les notificacions no desencadenades per res que l'infant hagi fet</li>
+      <li>Recompensar un infant per publicar o retransmetre a un públic massiu</li>
+      <li>Incentivar la interacció a intervals regulars, incloses penalitzacions o pèrdues de beneficis per no tornar, que és la mecànica de ratxa anomenada sense anomenar-la</li>
+    </ul>
+    <p style="margin-bottom:0;">
+      Els proveïdors també han de proporcionar límits de temps efectius i interrupcions d'ús pensades al voltant de l'horari escolar i
+      <strong>les hores nuclears de son</strong>, que el considerand 27 defineix com almenys vuit hores consecutives entre les 22.00
+      i les 08.00, hora local. El considerand també insisteix que aquestes eines no s'han de poder eludir fàcilment, perquè a la pràctica
+      els infants les evadeixen.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shuffle-variant"></i> Article 10: sistemes de recomanació</div>
+    <p>Per als menors, el feed s'ha d'optimitzar per a la seguretat, la qualitat i els resultats de salut mental, més que no pas per a l'engagement:</p>
+    <ul style="margin-bottom:0.75rem;">
+      <li>Les preferències explícites, declarades per l'usuari, tenen prioritat i pes principal</li>
+      <li>La recomanació a partir de senyals d'interacció implícits, és a dir, el temps de permanència i els clics, està <strong>desactivada per defecte</strong></li>
+      <li>Cap dada personal procedent de fora del servei pot alimentar el sistema</li>
+      <li>Cap exposició a contingut que és perjudicial quan es troba de manera repetida, que és el problema del forat de conill i de la bombolla de filtres convertit en obligació</li>
+    </ul>
+    <p style="margin-bottom:0;">
+      Els infants també han de disposar d'una opció visible per reiniciar que esborri tota preferència apresa, i almenys una opció de feed
+      sense cap definició de perfil. Aquesta opció s'ha d'oferir en la creació del compte, ha de romandre accessible des del feed
+      mateix, i no es pot dissenyar per empènyer l'infant de nou cap a la definició de perfils.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-toggle-switch-off-outline"></i> Article 11: configuració segura</div>
+    <p>Desactivats per defecte per als menors: la geolocalització i altres mecanismes de seguiment; l'accés al micròfon i a la càmera; les recomanacions d'altres comptes i la sincronització de contactes; les notificacions push, que en tot cas han de protegir les hores de son i escolars.</p>
+    <p style="margin-bottom:0;">
+      Algunes coses no només estan desactivades, sinó que són <strong>inexistents</strong>: funcionalitats que augmenten la comparació social,
+      i filtres que desvirtuen la imatge d'un infant embellint-la o idealitzant-la de manera desproporcionada. El considerand 29
+      té cura d'excloure'n els filtres innocus que et converteixen en un animal.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-cancel-outline"></i> Article 12: contacte i visibilitat</div>
+    <p style="margin-bottom:0;">
+      Ningú no pot obrir contacte directe amb un infant que no l'hagi aprovat prèviament, i el proveïdor ha de vigilar activament
+      que els infants no siguin manipulats perquè donin aquesta aprovació. Els infants no apareixen en els suggeriments de contacte,
+      no poden ser afegits a un grup sense donar-hi el consentiment, i poden bloquejar qualsevol persona sense que la seva identitat es reveli a
+      la persona bloquejada. El seu contingut només és visible per als contactes acceptats i mai per a visitants que no han iniciat sessió, les seves
+      dades de contacte no es divulguen mai, altres persones no poden descarregar ni fer captures del seu contingut, i els menors no poden
+      retransmetre en directe per defecte.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cart-outline"></i> Article 13: diners</div>
+    <p style="margin-bottom:0;">
+      Abans que es produeixi una transacció, l'infant ha de ser informat, de manera clara i en temps real, que es tracta d'una transacció.
+      Les compres fetes amb moneda virtual han de mostrar el valor real en la moneda del país de residència habitual de l'infant.
+      Els serveis no es poden construir de manera que condueixin a una despesa excessiva, impulsiva o no desitjada,
+      i els menors no poden ser exposats a sistemes de recompensa variable, que és la caixa de botí descrita pel seu mecanisme.
+    </p>
+  </div>
+
+  <p>
+    Tres obligacions més completen el capítol. L'<strong>article 18</strong> exigeix que tot control, avís i
+    explicació sigui realment comprensible per a un infant, i exigeix que les plataformes en línia de molt grans dimensions els ofereixin en les
+    llengües oficials dels Estats membres on presten servei. L'<strong>article 19</strong> exigeix una notificació adaptada als infants
+    que es tracti com a prioritària, amb confirmació, terminis i una via cap a línies d'ajuda nacionals i Centres d'Internet
+    Segura. L'<strong>article 21</strong> permet que un infant o un tutor mandati un organisme sense ànim de lucre perquè actuï en el seu nom, i
+    afegeix el Reglament a l'annex de la Directiva sobre accions de representació, de manera que la reparació col·lectiva queda disponible.
+  </p>
+</section>
+
+<!-- 5. AI -->
+<section class="section" id="ai">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-robot-outline"></i></div>
+    <div>
+      <h2 class="section__title">Acompanyants d'IA i chatbots</h2>
+      <p class="section__subtitle">Article 14. La part genuïnament nova</p>
+    </div>
+  </div>
+
+  <p>
+    Aquí és on el KIDS Act va més enllà de codificar les directrius existents. El Reglament d'Intel·ligència Artificial ja prohibeix els
+    sistemes que exploten vulnerabilitats derivades de l'edat i exigeix revelar que es parla amb una màquina, però no diu res
+    específic sobre un chatbot que es comporta com un amic. L'article 14 sí que ho fa.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-heart-broken-outline"></i> Cap vinculació fabricada</div>
+    <p style="margin-bottom:0;">
+      Els proveïdors han d'evitar funcionalitats de disseny i comportaments del sistema que simulin relacions interpersonals i que
+      puguin crear <strong>dependències emocionals</strong>, inclosos els casos en què aquesta dependència perjudiqui
+      les relacions de l'infant amb altres persones o el seu desenvolupament. El document de treball dels serveis de la Comissió és explícit sobre el mecanisme que
+      tem: sistemes optimitzats per agradar, donar la raó i reflectir, cosa que, per a un menor, reforça creences immadures o arriscades
+      en lloc de qüestionar-les.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-memory"></i> Memòria desactivada per defecte</div>
+    <p style="margin-bottom:0;">
+      Per defecte, el sistema no pot traslladar informació ni anàlisi de converses anteriors d'un infant a converses
+      posteriors, llevat que això sigui necessari per protegir la seguretat de l'infant. El motiu declarat és doble: evitar que
+      s'acumulin dades sensibles sobre un menor, i evitar que patrons d'interacció perjudicials es reforcin amb el temps.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-test-tube"></i> Provat abans del llançament, vigilat després</div>
+    <p style="margin-bottom:0;">
+      Avaluació i proves segons l'estat de la tècnica dels riscos per a la salut, la seguretat, els drets fonamentals i el
+      desenvolupament d'un menor abans que el sistema es posi al mercat, més un seguiment posterior a la comercialització que inclou
+      la resposta a incidents greus. Les microempreses i petites empreses només queden exemptes de l'obligació de seguiment posterior a la comercialització.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-toggle-switch-outline"></i> Integrat en una altra cosa</div>
+    <p style="margin-bottom:0;">
+      Quan un acompanyant o chatbot apareix com a funcionalitat dins d'una xarxa social, una plataforma de vídeo o un joc, no es
+      pot activar per si sol, no es pot mostrar de manera destacada, no es pot empènyer als menors, i s'ha de poder desactivar
+      fàcilment en qualsevol moment. El considerand 34 assenyala el truc concret al qual s'adreça: posar la IA al capdamunt de la llista
+      de contactes de l'infant.
+    </p>
+  </div>
+
+  <p>
+    Els menors de 13 anys només poden accedir a aquests sistemes a través d'eines de control parental. El disseny addictiu, la configuració segura i la transparència de les
+    transaccions es traslladen íntegrament dels articles 9, 11 i 13. L'execució recau en el Reglament d'Intel·ligència Artificial, no en el DSA,
+    per això la sanció del 6% de la facturació es detalla expressament per a aquesta categoria.
+  </p>
+</section>
+
+<!-- 6. Games and app stores -->
+<section class="section" id="games">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-gamepad-variant-outline"></i></div>
+    <div>
+      <h2 class="section__title">Jocs i botigues d'aplicacions</h2>
+      <p class="section__subtitle">Articles 15 a 17</p>
+    </div>
+  </div>
+
+  <p>
+    Els jocs reben un subconjunt adaptat de les normes de disseny: cap mecànica d'ús compulsiu, configuració segura per defecte,
+    salvaguardes de contacte, i eines de control parental obligatòries amb accés per a menors de 13 anys només a través d'elles. Una obligació és
+    específica del mitjà: un joc no pot ser utilitzat com a trampolí per portar un infant cap a un altre servei més arriscat, cosa que a la pràctica
+    significa restringir els enllaços de sortida i avisar el jugador. Quan una plataforma permet als usuaris crear i publicar els seus
+    propis jocs, la plataforma ha de proporcionar a aquests creadors els mitjans informàtics i organitzatius per complir la norma.
+  </p>
+
+  <p>
+    Les botigues d'aplicacions tenen l'obligació de porter. Tota aplicació ha de tenir una qualificació per edat, la metodologia, els criteris i les fonts
+    s'han de publicar, i un menor no ha de poder accedir ni comprar res qualificat per sobre de la seva edat. Quan la botiga
+    tingui coneixement que una aplicació consisteix majoritàriament en contingut subjecte a una edat legal més alta en un Estat membre determinat,
+    ha de bloquejar els menors d'aquell país. Les botigues també han de permetre que la solució europea de verificació de l'edat s'ofereixi
+    dins la botiga.
+  </p>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-handshake-outline"></i> El PEGI, esmentat en un considerand</div>
+    <p style="margin-bottom:0;">
+      L'article 17 demana a la Comissió que faciliti un codi de conducta d'àmbit de la Unió sobre la qualificació per edat en el termini d'un any des de l'inici de
+      l'aplicació, que cobreixi el reconeixement mutu entre Estats membres, els criteris per a contingut violent, sexual, de joc d'atzar i d'autolesió
+      contingut, les compres dins l'aplicació, el risc de contacte i el disseny addictiu, més una via d'apel·lació independent per als
+      desenvolupadors. El considerand 39 esmenta el sistema paneuropeu PEGI com un referent que podria constituir la base d'aquest
+      codi, sempre que assoleixi el nivell de protecció que exigeix el Reglament. L'adhesió a un codi adequat pot
+      servir de prova de compliment de les obligacions basades en mesures, però mai de les prohibicions.
+    </p>
+  </div>
+</section>
+
+<!-- 7. Age assurance -->
+<section class="section" id="age-assurance">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-shield-key-outline"></i></div>
+    <div>
+      <h2 class="section__title">Com es demostra l'edat sense revelar qui ets</h2>
+      <p class="section__subtitle">Capítol V, articles 27 a 32</p>
+    </div>
+  </div>
+
+  <p>
+    Tot el que s'ha exposat depèn de saber, de manera aproximada, quina edat té l'usuari, i aquesta és la part que probablement decidirà
+    si aquest Reglament es recorda com una mesura de protecció de la infància o com un mandat d'identitat. La proposta està
+    construïda per resistir aquesta acusació.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 27</div>
+      <div class="article-card__title">Set criteris acumulatius</div>
+      <div class="article-card__desc">Exactitud, fiabilitat, seguretat, robustesa, no-intrusivitat, privadesa i protecció de dades, i no-discriminació. Si en falla un, la solució no és conforme.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 27</div>
+      <div class="article-card__title">L'autodeclaració ha mort</div>
+      <div class="article-card__desc">Marcar una casella de data de naixement queda expressament exclòs de la definició de garantia d'edat. L'OCDE va trobar que només 2 de 50 serveis estudiats verifiquen sistemàticament l'edat en el moment del registre.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 28</div>
+      <div class="article-card__title">Prova de coneixement zero, obligatòria</div>
+      <div class="article-card__desc">La comprovació no pot identificar, localitzar, seguir, orientar, fer publicitat ni definir el perfil de ningú. Cap combinació amb altres dades. La resposta transmesa és per sobre o per sota del llindar, res més.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 29</div>
+      <div class="article-card__title">Dos nivells de comprovació</div>
+      <div class="article-card__desc">Per al límit d'edat en si mateix, només una solució europea de verificació de l'edat certificada procedent d'un tercer independent. Per a la seguretat des del disseny, es permeten mètodes més barats com l'estimació de l'edat si compleixen els articles 27 i 28.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 31</div>
+      <div class="article-card__title">Què han de construir els Estats membres</div>
+      <div class="article-card__desc">Almenys una solució europea de verificació de l'edat gratuïta, diverses vies cap a una atestació de prova d'edat, i almenys una manera de preservar la privadesa perquè un tutor pugui demostrar la responsabilitat parental, gratuïtament i basada en fonts nacionals autèntiques.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 31</div>
+      <div class="article-card__title">Ningú no queda exclòs</div>
+      <div class="article-card__desc">L'accés ha de ser efectiu per a les persones amb discapacitat, les persones amb competències digitals limitades, i les famílies la situació de les quals no consta en els registres de l'estat civil ordinari, incloent-hi expressament les famílies refugiades i desplaçades i els tutors de menors no acompanyats.</div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    Tot mètode utilitzat per comprovar l'edat hauria de mantenir els més alts estàndards de privadesa i protecció de dades i no hauria
+    de conduir al tractament de documents d'identitat i dades biomètriques amb la finalitat d'estimar l'edat.
+    <cite>Fegert i Melchior, copresidents del Grup Especial sobre la seguretat dels infants en línia, citats en el document de treball dels serveis de la Comissió</cite>
+  </div>
+
+  <p>
+    L'arquitectura descansa sobre la cartera europea d'identitat digital. Una cartera certificada d'acord amb el marc eIDAS i que
+    compleixi l'esquema europeu de verificació de l'edat es considera certificada també per a aquest Reglament, i la Comissió manté
+    dues llistes públiques llegibles per màquina, una de proveïdors d'atestació aprovats i una de solucions de verificació
+    aprovades. Una solució inclosa a la llista per un Estat membre ha de ser reconeguda per tots els altres.
+  </p>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-alert-outline"></i> La lliçó que la Comissió va treure d'Austràlia</div>
+    <p style="margin-bottom:0;">
+      La llei d'Austràlia, en vigor des del desembre de 2025, només exigeix mesures raonables per impedir que els menors de 16 anys mantinguin
+      comptes. El document de treball informa que la majoria de menors que tenien comptes encara els tenen, i el motiu que en dona és contundent:
+      <strong>a la majoria mai no se'ls va demanar que demostressin l'edat</strong>. D'aquí l'opció europea d'exigir la comprovació <em>abans</em> que es creï el compte, en lloc de després que es plantegi una sospita.
+    </p>
+  </div>
+</section>
+
+<!-- Inline image: parents -->
+<figure class="inline-image reveal">
+  <img
+    src="https://images.pexels.com/photos/27177479/pexels-photo-27177479.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
+    alt="Un pare i un infant mirant junts la pantalla d'un telèfon intel·ligent a casa"
+    loading="lazy">
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@helenalopes" target="_blank" rel="noopener">Helena Lopes</a>
+    via <a href="https://www.pexels.com/photo/27177479/" target="_blank" rel="noopener">Pexels</a>
+    | El Reglament dona eines als tutors, però va amb compte de no traslladar-los mai l'obligació
+  </figcaption>
+</figure>
+
+<!-- 8. Parents -->
+<section class="section" id="parents">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-account-supervisor-outline"></i></div>
+    <div>
+      <h2 class="section__title">Què obtenen els pares, i què no se'ls demana de portar</h2>
+      <p class="section__subtitle">Articles 20, 26 i 31</p>
+    </div>
+  </div>
+
+  <p>
+    L'article 20 exigeix que tot servei dins l'àmbit proporcioni eines de control parental que siguin efectives, accessibles, fàcils
+    d'activar i, això és important, <strong>no fàcilment eludibles ni soscavades pel propi disseny del servei</strong>.
+    Canviar una configuració ha de requerir el mateix nivell d'autorització que activar l'eina en primer lloc, cosa que
+    tanca la porta a un infant que desactiva silenciosament la supervisió.
+  </p>
+
+  <p>El conjunt mínim de funcionalitats:</p>
+  <ul>
+    <li>Límits de temps de pantalla, que operen mitjançant el mateix mecanisme que l'obligació de gestió del temps de l'article 9</li>
+    <li>Veure i gestionar els comptes amb què l'infant es comunica</li>
+    <li>Gestionar la privadesa, el contacte, la visibilitat, les notificacions, la geolocalització i la configuració de la càmera</li>
+    <li>Notificar contingut, comptes, grups o conductes perjudicials en nom de l'infant</li>
+  </ul>
+
+  <p>
+    El considerand 43 suggereix més funcionalitats, com ara alertar un tutor de cerques repetides sobre suïcidi, autolesió
+    o trastorns de la conducta alimentària, o sobre un nou contacte que sigui adult. En els comptes de menors de 13 i 14 anys aquestes eines són
+    permanentment actives. Per a les plataformes en línia de molt grans dimensions, han d'interoperar amb eines de control parental de tercers en
+    les condicions de l'article 6 del Reglament de Mercats Digitals.
+  </p>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-scale-unbalanced"></i> Dues salvaguardes que estiren en direccions oposades</div>
+    <p style="margin-bottom:0.6rem;">
+      <strong>Cap a l'infant.</strong> Els menors han de ser informats quan una eina de control parental estigui activa, i se'ls ha de donar una indicació clara i en
+      temps real de quan hi ha supervisió activa. Les eines han de respectar la privadesa i l'autonomia creixent de l'infant i
+      no poden restringir-ne els drets de manera desproporcionada.
+    </p>
+    <p style="margin-bottom:0;">
+      <strong>Lluny del progenitor.</strong> El considerand 43 estableix que, com que la supervisió parental no sempre és possible i
+      els tutors poden estar absents o desimplicats, <strong>el compliment no pot dependre dels tutors</strong>. Aquestes eines
+      complementen l'obligació pròpia del proveïdor. Mai no la substitueixen.
+    </p>
+  </div>
+
+  <p>
+    Demostrar la responsabilitat parental es tracta a l'article 26. Un proveïdor pot utilitzar senyals de bases de dades
+    oficials d'accés lliure, senyals que ja té per relacions anteriors amb la família, o, almenys fins que la
+    Comissió adopti l'acte delegat corresponent, una autodeclaració que el proveïdor ha de fer esforços raonables per comprovar.
+    Tot això ha de preservar la privadesa, sense cap tractament addicional que permeti a ningú localitzar,
+    seguir, orientar o definir el perfil de l'adult o de l'infant.
+  </p>
+</section>
+
+<!-- 9. Enforcement -->
+<section class="section" id="enforcement">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-gavel"></i></div>
+    <div>
+      <h2 class="section__title">Execució, i qui la paga</h2>
+      <p class="section__subtitle">Article 5 i capítol VII</p>
+    </div>
+  </div>
+
+  <p>
+    No es crea cap agència nova. La supervisió es basa en el Reglament de Serveis Digitals per a les plataformes, les botigues i les
+    plataformes de jocs, i en el Reglament d'Intel·ligència Artificial per als acompanyants i chatbots. La Comissió es reserva la competència exclusiva sobre les
+    plataformes en línia de molt grans dimensions, els Coordinadors de Serveis Digitals nacionals gestionen la resta, i, per a un videojoc que no és
+    una plataforma, l'autoritat competent és la de l'establiment principal del proveïdor, amb potestats exclusives.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clipboard-check-outline"></i> La càrrega invertida: article 5</div>
+    <p style="margin-bottom:0.6rem;">
+      El Grup Especial va demanar que la càrrega de la prova recaigués en els proveïdors. Aquesta és la resposta de la Comissió. Una
+      plataforma en línia de molt grans dimensions ha de presentar un <strong>pla de compliment</strong> a la Comissió, en el termini de quatre mesos
+      des de la designació o de 30 dies des de l'aplicació del Reglament si ja està designada, que descrigui detalladament
+      com compleix cadascuna de les obligacions dels capítols II a V.
+    </p>
+    <p style="margin-bottom:0.6rem;">
+      Aquest pla ha de ser auditat, <strong>a costa del propi proveïdor</strong>, per auditors independents que tinguin, o
+      que contractin experts amb, experiència demostrada en sis àmbits designats: la protecció i els drets de la infància, la medicina
+      pediàtrica i la psiquiatria infantil, la ciència del desenvolupament, la garantia d'edat, el disseny d'interfícies i de sistemes de recomanació, i la
+      protecció i seguretat de dades. L'auditor envia un esborrany, el proveïdor té 15 dies per fer-hi comentaris, i l'informe final
+      arriba a la Comissió i al proveïdor simultàniament en el termini de dos mesos. S'ha de publicar un resum.
+    </p>
+    <p style="margin-bottom:0;">
+      Si la Comissió decideix que el pla té deficiències, el proveïdor té 30 dies per proposar mesures correctores
+      i com a màxim 60 dies per aplicar cadascuna d'elles. De manera crucial, l'article 5, apartat 8, estableix que ni l'informe de l'auditor
+      ni el silenci de la Comissió constitueixen una declaració de compliment. El pla és un mínim, no un escut.
+    </p>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Mecanisme</th><th>Detall</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">Procediment accelerat</td><td>Conclusions preliminars en el termini de 30 dies hàbils des de l'obertura del procediment, decisió final prevista en el termini de 90 dies hàbils (article 35)</td></tr>
+      <tr><td class="highlight-cell">Sancions, sistemes d'IA</td><td>Fins al 6% de la facturació anual mundial total, en virtut de l'article 99 del Reglament d'Intel·ligència Artificial</td></tr>
+      <tr><td class="highlight-cell">Sancions, plataformes</td><td>A través del capítol IV del Reglament de Serveis Digitals, amb règims sancionadors nacionals per als jocs que no siguin plataformes</td></tr>
+      <tr><td class="highlight-cell">Protecció de dades</td><td>Les autoritats de control en matèria de protecció de dades continuen sent competents per al tractament, amb sancions fins al límit de l'article 83, apartat 5, del RGPD</td></tr>
+      <tr><td class="highlight-cell">Taxa de supervisió</td><td>Un suplement anual a la taxa del DSA, per servei, amb un límit del 0,03% dels ingressos nets anuals mundials del proveïdor (article 36)</td></tr>
+      <tr><td class="highlight-cell">Recursos de la Comissió</td><td>85 equivalents a temps complet, dels quals 45 redistribuïts i 40 de nous</td></tr>
+      <tr><td class="highlight-cell">Resposta a incidents</td><td>Un mecanisme de coordinació per a danys de ràpida propagació com els reptes virals perillosos, que complementa les eines de crisi del DSA (article 38)</td></tr>
+      <tr><td class="highlight-cell">Comitologia</td><td>Un nou Comitè de Seguretat Infantil (article 40); poders delegats per cinc anys, tàcitament renovables (article 39)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-cash-clock"></i> Un buit de finançament que la Comissió admet per escrit</div>
+    <p style="margin-bottom:0;">
+      La memòria financera reconeix un buit inevitable entre la necessitat de disposar de personal des del primer dia i la recaptació de la taxa
+      que el finança, que només arriba després de l'entrada en vigor. Ho qualifica de risc crític per a una aplicació
+      correcta i indica la redistribució de personal com a mesura pal·liativa. La taxa de supervisió existent del DSA ha recaptat entre
+      40 i 60 milions d'euros anuals des del 2024.
+    </p>
+  </div>
+</section>
+
+<!-- 10. Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <div>
+      <h2 class="section__title">Dates que importen</h2>
+      <p class="section__subtitle">Com s'ha arribat fins aquí, i què passa si s'aprova</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">Setembre de 2025</div>
+      <div class="timeline__text">En el seu discurs sobre l'estat de la Unió, la presidenta de la Comissió, Ursula von der Leyen, anuncia un grup d'especialistes que assessorarà sobre la seguretat dels infants en línia.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Octubre de 2025</div>
+      <div class="timeline__text">Vint-i-cinc Estats membres signen la Declaració de Jutlàndia, que reclama la verificació de l'edat i un entorn en línia més segur. El Consell Europeu torna sobre el tema, inclosa una majoria d'edat digital.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Novembre de 2025</div>
+      <div class="timeline__text">El Parlament Europeu adopta una resolució que demana un límit d'edat digital harmonitzat de 16 anys, amb 13 com a llindar mínim quan un tutor autoritza l'accés.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Primera meitat de 2026</div>
+      <div class="timeline__text">El Grup Especial es reuneix. Més de 60 especialistes en salut, psiquiatria infantil, informàtica i ciències socials, més representants de la joventut, dels pares i dels drets dels infants.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Juliol de 2026</div>
+      <div class="timeline__text">Els copresidents, el professor Jörg M. Fegert i la doctora Maria Melchior, presenten el seu informe. Entre les seves recomanacions: una restricció d'accés harmonitzada a nivell de la UE per sota dels 13 anys, una seguretat des del disseny harmonitzada, i una garantia d'edat que preserva la privadesa.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Durant el 2025 i el 2026</div>
+      <div class="timeline__text">França, Itàlia, Grècia, Àustria, Noruega, Polònia i Bèlgica notifiquen avantprojectes de lleis nacionals sobre l'edat. La llei pròpia de França, votada el juliol de 2026, és anul·lada pel Consell Constitucional. Grècia i Àustria preveuen que les seves entrin en vigor el gener de 2027.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">17 de setembre de 2026</div>
+      <div class="timeline__text">La Comissió adopta la proposta, la Comunicació sobre un enfocament de la UE en matèria de seguretat dels infants en línia, i el document de treball dels serveis de la Comissió. Comença el procediment legislatiu ordinari. Encara no s'ha designat cap comissió competent ni ponent.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">En l'adopció</div>
+      <div class="timeline__text">Entrada en vigor el vintè dia després de la publicació al Diari Oficial. L'article 5, l'obligació del pla de compliment, s'aplica immediatament.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Més sis mesos</div>
+      <div class="timeline__text">El Reglament s'aplica. Comença a córrer el termini de sis mesos per comprovar els comptes existents.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Més dotze mesos</div>
+      <div class="timeline__text">S'apliquen l'article 33 sobre estratègies nacionals de suport i l'article 35 sobre el procediment accelerat. Els Estats membres han d'haver comunicat les seves estratègies a la Comissió.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Abans del 31 d'agost de 2030</div>
+      <div class="timeline__text">La Comissió revisa el Reglament, examinant específicament si el retard d'accés ha funcionat, si el seu àmbit personal era el correcte, i quin efecte ha tingut sobre la llibertat d'expressió. Presenta informes cada quatre anys a partir d'aleshores.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. The number -->
+<section class="section" id="the-number">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-scale-balance"></i></div>
+    <div>
+      <h2 class="section__title">Tretze, quinze o setze</h2>
+      <p class="section__subtitle">El debat que definirà l'expedient</p>
+    </div>
+  </div>
+
+  <p>
+    Tres institucions van fer la feina i van arribar a tres números diferents. Aquesta és tota la negociació en una
+    línia.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Qui</th><th>Quan</th><th>Número</th><th>Raonament</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Copresidents del Grup Especial</td>
+        <td>Juliol de 2026</td>
+        <td><span class="pill pill--amber">Menys de 13</span></td>
+        <td>Un enfocament evolutiu. La recerca mostra que els infants són especialment vulnerables per sota dels 13 anys.</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Comissió Europea</td>
+        <td>Setembre de 2026</td>
+        <td><span class="pill pill--blue">15</span></td>
+        <td>Els adolescents d'entre 13 i 15 anys es troben al punt àlgid de la vulnerabilitat evolutiva: encara estan formant el control cognitiu, són molt sensibles a l'avaluació social, i queden fora de l'abast d'una supervisió adulta efectiva.</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Parlament Europeu</td>
+        <td>Novembre de 2025</td>
+        <td><span class="pill pill--red">16</span></td>
+        <td>Un llindar de precaució més alt, amb 13 anys com a mínim absolut quan un tutor autoritza l'accés.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    La Comissió va anar <em>per sobre</em> del seu propi grup d'experts i <em>per sota</em> del Parlament. El document de treball explica per què:
+    fins als 15 anys, els adolescents es troben en transició cap a l'autonomia, la supervisió per part de cuidadors i educadors
+    esdevé cada cop menys efectiva, i el risc queda cada cop més determinat per l'arquitectura social del servei, més que no pas pel propi
+    comportament de l'infant.
+  </p>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-lock-outline"></i> El debat més silenciós: l'harmonització plena</div>
+    <p style="margin-bottom:0;">
+      La recomanació 7 del Grup Especial era que els Estats membres fossin lliures d'afegir les seves pròpies
+      restriccions de precaució a partir dels 13 anys. La Comissió la va <strong>rebutjar</strong>. El document de treball ho diu en termes explícits: el
+      Reglament proposat no dona marge als Estats membres per introduir restriccions addicionals, perquè
+      l'harmonització plena és el que aporta seguretat jurídica, costos de compliment més baixos i un nivell de protecció igual per a tothom.
+      Les capitals que ja han legislat, o que estan a punt de fer-ho, notaran que aquest sostre és també un terra que no
+      poden superar.
+    </p>
+  </div>
+</section>
+
+<!-- 12. Cost -->
+<section class="section" id="cost">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-cash-multiple"></i></div>
+    <div>
+      <h2 class="section__title">Què costarà</h2>
+      <p class="section__subtitle">Les xifres del document de treball dels serveis de la Comissió, i els seus límits</p>
+    </div>
+  </div>
+
+  <p>
+    No hi ha una avaluació d'impacte formal. El document de treball és una anàlisi d'impactes que pren dades de les avaluacions fetes
+    per al DSA, el DMA, el Reglament d'Intel·ligència Artificial i altres, més un estudi extern sobre la garantia d'edat els resultats del qual no s'esperen
+    fins al quart trimestre del 2026. Val la pena dir-ho clarament, perquè és una línia d'atac evident per al
+    Parlament i per al Comitè de Control Reglamentari.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Què</th><th>Estimació</th><th>Font</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Per comprovació d'edat, Austràlia</td><td>EUR 0,39</td><td>Estimació del govern australià</td></tr>
+      <tr><td>Per comprovació d'edat, mediana</td><td>EUR 0,07</td><td>Conclusions d'aplicació d'Ofcom, 2026</td></tr>
+      <tr><td>Integració d'una solució de tercers, serveis petits</td><td>Des de centenars fins a pocs milers d'euros</td><td>Estudi extern, base de proves qualificada de limitada</td></tr>
+      <tr><td>Regulador australià, quatre anys</td><td>Uns 47 milions d'euros</td><td>Govern australià</td></tr>
+      <tr><td>Llei de seguretat en línia del Regne Unit, regulador</td><td>Uns 73 milions d'euros anuals</td><td>Avaluació d'impacte del Regne Unit</td></tr>
+      <tr><td>Supervisió nacional addicional, Àustria</td><td>0,5 ETC, uns 60.000 euros</td><td>Estimació de l'avantprojecte de llei austríac</td></tr>
+      <tr><td>Guany d'harmonització, per analogia amb el DSA</td><td>Entre 8.600 i 15.500 milions d'euros en facturació transfronterera</td><td>Avaluació d'impacte del DSA</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    L'argument central de la Comissió sobre el cost és comparatiu, no absolut: sense aquest Reglament, els proveïdors
+    s'enfrontarien fins a 27 règims diferents amb edats, àmbits, normes de consentiment parental i requisits tècnics
+    diferents. També espera que la solució europea de verificació de l'edat, finançada públicament i de codi obert, acabi sent
+    la via més barata disponible, ja que els seus costos de desenvolupament no s'han de recuperar per comprovació.
+  </p>
+
+  <p>
+    El text conté dues admissions sinceres. Les microempreses i petites empreses notaran més la càrrega relativa fins i tot quan
+    el cost absolut sigui més baix, perquè disposen de menys capacitat legal i tècnica. I al voltant del 80% de les
+    empreses europees de videojocs són micro o petites empreses, per això és probable que la indústria dels jocs sigui la veu més forta
+    en el debat.
+  </p>
+</section>
+
+<!-- 13. Evidence -->
+<section class="section" id="evidence">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-chart-line"></i></div>
+    <div>
+      <h2 class="section__title">Les proves que hi ha darrere</h2>
+      <p class="section__subtitle">D'on surten les xifres de la Comissió</p>
+    </div>
+  </div>
+
+  <div class="figures">
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="48" data-suffix="%">48%</div>
+      <div class="figure-card__label">D'infants de 9 a 16 anys que diuen sentir-se segurs en línia</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="61" data-decimal="1" data-suffix="h">6.1h</div>
+      <div class="figure-card__label">Temps de pantalla mitjà els caps de setmana, joves de 13 a 18 anys</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="34" data-suffix="%">34%</div>
+      <div class="figure-card__label">D'infants de 9 a 11 anys que declaren tenir un perfil de xarxa social</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="92" data-suffix="%">92%</div>
+      <div class="figure-card__label">D'europeus que consideren la protecció de la infància en línia una prioritat màxima</div>
+    </div>
+  </div>
+
+  <p>
+    L'instrument central és un Eurobaròmetre dut a terme entre març i abril de 2026, que abasta més de 26.000 persones
+    d'entre 13 i 18 anys i més de 12.000 pares dels 27 Estats membres. Va trobar 4,5 hores diàries de temps de pantalla
+    els dies de classe i 6,1 hores els caps de setmana, amb un 46% per sobre de sis hores i un 14% per sobre de deu. Nou de cada deu
+    adolescents s'havien trobat almenys un contingut perjudicial o angoixant en els tres mesos anteriors.
+  </p>
+
+  <p>
+    L'interès públic per aquesta solució és real, però no aclaparador: el 54% dels pares i el 45% dels joves de 13 a 18
+    anys pensen que els retards d'edat serien efectius, mentre que el 47% dels pares i el 48% dels adolescents preferirien veure
+    aplicades correctament les normes que ja existeixen. Les dues xifres apareixen en el propi text de la Comissió.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Contingut perjudicial</div>
+      <div class="article-card__title">73% en quatre setmanes</div>
+      <div class="article-card__desc">D'infants de 11 a 17 anys exposats almenys a un tipus de contingut perjudicial durant un període de quatre setmanes; el 31% s'ha trobat el tipus més greu.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Ciberassetjament</div>
+      <div class="article-card__title">24%</div>
+      <div class="article-card__desc">D'infants de 12 a 17 anys que declaren haver-lo patit; el 39% n'ha estat testimoni; el 50% coneixia algú que n'havia estat objecte. Al voltant del 75% qualifica les mesures de les plataformes d'ineficaces o dolentes.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Grooming</div>
+      <div class="article-card__title">Un augment del 158%</div>
+      <div class="article-card__desc">Creixement de les notificacions en tres anys, segons dades de 2025 del National Centre for Missing and Exploited Children dels Estats Units.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">On s'allotja</div>
+      <div class="article-card__title">63%</div>
+      <div class="article-card__desc">De les pàgines web d'abús sexual infantil trobades per la Internet Watch Foundation el 2025 estaven allotjades en Estats membres de la UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Ús compulsiu</div>
+      <div class="article-card__title">Un de cada quatre</div>
+      <div class="article-card__desc">Un estudi de l'EPRS realitzat en sis països va trobar que el 78% dels joves de 13 a 17 anys consulten el dispositiu almenys cada hora, i més d'una quarta part mostra una conducta que s'assembla a l'addicció.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Execució fins ara</div>
+      <div class="article-card__title">Deu procediments</div>
+      <div class="article-card__desc">Procediments formals del DSA sobre la protecció dels menors, inclosos els resultats preliminars contra TikTok i Meta pel disseny addictiu, contra Meta pels menors de 13 anys, i procediments contra Snapchat pel grooming i la configuració per defecte.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-magnify"></i> Allò que les proves no diuen</div>
+    <p style="margin-bottom:0;">
+      El document de treball és més prudent que el material de premsa. Sobre la qüestió causal clau, assenyala que
+      l'associació entre el retard de l'accés i uns millors resultats als 13 anys es pot llegir com una associació més que no pas com una prova definitiva d'un
+      efecte causal específic per edat. També admet que els efectes no són uniformes, varien segons el servei, la funcionalitat
+      de disseny i les circumstàncies individuals, i que un ús més actiu, com publicar i interactuar, tendeix a correlacionar-se
+      amb un benestar millor que el desplaçament passiu. Qui citi aquest expedient hauria de citar també aquesta advertència.
+    </p>
+  </div>
+</section>
+
+<!-- 14. Drafting slips -->
+<section class="section" id="slips">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-alert-circle-outline"></i></div>
+    <div>
+      <h2 class="section__title">Errors en el text publicat</h2>
+      <p class="section__subtitle">Llegiu l'article, no la remissió</p>
+    </div>
+  </div>
+
+  <p>
+    La proposta es va publicar amb presses, i es nota. Cap d'aquests errors canvia el que fa el Reglament, però qui
+    redacti una esmena, un memoràndum de compliment o una nota per a un client ha de saber quines remissions no es poden llegir
+    tal com estan impreses. Cadascun d'aquests errors apareix en el text tal com es va publicar el 17 de setembre de 2026.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>On</th><th>Què diu</th><th>Què ha de voler dir</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">Article 6, apartat 1</td><td>Les cinc condicions de risc estan enumerades com a lletres d) a h)</td><td>a) a e). No hi ha lletres anteriors per encadenar-hi</td></tr>
+      <tr><td class="highlight-cell">Articles 2, apartat 5; 6, apartat 6; 7, apartat 6; 25, apartat 1</td><td>Actes delegats adoptats de conformitat amb l'article 40</td><td>Article 39. L'article 40 és el procediment de comitè</td></tr>
+      <tr><td class="highlight-cell">Article 36, apartat 6</td><td>Actes delegats de conformitat amb l'article X</td><td>Un espai reservat que mai no es va omplir</td></tr>
+      <tr><td class="highlight-cell">Article 7, apartat 5</td><td>Sense perjudici de la creació d'un compte de conformitat amb l'article 5, apartat 2</td><td>Article 6, apartat 2. L'article 5 és el pla de compliment</td></tr>
+      <tr><td class="highlight-cell">Article 8, apartat 1</td><td>Comptes especificats a l'article 5, apartat 3, i l'article 6, apartat 3</td><td>Les vies del compte tutelat dels articles 6 i 7</td></tr>
+      <tr><td class="highlight-cell">Article 38, apartat 1</td><td>Autoritats competents de conformitat amb l'article 33</td><td>Article 34. L'article 33 és el de les mesures de suport nacionals</td></tr>
+      <tr><td class="highlight-cell">Considerand 44</td><td>Autoritat competent determinada de conformitat amb l'article 27</td><td>Article 34</td></tr>
+      <tr><td class="highlight-cell">Conclusió del document de treball</td><td>Un retard d'accés harmonitzat de 15 anys per a les xarxes socials, l'intercanvi de vídeos i els acompanyants d'IA</td><td>L'article 6 només cobreix les xarxes socials i l'intercanvi de vídeos. Els acompanyants d'IA porten obligacions de disseny, no el límit d'edat</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-bullhorn-outline"></i> Una diferència que no és un error tipogràfic</div>
+    <p style="margin-bottom:0;">
+      Tant la Comunicació com les preguntes i respostes encapçalen amb la frase que l'Act <em>prohibeix els comptes de xarxes socials
+      per sota dels 13 anys</em>. El text legal fa alguna cosa més forta: l'article 6, apartat 1, és una prohibició absoluta per sota dels <strong>15</strong>,
+      amb una derogació fins als 13 anys que un tutor pot triar utilitzar. Les dues afirmacions són defensables, però
+      l'equip de comunicació ha encapçalat amb el número més petit.
+    </p>
+  </div>
+</section>
+
+<!-- 15. Documents -->
+<section class="section" id="documents">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-file-document-outline"></i></div>
+    <div>
+      <h2 class="section__title">Els documents</h2>
+      <p class="section__subtitle">Fonts primàries, totes publicades el 17 de setembre de 2026</p>
+    </div>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">COM(2026) 681 final</div>
+      <div class="article-card__title">La proposta</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52026PC0681" target="_blank" rel="noopener">Reglament, 43 articles repartits en nou capítols, procediment 2026/0286(COD)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">COM(2026) 680 final</div>
+      <div class="article-card__title">La Comunicació</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/en/TXT/?uri=COM%3A2026%3A680%3AFIN" target="_blank" rel="noopener">Un enfocament de la UE en matèria de seguretat dels infants en línia, incloses les mesures complementàries</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">SWD(2026) 681 final</div>
+      <div class="article-card__title">Anàlisi d'impactes</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52026SC0681" target="_blank" rel="noopener">Definició del problema, drets fonamentals i impactes econòmics, 385 notes al peu</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Comissió</div>
+      <div class="article-card__title">Preguntes i respostes oficials</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/faqs/kids-act-explained" target="_blank" rel="noopener">El KIDS Act explicat, en el propi plantejament de la Comissió</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Juliol de 2026</div>
+      <div class="article-card__title">Informe del Grup Especial</div>
+      <div class="article-card__desc"><a href="https://commission.europa.eu/document/download/d833504d-5ec3-4fac-945f-38e7d0bd5326_en?filename=Special-panel-report.pdf" target="_blank" rel="noopener">Child safety online: protecting and empowering minors in a digital world</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Juliol de 2025</div>
+      <div class="article-card__title">Directrius sobre l'article 28 del DSA</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-protection-minors" target="_blank" rel="noopener">El text no vinculant que aquest Reglament converteix en llei</a></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- CTA strip -->
+<div class="container" style="padding-top:0;">
+  <div class="cta-strip" style="background-image:
+    linear-gradient(135deg, rgba(155,81,224,0.88) 0%, rgba(6,147,227,0.85) 100%),
+    url('https://images.pexels.com/photos/8060005/pexels-photo-8060005.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');">
+    <h2 class="cta-strip__title">Segueix aquest expedient des de la primera lectura fins al Diari Oficial</h2>
+    <p class="cta-strip__sub">Brubru segueix cada document de comissió, cada esmena i cada votació. Prova gratuïta de 14 dies, sense targeta.</p>
+    <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Comença la prova gratuïta</a>
+  </div>
+</div>
+
+<!-- Post-matter -->
+<div class="pm">
+  <p>
+    <a href="https://brubru.beresol.eu">Brubru</a> per <a href="https://beresol.eu">Beresol</a> |
+    <a href="https://beresol.eu/public-affairs">Beresol Open Reports</a> |
+    <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+  <p style="margin-top: 0.5rem;">Anàlisi basada en fonts institucionals oficials de la UE, llegides íntegrament. Publicat el setembre de 2026.</p>
+  <p style="margin-top: 0.35rem;">
+    Crèdits d'imatge: foto de portada de <a href="https://www.pexels.com/photo/5999680/" target="_blank" rel="noopener">cottonbro studio via Pexels</a> (ID de la foto 5999680) |
+    foto dins la pàgina de <a href="https://www.pexels.com/photo/27177479/" target="_blank" rel="noopener">Helena Lopes via Pexels</a> (ID de la foto 27177479) |
+    foto de la crida a l'acció de <a href="https://www.pexels.com/photo/8060005/" target="_blank" rel="noopener">Windo Nugroho via Pexels</a> (ID de la foto 8060005).
+  </p>
+</div>
+
+<footer class="footer  "><div class="footer__container"><div class="footer__content"><div class="footer__section footer__section--brand"><div class="footer__brand"><img alt="Beresol BV" class="footer__logo" src="/assets/beresol-logo.png"><div class="footer__brand-info"><p class="footer__copyright">&copy; 2026 <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV</p><p class="footer__trademark">Brubru's trademark belongs to <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV and is registered at EUIPO</p></div></div></div><div class="footer__section footer__section--nav"><h4 class="footer__nav-title">Links</h4><nav class="footer__nav"><a class="footer__link" href="/about" data-discover="true">About</a><a href="mailto:hello@beresol.eu" class="footer__link">Contact</a><a class="footer__link" href="/privacy" data-discover="true">Privacy Policy</a><a class="footer__link" href="/terms" data-discover="true">Terms of Service</a><a class="footer__link" href="/cookies" data-discover="true">Cookies</a><a class="footer__link" href="/subprocessors" data-discover="true">Subprocessors</a><a href="https://www.instagram.com/beresolbv/" target="_blank" rel="noopener noreferrer" aria-label="Beresol on Instagram" class="footer__link footer__link--social"><svg viewBox="0 0 24 24" role="presentation" style="width: 1.275rem; height: 1.275rem;"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" style="fill: currentcolor;"></path></svg><span class="footer__link-label">Instagram</span></a></nav></div></div></div></footer>
+
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="backToTop" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+  <i class="mdi mdi-chevron-up"></i>
+</a>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Scroll reveal. Every section and every stair gets it, but nothing
+     depends on it: the elements are visible with JS off because `.reveal` is
+     only applied by this script. ---- */
+  var targets = document.querySelectorAll('.section, .figures, .toc, .hero-image, .inline-image, .stair, .cta-strip');
+  if (reduce || !('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(targets, function (el) { el.classList.add('is-visible'); });
+  } else {
+    Array.prototype.forEach.call(targets, function (el) {
+      if (!el.classList.contains('stair')) el.classList.add('reveal');
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+  }
+
+  /* ---- Count-up on the figure cards. The final value is already in the HTML,
+     so a reader with JS off or reduced motion on sees the real number. ---- */
+  function countUp(el) {
+    var end = parseFloat(el.getAttribute('data-count'));
+    if (isNaN(end)) return;
+    var dec = parseInt(el.getAttribute('data-decimal') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var start = null, dur = 1100;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var v = end * eased;
+      el.textContent = (dec ? (v / Math.pow(10, dec)).toFixed(dec) : Math.round(v)) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  var nums = document.querySelectorAll('.figure-card__number[data-count]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io2 = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { countUp(e.target); io2.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    Array.prototype.forEach.call(nums, function (el) { io2.observe(el); });
+  }
+})();
+</script>
+
+<script>
+  window.addEventListener('scroll', function() {
+    document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+  });
+</script>
+
+<script>
+/* brubru:mobile-fix-2026-09-22 -- additive: toggles its own class only, so it composes with whatever
+   scroll handler this page already has controlling `display`. */
+(function () {
+  var btt = document.querySelector('.back-to-top');
+  if (!btt) return;
+  var last = window.scrollY, ticking = false;
+  function update() {
+    var y = window.scrollY;
+    if (y > last + 4) btt.classList.add('btt--away');        // scrolling down
+    else if (y < last - 4) btt.classList.remove('btt--away'); // scrolling up
+    last = y;
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

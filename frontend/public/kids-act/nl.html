@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
+  <title>De EU KIDS Act uitgelegd: Europa's nieuwe regels voor kinderen online | Brubru</title>
+  <meta name="description" content="Volledige gids over de EU KIDS Act (COM(2026) 681, procedure 2026/0286(COD)): de minimumleeftijd van 15 jaar, voogdaccounts vanaf 13 jaar, veilig door ontwerp, AI-metgezellen, leeftijdsborging en de EU-oplossing voor leeftijdsverificatie, handhaving en boetes. Artikelsgewijze analyse van het voorstel, ingediend op 17 september 2026.">
+  <meta property="og:title" content="De EU KIDS Act uitgelegd | Brubru">
+  <meta property="og:description" content="Minimumleeftijd 15 jaar, voogdaccounts vanaf 13 jaar, een verbod op verslavend ontwerp, en leeftijdsverificatie die nooit weet wie u bent. Het voorstel, van begin tot eind gelezen.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="De EU KIDS Act uitgelegd | Brubru">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200">
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --color-accent: #9b51e0;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Header ---------- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; min-width: 0; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---------- Hero ---------- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(155,81,224,0.1);
+      color: var(--color-purple);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-purple);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-purple), var(--color-blue), var(--color-green), var(--color-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowShift 9s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--color-secondary);
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+    /* ---------- Figure cards ---------- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 2.5rem 0;
+    }
+    .figure-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(155,81,224,0.04) 0%, rgba(6,147,227,0.04) 100%);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      min-width: 0;
+    }
+    .figure-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--color-purple);
+      box-shadow: 0 12px 28px rgba(155,81,224,0.14);
+    }
+    .figure-card__number {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .figure-card__label {
+      font-size: 0.82rem;
+      color: var(--color-secondary);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    /* ---------- Table of contents ---------- */
+    .toc {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin: 2.5rem 0;
+      background: var(--color-bg-alt);
+    }
+    .toc__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
+    }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem 1.5rem;
+    }
+    .toc__link {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0;
+      transition: color 0.2s ease, transform 0.2s ease;
+      min-width: 0;
+    }
+    .toc__link:hover { color: var(--color-purple); transform: translateX(4px); }
+    .toc__link i { color: var(--color-muted); flex: 0 0 auto; }
+
+    /* ---------- Sections ---------- */
+    .section { margin: 3.5rem 0; }
+    .section__header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
+    .section__icon {
+      flex: 0 0 auto;
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(155,81,224,0.12), rgba(6,147,227,0.12));
+      color: var(--color-purple);
+      font-size: 1.4rem;
+    }
+    .section__title { font-size: 1.75rem; font-weight: 700; line-height: 1.25; }
+    .section__subtitle { font-size: 0.95rem; color: var(--color-secondary); margin-top: 0.2rem; }
+    .section p { margin-bottom: 1rem; }
+    .section ul, .section ol { margin: 0 0 1rem 1.25rem; }
+    .section li { margin-bottom: 0.5rem; }
+
+    /* ---------- Cards ---------- */
+    .card {
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-purple);
+      border-radius: var(--radius-sm);
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      background: var(--color-bg);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      min-width: 0;
+    }
+    .card:hover { box-shadow: 0 8px 22px rgba(0,0,0,0.06); transform: translateX(3px); }
+    .card__title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title i { color: var(--color-purple); }
+
+    .article-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .article-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1.25rem;
+      background: var(--color-bg);
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      min-width: 0;
+    }
+    .article-card:hover { border-color: var(--color-purple); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.06); }
+    .article-card__num {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-purple); margin-bottom: 0.3rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+    .article-card__desc a { color: var(--color-blue); }
+
+    /* ---------- Boxes ---------- */
+    .info-box, .alert-box, .quote-box {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.97rem;
+      min-width: 0;
+    }
+    .info-box { background: rgba(6,147,227,0.06); border-left: 4px solid var(--color-blue); }
+    .alert-box { background: rgba(217,119,6,0.07); border-left: 4px solid var(--color-amber); }
+    .quote-box {
+      background: var(--color-bg-alt);
+      border-left: 4px solid var(--color-muted);
+      font-style: italic;
+    }
+    .quote-box cite { display: block; font-style: normal; font-size: 0.85rem; color: var(--color-secondary); margin-top: 0.6rem; }
+    .box__title { font-weight: 700; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+
+    /* ---------- The age staircase ---------- */
+    .stair {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      align-items: end;
+      margin: 2rem 0 1rem;
+    }
+    .stair__step {
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1rem;
+      color: white;
+      min-width: 0;
+      transform: translateY(24px) scaleY(0.94);
+      transform-origin: bottom;
+      opacity: 0;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, box-shadow 0.3s ease;
+    }
+    .stair.is-visible .stair__step { transform: none; opacity: 1; }
+    .stair.is-visible .stair__step:nth-child(1) { transition-delay: 0.05s; }
+    .stair.is-visible .stair__step:nth-child(2) { transition-delay: 0.20s; }
+    .stair.is-visible .stair__step:nth-child(3) { transition-delay: 0.35s; }
+    .stair.is-visible .stair__step:nth-child(4) { transition-delay: 0.50s; }
+    .stair__step:hover { box-shadow: 0 14px 30px rgba(0,0,0,0.16); }
+    .stair__step--1 { background: linear-gradient(160deg, #b91c1c, #dc2626); min-height: 150px; }
+    .stair__step--2 { background: linear-gradient(160deg, #b45309, #d97706); min-height: 185px; }
+    .stair__step--3 { background: linear-gradient(160deg, #6d28d9, #9b51e0); min-height: 220px; }
+    .stair__step--4 { background: linear-gradient(160deg, #0369a1, #0693e3); min-height: 255px; }
+    .stair__age { font-size: 1.5rem; font-weight: 700; line-height: 1.1; }
+    .stair__rule { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; margin: 0.35rem 0 0.6rem; }
+    .stair__detail { font-size: 0.85rem; line-height: 1.5; opacity: 0.95; }
+    .stair__detail li { margin-bottom: 0.3rem; }
+    .stair__detail ul { margin: 0 0 0 1rem; padding: 0; }
+
+    /* ---------- Tables ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+    th, td { padding: 0.7rem 0.85rem; text-align: left; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    th { background: var(--color-bg-alt); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    tbody tr { transition: background 0.2s ease; }
+    tbody tr:hover { background: rgba(155,81,224,0.04); }
+    .highlight-cell { font-weight: 700; color: var(--color-purple); }
+
+    .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pill--red { background: rgba(220,38,38,0.12); color: var(--color-red); }
+    .pill--green { background: rgba(5,150,105,0.12); color: var(--color-green); }
+    .pill--amber { background: rgba(217,119,6,0.12); color: var(--color-amber); }
+    .pill--blue { background: rgba(6,147,227,0.12); color: var(--color-blue); }
+
+    /* ---------- Timeline ---------- */
+    .timeline { position: relative; margin: 2rem 0 1rem; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0.45rem; top: 0.4rem; bottom: 0.4rem;
+      width: 2px; background: linear-gradient(180deg, var(--color-purple), var(--color-blue), var(--color-border));
+    }
+    .timeline__item { position: relative; padding-bottom: 1.35rem; min-width: 0; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -1.68rem; top: 0.55rem;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--color-bg); border: 2px solid var(--color-muted);
+    }
+    .timeline__item--active::before {
+      background: var(--color-purple); border-color: var(--color-purple);
+      box-shadow: 0 0 0 5px rgba(155,81,224,0.18);
+      animation: pulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 5px rgba(155,81,224,0.18); }
+      50% { box-shadow: 0 0 0 10px rgba(155,81,224,0.05); }
+    }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--color-purple); text-transform: uppercase; letter-spacing: 0.04em; }
+    .timeline__text { font-size: 0.95rem; color: var(--color-text); }
+
+    /* ---------- Hero and inline images ---------- */
+    .hero-image, .inline-image { margin: 2.5rem 0; }
+    .hero-image img, .inline-image img {
+      width: 100%; height: auto; display: block;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.10);
+    }
+    .hero-image figcaption, .inline-image figcaption {
+      font-size: 0.82rem; color: var(--color-secondary);
+      margin-top: 0.6rem; text-align: center; line-height: 1.5;
+    }
+    .hero-image figcaption a, .inline-image figcaption a { color: var(--color-blue); }
+
+    /* ---------- CTA strip ---------- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+      background-size: cover;
+      background-position: center;
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.88); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-purple);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---------- Scroll reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* ---------- Post-matter ---------- */
+    .pm { text-align: center; font-size: 0.85rem; color: var(--color-secondary); padding: 2rem 1.5rem 1rem; }
+    .pm a { color: var(--color-blue); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toc__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .article-grid { grid-template-columns: minmax(0, 1fr); }
+      .stair { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+      .stair__step--1, .stair__step--2, .stair__step--3, .stair__step--4 { min-height: 0; }
+    }
+    @media (max-width: 900px) {
+      table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: calc(100vw - 2.5rem); }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .hero { padding: 2rem 0.5rem 1.5rem; }
+      .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toc__grid { grid-template-columns: minmax(0, 1fr); }
+      .stair { grid-template-columns: minmax(0, 1fr); }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none !important; }
+      .header select, .lang-select { min-height: 44px; padding: 0.4rem 0.4rem; max-width: 72px; font-size: 0.85rem; }
+      .header__text { min-width: 0; }
+      .header__title, .header__subtitle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .toc__link { min-height: 44px; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .section__title { font-size: 1.4rem; }
+      .cta-strip { padding: 2.25rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .back-to-top { width: 40px; height: 40px; bottom: 0.75rem; right: 0.75rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .stair__step { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .header__cta, .hero__title span, .timeline__item--active::before { animation: none !important; }
+      * { scroll-behavior: auto !important; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-purple); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+    .back-to-top.btt--away { opacity: 0; pointer-events: none; }
+
+  /* ---- CANONICAL BRUBRU FOOTER (mirrors frontend/src/components/shared/footer.css,
+     tokens resolved because a standalone page never loads globals.css). Do not restyle. ---- */
+  .footer { width:100%; background-color:#f9fafb; border-top:1px solid #e5e7eb; margin-top:auto;
+    position:relative; z-index:10; text-align:left;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px); }
+  .footer__container { max-width:100%; width:100%; margin:0; padding:2rem 1.5rem 1.5rem; }
+  .footer__content { display:flex; flex-direction:column; gap:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
+  .footer__section { display:flex; flex-direction:column; gap:.5rem; min-width:0; }
+  .footer__section--brand { gap:.75rem; flex-shrink:0; padding-right:1.5rem; position:relative; }
+  .footer__section:last-child { flex-shrink:0; min-width:fit-content; }
+  .footer__section--nav { gap:.75rem; }
+  .footer__nav-title { font-size:.8125rem; font-weight:600; color:#111827; margin-bottom:0;
+    text-transform:uppercase; letter-spacing:.5px; }
+  .footer__brand { display:flex; align-items:center; gap:1rem; }
+  .footer__logo { height:48px; width:auto; transition:all .3s cubic-bezier(.34,1.56,.64,1); cursor:pointer; }
+  .footer__logo:hover { transform:scale(1.08) rotate(-2deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.15)); }
+  .footer__brand-info { display:flex; flex-direction:column; gap:.25rem; }
+  .footer__copyright { font-size:.8125rem; color:#111827; margin-bottom:0; }
+  .footer__trademark { font-size:.75rem; color:#6b7280; margin-bottom:0; }
+  .footer__beresol-link { color:#111827; text-decoration:none; font-weight:600; transition:all .3s ease; position:relative; }
+  .footer__beresol-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s ease; }
+  .footer__beresol-link:hover { color:#0693e3; text-decoration:none; }
+  .footer__beresol-link:hover::after { width:100%; }
+  .footer__nav { display:flex; flex-wrap:wrap; gap:.75rem 1rem; align-items:flex-start; row-gap:.5rem; }
+  .footer__link { font-size:.8125rem; color:#111827; font-weight:500; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; position:relative; display:inline-block; }
+  .footer__link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s cubic-bezier(.4,0,.2,1); }
+  .footer__link:hover { color:#0693e3; text-decoration:none; transform:translateX(4px); }
+  .footer__link:hover::after { width:100%; }
+  .footer__link--social { display:inline-flex; align-items:center; gap:.35rem; }
+  .footer__link--social svg { flex:0 0 auto; }
+  @media (min-width:768px) {
+    .footer__section--brand::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, #e5e7eb 20%, #e5e7eb 80%, transparent); opacity:.5; }
+    .footer__content { flex-direction:row; justify-content:flex-start; align-items:flex-start; gap:2rem; flex-wrap:wrap; }
+    .footer__section--brand { flex:0 0 auto; max-width:500px; }
+    .footer__section--nav { flex:0 0 auto; min-width:300px; }
+  }
+  @media (max-width:767px) {
+    .footer { margin-left:0 !important; width:100% !important; }
+    .footer__container { padding:1.5rem 1rem 1rem; }
+    .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .footer__logo { height:40px; }
+    .footer__nav { gap:.75rem; }
+  }
+  </style>
+</head>
+<body>
+
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">EU KIDS Act uitleg</div>
+    <div class="header__subtitle">Keeping Internet Digital Spaces Accountable and Trustworthy</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Language" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+    <option value="ca.html">Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">Voorstel ingediend op 17 september 2026</div>
+  <h1 class="hero__title">Europa wil de leeftijd verhogen<br><span>waarop de jeugd online gaat</span></h1>
+  <p class="hero__subtitle">
+    De EU KIDS Act zou iedereen onder de 15 jaar verhinderen om ergens in de Unie een eigen account op
+    sociale media te openen, ouders vanaf 13 jaar een begeleid account laten openen, en elke dienst die een
+    kind kan bereiken veilig door ontwerp maken. Dit is het voorstel van begin tot eind gelezen: de
+    leeftijdstrap, de verboden ontwerpkenmerken, de leeftijdscontroles die nooit weten wie u bent, en de strijd
+    over de vraag of het getal 13, 15 of 16 moet zijn.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-file-document-outline"></i> Voorstel voor een verordening (COD)</span>
+    <span><i class="mdi mdi-scale-balance"></i> Artikel 114 VWEU</span>
+    <span><i class="mdi mdi-timeline-clock-outline"></i> Eerste lezing, nog geen commissie</span>
+  </div>
+</section>
+
+<!-- Figures -->
+<div class="figures reveal">
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="15">15</div>
+    <div class="figure-card__label">Minimumleeftijd voor een eigen account</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="43">43</div>
+    <div class="figure-card__label">Artikelen verdeeld over negen hoofdstukken</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="6" data-suffix="%">6%</div>
+    <div class="figure-card__label">Maximale boete, wereldwijde jaaromzet</div>
+  </div>
+  <div class="figure-card">
+    <div class="figure-card__number" data-count="90">90</div>
+    <div class="figure-card__label">Werkdagen tot een definitief besluit van de Commissie</div>
+  </div>
+</div>
+
+<!-- Table of contents -->
+<nav class="toc reveal">
+  <div class="toc__title">Op deze pagina</div>
+  <div class="toc__grid">
+    <a class="toc__link" href="#what"><i class="mdi mdi-chevron-right"></i> Wat de KIDS Act is</a>
+    <a class="toc__link" href="#staircase"><i class="mdi mdi-chevron-right"></i> De leeftijdstrap</a>
+    <a class="toc__link" href="#scope"><i class="mdi mdi-chevron-right"></i> Welke diensten worden geraakt</a>
+    <a class="toc__link" href="#design"><i class="mdi mdi-chevron-right"></i> Veilig door ontwerp</a>
+    <a class="toc__link" href="#ai"><i class="mdi mdi-chevron-right"></i> AI-metgezellen en chatbots</a>
+    <a class="toc__link" href="#games"><i class="mdi mdi-chevron-right"></i> Spellen en app-winkels</a>
+    <a class="toc__link" href="#age-assurance"><i class="mdi mdi-chevron-right"></i> Leeftijd bewijzen</a>
+    <a class="toc__link" href="#parents"><i class="mdi mdi-chevron-right"></i> Wat ouders krijgen</a>
+    <a class="toc__link" href="#enforcement"><i class="mdi mdi-chevron-right"></i> Handhaving en geld</a>
+    <a class="toc__link" href="#timeline"><i class="mdi mdi-chevron-right"></i> Data die ertoe doen</a>
+    <a class="toc__link" href="#the-number"><i class="mdi mdi-chevron-right"></i> 13, 15 of 16</a>
+    <a class="toc__link" href="#cost"><i class="mdi mdi-chevron-right"></i> Wat het gaat kosten</a>
+    <a class="toc__link" href="#evidence"><i class="mdi mdi-chevron-right"></i> Het bewijs erachter</a>
+    <a class="toc__link" href="#slips"><i class="mdi mdi-chevron-right"></i> Fouten in de gepubliceerde tekst</a>
+    <a class="toc__link" href="#documents"><i class="mdi mdi-chevron-right"></i> De documenten</a>
+  </div>
+</nav>
+
+<!-- Hero image -->
+<figure class="hero-image reveal">
+  <img
+    src="https://images.pexels.com/photos/5999680/pexels-photo-5999680.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
+    alt="Drie tieners liggen 's nachts op bed en gebruiken smartphones in een schemerig verlichte slaapkamer"
+    loading="lazy">
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@cottonbro" target="_blank" rel="noopener">cottonbro studio</a>
+    via <a href="https://www.pexels.com/photo/5999680/" target="_blank" rel="noopener">Pexels</a>
+    | Tieners in Europa melden 4,5 uur schermtijd op schooldagen en 6,1 uur in het weekend
+  </figcaption>
+</figure>
+
+<!-- 1. What it is -->
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-shield-account-outline"></i></div>
+    <div>
+      <h2 class="section__title">Wat de KIDS Act is</h2>
+      <p class="section__subtitle">Twee helften die alleen samen werken</p>
+    </div>
+  </div>
+
+  <p>
+    Op 17 september 2026 diende de Commissie een voorstel voor een verordening in met een naam die bewust
+    een acroniem vormt: de <strong>EU KIDS Act</strong>, voor Keeping Internet Digital Spaces Accountable and Trustworthy. Het ging vergezeld
+    van een mededeling met de bredere strategie en een werkdocument van de diensten van de Commissie met een
+    analyse van de effecten. De rechtsgrondslag is artikel 114 VWEU, de bepaling over de eengemaakte markt, wat
+    belangrijker is dan het klinkt: de Commissie claimt geen bevoegdheid inzake kinderbescherming die zij niet
+    heeft, zij stelt dat een lappendeken van nationale leeftijdsgrenzen de interne markt versnippert.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-numeric-1-circle-outline"></i> Gemeenschappelijke leeftijdsregels</div>
+    <p style="margin-bottom:0;">
+      Een minimumleeftijd voor de hele Unie, in plaats van wat anders 27 verschillende leeftijden zouden
+      worden. Geen eigen account onder de 15 jaar op de risicovolste sociale en videodiensten, een begeleid
+      account dat een voogd vanaf 13 jaar kan openen, en helemaal niets onder de 13 jaar, behalve een smalle,
+      door de voogd beheerde uitzondering voor diensten gebouwd voor jonge kinderen.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-numeric-2-circle-outline"></i> Veilig door ontwerp</div>
+    <p style="margin-bottom:0;">
+      Een bindende lijst van zaken die een dienst niet mag doen bij een minderjarige: geen eindeloos
+      scrollen zonder onderbrekingen, geen meldingen die tot betrokkenheid moeten verleiden, geen
+      reeksmechanismen, geen aanbevelingssysteem geoptimaliseerd voor aandacht, geen contact van onbekenden,
+      geen schoonheidsfilters die het gezicht van een kind idealiseren, geen loot boxes. Deze helft geldt voor
+      elke dienst binnen het toepassingsgebied, ongeacht de omvang, ook voor diensten die een 16-jarige volledig
+      mag gebruiken.
+    </p>
+  </div>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-lightbulb-outline"></i> Waarom de tweede helft de belangrijkste is</div>
+    <p style="margin-bottom:0;">
+      De eigen vraag- en antwoorddocumentatie van de Commissie is er duidelijk over: leeftijdsgrenzen alleen
+      zouden het onderliggende probleem onaangeroerd laten, omdat het probleem diensten zijn die zijn ontworpen
+      om de tijd en aandacht van een kind te maximaliseren. De leeftijdsregels zijn waar de kranten over zullen
+      berichten. De ontwerpregels zijn wat de producten daadwerkelijk zal veranderen.
+    </p>
+  </div>
+
+  <p>
+    Formeel vervangt de verordening niets. Zij <em>specificeert</em> artikel 28 van de digitaledienstenverordening,
+    die onlineplatforms al verplicht een hoog niveau van privacy, veiligheid en beveiliging voor minderjarigen
+    te waarborgen, en zij <em>vult aan</em> op de AI-verordening voor AI-metgezellen en chatbots. In de praktijk zet
+    zij de niet-bindende richtsnoeren van de Commissie van juli 2025 over de bescherming van minderjarigen om
+    in dwingend recht met bijbehorende boetes.
+  </p>
+</section>
+
+<!-- 2. The age staircase -->
+<section class="section" id="staircase">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-stairs"></i></div>
+    <div>
+      <h2 class="section__title">De leeftijdstrap</h2>
+      <p class="section__subtitle">Artikelen 6 en 7. Vier stappen, geen enkele klif</p>
+    </div>
+  </div>
+
+  <p>
+    Wat iedereen bij een eerste lezing verkeerd begrijpt, is dat dit geen enkel verbod op één leeftijd is.
+    Het is een reeks van vier regimes, en het kind stapt een trede hoger naarmate het opgroeit. Merk vooral op
+    dat tussen 13 en 15 jaar het account toebehoort aan de <strong>voogd</strong>, niet aan het kind: de minderjarige is
+    geen partij bij het contract met de aanbieder.
+  </p>
+
+  <div class="stair">
+    <div class="stair__step stair__step--1">
+      <div class="stair__age">Onder de 3</div>
+      <div class="stair__rule">Niets</div>
+      <div class="stair__detail">
+        Door de voogd beheerde toegang kan onder de 3 jaar helemaal niet worden ingeschakeld. De mededeling
+        gaat verder en adviseert helemaal geen schermen, hoewel dat een advies is, geen wet.
+      </div>
+    </div>
+    <div class="stair__step stair__step--2">
+      <div class="stair__age">3 tot 12</div>
+      <div class="stair__rule">Geen account, smalle uitzondering</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Geen enkel account voor het kind</li>
+          <li>Een voogd mag beperkte toegang toestaan via het eigen account van de voogd, maar alleen op een
+              videodeeldienst die specifiek is gebouwd voor kinderen onder de 13 jaar</li>
+          <li>Gepersonaliseerde feeds en zoekfuncties uitgeschakeld en niet inschakelbaar</li>
+          <li>Maximaal een uur per dag, ingesteld door de voogd</li>
+          <li>De voogd kan de toegang op elk moment opschorten</li>
+          <li>De aanbieder moet voor deze leeftijdsgroep een effectbeoordeling publiceren</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stair__step stair__step--3">
+      <div class="stair__age">13 tot 14</div>
+      <div class="stair__rule">Account van de voogd, beperkte functies</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Een voogd mag een beperkt account openen, dat toebehoort aan de voogd</li>
+          <li>Ouderlijke instrumenten staan altijd aan, nooit uitschakelbaar</li>
+          <li>Maximaal een uur per dag</li>
+          <li>De voogd keurt elk nieuw contact vooraf goed en begrenst het aantal</li>
+          <li>De ouderlijke verantwoordelijkheid moet eerst worden geverifieerd</li>
+          <li>Niet beschikbaar wanneer de eigen voorwaarden van de aanbieder een hogere leeftijd vaststellen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stair__step stair__step--4">
+      <div class="stair__age">15 tot 17</div>
+      <div class="stair__rule">Een eigen account</div>
+      <div class="stair__detail">
+        <ul>
+          <li>Een autonoom account, zonder ouderlijke goedkeuring nodig</li>
+          <li>Maar elke verplichting inzake veilig door ontwerp blijft volledig van toepassing</li>
+          <li>Instellingen blijven vergrendeld op de beschermende standaardwaarde, tenzij de minderjarige
+              ouder is dan 15 jaar, duidelijk is geïnformeerd en uitdrukkelijk toestemming heeft gegeven</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-account-clock-outline"></i> Accounts die al bestaan</div>
+    <p style="margin-bottom:0;">
+      Binnen zes maanden na de toepassing van de regels moeten aanbieders nagaan of bestaande
+      accounthouders jonger zijn dan 15 jaar en <strong>de accounts uitschakelen van wie dat is, en van wie de
+      leeftijd niet kan worden vastgesteld</strong>.
+      Dat tweede onderdeel is het scherpe. Wanneer een aanbieder al met grote zekerheid kan vaststellen dat
+      een houder volwassen is, bijvoorbeeld op basis van het jaar waarin het account is aangemaakt of een al
+      langer geregistreerde creditcard, is geen nieuwe controle nodig, zodat de meeste volwassenen niets zouden
+      moeten merken. Zeer grote platforms moeten vooraf een plan indienen waarin wordt beschreven hoe zij die
+      zekerheid denken te bereiken, met nauwkeurigheid, precisie, recall en een volledige confusiematrix per
+      leeftijdsgroep.
+    </p>
+  </div>
+</section>
+
+<!-- 3. Scope -->
+<section class="section" id="scope">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-layers-outline"></i></div>
+    <div>
+      <h2 class="section__title">Welke diensten worden geraakt</h2>
+      <p class="section__subtitle">Artikel 2 voor het toepassingsgebied, artikel 6, lid 1, voor de vijf triggers</p>
+    </div>
+  </div>
+
+  <p>
+    Zeven categorieën diensten of systemen vallen binnen de verordening, en kleine en micro-ondernemingen
+    zijn <strong>niet</strong> vrijgesteld. De redenering van de Commissie is dat op digitale markten het aantal
+    werknemers een slechte maatstaf is voor bereik, en dat vrijstelling van kleine ondernemingen risicovolle
+    activiteiten eenvoudig naar hen zou verplaatsen.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder a) en b)</div>
+      <div class="article-card__title">Sociale netwerken en videodeling</div>
+      <div class="article-card__desc">Definities ontleend aan de digitalemarktenverordening. Dit zijn de enige twee categorieën waarvoor de minimumleeftijd geldt.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder c)</div>
+      <div class="article-card__title">App-winkels</div>
+      <div class="article-card__desc">Verplichtingen inzake leeftijdsclassificatie en de verplichting om de EU-oplossing voor leeftijdsverificatie aan te bieden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder d)</div>
+      <div class="article-card__title">Onlinespellen</div>
+      <div class="article-card__desc">Zowel gamingplatforms als individuele videospellen, op pc, mobiel of console. Spellen die alleen op fysieke dragers zonder onlinecomponent worden verkocht, vallen erbuiten.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder e)</div>
+      <div class="article-card__title">Besturingssystemen</div>
+      <div class="article-card__desc">Slechts één smalle verplichting: een leeftijdssignaal delen dat al bekend is, met toestemming van de gebruiker, zodat niemand tweemaal wordt gecontroleerd.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder f)</div>
+      <div class="article-card__title">AI-metgezellen</div>
+      <div class="article-card__desc">Systemen die een langdurige, gepersonaliseerde interactie bieden die een sociale, emotionele of interpersoonlijke relatie simuleert.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2, lid 1, onder g)</div>
+      <div class="article-card__title">Algemene conversatiechatbots</div>
+      <div class="article-card__desc">Assistenten voor algemene doeleinden op meerdere terreinen. Gespecialiseerde klantenservice, technische ondersteuning, en onderwijs- en industriële toepassingen zijn uitdrukkelijk uitgesloten.</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.15rem;font-weight:700;margin:2rem 0 0.75rem;">De vijf kenmerken die de minimumleeftijd activeren</h3>
+  <p>
+    De regel van onder de 15 jaar geldt niet voor elke sociale of videodienst. Zij geldt voor een dienst met
+    een van vijf kenmerken, opgesomd in artikel 6, lid 1. Dit is de bepaling waaraan lobbyisten de komende twee
+    jaar zullen besteden, want een dienst die alle vijf kan afwerpen, ontsnapt volledig aan de leeftijdsgrens
+    terwijl hij wel gebonden blijft aan de ontwerpregels.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th style="width:8%;">Nr.</th><th>Kenmerk</th><th>Waarom het er is</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">1</td><td>Realtime-uitzending naar een onbepaald aantal ontvangers, met inbegrip van livestreaming</td><td>Blootstelling van het kind, en blootstelling aan pornografische en andere ongepaste inhoud</td></tr>
+      <tr><td class="highlight-cell">2</td><td>Contact en interactie met ontvangers buiten de bestaande contacten van de gebruiker</td><td>Grooming, misbruik en schadelijk gedrag door onbekenden</td></tr>
+      <tr><td class="highlight-cell">3</td><td>Een aanbevelingssysteem gebaseerd op profilering in de zin van de AVG</td><td>Algoritmische versterking richting schadelijk materiaal</td></tr>
+      <tr><td class="highlight-cell">4</td><td>Een aanbevelingssysteem dat contacten of inhoud voorstelt van buiten de bestaande contacten</td><td>Konijnenholen (« rabbit hole »), en routes naar kwaadwillende gebruikers</td></tr>
+      <tr><td class="highlight-cell">5</td><td>Ontwerpen die ononderbroken consumptie mogelijk maken, interactie stimuleren, of meldingen die tot terugkeer aanzetten</td><td>Dwangmatige en verslavende gebruikspatronen</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-shield-off-outline"></i> Zes uitzonderingen</div>
+    <p style="margin-bottom:0;">
+      Volledig buiten het toepassingsgebied: online-encyclopedieën zonder winstoogmerk; educatieve en
+      wetenschappelijke repositoria zonder winstoogmerk; diensten die primair zijn ontworpen voor onderwijs en
+      worden beheerd door of voor onderwijsinstellingen; opensourceplatforms voor softwareontwikkeling en
+      -deling, tenzij het platform zelf een AI-systeem binnen het toepassingsgebied is; diensten die uitsluitend
+      zijn gebouwd voor wetenschappelijk onderzoek en ontwikkeling; en diensten die door overheden zijn ontworpen
+      en beheerd voor hun eigen exclusieve gebruik. De Commissie kan deze lijst bij gedelegeerde handeling
+      aanvullen of inperken.
+    </p>
+  </div>
+</section>
+
+<!-- 4. Safety by design -->
+<section class="section" id="design">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-palette-outline"></i></div>
+    <div>
+      <h2 class="section__title">Veilig door ontwerp</h2>
+      <p class="section__subtitle">Artikelen 8 tot en met 13. De lijst van wat een product niet meer mag doen</p>
+    </div>
+  </div>
+
+  <p>
+    Artikel 8 stelt het kader vast. Elke aanbieder binnen het toepassingsgebied moet ontwerpen voor een hoog
+    niveau van privacy, veiligheid en beveiliging <strong>standaard</strong>, ongeacht of de gebruiker een account heeft, en mag
+    die standaardinstellingen pas loslaten nadat via leeftijdsborging is vastgesteld dat de persoon volwassen
+    is. Uitgelogde bezoekers krijgen de instellingen voor kinderen.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-infinity"></i> Artikel 9: verslavend ontwerp</div>
+    <p>Vier technieken worden bij wet geacht dwangmatig of overmatig gebruik aan te moedigen, zodat geen enkel argument over bedoeling mogelijk is:</p>
+    <ul style="margin-bottom:0.75rem;">
+      <li>Automatisch afspelen en ononderbroken consumptie zonder echte, regelmatige stoppunten waarop het kind kan beslissen om al dan niet verder te gaan</li>
+      <li>Het ondermijnen van de beslissing van het kind om te stoppen, met inbegrip van meldingen die niet zijn uitgelokt door iets wat het kind heeft gedaan</li>
+      <li>Het belonen van een kind voor het posten of uitzenden naar een massapubliek</li>
+      <li>Het stimuleren van betrokkenheid op regelmatige tijdstippen, met inbegrip van sancties of verloren voordelen wanneer men niet terugkeert, wat het reeksmechanisme is zonder het als zodanig te noemen</li>
+    </ul>
+    <p style="margin-bottom:0;">
+      Aanbieders moeten ook doeltreffende tijdslimieten en gebruiksonderbrekingen bieden die zijn afgestemd
+      op schooltijd en <strong>de kernslaapuren</strong>, die overweging 27 definieert als ten minste acht opeenvolgende
+      uren tussen 22.00 en 08.00 uur plaatselijke tijd. De overweging benadrukt ook dat deze instrumenten niet
+      gemakkelijk mogen kunnen worden omzeild, omdat kinderen ze in de praktijk vaak toch omzeilen.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shuffle-variant"></i> Artikel 10: aanbevelingssystemen</div>
+    <p>Voor minderjarigen moet de feed geoptimaliseerd zijn voor veiligheid, kwaliteit en geestelijke gezondheid in plaats van voor betrokkenheid:</p>
+    <ul style="margin-bottom:0.75rem;">
+      <li>Expliciete, door de gebruiker aangegeven voorkeuren krijgen voorrang en het meeste gewicht</li>
+      <li>Aanbevelingen op basis van impliciete betrokkenheidssignalen, zoals verblijftijd en doorklikgedrag, staan <strong>standaard uit</strong></li>
+      <li>Er mogen geen persoonsgegevens van buiten de dienst worden gebruikt om het systeem te voeden</li>
+      <li>Geen blootstelling aan inhoud die schadelijk is bij herhaalde blootstelling, wat het probleem van het konijnenhol en de filterbubbel omzet in een verplichting</li>
+    </ul>
+    <p style="margin-bottom:0;">
+      Kinderen moeten ook een duidelijk zichtbare reset krijgen die elke geleerde voorkeur wist, en ten
+      minste één feed-optie zonder enige profilering. Die optie moet worden aangeboden bij het aanmaken van
+      het account, moet vanuit de feed zelf bereikbaar blijven, en mag niet zodanig zijn ontworpen dat het
+      kind toch weer richting profilering wordt geduwd.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-toggle-switch-off-outline"></i> Artikel 11: veilige instellingen</div>
+    <p>Standaard uit voor minderjarigen: geolocatie en andere tracking; toegang tot microfoon en camera; aanbevelingen van andere accounts en synchronisatie van contacten; pushmeldingen, die in elk geval de slaap- en schooluren moeten beschermen.</p>
+    <p style="margin-bottom:0;">
+      Sommige zaken zijn niet enkel uitgeschakeld, ze zijn <strong>onbeschikbaar</strong>: functies die sociale
+      vergelijking vergroten, en filters die het beeld van een kind vervalsen door het onevenredig te
+      verfraaien of te idealiseren. Overweging 29 zorgt ervoor dat de onschuldige filters die van iemand een
+      dier maken, buiten schot blijven.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-cancel-outline"></i> Artikel 12: contact en zichtbaarheid</div>
+    <p style="margin-bottom:0;">
+      Niemand mag rechtstreeks contact opnemen met een kind dat dit niet vooraf heeft goedgekeurd, en de
+      aanbieder moet actief waken tegen het manipuleren van kinderen om die goedkeuring te geven. Kinderen
+      verschijnen niet in contactvoorstellen, kunnen niet zonder instemming aan een groep worden toegevoegd,
+      en kunnen iedereen blokkeren zonder dat hun identiteit wordt onthuld aan de geblokkeerde persoon. Hun
+      inhoud is alleen zichtbaar voor geaccepteerde contacten en nooit voor uitgelogde bezoekers, hun
+      contactgegevens worden nooit bekendgemaakt, anderen kunnen hun inhoud niet downloaden of een
+      schermafbeelding maken, en minderjarigen kunnen standaard geen livestreams hosten.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cart-outline"></i> Artikel 13: geld</div>
+    <p style="margin-bottom:0;">
+      Voordat een transactie plaatsvindt, moet het kind duidelijk en in real time worden meegedeeld dat het
+      om een transactie gaat. Aankopen met virtuele valuta moeten de werkelijke waarde tonen in de valuta van
+      het land van gewone verblijfplaats van het kind. Diensten mogen niet zodanig zijn ontworpen dat zij
+      leiden tot overmatige, impulsieve of ongewenste uitgaven, en minderjarigen mogen niet worden blootgesteld
+      aan systemen met variabele beloningen, wat loot boxes zijn, beschreven naar hun werkingsmechanisme.
+    </p>
+  </div>
+
+  <p>
+    Drie verdere verplichtingen sluiten het hoofdstuk af. <strong>Artikel 18</strong> vereist dat elk instrument, elke
+    waarschuwing en elke uitleg werkelijk begrijpelijk is voor een kind, en vereist dat zeer grote platforms
+    deze aanbieden in de officiële talen van de lidstaten die zij bedienen. <strong>Artikel 19</strong> vereist een
+    kindvriendelijke meldingsprocedure die met voorrang wordt behandeld, met bevestiging, termijnen en een
+    doorverwijzing naar nationale hulplijnen en centra voor veiliger internet. <strong>Artikel 21</strong> staat een
+    kind of voogd toe om een non-profitorganisatie te mandateren om namens hen op te treden, en voegt de
+    verordening toe aan de bijlage bij de richtlijn representatieve vorderingen, zodat collectief verhaal
+    mogelijk is.
+  </p>
+</section>
+
+<!-- 5. AI -->
+<section class="section" id="ai">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-robot-outline"></i></div>
+    <div>
+      <h2 class="section__title">AI-metgezellen en chatbots</h2>
+      <p class="section__subtitle">Artikel 14. Het werkelijk nieuwe deel</p>
+    </div>
+  </div>
+
+  <p>
+    Hier gaat de KIDS Act verder dan het codificeren van bestaande richtsnoeren. De AI-verordening verbiedt al
+    systemen die kwetsbaarheden op basis van leeftijd uitbuiten en vereist openbaarmaking dat men met een
+    machine spreekt, maar zegt niets specifieks over een chatbot die zich als vriend gedraagt. Artikel 14 doet
+    dat wel.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-heart-broken-outline"></i> Geen gefabriceerde gehechtheid</div>
+    <p style="margin-bottom:0;">
+      Aanbieders moeten ontwerpkenmerken en systeemgedrag vermijden die interpersoonlijke relaties
+      simuleren en die waarschijnlijk <strong>emotionele afhankelijkheid</strong> creëren, met inbegrip van gevallen waarin
+      die afhankelijkheid schade toebrengt aan de relaties van het kind met andere mensen of aan zijn
+      ontwikkeling. Het werkdocument is expliciet over het mechanisme dat het vreest: systemen die zijn
+      geoptimaliseerd om te behagen, in te stemmen en te weerspiegelen, wat bij een minderjarige onvolwassen
+      of risicovolle overtuigingen versterkt in plaats van ze uit te dagen.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-memory"></i> Standaard geen geheugen</div>
+    <p style="margin-bottom:0;">
+      Standaard mag het systeem geen informatie of analyse uit eerdere gesprekken van een kind meenemen
+      naar latere gesprekken, behalve wanneer dat noodzakelijk is om de veiligheid van het kind te beschermen.
+      De aangevoerde reden is tweeledig: voorkomen dat gevoelige gegevens over een minderjarige zich ophopen,
+      en voorkomen dat schadelijke interactiepatronen zich in de tijd versterken.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-test-tube"></i> Getest vóór lancering, gevolgd erna</div>
+    <p style="margin-bottom:0;">
+      State-of-the-art-evaluatie en -tests van risico's voor de gezondheid, veiligheid, grondrechten en
+      ontwikkeling van een minderjarige vóór het systeem op de markt wordt gebracht, plus monitoring na het
+      op de markt brengen, met inbegrip van reactie op ernstige incidenten nadien. Micro- en kleine
+      ondernemingen zijn alleen vrijgesteld van het onderdeel monitoring na het op de markt brengen.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-toggle-switch-outline"></i> Ingebouwd in iets anders</div>
+    <p style="margin-bottom:0;">
+      Wanneer een metgezel of chatbot verschijnt als functie binnen een sociaal netwerk, een videoplatform
+      of een spel, mag deze zichzelf niet inschakelen, niet prominent worden weergegeven, niet actief onder
+      de aandacht van minderjarigen worden gebracht, en moet op elk moment eenvoudig kunnen worden
+      uitgeschakeld. Overweging 34 noemt de specifieke truc die wordt beoogd: de AI bovenaan de contactlijst
+      van het kind plaatsen.
+    </p>
+  </div>
+
+  <p>
+    Kinderen onder de 13 jaar kunnen deze systemen alleen bereiken via ouderlijke instrumenten. Verslavend
+    ontwerp, veilige instellingen en transactietransparantie gelden ook hier, volgend uit de artikelen 9, 11
+    en 13. Handhaving verloopt via de AI-verordening in plaats van via de DSA, wat verklaart waarom de boete
+    van 6 procent van de omzet voor deze categorie expliciet is vastgelegd.
+  </p>
+</section>
+
+<!-- 6. Games and app stores -->
+<section class="section" id="games">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-gamepad-variant-outline"></i></div>
+    <div>
+      <h2 class="section__title">Spellen en app-winkels</h2>
+      <p class="section__subtitle">Artikelen 15 tot en met 17</p>
+    </div>
+  </div>
+
+  <p>
+    Spellen krijgen een aangepaste subset van de ontwerpregels: geen dwangmatige gebruiksmechanismen,
+    veilige standaardinstellingen, contactwaarborgen, en verplichte ouderlijke instrumenten waarbij toegang
+    onder de 13 jaar alleen daarlangs mogelijk is. Eén verplichting is specifiek voor het medium: een spel
+    mag niet worden gebruikt als opstap om een kind naar een andere, risicovollere dienst te lokken, wat in
+    de praktijk betekent dat doorverwijzingslinks worden beperkt en de speler wordt gewaarschuwd. Wanneer een
+    platform gebruikers toestaat om eigen spellen te bouwen en te publiceren, moet het platform die makers de
+    software en organisatorische middelen geven om te voldoen.
+  </p>
+
+  <p>
+    App-winkels dragen de poortwachtersplicht. Elke toepassing moet een leeftijdsclassificatie krijgen, de
+    methodologie, criteria en bronnen moeten worden gepubliceerd, en een minderjarige mag niets kunnen bereiken
+    of kopen dat boven de eigen leeftijd is geclassificeerd. Wanneer de winkel vaststelt dat een app
+    hoofdzakelijk bestaat uit inhoud die in een bepaalde lidstaat onder een hogere wettelijke leeftijd valt,
+    moet zij minderjarigen uit dat land blokkeren. Winkels moeten ook toestaan dat de EU-oplossing voor
+    leeftijdsverificatie binnen de winkel wordt aangeboden.
+  </p>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-handshake-outline"></i> PEGI, genoemd in een overweging</div>
+    <p style="margin-bottom:0;">
+      Artikel 17 verzoekt de Commissie om binnen een jaar na toepassing een gedragscode op Unieniveau voor
+      leeftijdsclassificatie te faciliteren, die de wederzijdse erkenning tussen lidstaten dekt, criteria voor
+      gewelddadige, seksuele, kansspel- en zelfbeschadigende inhoud, in-appaankopen, contactrisico's en
+      verslavend ontwerp, plus een onafhankelijke beroepsprocedure voor ontwikkelaars. Overweging 39 noemt het
+      pan-Europese PEGI-systeem als een referentiepunt dat de basis van een dergelijke code zou kunnen vormen,
+      mits het het beschermingsniveau bereikt dat de verordening vereist. Naleving van een adequate code kan
+      als bewijs dienen voor de op maatregelen gebaseerde verplichtingen, maar nooit voor de verboden.
+    </p>
+  </div>
+</section>
+
+<!-- 7. Age assurance -->
+<section class="section" id="age-assurance">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-shield-key-outline"></i></div>
+    <div>
+      <h2 class="section__title">Leeftijd bewijzen zonder te onthullen wie u bent</h2>
+      <p class="section__subtitle">Hoofdstuk V, artikelen 27 tot en met 32</p>
+    </div>
+  </div>
+
+  <p>
+    Alles hierboven hangt af van bij benadering weten hoe oud de gebruiker is, en dat is het onderdeel dat
+    het meest waarschijnlijk zal bepalen of deze verordening de geschiedenis ingaat als een maatregel ter
+    bescherming van kinderen of als een identiteitsverplichting. Het voorstel is gebouwd om die kritiek te
+    doorstaan.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 27</div>
+      <div class="article-card__title">Zeven cumulatieve criteria</div>
+      <div class="article-card__desc">Nauwkeurigheid, betrouwbaarheid, veiligheid, robuustheid, niet-indringendheid, privacy en gegevensbescherming, en non-discriminatie. Als er één niet wordt gehaald, voldoet de oplossing niet.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 27</div>
+      <div class="article-card__title">Zelfverklaring is dood</div>
+      <div class="article-card__desc">Het aanvinken van een geboortedatumvakje is uitdrukkelijk uitgesloten van de definitie van leeftijdsborging. De OESO stelde vast dat slechts 2 van de 50 onderzochte diensten systematisch de leeftijd controleren bij aanmelding.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 28</div>
+      <div class="article-card__title">Zero-knowledge-bewijs, verplicht</div>
+      <div class="article-card__desc">De controle mag niemand identificeren, lokaliseren, volgen, targeten, benaderen met reclame of profileren. Geen combinatie met andere gegevens. Het doorgegeven antwoord is boven of onder de drempel, niets meer.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 29</div>
+      <div class="article-card__title">Twee controleniveaus</div>
+      <div class="article-card__desc">Voor de leeftijdsgrens zelf alleen een gecertificeerde EU-oplossing voor leeftijdsverificatie van een onafhankelijke derde partij. Voor veilig door ontwerp zijn goedkopere methoden zoals leeftijdsschatting toegestaan als deze voldoen aan de artikelen 27 en 28.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 31</div>
+      <div class="article-card__title">Wat lidstaten moeten opbouwen</div>
+      <div class="article-card__desc">Ten minste één gratis EU-oplossing voor leeftijdsverificatie, verschillende routes naar een attestatie van leeftijdsbewijs, en ten minste één privacyvriendelijke manier voor een voogd om ouderlijke verantwoordelijkheid te bewijzen, kosteloos en afkomstig uit authentieke nationale bronnen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 31</div>
+      <div class="article-card__title">Niemand wordt uitgesloten</div>
+      <div class="article-card__desc">De toegang moet doeltreffend zijn voor mensen met een beperking, mensen met beperkte digitale vaardigheden, en gezinnen wier situatie niet in gewone registers van de burgerlijke stand is vastgelegd, met uitdrukkelijke inbegrip van vluchtelingen- en ontheemde gezinnen en voogden van niet-begeleide minderjarigen.</div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    Elke methode die wordt gebruikt om de leeftijd te controleren, moet de hoogste normen voor privacy en
+    gegevensbescherming naleven en mag niet leiden tot de verwerking van identiteitsdocumenten en biometrische
+    gegevens met het oog op leeftijdsschatting.
+    <cite>Fegert en Melchior, covoorzitters van het speciale panel voor onlineveiligheid van kinderen, geciteerd in het werkdocument van de diensten van de Commissie</cite>
+  </div>
+
+  <p>
+    De architectuur rust op de Europese portemonnee voor digitale identiteit. Een portemonnee die is
+    gecertificeerd onder het eIDAS-kader en voldoet aan de EU-regeling voor leeftijdsverificatie, geldt ook
+    als gecertificeerd voor deze verordening, en de Commissie houdt twee openbare, machinaal leesbare lijsten
+    bij, één van goedgekeurde aanbieders van attestaties en één van goedgekeurde verificatieoplossingen. Een
+    oplossing die door één lidstaat is opgenomen, moet door alle lidstaten worden erkend.
+  </p>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-alert-outline"></i> De les die de Commissie trok uit Australië</div>
+    <p style="margin-bottom:0;">
+      De Australische wet, van kracht sinds december 2025, vereist alleen redelijke stappen om te
+      voorkomen dat jongeren onder de 16 jaar hun account behouden. Het werkdocument meldt dat de meeste
+      minderjarigen die een account hadden, dat nog steeds hebben, en de reden die wordt gegeven is bot:
+      <strong>aan de meesten van hen werd nooit gevraagd hun leeftijd te bewijzen</strong>. Vandaar de Europese keuze
+      om de controle <em>vóór</em> het aanmaken van het account te vereisen in plaats van nadat een vermoeden is
+      gerezen.
+    </p>
+  </div>
+</section>
+
+<!-- Inline image: parents -->
+<figure class="inline-image reveal">
+  <img
+    src="https://images.pexels.com/photos/27177479/pexels-photo-27177479.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
+    alt="Een ouder en een kind kijken thuis samen naar een smartphonescherm"
+    loading="lazy">
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@helenalopes" target="_blank" rel="noopener">Helena Lopes</a>
+    via <a href="https://www.pexels.com/photo/27177479/" target="_blank" rel="noopener">Pexels</a>
+    | De verordening geeft voogden instrumenten, maar zorgt er zorgvuldig voor dat de verplichting nooit
+    op hen wordt afgewenteld
+  </figcaption>
+</figure>
+
+<!-- 8. Parents -->
+<section class="section" id="parents">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-account-supervisor-outline"></i></div>
+    <div>
+      <h2 class="section__title">Wat ouders krijgen, en wat er niet van hen wordt gevraagd</h2>
+      <p class="section__subtitle">Artikelen 20, 26 en 31</p>
+    </div>
+  </div>
+
+  <p>
+    Artikel 20 vereist dat elke dienst binnen het toepassingsgebied ouderlijke instrumenten biedt die
+    doeltreffend, toegankelijk, gemakkelijk te activeren zijn en, belangrijk, <strong>niet eenvoudig kunnen worden
+    omzeild of ondermijnd door het ontwerp van de dienst zelf</strong>.
+    Het wijzigen van een instelling moet hetzelfde niveau van autorisatie vereisen als het voor het eerst
+    inschakelen van het instrument, waardoor het achterdeurtje wordt gesloten waarlangs een kind het toezicht
+    stilletjes zou kunnen uitschakelen.
+  </p>
+
+  <p>De minimale set functies:</p>
+  <ul>
+    <li>Schermtijdlimieten, werkend via hetzelfde mechanisme als de tijdsbeheerverplichting van artikel 9</li>
+    <li>Zicht op en beheer van de accounts waarmee het kind communiceert</li>
+    <li>Beheer van privacy-, contact-, zichtbaarheids-, meldings-, geolocatie- en camera-instellingen</li>
+    <li>Melden van schadelijke inhoud, accounts, groepen of gedrag namens het kind</li>
+  </ul>
+
+  <p>
+    Overweging 43 stelt verdere functies voor, zoals een voogd waarschuwen bij herhaalde zoekopdrachten
+    over zelfmoord, zelfbeschadiging of eetstoornissen, of bij een nieuw contact dat volwassen is. Bij
+    accounts voor 13- en 14-jarigen staan deze instrumenten permanent aan. Voor zeer grote platforms moeten
+    zij interoperabel zijn met ouderlijke controle-instrumenten van derden onder de voorwaarden van artikel 6
+    van de digitalemarktenverordening.
+  </p>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-scale-unbalanced"></i> Twee waarborgen die tegengesteld werken</div>
+    <p style="margin-bottom:0.6rem;">
+      <strong>Richting het kind.</strong> Minderjarigen moeten worden geïnformeerd wanneer een ouderlijk instrument
+      actief is, en krijgen een duidelijke realtime-indicatie wanneer er toezicht plaatsvindt. Instrumenten
+      moeten de privacy en groeiende autonomie van het kind respecteren en mogen zijn rechten niet
+      onevenredig beperken.
+    </p>
+    <p style="margin-bottom:0;">
+      <strong>Weg van de ouder.</strong> Overweging 43 stelt dat, omdat ouderlijk toezicht niet altijd mogelijk is en
+      voogden afwezig of niet betrokken kunnen zijn, <strong>naleving niet mag afhangen van voogden</strong>.
+      Deze instrumenten vormen een aanvulling op de eigen verplichting van de aanbieder. Zij vervangen deze
+      nooit.
+    </p>
+  </div>
+
+  <p>
+    Het bewijzen van ouderlijke verantwoordelijkheid wordt geregeld in artikel 26. Een aanbieder mag
+    gebruikmaken van signalen uit vrij toegankelijke officiële databanken, signalen die al beschikbaar zijn
+    uit eerdere contacten met het gezin, of, ten minste totdat de Commissie de relevante gedelegeerde
+    handeling heeft vastgesteld, een zelfverklaring die de aanbieder redelijke inspanningen moet leveren om te
+    controleren. Dit alles moet privacyvriendelijk zijn, zonder aanvullende verwerking waarmee iemand de
+    volwassene of het kind zou kunnen lokaliseren, volgen, targeten of profileren.
+  </p>
+</section>
+
+<!-- 9. Enforcement -->
+<section class="section" id="enforcement">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-gavel"></i></div>
+    <div>
+      <h2 class="section__title">Handhaving, en wie ervoor betaalt</h2>
+      <p class="section__subtitle">Artikel 5 en hoofdstuk VII</p>
+    </div>
+  </div>
+
+  <p>
+    Er wordt geen nieuw agentschap opgericht. Het toezicht steunt op de digitaledienstenverordening voor
+    platforms, winkels en gamingplatforms, en op de AI-verordening voor metgezellen en chatbots. De Commissie
+    behoudt exclusieve bevoegdheid over zeer grote onlineplatforms, nationale coördinatoren voor digitale
+    diensten behandelen de rest, en voor een videospel dat geen platform is, is de bevoegde autoriteit die van
+    de hoofdvestiging van de aanbieder, met exclusieve bevoegdheden.
+  </p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clipboard-check-outline"></i> De omgekeerde bewijslast: artikel 5</div>
+    <p style="margin-bottom:0.6rem;">
+      Het speciale panel vroeg om de bewijslast bij de aanbieders te leggen. Dit is het antwoord van de
+      Commissie. Een zeer groot onlineplatform moet een <strong>nalevingsplan</strong> indienen bij de Commissie,
+      binnen vier maanden na aanwijzing of binnen 30 dagen nadat de verordening van toepassing wordt als het
+      platform al is aangewezen, met een gedetailleerde beschrijving van de wijze waarop het aan elke
+      verplichting van de hoofdstukken II tot en met V voldoet.
+    </p>
+    <p style="margin-bottom:0.6rem;">
+      Dat plan moet worden geauditeerd, <strong>op kosten van de aanbieder zelf</strong>, door onafhankelijke
+      auditors die aantoonbare deskundigheid hebben, of experts in dienst hebben of inschakelen, op zes
+      genoemde terreinen: kinderbescherming en -rechten, kindergeneeskunde en kinderpsychiatrie,
+      ontwikkelingswetenschap, leeftijdsborging, interface- en aanbevelingsontwerp, en gegevensbescherming en
+      beveiliging. De auditor stuurt een ontwerp, de aanbieder heeft 15 dagen om te reageren, en het
+      eindverslag gaat binnen twee maanden gelijktijdig naar de Commissie en de aanbieder. Een samenvatting
+      moet worden gepubliceerd.
+    </p>
+    <p style="margin-bottom:0;">
+      Als de Commissie besluit dat het plan tekortkomingen vertoont, heeft de aanbieder 30 dagen om
+      corrigerende maatregelen op te stellen en niet meer dan 60 dagen om elk daarvan uit te voeren. Van
+      cruciaal belang is dat artikel 5, lid 8, bepaalt dat noch het verslag van de auditor, noch het stilzwijgen
+      van de Commissie een vaststelling van naleving vormt. Het plan is een ondergrens, geen schild.
+    </p>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Mechanisme</th><th>Detail</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">Versnelde procedure</td><td>Voorlopige bevindingen binnen 30 werkdagen na de opening van de procedure, definitief besluit beoogd binnen 90 werkdagen (artikel 35)</td></tr>
+      <tr><td class="highlight-cell">Boetes, AI-systemen</td><td>Tot 6 procent van de totale wereldwijde jaaromzet krachtens artikel 99 van de AI-verordening</td></tr>
+      <tr><td class="highlight-cell">Boetes, platforms</td><td>Via hoofdstuk IV van de digitaledienstenverordening, met nationale sanctieregelingen voor spellen die geen platform zijn</td></tr>
+      <tr><td class="highlight-cell">Gegevensbescherming</td><td>AVG-toezichthouders blijven bevoegd voor de verwerking, met boetes tot het plafond van artikel 83, lid 5</td></tr>
+      <tr><td class="highlight-cell">Toezichtsvergoeding</td><td>Een jaarlijkse opslag op de DSA-vergoeding, per dienst, met een maximum van 0,03 procent van de wereldwijde netto jaaromzet van een aanbieder (artikel 36)</td></tr>
+      <tr><td class="highlight-cell">Middelen van de Commissie</td><td>85 voltijdequivalenten, waarvan 45 heringezet en 40 nieuw</td></tr>
+      <tr><td class="highlight-cell">Incidentrespons</td><td>Een coördinatiemechanisme voor snel evoluerende schade, zoals virale gevaarlijke uitdagingen, als aanvulling op de crisisinstrumenten van de DSA (artikel 38)</td></tr>
+      <tr><td class="highlight-cell">Comitologie</td><td>Een nieuw Comité voor de veiligheid van kinderen (artikel 40); gedelegeerde bevoegdheden voor vijf jaar, stilzwijgend verlengbaar (artikel 39)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-cash-clock"></i> Een financieringstekort dat de Commissie schriftelijk erkent</div>
+    <p style="margin-bottom:0;">
+      De financiële toelichting erkent een onvermijdelijke kloof tussen de behoefte aan personeel vanaf dag
+      één en de inning van de vergoeding die hen betaalt, die pas na de inwerkingtreding binnenkomt. Zij
+      noemt dit een kritiek risico voor een correcte uitvoering en wijst herinzet als de mitigerende maatregel
+      aan. De bestaande DSA-toezichtsvergoeding heeft sinds 2024 jaarlijks tussen EUR 40 en 60 miljoen
+      opgebracht.
+    </p>
+  </div>
+</section>
+
+<!-- 10. Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <div>
+      <h2 class="section__title">Data die ertoe doen</h2>
+      <p class="section__subtitle">Hoe het hier kwam, en wat er gebeurt als het wordt aangenomen</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">September 2025</div>
+      <div class="timeline__text">In haar toespraak over de Staat van de Unie kondigt Commissievoorzitter Ursula von der Leyen een panel van specialisten aan om te adviseren over onlineveiligheid van kinderen.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Oktober 2025</div>
+      <div class="timeline__text">Vijfentwintig lidstaten ondertekenen de Verklaring van Jutland, met een oproep tot leeftijdsverificatie en een veiliger online omgeving. De Europese Raad komt terug op het thema, met inbegrip van een digitale meerderjarigheid.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">November 2025</div>
+      <div class="timeline__text">Het Europees Parlement neemt een resolutie aan met een oproep tot een geharmoniseerde digitale leeftijdsgrens van 16 jaar, met 13 jaar als ondergrens waarbij een voogd toegang toestaat.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Eerste helft van 2026</div>
+      <div class="timeline__text">Het speciale panel komt bijeen. Meer dan 60 specialisten in gezondheid, kinderpsychiatrie, computerwetenschap en sociale wetenschap, plus vertegenwoordigers van jongeren, ouders en kinderrechten.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Juli 2026</div>
+      <div class="timeline__text">Covoorzitters professor Jörg M. Fegert en dokter Maria Melchior presenteren hun verslag. Onder de aanbevelingen: een EU-brede toegangsbeperking onder de 13 jaar, geharmoniseerd veilig door ontwerp, en privacyvriendelijke leeftijdsborging.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Doorheen 2025 en 2026</div>
+      <div class="timeline__text">Frankrijk, Italië, Griekenland, Oostenrijk, Noorwegen, Polen en België melden ontwerpen van nationale leeftijdswetten. De eigen wet van Frankrijk, aangenomen in juli 2026, wordt door de Grondwettelijke Raad nietig verklaard. Griekenland en Oostenrijk verwachten hun wet in januari 2027 in werking te laten treden.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">17 september 2026</div>
+      <div class="timeline__text">De Commissie neemt het voorstel aan, samen met de mededeling over een EU-aanpak van onlineveiligheid van kinderen en het werkdocument. De gewone wetgevingsprocedure begint. Er is nog geen leidende commissie of rapporteur aangewezen.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Bij aanneming</div>
+      <div class="timeline__text">Inwerkingtreding op de twintigste dag na bekendmaking in het Publicatieblad. Artikel 5, de verplichting tot een nalevingsplan, geldt onmiddellijk.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Plus zes maanden</div>
+      <div class="timeline__text">De verordening wordt van toepassing. De klok begint te lopen voor de termijn van zes maanden om bestaande accounts te controleren.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Plus twaalf maanden</div>
+      <div class="timeline__text">Artikel 33 over nationale ondersteuningsstrategieën en artikel 35 over de versnelde procedure zijn van toepassing. Lidstaten moeten hun strategieën aan de Commissie hebben meegedeeld.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Uiterlijk 31 augustus 2030</div>
+      <div class="timeline__text">De Commissie evalueert de verordening, waarbij specifiek wordt gekeken of de toegangsvertraging heeft gewerkt, of het persoonlijke toepassingsgebied juist was, en wat het effect was op de vrijheid van meningsuiting. Vervolgens om de vier jaar een verslag.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. The number -->
+<section class="section" id="the-number">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-scale-balance"></i></div>
+    <div>
+      <h2 class="section__title">Dertien, vijftien of zestien</h2>
+      <p class="section__subtitle">Het argument dat het dossier zal bepalen</p>
+    </div>
+  </div>
+
+  <p>
+    Drie instellingen deden het werk en kwamen tot drie verschillende getallen. Dat is de hele onderhandeling
+    in één zin.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Wie</th><th>Wanneer</th><th>Getal</th><th>Redenering</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Covoorzitters speciaal panel</td>
+        <td>Juli 2026</td>
+        <td><span class="pill pill--amber">Onder de 13</span></td>
+        <td>Een ontwikkelingsgerichte benadering. Onderzoek toont aan dat kinderen onder de 13 jaar bijzonder kwetsbaar zijn.</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Europese Commissie</td>
+        <td>September 2026</td>
+        <td><span class="pill pill--blue">15</span></td>
+        <td>Adolescenten tussen 13 en 15 jaar bevinden zich op het hoogtepunt van ontwikkelingsgerichte kwetsbaarheid: nog bezig met het vormen van cognitieve controle, sterk gevoelig voor sociale beoordeling, en buiten het bereik van doeltreffend toezicht door volwassenen.</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Europees Parlement</td>
+        <td>November 2025</td>
+        <td><span class="pill pill--red">16</span></td>
+        <td>Een hogere voorzorgsdrempel, met 13 jaar als absolute ondergrens waarbij een voogd toegang toestaat.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    De Commissie ging <em>boven</em> haar eigen deskundigenpanel en <em>onder</em> het Parlement. Het werkdocument
+    legt uit waarom: tot 15 jaar zijn adolescenten in overgang naar autonomie, wordt toezicht door
+    verzorgers en opvoeders steeds minder doeltreffend, en wordt het risico steeds meer bepaald door de
+    sociale architectuur van de dienst dan door het eigen gedrag van het kind.
+  </p>
+
+  <div class="alert-box">
+    <div class="box__title"><i class="mdi mdi-lock-outline"></i> De stillere strijd: volledige harmonisatie</div>
+    <p style="margin-bottom:0;">
+      Aanbeveling 7 van het speciale panel was dat lidstaten vrij zouden moeten zijn om vanaf 13 jaar hun
+      eigen voorzorgsbeperkingen toe te voegen. De Commissie <strong>wees dit af</strong>. Het werkdocument zegt het
+      met zoveel woorden: de voorgestelde verordening biedt lidstaten geen ruimte om aanvullende beperkingen
+      in te voeren, omdat volledige harmonisatie juridische zekerheid, lagere nalevingskosten en een gelijk
+      beschermingsniveau oplevert. Hoofdsteden die al wetgeving hebben aangenomen, of daarmee bezig zijn,
+      zullen merken dat dit plafond ook een ondergrens is waarboven zij niet mogen bouwen.
+    </p>
+  </div>
+</section>
+
+<!-- 12. Cost -->
+<section class="section" id="cost">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-cash-multiple"></i></div>
+    <div>
+      <h2 class="section__title">Wat het gaat kosten</h2>
+      <p class="section__subtitle">De cijfers van het werkdocument, en hun beperkingen</p>
+    </div>
+  </div>
+
+  <p>
+    Er is geen formele effectbeoordeling. Het werkdocument is een analyse van effecten die leunt op de
+    beoordelingen die zijn gemaakt voor de DSA, de DMA, de AI-verordening en andere, plus een extern onderzoek
+    naar leeftijdsborging waarvan de resultaten pas in het vierde kwartaal van 2026 worden verwacht. Dat is de
+    moeite waard om ronduit te vermelden, want het is een voor de hand liggend aanvalspunt voor het Parlement
+    en voor de Raad voor regelgevingstoetsing.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Wat</th><th>Schatting</th><th>Bron</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Per leeftijdscontrole, Australië</td><td>EUR 0,39</td><td>Schatting van de Australische overheid</td></tr>
+      <tr><td>Per leeftijdscontrole, mediaan</td><td>EUR 0,07</td><td>Bevindingen van Ofcom over de uitvoering, 2026</td></tr>
+      <tr><td>Integratie van een oplossing van een derde partij, kleinere diensten</td><td>Enkele honderden tot laagduizenden euro's</td><td>Extern onderzoek, bewijsbasis omschreven als beperkt</td></tr>
+      <tr><td>Australische toezichthouder, vier jaar</td><td>Ongeveer EUR 47 miljoen</td><td>Australische overheid</td></tr>
+      <tr><td>Britse Online Safety Act, toezichthouder</td><td>Ongeveer EUR 73 miljoen per jaar</td><td>Britse effectbeoordeling</td></tr>
+      <tr><td>Extra nationaal toezicht, Oostenrijk</td><td>0,5 voltijdequivalent, ongeveer EUR 60.000</td><td>Schatting Oostenrijks wetsontwerp</td></tr>
+      <tr><td>Harmonisatiewinst, naar analogie van de DSA</td><td>EUR 8,6 tot 15,5 miljard aan grensoverschrijdende omzet</td><td>Effectbeoordeling DSA</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Het centrale argument van de Commissie over kosten is vergelijkend, niet absoluut: zonder deze
+    verordening zouden aanbieders tot 27 verschillende regimes tegenkomen, met verschillende leeftijden,
+    toepassingsgebieden, regels voor ouderlijke toestemming en technische vereisten. Zij verwacht ook dat de
+    EU-oplossing voor leeftijdsverificatie, omdat zij publiek gefinancierd en opensource is, uiteindelijk de
+    goedkoopste route zal blijken, aangezien de ontwikkelingskosten niet per controle hoeven te worden
+    terugverdiend.
+  </p>
+
+  <p>
+    De tekst bevat twee eerlijke erkenningen. Kleine en micro-ondernemingen zullen de relatieve last sterker
+    voelen, ook waar de absolute kosten lager zijn, omdat zij minder juridische en technische capaciteit
+    hebben. En ongeveer 80 procent van de Europese videogamebedrijven zijn kleine of micro-ondernemingen, wat
+    verklaart waarom de gamesector waarschijnlijk de luidste stem in de kamer zal zijn.
+  </p>
+</section>
+
+<!-- 13. Evidence -->
+<section class="section" id="evidence">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-chart-line"></i></div>
+    <div>
+      <h2 class="section__title">Het bewijs erachter</h2>
+      <p class="section__subtitle">Waar de cijfers van de Commissie vandaan komen</p>
+    </div>
+  </div>
+
+  <div class="figures">
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="48" data-suffix="%">48%</div>
+      <div class="figure-card__label">Van kinderen van 9 tot 16 jaar die zeggen zich online veilig te voelen</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="61" data-decimal="1" data-suffix="h">6.1h</div>
+      <div class="figure-card__label">Gemiddelde schermtijd in het weekend, 13- tot 18-jarigen</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="34" data-suffix="%">34%</div>
+      <div class="figure-card__label">Van 9- tot 11-jarigen die zeggen een profiel op sociale media te hebben</div>
+    </div>
+    <div class="figure-card">
+      <div class="figure-card__number" data-count="92" data-suffix="%">92%</div>
+      <div class="figure-card__label">Van Europeanen die de bescherming van kinderen online een topprioriteit noemen</div>
+    </div>
+  </div>
+
+  <p>
+    Het centrale instrument is een Eurobarometer-onderzoek uitgevoerd tussen maart en april 2026, onder meer
+    dan 26.000 personen van 13 tot 18 jaar en meer dan 12.000 ouders in alle 27 lidstaten. Het onderzoek vond
+    4,5 uur dagelijkse schermtijd op schooldagen en 6,1 uur in het weekend, waarbij 46 procent boven de zes
+    uur uitkwam en 14 procent boven de tien uur. Negen op de tien adolescenten waren in de voorgaande drie
+    maanden ten minste eenmaal met schadelijke of verontrustende inhoud in aanraking gekomen.
+  </p>
+
+  <p>
+    De publieke steun voor de maatregel is reëel maar niet overweldigend: 54 procent van de ouders en 45
+    procent van de 13- tot 18-jarigen denkt dat leeftijdsvertragingen doeltreffend zouden zijn, terwijl 47
+    procent van de ouders en 48 procent van de adolescenten liever zou zien dat de bestaande regels beter
+    worden gehandhaafd. Beide cijfers staan in de eigen tekst van de Commissie.
+  </p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Schadelijke inhoud</div>
+      <div class="article-card__title">73 procent in vier weken</div>
+      <div class="article-card__desc">Van 11- tot 17-jarigen die binnen een periode van vier weken aan ten minste één type schadelijke inhoud werden blootgesteld; 31 procent kwam met de ernstigste soort in aanraking.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Cyberpesten</div>
+      <div class="article-card__title">24 procent</div>
+      <div class="article-card__desc">Van kinderen van 12 tot 17 jaar meldde het te hebben ervaren; 39 procent was er getuige van; 50 procent kende iemand die er slachtoffer van werd. Ongeveer 75 procent beoordeelt de maatregelen van platforms als ondoeltreffend of slecht.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Grooming</div>
+      <div class="article-card__title">158 procent gestegen</div>
+      <div class="article-card__desc">Toename van het aantal meldingen over drie jaar, op basis van gegevens uit 2025 van het Amerikaanse National Centre for Missing and Exploited Children.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Waar het wordt gehost</div>
+      <div class="article-card__title">63 procent</div>
+      <div class="article-card__desc">Van de webpagina's met seksueel misbruik van kinderen die de Internet Watch Foundation in 2025 vond, werd gehost in lidstaten van de EU.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Dwangmatig gebruik</div>
+      <div class="article-card__title">Eén op de vier</div>
+      <div class="article-card__desc">Een EPRS-onderzoek in zes landen vond dat 78 procent van de 13- tot 17-jarigen hun toestel ten minste elk uur controleert, waarbij meer dan een kwart gedrag vertoont dat op verslaving lijkt.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Handhaving tot nu toe</div>
+      <div class="article-card__title">Tien procedures</div>
+      <div class="article-card__desc">Formele DSA-procedures over de bescherming van minderjarigen, met inbegrip van voorlopige bevindingen tegen TikTok en Meta over verslavend ontwerp, tegen Meta over kinderen onder de 13 jaar, en procedures tegen Snapchat over grooming en standaardinstellingen.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-magnify"></i> Wat het bewijs niet zegt</div>
+    <p style="margin-bottom:0;">
+      Het werkdocument is voorzichtiger dan het persmateriaal. Over de centrale causale vraag merkt het op
+      dat het verband tussen uitgestelde toegang en betere uitkomsten op 13-jarige leeftijd kan worden gelezen
+      als een samenhang eerder dan als definitief bewijs van een causaal leeftijdsspecifiek effect. Het
+      erkent ook dat de effecten niet uniform zijn, en variëren naar dienst, naar ontwerpkenmerk en naar
+      individuele omstandigheden, en dat actiever gebruik zoals posten en interactie eerder samenhangt met
+      een beter welzijn dan passief scrollen. Wie dit dossier citeert, moet ook dat voorbehoud citeren.
+    </p>
+  </div>
+</section>
+
+<!-- 14. Drafting slips -->
+<section class="section" id="slips">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-alert-circle-outline"></i></div>
+    <div>
+      <h2 class="section__title">Fouten in de gepubliceerde tekst</h2>
+      <p class="section__subtitle">Lees het artikel, niet de kruisverwijzing</p>
+    </div>
+  </div>
+
+  <p>
+    Het voorstel werd overhaast gepubliceerd en dat is te merken. Geen van deze punten verandert wat de
+    verordening doet, maar wie een amendement, een nalevingsmemo of een klantnota opstelt, moet weten welke
+    verwijzingen niet zomaar te vertrouwen zijn zoals gedrukt. Elk van deze staat in de tekst zoals
+    gepubliceerd op 17 september 2026.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Waar</th><th>Wat er staat</th><th>Wat het moet betekenen</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">Artikel 6, lid 1</td><td>De vijf risicovoorwaarden zijn gelabeld (d) tot (h)</td><td>(a) tot (e). Er zijn geen eerdere punten om op aan te sluiten</td></tr>
+      <tr><td class="highlight-cell">Artikelen 2, lid 5, 6, lid 6, 7, lid 6, 25, lid 1</td><td>Gedelegeerde handelingen vastgesteld overeenkomstig artikel 40</td><td>Artikel 39. Artikel 40 is de comitéprocedure</td></tr>
+      <tr><td class="highlight-cell">Artikel 36, lid 6</td><td>Gedelegeerde handelingen overeenkomstig artikel X</td><td>Een plaatshouder die nooit is ingevuld</td></tr>
+      <tr><td class="highlight-cell">Artikel 7, lid 5</td><td>Onverminderd het aanmaken van een account krachtens artikel 5, lid 2</td><td>Artikel 6, lid 2. Artikel 5 betreft het nalevingsplan</td></tr>
+      <tr><td class="highlight-cell">Artikel 8, lid 1</td><td>Accounts gespecificeerd in artikel 5, lid 3, en artikel 6, lid 3</td><td>De routes voor voogdaccounts in de artikelen 6 en 7</td></tr>
+      <tr><td class="highlight-cell">Artikel 38, lid 1</td><td>Bevoegde autoriteiten krachtens artikel 33</td><td>Artikel 34. Artikel 33 betreft nationale ondersteuningsmaatregelen</td></tr>
+      <tr><td class="highlight-cell">Overweging 44</td><td>Bevoegde autoriteit bepaald overeenkomstig artikel 27</td><td>Artikel 34</td></tr>
+      <tr><td class="highlight-cell">Conclusie werkdocument</td><td>Een geharmoniseerde toegangsvertraging van 15 jaar voor sociale netwerken, videodeling en AI-metgezellen</td><td>Artikel 6 heeft alleen betrekking op sociale netwerken en videodeling. AI-metgezellen dragen ontwerpverplichtingen, niet de leeftijdsgrens</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <div class="box__title"><i class="mdi mdi-bullhorn-outline"></i> Eén verschil dat geen tikfout is</div>
+    <p style="margin-bottom:0;">
+      Zowel de mededeling als het vraag- en antwoorddocument leiden in met de zin dat de wet <em>accounts op
+      sociale media onder de 13 jaar verbiedt</em>. De wettekst doet iets sterkers: artikel 6, lid 1, is een
+      absoluut verbod onder <strong>15</strong>, met een derogatie tot 13 jaar die een voogd kan kiezen te gebruiken. Beide
+      uitspraken zijn verdedigbaar, maar het communicatieteam leidde in met het kleinere getal.
+    </p>
+  </div>
+</section>
+
+<!-- 15. Documents -->
+<section class="section" id="documents">
+  <div class="section__header">
+    <div class="section__icon"><i class="mdi mdi-file-document-outline"></i></div>
+    <div>
+      <h2 class="section__title">De documenten</h2>
+      <p class="section__subtitle">Primaire bronnen, allemaal gepubliceerd op 17 september 2026</p>
+    </div>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">COM(2026) 681 final</div>
+      <div class="article-card__title">Het voorstel</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52026PC0681" target="_blank" rel="noopener">Verordening, 43 artikelen verdeeld over negen hoofdstukken, procedure 2026/0286(COD)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">COM(2026) 680 final</div>
+      <div class="article-card__title">De mededeling</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/en/TXT/?uri=COM%3A2026%3A680%3AFIN" target="_blank" rel="noopener">Een EU-aanpak van onlineveiligheid van kinderen, met inbegrip van de aanvullende maatregelen</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">SWD(2026) 681 final</div>
+      <div class="article-card__title">Analyse van effecten</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52026SC0681" target="_blank" rel="noopener">Probleemdefinitie, grondrechten en economische effecten, 385 voetnoten</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Commissie</div>
+      <div class="article-card__title">Officiële vraag- en antwoorddocumentatie</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/faqs/kids-act-explained" target="_blank" rel="noopener">De KIDS Act uitgelegd, in de eigen framing van de Commissie</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Juli 2026</div>
+      <div class="article-card__title">Verslag speciaal panel</div>
+      <div class="article-card__desc"><a href="https://commission.europa.eu/document/download/d833504d-5ec3-4fac-945f-38e7d0bd5326_en?filename=Special-panel-report.pdf" target="_blank" rel="noopener">Child safety online: protecting and empowering minors in a digital world</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Juli 2025</div>
+      <div class="article-card__title">DSA-richtsnoeren artikel 28</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-protection-minors" target="_blank" rel="noopener">De niet-bindende tekst die deze verordening in wet omzet</a></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- CTA strip -->
+<div class="container" style="padding-top:0;">
+  <div class="cta-strip" style="background-image:
+    linear-gradient(135deg, rgba(155,81,224,0.88) 0%, rgba(6,147,227,0.85) 100%),
+    url('https://images.pexels.com/photos/8060005/pexels-photo-8060005.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');">
+    <h2 class="cta-strip__title">Volg dit dossier van eerste lezing tot het Publicatieblad</h2>
+    <p class="cta-strip__sub">Brubru volgt elk commissiedocument, elk amendement en elke stemming. Gratis proefperiode van 14 dagen, geen kaart nodig.</p>
+    <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start gratis proefperiode</a>
+  </div>
+</div>
+
+<!-- Post-matter -->
+<div class="pm">
+  <p>
+    <a href="https://brubru.beresol.eu">Brubru</a> door <a href="https://beresol.eu">Beresol</a> |
+    <a href="https://beresol.eu/public-affairs">Beresol Open Reports</a> |
+    <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+  <p style="margin-top: 0.5rem;">Analyse gebaseerd op officiële EU-institutionele bronnen, volledig gelezen. Gepubliceerd september 2026.</p>
+  <p style="margin-top: 0.35rem;">
+    Beeldcredits: hero-foto door <a href="https://www.pexels.com/photo/5999680/" target="_blank" rel="noopener">cottonbro studio via Pexels</a> (foto-ID 5999680) |
+    foto op de pagina door <a href="https://www.pexels.com/photo/27177479/" target="_blank" rel="noopener">Helena Lopes via Pexels</a> (foto-ID 27177479) |
+    CTA-foto door <a href="https://www.pexels.com/photo/8060005/" target="_blank" rel="noopener">Windo Nugroho via Pexels</a> (foto-ID 8060005).
+  </p>
+</div>
+
+<footer class="footer  "><div class="footer__container"><div class="footer__content"><div class="footer__section footer__section--brand"><div class="footer__brand"><img alt="Beresol BV" class="footer__logo" src="/assets/beresol-logo.png"><div class="footer__brand-info"><p class="footer__copyright">&copy; 2026 <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV</p><p class="footer__trademark">Brubru's trademark belongs to <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV and is registered at EUIPO</p></div></div></div><div class="footer__section footer__section--nav"><h4 class="footer__nav-title">Links</h4><nav class="footer__nav"><a class="footer__link" href="/about" data-discover="true">About</a><a href="mailto:hello@beresol.eu" class="footer__link">Contact</a><a class="footer__link" href="/privacy" data-discover="true">Privacy Policy</a><a class="footer__link" href="/terms" data-discover="true">Terms of Service</a><a class="footer__link" href="/cookies" data-discover="true">Cookies</a><a class="footer__link" href="/subprocessors" data-discover="true">Subprocessors</a><a href="https://www.instagram.com/beresolbv/" target="_blank" rel="noopener noreferrer" aria-label="Beresol on Instagram" class="footer__link footer__link--social"><svg viewBox="0 0 24 24" role="presentation" style="width: 1.275rem; height: 1.275rem;"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" style="fill: currentcolor;"></path></svg><span class="footer__link-label">Instagram</span></a></nav></div></div></div></footer>
+
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="backToTop" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+  <i class="mdi mdi-chevron-up"></i>
+</a>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Scroll reveal. Every section and every stair gets it, but nothing
+     depends on it: the elements are visible with JS off because `.reveal` is
+     only applied by this script. ---- */
+  var targets = document.querySelectorAll('.section, .figures, .toc, .hero-image, .inline-image, .stair, .cta-strip');
+  if (reduce || !('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(targets, function (el) { el.classList.add('is-visible'); });
+  } else {
+    Array.prototype.forEach.call(targets, function (el) {
+      if (!el.classList.contains('stair')) el.classList.add('reveal');
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+  }
+
+  /* ---- Count-up on the figure cards. The final value is already in the HTML,
+     so a reader with JS off or reduced motion on sees the real number. ---- */
+  function countUp(el) {
+    var end = parseFloat(el.getAttribute('data-count'));
+    if (isNaN(end)) return;
+    var dec = parseInt(el.getAttribute('data-decimal') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var start = null, dur = 1100;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var v = end * eased;
+      el.textContent = (dec ? (v / Math.pow(10, dec)).toFixed(dec) : Math.round(v)) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  var nums = document.querySelectorAll('.figure-card__number[data-count]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io2 = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { countUp(e.target); io2.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    Array.prototype.forEach.call(nums, function (el) { io2.observe(el); });
+  }
+})();
+</script>
+
+<script>
+  window.addEventListener('scroll', function() {
+    document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+  });
+</script>
+
+<script>
+/* brubru:mobile-fix-2026-09-22 -- additive: toggles its own class only, so it composes with whatever
+   scroll handler this page already has controlling `display`. */
+(function () {
+  var btt = document.querySelector('.back-to-top');
+  if (!btt) return;
+  var last = window.scrollY, ticking = false;
+  function update() {
+    var y = window.scrollY;
+    if (y > last + 4) btt.classList.add('btt--away');        // scrolling down
+    else if (y < last - 4) btt.classList.remove('btt--away'); // scrolling up
+    last = y;
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
