@@ -8,6 +8,7 @@ find_stale() returns sources whose last success is older than their threshold
 """
 
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
@@ -17,6 +18,15 @@ from sqlalchemy.orm import Session
 from services.sync.source_registry import MEUB_SOURCES, get_source
 
 logger = logging.getLogger(__name__)
+
+
+def current_runner() -> str:
+    """Where this process runs. sync_runs is shared, so a laptop run used to be
+    indistinguishable from a container run and could set the production health
+    verdict (22 Sep 2026, migration 235)."""
+    return os.environ.get("BRUBRU_RUNNER") or (
+        "railway" if os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_SERVICE_NAME")
+        else "local")
 
 
 def record_run(
@@ -36,10 +46,10 @@ def record_run(
             text(
                 """
                 INSERT INTO sync_runs
-                    (source_key, tier, status, items_added, error, started_at, finished_at)
+                    (source_key, tier, status, items_added, error, started_at, finished_at, runner)
                 VALUES
                     (:source_key, :tier, :status, :items_added, :error,
-                     COALESCE(:started_at, now()), COALESCE(:finished_at, now()))
+                     COALESCE(:started_at, now()), COALESCE(:finished_at, now()), :runner)
                 """
             ),
             {
@@ -50,6 +60,7 @@ def record_run(
                 "error": (error or None) and str(error)[:2000],
                 "started_at": started_at,
                 "finished_at": finished_at,
+                "runner": current_runner(),
             },
         )
         db.commit()

@@ -13,7 +13,9 @@ Tested here:
   * the snapshot store for records that are not rows (MEPs, commissioners);
   * each of the six v2 endpoints: dates on every item, the filters narrowing to what
     the table says, page sizes up to 500;
-  * MEPs: sitting MEPs by default (719, not the 744 who have sat this term), former
+  * that a sync run records WHERE it ran, so a laptop cannot set the production
+    health verdict (migration 235);
+  * MEPs: sitting MEPs by default (718 today, not the 744 who have sat this term), former
     members with an updated_ window, name search accent-insensitive, and no per-MEP
     profile call when the snapshot has the record (the EP API rate-limits them).
 """
@@ -268,3 +270,29 @@ def test_mep_name_search_ignores_accents_and_case(client, fake_ep):
 
 def test_mep_dates_are_for_the_current_term_only(client, fake_ep):
     assert client.get(SIX["meps"], params={"term": 9, "updated_from": "2026-01-01"}).status_code == 422
+
+
+# --------------------------------------------------------------------------- where a run happened
+def test_a_run_records_where_it_happened(tx, monkeypatch):
+    """sync_runs is shared, so a laptop run used to be indistinguishable from a
+    container run and could set the production health verdict (migration 235)."""
+    from services.sync import freshness
+
+    monkeypatch.delenv("BRUBRU_RUNNER", raising=False)
+    monkeypatch.delenv("RAILWAY_ENVIRONMENT", raising=False)
+    monkeypatch.delenv("RAILWAY_SERVICE_NAME", raising=False)
+    assert freshness.current_runner() == "local"
+    monkeypatch.setenv("RAILWAY_ENVIRONMENT", "production")
+    assert freshness.current_runner() == "railway"
+    monkeypatch.setenv("BRUBRU_RUNNER", "somewhere-else")
+    assert freshness.current_runner() == "somewhere-else"
+
+
+def test_the_tier_verdict_ignores_local_runs(tx):
+    rows = tx.execute(text(
+        "SELECT count(*) FILTER (WHERE runner = 'local') AS local, count(*) AS all_rows "
+        "FROM sync_runs WHERE tier IS NOT NULL AND started_at > now() - interval '24 hours'")).one()
+    judged = tx.execute(text(
+        "SELECT count(*) FROM sync_runs WHERE tier IS NOT NULL AND started_at > now() - interval '24 hours' "
+        "AND runner IS DISTINCT FROM 'local'")).scalar()
+    assert judged == rows.all_rows - rows.local

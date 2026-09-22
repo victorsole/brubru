@@ -103,6 +103,9 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
                count(*) FILTER (WHERE started_at > now() - interval '24 hours') AS runs_24h
         FROM sync_runs
         WHERE tier IS NOT NULL
+          -- A run from a laptop is not this service's health. Rows written before
+          -- migration 235 have no runner and are counted as they always were.
+          AND runner IS DISTINCT FROM 'local'
         GROUP BY tier
         ORDER BY tier
     """)).mappings().all()
