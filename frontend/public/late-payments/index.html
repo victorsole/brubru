@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="brubru:last-reviewed" content="2026-09-10">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
   <title>Late Payments Regulation Explained: COM(2023)533 | Brubru</title>
   <meta name="description" content="Comprehensive analysis of the EU Late Payments Regulation (COM(2023)533): 30-day payment limits, automatic penalties, enforcement framework. Rapporteur proposals, MEP amendments, EP adopted text, stakeholder positions. Currently blocked in Council.">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
@@ -384,7 +384,20 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* A `1fr` track floors at min-content, so a long single word in
+       .figure-card__number (Dutch "Geblokkeerd" at 2.2rem) makes the track wider
+       than its share of the row and pushes the page sideways: 72px of horizontal
+       overflow at 375px, which breaks the responsive rule. minmax(0, 1fr) lets
+       the track shrink, and the number wraps instead of overflowing.
+       Found 22 September 2026 by the rendered check; it had never been measured. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -440,7 +453,7 @@
     <div class="figure-card__label">IMCO committee vote</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">405</div>
+    <div class="figure-card__number">380</div>
     <div class="figure-card__label">Amendments tabled</div>
   </div>
 </div>
@@ -582,11 +595,11 @@
     <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
     <h2 class="section__title">MEP Amendments in IMCO</h2>
   </div>
-  <p class="section__subtitle">405 amendments tabled (PE757.130: amendments 26-223; PE757.363: amendments 224-405)</p>
+  <p class="section__subtitle">380 amendments tabled (PE757.130: amendments 26-223; PE757.363: amendments 224-405)</p>
 
   <div class="info-box">
     <h3>The amendment battle</h3>
-    <p>IMCO members tabled 405 amendments to the rapporteur's draft report, reflecting deep divisions on the balance between SME protection and contractual freedom. The key battleground was the maximum payment period: the Commission wanted a strict 30-day limit with no exceptions, the rapporteur proposed 60-day B2B flexibility, and several MEPs pushed for even greater flexibility or sector-specific carve-outs.</p>
+    <p>IMCO members tabled 380 amendments to the rapporteur's draft report, reflecting deep divisions on the balance between SME protection and contractual freedom. The key battleground was the maximum payment period: the Commission wanted a strict 30-day limit with no exceptions, the rapporteur proposed 60-day B2B flexibility, and several MEPs pushed for even greater flexibility or sector-specific carve-outs.</p>
   </div>
 
   <div class="card">
@@ -617,6 +630,14 @@
   <div class="card">
     <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Micro-undertaking grace period</div>
     <p>Micro-undertakings (fewer than 10 employees) receive a 12-month additional grace period as debtors, recognising their particular vulnerability to sudden regulatory changes in payment practices.</p>
+  </div>
+
+  <div class="card" id="rollcall">
+    <div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-red);"></i> The committee vote, and the man who carried the file afterwards</div>
+    <p>The roll-call annex to report <strong>A9-0156/2024</strong> records the IMCO vote of 20 March 2024 as <strong>33 in favour, 10 against, 2 abstentions</strong>. Reading the names rather than the totals explains why the file has not moved since.</p>
+    <p><strong>Renew split 3 to 4 against its own rapporteur.</strong> Sandro Gozi, R&oacute;&#380;a Thun und Hohenstein and St&eacute;phanie Yon-Courtin voted in favour. Andrus Ansip, Vlad-Marius Boto&#537;, Svenja Hahn and <strong>Ivars Ijabs</strong> voted against. The EPP split too, eight in favour against four opposed.</p>
+    <p><strong>Ivars Ijabs voted against the report.</strong> On 3 October 2024, after the European elections, he became the rapporteur responsible for the very position he had opposed. That is not a contradiction on his part, it is a fact worth knowing when reading anything Parliament says about this file from 2025 onwards: the member now negotiating for Parliament did not support the mandate he inherited.</p>
+    <p style="margin-bottom: 0;">Two national parliaments also filed reasoned opinions on subsidiarity, both on 9 January 2024: the <strong>Italian Chamber of Deputies</strong> (PE757.362) and the <strong>Swedish Parliament</strong> (PE757.364). Neither reached the threshold for a yellow card, but both signalled the national-level resistance that the Council later formalised in its non-paper of 7 June 2024.</p>
   </div>
 </section>
 
@@ -829,6 +850,34 @@
     </ul>
     <p style="margin-top: 0.75rem;">No general approach or Presidency compromise text has been published. The file is effectively stalled, and BusinessEurope, Eurochambres, and EuroCommerce have called for the Commission to withdraw the proposal entirely.</p>
   </div>
+
+  <div class="card" id="survey2025">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> The Commission went back for evidence: the 2025 survey, presented to IMCO on 26 January 2026</div>
+    <p>While the file sat blocked in Council, DG GROW ran a fresh survey and took the results to the IMCO committee on <strong>26 January 2026</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/IMCO/DV/2026/01-26/26012026_LPR_IMCO_EN.pdf" target="_blank" rel="noopener">presentation</a>). It ran from 7 July to 25 September 2025 and drew <strong>3,503 replies</strong>, half of them from micro-enterprises or the self-employed, led by Germany (719), Italy (610), Portugal (555), Spain (387), France (360) and Poland (335).</p>
+    <p><strong>73% still report late payment problems</strong>, and for 30% it is systemic, happening always or often. Almost 60% of late payments occur in business-to-business transactions. The cause respondents put first is not illiquidity but <strong>the lack of sanctions and ineffective enforcement</strong>. The worst consequences they report are reduced investment and growth, higher working-capital needs, and a threat to the survival of the business itself.</p>
+    <p>The finding that matters politically is on caps. <strong>Almost 48% want a maximum payment term</strong>, and they prefer a short one: <strong>30.71% at 30 days against 17.13% at 60 days</strong>, with 27% preferring the status quo. On the choice of instrument respondents split evenly between a Regulation and a revised Directive, but a large majority want the rules reinforced and harmonised either way.</p>
+    <p style="margin-bottom: 0;">That evidence sits awkwardly with where Parliament landed. Parliament softened the Commission's flat 30 days into 60 by agreement and 120 for slow-moving goods, yet the businesses surveyed back the stricter cap by nearly two to one. The presentation also notes that calls to keep the present B2B framework came primarily from a single sector: <strong>books</strong>.</p>
+  </div>
+
+  <div class="card" id="lobbying">
+    <div class="card__title"><i class="mdi mdi-account-tie" style="color: var(--color-purple);"></i> Who the rapporteur has been meeting</div>
+    <p>Parliament publishes rapporteurs' meetings with interest representatives, and the Legislative Observatory lists them on the procedure file itself. For Ivars Ijabs the published entries on this file read as follows.</p>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Interest representatives</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>26/09/2024</td><td>Latvian Chamber of Traders</td></tr>
+        <tr><td>18/10/2024</td><td>German Permanent Representation; Austrian Permanent Representation</td></tr>
+        <tr><td>15/11/2024</td><td>EUROCHAMBRES; Permanent Representation of Hungary</td></tr>
+        <tr><td>03/12/2024</td><td>BUSINESSEUROPE; Kreab</td></tr>
+        <tr><td>05/12/2024</td><td>Permanent Representation of Poland</td></tr>
+      </tbody>
+    </table>
+    <p>Four of the counterparts are <strong>Member State permanent representations</strong>: Germany and Austria, then Hungary, then Poland. That is the Council side, the institution that has blocked this file since June 2024. The business counterparts, BUSINESSEUROPE and EUROCHAMBRES, are the employer and chamber organisations that argued against strict payment caps.</p>
+    <p>Meetings of this kind are ordinary and entirely proper for a rapporteur, and nothing here suggests otherwise. It is simply useful to know, when reading Parliament's position on a blocked file, which rooms its negotiator has been in. Note also that the Observatory paginates this table behind a "Load more" control, so the entries above are what is published on the first page, not necessarily the complete list.</p>
+    <p style="margin-bottom: 0;">Shadow rapporteur Jorge Mart&iacute;n Fr&iacute;as met ANGED on 11 December 2024 and CONPYMES on 15 January 2025; shadow rapporteur Eugen Jurzyca met Fleishman-Hillard on 6 March 2024.</p>
+  </div>
 </section>
 
 <!-- Section 9: Timeline -->
@@ -853,7 +902,7 @@
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">15-18 December 2023</div>
-      <div class="timeline__text">405 amendments tabled by MEPs (PE757.130, PE757.363)</div>
+      <div class="timeline__text">380 amendments tabled by MEPs (PE757.130, PE757.363)</div>
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">17 January 2024</div>

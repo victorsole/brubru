@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="brubru:last-reviewed" content="2026-09-10">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
   <title>Reglamento sobre morosidad : COM(2023)533 | Brubru</title>
   <meta name="description" content="An&aacute;lisis exhaustivo del Reglamento de la UE sobre morosidad (COM(2023)533): plazos de pago de 30 d&iacute;as, penalizaciones autom&aacute;ticas, marco de ejecuci&oacute;n. Propuestas del ponente, enmiendas de los eurodiputados, texto adoptado por el PE, posiciones de las partes interesadas. Actualmente bloqueado en el Consejo.">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
@@ -384,7 +384,20 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* A `1fr` track floors at min-content, so a long single word in
+       .figure-card__number (Dutch "Geblokkeerd" at 2.2rem) makes the track wider
+       than its share of the row and pushes the page sideways: 72px of horizontal
+       overflow at 375px, which breaks the responsive rule. minmax(0, 1fr) lets
+       the track shrink, and the number wraps instead of overflowing.
+       Found 22 September 2026 by the rendered check; it had never been measured. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -440,7 +453,7 @@
     <div class="figure-card__label">Votaci&oacute;n en la comisi&oacute;n IMCO</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">405</div>
+    <div class="figure-card__number">380</div>
     <div class="figure-card__label">Enmiendas presentadas</div>
   </div>
 </div>
@@ -582,11 +595,11 @@
     <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
     <h2 class="section__title">Enmiendas de los eurodiputados en la IMCO</h2>
   </div>
-  <p class="section__subtitle">405 enmiendas presentadas (PE757.130: enmiendas 26-223; PE757.363: enmiendas 224-405)</p>
+  <p class="section__subtitle">380 enmiendas presentadas (PE757.130: enmiendas 26-223; PE757.363: enmiendas 224-405)</p>
 
   <div class="info-box">
     <h3>La batalla de las enmiendas</h3>
-    <p>Los miembros de la IMCO presentaron 405 enmiendas al informe provisional del ponente, lo que refleja profundas divisiones sobre el equilibrio entre la protecci&oacute;n de las p&yacute;mes y la libertad contractual. El principal campo de batalla fue el plazo m&aacute;ximo de pago: la Comisi&oacute;n defend&iacute;a un l&iacute;mite estricto de 30 d&iacute;as sin excepciones, el ponente propuso una flexibilidad B2B de 60 d&iacute;as, y varios eurodiputados abogaron por una mayor flexibilidad o exenciones sectoriales.</p>
+    <p>Los miembros de la IMCO presentaron 380 enmiendas al informe provisional del ponente, lo que refleja profundas divisiones sobre el equilibrio entre la protecci&oacute;n de las p&yacute;mes y la libertad contractual. El principal campo de batalla fue el plazo m&aacute;ximo de pago: la Comisi&oacute;n defend&iacute;a un l&iacute;mite estricto de 30 d&iacute;as sin excepciones, el ponente propuso una flexibilidad B2B de 60 d&iacute;as, y varios eurodiputados abogaron por una mayor flexibilidad o exenciones sectoriales.</p>
   </div>
 
   <div class="card">
@@ -617,6 +630,14 @@
   <div class="card">
     <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Per&iacute;odo de gracia para microempresas</div>
     <p>Las microempresas (menos de 10 trabajadores) disponen de un per&iacute;odo de gracia adicional de 12 meses como deudoras, en reconocimiento de su especial vulnerabilidad ante cambios normativos repentinos en las pr&aacute;cticas de pago.</p>
+  </div>
+
+  <div class="card" id="rollcall">
+    <div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-red);"></i> La votaci&oacute;n en comisi&oacute;n y quien se qued&oacute; el expediente despu&eacute;s</div>
+    <p>El anexo de votaci&oacute;n nominal del informe <strong>A9-0156/2024</strong> registra la votaci&oacute;n de la IMCO del 20 de marzo de 2024 como <strong>33 a favor, 10 en contra y 2 abstenciones</strong>. Leer los nombres en lugar de los totales explica por qu&eacute; el expediente no se ha movido desde entonces.</p>
+    <p><strong>Renew se dividi&oacute; 3 contra 4 frente a su propia ponente.</strong> Sandro Gozi, R&oacute;&#380;a Thun und Hohenstein y St&eacute;phanie Yon-Courtin votaron a favor. Andrus Ansip, Vlad-Marius Boto&#537;, Svenja Hahn e <strong>Ivars Ijabs</strong> votaron en contra. El PPE tambi&eacute;n se dividi&oacute;: ocho a favor frente a cuatro en contra.</p>
+    <p><strong>Ivars Ijabs vot&oacute; en contra del informe.</strong> El 3 de octubre de 2024, tras las elecciones europeas, pas&oacute; a ser el ponente responsable de la misma posici&oacute;n a la que se hab&iacute;a opuesto. No es una contradicci&oacute;n suya, es un dato que conviene tener presente al leer cualquier cosa que el Parlamento diga sobre este expediente a partir de 2025: quien negocia ahora en nombre del Parlamento no apoy&oacute; el mandato que hered&oacute;.</p>
+    <p style="margin-bottom: 0;">Dos parlamentos nacionales presentaron adem&aacute;s dictámenes motivados sobre subsidiariedad, ambos el 9 de enero de 2024: la <strong>C&aacute;mara de Diputados de Italia</strong> (PE757.362) y el <strong>Parlamento de Suecia</strong> (PE757.364). Ninguno alcanz&oacute; el umbral de la tarjeta amarilla, pero ambos anticiparon la resistencia nacional que el Consejo formaliz&oacute; despu&eacute;s en su non-paper del 7 de junio de 2024.</p>
   </div>
 </section>
 
@@ -829,6 +850,34 @@
     </ul>
     <p style="margin-top: 0.75rem;">No se ha publicado ning&uacute;n enfoque general ni texto de compromiso de la Presidencia. El expediente est&aacute; en la pr&aacute;ctica paralizado, y BusinessEurope, Eurochambres y EuroCommerce han pedido a la Comisi&oacute;n que retire la propuesta.</p>
   </div>
+
+  <div class="card" id="survey2025">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> La Comisi&oacute;n volvi&oacute; a buscar pruebas: la encuesta de 2025, presentada a la IMCO el 26 de enero de 2026</div>
+    <p>Mientras el expediente segu&iacute;a bloqueado en el Consejo, la DG GROW realiz&oacute; una nueva encuesta y llev&oacute; los resultados a la comisi&oacute;n IMCO el <strong>26 de enero de 2026</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/IMCO/DV/2026/01-26/26012026_LPR_IMCO_EN.pdf" target="_blank" rel="noopener">presentaci&oacute;n</a>). Se desarroll&oacute; del 7 de julio al 25 de septiembre de 2025 y obtuvo <strong>3.503 respuestas</strong>, la mitad de microempresas o aut&oacute;nomos, encabezadas por Alemania (719), Italia (610), Portugal (555), Espa&ntilde;a (387), Francia (360) y Polonia (335).</p>
+    <p><strong>El 73% sigue declarando problemas de morosidad</strong>, y para el 30% es sist&eacute;mico, siempre o a menudo. Casi el 60% de los pagos tard&iacute;os se producen entre empresas. La causa que los encuestados sit&uacute;an en primer lugar no es la falta de liquidez sino <strong>la ausencia de sanciones y la aplicaci&oacute;n ineficaz</strong>. Las peores consecuencias que declaran son menos inversi&oacute;n y crecimiento, mayores necesidades de circulante y una amenaza para la propia supervivencia de la empresa.</p>
+    <p>El dato pol&iacute;ticamente decisivo son los topes. <strong>Casi el 48% quiere un plazo m&aacute;ximo de pago</strong>, y lo prefiere corto: <strong>30,71% a 30 d&iacute;as frente a 17,13% a 60 d&iacute;as</strong>, con un 27% partidario del statu quo. Sobre el instrumento, los encuestados se dividen por igual entre reglamento y directiva revisada, pero una amplia mayor&iacute;a quiere reforzar y armonizar las normas en cualquier caso.</p>
+    <p style="margin-bottom: 0;">Esa evidencia encaja mal con el resultado del Parlamento. El Parlamento suaviz&oacute; los 30 d&iacute;as fijos de la Comisi&oacute;n hasta 60 por acuerdo y 120 para bienes de rotaci&oacute;n lenta, pero las empresas encuestadas respaldan el tope m&aacute;s estricto casi dos a uno. La presentaci&oacute;n se&ntilde;ala adem&aacute;s que las peticiones de mantener el marco actual entre empresas proced&iacute;an sobre todo de un solo sector: el del <strong>libro</strong>.</p>
+  </div>
+
+  <div class="card" id="lobbying">
+    <div class="card__title"><i class="mdi mdi-account-tie" style="color: var(--color-purple);"></i> Con qui&eacute;n se ha reunido el ponente</div>
+    <p>El Parlamento publica las reuniones de los ponentes con representantes de intereses, y el Observatorio Legislativo las recoge en la propia ficha de procedimiento. Para Ivars Ijabs, las entradas publicadas en este expediente son estas.</p>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Representantes de intereses</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>26/09/2024</td><td>Latvian Chamber of Traders</td></tr>
+        <tr><td>18/10/2024</td><td>German Permanent Representation; Austrian Permanent Representation</td></tr>
+        <tr><td>15/11/2024</td><td>EUROCHAMBRES; Permanent Representation of Hungary</td></tr>
+        <tr><td>03/12/2024</td><td>BUSINESSEUROPE; Kreab</td></tr>
+        <tr><td>05/12/2024</td><td>Permanent Representation of Poland</td></tr>
+      </tbody>
+    </table>
+    <p>Cuatro de las contrapartes son <strong>representaciones permanentes de Estados miembros</strong>: Alemania y Austria, luego Hungr&iacute;a, luego Polonia. Ese es el lado del Consejo, la instituci&oacute;n que bloquea el expediente desde junio de 2024. Las contrapartes empresariales, BUSINESSEUROPE y EUROCHAMBRES, son las organizaciones patronales y camerales que se opusieron a topes de pago estrictos.</p>
+    <p>Reuniones de este tipo son habituales y del todo leg&iacute;timas para un ponente, y nada aqu&iacute; sugiere lo contrario. Simplemente resulta &uacute;til saber, al leer la posici&oacute;n del Parlamento sobre un expediente bloqueado, en qu&eacute; despachos ha estado su negociador. Conviene se&ntilde;alar adem&aacute;s que el Observatorio pagina esta tabla tras un control de "Load more", de modo que lo anterior es lo publicado en la primera p&aacute;gina, no necesariamente la lista completa.</p>
+    <p style="margin-bottom: 0;">El ponente alternativo Jorge Mart&iacute;n Fr&iacute;as se reuni&oacute; con ANGED el 11 de diciembre de 2024 y con CONPYMES el 15 de enero de 2025; el ponente alternativo Eugen Jurzyca se reuni&oacute; con Fleishman-Hillard el 6 de marzo de 2024.</p>
+  </div>
 </section>
 
 <!-- Secci&oacute;n 9: Cronolog&iacute;a legislativa -->
@@ -853,7 +902,7 @@
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">15-18 de diciembre de 2023</div>
-      <div class="timeline__text">Los eurodiputados presentan 405 enmiendas (PE757.130, PE757.363)</div>
+      <div class="timeline__text">Los eurodiputados presentan 380 enmiendas (PE757.130, PE757.363)</div>
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">17 de enero de 2024</div>

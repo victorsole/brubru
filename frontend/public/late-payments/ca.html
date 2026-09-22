@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="brubru:last-reviewed" content="2026-09-10">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
   <title>Reglament sobre morositat : COM(2023)533 | Brubru</title>
   <meta name="description" content="An&agrave;lisi completa del Reglament de la UE sobre morositat (COM(2023)533): terminis m&agrave;xims de pagament de 30 dies, penalitzacions autom&agrave;tiques, marc d&apos;execuci&oacute;. Propostes del ponent, esmenes dels eurodiputats, text adoptat pel PE, posicions de les parts interessades. Actualment bloquejat al Consell.">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
@@ -393,7 +393,20 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* A `1fr` track floors at min-content, so a long single word in
+       .figure-card__number (Dutch "Geblokkeerd" at 2.2rem) makes the track wider
+       than its share of the row and pushes the page sideways: 72px of horizontal
+       overflow at 375px, which breaks the responsive rule. minmax(0, 1fr) lets
+       the track shrink, and the number wraps instead of overflowing.
+       Found 22 September 2026 by the rendered check; it had never been measured. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -454,7 +467,7 @@
     <div class="figure-card__label">Votaci&oacute; a la comissi&oacute; IMCO</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">405</div>
+    <div class="figure-card__number">380</div>
     <div class="figure-card__label">Esmenes presentades</div>
   </div>
 </div>
@@ -596,11 +609,11 @@
     <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
     <h2 class="section__title">Esmenes dels eurodiputats a la comissi&oacute; IMCO</h2>
   </div>
-  <p class="section__subtitle">405 esmenes presentades (PE757.130: esmenes 26-223; PE757.363: esmenes 224-405)</p>
+  <p class="section__subtitle">380 esmenes presentades (PE757.130: esmenes 26-223; PE757.363: esmenes 224-405)</p>
 
   <div class="info-box">
     <h3>La batalla de les esmenes</h3>
-    <p>Els membres de la comissi&oacute; IMCO van presentar 405 esmenes a l&apos;informe provisional del ponent, reflectint profundes divisions sobre l&apos;equilibri entre la protecci&oacute; de les pimes i la llibertat contractual. El principal camp de batalla era el termini m&agrave;xim de pagament: la Comissi&oacute; volia un l&iacute;mit estricte de 30 dies sense excepcions, el ponent proposava flexibilitat B2B de 60 dies, i diversos eurodiputats van defensar una flexibilitat encara m&eacute;s gran o exempcions sectorials.</p>
+    <p>Els membres de la comissi&oacute; IMCO van presentar 380 esmenes a l&apos;informe provisional del ponent, reflectint profundes divisions sobre l&apos;equilibri entre la protecci&oacute; de les pimes i la llibertat contractual. El principal camp de batalla era el termini m&agrave;xim de pagament: la Comissi&oacute; volia un l&iacute;mit estricte de 30 dies sense excepcions, el ponent proposava flexibilitat B2B de 60 dies, i diversos eurodiputats van defensar una flexibilitat encara m&eacute;s gran o exempcions sectorials.</p>
   </div>
 
   <div class="card">
@@ -631,6 +644,14 @@
   <div class="card">
     <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Per&iacute;ode de gr&agrave;cia per a les microempreses</div>
     <p>Les microempreses (menys de 10 empleats) reben un per&iacute;ode de gr&agrave;cia addicional de 12 mesos com a deutors, reconeixent la seva vulnerabilitat particular als canvis regulatoris sobtats en les pr&agrave;ctiques de pagament.</p>
+  </div>
+
+  <div class="card" id="rollcall">
+    <div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-red);"></i> La votaci&oacute; en comissi&oacute; i qui es va quedar l&apos;expedient despr&eacute;s</div>
+    <p>L&apos;annex de votaci&oacute; nominal de l&apos;informe <strong>A9-0156/2024</strong> registra la votaci&oacute; de la comissi&oacute; IMCO del 20 de mar&ccedil; de 2024 com a <strong>33 a favor, 10 en contra i 2 abstencions</strong>. Llegir els noms en lloc dels totals explica per qu&egrave; l&apos;expedient no s&apos;ha mogut des de llavors.</p>
+    <p><strong>Renew es va dividir 3 contra 4 davant la seva pr&ograve;pia ponent.</strong> Sandro Gozi, R&oacute;&#380;a Thun und Hohenstein i St&eacute;phanie Yon-Courtin hi van votar a favor. Andrus Ansip, Vlad-Marius Boto&#537;, Svenja Hahn i <strong>Ivars Ijabs</strong> hi van votar en contra. El PPE tamb&eacute; es va dividir: vuit a favor i quatre en contra.</p>
+    <p><strong>Ivars Ijabs va votar en contra de l&apos;informe.</strong> El 3 d&apos;octubre de 2024, despr&eacute;s de les eleccions europees, va passar a ser el ponent responsable de la mateixa posici&oacute; a la qual s&apos;havia oposat. No &eacute;s una contradicci&oacute; seva, &eacute;s una dada que convé tenir present en llegir qualsevol cosa que el Parlament digui sobre aquest expedient a partir del 2025: qui negocia ara en nom del Parlament no va donar suport al mandat que va heretar.</p>
+    <p style="margin-bottom: 0;">Dos parlaments nacionals van presentar a m&eacute;s dictàmens motivats sobre subsidiarietat, tots dos el 9 de gener de 2024: la <strong>C&agrave;mera de Diputats d&apos;It&agrave;lia</strong> (PE757.362) i el <strong>Parlament de Su&egrave;cia</strong> (PE757.364). Cap no va arribar al llindar de la targeta groga, per&ograve; tots dos van anticipar la resist&egrave;ncia nacional que el Consell va formalitzar despr&eacute;s en el seu non-paper del 7 de juny de 2024.</p>
   </div>
 </section>
 
@@ -843,6 +864,34 @@
     </ul>
     <p style="margin-top: 0.75rem;">No s&apos;ha publicat cap enfocament general ni cap text de compromi&iacute;s de la Presid&egrave;ncia. El dossier est&agrave; efectivament aturat, i BusinessEurope, Eurochambres i EuroCommerce han demanat a la Comissi&oacute; que retiri completament la proposta.</p>
   </div>
+
+  <div class="card" id="survey2025">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> La Comissi&oacute; va tornar a buscar proves: l&apos;enquesta de 2025, presentada a la comissi&oacute; IMCO el 26 de gener de 2026</div>
+    <p>Mentre l&apos;expedient continuava bloquejat al Consell, la DG GROW va fer una nova enquesta i en va portar els resultats a la comissi&oacute; IMCO el <strong>26 de gener de 2026</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/IMCO/DV/2026/01-26/26012026_LPR_IMCO_EN.pdf" target="_blank" rel="noopener">presentaci&oacute;</a>). Es va dur a terme del 7 de juliol al 25 de setembre de 2025 i va obtenir <strong>3.503 respostes</strong>, la meitat de microempreses o aut&ograve;noms, encap&ccedil;alades per Alemanya (719), It&agrave;lia (610), Portugal (555), Espanya (387), Fran&ccedil;a (360) i Pol&ograve;nia (335).</p>
+    <p><strong>El 73% continua declarant problemes de morositat</strong>, i per al 30% &eacute;s sistem&agrave;tic, sempre o sovint. Gaireb&eacute; el 60% dels pagaments tardans es produeixen entre empreses. La causa que els enquestats situen en primer lloc no &eacute;s la manca de liquiditat sin&oacute; <strong>l&apos;abs&egrave;ncia de sancions i una aplicaci&oacute; ineficient</strong>. Les pitjors conseq&uuml;&egrave;ncies que declaren s&oacute;n menys inversi&oacute; i creixement, m&eacute;s necessitats de circulant i una amena&ccedil;a per a la superviv&egrave;ncia mateixa de l&apos;empresa.</p>
+    <p>La dada pol&iacute;ticament decisiva s&oacute;n els topalls. <strong>Gaireb&eacute; el 48% vol un termini m&agrave;xim de pagament</strong>, i el prefereix curt: <strong>30,71% a 30 dies davant 17,13% a 60 dies</strong>, amb un 27% partidari de l&apos;statu quo. Sobre l&apos;instrument, els enquestats es divideixen per igual entre reglament i directiva revisada, per&ograve; una &agrave;mplia majoria vol refor&ccedil;ar i harmonitzar les normes en qualsevol cas.</p>
+    <p style="margin-bottom: 0;">Aquesta evid&egrave;ncia encaixa malament amb el resultat del Parlament. El Parlament va suavitzar els 30 dies fixos de la Comissi&oacute; fins a 60 per acord i 120 per a b&eacute;ns de rotaci&oacute; lenta, per&ograve; les empreses enquestades donen suport al topall m&eacute;s estricte gaireb&eacute; dos a un. La presentaci&oacute; assenyala a m&eacute;s que les peticions de mantenir el marc actual entre empreses provenien sobretot d&apos;un sol sector: el del <strong>llibre</strong>.</p>
+  </div>
+
+  <div class="card" id="lobbying">
+    <div class="card__title"><i class="mdi mdi-account-tie" style="color: var(--color-purple);"></i> Amb qui s&apos;ha reunit el ponent</div>
+    <p>El Parlament publica les reunions dels ponents amb representants d&apos;interessos, i l&apos;Observatori Legislatiu les recull a la mateixa fitxa de procediment. Per a Ivars Ijabs, les entrades publicades en aquest expedient s&oacute;n aquestes.</p>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Representants d&apos;interessos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>26/09/2024</td><td>Latvian Chamber of Traders</td></tr>
+        <tr><td>18/10/2024</td><td>German Permanent Representation; Austrian Permanent Representation</td></tr>
+        <tr><td>15/11/2024</td><td>EUROCHAMBRES; Permanent Representation of Hungary</td></tr>
+        <tr><td>03/12/2024</td><td>BUSINESSEUROPE; Kreab</td></tr>
+        <tr><td>05/12/2024</td><td>Permanent Representation of Poland</td></tr>
+      </tbody>
+    </table>
+    <p>Quatre de les contraparts s&oacute;n <strong>representacions permanents d&apos;estats membres</strong>: Alemanya i &Agrave;ustria, despr&eacute;s Hongria, despr&eacute;s Pol&ograve;nia. Aquest &eacute;s el costat del Consell, la instituci&oacute; que bloqueja l&apos;expedient des del juny de 2024. Les contraparts empresarials, BUSINESSEUROPE i EUROCHAMBRES, s&oacute;n les organitzacions patronals i camerals que es van oposar a topalls de pagament estrictes.</p>
+    <p>Reunions d&apos;aquesta mena s&oacute;n habituals i del tot leg&iacute;times per a un ponent, i res d&apos;aix&ograve; no suggereix el contrari. Simplement &eacute;s &uacute;til saber, en llegir la posici&oacute; del Parlament sobre un expedient bloquejat, en quins despatxos ha estat el seu negociador. Cal assenyalar a m&eacute;s que l&apos;Observatori pagina aquesta taula darrere d&apos;un control "Load more", de manera que all&ograve; anterior &eacute;s el que es publica a la primera p&agrave;gina, no necess&agrave;riament la llista completa.</p>
+    <p style="margin-bottom: 0;">El ponent alternatiu Jorge Mart&iacute;n Fr&iacute;as es va reunir amb ANGED l&apos;11 de desembre de 2024 i amb CONPYMES el 15 de gener de 2025; el ponent alternatiu Eugen Jurzyca es va reunir amb Fleishman-Hillard el 6 de mar&ccedil; de 2024.</p>
+  </div>
 </section>
 
 <!-- Secci&oacute; 9: Calendari legislatiu -->
@@ -867,7 +916,7 @@
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">15-18 de desembre de 2023</div>
-      <div class="timeline__text">405 esmenes presentades pels eurodiputats (PE757.130, PE757.363)</div>
+      <div class="timeline__text">380 esmenes presentades pels eurodiputats (PE757.130, PE757.363)</div>
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">17 de gener de 2024</div>

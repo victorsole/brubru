@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="brubru:last-reviewed" content="2026-09-10">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
   <title>R&egrave;glement sur les retards de paiement : COM(2023)533 | Brubru</title>
   <meta name="description" content="Analyse approfondie du r&egrave;glement de l'UE sur les retards de paiement (COM(2023)533)&nbsp;: d&eacute;lais de paiement de 30 jours, p&eacute;nalit&eacute;s automatiques, cadre d'application. Propositions du rapporteur, amendements des d&eacute;put&eacute;s, texte adopt&eacute; par le PE, positions des parties prenantes. Actuellement bloqu&eacute; au Conseil.">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
@@ -384,7 +384,20 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* A `1fr` track floors at min-content, so a long single word in
+       .figure-card__number (Dutch "Geblokkeerd" at 2.2rem) makes the track wider
+       than its share of the row and pushes the page sideways: 72px of horizontal
+       overflow at 375px, which breaks the responsive rule. minmax(0, 1fr) lets
+       the track shrink, and the number wraps instead of overflowing.
+       Found 22 September 2026 by the rendered check; it had never been measured. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -440,7 +453,7 @@
     <div class="figure-card__label">Vote en commission IMCO</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">405</div>
+    <div class="figure-card__number">380</div>
     <div class="figure-card__label">Amendements d&eacute;pos&eacute;s</div>
   </div>
 </div>
@@ -582,11 +595,11 @@
     <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
     <h2 class="section__title">Amendements des d&eacute;put&eacute;s en commission IMCO</h2>
   </div>
-  <p class="section__subtitle">405 amendements d&eacute;pos&eacute;s (PE757.130&nbsp;: amendements 26-223&nbsp;; PE757.363&nbsp;: amendements 224-405)</p>
+  <p class="section__subtitle">380 amendements d&eacute;pos&eacute;s (PE757.130&nbsp;: amendements 26-223&nbsp;; PE757.363&nbsp;: amendements 224-405)</p>
 
   <div class="info-box">
     <h3>La bataille des amendements</h3>
-    <p>Les membres de la commission IMCO ont d&eacute;pos&eacute; 405 amendements au projet de rapport du rapporteur, refl&eacute;tant de profondes divisions sur l&rsquo;&eacute;quilibre entre la protection des PME et la libert&eacute; contractuelle. Le principal champ de bataille &eacute;tait la dur&eacute;e maximale du d&eacute;lai de paiement&nbsp;: la Commission voulait une limite stricte de 30 jours sans exception, le rapporteur proposait une flexibilit&eacute; B2B jusqu&rsquo;&agrave; 60 jours, et plusieurs d&eacute;put&eacute;s plaidaient pour une plus grande flexibilit&eacute; ou des exemptions sectorielles.</p>
+    <p>Les membres de la commission IMCO ont d&eacute;pos&eacute; 380 amendements au projet de rapport du rapporteur, refl&eacute;tant de profondes divisions sur l&rsquo;&eacute;quilibre entre la protection des PME et la libert&eacute; contractuelle. Le principal champ de bataille &eacute;tait la dur&eacute;e maximale du d&eacute;lai de paiement&nbsp;: la Commission voulait une limite stricte de 30 jours sans exception, le rapporteur proposait une flexibilit&eacute; B2B jusqu&rsquo;&agrave; 60 jours, et plusieurs d&eacute;put&eacute;s plaidaient pour une plus grande flexibilit&eacute; ou des exemptions sectorielles.</p>
   </div>
 
   <div class="card">
@@ -617,6 +630,14 @@
   <div class="card">
     <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> P&eacute;riode de gr&acirc;ce pour les micro-entreprises</div>
     <p>Les micro-entreprises (moins de 10 salari&eacute;s) b&eacute;n&eacute;ficient d&rsquo;une p&eacute;riode de gr&acirc;ce suppl&eacute;mentaire de 12 mois en tant que d&eacute;bitrices, tenant compte de leur vuln&eacute;rabilit&eacute; particuli&egrave;re face aux changements r&eacute;glementaires soudains en mati&egrave;re de pratiques de paiement.</p>
+  </div>
+
+  <div class="card" id="rollcall">
+    <div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-red);"></i> Le vote en commission, et celui qui a repris le dossier ensuite</div>
+    <p>L&rsquo;annexe de vote par appel nominal du rapport <strong>A9-0156/2024</strong> enregistre le vote de la commission IMCO du 20 mars 2024 par <strong>33 voix pour, 10 contre et 2 abstentions</strong>. Lire les noms plut&ocirc;t que les totaux explique pourquoi le dossier n&rsquo;a pas boug&eacute; depuis.</p>
+    <p><strong>Renew s&rsquo;est divis&eacute; 3 contre 4 face &agrave; sa propre rapporteure.</strong> Sandro Gozi, R&oacute;&#380;a Thun und Hohenstein et St&eacute;phanie Yon-Courtin ont vot&eacute; pour. Andrus Ansip, Vlad-Marius Boto&#537;, Svenja Hahn et <strong>Ivars Ijabs</strong> ont vot&eacute; contre. Le PPE s&rsquo;est lui aussi divis&eacute;, huit pour contre quatre.</p>
+    <p><strong>Ivars Ijabs a vot&eacute; contre le rapport.</strong> Le 3 octobre 2024, apr&egrave;s les &eacute;lections europ&eacute;ennes, il est devenu le rapporteur responsable de la position m&ecirc;me &agrave; laquelle il s&rsquo;&eacute;tait oppos&eacute;. Ce n&rsquo;est pas une contradiction de sa part, c&rsquo;est un fait &agrave; conna&icirc;tre pour lire tout ce que le Parlement dit de ce dossier depuis 2025&nbsp;: celui qui n&eacute;gocie aujourd&rsquo;hui au nom du Parlement n&rsquo;a pas soutenu le mandat dont il a h&eacute;rit&eacute;.</p>
+    <p style="margin-bottom: 0;">Deux parlements nationaux ont en outre d&eacute;pos&eacute; des avis motiv&eacute;s sur la subsidiarit&eacute;, tous deux le 9 janvier 2024&nbsp;: la <strong>Chambre des d&eacute;put&eacute;s italienne</strong> (PE757.362) et le <strong>Parlement su&eacute;dois</strong> (PE757.364). Aucun n&rsquo;a atteint le seuil du carton jaune, mais tous deux annon&ccedil;aient la r&eacute;sistance nationale que le Conseil a ensuite formalis&eacute;e dans son non-paper du 7 juin 2024.</p>
   </div>
 </section>
 
@@ -829,6 +850,34 @@
     </ul>
     <p style="margin-top: 0.75rem;">Aucune orientation g&eacute;n&eacute;rale ni aucun texte de compromis de pr&eacute;sidence n&rsquo;ont &eacute;t&eacute; publi&eacute;s. Le dossier est de fait bloqu&eacute;, et BusinessEurope, Eurochambres et EuroCommerce ont demand&eacute; &agrave; la Commission de retirer enti&egrave;rement la proposition.</p>
   </div>
+
+  <div class="card" id="survey2025">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> La Commission est retourn&eacute;e chercher des preuves&nbsp;: l&rsquo;enqu&ecirc;te 2025, pr&eacute;sent&eacute;e &agrave; la commission IMCO le 26 janvier 2026</div>
+    <p>Pendant que le dossier restait bloqu&eacute; au Conseil, la DG GROW a men&eacute; une nouvelle enqu&ecirc;te et en a pr&eacute;sent&eacute; les r&eacute;sultats &agrave; la commission IMCO le <strong>26 janvier 2026</strong> (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/IMCO/DV/2026/01-26/26012026_LPR_IMCO_EN.pdf" target="_blank" rel="noopener">pr&eacute;sentation</a>). Men&eacute;e du 7 juillet au 25 septembre 2025, elle a recueilli <strong>3 503 r&eacute;ponses</strong>, dont la moiti&eacute; de micro-entreprises ou d&rsquo;ind&eacute;pendants, avec en t&ecirc;te l&rsquo;Allemagne (719), l&rsquo;Italie (610), le Portugal (555), l&rsquo;Espagne (387), la France (360) et la Pologne (335).</p>
+    <p><strong>73&nbsp;% signalent toujours des retards de paiement</strong>, et pour 30&nbsp;% le ph&eacute;nom&egrave;ne est syst&eacute;mique, permanent ou fr&eacute;quent. Pr&egrave;s de 60&nbsp;% des retards surviennent entre entreprises. La cause que les r&eacute;pondants placent en premier n&rsquo;est pas le manque de liquidit&eacute;s mais <strong>l&rsquo;absence de sanctions et une application inefficace</strong>. Les cons&eacute;quences les plus graves qu&rsquo;ils citent sont la baisse de l&rsquo;investissement et de la croissance, des besoins en fonds de roulement accrus et une menace sur la survie m&ecirc;me de l&rsquo;entreprise.</p>
+    <p>Le r&eacute;sultat politiquement d&eacute;cisif porte sur les plafonds. <strong>Pr&egrave;s de 48&nbsp;% veulent un d&eacute;lai de paiement maximal</strong>, et le veulent court&nbsp;: <strong>30,71&nbsp;% &agrave; 30 jours contre 17,13&nbsp;% &agrave; 60 jours</strong>, 27&nbsp;% pr&eacute;f&eacute;rant le statu quo. Sur l&rsquo;instrument, les r&eacute;pondants se partagent &eacute;galement entre r&egrave;glement et directive r&eacute;vis&eacute;e, mais une large majorit&eacute; veut des r&egrave;gles renforc&eacute;es et harmonis&eacute;es dans les deux cas.</p>
+    <p style="margin-bottom: 0;">Ces donn&eacute;es s&rsquo;accordent mal avec le point d&rsquo;arriv&eacute;e du Parlement. Celui-ci a assoupli les 30 jours fermes de la Commission &agrave; 60 jours par accord et 120 jours pour les biens &agrave; rotation lente, alors que les entreprises interrog&eacute;es soutiennent le plafond le plus strict dans un rapport de pr&egrave;s de deux contre un. La pr&eacute;sentation note aussi que les appels &agrave; conserver le cadre actuel entre entreprises &eacute;manaient surtout d&rsquo;un seul secteur&nbsp;: le <strong>livre</strong>.</p>
+  </div>
+
+  <div class="card" id="lobbying">
+    <div class="card__title"><i class="mdi mdi-account-tie" style="color: var(--color-purple);"></i> Avec qui le rapporteur s&rsquo;est r&eacute;uni</div>
+    <p>Le Parlement publie les r&eacute;unions des rapporteurs avec les repr&eacute;sentants d&rsquo;int&eacute;r&ecirc;ts, et l&rsquo;Observatoire l&eacute;gislatif les fait figurer sur la fiche de proc&eacute;dure elle-m&ecirc;me. Pour Ivars Ijabs, les entr&eacute;es publi&eacute;es sur ce dossier sont les suivantes.</p>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Repr&eacute;sentants d&rsquo;int&eacute;r&ecirc;ts</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>26/09/2024</td><td>Latvian Chamber of Traders</td></tr>
+        <tr><td>18/10/2024</td><td>German Permanent Representation; Austrian Permanent Representation</td></tr>
+        <tr><td>15/11/2024</td><td>EUROCHAMBRES; Permanent Representation of Hungary</td></tr>
+        <tr><td>03/12/2024</td><td>BUSINESSEUROPE; Kreab</td></tr>
+        <tr><td>05/12/2024</td><td>Permanent Representation of Poland</td></tr>
+      </tbody>
+    </table>
+    <p>Quatre des interlocuteurs sont des <strong>repr&eacute;sentations permanentes d&rsquo;&Eacute;tats membres</strong>&nbsp;: l&rsquo;Allemagne et l&rsquo;Autriche, puis la Hongrie, puis la Pologne. C&rsquo;est le c&ocirc;t&eacute; du Conseil, l&rsquo;institution qui bloque ce dossier depuis juin 2024. Les interlocuteurs &eacute;conomiques, BUSINESSEUROPE et EUROCHAMBRES, sont les organisations patronales et consulaires qui se sont oppos&eacute;es &agrave; des plafonds de paiement stricts.</p>
+    <p>De telles r&eacute;unions sont courantes et parfaitement l&eacute;gitimes pour un rapporteur, et rien ici ne sugg&egrave;re le contraire. Il est simplement utile de savoir, en lisant la position du Parlement sur un dossier bloqu&eacute;, dans quels bureaux son n&eacute;gociateur s&rsquo;est rendu. &Agrave; noter aussi que l&rsquo;Observatoire pagine ce tableau derri&egrave;re un bouton "Load more"&nbsp;: ce qui pr&eacute;c&egrave;de est donc la premi&egrave;re page publi&eacute;e, pas n&eacute;cessairement la liste compl&egrave;te.</p>
+    <p style="margin-bottom: 0;">Le rapporteur fictif Jorge Mart&iacute;n Fr&iacute;as a rencontr&eacute; ANGED le 11 d&eacute;cembre 2024 et CONPYMES le 15 janvier 2025&nbsp;; le rapporteur fictif Eugen Jurzyca a rencontr&eacute; Fleishman-Hillard le 6 mars 2024.</p>
+  </div>
 </section>
 
 <!-- Section 9 : Calendrier l&eacute;gislatif -->
@@ -853,7 +902,7 @@
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">15-18 d&eacute;cembre 2023</div>
-      <div class="timeline__text">405 amendements d&eacute;pos&eacute;s par les d&eacute;put&eacute;s (PE757.130, PE757.363)</div>
+      <div class="timeline__text">380 amendements d&eacute;pos&eacute;s par les d&eacute;put&eacute;s (PE757.130, PE757.363)</div>
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">17 janvier 2024</div>

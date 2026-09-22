@@ -688,7 +688,26 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* The pillar tooltip is centred on its pillar (left:50% + translateX(-50%)).
+       For the outermost pillars half of it therefore sits outside the viewport,
+       which is 9-23px of horizontal page overflow at 768px in all six languages
+       (and 1024px in es/nl). An earlier `max-width:80vw` could not help: the
+       tooltip is `white-space: nowrap`, so max-width never binds, and centring
+       is the real problem, not width.
+       Fix: let it wrap so the width cap works, and anchor the two outermost
+       tooltips on each side to their pillar's edge instead of its centre.
+       Found 22 September 2026 by the rendered check at six breakpoints. */
+    @media (max-width: 1024px) {
+      .temple__pillar-tooltip { white-space: normal; max-width: min(200px, 60vw); text-align: center; }
+      .temple__pillar:nth-child(-n+2) .temple__pillar-tooltip {
+        left: 0; right: auto; transform: translateX(0) translateY(0);
+      }
+      .temple__pillar:nth-last-child(-n+2) .temple__pillar-tooltip {
+        left: auto; right: 0; transform: translateX(0) translateY(0);
+      }
+    }
+</style>
     <script src="/analytics.js" defer></script>
 </head>
 <body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="brubru:last-reviewed" content="2026-09-10">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
   <title>Verordening betalingsachterstand : COM(2023)533 | Brubru</title>
   <meta name="description" content="Uitgebreide analyse van de EU-verordening betalingsachterstand (COM(2023)533): maximale betalingstermijn van 30 dagen, automatische sancties, handhavingskader. Voorstellen rapporteur, amendementen EP-leden, aangenomen tekst EP, standpunten belanghebbenden. Momenteel geblokkeerd in de Raad.">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
@@ -384,7 +384,20 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }
+    /* A `1fr` track floors at min-content, so a long single word in
+       .figure-card__number (Dutch "Geblokkeerd" at 2.2rem) makes the track wider
+       than its share of the row and pushes the page sideways: 72px of horizontal
+       overflow at 375px, which breaks the responsive rule. minmax(0, 1fr) lets
+       the track shrink, and the number wraps instead of overflowing.
+       Found 22 September 2026 by the rendered check; it had never been measured. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
   <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -440,7 +453,7 @@
     <div class="figure-card__label">Stemming IMCO-commissie</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">405</div>
+    <div class="figure-card__number">380</div>
     <div class="figure-card__label">Ingediende amendementen</div>
   </div>
 </div>
@@ -582,11 +595,11 @@
     <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
     <h2 class="section__title">Amendementen EP-leden in IMCO</h2>
   </div>
-  <p class="section__subtitle">405 ingediende amendementen (PE757.130: amendementen 26-223; PE757.363: amendementen 224-405)</p>
+  <p class="section__subtitle">380 ingediende amendementen (PE757.130: amendementen 26-223; PE757.363: amendementen 224-405)</p>
 
   <div class="info-box">
     <h3>De amendementsstrijd</h3>
-    <p>IMCO-leden dienden 405 amendementen in op het ontwerpverslag van de rapporteur, wat de diepe verdeeldheid weerspiegelt over het evenwicht tussen bescherming van het mkb en contractuele vrijheid. Het belangrijkste strijdpunt was de maximale betalingstermijn: de Commissie wilde een strikte limiet van 30 dagen zonder uitzonderingen, de rapporteur stelde B2B-flexibiliteit van 60 dagen voor, en meerdere EP-leden pleitten voor nog meer flexibiliteit of sectorspecifieke uitzonderingen.</p>
+    <p>IMCO-leden dienden 380 amendementen in op het ontwerpverslag van de rapporteur, wat de diepe verdeeldheid weerspiegelt over het evenwicht tussen bescherming van het mkb en contractuele vrijheid. Het belangrijkste strijdpunt was de maximale betalingstermijn: de Commissie wilde een strikte limiet van 30 dagen zonder uitzonderingen, de rapporteur stelde B2B-flexibiliteit van 60 dagen voor, en meerdere EP-leden pleitten voor nog meer flexibiliteit of sectorspecifieke uitzonderingen.</p>
   </div>
 
   <div class="card">
@@ -617,6 +630,14 @@
   <div class="card">
     <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Overgangsperiode micro-ondernemingen</div>
     <p>Micro-ondernemingen (minder dan 10 werknemers) krijgen als schuldenaar een extra overgangsperiode van 12 maanden, vanwege hun bijzondere kwetsbaarheid voor plotselinge regelgevingswijzigingen op het gebied van betalingspraktijken.</p>
+  </div>
+
+  <div class="card" id="rollcall">
+    <div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-red);"></i> De stemming in de commissie, en wie het dossier daarna kreeg</div>
+    <p>De bijlage met de hoofdelijke stemming bij verslag <strong>A9-0156/2024</strong> legt de IMCO-stemming van 20 maart 2024 vast op <strong>33 voor, 10 tegen en 2 onthoudingen</strong>. De namen lezen in plaats van de totalen verklaart waarom het dossier sindsdien stilstaat.</p>
+    <p><strong>Renew viel 3 tegen 4 uiteen tegenover de eigen rapporteur.</strong> Sandro Gozi, R&oacute;&#380;a Thun und Hohenstein en St&eacute;phanie Yon-Courtin stemden voor. Andrus Ansip, Vlad-Marius Boto&#537;, Svenja Hahn en <strong>Ivars Ijabs</strong> stemden tegen. Ook de EVP viel uiteen: acht voor tegen vier tegen.</p>
+    <p><strong>Ivars Ijabs stemde tegen het verslag.</strong> Op 3 oktober 2024, na de Europese verkiezingen, werd hij de rapporteur voor precies het standpunt waartegen hij zich had verzet. Dat is geen tegenstrijdigheid van hem, het is een gegeven dat je moet kennen bij alles wat het Parlement vanaf 2025 over dit dossier zegt: wie nu namens het Parlement onderhandelt, steunde het mandaat dat hij erfde niet.</p>
+    <p style="margin-bottom: 0;">Twee nationale parlementen dienden bovendien gemotiveerde adviezen over subsidiariteit in, beide op 9 januari 2024: de <strong>Italiaanse Kamer van Afgevaardigden</strong> (PE757.362) en het <strong>Zweedse parlement</strong> (PE757.364). Geen van beide haalde de drempel voor een gele kaart, maar beide kondigden de nationale weerstand aan die de Raad later vastlegde in zijn non-paper van 7 juni 2024.</p>
   </div>
 </section>
 
@@ -829,6 +850,34 @@
     </ul>
     <p style="margin-top: 0.75rem;">Er is geen algemene aanpak of compromistekst van het voorzitterschap gepubliceerd. Het dossier ligt effectief stil, en BusinessEurope, Eurochambres en EuroCommerce hebben de Commissie opgeroepen het voorstel volledig in te trekken.</p>
   </div>
+
+  <div class="card" id="survey2025">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> De Commissie ging opnieuw bewijs halen: de enqu&ecirc;te van 2025, gepresenteerd aan de IMCO-commissie op 26 januari 2026</div>
+    <p>Terwijl het dossier in de Raad vastzat, hield DG GROW een nieuwe enqu&ecirc;te en bracht de resultaten op <strong>26 januari 2026</strong> naar de IMCO-commissie (<a href="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/IMCO/DV/2026/01-26/26012026_LPR_IMCO_EN.pdf" target="_blank" rel="noopener">presentatie</a>). De enqu&ecirc;te liep van 7 juli tot 25 september 2025 en leverde <strong>3.503 antwoorden</strong> op, waarvan de helft van micro-ondernemingen of zelfstandigen, aangevoerd door Duitsland (719), Itali&euml; (610), Portugal (555), Spanje (387), Frankrijk (360) en Polen (335).</p>
+    <p><strong>73% meldt nog steeds problemen met betalingsachterstand</strong>, en voor 30% is het structureel, altijd of vaak. Bijna 60% van de late betalingen doet zich voor tussen ondernemingen. De oorzaak die respondenten vooropstellen is niet gebrek aan liquiditeit maar <strong>het ontbreken van sancties en gebrekkige handhaving</strong>. De ernstigste gevolgen die zij noemen zijn minder investeringen en groei, hogere werkkapitaalbehoefte en een bedreiging voor het voortbestaan van de onderneming zelf.</p>
+    <p>Het politiek beslissende gegeven betreft de maxima. <strong>Bijna 48% wil een maximale betaaltermijn</strong>, en wil die kort: <strong>30,71% op 30 dagen tegen 17,13% op 60 dagen</strong>, met 27% voor de status quo. Over het instrument verdelen de respondenten zich gelijk tussen een verordening en een herziene richtlijn, maar een ruime meerderheid wil hoe dan ook strengere en geharmoniseerde regels.</p>
+    <p style="margin-bottom: 0;">Dat bewijs verhoudt zich slecht tot waar het Parlement uitkwam. Het Parlement versoepelde de vaste 30 dagen van de Commissie naar 60 bij overeenkomst en 120 voor langzaam lopende goederen, terwijl de ondervraagde ondernemingen de striktere termijn met bijna twee tegen &eacute;&eacute;n steunen. De presentatie merkt ook op dat de oproepen om het huidige kader tussen ondernemingen te behouden vooral uit &eacute;&eacute;n sector kwamen: het <strong>boek</strong>.</p>
+  </div>
+
+  <div class="card" id="lobbying">
+    <div class="card__title"><i class="mdi mdi-account-tie" style="color: var(--color-purple);"></i> Met wie de rapporteur heeft gesproken</div>
+    <p>Het Parlement publiceert de ontmoetingen van rapporteurs met belangenvertegenwoordigers, en het Wetgevingsobservatorium vermeldt ze op de procedurefiche zelf. Voor Ivars Ijabs zijn dit de gepubliceerde vermeldingen bij dit dossier.</p>
+    <table>
+      <thead>
+        <tr><th>Datum</th><th>Belangenvertegenwoordigers</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>26/09/2024</td><td>Latvian Chamber of Traders</td></tr>
+        <tr><td>18/10/2024</td><td>German Permanent Representation; Austrian Permanent Representation</td></tr>
+        <tr><td>15/11/2024</td><td>EUROCHAMBRES; Permanent Representation of Hungary</td></tr>
+        <tr><td>03/12/2024</td><td>BUSINESSEUROPE; Kreab</td></tr>
+        <tr><td>05/12/2024</td><td>Permanent Representation of Poland</td></tr>
+      </tbody>
+    </table>
+    <p>Vier van de gesprekspartners zijn <strong>permanente vertegenwoordigingen van lidstaten</strong>: Duitsland en Oostenrijk, daarna Hongarije, daarna Polen. Dat is de Raadszijde, de instelling die dit dossier sinds juni 2024 blokkeert. De zakelijke gesprekspartners, BUSINESSEUROPE en EUROCHAMBRES, zijn de werkgevers- en kamerorganisaties die zich tegen strikte betaalmaxima verzetten.</p>
+    <p>Zulke ontmoetingen zijn gewoon en volkomen legitiem voor een rapporteur, en niets hier suggereert het tegendeel. Het is eenvoudigweg nuttig te weten, bij het lezen van het standpunt van het Parlement over een geblokkeerd dossier, in welke kamers zijn onderhandelaar is geweest. Merk ook op dat het Observatorium deze tabel achter een "Load more"-knop pagineert, zodat het bovenstaande is wat op de eerste pagina staat, niet noodzakelijk de volledige lijst.</p>
+    <p style="margin-bottom: 0;">Schaduwrapporteur Jorge Mart&iacute;n Fr&iacute;as sprak op 11 december 2024 met ANGED en op 15 januari 2025 met CONPYMES; schaduwrapporteur Eugen Jurzyca sprak op 6 maart 2024 met Fleishman-Hillard.</p>
+  </div>
 </section>
 
 <!-- Section 9: Wetgevingskalender -->
@@ -853,7 +902,7 @@
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">15-18 december 2023</div>
-      <div class="timeline__text">405 amendementen ingediend door EP-leden (PE757.130, PE757.363)</div>
+      <div class="timeline__text">380 amendementen ingediend door EP-leden (PE757.130, PE757.363)</div>
     </div>
     <div class="timeline__item timeline__item--done">
       <div class="timeline__date">17 januari 2024</div>
