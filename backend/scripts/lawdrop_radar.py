@@ -361,12 +361,94 @@ def check_uncovered(db, lo: int, hi: int) -> list[dict]:
     return out
 
 
+def check_in_force_now(db, days: int, max_lookups: int = 45) -> list[dict]:
+    """Acts published in the LAST `days` that are ALREADY IN FORCE and uncovered.
+
+    Check C's window starts 15 days back because it assumes the standard
+    twentieth-day entry-into-force clause. That assumption has a hole, and
+    Regulation (EU) 2026/2108 fell straight through it on 22 September 2026:
+    the new Union Customs Code and EU Customs Authority, repealing the 2013
+    Code, published 19 September and in force on 20 September under Article
+    287(1) -- "the day following that of its publication". It was law within 24
+    hours. Check A could not see it (it reads law_requirements, so it only finds
+    files we already built a package for), check B looks backwards at passed
+    deadlines, and check C would not glance at that date until October. The
+    radar printed "No law drop in the window" on the morning after the biggest
+    customs reform in a decade entered into force.
+
+    So do not infer the in-force date from the publication date at all: ASK.
+    Cellar records `date_in_force` per act. Lookups are bounded and ranked, so a
+    month of OJ costs a few dozen queries, not 500.
+    """
+    import asyncio
+    from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+
+    lo_d = date.today() - timedelta(days=days)
+    hi_d = date.today()
+
+    covered = {c for (c,) in db.execute(text(
+        "SELECT DISTINCT l.celex FROM law_requirements r "
+        "JOIN eu_laws l ON l.id = r.law_id WHERE l.celex IS NOT NULL")).all()}
+
+    async def _fetch():
+        async with CellarSPARQLClient() as client:
+            acts = await client.discover_by_date_range(lo_d, hi_d, sectors=["3"], limit=500)
+            cands = []
+            for a in acts:
+                celex = (a.get("celex") or "")
+                title = (a.get("title") or "")
+                if celex in covered:
+                    continue
+                if _NOISE_CELEX.search(celex) or _NOISE_TITLE.search(title):
+                    continue
+                if not _SUBSTANTIVE.match(celex):
+                    continue
+                cands.append({"celex": celex, "title": title, "date": a.get("date"),
+                              "touches": _touches_covered(title)})
+            # Ask about the ones most likely to matter first.
+            cands.sort(key=lambda r: (bool(r["touches"]), str(r.get("date") or "")), reverse=True)
+            out = []
+            for c in cands[:max_lookups]:
+                try:
+                    st = await client.get_force_status(c["celex"])
+                except Exception:  # noqa: BLE001
+                    continue
+                dif = st.get("date_in_force")
+                if isinstance(dif, str):
+                    try:
+                        dif = date.fromisoformat(dif[:10])
+                    except ValueError:
+                        dif = None
+                # Cellar sometimes carries a PLACEHOLDER date_in_force -- 2026/2108
+                # comes back as 1001-01-01. No EU act entered into force before
+                # the Treaty of Rome, so anything earlier than 1958 is a broken
+                # reading, not a date, and must never be printed as a fact. The
+                # act still surfaces (inForce is authoritative); only the date is
+                # withheld.
+                if dif and dif.year < 1958:
+                    dif = None
+                if st.get("in_force") and (dif is None or dif <= date.today()):
+                    c["date_in_force"] = dif
+                    out.append(c)
+            return out
+
+    try:
+        return asyncio.run(_fetch())
+    except Exception as exc:  # noqa: BLE001
+        # Loud, never silent: an unreachable Cellar must not read as "no drops".
+        return [{"celex": "", "title": f"CELLAR UNREACHABLE ({type(exc).__name__}) "
+                                       f"-- check E did NOT run", "date": None, "error": True}]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ahead", type=int, default=30)
     ap.add_argument("--back", type=int, default=60)
     ap.add_argument("--force-lo", type=int, default=15)
     ap.add_argument("--force-hi", type=int, default=35)
+    ap.add_argument("--in-force-days", type=int, default=15,
+                    help="Check E window: acts published in the last N days that are "
+                         "ALREADY in force per Cellar (default 15, the gap below check C).")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
 
@@ -376,12 +458,13 @@ def main() -> int:
         un = check_unmarked(db, a.back)
         unc = check_uncovered(db, a.force_lo, a.force_hi)
         cal = check_calendar_only(db, a.ahead)
+        inf = check_in_force_now(db, a.in_force_days)
     finally:
         db.close()
 
     if a.json:
         print(json.dumps({"upcoming": up, "unmarked": un, "uncovered": unc,
-                          "calendar_only": cal},
+                          "calendar_only": cal, "in_force_now": inf},
                          default=str, indent=2))
         return 0
 
@@ -436,7 +519,27 @@ def main() -> int:
         days = (r["milestone"] - today).days
         print(f"   {r['milestone']}  (+{days:>3}d)  [{(r['source'] or '')[:22]:22s}] {(r['title'] or '')[:62]}")
 
+    print(f"\nE. ALREADY IN FORCE -- acts published in the last {a.in_force_days}d that Cellar")
+    print("   reports IN FORCE TODAY, and that no cluster covers. These entered force")
+    print("   on their own clause (often 'the day following publication'), so checks")
+    print("   A-C never see them in time. THIS IS THE ONE THAT CATCHES A LAW DROP.")
+    inf_err = [r for r in inf if r.get("error")]
+    real_inf = [r for r in inf if not r.get("error")]
+    if inf_err:
+        for r in inf_err:
+            print(f"   [!] {r['title']}")
+    elif not real_inf:
+        print("   none.")
+    for r in real_inf:
+        mark = f"[amends {', '.join(r['touches'])}] " if r.get("touches") else ""
+        dif = r.get('date_in_force')
+        when = str(dif) if dif else 'date unknown'
+        print(f"   in force {when:10s}  {r['celex']:14s} {mark}{(r['title'] or '')[:72]}")
+
     print("\nVERDICT")
+    if real_inf:
+        print(f"  {len(real_inf)} act(s) ALREADY IN FORCE with no cluster -- read the final "
+              f"article of each and consider /lawdrop.")
     if flagged:
         print(f"  {len(flagged)} MISSED law drop(s) -- a passed deadline with nothing shipped.")
     if up:
@@ -446,7 +549,7 @@ def main() -> int:
     if cal:
         print(f"  {len(cal)} dated milestone(s) in the calendar with NO cluster requirement "
               f"-- check A cannot see these.")
-    if not (flagged or up or unc or cal):
+    if not (flagged or up or unc or cal or real_inf):
         print("  No law drop in the window.")
     return 0
 
