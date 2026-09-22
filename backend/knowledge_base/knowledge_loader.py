@@ -6723,6 +6723,10 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # GDPR / Data Protection (training 31 Mar 2026)
     'gdpr': ['gdpr_data_protection'],
+    'c-317/25': ['gdpr_data_protection'],
+    'groupe canal': ['gdpr_data_protection'],
+    'consent for direct marketing': ['gdpr_data_protection'],
+    'partners direct marketing consent': ['gdpr_data_protection'],
     # The article-level reference guide also carries the canon deep-dive
     # ALWAYS-LINK. It used to be reachable ONLY by typing the literal CELEX, so
     # every natural-language GDPR question missed it and the eucanon URL was

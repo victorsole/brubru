@@ -4,6 +4,14 @@
     {
       "date": "2026-09-22",
       "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "GDPR and data protection",
+      "summary": "AG Spielmann's opinion in C-317/25 Groupe Canal+: consent for direct marketing by unnamed partners is invalid; judgment pending",
+      "refs": []
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
       "guide": "eu_minors_social_media_age_limits",
       "title": "EU minors and social media age limits",
       "summary": "EU Kids Act OEIL procedure reference added: 2026/0286(COD)",
