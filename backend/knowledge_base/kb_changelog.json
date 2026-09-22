@@ -4,6 +4,39 @@
     {
       "date": "2026-09-22",
       "action": "updated",
+      "guide": "eppo_european_public_prosecutor",
+      "title": "European Public Prosecutor's Office",
+      "summary": "Commission evaluations of the EPPO Regulation and of OLAF Regulation 883/2013; Hungary notified intention to join the EPPO on 29 May 2026",
+      "refs": [
+        "52026DC0491",
+        "52026DC0493"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "european_health_data_space",
+      "title": "European Health Data Space",
+      "summary": "Same two implementing regulations added",
+      "refs": [
+        "32026R2083",
+        "32026R2098"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "ehds_european_health_data_space",
+      "title": "European Health Data Space",
+      "summary": "MyHealth@EU implementing regulation 2026/2083 (applies 26 Mar 2027) and the secondary-use minimum metadata regulation 2026/2098 (applies 26 Mar 2029)",
+      "refs": [
+        "32026R2083",
+        "32026R2098"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
       "guide": "eu_minors_social_media_age_limits",
       "title": "EU minors and social media age limits",
       "summary": "EU Kids Act text published (COM(2026)681); the under-15 rule is conditional on the service meeting risk criteria, not a blanket ban",

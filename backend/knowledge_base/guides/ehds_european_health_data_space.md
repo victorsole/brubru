@@ -14,6 +14,10 @@ triggers: ["ehds", "european health data space", "electronic health record", "eh
 
 ## QUICK FACTS
 
+- **NEW IMPLEMENTING ACTS (published 18 September 2026, verified 22 September against the acts themselves).** The first operational layer of the EHDS is now law. Both were adopted under Regulation (EU) 2025/327:
+  - **Commission Implementing Regulation (EU) 2026/2083 of 18 September 2026 on MyHealth@EU** — CELEX `32026R2083`, ELI http://data.europa.eu/eli/reg_impl/2026/2083/oj. **Article 1**: rules on **cybersecurity, technical interoperability, semantic interoperability, operations and service management** for the Commission's processing **as processor** for MyHealth@EU, and its responsibilities towards the **joint controllers**. Enters into force on the **twentieth day** after publication; **applies from 26 March 2027** — the same date the EHDS primary-use regime starts, so this is the instrument that makes MyHealth@EU operable on day one.
+  - **Commission Implementing Regulation (EU) 2026/2098 of 18 September 2026** laying down the **minimum metadata elements and their characteristics to be provided by health data holders for dataset descriptions for the SECONDARY use** of electronic health data — CELEX `32026R2098`, ELI http://data.europa.eu/eli/reg_impl/2026/2098/oj. Adopted under **Article 77(4)** of Regulation (EU) 2025/327; **Article 1** ties the obligation to **Article 60(3)**, the duty on health data holders to describe their datasets to **health data access bodies**. Enters into force on the twentieth day after publication; **applies from 26 March 2029**.
+  - **Do not conflate the two dates: 26 March 2027 for MyHealth@EU, 26 March 2029 for the secondary-use metadata.** They are two years apart and answer different questions.
 - **Formal title:** Regulation (EU) 2025/327 of the European Parliament and of the Council of 11 February 2025 on the European Health Data Space and amending Directive 2011/24/EU and Regulation (EU) 2024/2847
 - **CELEX:** 32025R0327
 - **OJ:** OJ L, 2025/327, 5.3.2025 (ELI: http://data.europa.eu/eli/reg/2025/327/oj)
