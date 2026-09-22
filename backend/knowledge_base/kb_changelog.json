@@ -4,6 +4,36 @@
     {
       "date": "2026-09-22",
       "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "EU minors and social media age limits",
+      "summary": "EU Kids Act text published (COM(2026)681); the under-15 rule is conditional on the service meeting risk criteria, not a blanket ban",
+      "refs": [
+        "52026PC0681"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "union_customs_code_reform",
+      "title": "Union Customs Code Reform",
+      "summary": "Procedure closed; act adopted as Regulation (EU) 2026/2108",
+      "refs": [
+        "32026R2108"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Adopted: Regulation (EU) 2026/2108, in force 20 Sep 2026, applying 21 Sep 2027; EU Customs Authority in Lille; Data Hub calendar and the 29 Sep 2026 handling-fee delegated act",
+      "refs": [
+        "32026R2108"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "action": "updated",
       "guide": "chips_ju_chips_for_europe",
       "title": "Chips Joint Undertaking",
       "summary": "Chips Fund no longer described as new in Chips Act 2.0",
