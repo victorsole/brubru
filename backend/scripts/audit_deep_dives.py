@@ -140,7 +140,42 @@ def fetch_facts(engine, refs: List[str]) -> Dict[str, dict]:
     return out
 
 
-def audit_one(dd: dict, facts: Optional[dict]) -> dict:
+def fetch_by_title(engine, dds: List[dict]) -> Dict[str, List[dict]]:
+    """Committee documents found by TITLE, for rows with no procedure_ref.
+
+    49% of ep_emeeting_documents rows carry no procedure_ref (8,135 of 16,603).
+    For the kinds that matter the coverage is good -- draft reports 97.6%,
+    amendments 96%, voting lists 91% -- but the remainder is not nothing, and
+    the untagged rows include committee EVENTS that never carry a ref at all.
+
+    The Industrial Accelerator Act is the case that proved it: a joint IMCO and
+    INTA public-hearing programme on 2 September 2026 ("Final_programme_PH_IAA")
+    has no procedure_ref, so a ref-only query reported no committee activity on
+    a file that had just been through a public hearing.
+    """
+    out: Dict[str, List[dict]] = {}
+    with engine.connect() as c:
+        for d in dds:
+            needle = (d.get("short_title") or d.get("title") or "").strip()
+            if len(needle) < 6:
+                continue
+            rows = c.execute(text("""
+                SELECT doc_kind, committee_code, coalesce(reference,'') AS ref,
+                       meeting_date, left(coalesce(item_title, title), 90) AS t
+                  FROM ep_emeeting_documents
+                 WHERE procedure_ref IS NULL
+                   AND coalesce(item_title,'') || coalesce(title,'') ILIKE :pat
+                 ORDER BY meeting_date DESC LIMIT 25
+            """), {"pat": f"%{needle}%"}).mappings().all()
+            if rows:
+                out[d["base_path"]] = [
+                    {"kind": r["doc_kind"], "committee": r["committee_code"],
+                     "ref": r["ref"], "date": str(r["meeting_date"]), "title": r["t"]}
+                    for r in rows]
+    return out
+
+
+def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = None) -> dict:
     base = dd["base_path"]
     pages = pages_for(base)
     res = {"base_path": base, "title": dd.get("short_title") or dd.get("title"),
@@ -153,6 +188,14 @@ def audit_one(dd: dict, facts: Optional[dict]) -> dict:
     raw0 = pages[0].read_text(encoding="utf-8", errors="replace")
     m = _META_RE.search(raw0)
     res["reviewed"] = m.group(1) if m else None
+
+    # Untagged committee activity found by title: report it whatever the
+    # carriage says, because these rows never carry a procedure reference.
+    for u in (untagged or []):
+        if fold(u["date"]) not in page_text(pages[0]) and (
+                not u["ref"] or fold(u["ref"]) not in page_text(pages[0])):
+            res.setdefault("untagged", []).append(
+                f"{u['kind'].replace('_',' ')} {u['committee']} {u['date']} \"{u['title'][:52]}\"")
 
     if facts is None:
         res["notes"].append("no carriage for this procedure ref, nothing to compare against")
@@ -233,22 +276,24 @@ def main() -> int:
     engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True)
     facts = fetch_facts(engine, refs)
 
-    results = [audit_one(d, facts.get(d.get("procedure_ref"))) for d in dds]
+    untagged = fetch_by_title(engine, dds)
+    results = [audit_one(d, facts.get(d.get("procedure_ref")),
+                         untagged.get(d["base_path"], [])) for d in dds]
 
     if a.json:
         print(json.dumps({"results": results, "facts": facts}, indent=1, default=str))
         return 1 if any(r["missing"] or r.get("emeeting_newer") or r.get("owed") for r in results) else 0
 
-    behind = [r for r in results if r["missing"] or r.get("emeeting_newer") or r.get("owed")]
+    behind = [r for r in results if any((r["missing"], r.get("emeeting_newer"), r.get("owed"), r.get("untagged")))]
     print(f"DEEP-DIVE AUDIT  {len(results)} deep-dive(s), "
           f"{sum(r['pages'] for r in results)} page(s)")
     print("=" * 78)
     for r in sorted(results, key=lambda x: (not x["missing"], x["base_path"])):
         head = f"{r['base_path']:<34} {str(r['procedure_ref'] or '-'):<18} reviewed {r['reviewed'] or '-'}"
-        if not r["missing"] and not r.get("emeeting_newer") and not r.get("owed"):
+        if not any((r["missing"], r.get("emeeting_newer"), r.get("owed"), r.get("untagged"))):
             print(f"[ok  ] {head}")
             continue
-        flag = 'BEHIND' if (r['missing'] or r.get('emeeting_newer') or r.get('owed')) else 'note '
+        flag = 'BEHIND' if any((r['missing'], r.get('emeeting_newer'), r.get('owed'), r.get('untagged'))) else 'note '
         print(f'[{flag:<6}] {head}')
         for note in r["notes"]:
             print(f"         note: {note}")
@@ -263,6 +308,8 @@ def main() -> int:
             print(f"         missing: {f}   [{where}]")
         for owed in r.get("owed", []):
             print(f"         NOT ANALYSED: {owed}")
+        for u in r.get("untagged", []):
+            print(f"         NOT ANALYSED (no procedure ref, found by title): {u}")
     print()
     print(f"{len(behind)} of {len(results)} deep-dive(s) are behind their own file.")
     return 1 if behind else 0

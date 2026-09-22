@@ -112,11 +112,24 @@ def render_checks(paths: List[pathlib.Path]) -> Dict[str, List[str]]:
                     "document.documentElement.scrollWidth - document.documentElement.clientWidth")
                 if ov > 0:
                     # Name the element, or the report is unactionable.
-                    worst = pg.evaluate("""() => {let r=[];document.querySelectorAll('*').forEach(e=>{
-                        const b=e.getBoundingClientRect();
-                        if(b.right>window.innerWidth+2) r.push({t:e.tagName,
-                          c:(e.className||'').toString().slice(0,26), x:Math.round(b.right)});});
-                        return r.sort((a,b)=>b.x-a.x)[0]||null;}""")
+                    # Ignore anything inside a horizontal SCROLL container.
+                    # Deep-dive tables are deliberately `overflow-x:auto` at small
+                    # widths, so their cells legitimately extend past the viewport
+                    # and dominate a naive "widest element" sort. On nl.html that
+                    # pointed at a table header while the real cause was a 4px-wide
+                    # language <select>, and it cost a wrong diagnosis.
+                    worst = pg.evaluate("""() => {
+                        const bad=[];
+                        document.querySelectorAll('*').forEach(e=>{
+                          const b=e.getBoundingClientRect();
+                          if(b.right<=window.innerWidth+2) return;
+                          let p=e.parentElement, inScroll=false;
+                          while(p){const cs=getComputedStyle(p);
+                            if(cs.overflowX==='auto'||cs.overflowX==='scroll'){inScroll=true;break;}
+                            p=p.parentElement;}
+                          if(!inScroll) bad.push({t:e.tagName,
+                            c:(e.className||'').toString().slice(0,26), x:Math.round(b.right)});});
+                        return bad.sort((a,b)=>b.x-a.x)[0]||null;}""")
                     fails.append(f"{w}px: {ov}px horizontal overflow (worst: {worst})")
                 pg.close()
             if fails:

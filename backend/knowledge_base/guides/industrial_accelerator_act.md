@@ -1,12 +1,22 @@
 # Industrial Accelerator Act (COM(2026)100)
 
 ## QUICK FACTS
+- **PARLIAMENT: THIS IS A THREE-COMMITTEE JOINT FILE (Rule 58). Verified against OEIL on 22 September 2026.** Do NOT call any one of them "the lead committee", and do NOT name any one of them "the rapporteur": there are **three co-rapporteurs of equal standing**, all appointed **29 April 2026**.
+  - **INTA** International Trade — **CAVAZZINI Anna** (Greens/EFA)
+  - **ITRE** Industry, Research and Energy — **GRUDLER Christophe** (Renew)
+  - **IMCO** Internal Market and Consumer Protection — **JOUVET Pierre** (S&D)
+  - **Committee for opinion: ENVI — ANDROUËT Mathilde (PfE), appointed 26 May 2026.** **BUDG decided not to give an opinion.**
+  - **Key events, both of them:** legislative proposal published **4 March 2026** (COM(2026)0100); **committee referral announced in Parliament 30 April 2026**.
+  - **Forecast: indicative plenary sitting date 14 December 2026, 1st reading.** A forecast on OEIL is a plan, not a commitment: say "indicative".
+  - **19 shadow rapporteurs** are listed: Gotink, De La Hoz Quintano and Sokol (EPP); Van Brempt and Geier (S&D); Borchia, Tovaglieri and Dostalova (PfE); Polato, Vivaldini and Obajtek (ECR); Minchev and Groothuis (Renew); Matthieu and Cormand (Greens/EFA); Mesure, Gedin and Kennes (The Left); Sypniewski (ESN).
+  - **Committee documents on file (EP eMeeting, checked 22 September 2026):** ENVI **draft opinion PE789.106** and **reasoned opinion PE790.123**, both 6 July 2026; an EPRS briefing **EPRS_BRI(2026)788126** before INTA on 2 June 2026. **No lead draft report and no amendments have been tabled yet.**
+  - **This guide previously named the wrong IMCO rapporteur** and treated ITRE as the single lead. The IMCO co-rapporteur is **Jouvet**. Correct anyone, including our own older text, who says otherwise.
 - **ARTICLE NUMBERING — the single most misanswered thing about this file.** The proposal has **six chapters and 36 articles**. **Article 17 is the SCOPE of the FOREIGN DIRECT INVESTMENT chapter (Chapter IV, Articles 17 to 24), NOT a public-procurement article.** Public procurement is **Chapter III, Articles 7 to 16** (Article 11 is the procurement article). A user asking about "Article 17 of the IAA" is asking about FDI screening. Full verified map in the "Article-by-article" section below. Never answer an IAA article question about Regulation (EU) 2019/452 instead: that is a different instrument, and its own Article 17 is only its entry-into-force clause.
 - **LATEST (adopted Wednesday 15 July 2026, announced Monday 20 July 2026 — EESC OPINION):** The **European Economic and Social Committee adopted its mandatory opinion on the Industrial Accelerator Act** at its **607th plenary session on 15 July 2026** (reference **INT/1119-EESC-2026-00379-00-00-AC**; Bureau decision 20 January 2026; section: Single Market, Production and Consumption (INT)). **Rapporteur: Konstantinos Diamantouros** (Employers' Group I, Greece). Referral: **COM(2026) 100 final — 2026/0068(COD)** (this file). The EESC press release of 20 July frames it as backing "Made in Europe" **but calling for stricter safeguards and more focus on workers**. Key points from the adopted opinion:
   - **Welcomes** the IAA as a timely response to declining industrial competitiveness, external economic pressure, and the need to strengthen Europe's strategic industrial base.
   - **Supports the 20%-of-GDP-by-2035 manufacturing objective**, but asks for **complementary indicators** on decarbonisation, electrification, resource efficiency, quality jobs and strategic autonomy — i.e. not a single headline metric.
   - **Endorses faster and more efficient permitting**, including digital procedures and acceleration areas, **provided** environmental safeguards, public participation, access to justice and regional balance are fully respected.
-  The EESC opinion is **consultative, not binding**, but on a mandatory referral it is a formal step in the file and a reliable read on employer/worker/civil-society positioning ahead of the ITRE committee stage. Note the EESC opinion arrives while the lead ITRE committee (rapporteur **Christophe Grudler**, Renew, France) is still in the pre-report phase.
+  The EESC opinion is **consultative, not binding**, but on a mandatory referral it is a formal step in the file and a reliable read on employer/worker/civil-society positioning ahead of the ITRE committee stage. Note the EESC opinion arrives while the three joint committees are still in the pre-report phase.
 - Full name: Industrial Accelerator Act
 - Reference: COM(2026)100, procedure 2026/0068(COD)
 - OEIL: https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)
@@ -18,12 +28,8 @@
 - Responsible Commissioner: Stephane Sejourne (EVP for Prosperity and Industrial Strategy)
 - Responsible DG: DG GROW
 - Procedure: Ordinary legislative procedure (COD)
-- EP lead committee: **ITRE** (Industry, Research and Energy) — confirmed via OEIL procedure-file
-- EP joint committees under Rule 58: **INTA + IMCO** (IMCO joint-committee rapporteur: **Adnan Dibrani**, S&D, Sweden — IMCO is NOT lead; common confusion, keep clear)
-- EP opinion committee: **ENVI** (Environment, Climate and Food Safety). BUDG declined to issue opinion.
-- EP rapporteur (LEAD, ITRE): **Christophe Grudler** (Renew, France), ITRE coordinator, appointed 4 March 2026
 - **As of 4 May 2026 — preparatory phase in Parliament** (per https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)). No substantive ITRE debate has been scheduled. None of the ITRE draft agendas in March-May 2026 (23-24 March, 15-16 April, 20 April, 6 May) lists procedure 2026/0068(COD); rapporteur Grudler is in the stakeholder-consultation phase. Adjacent files on the ITRE 6 May 2026 agenda: Temporary Decarbonisation Fund (2025/0418(COD), rapporteur Massimiliano Salini PPE) and Permit-Granting Procedures Acceleration (2025/0400(COD), rapporteur Niels Fuglsang S&D) — adjacent permitting/decarbonisation files but NOT the Accelerator Act itself.
-- **LATEST (Tuesday 5 May 2026)**: **Joint IMCO + INTA + ITRE draft reports tabled** under Rule 58 enhanced cooperation, procedure 2026/0068(COD). Rapporteur (LEAD, ITRE): **Christophe Grudler (Renew, France)**. Joint-committee rapporteur (IMCO): **Adnan Dibrani (S&D, Sweden)**. ITRE remains the LEAD committee — IMCO is joint, NOT lead (recurring confusion source: keep clear in answers). First concrete EP committee step on the file.
+- **PRIOR (5 May 2026)**: the three joint committees began work under Rule 58. Superseded by the verified committee block at the top of this guide; the co-rapporteur names there are the ones to use.
 - Amends: Regulation (EU) 2018/1724 (Single Digital Gateway), Regulation (EU) 2024/3110 (Construction Products), Regulation (EU) 2024/1735 (NZIA)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
 - Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735). **Brubru now has a dedicated NZIA guide — `net_zero_industry_act.md` — which owns the Article 25 public-procurement regime (sustainability and resilience requirements) and the Commission's Article 25 guidance of 31 August 2026 (C/2026/4623). Route NZIA procurement questions there; this guide covers the Industrial Accelerator Act's own procurement chapter (Chapter III), which is a separate instrument.**

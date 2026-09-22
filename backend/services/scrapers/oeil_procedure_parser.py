@@ -59,6 +59,12 @@ class ProcedureFacts:
     # two committees share responsibility and each has its own rapporteur, so
     # `responsible_committee` is the FIRST of two, not the only one.
     joint_committee: bool = False
+    # ALL committees sharing responsibility, in OEIL's order. A Rule 58 file can
+    # have three: the Industrial Accelerator Act is INTA + ITRE + IMCO, each with
+    # its own rapporteur. Keeping only the first dropped ITRE and IMCO from the
+    # carriage entirely and would have published Cavazzini as "the" rapporteur
+    # across six public pages, erasing Grudler and Jouvet.
+    responsible_committees: List[str] = field(default_factory=list)
     opinion_committees: List[str] = field(default_factory=list)
     rapporteur_name: Optional[str] = None
     rapporteur_appointed: Optional[date] = None
@@ -67,8 +73,9 @@ class ProcedureFacts:
 
     @property
     def all_committees(self) -> List[str]:
-        out = ([self.responsible_committee] if self.responsible_committee else [])
-        return out + [c for c in self.opinion_committees if c != self.responsible_committee]
+        out = list(self.responsible_committees) or (
+            [self.responsible_committee] if self.responsible_committee else [])
+        return out + [c for c in self.opinion_committees if c not in out]
 
 
 def _section(text: str, start_label: str, end_labels: tuple[str, ...]) -> str:
@@ -145,6 +152,9 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
 
     resp_codes = _codes_in(resp)
     if resp_codes:
+        # Keep every responsible committee, not just the first. `_codes_in` is
+        # order-preserving and de-duplicating, so this is OEIL's own order.
+        facts.responsible_committees = resp_codes
         facts.responsible_committee = resp_codes[0]
     facts.opinion_committees = [
         c for c in _codes_in(opin) if c != facts.responsible_committee
