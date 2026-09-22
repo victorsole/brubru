@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="brubru:last-reviewed" content="2026-09-22">
+  <title>De CSAM-verordening uitgelegd: de strijd tegen online seksueel kindermisbruik | Brubru</title>
+  <meta name="description" content="Volledige gids bij het voorstel voor de EU-CSAM-verordening (COM(2022) 209): verplichte opsporingsbevelen, het EU-centrum voor seksueel kindermisbruik, de crisis rond de ePrivacy-afwijking en het debat over chatcontrole. Artikelsgewijze analyse.">
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-red);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-red), var(--color-amber), var(--color-purple), var(--color-red));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-red); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220,38,38,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(220,38,38,0.08); color: var(--color-red); }
+    .toc__link .mdi { color: var(--color-red); font-size: 1.1rem; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-red); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(217,119,6,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    .alert-box {
+      background: linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(220,38,38,0.03) 100%);
+      border: 2px solid var(--color-red);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .alert-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; color: var(--color-red); }
+    .alert-box p { color: var(--color-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(220,38,38,0.03); }
+    .highlight-cell { color: var(--color-red); font-weight: 600; }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-red); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-red);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-red);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-red); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-red); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+
+    .pm {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .pm a { color: var(--color-red); text-decoration: none; }
+    .pm a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+      /* responsive-tables */ @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
+  
+  /* ---- CANONICAL BRUBRU FOOTER (mirrors frontend/src/components/shared/footer.css,
+     tokens resolved because a standalone page never loads globals.css). Do not restyle. ---- */
+  .footer { width:100%; background-color:#f9fafb; border-top:1px solid #e5e7eb; margin-top:auto;
+    position:relative; z-index:10; text-align:left;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,.01) 10px, rgba(0,0,0,.01) 11px); }
+  .footer__container { max-width:100%; width:100%; margin:0; padding:2rem 1.5rem 1.5rem; }
+  .footer__content { display:flex; flex-direction:column; gap:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
+  .footer__section { display:flex; flex-direction:column; gap:.5rem; min-width:0; }
+  .footer__section--brand { gap:.75rem; flex-shrink:0; padding-right:1.5rem; position:relative; }
+  .footer__section:last-child { flex-shrink:0; min-width:fit-content; }
+  .footer__section--nav { gap:.75rem; }
+  .footer__nav-title { font-size:.8125rem; font-weight:600; color:#111827; margin-bottom:0;
+    text-transform:uppercase; letter-spacing:.5px; }
+  .footer__brand { display:flex; align-items:center; gap:1rem; }
+  .footer__logo { height:48px; width:auto; transition:all .3s cubic-bezier(.34,1.56,.64,1); cursor:pointer; }
+  .footer__logo:hover { transform:scale(1.08) rotate(-2deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.15)); }
+  .footer__brand-info { display:flex; flex-direction:column; gap:.25rem; }
+  .footer__copyright { font-size:.8125rem; color:#111827; margin-bottom:0; }
+  .footer__trademark { font-size:.75rem; color:#6b7280; margin-bottom:0; }
+  .footer__beresol-link { color:#111827; text-decoration:none; font-weight:600; transition:all .3s ease; position:relative; }
+  .footer__beresol-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s ease; }
+  .footer__beresol-link:hover { color:#0693e3; text-decoration:none; }
+  .footer__beresol-link:hover::after { width:100%; }
+  .footer__nav { display:flex; flex-wrap:wrap; gap:.75rem 1rem; align-items:flex-start; row-gap:.5rem; }
+  .footer__link { font-size:.8125rem; color:#111827; font-weight:500; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; position:relative; display:inline-block; }
+  .footer__link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background:linear-gradient(to right,#0693e3,#9b51e0); transition:width .3s cubic-bezier(.4,0,.2,1); }
+  .footer__link:hover { color:#0693e3; text-decoration:none; transform:translateX(4px); }
+  .footer__link:hover::after { width:100%; }
+  .footer__link--social { display:inline-flex; align-items:center; gap:.35rem; }
+  .footer__link--social svg { flex:0 0 auto; }
+  @media (min-width:768px) {
+    .footer__section--brand::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, #e5e7eb 20%, #e5e7eb 80%, transparent); opacity:.5; }
+    .footer__content { flex-direction:row; justify-content:flex-start; align-items:flex-start; gap:2rem; flex-wrap:wrap; }
+    .footer__section--brand { flex:0 0 auto; max-width:500px; }
+    .footer__section--nav { flex:0 0 auto; min-width:300px; }
+  }
+  @media (max-width:767px) {
+    .footer { margin-left:0 !important; width:100% !important; }
+    .footer__container { padding:1.5rem 1rem 1rem; }
+    .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
+    .footer__logo { height:40px; }
+    .footer__nav { gap:.75rem; }
+  }
+    /* brubru:mobile-fix-2026-09-22
+       Phone fixes measured from a real device screenshot. The sticky header was
+       taking 27% of an iPhone SE screen (33% on the Cloud and AI page) because
+       the CTA was never hidden below 767px, leaving 51px for the title. */
+    @media (max-width: 767px) {
+      .header__cta { display: none !important; }
+      .header { gap: 0.75rem; }
+      /* Target the select by POSITION, not by class. On biotech-act and
+         csam-regulation it carries no `lang-select` class, so a class-only rule
+         left the browser default at 109px wide, which starved the title column
+         and kept those headers at 145px and 123px. */
+      .header select, .lang-select {
+        min-height: 44px; padding: 0.4rem 0.4rem; max-width: 72px;
+        font-size: 0.85rem;
+      }
+      .toc__link { min-height: 44px; }
+      /* Long file names wrapped the sticky bar to two lines each and kept the
+         Industrial Accelerator Act and Late Payments headers at 123px. Clamp to
+         one line apiece: the full title sits in the hero immediately below. */
+      /* min-width:0 is NOT optional here. A flex item defaults to
+         min-width:auto, so once the children are `nowrap` its min-content width
+         becomes the whole string and the item refuses to shrink, shoving the
+         language select off the right edge. That is exactly what happened: the
+         clamp alone put 32 pages into horizontal overflow at 375px, caught by
+         validate_deep_dive_html.py --render. */
+      .header__text { min-width: 0; }
+      .header__title, .header__subtitle {
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .back-to-top { width: 40px; height: 40px; bottom: 0.75rem; right: 0.75rem; }
+    }
+    /* The button is only wanted when the reader is heading back up. Hiding it on
+       downward scroll is what stops it sitting on top of the paragraph. */
+    .back-to-top { transition: opacity .2s ease, transform .2s ease; }
+    .back-to-top.btt--away { opacity: 0; pointer-events: none; transform: translateY(6px); }
+
+    /* A `1fr` track floors at min-content, so one long unbreakable word in a
+       figure card pushes the whole page sideways. It surfaced twice: the Dutch
+       "Geblokkeerd" on late-payments (72px at 375px) and the Dutch compound
+       "kindermisbruikmateriaal" on the CSAM page (29px). Same cause, different
+       word, so fix it everywhere rather than per page. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number, .figure-card__label { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
+</style>
+    <script src="/analytics.js" defer></script>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">CSAM-verordening uitgelegd</div>
+    <div class="header__subtitle">Strijd tegen online seksueel kindermisbruik</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Language" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+    <option value="ca.html">Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0155(COD)" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2022) 209</a> | Proposed 11 May 2022</div>
+  <h1 class="hero__title">De strijd tegen online<br><span>seksueel kindermisbruik</span></h1>
+  <p class="hero__subtitle"> Het EU-voorstel voor een verordening ter voorkoming en bestrijding van seksueel kindermisbruik. Verplichte opsporingsbevelen, een EU-centrum voor seksueel kindermisbruik en het meest omstreden debat over digitale rechten in Europa. Dit is alles wat u moet weten. </p>
+  <div class="hero__meta"> <span><i class="mdi mdi-file-document-outline"></i> Voorstel voor een verordening (COD)</span> <span><i class="mdi mdi-scale-balance"></i> In trialoogonderhandelingen</span> <span><i class="mdi mdi-alert-circle-outline"></i> Tijdelijke afwijking: verlopen op 3 april 2026</span> </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">20,5 mln</div>
+    <div class="figure-card__label">Meldingen bij de NCMEC CyberTipline (2024)</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">1.325%</div>
+    <div class="figure-card__label">Toename van AI-gegenereerd kindermisbruikmateriaal (2023 tot 2024)</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">70%</div>
+    <div class="figure-card__label">Bekend kindermisbruikmateriaal herleid tot Europa (IWF 2024)</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">68%</div>
+    <div class="figure-card__label">EU-meldingen bij de CyberTipline afkomstig van chat- en berichtendiensten</div>
+  </div>
+</div>
+
+<!-- Alert box: derogation expired -->
+<div class="alert-box">
+  <h3><i class="mdi mdi-alert-circle"></i> Temporary Derogation Expired</h3>
+  <p>Verordening (EU) 2021/1232, de rechtsgrondslag voor vrijwillige scanning op kindermisbruikmateriaal in privéberichten door aanbieders als WhatsApp, Discord en Telegram, <strong>is op 3 april 2026 verstreken</strong>. Het Europees Parlement heeft een standpunt aangenomen dat de afwijking verlengt tot 3 augustus 2027 met aanzienlijke voorwaarden, maar de Raad heeft daar nog niet mee ingestemd. Zolang beide instellingen geen overeenstemming bereiken, is er <strong>geen EU-rechtsgrondslag</strong> voor vrijwillige opsporing van kindermisbruikmateriaal in privécommunicatie.</p>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#problem" class="toc__link"><i class="mdi mdi-chart-line"></i> The problem: scale and trends</a>
+    <a href="#framework" class="toc__link"><i class="mdi mdi-layers-outline"></i> EU regulatory framework</a>
+    <a href="#derogation" class="toc__link"><i class="mdi mdi-clock-alert-outline"></i> Temporary derogation crisis</a>
+    <a href="#proposal" class="toc__link"><i class="mdi mdi-file-document-outline"></i> Commission proposal</a>
+    <a href="#detection" class="toc__link"><i class="mdi mdi-magnify-scan"></i> Detection orders and technologies</a>
+    <a href="#eucsa" class="toc__link"><i class="mdi mdi-shield-check-outline"></i> EU Centre (EUCSA)</a>
+    <a href="#positions" class="toc__link"><i class="mdi mdi-account-group-outline"></i> Parliament vs. Council</a>
+    <a href="#epencryption" class="toc__link"><i class="mdi mdi-lock-outline"></i> The encryption debate</a>
+    <a href="#stakeholders" class="toc__link"><i class="mdi mdi-comment-text-outline"></i> Stakeholder positions</a>
+    <a href="#minors" class="toc__link"><i class="mdi mdi-account-child-outline"></i> DSA guidelines on minors</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-timeline-clock-outline"></i> Legislative timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+  </div>
+</nav>
+
+<!-- Section: The Problem -->
+<section class="section" id="problem">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Het probleem: omvang en trends</h2>
+  </div>
+  <p class="section__subtitle">Online seksueel misbruik van kinderen neemt toe in omvang en ernst en richt zich steeds vaker op jongere kinderen</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">NCMEC Data</div>
+      <div class="article-card__title">20,5 miljoen meldingen in 2024</div>
+      <div class="article-card__desc">De CyberTipline van het Amerikaanse National Center for Missing &amp; Exploited Children ontving in 2024 meer dan 20,5 miljoen meldingen van vermoedelijk online kindermisbruikmateriaal. Het merendeel betrof de verspreiding van bekend materiaal.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">AI-Generated CSAM</div>
+      <div class="article-card__title">Toename van 1.325% in één jaar</div>
+      <div class="article-card__desc">Meldingen van AI-gegenereerd kindermisbruikmateriaal stegen van 4.700 in 2023 naar 67.000 in 2024. Operatie Cumberland (2025, 19 landen) was de eerste grote zaak met AI-gegenereerd materiaal.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">European Hosting</div>
+      <div class="article-card__title">70% van het bekende kindermisbruikmateriaal herleid tot Europa</div>
+      <div class="article-card__desc">Volgens de Internet Watch Foundation werd 70% van al het bekende kindermisbruikmateriaal in 2024 herleid tot een Europees land. Vrijwel alle inhoud (99%) stond op openbaar toegankelijke delen van het internet.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Messaging Services</div>
+      <div class="article-card__title">68% van de EU-meldingen komt uit chats</div>
+      <div class="article-card__desc">In 2022 was 68% van de meldingen bij de CyberTipline afkomstig van chat-, berichten- of e-maildiensten binnen de EU. Nog eens 22% kwam van socialemediaplatforms of onlinegamingplatforms.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Younger Victims</div>
+      <div class="article-card__title">Stijging van 65% bij kinderen van 7 tot 10 jaar</div>
+      <div class="article-card__desc">Zelfgemaakt materiaal neemt toe bij jongere leeftijdsgroepen. Gegevens van INHOPE tonen dat de meeste slachtoffers die zelfgemaakt materiaal produceerden tussen 3 en 13 jaar oud waren. Tussen 2022 en 2023 werd een stijging van 65% van kindermisbruikmateriaal bij kinderen van 7 tot 10 jaar geregistreerd.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Sextortion</div>
+      <div class="article-card__title">Financiële sextortion neemt wereldwijd toe</div>
+      <div class="article-card__desc">De FBI gaf begin 2023 een wereldwijde waarschuwing over de toename van financiële sextortion: nepaccounts benaderen minderjarigen op digitale platforms, dwingen expliciet materiaal af en eisen vervolgens betaling onder dreiging van publicatie.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: EU Framework -->
+<section class="section" id="framework">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-layers-outline"></i></div>
+    <h2 class="section__title">EU-regelgevingskader</h2>
+  </div>
+  <p class="section__subtitle">Drie lagen: strafrecht, vrijwillige opsporing (tijdelijk) en de voorgestelde permanente verordening</p>
+
+  <div class="info-box">
+    <h3>Architectuur met drie lagen</h3>
+    <p><strong>Laag 1: strafrecht</strong> (Richtlijn 2011/93/EU) stelt minimumregels vast voor strafbare feiten en straffen inzake kindermisbruikmateriaal in alle lidstaten, met inbegrip van grooming. <strong>Laag 2: vrijwillige opsporing</strong> (Verordening 2021/1232, inmiddels verstreken) week tijdelijk af van de e-privacyregels om NI-ICS-aanbieders toe te staan te scannen op kindermisbruikmateriaal. <strong>Laag 3: permanente verordening</strong> (COM(2022) 209) stelt verplichte opsporings-, meldings- en verwijderingsverplichtingen voor. Momenteel in trialoog.</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Laag</th>
+        <th>Instrument</th>
+        <th>Status</th>
+        <th>Kernmechanisme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Strafrecht</td>
+        <td>Richtlijn 2011/93/EU</td>
+        <td><span class="pill pill--green">Van kracht</span></td>
+        <td>Minimumdefinities van strafbare feiten, straffen, verwijderings- en blokkeringsbevelen</td>
+      </tr>
+      <tr>
+        <td>Vrijwillige opsporing</td>
+        <td>Verordening 2021/1232 (zoals verlengd bij 2024/1307)</td>
+        <td><span class="pill pill--red">Verstreken op 3 april 2026</span></td>
+        <td>E-privacyafwijking voor vrijwillige scanning op kindermisbruikmateriaal door NI-ICS</td>
+      </tr>
+      <tr>
+        <td>Permanente verordening</td>
+        <td>COM(2022) 209</td>
+        <td><span class="pill pill--amber">In trialoog</span></td>
+        <td>Verplichte opsporingsbevelen, EUCSA, verwijdering binnen 24 uur</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: Derogation Crisis -->
+<section class="section" id="derogation">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-clock-alert-outline"></i></div>
+    <h2 class="section__title">De crisis rond de tijdelijke afwijking</h2>
+  </div>
+  <p class="section__subtitle">De rechtsgrondslag voor vrijwillige scanning op kindermisbruikmateriaal is op 3 april 2026 verstreken</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-red);"></i> Verlengingsprocedure: 2025/0429(COD)</div>
+    <p>De Commissie stelde op 19 december 2025 voor de afwijking te verlengen. De commissie LIBE heeft het dossier opgepakt; volgens OEIL lopen de gebeurtenissen in de commissiefase van 19 december 2025 tot een commissieverslag van 11 maart 2026. Op 23 april 2026 bevindt het dossier zich nog vóór de plenaire fase; geen naam van een rapporteur en geen stemuitslag zijn onafhankelijk geverifieerd tegen doceo.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-information-outline" style="color: var(--color-red);"></i> Verlengingsprocedure 2025/0429(COD): huidige stand van zaken</div>
+    <p>Op 23 april 2026 bevindt het dossier zich volgens OEIL in de commissiefase van LIBE (status CLOSE_TO_ADOPTION). Door OEIL geverifieerde gebeurtenissen: wetgevingsvoorstel 19 december 2025 + 27 januari 2026; commissieverslag 5 februari + 10 februari + 11 maart 2026; verwijzing naar de commissie 2 maart 2026; stemming in de commissie 3 maart 2026. Geen plenaire stemming geregistreerd.</p>
+    <p>De tijdelijke afwijking is op 3 april 2026 verstreken. Zolang de plenaire vergadering van het EP niet stemt en de Raad geen standpunt vaststelt, ontbreekt voor vrijwillige scanning op kindermisbruikmateriaal in OTT-communicatie een EU-rechtsgrondslag.</p>
+  </div>
+
+  <div class="info-box">
+    <h3>Bekende ankerpunten (niet verzonnen)</h3>
+    <p>Voorstel van de Commissie: 19 december 2025.<br>
+       Werkzaamheden van de commissie LIBE: februari-maart 2026 (zie OEIL voor de belangrijkste gebeurtenissen).<br>
+       Vorige verlenging: Verordening (EU) 2024/1307 (tot 3 april 2026).<br>
+       Huidige stand (23 april 2026): afwijking VERSTREKEN, verlenging nog vóór de plenaire fase.</p>
+  </div>
+</section>
+
+<!-- Section: Commission Proposal -->
+<section class="section" id="proposal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-file-document-outline"></i></div>
+    <h2 class="section__title">Het voorstel van de Commissie: COM(2022) 209</h2>
+  </div>
+  <p class="section__subtitle">Verplichte opsporings-, meldings- en verwijderingsverplichtingen voor hostingdiensten en aanbieders van interpersoonlijke communicatie</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Risk Assessment</div>
+      <div class="article-card__title">Verplichte risicobeoordelingen voor kindermisbruikmateriaal</div>
+      <div class="article-card__desc">Alle aanbieders moeten het risico beoordelen dat hun diensten worden misbruikt voor de verspreiding van kindermisbruikmateriaal (vergelijkbaar met de systeemrisicobeoordelingen uit de DSA). Aanbieders moeten de risico's van elke dienst evalueren en mitigerende maatregelen treffen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Risk Mitigation</div>
+      <div class="article-card__title">Leeftijdsverificatie en veiligheid door ontwerp</div>
+      <div class="article-card__desc">Aanbieders moeten mitigerende maatregelen treffen, waaronder leeftijdsverificatie, veiligheid door ontwerp voor kinderen en inhoudsmoderatie voor kindermisbruikmateriaal. Appstores moeten leeftijden verifiëren om te voorkomen dat kinderen risicovolle apps downloaden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Detection Orders</div>
+      <div class="article-card__title">Rechterlijke of bestuurlijke opsporingsmandaten</div>
+      <div class="article-card__desc">Nationale coördinerende autoriteiten kunnen rechterlijke instanties verzoeken opsporingsbevelen uit te vaardigen die aanbieders verplichten geautomatiseerde opsporingstechnologie in te zetten. Maximaal 2 jaar voor kindermisbruikmateriaal, 1 jaar voor grooming. De minst privacy-ingrijpende technologie is vereist.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Reporting</div>
+      <div class="article-card__title">Melding aan het EUCSA en de rechtshandhaving</div>
+      <div class="article-card__desc">Aanbieders moeten opgespoord kindermisbruikmateriaal melden aan het EU-centrum on Child Sexual Abuse (EUCSA). Het EUCSA stuurt de meldingen door naar de bevoegde rechtshandhavingsautoriteiten en naar Europol.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Removal Orders</div>
+      <div class="article-card__title">Verwijderingstermijn van 24 uur</div>
+      <div class="article-card__desc">Bevoegde autoriteiten kunnen de verwijdering van geïdentificeerd kindermisbruikmateriaal binnen 24 uur gelasten. Voor inhoud die niet bij de bron kan worden verwijderd, kunnen blokkeringsbevelen worden uitgevaardigd om toegang vanuit de EU te voorkomen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">User Rights</div>
+      <div class="article-card__title">Rechtsmiddelen en klachtenmechanismen</div>
+      <div class="article-card__desc">Zowel aanbieders als gebruikers hebben het recht maatregelen aan te vechten. Gebruikers hebben recht op schadevergoeding. Aanbieders moeten gebruikers informeren wanneer inhoud wordt verwijderd en op verzoek de redenen daarvoor geven.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Detection Technologies -->
+<section class="section" id="detection">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-magnify-scan"></i></div>
+    <h2 class="section__title">Opsporingstechnologieën</h2>
+  </div>
+  <p class="section__subtitle">Hashgebaseerde vergelijking voor bekend materiaal, AI-classificatoren voor nieuw materiaal en NLP voor grooming</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Technologie</th>
+        <th>Nauwkeurigheid</th>
+        <th>Menselijk toezicht</th>
+        <th>Impact op de privacy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Bekend kindermisbruikmateriaal</td>
+        <td>Hashgebaseerd (PhotoDNA): digitale vingerafdruk vergeleken met een databank van bekende hashes</td>
+        <td>Zeer hoog (minimale valse positieven)</td>
+        <td>Niet nodig (onrechtmatigheid al geverifieerd)</td>
+        <td>Laag (geen toegang tot de inhoud, alleen vergelijking van hashes)</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Nieuw of onbekend kindermisbruikmateriaal</td>
+        <td>Beeldclassificatie op basis van AI</td>
+        <td>Hoger percentage valse positieven</td>
+        <td>Vereist voor verificatie</td>
+        <td>Hoog (vereist toegang tot de beeldinhoud)</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Grooming</td>
+        <td>Tekstgebaseerde patroonherkenning met NLP (Microsoft: 88% nauwkeurigheid)</td>
+        <td>Aanzienlijke valse positieven</td>
+        <td>Vereist (kan een gesprek met wederzijdse instemming niet onderscheiden van grooming)</td>
+        <td>Zeer hoog (vereist toegang tot de tekst van berichten)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <h3>De vraag naar de rijpheid van de technologie</h3>
+    <p>De aanvullende effectbeoordeling van de EPRS concludeerde dat de algehele doeltreffendheid van opsporing van nieuw kindermisbruikmateriaal en van grooming naar verwachting beperkt zal zijn omdat de technologie niet rijp genoeg is, en dat zij een inmenging zou vormen in de artikelen 7 en 8 van het EU-Handvest van de grondrechten (privéleven en gegevensbescherming). Deze bevinding ligt ten grondslag aan het besluit van het Parlement om de verlenging te beperken tot uitsluitend bekend materiaal.</p>
+  </div>
+</section>
+
+<!-- Section: EUCSA -->
+<section class="section" id="eucsa">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">EU-centrum on Child Sexual Abuse (EUCSA)</h2>
+  </div>
+  <p class="section__subtitle">Een voorgesteld nieuw gedecentraliseerd EU-agentschap om de strijd tegen online kindermisbruikmateriaal te coördineren</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-database" style="color: var(--color-blue);"></i> Kerntaken</div>
+    <p>Het EUCSA zou: (1) databanken met indicatoren van kindermisbruikmateriaal (hashes, URL's) voor aanbieders aanleggen, bijhouden en beheren; (2) meldingen van aanbieders over opgespoord kindermisbruikmateriaal ontvangen; (3) meldingen doorsturen naar de bevoegde rechtshandhavingsautoriteiten en naar Europol; (4) verifiëren of aanbieders inhoud hebben verwijderd; (5) nationale coördinerende autoriteiten bij hun taken ondersteunen.</p>
+  </div>
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-heart-outline" style="color: var(--color-blue);"></i> Toevoegingen van het Parlement</div>
+    <p>In het LIBE-verslag van het EP (november 2023) werd een <strong>Raadgevend Forum voor de rechten van slachtoffers en overlevenden</strong> bij het EUCSA toegevoegd, plus een <strong>online Europees platform voor kinderbescherming</strong> om de bekendheid van meld- en hulplijnen te vergroten en preventiecampagnes te lanceren.</p>
+  </div>
+</section>
+
+<!-- Section: Parliament vs Council -->
+<section class="section" id="positions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Standpunten van Parlement en Raad</h2>
+  </div>
+  <p class="section__subtitle">De permanente verordening: de belangrijkste verschillen tussen de medewetgevers</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Kwestie</th>
+        <th>Voorstel van de Commissie</th>
+        <th>Parlement (LIBE)</th>
+        <th>Raad (Deens voorzitterschap)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Toepassingsgebied</td>
+        <td>Hostingdiensten + interpersoonlijke communicatie</td>
+        <td>Uitgebreid tot zoekmachines en AI-systemen</td>
+        <td>Dichter bij de Commissie</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Eind-tot-eindversleuteling</td>
+        <td>Niet uitdrukkelijk geregeld</td>
+        <td>Versleutelde communicatie uitgesloten van inhoudsscanning; uitsluitend analyse van metagegevens</td>
+        <td>Meer open voor de aanpak van de Commissie</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Opsporing van grooming</td>
+        <td>Verplicht via opsporingsbevelen</td>
+        <td>Beperkt (technologie niet rijp genoeg)</td>
+        <td>Dichter bij de Commissie</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Onlinegames</td>
+        <td>Niet specifiek geregeld</td>
+        <td>Opgenomen in het toepassingsgebied</td>
+        <td>Niet gespecificeerd</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Vrijwillige opsporing</td>
+        <td>Zou met het nieuwe regime eindigen</td>
+        <td>Behouden naast het verplichte regime</td>
+        <td>Niet gespecificeerd</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Slachtofferforum</td>
+        <td>Niet opgenomen</td>
+        <td>Raadgevend Forum voor de rechten van slachtoffers en overlevenden bij het EUCSA</td>
+        <td>Niet gespecificeerd</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Preventie</td>
+        <td>Beperkte bepalingen</td>
+        <td>Versterkt: veiligheid door ontwerp, leeftijdsbepaling, uitgebreid ouderlijk toezicht</td>
+        <td>Niet gespecificeerd</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: Encryption debate -->
+<section class="section" id="epencryption">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-lock-outline"></i></div>
+    <h2 class="section__title">Het debat over versleuteling</h2>
+  </div>
+  <p class="section__subtitle">"Chatcontrole" tegenover de grondrechten: het meest polariserende aspect van het voorstel</p>
+
+  <div class="info-box">
+    <h3>De kernspanning</h3>
+    <p>Het voorstel van de Commissie zou aanbieders verplichten geautomatiseerde opsporingstechnologie in te zetten in interpersoonlijke communicatie, ook in communicatie die door eind-tot-eindversleuteling wordt beschermd. Critici noemen dit "chatcontrole" en stellen dat het neerkomt op massasurveillance van privéberichten en de eind-tot-eindversleuteling zou ondermijnen. Voorstanders stellen dat kindermisbruik zonder opsporing in versleutelde kanalen steeds meer zal verschuiven naar versleutelde diensten, waar het niet kan worden gemeld.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-purple);"></i> Het standpunt van het Parlement: geen scanning van eind-tot-eindversleutelde communicatie</div>
+    <p>De commissie LIBE (rapporteur Zarzalejos) heeft versleutelde communicatie uitgesloten van inhoudsscanning. Opsporing in eind-tot-eindversleutelde diensten blijft beperkt tot uitsluitend <strong>analyse van metagegevens</strong>, zonder toegang tot de inhoud van de communicatie. Dit werd bevestigd bij de stemmingen over de verlenging in maart 2026.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> Standpunt van de EDPS en het EDPB</div>
+    <p>In het gezamenlijk advies van het EDPB en de EDPS (2022) werden "ernstige zorgen over de onevenredigheid van de beoogde inmenging" met de vertrouwelijkheid van communicatie geuit. Historische standpunten van de EDPS over afwijkingen voor scanning op kindermisbruikmateriaal benadrukken consequent evenredigheid en gerichtheid boven ongerichte scanning; raadpleeg <a href="https://www.edps.europa.eu/" target="_blank" rel="noopener">edps.europa.eu</a> voor een eventueel specifiek advies uit 2026 over 2025/0429(COD).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-comment-alert-outline" style="color: var(--color-red);"></i> De daling met 58%</div>
+    <p>Toen de afwijking van de e-privacyrichtlijn eind 2020 voor het eerst van kracht werd en vrijwillige opsporing van kindermisbruikmateriaal door NI-ICS-aanbieders mogelijk maakte, zat er aanvankelijk een gat van 18 weken voordat aanbieders het scannen konden hervatten. In die periode daalden de EU-meldingen aan NCMEC met <strong>58%</strong>, wat de werkelijke gevolgen van juridische onzekerheid voor meldingen over kinderveiligheid illustreert.</p>
+  </div>
+</section>
+
+<!-- Section: Stakeholders -->
+<section class="section" id="stakeholders">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-comment-text-outline"></i></div>
+    <h2 class="section__title">Standpunten van belanghebbenden</h2>
+  </div>
+  <p class="section__subtitle">Een diep gepolariseerd debat tussen voorvechters van kinderbescherming en organisaties voor digitale rechten</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Belanghebbende</th>
+        <th>Standpunt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">NCMEC</td><td>Steunt verplichte opsporing; de vrijwillige aanpak volstaat niet; te veel bedrijven weigeren deel te nemen</td></tr>
+      <tr><td class="highlight-cell">UNICEF</td><td>Verwelkomt het voorstel als in lijn met het VN-Verdrag inzake de rechten van het kind (art. 3, lid 1)</td></tr>
+      <tr><td class="highlight-cell">IWF</td><td>Steunt een verplicht kader; 70% van het kindermisbruikmateriaal wordt in Europa gehost en vergt dringend optreden</td></tr>
+      <tr><td class="highlight-cell">ECPAT</td><td>Steunt een geharmoniseerde uitvoering; 68% van de EU-burgers steunt instrumenten voor de opsporing van kindermisbruikmateriaal (enquête van ECPAT)</td></tr>
+      <tr><td class="highlight-cell">Microsoft</td><td>Er is geen "wondermiddel"; regelgeving moet de drempels voor vrijwillige inspanningen verlagen, niet verhogen</td></tr>
+      <tr><td class="highlight-cell">Google</td><td>Steunt een vrijwillig systeem met een duidelijke rechtsgrondslag; kennisgeving en verwijdering in overeenstemming met de DSA</td></tr>
+      <tr><td class="highlight-cell">EDRi + 117 organisaties</td><td>Geautomatiseerde scanning en chatcontroles zouden onrechtmatig kunnen zijn; eisen alternatieven op maat en gericht</td></tr>
+      <tr><td class="highlight-cell">Duitse orde van advocaten</td><td>Voorstel mogelijk schadelijk voor de grondrechten, waaronder de privacy</td></tr>
+      <tr><td class="highlight-cell">EESC</td><td>Steunt het beginsel maar is sceptisch over het scannen van versleutelde communicatie; acht de maatregelen onevenredig</td></tr>
+      <tr><td class="highlight-cell">Global Encryption Coalition</td><td>Overheden moeten eind-tot-eindversleuteling behouden; moedigt analyse van metagegevens als alternatief aan</td></tr>
+      <tr><td class="highlight-cell">Digital Europe</td><td>Verwelkomt de waarborgen, maar bevelen moeten het algemene toezichtverbod uit de DSA eerbiedigen</td></tr>
+      <tr><td class="highlight-cell">ISFE (videogames) + Cloudflare</td><td>Opsporing van "nieuw" kindermisbruikmateriaal is technisch onhaalbaar; menselijke controle dreigt de toegang tot kindermisbruikmateriaal te vergroten</td></tr>
+      <tr><td class="highlight-cell">Zoom/ITI</td><td>Zou alleen moeten gelden voor interpersoonlijke communicatie van consumenten, niet voor professionele diensten</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: DSA Guidelines on Minors -->
+<section class="section" id="minors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-child-outline"></i></div>
+    <h2 class="section__title">DSA-richtsnoeren inzake de bescherming van minderjarigen</h2>
+  </div>
+  <p class="section__subtitle">Richtsnoeren van de Commissie, gepubliceerd op 14 juli 2025 op grond van artikel 28, lid 1, van de DSA</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-account-outline" style="color: var(--color-green);"></i> Belangrijkste vereisten voor platforms</div>
+    <p>Accounts van minderjarigen standaard op privé zetten. Blokkeren, dempen en uitdrukkelijke toestemming voor toevoeging aan groepen mogelijk maken. Screenshot- en downloadfuncties voor door minderjarigen gemaakte inhoud verbieden. Aanbevelingssystemen aanpassen om blootstelling aan schadelijke inhoud te verminderen. Verslavende functies (streaks, automatisch afspelen, pushmeldingen) standaard uitschakelen voor minderjarigen. Manipulatieve praktijken beperken (virtuele valuta, lootboxen). Methoden voor leeftijdsbepaling invoeren voor toegang tot inhoud voor volwassenen. Meldmechanismen verbeteren met snelle terugkoppeling.</p>
+    <p>Het volgen van deze richtsnoeren is vrijwillig en garandeert geen naleving van de DSA, maar de Commissie zal ernaar verwijzen bij handhavingsbeoordelingen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-multiple-outline" style="color: var(--color-green);"></i> Speciaal panel over de online veiligheid van kinderen</div>
+    <p>Op 5 maart 2026 hield de Commissie de eerste vergadering van het Speciaal panel over de online veiligheid van kinderen, met voorzitter von der Leyen als gastvrouw. Het panel geeft deskundige aanbevelingen over kinderbescherming online, over mogelijke geharmoniseerde leeftijdsgrenzen voor toegang tot sociale media en over EU-oplossingen voor leeftijdsverificatie.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-green);"></i> Uitleg van de Commissie in begrijpelijke taal (april 2026)</div>
+    <p>In april 2026 publiceerde het Bureau voor publicaties van de EU <a href="https://op.europa.eu/en/publication-detail/-/publication/33740183-a581-11f0-a7c5-01aa75ed71a1/language-en" target="_blank" rel="noopener">"The Digital Services Act explained: What online platforms should do to keep kids and teens safe online"</a> (19 bladzijden, catalogus-ID 33740183-a581-11f0-a7c5-01aa75ed71a1). Het boekje vertaalt de DSA-richtsnoeren van juli 2025 in begrijpelijke taal voor ouders, opvoeders, jongeren en platformteams. Het zet 10 aanbevelingsgebieden uiteen, 3 risiconiveaus voor leeftijdsbepaling, en definieert de "digitale meerderjarigheid" (doorgaans 13 of 18 jaar, afhankelijk van de lidstaat).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-key-outline" style="color: var(--color-green);"></i> Drie risiconiveaus voor leeftijdsbepaling</div>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--color-border);">
+          <th style="text-align: left; padding: 0.5rem;">Risiconiveau</th>
+          <th style="text-align: left; padding: 0.5rem;">Voorbeelddiensten</th>
+          <th style="text-align: left; padding: 0.5rem;">Aanbevolen methode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--color-border);">
+          <td style="padding: 0.5rem;"><strong>Laag risico</strong></td>
+          <td style="padding: 0.5rem;">Platforms voor algemeen gebruik met minimaal risico op schade</td>
+          <td style="padding: 0.5rem;">Andere veiligheidsmaatregelen kunnen volstaan</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-border);">
+          <td style="padding: 0.5rem;"><strong>Middelhoog risico</strong></td>
+          <td style="padding: 0.5rem;">Bepaalde socialemediaplatforms</td>
+          <td style="padding: 0.5rem;">Leeftijdsschatting of leeftijdsverificatie</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem;"><strong>Hoog risico</strong></td>
+          <td style="padding: 0.5rem;">Gokken, dating, inhoud voor volwassenen (18+), lootboxen</td>
+          <td style="padding: 0.5rem;">Leeftijdsverificatie vereist</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 1rem;">Zelfverklaring ("ik ben ouder dan 13/18") wordt uitdrukkelijk als ondoeltreffend en onbetrouwbaar beoordeeld. Leeftijdsverificatie via de <strong>Europese portemonnee voor digitale identiteit</strong> en de blauwdruk van de Commissie voor een leeftijdsverificatie-app (gelanceerd in juli 2025) vormen de privacyvriendelijke standaard.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-octagon-outline" style="color: var(--color-red);"></i> Verslavende ontwerpkenmerken die platforms standaard moeten uitschakelen voor minderjarigen</div>
+    <ul>
+      <li>Oneindig scrollen</li>
+      <li>Naar beneden trekken om te vernieuwen</li>
+      <li>Voortdurende pushmeldingen</li>
+      <li>Automatisch afspelen van video's</li>
+      <li>Virtuele dagelijkse beloningen, streaks en punten die vereisen dat de app elke dag wordt geopend</li>
+      <li>Lootboxen en gokachtige functies</li>
+      <li>Aftelklokken en "nu kopen"-drukberichten</li>
+      <li>Filters die het lichaamsbeeld of het zelfbeeld negatief beïnvloeden</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-compass-outline" style="color: var(--color-blue);"></i> Platforms die onder de DSA-richtsnoeren voor minderjarigen vallen</div>
+    <p><strong>Wel gedekt:</strong> sociale media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-deel- en streamingdiensten (YouTube, Twitch); games met door gebruikers gegenereerde inhoud (Roblox, Minecraft); plaats-en-deelplatforms (Discord, Reddit).</p>
+    <p><strong>NIET gedekt:</strong> privéberichtendiensten of -functies. Minimumleeftijd op TikTok, Snapchat, Instagram, BeReal en Steam: 13 jaar.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-road-variant" style="color: var(--color-amber);"></i> Wat de Commissie en de lidstaten hierna doen</div>
+    <ul>
+      <li>Controleren of platforms de DSA-richtsnoeren voor minderjarigen volgen; juridische procedures openen tegen platforms die de regels niet naleven</li>
+      <li>De <strong>EU-leeftijdsverificatie-app</strong> testen en uitrollen</li>
+      <li>Een <strong>EU-actieplan tegen cyberpesten</strong> ontwikkelen</li>
+      <li>Analyseren hoe socialemediagebruik de geestelijke gezondheid van kinderen en tieners beïnvloedt</li>
+    </ul>
+  </div>
+</section>
+
+<!-- COMMITTEE STAGE -->
+<section class="section" id="committee-stage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Hoe het Parlement zijn mandaat opbouwde</h2>
+  </div>
+  <p class="section__subtitle">1.909 amendementen in de bevoegde commissie, de felste tegenstander diende er een vijfde van in, en daarna een stemming van 51 tegen 2</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-purple);"></i> Wie het dossier behandelde</div>
+    <p>De Commissie burgerlijke vrijheden, justitie en binnenlandse zaken (LIBE) is bevoegd. <strong>Javier Zarzalejos</strong> (EPP, Spanje) is sinds 10 oktober 2022 rapporteur en werd op 12 september 2024 opnieuw benoemd toen het dossier overging naar het nieuwe Parlement. Zijn schaduwrapporteurs zijn Alex Agius Saliba (S&amp;D), Ant&oacute;nio T&acirc;nger Corr&ecirc;a (Patriots for Europe), Nicolas Bay (ECR), Hilde Vautmans (Renew), Mark&eacute;ta Gregorov&aacute; (Greens/EFA), Isabel Serra S&aacute;nchez (The Left) en Mary Khan (Europe of Sovereign Nations).</p>
+    <p style="margin-bottom: 0;">IMCO is op grond van het Reglement een <strong>medeverantwoordelijke commissie</strong> en niet louter een adviserende commissie, en haar rapporteur voor advies is <strong>Alex Agius Saliba</strong>, die tegelijk S&amp;D-schaduwrapporteur is in de bevoegde commissie. Drie andere commissies brachten in de vorige zittingsperiode advies uit: BUDG, CULT en FEMM.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> Het ontwerpverslag, 19 april 2023</div>
+    <p>Zarzalejos diende op 19 april 2023 ontwerpverslag <strong>PE746.811</strong> in met <strong>276 amendementen</strong>. In zijn toelichting aanvaardt hij de centrale keuze van de Commissie, de overgang van een vrijwillig naar een verplicht opsporingsregime, op grond dat de interimverordening ontoereikend bleek omdat aanbieders ongelijk meewerkten. Hij stelt daarbij ook drie grenzen die alles daarna hebben bepaald.</p>
+    <ul>
+      <li><strong>Versleuteling wordt afgeschermd.</strong> Niets in de verordening mag zo worden uitgelegd dat het eind-tot-eindversleuteling verbiedt of verzwakt. Waar opsporing is toegestaan, mogen aanbieders <strong>metagegevens</strong> verwerken om verdachte gedragspatronen te herkennen <strong>zonder toegang tot de inhoud</strong> van de versleutelde communicatie, en uitsluitend met toestemming van een rechterlijke instantie of een andere onafhankelijke bestuurlijke autoriteit.</li>
+      <li><strong>Opsporingsbevelen worden een uiterst middel</strong>, ondersteund door versterkte preventieplichten: veiligheid en beveiliging door ontwerp voor kinderen, leeftijdsbepaling en leeftijdsscoring, leeftijdsgeschikt ouderlijk toezicht, functies om te signaleren en zelf te melden, en gedragscodes.</li>
+      <li><strong>Geen versmalling van wat wordt opgespoord.</strong> De rapporteur behoudt alle drie de categorieën, bekend materiaal, nieuw materiaal en het benaderen van kinderen, met het argument dat inperking van het toepassingsgebied een stap terug zou zijn omdat de interimverordening alle drie al bestreek.</li>
+    </ul>
+    <p style="margin-bottom: 0;">Hij stelt ook een aanvullend mechanisme van <strong>vrijwillige opsporingsbevelen</strong> voor, uitdrukkelijk om het gat te overbruggen dat ontstond toen de interimverordening op 3 augustus 2024 afliep, en breidt het toepassingsgebied uit tot onlinezoekmachines en andere AI-systemen via bevelen tot verwijdering uit zoekresultaten. Institutioneel steunt hij het EU-centrum en voegt hij een <strong>Raadgevend Forum voor slachtoffers</strong> toe.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-amber);"></i> 1.633 amendementen van leden, juli 2023</div>
+    <p>Leden dienden vervolgens <strong>1.633 amendementen</strong> in, genummerd 277 tot 1909 zonder gaten, gepubliceerd in vijf documenten in juli 2023 (PE749.189, PE746.814, PE749.190, PE749.191 en PE749.192). Samen met de 276 van de rapporteur werkte de commissie in totaal <strong>1.909 amendementen</strong> door.</p>
+    <table>
+      <thead><tr><th>Ingediend door</th><th>Fractie</th><th>Amendementen</th></tr></thead>
+      <tbody>
+        <tr><td>Patrick Breyer</td><td>Verts/ALE</td><td>389</td></tr>
+        <tr><td>Fractie Verts/ALE (als fractie)</td><td>Verts/ALE</td><td>383</td></tr>
+        <tr><td>Cornelia Ernst en Clare Daly</td><td>The Left</td><td>287</td></tr>
+        <tr><td>Fractie S&amp;D (als fractie)</td><td>S&amp;D</td><td>190</td></tr>
+        <tr><td>Ren&eacute; Repasi en Tiemo W&ouml;lken</td><td>S&amp;D</td><td>179</td></tr>
+        <tr><td>Birgit Sippel</td><td>S&amp;D</td><td>179</td></tr>
+        <tr><td>Petar Vitanov</td><td>S&amp;D</td><td>165</td></tr>
+        <tr><td>Rob Rooken</td><td>ECR</td><td>79</td></tr>
+        <tr><td>Cristian Terhe&#537;</td><td>ECR</td><td>62</td></tr>
+      </tbody>
+    </table>
+    <p>De verdeling is het verhaal. <strong>Patrick Breyer diende er in zijn eentje 389 in</strong>, een vijfde van alles wat leden indienden, en de fractie Greens/EFA diende er nog eens 383 op eigen naam in. De meest omstreden bepaling was <strong>artikel 7, de opsporingsbevelen</strong>, met 92 amendementen, gevolgd door artikel 3 (risicobeoordeling) met 63 en artikel 4 (risicobeperking) met 53.</p>
+    <p style="margin-bottom: 0;">De vier adviserende commissies voegden er nog 598 toe. CULT diende ook eigen amendementen op haar ontwerpadvies in, in <strong>PE739.506</strong>, en haar advies <strong>PE737.365</strong> was het eerste van de vier dat werd aangenomen.</p>
+    <table>
+      <thead><tr><th>Commissie</th><th>Rapporteur voor advies</th><th>Referentie</th><th>Amendementen</th><th>Aangenomen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IMCO</strong></td><td>Alex Agius Saliba (S&amp;D)</td><td><strong>PE740.727</strong></td><td>300</td><td>3 juli 2023</td></tr>
+        <tr><td><strong>FEMM</strong></td><td>Hel&eacute;ne Fritzon (S&amp;D)</td><td><strong>PE746.640</strong></td><td>182</td><td>29 juni 2023</td></tr>
+        <tr><td><strong>BUDG</strong></td><td>Niclas Herbst (EPP)</td><td><strong>PE740.759</strong></td><td>69</td><td>9 juni 2023</td></tr>
+        <tr><td><strong>CULT</strong></td><td>Niyazi Kizily&uuml;rek (The Left)</td><td><strong>PE737.365</strong></td><td>47</td><td>29 maart 2023</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert-box">
+    <h3>De stemming die het dossier verklaart: 51 voor, 2 tegen, 1 onthouding</h3>
+    <p>LIBE nam het verslag aan op <strong>14 november 2023</strong> en besloot diezelfde dag interinstitutionele onderhandelingen te openen. Het verslag <strong>A9-0364/2023</strong> werd op 16 november ingediend en het mandaat werd op 20 november in de plenaire vergadering aangekondigd en op 22 november 2023 bevestigd op grond van artikel 72 van het Reglement.</p>
+    <p>In de bijlage met de hoofdelijke stemming staan slechts twee stemmen tegen, Nicolaus Fest (ID) en Milan Uhr&iacute;k (niet-fractiegebonden), en één onthouding, Beata Kempa (ECR). <strong>Patrick Breyer stemde voor.</strong> Het lid dat 389 amendementen tegen het voorstel had ingediend, steunde het verslag dat daaruit voortkwam, omdat het compromis hem gaf waarvoor hij had gestreden: versleuteling uitdrukkelijk beschermd, inhoudsscanning van tafel, verwerking van metagegevens alleen met rechterlijke toestemming, en opsporingsbevelen teruggebracht tot een uiterst middel.</p>
+    <p style="margin-bottom: 0;">Die bijna-unanimiteit is het onthouden waard wanneer u over dit dossier leest. De impasse ligt niet bij het Parlement. Het Parlement heeft zijn standpunt bijna drie jaar geleden bepaald en houdt daar sindsdien aan vast.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-timer-sand" style="color: var(--color-red);"></i> En daarna niets</div>
+    <p style="margin-bottom: 0;">Het Wetgevingsobservatorium registreert de procedure nog steeds als <strong>in afwachting van het standpunt van het Parlement in eerste lezing</strong>. Dat is geen administratieve achterstand: het Parlement heeft een onderhandelingsmandaat aangenomen in plaats van over een standpunt in eerste lezing te stemmen, waardoor de wetgevingsresolutie formeel openstaat terwijl de onderhandelaars wachten op een Raad die geen algemene oriëntatie heeft kunnen bereiken. Het dossier staat sinds <strong>november 2023</strong> op dat punt, en de werkzaamheden van de vorige zittingsperiode werden op 13 november 2024 formeel hervat om het in leven te houden.</p>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">Van de strafrechtelijke richtlijn tot de trialoogonderhandelingen</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">13 december 2011</div>
+      <div class="timeline__text">Richtlijn 2011/93/EU aangenomen (strafrechtelijk kader voor kindermisbruikmateriaal)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">14 juli 2021</div>
+      <div class="timeline__text">Verordening 2021/1232 aangenomen (tijdelijke e-privacyafwijking voor vrijwillige opsporing van kindermisbruikmateriaal)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 mei 2022</div>
+      <div class="timeline__text">De Commissie publiceert het voorstel voor een permanente verordening COM(2022) 209</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 april 2023</div>
+      <div class="timeline__text">LIBE-rapporteur Zarzalejos publiceert het ontwerpverslag</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 november 2023</div>
+      <div class="timeline__text">De commissie LIBE neemt het verslag aan (51 voor, 2 tegen, 1 onthouding)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">22 november 2023</div>
+      <div class="timeline__text">De plenaire vergadering van het EP bevestigt de opening van interinstitutionele onderhandelingen</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">29 april 2024</div>
+      <div class="timeline__text">Verordening 2024/1307 verlengt de tijdelijke afwijking tot 3 april 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 november 2025</div>
+      <div class="timeline__text">De Raad bereikt een gemeenschappelijk standpunt onder het Deense voorzitterschap</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">9 december 2025</div>
+      <div class="timeline__text">De trialoogonderhandelingen beginnen (1e trialoog)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 december 2025</div>
+      <div class="timeline__text">De Commissie stelt verlenging van de afwijking voor (COM(2025) 0797)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 februari 2026</div>
+      <div class="timeline__text">3e trialoog over de permanente verordening</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 maart 2026</div>
+      <div class="timeline__text">Verslag van de commissie LIBE (laatste document uit de commissiefase volgens OEIL). Geen plenaire stemming.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 april 2026</div>
+      <div class="timeline__text"><strong>Tijdelijke afwijking verstrijkt</strong>: geen EU-rechtsgrondslag voor vrijwillige scanning op kindermisbruikmateriaal</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">4 mei 2026</div>
+      <div class="timeline__text">4e trialoog over de permanente verordening (gepland)</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">Alle primaire documenten en institutionele referenties</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Commission Proposal</div>
+      <div class="article-card__title">COM(2022) 209</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/resource.html?uri=cellar:13e33abf-d209-11ec-a95f-01aa75ed71a1.0001.02/DOC_1&format=PDF" target="_blank" rel="noopener">Voorstel-pdf (deel 1)</a> | <a href="https://eur-lex.europa.eu/resource.html?uri=cellar:13e33abf-d209-11ec-a95f-01aa75ed71a1.0001.02/DOC_2&format=PDF" target="_blank" rel="noopener">Deel 2 (bijlagen)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">OEIL Procedure Files</div>
+      <div class="article-card__title">Permanent + verlenging</div>
+      <div class="article-card__desc"><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0155(COD)" target="_blank" rel="noopener">2022/0155(COD) (permanent)</a> | <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0429(COD)" target="_blank" rel="noopener">2025/0429(COD) (verlenging)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">EP Plenary Status</div>
+      <div class="article-card__title">Vóór de plenaire fase (stand van 23 april 2026)</div>
+      <div class="article-card__desc">Voor procedure 2025/0429(COD) is volgens OEIL nog geen plenair aangenomen tekst (T/P10_TA) geregistreerd. Verifieer via <a href="https://www.europarl.europa.eu/doceo/" target="_blank" rel="noopener">doceo</a> voordat u een T-nummer citeert.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">LIBE Committee Work</div>
+      <div class="article-card__title">Documenten uit de commissiefase</div>
+      <div class="article-card__desc"><a href="https://www.europarl.europa.eu/committees/en/libe/home/highlights" target="_blank" rel="noopener">Pagina van de commissie LIBE</a>: raadpleeg de documentzoekfunctie van de commissie voor het actuele ontwerpverslag van LIBE; citeer geen specifieke PE- of A-nummers zonder verificatie.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Legislative Train</div>
+      <div class="article-card__title">Volgpagina van het EP</div>
+      <div class="article-card__desc"><a href="https://www.europarl.europa.eu/legislative-train/spotlight-JD22/file-combating-child-sexual-abuse-online" target="_blank" rel="noopener">Actuele stand van zaken en volgende stappen</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">EDPS</div>
+      <div class="article-card__title">Advies 7/2026</div>
+      <div class="article-card__desc"><a href="https://www.edps.europa.eu/press-publications/press-news/press-releases/2026/extension-interim-rules-combat-child-sexual-abuse-online-must-address-shortcomings-and-prevent-indiscriminate-scanning_en" target="_blank" rel="noopener">Standpunt van de EDPS over de verlenging</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Commission Guidelines</div>
+      <div class="article-card__title">Bescherming van minderjarigen (DSA, artikel 28)</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-protection-minors" target="_blank" rel="noopener">Gepubliceerd op 14 juli 2025</a></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- Footer -->
+<div class="pm">
+  <p>
+    <a href="https://brubru.beresol.eu">Brubru</a> van <a href="https://beresol.eu">Beresol</a> |
+    <a href="https://beresol.eu/public-affairs">Beresol Open Reports</a> |
+    <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+  <p style="margin-top: 0.5rem;">Analyse op basis van officiële institutionele bronnen van de EU. Bijgewerkt in april 2026.</p>
+</div>
+<footer class="footer  "><div class="footer__container"><div class="footer__content"><div class="footer__section footer__section--brand"><div class="footer__brand"><img alt="Beresol BV" class="footer__logo" src="/assets/beresol-logo.png"><div class="footer__brand-info"><p class="footer__copyright">&copy; 2026 <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV</p><p class="footer__trademark">Brubru's trademark belongs to <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" class="footer__beresol-link">Beresol</a> BV and is registered at EUIPO</p></div></div></div><div class="footer__section footer__section--nav"><h4 class="footer__nav-title">Links</h4><nav class="footer__nav"><a class="footer__link" href="/about" data-discover="true">About</a><a href="mailto:hello@beresol.eu" class="footer__link">Contact</a><a class="footer__link" href="/privacy" data-discover="true">Privacy Policy</a><a class="footer__link" href="/terms" data-discover="true">Terms of Service</a><a class="footer__link" href="/cookies" data-discover="true">Cookies</a><a class="footer__link" href="/subprocessors" data-discover="true">Subprocessors</a><a href="https://www.instagram.com/beresolbv/" target="_blank" rel="noopener noreferrer" aria-label="Beresol on Instagram" class="footer__link footer__link--social"><svg viewBox="0 0 24 24" role="presentation" style="width: 1.275rem; height: 1.275rem;"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" style="fill: currentcolor;"></path></svg><span class="footer__link-label">Instagram</span></a></nav></div></div></div></footer>
+
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="backToTop" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+  <i class="mdi mdi-chevron-up"></i>
+</a>
+<script>
+  window.addEventListener('scroll', function() {
+    document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+  });
+</script>
+
+
+<script>
+/* brubru:mobile-fix-2026-09-22 -- additive: toggles its own class only, so it composes with whatever
+   scroll handler this page already has controlling `display`. */
+(function () {
+  var btt = document.querySelector('.back-to-top');
+  if (!btt) return;
+  var last = window.scrollY, ticking = false;
+  function update() {
+    var y = window.scrollY;
+    if (y > last + 4) btt.classList.add('btt--away');        // scrolling down
+    else if (y < last - 4) btt.classList.remove('btt--away'); // scrolling up
+    last = y;
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

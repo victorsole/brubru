@@ -207,6 +207,18 @@
        downward scroll is what stops it sitting on top of the paragraph. */
     .back-to-top { transition: opacity .2s ease, transform .2s ease; }
     .back-to-top.btt--away { opacity: 0; pointer-events: none; transform: translateY(6px); }
+
+    /* A `1fr` track floors at min-content, so one long unbreakable word in a
+       figure card pushes the whole page sideways. It surfaced twice: the Dutch
+       "Geblokkeerd" on late-payments (72px at 375px) and the Dutch compound
+       "kindermisbruikmateriaal" on the CSAM page (29px). Same cause, different
+       word, so fix it everywhere rather than per page. */
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .figure-card__number, .figure-card__label { overflow-wrap: anywhere; hyphens: auto; }
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 767px)  { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                                 .figure-card { padding: 1rem 0.75rem; }
+                                 .figure-card__number { font-size: 1.6rem; } }
 </style>
   <script src="/analytics.js" defer></script>
 </head>
