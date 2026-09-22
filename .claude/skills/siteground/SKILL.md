@@ -195,6 +195,26 @@ lftp -c "set ftp:ssl-allow true; set ssl:verify-certificate no; open -u '$U','$P
   put .htaccess -o /brubru.beresol.eu/public_html/.htaccess"
 ```
 
+**The asset mirror does NOT cover a deep-dive's own images (set 11 September 2026).** Step 1 mirrors
+`frontend/dist/assets/` and step 2 mirrors `*.html`. A deep-dive that ships its own `hero.jpg` and
+`cta.jpg` inside `dist/<slug>/` matches neither glob, so the page deploys and its hero 404s. Push
+them explicitly, and verify the byte count rather than a 200:
+
+```bash
+lftp -c "set ftp:ssl-allow true; set ssl:verify-certificate no; open -u '$U','$P' '$H'; \
+  lcd frontend/dist/<slug>; \
+  put hero.jpg -o /brubru.beresol.eu/public_html/<slug>/hero.jpg; \
+  put cta.jpg  -o /brubru.beresol.eu/public_html/<slug>/cta.jpg"
+```
+
+A `550 Can't create directory: File exists` from a preceding `mkdir` is expected once the HTML
+mirror has already made the folder; it is not a failure.
+
+**Do NOT `export PATH=/usr/bin:/bin:...` in the verification step.** The recipe above recommends it
+for lftp shell-outs, but in a plain Bash tool call it REPLACED a working PATH and `curl`, `sort` and
+`tr` all came back "command not found", which reads exactly like a network failure. Either leave
+PATH alone or call the tools absolutely: `/usr/bin/curl`, `/usr/bin/sort`, `/usr/bin/tr`.
+
 **Verify BOTH shells by content-hash (not just a 200):**
 
 ```bash
@@ -207,6 +227,55 @@ echo "local bundle:      $LOCAL"
 echo "server app.html:   $(grep -oE 'assets/index-[A-Za-z0-9_-]+\.js' /tmp/sg_app.html | head -1)"
 echo "server index.html: $(grep -oE 'assets/index-[A-Za-z0-9_-]+\.js' /tmp/sg_idx.html | head -1)"
 # All three MUST match. If app.html differs, the app is serving old code.
+```
+
+**Static-only change? Put the files, skip the build (set 15 September 2026).** When the change is only
+files under `frontend/public/` that the SPA does not reference (canon pages `eucanon/<folder>/*.html`,
+`guides/index.html`, deep-dive HTML with no new assets), there is no bundle to rebuild. Upload those
+files straight from `frontend/public/` to the same path under the docroot, and verify each one by
+SHA-256 against the live URL. Used on 15 Sep for the six AI Act canon pages and the guides page; all hashes matched:
+
+```bash
+lftp -c "set ftp:ssl-allow true; set ssl:verify-certificate no; open -u '$U','$P' '$H'; \
+  lcd frontend/public/eucanon/<folder>; cd /brubru.beresol.eu/public_html/eucanon/<folder>; \
+  put index.html; put es.html; put ca.html; put fr.html; put it.html; put nl.html"
+for f in index es ca fr it nl; do
+  L=$(shasum -a 256 frontend/public/eucanon/<folder>/$f.html | cut -c1-16)
+  R=$(curl -s "https://brubru.beresol.eu/eucanon/<folder>/$f.html?nc=$RANDOM" | shasum -a 256 | cut -c1-16)
+  echo "$f $([ "$L" = "$R" ] && echo MATCH || echo DIFF)"
+done
+```
+
+`frontend/dist/` keeps its old copy until the next full build copies `public/` again; that is harmless
+because the next full deploy mirrors the newer file. Anything that changes a React route, the bundle or
+`app.html` still needs the full Step 6 recipe.
+
+**Two verification traps, both of which report a total failure that did not happen (set 22 September 2026).**
+A deploy of 49 deep-dive pages verified as 0 of 49 matching, twice, and the deploy was fine both times:
+
+1. **`curl` gets a 202 sgcaptcha, not the page.** `https://brubru.beresol.eu/<path>` answered 202 with
+   an `sgcaptcha` meta-refresh body (`content-length: 207`), so every hash comparison mismatched. A 202
+   is the standing signal to switch to Playwright: a browser context clears the challenge, though the
+   FIRST navigation may still land on the interstitial, so load the page twice before reading the DOM.
+2. **Do NOT `mktemp` the download target.** `mktemp` creates the file, and `lftp`'s `get -o` refuses to
+   overwrite an existing path (`File exists`). The download fails silently and the script hashes the
+   previous iteration's leftover, which produces IDENTICAL hashes for DIFFERENT files. That impossible
+   reading is the tell. Use one distinct non-existent path per file, and require both a zero exit AND a
+   non-empty file before comparing.
+
+The correct check, which is also the real success signal because SiteGround can serve a stale body
+while the disk is correct:
+
+```bash
+D=/tmp/sgverify; rm -rf "$D"; mkdir -p "$D"
+while read -r f; do
+  T="$D/$(echo "$f" | tr '/' '_')"          # distinct, does NOT exist yet
+  if lftp -c "set ftp:ssl-allow true; set ssl:verify-certificate no; open -u '$U','$P' '$H'; \
+      get /brubru.beresol.eu/public_html/$f -o $T" 2>/dev/null && [ -s "$T" ]; then
+    [ "$(shasum -a 256 "frontend/public/$f" | cut -c1-16)" = "$(shasum -a 256 "$T" | cut -c1-16)" ] \
+      && echo "MATCH $f" || echo "DIFF  $f"
+  else echo "GETFAIL $f"; fi
+done < files.txt
 ```
 
 **SiteGround dynamic-cache caveat.** SiteGround caches the HTML shells in its
