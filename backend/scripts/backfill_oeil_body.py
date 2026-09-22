@@ -32,6 +32,10 @@ from services.scrapers.oeil_body_scraper import fetch_many  # noqa: E402
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("backfill-oeil-body")
 
+# The section every OEIL procedure page carries once a committee is seized.
+# Used as the quality signal for "is this a real page or a header-only stub?".
+_MARKER = "Committee responsible"
+
 
 def _candidates(engine, *, limit: int, refresh_older_than_days: int | None):
     """Return list of oeil_procedure_refs that need a body fetch."""
@@ -74,6 +78,8 @@ async def _run(engine, refs: list[str], dry_run: bool, concurrency: int):
 
     now = datetime.utcnow()
     written = 0
+    kept = 0
+    stubs = 0
     with engine.begin() as c:
         for ref, body in results.items():
             if body is None:
@@ -85,15 +91,45 @@ async def _run(engine, refs: list[str], dry_run: bool, concurrency: int):
                     WHERE oeil_procedure_ref = :ref
                 """), {"now": now, "ref": ref})
                 continue
+
+            # NEVER DOWNGRADE A GOOD BODY TO A STUB (added 22 September 2026).
+            #
+            # `parse_body` returns a body when ANY expected section anchor is
+            # present, so a page that rendered only its header parses "fine" and
+            # was written straight over a complete one. That is how the Chips Act
+            # 2.0 carriage (2026/0139(COD)) ended up holding a 2,214-char body
+            # containing neither "ITRE" nor "SCHENK" while OEIL had shown both
+            # since 31 August. The role parser then read that stub, found
+            # nothing, stamped oeil_roles_parsed_at and reported success — so the
+            # defect was logged for a week as "the role parser is missing a live
+            # appointment" when the parser was correct and the stored page was
+            # not.
+            #
+            # The committee table is the section every procedure page carries once
+            # a committee is seized, so its presence is the cheap quality signal.
+            new_txt = body.text_body or ""
+            old = c.execute(text("""
+                SELECT coalesce(oeil_text_body, '') FROM legislative_carriages
+                 WHERE oeil_procedure_ref = :ref
+            """), {"ref": ref}).scalar() or ""
+            if _MARKER in old and _MARKER not in new_txt:
+                kept += 1
+                continue
+            if _MARKER not in new_txt:
+                stubs += 1
+
             c.execute(text("""
                 UPDATE legislative_carriages
                 SET oeil_html_body       = :html,
                     oeil_text_body       = :txt,
                     oeil_body_fetched_at = :now
                 WHERE oeil_procedure_ref = :ref
-            """), {"html": body.html_body, "txt": body.text_body, "now": now, "ref": ref})
+            """), {"html": body.html_body, "txt": new_txt, "now": now, "ref": ref})
             written += 1
-    log.info("Wrote %d rows.", written)
+    # Report QUALITY, not just volume: "wrote 200 rows" reads as success even when
+    # every one of them is a header-only stub.
+    log.info("Wrote %d rows (%d without a '%s' section); kept %d existing bodies "
+             "rather than overwrite them with a stub.", written, stubs, _MARKER, kept)
     return written
 
 
