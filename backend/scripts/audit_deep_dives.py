@@ -82,6 +82,44 @@ def fold(s: str) -> str:
     return "".join(c for c in n if not unicodedata.combining(c)).lower()
 
 
+_MONTHS = {
+    # Brubru's six languages. A page writes "2 September 2026" or "2 de setembre
+    # de 2026"; eMeeting stores "2026-09-02". Comparing the ISO string against
+    # page text reports every correctly-updated page as missing, which is what it
+    # did to the Industrial Accelerator Act minutes after that page was updated.
+    9: ["september", "setembre", "septiembre", "septembre", "settembre"],
+    1: ["january", "gener", "enero", "janvier", "gennaio", "januari"],
+    2: ["february", "febrer", "febrero", "fevrier", "febbraio", "februari"],
+    3: ["march", "marc", "marzo", "mars", "maart"],
+    4: ["april", "abril", "avril", "aprile"],
+    5: ["may", "maig", "mayo", "mai", "maggio", "mei"],
+    6: ["june", "juny", "junio", "juin", "giugno", "juni"],
+    7: ["july", "juliol", "julio", "juillet", "luglio", "juli"],
+    8: ["august", "agost", "agosto", "aout", "augustus"],
+    10: ["october", "octubre", "ottobre", "octobre", "oktober"],
+    11: ["november", "novembre", "noviembre", "novembre"],
+    12: ["december", "desembre", "diciembre", "decembre", "dicembre"],
+}
+
+
+def date_is_on_page(iso: str, page: str) -> bool:
+    """True if `page` mentions this date in ISO or in any of our six languages."""
+    if not iso:
+        return False
+    if fold(iso) in page:
+        return True
+    try:
+        y, mth, day = iso.split("-")
+        d = str(int(day))
+    except (ValueError, AttributeError):
+        return False
+    for name in _MONTHS.get(int(mth), []):
+        # "2 september 2026" with anything short in between ("de", "di", ...).
+        if re.search(rf"\b{d}\b[^0-9]{{0,12}}{name}[^0-9]{{0,12}}{y}", page):
+            return True
+    return False
+
+
 def page_text(p: pathlib.Path) -> str:
     raw = p.read_text(encoding="utf-8", errors="replace")
     return fold(_TAG_RE.sub(" ", raw))
@@ -191,9 +229,11 @@ def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = 
 
     # Untagged committee activity found by title: report it whatever the
     # carriage says, because these rows never carry a procedure reference.
+    _first = page_text(pages[0])
     for u in (untagged or []):
-        if fold(u["date"]) not in page_text(pages[0]) and (
-                not u["ref"] or fold(u["ref"]) not in page_text(pages[0])):
+        covered = date_is_on_page(u["date"], _first) or (
+            bool(u["ref"]) and fold(u["ref"]) in _first)
+        if not covered:
             res.setdefault("untagged", []).append(
                 f"{u['kind'].replace('_',' ')} {u['committee']} {u['date']} \"{u['title'][:52]}\"")
 
