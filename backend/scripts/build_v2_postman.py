@@ -242,6 +242,10 @@ _QUERY_FALLBACKS = {
     "text": "See Regulation (EU) 2016/679 and the AI Act.",
     "detail_level": "Summary", "report_type": "canon", "legal_family": "eu_pharmaceutical",
     "include_body": "false", "body": "html",
+    # Incremental sync (22 Sep 2026): a partner filters on these every morning, so the
+    # published example shows a one-day window rather than an empty box.
+    "updated_from": "2026-09-21", "updated_to": "2026-09-22",
+    "created_from": "2026-09-21", "created_to": "2026-09-22",
 }
 
 
