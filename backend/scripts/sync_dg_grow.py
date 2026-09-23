@@ -117,6 +117,11 @@ async def main():
                         help="Look back period for TRIS (default: 7)")
     parser.add_argument("--country", type=str, default=None,
                         help="Country filter (ISO alpha-2)")
+    parser.add_argument("--from-id", type=int, default=None,
+                        help="TRIS: start counting up from this page id instead of the stored "
+                             "frontier (backfill a range; the daily run always uses the frontier)")
+    parser.add_argument("--max-new", type=int, default=400,
+                        help="TRIS: notifications per run (default 400)")
     parser.add_argument("--stats", action="store_true",
                         help="Show current database stats and exit")
     parser.add_argument("--verbose", action="store_true",
@@ -147,7 +152,8 @@ async def main():
             import datetime as _dt
             started = _dt.datetime.now(_dt.timezone.utc)
             try:
-                stats = await service.sync_tris(days=args.days, country=args.country)
+                stats = await service.sync_tris(days=args.days, country=args.country,
+                                                from_id=args.from_id, max_new=args.max_new)
             except Exception as exc:
                 _record_tris(db, {"error": f"{type(exc).__name__}: {exc}"[:500]}, started)
                 raise

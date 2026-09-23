@@ -273,7 +273,7 @@ def test_sync_writes_in_batches_and_survives_a_failed_batch(monkeypatch):
     service._write_tris = write
 
     class _Tris:
-        async def get_recent_notifications(self, days, frontier, on_item):
+        async def get_recent_notifications(self, days, frontier, on_item, **kw):
             for i in range(101, 126):
                 on_item({"notification_number": i})
             self.last_frontier = 125

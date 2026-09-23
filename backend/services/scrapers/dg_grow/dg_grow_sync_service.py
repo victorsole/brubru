@@ -166,7 +166,8 @@ class DGGrowSyncService:
         logger.info(f"[OK] NANDO sync: {stats['new']} new, {stats['updated']} updated, {stats['errors']} errors")
         return stats
 
-    async def sync_tris(self, days: int = 7, country: Optional[str] = None) -> Dict[str, int]:
+    async def sync_tris(self, days: int = 7, country: Optional[str] = None,
+                        from_id: Optional[int] = None, max_new: int = 400) -> Dict[str, int]:
         """
         Sync TRIS technical regulation notifications.
 
@@ -198,6 +199,9 @@ class DGGrowSyncService:
         frontier = self.db.execute(_text(
             "SELECT max(substring(source_url from '/notification/([0-9]+)')::int) "
             "FROM tris_notifications")).scalar()
+        if from_id is not None:
+            # An explicit backfill range: count up from here instead.
+            frontier = from_id - 1
         # Release the connection before the long fetch: pool_pre_ping only
         # fires on checkout, so a session held across it dies. On 23 Sep 2026
         # two runs of one to two hours each lost every row, once at the write
@@ -238,7 +242,9 @@ class DGGrowSyncService:
             if len(batch) >= 10:
                 flush()
 
-        await self.tris.get_recent_notifications(days=days, frontier=frontier, on_item=on_item)
+        await self.tris.get_recent_notifications(days=days, frontier=frontier, on_item=on_item,
+                                                 max_new=max_new,
+                                                 recheck=0 if from_id is not None else 20)
         flush()
         stats["frontier_before"] = frontier
         stats["frontier_after"] = getattr(self.tris, "last_frontier", frontier)
