@@ -199,6 +199,14 @@ PORTALS = [
     # list -- not the store -- was the narrow end.
     {"url": "https://www.eba.europa.eu/rss.xml",
      "source": "EBA", "category": "agency", "priority": 3, "type": "rss"},
+    # Added 23 Sep 2026: EDPB reached /api/v2/news/all but never this scrape,
+    # so its items (national DPA fines among them) were missing from the daily
+    # ledger. Not added, deliberately: ENISA publishes no RSS (three candidate
+    # paths 404) and ACER's rss.xml is malformed (an HTML anchor inside every
+    # <title>, "Tue, 09/22/2026 - 11:27" dates, broken <link>s). Both stay
+    # with the v2 aggregator, which already reads them.
+    {"url": "https://www.edpb.europa.eu/feed/news_en",
+     "source": "EDPB", "category": "agency", "priority": 3, "type": "rss"},
     # EPPO and EEAS publish no RSS -- both candidate feed paths 404. Probed
     # rather than guessed a third time (the "404 = switch tool, never re-guess a
     # similar path" rule); their HTML listings return 200, so they use the

@@ -15388,6 +15388,13 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     "accord d'ohrid": ['serbia_eu_accession_and_conditionality'],
     'accordo di ohrid': ['serbia_eu_accession_and_conditionality'],
     'akkoord van ohrid': ['serbia_eu_accession_and_conditionality'],
+    # 23 Sep 2026: EDPS Opinion 18/2026 on the Europol recast
+    'edps opinion 18/2026': ['europol_regulation_revision_2026'],
+    'edps opinion on europol': ['europol_regulation_revision_2026'],
+    'edps europol': ['europol_regulation_revision_2026'],
+    'eden conference': ['europol_regulation_revision_2026'],
+    'new europol regulation': ['europol_regulation_revision_2026'],
+    '2016/794': ['europol_regulation_revision_2026'],
 }
 
 
