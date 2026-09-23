@@ -30,6 +30,14 @@ import os
 # Add project root to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+# The paid fallback's key (SCRAPEDO_API_KEY) is in the repo-root .env locally
+# and in the environment on Railway; load it without overriding either.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"), override=False)
+except ImportError:  # pragma: no cover
+    pass
+
 from core.database import SessionLocal
 from services.scrapers.dg_grow.dg_grow_sync_service import DGGrowSyncService
 
