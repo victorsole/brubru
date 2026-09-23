@@ -200,3 +200,66 @@ def test_super_is_sent_only_when_explicitly_asked_for(monkeypatch):
                         lambda req, timeout=None: (seen.__setitem__("url", req.full_url), _Resp())[1])
     t._fetch_scrapedo("https://example.invalid/x", super_proxy=True)
     assert "super=true" in seen["url"]
+
+
+# --- the plain aiohttp tier (23 Sep 2026) ------------------------------------
+# It returned a 200 challenge page as the page AND cached it, so every caller of
+# BaseScraper._fetch read "no items" for a block. 49 call sites use this tier.
+
+class _Resp:
+    def __init__(self, body):
+        self._body = body
+
+    def raise_for_status(self):
+        return None
+
+    async def text(self):
+        return self._body
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *a):
+        return False
+
+
+class _Session:
+    def __init__(self, body):
+        self._body = body
+
+    def get(self, *a, **k):
+        return _Resp(self._body)
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *a):
+        return False
+
+
+def _plain_fetch(monkeypatch, body):
+    import asyncio
+    import aiohttp
+
+    monkeypatch.setattr(aiohttp, "ClientSession", lambda *a, **k: _Session(body))
+    t = _T()
+    t._rate_limit = lambda: asyncio.sleep(0)
+    saved = []
+    t._save_to_cache = lambda key, data: saved.append(data)
+    t._get_from_cache = lambda key: None
+    return t, saved, asyncio.run
+
+
+@pytest.mark.parametrize("body", [CLOUDFLARE, CONSILIUM_403, SITEGROUND])
+def test_plain_fetch_refuses_an_interstitial_and_does_not_cache_it(monkeypatch, body):
+    t, saved, run = _plain_fetch(monkeypatch, body)
+    with pytest.raises(ScraperError, match="interstitial"):
+        run(t._fetch("https://example.invalid/page"))
+    assert saved == []
+
+
+def test_plain_fetch_still_returns_and_caches_a_real_page(monkeypatch):
+    page = "<html><body><h1>Council press release</h1><p>New challenges for the Union.</p></body></html>"
+    t, saved, run = _plain_fetch(monkeypatch, page)
+    assert run(t._fetch("https://example.invalid/page")) == page
+    assert saved == [page]

@@ -218,10 +218,72 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
             "alive": alive,
         },
         "process_limits": _process_limits(),
+        "memory": _memory_usage(),
         "tiers": tiers,
         "scrapers": scrapers,
         "corpora": corpora,
         "bodies": bodies,
+    }
+
+
+def _memory_usage() -> dict:
+    """What is holding the container's memory (23 Sep 2026).
+
+    Memory was 63% of the Railway bill (about 1.2 GB sustained) and headless
+    Chromium was the suspect, but nothing measured it, so the suspicion could not
+    be tested. cgroup v2 `memory.current` is the figure Railway bills; the RSS of
+    this web process and the resident total of every Chromium/Playwright process
+    in the container say how much of it is ours and how much is browsers.
+
+    Three-state like _process_limits: "unknown" off-Linux, never a guess.
+    """
+    import os
+
+    def _read(path: str):
+        try:
+            with open(path) as fh:
+                raw = fh.read().strip()
+            return None if raw == "max" else int(raw)
+        except (OSError, ValueError):
+            return None
+
+    def _rss_kb(pid: str):
+        try:
+            with open(f"/proc/{pid}/status") as fh:
+                for line in fh:
+                    if line.startswith("VmRSS:"):
+                        return int(line.split()[1])
+        except (OSError, ValueError, IndexError):
+            return None
+        return None
+
+    current = _read("/sys/fs/cgroup/memory.current")
+    limit = _read("/sys/fs/cgroup/memory.max")
+    if current is None:
+        return {"state": "unknown", "note": "cgroup memory counters unreadable here (expected off-Linux)"}
+
+    browsers = {"count": 0, "rss_mb": 0.0}
+    web_rss = _rss_kb(str(os.getpid()))
+    try:
+        for pid in (d for d in os.listdir("/proc") if d.isdigit()):
+            try:
+                with open(f"/proc/{pid}/comm") as fh:
+                    comm = fh.read().strip().lower()
+            except OSError:
+                continue
+            if "chrom" in comm or comm in ("headless_shell", "node") or "playwright" in comm:
+                rss = _rss_kb(pid)
+                browsers["count"] += 1
+                browsers["rss_mb"] += (rss or 0) / 1024
+    except OSError:
+        pass
+    browsers["rss_mb"] = round(browsers["rss_mb"], 1)
+    return {
+        "state": "ok",
+        "container_mb": round(current / 1048576, 1),
+        "container_max_mb": round(limit / 1048576, 1) if limit else None,
+        "web_process_rss_mb": round(web_rss / 1024, 1) if web_rss else None,
+        "browser_processes": browsers,
     }
 
 

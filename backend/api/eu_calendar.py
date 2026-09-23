@@ -224,6 +224,10 @@ def list_events(
 
     # Exclude recess events by default
     query = query.filter(EUCalendarEvent.event_type != EventTypeEnum.RECESS)
+    # A cancelled event is kept for the audit trail, never served (23 Sep 2026):
+    # the College generator marks a Wednesday that moved to Strasbourg Tuesday
+    # as cancelled, and the tab was still showing both meetings.
+    query = query.filter(EUCalendarEvent.status != EventStatusEnum.CANCELLED)
 
     total = query.count()
     events = (
@@ -312,6 +316,10 @@ def get_events_in_range(
 
     # Exclude recess
     query = query.filter(EUCalendarEvent.event_type != EventTypeEnum.RECESS)
+    # A cancelled event is kept for the audit trail, never served (23 Sep 2026):
+    # the College generator marks a Wednesday that moved to Strasbourg Tuesday
+    # as cancelled, and the tab was still showing both meetings.
+    query = query.filter(EUCalendarEvent.status != EventStatusEnum.CANCELLED)
 
     events = query.order_by(EUCalendarEvent.start_date.asc()).all()
 
@@ -342,6 +350,7 @@ async def get_today_digest(
         .filter(
             EUCalendarEvent.start_date == today,
             EUCalendarEvent.event_type != EventTypeEnum.RECESS,
+            EUCalendarEvent.status != EventStatusEnum.CANCELLED,
         )
         .order_by(EUCalendarEvent.start_time.asc().nullsfirst())
         .all()
@@ -352,6 +361,7 @@ async def get_today_digest(
         .filter(
             EUCalendarEvent.start_date == tomorrow,
             EUCalendarEvent.event_type != EventTypeEnum.RECESS,
+            EUCalendarEvent.status != EventStatusEnum.CANCELLED,
         )
         .order_by(EUCalendarEvent.start_time.asc().nullsfirst())
         .all()

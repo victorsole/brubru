@@ -241,6 +241,15 @@ class BaseScraper(ABC):
                     response.raise_for_status()
                     content = await response.text()
 
+                    # A challenge page is a 200 with a body (23 Sep 2026). The
+                    # browser tiers already refuse it (_fetch_resilient); this
+                    # plain tier returned it as the page AND cached it, so the
+                    # caller parsed zero items and read "the publisher was quiet".
+                    # Raise instead: a block is a failure, never an empty page.
+                    # The generic handler below counts and records it, once.
+                    if self._is_walled(content):
+                        raise ScraperError(f"anti-bot interstitial served for {url}")
+
                     # Update statistics
                     self.stats['requests_made'] += 1
                     self.stats['total_bytes'] += len(content)

@@ -82,6 +82,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("texts_adopted_bodies", "Texts adopted - full text", "warm",
                "scripts/backfill_texts_adopted_bodies.py", ("--apply", "--limit", "150"),
                timeout=1800, stale_after_hours=48),
+    # Procedure refs for adopted texts, from the EP Open Data API (23 Sep 2026).
+    # Before resolution_dates and resolutions_corpus on purpose: the corpus only
+    # admits texts WITH a procedure, and 495 of 750 had none, so it reported
+    # success daily while it had not grown since 27 August. Newest first, 60 per
+    # run, which covers a plenary week with room to spare.
+    SourceSpec("texts_adopted_procedures", "Texts adopted - procedure refs", "warm",
+               "scripts/backfill_texts_adopted_procedures.py", ("--apply", "--limit", "60"),
+               timeout=1500, stale_after_hours=48),
     SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
                "scripts/backfill_oeil_committee_roles.py", ("--apply",),
                timeout=900, stale_after_hours=48),

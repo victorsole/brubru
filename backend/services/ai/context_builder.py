@@ -5527,6 +5527,7 @@ class ContextBuilder:
                 EUCalendarEvent.start_date >= date_start,
                 EUCalendarEvent.start_date <= date_end,
                 EUCalendarEvent.event_type != EventTypeEnum.RECESS.value,
+                EUCalendarEvent.status != "cancelled",  # kept for audit, never presented
             )).order_by(EUCalendarEvent.start_date.asc()).limit(8)
 
             rows = q.all()
@@ -5851,7 +5852,10 @@ class ContextBuilder:
                 return []
 
             # Build query
-            base_query = db.query(EUCalendarEvent).filter(and_(*filters))
+            # A cancelled event is kept for the audit trail, never presented as
+            # happening (23 Sep 2026: phantom College Wednesdays in Strasbourg weeks).
+            base_query = (db.query(EUCalendarEvent).filter(and_(*filters))
+                          .filter(EUCalendarEvent.status != "cancelled"))
 
             if order_desc:
                 base_query = base_query.order_by(EUCalendarEvent.start_date.desc())
@@ -6915,6 +6919,7 @@ class ContextBuilder:
                     db.query(EUCalendarEvent)
                     .filter(EUCalendarEvent.start_date >= window_start)
                     .filter(EUCalendarEvent.start_date <= window_end)
+                    .filter(EUCalendarEvent.status != "cancelled")
                     .filter(EUCalendarEvent.institution.in_(
                         ["EP", "COMMISSION", "COUNCIL", "EUROPEAN_COUNCIL"]
                     ))
@@ -10183,6 +10188,7 @@ class ContextBuilder:
                           FROM eu_calendar_events
                          WHERE institution = 'EP'
                            AND start_date >= CURRENT_DATE
+                           AND status <> 'cancelled'
                            AND (
                                 ep_committee_code = :c OR title ILIKE :cw OR description ILIKE :cw
                            )
@@ -11197,7 +11203,7 @@ class ContextBuilder:
                      ORDER BY published_date DESC NULLS LAST
                      LIMIT 6
                 """), params).mappings().all()
-                cal_where = "institution = ANY(ARRAY['COUNCIL','EUROPEAN_COUNCIL'])"
+                cal_where = "institution = ANY(ARRAY['COUNCIL','EUROPEAN_COUNCIL']) AND status <> 'cancelled'"
                 if intent.get("configuration"):
                     params["cfg"] = intent["configuration"]
                     cal_where += " AND council_configuration = :cfg"

@@ -828,6 +828,7 @@ def _handle_get_calendar_events(days_ahead: int = 14, institution: str = "") -> 
                    start_date, end_date, ep_committee_code, policy_areas
             FROM eu_calendar_events
             WHERE start_date >= :start AND start_date <= :end
+              AND status <> 'cancelled'
         """
         params: Dict[str, Any] = {"start": today, "end": end_date}
         if institution:
