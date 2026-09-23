@@ -1,0 +1,14 @@
+{
+  "_about": "Law drops the radar's check B would call MISSED that Victor has decided not to act on. Keyed on CELEX + deadline, so a LATER deadline of the same act still fires. Every entry needs who decided, when, and why. Read by backend/scripts/lawdrop_radar.py.",
+  "acknowledged": [
+    {
+      "celex": "32023R2854",
+      "deadline": "2026-09-12",
+      "short_name": "Data Act, Article 3(1) design obligation",
+      "decided_by": "Victor",
+      "decided_on": "2026-09-23",
+      "decision": "no action",
+      "reason": "Missed marketing moment only: Chat already answers it correctly (eu_data_act.md, eu_legislation_milestones_aug_sep_2026.md). No deck or canon page to be made."
+    }
+  ]
+}

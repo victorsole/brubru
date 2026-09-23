@@ -137,12 +137,19 @@ Three possible outcomes per failing query:
 Since 6 August the response validator runs on the path users actually hit, in **shadow mode**: it computes a verdict on every answer and writes it to `chat_validations`, but never modifies what shipped. That table is now a second audit input, and it is free — the judging already happened.
 
 ```sql
-SELECT created_at, generator, language, severity, passed,
-       violation_count, violations, left(query, 80) AS query
+SELECT created_at, generator, language, outcome, severity, passed,
+       violation_count, violations, error AS reason, left(query, 80) AS query
 FROM chat_validations
 WHERE created_at::date BETWEEN 'START_DATE' AND 'END_DATE'
 ORDER BY created_at;
 ```
+
+**Every answer has a row since 23 September 2026 (migration 237), and `outcome` says what the row is:**
+`judged` (a real verdict), `skipped` (the pre-filter found nothing checkable; reason in `error`),
+`timeout` or `error`. `passed` is NULL for anything not judged. Compute pass and FP rates over
+`outcome = 'judged'` ONLY. Before 237, a skip or a caller timeout wrote no row, and the validator's
+own soft failure was stored as `passed = true` (80 of 428 rows, 19%, backfilled). An answer with
+NO row after 23 Sep is now itself a defect: the recorder failed.
 
 Two jobs each run:
 

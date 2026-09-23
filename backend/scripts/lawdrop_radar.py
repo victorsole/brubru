@@ -50,6 +50,24 @@ from sqlalchemy import text  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DECK_DIR = os.path.join(ROOT, "docs", "marketing", "designs")
 CANON_DIR = os.path.join(ROOT, "frontend", "public", "eucanon")
+# Drops Victor decided not to act on (23 Sep 2026). Without this, check B
+# repeated an already-decided miss at every /news run for 60 days, inviting
+# the same proposal back each morning. Keyed on CELEX + deadline.
+ACK_FILE = os.path.join(ROOT, "backend", "data", "lawdrop_acknowledged.json")
+
+
+def _acknowledged() -> dict:
+    """(celex, 'YYYY-MM-DD') -> entry. A missing or broken file acknowledges
+    nothing and says so: it must never silently hide a miss."""
+    try:
+        with open(ACK_FILE, encoding="utf-8") as fh:
+            entries = json.load(fh).get("acknowledged") or []
+    except FileNotFoundError:
+        return {}
+    except (OSError, ValueError) as exc:
+        print(f"[WARN] {ACK_FILE} unreadable ({exc}); no drop is treated as acknowledged")
+        return {}
+    return {(e["celex"], e["deadline"]): e for e in entries if e.get("celex") and e.get("deadline")}
 
 # CELEX shapes that are never a "law drop" worth a deck. Kept explicit rather
 # than clever: a silent over-filter here would recreate the blind spot this
@@ -244,11 +262,14 @@ def check_unmarked(db, back: int) -> list[dict]:
            AND r.deadline >= CURRENT_DATE - make_interval(days => :back)
          GROUP BY 1,2,3,4 ORDER BY 1 DESC
     """), {"back": back}).mappings().all()
+    acks = _acknowledged()
     out = []
     for r in rows:
         d = dict(r)
         d["marked"] = _marked(d.get("celex") or "", d.get("name") or "")
-        d["unmarked"] = not (d["marked"]["decks"] or d["marked"]["canon"])
+        d["ack"] = acks.get((d.get("celex") or "", str(d["deadline"])))
+        # An acknowledged miss is still printed, just not counted as MISSED.
+        d["unmarked"] = not (d["marked"]["decks"] or d["marked"]["canon"]) and not d["ack"]
         out.append(d)
     return out
 
@@ -492,7 +513,13 @@ def main() -> int:
               f"{r['binding']}/{r['reqs']} binding   <-- NOTHING SHIPPED")
     for r in [x for x in un if not x["unmarked"]]:
         ev = (r["marked"]["decks"] + r["marked"]["canon"])[:2]
-        print(f"   {r['deadline']}  marked: {', '.join(ev)}")
+        if ev:
+            print(f"   {r['deadline']}  marked: {', '.join(ev)}")
+        else:
+            a_ = r["ack"]
+            print(f"   {r['deadline']}  cluster {r['cluster_id']:<3} {r['celex'] or '':12s} "
+                  f"acknowledged, {a_.get('decision', 'no action')} "
+                  f"({a_.get('decided_by', '?')}, {a_.get('decided_on', '?')})")
 
     print(f"\nC. UNCOVERED -- substantive acts published {a.force_lo}-{a.force_hi}d ago with NO cluster")
     print("   (twentieth-day clause puts these in force about now; deferred")
