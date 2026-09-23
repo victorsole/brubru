@@ -7,11 +7,14 @@
 - **Headline market access**: the FTA will liberalise **over 94% of tariff lines, covering more than 97% of bilateral trade**, on both sides. No product-by-product tariff schedule has been published yet.
 - **Agri-food (Commissioner for Agriculture and Food Christophe Hansen)**: tariff preferences on key EU export interests "such as pigmeat", and protection for **almost 200 EU Geographical Indications (GIs)**. Key EU agri-food exports: pork, poultry, dairy, spirits. EU agri-food exports about EUR 2 billion against EUR 1.4 billion of imports (Šefčovič remarks, SPEECH/26/1932).
 - **Other chapters announced**: Philippine **government procurement** opened to foreign bidders "for the first-time ever"; intellectual property; digital trade (with data privacy and consumer protection); sanitary and phytosanitary (SPS) measures and technical barriers to trade (TBT); energy and raw materials; a "very ambitious" **Trade and Sustainable Development (TSD) chapter**, with **human rights and the Paris Agreement as essential elements** of the agreement.
-- **Trade figures**: goods EUR 17.6 billion (2025), services EUR 10.3 billion (2024). EU is the Philippines' **fourth-largest** trading partner (8.3% of its goods trade). EU foreign direct investment (FDI) stock in the Philippines EUR 15.4 billion; Philippine FDI stock in the EU EUR 2.4 billion. Philippines population: 113 million.
+- **Trade figures**: goods EUR 17.6 billion (2025), services EUR 10.3 billion (2024); the EU is the Philippines' **fourth-largest** trading partner. Investment figures are in the body below.
 - **History**: negotiations launched **22 December 2015**; second round **February 2017**, then on hold; stocktaking exercise announced **July 2023**; resumption announced **18 March 2024** (IP/24/1504); sixth round Manila **18-22 May 2026**; substantial agreement **22 September 2026**.
 - **Trade preferences today**: the Philippines benefits from the **Generalised Scheme of Preferences plus (GSP+)** since **December 2014**, a unilateral EU arrangement (NOT a trade agreement) that removes tariffs on two thirds of product categories, conditional on 27 core international conventions. GSP runs under Regulation (EU) No 978/2012, extended to **31 December 2027** by Regulation (EU) 2023/2663.
 - **EU-only or mixed?** NOT yet published. No Commission document has said whether the FTA will be an EU-only agreement or a mixed agreement. Do not assert either.
 - **Lead**: Directorate-General for Trade and Economic Security (DG TRADE). European Parliament committee for consent: Committee on International Trade (INTA).
+- **Order of the remaining steps (Article 218 TFEU)**: formal conclusion; Council authorises **signature**; signature (foreseen 2027); **then** European Parliament **consent**, which comes AFTER signature, NOT before it; then Council **conclusion**; then entry into force.
+
+**Investment and population (moved from QUICK FACTS)**: EU foreign direct investment (FDI) stock in the Philippines EUR 15.4 billion; Philippine FDI stock in the EU EUR 2.4 billion; population 113 million (Commission press release IP/26/1929).
 
 ## What was agreed on 22 September 2026
 
