@@ -50,12 +50,23 @@ import datetime
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 
 
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://brubru-production.up.railway.app")
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
+
+
+# Railway's edge closes a request at ~300 seconds, and every real tier runs longer
+# (fast 1,317s, warm 728s, daily 1,242s, economy 1,778s, measured 23 Sep 2026). The
+# backend keeps working after the caller goes away, so a cut connection means "still
+# running", not "failed". Fire, let go, then read what the container recorded.
+EDGE_TIMEOUT = 280
+DETACHED = "detached"
+POLL_SECONDS = 60
+MAX_WAIT_SECONDS = 50 * 60
 
 
 def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
@@ -75,14 +86,56 @@ def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
                 print(f"[OK]   {endpoint_path} → non-JSON response (len={len(body)})", flush=True)
                 return {"status": "success", "raw": body[:500]}
     except urllib.error.HTTPError as e:
+        # 502/504 from the edge = our connection was cut while the backend works on.
+        if e.code in (502, 503, 504):
+            print(f"[WAIT] {endpoint_path} → HTTP {e.code} from the edge; the tier runs on", flush=True)
+            return {"status": DETACHED, "http_code": e.code}
         print(f"[ERR]  {endpoint_path} → HTTP {e.code}: {e.reason}", flush=True)
         return {"status": "failed", "http_code": e.code, "reason": str(e.reason)}
     except urllib.error.URLError as e:
-        print(f"[ERR]  {endpoint_path} → URL error: {e.reason}", flush=True)
-        return {"status": "failed", "error": str(e.reason)}
+        print(f"[WAIT] {endpoint_path} → connection dropped ({e.reason}); the tier runs on", flush=True)
+        return {"status": DETACHED, "error": str(e.reason)}
+    except TimeoutError as e:
+        print(f"[WAIT] {endpoint_path} → read timed out; the tier runs on", flush=True)
+        return {"status": DETACHED, "error": str(e)}
     except Exception as e:
         print(f"[ERR]  {endpoint_path} → {type(e).__name__}: {e}", flush=True)
         return {"status": "failed", "error": str(e)}
+
+
+def _status_since(minutes: int) -> dict | None:
+    """What the container has recorded, and what it is still working on (None if unreadable)."""
+    url = f"{BACKEND_URL}/api/cron/runs-since?minutes={minutes}"
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {CRON_SECRET}"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return json.loads(resp.read().decode()) or {}
+    except Exception as e:  # noqa: BLE001
+        print(f"[ERR]  runs-since → {type(e).__name__}: {e}", flush=True)
+        return None
+
+
+def _wait_for_detached(started: float) -> list[dict] | None:
+    """Wait until the container is no longer working, then return what it recorded.
+
+    Not "no new rows for a while": a row is written when a source FINISHES, and one
+    source can work for seven minutes (votes_ep, 418s on 23 Sep) or, in the daily tier,
+    for half an hour. A quiet ledger is a slow job as often as a finished tier, so the
+    backend is asked what is in flight instead.
+    """
+    last = None
+    while time.time() - started < MAX_WAIT_SECONDS:
+        time.sleep(POLL_SECONDS)
+        status = _status_since(int((time.time() - started) / 60) + 2)
+        if status is None:
+            continue
+        last = status.get("runs") or []
+        in_flight = status.get("in_flight") or []
+        if not in_flight:
+            return last
+        print(f"[WAIT] still running: {', '.join(in_flight)} ({len(last)} recorded)", flush=True)
+    print(f"[ERR]  still working after {MAX_WAIT_SECONDS // 60} minutes; judging what there is", flush=True)
+    return last
 
 
 def _iter_job_statuses(payload) -> list[tuple[str, str]]:
@@ -296,13 +349,15 @@ def main():
 
     print(f"[CRON-DISPATCH] Firing {len(fires)} tier(s): {[label for label, _ in fires]}", flush=True)
 
+    fired_at = time.time()
     results = {}
     for label, endpoint in fires:
-        results[label] = _fire(endpoint)
+        results[label] = _fire(endpoint, timeout=EDGE_TIMEOUT)
 
     # Summary line for log scraping
     succeeded = sum(1 for r in results.values() if r.get("status") == "success")
     failed = sum(1 for r in results.values() if r.get("status") == "failed")
+    detached = [label for label, r in results.items() if r.get("status") == DETACHED]
 
     # Per-job failures INSIDE a 200 response. The top-level count above is not
     # enough: `/api/cron/sync/tier/{tier}` returns {"tier":..., "ran": {...}} with
@@ -312,6 +367,21 @@ def main():
     # green Railway job every hour: the ingestion was dead and nothing here could
     # say so. Walk the payload.
     job_failures: list[str] = []
+    # A tier whose connection was cut is judged from the ledger the container writes,
+    # not from a response we never got.
+    if detached:
+        print(f"[CRON-DISPATCH] Detached: {detached}. Reading the ledger instead.", flush=True)
+        runs = _wait_for_detached(fired_at)
+        if runs is None:
+            job_failures.append("runs-since=unreadable")
+        elif not runs:
+            job_failures.append(f"{','.join(detached)}=no runs recorded")
+        else:
+            for r in runs:
+                if r.get("status") not in ("success", "ok", "skipped", "degraded"):
+                    job_failures.append(f"{r.get('source_key')}={r.get('status')}")
+            print(f"[CRON-DISPATCH] Ledger: {len(runs)} run(s), "
+                  f"{len(job_failures)} failed", flush=True)
     for label, payload in results.items():
         for job, status in _iter_job_statuses(payload):
             # "degraded" = an AUDIT source found gaps (it exits non-zero to say
@@ -324,7 +394,7 @@ def main():
 
     print(
         f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed} "
-        f"job_failures={len(job_failures)}",
+        f"detached={len(detached)} job_failures={len(job_failures)}",
         flush=True,
     )
     if job_failures:
@@ -336,6 +406,11 @@ def main():
     # log". No operator reads a green log. Execution stays fail-soft -- one tier
     # failing still does not stop the next, which is what matters -- but the
     # REPORT is now honest. Set 22 September 2026.
+    #
+    # 23 September 2026: red also has to MEAN something. Every tier outlives
+    # Railway's 300s edge timeout, so the cut connection was counted as a failed
+    # tier and every single run went red and mailed a crash. A cut connection is
+    # now `detached` and the verdict comes from the ledger the container writes.
     if failed or job_failures:
         sys.exit(1)
     sys.exit(0)

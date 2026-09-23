@@ -9,7 +9,7 @@ Railway cron service calls these endpoints on a schedule.
 
 import logging
 import time as _time
-from fastapi import APIRouter, HTTPException, Header, Query
+from fastapi import APIRouter, Depends, HTTPException, Header, Query, Request
 from sqlalchemy.orm import Session
 
 from core.config import settings
@@ -17,7 +17,33 @@ from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/cron", tags=["Cron Jobs"])
+# Which cron calls are still working, so the dispatcher can tell "the tier is running"
+# from "the tier has finished". It cannot tell from its own connection: Railway's edge
+# closes the request at ~300s and every tier runs longer, and it cannot tell from the
+# ledger either, because a single source can work for 7 minutes (votes_ep, 418s) or,
+# in the daily tier, for half an hour, writing nothing until it finishes.
+_IN_FLIGHT: dict = {}
+
+
+async def _track_cron_activity(request: Request):
+    """Mark a cron call in flight for as long as it runs, reads included in the exceptions.
+
+    The teardown of a yield dependency runs after the response, and the endpoint runs to
+    completion even when the caller has gone, which is precisely the case this exists for.
+    """
+    path = request.url.path
+    if path.endswith("/heartbeat") or path.endswith("/runs-since"):
+        yield
+        return
+    key = f"{path}#{_time.time():.3f}"
+    _IN_FLIGHT[key] = _time.time()
+    try:
+        yield
+    finally:
+        _IN_FLIGHT.pop(key, None)
+
+
+router = APIRouter(prefix="/api/cron", tags=["Cron Jobs"], dependencies=[Depends(_track_cron_activity)])
 
 
 def _verify_cron_secret(authorization: str = Header(...)):
@@ -1335,6 +1361,50 @@ def _send_staleness_email(stale: list[dict]) -> None:
         logger.info("[CRON] Staleness email sent to %s (%d feeds)", recipient, len(stale))
     except Exception as exc:  # pragma: no cover - defensive
         logger.warning("[CRON] Staleness email failed: %s", exc)
+
+
+@router.get("/runs-since")
+async def cron_runs_since(
+    minutes: int = 120,
+    authorization: str = Header(...),
+):
+    """What this container has recorded in the last `minutes`, for the dispatcher to judge by.
+
+    Why (23 Sep 2026): the dispatcher fires a tier over the public URL and waits for the
+    response, but Railway's edge closes the request at 300 seconds and every real tier runs
+    far longer than that (fast 1,317s, warm 728s, daily 1,242s, economy 1,778s on 23 Sep).
+    The dispatcher read that 502 as a failed tier and exited 1, so EVERY hour that fired a
+    tier went red and mailed a crash, whatever the scrapers had done. The work itself is
+    unaffected: the backend keeps running the tier after the caller goes away, which is
+    exactly why the answer has to be read from `sync_runs` instead of from the response.
+
+    Local rows (a developer's laptop writes to the same table) are excluded, as in the tier
+    health verdict.
+    """
+    _verify_cron_secret(authorization)
+    from sqlalchemy import text
+    minutes = max(1, min(int(minutes), 720))
+    db = SessionLocal()
+    try:
+        rows = db.execute(text("""
+            SELECT source_key, tier, status, started_at, finished_at
+              FROM sync_runs
+             WHERE started_at > now() - (:m || ' minutes')::interval
+               AND runner IS DISTINCT FROM 'local'
+             ORDER BY started_at
+        """), {"m": minutes}).mappings().all()
+    finally:
+        db.close()
+    return {
+        "minutes": minutes,
+        # What is still working right now. An empty list is the only honest way for the
+        # dispatcher to know a detached tier has ended.
+        "in_flight": sorted(k.split("#")[0] for k in _IN_FLIGHT),
+        "runs": [{"source_key": r["source_key"], "tier": r["tier"], "status": r["status"],
+                  "started_at": r["started_at"].isoformat() if r["started_at"] else None,
+                  "finished_at": r["finished_at"].isoformat() if r["finished_at"] else None}
+                 for r in rows],
+    }
 
 
 @router.post("/heartbeat")
