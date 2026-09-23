@@ -47,42 +47,42 @@ def _exit_code(fn):
 
 
 def test_a_cut_connection_with_a_clean_ledger_is_green(monkeypatch, one_tier):
-    monkeypatch.setattr(cd, "_wait_for_detached", lambda started: [
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: ([
         {"source_key": "news_dg", "status": "success"},
         {"source_key": "oj", "status": "success"},
         {"source_key": "cron_dispatch", "status": "ok"},
         {"source_key": "council_docs", "status": "skipped"},
-    ])
+    ], []))
     assert _exit_code(cd.main) == 0
     # and it no longer sits on a connection the edge will cut anyway
     assert one_tier["/api/cron/sync/tier/fast"] == cd.EDGE_TIMEOUT
 
 
 def test_a_cut_connection_with_a_failed_source_is_red(monkeypatch, one_tier):
-    monkeypatch.setattr(cd, "_wait_for_detached", lambda started: [
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: ([
         {"source_key": "news_dg", "status": "success"},
         {"source_key": "oj_acts_ca", "status": "failed"},
-    ])
+    ], []))
     assert _exit_code(cd.main) == 1
 
 
 def test_an_audit_source_reporting_gaps_is_not_a_failure(monkeypatch, one_tier):
     """`degraded` is an auditor exiting non-zero to report what it found. Counting it
     would paint every run red for ever, which is how a red build stops meaning anything."""
-    monkeypatch.setattr(cd, "_wait_for_detached", lambda started: [
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: ([
         {"source_key": "news_dg", "status": "success"},
         {"source_key": "scraper_health", "status": "degraded"},
-    ])
+    ], []))
     assert _exit_code(cd.main) == 0
 
 
 def test_a_tier_that_recorded_nothing_at_all_is_red(monkeypatch, one_tier):
-    monkeypatch.setattr(cd, "_wait_for_detached", lambda started: [])
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: ([], []))
     assert _exit_code(cd.main) == 1
 
 
 def test_an_unreadable_ledger_is_red(monkeypatch, one_tier):
-    monkeypatch.setattr(cd, "_wait_for_detached", lambda started: None)
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: (None, []))
     assert _exit_code(cd.main) == 1
 
 
@@ -95,7 +95,7 @@ def test_a_tier_that_answers_in_time_is_still_judged_on_its_payload(monkeypatch)
         {"status": "success"} if endpoint.endswith("/heartbeat")
         else {"tier": "daily", "ran": {"consultations": "success", "tris": "failed"}}))
 
-    def _boom(started):
+    def _boom(started, endpoints=None):
         raise AssertionError("nothing was detached; the ledger must not be consulted")
 
     monkeypatch.setattr(cd, "_wait_for_detached", _boom)
@@ -125,7 +125,7 @@ def test_the_wait_ends_on_what_is_in_flight_not_on_a_quiet_ledger(monkeypatch):
 
     monkeypatch.setattr(cd, "_status_since", fake_status)
     import time as _t
-    runs = cd._wait_for_detached(_t.time())
+    runs, unfinished = cd._wait_for_detached(_t.time())
     assert calls["n"] == 5                       # it did not stop during the silence
     assert [r["source_key"] for r in runs] == ["news_dg", "votes_ep"]
     assert any(r["status"] == "failed" for r in runs)  # the late failure is still seen
@@ -142,7 +142,7 @@ def test_an_unreadable_status_does_not_end_the_wait(monkeypatch):
 
     monkeypatch.setattr(cd, "_status_since", fake_status)
     import time as _t
-    assert [r["source_key"] for r in cd._wait_for_detached(_t.time())] == ["a"]
+    assert [r["source_key"] for r in cd._wait_for_detached(_t.time())[0]] == ["a"]
     assert calls["n"] == 3
 
 
@@ -182,3 +182,37 @@ def test_the_two_read_endpoints_are_not_work():
     for path in ("/api/cron/heartbeat", "/api/cron/runs-since"):
         during, after = _run_dependency(path)
         assert during == [] and after == []
+
+
+def test_a_tier_killed_by_a_deploy_is_not_green(monkeypatch, one_tier):
+    """A deploy replaces the web container and the tier simply stops: the 15:00 economy
+    tier of 23 Sep died after 6 of its 28 sources when another session pushed. Nothing is
+    then in flight and every recorded row is a success, so only the backend's own record
+    of having REACHED THE END can tell a finished tier from a truncated one. That record
+    lives in the process and dies with it."""
+    monkeypatch.setattr(cd, "_wait_for_detached", lambda started, endpoints=None: (
+        [{"source_key": "economy_eea", "status": "success"},
+         {"source_key": "economy_efca", "status": "success"}],
+        ["/api/cron/sync/tier/fast"]))
+    assert _exit_code(cd.main) == 1
+
+
+def test_the_end_record_must_be_from_this_run(monkeypatch):
+    """A `completed` entry older than the fire is the PREVIOUS run's; it must not pass."""
+    monkeypatch.setattr(cd, "POLL_SECONDS", 0)
+    import time as _t
+    started = _t.time() - 120  # the tier was fired two minutes ago
+    monkeypatch.setattr(cd, "_status_since", lambda minutes: {
+        "in_flight": [],
+        "completed": {"/api/cron/sync/economy": {"seconds_ago": 4000.0, "ok": True}},
+        "runs": [{"source_key": "economy_eea", "status": "success"}],
+    })
+    runs, unfinished = cd._wait_for_detached(started, ["/api/cron/sync/economy?batch=1"])
+    assert unfinished == ["/api/cron/sync/economy"]
+    monkeypatch.setattr(cd, "_status_since", lambda minutes: {
+        "in_flight": [],
+        "completed": {"/api/cron/sync/economy": {"seconds_ago": 30.0, "ok": True}},
+        "runs": [{"source_key": "economy_eea", "status": "success"}],
+    })
+    runs, unfinished = cd._wait_for_detached(started, ["/api/cron/sync/economy?batch=1"])
+    assert unfinished == []

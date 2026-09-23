@@ -23,10 +23,15 @@ logger = logging.getLogger(__name__)
 # ledger either, because a single source can work for 7 minutes (votes_ep, 418s) or,
 # in the daily tier, for half an hour, writing nothing until it finishes.
 _IN_FLIGHT: dict = {}
+# Cron calls that RAN TO THE END in this process. A container replacement empties it,
+# which is the point: a deploy kills whatever tier is mid-flight (the 15:00 economy tier
+# of 23 Sep died after 6 of 28 sources when another session pushed), and without this a
+# dispatcher that saw nothing in flight would call a truncated run green.
+_COMPLETED: dict = {}
 
 
 async def _track_cron_activity(request: Request):
-    """Mark a cron call in flight for as long as it runs, reads included in the exceptions.
+    """Mark a cron call in flight while it runs, and record that it finished.
 
     The teardown of a yield dependency runs after the response, and the endpoint runs to
     completion even when the caller has gone, which is precisely the case this exists for.
@@ -37,10 +42,15 @@ async def _track_cron_activity(request: Request):
         return
     key = f"{path}#{_time.time():.3f}"
     _IN_FLIGHT[key] = _time.time()
+    ok = True
     try:
         yield
+    except Exception:
+        ok = False
+        raise
     finally:
         _IN_FLIGHT.pop(key, None)
+        _COMPLETED[path] = {"at": _time.time(), "ok": ok}
 
 
 router = APIRouter(prefix="/api/cron", tags=["Cron Jobs"], dependencies=[Depends(_track_cron_activity)])
@@ -1409,6 +1419,10 @@ async def cron_runs_since(
         # What is still working right now. An empty list is the only honest way for the
         # dispatcher to know a detached tier has ended.
         "in_flight": sorted(k.split("#")[0] for k in _IN_FLIGHT),
+        # ...and which calls reached their end IN THIS PROCESS, so "nothing in flight"
+        # after a container replacement cannot pass as "the tier finished".
+        "completed": {p: {"seconds_ago": round(_time.time() - v["at"], 1), "ok": v["ok"]}
+                      for p, v in _COMPLETED.items()},
         "runs": [{"source_key": r["source_key"], "tier": r["tier"], "status": r["status"],
                   "started_at": r["started_at"].isoformat() if r["started_at"] else None,
                   "finished_at": r["finished_at"].isoformat() if r["finished_at"] else None}

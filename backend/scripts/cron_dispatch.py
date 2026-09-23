@@ -115,7 +115,11 @@ def _status_since(minutes: int) -> dict | None:
         return None
 
 
-def _wait_for_detached(started: float) -> list[dict] | None:
+def _endpoint_path(endpoint: str) -> str:
+    return endpoint.split("?")[0]
+
+
+def _wait_for_detached(started: float, endpoints: list[str] | None = None) -> tuple[list[dict] | None, list[str]]:
     """Wait until the container is no longer working, then return what it recorded.
 
     Not "no new rows for a while": a row is written when a source FINISHES, and one
@@ -123,6 +127,7 @@ def _wait_for_detached(started: float) -> list[dict] | None:
     for half an hour. A quiet ledger is a slow job as often as a finished tier, so the
     backend is asked what is in flight instead.
     """
+    wanted = [_endpoint_path(e) for e in (endpoints or [])]
     last = None
     while time.time() - started < MAX_WAIT_SECONDS:
         time.sleep(POLL_SECONDS)
@@ -132,10 +137,16 @@ def _wait_for_detached(started: float) -> list[dict] | None:
         last = status.get("runs") or []
         in_flight = status.get("in_flight") or []
         if not in_flight:
-            return last
+            # Nothing in flight is not enough: a deploy replaces the container mid-tier
+            # and the work simply stops. Only the backend's own record of reaching the
+            # end counts, and that record dies with the process, which is what we want.
+            completed = status.get("completed") or {}
+            unfinished = [p for p in wanted
+                          if float((completed.get(p) or {}).get("seconds_ago", 1e9)) > time.time() - started]
+            return last, unfinished
         print(f"[WAIT] still running: {', '.join(in_flight)} ({len(last)} recorded)", flush=True)
     print(f"[ERR]  still working after {MAX_WAIT_SECONDS // 60} minutes; judging what there is", flush=True)
-    return last
+    return last, ["timed out: " + ",".join(wanted)]
 
 
 def _iter_job_statuses(payload) -> list[tuple[str, str]]:
@@ -371,7 +382,12 @@ def main():
     # not from a response we never got.
     if detached:
         print(f"[CRON-DISPATCH] Detached: {detached}. Reading the ledger instead.", flush=True)
-        runs = _wait_for_detached(fired_at)
+        detached_endpoints = [e for label, e in fires if results[label].get("status") == DETACHED]
+        runs, unfinished = _wait_for_detached(fired_at, detached_endpoints)
+        for path in unfinished:
+            # The container was replaced (a deploy) or the work vanished: whatever was
+            # recorded is a PART of the tier, never the tier.
+            job_failures.append(f"{path}=did not reach its end")
         if runs is None:
             job_failures.append("runs-since=unreadable")
         elif not runs:
