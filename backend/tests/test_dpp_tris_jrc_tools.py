@@ -27,16 +27,32 @@ def test_instructions_name_the_new_sources():
 
 
 def test_tris_rows_are_in_domain_and_open_first():
+    import re
+    from sqlalchemy import text
+    from core.database import SessionLocal
+    from services.mcp.dpp_tools import _TRIS_DPP_RX
     out = handle_dpp_tris(limit=50)
     rows = out["notifications"]
     assert out["feed"]["total"] > 0
     opens = [r["standstill_open"] for r in rows]
     assert opens == sorted(opens, key=lambda x: (x is not True))       # open ones first
-    for r in rows:
-        blob = " ".join(str(r.get(k) or "") for k in ("title", "main_content", "products")).lower()
-        assert any(w in blob for w in ("textil", "footwear", "packag", "waste", "recycl", "ecodesign",
-                                       "passport", "traceab", "producer", "unsold", "batter",
-                                       "circular", "repair", "durab", "apparel", "garment", "clothing"))
+    db = SessionLocal()
+    try:
+        for r in rows:   # judged on the FULL stored text, the same text SQL matched
+            full = " ".join(x or "" for x in db.execute(text(
+                "SELECT title, products_or_services, main_content, full_text_summary "
+                "FROM tris_notifications WHERE notification_number = :n"),
+                {"n": r["reference"]}).one())
+            assert re.search(_TRIS_DPP_RX, full, re.I), r["reference"]
+    finally:
+        db.close()
+
+
+def test_animal_traceability_is_not_in_domain():
+    import re
+    from services.mcp.dpp_tools import _TRIS_DPP_RX
+    assert not re.search(_TRIS_DPP_RX, "welfare of dogs and cats and their traceability", re.I)
+    assert re.search(_TRIS_DPP_RX, "product traceability in the textile supply chain", re.I)
 
 
 def test_open_only_really_filters():
@@ -68,3 +84,12 @@ def test_ask_dpp_carries_tris_and_answers_catalan_jrc_question():
     out = handle_ask_dpp("Quan és el taller del JRC sobre el passaport digital?")
     assert out["found"] and "national_draft_rules_tris" in out
     assert any("JRC" in r["title"] for r in out["matches"].get("event", []))
+
+
+def test_updates_list_upcoming_events_soonest_first():
+    from services.mcp.dpp_tools import handle_dpp_updates
+    ev = handle_dpp_updates(10)["events"]
+    up = [e["document_date"] for e in ev if e["upcoming"]]
+    assert up == sorted(up)
+    flags = [e["upcoming"] for e in ev]
+    assert flags == sorted(flags, reverse=True)       # all upcoming before any past

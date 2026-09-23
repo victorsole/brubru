@@ -52,6 +52,7 @@ logging.disable(logging.WARNING)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.database import SessionLocal  # noqa: E402
+from services.mcp.dpp_tools import _TRIS_DPP_RX  # noqa: E402  one definition, shared with the connector
 from sqlalchemy import text  # noqa: E402
 
 # --------------------------------------------------------------------------
@@ -334,8 +335,13 @@ def sweep(db, scope_key: str, days: int) -> list[dict]:
         WHERE (standstill_until >= current_date OR notification_date >= :since)
           AND (title || ' ' || coalesce(products_or_services,'') || ' ' || coalesce(main_content,'')
                || ' ' || coalesce(full_text_summary,'')) ~* :rx
+          -- AND the connector's product-domain filter: scope words such as
+          -- "traceability" alone matched a Spanish animal-rights decree (dogs
+          -- and cats), which the home-country rule would have made URGENT.
+          AND (title || ' ' || coalesce(products_or_services,'') || ' ' || coalesce(main_content,'')
+               || ' ' || coalesce(full_text_summary,'')) ~* :trx
         ORDER BY standstill_until NULLS LAST LIMIT 120"""),
-        {"since": since, "rx": rx}).mappings().all():
+        {"since": since, "rx": rx, "trx": _TRIS_DPP_RX}).mappings().all():
         extra = []
         if r["opinions"]:
             extra.append("detailed opinion: " + ", ".join(r["opinions"]))

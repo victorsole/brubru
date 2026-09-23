@@ -89,3 +89,22 @@ def test_sweep_sends_postgres_boundaries(watch):
     watch.sweep(_DB(), "A", 7)
     rxs = [r for r in seen if r]
     assert rxs and all("\\b" not in r and "\\y" in r for r in rxs)
+
+
+def test_watch_tris_scan_uses_the_product_domain_filter(watch):
+    seen = []
+
+    class _R:
+        def mappings(self):
+            return self
+
+        def all(self):
+            return []
+
+    class _DB:
+        def execute(self, stmt, params=None):
+            seen.append(params or {})
+            return _R()
+
+    watch.sweep(_DB(), "A", 7)
+    assert any("trx" in p for p in seen)

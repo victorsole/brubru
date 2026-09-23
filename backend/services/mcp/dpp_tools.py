@@ -478,7 +478,16 @@ def handle_dpp_registry() -> Dict[str, Any]:
 
 def handle_dpp_updates(limit: int = 15) -> Dict[str, Any]:
     news = _items("news", None, limit=limit)
-    events = _items("event", None, limit=limit)
+    # Upcoming first, SOONEST first, then the most recent past ones. Sorting
+    # every event newest-date-first put the far-future JRC workshops (to
+    # January 2028) above the passport webinar due next week (23 Sep 2026).
+    events = _rows(
+        "SELECT id, title, summary, public_url, document_date, "
+        "(document_date::date >= current_date) AS upcoming FROM economy_items "
+        "WHERE body_code = :b AND item_type = 'event' "
+        "ORDER BY (document_date::date >= current_date) DESC, "
+        "CASE WHEN document_date::date >= current_date THEN document_date END ASC, "
+        "document_date DESC NULLS LAST LIMIT :lim", {"b": BODY, "lim": limit})
     return {"news": news, "events": events,
             "note": "Commission announcements and events on the passport."}
 
@@ -542,9 +551,13 @@ def handle_dpp_forum() -> Dict[str, Any]:
 # Brubru did, because the feed was frozen and this server could not see TRIS at
 # all. Domain filter kept tight on purpose: TRIS is mostly food, telecoms and
 # vehicles, and "label" alone would drown the passport in food labelling.
+# Bare "traceab", "repair" and "circular" were dropped after the first review
+# of real matches (23 Sep 2026): "traceability" matched a Spanish animal-rights
+# decree (dogs and cats). Product-context forms only.
 _TRIS_DPP_RX = (r"textil|footwear|apparel|garment|clothing|packag|waste|recycl|ecodesign|"
-                r"eco-design|product passport|traceab|extended producer|unsold|batter|"
-                r"circular|repair|durab")
+                r"eco-design|product passport|digital product|product traceab|"
+                r"supply.chain traceab|extended producer|unsold|batter|circular econom|"
+                r"repairab|reparab|right to repair|durabilit")
 
 
 def handle_dpp_tris(query: Optional[str] = None, country: Optional[str] = None,
