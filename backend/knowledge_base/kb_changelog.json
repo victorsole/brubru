@@ -2,6 +2,16 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-23",
+      "action": "updated",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "Committee stage from the documents: joint draft report PE792.067, ENVI draft opinion and 767 ENVI amendments, the 70% to 80% vehicle-origin push, the French Senate's subsidiarity objection, 28 September joint committee; legal basis corrected to Articles 114 and 207(2) TFEU",
+      "refs": [
+        "52026PC0100"
+      ]
+    },
+    {
       "date": "2026-09-22",
       "action": "updated",
       "guide": "industrial_accelerator_act",

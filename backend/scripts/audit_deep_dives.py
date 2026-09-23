@@ -65,6 +65,7 @@ import html
 import json
 import pathlib
 import re
+from datetime import date
 import sys
 import unicodedata
 from typing import Dict, List, Optional
@@ -367,8 +368,15 @@ def audit_one(dd: dict, facts: Optional[dict], untagged: Optional[List[dict]] = 
     # English page happens to use the words and the translations do not. The
     # question worth asking is whether a committee document appeared AFTER the
     # page was last reviewed.
+    #
+    # Only meetings that have HAPPENED count (23 Sep 2026). `date` is the MEETING
+    # date, so a document filed for a meeting next week made a page reviewed
+    # today look stale, and no review could ever clear it until the meeting
+    # passed. A document for a future meeting is still caught when the page does
+    # not cite it: that is the NOT ANALYSED check below, which reads references.
+    today = date.today().isoformat()
     newer = [e for e in facts["emeeting"]
-             if res["reviewed"] and e["date"] > res["reviewed"]]
+             if res["reviewed"] and res["reviewed"] < e["date"] <= today]
     if newer:
         newest = max(newer, key=lambda e: e["date"])
         res["emeeting_newer"] = newer
