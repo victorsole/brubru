@@ -723,5 +723,11 @@ async def get_mep(
             detail={"error": f"MEP {mep_id} not found on EP Open Data", "reason_code": "not_found", "resource": "mep", "id": mep_id},
         )
     item = _normalise(profile)
+    # The list hydrates country / group / role from the profile; the detail used to
+    # return them null although it HAD the profile in hand. The call is cached.
+    try:
+        await _enrich_country_group([item])
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] detail hydration skipped: %s", exc)
     _attach_dates(db, [item], CURRENT_TERM)
     return item
