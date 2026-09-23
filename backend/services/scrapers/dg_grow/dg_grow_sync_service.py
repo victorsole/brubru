@@ -186,183 +186,224 @@ class DGGrowSyncService:
 
         if country:
             notifications = await self.tris.search_notifications(country=country)
-        else:
-            # Frontier = the highest TRIS page id already stored, read from the
-            # source URL (/en/notification/<id>). See get_recent_notifications.
-            from sqlalchemy import text as _text
-            frontier = self.db.execute(_text(
-                "SELECT max(substring(source_url from '/notification/([0-9]+)')::int) "
-                "FROM tris_notifications")).scalar()
-            notifications = await self.tris.get_recent_notifications(days=days, frontier=frontier)
-            stats["frontier_before"] = frontier
-            stats["frontier_after"] = getattr(self.tris, "last_frontier", frontier)
-            stats["throttled"] = bool(getattr(self.tris, "throttled", False))
-            stats["paid_fetches"] = getattr(self.tris, "paid_fetches", 0)
-            stats["uncertain_ids"] = len(getattr(self.tris, "uncertain_ids", []) or [])
-            # The fetch above can run for many minutes; the session's pooled
-            # connection may be dead by now, and pool_pre_ping only fires on
-            # checkout. Release it so the writes below check out a live one
-            # (23 Sep 2026: a 15-minute backfill lost every row to
-            # PendingRollbackError).
+            for notif in notifications:
+                self._write_tris(self.db, notif, stats)
+            self.db.commit()
+            return stats
+
+        # Frontier = the highest TRIS page id already stored, read from the
+        # source URL (/en/notification/<id>). See get_recent_notifications.
+        from sqlalchemy import text as _text
+        from core.database import SessionLocal
+        frontier = self.db.execute(_text(
+            "SELECT max(substring(source_url from '/notification/([0-9]+)')::int) "
+            "FROM tris_notifications")).scalar()
+        # Release the connection before the long fetch: pool_pre_ping only
+        # fires on checkout, so a session held across it dies. On 23 Sep 2026
+        # two runs of one to two hours each lost every row, once at the write
+        # and once inside close() itself.
+        try:
             self.db.close()
+        except Exception:  # noqa: BLE001
+            self.db.invalidate()
 
-        for notif in notifications:
+        # Write as we go, in batches of 10, each in a fresh short session: a
+        # dead connection costs at most one batch, and a crash keeps the rest.
+        batch: List[Dict[str, Any]] = []
+
+        def flush() -> None:
+            if not batch:
+                return
+            wdb = SessionLocal()
             try:
-                # The TRIS scraper emits TWO identifiers:
-                #   - `reference`           — human-readable, e.g. "2026/0115/CZ"
-                #   - `notification_number` — upstream's internal integer id
-                # The canonical key is the reference (matches what citizens see
-                # on the TRIS portal and what `/api/v1/tris-notifications`
-                # exposes as `notification_number` in the response).
-                number = notif.get("reference") or notif.get("notification_number")
-                if not number:
-                    continue
-                number = str(number)  # tris_notifications.notification_number is varchar
+                for n in batch:
+                    self._write_tris(wdb, n, stats)
+                wdb.commit()
+            except Exception as exc:  # noqa: BLE001
+                logger.error(f"TRIS batch write failed ({len(batch)} rows): {exc}")
+                stats["errors"] += len(batch)
+                try:
+                    wdb.rollback()
+                except Exception:  # noqa: BLE001
+                    pass
+            finally:
+                try:
+                    wdb.close()
+                except Exception:  # noqa: BLE001
+                    pass
+            batch.clear()
 
-                # Parse dates
-                notification_date = None
-                standstill_end = None
-                date_str = notif.get("notification_date")
-                if date_str:
-                    try:
-                        notification_date = datetime.fromisoformat(date_str) if isinstance(date_str, str) else date_str
-                    except (ValueError, TypeError):
-                        pass
-                standstill_str = notif.get("standstill_end_date")
-                if standstill_str:
-                    try:
-                        standstill_end = datetime.fromisoformat(standstill_str) if isinstance(standstill_str, str) else standstill_str
-                    except (ValueError, TypeError):
-                        pass
+        def on_item(notif: Dict[str, Any]) -> None:
+            batch.append(notif)
+            if len(batch) >= 10:
+                flush()
 
-                country_alpha2 = notif.get("country") or notif.get("notifying_country") or "??"
-                title_value = notif.get("title") or number
-
-                # 1) Canonical write into tris_notifications (the v1 API table).
-                existing_tris = self.db.query(TRISNotification).filter(
-                    TRISNotification.notification_number == number
-                ).first()
-                now = datetime.utcnow()
-                if existing_tris:
-                    existing_tris.notifying_country = country_alpha2
-                    existing_tris.title = title_value
-                    existing_tris.short_summary = notif.get("description") or existing_tris.short_summary
-                    if notification_date:
-                        existing_tris.notification_date = notification_date.date() if hasattr(notification_date, "date") else notification_date
-                    if standstill_end:
-                        existing_tris.standstill_until = standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
-                    existing_tris.sector = notif.get("product_sector") or existing_tris.sector
-                    existing_tris.products_or_services = notif.get("product_description") or existing_tris.products_or_services
-                    existing_tris.source_url = notif.get("source_url") or existing_tris.source_url
-                    existing_tris.main_content = notif.get("main_content") or existing_tris.main_content
-                    existing_tris.full_text_summary = notif.get("grounds") or existing_tris.full_text_summary
-                    if "comments_by" in notif:
-                        existing_tris.member_state_observations = notif["comments_by"]
-                    if "detailed_opinions" in notif:
-                        existing_tris.detailed_opinions = notif["detailed_opinions"]
-                    existing_tris.pdf_url = notif.get("document_url") or existing_tris.pdf_url
-                    related = notif.get("related_eu_legislation")
-                    if related is not None:
-                        existing_tris.related_celex = related if isinstance(related, list) else [related]
-                    existing_tris.last_updated = now
-                    stats["updated"] += 1
-                else:
-                    self.db.add(TRISNotification(
-                        notification_number=number,
-                        notifying_country=country_alpha2,
-                        title=title_value,
-                        short_summary=notif.get("description"),
-                        notification_date=(
-                            notification_date.date()
-                            if hasattr(notification_date, "date")
-                            else (notification_date or now.date())
-                        ),
-                        standstill_until=(
-                            standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
-                        ),
-                        sector=notif.get("product_sector"),
-                        products_or_services=notif.get("product_description"),
-                        main_content=notif.get("main_content"),
-                        full_text_summary=notif.get("grounds"),
-                        # Issuers of comments (Commission and/or Member States)
-                        # and of detailed opinions, as TRIS lists them.
-                        member_state_observations=notif.get("comments_by") or [],
-                        detailed_opinions=notif.get("detailed_opinions") or [],
-                        source_url=notif.get("source_url") or (
-                            "https://technical-regulation-information-system.ec.europa.eu/"
-                            + number.replace("/", "-")
-                        ),
-                        pdf_url=notif.get("document_url"),
-                        related_celex=(
-                            notif.get("related_eu_legislation")
-                            if isinstance(notif.get("related_eu_legislation"), list)
-                            else ([notif["related_eu_legislation"]] if notif.get("related_eu_legislation") else [])
-                        ),
-                        scraped_at=now,
-                        first_seen=now,
-                        last_updated=now,
-                    ))
-                    stats["new"] += 1
-
-                # 2) Mirror into technical_regulations so the legacy
-                # /api/dg_grow/* read path + CPV alert matching keep working.
-                existing_tr = self.db.query(TechnicalRegulation).filter(
-                    TechnicalRegulation.reference == number
-                ).first()
-                if existing_tr:
-                    existing_tr.title = title_value
-                    existing_tr.country = country_alpha2
-                    existing_tr.country_name = notif.get("country_name", existing_tr.country_name)
-                    if notification_date:
-                        existing_tr.notification_date = notification_date
-                    if standstill_end:
-                        existing_tr.standstill_end_date = standstill_end
-                    existing_tr.cpv_mapping = notif.get("cpv_mapping", existing_tr.cpv_mapping)
-                    existing_tr.status = notif.get("status", existing_tr.status)
-                    if "has_comments" in notif:
-                        existing_tr.has_comments = notif["has_comments"]
-                    if "has_detailed_opinion" in notif:
-                        existing_tr.has_detailed_opinion = notif["has_detailed_opinion"]
-                else:
-                    # technical_regulations.notification_number is an INTEGER
-                    # NOT NULL upstream id (legacy schema). Reuse the raw
-                    # numeric id when the scraper provides one; otherwise
-                    # synth a hash from the reference so the mirror still
-                    # inserts (alert matching still works via cpv_mapping).
-                    legacy_id = notif.get("notification_number")
-                    if not isinstance(legacy_id, int):
-                        try:
-                            legacy_id = int(legacy_id) if legacy_id is not None else abs(hash(number)) % 2_000_000_000
-                        except (TypeError, ValueError):
-                            legacy_id = abs(hash(number)) % 2_000_000_000
-                    self.db.add(TechnicalRegulation(
-                        notification_number=legacy_id,
-                        reference=number,
-                        title=title_value,
-                        description=notif.get("description"),
-                        product_sector=notif.get("product_sector"),
-                        country=country_alpha2,
-                        country_name=notif.get("country_name"),
-                        notification_date=notification_date or now,
-                        standstill_end_date=standstill_end,
-                        status=notif.get("status", "notified"),
-                        has_detailed_opinion=notif.get("has_detailed_opinion", False),
-                        has_comments=notif.get("has_comments", False),
-                        related_eu_legislation=notif.get("related_eu_legislation"),
-                        cpv_mapping=notif.get("cpv_mapping"),
-                        source_url=notif.get("source_url"),
-                        raw_data=notif.get("raw_data"),
-                    ))
-
-                stats["synced"] += 1
-
-            except Exception as e:
-                logger.error(f"Failed to sync TRIS notification {notif.get('notification_number')}: {e}")
-                stats["errors"] += 1
-
-        self.db.commit()
+        await self.tris.get_recent_notifications(days=days, frontier=frontier, on_item=on_item)
+        flush()
+        stats["frontier_before"] = frontier
+        stats["frontier_after"] = getattr(self.tris, "last_frontier", frontier)
+        stats["throttled"] = bool(getattr(self.tris, "throttled", False))
+        stats["paid_fetches"] = getattr(self.tris, "paid_fetches", 0)
+        stats["uncertain_ids"] = len(getattr(self.tris, "uncertain_ids", []) or [])
         logger.info(f"[OK] TRIS sync: {stats['new']} new, {stats['updated']} updated, {stats['errors']} errors")
         return stats
+
+    def _write_tris(self, db, notif: Dict[str, Any], stats: Dict[str, Any]) -> None:
+        """Upsert one TRIS notification (tris_notifications + the legacy mirror)."""
+        try:
+            # The TRIS scraper emits TWO identifiers:
+            #   - `reference`           — human-readable, e.g. "2026/0115/CZ"
+            #   - `notification_number` — upstream's internal integer id
+            # The canonical key is the reference (matches what citizens see
+            # on the TRIS portal and what `/api/v1/tris-notifications`
+            # exposes as `notification_number` in the response).
+            number = notif.get("reference") or notif.get("notification_number")
+            if not number:
+                return
+            number = str(number)  # tris_notifications.notification_number is varchar
+
+            # Parse dates
+            notification_date = None
+            standstill_end = None
+            date_str = notif.get("notification_date")
+            if date_str:
+                try:
+                    notification_date = datetime.fromisoformat(date_str) if isinstance(date_str, str) else date_str
+                except (ValueError, TypeError):
+                    pass
+            standstill_str = notif.get("standstill_end_date")
+            if standstill_str:
+                try:
+                    standstill_end = datetime.fromisoformat(standstill_str) if isinstance(standstill_str, str) else standstill_str
+                except (ValueError, TypeError):
+                    pass
+
+            country_alpha2 = notif.get("country") or notif.get("notifying_country") or "??"
+            title_value = notif.get("title") or number
+
+            # 1) Canonical write into tris_notifications (the v1 API table).
+            existing_tris = db.query(TRISNotification).filter(
+                TRISNotification.notification_number == number
+            ).first()
+            now = datetime.utcnow()
+            if existing_tris:
+                existing_tris.notifying_country = country_alpha2
+                existing_tris.title = title_value
+                existing_tris.short_summary = notif.get("description") or existing_tris.short_summary
+                if notification_date:
+                    existing_tris.notification_date = notification_date.date() if hasattr(notification_date, "date") else notification_date
+                if standstill_end:
+                    existing_tris.standstill_until = standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
+                existing_tris.sector = notif.get("product_sector") or existing_tris.sector
+                existing_tris.products_or_services = notif.get("product_description") or existing_tris.products_or_services
+                existing_tris.source_url = notif.get("source_url") or existing_tris.source_url
+                existing_tris.main_content = notif.get("main_content") or existing_tris.main_content
+                existing_tris.full_text_summary = notif.get("grounds") or existing_tris.full_text_summary
+                if "comments_by" in notif:
+                    existing_tris.member_state_observations = notif["comments_by"]
+                if "detailed_opinions" in notif:
+                    existing_tris.detailed_opinions = notif["detailed_opinions"]
+                existing_tris.pdf_url = notif.get("document_url") or existing_tris.pdf_url
+                related = notif.get("related_eu_legislation")
+                if related is not None:
+                    existing_tris.related_celex = related if isinstance(related, list) else [related]
+                existing_tris.last_updated = now
+                stats["updated"] += 1
+            else:
+                db.add(TRISNotification(
+                    notification_number=number,
+                    notifying_country=country_alpha2,
+                    title=title_value,
+                    short_summary=notif.get("description"),
+                    notification_date=(
+                        notification_date.date()
+                        if hasattr(notification_date, "date")
+                        else (notification_date or now.date())
+                    ),
+                    standstill_until=(
+                        standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
+                    ),
+                    sector=notif.get("product_sector"),
+                    products_or_services=notif.get("product_description"),
+                    main_content=notif.get("main_content"),
+                    full_text_summary=notif.get("grounds"),
+                    # Issuers of comments (Commission and/or Member States)
+                    # and of detailed opinions, as TRIS lists them.
+                    member_state_observations=notif.get("comments_by") or [],
+                    detailed_opinions=notif.get("detailed_opinions") or [],
+                    source_url=notif.get("source_url") or (
+                        "https://technical-regulation-information-system.ec.europa.eu/"
+                        + number.replace("/", "-")
+                    ),
+                    pdf_url=notif.get("document_url"),
+                    related_celex=(
+                        notif.get("related_eu_legislation")
+                        if isinstance(notif.get("related_eu_legislation"), list)
+                        else ([notif["related_eu_legislation"]] if notif.get("related_eu_legislation") else [])
+                    ),
+                    scraped_at=now,
+                    first_seen=now,
+                    last_updated=now,
+                ))
+                stats["new"] += 1
+
+            # 2) Mirror into technical_regulations so the legacy
+            # /api/dg_grow/* read path + CPV alert matching keep working.
+            existing_tr = db.query(TechnicalRegulation).filter(
+                TechnicalRegulation.reference == number
+            ).first()
+            if existing_tr:
+                existing_tr.title = title_value
+                existing_tr.country = country_alpha2
+                existing_tr.country_name = notif.get("country_name", existing_tr.country_name)
+                if notification_date:
+                    existing_tr.notification_date = notification_date
+                if standstill_end:
+                    existing_tr.standstill_end_date = standstill_end
+                existing_tr.cpv_mapping = notif.get("cpv_mapping", existing_tr.cpv_mapping)
+                existing_tr.status = notif.get("status", existing_tr.status)
+                if "has_comments" in notif:
+                    existing_tr.has_comments = notif["has_comments"]
+                if "has_detailed_opinion" in notif:
+                    existing_tr.has_detailed_opinion = notif["has_detailed_opinion"]
+            else:
+                # technical_regulations.notification_number is an INTEGER
+                # NOT NULL upstream id (legacy schema). Reuse the raw
+                # numeric id when the scraper provides one; otherwise
+                # synth a hash from the reference so the mirror still
+                # inserts (alert matching still works via cpv_mapping).
+                legacy_id = notif.get("notification_number")
+                if not isinstance(legacy_id, int):
+                    try:
+                        legacy_id = int(legacy_id) if legacy_id is not None else abs(hash(number)) % 2_000_000_000
+                    except (TypeError, ValueError):
+                        legacy_id = abs(hash(number)) % 2_000_000_000
+                db.add(TechnicalRegulation(
+                    notification_number=legacy_id,
+                    reference=number,
+                    title=title_value,
+                    description=notif.get("description"),
+                    product_sector=notif.get("product_sector"),
+                    country=country_alpha2,
+                    country_name=notif.get("country_name"),
+                    notification_date=notification_date or now,
+                    standstill_end_date=standstill_end,
+                    status=notif.get("status", "notified"),
+                    has_detailed_opinion=notif.get("has_detailed_opinion", False),
+                    has_comments=notif.get("has_comments", False),
+                    related_eu_legislation=notif.get("related_eu_legislation"),
+                    cpv_mapping=notif.get("cpv_mapping"),
+                    source_url=notif.get("source_url"),
+                    raw_data=notif.get("raw_data"),
+                ))
+
+            stats["synced"] += 1
+
+        except Exception as e:
+            logger.error(f"Failed to sync TRIS notification {notif.get('notification_number')}: {e}")
+            stats["errors"] += 1
+
+
 
     async def sync_tbt(self, eu_only: bool = True) -> Dict[str, int]:
         """

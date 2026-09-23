@@ -124,6 +124,7 @@ class TRISScraper(BaseScraper):
         recheck: int = 20,
         max_new: int = 400,
         miss_limit: int = 60,
+        on_item=None,
     ) -> List[Dict[str, Any]]:
         """Fetch new notifications, and re-read recent ones, by page id.
 
@@ -162,6 +163,8 @@ class TRISScraper(BaseScraper):
                 break
             if detail:
                 results.append(detail)
+                if on_item:
+                    on_item(detail)   # persisted by the caller as it arrives
                 new_found += 1
                 misses = 0
             else:
@@ -181,6 +184,8 @@ class TRISScraper(BaseScraper):
                 break
             if detail:
                 results.append(detail)
+                if on_item:
+                    on_item(detail)
 
         logger.info(f"[OK] TRIS: {new_found} new above {base}, {len(results) - new_found} re-read; "
                     f"frontier now {self.last_frontier}")

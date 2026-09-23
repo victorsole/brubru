@@ -220,3 +220,66 @@ def test_scrapedo_failure_is_a_miss_recorded_as_uncertain(monkeypatch):
     s._fetch_scrapedo = fails
     assert asyncio.run(s._safe_notification(99999)) is None
     assert s.uncertain_ids == [99999]
+
+
+def test_each_notification_is_handed_over_as_it_arrives():
+    s, _ = _scraper_with({101, 102, 99})
+    got = []
+    asyncio.run(s.get_recent_notifications(frontier=100, recheck=2, miss_limit=3, on_item=got.append))
+    assert [r["notification_number"] for r in got] == [101, 102, 99]
+
+
+def test_sync_writes_in_batches_and_survives_a_failed_batch(monkeypatch):
+    import services.scrapers.dg_grow.dg_grow_sync_service as svc_mod
+    import core.database as cdb
+
+    class _S:
+        def __init__(self):
+            self.n = 0
+
+        def execute(self, *a, **k):
+            class R:
+                def scalar(self_inner):
+                    return 100
+            return R()
+
+        def commit(self):
+            pass
+
+        def rollback(self):
+            pass
+
+        def close(self):
+            pass
+
+    sessions = []
+
+    def factory():
+        s = _S()
+        sessions.append(s)
+        return s
+
+    monkeypatch.setattr(cdb, "SessionLocal", factory)
+    service = svc_mod.DGGrowSyncService.__new__(svc_mod.DGGrowSyncService)
+    service.db = _S()
+    written = []
+
+    def write(db, notif, stats):
+        if notif["notification_number"] == 115:
+            raise RuntimeError("dead connection")
+        written.append(notif["notification_number"])
+        stats["new"] += 1
+
+    service._write_tris = write
+
+    class _Tris:
+        async def get_recent_notifications(self, days, frontier, on_item):
+            for i in range(101, 126):
+                on_item({"notification_number": i})
+            self.last_frontier = 125
+
+    service.tris = _Tris()
+    stats = asyncio.run(service.sync_tris())
+    assert len(sessions) == 3                      # batches of 10, 10, 5
+    assert 101 in written and 125 in written       # batches around the failure landed
+    assert stats["errors"] == 10                   # only the failed batch is lost
