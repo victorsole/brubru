@@ -242,7 +242,23 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
     consultations = handle_dpp_consultations(
         query=terms[0] if terms else q, limit=4).get("consultations", [])
 
-    if not found and not consultations:
+    # National draft rules (TRIS) in the passport's domain that match the
+    # question's terms, open standstills first.
+    tris_where = " OR ".join(
+        f"title ILIKE :t{i} OR main_content ILIKE :t{i} OR products_or_services ILIKE :t{i}"
+        for i in range(len(terms)))
+    tparams = {f"t{i}": f"%{t}%" for i, t in enumerate(terms)}
+    tparams["rx"] = _TRIS_DPP_RX
+    tris = _rows(
+        "SELECT notification_number AS reference, notifying_country AS country, title, "
+        "notification_date AS notified, standstill_until, "
+        "(standstill_until >= current_date) AS standstill_open, source_url "
+        "FROM tris_notifications WHERE (title || ' ' || coalesce(products_or_services,'') || ' ' "
+        "|| coalesce(main_content,'') || ' ' || coalesce(full_text_summary,'')) ~* :rx "
+        f"AND ({tris_where}) ORDER BY (standstill_until >= current_date) DESC NULLS LAST, "
+        "notification_date DESC LIMIT 4", tparams) if terms else []
+
+    if not found and not consultations and not tris:
         return {
             "question": q,
             "found": False,
@@ -258,8 +274,11 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
         "found": True,
         "matches": found,
         "consultations": consultations,
-        "note": ("Call dpp_law with full_text=true to read an act in full, or "
-                 "dpp_when for the date a sector's passport becomes mandatory."),
+        "national_draft_rules_tris": tris,
+        "note": ("Call dpp_law with full_text=true to read an act in full, "
+                 "dpp_when for the date a sector's passport becomes mandatory, dpp_tris for "
+                 "national draft rules and their standstill deadlines, or dpp_jrc for the JRC "
+                 "methodology consultation and the textile preparatory study."),
     }
 
 
@@ -514,6 +533,100 @@ def handle_dpp_forum() -> Dict[str, Any]:
     }
 
 
+# ---- TRIS: national draft rules in the passport's domain ------------------- #
+
+# Added 23 Sep 2026. Member States must notify draft technical rules to the
+# Commission (Directive (EU) 2015/1535) and wait out a standstill during which
+# the Commission and other Member States can comment or issue a detailed
+# opinion. A client found the Spanish textile and footwear decree there before
+# Brubru did, because the feed was frozen and this server could not see TRIS at
+# all. Domain filter kept tight on purpose: TRIS is mostly food, telecoms and
+# vehicles, and "label" alone would drown the passport in food labelling.
+_TRIS_DPP_RX = (r"textil|footwear|apparel|garment|clothing|packag|waste|recycl|ecodesign|"
+                r"eco-design|product passport|traceab|extended producer|unsold|batter|"
+                r"circular|repair|durab")
+
+
+def handle_dpp_tris(query: Optional[str] = None, country: Optional[str] = None,
+                    open_only: bool = False, limit: int = 20) -> Dict[str, Any]:
+    """National draft technical rules in the DPP domain, deadline first."""
+    where = ["(title || ' ' || coalesce(products_or_services,'') || ' ' || coalesce(main_content,'') "
+             "|| ' ' || coalesce(full_text_summary,'')) ~* :rx"]
+    params: Dict[str, Any] = {"rx": _TRIS_DPP_RX, "lim": max(1, min(int(limit or 20), 50))}
+    if query:
+        where.append("(title ILIKE :q OR main_content ILIKE :q OR products_or_services ILIKE :q "
+                     "OR full_text_summary ILIKE :q)")
+        params["q"] = f"%{query}%"
+    if country:
+        where.append("notifying_country = :c")
+        params["c"] = country.strip().upper()[:2]
+    if open_only:
+        where.append("standstill_until >= current_date")
+    rows = _rows(
+        "SELECT notification_number AS reference, notifying_country AS country, title, "
+        "notification_date AS notified, standstill_until, "
+        "(standstill_until >= current_date) AS standstill_open, "
+        "coalesce(member_state_observations, '[]'::jsonb) AS comments_by, "
+        "coalesce(detailed_opinions, '[]'::jsonb) AS detailed_opinions_by, "
+        "left(main_content, 600) AS main_content, left(products_or_services, 400) AS products, "
+        "source_url FROM tris_notifications WHERE " + " AND ".join(where) +
+        " ORDER BY (standstill_until >= current_date) DESC NULLS LAST, "
+        "CASE WHEN standstill_until >= current_date THEN standstill_until END ASC, "
+        "notification_date DESC LIMIT :lim", params)
+    fresh = _rows("SELECT max(notification_date) AS newest, count(*) AS total FROM tris_notifications", {})
+    return {
+        "count": len(rows),
+        "notifications": rows,
+        "feed": fresh[0] if fresh else {},
+        "note": ("TRIS lists draft national technical rules notified to the Commission under "
+                 "Directive (EU) 2015/1535. While the standstill runs the Member State may not "
+                 "adopt the rule, and the Commission or other Member States can issue comments "
+                 "or a detailed opinion; a detailed opinion extends the standstill. An open "
+                 "standstill is the window to react. 'comments_by' and 'detailed_opinions_by' "
+                 "name who issued them; the texts are on the TRIS page."),
+    }
+
+
+# ---- JRC Product Bureau: methodology consultation + textile study ---------- #
+
+def handle_dpp_jrc(kind: Optional[str] = None, query: Optional[str] = None,
+                   limit: int = 12) -> Dict[str, Any]:
+    """The JRC Product Bureau's ESPR methodology consultation and textile study."""
+    kinds = {"workshops": "event", "reports": "jrc_report", "textiles": "jrc_study_document"}
+    types = [kinds[kind]] if kind in kinds else list(kinds.values())
+    params: Dict[str, Any] = {"b": BODY, "lim": max(1, min(int(limit or 12), 60))}
+    ph = ", ".join(f":ty{i}" for i in range(len(types)))
+    params.update({f"ty{i}": t for i, t in enumerate(types)})
+    extra = ""
+    if query:
+        extra = " AND (title ILIKE :q OR summary ILIKE :q)"
+        params["q"] = f"%{query}%"
+    # The limit applies PER KIND: one shared limit let 12 workshops and 10
+    # reports crowd the textile study down to three rows.
+    rows = _rows(
+        "SELECT item_type, title, summary, document_date, public_url FROM ("
+        "  SELECT item_type, title, summary, document_date, public_url, row_number() OVER ("
+        "    PARTITION BY item_type ORDER BY CASE WHEN item_type = 'event' THEN document_date END ASC,"
+        "    document_date DESC NULLS LAST) AS rn FROM economy_items "
+        f"  WHERE body_code = :b AND guid LIKE 'jrc-pb-%' AND item_type IN ({ph}){extra}"
+        ") t WHERE rn <= :lim "
+        "ORDER BY CASE item_type WHEN 'event' THEN 0 WHEN 'jrc_report' THEN 1 ELSE 2 END, rn", params)
+    grouped: Dict[str, List[Dict[str, Any]]] = {}
+    back = {v: k for k, v in kinds.items()}
+    for r in rows:
+        grouped.setdefault(back[r.pop("item_type")], []).append(r)
+    return {
+        "results": grouped,
+        "note": ("JRC Product Bureau (unit B.5, Circular Economy and Industrial Sustainability). "
+                 "The ESPR methodology consultation runs one online workshop per pair of reports, "
+                 "then a questionnaire open about 1.5 months; the links go only to registered "
+                 "stakeholders, so register once for the whole project at "
+                 "https://susproc.jrc.ec.europa.eu/product-bureau/product-groups/654/home . "
+                 "The Digital Product Passport method is in the April 2027 round. Dates the page "
+                 "gives only as a month are marked 'day not yet fixed'."),
+    }
+
+
 # ---- the pair ChatGPT requires -------------------------------------------- #
 
 def handle_search(query: str) -> Dict[str, Any]:
@@ -707,6 +820,43 @@ DPP_TOOLS: List[McpTool] = [
         input_schema={"type": "object", "properties": {}},
         scope="read:knowledge", cost_micro=COST_LIGHT_MCP,
         handler=lambda **_: handle_dpp_forum(),
+    ),
+    McpTool(
+        name="dpp_tris",
+        description=(
+            "National draft technical rules that Member States have notified to the "
+            "Commission (TRIS, Directive (EU) 2015/1535) in the passport's domain: "
+            "textiles and footwear, packaging, waste and recycling, ecodesign, "
+            "traceability, extended producer responsibility, batteries. Each has its "
+            "standstill end date (the window to react before adoption) and who issued "
+            "comments or detailed opinions. Open standstills come first, soonest "
+            "deadline first. Example: the Spanish draft Royal Decree on textile and "
+            "footwear products and their waste."
+        ),
+        input_schema={"type": "object", "properties": {
+            "query": {"type": "string", "description": "Free text filter, e.g. 'textile'."},
+            "country": {"type": "string", "description": "ISO code of the notifying country, e.g. ES."},
+            "open_only": {"type": "boolean", "description": "Only notifications whose standstill is still running."},
+            "limit": {"type": "integer", "description": "Max results (default 20, max 50)."}}},
+        scope="read:knowledge", cost_micro=COST_LIGHT_MCP,
+        handler=lambda query=None, country=None, open_only=False, limit=20, **_:
+            handle_dpp_tris(query, country, bool(open_only), limit),
+    ),
+    McpTool(
+        name="dpp_jrc",
+        description=(
+            "The JRC Product Bureau: the ESPR methodology consultation (workshop "
+            "calendar and the methodological reports open for comment, including the "
+            "method for Digital Product Passport data requirements) and the textile "
+            "products preparatory study (its documents, including the study on DPP "
+            "content for textile apparel)."
+        ),
+        input_schema={"type": "object", "properties": {
+            "kind": {"type": "string", "description": "workshops | reports | textiles (default: all)"},
+            "query": {"type": "string", "description": "Free text filter."},
+            "limit": {"type": "integer", "description": "Max results per kind (default 12)."}}},
+        scope="read:knowledge", cost_micro=COST_LIGHT_MCP,
+        handler=lambda kind=None, query=None, limit=12, **_: handle_dpp_jrc(kind, query, limit),
     ),
     McpTool(
         name="search",

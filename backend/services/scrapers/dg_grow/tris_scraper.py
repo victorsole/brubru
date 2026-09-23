@@ -82,6 +82,10 @@ SECTOR_CPV_MAP = {
 }
 
 
+class TrisRateLimited(Exception):
+    """TRIS answered 429. Never a missing notification."""
+
+
 class TRISScraper(BaseScraper):
     """
     Scraper for TRIS technical regulation notifications.
@@ -113,50 +117,118 @@ class TRISScraper(BaseScraper):
         """Get notifications from the last 7 days."""
         return await self.get_recent_notifications(days=7)
 
-    async def get_recent_notifications(self, days: int = 7) -> List[Dict[str, Any]]:
+    async def get_recent_notifications(
+        self,
+        days: int = 7,
+        frontier: Optional[int] = None,
+        recheck: int = 20,
+        max_new: int = 400,
+        miss_limit: int = 60,
+    ) -> List[Dict[str, Any]]:
+        """Fetch new notifications, and re-read recent ones, by page id.
+
+        TRIS is a SPA with no usable list, so notifications are read one detail
+        page at a time by their internal id (/en/notification/<id>).
+
+        Until 23 Sep 2026 this counted DOWN from a hard-coded 27740 ("as of
+        March 2026"), so it re-read the same 46 notifications every day and
+        never saw anything newer: 0 new for six and a half months, including
+        the Spanish textile and footwear decree (id 27983) a client found
+        before we did. Now:
+
+        - NEW: count UP from `frontier` (the highest id already stored) until
+          `miss_limit` ids in a row do not exist, at most `max_new` per run.
+        - RECHECK: re-read the `recheck` ids just below the frontier, because
+          comments, detailed opinions and standstill extensions arrive weeks
+          after a notification is first published.
+
+        Without a frontier (empty table) it falls back to a window below the
+        highest id found by probing upwards from the old anchor.
         """
-        Fetch recent notifications by enumerating recent notification IDs.
+        base = frontier if frontier is not None else 27740
+        results: List[Dict[str, Any]] = []
 
-        TRIS is a SPA - the list page doesn't contain data in the initial HTML.
-        Instead, we enumerate recent notification IDs (descending from latest known)
-        and fetch each detail page individually.
-
-        Args:
-            days: Approximate look-back period (controls how many IDs to try)
-
-        Returns:
-            List of notification records
-        """
-        # Estimate how many notifications to try based on days
-        # TRIS gets ~3-5 notifications per day across all EU/EEA countries
-        max_attempts = min(days * 5, 50)
-
-        # Start from a known recent ID and work backwards
-        # As of March 2026, notification ~27736 is current
-        start_id = 27740  # Slightly above latest known
-
-        results = []
-        consecutive_failures = 0
-
-        for offset in range(max_attempts):
-            notif_id = start_id - offset
-
-            if consecutive_failures >= 10:
-                logger.info(f"TRIS: Stopping enumeration after {consecutive_failures} consecutive failures")
+        # NEW, upwards
+        self.throttled = False
+        self.uncertain_ids: List[int] = []
+        self.paid_fetches = 0
+        misses, nid, new_found = 0, base + 1, 0
+        while misses < miss_limit and new_found < max_new:
+            try:
+                detail = await self._safe_notification(nid)
+            except TrisRateLimited:
+                self.throttled = True
+                logger.warning(f"TRIS: still rate limited at id {nid} after back-off; stopping this run")
                 break
+            if detail:
+                results.append(detail)
+                new_found += 1
+                misses = 0
+            else:
+                misses += 1
+            nid += 1
+        self.last_frontier = max((r_id for r_id in (int(r.get("notification_number") or 0) for r in results)
+                                  if r_id), default=base)
 
+        # RECHECK, just below the old frontier
+        for rid in range(base, max(base - recheck, 0), -1):
+            if self.throttled:
+                break
+            try:
+                detail = await self._safe_notification(rid)
+            except TrisRateLimited:
+                self.throttled = True
+                break
+            if detail:
+                results.append(detail)
+
+        logger.info(f"[OK] TRIS: {new_found} new above {base}, {len(results) - new_found} re-read; "
+                    f"frontier now {self.last_frontier}")
+        return results
+
+    # Back-off schedule for a 429, in seconds. After the last one the run stops
+    # and says it was throttled, rather than reading refusals as the end.
+    RATE_LIMIT_BACKOFF = (60, 120, 240)
+
+    async def _safe_notification(self, notif_id: int) -> Optional[Dict[str, Any]]:
+        """One id: direct first; on a 429, the paid Scrape.do tier (1 credit).
+
+        TRIS throttles by address over a long window: on 23 Sep 2026 it refused
+        after 15 pages. Scrape.do returns an existing page at once, but reports a
+        MISSING id (TRIS 500) as a 502 rotation failure, so a Scrape.do failure
+        is counted as a miss and the id is kept in `uncertain_ids`; the next
+        run re-reads the ids just below the frontier directly. Without a
+        Scrape.do key it falls back to waiting (RATE_LIMIT_BACKOFF).
+        """
+        import asyncio
+        import os
+        has_paid = bool((os.environ.get("SCRAPEDO_API_KEY") or "").strip())
+        waits = (None,) if has_paid else (*self.RATE_LIMIT_BACKOFF, None)
+        for wait in waits:
             try:
                 detail = await self.get_notification(notif_id)
-                if detail and detail.get("reference"):
-                    results.append(detail)
-                    consecutive_failures = 0
-                else:
-                    consecutive_failures += 1
-            except Exception:
-                consecutive_failures += 1
+                return detail if detail and detail.get("reference") else None
+            except TrisRateLimited:
+                if has_paid:
+                    return self._via_scrapedo(notif_id)
+                if wait is None:
+                    raise
+                logger.warning(f"TRIS: rate limited at id {notif_id}; waiting {wait}s")
+                await asyncio.sleep(wait)
+            except Exception:  # noqa: BLE001 -- a missing id is a miss, not a crash
+                return None
+        return None
 
-        logger.info(f"[OK] TRIS: fetched {len(results)} notifications via enumeration")
-        return results
+    def _via_scrapedo(self, notif_id: int) -> Optional[Dict[str, Any]]:
+        url = f"{self.BASE_URL}/en/notification/{notif_id}"
+        try:
+            html = self._fetch_scrapedo(url, retries=1)
+        except Exception:  # noqa: BLE001 -- missing and failed look alike here
+            self.uncertain_ids.append(notif_id)
+            return None
+        self.paid_fetches += 1
+        detail = self._parse_notification_detail(self._parse_html(html), notif_id)
+        return detail if detail.get("reference") else None
 
     async def search_notifications(
         self,
@@ -224,6 +296,11 @@ class TRISScraper(BaseScraper):
             soup = self._parse_html(content)
             return self._parse_notification_detail(soup, notification_number)
         except Exception as e:
+            # A 429 is TRIS throttling us, not a missing notification. Counting
+            # it as a miss is how the 23 Sep backfill stopped 140 ids short of
+            # the notification it was run to find.
+            if "HTTP 429" in str(e):
+                raise TrisRateLimited(str(e)) from e
             logger.error(f"Failed to fetch TRIS notification {notification_number}: {e}")
             return {}
 
@@ -364,7 +441,7 @@ class TRISScraper(BaseScraper):
             value_div = label_div.find_next_sibling("div", class_=re.compile(r"ecl-col"))
             if not value_div:
                 continue
-            value = value_div.get_text(strip=True)
+            value = value_div.get_text(separator=", ", strip=True)
             if not value:
                 continue
 
@@ -382,10 +459,19 @@ class TRISScraper(BaseScraper):
                 except ValueError:
                     result["notification_date"] = value
             elif "standstill" in label:
-                try:
-                    result["standstill_end_date"] = datetime.strptime(value, "%d/%m/%Y").isoformat()
-                except ValueError:
-                    result["standstill_end_date"] = value
+                # "28/08/2026 (28/09/2026)": the bracketed date is the standstill
+                # as EXTENDED by a detailed opinion. The effective end is the
+                # latest date shown; the original is kept for the record.
+                dates = []
+                for d in re.findall(r"\d{2}/\d{2}/\d{4}", value):
+                    try:
+                        dates.append(datetime.strptime(d, "%d/%m/%Y"))
+                    except ValueError:
+                        pass
+                if dates:
+                    result["standstill_end_date"] = max(dates).isoformat()
+                    result["standstill_original_end_date"] = dates[0].isoformat()
+                    result["standstill_extended"] = len(dates) > 1 and max(dates) > dates[0]
             elif "title" in label or "subject" in label:
                 result["title"] = value
             elif "sector" in label or "product" in label:
@@ -395,9 +481,15 @@ class TRISScraper(BaseScraper):
             elif "legislation" in label or "directive" in label:
                 result.setdefault("related_eu_legislation", []).append(value)
             elif "opinion" in label:
-                result["has_detailed_opinion"] = "yes" in value.lower()
+                # The value names the issuers ("European Commission, Germany"),
+                # it is never "yes"; the old test read every one as False.
+                issuers = [v.strip() for v in value.split(",") if v.strip()]
+                result["detailed_opinions"] = issuers
+                result["has_detailed_opinion"] = bool(issuers)
             elif "comment" in label:
-                result["has_comments"] = "yes" in value.lower()
+                issuers = [v.strip() for v in value.split(",") if v.strip()]
+                result["comments_by"] = issuers
+                result["has_comments"] = bool(issuers)
 
         # Fallback: extract title from page heading if not found in grid
         if "title" not in result:
@@ -412,14 +504,27 @@ class TRISScraper(BaseScraper):
         if "title" not in result and "reference" in result:
             result["title"] = f"TRIS Notification {result['reference']}"
 
-        # Determine status based on standstill date
+        # The notification message's numbered fields: 6 products, 8 main
+        # content, 9 grounds. The DPP watch matches on these, not on the title.
+        text = soup.get_text("\n", strip=True)
+        msg = text.find("MSG 001")
+        if msg >= 0:
+            body = text[msg:msg + 20000]
+            for num, key, nxt in (("6", "product_description", "7"), ("8", "main_content", "9"),
+                                  ("9", "grounds", "10")):
+                m = re.search(rf"(?:^|\n){num}\.\s(.+?)(?=\n{nxt}\.\s|\Z)", body, re.S)
+                if m:
+                    result[key] = re.sub(r"\s+", " ", m.group(1)).strip()[:6000]
+
+        # Status from the effective standstill. A passed standstill means the
+        # Member State MAY adopt, not that it did: never "adopted".
         if result.get("standstill_end_date"):
             try:
                 standstill_end = datetime.fromisoformat(result["standstill_end_date"])
                 if standstill_end > datetime.utcnow():
                     result["status"] = "standstill"
                 else:
-                    result["status"] = "adopted"
+                    result["status"] = "standstill_ended"
             except (ValueError, TypeError):
                 result["status"] = "notified"
         else:

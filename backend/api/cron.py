@@ -693,6 +693,15 @@ async def cron_sync_daily(
         "have_your_say", "scripts/sync_have_your_say.py", ["--apply"], timeout=1800)
     results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
     results["tris"] = await _run_script_async("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
+    # WTO TBT notifications (23 Sep 2026): the sync worked but was never
+    # scheduled, so the table sat at 14 May for four months. Found by the
+    # Terraqui source ledger (backend/data/client_sources/).
+    results["tbt"] = await _run_script_async("tbt", "scripts/sync_dg_grow.py", ["--source", "tbt"], timeout=300)
+    # JRC Product Bureau (23 Sep 2026): ESPR methodology consultation calendar +
+    # reports, textile preparatory study documents, into the DPP corpus that the
+    # Brubru DPP connector and dpp_watch read.
+    results["jrc_product_bureau"] = await _run_script_async(
+        "jrc_product_bureau", "scripts/sync_jrc_product_bureau.py", [], timeout=300)
     results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
     results["transparency_register"] = await _run_script_async("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
     results["jrc"] = await _run_script_async("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)

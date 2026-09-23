@@ -187,7 +187,24 @@ class DGGrowSyncService:
         if country:
             notifications = await self.tris.search_notifications(country=country)
         else:
-            notifications = await self.tris.get_recent_notifications(days=days)
+            # Frontier = the highest TRIS page id already stored, read from the
+            # source URL (/en/notification/<id>). See get_recent_notifications.
+            from sqlalchemy import text as _text
+            frontier = self.db.execute(_text(
+                "SELECT max(substring(source_url from '/notification/([0-9]+)')::int) "
+                "FROM tris_notifications")).scalar()
+            notifications = await self.tris.get_recent_notifications(days=days, frontier=frontier)
+            stats["frontier_before"] = frontier
+            stats["frontier_after"] = getattr(self.tris, "last_frontier", frontier)
+            stats["throttled"] = bool(getattr(self.tris, "throttled", False))
+            stats["paid_fetches"] = getattr(self.tris, "paid_fetches", 0)
+            stats["uncertain_ids"] = len(getattr(self.tris, "uncertain_ids", []) or [])
+            # The fetch above can run for many minutes; the session's pooled
+            # connection may be dead by now, and pool_pre_ping only fires on
+            # checkout. Release it so the writes below check out a live one
+            # (23 Sep 2026: a 15-minute backfill lost every row to
+            # PendingRollbackError).
+            self.db.close()
 
         for notif in notifications:
             try:
@@ -237,6 +254,12 @@ class DGGrowSyncService:
                     existing_tris.sector = notif.get("product_sector") or existing_tris.sector
                     existing_tris.products_or_services = notif.get("product_description") or existing_tris.products_or_services
                     existing_tris.source_url = notif.get("source_url") or existing_tris.source_url
+                    existing_tris.main_content = notif.get("main_content") or existing_tris.main_content
+                    existing_tris.full_text_summary = notif.get("grounds") or existing_tris.full_text_summary
+                    if "comments_by" in notif:
+                        existing_tris.member_state_observations = notif["comments_by"]
+                    if "detailed_opinions" in notif:
+                        existing_tris.detailed_opinions = notif["detailed_opinions"]
                     existing_tris.pdf_url = notif.get("document_url") or existing_tris.pdf_url
                     related = notif.get("related_eu_legislation")
                     if related is not None:
@@ -259,6 +282,12 @@ class DGGrowSyncService:
                         ),
                         sector=notif.get("product_sector"),
                         products_or_services=notif.get("product_description"),
+                        main_content=notif.get("main_content"),
+                        full_text_summary=notif.get("grounds"),
+                        # Issuers of comments (Commission and/or Member States)
+                        # and of detailed opinions, as TRIS lists them.
+                        member_state_observations=notif.get("comments_by") or [],
+                        detailed_opinions=notif.get("detailed_opinions") or [],
                         source_url=notif.get("source_url") or (
                             "https://technical-regulation-information-system.ec.europa.eu/"
                             + number.replace("/", "-")
@@ -290,6 +319,10 @@ class DGGrowSyncService:
                         existing_tr.standstill_end_date = standstill_end
                     existing_tr.cpv_mapping = notif.get("cpv_mapping", existing_tr.cpv_mapping)
                     existing_tr.status = notif.get("status", existing_tr.status)
+                    if "has_comments" in notif:
+                        existing_tr.has_comments = notif["has_comments"]
+                    if "has_detailed_opinion" in notif:
+                        existing_tr.has_detailed_opinion = notif["has_detailed_opinion"]
                 else:
                     # technical_regulations.notification_number is an INTEGER
                     # NOT NULL upstream id (legacy schema). Reuse the raw
