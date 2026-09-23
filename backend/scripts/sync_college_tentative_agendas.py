@@ -230,12 +230,11 @@ def rows_from_register(pages: int, size: int) -> list[dict]:
     return seen
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--pages", type=int, default=1, help="pages of 20 to read (default 1)")
-    ap.add_argument("--backfill", action="store_true", help="read 32 pages, the whole series")
-    ap.add_argument("--dry-run", action="store_true", help="fetch and parse, write nothing")
-    a = ap.parse_args()
+SOURCE_KEY = "college_tentative_agendas"
+
+
+def _run(a, outcome: dict) -> int:
+    """The sync itself. Fills `outcome` so main() can record what happened."""
     pages = 32 if a.backfill else a.pages
 
     print("COLLEGE TENTATIVE AGENDAS")
@@ -243,6 +242,7 @@ def main() -> int:
     found = rows_from_register(pages, 20)
     print(f"  documents listed: {len(found)}")
     if not found:
+        outcome["error"] = "the register returned no documents (a fetch failure, not an empty register)"
         print("\n[FAIL] the register returned no documents. That is a fetch failure, "
               "not an empty register: this query had 628 results on 22 Sep 2026.")
         return 1
@@ -278,6 +278,8 @@ def main() -> int:
         items = parse_items(text)
         (changed if ref in held else new).append({**row, "text": text, "items": items})
 
+    outcome.update(new=[r["reference"] for r in new], changed=len(changed),
+                   unchanged=unchanged, failed=failed)
     print(f"  new             : {len(new)}")
     print(f"  re-fetched      : {len(changed)}")
     print(f"  unchanged       : {unchanged}")
@@ -337,6 +339,7 @@ def main() -> int:
             for sub in it.get("sub_items") or []:
                 print(f"        . {sub[:78]}")
     if not rec["items"]:
+        outcome["warn"] = f"no items parsed from {newest['reference']}; the PDF layout may have changed"
         print("\n  [WARN] no items parsed. The PDF layout may have changed; "
               "read the text_body directly before trusting this as empty.")
 
@@ -392,6 +395,67 @@ def main() -> int:
 
     conn.close()
     return 0
+
+
+def _record(outcome: dict, rc: int, started: dt.datetime) -> None:
+    """One sync_runs row per run (23 Sep 2026).
+
+    The job ran from the hot-6h tier through a bare subprocess, which records
+    nothing, so there was no way to tell a quiet register from a job that never
+    ran. Counts are PERSISTED rows: the new references are re-read after the
+    commit. Three states: failed (no data, or an exception), degraded (it ran,
+    but some documents could not be fetched or the newest one did not parse),
+    success.
+    """
+    from core.database import SessionLocal
+    from services.sync.freshness import record_run
+    from sqlalchemy import text
+
+    db = SessionLocal()
+    try:
+        persisted = 0
+        if outcome.get("new"):
+            persisted = db.execute(
+                text("SELECT count(*) FROM commission_documents WHERE reference = ANY(:r) "
+                     "AND document_register_category = 'TENTAT_AGENDA_COM_MEETING'"),
+                {"r": outcome["new"]},
+            ).scalar()
+        problems = [f"{ref}: {why}" for ref, why in outcome.get("failed", [])]
+        if outcome.get("warn"):
+            problems.append(outcome["warn"])
+        if rc != 0 or outcome.get("error"):
+            status, error = "failed", outcome.get("error") or f"exit code {rc}"
+        elif outcome.get("new") and persisted != len(outcome["new"]):
+            status = "failed"
+            error = f"persisted {persisted} of {len(outcome['new'])} new document(s)"
+        elif problems:
+            status, error = "degraded", "; ".join(problems)[:1000]
+        else:
+            status, error = "success", None
+        record_run(db, source_key=SOURCE_KEY, tier="hot_6h", status=status,
+                   items_added=persisted, error=error, started_at=started)
+    finally:
+        db.close()
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--pages", type=int, default=1, help="pages of 20 to read (default 1)")
+    ap.add_argument("--backfill", action="store_true", help="read 32 pages, the whole series")
+    ap.add_argument("--dry-run", action="store_true", help="fetch and parse, write nothing")
+    a = ap.parse_args()
+    started = dt.datetime.now(dt.timezone.utc)
+    outcome: dict = {}
+    try:
+        rc = _run(a, outcome)
+    except Exception as e:  # noqa: BLE001 -- recorded, then re-raised
+        outcome["error"] = f"{type(e).__name__}: {e}"
+        if not a.dry_run:
+            _record(outcome, 1, started)
+        raise
+    if not a.dry_run:
+        _record(outcome, rc, started)
+    return rc
 
 
 if __name__ == "__main__":
