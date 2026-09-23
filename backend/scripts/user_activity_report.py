@@ -583,7 +583,35 @@ def section_api(conn, start, end, include_internal):
         start=start,
         end=end,
     )
-    return {"by_caller": by_caller, "by_endpoint": by_endpoint}
+    # Connector activity (migration 238, 23 Sep 2026). A row means a client
+    # with the connector installed listed Brubru's tools that day; Claude clients
+    # do that by themselves at start-up. It says the connector is still WIRED IN,
+    # not that anyone asked Brubru anything, so it is never a core action and
+    # WAPU never reads it. The useful reading is the gap: active days with no
+    # tool call = installed, not used.
+    connectors = q(
+        conn,
+        f"""
+        SELECT u.email, c.server,
+               count(DISTINCT c.day) AS active_days,
+               max(c.last_at)::date AS last_connected,
+               (SELECT count(*) FROM api_usage_events e
+                 WHERE e.user_id = c.user_id AND e.endpoint LIKE 'mcp:%'
+                   AND NOT COALESCE(e.is_probe, false)
+                   AND e.created_at >= :start AND e.created_at < :end) AS tool_calls,
+               (SELECT max(e.created_at)::date FROM api_usage_events e
+                 WHERE e.user_id = c.user_id AND e.endpoint LIKE 'mcp:%'
+                   AND NOT COALESCE(e.is_probe, false)) AS last_tool_call
+        FROM mcp_connections c
+        JOIN users u ON u.id = c.user_id
+        WHERE c.day >= :start AND c.day < :end {filt}
+        GROUP BY u.email, c.server, c.user_id
+        ORDER BY 3 DESC, 1
+        """,
+        start=start,
+        end=end,
+    )
+    return {"by_caller": by_caller, "by_endpoint": by_endpoint, "connectors": connectors}
 
 
 # The six tables that carry `source` (migration 230). The other four tracking
@@ -1480,6 +1508,10 @@ def render(report):
         _fmt(report["api"]["by_caller"]),
         "  By endpoint:",
         _fmt(report["api"]["by_endpoint"]),
+        "  MCP connectors active (a client listed Brubru's tools; recorded since 23 Sep 2026,",
+        "   earlier = not measured). NOT a core action, never counted in WAPU. Active days",
+        "   with 0 tool calls = installed, not used:",
+        _fmt(report["api"].get("connectors", [])),
         "",
         "-- 9. MY EU BUBBLE TRACKING ----------------------------------------------",
         "  (in window; chosen = the user picked it, provisnd = we wrote it,",

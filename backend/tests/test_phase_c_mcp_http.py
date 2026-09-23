@@ -91,6 +91,7 @@ def user_with_key_full_scopes():
         yield u, plaintext, k.id
     finally:
         db.query(ApiUsageEvent).filter(ApiUsageEvent.user_id == u.id).delete()
+        db.execute(text("DELETE FROM mcp_connections WHERE user_id = :u"), {"u": str(u.id)})
         db.query(ApiKey).filter(ApiKey.user_id == u.id).delete()
         db.query(User).filter(User.id == u.id).delete()
         db.commit(); db.close()
@@ -116,6 +117,7 @@ def user_with_key_laws_only():
         yield u, plaintext
     finally:
         db.query(ApiUsageEvent).filter(ApiUsageEvent.user_id == u.id).delete()
+        db.execute(text("DELETE FROM mcp_connections WHERE user_id = :u"), {"u": str(u.id)})
         db.query(ApiKey).filter(ApiKey.user_id == u.id).delete()
         db.query(User).filter(User.id == u.id).delete()
         db.commit(); db.close()

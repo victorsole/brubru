@@ -47,6 +47,7 @@ import anyio
 from fastapi import APIRouter, Header, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import SessionLocal
@@ -192,6 +193,9 @@ def _resolve_api_key(
         except Exception:  # noqa: BLE001
             oauth_key, oauth_user = None, None
         if oauth_key is not None:
+            # OAuth connections were never stamped (found 23 Sep 2026), so an
+            # OAuth-only client read as "never used" however active it was.
+            _touch_last_used(db, oauth_key)
             return oauth_key, oauth_user, None
         return None, None, (_ERR_AUTH_INVALID, "Invalid credentials. Use a brubru_live_ key or an OAuth access token.")
 
@@ -241,6 +245,39 @@ def _touch_last_used(db: Session, api_key: ApiKey) -> None:
         db.commit()
     except Exception as exc:  # noqa: BLE001
         logger.warning("[mcp] could not update last_used_at for key %s: %s: %s",
+                       getattr(api_key, "key_prefix", "?"), type(exc).__name__, exc)
+        try:
+            db.rollback()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+def _record_connection(db: Session, api_key: ApiKey, server: str,
+                       client: str, auth: str) -> None:
+    """One mcp_connections row per key, server, client and day (migration 238).
+
+    Called on every authenticated `tools/list`. A listing proves the connector
+    is installed and its client was running that day; Claude clients send one
+    by themselves at start-up, so it is NOT proof anyone asked Brubru anything
+    and it is not a core action. /users reports it as "connector active", never
+    as usage. Fail-soft: bookkeeping must never break the connection.
+    """
+    try:
+        db.execute(
+            text(
+                """
+                INSERT INTO mcp_connections (api_key_id, user_id, server, client, auth, day)
+                VALUES (:k, :u, :s, :c, :a, (now() AT TIME ZONE 'utc')::date)
+                ON CONFLICT (api_key_id, server, client, day)
+                DO UPDATE SET last_at = now(), listings = mcp_connections.listings + 1
+                """
+            ),
+            {"k": str(api_key.id), "u": str(api_key.user_id), "s": server[:64],
+             "c": (client or "")[:200], "a": auth},
+        )
+        db.commit()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[mcp] could not record connection for key %s: %s: %s",
                        getattr(api_key, "key_prefix", "?"), type(exc).__name__, exc)
         try:
             db.rollback()
@@ -563,6 +600,12 @@ async def _handle_mcp(
             return _err(req_id, code, msg)
 
         if method == "tools/list":
+            if not is_probe_header(request.headers.get("X-Brubru-Probe")):
+                _record_connection(
+                    db, api_key, profile.server_info.get("name", "Brubru"),
+                    request.headers.get("user-agent", ""),
+                    "key" if (plaintext or "").startswith(KEY_PREFIX) else "oauth",
+                )
             return _dispatch_tools_list(req_id, profile)
 
         if method == "tools/call":

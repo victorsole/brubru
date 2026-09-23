@@ -1,5 +1,5 @@
 {
-  "_about": "Law drops the radar's check B would call MISSED that Victor has decided not to act on. Keyed on CELEX + deadline, so a LATER deadline of the same act still fires. Every entry needs who decided, when, and why. Read by backend/scripts/lawdrop_radar.py.",
+  "_about": "Law drops the radar's check B would call MISSED but that are settled: either Victor decided not to act, or the deliverable shipped and its file was later deleted (Victor clears docs/marketing for space, so a missing deck file is not evidence of a miss). Keyed on CELEX + deadline, so a LATER deadline of the same act still fires. Every entry needs who decided, when, and why. Read by backend/scripts/lawdrop_radar.py.",
   "acknowledged": [
     {
       "celex": "32023R2854",
@@ -9,6 +9,15 @@
       "decided_on": "2026-09-23",
       "decision": "no action",
       "reason": "Missed marketing moment only: Chat already answers it correctly (eu_data_act.md, eu_legislation_milestones_aug_sep_2026.md). No deck or canon page to be made."
+    },
+    {
+      "celex": "32024R2847",
+      "deadline": "2026-09-11",
+      "short_name": "Cyber Resilience Act, Article 14 reporting obligations",
+      "decided_by": "Victor",
+      "decided_on": "2026-09-23",
+      "decision": "shipped",
+      "reason": "Deck built and delivered on 11 Sep 2026 (cra_article14_deck.pdf, builder backend/scripts/build_cra_article14_deck.py); the file was deleted from docs/marketing on 23 Sep to free space."
     }
   ]
 }
