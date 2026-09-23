@@ -712,6 +712,14 @@ async def cron_sync_daily(
     # Brubru DPP connector and dpp_watch read.
     results["jrc_product_bureau"] = await _run_script_async(
         "jrc_product_bureau", "scripts/sync_jrc_product_bureau.py", [], timeout=300)
+    # Client watches (23 Sep 2026): the Terraqui/DPP-TEX source ledger and the
+    # DPP watch were MANDATORY DAILY in /news, i.e. reminders nobody executed
+    # unless a human ran the skill. They run here, after the feeds they read,
+    # and write sync_runs rows the morning routine and /api/sync/health see.
+    results["client_source_ledger"] = await _run_script_async(
+        "client_source_ledger", "scripts/client_source_ledger.py", ["--record"], timeout=120)
+    results["dpp_watch"] = await _run_script_async(
+        "dpp_watch", "scripts/dpp_watch.py", ["--days", "1", "--record"], timeout=300)
     results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
     results["transparency_register"] = await _run_script_async("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
     results["jrc"] = await _run_script_async("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)

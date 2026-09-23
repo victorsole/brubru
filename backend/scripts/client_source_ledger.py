@@ -78,12 +78,34 @@ def run(client: str | None) -> tuple[list[dict], bool]:
     return results, bad
 
 
+def _record(results: list[dict]) -> None:
+    """A daily job, not a reminder (23 Sep 2026): the ledger used to run only
+    when someone ran /news. Degraded when any ingested source is STALE or
+    UNMEASURED, naming them, so the health endpoint shows it."""
+    from core.database import SessionLocal
+    from services.sync.freshness import record_run
+    bad = [f"{r['client'].split(' (')[0]}: {row['key']} {row['state']}"
+           for r in results for row in r["rows"] if row["state"] in ("STALE", "UNMEASURED")]
+    db = SessionLocal()
+    try:
+        record_run(db, source_key="client_source_ledger", tier="daily",
+                   status="degraded" if bad else "success",
+                   items_added=sum(len(r["rows"]) for r in results),
+                   error="; ".join(bad)[:1900] or None)
+    finally:
+        db.close()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--client")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--record", action="store_true",
+                    help="write one sync_runs row (the daily cron passes this)")
     a = ap.parse_args()
     results, bad = run(a.client)
+    if a.record:
+        _record(results)
     if a.json:
         print(json.dumps(results, indent=2, default=str))
         return 1 if bad else 0

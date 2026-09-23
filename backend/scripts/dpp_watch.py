@@ -403,6 +403,8 @@ def main() -> int:
     ap.add_argument("--scope", choices=sorted(SCOPES), action="append",
                     help="repeatable; default = all three")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--record", action="store_true",
+                    help="write one sync_runs row with the verdict (the daily cron passes this)")
     ap.add_argument("--limit", type=int, default=15, help="rows printed per scope")
     args = ap.parse_args()
     keys = args.scope or sorted(SCOPES)
@@ -415,6 +417,24 @@ def main() -> int:
         db.close()
 
     vkey, why = verdict(results, fresh)
+
+    if args.record:
+        # A daily job, not a reminder (23 Sep 2026): the watch ran only when
+        # someone ran /dpp-brief, which is how a client's TRIS find reached us
+        # before our own alert did. The verdict is data, not a failure:
+        # URGENT is recorded as success with the urgent items named, so the
+        # morning routine reads them from sync_runs; UNPROVEN is degraded.
+        from services.sync.freshness import record_run
+        urgent = [h for hs in results.values() for h in hs if h["urgent"]]
+        names = "; ".join(sorted({str(h["title"])[:90] for h in urgent}))[:1700]
+        rdb = SessionLocal()
+        try:
+            record_run(rdb, source_key="dpp_watch", tier="daily",
+                       status="degraded" if vkey == "UNPROVEN" else "success",
+                       items_added=len(urgent),
+                       error=f"{vkey}: {why}" + (f" URGENT: {names}" if names else ""))
+        finally:
+            rdb.close()
 
     if args.json:
         print(json.dumps({
