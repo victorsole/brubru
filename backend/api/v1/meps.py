@@ -79,6 +79,25 @@ async def _ep_get(hc: httpx.AsyncClient, path: str, params: Dict[str, Any], pati
     return r
 
 
+class EPUnavailable(RuntimeError):
+    """The EP API did not answer with data. It says so with HTTP 200 (23 Sep 2026)."""
+
+
+def _rows(payload: Any) -> List[Dict[str, Any]]:
+    """The `data` array of an EP response, or EPUnavailable.
+
+    When the EP API is overloaded it answers **HTTP 200** with an error body and no
+    `data` key:
+        {"error": "Pending acquire queue has reached its maximum size of 100 ..."}
+    Read as "no MEPs", that emptied /meps for six hours on 23 Sep 2026 (the empty
+    answer was cached). An answer without a `data` list is a FAILURE, never a result.
+    """
+    if not isinstance(payload, dict) or "data" not in payload or not isinstance(payload["data"], list):
+        detail = (payload or {}).get("error") if isinstance(payload, dict) else None
+        raise EPUnavailable(str(detail or "no data array in the EP response")[:200])
+    return payload["data"]
+
+
 def _cached(key: str):
     v = _CACHE.get(key)
     if v and time.time() - v[0] < _TTL:
@@ -90,7 +109,7 @@ def _put(key: str, value):
     _CACHE[key] = (time.time(), value)
 
 
-async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, offset=0) -> List[Dict[str, Any]]:
+async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, offset=0) -> Optional[List[Dict[str, Any]]]:
     key = f"list:{country}:{group}:{name}:{term}:{limit}:{offset}"
     cached = _cached(key)
     if cached is not None:
@@ -115,13 +134,11 @@ async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, o
         async with httpx.AsyncClient(timeout=15.0) as hc:
             r = await hc.get(f"{EP_API_BASE}/meps", params=params, headers=headers)
             r.raise_for_status()
-            data = r.json()
-    except Exception:
-        return []
+            rows = _rows(r.json())
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] list fetch failed: %s", exc)
+        return None
 
-    rows = data.get("data") if isinstance(data, dict) else []
-    if not isinstance(rows, list):
-        rows = []
     _put(key, rows)
     return rows
 
@@ -133,17 +150,35 @@ async def _fetch_total_count(country=None, group=None, name=None, term=10) -> in
 
 
 async def _fetch_all(country=None, group=None, term=10, patient: bool = False) -> Optional[List[Dict[str, Any]]]:
-    """Every MEP matching the filters, paging the EP Open Data /meps endpoint 500 at
-    a time. Cached for 6h, so it costs 2-3 upstream requests per cache cycle.
-
-    Returns None on upstream failure, never a partial list.
-    """
+    """Every MEP matching the filters, cached 6h. None on upstream failure, never a
+    partial list. A background job retries a bad spell; a request path does not wait."""
     key = f"all:{country}:{group}:{term}"
     cached = _cached(key)
     if cached is not None:
         return cached
+    # A background job (patient) rides out a bad spell: the EP API returns error
+    # bodies in bursts when its connection pool is saturated. A request path never waits.
+    attempts = 4 if patient else 1
+    for attempt in range(attempts):
+        rows = await _fetch_all_once(country=country, group=group, term=term, patient=patient)
+        if rows is not None:
+            if not rows and not (country or group):
+                logger.warning("[meps] the EP API returned no MEPs for term %s; not caching", term)
+                return None
+            _put(key, rows)
+            return rows
+        if attempt + 1 < attempts:
+            logger.info("[meps] EP API unavailable, retrying in 60s (%d/%d)", attempt + 1, attempts - 1)
+            await asyncio.sleep(60)
+    return None
 
-    PAGE = 500
+
+async def _fetch_all_once(country=None, group=None, term=10, patient: bool = False) -> Optional[List[Dict[str, Any]]]:
+    """One pass over the EP /meps pages. None the moment anything fails: a partial
+    list read as complete would look like MEPs leaving Parliament."""
+    # 200 per page, not 500: the EP API answers a 500-row request with an error body
+    # (HTTP 200) whenever its connection pool is saturated. 200 answered every time.
+    PAGE = 200
     collected: List[Dict[str, Any]] = []
     offset = 0
     try:
@@ -161,9 +196,8 @@ async def _fetch_all(country=None, group=None, term=10, patient: bool = False) -
                     params["political-group"] = group
                 r = await _ep_get(hc, "/meps", params, patient=patient)
                 r.raise_for_status()
-                data = r.json()
-                rows = data.get("data") if isinstance(data, dict) else []
-                if not isinstance(rows, list) or not rows:
+                rows = _rows(r.json())
+                if not rows:
                     break
                 collected.extend(rows)
                 if len(rows) < PAGE:
@@ -173,7 +207,6 @@ async def _fetch_all(country=None, group=None, term=10, patient: bool = False) -
         logger.warning("[meps] full-list fetch failed: %s", exc)
         return None
 
-    _put(key, collected)
     return collected
 
 
@@ -189,13 +222,13 @@ async def _fetch_current_ids(patient: bool = False) -> Optional[set]:
         async with httpx.AsyncClient(timeout=20.0) as hc:
             for _ in range(10):
                 r = await _ep_get(hc, "/meps/show-current",
-                                  {"format": "application/ld+json", "limit": 500, "offset": offset}, patient=patient)
+                                  {"format": "application/ld+json", "limit": 200, "offset": offset}, patient=patient)
                 r.raise_for_status()
-                rows = (r.json() or {}).get("data") or []
+                rows = _rows(r.json())
                 ids.update(_identifier(x) for x in rows)
-                if len(rows) < 500:
+                if len(rows) < 200:
                     break
-                offset += 500
+                offset += 200
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] current-MEP list unavailable: %s", exc)
         return None
@@ -203,6 +236,27 @@ async def _fetch_current_ids(patient: bool = False) -> Optional[set]:
         return None
     _put("current_ids", ids)
     return ids
+
+
+def _upstream_down(message: Optional[str] = None) -> HTTPException:
+    return HTTPException(status_code=502, detail={
+        "error": message or "Upstream EP Open Data temporarily unavailable",
+        "reason_code": "upstream_error", "source": "europarl.europa.eu"})
+
+
+# The EP gives citizenship as ISO-3; the `country` filter takes ISO-2, which only the
+# EP API can translate. Needed when we answer from the snapshot instead.
+_ISO2_TO_ISO3 = {
+    "AT": "AUT", "BE": "BEL", "BG": "BGR", "HR": "HRV", "CY": "CYP", "CZ": "CZE", "DK": "DNK",
+    "EE": "EST", "FI": "FIN", "FR": "FRA", "DE": "DEU", "GR": "GRC", "EL": "GRC", "HU": "HUN",
+    "IE": "IRL", "IT": "ITA", "LV": "LVA", "LT": "LTU", "LU": "LUX", "MT": "MLT", "NL": "NLD",
+    "PL": "POL", "PT": "PRT", "RO": "ROU", "SK": "SVK", "SI": "SVN", "ES": "ESP", "SE": "SWE",
+    "GB": "GBR", "UK": "GBR",
+}
+
+
+def _iso3(country: str) -> str:
+    return _ISO2_TO_ISO3.get((country or "").upper(), (country or "").upper())
 
 
 def _fold(value: Optional[str]) -> str:
@@ -239,7 +293,11 @@ async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[st
             data = r.json()
     except Exception:
         return None
-    rows = data.get("data") if isinstance(data, dict) else []
+    try:
+        rows = _rows(data)
+    except EPUnavailable as exc:
+        logger.warning("[meps] profile %s unavailable: %s", mep_id, exc)
+        return None
     if not rows:
         return None
     _put(key, rows[0])
@@ -519,19 +577,11 @@ async def list_meps(
                                      order=order, include_former=include_former, limit=limit, page=page)
     # EP API uses offset-based pagination
     offset = (page - 1) * limit
-    try:
-        raw = await _fetch_list(country=country, group=group, name=name, term=term, limit=limit, offset=offset)
-    except Exception as exc:  # noqa: BLE001
-        raise HTTPException(
-            status_code=502,
-            detail={
-                "error": "Upstream EP Open Data temporarily unavailable",
-                "reason_code": "upstream_error",
-                "source": "europarl.europa.eu",
-            },
-        )
+    raw = await _fetch_list(country=country, group=group, name=name, term=term, limit=limit, offset=offset)
+    if raw is None:
+        raise _upstream_down()
 
-    data = [_normalise(r) for r in (raw or [])]
+    data = [_normalise(r) for r in raw]
     # Per-MEP profile hydration so country/group/role surface on LIST too.
     # Bounded concurrency (8) + 6h cache means a warmed cache makes this free.
     try:
@@ -569,17 +619,32 @@ async def _list_from_full(db: Session, *, country, group, name, term, window, or
             "message": f"Change dates are kept for the current term ({CURRENT_TERM}) only; drop the date window or the sync order for term={term}.",
         })
     raw = await _fetch_all(country=country, group=group, term=term)
-    if raw is None:
-        raise HTTPException(status_code=502, detail={
-            "error": "Upstream EP Open Data temporarily unavailable",
-            "reason_code": "upstream_error", "source": "europarl.europa.eu"})
-    items = [_normalise(r) for r in raw]
     stored: Dict[str, Dict[str, Any]] = {}
     if term == CURRENT_TERM:
         try:
             stored = api_snapshots.payloads_for(db, SNAPSHOT_DATASET)
         except Exception as exc:  # noqa: BLE001
             logger.warning("[meps] snapshot unavailable: %s", exc)
+    if raw is None:
+        # The EP API is down or throttled. We hold every current-term MEP from the
+        # daily snapshot, so serve that rather than an empty Parliament (23 Sep 2026:
+        # an overloaded EP API answered HTTP 200 with an error body and /meps served 0).
+        if term != CURRENT_TERM or not stored:
+            raise _upstream_down()
+        if group:
+            # The snapshot stores the EP's group URI (org/7018); the filter takes a
+            # code (EPP). Only upstream can map them, and upstream is down.
+            raise _upstream_down("`group` filtering needs the EP API, which is not answering. "
+                                 "Retry, or filter by country instead.")
+        items = [MEPItem(**p) for p in stored.values()]
+        if country:
+            want = _iso3(country)
+            items = [i for i in items if (i.country or "").upper() == want]
+        source_is_snapshot = True
+    else:
+        items = [_normalise(r) for r in raw]
+        source_is_snapshot = False
+    if term == CURRENT_TERM:
         current = await _fetch_current_ids()
         for i in items:
             snap = stored.get(i.id or "")
@@ -617,7 +682,10 @@ async def _list_from_full(db: Session, *, country, group, name, term, window, or
         except Exception as exc:  # noqa: BLE001
             logger.warning("[meps] hydration skipped: %s", exc)
     _attach_dates(db, out, term)
-    return build_envelope(out, total=total, page=page, limit=limit)
+    # coverage_complete=False says the answer came from Brubru's snapshot of the EP
+    # register, not from the EP API itself, so a caller can tell a stale answer from a live one.
+    return build_envelope(out, total=total, page=page, limit=limit,
+                          coverage_complete=not source_is_snapshot)
 
 @router.get(
     "/{mep_id}",

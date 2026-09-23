@@ -296,3 +296,53 @@ def test_the_tier_verdict_ignores_local_runs(tx):
         "SELECT count(*) FROM sync_runs WHERE tier IS NOT NULL AND started_at > now() - interval '24 hours' "
         "AND runner IS DISTINCT FROM 'local'")).scalar()
     assert judged == rows.all_rows - rows.local
+
+
+# --------------------------------------------------------------------------- the EP API answering 200 with an error
+def test_an_ep_error_body_is_a_failure_not_an_empty_parliament():
+    """23 Sep 2026: an overloaded EP API answers HTTP 200 with
+    {"error": "Pending acquire queue has reached its maximum size of 100 ..."} and no
+    `data`. Read as "no MEPs" and cached, it served 0 MEPs for six hours."""
+    assert meps_v1._rows({"data": [{"identifier": "1"}]}) == [{"identifier": "1"}]
+    assert meps_v1._rows({"data": []}) == []
+    for bad in ({"error": "Pending acquire queue has reached its maximum size of 100"},
+                {"@id": "x"}, {"data": "not a list"}, None):
+        with pytest.raises(meps_v1.EPUnavailable):
+            meps_v1._rows(bad)
+
+
+@pytest.fixture()
+def ep_down(monkeypatch):
+    """The EP API answering nothing, with yesterday's snapshot still in hand."""
+    async def no_list(country=None, group=None, term=10, patient=False):
+        return None
+
+    async def no_current(patient=False):
+        return None
+
+    monkeypatch.setattr(meps_v1, "_fetch_all", no_list)
+    monkeypatch.setattr(meps_v1, "_fetch_current_ids", no_current)
+    snap = {}
+    for i, (mid, name, iso3, sits) in enumerate((("1", "Víctor SOLÉ", "ESP", True),
+                                                 ("2", "Anna SMITH", "DEU", True),
+                                                 ("3", "Left EARLY", "ESP", False))):
+        snap[mid] = meps_v1.MEPItem(id=mid, full_name=name, country=iso3, group="org/7018",
+                                    in_office=sits).model_dump(mode="json",
+                                                               exclude={"creation_date", "updated_date"})
+    monkeypatch.setattr(api_snapshots, "payloads_for", lambda db, ds: snap)
+    monkeypatch.setattr(api_snapshots, "dates_for", lambda db, ds, keys=None: {})
+
+
+def test_meps_serve_the_snapshot_when_the_ep_api_is_down(client, ep_down):
+    body = client.get(SIX["meps"]).json()
+    assert [m["id"] for m in body["data"]] == ["1", "2"]  # the former member stays hidden
+    assert body["coverage_complete"] is False  # says the answer is Brubru's, not the EP's
+    # ISO-2 in, ISO-3 in the record: only the EP API maps those, so we map them here.
+    assert [m["id"] for m in client.get(SIX["meps"], params={"country": "ES"}).json()["data"]] == ["1"]
+
+
+def test_a_group_filter_says_so_instead_of_answering_wrongly(client, ep_down):
+    r = client.get(SIX["meps"], params={"group": "EPP"})
+    body = r.json()
+    # The handler flattens `detail` into the body.
+    assert r.status_code == 502 and body["reason_code"] == "upstream_error" and "group" in body["error"]
