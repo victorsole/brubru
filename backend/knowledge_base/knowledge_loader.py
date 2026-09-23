@@ -15395,6 +15395,20 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'eden conference': ['europol_regulation_revision_2026'],
     'new europol regulation': ['europol_regulation_revision_2026'],
     '2016/794': ['europol_regulation_revision_2026'],
+    # 23 Sep 2026: Spanish textile and footwear Royal Decree (TRIS 2026/0266/ES)
+    '2026/0266/es': ['spain_catalonia_waste_epr_national_law', 'textile_epr_waste_framework_directive_2025_1892'],
+    'real decreto de productos textiles y calzado': ['spain_catalonia_waste_epr_national_law'],
+    'real decreto textil y calzado': ['spain_catalonia_waste_epr_national_law'],
+    'real decreto de textiles': ['spain_catalonia_waste_epr_national_law'],
+    'reial decret de productes tèxtils i calçat': ['spain_catalonia_waste_epr_national_law'],
+    'reial decret tèxtil': ['spain_catalonia_waste_epr_national_law'],
+    'reial decret textil': ['spain_catalonia_waste_epr_national_law'],
+    'draft royal decree on textile': ['spain_catalonia_waste_epr_national_law'],
+    'spanish textile royal decree': ['spain_catalonia_waste_epr_national_law'],
+    'spanish textile decree': ['spain_catalonia_waste_epr_national_law', 'textile_epr_waste_framework_directive_2025_1892'],
+    'décret royal espagnol textile': ['spain_catalonia_waste_epr_national_law'],
+    'regio decreto spagnolo tessile': ['spain_catalonia_waste_epr_national_law'],
+    'spaans koninklijk besluit textiel': ['spain_catalonia_waste_epr_national_law'],
 }
 
 
