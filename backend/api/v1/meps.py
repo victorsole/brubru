@@ -173,32 +173,50 @@ async def _fetch_all(country=None, group=None, term=10, patient: bool = False) -
     return None
 
 
+# 200 per page, not 500: the EP API answers a 500-row request with an error body
+# (HTTP 200) whenever its connection pool is saturated. Below MIN_PAGE, give up.
+PAGE = 200
+MIN_PAGE = 25
+
+
+async def _fetch_window(hc, base: Dict[str, Any], offset: int, size: int, patient: bool) -> List[Dict[str, Any]]:
+    """One window of the MEP list, halved on failure.
+
+    The EP API can have ONE (limit, offset) combination stuck while its neighbours
+    answer: on 23 Sep 2026 `limit=200&offset=200` failed four times in a row from two
+    different networks, while `limit=100` at offsets 200 and 300 returned the same
+    people immediately. Retrying the same window is useless; asking for it in smaller
+    pieces works, so that is what this does.
+    """
+    try:
+        r = await _ep_get(hc, "/meps", {**base, "limit": size, "offset": offset}, patient=patient)
+        r.raise_for_status()
+        return _rows(r.json())
+    except Exception as exc:  # noqa: BLE001
+        if size <= MIN_PAGE:
+            raise
+        logger.info("[meps] window offset=%s size=%s failed (%s); splitting", offset, size, str(exc)[:80])
+        half = size // 2
+        first = await _fetch_window(hc, base, offset, half, patient)
+        if len(first) < half:
+            return first  # the list ended inside the first half
+        return first + await _fetch_window(hc, base, offset + half, half, patient)
+
+
 async def _fetch_all_once(country=None, group=None, term=10, patient: bool = False) -> Optional[List[Dict[str, Any]]]:
     """One pass over the EP /meps pages. None the moment anything fails: a partial
     list read as complete would look like MEPs leaving Parliament."""
-    # 200 per page, not 500: the EP API answers a 500-row request with an error body
-    # (HTTP 200) whenever its connection pool is saturated. 200 answered every time.
-    PAGE = 200
+    base: Dict[str, Any] = {"format": "application/ld+json", "parliamentary-term": term}
+    if country:
+        base["country-of-representation"] = country.upper()
+    if group:
+        base["political-group"] = group
     collected: List[Dict[str, Any]] = []
     offset = 0
     try:
         async with httpx.AsyncClient(timeout=20.0) as hc:
             for _ in range(20):  # safety cap (10,000 MEPs is more than enough)
-                params: Dict[str, Any] = {
-                    "limit": PAGE,
-                    "offset": offset,
-                    "format": "application/ld+json",
-                    "parliamentary-term": term,
-                }
-                if country:
-                    params["country-of-representation"] = country.upper()
-                if group:
-                    params["political-group"] = group
-                r = await _ep_get(hc, "/meps", params, patient=patient)
-                r.raise_for_status()
-                rows = _rows(r.json())
-                if not rows:
-                    break
+                rows = await _fetch_window(hc, base, offset, PAGE, patient)
                 collected.extend(rows)
                 if len(rows) < PAGE:
                     break  # last page

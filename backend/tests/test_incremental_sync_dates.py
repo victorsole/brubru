@@ -346,3 +346,37 @@ def test_a_group_filter_says_so_instead_of_answering_wrongly(client, ep_down):
     body = r.json()
     # The handler flattens `detail` into the body.
     assert r.status_code == 502 and body["reason_code"] == "upstream_error" and "group" in body["error"]
+
+
+def test_one_stuck_page_does_not_lose_the_whole_list(monkeypatch):
+    """23 Sep 2026: `limit=200&offset=200` failed four times in a row, from this machine
+    and through a different network, while `limit=100` at offsets 200 and 300 returned
+    the same people at once. Retrying that window is useless; splitting it works."""
+    import asyncio
+
+    PEOPLE = [{"identifier": str(i)} for i in range(744)]
+    asked = []
+
+    class _Resp:
+        def __init__(self, payload):
+            self._p = payload
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return self._p
+
+    async def fake_get(hc, path, params, patient=False):
+        size, offset = params["limit"], params["offset"]
+        asked.append((offset, size))
+        if (offset, size) == (200, 200):  # the stuck combination, exactly as observed
+            return _Resp({"error": "Pool#acquire(Duration) has been pending for more than 10000ms"})
+        return _Resp({"data": PEOPLE[offset:offset + size]})
+
+    monkeypatch.setattr(meps_v1, "_ep_get", fake_get)
+    meps_v1._CACHE.clear()
+    rows = asyncio.run(meps_v1._fetch_all(term=10))
+    assert [r["identifier"] for r in rows] == [p["identifier"] for p in PEOPLE]  # all 744, in order
+    assert (200, 100) in asked and (300, 100) in asked  # it split rather than retrying
+    meps_v1._CACHE.clear()
