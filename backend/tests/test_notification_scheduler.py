@@ -185,3 +185,74 @@ def test_run_all_surfaces_dead_scopes_in_its_summary():
                 "subscriptions_run", "notifications_created"):
         assert key in summary, f"run_all summary is missing {key}"
     assert isinstance(summary["unknown_scopes"], list)
+
+
+# --- the job BODY, not a stand-in (23 Sep 2026) ------------------------------
+# Every test above replaces _run_carriage_notifier wholesale, so its body never
+# ran under test. It read `run.created`, a field NotifierRun does not have, and
+# failed every morning from 15 to 23 Sep 2026 after the notifications had
+# already been committed. These tests run the real body with the notifier,
+# the session and the recorder stubbed.
+
+
+class _FakeSession:
+    def __init__(self):
+        self.rolled_back = self.closed = False
+
+    def rollback(self):
+        self.rolled_back = True
+
+    def close(self):
+        self.closed = True
+
+
+def _stub_carriage_job(monkeypatch, run):
+    import core.database
+    import services.notifications.carriage_status_notifier as csn
+    import services.sync.freshness as freshness
+
+    session, recorded, calls = _FakeSession(), [], []
+    monkeypatch.setattr(core.database, "SessionLocal", lambda: session)
+
+    class _Notifier:
+        def __init__(self, db):
+            assert db is session
+
+        def run(self, **kw):
+            calls.append(kw)
+            return run
+
+    monkeypatch.setattr(csn, "CarriageStatusNotifier", _Notifier)
+    monkeypatch.setattr(freshness, "record_run", lambda db, **kw: recorded.append(kw))
+    return session, recorded, calls
+
+
+def test_carriage_job_records_what_was_persisted(monkeypatch):
+    from services.notifications.carriage_status_notifier import NotifierRun
+
+    run = NotifierRun(tracks_examined=12, notifications_created=3, unchanged=9)
+    session, recorded, calls = _stub_carriage_job(monkeypatch, run)
+
+    result = ns._run_carriage_notifier()
+
+    assert result == {"created": 3, "ok": True, "errors": 0}
+    assert len(recorded) == 1
+    rec = recorded[0]
+    assert rec["source_key"] == "notifications_carriage"
+    assert rec["status"] == "success" and rec["items_added"] == 3 and rec["error"] is None
+    assert session.closed and not session.rolled_back
+    # A new track has no baseline; without seeding it would never notify.
+    assert calls == [{"seed_baseline": True}]
+
+
+def test_carriage_job_records_track_errors_as_failed(monkeypatch):
+    from services.notifications.carriage_status_notifier import NotifierRun
+
+    run = NotifierRun(tracks_examined=2, notifications_created=1, errors=["track 7: boom"])
+    _, recorded, _ = _stub_carriage_job(monkeypatch, run)
+
+    result = ns._run_carriage_notifier()
+
+    assert result["ok"] is False and result["errors"] == 1
+    assert recorded[0]["status"] == "failed" and "track 7: boom" in recorded[0]["error"]
+    assert recorded[0]["items_added"] == 1

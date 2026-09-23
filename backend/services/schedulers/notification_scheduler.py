@@ -83,19 +83,30 @@ def _run_carriage_notifier() -> dict:
     db = SessionLocal()
     started = datetime.now(timezone.utc)
     try:
-        run = CarriageStatusNotifier(db).run()
+        # seed_baseline=True (23 Sep 2026): none of the eight places that create a
+        # track sets a baseline, and a track without one is skipped for good, so
+        # every file tracked after the one-off seed of 16 Sep would never have
+        # notified. Seeding records the current status silently; the user hears
+        # about every change after that. A change between tracking a file and
+        # the next 06:00 run is absorbed into the baseline: at most one day.
+        run = CarriageStatusNotifier(db).run(seed_baseline=True)
         # Count what was persisted, never what was attempted.
         logger.info("[NOTIFY-SCHED] carriage: %s", run.summary())
         for err in run.errors:
             logger.error("[NOTIFY-SCHED] carriage track failed: %s", err)
+        # The field is `notifications_created`. From 15 to 23 Sep 2026 this read
+        # `run.created`, which does not exist: notifications were committed by
+        # run(), then the record step raised AttributeError, so the durable
+        # record said "failed" every day while delivery was working. No test
+        # caught it because every test replaced this whole function.
         # Durable run record (15 Sep 2026): a log line alone could not prove the
         # job ran on a day that produced no notification, so "0 sent" was
         # indistinguishable from "never ran".
         record_run(db, source_key="notifications_carriage", tier="notifications",
-                   status="success" if run.ok else "failed", items_added=run.created,
+                   status="success" if run.ok else "failed", items_added=run.notifications_created,
                    error="; ".join(str(e) for e in run.errors[:5]) or None,
                    started_at=started)
-        return {"created": run.created, "ok": run.ok, "errors": len(run.errors)}
+        return {"created": run.notifications_created, "ok": run.ok, "errors": len(run.errors)}
     except Exception as exc:
         db.rollback()
         record_run(db, source_key="notifications_carriage", tier="notifications",
