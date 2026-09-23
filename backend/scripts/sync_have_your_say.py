@@ -166,6 +166,10 @@ _UPSERT = text("""
         start_date = COALESCE(EXCLUDED.start_date, public_consultations.start_date),
         end_date = COALESCE(EXCLUDED.end_date, public_consultations.end_date),
         portal_url = EXCLUDED.portal_url,
+        -- Fill a body another writer left empty (23 Sep 2026: open Commission
+        -- consultations had NULL here, so body filters and labels missed them);
+        -- never overwrite an agency code with the Commission default.
+        source_body = COALESCE(public_consultations.source_body, EXCLUDED.source_body),
         updated_at = EXCLUDED.updated_at,
         last_updated = EXCLUDED.last_updated,
         scraped_at = EXCLUDED.scraped_at

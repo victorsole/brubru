@@ -313,6 +313,10 @@ class ConsultationSyncService:
             portal_url=item.portal_url,
             feedback_url=item.feedback_url,
             relevance_score=relevance_score,
+            # Have Your Say items are the Commission's own (23 Sep 2026: rows
+            # created here carried NULL, which body filters and labels missed).
+            source="commission",
+            source_body="European Commission",
             scraped_at=item.scraped_at,
             first_seen=now,
             last_updated=now,
