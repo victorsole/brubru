@@ -264,12 +264,15 @@ def _fold(value: Optional[str]) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", value or "") if not unicodedata.combining(c)).casefold()
 
 
-def _attach_dates(db: Session, items: List["MEPItem"], term: int) -> None:
-    """creation_date / updated_date from the daily snapshot (current term only)."""
+def _attach_dates(db: Session, items: List["MEPItem"], term: int, with_office: bool = False) -> None:
+    """creation_date / updated_date from the daily snapshot (current term only), and
+    on the detail route `in_office` too, which only the snapshot knows."""
     if term != CURRENT_TERM or not items:
         return
+    keys = [i.id for i in items if i.id]
     try:
-        dates = api_snapshots.dates_for(db, SNAPSHOT_DATASET, [i.id for i in items if i.id])
+        dates = api_snapshots.dates_for(db, SNAPSHOT_DATASET, keys)
+        stored = api_snapshots.payloads_for(db, SNAPSHOT_DATASET) if with_office else {}
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] snapshot dates unavailable: %s", exc)
         return
@@ -277,6 +280,10 @@ def _attach_dates(db: Session, items: List["MEPItem"], term: int) -> None:
         d = dates.get(item.id or "")
         if d:
             item.creation_date, item.updated_date = d[0], d[1]
+        if with_office and item.in_office is None:
+            snap = stored.get(item.id or "")
+            if snap is not None:
+                item.in_office = snap.get("in_office")
 
 
 async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[str, Any]]:
@@ -729,5 +736,5 @@ async def get_mep(
         await _enrich_country_group([item])
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] detail hydration skipped: %s", exc)
-    _attach_dates(db, [item], CURRENT_TERM)
+    _attach_dates(db, [item], CURRENT_TERM, with_office=True)
     return item
