@@ -88,7 +88,7 @@ MEUB_SOURCES: List[SourceSpec] = [
     # success daily while it had not grown since 27 August. Newest first, 60 per
     # run, which covers a plenary week with room to spare.
     SourceSpec("texts_adopted_procedures", "Texts adopted - procedure refs", "warm",
-               "scripts/backfill_texts_adopted_procedures.py", ("--apply", "--limit", "60"),
+               "scripts/backfill_texts_adopted_procedures.py", ("--apply", "--limit", "60", "--budget", "1300"),
                timeout=1500, stale_after_hours=48),
     SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
                "scripts/backfill_oeil_committee_roles.py", ("--apply",),

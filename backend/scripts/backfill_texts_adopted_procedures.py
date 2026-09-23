@@ -125,6 +125,9 @@ def main() -> int:
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--limit", type=int, default=0, help="texts per run (0 = all)")
     ap.add_argument("--pace", type=float, default=0.5, help="seconds between texts")
+    ap.add_argument("--budget", type=int, default=0,
+                    help="stop starting new texts after this many seconds (0 = none); the warm "
+                         "tier passes one because a plenary document takes ~25s to fetch")
     a = ap.parse_args()
 
     url = os.environ["DATABASE_URL"]
@@ -138,8 +141,15 @@ def main() -> int:
             "ORDER BY adoption_date DESC NULLS LAST" + (f" LIMIT {int(a.limit)}" if a.limit else ""))).all()
     print(f"[INFO] {len(rows)} adopted text(s) without a procedure")
 
-    found, failed, reasons = [], 0, {}
+    # Write each text as it resolves (23 Sep 2026). The first version collected
+    # everything and wrote at the end, so a timeout lost the whole run: at ~25s a
+    # text, 60 texts outlast the warm tier's 1500s limit and nothing would land.
+    started = time.monotonic()
+    found, failed, reasons, written = [], 0, {}, 0
     for i, r in enumerate(rows, 1):
+        if a.budget and time.monotonic() - started > a.budget:
+            print(f"[INFO] budget spent; {len(rows) - i + 1} text(s) left for the next run", flush=True)
+            break
         try:
             label, why = resolve(r.ta_reference)
         except RuntimeError as e:
@@ -150,6 +160,13 @@ def main() -> int:
             kind = _LABEL.match(label).group(1)
             new_type = TYPE_BY_KIND.get(kind) if r.text_type == "other" else None
             found.append((r.id, r.ta_reference, label, new_type))
+            if a.apply:
+                with engine.begin() as c:
+                    written += c.execute(text(
+                        "UPDATE texts_adopted SET procedure_ref = :p, "
+                        "text_type = COALESCE(CAST(:t AS adopted_text_type), text_type), last_updated = now() "
+                        "WHERE id = :id AND procedure_ref IS NULL"),
+                        {"p": label, "t": new_type, "id": r.id}).rowcount
             print(f"  [{i}/{len(rows)}] {r.ta_reference} -> {label}"
                   + (f" ({new_type})" if new_type else ""), flush=True)
         else:
@@ -157,7 +174,7 @@ def main() -> int:
             reasons[key] = reasons.get(key, 0) + 1
         time.sleep(a.pace)
 
-    print(f"\n[INFO] resolved {len(found)}, unresolved {len(rows) - len(found) - failed}, "
+    print(f"\n[INFO] resolved {len(found)}, unresolved {i - len(found) - failed if rows else 0}, "
           f"API errors {failed}")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:6]:
         print(f"       {n:4d}  {why}")
@@ -165,14 +182,6 @@ def main() -> int:
         print("[DRY-RUN] nothing written")
         return 1 if failed and not found else 0
 
-    written = 0
-    with engine.begin() as c:
-        for tid, ref, label, new_type in found:
-            written += c.execute(text(
-                "UPDATE texts_adopted SET procedure_ref = :p, "
-                "text_type = COALESCE(CAST(:t AS adopted_text_type), text_type), last_updated = now() "
-                "WHERE id = :id AND procedure_ref IS NULL"),
-                {"p": label, "t": new_type, "id": tid}).rowcount
     with engine.connect() as c:
         still = c.execute(text("SELECT count(*) FROM texts_adopted WHERE procedure_ref IS NULL "
                                "AND ta_reference LIKE 'P%\\_TA(%'")).scalar()
