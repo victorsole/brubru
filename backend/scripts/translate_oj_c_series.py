@@ -20,7 +20,11 @@ Cellar is not used: C items are not CELEX-addressable there. EUR-Lex sits behind
 a WAF, so the fetch goes through WafBrowserFetcher (Playwright), which is the
 same fallback the L driver already relies on.
 
-Softcatala only -- no Anthropic, no paid APIs. Runs locally against prod DB.
+Each page is uploaded to SiteGround by the run that produced it and only then
+stamped deployed (``_oj_catalan_runtime.upload_page``); see that module for why.
+
+Softcatala only -- no Anthropic, no paid APIs. Runs on Railway (fast tier,
+source key ``oj_c_ca``) and locally, both against the production DB.
 
 Usage (from backend/):
     python3.12 scripts/translate_oj_c_series.py --limit 40      # newest first
@@ -41,6 +45,11 @@ import psycopg2
 import psycopg2.extras
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _oj_catalan_runtime import (  # noqa: E402
+    ActBudget, database_url, in_cooldown, missing_ftp_settings, record_failure,
+    run_bounded, stamp_deployed, upload_page,
+)
 
 BACKEND = Path(__file__).resolve().parent.parent
 OUT_ROOT = BACKEND.parent / "data" / "legislacio-ue-catala"
@@ -68,12 +77,10 @@ _COUNTS = re.compile(r"(\d+)\s+articles?,\s+(\d+)\s+recitals?")
 
 
 def _db():
-    # Read .env directly (as translate_oj_daily_acts.py does): these drivers run
-    # as plain scripts, so os.environ has no DATABASE_URL unless dotenv is loaded.
-    url = [l.split("=", 1)[1].strip() for l in open(BACKEND / ".env")
-           if l.startswith("DATABASE_URL=")][0]
+    # Environment first: a Railway container has no backend/.env, which is why
+    # this job failed on every Railway run from 28 Aug to 23 Sep 2026.
     return psycopg2.connect(
-        url, connect_timeout=15,
+        database_url(), connect_timeout=15,
         keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=5)
 
 
@@ -84,16 +91,25 @@ def _load_failures() -> dict:
         return {}
 
 
-def _record_failure(oj_id: str):
+# See translate_oj_daily_acts.py: an item that runs out of time on Railway will
+# do so again, so it is retried rarely and left for a local run.
+TIMEOUT_COOLDOWN_H = 72
+_BUDGET: ActBudget | None = None
+
+
+def _timeout(unbounded: int = 3600) -> int:
+    return _BUDGET.act_timeout() if _BUDGET else unbounded
+
+
+def _record_failure(oj_id: str, hours: float = FAIL_COOLDOWN_H):
     fails = _load_failures()
-    fails[oj_id] = time.time()
+    record_failure(fails, oj_id, hours)
     FAIL_STATE.parent.mkdir(parents=True, exist_ok=True)
     FAIL_STATE.write_text(json.dumps(fails))
 
 
 def _in_cooldown(oj_id: str, fails: dict) -> bool:
-    ts = fails.get(oj_id)
-    return bool(ts and (time.time() - ts) < FAIL_COOLDOWN_H * 3600)
+    return in_cooldown(fails, oj_id, FAIL_COOLDOWN_H)
 
 
 def _pending(limit: int, date: str | None):
@@ -104,8 +120,10 @@ def _pending(limit: int, date: str | None):
             SELECT DISTINCT ON (e.oj_id) e.oj_id, e.oj_date, e.title
               FROM oj_entries e
              WHERE e.series = 'C' AND e.oj_id IS NOT NULL
+               -- Not yet DEPLOYED (23 Sep 2026): a failed upload leaves a
+               -- registered, undeployed row that must be retried.
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.oj_id = e.oj_id)
+                                WHERE ct.oj_id = e.oj_id AND ct.deployed_at IS NOT NULL)
         """
         # Disjoint slices so N workers never collide on the same item. hashtext
         # is deterministic per oj_id, so a worker always owns the same subset
@@ -192,7 +210,11 @@ def _register(oj_id: str, html_path: Path, articles: int, recitals: int):
         conn.close()
 
 
-def run(limit: int, date: str | None):
+def run(limit: int, date: str | None) -> int:
+    missing = missing_ftp_settings()
+    if missing:
+        print(f"[ERROR] cannot deploy, not set: {', '.join(missing)}", flush=True)
+        return 1
     fails = _load_failures()
     rows = _pending(limit + len(fails), date)
     skipped = [r for r in rows if _in_cooldown(r["oj_id"], fails)]
@@ -200,10 +222,13 @@ def run(limit: int, date: str | None):
     if skipped:
         print(f"[INFO] {len(skipped)} in fetch-fail cooldown, retried after {FAIL_COOLDOWN_H}h", flush=True)
     print(f"[INFO] {len(rows)} pending OJ C-series items", flush=True)
-    ok = failed = 0
+    ok = failed = deploy_failed = 0
     t0 = time.time()
     for i, r in enumerate(rows, 1):
         oj_id = r["oj_id"]
+        if _BUDGET and _BUDGET.remaining() < 180:
+            print(f"[INFO] run budget spent; {len(rows) - i + 1} item(s) left for the next run", flush=True)
+            break
         print(f"\n[{i}/{len(rows)}] {oj_id} ({r['oj_date']}) {r['title'][:70]}", flush=True)
         html_path = OUT_ROOT / oj_id / "index.html"
         articles = recitals = 0
@@ -217,9 +242,14 @@ def run(limit: int, date: str | None):
                 _record_failure(oj_id); failed += 1; continue
             tmp = f"/tmp/{oj_id}_eurlex.html"
             Path(tmp).write_text(html, encoding="utf-8")
-            p = subprocess.run(
-                [sys.executable, "scripts/catalan_translate.py", "--html", tmp, "--celex", oj_id],
-                cwd=BACKEND, capture_output=True, text=True, timeout=3600)
+            try:
+                p = run_bounded(
+                    [sys.executable, "scripts/catalan_translate.py", "--html", tmp, "--celex", oj_id],
+                    cwd=BACKEND, timeout=_timeout(3600))
+            except subprocess.TimeoutExpired:
+                print(f"  [SKIP] out of time; retry in {TIMEOUT_COOLDOWN_H}h, "
+                      f"or clear it with a local run (no --budget)", flush=True)
+                _record_failure(oj_id, TIMEOUT_COOLDOWN_H); failed += 1; continue
             out = p.stdout + p.stderr
             if p.returncode != 0 or not html_path.exists():
                 reason = [l for l in out.splitlines() if "ERROR" in l or "raise" in l][-1:] \
@@ -233,22 +263,41 @@ def run(limit: int, date: str | None):
             print("  [INFO] HTML already present, registering only", flush=True)
         try:
             _register(oj_id, html_path, articles, recitals)
-            ok += 1
-            print(f"  [OK] registered ({(time.time()-t0)/i:.0f}s/item avg)", flush=True)
         except Exception as e:
             failed += 1
             print(f"  [SKIP] db register failed: {str(e)[:100]}", flush=True)
-    print(f"\n[DONE] ok={ok} failed={failed} in {(time.time()-t0)/60:.1f}min "
-          f"(deploy via scripts/deploy_catalan_backlog.py)", flush=True)
+            continue
+        shipped, detail = upload_page(oj_id, html_path)
+        if not shipped:
+            deploy_failed += 1
+            print(f"  [ERROR] deploy: {detail}", flush=True)
+            continue
+        conn = _db()
+        try:
+            stamp_deployed(conn, oj_id)
+        finally:
+            conn.close()
+        ok += 1
+        print(f"  [OK] registered + deployed ({detail}) ({(time.time()-t0)/i:.0f}s/item avg)", flush=True)
+    print(f"\n[DONE] ok={ok} failed={failed} deploy_failed={deploy_failed} "
+          f"in {(time.time()-t0)/60:.1f}min", flush=True)
+    return 1 if deploy_failed else 0
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=30)
     ap.add_argument("--date", type=str, default=None, help="only this OJ date (YYYY-MM-DD)")
+    ap.add_argument("--budget", type=int, default=None,
+                    help="seconds for the whole run; stops starting new items near the end and caps "
+                         "each item (Railway passes 1500 against the tier's 1800s kill)")
+    ap.add_argument("--per-act", type=int, default=900, help="per-item ceiling when --budget is set")
     args = ap.parse_args()
     os.chdir(BACKEND)
-    run(args.limit, args.date)
+    global _BUDGET
+    if args.budget:
+        _BUDGET = ActBudget(args.budget, args.per_act)
+    return run(args.limit, args.date)
 
 
 if __name__ == "__main__":

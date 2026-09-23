@@ -165,8 +165,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     # comfortably above the ~60 entries a normal OJ day publishes. A historical
     # backlog is cleared by running the same scripts locally with a big --limit;
     # both are idempotent (they skip anything already in catalan_translations).
-    SourceSpec("oj_acts_ca", "My OJ - Catalan full text (L)", "fast", "scripts/translate_oj_daily_acts.py", ("--limit", "10"), timeout=1800, stale_after_hours=14),
-    SourceSpec("oj_c_ca",    "My OJ - Catalan full text (C)", "fast", "scripts/translate_oj_c_series.py",   ("--limit", "10"), timeout=1800, stale_after_hours=14),
+    #
+    # 23 Sep 2026: neither had produced a page on Railway. Both opened
+    # backend/.env, which a container does not have, and both left the upload to
+    # a Mac-only deploy loop. They now read the environment, upload each page in
+    # the same run (scripts/_oj_catalan_runtime.py), and take --budget 1500 so an
+    # oversized act is skipped and cooled down inside the 1800s kill instead of
+    # getting the whole job killed at the head of the queue on every run.
+    SourceSpec("oj_acts_ca", "My OJ - Catalan full text (L)", "fast", "scripts/translate_oj_daily_acts.py", ("--limit", "10", "--budget", "1500"), timeout=1800, stale_after_hours=14),
+    SourceSpec("oj_c_ca",    "My OJ - Catalan full text (C)", "fast", "scripts/translate_oj_c_series.py",   ("--limit", "10", "--budget", "1500"), timeout=1800, stale_after_hours=14),
 ]
 # fmt: on
 

@@ -8,13 +8,16 @@ always ahead of it. This driver keeps the corpus current: for every L-series
 ``oj_entries`` row whose CELEX has no ``catalan_translations`` record yet, it
 runs the existing ``catalan_translate.py --cellar`` path (Cellar XHTML fetch ->
 Softcatala -> HTML at data/legislacio-ue-catala/{celex}/), registers the DB row,
-and leaves deployment to ``deploy_catalan_backlog.py`` (the same loop that
-deploys law batches).
+uploads it to SiteGround in the same run, and stamps ``deployed_at`` once the
+remote size matches (``_oj_catalan_runtime.upload_page``). It used to leave the
+upload to ``deploy_catalan_backlog.py``, which only runs on this Mac; see that
+module for why a Railway run could never have shipped a page that way.
 
 My OJ then links each act card to the full Catalan text (api/oj.py adds
 ``catalan_url`` when the CELEX is deployed).
 
-Softcatala only — no Anthropic, no paid APIs. Runs locally against prod DB.
+Softcatala only — no Anthropic, no paid APIs. Runs on Railway (fast tier,
+source key ``oj_acts_ca``) and locally, both against the production DB.
 
 Usage (from backend/):
     python3.12 scripts/translate_oj_daily_acts.py --limit 30    # newest first
@@ -36,6 +39,11 @@ import psycopg2.extras
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from _oj_catalan_runtime import (  # noqa: E402
+    ActBudget, database_url, in_cooldown, missing_ftp_settings, record_failure,
+    run_bounded, stamp_deployed, upload_page,
+)
+
 BACKEND = Path(__file__).resolve().parent.parent
 OUT_ROOT = BACKEND.parent / "data" / "legislacio-ue-catala"
 
@@ -55,29 +63,40 @@ def _load_failures() -> dict:
         return {}
 
 
-def _record_failure(celex: str):
+# An act that runs out of time on Railway will run out of time again: retry it
+# rarely, and let a local /oj-cat run (no --budget) clear it.
+TIMEOUT_COOLDOWN_H = 72
+
+# Set by --budget (the Railway fast tier passes one). None = no limit, the
+# behaviour of a local run before 23 Sep 2026.
+_BUDGET: ActBudget | None = None
+
+
+def _timeout(unbounded: int = 3600) -> int:
+    return _BUDGET.act_timeout() if _BUDGET else unbounded
+
+
+def _record_failure(celex: str, hours: float = FAIL_COOLDOWN_H):
     fails = _load_failures()
-    fails[celex] = time.time()
+    record_failure(fails, celex, hours)
     FAIL_STATE.parent.mkdir(parents=True, exist_ok=True)
     FAIL_STATE.write_text(json.dumps(fails))
 
 
 def _in_cooldown(celex: str, fails: dict) -> bool:
-    ts = fails.get(celex)
-    return bool(ts) and (time.time() - ts) < FAIL_COOLDOWN_H * 3600
+    return in_cooldown(fails, celex, FAIL_COOLDOWN_H)
 
 _TITLE = re.compile(r"<title>(.*?)\s*\|\s*Brubru</title>", re.S)
 _COUNTS = re.compile(r"(\d+)\s+articles?,\s+(\d+)\s+recitals?")
 
 
 def _db():
-    url = [l.split("=", 1)[1].strip() for l in open(BACKEND / ".env")
-           if l.startswith("DATABASE_URL=")][0]
-    return psycopg2.connect(url, connect_timeout=15)
+    # Environment first: a Railway container has no backend/.env (23 Sep 2026).
+    return psycopg2.connect(database_url(), connect_timeout=15)
 
 
 def _pending(limit: int, date: str | None):
-    """L-series OJ acts with no catalan_translations row, newest first.
+    """L-series OJ acts with no DEPLOYED catalan_translations row, newest first.
 
     Keyed on COALESCE(celex, oj_id). International agreements, exchanges of
     letters and similar instruments carry NO CELEX, and the old
@@ -99,8 +118,12 @@ def _pending(limit: int, date: str | None):
                -- were excluded in July for wrong-sector scraper CELEXes that
                -- 404ed; derive_celex has returned None for them since 23 Jul, so
                -- they key on oj_id and resolve on Cellar. 98 sat untranslated.
+               -- "Not yet DEPLOYED", not "no row" (23 Sep 2026): a page whose
+               -- upload failed is registered but undeployed, and must be picked
+               -- up again or it never reaches the site.
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.celex = COALESCE(e.celex, e.oj_id))
+                                WHERE ct.celex = COALESCE(e.celex, e.oj_id)
+                                  AND ct.deployed_at IS NOT NULL)
         """
         params: list = []
         if date:
@@ -119,7 +142,7 @@ def _pending(limit: int, date: str | None):
 
 
 def _register(celex: str, html_path: Path, articles: int, recitals: int):
-    """Create the catalan_translations row (undeployed; the deploy loop ships it).
+    """Create or refresh the catalan_translations row (undeployed until upload_page succeeds).
 
     Uses the driver's own psycopg2 connection (connect_timeout + keepalives) —
     batch_catalan_translate.import_to_db goes through SQLAlchemy SessionLocal,
@@ -191,10 +214,10 @@ def _cellar_ojid_fallback(celex: str, oj_id: str) -> str | None:
     tmp = f"/tmp/{celex}_ojid.html"
     with open(tmp, "w", encoding="utf-8") as fh:
         fh.write(r.text)
-    p = subprocess.run(
+    p = run_bounded(
         [sys.executable, "scripts/catalan_translate.py", "--html", tmp,
          "--celex", celex, "--ref", oj_id],
-        cwd=BACKEND, capture_output=True, text=True, timeout=7200)
+        cwd=BACKEND, timeout=_timeout(7200))
     return (p.stdout + p.stderr) if p.returncode == 0 else None
 
 
@@ -228,10 +251,12 @@ def _eurlex_fallback(celex: str) -> str | None:
         tmp = f"/tmp/{celex}_eurlex.html"
         with open(tmp, "w", encoding="utf-8") as fh:
             fh.write(html)
-        p = subprocess.run(
+        p = run_bounded(
             [sys.executable, "scripts/catalan_translate.py", "--html", tmp, "--celex", celex],
-            cwd=BACKEND, capture_output=True, text=True, timeout=3600)
+            cwd=BACKEND, timeout=_timeout(3600))
         return (p.stdout + p.stderr) if p.returncode == 0 else None
+    except subprocess.TimeoutExpired:
+        raise  # the act is out of time; do not fall through to another fallback
     except Exception as e:
         print(f"  [WARN] EUR-Lex fallback error: {str(e)[:80]}", flush=True)
         return None
@@ -265,10 +290,10 @@ def _ojid_fallback(oj_id: str, celex: str) -> str | None:
             tmp = f"/tmp/{oj_id}_oj.html"
             with open(tmp, "w", encoding="utf-8") as fh:
                 fh.write(html)
-            p = subprocess.run(
+            p = run_bounded(
                 [sys.executable, "scripts/catalan_translate.py", "--html", tmp,
                  "--celex", celex, "--ref", oj_id],
-                cwd=BACKEND, capture_output=True, text=True, timeout=3600)
+                cwd=BACKEND, timeout=_timeout(3600))
             return (p.stdout + p.stderr) if p.returncode == 0 else None
         print(f"  [WARN] OJ-id attempt {attempt}: {len(html)} bytes", flush=True)
         if attempt == 1:
@@ -348,7 +373,48 @@ def _page_has_act_text(path: Path) -> tuple[bool, str]:
     return True, f"{chars} chars, {len(substantive)} substantive paragraphs"
 
 
-def run(limit: int, date: str | None):
+def _translate(celex: str, r: dict, html_path: Path) -> str | None:
+    """Produce html_path for one act. Returns the translator's output ("" when
+    the page was already on disk), or None when every route failed (the failure
+    is recorded and cooled down). Raises subprocess.TimeoutExpired when the act
+    runs out of its time budget."""
+    if html_path.exists():
+        print("  [INFO] HTML already present, registering only", flush=True)
+        return ""
+    # Cellar fetch + Softcatala translate via the canonical pipeline.
+    p = run_bounded(
+        [sys.executable, "scripts/catalan_translate.py", "--cellar", celex],
+        cwd=BACKEND, timeout=_timeout(3600))
+    out = p.stdout + p.stderr
+    if p.returncode == 0 and html_path.exists():
+        return out
+    # Fresh acts 404 on Cellar for days; EUR-Lex HTML via the WAF
+    # browser fetcher is available from day one.
+    out = _cellar_ojid_fallback(celex, r.get("oj_id") or "")
+    if out is None or not html_path.exists():
+        out = _eurlex_fallback(celex)
+    if (out is None or not html_path.exists()) and r.get("oj_id"):
+        # CELEX is likely fabricated (wrong sector). Re-key on oj_id.
+        # Storage key stays the CELEX so every existing lookup
+        # (api/oj.py, carriages, the deploy loop) keeps matching;
+        # only the page's shown reference and link use the oj_id.
+        out = _ojid_fallback(r["oj_id"], celex)
+    if out is None or not html_path.exists():
+        reason = [l for l in (out or "").splitlines()
+                  if "ERROR" in l or "raise" in l][-1:] or ["Cellar + EUR-Lex both failed"]
+        print(f"  [SKIP] translate failed: {reason[0][:100]}", flush=True)
+        _record_failure(celex)
+        return None
+    return out
+
+
+def run(limit: int, date: str | None) -> int:
+    missing = missing_ftp_settings()
+    if missing:
+        # Translating without being able to upload would register pages that
+        # vanish with the container. Fail before spending any CPU.
+        print(f"[ERROR] cannot deploy, not set: {', '.join(missing)}", flush=True)
+        return 1
     fails = _load_failures()
     rows = _pending(limit + len(fails), date)
     skipped = [r for r in rows if _in_cooldown(r["celex"], fails)]
@@ -356,43 +422,31 @@ def run(limit: int, date: str | None):
     if skipped:
         print(f"[INFO] {len(skipped)} in Cellar-404 cooldown, retried after {FAIL_COOLDOWN_H}h", flush=True)
     print(f"[INFO] {len(rows)} pending OJ L-series acts", flush=True)
-    ok = failed = 0
+    ok = failed = deploy_failed = 0
     t0 = time.time()
     for i, r in enumerate(rows, 1):
         celex = r["celex"]
+        if _BUDGET and _BUDGET.remaining() < 180:
+            print(f"[INFO] run budget spent; {len(rows) - i + 1} act(s) left for the next run", flush=True)
+            break
         print(f"\n[{i}/{len(rows)}] {celex} ({r['oj_date']}) {r['title'][:70]}", flush=True)
         html_path = OUT_ROOT / celex / "index.html"
         articles = recitals = 0
-        if not html_path.exists():
-            # Cellar fetch + Softcatala translate via the canonical pipeline.
-            p = subprocess.run(
-                [sys.executable, "scripts/catalan_translate.py", "--cellar", celex],
-                cwd=BACKEND, capture_output=True, text=True, timeout=3600)
-            out = p.stdout + p.stderr
-            if p.returncode != 0 or not html_path.exists():
-                # Fresh acts 404 on Cellar for days; EUR-Lex HTML via the WAF
-                # browser fetcher is available from day one.
-                out = _cellar_ojid_fallback(celex, r.get("oj_id") or "")
-                if out is None or not html_path.exists():
-                    out = _eurlex_fallback(celex)
-                if (out is None or not html_path.exists()) and r.get("oj_id"):
-                    # CELEX is likely fabricated (wrong sector). Re-key on oj_id.
-                    # Storage key stays the CELEX so every existing lookup
-                    # (api/oj.py, carriages, the deploy loop) keeps matching;
-                    # only the page's shown reference and link use the oj_id.
-                    out = _ojid_fallback(r["oj_id"], celex)
-                if out is None or not html_path.exists():
-                    reason = [l for l in (out or "").splitlines()
-                              if "ERROR" in l or "raise" in l][-1:] or ["Cellar + EUR-Lex both failed"]
-                    print(f"  [SKIP] translate failed: {reason[0][:100]}", flush=True)
-                    _record_failure(celex)
-                    failed += 1
-                    continue
+        try:
+            out = _translate(celex, r, html_path)
+        except subprocess.TimeoutExpired:
+            print(f"  [SKIP] out of time; retry in {TIMEOUT_COOLDOWN_H}h, "
+                  f"or clear it with a local run (no --budget)", flush=True)
+            _record_failure(celex, TIMEOUT_COOLDOWN_H)
+            failed += 1
+            continue
+        if out is None:
+            failed += 1
+            continue
+        if out:
             mc = _COUNTS.search(out)
             if mc:
                 articles, recitals = int(mc.group(1)), int(mc.group(2))
-        else:
-            print("  [INFO] HTML already present, registering only", flush=True)
         good, why = _page_has_act_text(html_path)
         if not good:
             # Never register a page that does not contain the act.
@@ -402,22 +456,46 @@ def run(limit: int, date: str | None):
             continue
         try:
             _register(celex, html_path, articles, recitals)
-            ok += 1
-            print(f"  [OK] registered ({why}) ({(time.time()-t0)/i:.0f}s/act avg)", flush=True)
         except Exception as e:
             failed += 1
             print(f"  [SKIP] db register failed: {str(e)[:100]}", flush=True)
-    print(f"\n[DONE] ok={ok} failed={failed} in {(time.time()-t0)/60:.1f}min "
-          f"(deploy via scripts/deploy_catalan_backlog.py)", flush=True)
+            continue
+        shipped, detail = upload_page(celex, html_path)
+        if not shipped:
+            # Row stays undeployed and the page stays on disk, so the next run
+            # (which finds the HTML present) retries the upload.
+            deploy_failed += 1
+            print(f"  [ERROR] deploy: {detail}", flush=True)
+            continue
+        conn = _db()
+        try:
+            stamp_deployed(conn, celex)
+        finally:
+            conn.close()
+        ok += 1
+        print(f"  [OK] registered + deployed ({why}; {detail}) "
+              f"({(time.time()-t0)/i:.0f}s/act avg)", flush=True)
+    print(f"\n[DONE] ok={ok} failed={failed} deploy_failed={deploy_failed} "
+          f"in {(time.time()-t0)/60:.1f}min", flush=True)
+    # Translation failures on fresh acts are expected (Cellar lags publication)
+    # and are cooled down. An upload failure is infrastructure and must show red.
+    return 1 if deploy_failed else 0
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=30)
     ap.add_argument("--date", type=str, default=None, help="only this OJ date (YYYY-MM-DD)")
+    ap.add_argument("--budget", type=int, default=None,
+                    help="seconds for the whole run; stops starting new acts near the end and caps "
+                         "each act (Railway passes 1500 against the tier's 1800s kill)")
+    ap.add_argument("--per-act", type=int, default=900, help="per-act ceiling when --budget is set")
     args = ap.parse_args()
     os.chdir(BACKEND)
-    run(args.limit, args.date)
+    global _BUDGET
+    if args.budget:
+        _BUDGET = ActBudget(args.budget, args.per_act)
+    return run(args.limit, args.date)
 
 
 if __name__ == "__main__":
