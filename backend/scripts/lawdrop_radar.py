@@ -481,7 +481,12 @@ def main() -> int:
         cal = check_calendar_only(db, a.ahead)
         inf = check_in_force_now(db, a.in_force_days)
     finally:
-        db.close()
+        # The Cellar phase can outlast the pooled connection; on 23 Sep 2026 a
+        # dead connection raised here and threw away five completed checks.
+        try:
+            db.close()
+        except Exception as exc:  # noqa: BLE001
+            print(f"[WARN] closing the DB connection failed ({type(exc).__name__}); results kept")
 
     if a.json:
         print(json.dumps({"upcoming": up, "unmarked": un, "uncovered": unc,
