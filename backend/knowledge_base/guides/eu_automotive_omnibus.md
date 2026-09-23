@@ -11,6 +11,7 @@
 - Legal basis: Article 114 TFEU (internal market); Article 192 TFEU (environment) for climate-related parts
 - EPRS Briefing (14 April 2026): "EU automotive omnibus [EU Legislation in Progress]" -- Ref: EPRS_BLOG_eu-automotive-omnibus
 - EPRS Briefing (13 April 2026): "EU automotive omnibus - 13-04-2026" -- Ref: EPRS_UNK_e49bf37302be
+- JRC Science for Policy Report (22 Sep 2026): "Research and innovation towards zero-emission road transport and European automotive sector competitiveness" (EUR 40849) -- maps 150 EU-funded research and innovation (R&I) projects (about EUR 1.99 billion total budget, EUR 1.23 billion EU contribution) across connected and automated mobility, software-defined vehicles, electric-vehicle batteries, zero-emission components and infrastructure, advanced materials and manufacturing, and workforce transformation; finds EU R&I helps validate, demonstrate and pilot technologies, but stronger links are needed to industrial scale-up, certification, infrastructure deployment, skills and market uptake. doi: 10.2760/4220161 (https://publications.jrc.ec.europa.eu/repository/handle/JRC146980)
 - **NEW IN OJ (7 May 2026)**: **Regulation (EU) 2026/1046** of the European Parliament and of the Council of 29 April 2026 amending Regulation (EU) 2019/1242 -- as regards the calculation of emission credits for heavy-duty vehicles. CELEX: 32026R1046. Published OJ:L_202601046, 7 May 2026. Companion file to the CO2 Standards Flexibility component for HDVs.
 
 ## Key Components of the Omnibus
