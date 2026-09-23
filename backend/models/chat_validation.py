@@ -30,7 +30,10 @@ class ChatValidation(Base):
     generator = Column(String(64), nullable=True)
     language = Column(String(8), nullable=True)
 
-    passed = Column(Boolean, nullable=False)
+    # NULL unless outcome == 'judged' (migration 237): a skipped, timed-out or
+    # errored pass must not read as a pass.
+    passed = Column(Boolean, nullable=True)
+    outcome = Column(String(16), nullable=False, default="judged")
     severity = Column(String(16), nullable=False)
     violation_count = Column(Integer, nullable=False, default=0)
     violations = Column(JSONB, nullable=False, default=list)

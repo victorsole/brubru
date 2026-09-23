@@ -230,6 +230,47 @@ class TestStripOrphanCitations:
         assert "[1]" not in result
 
 
+    # Grouped markers (audit 23 Sep 2026): Gemini shipped `[1, 21, 22, 23, 24]`
+    # against 20 shown sources and the single-number pattern let it through.
+    def test_group_keeps_valid_and_strips_orphans(self, service):
+        cites = [{"title": str(i)} for i in range(20)]
+        result = service._strip_orphan_citations(
+            "Chips Act 2.0 funds pilot lines [1, 21, 22, 23, 24].", citations=cites)
+        assert result == "Chips Act 2.0 funds pilot lines [1]."
+
+    def test_group_of_only_orphans_disappears(self, service):
+        result = service._strip_orphan_citations("Text [21, 22].", citations=[{"title": "a"}])
+        assert result == "Text."
+
+    def test_run_of_separate_orphans_leaves_no_commas(self, service):
+        result = service._strip_orphan_citations(
+            "Israel association agreement [21], [22], [23].", citations=[{"title": "a"}])
+        assert result == "Israel association agreement."
+
+    def test_run_mixing_valid_and_orphan(self, service):
+        result = service._strip_orphan_citations(
+            "Text [1], [2], [30].", citations=[{"title": "a"}, {"title": "b"}])
+        assert result == "Text [1][2]."
+
+    def test_range_is_expanded_and_bounded(self, service):
+        cites = [{"title": str(i)} for i in range(3)]
+        result = service._strip_orphan_citations("Text [2-5].", citations=cites)
+        assert result == "Text [2][3]."
+
+    def test_fullwidth_group(self, service):
+        result = service._strip_orphan_citations("Text 【1，9】.", citations=[{"title": "a"}])
+        assert result == "Text [1]."
+
+    def test_group_link_label_untouched(self, service):
+        text = "See [1, 2](https://example.org) here."
+        assert service._strip_orphan_citations(text, citations=[]) == text
+
+    def test_implausible_range_untouched(self, service):
+        # A backwards or very wide range is not a citation list.
+        text = "Articles [9-2] and [1-80]."
+        assert service._strip_orphan_citations(text, citations=[{"title": "a"}]) == text
+
+
 # ---------------------------------------------------------------------------
 # _linkify_mep_names
 # ---------------------------------------------------------------------------

@@ -543,7 +543,13 @@ _VALIDATE_TRIGGER_RE = re.compile(
     # what the model is most likely to have supplied itself. Two fisheries
     # working documents were served to a client as the audiovisual review's
     # evidence base, and this pre-filter waved the answer through unvalidated.
-    r"|\b(?:SWD|COM|SEC|JOIN)\s*\(\s*\d{4}\s*\)\s*\d{1,4}\b",
+    r"|\b(?:SWD|COM|SEC|JOIN)\s*\(\s*\d{4}\s*\)\s*\d{1,4}\b"
+    # Paragraph-level article citations (audit 23 Sep 2026). "Art 4(6)" names
+    # one paragraph of one act, which is as specific and as checkable as a PE
+    # number, and a Chips Act 2.0 answer asserted exactly that unvalidated.
+    # 20 of the 121 answers skipped in the previous 30 days carried one. A bare
+    # "Article 5" stays out: it is everywhere and usually right.
+    r"|\b(?:Article|Art\.?|Art[íi]culo|Articolo|Artikel|Artigo)\s+\d{1,3}\s*\(\d{1,2}\)",
     re.IGNORECASE,
 )
 
@@ -1709,6 +1715,23 @@ class AIService:
         """
         if not message:
             return message
+
+        # Every exit below leaves a row (audit 23 Sep 2026). A skip, a timeout
+        # or a crash used to write nothing, so an answer with no verdict could
+        # have been skipped by design, timed out or broken the validator, and
+        # the audit could not tell which. Half of one day's answers had none.
+        def _record(outcome: str, result=None, reason: Optional[str] = None) -> None:
+            try:
+                from services.ai.validator_settings import VALIDATOR_SHADOW_MODE as _shadow
+                asyncio.create_task(self._log_chat_validation(
+                    query=user_message, response=message,
+                    context_length=len(context_str or ""), generator=provider_used,
+                    language=query_lang, result=result, shadow_mode=_shadow,
+                    user_id=user_id, outcome=outcome, reason=reason,
+                ))
+            except Exception as _e:  # noqa: BLE001 -- observability never breaks chat
+                logger.warning("[VALIDATOR] could not record %s outcome: %s", outcome, _e)
+
         try:
             from services.ai.validator_settings import (
                 VALIDATOR_ENABLED,
@@ -1717,12 +1740,20 @@ class AIService:
             )
             # Skip the second provider call unless the answer has a
             # checkable-fabrication surface.
-            if not (VALIDATOR_ENABLED and use_context and _response_needs_validation(message)):
+            if not VALIDATOR_ENABLED:
+                return message
+
+            if not use_context:
+                _record("skipped", reason="no_context")
+                return message
+            if not _response_needs_validation(message):
+                _record("skipped", reason="no_checkable_surface")
                 return message
 
             from services.ai.response_validator import get_response_validator
             _validator = get_response_validator()
             if not _validator.is_available:
+                _record("error", reason="validator_unavailable")
                 return message
 
             # Bounded: the validator is a SECOND provider call on the same
@@ -1789,18 +1820,13 @@ class AIService:
                 # Never let the language observation break validation logging.
                 logger.warning("[VALIDATOR] language check failed: %s", type(_e).__name__)
 
-            asyncio.create_task(
-                self._log_chat_validation(
-                    query=user_message,
-                    response=message,
-                    context_length=len(context_str),
-                    generator=provider_used,
-                    language=query_lang,
-                    result=_validation,
-                    shadow_mode=VALIDATOR_SHADOW_MODE,
-                    user_id=user_id,
-                )
-            )
+            # The validator fails soft: on its own timeout or a provider error
+            # it returns passed=True with `error` set. That is not a verdict.
+            if _validation.error:
+                _record("timeout" if _validation.error == "timeout" else "error",
+                        result=_validation, reason=_validation.error)
+            else:
+                _record("judged", result=_validation)
             if (
                 not VALIDATOR_SHADOW_MODE
                 and _validation.should_override
@@ -1820,8 +1846,10 @@ class AIService:
                 "[VALIDATOR] exceeded %ss budget -- answer kept unvalidated",
                 self.validator_timeout_s,
             )
+            _record("timeout", reason=f"caller budget {self.validator_timeout_s:g}s")
         except Exception as _e:  # noqa: BLE001
             logger.warning("validator pass failed (non-fatal): %s", _e)
+            _record("error", reason=f"{type(_e).__name__}: {_e}"[:300])
         return message
 
     def _post_process_text(
@@ -3456,6 +3484,30 @@ USER QUESTION: {user_message}
 
         return self._CELEX_LINK_RE.sub(_fix, text)
 
+    # `[1, 21, 22]`, `[21-23]`, `【1，2】`: two or more numbers, or a range, in
+    # one bracket. Not followed by `(`, which would make it a link label.
+    _GROUPED_CITATION_RE = re.compile(
+        r'([\[【])\s*(\d{1,3}(?:\s*(?:[,，;]|[-\u2013])\s*\d{1,3})+)\s*([\]】])(?!\()')
+    # `[21], [22], [23]`: separate markers joined only by commas.
+    _CITATION_RUN_RE = re.compile(
+        r'[\[【]\d{1,3}[\]】](?:\s*[,，]\s*[\[【]\d{1,3}[\]】])+(?!\()')
+
+    @staticmethod
+    def _split_citation_group(match: "re.Match") -> str:
+        """`[1, 21-23]` -> `[1][21][22][23]`. A range wider than 20, or one
+        written backwards, is not a citation list and is returned untouched."""
+        out = []
+        for part in re.split(r'\s*[,，;]\s*', match.group(2)):
+            bounds = re.split(r'\s*[-\u2013]\s*', part)
+            if len(bounds) == 2:
+                lo, hi = int(bounds[0]), int(bounds[1])
+                if hi < lo or hi - lo > 20:
+                    return match.group(0)
+                out.extend(range(lo, hi + 1))
+            else:
+                out.append(int(bounds[0]))
+        return ''.join(f'[{n}]' for n in out)
+
     def _strip_orphan_citations(self, text: str, citations: List[Dict]) -> str:
         """
         Remove [N] citation markers from AI response when they don't map
@@ -3488,6 +3540,19 @@ USER QUESTION: {user_message}
         # line numbers in a file the user cannot see. Folding rather than
         # deleting keeps a marker that IS backed by a real source.
         text = re.sub(r'([\[【])(\d+)\s*[†‡]\s*[^\]】]*([\]】])', r'\1\2\3', text)
+
+        # Split grouped markers into single ones BEFORE the bound check (audit
+        # 23 Sep 2026). Gemini cites a group, `[1, 21, 22, 23, 24]`, and writes
+        # runs of separate markers, `[21], [22], [23]`. The pattern below only
+        # matches one number between brackets, so a group reached the user
+        # whole, orphans included, and a run of orphans was stripped one marker
+        # at a time and left its commas behind (", , ."). Rewriting both shapes
+        # as adjacent single markers, `[1][21][22]`, lets every number face the
+        # bound on its own and leaves nothing to clean up. A bracket followed by
+        # `(` is a markdown link label and is left alone.
+        text = self._GROUPED_CITATION_RE.sub(self._split_citation_group, text)
+        text = self._CITATION_RUN_RE.sub(
+            lambda m: ''.join(f'[{n}]' for n in re.findall(r'\d+', m.group(0))), text)
 
         # Match [N] AND fullwidth CJK 【N】 markers (audit defect A1, 23 Jun 2026).
         # Cerebras/Gemini occasionally emit 【1】 (U+3010/U+3011) which the old
@@ -5341,9 +5406,13 @@ USER QUESTION: {user_message}
         result,
         shadow_mode: bool,
         user_id: Optional[str],
+        outcome: str = "judged",
+        reason: Optional[str] = None,
     ) -> None:
         """
-        Persist one validator pass to chat_validations.
+        Persist one validator outcome to chat_validations: judged, skipped,
+        timeout or error (migration 237). `passed` is written only for a
+        judged answer; anything else stores NULL so it cannot read as a pass.
 
         Fail-soft: any DB error is logged but never propagated. The validator
         is observability; it must not break the chat path. Workstream 1
@@ -5359,20 +5428,23 @@ USER QUESTION: {user_message}
             def _save_validation():
                 db = SessionLocal()
                 try:
+                    judged = outcome == "judged" and result is not None
+                    violations = list(result.violations) if result is not None else []
                     row = ChatValidation(
                         query=(query or "")[:VALIDATOR_QUERY_TRUNCATE],
                         response_excerpt=(response or "")[:VALIDATOR_RESPONSE_TRUNCATE],
-                        validator_model=result.validator_model,
+                        validator_model=(result.validator_model if result is not None else "") or "none",
                         generator=generator,
                         language=(language or "").lower()[:8] or None,
-                        passed=result.passed,
-                        severity=result.severity,
-                        violation_count=len(result.violations),
-                        violations=[v.to_dict() for v in result.violations],
-                        latency_ms=result.latency_ms,
+                        passed=result.passed if judged else None,
+                        outcome=outcome if result is not None or outcome != "judged" else "error",
+                        severity=result.severity if judged else outcome,
+                        violation_count=len(violations),
+                        violations=[v.to_dict() for v in violations],
+                        latency_ms=result.latency_ms if result is not None else 0,
                         context_length=context_length,
                         shadow_mode=shadow_mode,
-                        error=result.error,
+                        error=reason if reason is not None else (result.error if result is not None else None),
                         user_id=user_id if user_id else None,
                     )
                     db.add(row)
