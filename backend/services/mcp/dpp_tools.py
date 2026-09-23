@@ -242,21 +242,31 @@ def handle_ask_dpp(question: str) -> Dict[str, Any]:
     consultations = handle_dpp_consultations(
         query=terms[0] if terms else q, limit=4).get("consultations", [])
 
-    # National draft rules (TRIS) in the passport's domain that match the
-    # question's terms, open standstills first.
-    tris_where = " OR ".join(
-        f"title ILIKE :t{i} OR main_content ILIKE :t{i} OR products_or_services ILIKE :t{i}"
-        for i in range(len(terms)))
-    tparams = {f"t{i}": f"%{t}%" for i, t in enumerate(terms)}
-    tparams["rx"] = _TRIS_DPP_RX
-    tris = _rows(
-        "SELECT notification_number AS reference, notifying_country AS country, title, "
-        "notification_date AS notified, standstill_until, "
-        "(standstill_until >= current_date) AS standstill_open, source_url "
-        "FROM tris_notifications WHERE (title || ' ' || coalesce(products_or_services,'') || ' ' "
-        "|| coalesce(main_content,'') || ' ' || coalesce(full_text_summary,'')) ~* :rx "
-        f"AND ({tris_where}) ORDER BY (standstill_until >= current_date) DESC NULLS LAST, "
-        "notification_date DESC LIMIT 4", tparams) if terms else []
+    # National draft rules (TRIS) in the passport's domain, ranked by how many
+    # of the question's (English-mapped) terms they match; a named country is
+    # a filter, not a hint. Open standstills first among equals.
+    tterms, tcountry = _tris_query(q)
+    tris: List[Dict[str, Any]] = []
+    if tterms or tcountry:
+        blob = ("(title || ' ' || coalesce(products_or_services,'') || ' ' || coalesce(main_content,'') "
+                "|| ' ' || coalesce(full_text_summary,''))")
+        tparams: Dict[str, Any] = {f"t{i}": f"%{t}%" for i, t in enumerate(tterms)}
+        tparams["rx"] = _TRIS_DPP_RX
+        hits = " + ".join(f"(CASE WHEN {blob} ILIKE :t{i} THEN 1 ELSE 0 END)"
+                          for i in range(len(tterms))) or "0"
+        cond = [f"{blob} ~* :rx"]
+        if tterms:
+            cond.append("(" + " OR ".join(f"{blob} ILIKE :t{i}" for i in range(len(tterms))) + ")")
+        if tcountry:
+            cond.append("notifying_country = :c")
+            tparams["c"] = tcountry
+        tris = _rows(
+            "SELECT notification_number AS reference, notifying_country AS country, title, "
+            "notification_date AS notified, standstill_until, "
+            "(standstill_until >= current_date) AS standstill_open, source_url "
+            f"FROM tris_notifications WHERE {' AND '.join(cond)} "
+            f"ORDER BY ({hits}) DESC, (standstill_until >= current_date) DESC NULLS LAST, "
+            "notification_date DESC LIMIT 4", tparams)
 
     if not found and not consultations and not tris:
         return {
@@ -558,6 +568,42 @@ _TRIS_DPP_RX = (r"textil|footwear|apparel|garment|clothing|packag|waste|recycl|e
                 r"eco-design|product passport|digital product|product traceab|"
                 r"supply.chain traceab|extended producer|unsold|batter|circular econom|"
                 r"repairab|reparab|right to repair|durabilit")
+
+
+# TRIS texts are in English; Terraqui asks in Catalan and Spanish. The generic
+# term extraction keeps the question's own words (and only eight of them), so a
+# Catalan question about the "Reial Decret espanyol de productes tèxtils i
+# calçat" matched an Estonian regulation (23 Sep 2026). These map the domain
+# nouns and country names that matter for TRIS in the six Brubru languages.
+_TRIS_WORDS = {
+    "textile": ("tèxtil", "textil", "textile", "tessil", "textiel"),
+    "footwear": ("calçat", "calzado", "chaussure", "calzatur", "schoeisel", "footwear", "shoe"),
+    "packaging": ("envàs", "envasos", "envase", "embalaj", "emballage", "imballagg", "verpakking", "packag"),
+    "waste": ("residu", "déchet", "dechet", "rifiut", "afval", "waste"),
+    "decree": ("decret", "decreto", "décret", "decreet", "decree"),
+    "battery": ("bateri", "batteri", "battery"),
+    "recycl": ("reciclat", "reciclaj", "recycl", "riciclag"),
+    "extended producer": ("responsabilitat ampliada", "responsabilidad ampliada", "responsabilité élargie",
+                          "responsabilità estesa", "uitgebreide producentenverantwoordelijkheid",
+                          "extended producer"),
+}
+_TRIS_COUNTRIES = {
+    "ES": ("espany", "españ", "espagn", "spagn", "spaans", "spanje", "spain", "spanish"),
+    "FR": ("frança", "francia", "francès", "francés", "français", "frankrijk", "france", "french"),
+    "IT": ("itàlia", "itali", "italie", "italy"),
+    "NL": ("holanda", "països baixos", "países bajos", "pays-bas", "paesi bassi", "nederland", "netherlands", "dutch"),
+    "DE": ("alemany", "aleman", "allemagne", "germania", "duitsland", "germany", "german"),
+    "PT": ("portugal", "portogallo", "portugu"),
+    "BE": ("bèlgica", "bélgica", "belgique", "belgio", "belgi", "belgium"),
+}
+
+
+def _tris_query(question: str) -> Tuple[List[str], Optional[str]]:
+    """(English TRIS terms, ISO country or None) for a question in any of six languages."""
+    ql = (question or "").lower()
+    terms = [en for en, forms in _TRIS_WORDS.items() if any(f in ql for f in forms)]
+    country = next((c for c, forms in _TRIS_COUNTRIES.items() if any(f in ql for f in forms)), None)
+    return terms, country
 
 
 def handle_dpp_tris(query: Optional[str] = None, country: Optional[str] = None,

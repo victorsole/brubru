@@ -93,3 +93,21 @@ def test_updates_list_upcoming_events_soonest_first():
     assert up == sorted(up)
     flags = [e["upcoming"] for e in ev]
     assert flags == sorted(flags, reverse=True)       # all upcoming before any past
+
+
+def test_tris_query_maps_six_languages_and_countries():
+    from services.mcp.dpp_tools import _tris_query
+    assert _tris_query("Reial Decret espanyol de productes tèxtils i calçat") == (["textile", "footwear", "decree"], "ES")
+    assert _tris_query("décret français sur les emballages") == (["packaging", "decree"], "FR")
+    assert _tris_query("imballaggi e rifiuti in Italia")[1] == "IT"
+
+
+def test_tris_query_substring_traps():
+    from services.mcp.dpp_tools import _tris_query
+    # "representative", "rapporteur", "franchise" must not add terms or a country
+    assert _tris_query("the rapporteur's representative on franchise rules") == ([], None)
+
+
+def test_catalan_question_finds_the_spanish_textile_decree():
+    out = handle_ask_dpp("Quin és l'estat del Reial Decret espanyol de productes tèxtils i calçat?")
+    assert out["national_draft_rules_tris"][0]["reference"] == "2026/0266/ES"
