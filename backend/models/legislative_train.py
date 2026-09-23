@@ -211,6 +211,9 @@ class LegislativeCarriage(Base):
     # committee vote that had already taken place (migration 225).
     oeil_forecasts = Column(JSON, default=[])
     rapporteur_name = Column(String)
+    # Every rapporteur, OEIL order: [{name, group, committee, appointed}] (migration 236).
+    # rapporteur_name is the first; a Rule 58 joint file has one per committee.
+    rapporteurs = Column(JSONB, nullable=True)
     rapporteur_appointed = Column(Date)
     # NULL = the procedure page has never been parsed, so lead_committee is still
     # the positional guess from the OEIL feed. Load-bearing: the sync uses it to

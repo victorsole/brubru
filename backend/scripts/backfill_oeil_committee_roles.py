@@ -54,6 +54,7 @@ UPDATE legislative_carriages SET
     opinion_committees   = :opinions,
     committees           = :all_committees,
     rapporteur_name      = COALESCE(:rapporteur, rapporteur_name),
+    rapporteurs          = COALESCE(CAST(:rapporteurs AS jsonb), rapporteurs),
     rapporteur_appointed = COALESCE(CAST(:appointed AS date), rapporteur_appointed),
     oeil_forecasts       = CAST(:forecasts AS json),
     oeil_roles_parsed_at = now()
@@ -153,6 +154,7 @@ def main() -> int:
                     "all_committees": facts.all_committees,
                     "rapporteur": facts.rapporteur_name,
                     "appointed": facts.rapporteur_appointed,
+                    "rapporteurs": json.dumps(facts.rapporteurs) if facts.rapporteurs else None,
                     "forecasts": json.dumps(facts.forecasts),
                 })
 

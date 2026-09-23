@@ -68,6 +68,11 @@ class ProcedureFacts:
     opinion_committees: List[str] = field(default_factory=list)
     rapporteur_name: Optional[str] = None
     rapporteur_appointed: Optional[date] = None
+    # EVERY rapporteur of the responsible committee(s), in OEIL's order (23 Sep
+    # 2026). `rapporteur_name` is the first one and stays for its readers; a
+    # Rule 58 file has one per joint committee, and the single column could only
+    # ever show one of them. Items: {name, group, committee, appointed}.
+    rapporteurs: List[dict] = field(default_factory=list)
     key_events: List[dict] = field(default_factory=list)
     forecasts: List[dict] = field(default_factory=list)
 
@@ -171,6 +176,34 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
         if m:
             facts.rapporteur_name = f"{m.group(1).strip()} {m.group(2).strip()}"
             facts.rapporteur_appointed = _parse_date(head[m.end():m.end() + 40])
+        # All of them, each tied to the committee code that precedes it.
+        #
+        # Only a JOINT (Rule 58) file has more than one: one per joint
+        # committee, each with an appointment date. The first version took every
+        # "SURNAME Firstname (GROUP)" in the block and recorded up to 23 names
+        # on delegated-act and resolution files (the MEPs who tabled motions,
+        # undated) and every opinion rapporteur on budget files. So: on a joint
+        # file, the first DATED rapporteur of each joint committee; on any other
+        # file, the one rapporteur `rapporteur_name` already holds.
+        found = []
+        for mm in re.finditer(r"\b([A-ZÀ-Þ][A-ZÀ-Þ'\-]{1,}(?:\s+[A-ZÀ-Þ'\-]{2,})*)\s+"
+                              r"([A-ZÀ-Þ][a-zà-ÿ'\-]+(?:\s+[A-ZÀ-Þ][a-zà-ÿ'\-]+)*)\s*\(([^)]{1,20})\)", head):
+            before = _codes_in(head[:mm.start()])
+            appointed = _parse_date(head[mm.end():mm.end() + 40])
+            found.append({
+                "name": f"{mm.group(1).strip()} {mm.group(2).strip()}",
+                "group": mm.group(3).strip(),
+                "committee": before[-1] if before else facts.responsible_committee,
+                "appointed": appointed.isoformat() if appointed else None,
+            })
+        if facts.joint_committee and len(facts.responsible_committees) > 1:
+            for code in facts.responsible_committees:
+                first = next((f for f in found if f["committee"] == code and f["appointed"]), None)
+                if first and all(first["name"] != r["name"] for r in facts.rapporteurs):
+                    facts.rapporteurs.append(first)
+        elif found and facts.rapporteur_name:
+            first = next((f for f in found if f["name"] == facts.rapporteur_name), found[0])
+            facts.rapporteurs = [first]
 
     # --- events vs forecasts ---------------------------------------------
     # Two different claims about the world. "Key events" is what HAPPENED;

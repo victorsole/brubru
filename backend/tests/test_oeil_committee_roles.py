@@ -204,3 +204,50 @@ def test_the_model_exposes_the_guard_column():
     from models.legislative_train import LegislativeCarriage
     for col in ("oeil_roles_parsed_at", "rapporteur_name", "oeil_forecasts"):
         assert hasattr(LegislativeCarriage, col), f"model is missing {col}"
+
+
+# --- every rapporteur of a joint file (23 Sep 2026) --------------------------
+_JOINT = """Key players
+European Parliament
+Joint committee responsible Rapporteur Appointed
+INTA International Trade CAVAZZINI Anna (Greens/EFA) 29/04/2026
+ITRE Industry, Research and Energy GRUDLER Christophe (Renew) 29/04/2026
+IMCO Internal Market and Consumer Protection JOUVET Pierre (S&D) 29/04/2026
+Shadow rapporteur SOKOL Tomislav (EPP) GOTINK Dirk (EPP)
+Committee for opinion Rapporteur for opinion Appointed
+ENVI Environment, Climate and Food Safety ANDROUËT Mathilde (PfE) 26/05/2026
+Key events
+04/03/2026 Legislative proposal published
+"""
+
+_SINGLE_WITH_TABLERS = """Key players
+European Parliament
+Committee responsible Rapporteur Appointed
+ITRE Industry, Research and Energy JARUBAS Adam (EPP)
+SARDONE Silvia (PfE) BORCHIA Paolo (PfE) CIRIANI Alessandro (ECR) 18/09/2025
+Key events
+18/09/2025 Committee referral announced in Parliament
+"""
+
+
+def test_joint_file_keeps_one_dated_rapporteur_per_committee():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    f = parse_procedure_text(_JOINT)
+    assert f.joint_committee
+    assert [(r["name"], r["committee"], r["group"]) for r in f.rapporteurs] == [
+        ("CAVAZZINI Anna", "INTA", "Greens/EFA"),
+        ("GRUDLER Christophe", "ITRE", "Renew"),
+        ("JOUVET Pierre", "IMCO", "S&D"),
+    ]
+    assert f.rapporteur_name == "CAVAZZINI Anna"  # the legacy column is unchanged
+    assert all(r["appointed"] == "2026-04-29" for r in f.rapporteurs)
+    # Neither shadows nor the opinion rapporteur are co-rapporteurs.
+    assert not {"SOKOL Tomislav", "ANDROUËT Mathilde"} & {r["name"] for r in f.rapporteurs}
+
+
+def test_non_joint_file_never_lists_motion_tablers_as_rapporteurs():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    f = parse_procedure_text(_SINGLE_WITH_TABLERS)
+    assert [r["name"] for r in f.rapporteurs] == [f.rapporteur_name]

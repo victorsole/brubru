@@ -1075,50 +1075,64 @@ async def get_carriage_key_players(
             # Transform nested OEIL structure into flat array
             key_players_list = []
 
-            # Extract rapporteur from committee_responsible
+            # Responsible committees, then opinion committees (23 Sep 2026).
+            #
+            # On a Rule 58 joint file OEIL's scraper puts the FIRST joint
+            # committee under committee_responsible and the others under
+            # committees_opinion, each tagged role="responsible". Reading only
+            # the first block labelled two of the Industrial Accelerator Act's
+            # three co-rapporteurs "Opinion Rapporteur", and dropped all 19
+            # shadows, which OEIL lists under the last joint committee.
+            def _player(person, role):
+                return {
+                    "name": person.get("name"),
+                    "role": role,
+                    "political_group": person.get("political_group"),
+                    "country": person.get("country"),
+                    "mep_id": person.get("mep_id"),
+                    "photo_url": person.get("photo_url"),
+                }
+
+            entries = []
             committee_responsible = oeil_key_players.get("committee_responsible")
             if isinstance(committee_responsible, dict):
-                rapporteur = committee_responsible.get("rapporteur")
-                committee_code = committee_responsible.get("code", "")
-
-                if isinstance(rapporteur, dict) and rapporteur.get("name"):
-                    key_players_list.append({
-                        "name": rapporteur.get("name"),
-                        "role": f"Rapporteur ({committee_code})" if committee_code else "Rapporteur",
-                        "political_group": rapporteur.get("political_group"),
-                        "country": rapporteur.get("country"),
-                        "mep_id": rapporteur.get("mep_id"),
-                        "photo_url": rapporteur.get("photo_url"),
-                    })
-
-                # Extract shadow rapporteurs
-                shadows = committee_responsible.get("shadow_rapporteurs", [])
-                for shadow in shadows:
-                    if isinstance(shadow, dict) and shadow.get("name"):
-                        key_players_list.append({
-                            "name": shadow.get("name"),
-                            "role": f"Shadow Rapporteur ({committee_code})" if committee_code else "Shadow Rapporteur",
-                            "political_group": shadow.get("political_group"),
-                            "country": shadow.get("country"),
-                            "mep_id": shadow.get("mep_id"),
-                            "photo_url": shadow.get("photo_url"),
-                        })
-
-            # Extract rapporteurs from opinion committees
-            for committee in oeil_key_players.get("committees_opinion", []):
+                entries.append((committee_responsible, "responsible"))
+            for committee in oeil_key_players.get("committees_opinion", []) or []:
                 if isinstance(committee, dict):
-                    rapporteur = committee.get("rapporteur")
-                    committee_code = committee.get("code", "")
+                    entries.append((committee, "responsible" if committee.get("role") == "responsible" else "opinion"))
 
-                    if isinstance(rapporteur, dict) and rapporteur.get("name"):
-                        key_players_list.append({
-                            "name": rapporteur.get("name"),
-                            "role": f"Opinion Rapporteur ({committee_code})" if committee_code else "Opinion Rapporteur",
-                            "political_group": rapporteur.get("political_group"),
-                            "country": rapporteur.get("country"),
-                            "mep_id": rapporteur.get("mep_id"),
-                            "photo_url": rapporteur.get("photo_url"),
-                        })
+            responsible = [c for c, kind in entries if kind == "responsible"]
+            joint = len(responsible) > 1
+            seen_shadows = set()
+            shadows_out = []
+            for committee in responsible:
+                code = committee.get("code", "")
+                rapporteur = committee.get("rapporteur")
+                if isinstance(rapporteur, dict) and rapporteur.get("name"):
+                    label = "Co-rapporteur" if joint else "Rapporteur"
+                    key_players_list.append(_player(rapporteur, f"{label} ({code})" if code else label))
+                for shadow in committee.get("shadow_rapporteurs", []) or []:
+                    if not (isinstance(shadow, dict) and shadow.get("name")):
+                        continue
+                    key = shadow.get("mep_id") or shadow.get("name")
+                    if key in seen_shadows:
+                        continue
+                    seen_shadows.add(key)
+                    if joint:
+                        role = "Shadow Rapporteur (joint committee)"
+                    else:
+                        role = f"Shadow Rapporteur ({code})" if code else "Shadow Rapporteur"
+                    shadows_out.append(_player(shadow, role))
+            key_players_list.extend(shadows_out)
+
+            for committee, kind in entries:
+                if kind != "opinion":
+                    continue
+                code = committee.get("code", "")
+                rapporteur = committee.get("rapporteur")
+                if isinstance(rapporteur, dict) and rapporteur.get("name"):
+                    key_players_list.append(_player(
+                        rapporteur, f"Opinion Rapporteur ({code})" if code else "Opinion Rapporteur"))
 
             # Add Commission DG if available and has meaningful content
             commission_dg = oeil_key_players.get("commission_dg")

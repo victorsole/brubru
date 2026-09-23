@@ -111,8 +111,16 @@ def _fetch(ref: str, fetcher) -> str:
     return re.sub(r"[ \t]+", " ", r.text or "")
 
 
-def candidates(conn, only_ref: Optional[str]) -> List[Tuple[str, str, str, str]]:
-    """(ref, title, stored status, earliest future forecast)."""
+def candidates(conn, only_ref: Optional[str], by_stored_status: bool = False) -> List[Tuple[str, str, str, str]]:
+    """(ref, title, stored status, earliest future forecast or 'stored OEIL: ...').
+
+    Default: a finished status contradicted by a FUTURE forecast.
+    --by-stored-status (23 Sep 2026) adds a finished status contradicted by the
+    OEIL Status line we already stored ("Awaiting final decision", "Awaiting
+    Council's 1st reading position" ...). The forecast test alone left about
+    seventy such files out: many unfinished procedures carry no forecast at all.
+    Either way every candidate is re-checked against LIVE OEIL before a write.
+    """
     today = dt.date.today().isoformat()
     rows = conn.execute(text("""
         SELECT oeil_procedure_ref, title, current_status, oeil_forecasts
@@ -133,6 +141,22 @@ def candidates(conn, only_ref: Optional[str]) -> List[Tuple[str, str, str, str]]
                         if d and d > today)
         if future:
             out.append((r.oeil_procedure_ref, str(r.title or ""), r.current_status, future[0]))
+    if by_stored_status:
+        seen = {c[0] for c in out}
+        for r in conn.execute(text("""
+            SELECT oeil_procedure_ref, title, current_status, oeil_text_body
+              FROM legislative_carriages
+             WHERE oeil_procedure_ref IS NOT NULL
+               AND current_status IN ('COMPLETED', 'ADOPTED')
+               AND oeil_text_body IS NOT NULL
+        """)):
+            if r.oeil_procedure_ref in seen or (only_ref and r.oeil_procedure_ref != only_ref):
+                continue
+            m = re.search(r"Status\s+(.+?)(?:\s{2,}|$)", r.oeil_text_body or "")
+            stored_oeil = (m.group(1).strip() if m else "")
+            if stored_oeil and not any(f in stored_oeil.lower() for f in _FINISHED):
+                out.append((r.oeil_procedure_ref, str(r.title or ""), r.current_status,
+                            f"stored OEIL: {stored_oeil[:40]}"))
     return sorted(out)
 
 
@@ -140,6 +164,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--apply", action="store_true", help="write the corrected statuses")
     ap.add_argument("--ref", help="only this procedure reference")
+    ap.add_argument("--by-stored-status", action="store_true",
+                    help="also select files whose stored OEIL Status line is not finished")
     a = ap.parse_args()
 
     load_dotenv(os.path.join(_BACKEND, ".env"))
@@ -147,7 +173,7 @@ def main() -> int:
     engine = create_engine(url, pool_pre_ping=True)
 
     with engine.connect() as conn:
-        cands = candidates(conn, a.ref)
+        cands = candidates(conn, a.ref, a.by_stored_status)
 
     print("CARRIAGE STATUS REPAIR  (stored status says finished, OEIL forecasts a future event)")
     print("=" * 100)

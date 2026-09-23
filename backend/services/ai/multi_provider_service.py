@@ -4,14 +4,21 @@ Multi-Provider AI Service with Fallback Chain
 Provides resilient AI chat with automatic failover.
 
 Since the 10 June 2026 OSS migration (memory/project_chat_oss_migration.md) the
-chat generator runs on a stacked chain of FREE tiers, in this order:
+chat generator runs on a stacked chain, rebuilt on 11 September 2026 after a
+request failed on all six providers at once. The order, as built in
+MultiProviderService.__init__ and reported by /api/chat/health:
 
     Cerebras gpt-oss-120b (OPEN, PRIMARY, streams, ~0.8s)
       → Gemini 2.5-flash (free tier, streams, full context)
-      → Groq qwen3.6-27b (OPEN; 12K free TPM 413s on Brubru's prompt)
-      → NVIDIA llama-3.3-70b (OPEN, full-context backstop, slow)
-      → Mistral (free, EU, open-weight; reads only ~30% of injected context)
+      → Scaleway (EU-hosted, paid but cheap: the lane that answers when both
+        free tiers are rate-limited)
+      → Mistral (free, EU; reads only ~30% of injected context)
+      → Groq qwen3.6-27b (free tier's 1,000 output-token/min cap refuses a
+        normal answer; kept for short prompts)
       → OpenAI (paid last resort)
+
+NVIDIA was removed from the chain on 11 September 2026: its model reached end
+of life (410) and no model our key can invoke streams usable content.
 
 NO ANTHROPIC. Removed 6 August 2026 by explicit decision: too expensive, and
 the open models are what Brubru runs on. The provider class was deleted, not

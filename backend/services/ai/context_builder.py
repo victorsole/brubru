@@ -4631,6 +4631,28 @@ class ContextBuilder:
                         {'name': s.get('name'), 'group': s.get('political_group')}
                         for s in shadows if isinstance(s, dict) and s.get('name')
                     ]
+            # Rule 58 joint files (23 Sep 2026): OEIL puts the other joint
+            # committees under committees_opinion with role="responsible", and
+            # lists the shadows under the LAST of them. Reading only
+            # committee_responsible told the model the Industrial Accelerator
+            # Act had one rapporteur and no shadows.
+            if not actions.get('shadow_rapporteurs'):
+                joint_shadows = []
+                for c in key_players.get('committees_opinion', []) or []:
+                    if isinstance(c, dict) and c.get('role') == 'responsible':
+                        joint_shadows += [
+                            {'name': s.get('name'), 'group': s.get('political_group')}
+                            for s in (c.get('shadow_rapporteurs') or [])
+                            if isinstance(s, dict) and s.get('name')
+                        ]
+                if joint_shadows:
+                    actions['shadow_rapporteurs'] = joint_shadows
+        co = getattr(carriage, 'rapporteurs', None)
+        if isinstance(co, list) and len(co) > 1:
+            actions['co_rapporteurs'] = [
+                {'name': r.get('name'), 'group': r.get('group'), 'committee': r.get('committee')}
+                for r in co if isinstance(r, dict) and r.get('name')
+            ]
 
         # --- Key Events (votes, debates) ---
         key_events = oeil_data.get('key_events', {})
@@ -12200,7 +12222,14 @@ class ContextBuilder:
                     actions = file['available_actions']
                     action_lines = []
 
-                    if actions.get('rapporteur_name'):
+                    if actions.get('co_rapporteurs'):
+                        co = '; '.join(
+                            f"{r['name']} ({r.get('group') or ''}, {r.get('committee') or ''})"
+                            for r in actions['co_rapporteurs'])
+                        action_lines.append(
+                            f"Joint committee file (Rule 58): {len(actions['co_rapporteurs'])} "
+                            f"co-rapporteurs of equal standing, no single rapporteur: {co}")
+                    elif actions.get('rapporteur_name'):
                         rapp = actions['rapporteur_name']
                         group = actions.get('rapporteur_group') or ''
                         comm = actions.get('rapporteur_committee') or ''
