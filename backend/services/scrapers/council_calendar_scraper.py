@@ -127,22 +127,38 @@ class CouncilCalendarScraper(BaseScraper):
         events: List[Dict[str, Any]] = []
         seen: set[str] = set()
 
+        html = ""
         try:
             result = fetch_one(
                 CALENDAR_URL, expand_accordions=False, strip_chrome=False
             )
+            if getattr(result, "ok", False):
+                html = getattr(result, "html", "") or ""
+            else:
+                logger.warning(
+                    f"[WARN] Council calendar browser fetch blocked/empty "
+                    f"(status={getattr(result, 'nav_status', None)})"
+                )
         except Exception as e:
-            logger.error(f"[ERROR] Council calendar render failed: {e}")
-            return events
+            logger.warning(f"[WARN] Council calendar render failed: {e}")
 
-        if not getattr(result, "ok", False) or not getattr(result, "html", ""):
-            logger.error(
-                f"[ERROR] Council calendar fetch blocked/empty "
-                f"(status={getattr(result, 'nav_status', None)})"
-            )
-            return events
+        # Scrape.do fallback (23 Sep 2026). consilium blocks the Railway address
+        # by IP reputation, so in production this fetch returned nothing from 24
+        # July and every Council meeting after that was missing from My EU
+        # Calendar (the Competitiveness Council of 24 Sep among them) while the
+        # same code worked from a laptop. A plain Scrape.do call (1 credit) returns
+        # the full list. Used only when the free fetch produced no meeting list.
+        if "gsc-excerpt-list__item" not in html:
+            try:
+                html = self._fetch_scrapedo(CALENDAR_URL)
+                self.last_fetch_tier = "scrapedo"
+            except Exception as e:
+                logger.error(f"[ERROR] Council calendar Scrape.do fallback failed: {e}")
+                return events
+        else:
+            self.last_fetch_tier = "browser"
 
-        soup = BeautifulSoup(result.html, "html.parser")
+        soup = BeautifulSoup(html, "html.parser")
         groups = soup.select(".gsc-excerpt-list__item")
         logger.info(f"[INFO] Found {len(groups)} Council calendar date groups")
 

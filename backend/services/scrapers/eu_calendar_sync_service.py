@@ -596,6 +596,8 @@ class EUCalendarSyncService:
 
             scraper = CouncilCalendarScraper()
             events_data = scraper.scrape_meetings(months_ahead)
+            result["scraped"] = len(events_data)
+            result["fetch_tier"] = getattr(scraper, "last_fetch_tier", None)
 
             db = self._get_db()
             try:
@@ -616,6 +618,30 @@ class EUCalendarSyncService:
             result["errors"] += 1
 
         result["duration_seconds"] = round(time.time() - start_time, 2)
+        # One sync_runs row per run (23 Sep 2026). This job failed silently in
+        # production for two months: a blocked fetch returned an empty list and
+        # an empty list read as "no new meetings". consilium always lists
+        # upcoming meetings, so zero scraped is a failure.
+        try:
+            from datetime import datetime as _dt, timezone as _tz, timedelta as _td
+            from services.sync.freshness import record_run
+            scraped = result.get("scraped", 0)
+            if scraped == 0:
+                status, err = "failed", "no Council meetings scraped (fetch blocked or page changed)"
+            elif result["errors"]:
+                status, err = "degraded", f"{result['errors']} meeting(s) failed to write"
+            else:
+                status, err = "success", None
+            _db = self._get_db()
+            try:
+                record_run(_db, source_key="council_calendar", tier="calendar", status=status,
+                           items_added=result["added"], error=err,
+                           started_at=_dt.now(_tz.utc) - _td(seconds=result["duration_seconds"]))
+            finally:
+                if self._should_close_db():
+                    _db.close()
+        except Exception as e:  # noqa: BLE001 -- bookkeeping never breaks the sync
+            logger.warning(f"[WARN] could not record council_calendar run: {e}")
         logger.info(
             f"[OK] Council: {result['added']} added, "
             f"{result['updated']} updated, {result['skipped']} skipped"

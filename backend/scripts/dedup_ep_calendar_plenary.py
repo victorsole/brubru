@@ -41,6 +41,13 @@ import psycopg2
 from dotenv import load_dotenv
 
 
+def _safe_load(fn, year):
+    try:
+        return fn(year)
+    except FileNotFoundError:
+        return []
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="perform the writes (default is dry-run)")
@@ -57,41 +64,43 @@ def main() -> int:
     conn = psycopg2.connect(url)
     cur = conn.cursor()
 
+    # Keep exactly the rows the loader emits TODAY; everything else from this
+    # source is stale (23 Sep 2026). The first version kept the earliest row of
+    # each (title, date) group and re-keyed it to the per-day PLENARY id,
+    # whatever the row was. A committee week re-keyed that way never matches the
+    # loader's `<date>_committee_week` id, so the next sync inserted it again:
+    # the script recreated the duplicates it removed. It also could not see a
+    # stale row that shares no title with its replacement, which is how four
+    # plenary days on 2-5 Nov and four on 7-10 Dec survived the 21 July calendar
+    # correction. The loader's JSON is the EP's own PDF; it decides.
+    _backend = os.path.join(_REPO_ROOT, "backend")
+    if _backend not in sys.path:
+        sys.path.insert(0, _backend)
+    from services.scrapers.ep_calendar_loader import load_ep_calendar
+    emitted = {e["external_id"] for y in (2025, 2026, 2027) for e in _safe_load(load_ep_calendar, y)}
+    if not emitted:
+        print("[ERROR] the loader emitted nothing; refusing to treat every row as stale.")
+        return 2
     cur.execute(
         """
-        SELECT title, start_date::date, array_agg(id::text ORDER BY scraped_at)
+        SELECT id::text, external_id, title, start_date::date
         FROM eu_calendar_events
         WHERE source = 'ep_calendar_json'
-        GROUP BY 1, 2
-        HAVING count(*) > 1
-        ORDER BY 2
+          AND start_date >= CURRENT_DATE
+        ORDER BY start_date
         """
     )
-    groups = cur.fetchall()
-    if not groups:
-        print("[OK] no duplicate ep_calendar_json rows; nothing to do.")
+    stale = [r for r in cur.fetchall() if r[1] not in emitted]
+    if not stale:
+        print("[OK] every future ep_calendar_json row is one the loader emits; nothing to do.")
         return 0
-
-    # array_agg on a uuid column can come back as a STRING rather than a list,
-    # in which case ids[1:] silently slices CHARACTERS and the delete list is
-    # nonsense (28 groups produced a 2072-entry list before this check existed).
-    # Assert the shape rather than trust it.
-    if not isinstance(groups[0][2], list):
-        print(f"[ERROR] array_agg returned {type(groups[0][2]).__name__}, expected list. Aborting.")
-        return 2
-
-    to_delete: list[str] = []
+    to_delete = [r[0] for r in stale]
+    groups = [(r[2], r[3], [r[0]]) for r in stale]
     to_rekey: list[tuple[str, str]] = []
-    for title, day, ids in groups:
-        if not all(len(i) == 36 for i in ids):
-            print(f"[ERROR] non-UUID ids in group {title} {day}: {ids[:2]}. Aborting.")
-            return 2
-        to_delete += ids[1:]                       # keep the earliest-scraped row
-        to_rekey.append((f"ep_{day.year}_plenary_{day.isoformat()}", ids[0]))
 
-    print(f"groups: {len(groups)}   rows to delete: {len(to_delete)}   rows to re-key: {len(to_rekey)}")
-    for title, day, ids in groups[:8]:
-        print(f"  {day}  {title}  keep 1 of {len(ids)}")
+    print(f"stale future rows (not emitted by the loader): {len(to_delete)}")
+    for _id, ext, title, day in stale:
+        print(f"  {day}  {title:34s} {ext}")
 
     # A tracked event is a promise to a user. Never delete a row someone is
     # subscribed to; move the subscription or abort.
@@ -122,14 +131,10 @@ def main() -> int:
 
     # Verify by query, not by the counters above. Silence is not success.
     cur.execute(
-        """
-        SELECT coalesce(sum(c - 1), 0) FROM (
-          SELECT institution, title, start_date, count(*) c
-          FROM eu_calendar_events WHERE source = 'ep_calendar_json'
-          GROUP BY 1, 2, 3 HAVING count(*) > 1) x
-        """
+        "SELECT external_id FROM eu_calendar_events "
+        "WHERE source = 'ep_calendar_json' AND start_date >= CURRENT_DATE"
     )
-    remaining = cur.fetchone()[0]
+    remaining = sum(1 for (ext,) in cur.fetchall() if ext not in emitted)
     print(f"[OK] deleted {deleted}, re-keyed {rekeyed}. Redundant rows remaining: {remaining}")
     return 0 if remaining == 0 else 1
 
