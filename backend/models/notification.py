@@ -56,6 +56,8 @@ class Notification(Base):
     # Timestamps
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     read_at = Column(DateTime(timezone=True), nullable=True)
+    # Set when the notification was delivered by email (migration 239, 24 Sep 2026).
+    emailed_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     user = relationship("User", back_populates="notifications")

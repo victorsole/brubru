@@ -71,6 +71,10 @@ _notification_scheduler: AsyncIOScheduler | None = None
 # Brubru, late enough that the nightly carriage sweep has finished writing.
 _CARRIAGE_HOUR = 6
 _SAVED_SEARCH_HOUR = 7
+# 24 Sep 2026: the tender digest (in-app, weekly per user) after the producers,
+# then the email channel last, so one email carries the morning's notifications.
+_TENDER_DIGEST_TIME = (7, 30)
+_EMAIL_TIME = (8, 0)
 
 
 def _run_carriage_notifier() -> dict:
@@ -155,6 +159,89 @@ def _run_saved_searches() -> dict:
     return summary
 
 
+def _run_tender_digest() -> dict:
+    """Weekly Tenderator digest, in-app. Scheduled 24 Sep 2026: the code existed
+    and ran only from an admin endpoint, so 21,298 matches reached nobody."""
+    import asyncio as _asyncio
+
+    from core.database import SessionLocal
+    from services.sync.freshness import record_run
+    from services.tenders.tender_notifications import TenderNotificationService
+
+    db = SessionLocal()
+    started = datetime.now(timezone.utc)
+    try:
+        stats = _asyncio.run(TenderNotificationService(db).send_weekly_digest())
+        record_run(db, source_key="notifications_tender_digest", tier="notifications",
+                   status="success", items_added=stats.get("users_notified"),
+                   error=(f"matches={stats.get('matches_included')} "
+                          f"skipped_recent={stats.get('skipped_recent')}"),
+                   started_at=started)
+        logger.info("[NOTIFY-SCHED] tender digest: %s", stats)
+        return stats
+    except Exception as exc:
+        db.rollback()
+        record_run(db, source_key="notifications_tender_digest", tier="notifications",
+                   status="failed", error=f"{type(exc).__name__}: {exc}", started_at=started)
+        raise
+    finally:
+        db.close()
+
+
+def _run_notification_email() -> dict:
+    """One summary email per user of unread, un-emailed notifications.
+
+    Gated by NOTIFICATION_EMAIL_ENABLED (off by default): a disabled run records
+    'skipped' with who WOULD have been emailed, never a silent success.
+    """
+    from core.database import SessionLocal
+    from services.notifications.notification_email import run as email_run
+    from services.sync.freshness import record_run
+
+    db = SessionLocal()
+    started = datetime.now(timezone.utc)
+    try:
+        summary = email_run(db)
+        if not summary.enabled:
+            status = "skipped"
+        elif summary.send_failures and not summary.emails_sent:
+            status = "failed"
+        elif summary.send_failures:
+            status = "degraded"
+        else:
+            status = "success"
+        detail = summary.line()
+        if summary.would_send:
+            detail += " | would email: " + "; ".join(summary.would_send[:10])
+        record_run(db, source_key="notifications_email", tier="notifications", status=status,
+                   items_added=summary.emails_sent, error=detail[:1000], started_at=started)
+        logger.info("[NOTIFY-SCHED] notification email: %s", detail)
+        return {"sent": summary.emails_sent, "enabled": summary.enabled}
+    except Exception as exc:
+        db.rollback()
+        record_run(db, source_key="notifications_email", tier="notifications",
+                   status="failed", error=f"{type(exc).__name__}: {exc}", started_at=started)
+        raise
+    finally:
+        db.close()
+
+
+async def _tender_digest_job() -> None:
+    try:
+        await asyncio.to_thread(_run_tender_digest)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("[NOTIFY-SCHED] tender digest failed: %s: %s",
+                     type(exc).__name__, exc, exc_info=True)
+
+
+async def _email_job() -> None:
+    try:
+        await asyncio.to_thread(_run_notification_email)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("[NOTIFY-SCHED] notification email failed: %s: %s",
+                     type(exc).__name__, exc, exc_info=True)
+
+
 async def _carriage_job() -> None:
     try:
         await asyncio.to_thread(_run_carriage_notifier)
@@ -204,6 +291,26 @@ def start_notification_scheduler() -> None:
         trigger=CronTrigger(hour=_SAVED_SEARCH_HOUR, minute=0, timezone="UTC"),
         id="saved_search_notifications",
         name="Saved search alerts",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        misfire_grace_time=3600,
+    )
+    _notification_scheduler.add_job(
+        _tender_digest_job,
+        trigger=CronTrigger(hour=_TENDER_DIGEST_TIME[0], minute=_TENDER_DIGEST_TIME[1], timezone="UTC"),
+        id="tender_digest",
+        name="Tenderator weekly digest",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        misfire_grace_time=3600,
+    )
+    _notification_scheduler.add_job(
+        _email_job,
+        trigger=CronTrigger(hour=_EMAIL_TIME[0], minute=_EMAIL_TIME[1], timezone="UTC"),
+        id="notification_email",
+        name="Notification email channel",
         replace_existing=True,
         max_instances=1,
         coalesce=True,

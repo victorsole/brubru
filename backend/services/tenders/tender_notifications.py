@@ -146,11 +146,16 @@ class TenderNotificationService:
             "emails_sent": 0
         }
 
-        # Get profiles with weekly notifications enabled
+        # Scheduled daily since 24 Sep 2026 (services/schedulers/
+        # notification_scheduler.py); the per-user guard below makes it weekly.
+        # Until then it ran only from an admin endpoint, and 21,298 matches had
+        # never reached anyone (`notified_at` set on none). The in-app digest
+        # follows the in-app switch; email goes through the notification email
+        # channel, which honours `notification_email` itself.
         query = self.db.query(TenderProfile).filter(
             and_(
                 TenderProfile.is_active == True,
-                TenderProfile.notification_email == True,
+                TenderProfile.notification_in_app == True,
                 TenderProfile.notification_frequency == "weekly"
             )
         )
@@ -160,15 +165,29 @@ class TenderNotificationService:
 
         profiles = query.all()
 
+        stats.setdefault("skipped_recent", 0)
         for profile in profiles:
-            # Get recent matches for this user
+            # Once a week per user, whatever the caller's cadence.
+            recent = self.db.query(Notification).filter(
+                and_(
+                    Notification.user_id == profile.user_id,
+                    Notification.notification_type == "tender_digest",
+                    Notification.created_at >= datetime.utcnow() - timedelta(days=6, hours=12),
+                )
+            ).first()
+            if recent and not user_id:
+                stats["skipped_recent"] += 1
+                continue
+
+            # Get recent matches for this user that no digest has carried yet
             week_ago = datetime.utcnow() - timedelta(days=7)
 
             matches = self.db.query(TenderMatch).filter(
                 and_(
                     TenderMatch.user_id == profile.user_id,
                     TenderMatch.created_at >= week_ago,
-                    TenderMatch.is_dismissed == False
+                    TenderMatch.is_dismissed == False,
+                    TenderMatch.notified_at.is_(None),
                 )
             ).order_by(desc(TenderMatch.match_score)).limit(
                 profile.max_matches_per_digest or 10
@@ -200,9 +219,13 @@ class TenderNotificationService:
                 }
             )
 
-            # TODO: Send email using email service
-            # For now, just log the digest
-            logger.info(f"Would send weekly digest to {user.email} with {len(matches)} matches")
+            # Mark exactly the matches this digest carried: `notified_at` was
+            # set on none of 21,298 matches before 24 Sep 2026.
+            now = datetime.utcnow()
+            for m in matches:
+                m.notified_at = now
+                m.notification_method = "in_app_digest"
+            self.db.commit()
 
             stats["users_notified"] += 1
             stats["matches_included"] += len(matches)
