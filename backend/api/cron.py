@@ -371,6 +371,14 @@ def _kill_process_group(proc, name: str) -> None:
             pass
 
 
+_TENDERATOR_CHAIN = (
+    "tenders_fetch", "tenders", "tenders_country_repair",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities",
+    "tenderator_translations_ted", "tenderator_translations_ft_tenders",
+    "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
+)
+
+
 def _failure_detail(stderr: str | None, stdout: str | None, returncode=None) -> str:
     """What a failed child said, for the sync_runs error column.
 
@@ -868,6 +876,30 @@ async def cron_sync_daily(
     )
 
     logger.info(f"[CRON] daily tier sync complete: {results}")
+    # Durable run rows for the Tenderator chain (24 Sep 2026). These scripts do
+    # not call record_run themselves, so the TED ingest had NO sync_runs row at
+    # all: its verdicts lived only in tender_fetch_jobs, which neither
+    # /api/sync/health nor the morning routine reads. A failed or incomplete
+    # day would have been invisible. Recorded here from the runner's result,
+    # whose failure detail now carries stdout and the return code.
+    try:
+        from services.sync.freshness import record_run
+        _db = SessionLocal()
+        try:
+            for _key in _TENDERATOR_CHAIN:
+                _res = results.get(_key)
+                if not isinstance(_res, dict):
+                    continue
+                _status = _res.get("status", "failed")
+                record_run(_db, source_key=_key, tier="daily", status=_status,
+                           error=(None if _status == "success" else
+                                  str(_res.get("stderr_tail") or _res.get("error")
+                                      or _res.get("reason") or "")[:1000]))
+        finally:
+            _db.close()
+    except Exception as e:  # noqa: BLE001 -- recording must not fail the tier
+        logger.error(f"[CRON] daily: could not record the Tenderator chain: {e}")
+
     return {"status": "success", "tier": "daily", "results": results}
 
 
@@ -1160,6 +1192,10 @@ async def cron_sync_commission_heavy(authorization: str = Header(...)):
 # A lease expires on wall-clock instead, so a wedged run self-heals on the next
 # nightly tick rather than needing a redeploy.
 _SCRAPER_HEALTH_DEADLINE_S = 20 * 60   # a healthy confirm run takes ~2.5 min
+# At most this many LIVE scraper runs a night, stalest first. Measured 24 Sep 2026:
+# 6 live checks took 138s, so ~23s each; 30 is ~11.5 minutes against the 20-minute
+# deadline. The whole set is covered in a few nights instead of never.
+_SCRAPER_HEALTH_LIVE_BUDGET = 30
 _SCRAPER_HEALTH_LEASE_S = 40 * 60      # 2x the deadline; the job runs once a day
 _scraper_health_started_at: float | None = None
 _scraper_health_tasks: set = set()
@@ -1202,8 +1238,11 @@ async def _run_scraper_health_bg() -> None:
         # DB state up front and closes the connection before the slow part, and
         # all the writing happens HERE, in the caller. An abandoned thread
         # therefore touches nothing -- it just finishes into the void.
+        # A live-check budget, so the run FINISHES. Without it the detector spent
+        # three nights in a row (21-23 Sep 2026) hitting the deadline below and
+        # storing nothing at all, because the writes happen after this await.
         results = await _asyncio.wait_for(
-            _asyncio.to_thread(sh.run, "confirm", None),
+            _asyncio.to_thread(sh.run, "confirm", None, _SCRAPER_HEALTH_LIVE_BUDGET),
             timeout=_SCRAPER_HEALTH_DEADLINE_S,
         )
         db = SessionLocal()
