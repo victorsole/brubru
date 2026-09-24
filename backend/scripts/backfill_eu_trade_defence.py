@@ -438,6 +438,7 @@ def _open_db():
 
 
 async def main_async(args):
+    _started_monotonic = time.monotonic()
     if args.fill_missing_bodies:
         # The weekly cron runs `--apply --days 21`, so it only ever hydrates acts
         # published in the last three weeks. Everything older that was listed but never
@@ -473,6 +474,16 @@ async def main_async(args):
     counts = {"upserted": 0, "body_xhtml": 0, "body_pdf": 0, "no_body": 0, "errors": 0}
     for i, row in enumerate(universe, 1):
         celex = row["celex"]
+
+        # A count-based slice is sized from a measured rate, and the rate is not constant:
+        # the newest acts come from Cellar XHTML in ~14s, while older ones fall back to a
+        # PDF fetch plus text extraction. Overrunning is not harmless -- the caller kills
+        # the process and records a timeout instead of the rows it did fetch -- so stop on
+        # the clock the caller is actually holding.
+        if args.max_seconds and (time.monotonic() - _started_monotonic) > args.max_seconds:
+            print(f"[INFO] stopping at the {args.max_seconds}s budget after {i - 1} measure(s); "
+                  f"the rest stay in the queue for the next run", flush=True)
+            break
 
         try:
             meta = await hydrate_metadata(celex)
@@ -584,6 +595,10 @@ def main():
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
     ap.add_argument("--refresh-bodies", action="store_true")
+    ap.add_argument("--max-seconds", type=int, metavar="S", default=0,
+                    help="Stop cleanly after S seconds, between measures. A slice sized by "
+                         "COUNT assumes a fetch rate; this bounds the thing the caller "
+                         "actually has, which is a timeout.")
     ap.add_argument("--fill-missing-bodies", type=int, metavar="N", default=0,
                     help="Skip the SPARQL listing: hydrate N stored measures that have no "
                          "body yet, newest first. Resumable; drains the historical backlog "

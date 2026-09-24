@@ -161,15 +161,32 @@ def test_every_status_the_data_uses_is_documented():
 SECONDS_PER_MEASURE = 15
 
 
-def test_the_body_backfill_slice_fits_its_cron_window():
-    """The weekly window can only hydrate the last 21 days, so the backlog is drained by a
-    bounded slice. Sized from a measured rate, not a guess: a slice that overruns is killed
-    mid-way and the ledger records a timeout instead of the rows it did fetch."""
+def test_the_body_backfill_is_bounded_by_time_not_by_a_guessed_rate():
+    """A slice sized from a measured rate assumes the rate holds. It does not: the newest
+    acts come from Cellar XHTML in ~14s and the older ones fall back to a PDF fetch, and
+    the backlog is made of the older ones. A run that overruns is killed, so the ledger
+    records a timeout instead of the measures it did hydrate. The bound has to be the
+    clock the caller is holding."""
     import re
 
     cron = (BACKEND / "api" / "cron.py").read_text(encoding="utf-8")
-    block = cron.split('results["trade_defence_bodies"]')[1][:400]
-    slice_n = int(re.search(r'"--fill-missing-bodies", "(\d+)"', block).group(1))
+    block = cron.split('results["trade_defence_bodies"]')[1][:500]
+    budget = int(re.search(r'"--max-seconds", "(\d+)"', block).group(1))
     timeout = int(re.search(r"timeout=(\d+)", block).group(1))
-    assert slice_n * SECONDS_PER_MEASURE < timeout * 0.75, (
-        f"{slice_n} measures x {SECONDS_PER_MEASURE}s does not fit {timeout}s with margin")
+    assert budget < timeout * 0.75, (
+        f"a {budget}s budget does not leave room inside a {timeout}s timeout")
+    # The count stays as a cap, and must not be the real limit: at the fast rate it should
+    # not be reachable within the budget, or it silently becomes the bound again.
+    slice_n = int(re.search(r'"--fill-missing-bodies", "(\d+)"', block).group(1))
+    assert slice_n * SECONDS_PER_MEASURE > budget, (
+        f"{slice_n} measures would finish inside {budget}s: the count is the real bound")
+
+
+def test_the_script_stops_between_measures_not_mid_fetch():
+    """Stopping mid-fetch would leave the measure half-written; the check sits at the top
+    of the loop, before the metadata call."""
+    src = (BACKEND / "scripts" / "backfill_eu_trade_defence.py").read_text(encoding="utf-8")
+    assert "args.max_seconds" in src
+    loop = src.split("for i, row in enumerate(universe, 1):")[1][:900]
+    assert loop.index("args.max_seconds") < loop.index("hydrate_metadata"), (
+        "the budget is checked after the fetch has already been paid for")

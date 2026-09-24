@@ -1371,12 +1371,15 @@ async def cron_sync_weekly(
     # nothing was ever going to hydrate it, and the note above sent the job to a manual
     # backfill queue that no one runs. This drains it a bounded slice at a time, newest
     # first, and is resumable by construction: a measure leaves the queue once it has a
-    # body, so a killed run costs only the slice it was on. Sized from a measured rate:
-    # 25 measures took 354s (14.2s each, 25/25 hydrated), so 80 is ~20 minutes and sits
-    # inside the 30-minute timeout with a third of it spare.
+    # body, so a killed run costs only the slice it was on. Bounded by TIME, not by a
+    # count: 25 recent measures took 354s (14.2s each) from Cellar XHTML, but the older
+    # ones fall back to a PDF fetch plus text extraction and are slower, so a slice sized
+    # from that rate would overrun on exactly the acts this backlog is made of. The count
+    # is a generous cap; --max-seconds is the bound that matches the caller's timeout, and
+    # it stops between measures so the run ends with a verdict instead of being killed.
     results["trade_defence_bodies"] = await _run_script_async(
         "trade_defence_bodies", "scripts/backfill_eu_trade_defence.py",
-        ["--apply", "--fill-missing-bodies", "80"], timeout=1800)
+        ["--apply", "--fill-missing-bodies", "300", "--max-seconds", "1200"], timeout=1800)
     # MEPs, political groups and group memberships from HowTheyVote. Nothing ran this: the
     # tables had been empty since migration 014 created them, because the groups step died
     # on a 63-character label in a VARCHAR(20) and took the whole transaction with it
