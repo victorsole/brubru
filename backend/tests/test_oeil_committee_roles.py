@@ -251,3 +251,100 @@ def test_non_joint_file_never_lists_motion_tablers_as_rapporteurs():
 
     f = parse_procedure_text(_SINGLE_WITH_TABLERS)
     assert [r["name"] for r in f.rapporteurs] == [f.rapporteur_name]
+
+
+# --- 24 Sep 2026: names outside Latin-1, hyphenated first names, same-committee
+# co-rapporteurs, former rapporteurs, motion files. Layouts copied from real
+# OEIL pages stored in legislative_carriages.oeil_text_body.
+
+def _page(block: str, ref: str = "") -> str:
+    return (f"Basic information {ref} Key players European Parliament "
+            f"Committee responsible Rapporteur Appointed {block} "
+            "Key events 01/01/2026 Committee referral announced in Parliament")
+
+
+def test_names_outside_latin1_are_parsed():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    for name in ("BŽOCH Jaroslav", "ZŁOTOWSKI Kosma", "BUŞOI Cristian-Silviu",
+                 "CIFROVÁ OSTRIHOŇOVÁ Veronika", "THUN UND HOHENSTEIN Róża",
+                 "ȘTEFĂNUȚĂ Nicolae", "NEMEC Matjaž"):
+        f = parse_procedure_text(_page(f"LIBE Civil Liberties {name} (ECR) 03/02/2025"))
+        assert f.rapporteur_name == name, name
+        assert [r["name"] for r in f.rapporteurs] == [name]
+        assert f.rapporteurs[0]["appointed"] == "2025-02-03"
+
+
+def test_hyphenated_first_names_are_parsed():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    for name in ("CAVADA Jean-Marie", "GERBRANDY Gerben-Jan",
+                 "LEITÃO-MARQUES Maria-Manuel", "STRACK-ZIMMERMANN Marie-Agnes"):
+        f = parse_procedure_text(_page(f"JURI Legal Affairs {name} (Renew) 14/03/2016"))
+        assert f.rapporteur_name == name, name
+
+
+def test_two_rapporteurs_in_one_committee():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    f = parse_procedure_text(_page(
+        "AFET Foreign Affairs ZOVKO Željana (EPP) PICULA Tonino (S&D) "
+        "15/07/2019 15/07/2019 Shadow rapporteur KYUCHYUK Ilhan (Renew)"),
+        "2018/0247(COD)")
+    assert [(r["name"], r["committee"], r["appointed"]) for r in f.rapporteurs] == [
+        ("ZOVKO Željana", "AFET", "2019-07-15"),
+        ("PICULA Tonino", "AFET", "2019-07-15"),
+    ]
+    assert f.rapporteur_name == "ZOVKO Željana"
+    assert str(f.rapporteur_appointed) == "2019-07-15"
+
+
+def test_a_former_rapporteur_is_never_current():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    f = parse_procedure_text(_page(
+        "ECON Economic and Monetary Affairs MUREŞAN Siegfried (EPP) 12/09/2024 "
+        "Former committee responsible Former committee responsible Former rapporteur "
+        "Appointed ECON Economic and Monetary Affairs KARAS Othmar (EPP) 29/02/2024"),
+        "2015/0270(COD)")
+    assert f.rapporteur_name == "MUREŞAN Siegfried"
+    assert [r["name"] for r in f.rapporteurs] == ["MUREŞAN Siegfried"]
+
+
+def test_motion_tablers_with_dates_are_not_corapporteurs():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    block = ("ITRE Industry, Research and Energy JARUBAS Adam (EPP) KNOTEK Ondřej (PfE) "
+             "SARDONE Silvia (PfE) 18/09/2025 18/09/2025 18/09/2025")
+    motion = parse_procedure_text(_page(block), "2025/2809(DEA)")
+    assert [r["name"] for r in motion.rapporteurs] == ["JARUBAS Adam"]
+    # The same shape on a report-type procedure IS three co-rapporteurs.
+    report = parse_procedure_text(_page(block), "2025/0130(COD)")
+    assert len(report.rapporteurs) == 3
+
+
+def test_joint_motion_file_keeps_one_name():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    page = ("Basic information 2025/2806(DEA) Key players European Parliament "
+            "Joint committee responsible Rapporteur Appointed "
+            "ECON Economic and Monetary Affairs EICKHOUT Bas (Greens/EFA) 10/10/2025 "
+            "ENVI Environment MATTHIEU Sara (Greens/EFA) 10/10/2025 "
+            "Key events 01/01/2026 Committee referral announced in Parliament")
+    f = parse_procedure_text(page, "2025/2806(DEA)")
+    assert [r["name"] for r in f.rapporteurs] == ["EICKHOUT Bas"]
+
+
+def test_joint_file_never_lists_a_former_rapporteur():
+    from services.scrapers.oeil_procedure_parser import parse_procedure_text
+
+    # ITRE has no current rapporteur; its former one must not fill the gap.
+    page = ("Basic information 2026/0099(COD) Key players European Parliament "
+            "Joint committee responsible Rapporteur Appointed "
+            "INTA International Trade CAVAZZINI Anna (Greens/EFA) 29/04/2026 "
+            "ITRE Industry, Research and Energy "
+            "Former committee responsible Former rapporteur Appointed "
+            "ITRE Industry, Research and Energy KARAS Othmar (EPP) 29/02/2024 "
+            "Key events 01/01/2026 Committee referral announced in Parliament")
+    f = parse_procedure_text(page, "2026/0099(COD)")
+    assert [r["name"] for r in f.rapporteurs] == ["CAVAZZINI Anna"]

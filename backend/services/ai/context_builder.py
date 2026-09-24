@@ -12232,8 +12232,15 @@ class ContextBuilder:
                         co = '; '.join(
                             f"{r['name']} ({r.get('group') or ''}, {r.get('committee') or ''})"
                             for r in actions['co_rapporteurs'])
+                        # Two layouts (24 Sep 2026): a Rule 58 joint file has one
+                        # rapporteur per committee; several rapporteurs appointed
+                        # in ONE committee is not a joint file and must not be
+                        # called one.
+                        comms = {r.get('committee') for r in actions['co_rapporteurs']}
+                        kind = ("Joint committee file (Rule 58)" if len(comms) > 1
+                                else f"Co-rapporteurs in one committee ({next(iter(comms)) or ''})")
                         action_lines.append(
-                            f"Joint committee file (Rule 58): {len(actions['co_rapporteurs'])} "
+                            f"{kind}: {len(actions['co_rapporteurs'])} "
                             f"co-rapporteurs of equal standing, no single rapporteur: {co}")
                     elif actions.get('rapporteur_name'):
                         rapp = actions['rapporteur_name']

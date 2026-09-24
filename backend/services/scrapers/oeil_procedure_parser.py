@@ -117,7 +117,57 @@ def _parse_date(s: str) -> Optional[date]:
         return None
 
 
-def parse_procedure_text(text: str) -> ProcedureFacts:
+# MEP names as OEIL writes them: "SURNAME Firstname". Built from Unicode rather
+# than [A-ZÀ-Þ] / [a-zà-ÿ], which is Latin-1 only (24 Sep 2026). That range has
+# no Ž Š Č Ř Ł Ś Ń Ş Ő Ň, so 106 MEPs (BŽOCH, ŠAREC, ZŁOTOWSKI, CIFROVÁ
+# OSTRIHOŇOVÁ, BUŞOI...) never matched, and 13 more failed on a hyphenated first
+# name ("Jean-Marie", "Gerben-Jan", "Cristian-Silviu") because the first-name
+# class allowed a hyphen but no capital after it.
+_UP = "".join(chr(c) for c in range(0x41, 0x250) if chr(c).isupper() and chr(c).isalpha())
+_LO = "".join(chr(c) for c in range(0x61, 0x250) if chr(c).islower() and chr(c).isalpha())
+_FIRST = rf"[{_UP}][{_LO}']+(?:-[{_UP}][{_LO}']+)*"
+_NAME = (rf"\b([{_UP}][{_UP}'\-]{{1,}}(?:\s+[{_UP}'\-]{{2,}})*)\s+"
+         rf"({_FIRST}(?:\s+{_FIRST})*)")
+
+
+_MOTION_TYPES = {"RSP", "RPS", "DEA"}
+
+
+def _same_committee_corapporteurs(head: str, found: List[dict], first: dict) -> List[dict]:
+    """Two or more rapporteurs appointed in ONE committee (24 Sep 2026).
+
+    Not a Rule 58 joint file: OEIL writes them as consecutive names followed by
+    the same number of dates, "ZOVKO Zeljana (EPP) PICULA Tonino (S&D)
+    15/07/2019 15/07/2019". Only that exact shape counts: k back-to-back names
+    AND exactly k dates straight after them. MEPs who tabled motions on
+    delegated-act and resolution files are listed undated, so they never
+    match, which was the reason the list was narrowed to one on 23 Sep.
+    Returns [] when the shape is absent.
+    """
+    try:
+        i = found.index(first)
+    except ValueError:
+        return []
+    run = [found[i]]
+    for nxt in found[i + 1:]:
+        if head[run[-1]["_span"][1]:nxt["_span"][0]].strip():
+            break
+        run.append(nxt)
+    if len(run) < 2:
+        return []
+    tail = head[run[-1]["_span"][1]:]
+    dates = re.match(r"\s*((?:\d{2}/\d{2}/\d{4}\s*)+)", tail)
+    stamps = re.findall(r"\d{2}/\d{2}/\d{4}", dates.group(1)) if dates else []
+    if len(stamps) != len(run):
+        return []
+    out = []
+    for person, stamp in zip(run, stamps):
+        d = _parse_date(stamp)
+        out.append({**person, "appointed": d.isoformat() if d else None})
+    return out
+
+
+def parse_procedure_text(text: str, procedure_ref: Optional[str] = None) -> ProcedureFacts:
     """Extract committees, rapporteur and the event/forecast split.
 
     `text` is the flattened procedure page (`legislative_carriages.oeil_text_body`).
@@ -170,9 +220,11 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
     # block. Take the FIRST such match: later ones are shadow rapporteurs, and
     # attributing a shadow's name to the file is its own fabrication.
     if resp:
-        head = resp.split("Shadow rapporteur")[0]
-        m = re.search(r"\b([A-ZÀ-Þ][A-ZÀ-Þ'\-]{1,}(?:\s+[A-ZÀ-Þ'\-]{2,})*)\s+"
-                      r"([A-ZÀ-Þ][a-zà-ÿ'\-]+(?:\s+[A-ZÀ-Þ][a-zà-ÿ'\-]+)*)\s*\(", head)
+        # The CURRENT rapporteur block only: a replaced rapporteur follows
+        # "Former committee responsible" / "Former rapporteur" in the same
+        # block, and must never be read as a co-rapporteur.
+        head = re.split(r"Shadow rapporteur|Former committee responsible|Former rapporteur", resp)[0]
+        m = re.search(_NAME + r"\s*\(", head)
         if m:
             facts.rapporteur_name = f"{m.group(1).strip()} {m.group(2).strip()}"
             facts.rapporteur_appointed = _parse_date(head[m.end():m.end() + 40])
@@ -186,8 +238,7 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
         # file, the first DATED rapporteur of each joint committee; on any other
         # file, the one rapporteur `rapporteur_name` already holds.
         found = []
-        for mm in re.finditer(r"\b([A-ZÀ-Þ][A-ZÀ-Þ'\-]{1,}(?:\s+[A-ZÀ-Þ'\-]{2,})*)\s+"
-                              r"([A-ZÀ-Þ][a-zà-ÿ'\-]+(?:\s+[A-ZÀ-Þ][a-zà-ÿ'\-]+)*)\s*\(([^)]{1,20})\)", head):
+        for mm in re.finditer(_NAME + r"\s*\(([^)]{1,20})\)", head):
             before = _codes_in(head[:mm.start()])
             appointed = _parse_date(head[mm.end():mm.end() + 40])
             found.append({
@@ -195,15 +246,33 @@ def parse_procedure_text(text: str) -> ProcedureFacts:
                 "group": mm.group(3).strip(),
                 "committee": before[-1] if before else facts.responsible_committee,
                 "appointed": appointed.isoformat() if appointed else None,
+                "_span": (mm.start(), mm.end()),
             })
-        if facts.joint_committee and len(facts.responsible_committees) > 1:
+        # Motion files (RSP resolutions, RPS/DEA objections to implementing and
+        # delegated acts) list the MEPs who TABLED the motion, all with the same
+        # date, in exactly the co-rapporteur shape: 25 ITRE members on
+        # 2025/2809(DEA), and two "co-rapporteurs" on the joint objection
+        # 2025/2806(DEA). They are not rapporteurs, so on a motion file only the
+        # one name `rapporteur_name` holds is kept. The type comes from the
+        # caller's reference, else from the page's first reference (579 pages
+        # carry none, which is why the caller's is preferred).
+        ref = procedure_ref or (re.search(r"\d{4}/\d{4}[A-Z]?\([A-Z]{3}\)", flat) or [None])[0]
+        ptype = re.search(r"\(([A-Z]{3})\)", ref or "")
+        motion = bool(ptype and ptype.group(1) in _MOTION_TYPES)
+        if facts.joint_committee and len(facts.responsible_committees) > 1 and not motion:
             for code in facts.responsible_committees:
                 first = next((f for f in found if f["committee"] == code and f["appointed"]), None)
                 if first and all(first["name"] != r["name"] for r in facts.rapporteurs):
                     facts.rapporteurs.append(first)
         elif found and facts.rapporteur_name:
             first = next((f for f in found if f["name"] == facts.rapporteur_name), found[0])
-            facts.rapporteurs = [first]
+            co = [] if motion else _same_committee_corapporteurs(head, found, first)
+            facts.rapporteurs = co or [first]
+        for r in facts.rapporteurs:
+            r.pop("_span", None)
+        lead = facts.rapporteurs[0] if facts.rapporteurs else None
+        if lead and lead["name"] == facts.rapporteur_name and lead.get("appointed"):
+            facts.rapporteur_appointed = date.fromisoformat(lead["appointed"])
 
     # --- events vs forecasts ---------------------------------------------
     # Two different claims about the world. "Key events" is what HAPPENED;

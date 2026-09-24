@@ -112,7 +112,7 @@ def main() -> int:
         no_heading = pending_referral = parse_failed = 0
         samples = []
         for r in rows:
-            facts = parse_procedure_text(r.oeil_text_body)
+            facts = parse_procedure_text(r.oeil_text_body, r.oeil_procedure_ref)
             if not facts.responsible_committee and not facts.opinion_committees \
                and not facts.rapporteur_name:
                 body = r.oeil_text_body or ""
@@ -158,9 +158,25 @@ def main() -> int:
                     "forecasts": json.dumps(facts.forecasts),
                 })
 
+        # A carriage can hold a rapporteur_name while its OEIL page no longer
+        # lists Parliament's committee at all (older terms, withdrawn files:
+        # 7 on 24 Sep 2026). The parser has nothing to read there, so the list
+        # stayed empty and every reader of `rapporteurs` saw no rapporteur.
+        # Mirror the stored name, marked as such, rather than leave it blank.
+        _mirror = (
+            "UPDATE legislative_carriages SET rapporteurs = jsonb_build_array("
+            " jsonb_build_object('name', rapporteur_name, 'group', NULL,"
+            " 'committee', lead_committee, 'appointed', rapporteur_appointed,"
+            " 'source', 'stored')) "
+            "WHERE rapporteur_name IS NOT NULL "
+            "AND (rapporteurs IS NULL OR jsonb_array_length(rapporteurs) = 0)"
+            + (" AND oeil_procedure_ref = :ref" if args.ref else ""))
+        mirrored = 0
         if args.apply:
+            mirrored = conn.execute(text(_mirror), {"ref": args.ref} if args.ref else {}).rowcount
             conn.commit()
 
+        print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] mirrored_stored_rapporteur={mirrored}")
         print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] parsed={changed} "
               f"lead_committee_corrected={corrected}")
         print(f"[INFO] not parsed: no_committee_section={no_heading} "
