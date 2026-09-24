@@ -127,7 +127,7 @@ Returns every Commission Implementing Regulation in Cellar that imposes, amends,
 
 **Input**
 - `measure_type` (string, optional) — `anti_dumping`, `countervailing`, `safeguard`, `registration`, `other`.
-- `duty_status` (string, optional) — `definitive`, `provisional`, `initiation`, `review`, `expiry_review`, `interim_review`, `amendment`, `termination`, `suspension`.
+- `duty_status` (string, optional) — `definitive`, `provisional`, `initiation`, `registration`, `review`, `expiry_review`, `interim_review`, `amendment`, `termination`, `suspension`, `other`. An act that OPENS a proceeding is `initiation`, even when it also orders registration of the imports concerned; `registration` is for the regulations whose purpose is the registration itself.
 - `target_country` (string, optional) — case-insensitive substring on the country/region under measure (extracted from the regulation title).
 - `product` (string, optional) — case-insensitive substring on the product description.
 - `in_force` (bool, optional) — true to return only regulations currently in force.

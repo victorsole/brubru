@@ -36,7 +36,11 @@ ALKALINE = ("Commission Implementing Regulation (EU) 2026/2049 of 14 September 2
 def test_registration_regulation_2026_phrasing():
     assert td.is_trade_defence(ALKALINE)
     assert td.classify_duty_status(ALKALINE) == "registration"
-    assert td.extract_target_country(ALKALINE) == "People’s Republic of China"
+    # The title uses the OJ's curly apostrophe; the EXTRACTED country is normalised to the
+    # straight one, because storing both spellings made 715 China measures read as two
+    # countries and a filter on either return part of the corpus while looking complete
+    # (24 September 2026). See test_trade_defence_classifiers.py.
+    assert td.extract_target_country(ALKALINE) == "People's Republic of China"
 
 
 @pytest.mark.parametrize("title,expected", [
@@ -50,7 +54,7 @@ def test_registration_regulation_2026_phrasing():
     ("... imports of Z originating in India, amending Council Implementing Regulation (EU) No 861/2013",
      "India"),
     ("... imports of W originating in the People’s Republic of China for three Chinese exporting producers",
-     "People’s Republic of China"),
+     "People's Republic of China"),   # curly in, straight out: see the note above
     ("... imports of V originating in Canada or not, for the purposes of determining an exemption",
      "Canada"),
 ])

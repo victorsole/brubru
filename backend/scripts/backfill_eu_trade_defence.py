@@ -83,9 +83,17 @@ def classify_measure_type(title: str) -> str:
     return "other"
 
 
+_INITIATING = re.compile(r"\binitiating (?:a|an|the)\b", re.IGNORECASE)
+
+
 def classify_duty_status(title: str) -> str:
     t = title.lower()
-    if "initiating an investigation" in t or "initiation" in t:
+    # An act that OPENS a proceeding is an initiation, whether what it opens is an
+    # investigation or a review: "initiating a 'new exporter' review" matched neither
+    # phrasing below and, because these acts also order registration of the imports
+    # concerned, 53 of them were about to be labelled "registration" -- the ancillary
+    # step, not what the act does.
+    if _INITIATING.search(t) or "initiation" in t:
         return "initiation"
     # "making imports of X ... subject to registration" is the phrasing every
     # registration regulation uses in 2026 (2026/1747, 1824, 2022, 2023, 2049);
@@ -133,9 +141,21 @@ _TARGET_CLAUSE_CUT = re.compile(
     r"\s+(?:following|subject to|by |from the extension|as regards|or not|as well as|for (?:one|two|three|four|five|\w+) (?:\w+ )?exporting|for the period|for one|for certain|for a|by imports|"
     r"to imports|as extended|as amended|with regard|with a view|pursuant|in so far|insofar|"
     r"after|and (?:terminating|repealing|collecting|definitively|amending|extending|imposing))\b"
-    r"|,\s*(?:imposing|repealing|terminating|amending|and|following|as|for)\b",
+    r"|,\s*(?:re-?)?(?:imposing|repealing|terminating|amending|and|following|as|for|manufactured|produced)\b"
+    r"|,\s*\((?:EEC|EC|EU|Euratom)\)",
     re.IGNORECASE,
 )
+
+# The OJ writes "People's Republic of China" with a curly apostrophe (U+2019) in
+# some acts and a straight one in others -- 403 rows against 312 on 24 Sep 2026.
+# Stored as they come, the same country is two countries, and a filter on the
+# straight spelling returns 312 of 715 measures while looking complete. The
+# stored TITLE stays as published; only the extracted fields are normalised.
+_CURLY = {0x2018: "'", 0x2019: "'", 0x201C: '"', 0x201D: '"', 0x2032: "'"}
+
+
+def normalise_quotes(value: str) -> str:
+    return value.translate(_CURLY)
 
 
 def extract_target_country(title: str) -> Optional[str]:
@@ -148,7 +168,7 @@ def extract_target_country(title: str) -> Optional[str]:
     if cut:
         raw = raw[: cut.start()]
     raw = re.sub(r"\s*\(.*\)\s*$", "", raw)
-    raw = raw.strip(" ,;:.")
+    raw = normalise_quotes(raw).strip(" ,;:.")
     return raw[:120] if raw else None
 
 
@@ -156,7 +176,7 @@ def extract_product(title: str) -> Optional[str]:
     m = _PRODUCT_PATTERN.search(title)
     if not m:
         return None
-    raw = m.group(1).strip()
+    raw = normalise_quotes(m.group(1).strip())
     return raw[:300] if raw else None
 
 
@@ -418,13 +438,34 @@ def _open_db():
 
 
 async def main_async(args):
-    print("[INFO] Listing trade-defence universe via Cellar SPARQL...", flush=True)
-    universe = await fetch_trade_defence_universe(days=args.days)
-    print(f"[INFO] {len(universe):,} trade-defence regulations identified", flush=True)
+    if args.fill_missing_bodies:
+        # The weekly cron runs `--apply --days 21`, so it only ever hydrates acts
+        # published in the last three weeks. Everything older that was listed but never
+        # hydrated stays without a body for good: 977 of 1,528 measures on 24 September
+        # 2026, which is what an endpoint serving "the act" has to answer from. A full
+        # 1995-now walk is about nine hours, far past any cron window, so this mode
+        # drains the backlog a bounded slice at a time, newest first, and is resumable
+        # by construction: a row leaves the queue when it gets a body.
+        conn = _open_db(); cur = conn.cursor()
+        cur.execute(
+            "SELECT celex, title, document_date FROM eu_trade_defence_measures "
+            "WHERE has_body IS NOT TRUE ORDER BY document_date DESC NULLS LAST LIMIT %s",
+            (args.fill_missing_bodies,))
+        rows = cur.fetchall()
+        cur.execute("SELECT count(*) FROM eu_trade_defence_measures WHERE has_body IS NOT TRUE")
+        remaining = cur.fetchone()[0]
+        universe = [{"celex": r[0], "title": r[1], "date": r[2]} for r in rows]
+        existing = {r[0]: False for r in rows}
+        print(f"[INFO] body backfill: {len(universe)} of {remaining:,} measures without a body",
+              flush=True)
+    else:
+        print("[INFO] Listing trade-defence universe via Cellar SPARQL...", flush=True)
+        universe = await fetch_trade_defence_universe(days=args.days)
+        print(f"[INFO] {len(universe):,} trade-defence regulations identified", flush=True)
 
-    conn = _open_db(); cur = conn.cursor()
-    cur.execute("SELECT celex, has_body FROM eu_trade_defence_measures")
-    existing = {row[0]: bool(row[1]) for row in cur.fetchall()}
+        conn = _open_db(); cur = conn.cursor()
+        cur.execute("SELECT celex, has_body FROM eu_trade_defence_measures")
+        existing = {row[0]: bool(row[1]) for row in cur.fetchall()}
 
     if not args.apply:
         universe = universe[: args.limit]
@@ -543,6 +584,10 @@ def main():
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
     ap.add_argument("--refresh-bodies", action="store_true")
+    ap.add_argument("--fill-missing-bodies", type=int, metavar="N", default=0,
+                    help="Skip the SPARQL listing: hydrate N stored measures that have no "
+                         "body yet, newest first. Resumable; drains the historical backlog "
+                         "the --days window can never reach.")
     ap.add_argument("--days", type=int, default=None,
                     help="Delta: only list acts dated in the last N days (default: full 1995-now walk)")
     args = ap.parse_args()
