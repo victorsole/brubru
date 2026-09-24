@@ -1305,35 +1305,48 @@ def section_blind_spots(conn, start, end):
     # 5b. The notification scheduler must leave a durable trace every day. "0 sent"
     #     cannot tell a quiet day from a scheduler that never fired; sync_runs can
     #     (rows written from 15 Sep 2026 by services/schedulers/notification_scheduler.py).
+    # Judged on each job's LATEST run (24 Sep 2026): counting any failure in the
+    # window kept the check red for two days after notifications_carriage was
+    # fixed. Earlier failures are still named. The tender digest and the email
+    # channel joined the scheduler on 24 Sep; the email channel is deliberately
+    # OFF, so 'skipped' is its healthy state.
+    expected = ("notifications_carriage", "notifications_saved_searches",
+                "notifications_tender_digest", "notifications_email")
     rows = q(
         conn,
         """
-        SELECT source_key, max(started_at) AS last_run,
-               count(*) FILTER (WHERE status <> 'success') AS failed
-        FROM sync_runs
-        WHERE source_key IN ('notifications_carriage', 'notifications_saved_searches')
+        SELECT DISTINCT ON (source_key) source_key, started_at AS last_run, status AS last_status,
+               (SELECT count(*) FROM sync_runs s2
+                 WHERE s2.source_key = s.source_key AND s2.started_at >= :since
+                   AND s2.status NOT IN ('success', 'skipped')) AS failed_in_window
+        FROM sync_runs s
+        WHERE source_key IN ('notifications_carriage', 'notifications_saved_searches',
+                             'notifications_tender_digest', 'notifications_email')
           AND started_at >= :since
-        GROUP BY source_key
+        ORDER BY source_key, started_at DESC
         """,
         since=end - timedelta(days=2),
     )
     if not errored(rows):
         got = {r["source_key"]: r for r in rows}
-        missing = [k for k in ("notifications_carriage", "notifications_saved_searches") if k not in got]
-        failed = sum((r["failed"] or 0) for r in rows)
+        missing = [k for k in expected if k not in got]
+        bad_latest = [k for k, r in got.items() if r["last_status"] not in ("success", "skipped")]
+        earlier = sum((r["failed_in_window"] or 0) for k, r in got.items() if k not in bad_latest)
         checks.append(
             {
-                "check": "notification scheduler ran in the last 48h",
-                "ok": not missing and failed == 0,
+                "check": "notification scheduler: latest run of each job is healthy",
+                "ok": not missing and not bad_latest,
                 "unproven": False,
                 "detail": (
-                    ", ".join(f"{k} last {got[k]['last_run']:%Y-%m-%d %H:%M}" for k in got)
+                    ", ".join(f"{k} {got[k]['last_status']} {got[k]['last_run']:%Y-%m-%d %H:%M}" for k in sorted(got))
                     or "no recorded run"
                 ) + (f"; missing: {', '.join(missing)}" if missing else "")
-                  + (f"; {failed} failed run(s)" if failed else ""),
+                  + (f"; latest run failed: {', '.join(bad_latest)}" if bad_latest else "")
+                  + (f"; {earlier} earlier failed run(s) in 48h, since recovered" if earlier else ""),
                 "means": "No sync_runs row means the daily delivery job did not run (or ran "
                 "before the recorder shipped on 15 Sep 2026). Tracked items then promise "
-                "notifications nobody sends; a zero in 'notifications get read' is meaningless.",
+                "notifications nobody sends; a zero in 'notifications get read' is meaningless. "
+                "notifications_email is 'skipped' while NOTIFICATION_EMAIL_ENABLED is off (Victor, 24 Sep).",
             }
         )
 

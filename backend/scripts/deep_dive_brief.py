@@ -75,6 +75,39 @@ _TABLER = re.compile(r"^\s*Amendment\s+\d+\s*\n((?:\s*[^\n]{2,90}\n){1,6})", re.
 _ROLLCALL = re.compile(r"\n\s*(\d+)\s*([+\-0])\s*\n")
 
 
+_EP_COMMITTEES = {
+    "foreign affairs": "AFET", "human rights": "DROI", "security and defence": "SEDE",
+    "development": "DEVE", "international trade": "INTA", "budgets": "BUDG",
+    "budgetary control": "CONT", "economic and monetary affairs": "ECON",
+    "tax matters": "FISC", "employment and social affairs": "EMPL",
+    "environment, climate and food safety": "ENVI", "environment, public health and food safety": "ENVI",
+    "public health": "SANT", "industry, research and energy": "ITRE",
+    "internal market and consumer protection": "IMCO", "transport and tourism": "TRAN",
+    "regional development": "REGI", "agriculture and rural development": "AGRI",
+    "fisheries": "PECH", "culture and education": "CULT", "legal affairs": "JURI",
+    "civil liberties, justice and home affairs": "LIBE", "constitutional affairs": "AFCO",
+    "women's rights and gender equality": "FEMM", "women\u2019s rights and gender equality": "FEMM",
+    "petitions": "PETI", "housing crisis": "HOUS",
+}
+
+
+def _committee_from_header(path) -> str | None:
+    """The committee code from a committee document's own first lines."""
+    import re as _re
+    try:
+        head = " ".join(open(path, errors="ignore").read(1500).split()).lower()
+    except OSError:
+        return None
+    m = _re.search(r"committee on (?:the )?([a-z ,\u2019']+?)(?: \d{4}/| amendments| draft| opinion| 20\d\d|$)", head)
+    if not m:
+        return None
+    name = m.group(1).strip()
+    for k, code in _EP_COMMITTEES.items():
+        if name.startswith(k):
+            return code
+    return None
+
+
 def slug(ref: str) -> str:
     return re.sub(r"[^0-9A-Za-z]+", "_", ref).strip("_")
 
@@ -375,7 +408,11 @@ def brief(ref: str, do_fetch: bool) -> dict:
                                   "targets": dict(p["targets"].most_common(8))}
         elif "amendments tabled" in kind:
             p = parse_one(f)
-            key = r.get("committee") or "_lead"
+            # The document's OWN header names its committee (24 Sep 2026). The
+            # gateway row carries the LEAD committee for every amendment
+            # document, so IMCO's and LIBE's amendments to their own draft
+            # opinions on 2025/2118(INI) were merged into one "AFCO" series.
+            key = _committee_from_header(f) or r.get("committee") or "_lead"
             g = series.setdefault(key, {"ids": [], "tablers": Counter(),
                                         "targets": Counter(), "docs": 0, "refs": []})
             g["ids"] += p["ids"]
