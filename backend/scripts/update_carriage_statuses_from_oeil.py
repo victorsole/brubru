@@ -64,6 +64,10 @@ STALEST_FIRST = _args.stalest_first
 BUDGET = _args.budget
 
 
+_OWNED_BY_ROLES = frozenset({"lead_committee", "opinion_committees", "committees",
+                             "rapporteur_name", "rapporteur_appointed"})
+
+
 def log(msg):
     """Print and flush immediately."""
     print(msg, flush=True)
@@ -147,6 +151,7 @@ async def update_statuses():
         status_changes = []
         failed_refs = []
         not_on_oeil = []
+        no_events = []
         started = time.monotonic()
 
         # Plain tuples, then re-load each row by id AFTER its fetch: ORM objects
@@ -189,14 +194,19 @@ async def update_statuses():
 
                 fields = carriage_fields_from_procedure(data)
                 if not fields.get("oeil_key_events"):
-                    # get_procedure_with_page refuses a page with no title and
-                    # no events, so a titled page with zero events still lands
-                    # here: record it rather than let it pass as "nothing new".
-                    errors += 1
-                    failed_refs.append(f"{procedure_ref}: page has no key events")
-                    log("   -> [ERROR] page parsed but carries no key events")
-                    await asyncio.sleep(0.5)
-                    continue
+                    # A named state, not an error (24 Sep 2026). OEIL renders no
+                    # "Key events" section at all for some files: immunity cases
+                    # awaiting a committee decision, some completed RSP
+                    # resolutions (checked on the live pages). Counting them as
+                    # errors turned the scheduled run red every time, and
+                    # skipping the write left them unstamped, so a stalest-first
+                    # queue re-picked them forever. The rest of the page is still
+                    # written; existing events are never wiped; OEIL's own stage
+                    # line still drives the status. A parser regression stays
+                    # visible through the majority guard after the loop.
+                    no_events.append(procedure_ref)
+                    fields.pop("oeil_key_events", None)
+                    log("   -> [INFO] OEIL page carries no key events (kept existing events)")
 
                 carriage = db.get(LegislativeCarriage, carriage_id)
                 if carriage is None:
@@ -205,6 +215,16 @@ async def update_statuses():
                     continue
                 changed = []
                 for col, val in fields.items():
+                    # One owner per field (24 Sep 2026). Committees and the
+                    # rapporteur are owned by oeil_roles (backfill_oeil_committee_
+                    # roles.py), which runs right after this job on the warm tier
+                    # and parses the page this job has just stored. Written here
+                    # too, the two disagreed on joint files (this parse kept
+                    # {INTA, ENVI} for the Industrial Accelerator Act where the
+                    # roles parser holds {INTA, ITRE, IMCO, ENVI, BUDG}) and
+                    # flipped the row on every run.
+                    if col in _OWNED_BY_ROLES:
+                        continue
                     if col in ("rapporteur_name", "rapporteur_mep_id", "rapporteur_appointed") and val is None:
                         continue   # never blank a known rapporteur from a page that omits one
                     if getattr(carriage, col) != val:
@@ -239,7 +259,7 @@ async def update_statuses():
                     # The stamps above would otherwise fire last_updated's
                     # onupdate and make an unchanged row look freshly updated.
                     flag_modified(carriage, "last_updated")
-                log(f"   -> via {page.route}: {len(fields['oeil_key_events'])} events, "
+                log(f"   -> via {page.route}: {len(fields.get('oeil_key_events') or [])} events, "
                     f"{len(fields['oeil_forecasts'])} forecasts, rapporteur={fields.get('rapporteur_name')}, "
                     f"opinions={fields.get('opinion_committees')}; changed={changed or 'nothing'}")
 
@@ -292,6 +312,14 @@ async def update_statuses():
         log(f"  Key events updated: {updated_key_events}")
         log(f"  Status changes: {updated_count}")
         log(f"  Errors: {errors}")
+        checked = len(targets) - len(not_on_oeil)
+        if checked >= 10 and len(no_events) > checked / 2:
+            # Most pages with no events is a parser or page-layout regression,
+            # not a batch of quiet files.
+            errors += 1
+            failed_refs.append(f"{len(no_events)} of {checked} pages parsed to no key events: parser regression?")
+        log(f"  Pages with no key events on OEIL (not an error): {len(no_events)}"
+            + (f" -> {', '.join(no_events[:12])}" if no_events else ""))
         log(f"  Not on OEIL yet (404, not an error): {len(not_on_oeil)}"
             + (f" -> {', '.join(not_on_oeil)}" if not_on_oeil else ""))
         log(f"  Fetch routes: {dict(scraper.fetch_stats)}")
