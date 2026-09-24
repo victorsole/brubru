@@ -1306,6 +1306,13 @@ async def cron_sync_weekly(
     _verify_cron_secret(authorization)
     results = {}
 
+    # Council ART research papers. The corpus held four HAND-WRITTEN ART rows until
+    # 24 Sep 2026 and none of them were real: the first URL checked answered "Page not
+    # found" and no title appeared on the Council's listing. The listing itself renders
+    # fine for our browser (no Scrape.do credits), so it is read here instead.
+    results["council_art"] = await _run_script_async(
+        "council_art", "scripts/sync_council_art.py", ["--apply"], timeout=600)
+
     # ft_participants, derived from the participant payload already stored on
     # ft_funded_projects. Weekly because its source (funded projects) moves
     # slowly, and the whole pass is a re-read of data we hold: no network.
