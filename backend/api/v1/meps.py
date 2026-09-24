@@ -559,7 +559,7 @@ Drive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to o
 **Input**
 - `country` — ISO-3166-1 alpha-2 (exact 2 chars).
 - `group` — political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) — both are accepted.
-- `name` — part of the full name, accent- and case-insensitive (`sole` finds `Solé`).
+- `name` (or `q`, its alias) — part of the full name, accent- and case-insensitive (`sole` finds `Solé`).
 - `term` — parliamentary term (default 10 = current, valid range 1-10).
 - `include_former` — current term only. By default the list holds the MEPs sitting today; `true` adds the members elected or seated this term who have since left (`in_office: false`). Any `updated_` window includes them too, so a sync sees a departure as a change.
 """ + SYNC_PARAMS_DOC + """ Change dates are kept for the current term (10) only; a date window on an older term is a 422.
@@ -582,7 +582,8 @@ async def list_meps(
     request: Request,
     country: Optional[str] = Query(None, min_length=2, max_length=2),
     group: Optional[str] = Query(None),
-    name: Optional[str] = Query(None),
+    name: Optional[str] = Query(None, description="Part of the member's name, accent- and case-insensitive. `q` is an accepted alias."),
+    q: Optional[str] = Query(None, description="Alias for `name`, the free-text parameter every other v2 list endpoint uses. An undeclared parameter is silently ignored, so a caller following that convention got the unfiltered first page and no error."),
     term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (current term only)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded on or before; a bare date covers the whole day."),
@@ -596,6 +597,11 @@ async def list_meps(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[MEPItem]:
+    # 54 of the 55 v2 list endpoints call their free-text parameter `q`; this one called it
+    # `name`. FastAPI ignores a parameter it does not declare, so `?q=weber` was answered
+    # with the unfiltered first page -- every name searched returned the same members, with
+    # a 200 and no hint that the filter had not been applied (24 September 2026).
+    name = name or q
     window = validate_window(created_from, created_to, updated_from, updated_to)
     if term == CURRENT_TERM or name or any_window(window) or order in SYNC_ORDERS:
         return await _list_from_full(db, country=country, group=group, name=name, term=term, window=window,

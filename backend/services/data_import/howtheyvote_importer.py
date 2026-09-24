@@ -57,7 +57,14 @@ GROUP_CODE_MAP = {
     "ECR": "ECR",
     "GUE_NGL": "GUE_NGL",
     "The Left": "GUE_NGL",
-    "ID": "PFE",  # ID became PfE
+    # ID is NOT PfE. Identity and Democracy was dissolved in July 2024 and Patriots for
+    # Europe was formed the same month with an overlapping but different membership, so
+    # they are two groups with two voting records. Mapping one onto the other did two
+    # things: the groups upsert matches on the mapped code, so the ID row UPDATED the PfE
+    # row and left Patriots for Europe carrying the name "Identity and Democracy"; and
+    # every pre-July-2024 ID vote would have been attributed to a group that did not yet
+    # exist. A dissolved group keeps its own code (24 September 2026).
+    "ID": "ID",
     "PFE": "PFE",
     "ESN": "ESN",
     "NI": "NI",

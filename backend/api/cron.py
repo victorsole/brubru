@@ -1366,6 +1366,25 @@ async def cron_sync_weekly(
     # The table stopped at 12 May 2026 (15 Sep 2026 finding). A 21-day window covers a
     # missed weekly run; a full walk is a manual backfill (memory/specialised_backfill_queue.md).
     results["trade_defence"] = await _run_script_async("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--days", "21"], timeout=1800)
+    # ...and that window is also why 977 of 1,528 measures held no body on 24 September
+    # 2026: every act listed before this job existed falls outside any --days window, so
+    # nothing was ever going to hydrate it, and the note above sent the job to a manual
+    # backfill queue that no one runs. This drains it a bounded slice at a time, newest
+    # first, and is resumable by construction: a measure leaves the queue once it has a
+    # body, so a killed run costs only the slice it was on. Sized from a measured rate:
+    # 25 measures took 354s (14.2s each, 25/25 hydrated), so 80 is ~20 minutes and sits
+    # inside the 30-minute timeout with a third of it spare.
+    results["trade_defence_bodies"] = await _run_script_async(
+        "trade_defence_bodies", "scripts/backfill_eu_trade_defence.py",
+        ["--apply", "--fill-missing-bodies", "80"], timeout=1800)
+    # MEPs, political groups and group memberships from HowTheyVote. Nothing ran this: the
+    # tables had been empty since migration 014 created them, because the groups step died
+    # on a 63-character label in a VARCHAR(20) and took the whole transaction with it
+    # (migration 240 widened it). Weekly, because membership changes with a resignation or
+    # a group switch, not daily. `--members-only` deliberately leaves out member_votes:
+    # that file is ~16M rows and is a storage decision, not a sync.
+    results["howtheyvote_members"] = await _run_script_async(
+        "howtheyvote_members", "scripts/import_howtheyvote.py", ["--members-only"], timeout=1800)
     results["gi"] = await _run_script_async("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
     results["cohesion"] = await _run_script_async("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
     # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].

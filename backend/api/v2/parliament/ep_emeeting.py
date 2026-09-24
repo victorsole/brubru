@@ -13,7 +13,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import Any, Dict, List, Optional  # noqa: F401
 
 from fastapi import APIRouter, Depends, Path, Query, Request  # noqa: F401
-from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session  # noqa: F401
 
 from core.database import get_db  # noqa: F401
