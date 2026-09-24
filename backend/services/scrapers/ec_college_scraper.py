@@ -45,12 +45,82 @@ GENERIC_DESCRIPTION = (
 )
 
 
-def load_tentative_agenda(path: Optional[pathlib.Path] = None) -> Dict[str, Any]:
-    """Return the tentative-agenda file, or an empty mapping if absent or unreadable.
+def agenda_from_items(items: List[Dict[str, Any]], reference: str, issued: Optional[str]) -> Dict[str, Any]:
+    """Shape parsed tentative-agenda items (sync_college_tentative_agendas.parse_items)
+    into the {'meetings': {YYYY-MM-DD: [{item, responsible}]}} mapping."""
+    meetings: Dict[str, List[Dict[str, str]]] = {}
+    for it in items or []:
+        raw = str(it.get("meeting_date_provisional") or "")
+        try:
+            d, m, y = (int(x) for x in raw.split("/"))
+            key = date(y, m, d).isoformat()
+        except ValueError:
+            continue
+        text = str(it.get("item") or "").strip()
+        subs = [str(x).strip() for x in (it.get("sub_items") or []) if str(x).strip()]
+        if subs:
+            text = f"{text}: {'; '.join(subs)}"
+        if text:
+            meetings.setdefault(key, []).append(
+                {"item": text, "responsible": str(it.get("responsible") or "").title()})
+    label = f"Commission tentative agenda {reference}" + (f" of {issued}" if issued else "")
+    return {"source_label": label, "source_reference": reference,
+            "responsible_heading": "President or Executive Vice-President responsible",
+            "meetings": meetings}
 
-    A missing or malformed file must never stop meeting generation: the meetings
-    still exist, they just carry the generic description.
+
+def load_tentative_agenda_from_db() -> Dict[str, Any]:
+    """The NEWEST tentative agenda scraped into commission_documents (24 Sep 2026).
+
+    The calendar used to read a hand-maintained JSON copy, which drifted: the
+    Enlargement package and the Climate resilience framework sat under 20
+    October while SEC(2026)2578 lists them for 28 October. The scraped document
+    is the primary record, parsed with the scraper's own parser.
     """
+    import importlib.util
+    import sys as _sys
+
+    from sqlalchemy import text as _text
+
+    from core.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        row = db.execute(_text(
+            "SELECT reference, publication_date::date AS issued, text_body FROM commission_documents "
+            "WHERE document_register_category = 'TENTAT_AGENDA_COM_MEETING' AND text_body IS NOT NULL "
+            "ORDER BY publication_date DESC NULLS LAST, reference DESC LIMIT 1")).mappings().first()
+    finally:
+        db.close()
+    if not row:
+        return {}
+    name = "_college_tentative_sync"
+    mod = _sys.modules.get(name)
+    if mod is None:
+        path = pathlib.Path(__file__).resolve().parents[2] / "scripts" / "sync_college_tentative_agendas.py"
+        spec = importlib.util.spec_from_file_location(name, path)
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules[name] = mod
+        spec.loader.exec_module(mod)
+    issued = row["issued"]
+    agenda = agenda_from_items(mod.parse_items(row["text_body"]), row["reference"],
+                               f"{issued.day} {issued:%B %Y}" if issued else None)
+    return agenda if agenda["meetings"] else {}
+
+
+def load_tentative_agenda(path: Optional[pathlib.Path] = None) -> Dict[str, Any]:
+    """Return the tentative agenda: the newest scraped one, else the JSON file.
+
+    A missing or malformed source must never stop meeting generation: the
+    meetings still exist, they just carry the generic description.
+    """
+    if path is None:
+        try:
+            agenda = load_tentative_agenda_from_db()
+            if agenda:
+                return agenda
+        except Exception as exc:  # noqa: BLE001 -- fall back to the file
+            logger.warning("[WARN] tentative agenda not read from the database: %s", exc)
     p = path or TENTATIVE_AGENDA_PATH
     try:
         data = json.loads(p.read_text(encoding="utf-8"))

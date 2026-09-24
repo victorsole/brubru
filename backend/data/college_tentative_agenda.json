@@ -1,27 +1,57 @@
 {
- "_about": "Items the Commission plans for upcoming College meetings, from its tentative agenda. The generator in services/scrapers/ec_college_scraper.py writes them into each meeting's calendar description, so the calendar sync keeps them instead of reverting to the generic text. Refresh from the newest tentative agenda in the EC Transparency Register during /news. Dates are the Commission's plan ('tbc'), never a commitment.",
+ "_about": "Items the Commission plans for upcoming College meetings, from its tentative agenda. The generator in services/scrapers/ec_college_scraper.py writes them into each meeting's calendar description, so the calendar sync keeps them instead of reverting to the generic text. FALLBACK ONLY since 24 Sep 2026: the generator reads the newest scraped tentative agenda from commission_documents first. Dates are the Commission's plan ('tbc'), never a commitment.",
  "source_label": "Commission tentative agenda of 14 September 2026",
  "source_reference": "SEC(2026) 2578 final",
  "retrieved": "2026-09-16",
  "responsible_heading": "President or Executive Vice-President responsible",
  "meetings": {
   "2026-09-30": [
-   {"item": "Pre-enlargement policy reviews", "responsible": "President"},
-   {"item": "European critical communication system", "responsible": "Virkkunen"},
-   {"item": "2040 vision for fisheries and aquaculture", "responsible": "Fitto"}
+   {
+    "item": "Pre-enlargement policy reviews",
+    "responsible": "President"
+   },
+   {
+    "item": "European critical communication system",
+    "responsible": "Virkkunen"
+   },
+   {
+    "item": "2040 vision for fisheries and aquaculture",
+    "responsible": "Fitto"
+   }
   ],
   "2026-10-06": [
-   {"item": "European product package: European Product Act (update of the framework for product rules and market surveillance) and Standardisation Regulation (update of rules on standardisation)", "responsible": "Séjourné"}
+   {
+    "item": "European product package: European Product Act (update of the framework for product rules and market surveillance) and Standardisation Regulation (update of rules on standardisation)",
+    "responsible": "Séjourné"
+   }
   ],
   "2026-10-20": [
-   {"item": "2027 Commission work programme", "responsible": "President"},
-   {"item": "2026 annual overview report on simplification, implementation and enforcement", "responsible": "President"},
-   {"item": "Northern Neighbourhood: New Arctic Strategy", "responsible": "President"},
-   {"item": "Enlargement package", "responsible": "President"},
-   {"item": "Climate resilience framework", "responsible": "Ribera"}
+   {
+    "item": "2027 Commission work programme",
+    "responsible": "President"
+   },
+   {
+    "item": "2026 annual overview report on simplification, implementation and enforcement",
+    "responsible": "President"
+   },
+   {
+    "item": "Northern Neighbourhood: New Arctic Strategy",
+    "responsible": "President"
+   }
   ],
   "2026-10-28": [
-   {"item": "Border and migration package: strengthening Frontex and enhancing its operations; digitalisation of the return process; European annual asylum and migration report", "responsible": "Virkkunen"}
+   {
+    "item": "Enlargement package",
+    "responsible": "President"
+   },
+   {
+    "item": "Climate resilience framework",
+    "responsible": "Ribera"
+   },
+   {
+    "item": "Border and migration package: strengthening Frontex and enhancing its operations; digitalisation of the return process; European annual asylum and migration report",
+    "responsible": "Virkkunen"
+   }
   ]
  }
 }
