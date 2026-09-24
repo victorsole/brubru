@@ -263,3 +263,52 @@ def test_plain_fetch_still_returns_and_caches_a_real_page(monkeypatch):
     t, saved, run = _plain_fetch(monkeypatch, page)
     assert run(t._fetch("https://example.invalid/page")) == page
     assert saved == [page]
+
+
+# --------------------------------------------------------------------------- a tier called on its own
+# The queued item said "migrate _fetch_stealthy callers to _fetch_resilient, because
+# interstitials still pass as success". There were no direct callers to migrate, but the
+# reason they would have been unsafe was real: only the CHAIN looked at the body, so any
+# future caller of a single tier would be handed a challenge page as if it were the page.
+# Renaming or migrating callers cannot hold that line; the tier refusing does.
+from services.scrapers.base_scraper import WalledError  # noqa: E402
+
+
+@pytest.mark.parametrize("wall", [CLOUDFLARE, CONSILIUM_403, SITEGROUND])
+def test_the_fingerprint_tier_refuses_an_interstitial_on_its_own(monkeypatch, wall):
+    t = _T()
+    monkeypatch.setattr("services.scrapers.base_scraper.SCRAPLING_AVAILABLE", True)
+    monkeypatch.setattr("services.scrapers.base_scraper.ScraplingFetcher",
+                        lambda **k: type("F", (), {"get": lambda self, u: type(
+                            "R", (), {"body": wall.encode()})()})(), raising=False)
+    with pytest.raises(WalledError):
+        t._fetch_with_fingerprint("https://example.invalid/x")
+
+
+def test_a_real_page_still_comes_back_from_the_tier(monkeypatch):
+    t = _T()
+    monkeypatch.setattr("services.scrapers.base_scraper.SCRAPLING_AVAILABLE", True)
+    monkeypatch.setattr("services.scrapers.base_scraper.ScraplingFetcher",
+                        lambda **k: type("F", (), {"get": lambda self, u: type(
+                            "R", (), {"body": REAL_PROSE.encode()})()})(), raising=False)
+    assert t._fetch_with_fingerprint("https://example.invalid/x") == REAL_PROSE
+
+
+def test_a_wall_is_not_reported_as_a_fetch_failure():
+    """`WalledError` is a ScraperError, so existing handlers still catch it, but the two
+    can be told apart: 'we were blocked' and 'the fetch broke' need different answers."""
+    assert issubclass(WalledError, ScraperError)
+
+
+def test_the_chain_still_names_a_walled_tier_as_an_interstitial(monkeypatch):
+    """The escalation message has to keep saying which tier was WALLED rather than which
+    raised, or the operator cannot tell a block from a broken dependency."""
+    t = _T()
+
+    def walled(u):
+        raise WalledError("interstitial")
+
+    monkeypatch.setattr(t, "_fetch_with_fingerprint", walled)
+    monkeypatch.setattr(t, "_fetch_stealthy", walled)
+    with pytest.raises(ScraperError, match="fingerprint: interstitial; stealthy: interstitial"):
+        t._fetch_resilient("https://example.invalid/x", allow_paid=False)

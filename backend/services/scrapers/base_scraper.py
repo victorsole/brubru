@@ -54,6 +54,17 @@ class ScraperError(Exception):
     pass
 
 
+class WalledError(ScraperError):
+    """The fetch succeeded and returned an anti-bot interstitial, not the page.
+
+    Its own class because the two are opposite conclusions: "the publisher was quiet"
+    (parse zero items and move on) versus "we were blocked" (escalate, or report the
+    source as unreachable). A tier that hands a challenge page back as content makes
+    the caller draw the first conclusion from the second situation, which is how the
+    Council news feed sat at 9 September while every run reported success.
+    """
+
+
 class RateLimitError(ScraperError):
     """Raised when rate limit is exceeded"""
     pass
@@ -361,8 +372,13 @@ class BaseScraper(ABC):
             content = response.body.decode('utf-8', errors='replace') if hasattr(response, 'body') and response.body else ''
             self.stats['requests_made'] += 1
             self.stats['total_bytes'] += len(content)
+            if self._is_walled(content):
+                raise WalledError(f"anti-bot interstitial from the fingerprint tier for {url}")
             logger.info(f"{self.name}: Fingerprint fetch OK ({len(content)} bytes)")
             return content
+        except WalledError:
+            self.stats['errors'] += 1
+            raise                      # a wall is not a fetch failure; say which it is
         except Exception as e:
             self.stats['errors'] += 1
             logger.error(f"{self.name}: Fingerprint fetch failed for {url}: {e}")
@@ -395,8 +411,13 @@ class BaseScraper(ABC):
             content = response.body.decode('utf-8', errors='replace') if hasattr(response, 'body') and response.body else ''
             self.stats['requests_made'] += 1
             self.stats['total_bytes'] += len(content)
+            if self._is_walled(content):
+                raise WalledError(f"anti-bot interstitial from the stealthy tier for {url}")
             logger.info(f"{self.name}: Stealthy fetch OK ({len(content)} bytes)")
             return content
+        except WalledError:
+            self.stats['errors'] += 1
+            raise                      # a wall is not a fetch failure; say which it is
         except Exception as e:
             self.stats['errors'] += 1
             logger.error(f"{self.name}: Stealthy fetch failed for {url}: {e}")
@@ -530,10 +551,18 @@ class BaseScraper(ABC):
                           ("stealthy", self._fetch_stealthy)):
             try:
                 content = fn(url)
+                # Belt AND braces: the tier refuses an interstitial on its own (so a
+                # DIRECT caller cannot be handed one), and the chain checks the body it
+                # gets back anyway, so a tier that is overridden, stubbed or newly added
+                # without the check cannot quietly return a challenge page as the page.
                 if content and not self._is_walled(content):
                     logger.info("%s: %s tier served %s", self.name, label, url)
                     return content
                 attempts.append(f"{label}: {'interstitial' if content else 'empty'}")
+            except WalledError:
+                # The tier refuses to hand back a challenge page, so this is the
+                # one place that knows to escalate rather than report a quiet source.
+                attempts.append(f"{label}: interstitial")
             except Exception as e:                        # noqa: BLE001
                 attempts.append(f"{label}: {type(e).__name__}")
 
