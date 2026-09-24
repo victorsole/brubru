@@ -56,8 +56,8 @@ load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(BACKEND_DIR.parent / ".env")
 
 from services.scrapers.council_register import (  # noqa: E402
-    CouncilDoc, fetch_by_reference, fetch_document_text, fetch_press_releases, search_by_date,
-    search_full_text, search_register,
+    CouncilDoc, fetch_by_reference, fetch_document_text, fetch_press_releases,
+    fetch_register_listings, search_by_date, search_full_text, search_register,
 )
 
 logger = logging.getLogger("ingest_council_documents")
@@ -142,6 +142,56 @@ def _persist(conn, doc: CouncilDoc, source: str, body: Optional[str] = None) -> 
     return bool(row.inserted) if row else False
 
 
+def backfill_bodies(apply: bool) -> int:
+    """Read the document text for stored register rows that have none.
+
+    Never blanks a body it cannot re-read: a row whose PDF is unreachable today keeps
+    whatever it already had, so a bad network run cannot erase the corpus.
+    """
+    engine = _engine()
+    with engine.connect() as conn:
+        rows = conn.execute(text(
+            "SELECT external_id, url, title, published_date, source_slug "
+            "FROM institutional_publications "
+            "WHERE institution_slug = :i AND source_slug IN (:reg, :press) "
+            "  AND html_content IS NULL "
+            "ORDER BY published_date DESC NULLS LAST"),
+            {"i": INSTITUTION_SLUG, "reg": SOURCE_REGISTER, "press": SOURCE_PRESS}).fetchall()
+    # Press releases were never covered: --fetch-bodies only ever ran for register
+    # documents, so 29 of 46 press rows held no text while the completeness detector
+    # counted them against the Council corpus (24 Sep 2026). The same reader handles
+    # both: a register PDF and a press page are both "the text at this URL".
+    logger.info("[BACKFILL] %d row(s) hold no body", len(rows))
+    if not rows or not apply:
+        if rows and not apply:
+            logger.info("[DRY-RUN] re-run with --apply to fill them")
+        return 0
+    read = failed = 0
+    with _engine().connect() as conn:
+        for ext_id, url, title, published, source_slug in rows:
+            doc = CouncilDoc(
+                external_id=ext_id, title=title or ext_id, url=url,
+                published=published.date() if hasattr(published, "date") else published,
+                subject_matters=[],
+                category="press_release" if source_slug == SOURCE_PRESS else "document")
+            body = None
+            try:
+                body = fetch_document_text(doc)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("[BACKFILL] %s unreadable: %s", ext_id, exc)
+            if not body:
+                failed += 1
+                continue
+            conn.execute(text(
+                "UPDATE institutional_publications SET html_content = :b, fetched_at = now() "
+                "WHERE institution_slug = :i AND source_slug = :s AND external_id = :e"),
+                {"b": body, "i": INSTITUTION_SLUG, "s": source_slug, "e": ext_id})
+            read += 1
+        conn.commit()
+    logger.info("[BACKFILL] filled=%d unreadable=%d", read, failed)
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--apply", action="store_true", help="Persist (default dry-run)")
@@ -153,6 +203,9 @@ def main() -> int:
                          "an absolute date in a cron entry silently rots.")
     ap.add_argument("--until", help="Window end (YYYY-MM-DD, default today)")
     ap.add_argument("--press-only", action="store_true", help="Only the press-release feed")
+    ap.add_argument("--no-listings", action="store_true",
+                    help="Skip the register's own listing pages (the route that still "
+                         "works while the search is Cloudflare-walled)")
     ap.add_argument("--no-window", action="store_true",
                     help="Skip date enumeration (terms only)")
     ap.add_argument("--window-days", type=int, default=30,
@@ -164,12 +217,20 @@ def main() -> int:
                          "ST-15875-2025-INIT. Uses data.consilium (plain HTTP), so a "
                          "document you can name is always ingestable even when the "
                          "register search does not surface it.")
+    ap.add_argument("--backfill-bodies", action="store_true",
+                    help="Fill html_content on register rows ALREADY stored without one. "
+                         "--fetch-bodies only covers documents collected in the same run, "
+                         "so rows stored before it existed stayed empty for ever and the "
+                         "completeness detector's advice could not be acted on.")
     ap.add_argument("--fetch-bodies", action="store_true",
                     help="Also download each register document's text. Needed for the "
                          "endpoint's body_txt contract AND for `q` to find documents "
                          "whose subject line does not contain the search term.")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(message)s")
+
+    if args.backfill_bodies:
+        return backfill_bodies(apply=args.apply)
 
     since = (date.today() - timedelta(days=args.since_days)) if args.since_days \
         else datetime.strptime(args.since, "%Y-%m-%d").date()
@@ -194,6 +255,25 @@ def main() -> int:
         # "minors" -- because policy DOMAINS are not the words that appear in a
         # document's subject line. Enumeration does not depend on guessing
         # vocabulary at all.
+        # LISTINGS: the register's own unwalled pages. The SEARCH sits behind
+        # Cloudflare (re-checked 24 Sep 2026 against plain HTTP, our stealth browser
+        # and Scrape.do in three modes), so every date window below fails and the
+        # corpus stops moving. These two pages still answer and carry current,
+        # dated, referenced documents, so the register keeps producing something
+        # while the search is blocked. It is a NARROWER window than the search and
+        # is reported as such: found here, not "all there is".
+        if not args.no_listings:
+            try:
+                listed, listing_failures = fetch_register_listings()
+                for d in listed:
+                    collected.append((d, SOURCE_REGISTER))
+                listing_count = len(listed)
+                failures.extend(f"listing {f}" for f in listing_failures)
+                logger.info("[LISTINGS] %d document(s) from the register's own pages", listing_count)
+            except Exception as exc:  # noqa: BLE001
+                failures.append(f"listings: {type(exc).__name__}: {exc}")
+                logger.warning("[FAIL] register listings %s", exc)
+
         if not args.no_window:
             until = (datetime.strptime(args.until, "%Y-%m-%d").date()
                      if args.until else date.today())

@@ -65,6 +65,18 @@ REGISTER_SEARCH = (
 )
 PRESS_RELEASES = "https://www.consilium.europa.eu/en/press/press-releases/"
 
+# The SEARCH is behind Cloudflare and stays behind it: on 24 September 2026 it answered
+# a challenge to plain HTTP, to our own stealth browser at 12s settle, and to Scrape.do
+# in plain, render and super modes (502 each, uncharged). Two of the register's own
+# listings are NOT walled, and between them they are a real discovery route:
+#   * `/latest/` -- the most recent documents (meeting convocations, ~9 at a time);
+#   * `/oj-council/` -- provisional agendas, ~169 document links, dated and referenced.
+# They are a narrower window than the search, which is why the search failure is still
+# reported honestly rather than papered over: a route that finds SOME documents must not
+# read as a register that HAS only those documents.
+REGISTER_LATEST = "https://www.consilium.europa.eu/en/documents/public-register/latest/"
+REGISTER_OJ = "https://www.consilium.europa.eu/en/documents/public-register/oj-council/"
+
 # One result row in the register. Selector confirmed against the live page rather
 # than guessed -- `feedback_read_the_producer_not_your_assumption`.
 _RESULT_SELECTOR = "li.gsc-public-register__result-item"
@@ -224,6 +236,82 @@ def _parse_results(html: str) -> List[CouncilDoc]:
             doc_type=doc_type,
         ))
     return out
+
+
+def _parse_listing(html: str, category: str = "document") -> List[CouncilDoc]:
+    """Documents out of a register LISTING page (`/latest/`, `/oj-council/`).
+
+    A listing is not the search: there is one row per document with its own PDF links
+    in every language, so the same reference appears many times and is kept once, in
+    English when English exists. The row's text carries the body that meets, its subject
+    codes and the meeting date.
+    """
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html or "", "html.parser")
+    by_ref: dict[str, CouncilDoc] = {}
+    for a in soup.find_all("a", href=True):
+        m = _DOC_HREF.search(a["href"])
+        if not m:
+            continue
+        ref = m.group(1)
+        lang = a["href"].rsplit("/", 2)[-2] if a["href"].count("/") >= 2 else ""
+        row = a.find_parent(["li", "tr", "article", "div"])
+        text = row.get_text(" ", strip=True) if row else a.get_text(" ", strip=True)
+        dm = _DATE_RE.search(text)
+        published = None
+        if dm:
+            try:
+                published = date(int(dm.group(3)), int(dm.group(2)), int(dm.group(1)))
+            except ValueError:
+                published = None
+        subjects: List[str] = []
+        if "Subject matters" in text:
+            tail = text.split("Subject matters", 1)[1].lstrip(": ")
+            subjects = [c.strip() for c in _TITLE_CUT.split(tail)[0].split(",") if c.strip()][:12]
+        title = _TITLE_CUT.split(text)[0].strip()
+        title = _REF_HEAD.sub("", title).strip() or ref
+        # One row links its document in every official language. Keep one per
+        # reference, and prefer English when a later link offers it.
+        prev = by_ref.get(ref)
+        if prev is not None and not (lang == "en" and not prev.url.endswith("/en/pdf")):
+            continue
+        if prev is not None:
+            prev.url = a["href"] if a["href"].startswith("http") else f"https://data.consilium.europa.eu{a['href']}"
+            continue
+        by_ref[ref] = CouncilDoc(
+            external_id=ref,
+            title=title[:480],
+            url=a["href"] if a["href"].startswith("http") else f"https://data.consilium.europa.eu{a['href']}",
+            published=published,
+            subject_matters=subjects,
+            category=category,
+            doc_type=None,
+        )
+    return list(by_ref.values())
+
+
+def fetch_register_listings(include_agendas: bool = True) -> tuple[List[CouncilDoc], List[str]]:
+    """The register's unwalled listings, and which of them failed.
+
+    The search is blocked (see REGISTER_LATEST / REGISTER_OJ above), so this is the
+    discovery route that still works. It returns what it found AND the sources that
+    did not answer, because "9 documents" and "9 documents, and the agendas page was
+    down" are different facts and the caller must be able to tell them apart.
+    """
+    found: dict[str, CouncilDoc] = {}
+    failed: List[str] = []
+    targets = [("latest", REGISTER_LATEST)]
+    if include_agendas:
+        targets.append(("oj-council", REGISTER_OJ))
+    for label, url in targets:
+        try:
+            for doc in _parse_listing(_fetch_rendered(url)):
+                found.setdefault(doc.external_id, doc)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[council-register] listing %s unavailable: %s", label, exc)
+            failed.append(f"{label}: {type(exc).__name__}")
+    return list(found.values()), failed
 
 
 PAGE_SIZE = 20
