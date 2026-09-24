@@ -3,7 +3,14 @@
 Auth is overridden so the test exercises the handlers and the data, not the API-key
 plumbing. Asserts the canonical contract: list nulls the body, detail returns it, and
 every law carries full text.
+
+Run it: `python3.12 scripts/check_dpp_endpoints.py`. It is a CHECK SCRIPT, not a pytest module.
+It used to live in tests/ and execute at import, so `pytest` ran it during
+COLLECTION -- minting a real API key against the live database -- and its final
+`sys.exit()` then aborted the whole session: on 24 September 2026 `cd backend &&
+pytest` collected 2,456 tests and ran none of them.
 """
+
 
 import pathlib
 

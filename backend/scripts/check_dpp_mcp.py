@@ -10,7 +10,14 @@ key (billing-exempt), and asserts the things that actually break MCP servers:
   * every tool returns without raising, and returns something non-empty.
   * `search` then `fetch` round-trips, because ChatGPT depends on that pair.
   * OAuth discovery names the DPP resource, not /api/mcp.
+
+Run it: `python3.12 scripts/check_dpp_mcp.py`. It is a CHECK SCRIPT, not a pytest module.
+It used to live in tests/ and execute at import, so `pytest` ran it during
+COLLECTION -- minting a real API key against the live database -- and its final
+`sys.exit()` then aborted the whole session: on 24 September 2026 `cd backend &&
+pytest` collected 2,456 tests and ran none of them.
 """
+
 import sys
 from pathlib import Path
 
@@ -86,7 +93,8 @@ def revoke(key_id):
 
 
 print("=== identity: two servers, one transport ===")
-for path, name, count in ((MAIN, "Brubru", 15), (DPP, "Brubru DPP", 11)):
+# 13 since 24 Sep 2026: dpp_tris (national draft rules) and dpp_jrc joined the server.
+for path, name, count in ((MAIN, "Brubru", 15), (DPP, "Brubru DPP", 13)):
     res = rpc(path, "initialize", {"protocolVersion": "2024-11-05"})["result"]
     check(f"{path} serverInfo.name == {name!r}", res["serverInfo"]["name"] == name,
           str(res["serverInfo"]))
@@ -135,7 +143,7 @@ try:
     print("\n=== tools/list ===")
     tools = rpc(DPP, "tools/list", key=KEY)["result"]["tools"]
     names = [t["name"] for t in tools]
-    check("DPP lists 11 tools", len(tools) == 11, str(len(tools)))
+    check("DPP lists 13 tools", len(tools) == 13, str(len(tools)))
     check("every tool has a description and schema",
           all(t.get("description") and t.get("inputSchema") for t in tools))
     check("search + fetch present (ChatGPT requires the pair)",
