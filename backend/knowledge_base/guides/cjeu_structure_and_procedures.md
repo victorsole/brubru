@@ -1,6 +1,7 @@
 # Court of Justice of the European Union -- Structure, Procedures and Case Types
 
 ## QUICK FACTS
+- **LATEST (23 Sep 2026): General Court leadership:** Savvas Papasavvas President; **Maria José Costeira (Portugal) Vice-President** until 31 August 2028 (CURIA press release 131/26).
 - **Full name**: Court of Justice of the European Union (CJEU), comprising two courts: the Court of Justice and the General Court
 - **Seat**: Luxembourg (Grand Duchy of Luxembourg)
 - **Treaty basis**: Articles 251-281 TFEU; Statute annexed as Protocol No 3 to the Treaties

@@ -1,6 +1,7 @@
 # European Affordable Housing Plan (EAHP)
 
 ## QUICK FACTS
+- **LATEST (23 Sep 2026): first national housing hub launched, in France** (Ministry of Housing, Caisse des Dépôts, CEB, USH, EIB) under the Pan-European Investment Platform for Affordable and Sustainable Housing (Commission Daily News, 23 September 2026).
 - **Affordable Housing Act package (9 Sep 2026)**: see `affordable_housing_act` and `affordable_housing_recommendation`. Deep dive: https://brubru.beresol.eu/affordable-housing-act/
 
 - Initiative: European Affordable Housing Plan -- the EU's first-ever dedicated plan to support all governance levels in delivering affordable housing

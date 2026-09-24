@@ -4,6 +4,100 @@
     {
       "date": "2026-09-24",
       "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "European Neighbourhood Policy",
+      "summary": "Team Gaza first EUR 43 million; Lebanon EUR 505 million; signing of the EU-Algeria judicial cooperation agreement",
+      "refs": [
+        "32026D2126"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "General Data Protection Regulation (GDPR)",
+      "summary": "EDPB fining guidelines (consultation to 13 Nov 2026) and final DSA-GDPR guidelines",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "hungary_election_2026_magyar",
+      "title": "Hungary 2026 Election",
+      "summary": "Commission proposes lifting the 2022 conditionality measures: EUR 4.2 billion, Erasmus+ and Horizon access, Council to decide within a month",
+      "refs": [
+        "32020R2092"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "nis2_directive",
+      "title": "NIS2 Directive",
+      "summary": "ECA Special report 19/2026 on cybersecurity incident response",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "european_education_area_2021_2030",
+      "title": "European Education Area 2021-2030",
+      "summary": "European Literacy Coalition launched; PISA 2025 basic-reading figure",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "european_affordable_housing_plan",
+      "title": "European Affordable Housing Plan",
+      "summary": "First national housing hub launched in France",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "cjeu_structure_and_procedures",
+      "title": "CJEU structure and procedures",
+      "summary": "General Court: Costeira elected Vice-President, Papasavvas President",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU trade defence",
+      "summary": "Anti-dumping investigations opened on acetylsalicylic acid, cellulose ethers and steel wire ropes",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "lebanon_humanitarian_crisis",
+      "title": "Lebanon humanitarian crisis",
+      "summary": "EUR 505 million for Lebanon 2026-2027",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "esma_supervisory_oversight_mandates",
+      "title": "ESMA supervisory oversight",
+      "summary": "ESAs Autumn 2026 risk update and ESMA digital-innovation supervisory priority from 2027",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU Emissions Trading System Review (2026)",
+      "summary": "Council mandate on the Market Stability Reserve (23 Sep 2026): invalidation suspended to end-2030, threshold 800 million from 2031",
+      "refs": []
+    },
+    {
+      "date": "2026-09-24",
+      "action": "updated",
       "guide": "gdpr_data_protection",
       "title": "General Data Protection Regulation (GDPR)",
       "summary": "Irish DPC fines Google EUR 403 million over location data (final decision 21 Sep 2026): scope, Articles 5, 6, 12, 13, six-month compliance order",

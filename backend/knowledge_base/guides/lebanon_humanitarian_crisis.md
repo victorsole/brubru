@@ -1,6 +1,7 @@
 # Lebanon Humanitarian Crisis and EU Response
 
 ## QUICK FACTS
+- **LATEST (Wednesday 23 September 2026): EUR 505 million for Lebanon for 2026-2027**, the second half of the EUR 1 billion package announced in Beirut in May 2024: basic services and support for the vulnerable (incl. durable solutions for refugees from Syria), recovery, reforms and security, civil society and culture. Source: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1946
 - Context: Israel's ongoing assault on Lebanon (2024-2026), massive humanitarian crisis
 - EP DEVE committee debate: 14 April 2026 (Tuesday), with WFP and Lebanon Humanitarian and Development Forum (online) + EU Commission representatives
 - Key EU instruments: EU humanitarian aid (DG ECHO), Neighbourhood South, Civil Protection Mechanism

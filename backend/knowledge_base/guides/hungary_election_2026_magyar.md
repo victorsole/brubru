@@ -1,7 +1,8 @@
 # Hungary 2026 Election: Orban Defeated, Magyar's Grand Bargain with Brussels
 
 ## QUICK FACTS
-- **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen cited Hungary as proof that "nothing is inevitable": "The date of 12 April will stay in our memory for a very long time. The day the Hungarian people took their future into their hands." She said years of backsliding "have started to be reversed", that there is "real progress on fundamental rights" and academic freedom, and that "billions of euro of investment in Hungary have been unlocked". **These are her statements. Brubru has not verified the amount or timing of any funds released**, so attribute them to her and do not put a figure on them. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
+- **LATEST (23 Sep 2026): the Commission PROPOSED to lift the 2022 Conditionality Regulation measures on Hungary** (IP/26/1941): **EUR 4.2 billion** of cohesion commitments reinstated and Erasmus+/Horizon Europe access restored for Public Interest Trust universities, **IF the Council agrees (it has one month)**. Not yet decided. Detail below.
+- **EARLIER (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen cited Hungary as proof that "nothing is inevitable": "The date of 12 April will stay in our memory for a very long time. The day the Hungarian people took their future into their hands." She said years of backsliding "have started to be reversed", that there is "real progress on fundamental rights" and academic freedom, and that "billions of euro of investment in Hungary have been unlocked". **These are her statements. Brubru has not verified the amount or timing of any funds released**, so attribute them to her and do not put a figure on them. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Election date: Sunday 12 April 2026 (parliamentary election)
 - Outcome: Viktor Orban's Fidesz lost majority after 16 years in power (since 2010)
 - Winning challenger: Péter Magyar, Tisza Party (centrist/centre-right, EPP-aligned)
@@ -119,3 +120,7 @@ Magyar's Tisza Party campaigned on a platform of reconciliation with Brussels: u
 - Council of the EU, Council Implementing Decision (EU) 2023/162 on Hungary RRP
 - Council Conclusions on Article 7 TEU hearings (most recent: General Affairs Council, March 2026)
 - Brubru can answer: Hungary EU funds, Magyar government priorities, Article 7 procedure, Russia sanctions Council dynamics, Ukraine accession status
+
+## Latest developments (detail)
+
+- **Conditionality lift proposal, 23 September 2026 (detail):** the Commission found the conditions for measures under Regulation 2020/2092 no longer fulfilled after remedies notified on 9 September 2026: Integrity Authority powers and data access, a comprehensive asset declaration system, conflict-of-interest safeguards for the Public Interest Trusts pending their termination, extended judicial review of prosecution decisions, tighter controls on EU funds and procurement; plus EPPO accession and beneficial-ownership rules. The 2022 measure suspended 55% of commitments for three cohesion programmes (earlier figure in this guide: EUR 6.3 billion); the release gives EUR 4.2 billion as the amount reinstated and does not explain the difference: state both, never invent a reason. Source: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1941

@@ -1,6 +1,7 @@
 # European Education Area 2021-2030 Strategic Framework
 
 ## QUICK FACTS
+- **LATEST (23 Sep 2026): European Literacy Coalition launched** (Union of Skills, Warsaw Memorandum). Commission context: **OECD PISA 2025, 31.3% of EU 15-year-olds struggle with basic text.**
 
 - EPRS Study (2 June 2026): "Erasmus+: Evolution, Structural Challenges and Future Design" -- assesses the Erasmus+ programme's growth, structural challenges, and options for its post-2027 design. Ref: IUST_STU(2026)789677 (https://www.europarl.europa.eu/thinktank/en/document/IUST_STU(2026)789677)
 - **Strategic framework**: **European Education Area (EEA) Strategic Framework 2021-2030**

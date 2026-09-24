@@ -1,6 +1,7 @@
 # General Data Protection Regulation (GDPR)
 
 ## QUICK FACTS
+- **EDPB (21 Sep 2026):** fining guidelines adopted (five-step method; minor infringement generally a reprimand, otherwise a strong presumption of a fine), **consultation until 13 November 2026**; final DSA-GDPR guidelines adopted. Detail below.
 - **LATEST (final decision 21 September 2026): the Irish Data Protection Commission (DPC) fined Google EUR 403 million over location data.** A NATIONAL decision by the Irish supervisory authority acting as **lead supervisory authority** for Google Ireland Limited under the one-stop-shop, NOT a European Commission fine and NOT an EDPB decision (the EDPB only published it on 23 September 2026). Decided by Commissioners Des Hogan, Dale Sunderland and Niamh Sweeney.
   - **Scope:** three features, **Web & App Activity**, **Location History** and **Location Accuracy** (Android), from **25 May 2018 to 4 February 2020**. Own-volition inquiry opened **February 2020** after complaints from consumer organisations including **BEUC**.
   - **Infringements:** (1) lawfulness and fairness of location processing in Web & App Activity and Location History; (2) accountability, as Google could not demonstrate compliance for Location Accuracy; (3) transparency for all three features; (4) retention of location data longer than necessary. **Legal references: Articles 5, 6, 12 and 13, listed TOGETHER. The DPC does NOT assign each finding to an article, so NEVER tabulate finding-by-article, and add no finding it did not make (e.g. purpose limitation).**
@@ -77,6 +78,8 @@ Independent body comprising heads of all 27 national DPAs and the European Data 
 Two tiers: (a) up to EUR 10 million or 2% global turnover for procedural infringements (data breach notification, DPO obligations, records of processing); (b) up to EUR 20 million or 4% global turnover for substantive violations (lawful basis, data subject rights, international transfers). Largest fines to date: Meta EUR 1.2 billion (Ireland DPA, May 2023, SCCs/US transfers), Meta EUR 390 million (January 2023, consent for behavioural advertising), Amazon EUR 746 million (Luxembourg CNPD, 2021).
 
 ## Recent Developments (2025-2026)
+
+- **EDPB plenary, 21 September 2026 (detail):** guidelines on imposing administrative fines alongside other corrective powers. Five steps: a legal basis for a fine; who is liable (controller or processor, by who is bound by the provision); intent or negligence (a culpable infringement is required); aggravating and mitigating factors; effective, proportionate and dissuasive. 14 worked examples; corrective measures range from warnings and reprimands to orders, bans and withdrawal of certification. Also the final DSA-GDPR interplay guidelines. https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en
 
 - **AG opinion, Case C-317/25 Groupe Canal+ (17 September 2026), full detail** (read from press release No 130/26, 22 September 2026):
   - **This is an ADVOCATE GENERAL'S OPINION, not a judgment.** Advocate General **Dean Spielmann**. The Court usually follows an opinion but is not bound by it, and the judgment is still to come. **Never state this as the Court's ruling**; say what the Advocate General proposed and that the judgment is pending.

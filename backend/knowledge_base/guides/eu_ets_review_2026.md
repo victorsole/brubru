@@ -1,7 +1,8 @@
 # EU Emissions Trading System Review (2026)
 
 ## QUICK FACTS
-- **LATEST (10 September 2026 — ENVI committee vote on the Market Stability Reserve).** ENVI voted
+- **LATEST (23 Sep 2026): Council (Coreper) agreed its position on the Market Stability Reserve amendment 2026/0085(COD):** invalidation suspended only until end-2030 (the Commission wanted an indefinite halt); **from 1 January 2031 the threshold doubles from 400 million to 800 million allowances.** A Council POSITION, not an adopted act: trilogues next, aim end-2026. Detail below.
+- **EARLIER (10 September 2026 — ENVI committee vote on the Market Stability Reserve).** ENVI voted
   on **2026/0085(COD)**, amending **Decision (EU) 2015/1814** as regards **ceasing the invalidation of
   allowances in the market stability reserve**. Source: Brubru's `ep_emeeting_documents` voting list
   for 10 September 2026.
@@ -87,3 +88,7 @@ When users ask about ETS, EUA prices, CBAM, ETS2, MSR, or the 2040 target:
 
 - **LATEST (Wednesday 13 May 2026, Eurostat)**: **EU economy greenhouse gas emissions rose +0.9% in Q4 2025** (Eurostat quarterly indicator, 13 May 2026). First quarterly uptick after seven consecutive quarters of decline; driven by power-sector emissions during the cold-snap weeks of late 2025. The Q4 2025 +0.9% data point is a politically salient input into the 7 July 2026 ETS Review Communication — it stress-tests the Linear Reduction Factor trajectory toward the 90% net 2040 target (Reg (EU) 2026/667). Source: ec.europa.eu/eurostat/web/products-eurostat-news
 - **LATEST (12 May 2026, DG CLIMA)**: **Revised 2026 EU ETS auction calendars published** — DG CLIMA published the revised 2026 auction calendars for both the **EU ETS** (covering power + industry + intra-EEA aviation + maritime) and the **ETS2** (covering buildings, road transport and small industry from 2027 with monitoring already running). Calendar revisions reflect Article 10a + Article 30b adjustments under Directive (EU) 2023/959 (ETS revision in the Fit for 55 package). Source: climate.ec.europa.eu/news.
+
+## Latest developments (detail)
+
+- **Council mandate on the MSR, 23 September 2026 (detail):** allowances above the 400 million invalidation threshold stay in the system until end-2030; from 1 January 2031 the threshold is 800 million; its annual decrease is left to the wider ETS review proposed in July 2026. Over 3 billion allowances have been invalidated since 2023. Parliament: ENVI voted 10 September 2026; ITRE's draft opinion on the ETS/MSR competitiveness file 2026/0212(COD) is on its 28 September agenda. Source: https://www.consilium.europa.eu/en/press/press-releases/2026/09/23/market-stability-reserve-council-agrees-targeted-amendment-for-a-resilient-and-predictable-carbon-market/
