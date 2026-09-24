@@ -101,7 +101,20 @@ def _classify(n_rows, last_sync, days, parse_count, err, disabled_reason=None):
     return "EMPTY?", "parses 0, no historical rows"
 
 
-def run(mode="confirm", bodies=None):
+def run(mode="confirm", bodies=None, max_live=None):
+    """Classify every ingestor, running the slow live check on at most `max_live` of them.
+
+    Why the cap (24 Sep 2026): a live check runs the real scraper, and `confirm` runs one
+    for every source that looks stale. A healthy night is ~2.5 minutes, but as stale
+    sources accumulate the run grows without bound, and on 21, 22 and 23 September it
+    passed the caller's 20-minute deadline. The caller writes its results only AFTER the
+    await, so each of those nights recorded a failure and stored NOTHING: the detector
+    that exists to notice broken scrapers was itself the thing that had stopped working.
+
+    With a cap the stalest sources are checked first and the rest wait for tomorrow, so
+    every run finishes and every source is covered over a few nights. A source not
+    reached is simply absent from the results: never reported as healthy, never as broken.
+    """
     # Read DB state up front and CLOSE the connection before the (slow, minutes-
     # long) live scraper runs — otherwise the idle Supabase connection is dropped
     # and db.close() later raises SSL-closed.
@@ -112,13 +125,28 @@ def run(mode="confirm", bodies=None):
         db.close()
     today = datetime.now(timezone.utc).date()
     results = []
-    for (body, itype), fn in sorted(se.INGESTORS.items()):
+    live_done = 0
+
+    def _staleness(item):
+        """Oldest sync first, never-synced before that, so a cap checks the worst."""
+        (body, itype), _fn = item
+        _rows, last = state.get((body, itype), (0, None))
+        return (0, "") if last is None else (1, last.isoformat())
+
+    order = sorted(se.INGESTORS.items(), key=_staleness) if max_live else sorted(se.INGESTORS.items())
+    for (body, itype), fn in order:
         if bodies and body not in bodies:
             continue
         n_rows, last_sync = state.get((body, itype), (0, None))
         days = (today - last_sync.date()).days if last_sync else None
         stale = (last_sync is None) or (days is not None and days > STALE_DAYS)
         do_live = mode == "full" or (mode == "confirm" and (stale or n_rows == 0))
+        if do_live and max_live is not None and live_done >= max_live:
+            # Out of budget for tonight. Say nothing about this source rather than
+            # guess: an unchecked scraper is not a healthy one.
+            continue
+        if do_live:
+            live_done += 1
         parse_count, err, ms, attempts = None, None, None, 0
         if do_live:
             t0 = time.time()
@@ -144,6 +172,9 @@ def run(mode="confirm", bodies=None):
                         "days_since_sync": days, "parse": parse_count,
                         "attempts": attempts, "ms": ms, "cls": cls, "detail": detail})
     results.sort(key=lambda r: (SEVERITY.get(r["cls"], 9), r["body"], r["type"]))
+    if max_live is not None:
+        print(f"[scraper-health] live checks: {live_done} (cap {max_live}); "
+              f"{len(results)} source(s) classified", flush=True)
     return results
 
 

@@ -13,6 +13,8 @@ import asyncio
 import hashlib
 import json
 import logging
+import os
+import pathlib as _pathlib
 import re
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
@@ -47,6 +49,28 @@ def _extract_domain(url: str) -> str:
     """Extract domain from URL"""
     parsed = urlparse(url)
     return parsed.netloc or parsed.path.split('/')[0]
+
+
+def _scrapedo_token() -> str:
+    """The Scrape.do key from the environment, falling back to the repo's .env.
+
+    A container gets it from the service config; a laptop run gets it from .env, which
+    nothing loads when a scraper runs as a library. Without this the paid tier was
+    "unavailable" locally even though the key was sitting in .env, and the Council
+    calendar reported a WALL it had never actually tried to climb (24 Sep 2026). The
+    same fix landed in the TRIS sync that morning; this puts it where every scraper
+    shares it.
+    """
+    token = (os.environ.get("SCRAPEDO_API_KEY") or "").strip().strip('"').strip("'")
+    if token:
+        return token
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(_pathlib.Path(__file__).resolve().parents[3] / ".env", override=False)
+    except Exception:  # noqa: BLE001  a missing .env is normal in a container
+        return ""
+    return (os.environ.get("SCRAPEDO_API_KEY") or "").strip().strip('"').strip("'")
 
 
 class ScraperError(Exception):
@@ -485,7 +509,7 @@ class BaseScraper(ABC):
         import urllib.parse
         import urllib.request
 
-        token = (os.environ.get("SCRAPEDO_API_KEY") or "").strip().strip('"').strip("'")
+        token = _scrapedo_token()
         if not token:
             raise ScraperError(
                 "SCRAPEDO_API_KEY is not set. Tier 4 is unavailable; the caller "

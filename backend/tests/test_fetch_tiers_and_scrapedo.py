@@ -149,8 +149,15 @@ def test_allow_paid_false_never_reaches_the_paid_tier(monkeypatch):
 
 
 def test_scrapedo_without_a_key_says_so_rather_than_returning_empty(monkeypatch):
-    """Silence is not success: a missing key must surface, not look like no data."""
+    """Silence is not success: a missing key must surface, not look like no data.
+
+    The .env fallback has to be blocked here, or this machine's real key is found and the
+    test makes a live call instead of exercising the missing-key path.
+    """
+    import dotenv
+
     monkeypatch.delenv("SCRAPEDO_API_KEY", raising=False)
+    monkeypatch.setattr(dotenv, "load_dotenv", lambda *a, **k: False)
     t = _T()
     with pytest.raises(ScraperError, match="SCRAPEDO_API_KEY"):
         t._fetch_scrapedo("https://example.invalid/x")
@@ -312,3 +319,44 @@ def test_the_chain_still_names_a_walled_tier_as_an_interstitial(monkeypatch):
     monkeypatch.setattr(t, "_fetch_stealthy", walled)
     with pytest.raises(ScraperError, match="fingerprint: interstitial; stealthy: interstitial"):
         t._fetch_resilient("https://example.invalid/x", allow_paid=False)
+
+
+# --------------------------------------------------------------------------- the key itself
+def test_the_paid_tier_finds_its_key_in_the_repo_env(monkeypatch):
+    """A wall we never actually tried to climb (24 Sep 2026).
+
+    The Council calendar reported "no meetings scraped (fetch blocked)" while its paid
+    fallback was refusing to start with "SCRAPEDO_API_KEY is not set" -- and the key was
+    sitting in the repo's .env all along. Nothing loads .env when a scraper runs as a
+    library, so a laptop run had no key and reported a block instead of a missing config.
+    """
+    import dotenv
+
+    from services.scrapers import base_scraper as bs
+
+    monkeypatch.delenv("SCRAPEDO_API_KEY", raising=False)
+    loaded = []
+
+    def fake_load(path=None, override=False):
+        loaded.append(str(path))
+        os.environ["SCRAPEDO_API_KEY"] = "from-the-env-file"
+        return True
+
+    monkeypatch.setattr(dotenv, "load_dotenv", fake_load)
+    assert bs._scrapedo_token() == "from-the-env-file"
+    assert loaded and loaded[0].endswith(".env")
+
+
+def test_the_environment_wins_over_the_file(monkeypatch):
+    """A container gets its key from the service config and must not read a stale file."""
+    import dotenv
+
+    from services.scrapers import base_scraper as bs
+
+    monkeypatch.setenv("SCRAPEDO_API_KEY", "from-the-container")
+
+    def _boom(*a, **k):
+        raise AssertionError("the .env file was read although the environment had the key")
+
+    monkeypatch.setattr(dotenv, "load_dotenv", _boom)
+    assert bs._scrapedo_token() == "from-the-container"
