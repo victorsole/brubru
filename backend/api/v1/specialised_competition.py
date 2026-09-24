@@ -199,6 +199,11 @@ def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
 # ─────────────────────── list endpoint ───────────────────────────────────
 
 
+# DG COMP's search API refuses to page past 10,000 results (a fixed search window, not a
+# rate limit): offset 9,900 returns rows, offset 10,000 returns none, measured 24 Sep 2026.
+_UPSTREAM_RESULT_WINDOW = 10_000
+
+
 @router.get(
     "",
     response_model=PaginatedResponse[CompetitionCaseItem],
@@ -244,13 +249,31 @@ async def list_cases(
     if case_instrument:
         text = f'({text}) AND caseInstrument:"{case_instrument}"'
     upstream = _upstream_search(text=text, page_number=page, page_size=limit, group_by_case=True)
-    total = int(upstream.get("totalResults") or 0)
+    matched = int(upstream.get("totalResults") or 0)
     hits = upstream.get("results") or []
 
     items = [_row_from_search_hit(h) for h in hits]
 
+    # The upstream search serves a 10,000-result window and nothing beyond it: measured
+    # 24 September 2026, offset 9,900 returns rows and offset 10,000 returns none. Its
+    # `totalResults` for the default `*` query is 1,048,187, so the envelope advertised
+    # 10,482 pages and every page past 100 came back empty with has_more still true --
+    # the same silent deep-page cliff GovClipping hit on /ep-documents the same day.
+    # `total` is now what this endpoint can actually SERVE, so `pages` and `has_more` are
+    # promises it can keep, and the full match count is kept in the note rather than
+    # dropped.
+    total = min(matched, _UPSTREAM_RESULT_WINDOW)
+    note = None
+    if matched > _UPSTREAM_RESULT_WINDOW:
+        note = (
+            f"The upstream DG COMP search serves at most {_UPSTREAM_RESULT_WINDOW:,} results "
+            f"per query; this query matches {matched:,}. Narrow it with `q` or "
+            f"`case_instrument` to reach the rest: there is no deeper page to ask for."
+        )
+
     return build_envelope(
         items=items, total=total, page=page, limit=limit,
+        coverage_note=note,
         coverage_complete=False,
         op_core_title="DG COMP competition cases",
         op_core_type="Competition case",

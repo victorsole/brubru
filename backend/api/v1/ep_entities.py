@@ -6,8 +6,9 @@ W3 P2 — EP entity endpoints not yet exposed in v1.
 - /amendments      → mep_amendments (scraped EP committee amendments)
 - /votes           → ep_votes (HowTheyVote roll-call votes)
 - /votes/{id}/records → ep_member_votes per-MEP positions
-- /ep-documents    → cross-committee unified view (committee_work + minutes
-                     + amendment_documents + texts_adopted + mep_amendments)
+- /ep-documents    → cross-committee unified view (committee_work + amendment_documents).
+                     NOT minutes, texts_adopted or mep_amendments: the module docstring
+                     claimed those for months and no branch ever read them.
 - /press-releases  → first-class wrapper over publications.category=press_release
 - /reports / /opinions → committee_work filtered by document type
 """
@@ -18,11 +19,11 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import String, and_, cast, false as sa_false, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.committee_work import CommitteeWorkItem
+from models.committee_work import CommitteeWorkItem, CommitteeWorkStatusEnum
 from models.ep_voting import EPMemberVote, EPVote, VoteResult
 from models.institutional_publication import InstitutionalPublication
 from models.legislative_train import LegislativeCarriage
@@ -618,11 +619,40 @@ async def get_vote_detail(
 # /ep-documents — Unified cross-committee EP documents view
 # ============================================================================
 
+# `document_type` is normalised across two very different source tables, and a value the
+# endpoint cannot serve used to filter NEITHER branch, so `document_type=report` (and any
+# typo) came back with the whole corpus. Both branches are filtered now, and a value no
+# branch can serve is a 422 rather than a silent full result or a silent empty one: an
+# integrator needs to know that `report` is not a type this view has, not to guess whether
+# the corpus is empty.
+_AD_DOC_TYPES = ("draft_report", "amendments", "draft_recommendation", "opinion", "draft_opinion")
+
+
+def _cw_document_type_sql():
+    """SQL for what branch 2 EMITS as document_type: (stage or status or 'work_item').
+
+    It must track the Python expression that builds the item below; if the two drift, the
+    filter silently stops matching rows the endpoint is showing.
+    """
+    return func.coalesce(
+        func.nullif(CommitteeWorkItem.stage, ""),
+        cast(CommitteeWorkItem.status, String),
+        "work_item",
+    )
+
+
+def _servable_document_types() -> tuple:
+    """Types with a source. The committee-work side reports its STATUS as document_type,
+    so those values are servable too, and are listed rather than hidden."""
+    return tuple(_AD_DOC_TYPES) + tuple(
+        e.value.lower() for e in CommitteeWorkStatusEnum
+    ) + ("work_item",)
+
 
 class EPDocumentItem(BaseModel):
     id: str
     source: str  # "committee_work" | "amendment_document" | "mep_amendment_set" | "text_adopted"
-    document_type: str  # "draft_report" | "amendments" | "report" | "opinion" | "minutes" | ...
+    document_type: str  # "draft_report" | "amendments" | "opinion" | a committee-work stage
     committee_code: Optional[str] = None
     procedure_reference: Optional[str] = None
     pe_reference: Optional[str] = None
@@ -644,7 +674,7 @@ class EPDocumentItem(BaseModel):
     response_model=PaginatedResponse[EPDocumentItem],
     summary="Unified view of all EP committee output — work items + amendments + adopted texts",
     description="""**What it does**
-Returns a unified, cross-committee view that merges three separate document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur), (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion), and (3) `texts_adopted` (the formal plenary outputs). Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across the three.
+Returns a unified, cross-committee view that merges two document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur) and (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion). Adopted plenary texts are NOT in this view: use `/texts-adopted` for those. Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across both.
 
 **When to use it**
 When you want "everything that happened on file X across all stages" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering "what is the LIBE committee working on this week?".
@@ -652,7 +682,7 @@ When you want "everything that happened on file X across all stages" without mak
 **Input**
 - `committee` — 4-letter code (e.g. `LIBE`).
 - `procedure_reference` — OEIL reference.
-- `document_type` — normalised: `draft_report` / `report` / `amendments` / `opinion` / `minutes` / `resolution`.
+- `document_type` — normalised across the two streams. From amendment documents: `draft_report`, `amendments`, `draft_recommendation`, `opinion`, `draft_opinion`. From committee work items, whose stage doubles as their type: `in_committee`, `awaiting_vote`, `tabled`, `adopted`, `rejected`, `withdrawn`, `pending`, `completed`, `unknown`, `work_item`. Anything else is a 422 listing these: it used to be accepted and answered with the whole corpus.
 - `q` — substring search across titles.
 - `published_from`, `published_to` — date filter.
 - `updated_from` — incremental sync.
@@ -674,7 +704,7 @@ async def list_ep_documents(
     request: Request,
     committee: Optional[str] = Query(None),
     procedure_reference: Optional[str] = Query(None),
-    document_type: Optional[str] = Query(None, description="draft_report | report | amendments | opinion | minutes | resolution"),
+    document_type: Optional[str] = Query(None, description="Normalised across both streams: draft_report | amendments | draft_recommendation | opinion | draft_opinion (amendment documents), or the committee-work stage (in_committee | awaiting_vote | tabled | adopted | rejected | withdrawn | pending | completed | unknown | work_item). An unserved value is a 422, not the whole corpus."),
     q: Optional[str] = Query(None),
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
@@ -685,6 +715,22 @@ async def list_ep_documents(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[EPDocumentItem]:
     items: List[EPDocumentItem] = []
+
+    # Normalised once, here: the branches below look their value up in different ways, so
+    # a mixed-case value could pass validation and then match neither branch, which is a
+    # 200 with an empty page -- the other half of the bug being fixed.
+    document_type = document_type.lower() if document_type else None
+    if document_type and document_type not in _servable_document_types():
+        raise HTTPException(status_code=422, detail={
+            "error": "unknown document_type",
+            "reason_code": "unknown_document_type",
+            "message": (
+                f"'{document_type}' is not a document type this view serves. It used to be "
+                "accepted and answered with the whole corpus, which is why per-type totals "
+                "did not add up."
+            ),
+            "valid_values": list(_servable_document_types()),
+        })
 
     # Branch 1: amendment_documents (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion)
     AD_TYPE_MAP = {
@@ -700,8 +746,13 @@ async def list_ep_documents(
         aq = aq.filter(AmendmentDocument.committee_code == committee.upper())
     if procedure_reference:
         aq = aq.filter(AmendmentDocument.procedure_reference == procedure_reference)
-    if document_type and document_type in REVERSE_AD_MAP:
-        aq = aq.filter(AmendmentDocument.document_type == REVERSE_AD_MAP[document_type])
+    if document_type:
+        if document_type in REVERSE_AD_MAP:
+            aq = aq.filter(AmendmentDocument.document_type == REVERSE_AD_MAP[document_type])
+        else:
+            # This branch does not serve that type. Leaving the filter off entirely is how
+            # `document_type=report` came back with all 1,356 amendment documents.
+            aq = aq.filter(sa_false())
     if published_from:
         aq = aq.filter(AmendmentDocument.document_date >= published_from)
     if published_to:
@@ -710,7 +761,14 @@ async def list_ep_documents(
         aq = aq.filter(AmendmentDocument.scraped_at >= updated_from)
 
     a_total = aq.count()
-    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(limit * 4).all()
+    # Take page*limit from EACH branch, not a fixed multiple of limit. The union is merged
+    # and sorted in Python, so the slice at the end can only see what was fetched: with
+    # `limit * 4` per branch the merged list held at most 8*limit rows, so page 9 onwards
+    # came back EMPTY at every page size while `total` still advertised 1,931 and
+    # `has_more` stayed true. Only 800 of the records were reachable. The same bug was
+    # fixed in /council-documents on 27 Aug 2026; this endpoint never got the fix.
+    depth = page * limit
+    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(depth).all()
     lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in a_rows])
     for r in a_rows:
         fallback = f"{AD_TYPE_MAP.get(r.document_type, r.document_type or 'doc')} for {r.procedure_reference} ({r.committee_code})"
@@ -741,6 +799,12 @@ async def list_ep_documents(
         cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if updated_from:
         cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
+    if document_type:
+        # This branch never applied the filter, so every document_type query returned all
+        # 575 work items on top of whatever branch 1 matched: that is why the per-type
+        # totals added up to 8,858 against a corpus of 1,931 (GovClipping, 24 Sep 2026).
+        # The expression has to match what this branch EMITS as document_type below.
+        cq = cq.filter(func.lower(_cw_document_type_sql()) == document_type)
     # The window applies to the date this branch serves as document_date. It was
     # missing, so every published_from/published_to call returned all 575 work items.
     if published_from:
@@ -748,7 +812,10 @@ async def list_ep_documents(
     if published_to:
         cq = cq.filter(CommitteeWorkItem.vote_date <= datetime.combine(published_to, time.max))
     c_total = cq.count()
-    c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(limit * 4).all()
+    # Ordered by last_updated, not vote_date: every committee_work row has a NULL
+    # vote_date, so they all tie at the bottom of the merge key below and last_updated is
+    # the only order that makes the page deterministic.
+    c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(depth).all()
     for r in c_rows:
         items.append(EPDocumentItem(
             id=str(r.id),

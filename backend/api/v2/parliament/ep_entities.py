@@ -260,7 +260,7 @@ async def list_member_votes(
     response_model=PaginatedResponse[EPDocumentItem],
     summary="Unified view of all EP committee output — work items + amendments + adopted texts",
     description="""**What it does**
-Returns a unified, cross-committee view that merges three separate document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur), (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion), and (3) `texts_adopted` (the formal plenary outputs). Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across the three.
+Returns a unified, cross-committee view that merges two document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur) and (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion). Adopted plenary texts are NOT in this view: use `/texts-adopted` for those. Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across both.
 
 **When to use it**
 When you want "everything that happened on file X across all stages" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering "what is the LIBE committee working on this week?".
@@ -268,7 +268,7 @@ When you want "everything that happened on file X across all stages" without mak
 **Input**
 - `committee` — 4-letter code (e.g. `LIBE`).
 - `procedure_reference` — OEIL reference.
-- `document_type` — normalised: `draft_report` / `report` / `amendments` / `opinion` / `minutes` / `resolution`.
+- `document_type` — normalised across the two streams. From amendment documents: `draft_report`, `amendments`, `draft_recommendation`, `opinion`, `draft_opinion`. From committee work items, whose stage doubles as their type: `in_committee`, `awaiting_vote`, `tabled`, `adopted`, `rejected`, `withdrawn`, `pending`, `completed`, `unknown`, `work_item`. Anything else is a 422 listing these: it used to be accepted and answered with the whole corpus.
 - `q` — substring search across titles.
 - `published_from`, `published_to` — date filter.
 - `updated_from` — incremental sync.
@@ -290,7 +290,7 @@ async def list_ep_documents(
     request: Request,
     committee: Optional[str] = Query(None),
     procedure_reference: Optional[str] = Query(None),
-    document_type: Optional[str] = Query(None, description="draft_report | report | amendments | opinion | minutes | resolution"),
+    document_type: Optional[str] = Query(None, description="Normalised across both streams: draft_report | amendments | draft_recommendation | opinion | draft_opinion (amendment documents), or the committee-work stage (in_committee | awaiting_vote | tabled | adopted | rejected | withdrawn | pending | completed | unknown | work_item). An unserved value is a 422, not the whole corpus."),
     q: Optional[str] = Query(None),
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
