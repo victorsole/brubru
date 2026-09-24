@@ -116,3 +116,39 @@ def test_the_news_alerts_source_is_still_there():
     alerts = [c for c in BESPOKE_SOURCES
               if c["institution"] == "ECHA" and c.get("source_key") != "ECHA_WEEKLY"]
     assert len(alerts) == 1 and alerts[0]["url"].endswith("/news")
+
+
+# --------------------------------------------------------------------------- machine tokens
+# CPVO's image links carry alt="field_file_image_title_text" -- the Drupal FIELD NAME, not
+# a description. At 27 characters it passed the length check and was stored as the title of
+# a news item (found 24 Sep 2026 while auditing six "stale" agencies).
+from services.scrapers.bespoke_news_scraper import _is_machine_token, _resolve_title_with_source  # noqa: E402
+
+
+@pytest.mark.parametrize("value", [
+    "field_file_image_title_text",
+    "field_image_alt_text",
+    "news-and-events-listing",
+])
+def test_a_machine_token_is_not_a_headline(value):
+    assert _is_machine_token(value)
+
+
+@pytest.mark.parametrize("value", [
+    "Official Publications 4.2026",
+    "EU-Australia trade deal signed",
+    "CPVO and Dutch Board launch a harmonised form",
+    "field_image",                     # two parts only: could be a real word pair
+])
+def test_a_real_title_is_not_mistaken_for_one(value):
+    assert not _is_machine_token(value)
+
+
+def test_the_alt_placeholder_never_becomes_the_title():
+    """Falls through to the slug, which is a poor title but a TRUE one."""
+    title, source = _resolve_title_with_source(
+        attrs='href="/en/news-and-events/news/official-publications-42026"',
+        inner='<img src="x.png" alt="field_file_image_title_text">',
+        path="/en/news-and-events/news/official-publications-42026",
+    )
+    assert source == "slug" and "field_" not in (title or "")

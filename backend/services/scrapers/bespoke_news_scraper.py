@@ -64,6 +64,16 @@ def _slug_title(path: str) -> str:
 _CTA_TEXT = re.compile(r"^\s*(?:read|learn|find out|discover|see|view)\s+(?:more|all|the full)\b|"
                        r"^\s*acc?ess\s+(?:to\s+)?the\s+(?:publication|article|story)\b", re.I)
 _ATTR_TITLE_PREFIX = re.compile(r"^\s*(?:acc?ess\s+to\s+the\s+publication|read\s+more)\s*:\s*", re.I)
+# A machine token is not a headline. CPVO's image links carry
+# alt="field_file_image_title_text" -- the Drupal FIELD NAME, not a description -- which
+# is 27 characters and therefore passed the length check and was stored as the title of a
+# news item (24 Sep 2026). No headline is a single lowercase word run joined by
+# underscores or hyphens, so this costs nothing and stops the class.
+_MACHINE_TOKEN = re.compile(r"^[a-z0-9]+(?:[_-][a-z0-9]+){2,}$")
+
+
+def _is_machine_token(value: str) -> bool:
+    return bool(_MACHINE_TOKEN.match(value.strip()))
 
 
 def _resolve_title_with_source(attrs: str, inner: str, path: str) -> tuple[str | None, str]:
@@ -81,10 +91,10 @@ def _resolve_title_with_source(attrs: str, inner: str, path: str) -> tuple[str |
         v = _attr(a, attrs)
         if v:
             v = _ATTR_TITLE_PREFIX.sub("", _clean(_html.unescape(v)))
-            if 15 <= len(v) <= 220:
+            if 15 <= len(v) <= 220 and not _is_machine_token(v):
                 return v, "attr"
     alt = re.search(r'alt="([^"]{15,220})"', inner)
-    if alt:
+    if alt and not _is_machine_token(_clean(alt.group(1))):
         return _clean(alt.group(1)), "alt"
     st = _slug_title(path)
     return (st, "slug") if len(st) >= 12 else (None, "none")
