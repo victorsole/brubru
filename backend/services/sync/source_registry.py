@@ -90,6 +90,19 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("texts_adopted_procedures", "Texts adopted - procedure refs", "warm",
                "scripts/backfill_texts_adopted_procedures.py", ("--apply", "--limit", "60", "--budget", "1300"),
                timeout=1500, stale_after_hours=48),
+    # Live OEIL pages for the Legislative Train (24 Sep 2026). Nothing refreshed
+    # an EXISTING carriage's OEIL page on a schedule: the OEIL feed sync runs
+    # with skip_existing=True, so it only adds new procedures, and this script
+    # was a manual /carriages step. 398 live files had a page older than 7 days
+    # and 19 had never been fetched, so rapporteur appointments, draft reports
+    # and status changes waited for a human. Stalest page first, so the budget
+    # walks the whole Train over a few runs; BEFORE oeil_roles so the role
+    # parse reads today's pages. A procedure OEIL has not created yet (404) is
+    # reported by name, not counted as an error.
+    SourceSpec("oeil_carriages", "Carriages - OEIL pages and status", "warm",
+               "scripts/update_carriage_statuses_from_oeil.py",
+               ("--stalest-first", "--limit", "80", "--budget", "1300"),
+               timeout=1500, stale_after_hours=48),
     SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
                "scripts/backfill_oeil_committee_roles.py", ("--apply",),
                timeout=900, stale_after_hours=48),

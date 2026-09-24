@@ -100,8 +100,6 @@ def resolve(ta_reference: str) -> tuple[str | None, str]:
     if not doc or not doc.get("data"):
         return None, "adopted text not in the EP API"
     adopts = doc["data"][0].get("adopts") or []
-    if not adopts:
-        return None, "adopts nothing"
     for target in adopts:
         tid = str(target).rsplit("/", 1)[-1]
         pd = _get(f"plenary-documents/{tid}")
@@ -117,7 +115,24 @@ def resolve(ta_reference: str) -> tuple[str | None, str]:
         if label and _LABEL.match(label):
             return label, f"via {tid}"
         return None, f"procedure {procs[0]} has no usable label"
-    return None, "no adopted document names a procedure"
+    # Second route (24 Sep 2026): the text's OWN record. Urgent-procedure votes
+    # (Rule 170: the EUDR delays, the wolf, CO2 cars, the CSRD/CSDDD stop-the-
+    # clock) adopt the Commission proposal directly, so there is no A-document
+    # to follow and the route above finds nothing: 23 of the term's texts
+    # stayed without a procedure. The record itself names it, in
+    # inverse_created_a_realization_of ("eli/dl/proc/2025-0044") and in its
+    # decision event ("2025-0044-DEC-DCPL-..."). Only an unambiguous single
+    # procedure is used.
+    own = sorted(set(_PROC.findall(json.dumps(doc["data"][0]))))
+    if len(own) == 1:
+        p = _get(f"procedures/{own[0]}")
+        label = ((p or {}).get("data") or [{}])[0].get("label")
+        if label and _LABEL.match(label):
+            return label, "via the text's own procedure link"
+        return None, f"procedure {own[0]} has no usable label"
+    if len(own) > 1:
+        return None, f"text names {len(own)} procedures"
+    return None, "adopts nothing" if not adopts else "no adopted document names a procedure"
 
 
 def main() -> int:

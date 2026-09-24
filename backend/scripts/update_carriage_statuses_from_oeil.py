@@ -21,6 +21,7 @@ OEIL had moved on.
 """
 
 import argparse
+import time
 import asyncio
 import sys
 from pathlib import Path
@@ -51,9 +52,16 @@ _ap.add_argument("--refs", action="append", default=None,
                  help="Procedure ref to refresh, e.g. --refs '2026/0074(COD)'. Repeatable. "
                       "Omit to sweep every non-adopted carriage.")
 _ap.add_argument("--limit", type=int, default=None, help="Cap the number of carriages checked.")
+_ap.add_argument("--stalest-first", action="store_true",
+                 help="Check the carriages whose OEIL page is oldest (never fetched first). "
+                      "The scheduled run uses this so a --limit never starves the same rows.")
+_ap.add_argument("--budget", type=int, default=0,
+                 help="Stop starting new carriages after this many seconds (0 = none).")
 _args, _ = _ap.parse_known_args()
 REFS = _args.refs
 LIMIT = _args.limit
+STALEST_FIRST = _args.stalest_first
+BUDGET = _args.budget
 
 
 def log(msg):
@@ -108,7 +116,15 @@ async def update_statuses():
         # included) for a 1,900-row sweep was tens of MB for three fields.
         carriages = q.with_entities(
             LegislativeCarriage.id, LegislativeCarriage.oeil_procedure_ref, LegislativeCarriage.title,
-        ).order_by(LegislativeCarriage.oeil_procedure_ref).all()
+        ).order_by(
+            # Scheduled on the warm tier since 24 Sep 2026. Ordered by reference,
+            # a --limit run re-checked the same rows forever: 398 of the live
+            # files had an OEIL page older than 7 days and 19 had never been
+            # fetched, so new rapporteurs and draft reports waited for someone
+            # to run /carriages by hand.
+            *((LegislativeCarriage.oeil_body_fetched_at.asc().nullsfirst(),) if STALEST_FIRST and not REFS else ()),
+            LegislativeCarriage.oeil_procedure_ref,
+        ).all()
         if LIMIT:
             carriages = carriages[:LIMIT]
 
@@ -130,6 +146,8 @@ async def update_statuses():
         rows_changed = 0
         status_changes = []
         failed_refs = []
+        not_on_oeil = []
+        started = time.monotonic()
 
         # Plain tuples, then re-load each row by id AFTER its fetch: ORM objects
         # from a session that was replaced on reconnect are detached, and writes
@@ -139,12 +157,30 @@ async def update_statuses():
         db.commit()
 
         for i, (carriage_id, procedure_ref, title) in enumerate(targets):
+            if BUDGET and time.monotonic() - started > BUDGET:
+                log(f"\n[INFO] budget spent; {len(targets) - i} carriage(s) left for the next run")
+                break
             log(f"\n[{i+1}/{len(targets)}] {procedure_ref}: {title[:50]}...")
 
             try:
                 try:
                     data, page = await scraper.get_procedure_with_page(procedure_ref)
                 except OEILFetchError as fe:
+                    if fe.status == 404:
+                        # Third state, not an error: OEIL answers 404 "does not
+                        # exist or is in the process of being initiated" for a
+                        # proposal the Commission adopted days ago (COM(2026) 498,
+                        # 2026/0289(COD), on 24 Sep). Stamp the row so it goes to
+                        # the back of a --stalest-first queue and is retried next
+                        # cycle; report it by name.
+                        not_on_oeil.append(procedure_ref)
+                        row = db.get(LegislativeCarriage, carriage_id)
+                        if row is not None:
+                            row.oeil_body_fetched_at = datetime.now(timezone.utc).replace(tzinfo=None)
+                            db.commit()
+                        log("   -> [INFO] not on OEIL yet (404); retried next cycle")
+                        await asyncio.sleep(0.5)
+                        continue
                     errors += 1
                     failed_refs.append(f"{procedure_ref}: {fe.reason}")
                     log(f"   -> [ERROR] FETCH/PARSE FAILED: {fe}")
@@ -256,6 +292,8 @@ async def update_statuses():
         log(f"  Key events updated: {updated_key_events}")
         log(f"  Status changes: {updated_count}")
         log(f"  Errors: {errors}")
+        log(f"  Not on OEIL yet (404, not an error): {len(not_on_oeil)}"
+            + (f" -> {', '.join(not_on_oeil)}" if not_on_oeil else ""))
         log(f"  Fetch routes: {dict(scraper.fetch_stats)}")
         if failed_refs:
             log("\nFailed refs (fetch/parse):")
