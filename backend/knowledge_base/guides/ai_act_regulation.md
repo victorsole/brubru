@@ -148,7 +148,7 @@ On 18 March 2026, the EP committees IMCO and LIBE (joint procedure) adopted thei
 - **Amendment deadline:** 28 April 2026
 - **Scope:** Constitutional and institutional implications of AI in the EU integration process, governance frameworks for AI use in EU institutions, democratic oversight of AI-driven decision-making
 
-This AFCO report examines how AI reshapes European governance and institutional functioning, complementing the AI Act's regulatory framework with constitutional considerations.
+This AFCO report examines how AI reshapes European governance and institutional functioning, complementing the AI Act's regulatory framework with constitutional considerations. **Full, current record (status, 180 amendments, adopted LIBE and IMCO opinions, the proposed European Parliament AI Observatory): see `ep_ai_institutional_aspects_report`.**
 
 ## EPRS: AI Regulatory Sandboxes (1 April 2026)
 

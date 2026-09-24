@@ -3,6 +3,16 @@
   "entries": [
     {
       "date": "2026-09-24",
+      "action": "added",
+      "guide": "ep_ai_institutional_aspects_report",
+      "title": "European Parliament report on the institutional aspects of AI (2025/2118(INI))",
+      "summary": "AFCO own-initiative report: status, the proposed Parliament AI Observatory, Treaty-change and electoral-law paragraphs, 180 amendments, LIBE and IMCO opinions",
+      "refs": [
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-09-24",
       "action": "updated",
       "guide": "eu_neighbourhood_policy_east_south",
       "title": "European Neighbourhood Policy",
