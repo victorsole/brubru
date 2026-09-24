@@ -121,6 +121,17 @@ BESPOKE_SOURCES: List[Dict] = [
      "link_re": r"/en/news-document/en/\d+", "type": "news"},
     {"institution": "ECHA", "url": "https://echa.europa.eu/news",
      "link_re": r"/-/[a-z][a-z0-9-]{15,}", "type": "news"},
+    # ECHA's news ALERTS stopped on 17 August 2026 (checked at the source on 24 Sep:
+    # the alerts archive's newest entry is that day), and its live stream moved to the
+    # weekly. Without this the feed showed a 37-day-old agency that in fact publishes
+    # every Tuesday. The date is in the URL, month spelled out.
+    {"institution": "ECHA", "url": "https://echa.europa.eu/news-and-events/e-news-archive",
+     "link_re": r"/view-article/-/journal_content/title/echa-weekly-\d{1,2}-[a-z]+-20\d\d",
+     "date_re": r"echa-weekly-(\d{1,2})-([a-z]+)-(20\d\d)",
+     "source_key": "ECHA_WEEKLY", "type": "news", "limit": 30,
+     # The archive's link text is only the day ("23 September"), so the parser would
+     # fall back to the URL slug ("Echa weekly 23 september 2026").
+     "title_template": "ECHA Weekly, {date.day} {date:%B %Y}"},
     {"institution": "ENISA", "url": "https://www.enisa.europa.eu/news",
      "link_re": r"/news/[a-z][a-z0-9-]{9,}", "type": "news"},
     {"institution": "EUIPO", "url": "https://www.euipo.europa.eu/en/news-and-events",
@@ -252,6 +263,46 @@ def _card_date(soup, key: str, is_item_link, absolute) -> Optional[date]:
     return None
 
 
+_MONTHS = {m: i for i, m in enumerate(
+    ("january february march april may june july august september october november december").split(), 1)}
+
+
+def _date_from_url(date_re, url: str):
+    """The day a URL names, or None.
+
+    Reads three captured groups in any order, because publishers disagree: most name
+    the day as `/2026/04/05/`, ECHA names it `.../echa-weekly-23-september-2026`. A
+    numeric-only reader left every ECHA weekly undated, so the write guard refused the
+    whole stream and the feed stopped on 17 August 2026.
+
+    The four-digit group is the year, a month NAME is the month, and what remains is
+    read as (month, day) in that order, which is what every numeric pattern here uses.
+    """
+    if not date_re:
+        return None
+    m = date_re.search(url)
+    if not m or len(m.groups()) < 3:
+        return None
+    groups = [(g or "").strip() for g in m.groups()[:3]]
+    year = next((int(g) for g in groups if g.isdigit() and len(g) == 4), None)
+    month = next((_MONTHS[g.lower()] for g in groups if g.lower() in _MONTHS), None)
+    rest = [int(g) for g in groups if g.isdigit() and len(g) != 4]
+    if year is None:
+        return None
+    if month is None:
+        if len(rest) != 2:
+            return None
+        month, day = rest
+    elif len(rest) == 1:
+        day = rest[0]
+    else:
+        return None
+    try:
+        return date(year, month, day)
+    except ValueError:
+        return None
+
+
 def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
     # Relative hrefs resolve against a page's <base href> if present (CJEU sets
     # <base href=".../site/">), otherwise against the page URL.
@@ -302,15 +353,8 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
         seen.add(key)
         nd = None
         day_precise = False
-        if date_re:
-            dm = date_re.search(url)
-            if dm and len(dm.groups()) >= 3:
-                g = dm.groups()
-                try:
-                    nd = date(int(g[0]), int(g[1]), int(g[2]))
-                    day_precise = True
-                except ValueError:
-                    nd = None
+        nd = _date_from_url(date_re, url)
+        day_precise = nd is not None
         if not day_precise:
             # A URL that names only a year or a month is not a publication date, and
             # it is never stored as one: FRA's /news/2026/ became 1 January on 57 rows,
@@ -322,6 +366,9 @@ def parse_bespoke(html: str, cfg: Dict) -> List[Dict]:
             if soup is None:
                 soup = BeautifulSoup(html or "", "html.parser")
             nd = _card_date(soup, key, _is_item_link, _absolute)
+        if nd is not None and cfg.get("title_template"):
+            # A listing whose link text is just a day needs the title built, not guessed.
+            title = cfg["title_template"].format(date=nd)
         item = {
             "title": title[:480], "summary": None, "news_date": nd, "image_url": None,
             "source_url": url, "external_id": _slug_id(url), "item_type": cfg.get("type", "news"),
@@ -367,13 +414,7 @@ def parse_rss_items(xml: bytes | str, cfg: Dict) -> List[Dict]:
         if key in seen:
             continue
         seen.add(key)
-        nd = None
-        dm = date_re.search(url) if date_re else None
-        if dm and len(dm.groups()) >= 3:
-            try:
-                nd = date(int(dm.group(1)), int(dm.group(2)), int(dm.group(3)))
-            except ValueError:
-                nd = None
+        nd = _date_from_url(date_re, url)
         if nd is None:
             raw = (item.findtext(f"{_ATOM_NS}updated") or "").strip()
             if len(raw) >= 10 and re.match(r"\d{4}-\d{2}-\d{2}", raw):
