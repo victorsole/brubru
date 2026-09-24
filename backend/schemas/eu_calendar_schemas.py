@@ -92,6 +92,7 @@ class EventType(str, Enum):
     COMITOLOGY_MEETING = "comitology_meeting"
     EXPERT_GROUP_MEETING = "expert_group_meeting"
     GRANT_DEADLINE = "grant_deadline"
+    TRIS_STANDSTILL = "tris_standstill"  # migration 240, 24 Sep 2026
     # Third-party (euagenda.eu) event types — same root cause as
     # THIRD_PARTY institution above. Mirror the model enum.
     CONFERENCE = "conference"
