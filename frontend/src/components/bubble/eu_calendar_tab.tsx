@@ -940,6 +940,8 @@ function EventDetailModal() {
                   ? 'View draft agendas'
                   : event.event_type === 'commission_college_meeting'
                     ? 'View agendas (OJ documents)'
+                    : event.event_type === 'tris_standstill'
+                      ? 'View the notification on TRIS'
                     : `Open on ${getInstitutionLabel(event.institution)} website`}
             </a>
           )}

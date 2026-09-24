@@ -3626,7 +3626,8 @@
       "webinar": "Seminari web",
       "workshop": "Taller",
       "agency_event": "Esdeveniment d'agència",
-      "court_hearing": "Vista judicial"
+      "court_hearing": "Vista judicial",
+      "tris_standstill": "Statu quo TRIS"
     },
     "epBody": "Òrgan",
     "committees": "Comissions",

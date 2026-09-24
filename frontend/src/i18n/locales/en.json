@@ -3626,7 +3626,8 @@
       "webinar": "Webinar",
       "workshop": "Workshop",
       "agency_event": "Agency event",
-      "court_hearing": "Court hearing"
+      "court_hearing": "Court hearing",
+      "tris_standstill": "TRIS standstill"
     },
     "epBody": "Body",
     "committees": "Committees",

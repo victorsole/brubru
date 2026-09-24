@@ -3626,7 +3626,8 @@
       "webinar": "Webinar",
       "workshop": "Laboratorio",
       "agency_event": "Evento dell'agenzia",
-      "court_hearing": "Udienza"
+      "court_hearing": "Udienza",
+      "tris_standstill": "Status quo TRIS"
     },
     "epBody": "Organo",
     "committees": "Commissioni",

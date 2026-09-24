@@ -2575,7 +2575,8 @@
       "webinar": "Webinar",
       "workshop": "Workshop",
       "agency_event": "Agentschapsevenement",
-      "court_hearing": "Hoorzitting"
+      "court_hearing": "Hoorzitting",
+      "tris_standstill": "TRIS-standstill"
     },
     "epBody": "Orgaan",
     "committees": "Commissies",

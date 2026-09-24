@@ -489,7 +489,7 @@ export const CORE_INSTITUTIONS: InstitutionType[] = [
 export const FILTERABLE_EVENT_TYPES: string[] = [
   'plenary_session', 'committee_meeting', 'council_meeting', 'european_council_summit',
   'eurogroup', 'commission_college_meeting', 'conference', 'webinar', 'workshop',
-  'agency_event', 'court_hearing',
+  'agency_event', 'court_hearing', 'tris_standstill',
 ];
 
 // EP "body" dropdown — the non-committee groups. Values are type-prefixed so the

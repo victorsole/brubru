@@ -81,6 +81,12 @@ class EUCalendarSyncService:
         result = self.sync_ecb_meetings(2026)
         results.append(result)
 
+        # TRIS standstill deadlines (24 Sep 2026)
+        try:
+            results.append(self.sync_tris_standstills())
+        except Exception as e:
+            logger.warning(f"[WARN] TRIS standstill sync skipped in sync_all: {e}")
+
         # Commission DG + executive-agency events (the ~50 DG event-page URLs)
         try:
             results.append(self.sync_dg_events())
@@ -584,6 +590,71 @@ class EUCalendarSyncService:
             filters.append(getattr(EUCalendarEvent, f) == val)
         return db.query(EUCalendarEvent.id).filter(*filters).first() is not None
 
+    def sync_tris_standstills(self, days_back: int = 30, days_ahead: int = 365) -> Dict[str, Any]:
+        """TRIS standstill deadlines as calendar events (24 Sep 2026, Victor).
+
+        A Member State that notifies a draft technical rule under Directive (EU)
+        2015/1535 may not adopt it before the standstill period ends; a detailed
+        opinion by the Commission or another Member State extends it. One event
+        per notification, keyed on its number, so an extended standstill MOVES
+        the event instead of adding a second one. Reads tris_notifications,
+        which the daily TRIS sync keeps current.
+        """
+        from datetime import date as _date, datetime as _dt, timedelta as _td, timezone as _tz
+
+        from sqlalchemy import text as _text
+
+        start_time = time.time()
+        result = {"source": "tris", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
+        today = _date.today()
+        db = self._get_db()
+        try:
+            rows = db.execute(_text("""
+                SELECT notification_number, notifying_country, title, products_or_services,
+                       standstill_until, source_url, policy_areas,
+                       COALESCE(jsonb_array_length(detailed_opinions), 0) AS opinions,
+                       COALESCE(jsonb_array_length(member_state_observations), 0) AS comments
+                  FROM tris_notifications
+                 WHERE standstill_until BETWEEN :lo AND :hi
+            """), {"lo": today - _td(days=days_back), "hi": today + _td(days=days_ahead)}).mappings().all()
+            result["scraped"] = len(rows)
+            for r in rows:
+                try:
+                    self._upsert_event(db, tris_event(r, today), result)
+                except Exception as e:  # noqa: BLE001 -- one row must not stop the rest
+                    logger.warning(f"[WARN] TRIS event {r['notification_number']} failed: {e}")
+                    result["errors"] += 1
+            db.commit()
+        except Exception as e:
+            logger.error(f"[ERROR] TRIS calendar sync failed: {e}")
+            result["errors"] += 1
+        finally:
+            if self._should_close_db():
+                db.close()
+
+        result["duration_seconds"] = round(time.time() - start_time, 2)
+        try:
+            from services.sync.freshness import record_run
+            if result.get("scraped", 0) == 0:
+                # TRIS always has open standstills; none means the source is empty.
+                status, err = "failed", "no TRIS standstills in the window (tris_notifications empty or stale)"
+            elif result["errors"]:
+                status, err = "degraded", f"{result['errors']} event(s) failed to write"
+            else:
+                status, err = "success", None
+            _db = self._get_db()
+            try:
+                record_run(_db, source_key="tris_calendar", tier="calendar", status=status,
+                           items_added=result["added"], error=err,
+                           started_at=_dt.now(_tz.utc) - _td(seconds=result["duration_seconds"]))
+            finally:
+                if self._should_close_db():
+                    _db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"[WARN] could not record tris_calendar run: {e}")
+        logger.info(f"[OK] TRIS standstills: {result['added']} added, {result['updated']} updated")
+        return result
+
     def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
         """Sync Council + European Council meetings from the live consilium
         calendar. SYNCHRONOUS: the scraper renders the WAF-protected page with
@@ -751,3 +822,60 @@ class EUCalendarSyncService:
         )
         db.add(event)
         result["added"] += 1
+
+
+# ----------------------------------------------------------------------------
+# TRIS standstill events (24 Sep 2026)
+# ----------------------------------------------------------------------------
+
+TRIS_COUNTRY_NAMES = {
+    "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "HR": "Croatia", "CY": "Cyprus",
+    "CZ": "Czechia", "DK": "Denmark", "EE": "Estonia", "FI": "Finland", "FR": "France",
+    "DE": "Germany", "EL": "Greece", "GR": "Greece", "HU": "Hungary", "IE": "Ireland",
+    "IT": "Italy", "LV": "Latvia", "LT": "Lithuania", "LU": "Luxembourg", "MT": "Malta",
+    "NL": "Netherlands", "PL": "Poland", "PT": "Portugal", "RO": "Romania", "SK": "Slovakia",
+    "SI": "Slovenia", "ES": "Spain", "SE": "Sweden", "NO": "Norway", "IS": "Iceland",
+    "LI": "Liechtenstein", "CH": "Switzerland", "TR": "Türkiye", "UK": "United Kingdom",
+    "GB": "United Kingdom", "XI": "United Kingdom (Northern Ireland)",
+}
+
+
+def tris_event(row, today) -> Dict[str, Any]:
+    """One TRIS notification as a calendar event dict for _upsert_event."""
+    number = row["notification_number"]
+    code = (row["notifying_country"] or "").upper()
+    country = TRIS_COUNTRY_NAMES.get(code, code or "a Member State")
+    draft = " ".join((row["title"] or "").split()).rstrip(".")
+    short = draft if len(draft) <= 140 else draft[:137].rsplit(" ", 1)[0] + "..."
+    ends = row["standstill_until"]
+    opinions, comments = int(row["opinions"] or 0), int(row["comments"] or 0)
+    parts = [
+        f"TRIS notification {number} ({country}). Standstill period ends on {ends:%d %B %Y}: "
+        f"under Directive (EU) 2015/1535 {country} may not adopt this draft technical rule "
+        "before that date.",
+        f"Draft: {draft}.",
+    ]
+    products = " ".join((row["products_or_services"] or "").split())[:400].rstrip(".")
+    if products:
+        parts.append(f"Products or services: {products}.")
+    if opinions:
+        parts.append(f"Detailed opinion(s) received: {opinions} (a detailed opinion extends the standstill).")
+    if comments:
+        parts.append(f"Comments received: {comments}.")
+    areas = [a for a in (row["policy_areas"] or []) if a] or ["Single Market"]
+    return {
+        "institution": "COMMISSION",
+        "event_type": "tris_standstill",
+        "title": f"TRIS standstill ends: {country}, {short}",
+        "description": " ".join(parts),
+        "start_date": ends,
+        "end_date": None,
+        "all_day": True,
+        "status": "completed" if ends < today else "scheduled",
+        "commission_dg": "GROW",
+        "policy_areas": areas,
+        "source": "tris",
+        "external_id": f"tris_{number}",
+        "source_url": row["source_url"],
+    }
+

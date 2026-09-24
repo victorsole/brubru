@@ -77,6 +77,7 @@ export type EventType =
   | 'comitology_meeting'
   | 'expert_group_meeting'
   | 'grant_deadline'
+  | 'tris_standstill'
   | 'conference'
   | 'webinar'
   | 'roundtable'
@@ -246,6 +247,7 @@ export const EVENT_TYPE_LABELS: Record<EventType, string> = {
   comitology_meeting: 'Comitology',
   expert_group_meeting: 'Expert Group',
   grant_deadline: 'Grant Deadline',
+  tris_standstill: 'TRIS standstill',
   conference: 'Conference',
   webinar: 'Webinar',
   roundtable: 'Roundtable',

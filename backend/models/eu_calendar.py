@@ -94,6 +94,9 @@ class EventTypeEnum(str, enum.Enum):
     COMITOLOGY_MEETING = "comitology_meeting"
     EXPERT_GROUP_MEETING = "expert_group_meeting"
     GRANT_DEADLINE = "grant_deadline"
+    # Standstill end of a draft national technical rule notified under
+    # Directive (EU) 2015/1535 (TRIS). Migration 240, 24 Sep 2026.
+    TRIS_STANDSTILL = "tris_standstill"
     # Third-party (euagenda.eu) event types, added 22 April 2026
     CONFERENCE = "conference"
     WEBINAR = "webinar"
