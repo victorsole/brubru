@@ -371,6 +371,23 @@ def _kill_process_group(proc, name: str) -> None:
             pass
 
 
+def _failure_detail(stderr: str | None, stdout: str | None, returncode=None) -> str:
+    """What a failed child said, for the sync_runs error column.
+
+    stderr first. When stderr is EMPTY, the stdout tail: scripts that fail on
+    purpose print "[ERROR] ..." to stdout and exit 1, and this runner used to
+    keep stdout only on success, so the reason was thrown away. The Catalan OJ
+    jobs failed four times in a row on Railway with an empty error for exactly
+    that reason (24 Sep 2026). The return code is always named, so a failure
+    can never be recorded as a blank.
+    """
+    err = (stderr or "").strip()
+    out = (stdout or "").strip()
+    body = err[-500:] if err else (("[stdout] " + out[-480:]) if out else "(no output)")
+    rc = f"rc={returncode}: " if returncode is not None else ""
+    return rc + body
+
+
 def _run_script(name: str, script_relpath: str, args: list[str] | None = None, timeout: int = 600):
     """Run a CLI sync script as a subprocess. Fail-soft + log.
 
@@ -413,12 +430,13 @@ def _run_script(name: str, script_relpath: str, args: list[str] | None = None, t
                 stdout = stderr = ""
             logger.error(f"[CRON] Tier sync: {name} timed out after {timeout}s")
             return {"status": "failed", "error": f"timeout_{timeout}s",
-                    "stderr_tail": (stderr or "")[-500:]}
+                    "stderr_tail": f"timeout_{timeout}s; " + _failure_detail(stderr, stdout)}
         if proc.returncode == 0:
             logger.info(f"[CRON] Tier sync: {name} done")
             return {"status": "success", "stdout_tail": (stdout or "")[-500:]}
-        logger.error(f"[CRON] Tier sync: {name} exited {proc.returncode}: {(stderr or '')[-300:]}")
-        return {"status": "failed", "returncode": proc.returncode, "stderr_tail": (stderr or "")[-500:]}
+        detail = _failure_detail(stderr, stdout, proc.returncode)
+        logger.error(f"[CRON] Tier sync: {name} exited {proc.returncode}: {detail[-300:]}")
+        return {"status": "failed", "returncode": proc.returncode, "stderr_tail": detail}
     except Exception as e:
         # Includes the EAGAIN spawn failure itself. Leave a breadcrumb that says
         # WHAT ran out, because the bare OSError message does not.
@@ -1603,7 +1621,8 @@ def cron_daily_brief(
             results["scrape"] = {"status": "success", "output": proc.stderr[-500:] if proc.stderr else ""}
             logger.info("[CRON] Daily brief: news scrape complete")
         else:
-            results["scrape"] = {"status": "failed", "error": proc.stderr[-300:] if proc.stderr else "Unknown error"}
+            results["scrape"] = {"status": "failed",
+                                 "error": _failure_detail(proc.stderr, proc.stdout, proc.returncode)[-300:]}
             logger.error(f"[CRON] Daily brief: scrape failed: {proc.stderr[-200:]}")
     except Exception as e:
         logger.error(f"[CRON] Daily brief: scrape error: {str(e)}")
