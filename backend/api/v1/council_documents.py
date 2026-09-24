@@ -311,12 +311,13 @@ def _cal_to_item(r) -> CouncilDocumentItem:
 Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council register documents (notes, working documents, presidency discussion notes), meeting agendas and summit outcomes. It unions Council-tagged `institutional_publications` with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL.
 
 **What the corpus covers, and what it does not**
-Read `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The Council public register is *queryable but not enumerable* — a date-only search returns nothing and there is no listing API — so register documents are ingested per policy term across Brubru's 35 canonical policy areas, alongside the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence — while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.
+Read `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The register's SEARCH is behind a Cloudflare challenge (re-checked 24 September 2026 against plain HTTP, a stealth browser and three Scrape.do modes), so documents reach Brubru through the register's own unwalled listings (latest documents, provisional agendas) and the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence — while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.
 
 **When to use it**
 For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.
 
 **Input**
+- `source` — `documents` (default): the register and press corpus. `meetings`: Council meetings from the calendar. `all`: both. Until 24 September 2026 there was no such parameter and the answer was always both, ordered by date; because meetings are FUTURE-dated, an endpoint called council-documents opened with next month's summits and read as a calendar.
 - `q` — substring search.
 - `document_type` — `press_release` / `conclusions` / `meeting_agenda` / etc.
 - `policy_area` — single policy area tag.
@@ -328,6 +329,7 @@ For tracking Council positions on legislative files (the "other half" of EP-Coun
 ```
 GET /api/v1/council-documents?document_type=conclusions&published_from=2026-01-01
 GET /api/v1/council-documents?policy_area=energy
+GET /api/v1/council-documents?source=meetings
 ```
 
 **You get back**
@@ -339,6 +341,10 @@ Synced every 12 hours (02:00 / 14:00 UTC, warm tier) for now — will move to de
 async def list_council_documents(
     request: Request,
     q: Optional[str] = Query(None),
+    source: str = Query("documents", pattern="^(documents|meetings|all)$",
+                        description="documents (default): the register and press corpus. "
+                                    "meetings: Council meetings from the calendar. "
+                                    "all: both, as this endpoint used to return by default."),
     document_type: Optional[str] = Query(None, description="press_release | conclusions | meeting_agenda | ..."),
     policy_area: Optional[str] = Query(None),
     published_from: Optional[date] = Query(None),
@@ -368,6 +374,13 @@ async def list_council_documents(
         updated_to = updated_end
 
     # Branch 1: institutional_publications filtered to Council sources
+    # Why `documents` is the default (24 Sep 2026): the union is ordered by date and
+    # Council MEETINGS are future-dated, so an endpoint called council-documents opened
+    # with next month's summits and the register documents began below them. It read as
+    # a calendar. Meetings are still here, on request, and `all` restores the old answer.
+    want_pubs = source in ("documents", "all")
+    want_cal = source in ("meetings", "all")
+
     pub_q = db.query(InstitutionalPublication).filter(
         or_(*[
             InstitutionalPublication.institution_slug.ilike(f"%{slug}%")
@@ -420,8 +433,11 @@ async def list_council_documents(
         # if filter is not meeting_agenda, exclude calendar events
         cal_q = cal_q.filter(False)
 
-    pub_total = pub_q.count()
-    cal_total = cal_q.count()
+    # A branch the caller did not ask for contributes nothing, to the count as well as
+    # to the rows: a `total` that counts meetings while the page holds only documents is
+    # the kind of number that sends a client paging for rows that are not there.
+    pub_total = pub_q.count() if want_pubs else 0
+    cal_total = cal_q.count() if want_cal else 0
     total = pub_total + cal_total
 
     # Take page*limit from EACH branch, not `limit`. The union is merged and
@@ -430,8 +446,10 @@ async def list_council_documents(
     # from 3 onwards came back EMPTY while `total` still advertised more.
     # Found 27 Aug 2026 while filling branch 1 (D1).
     depth = page * limit
-    pub_rows = pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast()).limit(depth).all()
-    cal_rows = cal_q.order_by(EUCalendarEvent.start_date.desc()).limit(depth).all()
+    pub_rows = (pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast())
+                .limit(depth).all()) if want_pubs else []
+    cal_rows = (cal_q.order_by(EUCalendarEvent.start_date.desc())
+                .limit(depth).all()) if want_cal else []
 
     data: list = [_pub_to_item(r) for r in pub_rows]
     data.extend(_cal_to_item(r) for r in cal_rows)

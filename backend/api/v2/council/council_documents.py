@@ -13,7 +13,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import Any, Dict, List, Optional  # noqa: F401
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request  # noqa: F401
-from api.v1._date_bounds import UpperBoundDatetime
 from sqlalchemy.orm import Session  # noqa: F401
 
 from core.database import get_db  # noqa: F401
@@ -34,12 +33,16 @@ configurations_router = APIRouter(prefix="/council-configurations", tags=["v2-co
     response_model=PaginatedResponse[CouncilDocumentItem],
     summary="Council of the EU documents — press releases, conclusions, meeting agendas, summits",
     description="""**What it does**
-Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council conclusions, meeting agendas, summit outcomes. Today the surface unions `institutional_publications` (Council-tagged rows) with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL events. A dedicated Council document register scraper (working-party + COREPER docs + Council conclusions full text) is queued.
+Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council register documents (notes, working documents, presidency discussion notes), meeting agendas and summit outcomes. It unions Council-tagged `institutional_publications` with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL.
+
+**What the corpus covers, and what it does not**
+Read `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The register's SEARCH is behind a Cloudflare challenge (re-checked 24 September 2026 against plain HTTP, a stealth browser and three Scrape.do modes), so documents reach Brubru through the register's own unwalled listings (latest documents, provisional agendas) and the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence — while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.
 
 **When to use it**
 For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.
 
 **Input**
+- `source` — `documents` (default): the register and press corpus. `meetings`: Council meetings from the calendar. `all`: both. Until 24 September 2026 there was no such parameter and the answer was always both, ordered by date; because meetings are FUTURE-dated, an endpoint called council-documents opened with next month's summits and read as a calendar.
 - `q` — substring search.
 - `document_type` — `press_release` / `conclusions` / `meeting_agenda` / etc.
 - `policy_area` — single policy area tag.
@@ -51,6 +54,7 @@ For tracking Council positions on legislative files (the "other half" of EP-Coun
 ```
 GET /api/v2/council/council-documents?document_type=conclusions&published_from=2026-01-01
 GET /api/v2/council/council-documents?policy_area=energy
+GET /api/v2/council/council-documents?source=meetings
 ```
 
 **You get back**
@@ -62,6 +66,10 @@ Synced every 12 hours (02:00 / 14:00 UTC, warm tier) for now — will move to de
 async def list_council_documents(
     request: Request,
     q: Optional[str] = Query(None),
+    source: str = Query("documents", pattern="^(documents|meetings|all)$",
+                        description="documents (default): the register and press corpus. "
+                                    "meetings: Council meetings from the calendar. "
+                                    "all: both, as this endpoint used to return by default."),
     document_type: Optional[str] = Query(None, description="press_release | conclusions | meeting_agenda | ..."),
     policy_area: Optional[str] = Query(None),
     published_from: Optional[date] = Query(None),
@@ -75,7 +83,7 @@ async def list_council_documents(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CouncilDocumentItem]:
-    return await _v1.list_council_documents(request=request, q=q, document_type=document_type, policy_area=policy_area, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_council_documents(request=request, q=q, source=source, document_type=document_type, policy_area=policy_area, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(
