@@ -781,6 +781,9 @@ _CA_DECISIVE_SUFFIX = ("cions",)
 # aspetti vadano approfonditi" matched nothing at all and defaulted to English.
 _IT_DECISIVE = frozenset({
     # articles and prepositions with no cross-language collision after folding
+    # "il" is ALSO the French pronoun ("faut-il", "existe-t-il"). It stays here
+    # because it is the only Italian signal in many short questions, and
+    # _FR_DECISIVE now competes with it in the same tally (24 Sep 2026).
     "il", "lo", "gli", "dei", "degli", "delle", "della", "dello", "dell",
     "nel", "nella", "nelle", "negli", "sul", "sulla", "sulle", "sui",
     "dal", "dalla", "col", "coi", "agli", "alle", "allo",
@@ -846,6 +849,37 @@ _NL_DECISIVE = frozenset({
     # domain nouns and participles
     "werking", "aangewezen", "geldt", "gelden", "bedrijven", "verplicht",
     "regels", "wetgeving",
+})
+
+# French-exclusive tokens, same contract as the four tables above (24 Sep 2026).
+#
+# Why this exists. French was the only Brubru language with no decisive table,
+# so the decisive pass could hand a French question to another language on one
+# shared token and French could not answer back. "Quelle majorite faut-il au
+# Conseil pour suspendre le volet commercial de l'accord d'association
+# UE-Israel ?" went to Italian on the pronoun "il" (also the Italian article)
+# and was answered in Italian twice in production. Seven of nine French test
+# questions with an inverted "-il" failed the same way.
+#
+# Membership rule, checked against the other five languages after folding.
+# Deliberately EXCLUDED, having been considered:
+#   "est"     Italian for "east"          "des"   Catalan for "since"
+#   "qui"     Italian and Catalan         "tres"  Catalan and Spanish "three"
+#   "sur"     Spanish for "south"         "parlement"  Dutch
+#   "commission", "comment", "vote"       English words
+#   "quelle"  Italian (already excluded from _IT_DECISIVE for the same reason)
+_FR_DECISIVE = frozenset({
+    # auxiliaries and modals
+    "faut", "doit", "doivent", "peut", "peuvent", "sont", "etre", "etait",
+    # function words and pronouns
+    "une", "avec", "dans", "cette", "ces", "aux", "au", "leur", "leurs",
+    "elle", "elles", "ils", "selon", "notamment", "ainsi", "aussi",
+    "depuis", "lorsque", "chaque", "tous", "quoi",
+    # interrogatives
+    "pourquoi", "quand", "quels", "quelles",
+    # domain nouns and verbs whose form differs in ES, CA, IT and NL
+    "conseil", "reglement", "delai", "delais", "loi", "donnees",
+    "entreprises", "transposer", "respecter",
 })
 
 
@@ -1012,13 +1046,23 @@ def _detect_query_language(text: str) -> str:
     _it_hits = sum(1 for w in words if _decisive(w, _IT_DECISIVE))
     _es_hits = sum(1 for w in words if _decisive(w, _ES_DECISIVE))
     _nl_hits = sum(1 for w in words if _decisive(w, _NL_DECISIVE))
+    _fr_hits = sum(1 for w in words if _decisive(w, _FR_DECISIVE))
+    # "il" is the Italian article AND the French pronoun. It stops counting for
+    # Italian when the sentence carries a French-exclusive token ("Il faut...",
+    # "Le Conseil a-t-il..."), or when it is the inverted French pronoun after
+    # a hyphen ("faut-il", "existe-t-il"). No Italian sentence writes "-il".
+    if "il" in words and (
+        _fr_hits or re.search(r"-\s*(?:t\s*-\s*)?il\b", text, re.IGNORECASE)
+    ):
+        _it_hits -= words.count("il")
     # Compared rather than short-circuited: an Italian sentence can clip a
     # single word from the Catalan list, and returning on first hit handed it
     # to Catalan outright. ES and NL joined the same comparison on 3 Sep 2026
     # (audit D1 + D3); a STRICT majority is required, so a sentence that ties
     # two decisive tables falls through to the bag-of-words scorer exactly as
     # before rather than being decided by declaration order here.
-    _decisive_tally = {"CA": _ca_hits, "IT": _it_hits, "ES": _es_hits, "NL": _nl_hits}
+    _decisive_tally = {"CA": _ca_hits, "IT": _it_hits, "ES": _es_hits,
+                       "NL": _nl_hits, "FR": _fr_hits}
     _top = max(_decisive_tally.values())
     if _top:
         _leaders = [lang for lang, n in _decisive_tally.items() if n == _top]
@@ -1445,7 +1489,8 @@ class AIService:
         assistant_message = self._apply_catalan_corrections(assistant_message, user_message)
 
         # Ensure a guide-flagged Brubru deep-dive/explainer URL is surfaced
-        assistant_message = self._append_deep_dive_link(assistant_message, context_str)
+        assistant_message = self._append_deep_dive_link(
+            assistant_message, context_str, user_message or "")
 
         # Post-process to add MEP links
         if mep_data:
@@ -1895,7 +1940,7 @@ class AIService:
         message = self._fold_prose_dashes(message)
         message = self._apply_catalan_corrections(message, user_query or "")
         message = self._correct_invented_features(message)
-        message = self._append_deep_dive_link(message, context_str)
+        message = self._append_deep_dive_link(message, context_str, user_query or "")
 
         if context_data is not None and getattr(
             context_data, "internal_knowledge", None
@@ -2448,7 +2493,8 @@ class AIService:
         yield ("I could not map that to a policy area just now. "
                "Please try again in a moment.")
 
-    def _append_deep_dive_link(self, message: str, context_str: str) -> str:
+    def _append_deep_dive_link(self, message: str, context_str: str,
+                               query: str = "") -> str:
         """
         If the injected EU context flags a Brubru explainer / deep-dive URL for
         the topic (a line containing both 'brubru.beresol.eu' and an
@@ -2490,6 +2536,8 @@ class AIService:
             "index", "html", "htm", "eucanon", "eu", "www", "brubru", "beresol",
             "the", "of", "and", "a", "an", "act", "regulation", "directive",
             "guide", "guides", "explainer", "deep", "dive", "ai", "data", "new",
+            # language page suffixes (".../ca.html"), never a topic
+            "ca", "es", "fr", "it", "nl", "en",
         }
         msg_norm = _re.sub(r"[^a-z0-9]+", " ", message.lower())
         msg_compact = msg_norm.replace(" ", "")
@@ -2504,19 +2552,45 @@ class AIService:
                 toks.append(t)
             return toks
 
+        # EVERY slug token must match, and against the user's QUESTION (audit,
+        # 24 Sep 2026). Matching ANY token against the ANSWER put
+        # /european-innovation-act/ on seven unrelated answers (EU-Israel, FDI),
+        # because "european" is in nearly every answer, and the batteries canon
+        # on an End-of-Life Vehicles answer. On the 27 historic appended links,
+        # any-token-in-answer kept 15 of 15 wrong ones; all-tokens-in-question
+        # kept 0 of 15 wrong and 10 of 12 right. English slugs cannot match a
+        # question in another language, so there the answer is the fallback,
+        # still with every token required (3 of 15 wrong on the same set).
+        def _hit(t: str, norm: str, compact: str, words: set) -> bool:
+            # plural tolerance: "batteries" slug vs "battery passport" question
+            forms = {t}
+            if t.endswith("ies") and len(t) > 4:
+                forms.add(t[:-3] + "y")
+            elif t.endswith("s") and len(t) > 4:
+                forms.add(t[:-1])
+            for f in forms:
+                # Long distinctive token: despaced substring, so "aiact"
+                # matches "AI Act". Shorter: whole word only ("inc" must be
+                # the word "inc", not a substring of "including").
+                if len(f) >= 5 and f in compact:
+                    return True
+                if f in words:
+                    return True
+            return False
+
+        q_norm = _re.sub(r"[^a-z0-9]+", " ", (query or "").lower())
+        q_compact = q_norm.replace(" ", "")
+        q_words = set(q_norm.split())
+        use_answer = not query or _detect_query_language(query) != "EN"
+
         def _matches(url: str) -> bool:
             toks = _slug_tokens(url)
             if not toks:
                 return False
-            for t in toks:
-                # Long distinctive slug token: allow despaced substring match so
-                # "aiact" matches an answer that says "AI Act" (-> "aiact").
-                if len(t) >= 5 and t in msg_compact:
-                    return True
-                # Shorter token: require a whole-word hit to avoid false matches
-                # ("inc" must be the word "inc", not a substring of "including").
-                if t in msg_words:
-                    return True
+            if query and all(_hit(t, q_norm, q_compact, q_words) for t in toks):
+                return True
+            if use_answer:
+                return all(_hit(t, msg_norm, msg_compact, msg_words) for t in toks)
             return False
 
         matched = next((u for u in to_add if _matches(u)), None)
