@@ -751,6 +751,13 @@ async def cron_sync_daily(
     # 22 Sep, so the API served a June directory. Marks departures (capped at 10% a run)
     # and records its own sync_runs row.
     results["who_is_who"] = await _run_script_async("who_is_who", "scripts/sync_who_is_who.py", [], timeout=900)
+    # Brussels lobby news. The corpus was seeded by hand on 8 June 2026 and never
+    # refreshed: the script had no schedule and wrote no run row, so 108 days of
+    # ageing were invisible to /api/sync/health. 300 organisations a night rotates
+    # through all 3,067 crawlable profiles in about ten days (measured: 1.75s each).
+    results["brussels_lobbies"] = await _run_script_async(
+        "brussels_lobbies", "scripts/sync_brussels_lobbies.py",
+        ["--detect", "--recheck", "--limit", "300"], timeout=1800)
     # Change dates for the registers served live (MEPs, the College): partners syncing
     # daily filter on updated_from. Pure HTTP (no browser); the EP API rate-limits, so the
     # job runs two calls at a time and waits when told, ~5 min.

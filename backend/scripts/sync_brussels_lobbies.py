@@ -200,7 +200,7 @@ def _item_body(it) -> tuple[str, str]:
     return txt, html
 
 
-def detect(db: ChunkedDb, limit: int, org_type: str | None, recheck: bool, workers: int) -> None:
+def detect(db: ChunkedDb, limit: int, org_type: str | None, recheck: bool, workers: int) -> dict:
     cond = ["website_url IS NOT NULL", "website_url <> ''"]
     if not recheck:
         cond.append("last_checked_at IS NULL")
@@ -256,6 +256,27 @@ def detect(db: ChunkedDb, limit: int, org_type: str | None, recheck: bool, worke
                 print(f"  {done}/{len(targets)} | active={active} items={items_total}", flush=True)
     db.commit()
     print(f"[DONE] checked={done} active={active} items_stored={items_total}", flush=True)
+    return {"checked": done, "active": active, "items": items_total}
+
+
+def _record(status: str, items: int | None, error: str | None, started) -> None:
+    """A durable run record, so a stopped crawl is visible somewhere.
+
+    This corpus went 108 days without a refresh (8 June to 24 September 2026) and nothing
+    reported it, because the job was never scheduled and never wrote a row: /api/sync/health
+    can only report on sources that record runs.
+    """
+    try:
+        from core.database import SessionLocal
+        from services.sync.freshness import record_run
+
+        s = SessionLocal()
+        record_run(s, source_key="brussels_lobbies", tier="daily", status=status,
+                   items_added=items, error=error, started_at=started,
+                   finished_at=datetime.now(timezone.utc))
+        s.close()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[WARN] could not record the run: {type(exc).__name__}: {exc}", flush=True)
 
 
 def main():
@@ -268,17 +289,34 @@ def main():
     ap.add_argument("--workers", type=int, default=8)
     args = ap.parse_args()
 
+    if not args.seed and not args.detect:
+        ap.error("pass --seed and/or --detect")
+
+    started = datetime.now(timezone.utc)
+    stats: dict = {}
+    error = None
     db = ChunkedDb()
     try:
         if args.seed:
             seed(db)
         if args.detect:
-            detect(db, args.limit, args.type, args.recheck, args.workers)
-        if not args.seed and not args.detect:
-            ap.error("pass --seed and/or --detect")
+            stats = detect(db, args.limit, args.type, args.recheck, args.workers) or {}
+    except Exception as exc:  # recorded, then a failing exit
+        error = f"{type(exc).__name__}: {exc}"
+        print(f"[ERROR] {error}", flush=True)
     finally:
         db.close()
+        if args.detect:
+            # A crawl that checked nothing is a FAILURE, not a quiet day: every
+            # crawlable profile is re-checkable, so zero means the selection or the
+            # network is broken. Without this the job would report success for ever
+            # while the corpus aged, which is exactly what happened here unscheduled.
+            checked = stats.get("checked", 0)
+            status = "failed" if (error or not checked) else "success"
+            _record(status, stats.get("items"), error or (None if checked else
+                    "checked 0 orgs: nothing was selected to crawl"), started)
+    return 1 if error else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
