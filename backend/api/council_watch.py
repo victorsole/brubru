@@ -26,8 +26,9 @@ from models.eu_news_item import EuNewsItem
 from models.ep_vote import EpVote
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.pi_committee_crosswalk import (
-    council_configs_for_interests, keywords_for_interests,
+    committees_for_interests, council_configs_for_interests, keywords_for_interests,
 )
+from services.linking.emeeting_links import council_watch_documents
 from .auth import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -97,23 +98,50 @@ def _outcome_items(db, user, my_interests, search) -> List[dict]:
     } for r in rows]
 
 
+def _document_items(db, user, my_interests, search) -> List[dict]:
+    """Council texts transmitted to EP committees (eMeeting `council_document`):
+    the Council's decisions under consent procedures, its first-reading positions,
+    its budget position. Lens: the committees and keywords of the user's interests."""
+    committees, kws = set(), set()
+    if my_interests:
+        interests = _interest_list(user)
+        if interests:
+            committees = committees_for_interests(interests)
+            kws = keywords_for_interests(interests)
+    rows = council_watch_documents(db, committees, kws, search, limit=80)
+    return [{
+        "kind": "document",
+        "date": r["meeting_date"].isoformat() if r["meeting_date"] else None,
+        "title": r["title"] or r["item_title"] or r["reference"] or "Council document",
+        "configuration": None,
+        "summary": r["item_title"] if r["item_title"] and r["item_title"] != r["title"] else None,
+        "url": r["url"],
+        "reference": r["reference"],
+        "committee": r["committee_code"],
+        "procedure_ref": r["procedure_ref"],
+        "is_pdf": bool(r["is_pdf"]),
+    } for r in rows]
+
+
 @router.get("")
 def list_activity(
     my_interests: bool = Query(True),
-    kind: str = Query("all", description="all | meeting | outcome"),
+    kind: str = Query("all", description="all | meeting | outcome | document"),
     search: Optional[str] = Query(None),
     limit: int = Query(60, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """Unified Council activity feed (meetings + outcomes), PI-filtered, newest first."""
+    """Unified Council activity feed (meetings, outcomes and Council documents), PI-filtered, newest first."""
     _require_yellow(user)
     items: List[dict] = []
     if kind in ("all", "meeting"):
         items += _meeting_items(db, user, my_interests, search)
     if kind in ("all", "outcome"):
         items += _outcome_items(db, user, my_interests, search)
+    if kind in ("all", "document"):
+        items += _document_items(db, user, my_interests, search)
     items.sort(key=lambda x: x["date"] or "", reverse=True)
     pi_active = my_interests and bool(any(_pi(user)))
     return {"total": len(items), "pi_active": pi_active,
@@ -147,7 +175,10 @@ async def summarise(
     if key in _SUM_CACHE:
         return {"summary": _SUM_CACHE[key], "lang": lang, "cached": True}
 
-    kind = "meeting" if payload.kind == "meeting" else "outcome / press item"
+    kind = {"meeting": "meeting",
+            "document": "document transmitted to the European Parliament (such as a "
+                        "Council decision, a first-reading position or its budget position)",
+            }.get(payload.kind, "outcome / press item")
     cfg = f" ({payload.configuration} configuration)" if payload.configuration else ""
     prompt = (
         f"This is a Council of the EU {kind}{cfg}. In 2-3 sentences, written in "
@@ -197,6 +228,7 @@ def stats(
     upcoming = sum(1 for m in meetings if (m["date"] or "") >= today)
     recent_outcomes = sum(1 for o in outcomes if (o["date"] or "") >= cutoff)
     council_votes = db.query(func.count(EpVote.id)).filter(EpVote.level == "council").scalar() or 0
+    council_documents = len(_document_items(db, user, my_interests, None))
     # configurations present in the user's meeting set
     present_configs = sorted({m["configuration"] for m in meetings if m["configuration"]})
     return {
@@ -206,4 +238,5 @@ def stats(
         "recent_outcomes": recent_outcomes,
         "your_configurations": present_configs,
         "council_votes": int(council_votes),
+        "council_documents": council_documents,
     }

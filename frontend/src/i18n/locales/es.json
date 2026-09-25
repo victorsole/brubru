@@ -517,7 +517,13 @@
       "permrepsSearch": "Buscar un Estado miembro",
       "whoIsWho": "Quién es quién",
       "news": "Noticias",
-      "tabActivity": "Actividad del Consejo"
+      "tabActivity": "Actividad del Consejo",
+      "documents": "Documentos del Consejo",
+      "document": "Documento del Consejo",
+      "kpiDocuments": "documentos del Consejo",
+      "openDocument": "Abrir el documento del Consejo (PDF)",
+      "openAgenda": "Abrir la reunión de comisión en la que se presentó",
+      "documentTabled": "Texto del Consejo transmitido al Parlamento Europeo y presentado en la comisión {{committee}}."
     },
     "mepw": {
       "title": "Seguimiento de eurodiputados",

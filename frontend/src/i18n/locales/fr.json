@@ -517,7 +517,13 @@
       "permrepsSearch": "Trouver un État membre",
       "whoIsWho": "Qui est qui",
       "news": "Actualités",
-      "tabActivity": "Activité du Conseil"
+      "tabActivity": "Activité du Conseil",
+      "documents": "Documents du Conseil",
+      "document": "Document du Conseil",
+      "kpiDocuments": "documents du Conseil",
+      "openDocument": "Ouvrir le document du Conseil (PDF)",
+      "openAgenda": "Ouvrir la réunion de commission où il a été déposé",
+      "documentTabled": "Texte du Conseil transmis au Parlement européen et déposé en commission {{committee}}."
     },
     "mepw": {
       "title": "Suivi des députés",

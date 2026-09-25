@@ -517,7 +517,13 @@
       "permrepsSearch": "Cerca un Estat membre",
       "whoIsWho": "Qui és qui",
       "news": "Notícies",
-      "tabActivity": "Activitat del Consell"
+      "tabActivity": "Activitat del Consell",
+      "documents": "Documents del Consell",
+      "document": "Document del Consell",
+      "kpiDocuments": "documents del Consell",
+      "openDocument": "Obrir el document del Consell (PDF)",
+      "openAgenda": "Obrir la reunió de comissió on es va presentar",
+      "documentTabled": "Text del Consell transmès al Parlament Europeu i presentat a la comissió {{committee}}."
     },
     "mepw": {
       "title": "Seguiment d'eurodiputats",

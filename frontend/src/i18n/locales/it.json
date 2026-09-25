@@ -517,7 +517,13 @@
       "permrepsSearch": "Trova uno Stato membro",
       "whoIsWho": "Chi è chi",
       "news": "Notizie",
-      "tabActivity": "Attività del Consiglio"
+      "tabActivity": "Attività del Consiglio",
+      "documents": "Documenti del Consiglio",
+      "document": "Documento del Consiglio",
+      "kpiDocuments": "documenti del Consiglio",
+      "openDocument": "Apri il documento del Consiglio (PDF)",
+      "openAgenda": "Apri la riunione di commissione in cui è stato presentato",
+      "documentTabled": "Testo del Consiglio trasmesso al Parlamento europeo e presentato in commissione {{committee}}."
     },
     "mepw": {
       "title": "Monitoraggio eurodeputati",

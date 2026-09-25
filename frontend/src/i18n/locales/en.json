@@ -517,7 +517,13 @@
       "permrepsSearch": "Find a member state",
       "whoIsWho": "Who’s who",
       "news": "News",
-      "tabActivity": "Council activity"
+      "tabActivity": "Council activity",
+      "documents": "Council documents",
+      "document": "Council document",
+      "kpiDocuments": "Council documents",
+      "openDocument": "Open the Council document (PDF)",
+      "openAgenda": "Open the committee meeting where it was tabled",
+      "documentTabled": "Council text transmitted to the European Parliament and tabled in the {{committee}} committee."
     },
     "mepw": {
       "title": "MEP Watch",

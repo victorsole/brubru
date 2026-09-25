@@ -3,9 +3,9 @@ import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api/council-watch`;
 function authHeaders() { const t = useAuth.getState().token; return t ? { Authorization: `Bearer ${t}` } : {}; }
-export interface CouncilItem { kind: 'meeting' | 'outcome'; date: string | null; title: string; configuration: string | null; summary: string | null; url: string | null; image_url?: string | null; institution?: string; }
+export interface CouncilItem { kind: 'meeting' | 'outcome' | 'document'; date: string | null; title: string; configuration: string | null; summary: string | null; url: string | null; image_url?: string | null; institution?: string; reference?: string | null; committee?: string | null; procedure_ref?: string | null; is_pdf?: boolean; }
 export interface PermRep { code: string; name: string; region?: boolean; home: string; about?: string; who?: string; news?: string; }
-export interface CouncilStats { pi_active: boolean; upcoming_meetings: number; total_meetings: number; recent_outcomes: number; your_configurations: string[]; council_votes: number; }
+export interface CouncilStats { pi_active: boolean; upcoming_meetings: number; total_meetings: number; recent_outcomes: number; your_configurations: string[]; council_votes: number; council_documents?: number; }
 export const councilWatchService = {
   list: async (myInterests: boolean, kind = 'all', search?: string): Promise<{ total: number; pi_active: boolean; items: CouncilItem[] }> => {
     const p = new URLSearchParams({ my_interests: String(myInterests), kind }); if (search) p.append('search', search);

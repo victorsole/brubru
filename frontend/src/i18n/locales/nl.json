@@ -517,7 +517,13 @@
       "permrepsSearch": "Zoek een lidstaat",
       "whoIsWho": "Wie is wie",
       "news": "Nieuws",
-      "tabActivity": "Raadactiviteit"
+      "tabActivity": "Raadactiviteit",
+      "documents": "Raadsdocumenten",
+      "document": "Raadsdocument",
+      "kpiDocuments": "raadsdocumenten",
+      "openDocument": "Het raadsdocument openen (pdf)",
+      "openAgenda": "De commissievergadering openen waarin het werd ingediend",
+      "documentTabled": "Tekst van de Raad, toegezonden aan het Europees Parlement en ingediend in de commissie {{committee}}."
     },
     "mepw": {
       "title": "EP-leden-monitor",

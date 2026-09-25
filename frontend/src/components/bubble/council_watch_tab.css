@@ -27,6 +27,7 @@
 .cwatch-item__rail { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .cwatch-item.is-meeting .cwatch-item__rail { background: #ecfdf5; color: #047857; }
 .cwatch-item.is-outcome .cwatch-item__rail { background: #eff6ff; color: #1d4ed8; }
+.cwatch-item.is-document .cwatch-item__rail { background: #fef3c7; color: #92400e; }
 .cwatch-item__body { flex: 1; min-width: 0; }
 .cwatch-item__top { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
 .cwatch-item__date { color: #64748b; font-size: 0.76rem; margin-left: auto; }
@@ -37,6 +38,7 @@
 .cwatch-kindchip { border-radius: 6px; padding: 0.12rem 0.5rem; font-size: 0.7rem; font-weight: 700; }
 .cwatch-kindchip.is-meeting { background: #d1fae5; color: #065f46; }
 .cwatch-kindchip.is-outcome { background: #dbeafe; color: #1e40af; }
+.cwatch-kindchip.is-document { background: #fde68a; color: #78350f; }
 .cwatch-soon { background: #fff7ed; color: #b45309; border-radius: 6px; padding: 0.1rem 0.45rem; font-size: 0.7rem; font-weight: 700; }
 
 .cwatch-item.is-clickable { cursor: pointer; transition: box-shadow .15s, transform .15s; }

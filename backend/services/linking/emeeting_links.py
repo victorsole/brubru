@@ -15,6 +15,7 @@ memory/reference_ep_emeeting.md):
 """
 
 import re
+from datetime import date
 from typing import Dict, Iterable, List, Optional
 
 from sqlalchemy import text
@@ -371,3 +372,46 @@ def emeeting_docs_for(
         db.rollback()
         return []
     return [dict(r) for r in rows]
+
+
+def council_watch_documents(db: Session, committees: Iterable[str] = (), keywords: Iterable[str] = (),
+                            search: Optional[str] = None, limit: int = 80) -> List[dict]:
+    """Council texts transmitted to EP committees, for Council Watch (25 Sep 2026).
+
+    `council_document` (geproCode CLS) is the Council's own text of an act: decisions
+    under consent procedures, Council positions at first reading, the Council's
+    budget position. Tracked-file detail already shows them per dossier
+    (KINDS_DOSSIER); Council Watch shows them across the user's interests.
+
+    One Council document is tabled at several meetings, so rows are deduplicated
+    on its reference, keeping the latest meeting. Lens: the EP committee it was
+    tabled in (from the user's interests) OR a keyword in its title / agenda item.
+    Empty `committees` and `keywords` means no lens (the "All" view).
+    """
+    committees = [c for c in committees if c]
+    keywords = [k for k in keywords if k]
+    where = ["doc_kind = 'council_document'"]
+    params: dict = {"lim": limit}
+    lens = []
+    if committees:
+        lens.append("committee_code = ANY(:coms)")
+        params["coms"] = committees
+    for i, kw in enumerate(keywords):
+        lens.append(f"(title ILIKE :kw{i} OR item_title ILIKE :kw{i})")
+        params[f"kw{i}"] = f"%{kw}%"
+    if lens:
+        where.append("(" + " OR ".join(lens) + ")")
+    if search:
+        where.append("(title ILIKE :s OR item_title ILIKE :s OR reference ILIKE :s)")
+        params["s"] = f"%{search}%"
+    rows = db.execute(text(f"""
+        SELECT DISTINCT ON (coalesce(reference, document_key))
+               reference, title, item_title, committee_code, meeting_date, procedure_ref,
+               coalesce(pdf_url, source_url) AS url, pdf_url IS NOT NULL AS is_pdf
+          FROM ep_emeeting_documents
+         WHERE {' AND '.join(where)}
+         ORDER BY coalesce(reference, document_key), meeting_date DESC NULLS LAST
+    """), params).mappings().all()
+    out = [dict(r) for r in rows]
+    out.sort(key=lambda r: r["meeting_date"] or date.min, reverse=True)
+    return out[:limit]
