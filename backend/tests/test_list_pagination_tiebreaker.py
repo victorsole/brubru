@@ -49,8 +49,26 @@ class _Result:
 
 
 class _FakeQuery:
-    def __init__(self, rec):
+    """Faithful enough for stable() to do what it does in production.
+
+    A real Query exposes `column_descriptions`, and `stable()` reads the entity from it to
+    find the primary key -- raising, deliberately, when it cannot, so a missing tiebreaker
+    can never silently no-op. A fake that omitted that attribute made stable() raise here
+    while the four endpoints returned 200 in production: the harness was testing its own
+    omission, not the code.
+    """
+
+    def __init__(self, rec, entities=()):
         self._rec = rec
+        self._entities = entities
+
+    @property
+    def column_descriptions(self):
+        descriptions = []
+        for entity in self._entities:
+            # A mapped class has a mapper; a bare Column expression does not.
+            descriptions.append({"entity": entity if hasattr(entity, "__mapper__") else None})
+        return descriptions
 
     def filter(self, *a, **k):
         return self
@@ -79,8 +97,8 @@ class _FakeDB:
         self.orm_order: list[list[str]] = []
         self.sql: list[str] = []
 
-    def query(self, *_):
-        return _FakeQuery(self)
+    def query(self, *entities):
+        return _FakeQuery(self, entities)
 
     def execute(self, stmt, *a, **k):
         self.sql.append(str(stmt))
