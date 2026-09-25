@@ -7452,12 +7452,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'sanciones contra rusia': ['eu_defence_procurement'],
 
     # EU Solidarity Fund (eu_budget_emu_law covers EU budget instruments)
-    'solidarity fund': ['eu_budget_emu_law', 'eu_solidarity_fund_eusf'],
+    'solidarity fund': ['eu_solidarity_fund_eusf', 'eu_budget_emu_law'],
     'european solidarity fund': ['eu_budget_emu_law'],
-    'fondo de solidaridad': ['eu_budget_emu_law'],
-    'fondo de solidaridad de la ue': ['eu_budget_emu_law'],
+    'fondo de solidaridad': ['eu_solidarity_fund_eusf', 'eu_budget_emu_law'],
+    'fondo de solidaridad de la ue': ['eu_solidarity_fund_eusf', 'eu_budget_emu_law'],
     'fonds de solidarite': ['eu_budget_emu_law'],
-    'fondo di solidarieta': ['eu_budget_emu_law'],
+    'fondo di solidarieta': ['eu_solidarity_fund_eusf', 'eu_budget_emu_law'],
     'solidariteitsfonds': ['eu_budget_emu_law'],
     'eu solidariteitsfonds': ['eu_budget_emu_law'],
 
@@ -11021,7 +11021,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'meststoffenstrategie eu': ['common_agricultural_policy'],
 
     # EU Solidarity Fund 18 May 2026 EUR 144M Spain Romania Cyprus
-    'eu solidarity fund spain romania cyprus': ['eu_budget_emu_law'],
+    'eu solidarity fund spain romania cyprus': ['eu_solidarity_fund_eusf', 'eu_budget_emu_law'],
     'eusf may 2026 144 million': ['eu_budget_emu_law'],
     'ip 26 1092': ['eu_budget_emu_law'],
     'fondo solidaridad ue espana rumania chipre': ['eu_budget_emu_law'],
