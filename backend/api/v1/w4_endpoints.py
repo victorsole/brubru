@@ -662,7 +662,17 @@ class SecondaryActItem(BaseModel):
     parent_procedure_ref: Optional[str] = None
     status: str
     proposing_dg: Optional[str] = None
-    publication_date: Optional[date] = None
+    publication_date: Optional[date] = Field(
+        None,
+        description="Date the act appeared in the Official Journal (Cellar "
+                    "cdm:work_date_creation_legacy).",
+    )
+    adoption_date: Optional[date] = Field(
+        None,
+        description="Date the Commission adopted the act (Cellar cdm:work_date_document). "
+                    "Usually earlier than publication_date. Null where Cellar's own dates "
+                    "contradict each other, rather than serving a date known to be wrong.",
+    )
     objection_deadline: Optional[date] = None
     ep_scrutiny: dict = Field(default_factory=dict)
     council_scrutiny: dict = Field(default_factory=dict)
@@ -774,6 +784,7 @@ def _secondary_act_to_item(
         parent_celex=r.parent_celex, parent_procedure_ref=r.parent_procedure_ref,
         status=r.status.value if hasattr(r.status, "value") else str(r.status),
         proposing_dg=r.proposing_dg, publication_date=r.publication_date,
+        adoption_date=r.adoption_date,
         objection_deadline=r.objection_deadline,
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),
@@ -793,13 +804,18 @@ def _secondary_act_to_item(
 
 def _list_secondary_acts(
     db: Session, act_type: str,
-    parent_celex, proposing_dg, status, q,
+    parent_celex, proposing_dg, status, q, celex,
     published_from, published_to, updated_from,
     limit, page,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> PaginatedResponse[SecondaryActItem]:
     query = db.query(SecondaryAct).filter(SecondaryAct.act_type == act_type)
     filters = []
+    if celex:
+        # The identifier callers actually hold. It was not a declared parameter, so
+        # `?celex=32014R0241` was ignored and the caller got an unrelated act with a 200
+        # (GovClipping identifies acts by CELEX, 25 Sep 2026).
+        filters.append(SecondaryAct.celex == celex.upper())
     if parent_celex:
         filters.append(SecondaryAct.parent_celex == parent_celex.upper())
     if proposing_dg:
@@ -862,6 +878,7 @@ Synced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex
 async def list_delegated_acts(
     request: Request,
     parent_celex: Optional[str] = Query(None),
+    celex: Optional[str] = Query(None, description="Exact CELEX of the act itself (not its parent)."),
     proposing_dg: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     q: Optional[str] = Query(None),
@@ -874,7 +891,7 @@ async def list_delegated_acts(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
-    return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q,
+    return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
                                 body_threshold=body_threshold)
 
@@ -994,6 +1011,7 @@ Synced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR
 async def list_implementing_acts(
     request: Request,
     parent_celex: Optional[str] = Query(None),
+    celex: Optional[str] = Query(None, description="Exact CELEX of the act itself (not its parent)."),
     proposing_dg: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     q: Optional[str] = Query(None),
@@ -1006,7 +1024,7 @@ async def list_implementing_acts(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
-    return _list_secondary_acts(db, "implementing", parent_celex, proposing_dg, status, q,
+    return _list_secondary_acts(db, "implementing", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
                                 body_threshold=body_threshold)
 

@@ -224,6 +224,9 @@ class SecondaryAct(Base):
 
     proposing_dg = Column(String(20), nullable=True, index=True)
     publication_date = Column(Date, nullable=True, index=True)
+    # The act's own two dates (migration 242). Both were absent until 25 Sep 2026,
+    # when the only dates served were Brubru's import timestamps.
+    adoption_date = Column(Date, nullable=True)
     objection_deadline = Column(Date, nullable=True)
     ep_scrutiny = Column(JSONB, default=dict)  # { result, date, vote_for, vote_against, ... }
     council_scrutiny = Column(JSONB, default=dict)

@@ -65,6 +65,7 @@ Synced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex
 async def list_delegated_acts(
     request: Request,
     parent_celex: Optional[str] = Query(None),
+    celex: Optional[str] = Query(None, description="Exact CELEX of the act itself (not its parent)."),
     proposing_dg: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     q: Optional[str] = Query(None),
@@ -78,7 +79,7 @@ async def list_delegated_acts(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return await _v1.list_delegated_acts(
-        request, parent_celex=parent_celex, proposing_dg=proposing_dg, status=status, q=q,
+        request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
         limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
     )
@@ -151,6 +152,7 @@ Synced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR
 async def list_implementing_acts(
     request: Request,
     parent_celex: Optional[str] = Query(None),
+    celex: Optional[str] = Query(None, description="Exact CELEX of the act itself (not its parent)."),
     proposing_dg: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     q: Optional[str] = Query(None),
@@ -164,7 +166,7 @@ async def list_implementing_acts(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return await _v1.list_implementing_acts(
-        request, parent_celex=parent_celex, proposing_dg=proposing_dg, status=status, q=q,
+        request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
         limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
     )
