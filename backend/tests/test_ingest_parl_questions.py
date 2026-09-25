@@ -90,3 +90,18 @@ def test_204_ends_the_list(monkeypatch):
     monkeypatch.setattr(pq.time, "sleep", lambda s: None)
     page = _Resp(200, {"data": [{"identifier": "E-10-2026-000001"}]})
     assert pq.list_ids(_Client([page, _Resp(204, {})]), 2026, deadline=float("inf")) == ["E-10-2026-000001"]
+
+
+def test_timeout_is_retried(monkeypatch):
+    monkeypatch.setattr(pq.time, "sleep", lambda s: None)
+
+    class _Flaky(_Client):
+        def get(self, url, params=None):
+            r = self.responses.pop(0)
+            if isinstance(r, Exception):
+                raise r
+            return r
+
+    page = _Resp(200, {"data": [{"identifier": "E-10-2026-000001"}]})
+    c = _Flaky([pq.httpx.ReadTimeout("slow"), page, _Resp(204, {})])
+    assert pq.list_ids(c, 2026, deadline=float("inf")) == ["E-10-2026-000001"]

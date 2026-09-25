@@ -70,7 +70,16 @@ def _get_data(client: httpx.Client, url: str, params: dict, attempts: int = 4):
     """
     last = ""
     for attempt in range(1, attempts + 1):
-        r = client.get(url, params=params)
+        try:
+            r = client.get(url, params=params)
+        except httpx.TransportError as exc:
+            # A read timeout or dropped connection is load, like the 200-with-
+            # error body: retry it (25 Sep 2026: one ReadTimeout on the list
+            # failed a whole run).
+            last = f"{type(exc).__name__}: {exc}"
+            if attempt < attempts:
+                time.sleep(3.0 * attempt)
+            continue
         if r.status_code == 404:
             return None
         if r.status_code == 204:
