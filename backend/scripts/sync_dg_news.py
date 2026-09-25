@@ -27,11 +27,21 @@ from services.scrapers.dg_news_sources import DG_NEWS_SOURCES, EU_BODY_FEEDS, OU
 from services.scrapers.dg_news_scraper import scrape_source
 from services.news.write_guard import date_new_items, record_refusals
 from services.news.same_story import find_same_story
+from services.news.public_url import canonical_public_url
 
 ALL_SOURCES = DG_NEWS_SOURCES + EU_BODY_FEEDS + OUTLET_FEEDS
 
 
 def _upsert(db, it) -> str:
+    # A private address is not a public URL. The EEA feed published its internal
+    # load-balancer host for three months, so every public_url we served was unopenable
+    # and, because identity is per URL, each run created a new row (534 rows for 60
+    # articles). Normalise before the URL becomes an identity.
+    institution = it.get("institution", "COMMISSION")
+    for field in ("entry_key", "source_url"):
+        if it.get(field):
+            it[field] = canonical_public_url(it[field], institution)
+
     existing = db.query(EuNewsItem).filter(EuNewsItem.entry_key == it["entry_key"]).first()
     if existing:
         changed = False
