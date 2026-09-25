@@ -159,6 +159,15 @@ def _val(row, key):
     return str(v) if v else None
 
 
+def clean_text(value: str | None) -> str | None:
+    """PDF extraction yields NUL bytes and PostgreSQL refuses them outright:
+    "A string literal cannot contain NUL (0x00) characters" killed all three corpora on
+    their first commit. The same strip is in backfill_eu_trade_defence.py."""
+    if value is None:
+        return None
+    return value.replace("\x00", "") or None
+
+
 def _get(url: str, timeout: int = 60) -> bytes:
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
         return r.read()
@@ -261,6 +270,7 @@ async def _run(args) -> int:
             for uri, r in by_uri.items():
                 body, body_html = results.get(uri, (None, None))
                 doc_date = dates.get(uri)
+                body, body_html = clean_text(body), clean_text(body_html)
                 if body and len(body) >= MIN_BODY:
                     ok += 1
                     lengths.append(len(body))

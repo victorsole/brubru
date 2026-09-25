@@ -27,6 +27,7 @@ Usage (from backend/):
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
 import sys
 import time
 import urllib.error
@@ -113,12 +114,29 @@ def main() -> int:
 
         ok = failed = 0
         gained = []
-        for i, r in enumerate(targets, 1):
-            body_txt, body_html, err = fetch(r.source_url)
-            if err:
-                failed += 1
-                print(f"  [{i:4}] {err:22} {r.title[:52]}", flush=True)
-            else:
+        # Fetched in parallel and committed per batch: 7,050 institutional news rows one at
+        # a time is hours, and a single commit at the end means a run that dies writes
+        # nothing.
+        BATCH = 40
+        i = 0
+        for start in range(0, len(targets), BATCH):
+            chunk = targets[start:start + BATCH]
+            with cf.ThreadPoolExecutor(max_workers=6) as ex:
+                fetched = list(ex.map(lambda row: (row, *fetch(row.source_url)), chunk))
+            for r, body_txt, body_html, err in fetched:
+                i += 1
+                # extract_html() returns (None, None) for a page with no <main>/<article>
+                # text, and error_body_reason(None) is None because "absent" is not
+                # "invalid". So a clean fetch can still carry no body, and len(None) then
+                # killed the whole run.
+                if err or not body_txt:
+                    failed += 1
+                    if failed <= 10:
+                        print(f"  [{i:5}] {(err or 'no text in page'):22} {r.title[:50]}",
+                              flush=True)
+                    continue
+                body_txt = body_txt.replace("\x00", "")
+                body_html = (body_html or "").replace("\x00", "") or None
                 ok += 1
                 gained.append(len(body_txt))
                 if args.apply:
@@ -138,8 +156,11 @@ def main() -> int:
                             "  body_source = 'fetched:article', fetched_at = now() "
                             "WHERE id = :id"),
                             {"t": body_txt, "h": body_html, "id": r.id})
-                if i <= 5 or i % 20 == 0:
-                    print(f"  [{i:4}] {len(body_txt):7,} chars  {r.title[:52]}", flush=True)
+            if args.apply:
+                db.commit()
+            avg_so_far = sum(gained) / len(gained) if gained else 0
+            print(f"  [{min(start + BATCH, len(targets)):5}/{len(targets)}] ok {ok}, "
+                  f"failed {failed}, avg {avg_so_far:,.0f} chars", flush=True)
             time.sleep(args.throttle)
 
         if args.apply:
