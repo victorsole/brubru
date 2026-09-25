@@ -492,12 +492,25 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
   -- creation_date was already protected this way; the content columns were the gap.
   title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
   summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
-  body_txt      = COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), economy_items.body_txt),
-  body_html     = COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), economy_items.body_html),
+  -- The LONGER body wins, which is not the same rule as "not empty wins".
+  -- The backfill fetched 348 EEA articles in full; this sync ran at 15:01 the same day
+  -- and put the 490-character RSS teaser back over every one of them, because a teaser
+  -- is non-empty and COALESCE asks nothing else. A feed summary must never displace the
+  -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
+  -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
+  -- than silently undoing every backfill each night.
+  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
+                       THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
+  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
+                          > length(COALESCE(economy_items.body_html, ''))
+                       THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
   document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
   -- Keep source_kind describing the body we actually hold: if we retained the
   -- stored body, relabelling it with this run's kind would misreport provenance.
-  source_kind   = CASE WHEN NULLIF(btrim(EXCLUDED.body_txt), '') IS NOT NULL
+  -- source_kind must describe the body we actually KEPT, so it follows the same test.
+  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
                        THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
   guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
@@ -527,12 +540,25 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
   -- creation_date was already protected this way; the content columns were the gap.
   title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
   summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
-  body_txt      = COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), economy_items.body_txt),
-  body_html     = COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), economy_items.body_html),
+  -- The LONGER body wins, which is not the same rule as "not empty wins".
+  -- The backfill fetched 348 EEA articles in full; this sync ran at 15:01 the same day
+  -- and put the 490-character RSS teaser back over every one of them, because a teaser
+  -- is non-empty and COALESCE asks nothing else. A feed summary must never displace the
+  -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
+  -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
+  -- than silently undoing every backfill each night.
+  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
+                       THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
+  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
+                          > length(COALESCE(economy_items.body_html, ''))
+                       THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
   document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
   -- Keep source_kind describing the body we actually hold: if we retained the
   -- stored body, relabelling it with this run's kind would misreport provenance.
-  source_kind   = CASE WHEN NULLIF(btrim(EXCLUDED.body_txt), '') IS NOT NULL
+  -- source_kind must describe the body we actually KEPT, so it follows the same test.
+  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
                        THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
   guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),

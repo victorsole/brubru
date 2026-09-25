@@ -176,8 +176,16 @@ INSERT INTO economy_items
 VALUES ('ftportal', %(item_type)s, %(title)s, %(summary)s, %(public_url)s,
         %(body_txt)s, %(body_html)s, %(document_date)s, NOW(), 'sedia', %(guid)s, NOW())
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
-    title=EXCLUDED.title, summary=EXCLUDED.summary, body_txt=EXCLUDED.body_txt,
-    body_html=EXCLUDED.body_html, document_date=EXCLUDED.document_date, fetched_at=NOW()
+    title=EXCLUDED.title, summary=EXCLUDED.summary,
+    -- The longer body wins. A listing payload carries a short description; the backfill
+    -- fetches the document itself. Overwriting unconditionally undid 348 EEA articles
+    -- the same day they were filled, so every scheduled writer into economy_items now
+    -- has to prove it brought MORE text before it replaces what is stored.
+    body_txt = CASE WHEN length(COALESCE(EXCLUDED.body_txt, '')) > length(COALESCE(economy_items.body_txt, ''))
+                    THEN EXCLUDED.body_txt ELSE economy_items.body_txt END,
+    body_html = CASE WHEN length(COALESCE(EXCLUDED.body_html, '')) > length(COALESCE(economy_items.body_html, ''))
+                     THEN EXCLUDED.body_html ELSE economy_items.body_html END,
+    document_date=EXCLUDED.document_date, fetched_at=NOW()
 """
 
 

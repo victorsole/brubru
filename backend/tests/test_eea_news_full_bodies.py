@@ -102,3 +102,31 @@ def test_the_ingest_normalises_before_it_looks_the_row_up():
     src = (BACKEND / "scripts" / "sync_dg_news.py").read_text(encoding="utf-8")
     assert "canonical_public_url" in src
     assert src.index("canonical_public_url(it[field]") < src.index("EuNewsItem.entry_key == it")
+
+
+def test_localhost_is_a_private_host_too():
+    """The first regex matched only numeric addresses.
+
+    25 EEA rows read `http://localhost:3000/...` and sailed through as public URLs: the
+    same leak in a different spelling. One entity must not become two because a host was
+    written by name instead of by number.
+    """
+    from services.news.public_url import canonical_public_url, is_private
+
+    for url in ("http://localhost:3000/en/newsroom/news/x",
+                "http://localhost/en/newsroom/news/x",
+                "http://[::1]:3000/en/a",
+                "http://0.0.0.0:3000/en/a"):
+        assert is_private(url), f"{url} must be recognised as private"
+
+    assert canonical_public_url("http://localhost:3000/en/newsroom/news/x", "EEA") == \
+        "https://www.eea.europa.eu/en/newsroom/news/x"
+
+
+def test_a_public_host_that_merely_starts_with_localhost_is_left_alone():
+    """`localhost-services.europa.eu` is a real host. Matching on a word boundary rewrote it."""
+    from services.news.public_url import canonical_public_url, is_private
+
+    for url in ("https://localhost-services.europa.eu/a", "https://localhostel.eu/a"):
+        assert not is_private(url), f"{url} is public and must not be rewritten"
+        assert canonical_public_url(url, "EEA") == url

@@ -22,9 +22,12 @@ from __future__ import annotations
 import re
 from typing import Optional
 
-# RFC1918 and loopback. A feed emitting one of these is describing its own network.
+# RFC1918, loopback, and the NAMES for loopback. The first version of this regex matched
+# only numeric addresses and missed 25 EEA rows reading `http://localhost:3000/...` -- the
+# same leak in a different spelling, which is how one entity quietly becomes two.
 _PRIVATE_HOST = re.compile(
-    r"^https?://(?:10\.|127\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)[^/]*", re.I)
+    r"^https?://(?:10\.|127\.|192\.168\.|0\.0\.0\.0|\[?::1\]?|localhost(?=[:/?#]|$)"
+    r"|172\.(?:1[6-9]|2\d|3[01])\.)[^/]*", re.I)
 
 # Publishers known to leak their internal address, and the host they actually serve on.
 _PUBLIC_HOST = {
