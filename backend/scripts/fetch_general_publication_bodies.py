@@ -189,7 +189,13 @@ def clean_text(value: str | None) -> str | None:
     their first commit. The same strip is in backfill_eu_trade_defence.py."""
     if value is None:
         return None
-    return value.replace("\x00", "") or None
+    text = value.replace("\x00", "")
+    # Lone surrogates too. PDF extraction emits them (a publication carried '\udbc0') and
+    # they cannot be encoded to UTF-8 at all, so psycopg2 raises UnicodeEncodeError and
+    # the run dies exactly the way the NUL bytes killed it. Same lesson, one codec later:
+    # whatever a PDF yields is bytes-shaped, not text-shaped, until it is cleaned.
+    text = text.encode("utf-8", "ignore").decode("utf-8", "ignore")
+    return text or None
 
 
 MAX_DOWNLOAD = 40 * 1024 * 1024   # bytes
@@ -216,7 +222,12 @@ def _get(url: str, timeout: int = 30) -> bytes:
             chunks.append(chunk)
             total += len(chunk)
             if total > MAX_DOWNLOAD:
-                raise ValueError(f"over {MAX_DOWNLOAD // 1048576} MB")
+                # Name the DECLARED size, not just the cap. "over 40 MB" cannot tell me
+                # whether a 41 MB cap would clear the bucket or a 400 MB one is needed,
+                # and 13% of publications land here -- too many to write off unmeasured.
+                declared = r.headers.get("Content-Length")
+                size = f"{int(declared) // 1048576} MB" if declared and declared.isdigit() else "size not declared"
+                raise ValueError(f"over {MAX_DOWNLOAD // 1048576} MB cap ({size})")
     return b"".join(chunks)
 
 

@@ -30,6 +30,7 @@ import argparse
 import concurrent.futures as cf
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -76,14 +77,64 @@ def presscorner_pdf(url: str) -> str | None:
             f"{slug}/{slug.upper()}_EN.pdf")
 
 
+# A 429 is a statement about our request RATE, not about the document. Recording one as a
+# failure leaves the row permanently empty and reads later as "this body has no text" --
+# the euda slice failed 240 of 400 rows this way. So: every thread shares one backoff
+# clock, and a rate limit pauses the whole run rather than burning through the queue.
+_RATE_LOCK = threading.Lock()
+_BACKOFF_UNTIL = 0.0
+_RETRY_STATUS = (429, 503)
+
+
+def _respect_backoff() -> None:
+    while True:
+        with _RATE_LOCK:
+            wait = _BACKOFF_UNTIL - time.time()
+        if wait <= 0:
+            return
+        time.sleep(min(wait, 5.0))
+
+
+def _note_rate_limit(exc: urllib.error.HTTPError, attempt: int) -> float:
+    """Pause every thread. Honour Retry-After when the server sends one."""
+    delay = 0.0
+    header = exc.headers.get("Retry-After") if exc.headers else None
+    if header:
+        try:
+            delay = float(header.strip())
+        except ValueError:
+            delay = 0.0
+    if delay <= 0:
+        delay = min(60.0, 5.0 * (3 ** attempt))
+    with _RATE_LOCK:
+        global _BACKOFF_UNTIL
+        _BACKOFF_UNTIL = max(_BACKOFF_UNTIL, time.time() + delay)
+    return delay
+
+
+def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
+    """Fetch, retrying a rate limit up to 3 times. Other HTTP errors raise at once."""
+    last: Exception | None = None
+    for attempt in range(3):
+        _respect_backoff()
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in _RETRY_STATUS:
+                raise
+            last = exc
+            _note_rate_limit(exc, attempt)
+    raise last  # type: ignore[misc]
+
+
 def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
     pdf_url = presscorner_pdf(url)
     if pdf_url:
         try:
-            req = urllib.request.Request(pdf_url, headers={"User-Agent": UA, "Accept": "*/*"})
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                raw = r.read()
+            raw = _read(pdf_url, timeout)
             import io
 
             from pypdf import PdfReader
@@ -99,9 +150,7 @@ def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | No
             return None, None, f"presscorner {type(exc).__name__}"
 
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": UA})
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            html = r.read().decode("utf-8", "replace")
+        html = _read(url, timeout, accept="text/html,*/*").decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         return None, None, f"HTTP {exc.code}"
     except Exception as exc:  # noqa: BLE001
