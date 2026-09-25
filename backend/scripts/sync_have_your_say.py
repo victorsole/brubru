@@ -330,6 +330,12 @@ def main() -> int:
         print(f"\n[OK] upserted {written} rows")
 
         # ---- verification ----
+        # On a FRESH session (25 Sep 2026): the upsert holds this one for
+        # minutes, and the server dropped it right after the last commit, so
+        # the verification crashed and the run exited 1 although all 4,112
+        # rows were written. A verdict must not depend on a stale connection.
+        db.close()
+        db = SessionLocal()
         after = db.execute(
             text("SELECT count(*) FROM public_consultations WHERE source = 'commission'")
         ).scalar()

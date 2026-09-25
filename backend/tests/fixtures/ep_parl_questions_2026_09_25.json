@@ -1,0 +1,296 @@
+{
+ "P-10-2026-003747": {
+  "id": "eli/dl/doc/P-10-2026-003747",
+  "type": "Work",
+  "parliamentary_term": "org/ep-10",
+  "document_date": "2026-09-17",
+  "is_realized_by": [
+   {
+    "id": "eli/dl/doc/P-10-2026-003747/en",
+    "type": "Expression",
+    "is_embodied_by": [
+     {
+      "id": "eli/dl/doc/P-10-2026-003747/en/docx",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/P-10-2026-003747/P-10-2026-003747_en.docx",
+      "media_type": "https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "format": "http://publications.europa.eu/resource/authority/file-type/DOCX",
+      "issued": "2026-09-21T15:04:40+02:00",
+      "byteSize": "12314"
+     },
+     {
+      "id": "eli/dl/doc/P-10-2026-003747/en/pdf",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/P-10-2026-003747/P-10-2026-003747_en.pdf",
+      "media_type": "https://www.iana.org/assignments/media-types/application/pdf",
+      "format": "http://publications.europa.eu/resource/authority/file-type/PDF",
+      "issued": "2026-09-21T15:04:40+02:00",
+      "byteSize": "12314"
+     }
+    ],
+    "language": "http://publications.europa.eu/resource/authority/language/ENG",
+    "title": {
+     "en": "Irish citizens forced to use non-Schengen queues at EU airports"
+    },
+    "title_alternative": {
+     "en": "Priority question for written answer P-003747/2026 - to the Commission - Rule 144 - Billy Kelleher (Renew)"
+    }
+   }
+  ],
+  "work_type": "def/ep-document-types/QUESTION_WRITTEN_PRIORITY",
+  "creator": [
+   "person/197818"
+  ],
+  "identifier": "P-10-2026-003747",
+  "publisher": "org/EU_PARLIAMENT",
+  "title_dcterms": {
+   "en": "Irish citizens forced to use non-Schengen queues at EU airports"
+  },
+  "epNumber": "PE796.099",
+  "identifierYear": "2026",
+  "originalLanguage": [
+   "http://publications.europa.eu/resource/authority/language/ENG"
+  ],
+  "workHadParticipation": [
+   {
+    "id": "eli/dl/participation/P-10-2026-003747_COM",
+    "type": "Participation",
+    "had_participant_organization": [
+     "org/COM"
+    ],
+    "participation_role": "def/ep-roles/ADDRESSEE"
+   },
+   {
+    "id": "eli/dl/participation/P-10-2026-003747_197818",
+    "type": "Participation",
+    "had_participant_person": [
+     "person/197818"
+    ],
+    "participation_role": "def/ep-roles/AUTHOR"
+   }
+  ]
+ },
+ "O-10-2026-000030": {
+  "id": "eli/dl/doc/O-10-2026-000030",
+  "type": "Work",
+  "parliamentary_term": "org/ep-10",
+  "document_date": "2026-06-29",
+  "is_realized_by": [
+   {
+    "id": "eli/dl/doc/O-10-2026-000030/en",
+    "type": "Expression",
+    "is_embodied_by": [
+     {
+      "id": "eli/dl/doc/O-10-2026-000030/en/pdf",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/O-10-2026-000030/O-10-2026-000030_en.pdf",
+      "media_type": "https://www.iana.org/assignments/media-types/application/pdf",
+      "format": "http://publications.europa.eu/resource/authority/file-type/PDF",
+      "issued": "2026-07-01T20:20:41+02:00",
+      "byteSize": "10931"
+     },
+     {
+      "id": "eli/dl/doc/O-10-2026-000030/en/docx",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/O-10-2026-000030/O-10-2026-000030_en.docx",
+      "media_type": "https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "format": "http://publications.europa.eu/resource/authority/file-type/DOCX",
+      "issued": "2026-07-01T20:20:41+02:00",
+      "byteSize": "10931"
+     }
+    ],
+    "language": "http://publications.europa.eu/resource/authority/language/ENG",
+    "title": {
+     "en": "An updated regulatory framework for wool"
+    },
+    "title_alternative": {
+     "en": "Question for oral answer O-000030/2026 - to the Commission - Rule 142 - Daniel Buda, Maria Walsh, Herbert Dorfmann - on behalf of the PPE Group"
+    }
+   }
+  ],
+  "work_type": "def/ep-document-types/QUESTION_ORAL",
+  "creator": [
+   "person/125012",
+   "org/PPE",
+   "person/197863",
+   "person/96787"
+  ],
+  "identifier": "O-10-2026-000030",
+  "publisher": "org/EU_PARLIAMENT",
+  "title_dcterms": {
+   "en": "An updated regulatory framework for wool"
+  },
+  "epNumber": "PE790.712",
+  "identifierYear": "2026",
+  "originalLanguage": [
+   "http://publications.europa.eu/resource/authority/language/ENG"
+  ],
+  "workHadParticipation": [
+   {
+    "id": "eli/dl/participation/O-10-2026-000030_96787",
+    "type": "Participation",
+    "had_participant_person": [
+     "person/96787"
+    ],
+    "participation_in_name_of": "org/PPE",
+    "participation_role": "def/ep-roles/AUTHOR"
+   },
+   {
+    "id": "eli/dl/participation/O-10-2026-000030_COM",
+    "type": "Participation",
+    "had_participant_organization": [
+     "org/COM"
+    ],
+    "participation_role": "def/ep-roles/ADDRESSEE"
+   },
+   {
+    "id": "eli/dl/participation/O-10-2026-000030_125012",
+    "type": "Participation",
+    "had_participant_person": [
+     "person/125012"
+    ],
+    "participation_in_name_of": "org/PPE",
+    "participation_role": "def/ep-roles/AUTHOR"
+   },
+   {
+    "id": "eli/dl/participation/O-10-2026-000030_197863",
+    "type": "Participation",
+    "had_participant_person": [
+     "person/197863"
+    ],
+    "participation_in_name_of": "org/PPE",
+    "participation_role": "def/ep-roles/AUTHOR"
+   }
+  ]
+ },
+ "E-10-2026-000002": {
+  "id": "eli/dl/doc/E-10-2026-000002",
+  "type": "Work",
+  "parliamentary_term": "org/ep-10",
+  "document_date": "2026-01-02",
+  "is_realized_by": [
+   {
+    "id": "eli/dl/doc/E-10-2026-000002/en",
+    "type": "Expression",
+    "is_embodied_by": [
+     {
+      "id": "eli/dl/doc/E-10-2026-000002/en/docx",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/E-10-2026-000002/E-10-2026-000002_en.docx",
+      "media_type": "https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "format": "http://publications.europa.eu/resource/authority/file-type/DOCX",
+      "issued": "2026-01-08T16:08:44+01:00",
+      "byteSize": "11914"
+     },
+     {
+      "id": "eli/dl/doc/E-10-2026-000002/en/pdf",
+      "type": "Manifestation",
+      "is_exemplified_by": "distribution/reds_iMaQp/E-10-2026-000002/E-10-2026-000002_en.pdf",
+      "media_type": "https://www.iana.org/assignments/media-types/application/pdf",
+      "format": "http://publications.europa.eu/resource/authority/file-type/PDF",
+      "issued": "2026-01-08T16:08:44+01:00",
+      "byteSize": "11914"
+     }
+    ],
+    "language": "http://publications.europa.eu/resource/authority/language/ENG",
+    "title": {
+     "en": "Enquiries regarding EU funding for the Digital Freedom Fund and grants to the  Gesellschaft für Freiheitsrechte"
+    },
+    "title_alternative": {
+     "en": "Question for written answer E-000002/2026 - to the Commission - Rule 144 - Alexander Jungbluth (ESN)"
+    }
+   }
+  ],
+  "work_type": "def/ep-document-types/QUESTION_WRITTEN",
+  "creator": [
+   "person/256941"
+  ],
+  "identifier": "E-10-2026-000002",
+  "publisher": "org/EU_PARLIAMENT",
+  "title_dcterms": {
+   "en": "Enquiries regarding EU funding for the Digital Freedom Fund and grants to the  Gesellschaft für Freiheitsrechte"
+  },
+  "epNumber": "PE782.726",
+  "identifierYear": "2026",
+  "originalLanguage": [
+   "http://publications.europa.eu/resource/authority/language/DEU"
+  ],
+  "workHadParticipation": [
+   {
+    "id": "eli/dl/participation/E-10-2026-000002-256941",
+    "type": "Participation",
+    "had_participant_person": [
+     "person/256941"
+    ],
+    "participation_role": "def/ep-roles/AUTHOR"
+   },
+   {
+    "id": "eli/dl/participation/E-10-2026-000002-COM",
+    "type": "Participation",
+    "had_participant_organization": [
+     "org/COM"
+    ],
+    "participation_role": "def/ep-roles/ADDRESSEE"
+   }
+  ],
+  "inverse_answers_to": [
+   {
+    "id": "eli/dl/doc/E-10-2026-000002-ASW",
+    "type": "Work",
+    "answers_to": "eli/dl/doc/E-10-2026-000002",
+    "parliamentary_term": "org/ep-10",
+    "document_date": "2026-02-20",
+    "is_realized_by": [
+     {
+      "id": "eli/dl/doc/E-10-2026-000002-ASW/en",
+      "type": "Expression",
+      "is_embodied_by": [
+       {
+        "id": "eli/dl/doc/E-10-2026-000002-ASW/en/docx",
+        "type": "Manifestation",
+        "is_exemplified_by": "distribution/reds_iMaQp_Asw/E-10-2026-000002-ASW/E-10-2026-000002-ASW_en.docx",
+        "media_type": "https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "format": "http://publications.europa.eu/resource/authority/file-type/DOCX",
+        "issued": "2026-02-20T17:40:43+01:00",
+        "byteSize": "20316"
+       },
+       {
+        "id": "eli/dl/doc/E-10-2026-000002-ASW/en/pdf",
+        "type": "Manifestation",
+        "is_exemplified_by": "distribution/reds_iMaQp_Asw/E-10-2026-000002-ASW/E-10-2026-000002-ASW_en.pdf",
+        "media_type": "https://www.iana.org/assignments/media-types/application/pdf",
+        "format": "http://publications.europa.eu/resource/authority/file-type/PDF",
+        "issued": "2026-02-20T17:40:43+01:00",
+        "byteSize": "20316"
+       }
+      ],
+      "language": "http://publications.europa.eu/resource/authority/language/ENG",
+      "title": {
+       "en": "Answer for question E-000002/26"
+      }
+     }
+    ],
+    "work_type": "def/ep-document-types/QUESTION_WRITTEN_ANSWER",
+    "creator": [
+     "org/EU_COMMISSION"
+    ],
+    "identifier": "E-10-2026-000002-ASW",
+    "publisher": "org/EU_PARLIAMENT",
+    "title_dcterms": {
+     "en": "Answer for question E-000002/26"
+    },
+    "identifierYear": "2026",
+    "workHadParticipation": [
+     {
+      "id": "eli/dl/participation/E-10-2026-000002-ASW-COM",
+      "type": "Participation",
+      "had_participant_organization": [
+       "org/EU_COMMISSION"
+      ],
+      "participation_role": "def/ep-roles/AUTHOR"
+     }
+    ]
+   }
+  ]
+ }
+}
