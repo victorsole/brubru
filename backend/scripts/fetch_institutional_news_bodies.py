@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import re
 import sys
 import time
 import urllib.error
@@ -52,8 +53,51 @@ def is_institutional(url: str) -> bool:
     return any(h in (url or "") for h in INSTITUTIONAL)
 
 
+_PRESSCORNER = re.compile(r"^https?://ec\.europa\.eu/commission/presscorner/detail/en/([\w-]+)")
+
+
+def presscorner_pdf(url: str) -> str | None:
+    """The print PDF for a presscorner page, or None if this is not one.
+
+    The page itself is a JavaScript shell: 200, ~22 KB, and zero characters of text, and
+    Scrape.do returns the same with render=true, so rendering is not the answer. The
+    Commission does serve the document, as a PDF, at a mechanical URL:
+
+        /detail/en/speech_26_911  ->  /api/files/document/print/en/speech_26_911/SPEECH_26_911_EN.pdf
+
+    Checked against speech_, ip_ and statement_ documents: 922 to 5,423 characters each.
+    (An older note in memory says this endpoint 404s; it answers 200 today.)
+    """
+    m = _PRESSCORNER.match(url or "")
+    if not m:
+        return None
+    slug = m.group(1)
+    return (f"https://ec.europa.eu/commission/presscorner/api/files/document/print/en/"
+            f"{slug}/{slug.upper()}_EN.pdf")
+
+
 def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
+    pdf_url = presscorner_pdf(url)
+    if pdf_url:
+        try:
+            req = urllib.request.Request(pdf_url, headers={"User-Agent": UA, "Accept": "*/*"})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            import io
+
+            from pypdf import PdfReader
+
+            txt = "\n".join((pg.extract_text() or "")
+                             for pg in PdfReader(io.BytesIO(raw)).pages).strip()
+            # No body_html: this is a PDF, and inventing HTML from one is what produced
+            # the composed stubs in the first place.
+            return (txt or None), None, None if txt else "presscorner pdf had no text"
+        except urllib.error.HTTPError as exc:
+            return None, None, f"presscorner HTTP {exc.code}"
+        except Exception as exc:  # noqa: BLE001
+            return None, None, f"presscorner {type(exc).__name__}"
+
     try:
         req = urllib.request.Request(url, headers={"User-Agent": UA})
         with urllib.request.urlopen(req, timeout=timeout) as r:
