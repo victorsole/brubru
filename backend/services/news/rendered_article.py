@@ -49,10 +49,16 @@ def visible_text(fragment: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+# Leading punctuation a close button or icon leaves behind. EUR-Lex opens its pages with
+# "\u00d7 Skip to main content", and `startswith` missed it by exactly one character, so
+# 3,178 characters of portal navigation read as an article.
+_LEADING_JUNK = re.compile(r"^[\s\u00d7\u2715\u2716xX*\u2022\-\u2013\u2014|>\]\[]+")
+
+
 def looks_like_chrome(text: str) -> bool:
     """True when the text opens with navigation or consent furniture."""
-    head = text[:160].lower()
-    return any(head.startswith(o) or head.lstrip().startswith(o) for o in _CHROME_OPENERS)
+    head = _LEADING_JUNK.sub("", text[:200]).lower()
+    return any(head.startswith(opener) for opener in _CHROME_OPENERS)
 
 
 # A listing page is not an article. The trade site's /news_en rendered 3,053 characters of
@@ -97,6 +103,37 @@ def looks_like_challenge(text: str) -> bool:
         return False
     head = text[:1500]
     return any(marker.search(head) for marker in _CHALLENGE_MARKERS)
+
+
+# Phrases a page opens with before its article starts. EU-OSHA pages read "Skip to main
+# content Highlights Back to highlights 14/12/2025 <the actual highlight>": furniture FOLLOWED
+# by a real article. Refusing those would throw away 110 genuine bodies, and storing them
+# whole puts navigation into the text a partner searches. So: strip the run, then judge what
+# is left.
+_STRIPPABLE_OPENERS = (
+    "skip to main content", "skip to content", "skip to search", "skip to navigation",
+    "back to highlights", "back to events", "back to news", "highlights", "osh events",
+    "accept all cookies", "accept only essential cookies", "refuse", "accept",
+    "this site uses cookies", "we use cookies",
+)
+
+
+def strip_page_furniture(text: str) -> str:
+    """Remove the run of navigation phrases a page opens with. Keeps the article."""
+    if not text:
+        return text
+    out = text
+    for _ in range(12):  # bounded: a page opens with a handful of these, not hundreds
+        stripped = _LEADING_JUNK.sub("", out)
+        lowered = stripped.lower()
+        for opener in _STRIPPABLE_OPENERS:
+            if lowered.startswith(opener):
+                stripped = stripped[len(opener):]
+                break
+        else:
+            return stripped.strip()
+        out = stripped
+    return out.strip()
 
 
 def is_app_shell(page_html: str) -> bool:

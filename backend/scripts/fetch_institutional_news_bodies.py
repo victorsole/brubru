@@ -149,7 +149,7 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
 
 from services.news.rendered_article import (extract_article, looks_like_challenge,
                                             looks_like_chrome, looks_like_listing,
-                                            visible_text)
+                                            strip_page_furniture, visible_text)
 
 
 # What counts as a whole body, matching scripts/api_body_coverage.py.
@@ -376,9 +376,14 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         # Never stored, never solved. The row keeps whatever it had and is retried later.
         return None, None, "bot challenge, not the document: back off and retry later"
     if looks_like_chrome(body_txt or ""):
-        # 120 ECA rows held exactly 307 characters of "Skip to content ... We use cookies ...
-        # Refuse Accept Title modal" and nothing else, stored as the body of an audit report.
-        return None, None, "page furniture, not the document"
+        # Strip the furniture, then judge what is left. 120 ECA rows held exactly 307
+        # characters of "Skip to content ... We use cookies ... Refuse Accept Title modal" and
+        # nothing else; 110 EU-OSHA rows held the same opening FOLLOWED by a real article.
+        # Refusing both would throw away the second kind, storing both keeps navigation in the
+        # text a partner searches.
+        body_txt = strip_page_furniture(body_txt or "")
+        if len(body_txt) < 200:
+            return None, None, "page furniture, not the document"
     reason = error_body_reason(body_txt)
     if reason or not body_txt:
         if render:

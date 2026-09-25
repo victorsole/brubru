@@ -181,3 +181,61 @@ def test_epthinktank_is_the_parliaments_own_site():
     import fetch_institutional_news_bodies as fetcher
 
     assert "epthinktank.eu" in fetcher.INSTITUTIONAL
+
+
+# --- navigation prefixes ------------------------------------------------------------------
+
+def test_a_navigation_prefix_is_stripped_not_the_whole_article():
+    """110 rows opened with navigation and then carried a real article.
+
+    Refusing them throws away genuine bodies; storing them whole puts "Skip to main content
+    Highlights Back to highlights" into the text a partner searches. Strip the run, then judge
+    what is left.
+    """
+    from services.news.rendered_article import strip_page_furniture
+
+    osha = ("Skip to main content Highlights Back to highlights 14/12/2025 "
+            "Together for a safer and healthier 2026. " + "The campaign continues. " * 20)
+    cleaned = strip_page_furniture(osha)
+    assert "Skip to main content" not in cleaned
+    assert "Together for a safer" in cleaned
+    assert len(cleaned) > 400, "the article itself must survive"
+
+
+def test_a_leading_close_button_does_not_hide_the_furniture():
+    """EUR-Lex opens with "x Skip to main content"; startswith missed it by one character,
+    so 3,178 characters of portal navigation read as an article."""
+    from services.news.rendered_article import looks_like_chrome
+
+    assert looks_like_chrome("× Skip to main content EUR-Lex Access to European Union law")
+    assert looks_like_chrome("  ✕ This site uses cookies. Visit our policy page.")
+    assert not looks_like_chrome("X-ray screening and skip counts are covered in the report.")
+
+
+def test_an_article_that_merely_mentions_skipping_is_untouched():
+    from services.news.rendered_article import strip_page_furniture
+
+    real = "The Commission adopted new rules today, skipping the usual consultation."
+    assert strip_page_furniture(real) == real
+
+
+def test_no_stored_body_still_opens_with_navigation():
+    """The corpus: 110 rows did before this ran; what remains was too short to keep."""
+    import psycopg2
+
+    dsn = next((l.split("=", 1)[1].strip() for l in pathlib.Path(_BACKEND, ".env").read_text().splitlines()
+                if l.startswith("DATABASE_URL=")), None)
+    if not dsn:
+        pytest.skip("no DATABASE_URL")
+    conn = psycopg2.connect(dsn)
+    try:
+        cur = conn.cursor()
+        cur.execute("SET statement_timeout='90s'")
+        for table in ("economy_items", "eu_news_items"):
+            cur.execute(f"SELECT count(*) FROM {table} "
+                        f"WHERE left(body_txt, 60) ~* '(skip to main content|skip to content)' "
+                        f"  AND length(body_txt) >= 200")
+            count = cur.fetchone()[0]
+            assert count == 0, f"{count} substantial row(s) in {table} still open with navigation"
+    finally:
+        conn.close()
