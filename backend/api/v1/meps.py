@@ -179,7 +179,8 @@ PAGE = 200
 MIN_PAGE = 25
 
 
-async def _fetch_window(hc, base: Dict[str, Any], offset: int, size: int, patient: bool) -> List[Dict[str, Any]]:
+async def _fetch_window(hc, base: Dict[str, Any], offset: int, size: int, patient: bool,
+                        path: str = "/meps") -> List[Dict[str, Any]]:
     """One window of the MEP list, halved on failure.
 
     The EP API can have ONE (limit, offset) combination stuck while its neighbours
@@ -187,9 +188,13 @@ async def _fetch_window(hc, base: Dict[str, Any], offset: int, size: int, patien
     different networks, while `limit=100` at offsets 200 and 300 returned the same
     people immediately. Retrying the same window is useless; asking for it in smaller
     pieces works, so that is what this does.
+
+    `/meps/show-current` has the same defect (25 Sep 2026: `limit=200&offset=600`
+    failed on every call from Railway and from a laptop, naming one MEP record,
+    while `limit=50` at 600, 650 and 700 answered at once), so it uses this too.
     """
     try:
-        r = await _ep_get(hc, "/meps", {**base, "limit": size, "offset": offset}, patient=patient)
+        r = await _ep_get(hc, path, {**base, "limit": size, "offset": offset}, patient=patient)
         r.raise_for_status()
         return _rows(r.json())
     except Exception as exc:  # noqa: BLE001
@@ -197,10 +202,10 @@ async def _fetch_window(hc, base: Dict[str, Any], offset: int, size: int, patien
             raise
         logger.info("[meps] window offset=%s size=%s failed (%s); splitting", offset, size, str(exc)[:80])
         half = size // 2
-        first = await _fetch_window(hc, base, offset, half, patient)
+        first = await _fetch_window(hc, base, offset, half, patient, path)
         if len(first) < half:
             return first  # the list ended inside the first half
-        return first + await _fetch_window(hc, base, offset + half, half, patient)
+        return first + await _fetch_window(hc, base, offset + half, half, patient, path)
 
 
 async def _fetch_all_once(country=None, group=None, term=10, patient: bool = False) -> Optional[List[Dict[str, Any]]]:
@@ -259,14 +264,12 @@ async def _fetch_current_ids_once(patient: bool = False) -> Optional[set]:
     try:
         async with httpx.AsyncClient(timeout=20.0) as hc:
             for _ in range(10):
-                r = await _ep_get(hc, "/meps/show-current",
-                                  {"format": "application/ld+json", "limit": 200, "offset": offset}, patient=patient)
-                r.raise_for_status()
-                rows = _rows(r.json())
+                rows = await _fetch_window(hc, {"format": "application/ld+json"}, offset, PAGE,
+                                           patient, path="/meps/show-current")
                 ids.update(_identifier(x) for x in rows)
-                if len(rows) < 200:
+                if len(rows) < PAGE:
                     break
-                offset += 200
+                offset += PAGE
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] current-MEP list unavailable: %s", exc)
         return None

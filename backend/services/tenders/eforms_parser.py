@@ -225,6 +225,13 @@ class EFormsParser:
         result["has_lots"] = len(result["lots"]) > 0
         result["lot_count"] = len(result["lots"])
 
+        # What is being bought. Until 25 Sep 2026 the eForms path never set this,
+        # only the legacy one did, so 31,829 of 32,070 stored tenders (99%) had no
+        # description: the card, the AI summary and the matcher saw a title only.
+        description = self._extract_description(root, result["lots"])
+        if description:
+            result["description"] = description
+
         # Selection criteria and requirements
         result.update(self._extract_requirements(root))
 
@@ -232,6 +239,31 @@ class EFormsParser:
         result.update(self._extract_documents(root))
 
         return result
+
+    def _extract_description(self, root: ET.Element, lots: List[Dict[str, Any]]) -> Optional[str]:
+        """The notice's own description, then each lot's (distinct, in order).
+
+        Only a `cbc:Description` that is a DIRECT child of `cac:ProcurementProject`
+        describes the purchase. The same tag also appears under appeal terms,
+        tenderer requirements and award criteria ("100% Preis"), so a `.//` search
+        would glue review-procedure boilerplate into the description.
+        """
+        parts: List[str] = []
+
+        def _add(text: Optional[str]) -> None:
+            t = " ".join((text or "").split())
+            if t and t not in parts:
+                parts.append(t)
+
+        project = root.find("cac:ProcurementProject", EFORMS_NS)
+        if project is not None:
+            descs = project.findall("cbc:Description", EFORMS_NS)
+            # A notice can carry the text in several languages; one is enough.
+            if descs:
+                _add(descs[0].text)
+        for lot in lots:
+            _add(lot.get("description"))
+        return "\n\n".join(parts) if parts else None
 
     def _determine_notice_type(self, root_tag: str) -> str:
         """Determine the notice type from root element"""

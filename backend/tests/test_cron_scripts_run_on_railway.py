@@ -132,3 +132,59 @@ def test_current_meps_request_path_never_waits(monkeypatch):
     monkeypatch.setattr(m, "_cached", lambda k: None)
     assert asyncio.run(m._fetch_current_ids(patient=False)) is None
     assert calls["n"] == 1
+
+
+_EFORMS = """<?xml version="1.0"?>
+<ContractNotice xmlns="urn:oasis:names:specification:ubl:schema:xsd:ContractNotice-2"
+ xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+ xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+  <cac:TenderingTerms><cac:AppealTerms><cac:PresentationPeriod>
+    <cbc:Description languageID="DEU">Rügeobliegenheit boilerplate</cbc:Description>
+  </cac:PresentationPeriod></cac:AppealTerms></cac:TenderingTerms>
+  <cac:ProcurementProject>
+    <cbc:Name languageID="DEU">Umbau</cbc:Name>
+    <cbc:Description languageID="DEU">Umbaumaßnahmen im Gebäude Reha Aufstockung</cbc:Description>
+  </cac:ProcurementProject>
+  <cac:ProcurementProjectLot><cbc:ID schemeName="Lot">LOT-0001</cbc:ID>
+    <cac:ProcurementProject><cbc:Description languageID="DEU">Los 1: Heizung</cbc:Description></cac:ProcurementProject>
+  </cac:ProcurementProjectLot>
+</ContractNotice>"""
+
+
+def test_eforms_description_is_the_project_not_the_boilerplate():
+    from services.tenders.eforms_parser import EFormsParser
+    d = EFormsParser().parse(_EFORMS)["description"]
+    assert d.startswith("Umbaumaßnahmen im Gebäude")
+    assert "Los 1: Heizung" in d
+    assert "Rügeobliegenheit" not in d
+
+
+def test_backfill_uses_the_ingest_parser_for_eforms():
+    import sys
+    sys.path.insert(0, str(_BACKEND / "scripts"))
+    from backfill_tenders_description import extract_description
+    assert extract_description(_EFORMS).startswith("Umbaumaßnahmen")
+
+
+def test_current_meps_splits_a_stuck_window(monkeypatch):
+    """EP answers limit=200&offset=600 with its pool-exhaustion body every time,
+    while smaller windows over the same people answer (25 Sep 2026)."""
+    from api.v1 import meps as m
+
+    class R:
+        def __init__(self, payload): self._p = payload
+        def raise_for_status(self): pass
+        def json(self): return self._p
+
+    people = [{"identifier": str(i)} for i in range(718)]
+
+    async def fake_get(hc, path, params, patient=False):
+        assert path == "/meps/show-current"
+        off, lim = params["offset"], params["limit"]
+        if off == 600 and lim == 200:
+            return R({"error": "Pending acquire queue has reached its maximum size of 100"})
+        return R({"data": people[off:off + lim]})
+    monkeypatch.setattr(m, "_ep_get", fake_get)
+    monkeypatch.setattr(m, "_identifier", lambda x: x["identifier"])
+    ids = asyncio.run(m._fetch_current_ids_once(patient=True))
+    assert ids is not None and len(ids) == 718

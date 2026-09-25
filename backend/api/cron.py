@@ -806,7 +806,10 @@ async def cron_sync_daily(
     )
     # Enrichment pass over whatever is now in the table, including what the
     # fetch just added.
-    results["tenders"] = await _run_script_async("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
+    # 3,000, not 200 (25 Sep 2026): the old cap took the same 200 oldest rows
+    # every day and 99% of tenders had no description. The ingest's parser now
+    # fills new rows itself; this mops up, ~0.15 s a row.
+    results["tenders"] = await _run_script_async("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "3000"], timeout=900)
     # Repair any country the ingest could not resolve from the search payload,
     # reading each row's own stored XML. Cheap and idempotent: rows with a valid
     # country are skipped without touching the network.

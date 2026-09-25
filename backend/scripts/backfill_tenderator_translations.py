@@ -299,8 +299,9 @@ def run(table: str, limit: int, batch: int, funding_only: bool):
         for r in rows:
             lang = detect_lang(_detection_text(table, r["title"], r["summary"]))
             trans_rows = []
-            if lang not in SIX_SET and lang != "und" and not detect_only:
-                foreign += 1
+            is_foreign = lang not in SIX_SET and lang != "und"
+            foreign += is_foreign
+            if is_foreign and not detect_only:
                 translate = get_translate()
                 for tgt in SIX:
                     try:
