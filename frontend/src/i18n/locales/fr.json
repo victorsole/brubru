@@ -5156,7 +5156,12 @@
     "noResults": "Aucun résultat.",
     "loadMore": "Charger plus",
     "department": "Département",
-    "pickDepartment": "Choisir un département..."
+    "pickDepartment": "Choisir un département...",
+    "consultationNote": "A répondu à la consultation publique de la Commission sur ce dossier{{date}}. Sa position est la sienne, telle que soumise à la Commission.",
+    "consultationFile": "{{count}} organisations ont répondu à la consultation publique de la Commission sur ce dossier.",
+    "consultationOpen": "Voir la consultation",
+    "openResponse": "Lire la réponse à la consultation",
+    "stance_mixed": "Mitigée"
   },
   "sd": {
     "subtitle": "Vos stratégies de plaidoyer, rattachées aux dossiers qu'elles concernent. Les modifications se synchronisent avec Mes Documents.",

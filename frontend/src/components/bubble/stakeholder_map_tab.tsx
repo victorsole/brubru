@@ -411,14 +411,30 @@ function NodeDrawer({ node, onClose, t }: { node: SMNode; onClose: () => void; t
           {node.stance && <Row label={t('sm.stance', 'Stated position')} value={t('sm.stance_' + node.stance, node.stance)} />}
           {m.stance_summary && <p className="sm-drawer__quote">{m.stance_summary}</p>}
           {m.kind === 'ecosystem' && <p className="sm-drawer__note">{t('sm.ecosystemNote', 'Brussels-based organisation active in this policy area (shown for context).')}</p>}
+          {m.kind === 'consultation' && (
+            <>
+              {!m.stance_summary && m.stance_excerpt && <p className="sm-drawer__quote">{String(m.stance_excerpt).slice(0, 420)}</p>}
+              <p className="sm-drawer__note">
+                {t('sm.consultationNote', 'Answered the Commission\u2019s public consultation on this file{{date}}. Its position is its own, as submitted to the Commission.', { date: m.feedback_date ? ` (${m.feedback_date})` : '' })}
+              </p>
+            </>
+          )}
         </>
+      )}
+      {node.type === 'file' && node.consultation && node.consultation.respondents > 0 && (
+        <p className="sm-drawer__note">
+          {t('sm.consultationFile', '{{count}} organisations answered the Commission\u2019s public consultation on this file.', { count: node.consultation.respondents })}
+          {node.consultation.initiatives[0]?.url && (
+            <> <a href={node.consultation.initiatives[0].url!} target="_blank" rel="noopener noreferrer">{t('sm.consultationOpen', 'See the consultation')}</a></>
+          )}
+        </p>
       )}
       {node.type === 'mep' && <Row label={t('sm.role', 'Role')} value={m.role} />}
       {node.type === 'official' && <p className="sm-drawer__note">{t('sm.wiwNote', 'Opens the live EU Who-is-Who organisation chart for this department.')}</p>}
 
       {node.url && (
         <a className="sm-drawer__cta" href={node.url} target="_blank" rel="noopener noreferrer">
-          {t('sm.open', 'Open profile')} <Icon path={mdiOpenInNew} size={0.6} />
+          {m.kind === 'consultation' ? t('sm.openResponse', 'Read the consultation response') : t('sm.open', 'Open profile')} <Icon path={mdiOpenInNew} size={0.6} />
         </a>
       )}
     </aside>

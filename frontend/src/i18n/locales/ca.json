@@ -5156,7 +5156,12 @@
     "noResults": "Sense resultats.",
     "loadMore": "Carrega'n més",
     "department": "Departament",
-    "pickDepartment": "Tria un departament..."
+    "pickDepartment": "Tria un departament...",
+    "consultationNote": "Va respondre a la consulta pública de la Comissió sobre aquest expedient{{date}}. La posició és seva, tal com la va presentar a la Comissió.",
+    "consultationFile": "{{count}} organitzacions van respondre a la consulta pública de la Comissió sobre aquest expedient.",
+    "consultationOpen": "Veure la consulta",
+    "openResponse": "Llegir la resposta a la consulta",
+    "stance_mixed": "Mixta"
   },
   "sd": {
     "subtitle": "Les teves estratègies d'incidència, ancorades als expedients que tracten. Els canvis se sincronitzen amb Els Meus Documents.",

@@ -26,9 +26,11 @@ export interface SMNode {
   sublabel?: string;
   relevance: number;
   pi_match?: boolean;
-  stance?: 'support' | 'oppose' | 'amend' | null;
+  stance?: 'support' | 'oppose' | 'amend' | 'mixed' | null;
   url?: string | null;
   meta?: Record<string, any>;
+  /** File nodes only: the Commission consultation(s) on this file and who answered. */
+  consultation?: { initiatives: { id: string; title: string; url?: string | null }[]; respondents: number; by_type: Record<string, number> };
 }
 export interface SMEdge {
   source: string;

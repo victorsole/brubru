@@ -174,6 +174,10 @@ MEUB_SOURCES: List[SourceSpec] = [
     # answer text for what the first one stored, and answers that arrive later.
     SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      ("--max-seconds", "420"), timeout=600,  stale_after_hours=14),
     SourceSpec("parl_question_text","Parliamentary Questions - text and answers","warm","scripts/backfill_parl_question_text.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
+    # Links each Commission consultation to the legislative file it produced and
+    # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
+    SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",
+               "scripts/link_consultations_to_files.py", ("--max-seconds", "420"), timeout=600, stale_after_hours=14),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
     # Names files that arrived without a readable one. Unlike the feeds above
     # this ingests nothing: it fills legislative_carriages.short_title for rows

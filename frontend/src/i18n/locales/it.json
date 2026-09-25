@@ -5156,7 +5156,12 @@
     "noResults": "Nessun risultato.",
     "loadMore": "Carica altri",
     "department": "Dipartimento",
-    "pickDepartment": "Scegli un dipartimento..."
+    "pickDepartment": "Scegli un dipartimento...",
+    "consultationNote": "Ha risposto alla consultazione pubblica della Commissione su questo fascicolo{{date}}. La posizione è la sua, come presentata alla Commissione.",
+    "consultationFile": "{{count}} organizzazioni hanno risposto alla consultazione pubblica della Commissione su questo fascicolo.",
+    "consultationOpen": "Vedi la consultazione",
+    "openResponse": "Leggi la risposta alla consultazione",
+    "stance_mixed": "Mista"
   },
   "sd": {
     "subtitle": "Le tue strategie di advocacy, ancorate ai dossier che riguardano. Le modifiche si sincronizzano con I Miei Documenti.",

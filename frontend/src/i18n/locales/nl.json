@@ -4105,7 +4105,12 @@
     "noResults": "Geen resultaten.",
     "loadMore": "Meer laden",
     "department": "Departement",
-    "pickDepartment": "Kies een departement..."
+    "pickDepartment": "Kies een departement...",
+    "consultationNote": "Heeft gereageerd op de openbare raadpleging van de Commissie over dit dossier{{date}}. Het standpunt is het zijne, zoals ingediend bij de Commissie.",
+    "consultationFile": "{{count}} organisaties hebben gereageerd op de openbare raadpleging van de Commissie over dit dossier.",
+    "consultationOpen": "Bekijk de raadpleging",
+    "openResponse": "Lees de reactie op de raadpleging",
+    "stance_mixed": "Gemengd"
   },
   "sd": {
     "subtitle": "Je belangenbehartigingsstrategieën, verankerd aan de dossiers waarover ze gaan. Wijzigingen synchroniseren met Mijn Documenten.",

@@ -10,6 +10,8 @@ Sources (all already in Brubru):
 - LegislativeCarriage / UserCarriageTrack  -> file, committees, rapporteur, tracked set
 - mep_lobby_meetings                       -> MEPs met + organisations that lobbied (evidence)
 - consultation_feedback (Outcome Alignment)-> org stance (matched by TR id / org name)
+- consultation_feedback (this file's own     -> organisations that answered the Commission's
+  Have Your Say consultation, 25 Sep 2026)     consultation on this file (linked by COM ref)
 - PI crosswalk                             -> lead DG + Council configuration (inference)
 - eu_transparency_register                 -> org enrichment + Brussels-HQ ecosystem
 - EU Who-is-Who org pages                  -> named officials behind the lead DG
@@ -205,6 +207,98 @@ def _stance_by_org(db: Session, tr_ids: List[str], names: List[str]) -> Dict[str
     return out
 
 
+_USER_TYPE_LABEL = {
+    "COMPANY": "Company", "BUSINESS_ASSOCIATION": "Business association",
+    "TRADE_UNION": "Trade union", "NGO": "NGO", "ENVIRONMENTAL_ORGANISATION": "Environmental organisation",
+    "ACADEMIC_RESEARCH_INSTITTUTION": "Academic or research institution",
+    "PUBLIC_AUTHORITY": "Public authority", "CONSUMER_ORGANISATION": "Consumer organisation",
+    "OTHER": "Other organisation",
+}
+_CLEAR_STANCES = ("support", "oppose", "amend", "mixed")
+_MAX_RESPONDENTS = 18
+
+
+def _count_label(n: int, label: str) -> str:
+    """'3 companies', '1 trade union', '71 NGOs' (acronyms keep their case)."""
+    word = label if label.isupper() else label.lower()
+    if n != 1:
+        if word.isupper():
+            word += "s"
+        elif word.endswith("y") and not word.endswith(("ay", "ey", "oy")):
+            word = word[:-1] + "ies"
+        elif not word.endswith("s"):
+            word += "s"
+    return f"{n} {word}"
+
+
+def _file_com_keys(db: Session, carriage) -> set:
+    """The file's Commission proposal(s) as canonical keys (matching only; nothing stored)."""
+    from services.linking.emeeting_links import canon_commission_ref
+    refs = list(carriage.celex_numbers or [])
+    if carriage.oeil_procedure_ref:
+        try:
+            refs += [r[0] for r in db.execute(text(
+                "SELECT DISTINCT reference FROM ep_emeeting_documents "
+                "WHERE doc_kind = 'commission_document' AND procedure_ref = :p"),
+                {"p": carriage.oeil_procedure_ref})]
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[stakeholders] commission refs lookup failed: %s", e)
+    return {k for k in (canon_commission_ref(r) for r in refs) if k}
+
+
+def _consultation_respondents(db: Session, carriage) -> tuple:
+    """(initiatives, rows) for the Have Your Say consultation(s) on this file.
+
+    Linked by the Commission document the consultation led to, as the portal
+    states it (public_consultations.com_references), so only files whose
+    consultation has reached a proposal can be linked: that is the honest limit.
+    """
+    from services.linking.emeeting_links import canon_commission_ref
+    keys = _file_com_keys(db, carriage)
+    if not keys:
+        return [], []
+    try:
+        cons = db.execute(text(
+            "SELECT initiative_id, coalesce(short_title, title) AS title, com_references, "
+            "feedback_url, portal_url FROM public_consultations "
+            "WHERE cardinality(com_references) > 0")).fetchall()
+        linked = [c for c in cons if any(canon_commission_ref(r) in keys for r in c.com_references)]
+        if not linked:
+            return [], []
+        rows = db.execute(text(
+            "SELECT organisation, organisation_norm, transparency_register_id, user_type, country, "
+            "stance, stance_summary, feedback_excerpt, feedback_date, source_url, initiative_id "
+            "FROM consultation_feedback WHERE initiative_id = ANY(:i) AND organisation IS NOT NULL"),
+            {"i": [c.initiative_id for c in linked]}).fetchall()
+        return linked, rows
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[stakeholders] consultation respondents failed: %s", e)
+        return [], []
+
+
+def _pick_respondents(rows, exclude: set, cap: int = _MAX_RESPONDENTS) -> list:
+    """Round-robin across respondent types, so unions, NGOs and business all show;
+    within a type, a stated stance first, then a Transparency Register match."""
+    by_type: Dict[str, list] = {}
+    seen = set()
+    for r in rows:
+        key = r.transparency_register_id or r.organisation_norm or r.organisation.lower()
+        if key in seen or f"org:{key}" in exclude:
+            continue
+        seen.add(key)
+        by_type.setdefault(r.user_type or "OTHER", []).append(r)
+    for lst in by_type.values():
+        lst.sort(key=lambda r: (r.stance not in _CLEAR_STANCES, not r.transparency_register_id,
+                                -(r.feedback_date.toordinal() if r.feedback_date else 0)))
+    order = sorted(by_type, key=lambda t: -len(by_type[t]))
+    picked = []
+    while len(picked) < cap and any(by_type[t] for t in order):
+        for t in order:
+            if by_type[t] and len(picked) < cap:
+                picked.append(by_type[t].pop(0))
+    return picked
+
+
 # --------------------------------------------------------------------- file graph
 def build_file_graph(db: Session, carriage, pi_domains: List[str], *, deep: bool = True) -> _Graph:
     g = _Graph()
@@ -301,6 +395,35 @@ def build_file_graph(db: Session, carriage, pi_domains: List[str], *, deep: bool
         g.edge(oid, fid, "lobbied_on", "lobby_meetings", weight=org_meet[key])
         if info.get("mep"):
             g.edge(oid, f"mep:{info['mep']}", "met", "lobby_meetings")
+
+    # organisations that answered the Commission's consultation on this file
+    # File view only: the portfolio overview merges up to 12 file graphs and would
+    # drown in respondents.
+    initiatives, resp_rows = _consultation_respondents(db, carriage) if deep else ([], [])
+    if resp_rows:
+        g.nodes[fid]["consultation"] = {
+            "initiatives": [{"id": c.initiative_id, "title": c.title,
+                             "url": c.portal_url or c.feedback_url} for c in initiatives],
+            "respondents": len({r.transparency_register_id or r.organisation_norm or r.organisation
+                                for r in resp_rows}),
+            "by_type": dict(Counter(_USER_TYPE_LABEL.get(r.user_type or "OTHER", "Other organisation")
+                                    for r in resp_rows)),
+        }
+        for r in _pick_respondents(resp_rows, set(g.nodes)):
+            key = r.transparency_register_id or r.organisation_norm or r.organisation.lower()
+            oid = f"org:{key}"
+            clear = r.stance if r.stance in _CLEAR_STANCES else None
+            g.node(oid, type="org", institution="stakeholder",
+                   label=r.organisation[:60],
+                   sublabel=_USER_TYPE_LABEL.get(r.user_type or "OTHER", "Other organisation"),
+                   relevance=0.45 if clear else 0.38, stance=clear,
+                   url=r.source_url or (_TR_URL.format(id=r.transparency_register_id)
+                                        if r.transparency_register_id else None),
+                   meta={"full_name": r.organisation, "tr_number": r.transparency_register_id,
+                         "hq_country": r.country, "kind": "consultation",
+                         "feedback_date": r.feedback_date.isoformat() if r.feedback_date else None,
+                         "stance_summary": r.stance_summary, "stance_excerpt": r.feedback_excerpt})
+            g.edge(oid, fid, "responded_to_consultation", "consultation_feedback")
 
     # lead DG + Council configuration (inference via crosswalk)
     dom = _domains_for_committee(carriage.lead_committee) or pi_domains
@@ -401,7 +524,9 @@ def strategy_draft(db: Session, carriage, pi_domains: List[str]) -> dict:
     sup = [o for o in orgs if o.get("stance") == "support"]
     opp = [o for o in orgs if o.get("stance") == "oppose"]
     amd = [o for o in orgs if o.get("stance") == "amend"]
-    other = [o for o in orgs if not o.get("stance")]
+    other = [o for o in orgs if not o.get("stance") and (o.get("meta") or {}).get("kind") != "consultation"]
+    respondents = [o for o in orgs if (o.get("meta") or {}).get("kind") == "consultation"]
+    consult = next((n.get("consultation") for n in g.nodes.values() if n.get("type") == "file"), None)
     proc = carriage.oeil_procedure_ref
 
     contacts = None
@@ -453,6 +578,11 @@ def strategy_draft(db: Session, carriage, pi_domains: List[str]) -> dict:
         L.append("Seeking amendments: " + ", ".join(name(o) for o in amd))
     if other:
         L.append("Also active: " + ", ".join(name(o) for o in other[:10]))
+    if consult and consult.get("respondents"):
+        mix = ", ".join(_count_label(v, k)
+                        for k, v in sorted(consult["by_type"].items(), key=lambda kv: -kv[1]))
+        L.append(f"Answered the Commission's public consultation: {consult['respondents']} "
+                 f"organisations ({mix}). Examples: " + ", ".join(name(o) for o in respondents[:8]))
     if not orgs:
         L.append("No lobbying footprint recorded yet on this file.")
     L.append("")

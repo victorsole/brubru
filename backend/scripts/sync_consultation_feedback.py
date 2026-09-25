@@ -34,6 +34,49 @@ from services.scrapers.mep_lobby_meetings_scraper import norm_org
 MIN_TEXT = 120   # below this, treat as boilerplate/attachment-only (skip Qwen)
 
 
+def com_references_of(init: dict) -> list:
+    """The Commission documents this initiative led to, AS THE PORTAL STATES THEM
+    (a publication's own `reference`, e.g. "COM(2026)321" on EU Inc.'s adoption
+    stage). Stored verbatim, never derived: the Stakeholder Map matches a file to
+    its consultation through these, via canon_commission_ref at query time."""
+    from services.linking.emeeting_links import canon_commission_ref
+    refs = []
+    for pub in (init or {}).get("publications") or []:
+        ref = (pub.get("reference") or "").strip()
+        key = canon_commission_ref(ref)
+        if key and key.split(":")[0] in ("COM", "JOIN") and ref not in refs:
+            refs.append(ref)
+    return refs
+
+
+def record_com_references(iid: str, init: dict) -> int:
+    refs = com_references_of(init)
+    if not refs:
+        return 0
+    db = SessionLocal()
+    try:
+        db.execute(sqla_text("UPDATE public_consultations SET com_references = :r "
+                             "WHERE initiative_id = :i"), {"r": refs, "i": iid})
+        db.commit()
+    finally:
+        db.close()
+    return len(refs)
+
+
+async def refs_only():
+    """Fill com_references for every initiative that has stored feedback."""
+    db = SessionLocal()
+    iids = [r[0] for r in db.execute(sqla_text(
+        "SELECT DISTINCT initiative_id FROM consultation_feedback WHERE initiative_id IS NOT NULL"))]
+    db.close()
+    linked = 0
+    for iid in iids:
+        init = fetch_initiative(str(iid))
+        if init and record_com_references(str(iid), init):
+            linked += 1
+    print(f"[cf] refs-only: {linked} of {len(iids)} initiatives now name their Commission document")
+
+
 async def run(n_consultations, max_feedback, max_qwen, dry, initiatives=None):
     db = SessionLocal()
     if initiatives:
@@ -59,6 +102,8 @@ async def run(n_consultations, max_feedback, max_qwen, dry, initiatives=None):
         init = fetch_initiative(iid)
         if not init:
             continue
+        if not dry:
+            record_com_references(iid, init)
         title = c.short_title or c.title or (init.get("shortTitle") or "")
         dg = c.dg_responsible or init.get("unit")
         pareas = list(c.policy_areas or [])
@@ -150,6 +195,11 @@ if __name__ == "__main__":
     ap.add_argument("--max-qwen", type=int, default=200)
     ap.add_argument("--initiative", action="append",
                     help="Have Your Say initiative id to sync regardless of its stored count (repeatable)")
+    ap.add_argument("--refs-only", action="store_true",
+                    help="Only record each synced initiative's Commission document references")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
-    asyncio.run(run(a.consultations, a.max_feedback, a.max_qwen, a.dry_run, a.initiative))
+    if a.refs_only:
+        asyncio.run(refs_only())
+    else:
+        asyncio.run(run(a.consultations, a.max_feedback, a.max_qwen, a.dry_run, a.initiative))

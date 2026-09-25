@@ -5156,7 +5156,12 @@
     "noResults": "Sin resultados.",
     "loadMore": "Cargar más",
     "department": "Departamento",
-    "pickDepartment": "Elige un departamento..."
+    "pickDepartment": "Elige un departamento...",
+    "consultationNote": "Respondió a la consulta pública de la Comisión sobre este expediente{{date}}. La posición es suya, tal como la presentó a la Comisión.",
+    "consultationFile": "{{count}} organizaciones respondieron a la consulta pública de la Comisión sobre este expediente.",
+    "consultationOpen": "Ver la consulta",
+    "openResponse": "Leer la respuesta a la consulta",
+    "stance_mixed": "Mixta"
   },
   "sd": {
     "subtitle": "Tus estrategias de incidencia, ancladas a los expedientes que tratan. Los cambios se sincronizan con Mis Documentos.",

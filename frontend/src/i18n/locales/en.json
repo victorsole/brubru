@@ -5156,7 +5156,12 @@
     "noResults": "No results.",
     "loadMore": "Load more",
     "department": "Department",
-    "pickDepartment": "Pick a department..."
+    "pickDepartment": "Pick a department...",
+    "consultationNote": "Answered the Commission’s public consultation on this file{{date}}. Its position is its own, as submitted to the Commission.",
+    "consultationFile": "{{count}} organisations answered the Commission’s public consultation on this file.",
+    "consultationOpen": "See the consultation",
+    "openResponse": "Read the consultation response",
+    "stance_mixed": "Mixed"
   },
   "sd": {
     "subtitle": "Your advocacy strategies, anchored to the files they are about. Edits sync with My Documents.",
