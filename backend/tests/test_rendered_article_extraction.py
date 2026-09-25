@@ -79,3 +79,39 @@ def test_an_article_mentioning_cookies_mid_text_is_kept():
             + "The guidance explains how this site uses cookies for analytics. " * 5)
     text, _, reason = extract_article(_page(f"<p>{body}</p>"))
     assert reason is None and text.startswith("The Commission adopted")
+
+
+def test_the_better_extractor_wins_per_template():
+    """Neither extractor is right for every Europa template.
+
+    extract_article knows the component library and refuses furniture; extract_html reads
+    templates it has no selector for. On a real FRA case-law page extract_article found 287
+    characters and extract_html found the whole 2,703-character record, so the fetcher runs
+    both and keeps the longer body that passes the furniture checks. Measured 25 September:
+    the fra/case_law slice went from 287 to 6,521 characters average once it did.
+    """
+    import sys as _sys
+
+    _sys.path.insert(0, str(pathlib.Path(_REPO_ROOT, "backend", "scripts")))
+    from fetch_institutional_news_bodies import _best_extraction
+
+    long_body = "The Court held that the measure was proportionate. " * 60
+    # A template with no article/main/ecl-col container: only extract_html reads it.
+    page = f"<html><body><div class='field-item'><p>{long_body}</p></div></body></html>"
+    text, _, reason = _best_extraction(page)
+    assert reason is None, f"neither extractor read the page: {reason}"
+    assert len(text) > 1200, f"kept only {len(text)} characters of a long record"
+
+
+def test_a_listing_is_still_refused_by_both_extractors():
+    """The best-of-two must not become a way for page furniture to get in."""
+    import sys as _sys
+
+    _sys.path.insert(0, str(pathlib.Path(_REPO_ROOT, "backend", "scripts")))
+    from fetch_institutional_news_bodies import _best_extraction
+
+    listing = ("<html><body><div class='view-content'><p>Showing results 1 to 10 of 696</p>"
+               + "".join(f"<p>News article 25 September 2026 Headline {i}</p>" for i in range(12))
+               + "</div></body></html>")
+    text, _, reason = _best_extraction(listing)
+    assert text is None, "an index page must not be stored as a body by either extractor"

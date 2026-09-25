@@ -132,7 +132,12 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
     raise last  # type: ignore[misc]
 
 
-from services.news.rendered_article import extract_article
+from services.news.rendered_article import (extract_article, looks_like_chrome,
+                                            looks_like_listing)
+
+
+# What counts as a whole body, matching scripts/api_body_coverage.py.
+WHOLE_BODY_CHARS = 1200
 
 
 def _scrapedo_token() -> str | None:
@@ -152,8 +157,38 @@ def _scrapedo_token() -> str | None:
     return None
 
 
-def fetch_rendered(url: str, timeout: int = 150) -> tuple[str | None, str | None, str | None]:
-    """A JavaScript-rendered Europa page, via Scrape.do.
+def _best_extraction(page_html: str) -> tuple[str | None, str | None, str | None]:
+    """Whichever extractor reads this template better, not whichever was written last.
+
+    extract_article knows the Europa component library and refuses consent banners and
+    listing pages. extract_html is the economy-store extractor and reads templates the
+    other one has no selector for: on an FRA case-law page it finds the whole 2,703-character
+    record where extract_article finds 287. Run both, keep the longer body that passes the
+    furniture checks, so neither template family loses.
+    """
+    text_a, html_a, reason_a = extract_article(page_html)
+
+    text_b, html_b = extract_html(page_html)
+    if text_b and (error_body_reason(text_b) or looks_like_chrome(text_b)
+                   or looks_like_listing(text_b)):
+        text_b, html_b = None, None
+
+    if text_a and text_b:
+        return (text_a, html_a, None) if len(text_a) >= len(text_b) else (text_b, html_b, None)
+    if text_a:
+        return text_a, html_a, None
+    if text_b:
+        return text_b, html_b, None
+    return None, None, reason_a
+
+
+def fetch_via_scrapedo(url: str, timeout: int = 150, render: bool = True
+                       ) -> tuple[str | None, str | None, str | None]:
+    """A page Brubru cannot fetch directly, via Scrape.do.
+
+    Two distinct jobs. `render=False` is one credit and defeats an IP-reputation block or a
+    rate limit, which is what a 403 or a persistent 429 from an agency site means. `render=True`
+    additionally runs the page
 
     customWait is not optional: without it the service returns the Angular shell with a 200,
     which is a failure carried in the body. 5s was enough on every page tested; 10s added
@@ -163,8 +198,9 @@ def fetch_rendered(url: str, timeout: int = 150) -> tuple[str | None, str | None
     if not token:
         return None, None, "no SCRAPEDO_API_KEY"
     api = ("https://api.scrape.do/?token=" + token
-           + "&url=" + urllib.parse.quote(url, safe="")
-           + "&render=true&customWait=5000")
+           + "&url=" + urllib.parse.quote(url, safe=""))
+    if render:
+        api += "&render=true&customWait=5000"
     # The render can come back unrendered: the same URL returned the Angular shell once and
     # the full 101 KB page on the next two calls, all with HTTP 200. A transient must be
     # retried, not filed as "this page has no text".
@@ -176,8 +212,8 @@ def fetch_rendered(url: str, timeout: int = 150) -> tuple[str | None, str | None
             return None, None, f"scrapedo HTTP {exc.code}"
         except Exception as exc:  # noqa: BLE001
             return None, None, f"scrapedo {type(exc).__name__}"
-        last = extract_article(raw.decode("utf-8", "replace"))
-        if last[0] or "did not render" not in (last[2] or ""):
+        last = _best_extraction(raw.decode("utf-8", "replace"))
+        if last[0] or not render or "did not render" not in (last[2] or ""):
             return last
         time.sleep(2 * (attempt + 1))
     return last
@@ -206,6 +242,16 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
     try:
         html = _read(url, timeout, accept="text/html,*/*").decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
+        # A wall is not an absence of text. 403 means our address is blocked and a 429 that
+        # survived three backoffs means the same in practice; Scrape.do fetches from
+        # elsewhere for one credit. Without this the row is filed as having no body.
+        if render and exc.code in (403, 429, 503):
+            text_, html_, reason = fetch_via_scrapedo(url, render=False)
+            if text_:
+                return text_, html_, None
+            if reason and "did not render" in reason:
+                return fetch_via_scrapedo(url, render=True)
+            return None, None, f"HTTP {exc.code}; scrapedo: {reason}"
         return None, None, f"HTTP {exc.code}"
     except Exception as exc:  # noqa: BLE001
         return None, None, f"{type(exc).__name__}"
@@ -215,7 +261,7 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         if render:
             # The page carried no prose of its own. On Europa that usually means an Angular
             # shell, so ask for it rendered rather than recording "no text available".
-            return fetch_rendered(url)
+            return fetch_via_scrapedo(url, render=True)
         return None, None, f"rejected:{reason or 'no text in the page'}"
     return body_txt, body_html, None
 
@@ -269,8 +315,15 @@ def main() -> int:
                 "       '' AS src, left(coalesce(title,''),70) AS title "
                 "FROM economy_items WHERE body_code = :code AND item_type = ANY(:types) "
                 "  AND public_url IS NOT NULL "
+                # The same resume filter the eu_news_items branch has had all along, which
+                # this one never got: without it the job re-downloads rows that ALREADY hold
+                # a whole body. It is why a euda slice spent 400 requests to earn 240 rate
+                # limits, and why a sample of fra/case_law came back holding 16,215
+                # characters on every row. Thin rows are the work; full rows are done.
+                "  AND coalesce(length(body_txt), 0) < :whole "
                 "ORDER BY document_date DESC NULLS LAST, id LIMIT :n"),
-                {"code": args.body_code, "types": types, "n": args.limit}).fetchall()
+                {"code": args.body_code, "types": types, "n": args.limit,
+                 "whole": WHOLE_BODY_CHARS}).fetchall()
             label = f"{args.body_code}/{','.join(types)}"
         else:
             rows = db.execute(text(
@@ -321,8 +374,30 @@ def main() -> int:
                     if failed <= 5:
                         print(f"  [{i:5}] {why:22} {r.title[:50]}", flush=True)
                     continue
-                body_txt = body_txt.replace("\x00", "")
-                body_html = (body_html or "").replace("\x00", "") or None
+                # NUL and lone surrogates: PostgreSQL rejects the first outright and the
+                # second cannot be encoded to UTF-8 at all. Both have killed a run.
+                def _clean(v):
+                    if not v:
+                        return None
+                    v = v.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8", "ignore")
+                    return v or None
+
+                body_txt = _clean(body_txt)
+                body_html = _clean(body_html)
+                if not body_txt:
+                    failed += 1
+                    reasons["nothing left after cleaning"] = reasons.get("nothing left after cleaning", 0) + 1
+                    continue
+
+                # Never shorten a body. A dry run on cedefop/news offered 309 characters for
+                # rows already holding 2,796, and euda/publication 5,282 for rows holding
+                # 10,600: the listing page is sometimes richer than the article page behind
+                # it. Overwriting on "we fetched something" would have degraded 55 slices.
+                if len(body_txt) <= (getattr(r, "blen", 0) or 0):
+                    failed += 1
+                    why = "fetched body is shorter than the stored one"
+                    reasons[why] = reasons.get(why, 0) + 1
+                    continue
                 ok += 1
                 gained.append(len(body_txt))
                 if args.apply:
