@@ -133,7 +133,7 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
 
 
 from services.news.rendered_article import (extract_article, looks_like_chrome,
-                                            looks_like_listing)
+                                            looks_like_listing, visible_text)
 
 
 # What counts as a whole body, matching scripts/api_body_coverage.py.
@@ -219,8 +219,61 @@ def fetch_via_scrapedo(url: str, timeout: int = 150, render: bool = True
     return last
 
 
+_CELEX_IN_URL = re.compile(r"(?i)CELEX(?::|%3A)([0-9][0-9A-Z()._-]{4,})")
+
+
+def _celex_from_url(url: str) -> str | None:
+    match = _CELEX_IN_URL.search(url or "")
+    return match.group(1).rstrip("&") if match else None
+
+
+def fetch_cellar(celex: str, timeout: int = 90) -> tuple[str | None, str | None, str | None]:
+    """The document itself, from the Publications Office, not the portal around it.
+
+    EUR-Lex renders a page; Cellar serves the act. For CJEU judgment 62024TJ0239 the rendered
+    EUR-Lex page yields 116,974 characters opening with "Skip to main content ... Help Print
+    Menu", and Cellar yields 113,938 opening with "JUDGMENT OF THE GENERAL COURT". Same
+    document, none of the furniture, one request instead of a render.
+
+    Accept-Language is required (a work-level request without one is rejected), and the type
+    must be text/html: these works hold no XHTML datastream.
+    """
+    url = f"https://publications.europa.eu/resource/celex/{celex}"
+    # Which manifestation a work holds varies by act, and asking for the wrong one is a flat
+    # 404, not a redirect to what exists: CJEU judgment 62024TJ0239 serves text/html and has
+    # no XHTML, ECB decision 32026D2039 serves application/xhtml+xml and has no HTML. Try
+    # both before concluding the document is not there.
+    last_reason = "cellar not attempted"
+    for accept in ("text/html", "application/xhtml+xml"):
+        try:
+            request = urllib.request.Request(url, headers={
+                "User-Agent": UA, "Accept": accept, "Accept-Language": "eng"})
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                raw = response.read()
+        except urllib.error.HTTPError as exc:
+            last_reason = f"cellar HTTP {exc.code} for {accept}"
+            continue
+        except Exception as exc:  # noqa: BLE001
+            return None, None, f"cellar {type(exc).__name__}"
+        page = raw.decode("utf-8", "replace")
+        body_txt = visible_text(page)
+        if len(body_txt) >= WHOLE_BODY_CHARS:
+            return body_txt, page, None
+        last_reason = f"cellar returned {len(body_txt)} characters for {accept}"
+    return None, None, last_reason
+
+
 def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
+    # An EUR-Lex link is a link to a document Cellar holds. Go to the source.
+    if "eur-lex.europa.eu" in (url or ""):
+        celex = _celex_from_url(url)
+        if celex:
+            body_txt, body_html, reason = fetch_cellar(celex)
+            if body_txt:
+                return body_txt, body_html, None
+            # Fall through: the portal page is better than nothing if Cellar has no copy.
+
     pdf_url = presscorner_pdf(url)
     if pdf_url:
         try:

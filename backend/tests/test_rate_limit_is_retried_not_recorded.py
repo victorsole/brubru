@@ -124,3 +124,62 @@ def test_without_render_a_missing_pdf_still_reports_the_reason(monkeypatch):
         "https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1129", render=False)
     assert body_txt is None
     assert reason and "404" in reason
+
+
+def test_an_eurlex_link_is_fetched_from_cellar(monkeypatch):
+    """EUR-Lex renders a page; Cellar serves the act.
+
+    The rendered EUR-Lex page for CJEU judgment 62024TJ0239 yields 116,974 characters opening
+    with "Skip to main content ... Help Print Menu"; Cellar yields 113,938 opening with
+    "JUDGMENT OF THE GENERAL COURT". Same document, none of the furniture, and no render credit.
+    """
+    called = {}
+
+    def fake_cellar(celex, timeout=90):
+        called["celex"] = celex
+        return "JUDGMENT OF THE GENERAL COURT " * 100, "<html>x</html>", None
+
+    monkeypatch.setattr(m, "fetch_cellar", fake_cellar)
+    body_txt, _, reason = m.fetch(
+        "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62024TJ0239")
+    assert reason is None and body_txt.startswith("JUDGMENT")
+    assert called["celex"] == "62024TJ0239"
+
+
+def test_cellar_tries_both_manifestations_before_giving_up(monkeypatch):
+    """Asking Cellar for the wrong type is a flat 404, not a redirect to what exists.
+
+    62024TJ0239 serves text/html and holds no XHTML; ECB decision 32026D2039 serves
+    application/xhtml+xml and holds no HTML. Asking only for the first left four whole slices
+    (ecb/legal, fra/charter_article, ema/mrl and part of cjeu/case_law) reading "no text".
+    """
+    asked = []
+
+    def fake_urlopen(req, timeout=None):
+        accept = req.headers.get("Accept")
+        asked.append(accept)
+        if accept == "text/html":
+            raise _http_error(404)
+
+        class R:
+            def read(self_inner):
+                return ("<html><body>" + "The Governing Council has adopted this Decision. " * 60
+                        + "</body></html>").encode()
+            def __enter__(self_inner): return self_inner
+            def __exit__(self_inner, *a): return False
+        return R()
+
+    monkeypatch.setattr(m.urllib.request, "urlopen", fake_urlopen)
+    body_txt, _, reason = m.fetch_cellar("32026D2039")
+    assert reason is None, f"gave up with {reason!r}"
+    assert "Governing Council" in body_txt
+    assert asked == ["text/html", "application/xhtml+xml"], f"asked {asked}"
+
+
+def test_cellar_reports_which_types_it_tried_when_nothing_is_there(monkeypatch):
+    """A document Cellar really does not hold must say so, naming what was asked."""
+    monkeypatch.setattr(m.urllib.request, "urlopen",
+                        lambda req, timeout=None: (_ for _ in ()).throw(_http_error(404)))
+    body_txt, _, reason = m.fetch_cellar("39999X9999")
+    assert body_txt is None
+    assert reason and "404" in reason and "xhtml" in reason
