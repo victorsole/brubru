@@ -175,7 +175,11 @@ def test_meps_coverage_is_incomplete_only_when_the_count_falls_back(auth_headers
             {"identifier": str(i), "label": f"Test MEP {i}"} for i in range(50)
         ]),
     ), patch("api.v1.meps._fetch_total_count", new=AsyncMock(return_value=-1)):
-        r = TestClient(app).get("/api/v1/meps?limit=50", headers=auth_headers)
+        # term=9, NOT the default. The current term is answered from Brubru's snapshot by
+        # `_list_from_full`, which never calls these two functions, so mocking them and
+        # requesting the default term tested a branch the request does not reach -- the
+        # assertions were reading live data (718 MEPs) straight past the mocks.
+        r = TestClient(app).get("/api/v1/meps?term=9&limit=50", headers=auth_headers)
     body = r.json()
     assert r.status_code == 200
     assert body["coverage_complete"] is False, (
@@ -192,8 +196,23 @@ def test_meps_coverage_is_complete_when_the_count_succeeds(auth_headers):
             {"identifier": str(i), "label": f"Test MEP {i}"} for i in range(50)
         ]),
     ), patch("api.v1.meps._fetch_total_count", new=AsyncMock(return_value=705)):
-        r = TestClient(app).get("/api/v1/meps?limit=50", headers=auth_headers)
+        r = TestClient(app).get("/api/v1/meps?term=9&limit=50", headers=auth_headers)
     body = r.json()
     assert r.status_code == 200
     assert body["total"] == 705
     assert body["coverage_complete"] is True
+
+
+def test_the_current_term_says_when_it_answered_from_the_snapshot(auth_headers):
+    """The branch the default actually takes, which the two tests above never reached.
+
+    The current term is served from Brubru's daily snapshot, and the envelope must say so:
+    `coverage_complete` is `not source_is_snapshot`. An answer from a stored copy that claims
+    complete coverage is the exact inconsistency this file exists to prevent.
+    """
+    r = TestClient(app).get("/api/v1/meps?limit=5", headers=auth_headers)
+    assert r.status_code == 200
+    body = r.json()
+    assert "coverage_complete" in body, "the envelope must state its coverage either way"
+    assert isinstance(body["coverage_complete"], bool)
+    assert body["total"] > 600, f"only {body['total']} MEPs in the current term"
