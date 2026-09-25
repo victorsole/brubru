@@ -218,7 +218,15 @@ def test_scrapedo_failure_is_a_miss_recorded_as_uncertain(monkeypatch):
 
     s.get_notification = throttled
     s._fetch_scrapedo = fails
-    assert asyncio.run(s._safe_notification(99999)) is None
+    # 25 Sep 2026: throttled directly AND unreadable through Scrape.do now STOPS
+    # the run (raise) instead of counting a miss and walking on at ~57 s per id,
+    # which is what got the job killed before it could record. The id is still
+    # kept as uncertain, and the frontier only advances past ids actually read.
+    try:
+        asyncio.run(s._safe_notification(99999))
+        raise AssertionError("expected TrisRateLimited")
+    except TrisRateLimited:
+        pass
     assert s.uncertain_ids == [99999]
 
 

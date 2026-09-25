@@ -68,8 +68,11 @@ def _record_tris(db, stats: dict, started) -> None:
         "SELECT CURRENT_DATE - max(notification_date) FROM tris_notifications")).scalar()
     if stats.get("error"):
         status, err = "failed", stats["error"]
-    elif not stats.get("synced"):
+    elif not stats.get("synced") and not (stats.get("throttled") or stats.get("budget_hit")):
         status, err = "failed", "no TRIS notifications fetched"
+    elif stats.get("budget_hit"):
+        status, err = "degraded", (f"stopped at the time budget at frontier {stats.get('frontier_after')}; "
+                                   f"{stats.get('new', 0)} new this run, the next run resumes there")
     elif stats.get("throttled"):
         status, err = "degraded", (f"TRIS rate limited (429) after back-off; stopped at frontier "
                                    f"{stats.get('frontier_after')}, the next run resumes from there")
@@ -122,6 +125,9 @@ async def main():
                              "frontier (backfill a range; the daily run always uses the frontier)")
     parser.add_argument("--max-new", type=int, default=400,
                         help="TRIS: notifications per run (default 400)")
+    parser.add_argument("--max-seconds", type=int, default=None,
+                        help="TRIS: stop cleanly and record after this many seconds "
+                             "(set below the cron timeout, or a killed run records nothing)")
     parser.add_argument("--stats", action="store_true",
                         help="Show current database stats and exit")
     parser.add_argument("--verbose", action="store_true",
@@ -153,7 +159,8 @@ async def main():
             started = _dt.datetime.now(_dt.timezone.utc)
             try:
                 stats = await service.sync_tris(days=args.days, country=args.country,
-                                                from_id=args.from_id, max_new=args.max_new)
+                                                from_id=args.from_id, max_new=args.max_new,
+                                                max_seconds=args.max_seconds)
             except Exception as exc:
                 _record_tris(db, {"error": f"{type(exc).__name__}: {exc}"[:500]}, started)
                 raise

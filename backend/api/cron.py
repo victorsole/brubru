@@ -579,6 +579,10 @@ async def cron_sync_warm_12h(
     # from the eMeeting open JSON API (no WAF, plain httpx). Feed the calendar
     # from our own store instead of from a broken HTML scrape.
     # [[feedback_silent_failure_reports_success]]
+    # TRIS again, same budget: throttled days still advance (see the daily tier).
+    results["tris"] = await _run_script_async(
+        "tris", "scripts/sync_dg_grow.py",
+        ["--source", "tris", "--days", "7", "--max-seconds", "300"], timeout=420)
     results["committee_agendas"] = await _run_script_async(
         "committee_agendas", "scripts/sync_calendar_from_emeeting_agendas.py",
         ["--back", "14", "--ahead", "45", "--apply"], timeout=600)
@@ -738,7 +742,13 @@ async def cron_sync_daily(
     results["have_your_say"] = await _run_script_async(
         "have_your_say", "scripts/sync_have_your_say.py", ["--apply"], timeout=1800)
     results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
-    results["tris"] = await _run_script_async("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
+    # TRIS (25 Sep 2026): a time budget below the timeout, or a killed run records
+    # nothing (it had NEVER written a Railway row). TRIS throttles hard and walks
+    # a sparse id space, so a run may end early; it resumes from the frontier, and
+    # the warm tier runs it twice more a day.
+    results["tris"] = await _run_script_async(
+        "tris", "scripts/sync_dg_grow.py",
+        ["--source", "tris", "--days", "7", "--max-seconds", "480"], timeout=600)
     # WTO TBT notifications (23 Sep 2026): the sync worked but was never
     # scheduled, so the table sat at 14 May for four months. Found by the
     # Terraqui source ledger (backend/data/client_sources/).

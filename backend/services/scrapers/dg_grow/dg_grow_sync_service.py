@@ -167,7 +167,8 @@ class DGGrowSyncService:
         return stats
 
     async def sync_tris(self, days: int = 7, country: Optional[str] = None,
-                        from_id: Optional[int] = None, max_new: int = 400) -> Dict[str, int]:
+                        from_id: Optional[int] = None, max_new: int = 400,
+                        max_seconds: Optional[int] = None) -> Dict[str, int]:
         """
         Sync TRIS technical regulation notifications.
 
@@ -242,13 +243,17 @@ class DGGrowSyncService:
             if len(batch) >= 10:
                 flush()
 
+        import time as _time
+        deadline = (_time.monotonic() + max_seconds) if max_seconds else None
         await self.tris.get_recent_notifications(days=days, frontier=frontier, on_item=on_item,
                                                  max_new=max_new,
-                                                 recheck=0 if from_id is not None else 20)
+                                                 recheck=0 if from_id is not None else 20,
+                                                 deadline=deadline)
         flush()
         stats["frontier_before"] = frontier
         stats["frontier_after"] = getattr(self.tris, "last_frontier", frontier)
         stats["throttled"] = bool(getattr(self.tris, "throttled", False))
+        stats["budget_hit"] = bool(getattr(self.tris, "budget_hit", False))
         stats["paid_fetches"] = getattr(self.tris, "paid_fetches", 0)
         stats["uncertain_ids"] = len(getattr(self.tris, "uncertain_ids", []) or [])
         logger.info(f"[OK] TRIS sync: {stats['new']} new, {stats['updated']} updated, {stats['errors']} errors")

@@ -125,6 +125,7 @@ class TRISScraper(BaseScraper):
         max_new: int = 400,
         miss_limit: int = 60,
         on_item=None,
+        deadline: Optional[float] = None,
     ) -> List[Dict[str, Any]]:
         """Fetch new notifications, and re-read recent ones, by page id.
 
@@ -146,8 +147,19 @@ class TRISScraper(BaseScraper):
         Without a frontier (empty table) it falls back to a window below the
         highest id found by probing upwards from the old anchor.
         """
+        import time as _time
         base = frontier if frontier is not None else 27740
         results: List[Dict[str, Any]] = []
+        # A time budget (25 Sep 2026): the cron kills this job at its timeout, and
+        # a killed run never reaches its sync_runs row, so on Railway TRIS had
+        # NEVER recorded a run. Stop cleanly before the budget and say so.
+        self.budget_hit = False
+
+        def _out_of_time() -> bool:
+            if deadline is not None and _time.monotonic() >= deadline:
+                self.budget_hit = True
+                return True
+            return False
 
         # NEW, upwards
         self.throttled = False
@@ -155,6 +167,9 @@ class TRISScraper(BaseScraper):
         self.paid_fetches = 0
         misses, nid, new_found = 0, base + 1, 0
         while misses < miss_limit and new_found < max_new:
+            if _out_of_time():
+                logger.warning(f"TRIS: time budget reached at id {nid}; the next run resumes from the frontier")
+                break
             try:
                 detail = await self._safe_notification(nid)
             except TrisRateLimited:
@@ -175,7 +190,7 @@ class TRISScraper(BaseScraper):
 
         # RECHECK, just below the old frontier
         for rid in range(base, max(base - recheck, 0), -1):
-            if self.throttled:
+            if self.throttled or _out_of_time():
                 break
             try:
                 detail = await self._safe_notification(rid)
@@ -215,7 +230,14 @@ class TRISScraper(BaseScraper):
                 return detail if detail and detail.get("reference") else None
             except TrisRateLimited:
                 if has_paid:
-                    return self._via_scrapedo(notif_id)
+                    detail = self._via_scrapedo(notif_id)
+                    if detail is None and notif_id in self.uncertain_ids:
+                        # TRIS refused us AND Scrape.do could not read it either
+                        # (25 Sep 2026: its proxies got 502 after ~57 s on pages
+                        # that exist). Stop and resume from the frontier next run,
+                        # rather than paying a minute for every remaining id.
+                        raise TrisRateLimited(f"id {notif_id}: throttled directly and via Scrape.do")
+                    return detail
                 if wait is None:
                     raise
                 logger.warning(f"TRIS: rate limited at id {notif_id}; waiting {wait}s")
