@@ -192,9 +192,32 @@ def clean_text(value: str | None) -> str | None:
     return value.replace("\x00", "") or None
 
 
-def _get(url: str, timeout: int = 60) -> bytes:
+MAX_DOWNLOAD = 40 * 1024 * 1024   # bytes
+MAX_SECONDS = 90                  # per item, wall clock
+
+
+def _get(url: str, timeout: int = 30) -> bytes:
+    """Read with a SIZE and a WALL-CLOCK cap, not just a socket timeout.
+
+    urlopen's timeout bounds each socket operation, not the transfer: a server trickling
+    bytes keeps it alive indefinitely. Ten workers each holding such a connection stalled
+    the run for half an hour with seven open sockets, 0% CPU and nothing committed, because
+    a batch writes only when every row in it is done.
+    """
+    deadline = time.monotonic() + MAX_SECONDS
+    chunks, total = [], 0
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
-        return r.read()
+        while True:
+            if time.monotonic() > deadline:
+                raise TimeoutError(f"exceeded {MAX_SECONDS}s")
+            chunk = r.read(262_144)
+            if not chunk:
+                break
+            chunks.append(chunk)
+            total += len(chunk)
+            if total > MAX_DOWNLOAD:
+                raise ValueError(f"over {MAX_DOWNLOAD // 1048576} MB")
+    return b"".join(chunks)
 
 
 def pdf_text(data: bytes, max_pages: int = 60) -> str | None:
@@ -254,7 +277,7 @@ async def _run(args) -> int:
         reasons: dict[str, int] = {}
         dated = 0
         lengths = []
-        BATCH = 60
+        BATCH = 30
         for start_i in range(0, len(rows), BATCH):
             chunk = rows[start_i:start_i + BATCH]
             by_uri = {r.cellar_uri: r for r in chunk}
@@ -295,7 +318,13 @@ async def _run(args) -> int:
                 if manif:
                     jobs[uri] = (manif, mtype)
                 else:
+                    # Named, not merely counted: 9 of 24 failures in a batch had no
+                    # reason at all in the tally because this branch incremented the
+                    # count and nothing else. An unexplained majority is how the
+                    # cover-image bug stayed invisible.
                     no_pdf += 1
+                    reasons["no English manifestation"] = \
+                        reasons.get("no English manifestation", 0) + 1
 
             results = {}
             if jobs:
@@ -341,7 +370,7 @@ async def _run(args) -> int:
             done = min(start_i + BATCH, len(rows))
             avg_so_far = sum(lengths) / len(lengths) if lengths else 0
             top = ", ".join(f"{k} x{v}" for k, v in
-                            sorted(reasons.items(), key=lambda kv: -kv[1])[:3])
+                            sorted(reasons.items(), key=lambda kv: -kv[1])[:6])
             print(f"  [{done:5}/{len(rows)}] full text {ok}, none {no_pdf}, "
                   f"avg {avg_so_far:,.0f} chars" + (f"  |  {top}" if top else ""), flush=True)
             time.sleep(args.throttle)
