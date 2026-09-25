@@ -1,8 +1,10 @@
 """European Parliament eMeeting client + normaliser.
 
-eMeeting (emeeting.europarl.europa.eu) is a SPA over an OPEN JSON API — NO WAF on
-the API, NO WAF on the document PDFs (www.europarl.europa.eu/meetdocs/...). So
-this is a pure-JSON integration (plain httpx), not a scrape.
+eMeeting (emeeting.europarl.europa.eu) is a SPA over an OPEN JSON API, with no WAF
+on the API, so this is a pure-JSON integration (plain httpx), not a scrape. The
+document PDFs it links to (www.europarl.europa.eu/meetdocs/...) ARE walled (HTTP
+202, 0 bytes, since at least 25 Sep 2026); this module only records their URLs,
+and services/analysis/pdf_text_extractor.py fetches them through Scrape.do.
 
 Flow:
     GET /emeeting/plmrep/organs/committees?language=EN          -> 26 committees
