@@ -63,12 +63,33 @@ class Annex:
     html: str = ""
 
 
+# CELEX sector-3 document-type letters. Only these are derived; anything else leaves the
+# CELEX unset rather than defaulting to "R", which is what filed Directives and Decisions
+# under Regulation CELEX values that do not exist (GovClipping, 25 September 2026).
+_CELEX_TYPE_LETTER = {
+    "Regulation": "R",
+    "Implementing Regulation": "R",
+    "Delegated Regulation": "R",
+    "Directive": "L",
+    "Implementing Directive": "L",
+    "Delegated Directive": "L",
+    "Decision": "D",
+    "Implementing Decision": "D",
+    "Delegated Decision": "D",
+    "Recommendation": "H",
+}
+
+
 @dataclass
 class ParsedLaw:
     """Complete parsed legal document."""
     # Identifiers
     celex: Optional[str] = None
     oj_reference: Optional[str] = None
+    # Year and number read from NO.DOC before the type is known. The CELEX letter cannot
+    # be derived from them alone, so they are carried until the title supplies the type.
+    celex_year: Optional[str] = None
+    celex_number: Optional[str] = None
 
     # Metadata
     title: str = ""
@@ -245,9 +266,18 @@ class FormexParser:
             com = no_doc.findtext('COM', '')
 
             if year and no_current:
-                # Guess document type from title
-                doc_type_code = 'R'  # Default to Regulation
-                result.celex = f"3{year}{doc_type_code}{no_current.zfill(4)}"
+                # The document-type letter is NOT guessable here: this runs before the
+                # title is parsed, and defaulting to "R" filed every Directive and
+                # Decision under a Regulation CELEX. That is how we came to serve
+                # 32023R2413 for RED III (really 32023L2413) and 32015R1535 for the TRIS
+                # Directive, neither of which exists in EUR-Lex, and how 9.9% of our CELEX
+                # values pointed at documents that do not exist (GovClipping, 25 Sep 2026).
+                #
+                # Year and number are kept for _extract_title(), which knows the type, and
+                # celex is left unset: no CELEX is better than a CELEX that resolves to
+                # nothing or, worse, to a different act.
+                result.celex_year = year
+                result.celex_number = no_current.zfill(4)
 
     def _extract_title(self, root: ET.Element, result: ParsedLaw):
         """Extract document title and type."""
@@ -284,14 +314,18 @@ class FormexParser:
             year = celex_match.group(1)
             number = celex_match.group(2)
 
-            # Determine type code
-            type_code = 'R'  # Regulation
-            if 'Directive' in result.doc_type:
-                type_code = 'L'
-            elif 'Decision' in result.doc_type:
-                type_code = 'D'
-
-            result.celex = f"3{year}{type_code}{number.zfill(4)}"
+            # The type letter comes from the document's own declared type. When the
+            # document does not say, the CELEX is left unset rather than assumed to be a
+            # Regulation: a wrong letter produces a CELEX that either does not exist or
+            # belongs to a different act.
+            type_code = _CELEX_TYPE_LETTER.get((result.doc_type or "").strip())
+            if type_code is None:
+                for name, letter in _CELEX_TYPE_LETTER.items():
+                    if name.lower() in (result.doc_type or "").lower():
+                        type_code = letter
+                        break
+            if type_code:
+                result.celex = f"3{year}{type_code}{number.zfill(4)}"
 
     def _extract_recitals(self, root: ET.Element, result: ParsedLaw):
         """Extract recitals (whereas clauses)."""

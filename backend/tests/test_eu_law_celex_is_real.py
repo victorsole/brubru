@@ -90,3 +90,39 @@ def test_the_correction_was_recorded_for_the_client():
     rows = json.loads(files[-1].read_text(encoding="utf-8"))
     assert len(rows) > 1000
     assert {"id", "old_celex", "new_celex", "title"} <= set(rows[0])
+
+
+# ------------------------------------------------------------------ the parser that caused it
+def test_the_formex_parser_no_longer_assumes_every_act_is_a_regulation():
+    """`doc_type_code = 'R'  # Default to Regulation` under a comment that said "Guess
+    document type from title", which it never did. Every Directive and Decision parsed
+    through that path got a Regulation CELEX."""
+    src = (BACKEND / "services" / "parsers" / "formex_parser.py").read_text(encoding="utf-8")
+    code = "\n".join(l.split("#")[0] for l in src.splitlines())
+    assert "doc_type_code = 'R'" not in code, "the parser still defaults the type letter to R"
+    assert "type_code = 'R'" not in code, "the second derivation still defaults to R"
+
+
+def test_the_parser_leaves_celex_unset_when_it_cannot_know_the_type():
+    """No CELEX is better than one that resolves to nothing, or to a different act."""
+    from services.parsers.formex_parser import _CELEX_TYPE_LETTER, ParsedLaw
+
+    assert _CELEX_TYPE_LETTER["Directive"] == "L"
+    assert _CELEX_TYPE_LETTER["Decision"] == "D"
+    assert _CELEX_TYPE_LETTER["Regulation"] == "R"
+    assert ParsedLaw().celex is None
+
+
+def test_there_is_a_scheduled_check_that_the_celex_we_publish_exist():
+    """We learned about 9.9% invalid CELEX from a customer. Something has to ask."""
+    cron = (BACKEND / "api" / "cron.py").read_text(encoding="utf-8")
+    assert "scripts/audit_celex_exists.py" in cron, "nothing checks whether our CELEX exist"
+    block = cron.split('"celex_exists_audit"')[-1][:300]
+    assert "--record" in block, "the audit runs but records no verdict, so nobody hears it"
+
+
+def test_the_audit_fails_rather_than_reporting_a_clean_run_on_an_error():
+    """A batch that errors must not be counted as 'all of these exist' or 'all missing'."""
+    src = (BACKEND / "scripts" / "audit_celex_exists.py").read_text(encoding="utf-8")
+    assert "raise" in src.split("except Exception as exc:")[1][:260], (
+        "a failed Cellar batch is swallowed, so a broken check would look like a clean corpus")

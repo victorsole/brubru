@@ -1411,6 +1411,15 @@ async def cron_sync_weekly(
     # that file is ~16M rows and is a storage decision, not a sync.
     results["howtheyvote_members"] = await _run_script_async(
         "howtheyvote_members", "scripts/import_howtheyvote.py", ["--members-only"], timeout=1800)
+    # Do the CELEX values we publish actually exist in EUR-Lex? A fabricated CELEX is
+    # indistinguishable from a real one from the inside: it is well formed and builds a
+    # plausible EUR-Lex URL that simply 404s for whoever follows it. 9.9% of ours were
+    # wrong and we learned it from a customer (GovClipping, 25 Sep 2026). This samples the
+    # newest rows, where a parser producing rubbish would show up first, and FAILS into
+    # sync_runs above a threshold so the ledger tells us next time.
+    results["celex_exists_audit"] = await _run_script_async(
+        "celex_exists_audit", "scripts/audit_celex_exists.py",
+        ["--sample", "600", "--record"], timeout=900)
     results["gi"] = await _run_script_async("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
     results["cohesion"] = await _run_script_async("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
     # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].
