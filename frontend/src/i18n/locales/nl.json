@@ -2225,6 +2225,7 @@
     "group": "Groep",
     "stance": "Standpunt",
     "cohesion": "Cohesie",
+    "cohesionNotMeasured": "Niet gemeten",
     "amendments": "Amendementen",
     "confidence": "Vertrouwen",
     "councilLabel": "Raad",

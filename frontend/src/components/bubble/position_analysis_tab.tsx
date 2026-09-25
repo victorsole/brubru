@@ -199,7 +199,7 @@ function GroupsCard({ parliament, actual }: { parliament: PositionResponse['parl
                 <td className="pos-group-table__group-name">{g.group_code}</td>
                 <td><StanceBadge stance={g.stance} /></td>
                 {hasActual && <td className="pos-group-table__actual">{actualForGroup(actual!.group_breakdown, g.group_code) || '-'}</td>}
-                <td className="pos-group-table__cohesion">{(g.cohesion * 100).toFixed(0)}%</td>
+                <td className="pos-group-table__cohesion">{g.cohesion == null ? t('positionTab.cohesionNotMeasured') : `${(g.cohesion * 100).toFixed(0)}%`}</td>
                 <td className="pos-group-table__count">{g.amendment_count}</td>
               </tr>
             ))}

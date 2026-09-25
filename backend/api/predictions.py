@@ -433,6 +433,8 @@ class PlenaryVoteResponse(BaseModel):
     total_meps: int
     group_predictions: List[GroupPositionResponse]
     swing_groups: List[str]
+    # "voting_record" or "policy_baseline_only" (no roll-call data on file).
+    basis: str = "voting_record"
 
 
 class DelegationDeviationResponse(BaseModel):
@@ -499,6 +501,7 @@ async def predict_ep_vote(
             predicted_outcome=prediction.predicted_outcome,
             confidence=prediction.confidence,
             predicted_margin=prediction.predicted_margin,
+            basis=getattr(prediction, "basis", "voting_record"),
             estimated_for=prediction.estimated_for,
             estimated_against=prediction.estimated_against,
             estimated_abstention=prediction.estimated_abstention,

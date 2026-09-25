@@ -45,12 +45,17 @@ SNAPSHOT_TTL_HOURS = 24
 # DTOs
 # ---------------------------------------------------------------------------
 
+def _not_measured(gp) -> bool:
+    return any(isinstance(f, dict) and f.get("factor") == "cohesion_not_measured"
+               for f in (getattr(gp, "factors", None) or []))
+
+
 @dataclass
 class GroupPosition:
     group_code: str
     stance: str               # for | against | abstention | split | unknown
     confidence: str           # high | medium | low
-    cohesion: float           # 0.0 - 1.0
+    cohesion: Optional[float]  # 0.0 - 1.0; None when not measured (no roll-call data)
     rationale: str = ""
     amendment_count: int = 0
     top_amendments: List[Dict[str, Any]] = field(default_factory=list)
@@ -271,8 +276,11 @@ class PositionAggregator:
                 group_positions.append(GroupPosition(
                     group_code=gp.group_code,
                     stance=(gp.predicted_position.value if hasattr(gp.predicted_position, "value") else str(gp.predicted_position)).lower(),
-                    confidence=self._confidence_from_cohesion(gp.expected_cohesion),
-                    cohesion=round(float(gp.expected_cohesion), 3),
+                    # A placeholder cohesion is neither shown nor allowed to lift the
+                    # confidence: "75%" was printed for every group in every file.
+                    confidence=("low" if _not_measured(gp)
+                                else self._confidence_from_cohesion(gp.expected_cohesion)),
+                    cohesion=(None if _not_measured(gp) else round(float(gp.expected_cohesion), 3)),
                     rationale=self._group_rationale(gp, rapporteur_group),
                 ))
         except Exception as exc:  # noqa: BLE001
@@ -534,19 +542,34 @@ class PositionAggregator:
     def _group_rationale(gp, rapporteur_group: Optional[str]) -> str:
         if rapporteur_group and gp.group_code == rapporteur_group:
             return "Rapporteur's group -- owns the file."
-        base = f"Predicted {gp.predicted_position.value if hasattr(gp.predicted_position, 'value') else gp.predicted_position} with cohesion {gp.expected_cohesion:.2f}."
-        if gp.prob_for >= 0.6:
-            return base + " Historical pattern favours FOR."
-        if gp.prob_against >= 0.6:
-            return base + " Historical pattern favours AGAINST."
-        return base + " Swing group."
+        # Say what the prediction rests on (25 Sep 2026). With no roll-call history
+        # on file it rests on the group's usual line in the policy area and the
+        # rapporteur's group, and the cohesion is a placeholder; the old text said
+        # "Historical pattern favours FOR" and "cohesion 0.75" for all 43 snapshots.
+        factors = {f.get("factor") for f in (gp.factors or []) if isinstance(f, dict)}
+        position = gp.predicted_position.value if hasattr(gp.predicted_position, "value") else gp.predicted_position
+        if "cohesion_not_measured" in factors:
+            base = f"Predicted {position} (group cohesion not measured: no roll-call data on file)."
+        else:
+            base = f"Predicted {position} with cohesion {gp.expected_cohesion:.2f}."
+        lean = ("FOR" if gp.prob_for >= 0.6 else "AGAINST" if gp.prob_against >= 0.6 else None)
+        if lean is None:
+            return base + " Swing group."
+        if "historical_pattern" in factors:
+            return base + f" Historical voting pattern favours {lean}."
+        return base + f" Leans {lean} on the group's usual line in this policy area, not on past votes."
 
     @staticmethod
     def _completeness(commission: Dict, parliament: Dict, council: Dict) -> str:
         score = 0
         if commission.get("com_references"):
             score += 1
-        if parliament.get("groups"):
+        # Predicted group stances count as data only when they rest on measured
+        # voting (25 Sep 2026): with no roll-call data every file scored "full /
+        # high" on stances that were policy-area defaults.
+        def _cohesion(g):
+            return g.get("cohesion") if isinstance(g, dict) else getattr(g, "cohesion", None)
+        if any(_cohesion(g) is not None for g in (parliament.get("groups") or [])):
             score += 1
         if parliament.get("amendment_activity", {}).get("total", 0) > 0:
             score += 1

@@ -3276,6 +3276,7 @@
     "group": "Grupo",
     "stance": "Postura",
     "cohesion": "Cohesión",
+    "cohesionNotMeasured": "Sin medir",
     "amendments": "Enmiendas",
     "confidence": "Confianza",
     "councilLabel": "Consejo",

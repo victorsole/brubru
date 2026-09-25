@@ -4,6 +4,16 @@
     {
       "date": "2026-09-25",
       "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act amendments 2026",
+      "summary": "Sandbox date 2 August 2027 per Regulation (EU) 2026/1744; provisional-agreement note marked superseded",
+      "refs": [
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
       "guide": "gdpr_data_protection",
       "title": "GDPR: data protection",
       "summary": "EDPB Guidelines 04/2026 on imposing administrative fines: adopted 17 Sep 2026 as a draft for consultation (to 13 Nov 2026); replace WP253, complement Guidelines 04/2022",

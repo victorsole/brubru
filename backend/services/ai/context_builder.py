@@ -522,6 +522,16 @@ ACTION_WORD_MAP = {
     'position paper': 'position_paper', 'draft a position': 'position_paper',
     'amendment': 'amendment', 'amend': 'amendment',
     'talking points': 'talking_points',
+    # Consultation responses (25 Sep 2026): Have Your Say, calls for evidence,
+    # agency consultations and Article 154 TFEU social partner consultations.
+    'consultation response': 'consultation_response', 'response to the consultation': 'consultation_response',
+    'respond to the consultation': 'consultation_response', 'reply to the consultation': 'consultation_response',
+    'resposta a la consulta': 'consultation_response', 'respondre a la consulta': 'consultation_response',
+    'respuesta a la consulta': 'consultation_response', 'responder a la consulta': 'consultation_response',
+    'réponse à la consultation': 'consultation_response', 'reponse a la consultation': 'consultation_response',
+    'répondre à la consultation': 'consultation_response', 'repondre a la consultation': 'consultation_response',
+    'risposta alla consultazione': 'consultation_response', 'rispondere alla consultazione': 'consultation_response',
+    'reactie op de consultatie': 'consultation_response', 'antwoord op de consultatie': 'consultation_response',
     'committee vote brief': 'committee_vote_brief',
     'vote brief': 'committee_vote_brief',
     'committee vote reaction': 'committee_vote_brief',
@@ -586,6 +596,7 @@ DOC_TYPE_TO_TEMPLATE = {
     'position_paper': ['position_paper_template', 'coalition_position_template'],
     'briefing': ['briefing_note', 'mep_briefing_note_template', 'meeting_preparation_brief_template'],
     'talking_points': ['briefing_note', 'mep_briefing_note_template'],
+    'consultation_response': ['consultation_response_template', 'position_paper_template'],
     'report': ['monthly_monitoring_report_template', 'weekly_legislative_monitoring_report_template'],
     'letter': ['briefing_note'],
     'ep_question': [],  # Handled by Document Generator
@@ -675,7 +686,7 @@ def detect_drafting_intent(query: str) -> DraftingIntent:
     TYPE_PRIORITY = {
         'position_paper': 10, 'briefing': 9, 'talking_points': 9,
         'justification': 9, 'amendment': 9, 'ep_question': 9,
-        'resolution': 9, 'petition': 9, 'report': 8, 'letter': 8,
+        'resolution': 9, 'petition': 9, 'consultation_response': 10, 'report': 8, 'letter': 8,
         'proposal': 7, 'summary': 5, 'template': 4, 'draft': 3,
     }
     found_actions.sort(key=lambda x: TYPE_PRIORITY.get(x[1], 0), reverse=True)

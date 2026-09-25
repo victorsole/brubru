@@ -83,6 +83,10 @@ class PlenaryVotePrediction:
     swing_groups: List[str] = field(default_factory=list)  # Groups that could swing outcome
     key_delegations: List[str] = field(default_factory=list)  # Delegations to watch
 
+    # What the prediction rests on: "voting_record" or "policy_baseline_only"
+    # (no roll-call history and no measured cohesion for any group).
+    basis: str = "voting_record"
+
 
 class GroupVotePredictor:
     """
@@ -309,6 +313,10 @@ class GroupVotePredictor:
         # 4. Get expected cohesion
         cohesion_result = await self.cohesion_analyzer.calculate_group_cohesion(group_code)
         expected_cohesion = cohesion_result.cohesion_score if cohesion_result else 0.75
+        if not cohesion_result:
+            # 0.75 is a placeholder, not a measurement (ep_member_votes is empty):
+            # say so, so no caller presents it as the group's measured unity.
+            factors.append({'factor': 'cohesion_not_measured', 'value': True, 'influence': 0.0})
 
         # 5. Calculate final probabilities
         prob_for = min(1.0, max(0.0, baseline + rapporteur_bonus))
@@ -465,6 +473,15 @@ class GroupVotePredictor:
         # Sort group predictions by seats
         group_predictions.sort(key=lambda x: self.GROUP_SEATS.get(x.group_code, 0), reverse=True)
 
+        # A prediction built only on policy-area defaults is not a 0.9 prediction
+        # (25 Sep 2026: the IAA read PASS at 0.90 with ep_member_votes empty).
+        def _measured(gp):
+            names = {f.get("factor") for f in gp.factors if isinstance(f, dict)}
+            return "historical_pattern" in names or "cohesion_not_measured" not in names
+        basis = "voting_record" if any(_measured(gp) for gp in group_predictions) else "policy_baseline_only"
+        if basis == "policy_baseline_only":
+            confidence = min(confidence, 0.45)
+
         return PlenaryVotePrediction(
             procedure_ref=procedure_ref,
             title=title,
@@ -476,7 +493,8 @@ class GroupVotePredictor:
             estimated_abstention=estimated_abstention,
             total_meps=total_meps,
             group_predictions=group_predictions,
-            swing_groups=swing_groups
+            swing_groups=swing_groups,
+            basis=basis,
         )
 
 

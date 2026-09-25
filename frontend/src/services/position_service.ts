@@ -13,7 +13,8 @@ export interface GroupPosition {
   group_code: string;
   stance: string;
   confidence: string;
-  cohesion: number;
+  /** null when not measured (no roll-call data on file). */
+  cohesion: number | null;
   rationale: string;
   amendment_count: number;
   top_amendments: Array<Record<string, any>>;
