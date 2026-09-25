@@ -15,7 +15,7 @@ import logging
 import re
 from typing import Optional
 
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 from sqlalchemy.orm import Session
 
 from models.user import User
@@ -127,6 +127,17 @@ def sync_tracked_files_from_interests(
     match_clauses = []
     if committees:
         match_clauses.append(LegislativeCarriage.lead_committee.in_(committees))
+        # Joint-committee files (Rule 59) have several responsible committees
+        # but one lead_committee column, so an IMCO or ITRE user was never
+        # offered the Industrial Accelerator Act (stored lead: INTA). The
+        # responsible committees are the ones with a rapporteur; opinion
+        # rapporteurs are not stored in this field. 54 live files, 25 Sep 2026.
+        match_clauses.append(text(
+            "EXISTS (SELECT 1 FROM jsonb_array_elements("
+            "CASE WHEN jsonb_typeof(legislative_carriages.rapporteurs) = 'array' "
+            "THEN legislative_carriages.rapporteurs ELSE '[]'::jsonb END) AS r "
+            "WHERE r->>'committee' = ANY(:seed_committees))"
+        ).bindparams(seed_committees=committees))
     if policy_areas:
         match_clauses.append(LegislativeCarriage.policy_areas.overlap(policy_areas))
 
