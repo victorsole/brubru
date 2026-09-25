@@ -230,10 +230,30 @@ async def _fetch_all_once(country=None, group=None, term=10, patient: bool = Fal
 
 async def _fetch_current_ids(patient: bool = False) -> Optional[set]:
     """Ids of the MEPs sitting today (EP `/meps/show-current`), cached 6h. The term
-    list also holds every member who has left since the election."""
+    list also holds every member who has left since the election.
+
+    A background job retries a bad spell exactly as `_fetch_all` does (25 Sep 2026).
+    Without it the daily snapshot failed on Railway three days running: it calls this
+    straight after the four term-list pages, EP's connection pool answers the burst
+    with its HTTP 200 "Pending acquire queue" body, and one attempt gave up in 0s.
+    From a laptop the same call succeeded 5 of 5 times."""
     cached = _cached("current_ids")
     if cached is not None:
         return cached
+    attempts = 4 if patient else 1
+    for attempt in range(attempts):
+        ids = await _fetch_current_ids_once(patient=patient)
+        if ids:
+            _put("current_ids", ids)
+            return ids
+        if attempt + 1 < attempts:
+            logger.info("[meps] current-MEP list unavailable, retrying in 60s (%d/%d)", attempt + 1, attempts - 1)
+            await asyncio.sleep(60)
+    return None
+
+
+async def _fetch_current_ids_once(patient: bool = False) -> Optional[set]:
+    """One pass over `/meps/show-current`. None on any failure, never a partial set."""
     ids: set = set()
     offset = 0
     try:
@@ -250,10 +270,7 @@ async def _fetch_current_ids(patient: bool = False) -> Optional[set]:
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] current-MEP list unavailable: %s", exc)
         return None
-    if not ids:
-        return None
-    _put("current_ids", ids)
-    return ids
+    return ids or None
 
 
 def _upstream_down(message: Optional[str] = None) -> HTTPException:

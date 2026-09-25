@@ -67,6 +67,8 @@ pdfplumber==0.11.0
 pikepdf==8.11.1
 pdfminer.six==20231228  # Text extraction for large PDFs
 pypdfium2==4.25.0  # Page count detection
+PyMuPDF==1.26.7  # College tentative agendas (scripts/sync_college_tentative_agendas.py); its parser is tuned to MuPDF's text layout
+langdetect==1.0.9  # Tenderator translation backfill detects each row's language on Railway (was only in requirements.txt, so the job crashed on every run from 12 Jun to 25 Sep 2026)
 
 # DOCX Processing
 python-docx==1.1.0

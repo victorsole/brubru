@@ -52,6 +52,17 @@ CELEX_PATTERN = re.compile(r"^2\d{4}A[0-9R().]+$")  # sector 2 type A (allow cor
 
 
 def get_env(k: str) -> str:
+    """The real environment first, then a local .env (25 Sep 2026).
+
+    This used to read the repo-root .env and nothing else. Railway has no .env
+    file, so under the cron this returned "" for DATABASE_URL and the job exited
+    "[FATAL] DATABASE_URL missing" every run, unrecorded. Same fix as
+    scripts/_db_url.py and ingest_funding_sedia.get_env.
+    """
+    import os
+    value = os.environ.get(k, "").strip()
+    if value:
+        return value
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():

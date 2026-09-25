@@ -114,6 +114,32 @@ def _db():
     return c
 
 
+def _detection_text(table: str, title: str, summary: str) -> str:
+    """The text whose language we detect.
+
+    TED titles read "Germany – Construction work – Ausschreibung von ...": the
+    country and the CPV category are ENGLISH boilerplate, only the object is in
+    the notice's language. Detected with the prefix, 113 of 400 recent tenders
+    came back 'en'; with the object alone, 28 did (25 Sep 2026). So about one
+    foreign tender in five was filed as English and never translated.
+    """
+    if table == "tenders":
+        parts = (title or "").split(" – ", 2)
+        if len(parts) == 3 and parts[2].strip():
+            title = parts[2]
+    return ((title or "") + " " + (summary or "")).strip()
+
+
+def _engine_available() -> bool:
+    """Is the local M2M100 engine installable here? Not on Railway: the light image
+    deliberately ships without torch/transformers (backend/Dockerfile)."""
+    try:
+        import transformers  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
 def _detector():
     from langdetect import detect, DetectorFactory
     DetectorFactory.seed = 0
@@ -150,7 +176,8 @@ def _translator():
     return translate
 
 
-def _fetch_undetected(table: str, spec: dict, batch: int, funding_only: bool):
+def _fetch_undetected(table: str, spec: dict, batch: int, funding_only: bool,
+                      detect_only: bool = False):
     """Short read connection: pull the next chunk of items still needing work.
 
     "Needing work" is not the same as "never seen". detected_lang was doing
@@ -173,6 +200,14 @@ def _fetch_undetected(table: str, spec: dict, batch: int, funding_only: bool):
     detected_lang <> 'en' and would have done exactly that.
     """
     six = "', '".join(SIX)
+    # Without a translation engine, a foreign row can never leave the second
+    # branch below, so it would be re-selected on every batch for ever and the
+    # undetected backlog behind it would never be reached. Detect only.
+    if detect_only:
+        where = spec["where"] + " AND detected_lang IS NULL"
+        if table == "economy_items" and funding_only:
+            where += " AND item_type IN ('tender','grant','eoi_call','startup_funding')"
+        return _select(table, spec, where, batch)
     where = (
         spec["where"] + f" AND (detected_lang IS NULL OR (detected_lang NOT IN ('{six}')"
         f" AND detected_lang <> 'und'"
@@ -181,6 +216,10 @@ def _fetch_undetected(table: str, spec: dict, batch: int, funding_only: bool):
     )
     if table == "economy_items" and funding_only:
         where += " AND item_type IN ('tender','grant','eoi_call','startup_funding')"
+    return _select(table, spec, where, batch)
+
+
+def _select(table: str, spec: dict, where: str, batch: int):
     conn = _db()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -239,6 +278,9 @@ def run(table: str, limit: int, batch: int, funding_only: bool):
         raise SystemExit(f"--table must be one of {list(SOURCES.keys())}")
     spec = SOURCES[table]
     detect_lang = _detector()
+    detect_only = not _engine_available()
+    if detect_only:
+        print(f"[{table}] no translation engine on this runner: detecting languages only", flush=True)
 
     # Lazy: only load M2M100 when we actually find a foreign row.
     _translate_cache: list = [None]
@@ -249,16 +291,15 @@ def run(table: str, limit: int, batch: int, funding_only: bool):
 
     done = foreign = 0
     while done < limit:
-        rows = _fetch_undetected(table, spec, min(batch, limit - done), funding_only)
+        rows = _fetch_undetected(table, spec, min(batch, limit - done), funding_only, detect_only)
         if not rows:
             print(f"[{table}] no more undetected rows.", flush=True)
             break
         writes = []
         for r in rows:
-            text = (r["title"] + " " + r["summary"]).strip()
-            lang = detect_lang(text)
+            lang = detect_lang(_detection_text(table, r["title"], r["summary"]))
             trans_rows = []
-            if lang not in SIX_SET and lang != "und":
+            if lang not in SIX_SET and lang != "und" and not detect_only:
                 foreign += 1
                 translate = get_translate()
                 for tgt in SIX:
@@ -284,6 +325,31 @@ def run(table: str, limit: int, batch: int, funding_only: bool):
               flush=True)
     print(f"[{table}] done: {done} processed, {foreign} foreign → {foreign*6} translation rows",
           flush=True)
+    pending = _pending_foreign(table, spec, funding_only)
+    if pending:
+        # Read by api/cron.py::_run_script: rc 0 with this line is `degraded`, so a
+        # backlog of untranslated foreign rows can never be recorded as a success.
+        why = ("no translation engine on this runner" if detect_only
+               else "translation backlog not yet cleared")
+        print(f"[SYNC_STATUS] degraded: {pending} foreign-language row(s) in {table} "
+              f"have no translation ({why})", flush=True)
+
+
+def _pending_foreign(table: str, spec: dict, funding_only: bool) -> int:
+    """Rows detected outside Brubru's six languages that still carry no sidecar."""
+    six = "', '".join(SIX)
+    where = (spec["where"] + f" AND detected_lang NOT IN ('{six}') AND detected_lang <> 'und'"
+             f" AND NOT EXISTS (SELECT 1 FROM {spec['sidecar']} s"
+             f" WHERE s.{spec['sidecar_fk']} = {table}.{spec['pk']})")
+    if table == "economy_items" and funding_only:
+        where += " AND item_type IN ('tender','grant','eoi_call','startup_funding')"
+    conn = _db()
+    try:
+        cur = conn.cursor()
+        cur.execute(f"SELECT count(*) FROM {table} WHERE {where}")
+        return int(cur.fetchone()[0])
+    finally:
+        conn.close()
 
 
 def main():

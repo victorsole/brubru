@@ -440,6 +440,16 @@ def _run_script(name: str, script_relpath: str, args: list[str] | None = None, t
             return {"status": "failed", "error": f"timeout_{timeout}s",
                     "stderr_tail": f"timeout_{timeout}s; " + _failure_detail(stderr, stdout)}
         if proc.returncode == 0:
+            # A child can finish its work and still owe some (25 Sep 2026: the
+            # Tenderator translator detects languages on Railway but has no engine
+            # to translate with). It says so with "[SYNC_STATUS] degraded: <why>"
+            # on stdout; a clean exit must not turn that into a success.
+            degraded = [ln.split(":", 1)[1].strip() for ln in (stdout or "").splitlines()
+                        if ln.startswith("[SYNC_STATUS] degraded:")]
+            if degraded:
+                logger.warning(f"[CRON] Tier sync: {name} degraded: {degraded[-1][:200]}")
+                return {"status": "degraded", "stderr_tail": "; ".join(degraded)[:1000],
+                        "stdout_tail": (stdout or "")[-500:]}
             logger.info(f"[CRON] Tier sync: {name} done")
             return {"status": "success", "stdout_tail": (stdout or "")[-500:]}
         detail = _failure_detail(stderr, stdout, proc.returncode)

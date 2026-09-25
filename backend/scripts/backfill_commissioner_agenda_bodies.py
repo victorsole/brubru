@@ -33,6 +33,17 @@ MIN_BODY_LEN = 200
 
 
 def get_env(k: str) -> str:
+    """The real environment first, then a local .env (25 Sep 2026).
+
+    This used to read the repo-root .env and nothing else. Railway has no .env
+    file, so under the cron this returned "" for DATABASE_URL and the job exited
+    "[FATAL] DATABASE_URL missing" every run, unrecorded. Same fix as
+    scripts/_db_url.py and ingest_funding_sedia.get_env.
+    """
+    import os
+    value = os.environ.get(k, "").strip()
+    if value:
+        return value
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():
