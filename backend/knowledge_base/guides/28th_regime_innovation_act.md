@@ -1,6 +1,7 @@
 # EU Inc. -- 28th Regime Corporate Legal Framework (COM(2026) 321)
 
 ## QUICK FACTS
+- **LATEST (24 September 2026): trade unions protested outside the European Commission against EU Inc.** The **EESC Workers' Group** reported joining "trade unions from across Europe outside the European Commission" with the slogan **"Fix #EUInc!"** ("We will not build Europe's future by making workers poorer and work less secure"). MEPs **Saskia Bricmont (Greens/EFA, Belgium)** and **Per Clausen (The Left, Denmark)** backed them, calling the 28th regime a "parallel regime" that weakens workers' and unions' rights. These are STAKEHOLDER POSITIONS, not changes to the proposal: the file is still in the legislative process (JURI). Source: the Workers' Group's and the MEPs' own posts, 24 Sep 2026.
 - **LATEST (10 September 2026 — EU INC. REACHED A COMMITTEE VOTE).** **EMPL held a vote on
   2026/0074(COD) on 10 September, with a compromise amendments document on the table** — the first
   time this file has reached a voting list in any committee. Brubru's `ep_emeeting_documents` holds

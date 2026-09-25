@@ -193,7 +193,7 @@ def _stance_by_org(db: Session, tr_ids: List[str], names: List[str]) -> Dict[str
         if norms:
             rows += q.filter(CF.organisation_norm.in_(norms)).all()
         for f in rows:
-            if f.stance in (None, "attachment_only", "unclear"):
+            if f.stance in (None, "attachment_only", "unclear", "pending"):  # pending = not yet classified
                 continue
             rec = {"stance": f.stance, "summary": f.stance_summary, "excerpt": f.feedback_excerpt}
             if f.transparency_register_id:

@@ -34,12 +34,21 @@ from services.scrapers.mep_lobby_meetings_scraper import norm_org
 MIN_TEXT = 120   # below this, treat as boilerplate/attachment-only (skip Qwen)
 
 
-async def run(n_consultations, max_feedback, max_qwen, dry):
+async def run(n_consultations, max_feedback, max_qwen, dry, initiatives=None):
     db = SessionLocal()
-    cons = db.execute(sqla_text("""
-        SELECT initiative_id, short_title, title, dg_responsible, policy_areas, feedback_count
-        FROM public_consultations WHERE feedback_count > 0
-        ORDER BY feedback_count DESC LIMIT :n"""), {"n": n_consultations}).fetchall()
+    if initiatives:
+        # Targeted: the stored feedback_count cannot be trusted to select these
+        # (25 Sep 2026: EU Inc, initiative 14674, has 2,518 responses on the
+        # portal across publications 19997/19998/23065 and a stored count of 0).
+        cons = db.execute(sqla_text("""
+            SELECT initiative_id, short_title, title, dg_responsible, policy_areas, feedback_count
+            FROM public_consultations WHERE initiative_id = ANY(:ids)"""),
+            {"ids": list(initiatives)}).fetchall()
+    else:
+        cons = db.execute(sqla_text("""
+            SELECT initiative_id, short_title, title, dg_responsible, policy_areas, feedback_count
+            FROM public_consultations WHERE feedback_count > 0
+            ORDER BY feedback_count DESC LIMIT :n"""), {"n": n_consultations}).fetchall()
     db.close()
     print(f"[cf] {len(cons)} consultations with feedback to scan")
 
@@ -63,7 +72,9 @@ async def run(n_consultations, max_feedback, max_qwen, dry):
                     s = await extract_stance(ftext, p["organisation"], title)
                     qwen_used += 1
                 else:
-                    s = {"stance": "attachment_only" if len(ftext) < MIN_TEXT else "unclear", "summary": None}
+                    # Over the model budget a substantive response is NOT judged
+                    # "unclear": it is pending, the extractor's retry state.
+                    s = {"stance": "attachment_only" if len(ftext) < MIN_TEXT else "pending", "summary": None}
                 p["stance"] = s["stance"]
                 p["stance_summary"] = s["summary"]
                 p["organisation_norm"] = norm_org(p["organisation"])
@@ -137,6 +148,8 @@ if __name__ == "__main__":
     ap.add_argument("--consultations", type=int, default=27)
     ap.add_argument("--max-feedback", type=int, default=30)
     ap.add_argument("--max-qwen", type=int, default=200)
+    ap.add_argument("--initiative", action="append",
+                    help="Have Your Say initiative id to sync regardless of its stored count (repeatable)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
-    asyncio.run(run(a.consultations, a.max_feedback, a.max_qwen, a.dry_run))
+    asyncio.run(run(a.consultations, a.max_feedback, a.max_qwen, a.dry_run, a.initiative))
