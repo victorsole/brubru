@@ -6788,6 +6788,11 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'condizionalita ungheria': ['hungary_election_2026_magyar'],
     'conditionaliteit hongarije': ['hungary_election_2026_magyar'],
     'edpb fining guidelines': ['gdpr_data_protection'],
+    # EDPB Guidelines 04/2026 on imposing administrative fines (adopted 17 Sep 2026, draft for consultation to 13 Nov 2026).
+    'guidelines 04/2026': ['gdpr_data_protection'],
+    'guidelines 4/2026': ['gdpr_data_protection'],
+    'imposition guidelines': ['gdpr_data_protection'],
+    'directrius sobre les multes del rgpd': ['gdpr_data_protection'],
     'fining methodology': ['gdpr_data_protection'],
     'gdpr fines guidelines': ['gdpr_data_protection'],
     'lignes directrices sur les amendes': ['gdpr_data_protection'],
