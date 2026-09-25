@@ -198,8 +198,8 @@ def clean_text(value: str | None) -> str | None:
     return text or None
 
 
-MAX_DOWNLOAD = 40 * 1024 * 1024   # bytes
-MAX_SECONDS = 90                  # per item, wall clock
+MAX_DOWNLOAD = 40 * 1024 * 1024   # bytes; raised per run by --max-mb
+MAX_SECONDS = 90                  # per item, wall clock; raised per run by --max-seconds
 
 
 def _get(url: str, timeout: int = 30) -> bytes:
@@ -342,7 +342,7 @@ async def _run(args) -> int:
                 # 10 workers, not 6: this is network-bound on multi-megabyte PDFs,
                 # and at 6 the corpus was moving at ~112 rows an hour, which is 43
                 # hours. Each worker holds one PDF in memory, so ~10 x 4 MB.
-                with cf.ThreadPoolExecutor(max_workers=10) as ex:
+                with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
                     futures = {ex.submit(fetch_one, m, t): u for u, (m, t) in jobs.items()}
                     for fut in cf.as_completed(futures):
                         results[futures[fut]] = fut.result()
@@ -428,6 +428,14 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--throttle", type=float, default=0.5)
+    ap.add_argument("--max-mb", type=int, default=MAX_DOWNLOAD // 1048576,
+                    help="Refuse a download larger than this. 11%% of publications exceed the "
+                         "40 MB default; a second pass can raise it.")
+    ap.add_argument("--max-seconds", type=int, default=MAX_SECONDS,
+                    help="Wall-clock cap per item. A bigger --max-mb needs a bigger one.")
+    ap.add_argument("--workers", type=int, default=10,
+                    help="Parallel fetches. Lower it when raising --max-mb: ten workers "
+                         "holding 150 MB each is how a laptop starts swapping.")
     ap.add_argument("--apply", action="store_true")
     return asyncio.run(_run(ap.parse_args()))
 
