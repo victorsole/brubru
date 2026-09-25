@@ -1,0 +1,2174 @@
+[
+ {
+  "id": 14569.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)1825802",
+  "foreseenActType": "REG_IMPL",
+  "shortTitle": "Amendment of protective measures against pests of plants",
+  "currentStatuses": [
+   {
+    "frontEndStage": "ISC_WORKFLOW",
+    "receivingFeedbackStatus": "OPEN",
+    "feedbackStartDate": "2026/09/24 14:56:00",
+    "feedbackEndDate": "2026/10/22 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Изменение на защитните мерки срещу вредителите по растенията",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Změna ochranných opatření proti škodlivým organismům rostlin",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ændring af beskyttelsesforanstaltningerne mod planteskadegørere",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Änderung der Maßnahmen zum Schutz vor Pflanzenschädlingen",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Τροποποίηση των προστατευτικών μέτρων κατά των επιβλαβών για τα φυτά οργανισμών",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Amendment of protective measures against pests of plants",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Modificación de las medidas de protección contra las plagas de los vegetales",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Taimekahjustajatevastaste kaitsemeetmete muutmine",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Modification des mesures de protection contre les organismes nuisibles aux végétaux",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Leasú ar bhearta cosanta i gcoinne lotnaidí plandaí",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Izmjena zaštitnih mjera protiv organizama štetnih za bilje",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Modifica delle misure di protezione contro gli organismi nocivi per le piante",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Kasvintuhoojien vastaisten suojatoimenpiteiden muuttaminen",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "A növénykárosítókkal szembeni védekező intézkedések módosítása",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Apsaugos priemonių nuo augalų kenkėjų pakeitimas",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aizsardzības pasākumu pret augiem kaitīgajiem organismiem grozījumi",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Emenda tal-miżuri protettivi kontra l-pesti tal-pjanti",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Wijziging van beschermende maatregelen tegen plaagorganismen bij planten",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Zmiana przepisów w sprawie środków ochronnych przeciwko agrofagom roślin",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Alteração das medidas de proteção contra as pragas dos vegetais",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Modificarea măsurilor de protecție împotriva organismelor dăunătoare plantelor",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Zmena ochranných opatrení proti škodcom rastlín",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sprememba ukrepov varstva pred škodljivimi organizmi rastlin",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ändring av skyddsåtgärder mot växtskadegörare",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "FOOD",
+    "label": "Food safety"
+   }
+  ]
+ },
+ {
+  "id": 19293.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2026)8738685",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Minimum performance standards for data centres in Europe",
+  "currentStatuses": [
+   {
+    "frontEndStage": "PLANNING_WORKFLOW",
+    "receivingFeedbackStatus": "OPEN",
+    "feedbackStartDate": "2026/09/21 12:14:46",
+    "feedbackEndDate": "2026/12/14 23:59:59",
+    "isCurrent": true
+   },
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "OPEN",
+    "feedbackStartDate": "2026/09/21 12:14:46",
+    "feedbackEndDate": "2026/12/14 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Центрове за данни в Европа — минимални стандарти за ефективност",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Minimální výkonnostní normy pro datová centra v Evropě",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Datacentre i EU – minimumsstandarder for ydeevne",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rechenzentren in der EU – Mindestleistungsstandards",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Κέντρα δεδομένων στην Ευρώπη — ελάχιστα πρότυπα επιδόσεων",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Data centres in Europe – minimum performance standards",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Centros de datos en Europa: normas mínimas de rendimiento",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Andmekeskused Euroopas – tulemuslikkuse miinimumnõuded",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Les centres de données en Europe – Normes minimales de performance",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Lárionaid sonraí san Aontas Eorpach – íoschaighdeáin feidhmíochta",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Podatkovni centri u Europi – minimalni standardi učinkovitosti",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Centri dati in Europa – Norme minime di prestazione",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Euroopan datakeskukset – vähimmäistehokkuusvaatimukset",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Adatközpontok Európában – A teljesítményre vonatkozó minimumszabványok",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Duomenų centrai Europoje. Minimalieji veiksmingumo standartai",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Datu centri Eiropā: minimālie snieguma standarti",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ċentri tad-data fl-Ewropa – standards minimi ta’ prestazzjoni",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Datacentra in de EU — Minimumprestatienormen",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Centra przetwarzania danych w Europie – minimalne normy efektywności",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Centros de dados na UE — Normas mínimas de desempenho",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Centrele de date din Europa - standarde minime de performanță",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Dátové centrá v Európe – minimálne výkonnostné normy",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Podatkovni centri v Evropi – minimalni standardi učinkovitosti",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Datacenter i EU – minimistandarder för prestanda",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "ENER",
+    "label": "Energy"
+   }
+  ]
+ },
+ {
+  "id": 15492.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)9170767",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Revision of EU rules on public procurement",
+  "currentStatuses": [
+   {
+    "frontEndStage": "ADOPTION_WORKFLOW",
+    "receivingFeedbackStatus": "OPEN",
+    "feedbackStartDate": "2026/09/15 00:40:14",
+    "feedbackEndDate": "2026/11/20 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Правила на ЕС за възлагане на обществени поръчки — преразглеждане",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Revize pravidel EU pro zadávání veřejných zakázek",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Revision af EU's regler for offentlige udbud",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU-Vorschriften für die Vergabe öffentlicher Aufträge – Überarbeitung",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ενωσιακοί κανόνες για τις δημόσιες συμβάσεις — αναθεώρηση",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU public procurement rules – revision",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Normas de contratación pública de la UE: revisión",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ELi riigihanke-eeskirjad – läbivaatamine",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Règles de l’UE en matière de marchés publics — révision",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rialacha soláthair phoiblí an Aontais – athbhreithniú",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pravila EU-a o javnoj nabavi – revizija",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Norme dell'UE in materia di appalti pubblici - revisione",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Julkisia hankintoja koskevien EU:n sääntöjen tarkistaminen",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Uniós közbeszerzési szabályok – felülvizsgálat",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ES viešųjų pirkimų taisyklių peržiūra",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ES publiskā iepirkuma noteikumu pārskatīšana",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ir-regoli tal-UE dwar l-akkwist pubbliku — reviżjoni",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU-regels voor overheidsopdrachten – herziening",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Nowelizacja unijnych przepisów dotyczących zamówień publicznych",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Regras da UE em matéria de contratos públicos — revisão",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Normele UE privind achizițiile publice – revizuire",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Revízia pravidiel EÚ v oblasti verejného obstarávania",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pravila EU o javnem naročanju – revizija",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU:s regler för offentlig upphandling – översyn",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "SINGMARK",
+    "label": "Single market"
+   }
+  ]
+ },
+ {
+  "id": 14778.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)5842314",
+  "foreseenActType": "SWD",
+  "shortTitle": "Evaluation of the Balanced Approach Regulation on noise at EU airports",
+  "currentStatuses": [
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "OPEN",
+    "feedbackStartDate": "2026/08/27 13:34:11",
+    "feedbackEndDate": "2026/11/19 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Шум на летищата в ЕС — оценка на Регламента за балансирания подход",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Hluk na letištích EU – hodnocení nařízení o vyváženém přístupu",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Støj i EU's lufthavne – evaluering af forordningen om en afbalanceret strategi",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Fluglärm an EU-Flughäfen – Bewertung der Verordnung über einen ausgewogenen Ansatz",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Θόρυβος στους αερολιμένες της ΕΕ — αξιολόγηση του κανονισμού για την ισορροπημένη προσέγγιση",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Noise at EU airports – evaluation of the Balanced Approach Regulation",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ruido en los aeropuertos de la UE: evaluación del Reglamento sobre el enfoque equilibrado",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Müra ELi lennujaamades – tasakaalustatud lähenemisviisi määruse hindamine",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bruit dans les aéroports de l’UE — Évaluation du règlement intégrant l’approche équilibrée",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Torann ag aerfoirt de chuid an Aontais – meastóireacht ar an Rialachán maidir le Cur Chuige Cothrom",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Buka u zračnim lukama EU-a – evaluacija Uredbe o uravnoteženom pristupu",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rumore negli aeroporti dell'UE - valutazione del regolamento sull'approccio equilibrato",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Melu EU:n lentoasemilla – tasapainoisesta lähestymistavasta annetun asetuksen arviointi",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Zaj az uniós repülőtereken – a kiegyensúlyozott megközelítésről szóló rendelet értékelése",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Triukšmas ES oro uostuose. Darniojo metodo reglamento vertinimas",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Troksnis ES lidostās — Līdzsvarotas pieejas regulas izvērtēšana",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "L-istorbju fl-ajruporti tal-UE – evalwazzjoni tar-Regolament dwar l-Approċċ Bilanċjat",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Geluidsoverlast op EU-luchthavens — evaluatie van de verordening inzake een evenwichtige aanpak",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Hałas w portach lotniczych UE – ocena rozporządzenia w sprawie zrównoważonego podejścia",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ruído nos aeroportos da UE — avaliação do Regulamento Abordagem Equilibrada",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Zgomotul de pe aeroporturile din UE – evaluarea Regulamentului privind abordarea echilibrată",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Hluk na letiskách EÚ – hodnotenie nariadenia o vyváženom prístupe",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Hrup na letališčih EU – ocena uredbe o uravnoteženem pristopu",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Buller vid EU-flygplatser – utvärdering av förordningen om en välavvägd strategi",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "TRANSPORT",
+    "label": "Transport"
+   }
+  ]
+ },
+ {
+  "id": 14353.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2024)5232145",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Revision of the EU explosives precursors legislation ",
+  "initiativeTranslations": [
+   {
+    "value": "Предлагане на пазара и употреба на прекурсори на взривни вещества — актуализиране на правилата",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Uvádění prekurzorů výbušnin na trh a jejich používání – aktualizovaná pravidla",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Opdaterede regler for markedsføring og brug af udgangsstoffer til eksplosivstoffer",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vermarktung und Verwendung von Ausgangsstoffen für Explosivstoffe – aktualisierte Vorschriften",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Κυκλοφορία στην αγορά και χρήση των πρόδρομων ουσιών εκρηκτικών υλών — επικαιροποιημένοι κανόνες",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Marketing and use of explosives precursors – updated rules",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Comercialización y utilización de precursores de explosivos: normas actualizadas",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Lõhkeainete lähteainete turustamine ja kasutamine – ajakohastatud õigusnormid",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Commercialisation et utilisation de précurseurs d’explosifs — mise à jour des règles",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Margú agus úsáid réamhtheachtaithe pléascán – rialacha nuashonraithe",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Stavljanje na tržište i uporaba prekursora eksploziva – ažurirana pravila",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Immissione sul mercato e uso di precursori di esplosivi - norme aggiornate",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Räjähteiden lähtöaineiden markkinoille saattaminen ja käyttö – sääntöjen päivitys",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Robbanóanyag-prekurzorok forgalmazása és felhasználása – aktualizált szabályok",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Prekyba sprogstamųjų medžiagų pirmtakais ir jų naudojimas. Atnaujintos taisyklės",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sprāgstvielu prekursoru tirdzniecība un lietošana: atjaunināti noteikumi",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Il-kummerċjalizzazzjoni u l-użu tal-prekursuri tal-isplussivi – regoli aġġornati",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Verkoop en gebruik van precursoren voor explosieven — bijgewerkte regels",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Wprowadzanie do obrotu i stosowanie prekursorów materiałów wybuchowych – zaktualizowane przepisy",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Comercialização e utilização de precursores de explosivos — regras atualizadas",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Comercializarea și utilizarea precursorilor de explozivi – norme actualizate",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Uvádzanie prekurzorov výbušnín na trh a ich používanie – aktualizované pravidlá",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Posodobitev pravil o trženju in uporabi predhodnih sestavin za eksplozive",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sprängämnesprekursorer – uppdaterade regler om saluföring och användning",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "HOME",
+    "label": "Home affairs"
+   }
+  ]
+ },
+ {
+  "id": 18173.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2026)4838595",
+  "shortTitle": "Targeted initiative for a better copyright environment for European creativity and innovation ",
+  "currentStatuses": [
+   {
+    "frontEndStage": "ADOPTION_WORKFLOW",
+    "receivingFeedbackStatus": "UPCOMING",
+    "feedbackStartDate": null,
+    "feedbackEndDate": null,
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Целева инициатива за по-добра среда по отношение на авторските права за творчеството и иновациите в Европа",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Cílená iniciativa pro lepší prostředí v oblasti autorského práva v zájmu evropské kreativity a inovací",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Målrettet initiativ med henblik på et bedre ophavsretligt miljø for europæisk kreativitet og innovation",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Gezielte Initiative für ein besseres urheberrechtliches Umfeld für Kreativität und Innovation in Europa",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Στοχευμένη πρωτοβουλία για ένα καλύτερο περιβάλλον δικαιωμάτων πνευματικής ιδιοκτησίας για την ευρωπαϊκή δημιουργικότητα και καινοτομία",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Targeted initiative for a better copyright environment for European creativity and innovation",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Iniciativa específica para mejorar el entorno de los derechos de autor en favor de la creatividad y la innovación europeas",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sihtotstarbeline algatus autoriõiguse keskkonna parandamiseks Euroopa loovuse ja innovatsiooni huvides",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Initiative ciblée pour un meilleur environnement du droit d’auteur en faveur de la créativité et de l’innovation européennes",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Tionscnamh spriocdhírithe ar son timpeallacht cóipchirt níos fearr le haghaidh chruthaitheacht agus nuálaíocht na hEorpa",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ciljana inicijativa za poboljšanje okruženja autorskih prava za europsku kreativnost i inovacije",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Iniziativa mirata a sostegno di un ambiente migliore per il diritto d'autore, che stimoli la creatività e l'innovazione europee",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Kohdennettu aloite, jonka tavoitteena on eurooppalaista luovuutta ja innovointia paremmin tukeva tekijänoikeusympäristö",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Célzott kezdeményezés az európai kreativitás és innováció szerzői jogi környezetének javítására",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Europos kūrybingumui ir inovacijoms palankesnės autorių teisių aplinkos sukūrimo tikslinė iniciatyva",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mērķēta iniciatīva labākai autortiesību videi Eiropas radošumam un inovācijai",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Inizjattiva mmirata għal ambjent aħjar tad-drittijiet tal-awtur għall-kreattività u l-innovazzjoni Ewropea",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Gericht initiatief voor een betere auteursrechtelijke omgeving voor Europese creativiteit en innovatie",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ukierunkowana inicjatywa na rzecz poprawy warunków stosowania prawa autorskiego na potrzeby rozwoju kreatywności i innowacyjności w Europie",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Iniciativa específica para um enquadramento dos direitos de autor mais propício à criatividade e à inovação europeias",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "O inițiativă specifică pentru un cadru mai bun privind drepturile de autor, în sprijinul creativității și al inovării din Europa",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Cielená iniciatíva za lepšie prostredie autorských práv pre európsku tvorivosť a inovácie",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ciljno usmerjena pobuda za boljše okolje avtorske pravice za evropsko ustvarjalnost in inovacije",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Riktat samråd för en bättre upphovsrättslig miljö för europeisk kreativitet och innovation",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "DIGITAL",
+    "label": "Digital economy and society"
+   }
+  ]
+ },
+ {
+  "id": 19072.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2026)7938089",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Transparent Rolling Stock Resale ",
+  "currentStatuses": [
+   {
+    "frontEndStage": "INIT_PLANNED",
+    "receivingFeedbackStatus": "DISABLED",
+    "feedbackStartDate": "2026/08/21 10:32:21",
+    "feedbackEndDate": null,
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Железопътен транспорт — прозрачна препродажба на подвижен състав",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Železnice – transparentní prodej použitých kolejových vozidel",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Jernbaner – gennemsigtigt videresalg af rullende materiel",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Schienenverkehr – transparenter Wiederverkauf von Schienenfahrzeugen",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Σιδηρόδρομος — διαφανής μεταπώληση τροχαίου υλικού",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rail – transparent resale of rolling stock",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ferrocarril: reventa transparente de material rodante",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Raudtee – veeremi läbipaistev edasimüük",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rail — revente transparente de matériel roulant",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Iarnród – athdhíol trédhearcach rothstoic",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Željeznički promet – transparentna prodaja rabljenih željezničkih vozila",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ferrovie - rivendita trasparente del materiale rotabile",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Raideliikenne – liikkuvan kaluston läpinäkyvä jälleenmyynti",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vasút – a vasúti járművek átlátható viszonteladása",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Geležinkeliai. Skaidrus riedmenų perpardavimas",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Dzelzceļš — ritošā sastāva pārredzama tālākpārdošana",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Il-ferroviji – trasparenza fil-bejgħ tal-vetturi ferrovjarji użati",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Spoor – transparante doorverkoop van rollend materieel",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Koleje – przejrzyste zasady odsprzedaży taboru",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Transporte ferroviário — transparência na revenda de material circulante",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Transport feroviar – revânzarea transparentă a materialului rulant",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Železničná doprava – transparentný následný predaj železničných koľajových vozidiel",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Železniški promet – pregledna nadaljnja prodaja tirnih vozil",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Järnväg – transparent återförsäljning av rullande materiel",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "TRANSPORT",
+    "label": "Transport"
+   }
+  ]
+ },
+ {
+  "id": 14729.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)4658397",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Revision of EU antitrust procedural rules",
+  "currentStatuses": [
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2025/07/10 14:27:46",
+    "feedbackEndDate": "2025/10/02 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "topics": [
+   {
+    "code": "COMP",
+    "label": "Competition"
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Антитръстови процедурни правила на ЕС (преразглеждане)",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Antimonopolní procesní pravidla EU (revize)",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU's procedureregler på konkurrenceområdet (revision)",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vorschriften für EU-Kartellverfahren (Überarbeitung)",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Αντιμονοπωλιακοί διαδικαστικοί κανόνες της ΕΕ (αναθεώρηση)",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU antitrust procedural rules (revision)",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Normas de procedimiento de la UE en materia de defensa de la competencia (revisión)",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ELi konkurentsialased menetlusnormid (läbivaatamine)",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Règles de procédure de l’UE en matière de pratiques anticoncurrentielles (révision)",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rialacha nós imeachta an Aontais in aghaidh trustaí (athbhreithniú)",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Protumonopolska postupovna pravila EU-a (revizija)",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Norme procedurali antitrust dell'UE (revisione)",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU:n kilpailusääntöjen soveltamista koskevat menettelyt (tarkistus)",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Az uniós antitröszteljárási szabályok (felülvizsgálat)",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ES antimonopolinės procedūrinės taisyklės (peržiūra)",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ES pretmonopola procedūras noteikumi (pārskatīšana)",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Regoli proċedurali tal-UE dwar l-antitrust (reviżjoni)",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU-procedureregels in antitrustzaken (herziening)",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Unijne przepisy proceduralne w zakresie ochrony konkurencji (rewizja)",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Regras processuais da UE no domínio anti-trust (revisão)",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Normele procedurale antitrust ale UE (revizuire)",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Antitrustové procesné pravidlá EÚ (revízia)",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Protimonopolna postopkovna pravila EU (revizija)",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "EU:s förfaranden vid antitrustärenden (översyn)",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ]
+ },
+ {
+  "id": 18804.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2026)7004765",
+  "foreseenActType": "PROP_DEC",
+  "shortTitle": "The Union Position for the World Radiocommunication Conference 2027 ",
+  "currentStatuses": [
+   {
+    "frontEndStage": "PLANNING_WORKFLOW",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2026/07/14 13:08:31",
+    "feedbackEndDate": "2026/09/11 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "topics": [
+   {
+    "code": "DIGITAL",
+    "label": "Digital economy and society"
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Световна конференция по радиосъобщения през 2027 г. — позиция на ЕС",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Světová radiokomunikační konference 2027 – postoj EU",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Verdensradiokonferencen 2027 – EU's holdning",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Weltfunkkonferenz 2027 – Standpunkt der EU",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Παγκόσμια Διάσκεψη Ραδιοεπικοινωνιών του 2027 — θέση της ΕΕ",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "World Radiocommunication Conference 2027 – EU position",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Conferencia Mundial de Radiocomunicaciones de 2027: posición de la UE",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "2027. aasta üleilmne raadiosidekonverents – ELi seisukoht",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Conférence mondiale des radiocommunications 2027 – Position de l’UE",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Comhdháil Dhomhanda Radachumarsáide 2027 – seasamh an Aontais Eorpaigh",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Svjetska radiokomunikacijska konferencija 2027. – stajalište EU-a",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Conferenza mondiale sulle radiocomunicazioni 2027 - posizione dell'UE",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Maailman radioviestintäkonferenssi 2027 – EU:n kanta",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "A 2027. évi rádiótávközlési világkonferencia – Az EU álláspontja",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "ES pozicija 2027 m. Pasaulinėje radijo ryšio konferencijoje",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "2027. gada Pasaules radiosakaru konference – ES nostāja",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Il-Konferenza Dinjija tal-2027 dwar ir-Radjukomunikazzjoni — il-pożizzjoni tal-UE",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Wereldradiocommunicatieconferentie 2027 – EU-standpunt",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Światowa Konferencja Radiokomunikacyjna 2027 – stanowisko UE",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Conferência Mundial das Radiocomunicações de 2027 — posição da UE",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Conferința mondială pentru radiocomunicații 2027 – Poziția UE",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Svetová rádiokomunikačná konferencia 2027 – pozícia EÚ",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Svetovna konferenca o radiokomunikacijah 2027 – stališče EU",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Världsradiokonferensen 2027 – EU:s ståndpunkt",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ]
+ },
+ {
+  "id": 14556.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)1627755",
+  "foreseenActType": "REG_IMPL",
+  "shortTitle": "Exceptions and rules for the attachment of the plant passport to the trade unit ",
+  "currentStatuses": [
+   {
+    "frontEndStage": "ISC_WORKFLOW",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2026/08/26 15:32:00",
+    "feedbackEndDate": "2026/09/23 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Растителни паспорти — изключения и правила за поставянето върху търговската единица на определени растения",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rostlinolékařské pasy – výjimky a pravidla týkající se připojení k obchodní jednotce určitých rostlin",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Plantepas – undtagelser fra og regler for fastgørelse til en handelsenhed af bestemte planter",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pflanzenpässe – Ausnahmen und Vorschriften in Bezug auf die Anbringung an der Handelseinheit bestimmter Pflanzen",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Φυτοϋγειονομικά διαβατήρια — εξαιρέσεις και κανόνες σύνδεσης με τη μονάδα εμπορίας συγκεκριμένων φυτών",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Plant passports – exceptions and rules for attachment to the trade unit of particular plants",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pasaportes fitosanitarios: excepciones y normas relativas a la colocación a la unidad comercial de determinados vegetales",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Taimepass – erandid ja eeskirjad selle sidumisel taimede kaubaühikutega",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Passeports phytosanitaires — exceptions et règles concernant leur apposition sur l’unité commerciale de certains végétaux",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pasanna plandaí – eisceachtaí agus rialacha maidir le ceangal le haonad trádála plandaí áirithe",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Biljne putovnice – iznimke i pravila za prilaganje trgovinskoj jedinici bilja",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Passaporti delle piante - eccezioni e norme per l'apposizione all'unità di vendita di determinate piante",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Kasvipassit – poikkeukset ja säännöt kasvipassien kiinnittämisestä tiettyjen kasvien kaupankäynnin yksiköihin",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Növényútlevelek – az egyes növények értékesítési egységeihez való rögzítéssel kapcsolatos szabályok és kivételek",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Augalų pasai. Pritvirtinimo prie konkrečių augalų prekybos vienetų taisyklės ir išimtys",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Augu pases – izņēmumi un noteikumi par noteiktu augu piestiprināšanu tirdzniecības vienībai",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Passaporti tal-pjanti — eċċezzjonijiet u regoli għal meta jinhemżu mal-unità tan-negozjar ta’ pjanti partikolari",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Plantenpaspoorten — uitzonderingen en regels voor bevestiging aan de handelseenheid van bepaalde planten",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Paszporty roślin – wyjątki i zasady dotyczące umieszczania na jednostkach handlowych określonych roślin",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Passaportes fitossanitários — exceções e regras aplicáveis à afixação na unidade comercial de determinados vegetais",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pașapoartele fitosanitare – Excepții și reguli privind atașarea pașaportului anumitor plante la unitatea comercială",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rastlinné pasy – výnimky a pravidlá týkajúce sa pripojenia k obchodnej jednotke určitých rastlín",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Rastlinski potni listi – izjeme in pravila za namestitev na prodajne enote posameznih rastlin",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Växtpass – undantag från regeln att växtpasset ska fästas på växten",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "FOOD",
+    "label": "Food safety"
+   }
+  ]
+ },
+ {
+  "id": 16795.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2026)1348740",
+  "foreseenActType": "COMMUNIC",
+  "shortTitle": "Competitiveness in the single banking market",
+  "currentStatuses": [
+   {
+    "frontEndStage": "ADOPTION_WORKFLOW",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2026/07/17 17:24:32",
+    "feedbackEndDate": "2026/09/17 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Конкурентоспособност на единния банков пазар",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurenceschopnost na jednotném bankovním trhu",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Det indre bankmarkeds konkurrenceevne",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Wettbewerbsfähigkeit im Bankenbinnenmarkt",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ανταγωνιστικότητα στην ενιαία τραπεζική αγορά",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Competitiveness in the single banking market",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Competitividad en el mercado único bancario",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurentsivõime ühtsel pangandusturul",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Compétitivité au sein du marché unique bancaire",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Iomaíochas sa mhargadh baincéireachta aonair",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurentnost na jedinstvenom bankarskom tržištu",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Competitività nel mercato bancario unico",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Kilpailukyky pankkialan sisämarkkinoilla",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Versenyképesség az egységes bankpiacon",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurencingumas bendrojoje bankų rinkoje",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurētspēja vienotajā banku tirgū",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Il-kompetittività fis-suq bankarju uniku",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Concurrentievermogen op de eengemaakte markt voor banken",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurencyjność na jednolitym rynku bankowym",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Competitividade no mercado único bancário",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Competitivitatea pe piața unică în sectorul bancar",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurencieschopnosť na jednotnom bankovom trhu",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurenčnost na enotnem bančnem trgu",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Konkurrenskraft på den inre bankmarknaden",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "FINANCE",
+    "label": "Banking and financial services"
+   }
+  ]
+ },
+ {
+  "id": 14620.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)2687372",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Revision of EU rules on air services",
+  "currentStatuses": [
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2025/08/12 10:58:00",
+    "feedbackEndDate": "2025/12/16 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Въздухоплаване — правила на ЕС за въздухоплавателните услуги (преразглеждане)",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Letectví – pravidla EU pro provozování leteckých služeb (revize)",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Luftfart – EU's regler for luftfartstjenester (revision)",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Luftfahrt – EU-Vorschriften für Flugdienste (Überarbeitung)",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Αεροπορία — Κανόνες της ΕΕ για τις αεροπορικές μεταφορές (αναθεώρηση)",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviation – EU air services rules (revision)",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviación: normas de la UE sobre servicios aéreos (revisión)",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Lennundus – ELis lennuteenuste osutamist käsitlevad eeskirjad (läbivaatamine)",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviation — Règles de l’UE en matière de services aériens (révision)",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Eitlíocht — rialacha an Aontais maidir le haersheirbhísí (athbhreithniú)",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Zračni promet – pravila EU-a o uslugama zračnog prijevoza (revizija)",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviazione - norme dell'UE sui servizi aerei (revisione)",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Ilmailu – EU:n lentoliikennesäännöt (tarkistus)",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Légi közlekedés – A légi szolgáltatásokra vonatkozó uniós szabályok (felülvizsgálat)",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviacija: ES oro susisiekimo paslaugų taisyklių peržiūra",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviācija — ES gaisa pārvadājumu pakalpojumu noteikumi (pārskatīšana)",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "L-avjazzjoni – Ir-regoli tal-UE dwar is-servizzi tal-ajru (reviżjoni)",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Luchtvaart — EU-regels voor luchtdiensten (herziening)",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Lotnictwo – unijne przepisy dotyczące przewozów lotniczych (zmiana)",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviação — Regras da UE em matéria de serviços aéreos (revisão)",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Aviație – Normele UE privind serviciile aeriene (revizuire)",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Letectvo – pravidlá EÚ v oblasti leteckej dopravnej služby (revízia)",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Letalstvo – pravila EU za zračne prevoze (revizija)",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Flyget – EU:s regler för flygtrafik (översyn)",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "TRANSPORT",
+    "label": "Transport"
+   }
+  ]
+ },
+ {
+  "id": 12738.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2020)6638494",
+  "foreseenActType": "COMMUNIC_POSIT",
+  "shortTitle": "Banking Union: Review of the bank crisis management and deposit insurance framework (SRMR review)",
+  "currentStatuses": [
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2021/02/25 12:10:40",
+    "feedbackEndDate": "2021/05/20 23:59:59",
+    "isCurrent": true
+   },
+   {
+    "frontEndStage": "ADOPTION_WORKFLOW",
+    "receivingFeedbackStatus": "DISABLED",
+    "feedbackStartDate": "2026/03/06 10:24:10",
+    "feedbackEndDate": null,
+    "isCurrent": true
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Банков съюз — преглед на уредбата за управление на банкови кризи и за застраховане на депозитите (преглед на Регламента за единния механизъм за преструктуриране)",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankovní unie – revize rámce pro krizové řízení bank a pojištění vkladů",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankunionen: revision af rammerne for styring af bankkriser og indskudsgaranti (SRMR-forordningen)",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankenunion – Überprüfung des Rahmens für das Bankenkrisenmanagement und die Einlagenversicherung (SRMR)",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Τραπεζική Ένωση - επανεξέταση του πλαισίου διαχείρισης τραπεζικών κρίσεων και ασφάλισης καταθέσεων (επανεξέταση ΚΕΜΕ)",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Banking Union – review of the bank crisis management & deposit insurance framework (SRMR review)",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Unión bancaria: revisión del marco de gestión de crisis bancarias y garantía de depósitos (revisión del RMUR)",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pangandusliit – pankade kriisijuhtimise ja hoiuste tagamise raamistiku läbivaatamine (ühtse kriislahenduskorra määrus)",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Union bancaire — réexamen du cadre pour la gestion des crises bancaires et la garantie des dépôts (réexamen du règlement MRU)",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "An tAontas Baincéireachta – athbhreithniú ar an gcreat bainistithe géarchéime banc agus árachais taiscí (athbhreithniú SRMR)",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankovna unija – revizija okvira za upravljanje kriznim situacijama banaka i osiguranje depozita (revizija SRMR-a)",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Unione bancaria - revisione del quadro per la gestione delle crisi bancarie e l'assicurazione dei depositi (revisione del regolamento sul meccanismo di risoluzione unico)",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pankkiunioni – pankkien kriisinhallintaa ja talletussuojaa koskevan kehyksen tarkistaminen",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankunió – a bankválságkezelési és betétbiztosítási keretszabályok (az Egységes Szanálási Mechanizmusról szóló rendelet) felülvizsgálata",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankų sąjunga. Bankų krizių valdymo ir indėlių draudimo sistemos (Bendro pertvarkymo mechanizmo reglamento) peržiūra",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Banku savienība – banku krīzes pārvaldības un noguldījumu apdrošināšanas satvara pārskatīšana (VNMR pārskatīšana)",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Unjoni Bankarja - rieżami tal-qafas tal-ġestjoni tal-kriżijiet bankarji u tal-assikurazzjoni tad-depożiti (rieżami tas-SRMR, Single Resolution Mechanism Regulation)",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankenunie – Herziening van het kader voor bankencrisisbeheer en depositoverzekering (SMSR-verordening)",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Unia bankowa – przegląd ram zarządzania kryzysowego banków i gwarantowania depozytów (przegląd rozporządzenia SRMR)",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "União Bancária - revisão do enquadramento para a gestão de crises bancárias e a garantia dos depósitos (revisão do SRMR)",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Uniunea bancară – revizuirea cadrului de gestionare a crizelor bancare și de asigurare a depozitelor (revizuirea RMUR)",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Banková únia – preskúmanie rámca pre krízové riadenie bánk a ochranu vkladov (preskúmanie nariadenia o jednotnom mechanizme riešenia krízových situácií)",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bančna unija – pregled okvira za krizno upravljanje bank in jamstva za vloge (pregled uredbe o enotnem mehanizmu za reševanje)",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Bankunionen – översyn av ramen för bankkrishantering och insättningsgaranti (förordningen om den gemensamma resolutionsmekanismen)",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ],
+  "topics": [
+   {
+    "code": "FINANCE",
+    "label": "Banking and financial services"
+   }
+  ]
+ },
+ {
+  "id": 14748.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)5215671",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Extension of the scope of the carbon border adjustment mechanism to downstream products and anti-circumvention measures",
+  "currentStatuses": [
+   {
+    "frontEndStage": "OPC_LAUNCHED",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2025/07/01 11:34:05",
+    "feedbackEndDate": "2025/08/26 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "topics": [
+   {
+    "code": "CLIMA",
+    "label": "Climate action"
+   },
+   {
+    "code": "CUSTOMS",
+    "label": "Customs"
+   },
+   {
+    "code": "ENER",
+    "label": "Energy"
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Механизъм за корекция на въглеродните емисии на границите (МКВЕГ) — разширяване надолу по веригата, мерки срещу заобикалянето и правила относно емисиите от производството на електроенергия",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mechanismus uhlíkového vyrovnání na hranicích (CBAM) – rozšíření na navazující výrobky, boj proti obcházení a pravidla týkající se emisí z výroby elektřiny",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Kulstofgrænsetilpasningsmekanisme (CBAM) – udvidelse af anvendelsesområdet til at omfatte efterfølgende produktionsled, yderligere foranstaltninger til modvirkning af omgåelse samt regler for elsektoren",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "CO2-Grenzausgleichssystem – Ausweitung auf nachgelagerte Produkte, Bekämpfung von Umgehungspraktiken und Vorschriften für strombedingte Emissionen",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Μηχανισμός συνοριακής προσαρμογής άνθρακα (ΜΣΠΑ) — κατάντη επέκταση, μέτρα κατά της καταστρατήγησης και κανόνες για τις εκπομπές ηλεκτρικής ενέργειας",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Carbon Border Adjustment Mechanism (CBAM) – downstream extension, anti-circumvention and rules on electricity emissions",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mecanismo de Ajuste en Frontera por Carbono (MAFC): ampliación a productos transformados, medidas antielusión y normas sobre las emisiones de electricidad",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Piiril kohaldatav süsinikdioksiidi kohandusmehhanism (SPIM) – meetme laiendamine järgneva etapi sektorile, kõrvalehoidmisvastased meetmed ja elektrienergiaga seotud heiteid käsitlevad eeskirjad",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mécanisme d’ajustement carbone aux frontières (MACF) – Extension en aval, mesures anticontournement et règles relatives aux émissions liées à l’électricité",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sásra Coigeartaithe Carbóin ar Theorainneacha (SCCT) – síneadh iartheachtach, frith-imchéimniú agus rialacha maidir le hastaíochtaí leictreachais",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mehanizam za ugljičnu prilagodbu na granicama (CBAM) – proširenje prema kraju proizvodnog lanca, sprečavanje izbjegavanja mjera i pravila o emisijama iz elektroenergetskog sektora",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Meccanismo di adeguamento del carbonio alle frontiere (CBAM) – estensione a valle, antielusione e norme sulle emissioni di energia elettrica",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Hiilirajamekanismi (CBAM) – soveltamisalan laajentaminen, kiertämisen estäminen ja sähköstä aiheutuvia päästöjä koskevat säännöt",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Az importáruk karbonintenzitását ellensúlyozó mechanizmus (CBAM) – downstream kiterjesztés, kijátszás elleni küzdelem és a villamos energiával összefüggő kibocsátásokra vonatkozó szabályok",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Pasienio anglies dioksido korekcinis mechanizmas (PADKM): galutinės grandies įtraukimas, kova su reikalavimų apėjimu ir su elektros energija susijusio išmetamųjų teršalų kiekio taisyklės",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Oglekļa ievedkorekcijas mehānisms (OIM) – lejupēja paplašināšana, apiešanas novēršana un noteikumi par elektroenerģijas emisijām",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mekkaniżmu ta’ Aġġustament tal-Karbonju fil-Fruntieri (CBAM, Carbon Border Adjustment Mechanism) — estensjoni downstream, antiċirkomvenzjoni u regoli dwar l-emissjonijiet tal-elettriku",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mechanisme voor koolstofcorrectie aan de grens (CBAM) — uitbreiding tot downstreamproducten, bestrijding van ontwijking en regels inzake elektriciteitsemissies",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mechanizm dostosowywania cen na granicach z uwzględnieniem emisji CO2 (CBAM) – rozszerzenie o towary niższego szczebla, środki przeciwdziałające obchodzeniu przepisów i przepisy dotyczące emisji energii elektrycznej",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mecanismo de Ajustamento Carbónico Fronteiriço (CBAM) — alargamento a jusante, antievasão e regras relativas às emissões de eletricidade",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mecanismul de ajustare a carbonului la frontieră (CBAM) – Extinderea la produse în aval, combaterea eludării și normele privind emisiile din sectorul energiei electrice",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mechanizmus uhlíkovej kompenzácie na hraniciach (CBAM) – rozšírenie na ďalšie články reťazca, zabránenie obchádzaniu a pravidlá týkajúce sa emisií z elektrickej energie",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mehanizem za ogljično prilagoditev na mejah (CBAM) – razširitev nižje prodajni v verigi, preprečevanje izogibanja in pravila o emisijah električne energije",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mekanismen för koldioxidjustering vid gränsen – produkter i senare led, åtgärder mot kringgående och regler för elsektorn",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ]
+ },
+ {
+  "id": 14850.0,
+  "initiativeStatus": "ACTIVE",
+  "reference": "Ares(2025)7591874",
+  "foreseenActType": "PROP_REG",
+  "shortTitle": "Proposal for a Regulation on Military Mobility",
+  "currentStatuses": [
+   {
+    "frontEndStage": "PLANNING_WORKFLOW",
+    "receivingFeedbackStatus": "CLOSED",
+    "feedbackStartDate": "2025/09/11 14:16:00",
+    "feedbackEndDate": "2025/10/24 23:59:59",
+    "isCurrent": true
+   }
+  ],
+  "topics": [
+   {
+    "code": "BUSINESS",
+    "label": "Business and industry"
+   }
+  ],
+  "initiativeTranslations": [
+   {
+    "value": "Военна мобилност — предложение за регламент",
+    "language": "BG",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Návrh nařízení týkajícího se vojenské mobility",
+    "language": "CS",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Militær mobilitet — forslag til forordning",
+    "language": "DA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Militärische Mobilität – Vorschlag für eine Verordnung",
+    "language": "DE",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Στρατιωτική κινητικότητα — πρόταση κανονισμού",
+    "language": "EL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Military mobility – proposal for a Regulation",
+    "language": "EN",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Movilidad militar: propuesta de Reglamento",
+    "language": "ES",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sõjaväeline liikuvus: ettepanek määruse kohta",
+    "language": "ET",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobilité militaire — Proposition de règlement",
+    "language": "FR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Soghluaisteacht mhíleata - togra le haghaidh Rialacháin",
+    "language": "GA",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vojna mobilnost – prijedlog uredbe",
+    "language": "HR",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobilità militare - proposta di regolamento",
+    "language": "IT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Sotilaallinen liikkuvuus – asetusehdotus",
+    "language": "FI",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Katonai mobilitás – rendeletjavaslat",
+    "language": "HU",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Karinis mobilumas. Pasiūlymas dėl reglamento",
+    "language": "LT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Militārā mobilitāte – priekšlikums regulai",
+    "language": "LV",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobbiltà militari – proposta għal Regolament",
+    "language": "MT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Militaire mobiliteit — voorstel voor een verordening",
+    "language": "NL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobilność wojskowa – wniosek dotyczący rozporządzenia",
+    "language": "PL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobilidade militar — proposta de regulamento",
+    "language": "PT",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Mobilitatea militară – propunere de regulament",
+    "language": "RO",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vojenská mobilita – návrh nariadenia",
+    "language": "SK",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Vojaška mobilnost – predlog uredbe",
+    "language": "SL",
+    "field": "SHORT_TITLE"
+   },
+   {
+    "value": "Militär rörlighet – förslag till en förordning",
+    "language": "SV",
+    "field": "SHORT_TITLE"
+   }
+  ]
+ }
+]

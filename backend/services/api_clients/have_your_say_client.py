@@ -307,36 +307,36 @@ class HaveYourSayClient:
         if not title:
             return None
 
-        # Get current status
-        current_statuses = data.get('currentStatuses', [])
-        status = ConsultationStatus.OPEN
+        # Status and dates: the SAME rule as scripts/sync_have_your_say.py
+        # (map_initiative), which owns this column. This parser used to default
+        # to OPEN whenever no *current* stage said OPEN or CLOSED, and to read an
+        # ADOPTION stage as "outcome published", so the two daily jobs rewrote
+        # each other: 627 closed->open "changes" in 7 days, and initiatives whose
+        # only remaining window was UPCOMING (CBAM extension, military mobility)
+        # shown to users as open for comment. 25 Sep 2026.
+        current_statuses = data.get('currentStatuses', []) or []
+        current = next((cs for cs in current_statuses if cs.get('isCurrent')),
+                       current_statuses[0] if current_statuses else {})
+        front_end_stage = current.get('frontEndStage', '') or ''
+        feedback = [cs.get('receivingFeedbackStatus') for cs in current_statuses]
+        if 'OPEN' in feedback:
+            status = ConsultationStatus.OPEN
+        elif 'UPCOMING' in feedback:
+            status = ConsultationStatus.UPCOMING
+        elif 'CLOSED' in feedback:
+            status = ConsultationStatus.CLOSED
+        else:
+            status = (ConsultationStatus.UPCOMING if front_end_stage == 'INIT_PLANNED'
+                      else ConsultationStatus.CLOSED)
+
         start_date = None
         end_date = None
-        feedback_status = None
-
         for cs in current_statuses:
-            if cs.get('isCurrent'):
-                feedback_status = cs.get('receivingFeedbackStatus')
-                front_end_stage = cs.get('frontEndStage', '')
-
-                # Parse dates
-                start_str = cs.get('feedbackStartDate')
-                end_str = cs.get('feedbackEndDate')
-
-                if start_str:
-                    start_date = self._parse_date(start_str)
-                if end_str:
-                    end_date = self._parse_date(end_str)
-
-                # Determine status
-                if feedback_status == 'OPEN':
-                    status = ConsultationStatus.OPEN
-                elif feedback_status == 'CLOSED':
-                    status = ConsultationStatus.CLOSED
-                elif 'ADOPTION' in front_end_stage:
-                    status = ConsultationStatus.OUTCOME_PUBLISHED
-
-                break
+            if cs.get('receivingFeedbackStatus') in ('OPEN', 'CLOSED', 'UPCOMING'):
+                if start_date is None and cs.get('feedbackStartDate'):
+                    start_date = self._parse_date(cs.get('feedbackStartDate'))
+                if end_date is None and cs.get('feedbackEndDate'):
+                    end_date = self._parse_date(cs.get('feedbackEndDate'))
 
         # Get consultation type from foreseenActType
         act_type = data.get('foreseenActType', '')

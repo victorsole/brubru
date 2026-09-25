@@ -339,6 +339,17 @@ class ConsultationSyncService:
         old_status = existing.status
         new_status = self._map_status(item.status)
 
+        # Status on an EXISTING row belongs to the Have Your Say sweep
+        # (sync_have_your_say.py), which runs right after this job. This job's
+        # queries are filtered by feedback status, so the portal hands it a
+        # different view of the same initiative (it lists the UPCOMING adoption
+        # stage that the sweep's unfiltered query omits): writing that view made
+        # the two jobs rewrite each other daily, 627 phantom changes in a week.
+        # This job only asserts what its OPEN query is authoritative for: that
+        # a feedback window is open now.
+        if new_status != ConsultationStatusEnum.OPEN:
+            new_status = old_status
+
         # Check for status change
         if old_status != new_status:
             status_changed = True
@@ -353,18 +364,24 @@ class ConsultationSyncService:
             self.db.add(history)
             existing.status = new_status
 
-        # Update other fields
-        existing.title = item.title
-        existing.short_title = item.short_title
-        existing.description = item.description
-        existing.consultation_type = self._map_consultation_type(item.consultation_type)
-        existing.dg_responsible = item.dg_responsible
-        existing.policy_areas = item.policy_areas
-        existing.start_date = item.start_date
-        existing.end_date = item.end_date
-        existing.feedback_count = item.feedback_count
-        existing.portal_url = item.portal_url
-        existing.feedback_url = item.feedback_url
+        # Update other fields. The list response carries no description, no
+        # feedback count and often no dates; writing those empties over stored
+        # values blanked what the detail fetch and the Have Your Say sweep had
+        # recorded (2,516 of 4,124 Commission rows had no dates, 25 Sep 2026).
+        # An empty scraped value never overwrites a stored one.
+        existing.title = item.title or existing.title
+        for field in ("short_title", "description", "dg_responsible", "policy_areas",
+                      "start_date", "end_date", "portal_url", "feedback_url"):
+            value = getattr(item, field, None)
+            if value:
+                setattr(existing, field, value)
+        if item.feedback_count:
+            existing.feedback_count = item.feedback_count
+        # consultation_type on EXISTING rows belongs to the Have Your Say sweep
+        # (it reads the stage; this parser guessed from the act type and wrote
+        # "initiative" over "call_for_evidence" every day), so it is set here only
+        # when this job creates the row. Status is still written above: both jobs
+        # now derive it with the same rule, and only this one records history.
         existing.relevance_score = self._calculate_relevance(item)
         existing.scraped_at = item.scraped_at
         existing.last_updated = datetime.now()
