@@ -366,7 +366,7 @@ async def _run(args) -> int:
                         f"     OR {cfg['date']} <> CAST(:d AS date))"),
                         {"d": doc_date[:10], "id": r.id}).rowcount
             if args.apply:
-                db.commit()
+                db = _commit(db)
             done = min(start_i + BATCH, len(rows))
             avg_so_far = sum(lengths) / len(lengths) if lengths else 0
             top = ", ".join(f"{k} x{v}" for k, v in
@@ -376,7 +376,7 @@ async def _run(args) -> int:
             time.sleep(args.throttle)
 
         if args.apply:
-            db.commit()
+            db = _commit(db)
         avg = sum(lengths) / len(lengths) if lengths else 0
         print(f"\n[{'APPLIED' if args.apply else 'DRY-RUN'}] full text for {ok}, "
               f"no usable PDF for {no_pdf}, errors {failed}; average {avg:,.0f} characters"
@@ -385,6 +385,30 @@ async def _run(args) -> int:
     finally:
         db.close()
 
+
+
+def _commit(db):
+    """Commit, reopening the session if the server has dropped it.
+
+    These runs hold one Session across hours of network work, and Supabase closes an idle
+    connection from its side. `pool_pre_ping` cannot help: it validates on CHECKOUT, and
+    the connection is checked out for the whole run. The EESC backfill died at 652 rows
+    with "server closed the connection unexpectedly" after fetching them all.
+
+    Returns the session to keep using, which may be a new one.
+    """
+    from sqlalchemy.exc import OperationalError
+    try:
+        db.commit()
+        return db
+    except OperationalError as exc:
+        print(f"  [db] {type(exc).__name__}: reopening the session", flush=True)
+        try:
+            db.rollback()
+            db.close()
+        except Exception:  # noqa: BLE001
+            pass
+        return SessionLocal()
 
 def main() -> int:
     ap = argparse.ArgumentParser()

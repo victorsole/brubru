@@ -111,5 +111,20 @@ def test_progress_is_committed_per_batch():
     indent = len(lines[loop]) - len(lines[loop].lstrip())
     in_loop = [l for l in lines[loop + 1:]
                if l.strip() and (len(l) - len(l.lstrip())) > indent]
-    assert any("db.commit()" in l for l in in_loop), (
+    # Either form: a plain commit, or the reconnecting _commit() that replaced it after
+    # Supabase dropped a session held across hours of fetching.
+    assert any("db.commit()" in l or "_commit(db)" in l for l in in_loop), (
         "the batch loop does not commit as it goes")
+
+
+def test_a_dropped_database_session_is_reopened_not_fatal():
+    """These runs hold one Session across hours of network work and Supabase closes it
+    from its side; pool_pre_ping validates on CHECKOUT and so cannot help. The EESC
+    backfill died at 652 rows with "server closed the connection unexpectedly" AFTER
+    fetching every one of them."""
+    for path in (CELLAR, NEWS):
+        src = path.read_text(encoding="utf-8")
+        assert "def _commit(" in src, f"{path.name} has no reconnecting commit"
+        assert "OperationalError" in src, f"{path.name} does not catch a dropped session"
+        assert "SessionLocal()" in src.split("def _commit(")[1][:900], (
+            f"{path.name} catches the drop but never reopens")

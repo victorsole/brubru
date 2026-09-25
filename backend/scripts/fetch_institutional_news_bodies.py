@@ -69,6 +69,30 @@ def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | No
     return body_txt, body_html, None
 
 
+
+def _commit(db):
+    """Commit, reopening the session if the server has dropped it.
+
+    These runs hold one Session across hours of network work, and Supabase closes an idle
+    connection from its side. `pool_pre_ping` cannot help: it validates on CHECKOUT, and
+    the connection is checked out for the whole run. The EESC backfill died at 652 rows
+    with "server closed the connection unexpectedly" after fetching them all.
+
+    Returns the session to keep using, which may be a new one.
+    """
+    from sqlalchemy.exc import OperationalError
+    try:
+        db.commit()
+        return db
+    except OperationalError as exc:
+        print(f"  [db] {type(exc).__name__}: reopening the session", flush=True)
+        try:
+            db.rollback()
+            db.close()
+        except Exception:  # noqa: BLE001
+            pass
+        return SessionLocal()
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--institution", help="eu_news_items.institution, e.g. EEA")
@@ -165,7 +189,7 @@ def main() -> int:
                             "WHERE id = :id"),
                             {"t": body_txt, "h": body_html, "id": r.id})
             if args.apply:
-                db.commit()
+                db = _commit(db)
             avg_so_far = sum(gained) / len(gained) if gained else 0
             top = ", ".join(f"{k} x{v}" for k, v in
                             sorted(reasons.items(), key=lambda kv: -kv[1])[:3])
@@ -175,7 +199,7 @@ def main() -> int:
             time.sleep(args.throttle)
 
         if args.apply:
-            db.commit()
+            db = _commit(db)
         avg = sum(gained) / len(gained) if gained else 0
         print(f"\n[{'APPLIED' if args.apply else 'DRY-RUN'}] fetched {ok}, failed {failed}; "
               f"average body {avg:,.0f} characters (was {before:,.0f})")
