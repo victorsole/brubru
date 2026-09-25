@@ -233,11 +233,26 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
                              for pg in PdfReader(io.BytesIO(raw)).pages).strip()
             # No body_html: this is a PDF, and inventing HTML from one is what produced
             # the composed stubs in the first place.
-            return (txt or None), None, None if txt else "presscorner pdf had no text"
+            if txt:
+                return txt, None, None
+            pdf_problem = "presscorner pdf had no text"
         except urllib.error.HTTPError as exc:
-            return None, None, f"presscorner HTTP {exc.code}"
+            # The print PDF exists for some item types and not others: speech_26_911 serves
+            # one, ip_26_1129 and ip_25_2000 return 404 while their detail pages are 200.
+            # That is a missing PDF, not a missing article, so fall through to the page
+            # itself rather than returning -- 22 rows were filed as unreachable this way.
+            pdf_problem = f"presscorner HTTP {exc.code}"
         except Exception as exc:  # noqa: BLE001
-            return None, None, f"presscorner {type(exc).__name__}"
+            pdf_problem = f"presscorner {type(exc).__name__}"
+
+        if not render:
+            return None, None, pdf_problem
+        # The detail page is an Angular app; rendered it carries the article (3,483
+        # characters for ip_26_1129, which has no print PDF at all).
+        text_, html_, reason = fetch_via_scrapedo(url, render=True)
+        if text_:
+            return text_, html_, None
+        return None, None, f"{pdf_problem}; rendered: {reason}"
 
     try:
         html = _read(url, timeout, accept="text/html,*/*").decode("utf-8", "replace")

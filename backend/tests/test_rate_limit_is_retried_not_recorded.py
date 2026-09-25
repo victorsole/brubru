@@ -92,3 +92,35 @@ def test_a_rate_limited_row_is_never_written_as_an_empty_body(monkeypatch):
     body_txt, body_html, error = m.fetch("https://www.euda.europa.eu/news/x")
     assert body_txt is None and body_html is None
     assert error and "429" in error, f"the reason must name the rate limit, got {error!r}"
+
+
+def test_a_missing_print_pdf_falls_through_to_the_page(monkeypatch):
+    """A presscorner item without a print PDF still has an article.
+
+    speech_26_911 serves a print PDF; ip_26_1129 and ip_25_2000 return 404 for theirs while
+    their detail pages return 200. The code used to return that 404 as the answer, which
+    filed 22 Commission rows as unreachable.
+    """
+    monkeypatch.setattr(m.urllib.request, "urlopen",
+                        lambda req, timeout=None: (_ for _ in ()).throw(_http_error(404)))
+    called = {}
+
+    def fake_scrapedo(url, timeout=150, render=True):
+        called["url"], called["render"] = url, render
+        return "The Commission published guidance today. " * 20, "<p>x</p>", None
+
+    monkeypatch.setattr(m, "fetch_via_scrapedo", fake_scrapedo)
+    url = "https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1129"
+    body_txt, _, reason = m.fetch(url, render=True)
+    assert reason is None and body_txt, "the article was not recovered from the page"
+    assert called["url"] == url and called["render"] is True
+
+
+def test_without_render_a_missing_pdf_still_reports_the_reason(monkeypatch):
+    """The fall-through is opt-in; without it the failure must still be named, not silent."""
+    monkeypatch.setattr(m.urllib.request, "urlopen",
+                        lambda req, timeout=None: (_ for _ in ()).throw(_http_error(404)))
+    body_txt, _, reason = m.fetch(
+        "https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1129", render=False)
+    assert body_txt is None
+    assert reason and "404" in reason
