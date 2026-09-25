@@ -264,6 +264,31 @@ def fetch_cellar(celex: str, timeout: int = 90) -> tuple[str | None, str | None,
     return None, None, last_reason
 
 
+def _pdf_text(raw: bytes) -> str | None:
+    """Text from PDF BYTES, or None. Never the bytes themselves.
+
+    A direct PDF link decoded as UTF-8 produces "%PDF-1.7 %\xc3\xa3\xcf\xd3 1 0 obj
+    </Metadata ...", which is long, looks like text to every length check, and is what 118
+    CJEU press releases and 17 ECB documents were holding as their article -- one ECB row at
+    623,585 characters of it.
+    """
+    try:
+        import io
+
+        from pypdf import PdfReader
+
+        reader = PdfReader(io.BytesIO(raw))
+        pages = [(page.extract_text() or "") for page in reader.pages[:120]]
+    except Exception:  # noqa: BLE001
+        return None
+    text = "\n".join(pages).strip()
+    return text or None
+
+
+def looks_like_pdf(raw: bytes) -> bool:
+    return raw[:5] == b"%PDF-" or raw[:1024].lstrip()[:5] == b"%PDF-"
+
+
 def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
     # An EUR-Lex link is a link to a document Cellar holds. Go to the source.
@@ -309,7 +334,14 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         return None, None, f"{pdf_problem}; rendered: {reason}"
 
     try:
-        html = _read(url, timeout, accept="text/html,*/*").decode("utf-8", "replace")
+        raw = _read(url, timeout, accept="text/html,*/*")
+        if looks_like_pdf(raw):
+            # A PDF is a document, not a page. Parse it or refuse it; never store the bytes.
+            body_txt = _pdf_text(raw)
+            if body_txt and len(body_txt) >= 200:
+                return body_txt, None, None
+            return None, None, "pdf carried no extractable text"
+        html = raw.decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         # A wall is not an absence of text. 403 means our address is blocked and a 429 that
         # survived three backoffs means the same in practice; Scrape.do fetches from
@@ -328,6 +360,10 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
     if looks_like_challenge(body_txt or ""):
         # Never stored, never solved. The row keeps whatever it had and is retried later.
         return None, None, "bot challenge, not the document: back off and retry later"
+    if looks_like_chrome(body_txt or ""):
+        # 120 ECA rows held exactly 307 characters of "Skip to content ... We use cookies ...
+        # Refuse Accept Title modal" and nothing else, stored as the body of an audit report.
+        return None, None, "page furniture, not the document"
     reason = error_body_reason(body_txt)
     if reason or not body_txt:
         if render:
