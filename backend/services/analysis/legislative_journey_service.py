@@ -200,9 +200,13 @@ async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
         logger.warning("[journey] HF Qwen failed: %s", e)
 
     # 2/3. GPT-4o then Mistral (smaller window -> smaller source budget).
-    from services.ai.multi_provider_service import MistralProvider, OpenAIProvider
+    from services.ai.multi_provider_service import (CerebrasProvider, GeminiProvider, MistralProvider,
+        OpenAIProvider, ScalewayProvider)
     system_prompt, messages = _build_messages(procedure_ref, is_legislative, layers, _TOTAL_CHAR_CAP)
-    for Provider in (OpenAIProvider, MistralProvider):
+    # 25 Sep 2026: OpenAI out of credits and Mistral rate-limited left every
+    # journey failing in production; the chat chain's open-model lanes come
+    # first, OpenAI (paid) last. Non-Anthropic, per the eMeeting engine rule.
+    for Provider in (GeminiProvider, ScalewayProvider, CerebrasProvider, MistralProvider, OpenAIProvider):
         try:
             provider = Provider()
             if not provider.is_available:

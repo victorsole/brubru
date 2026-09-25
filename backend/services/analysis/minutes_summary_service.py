@@ -88,8 +88,11 @@ async def summarise(db: Session, pdf_url: str) -> Optional[dict]:
     # Fallback to the non-Anthropic multi-provider chain (Mistral/GPT-4) if HF declines.
     if not summary:
         try:
-            from services.ai.multi_provider_service import MistralProvider, OpenAIProvider
-            for Provider in (MistralProvider, OpenAIProvider):
+            from services.ai.multi_provider_service import (CerebrasProvider, GeminiProvider, MistralProvider,
+                OpenAIProvider, ScalewayProvider)
+            # Same order as the journey service (25 Sep 2026): open-model lanes
+            # first, OpenAI (paid, out of credits that day) last.
+            for Provider in (GeminiProvider, ScalewayProvider, CerebrasProvider, MistralProvider, OpenAIProvider):
                 p = Provider()
                 if not p.is_available:
                     continue

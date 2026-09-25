@@ -86,7 +86,8 @@ def _fetch_text(url: str) -> Tuple[str, str]:
 
 # ----------------------------------------------------------------- non-Anthropic LLM
 async def _summarise_text(text: str, url: str, pi: List[str]) -> Tuple[str, str]:
-    from services.ai.multi_provider_service import MistralProvider, OpenAIProvider, GeminiProvider
+    from services.ai.multi_provider_service import (CerebrasProvider, GeminiProvider, MistralProvider,
+        OpenAIProvider, ScalewayProvider)
 
     interests = ", ".join(pi) if pi else "EU policy"
     system_prompt = (
@@ -104,7 +105,7 @@ async def _summarise_text(text: str, url: str, pi: List[str]) -> Tuple[str, str]
     messages = [{"role": "user", "content": f"Document URL: {url}\n\nDocument text:\n{text}"}]
 
     last_err = None
-    for Provider in (MistralProvider, OpenAIProvider, GeminiProvider):
+    for Provider in (GeminiProvider, ScalewayProvider, CerebrasProvider, MistralProvider, OpenAIProvider):  # open-model lanes first, OpenAI (paid) last
         try:
             provider = Provider()
             if not provider.is_available:
