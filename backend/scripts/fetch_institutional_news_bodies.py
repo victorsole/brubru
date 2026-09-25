@@ -132,8 +132,9 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
     raise last  # type: ignore[misc]
 
 
-from services.news.rendered_article import (extract_article, looks_like_chrome,
-                                            looks_like_listing, visible_text)
+from services.news.rendered_article import (extract_article, looks_like_challenge,
+                                            looks_like_chrome, looks_like_listing,
+                                            visible_text)
 
 
 # What counts as a whole body, matching scripts/api_body_coverage.py.
@@ -170,7 +171,7 @@ def _best_extraction(page_html: str) -> tuple[str | None, str | None, str | None
 
     text_b, html_b = extract_html(page_html)
     if text_b and (error_body_reason(text_b) or looks_like_chrome(text_b)
-                   or looks_like_listing(text_b)):
+                   or looks_like_listing(text_b) or looks_like_challenge(text_b)):
         text_b, html_b = None, None
 
     if text_a and text_b:
@@ -324,6 +325,9 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
     except Exception as exc:  # noqa: BLE001
         return None, None, f"{type(exc).__name__}"
     body_txt, body_html = extract_html(html)
+    if looks_like_challenge(body_txt or ""):
+        # Never stored, never solved. The row keeps whatever it had and is retried later.
+        return None, None, "bot challenge, not the document: back off and retry later"
     reason = error_body_reason(body_txt)
     if reason or not body_txt:
         if render:

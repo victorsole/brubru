@@ -75,6 +75,30 @@ def looks_like_listing(text: str) -> bool:
     return len(_ITEM_STAMP.findall(text)) >= 4
 
 
+# A challenge page is not an article. Cedefop answers HTTP 200 with "Due to unusually high
+# traffic, we need to verify that requests are coming from real users" and an arithmetic
+# puzzle; 502 economy rows and 50 news rows were storing that text as the body of an article,
+# and serving it. Detected and refused here -- never solved, and never stored.
+_CHALLENGE_MARKERS = (
+    re.compile(r"(?i)unusually high traffic"),
+    re.compile(r"(?i)verify that requests are coming from real users"),
+    re.compile(r"(?i)complete the verification below"),
+    re.compile(r"(?i)checking your browser before accessing"),
+    re.compile(r"(?i)enable javascript and cookies to continue"),
+    re.compile(r"(?i)please prove you are human"),
+    re.compile(r"(?i)\bcf-browser-verification\b|\bcf_chl_\w+"),
+    re.compile(r"(?i)access denied.{0,40}(reference|ray) (id|number)"),
+)
+
+
+def looks_like_challenge(text: str) -> bool:
+    """True when the page is a bot check rather than the document."""
+    if not text:
+        return False
+    head = text[:1500]
+    return any(marker.search(head) for marker in _CHALLENGE_MARKERS)
+
+
 def is_app_shell(page_html: str) -> bool:
     """A rendered page that never ran: the Angular root is present and empty of prose."""
     return "<app-root" in page_html.lower() and len(visible_text(page_html)) < 200
@@ -86,12 +110,15 @@ def extract_article(page_html: str) -> tuple[Optional[str], Optional[str], Optio
         return None, None, "empty response"
     if is_app_shell(page_html):
         return None, None, "app shell: the page did not render"
+    if looks_like_challenge(visible_text(page_html)):
+        return None, None, "bot challenge, not the document: back off and retry later"
 
     best_text, best_html = "", ""
     for pattern in _CONTAINERS:
         for fragment in re.findall(pattern, page_html):
             text = visible_text(fragment)
-            if len(text) <= len(best_text) or looks_like_chrome(text) or looks_like_listing(text):
+            if (len(text) <= len(best_text) or looks_like_chrome(text)
+                    or looks_like_listing(text) or looks_like_challenge(text)):
                 continue
             best_text, best_html = text, fragment
 
