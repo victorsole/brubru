@@ -117,19 +117,43 @@ def pick(entries: list[tuple[str, str]]) -> tuple[str | None, str | None]:
 
 
 def fetch_one(manif: str, mtype: str):
-    """(body_txt, body_html) for one manifestation. Runs in a worker thread."""
+    """(body_txt, body_html, reason). `reason` is None on success.
+
+    It returns WHY it failed, because a download that timed out and a publication that
+    genuinely has no text are different facts and were being counted as one. 29 of 40 rows
+    in a batch were filed as "no usable PDF" with no way to tell which they were.
+    """
     try:
         rdf = _get(manif).decode("utf-8", "replace")
-        m = _ITEM.search(rdf)
-        if not m:
-            return None, None
-        raw = _get(m.group(1))
-        if (mtype or "").startswith(("html", "xhtml")):
+    except Exception as exc:  # noqa: BLE001
+        return None, None, f"manifest {type(exc).__name__}"
+    items = _ITEM.findall(rdf)
+    if not items:
+        return None, None, "no item in manifestation"
+    # A manifestation holds several items and the RDF does not list them document-first:
+    # DOC_2 (a cover JPEG) came before DOC_1 (the publication), so taking the first item
+    # downloaded an image and reported "not a pdf" for 24 of 40 rows. DOC_1 first, then
+    # the rest, and stop at whichever actually yields text.
+    items.sort(key=lambda u: (not u.rstrip("/").endswith("DOC_1"), u))
+    last = "no usable item"
+    for item in items[:4]:
+        try:
+            raw = _get(item)
+        except Exception as exc:  # noqa: BLE001
+            last = f"download {type(exc).__name__}"
+            continue
+        if (mtype or "").startswith(("html", "xhtml")) or raw[:15].lstrip()[:1] == b"<":
             from services.scrapers.economy_common import extract_html
-            return extract_html(raw.decode("utf-8", "replace"))
-        return pdf_text(raw), None
-    except Exception:  # noqa: BLE001  a failure leaves the row untouched
-        return None, None
+            txt, html = extract_html(raw.decode("utf-8", "replace"))
+            if txt:
+                return txt, html, None
+            last = "html had no text"
+            continue
+        txt = pdf_text(raw)
+        if txt:
+            return txt, None, None
+        last = "not a pdf" if raw[:4] != b"%PDF" else "pdf unreadable"
+    return None, None, last
 
 
 def _q(cellar_uri: str) -> str:
@@ -227,6 +251,7 @@ async def _run(args) -> int:
               f"{sum(r.blen for r in rows)/max(len(rows),1):,.0f} characters")
 
         ok = no_pdf = failed = 0
+        reasons: dict[str, int] = {}
         dated = 0
         lengths = []
         BATCH = 40
@@ -267,8 +292,12 @@ async def _run(args) -> int:
                     for fut in cf.as_completed(futures):
                         results[futures[fut]] = fut.result()
 
+            for uri, (_b, _h, why) in results.items():
+                if why:
+                    reasons[why] = reasons.get(why, 0) + 1
+
             for uri, r in by_uri.items():
-                body, body_html = results.get(uri, (None, None))
+                body, body_html, _why = results.get(uri, (None, None, 'no manifestation'))
                 doc_date = dates.get(uri)
                 body, body_html = clean_text(body), clean_text(body_html)
                 if body and len(body) >= MIN_BODY:
@@ -296,8 +325,10 @@ async def _run(args) -> int:
                 db.commit()
             done = min(start_i + BATCH, len(rows))
             avg_so_far = sum(lengths) / len(lengths) if lengths else 0
+            top = ", ".join(f"{k} x{v}" for k, v in
+                            sorted(reasons.items(), key=lambda kv: -kv[1])[:3])
             print(f"  [{done:5}/{len(rows)}] full text {ok}, none {no_pdf}, "
-                  f"avg {avg_so_far:,.0f} chars", flush=True)
+                  f"avg {avg_so_far:,.0f} chars" + (f"  |  {top}" if top else ""), flush=True)
             time.sleep(args.throttle)
 
         if args.apply:
