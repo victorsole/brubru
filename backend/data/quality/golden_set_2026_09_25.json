@@ -1,0 +1,2984 @@
+[
+ {
+  "id": "Q120-001",
+  "query": "What is the AI Act and what does it regulate?",
+  "language": "EN",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-002",
+  "query": "¿Qué es la Ley de IA y qué regula?",
+  "language": "ES",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-003",
+  "query": "Què és la Llei d'IA i què regula?",
+  "language": "CA",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-004",
+  "query": "Qu'est-ce que l'AI Act et que réglemente-t-il ?",
+  "language": "FR",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-005",
+  "query": "Che cos'è l'AI Act e che cosa disciplina?",
+  "language": "IT",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-006",
+  "query": "Wat is de AI-verordening en wat regelt die?",
+  "language": "NL",
+  "pattern": "explain_topic",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "2024/1689",
+    "32024r1689"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files",
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-007",
+  "query": "How much did the Commission fine Alphabet under the Digital Markets Act in September 2026?",
+  "language": "EN",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-008",
+  "query": "¿Cuánto multó la Comisión a Alphabet en virtud de la Ley de Mercados Digitales en septiembre de 2026?",
+  "language": "ES",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-009",
+  "query": "Quant va multar la Comissió a Alphabet en virtut de la Llei de mercats digitals el setembre de 2026?",
+  "language": "CA",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-010",
+  "query": "Quel montant la Commission a-t-elle infligé à Alphabet au titre du DMA en septembre 2026 ?",
+  "language": "FR",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-011",
+  "query": "A quanto ammonta la multa inflitta dalla Commissione ad Alphabet ai sensi del DMA a settembre 2026?",
+  "language": "IT",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-012",
+  "query": "Hoe hoog was de boete die de Commissie Alphabet in september 2026 oplegde op grond van de DMA?",
+  "language": "NL",
+  "pattern": "status_inquiry",
+  "expected_guide": "digital_markets_act",
+  "expected_facts": [
+   [
+    "460"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "EU Law Comply"
+  ],
+  "topic": "digital_markets_act"
+ },
+ {
+  "id": "Q120-013",
+  "query": "What is the Carbon Border Adjustment Mechanism?",
+  "language": "EN",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-014",
+  "query": "¿Qué es el Mecanismo de Ajuste en Frontera por Carbono?",
+  "language": "ES",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-015",
+  "query": "Què és el Mecanisme d'Ajust en Frontera per Carboni?",
+  "language": "CA",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-016",
+  "query": "Qu'est-ce que le mécanisme d'ajustement carbone aux frontières ?",
+  "language": "FR",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-017",
+  "query": "Che cos'è il meccanismo di adeguamento del carbonio alle frontiere?",
+  "language": "IT",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-018",
+  "query": "Wat is het mechanisme voor koolstofcorrectie aan de grens?",
+  "language": "NL",
+  "pattern": "explain_topic",
+  "expected_guide": "cbam_carbon_border_adjustment_mechanism",
+  "expected_facts": [
+   [
+    "2023/956",
+    "32023r0956"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My Files"
+  ],
+  "topic": "cbam_carbon_border_adjustment_mechanism"
+ },
+ {
+  "id": "Q120-019",
+  "query": "Where does the Industrial Accelerator Act stand in the European Parliament?",
+  "language": "EN",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-020",
+  "query": "¿En qué punto está la Ley de Aceleración Industrial en el Parlamento Europeo?",
+  "language": "ES",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-021",
+  "query": "En quin punt es troba la Llei d'acceleració industrial al Parlament Europeu?",
+  "language": "CA",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-022",
+  "query": "Où en est l'Industrial Accelerator Act au Parlement européen ?",
+  "language": "FR",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-023",
+  "query": "A che punto è l'Industrial Accelerator Act al Parlamento europeo?",
+  "language": "IT",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-024",
+  "query": "Hoe staat het met de Industrial Accelerator Act in het Europees Parlement?",
+  "language": "NL",
+  "pattern": "status_inquiry",
+  "expected_guide": "industrial_accelerator_act",
+  "expected_facts": [
+   [
+    "2026/0068",
+    "COM(2026)100",
+    "COM(2026)0100",
+    "COM(2026) 100"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Legislative Tracker"
+  ],
+  "topic": "industrial_accelerator_act"
+ },
+ {
+  "id": "Q120-025",
+  "query": "What is the state of play of EU Inc., the 28th regime for innovative companies?",
+  "language": "EN",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-026",
+  "query": "¿Cuál es el estado de EU Inc., el régimen 28 para empresas innovadoras?",
+  "language": "ES",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-027",
+  "query": "Quin és l'estat d'EU Inc., el règim 28 per a empreses innovadores?",
+  "language": "CA",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-028",
+  "query": "Où en est EU Inc., le 28e régime pour les entreprises innovantes ?",
+  "language": "FR",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-029",
+  "query": "A che punto è EU Inc., il 28° regime per le imprese innovative?",
+  "language": "IT",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-030",
+  "query": "Wat is de stand van zaken rond EU Inc., het 28e regime voor innovatieve bedrijven?",
+  "language": "NL",
+  "pattern": "status_inquiry",
+  "expected_guide": "28th_regime_innovation_act",
+  "expected_facts": [
+   [
+    "2026/0074",
+    "COM(2026) 321",
+    "COM(2026)321",
+    "COM(2026) 320",
+    "COM(2026)320"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "Position Analysis",
+   "Amendator",
+   "Stakeholder Mapping"
+  ],
+  "topic": "28th_regime_innovation_act"
+ },
+ {
+  "id": "Q120-031",
+  "query": "Who are the European Parliament's co-rapporteurs on the MFF 2028-2034?",
+  "language": "EN",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-032",
+  "query": "¿Quiénes son los coponentes del Parlamento Europeo para el MFP 2028-2034?",
+  "language": "ES",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-033",
+  "query": "Qui són els coponents del Parlament Europeu per al MFP 2028-2034?",
+  "language": "CA",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-034",
+  "query": "Qui sont les corapporteurs du Parlement européen sur le CFP 2028-2034 ?",
+  "language": "FR",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-035",
+  "query": "Chi sono i correlatori del Parlamento europeo sul QFP 2028-2034?",
+  "language": "IT",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-036",
+  "query": "Wie zijn de corapporteurs van het Europees Parlement voor het MFK 2028-2034?",
+  "language": "NL",
+  "pattern": "who_is",
+  "expected_guide": "mff_2028_2034",
+  "expected_facts": [
+   [
+    "Mure"
+   ],
+   [
+    "Tavares"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My Files",
+   "MEP Watch",
+   "Position Analysis"
+  ],
+  "topic": "mff_2028_2034"
+ },
+ {
+  "id": "Q120-037",
+  "query": "When does Isabel Schnabel leave the ECB Executive Board, and why?",
+  "language": "EN",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-038",
+  "query": "¿Cuándo deja Isabel Schnabel el Comité Ejecutivo del BCE y por qué?",
+  "language": "ES",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-039",
+  "query": "Quan deixa Isabel Schnabel el Comitè Executiu del BCE i per què?",
+  "language": "CA",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-040",
+  "query": "Quand Isabel Schnabel quitte-t-elle le directoire de la BCE, et pourquoi ?",
+  "language": "FR",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-041",
+  "query": "Quando lascia Isabel Schnabel il Comitato esecutivo della BCE, e perché?",
+  "language": "IT",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-042",
+  "query": "Wanneer verlaat Isabel Schnabel de directie van de ECB, en waarom?",
+  "language": "NL",
+  "pattern": "who_is",
+  "expected_guide": "ecb_monetary_policy",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "ecb_monetary_policy"
+ },
+ {
+  "id": "Q120-043",
+  "query": "Until when can I comment on the EDPB Guidelines 04/2026?",
+  "language": "EN",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-044",
+  "query": "¿Hasta cuándo puedo comentar las Directrices 04/2026 del CEPD?",
+  "language": "ES",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-045",
+  "query": "Fins quan puc comentar les Directrius 04/2026 del CEPD?",
+  "language": "CA",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-046",
+  "query": "Jusqu'à quand puis-je commenter les lignes directrices 04/2026 du CEPD ?",
+  "language": "FR",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-047",
+  "query": "Fino a quando posso commentare le linee guida 04/2026 dell'EDPB?",
+  "language": "IT",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-048",
+  "query": "Tot wanneer kan ik reageren op de EDPB-richtsnoeren 04/2026?",
+  "language": "NL",
+  "pattern": "deadline",
+  "expected_guide": "gdpr_data_protection",
+  "expected_facts": [
+   [
+    "13 November",
+    "13 de noviembre",
+    "13 de novembre",
+    "13 novembre",
+    "13 november",
+    "13/11",
+    "13.11"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My EU Calendar",
+   "EC Public Consultations"
+  ],
+  "topic": "gdpr_data_protection"
+ },
+ {
+  "id": "Q120-049",
+  "query": "What temperature threshold applies in the Innovation Fund industrial heat auction?",
+  "language": "EN",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-050",
+  "query": "¿Qué umbral de temperatura se aplica en la subasta de calor industrial del Fondo de Innovación?",
+  "language": "ES",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-051",
+  "query": "Quin llindar de temperatura s'aplica a la subhasta de calor industrial del Fons d'Innovació?",
+  "language": "CA",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-052",
+  "query": "Quel seuil de température s'applique à l'enchère chaleur industrielle du Fonds pour l'innovation ?",
+  "language": "FR",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-053",
+  "query": "Quale soglia di temperatura si applica all'asta calore industriale del Fondo per l'innovazione?",
+  "language": "IT",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-054",
+  "query": "Welke temperatuurdrempel geldt in de veiling voor industriële warmte van het Innovatiefonds?",
+  "language": "NL",
+  "pattern": "funding_grants",
+  "expected_guide": "innovation_fund",
+  "expected_facts": [
+   [
+    "80"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Tenderator"
+  ],
+  "topic": "innovation_fund"
+ },
+ {
+  "id": "Q120-055",
+  "query": "How much does the Commission propose from the EU Solidarity Fund for Spain in September 2026?",
+  "language": "EN",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-056",
+  "query": "¿Cuánto propone la Comisión del Fondo de Solidaridad de la UE para España en septiembre de 2026?",
+  "language": "ES",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-057",
+  "query": "Quant proposa la Comissió del Fons de Solidaritat de la UE per a Espanya el setembre de 2026?",
+  "language": "CA",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-058",
+  "query": "Combien la Commission propose-t-elle au titre du Fonds de solidarité de l'UE pour l'Espagne en septembre 2026 ?",
+  "language": "FR",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-059",
+  "query": "Quanto propone la Commissione dal Fondo di solidarietà dell'UE per la Spagna a settembre 2026?",
+  "language": "IT",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-060",
+  "query": "Hoeveel stelt de Commissie in september 2026 voor uit het Solidariteitsfonds van de EU voor Spanje?",
+  "language": "NL",
+  "pattern": "funding_grants",
+  "expected_guide": "eu_solidarity_fund_eusf",
+  "expected_facts": [
+   [
+    "149"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_solidarity_fund_eusf"
+ },
+ {
+  "id": "Q120-061",
+  "query": "What definitive anti-dumping duties apply to pea protein from China?",
+  "language": "EN",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-062",
+  "query": "¿Qué derechos antidumping definitivos se aplican a la proteína de guisante de China?",
+  "language": "ES",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-063",
+  "query": "Quins drets antidúmping definitius s'apliquen a la proteïna de pèsol de la Xina?",
+  "language": "CA",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-064",
+  "query": "Quels droits antidumping définitifs s'appliquent aux protéines de pois de Chine ?",
+  "language": "FR",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-065",
+  "query": "Quali dazi antidumping definitivi si applicano alle proteine di pisello dalla Cina?",
+  "language": "IT",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-066",
+  "query": "Welke definitieve antidumpingrechten gelden voor erwteneiwit uit China?",
+  "language": "NL",
+  "pattern": "trade",
+  "expected_guide": "eu_trade_defence",
+  "expected_facts": [
+   [
+    "40.5",
+    "40,5"
+   ],
+   [
+    "67.1",
+    "67,1"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "My OJ",
+   "EU Law Comply"
+  ],
+  "topic": "eu_trade_defence"
+ },
+ {
+  "id": "Q120-067",
+  "query": "Which journalist did the EU list under its hybrid threats sanctions in September 2026?",
+  "language": "EN",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-068",
+  "query": "¿A qué periodista incluyó la UE en sus sanciones por amenazas híbridas en septiembre de 2026?",
+  "language": "ES",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-069",
+  "query": "Quina periodista va incloure la UE a les seves sancions per amenaces híbrides el setembre de 2026?",
+  "language": "CA",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-070",
+  "query": "Quelle journaliste l'UE a-t-elle inscrite sur sa liste de sanctions contre les menaces hybrides en septembre 2026 ?",
+  "language": "FR",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-071",
+  "query": "Quale giornalista l'UE ha inserito nelle sanzioni contro le minacce ibride a settembre 2026?",
+  "language": "IT",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-072",
+  "query": "Welke journalist heeft de EU in september 2026 op haar sanctielijst voor hybride dreigingen gezet?",
+  "language": "NL",
+  "pattern": "sanctions",
+  "expected_guide": "eu_sanctions_implementation_framework",
+  "expected_facts": [
+   [
+    "Fedorova"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_sanctions_implementation_framework"
+ },
+ {
+  "id": "Q120-073",
+  "query": "What information would a social media platform receive from the EU age-verification app?",
+  "language": "EN",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-074",
+  "query": "¿Qué información recibiría una red social de la app de verificación de edad de la UE?",
+  "language": "ES",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-075",
+  "query": "Quina informació rebria una xarxa social de l'app de verificació d'edat de la UE?",
+  "language": "CA",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-076",
+  "query": "Quelles informations une plateforme de réseau social recevrait-elle de l'application européenne de vérification de l'âge ?",
+  "language": "FR",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-077",
+  "query": "Quali informazioni riceverebbe una piattaforma social dall'app di verifica dell'età dell'UE?",
+  "language": "IT",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-078",
+  "query": "Welke informatie zou een socialemediaplatform ontvangen van de leeftijdsverificatie-app van de EU?",
+  "language": "NL",
+  "pattern": "explain_topic",
+  "expected_guide": "eu_minors_social_media_age_limits",
+  "expected_facts": [
+   [
+    "anon"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "eu_minors_social_media_age_limits"
+ },
+ {
+  "id": "Q120-079",
+  "query": "Which Spanish authority supervises artificial intelligence under Spain's AI governance bill?",
+  "language": "EN",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-080",
+  "query": "¿Qué autoridad española supervisa la inteligencia artificial según el anteproyecto de ley de gobernanza de la IA?",
+  "language": "ES",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-081",
+  "query": "Quina autoritat espanyola supervisa la intel·ligència artificial segons l'avantprojecte de llei de governança de la IA?",
+  "language": "CA",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-082",
+  "query": "Quelle autorité espagnole supervise l'intelligence artificielle selon le projet de loi espagnol sur la gouvernance de l'IA ?",
+  "language": "FR",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-083",
+  "query": "Quale autorità spagnola vigila sull'intelligenza artificiale secondo il disegno di legge spagnolo sulla governance dell'IA?",
+  "language": "IT",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-084",
+  "query": "Welke Spaanse autoriteit houdt toezicht op kunstmatige intelligentie volgens het Spaanse wetsontwerp over AI-governance?",
+  "language": "NL",
+  "pattern": "country_specific",
+  "expected_guide": "spain_ai_governance_bill_aesia",
+  "expected_facts": [
+   [
+    "AESIA"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup"
+  ],
+  "expected_features": [],
+  "topic": "spain_ai_governance_bill_aesia"
+ },
+ {
+  "id": "Q120-085",
+  "query": "What did the Court of Justice rule in case C-900/24 on unfair contract terms?",
+  "language": "EN",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-086",
+  "query": "¿Qué resolvió el Tribunal de Justicia en el asunto C-900/24 sobre cláusulas abusivas?",
+  "language": "ES",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-087",
+  "query": "Què va resoldre el Tribunal de Justícia en l'assumpte C-900/24 sobre clàusules abusives?",
+  "language": "CA",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-088",
+  "query": "Qu'a jugé la Cour de justice dans l'affaire C-900/24 sur les clauses abusives ?",
+  "language": "FR",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-089",
+  "query": "Che cosa ha stabilito la Corte di giustizia nella causa C-900/24 sulle clausole abusive?",
+  "language": "IT",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-090",
+  "query": "Wat heeft het Hof van Justitie beslist in zaak C-900/24 over oneerlijke bedingen?",
+  "language": "NL",
+  "pattern": "case_law",
+  "expected_guide": "eu_product_safety_consumer",
+  "expected_facts": [
+   [
+    "93/13"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "mentions_celex_or_com"
+  ],
+  "expected_features": [],
+  "topic": "eu_product_safety_consumer"
+ },
+ {
+  "id": "Q120-091",
+  "query": "When does the digital product passport become mandatory for textiles?",
+  "language": "EN",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-092",
+  "query": "¿Cuándo será obligatorio el pasaporte digital de producto para los textiles?",
+  "language": "ES",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-093",
+  "query": "Quan serà obligatori el passaport digital de producte per als tèxtils?",
+  "language": "CA",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-094",
+  "query": "Quand le passeport numérique des produits deviendra-t-il obligatoire pour les textiles ?",
+  "language": "FR",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-095",
+  "query": "Quando diventerà obbligatorio il passaporto digitale dei prodotti per i tessili?",
+  "language": "IT",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-096",
+  "query": "Wanneer wordt het digitale productpaspoort verplicht voor textiel?",
+  "language": "NL",
+  "pattern": "deadline",
+  "expected_guide": "ecodesign_digital_product_passport",
+  "expected_facts": [
+   [
+    "2027"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "british_english",
+   "does_not_say_search_eurlex",
+   "does_not_say_i_dont_have",
+   "actionable_followup",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "EU Law Comply",
+   "My EU Calendar"
+  ],
+  "topic": "ecodesign_digital_product_passport"
+ },
+ {
+  "id": "Q120-097",
+  "query": "Draft a short response for a trade association to the Commission's consultation on the Quality Jobs Act.",
+  "language": "EN",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-098",
+  "query": "Redacta una respuesta breve de una asociación empresarial a la consulta de la Comisión sobre la Ley de Empleos de Calidad.",
+  "language": "ES",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-099",
+  "query": "Redacta una resposta breu d'una associació empresarial a la consulta de la Comissió sobre la Llei d'ocupació de qualitat.",
+  "language": "CA",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-100",
+  "query": "Rédigez une courte réponse d'une association professionnelle à la consultation de la Commission sur le Quality Jobs Act.",
+  "language": "FR",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-101",
+  "query": "Redigi una breve risposta di un'associazione di categoria alla consultazione della Commissione sul Quality Jobs Act.",
+  "language": "IT",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-102",
+  "query": "Stel een korte reactie op van een brancheorganisatie op de raadpleging van de Commissie over de Quality Jobs Act.",
+  "language": "NL",
+  "pattern": "drafting_request",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Documents"
+  ],
+  "topic": "drafting_request"
+ },
+ {
+  "id": "Q120-103",
+  "query": "Propose an amendment to Article 50 of the AI Act to strengthen transparency for chatbots.",
+  "language": "EN",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-104",
+  "query": "Propón una enmienda al artículo 50 de la Ley de IA para reforzar la transparencia de los chatbots.",
+  "language": "ES",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-105",
+  "query": "Proposa una esmena a l'article 50 de la Llei d'IA per reforçar la transparència dels xatbots.",
+  "language": "CA",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-106",
+  "query": "Proposez un amendement à l'article 50 de l'AI Act pour renforcer la transparence des chatbots.",
+  "language": "FR",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-107",
+  "query": "Proponi un emendamento all'articolo 50 dell'AI Act per rafforzare la trasparenza dei chatbot.",
+  "language": "IT",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-108",
+  "query": "Stel een amendement voor op artikel 50 van de AI-verordening om de transparantie van chatbots te versterken.",
+  "language": "NL",
+  "pattern": "amendment_request",
+  "expected_guide": "ai_act_regulation",
+  "expected_facts": [
+   [
+    "50"
+   ]
+  ],
+  "quality_criteria": [
+   "contains_expected_facts",
+   "responds_in_query_language",
+   "does_not_say_i_dont_have",
+   "british_english",
+   "cross_link_correct"
+  ],
+  "expected_features": [
+   "Amendator"
+  ],
+  "topic": "ai_act_regulation"
+ },
+ {
+  "id": "Q120-109",
+  "query": "What is a good recipe for paella?",
+  "language": "EN",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-110",
+  "query": "¿Cuál es una buena receta de paella?",
+  "language": "ES",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-111",
+  "query": "Quina és una bona recepta de paella?",
+  "language": "CA",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-112",
+  "query": "Quelle est une bonne recette de paella ?",
+  "language": "FR",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-113",
+  "query": "Qual è una buona ricetta per la paella?",
+  "language": "IT",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-114",
+  "query": "Wat is een goed recept voor paella?",
+  "language": "NL",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-115",
+  "query": "Who won the last Champions League final?",
+  "language": "EN",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-116",
+  "query": "¿Quién ganó la última final de la Champions League?",
+  "language": "ES",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-117",
+  "query": "Qui va guanyar l'última final de la Champions League?",
+  "language": "CA",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-118",
+  "query": "Qui a gagné la dernière finale de la Ligue des champions ?",
+  "language": "FR",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-119",
+  "query": "Chi ha vinto l'ultima finale di Champions League?",
+  "language": "IT",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ },
+ {
+  "id": "Q120-120",
+  "query": "Wie won de laatste finale van de Champions League?",
+  "language": "NL",
+  "pattern": "off_topic",
+  "expected_guide": null,
+  "expected_facts": [],
+  "quality_criteria": [
+   "declines_off_topic",
+   "responds_in_query_language"
+  ],
+  "expected_features": [],
+  "topic": "off_topic"
+ }
+]

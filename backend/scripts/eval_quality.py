@@ -58,7 +58,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 GOLDEN_ANSWERS_PATH = PROJECT_ROOT / "data" / "golden_answers" / "golden_answers.json"
 
 DEFAULT_BACKEND = "http://localhost:8000"
-CHAT_ENDPOINT = "/api/chat/message"
+# /api/chat/stream is the ONLY path the UI calls (CLAUDE.md); a quality number
+# measured on /api/chat/message measures code users never reach. 25 Sep 2026.
+CHAT_ENDPOINT = "/api/chat/stream"
 REQUEST_TIMEOUT = 200  # seconds (context building can be slow)
 
 
@@ -219,11 +221,18 @@ def extract_doc_refs_from_quick_facts(quick_facts: str) -> list:
 
 
 def check_mentions_celex_or_com(response: str, _ga: dict) -> CriterionResult:
-    """Response must contain at least one CELEX number, COM reference, or procedure ref."""
+    """Response must cite at least one legal anchor: CELEX, COM, procedure ref, act
+    number, Commission decision, or case number."""
     celex = CELEX_PATTERN.findall(response)
     com = COM_PATTERN.findall(response)
     proc = PROCEDURE_PATTERN.findall(response)
-    all_refs = celex + com + proc
+    # Also the other legal anchors a correct answer cites (25 Sep 2026): an act
+    # number, a Commission decision, a Court case, a DMA/competition case. The
+    # DMA fine answer cited C(2026) 5358 and DMA.100193 and scored zero.
+    other = re.findall(r"\b(?:Regulation|Directive|Decision|Reglamento|Directiva|Règlement|Regolamento|Direttiva|Verordening|Richtlijn|Reglament)\s*\((?:EU|UE|EC|CE|EG|EEG)\)\s*(?:No\s*)?\d{2,4}/\d{1,4}"
+                       r"|\bC\(\d{4}\)\s*\d{2,5}|\b[CT]-\d{1,4}/\d{2}\b|\b(?:DMA|AT|M)\.\d{4,6}\b|\b\d{2,4}/\d{1,4}/(?:EU|UE|EC|CE|EEC|CEE)\b",
+                       response)
+    all_refs = celex + com + proc + other
     if all_refs:
         return CriterionResult("mentions_celex_or_com", True, f"Found: {', '.join(all_refs[:5])}")
     return CriterionResult("mentions_celex_or_com", False, "No CELEX, COM, or procedure ref found")
@@ -310,7 +319,7 @@ def check_responds_in_query_language(response: str, ga: dict) -> CriterionResult
     expected = ga.get("language", "EN")
     if expected == "EN":
         # For English queries, just check it's not in another language
-        detected = detect_language(response)
+        detected = detect_language_strict(response)
         if detected == "EN":
             return CriterionResult("responds_in_query_language", True)
         return CriterionResult(
@@ -318,16 +327,11 @@ def check_responds_in_query_language(response: str, ga: dict) -> CriterionResult
             f"Expected EN, detected {detected}"
         )
 
-    detected = detect_language(response)
+    detected = detect_language_strict(response)
     if detected == expected:
         return CriterionResult("responds_in_query_language", True)
-
-    # For CA/ES ambiguity, be lenient
-    if expected in ("CA", "ES") and detected in ("CA", "ES"):
-        return CriterionResult(
-            "responds_in_query_language", True,
-            f"CA/ES ambiguity (detected {detected}, expected {expected})"
-        )
+    # No CA/ES leniency (removed 25 Sep 2026): a Catalan question answered in
+    # Spanish is exactly the failure this criterion exists to catch.
 
     return CriterionResult(
         "responds_in_query_language", False,
@@ -348,6 +352,15 @@ def check_actionable_followup(response: str, _ga: dict) -> CriterionResult:
         r"do you want",
         r"feel free to ask",
         r"let me know if",
+        # Other five languages (25 Sep 2026): the list was English-only, so a
+        # Spanish or Catalan answer could pass only by ending with a question.
+        # Formal and informal forms, singular and plural: a first list missed
+        # the Catalan "Pròxim pas: Podeu consultar..." (instrument error).
+        r"¿te gustaría|¿le gustaría|puedes? (también|seguir|consultar)|pueden (seguir|consultar)|si lo deseas?|próximos? pasos?|siguientes? pasos?",
+        r"t'agradaria|us agradaria|pots (també|seguir|consultar)|podeu (també|seguir|consultar)|si ho vols|si ho voleu|pròxims? passos?|pròxim pas|propers? passos?|següents? passos?",
+        r"souhaitez-vous|voulez-vous|vous pouvez (aussi|également|suivre|consulter)|prochaines? étapes?",
+        r"vuoi che|volete|puoi (anche|seguire|consultare)|potete (anche|seguire|consultare)|prossim[oi] pass[oi]",
+        r"wilt u|wil je|u kunt (ook|volgen|raadplegen)|je kunt (ook|volgen|raadplegen)|volgende stap(pen)?",
     ]
     for pattern in followup_signals:
         if re.search(pattern, response, re.IGNORECASE):
@@ -375,15 +388,22 @@ FEATURE_PATTERNS = {
     "Position Analysis":        r"\bPosition\s+Analysis\b",
     "Predictions":              r"\bPredictions\s+tab\b|\bPredictions\s+feature\b|Brubru\s+Predictions|My\s+EU\s+Bubble\s*>\s*Predictions",
     "My EU Calendar":           r"\bMy\s+EU\s+Calendar\b|Brubru'?s?\s+EU\s+Calendar",
-    "EC Public Consultations":  r"\bEC\s+Public\s+Consultations\b|Public\s+Consultations\s+tab",
+    "EC Public Consultations":  r"\b(?:EC|EU)\s+Public\s+Consultations\b|Public\s+Consultations\s+tab",
     "Documents":                r"\bDocuments\s+tab\b|\bDocument\s+Generator\b|My\s+EU\s+Bubble\s*>\s*Documents",
-    "Legislative Tracker":      r"\bLegislative\s+Tracker\b",
-    "My Files":                 r"\bMy\s+Files\b",
+    "Legislative Tracker":      r"\bLegislative\s+Tracker\b|\bLegislative\s+Train\b",
+    "My Files":                 r"\bMy\s+(?:Tracked\s+)?Files\b",
     "EU Law Comply":            r"\bEU\s+Law\s+Comply\b",
     "Tenderator":               r"\bTenderator\b",
     "API":                      r"\bBrubru\s+API\b|\bv1\s+API\b|\bAPI\s+(?:tab|page|access|endpoint)\b",
     "Analytics":                r"\bAnalytics\s+tab\b",
     "Dashboard":                r"\bDashboard\s+tab\b",
+    # Current canonical MEUB sub-tabs (the list above predates them).
+    "Council Watch":            r"\bCouncil\s+Watch\b",
+    "MEP Watch":                r"\bMEP\s+Watch\b",
+    "Stakeholder Mapping":      r"\bStakeholder\s+(?:Mapping|Map)\b",
+    "Parliamentary Questions":  r"\bParliamentary\s+Questions\b",
+    "My OJ":                    r"\bMy\s+OJ\b",
+    "Votes":                    r"\bVotes\s+tab\b",
 }
 
 
@@ -429,6 +449,46 @@ def check_cross_link_correct(response: str, ga: dict) -> CriterionResult:
     )
 
 
+def detect_language_strict(text: str) -> str:
+    """langdetect on the prose (URLs, codes and markdown stripped), seeded for
+    repeatability; the word-marker heuristic only as a fallback."""
+    prose = re.sub(r"https?://\S+|\[[^\]]*\]\([^)]*\)|`[^`]*`|[A-Z]{2,}[\d/().-]*\d\S*", " ", text or "")
+    try:
+        from langdetect import DetectorFactory, detect
+        DetectorFactory.seed = 0
+        code = detect(prose)
+        return {"en": "EN", "es": "ES", "ca": "CA", "fr": "FR", "it": "IT", "nl": "NL"}.get(code, code.upper())
+    except Exception:  # noqa: BLE001
+        return detect_language(text)
+
+
+def check_contains_expected_facts(response: str, ga: dict) -> CriterionResult:
+    """Correctness: every expected fact group must appear (any of its variants).
+
+    `expected_facts` is a list of groups; a group is a list of acceptable
+    spellings ("460", "460 million"). Numbers are matched with thin/normal
+    spaces, dots and commas removed so "1.159" and "1 159" both read 1159.
+    """
+    groups = ga.get("expected_facts") or []
+    if not groups:
+        return CriterionResult("contains_expected_facts", True, "no facts specified")
+    norm = lambda t: re.sub(r"(?<=\d)[\s\u202f\u00a0.,](?=\d{3}\b)", "", (t or "").lower())
+    body = norm(response)
+    missing = [g[0] for g in groups if not any(norm(v) in body for v in g)]
+    if missing:
+        return CriterionResult("contains_expected_facts", False, "missing: " + "; ".join(missing[:4]))
+    return CriterionResult("contains_expected_facts", True)
+
+
+def check_declines_off_topic(response: str, ga: dict) -> CriterionResult:
+    """Off-topic question: no invented EU legal reference, and a short answer."""
+    if re.search(r"\b3\d{4}[RLD]\d{4}\b|COM\(\d{4}\)", response or ""):
+        return CriterionResult("declines_off_topic", False, "cites EU legal references for an off-topic question")
+    if len(response or "") > 1500:
+        return CriterionResult("declines_off_topic", False, f"long answer ({len(response)} chars) to an off-topic question")
+    return CriterionResult("declines_off_topic", True)
+
+
 CRITERION_CHECKERS = {
     "mentions_celex_or_com": check_mentions_celex_or_com,
     "includes_doc_refs_from_guide": check_includes_doc_refs_from_guide,
@@ -438,12 +498,49 @@ CRITERION_CHECKERS = {
     "responds_in_query_language": check_responds_in_query_language,
     "actionable_followup": check_actionable_followup,
     "cross_link_correct": check_cross_link_correct,
+    "contains_expected_facts": check_contains_expected_facts,
+    "declines_off_topic": check_declines_off_topic,
 }
 
 
 # ---------------------------------------------------------------------------
 # Query runner
 # ---------------------------------------------------------------------------
+def _read_sse(resp) -> tuple:
+    """(answer_text, model, citation_count) from /api/chat/stream.
+
+    Answer chunks arrive as raw text after `data: `; status and metadata events
+    as JSON objects. A first version of the probe dropped the raw chunks and read
+    every answer as empty (instrument error, 25 Sep 2026), so both are handled.
+    """
+    parts, model, citations = [], None, 0
+    buf = ""
+    for chunk in resp.iter_content(chunk_size=None, decode_unicode=True):
+        buf += chunk
+        while "\n\n" in buf:
+            block, buf = buf.split("\n\n", 1)
+            for line in block.splitlines():
+                if not line.startswith("data: "):
+                    continue
+                d = line[6:]
+                if d == "[DONE]":
+                    continue
+                try:
+                    j = json.loads(d)
+                except ValueError:
+                    parts.append(d)
+                    continue
+                if isinstance(j, dict):
+                    if j.get("type") in (None, "content", "delta", "token"):
+                        parts.append(j.get("content") or j.get("delta") or "")
+                    model = j.get("model") or model
+                    if isinstance(j.get("citations"), list):
+                        citations = len(j["citations"])
+                elif isinstance(j, str):
+                    parts.append(j)
+    return "".join(parts).replace("\\n", "\n"), model, citations
+
+
 def run_query(backend_url: str, ga: dict, verbose: bool = False) -> QueryResult:
     """Send a golden answer query to the backend and evaluate the response."""
     result = QueryResult(
@@ -453,35 +550,29 @@ def run_query(backend_url: str, ga: dict, verbose: bool = False) -> QueryResult:
         pattern=ga.get("pattern", "unknown"),
     )
 
-    payload = {
-        "message": ga["query"],
-        "user_id": None,
-        "chat_id": None,
-        "pre_user_id": None,
-        "use_context": True,
-        "stream": False,
-    }
+    payload = {"message": ga["query"], "use_context": True}
 
     try:
         start = time.time()
         resp = requests.post(
             f"{backend_url}{CHAT_ENDPOINT}",
             json=payload,
-            headers={"Content-Type": "application/json"},
+            # Probe header: evaluation traffic must never count as a user.
+            headers={"Content-Type": "application/json", "X-Brubru-Probe": "1"},
             timeout=REQUEST_TIMEOUT,
+            stream=True,
         )
-        elapsed_ms = (time.time() - start) * 1000
-        result.response_time_ms = round(elapsed_ms, 1)
-
         if resp.status_code != 200:
             result.error = f"HTTP {resp.status_code}: {resp.text[:200]}"
             return result
-
-        data = resp.json()
-        response_text = data.get("message", "")
+        response_text, model, citations = _read_sse(resp)
+        result.response_time_ms = round((time.time() - start) * 1000, 1)
         result.response_text = response_text
-        result.model = data.get("model", "unknown")
-        result.citation_count = len(data.get("citations", []))
+        result.model = model or "unknown"
+        result.citation_count = citations
+        if not response_text.strip():
+            result.error = "empty answer from the stream"
+            return result
 
     except requests.exceptions.Timeout:
         result.error = f"Timeout after {REQUEST_TIMEOUT}s"
@@ -871,17 +962,20 @@ def main():
     parser.add_argument("--json", action="store_true", help="Save JSON report")
     parser.add_argument("--verbose", action="store_true", help="Show response text")
     parser.add_argument("--dry-run", action="store_true", help="Load and validate golden answers without querying")
+    parser.add_argument("--golden", help="Path to a golden-answer set (default: the legacy 30-question file)")
+
     args = parser.parse_args()
 
     # Load golden answers
-    if not GOLDEN_ANSWERS_PATH.exists():
-        print(f"[ERROR] Golden answers not found: {GOLDEN_ANSWERS_PATH}")
+    golden_path = Path(args.golden) if args.golden else GOLDEN_ANSWERS_PATH
+    if not golden_path.exists():
+        print(f"[ERROR] Golden answers not found: {golden_path}")
         sys.exit(1)
 
-    with open(GOLDEN_ANSWERS_PATH) as f:
+    with open(golden_path) as f:
         golden_answers = json.load(f)
 
-    print(f"\n  Loaded {len(golden_answers)} golden answers from {GOLDEN_ANSWERS_PATH.name}")
+    print(f"\n  Loaded {len(golden_answers)} golden answers from {golden_path.name}")
 
     # Apply filters
     if args.pattern:
