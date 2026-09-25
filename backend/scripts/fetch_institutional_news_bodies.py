@@ -50,11 +50,26 @@ from services.scrapers.economy_common import error_body_reason, extract_html  # 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 # Anything on these hosts is an EU institution or agency: a public document.
-INSTITUTIONAL = ("europa.eu", "europarl.europa.eu", "consilium.europa.eu", "ecb.int")
+INSTITUTIONAL = ("europa.eu", "europarl.europa.eu", "consilium.europa.eu", "ecb.int",
+                 # The European Parliamentary Research Service publishes on its own
+                 # domain. Verified 25 September 2026: epthinktank.eu/about is titled
+                 # "About | Epthinktank | European Parliament" and describes EPRS as the
+                 # Parliament's research service. Institutional in substance, whatever
+                 # the top-level domain says.
+                 "epthinktank.eu")
 
 
 def is_institutional(url: str) -> bool:
-    return any(h in (url or "") for h in INSTITUTIONAL)
+    """True when the URL's HOST is one of these domains, or a subdomain of one.
+
+    This used to be a substring test over the whole URL, which is not a host check at all:
+    `https://europa.eu.evil.com/a` and `https://notepthinktank.eu.evil.com/a` both passed,
+    and so would any path containing the string. A host that merely ENDS with the domain is
+    not enough either, hence the dot: `notepthinktank.eu` must not match `epthinktank.eu`.
+    """
+    host = urllib.parse.urlsplit(url or "").hostname or ""
+    host = host.lower().rstrip(".")
+    return any(host == domain or host.endswith("." + domain) for domain in INSTITUTIONAL)
 
 
 _PRESSCORNER = re.compile(r"^https?://ec\.europa\.eu/commission/presscorner/detail/en/([\w-]+)")

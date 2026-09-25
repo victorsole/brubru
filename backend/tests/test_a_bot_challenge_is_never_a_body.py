@@ -139,3 +139,45 @@ def test_no_stored_body_is_raw_pdf():
             assert count == 0, f"{count} row(s) in {table} hold raw PDF bytes as their body"
     finally:
         conn.close()
+
+
+# --- who counts as institutional ---------------------------------------------------------
+
+def test_a_spoofed_host_is_not_institutional():
+    """The check decides whose text Brubru will fetch and store. It must test the HOST.
+
+    It was `any(domain in url)`, a substring test over the whole URL, so
+    `https://europa.eu.evil.com/a` passed, and so did any URL with the string anywhere in its
+    path or query. An attacker-controlled host reading as an EU institution is how third-party
+    content gets stored and served as official.
+    """
+    import fetch_institutional_news_bodies as fetcher
+
+    for url in ("https://europa.eu.evil.com/a",
+                "https://notepthinktank.eu.evil.com/a",
+                "https://evil.com/?redirect=https://europa.eu/a",
+                "https://europa.eu.attacker.test/news",
+                "https://notepthinktank.eu/a",
+                "https://www.politico.eu/article"):
+        assert not fetcher.is_institutional(url), f"{url} must not read as institutional"
+
+
+def test_the_real_institutions_still_pass():
+    import fetch_institutional_news_bodies as fetcher
+
+    for url in ("https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1129",
+                "https://www.europarl.europa.eu/news/en/x",
+                "https://www.consilium.europa.eu/en/press/x",
+                "https://epthinktank.eu/2026/02/24/x/",
+                "https://www.ecb.int/press/x"):
+        assert fetcher.is_institutional(url), f"{url} is institutional and must pass"
+
+
+def test_epthinktank_is_the_parliaments_own_site():
+    """Verified 25 September 2026: epthinktank.eu/about is titled
+    "About | Epthinktank | European Parliament" and describes EPRS as the Parliament's
+    research service. It is in the list on that evidence, not on the strength of its name.
+    """
+    import fetch_institutional_news_bodies as fetcher
+
+    assert "epthinktank.eu" in fetcher.INSTITUTIONAL
