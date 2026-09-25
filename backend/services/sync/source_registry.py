@@ -168,7 +168,12 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("calendar_ft_events","Calendar - Funding & Tenders","warm","scripts/sync_ft_events.py",           timeout=600,  stale_after_hours=14),
     SourceSpec("transcripts",       "Transcripts (committee)",   "warm", "scripts/sync_committee_transcripts.py", ("--max", "10", "--days", "7"), timeout=1200, stale_after_hours=14),
     SourceSpec("lobby_meetings",    "Lobby Meetings",            "warm", "scripts/sync_mep_lobby_meetings.py",    ("--procedures", "20", "--profiles", "10"), timeout=1200, stale_after_hours=14),
-    SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      timeout=900,  stale_after_hours=14),
+    # Budgets keep the warm tier near its usual length: until 25 Sep 2026 this
+    # job took seconds because it stored nothing (a walled HTML page); on EP
+    # Open Data it paces ~0.5 questions/s. The text job fills question and
+    # answer text for what the first one stored, and answers that arrive later.
+    SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      ("--max-seconds", "420"), timeout=600,  stale_after_hours=14),
+    SourceSpec("parl_question_text","Parliamentary Questions - text and answers","warm","scripts/backfill_parl_question_text.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
     # Names files that arrived without a readable one. Unlike the feeds above
     # this ingests nothing: it fills legislative_carriages.short_title for rows

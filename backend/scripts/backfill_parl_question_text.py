@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import argparse
 import io
+import os
 import json
 import re
 import sys
@@ -51,6 +52,12 @@ USER_AGENT = "BrubruParlQBackfill/1.0 (+https://brubru.beresol.eu)"
 
 
 def get_env(key: str) -> str:
+    # Environment first: on Railway there is no .env on disk, so a .env-only
+    # read returns "" and the job dies with DATABASE_URL missing (the class
+    # fixed in 10 cron scripts on 25 Sep 2026).
+    value = os.environ.get(key, "").strip()
+    if value:
+        return value
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():
@@ -172,7 +179,10 @@ def main():
     ap.add_argument("--year", type=int, help="Restrict to questions of this year")
     ap.add_argument("--apply", action="store_true", help="Write to DB. Default is dry-run.")
     ap.add_argument("--throttle", type=float, default=0.5, help="Seconds between EP API calls")
+    ap.add_argument("--max-seconds", type=int, default=0,
+                    help="Stop starting new rows after this long (0 = none). The schedule sets it.")
     args = ap.parse_args()
+    started = time.monotonic()
 
     db = get_env("DATABASE_URL")
     if not db:
@@ -181,10 +191,15 @@ def main():
 
     conn = psycopg2.connect(db)
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    where = "text_question IS NULL AND source_url IS NOT NULL"
+    # Also rows the ingest has since seen ANSWERED but whose answer text is
+    # missing: answers arrive weeks after the question, and this job used to
+    # look only at rows with no question text, so a later answer never landed.
+    where = ("source_url IS NOT NULL AND (text_question IS NULL "
+             "OR (answered_date IS NOT NULL AND text_answer IS NULL))")
     if args.year:
         where += f" AND question_reference LIKE '%/{args.year}'"
-    sql = f"SELECT id, question_reference, source_url, answer_url FROM parliamentary_questions WHERE {where} ORDER BY question_reference DESC"
+    sql = (f"SELECT id, question_reference, source_url, answer_url FROM parliamentary_questions "
+           f"WHERE {where} ORDER BY submitted_date DESC NULLS LAST, question_reference DESC")
     if args.limit:
         sql += f" LIMIT {args.limit}"
     cur.execute(sql)
@@ -205,7 +220,11 @@ def main():
     n_q_filled = 0
     n_a_filled = 0
     n_failed = 0
+    processed = 0
     for row in rows:
+        if args.max_seconds and time.monotonic() - started > args.max_seconds:
+            break
+        processed += 1
         ref_db = row["question_reference"]
         ep_ref = derive_ep_ref(ref_db)
         if not ep_ref:
@@ -262,7 +281,16 @@ def main():
     print(f"\n[DONE] Filled q_text on {n_q_filled} rows, a_text on {n_a_filled} rows, {n_failed} failures.")
     if not args.apply:
         print("[NOTE] Dry-run — pass --apply to write to DB.")
+    if processed and n_failed == processed:
+        print(f"[ERROR] all {processed} rows failed: EP Open Data unreachable or changed")
+        return 1
+    left = len(rows) - processed
+    if left or n_failed or (args.limit and len(rows) == args.limit):
+        print(f"[SYNC_STATUS] degraded: {left} row(s) not reached this run"
+              f"{' (limit hit, more may wait)' if args.limit and len(rows) == args.limit else ''}, "
+              f"{n_failed} failure(s)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
