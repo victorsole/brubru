@@ -28,8 +28,11 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import os
 import re
 import sys
+import pathlib
+import urllib.parse
 import threading
 import time
 import urllib.error
@@ -129,7 +132,58 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
     raise last  # type: ignore[misc]
 
 
-def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | None]:
+from services.news.rendered_article import extract_article
+
+
+def _scrapedo_token() -> str | None:
+    """SCRAPEDO_API_KEY lives in the REPO-ROOT .env, not backend/.env.
+
+    Scripts run from backend/ load backend/.env and see it unset, which is why it has read
+    as "missing" before. Derive the root from this file, never a hardcoded path.
+    """
+    token = os.environ.get("SCRAPEDO_API_KEY")
+    if token:
+        return token
+    root_env = Path(__file__).resolve().parents[2] / ".env"
+    if root_env.is_file():
+        for line in root_env.read_text(encoding="utf-8", errors="replace").splitlines():
+            if line.startswith("SCRAPEDO_API_KEY="):
+                return line.split("=", 1)[1].strip() or None
+    return None
+
+
+def fetch_rendered(url: str, timeout: int = 150) -> tuple[str | None, str | None, str | None]:
+    """A JavaScript-rendered Europa page, via Scrape.do.
+
+    customWait is not optional: without it the service returns the Angular shell with a 200,
+    which is a failure carried in the body. 5s was enough on every page tested; 10s added
+    nothing.
+    """
+    token = _scrapedo_token()
+    if not token:
+        return None, None, "no SCRAPEDO_API_KEY"
+    api = ("https://api.scrape.do/?token=" + token
+           + "&url=" + urllib.parse.quote(url, safe="")
+           + "&render=true&customWait=5000")
+    # The render can come back unrendered: the same URL returned the Angular shell once and
+    # the full 101 KB page on the next two calls, all with HTTP 200. A transient must be
+    # retried, not filed as "this page has no text".
+    last: tuple[str | None, str | None, str | None] = (None, None, "scrapedo not attempted")
+    for attempt in range(3):
+        try:
+            raw = _read(api, timeout, accept="text/html,*/*")
+        except urllib.error.HTTPError as exc:
+            return None, None, f"scrapedo HTTP {exc.code}"
+        except Exception as exc:  # noqa: BLE001
+            return None, None, f"scrapedo {type(exc).__name__}"
+        last = extract_article(raw.decode("utf-8", "replace"))
+        if last[0] or "did not render" not in (last[2] or ""):
+            return last
+        time.sleep(2 * (attempt + 1))
+    return last
+
+
+def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
     pdf_url = presscorner_pdf(url)
     if pdf_url:
@@ -157,8 +211,12 @@ def fetch(url: str, timeout: int = 40) -> tuple[str | None, str | None, str | No
         return None, None, f"{type(exc).__name__}"
     body_txt, body_html = extract_html(html)
     reason = error_body_reason(body_txt)
-    if reason:
-        return None, None, f"rejected:{reason}"
+    if reason or not body_txt:
+        if render:
+            # The page carried no prose of its own. On Europa that usually means an Angular
+            # shell, so ask for it rendered rather than recording "no text available".
+            return fetch_rendered(url)
+        return None, None, f"rejected:{reason or 'no text in the page'}"
     return body_txt, body_html, None
 
 
@@ -196,6 +254,9 @@ def main() -> int:
                     help="economy_items.item_type; repeatable. Default: news.")
     ap.add_argument("--limit", type=int, default=500)
     ap.add_argument("--throttle", type=float, default=1.0)
+    ap.add_argument("--render", action="store_true",
+                    help="Fall back to a rendered fetch (Scrape.do) when a page carries no prose. "
+                         "Costs credits, so it is opt-in.")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
@@ -244,7 +305,7 @@ def main() -> int:
         for start in range(0, len(targets), BATCH):
             chunk = targets[start:start + BATCH]
             with cf.ThreadPoolExecutor(max_workers=6) as ex:
-                fetched = list(ex.map(lambda row: (row, *fetch(row.source_url)), chunk))
+                fetched = list(ex.map(lambda row: (row, *fetch(row.source_url, render=args.render)), chunk))
             for r, body_txt, body_html, err in fetched:
                 i += 1
                 # extract_html() returns (None, None) for a page with no <main>/<article>
