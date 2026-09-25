@@ -42,6 +42,11 @@ ACTIVITY_TYPE_MAP = {
     "external_activities": "external_activities",
 }
 
+# A day whose PDF cell is split between two colours carries both activities.
+SPLIT_DAY_ACTIVITIES = {
+    "committee_and_group": ("committee_week", "group_week"),
+}
+
 # Activity type to human-readable title.
 #
 # These titles are user-facing: they are read aloud in chat answers and are
@@ -212,37 +217,41 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                 # 7-11 Sep 2026 is committee / group / group / committee).
                 # Emit one event per day so anything answering "what is on
                 # TODAY" gets the right answer instead of the week label.
-                for day_name, day_activity in week["daily"].items():
+                for day_name, day_value in week["daily"].items():
                     day_date = _get_weekday_date(start_date, day_name)
                     if day_date is None:
                         continue
+                    # A split day (the PDF cell is half committee pink, half group
+                    # blue) has BOTH committee and political group meetings: emit
+                    # one event for each (25 Sep 2026; Thursday 1 Oct 2026 was
+                    # labelled a group day while six committees met).
+                    for day_activity in SPLIT_DAY_ACTIVITIES.get(day_value, (day_value,)):
+                        # Date-derived, same reason as the plenary branch above:
+                        # week_num comes from the source JSON and is not stable.
+                        ext_id = f"ep_{year}_{day_date.isoformat()}_{day_activity}"
+                        if ext_id in seen_external_ids:
+                            continue
+                        seen_external_ids.add(ext_id)
 
-                    # Date-derived, same reason as the plenary branch above:
-                    # week_num comes from the source JSON and is not stable.
-                    ext_id = f"ep_{year}_{day_date.isoformat()}_{day_activity}"
-                    if ext_id in seen_external_ids:
-                        continue
-                    seen_external_ids.add(ext_id)
-
-                    events.append({
-                        "institution": "EP",
-                        "event_type": ACTIVITY_TYPE_MAP.get(day_activity, day_activity),
-                        "title": ACTIVITY_TITLES.get(
-                            day_activity,
-                            f"EP {day_activity.replace('_', ' ').title()}",
-                        ),
-                        "description": ACTIVITY_DESCRIPTIONS.get(day_activity),
-                        "start_date": day_date,
-                        "all_day": True,
-                        "status": "confirmed",
-                        "ep_activity_type": day_activity,
-                        "source": "ep_calendar_json",
-                        "external_id": ext_id,
-                        "source_url": ACTIVITY_SOURCE_URLS.get(
-                            day_activity,
-                            "https://www.europarl.europa.eu/plenary/en/agendas.html",
-                        ),
-                    })
+                        events.append({
+                            "institution": "EP",
+                            "event_type": ACTIVITY_TYPE_MAP.get(day_activity, day_activity),
+                            "title": ACTIVITY_TITLES.get(
+                                day_activity,
+                                f"EP {day_activity.replace('_', ' ').title()}",
+                            ),
+                            "description": ACTIVITY_DESCRIPTIONS.get(day_activity),
+                            "start_date": day_date,
+                            "all_day": True,
+                            "status": "confirmed",
+                            "ep_activity_type": day_activity,
+                            "source": "ep_calendar_json",
+                            "external_id": ext_id,
+                            "source_url": ACTIVITY_SOURCE_URLS.get(
+                                day_activity,
+                                "https://www.europarl.europa.eu/plenary/en/agendas.html",
+                            ),
+                        })
             else:
                 # Single multi-day event for the week
                 # Date-derived: a whole-week event is identified by the week's

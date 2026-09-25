@@ -3,11 +3,11 @@
   "institution": "European Parliament",
   "calendar_type": "Parliamentary Activities Calendar",
   "source": {
-    "pdf": "https://www.europarl.europa.eu/cmsdata/298340/EP%20Calendar%202026_EN.pdf",
+    "pdf": "https://www.europarl.europa.eu/sedcms/documents/AGENDA_OUTLINES/1600/calendar-2026_EN.pdf",
     "derived_by": "backend/scripts/derive_ep_calendar_from_pdf.py",
     "method": "Cell fill colours sampled from a 300 dpi render of the EP's official calendar PDF. Week type is encoded only as colour and is not recoverable from pdftotext output.",
     "verified_against": "EP published session dates (press release 20250310IPR27231): all official sessions located, no session days outside the list.",
-    "generated": "2026-07-21"
+    "generated": "2026-09-25"
   },
   "special_dates": {
     "europe_day": {
@@ -44,7 +44,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -104,7 +104,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -146,7 +146,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -213,7 +213,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -292,7 +292,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -319,7 +319,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         }
       ]
@@ -335,7 +335,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -444,7 +444,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         }
       ]
@@ -460,7 +460,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -482,7 +482,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -539,7 +539,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {
@@ -593,7 +593,7 @@
             "Monday": "committee_week",
             "Tuesday": "group_week",
             "Wednesday": "group_week",
-            "Thursday": "group_week"
+            "Thursday": "committee_and_group"
           }
         },
         {

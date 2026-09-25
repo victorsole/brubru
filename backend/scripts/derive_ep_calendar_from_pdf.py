@@ -76,7 +76,9 @@ except ImportError:  # pragma: no cover
 # --------------------------------------------------------------------------
 
 CALENDAR_PDF_URLS = {
-    2026: "https://www.europarl.europa.eu/cmsdata/298340/EP%20Calendar%202026_EN.pdf",
+    # Moved by the EP by 25 Sep 2026: the cmsdata/298340 address now answers 404.
+    # The current link is the one on https://www.europarl.europa.eu/plenary/en/calendar.html
+    2026: "https://www.europarl.europa.eu/sedcms/documents/AGENDA_OUTLINES/1600/calendar-2026_EN.pdf",
 }
 
 # Exact legend swatch colours, sampled from the PDF's own legend block.
@@ -86,6 +88,34 @@ LEGEND = {
     (153, 204, 255): "group_week",
     (85, 203, 192): "external_activities",
 }
+
+# The same four swatches as poppler renders them today, colour-managed (measured
+# 25 Sep 2026 on the 2026 PDF). An exact match against LEGEND alone classified
+# EVERY day as recess, so matching is now to the NEAREST anchor within a distance.
+LEGEND_ANCHORS = {
+    **LEGEND,
+    (238, 41, 61): "plenary_session",
+    (251, 196, 187): "committee_week",
+    (181, 184, 209): "group_week",
+    (100, 203, 193): "external_activities",
+}
+MAX_COLOUR_DISTANCE = 45
+
+# A cell split diagonally pink/blue is a day with BOTH committee and political
+# group meetings (1 and 15 Oct 2026). The majority colour used to decide, so
+# 1 Oct 2026 read as a group day while six committees met.
+SPLIT_DAY = "committee_and_group"
+SPLIT_MIN_SHARE = 0.25
+
+
+def _legend_activity(pixel):
+    best, best_d = None, MAX_COLOUR_DISTANCE ** 2 + 1
+    for anchor, activity in LEGEND_ANCHORS.items():
+        d = sum((a - b) ** 2 for a, b in zip(pixel, anchor))
+        if d < best_d:
+            best, best_d = activity, d
+    return best if best_d <= MAX_COLOUR_DISTANCE ** 2 else None
+
 
 # A week containing any session day is a session week; otherwise the most
 # frequent Mon-Fri activity wins, ties broken by this order.
@@ -165,6 +195,23 @@ def fetch_pdf(year: int, workdir: str, pdf_path: Optional[str]) -> str:
     dest = os.path.join(workdir, f"ep_calendar_{year}.pdf")
     print(f"[INFO] Downloading {url}")
     _run(["curl", "-sL", "-A", "Mozilla/5.0", "-o", dest, url])
+    # europarl.europa.eu answers a plain fetch with a 202 and 0 bytes (WAF).
+    # Scrape.do on any wall (hard rule, 25 Sep 2026).
+    if not os.path.exists(dest) or os.path.getsize(dest) < 10_000:
+        import urllib.parse
+        key = os.environ.get("SCRAPEDO_API_KEY", "")
+        if not key:
+            for env in (os.path.join(os.path.dirname(__file__), "..", ".env"),
+                        os.path.join(os.path.dirname(__file__), "..", "..", ".env")):
+                if os.path.exists(env):
+                    for line in open(env, encoding="utf-8"):
+                        if line.startswith("SCRAPEDO_API_KEY="):
+                            key = line.split("=", 1)[1].strip()
+        if key:
+            print("[INFO] WAF on the direct fetch; retrying through Scrape.do")
+            proxied = ("https://api.scrape.do/?token=" + key + "&url="
+                       + urllib.parse.quote(url, safe=""))
+            _run(["curl", "-s", "-m", "120", "-o", dest, proxied])
     if not os.path.exists(dest) or os.path.getsize(dest) < 10_000:
         raise RuntimeError("Downloaded calendar PDF looks empty or truncated")
     return dest
@@ -209,8 +256,10 @@ def classify_days(image: "Image.Image", bbox_xml: str,
     width, height = image.size
     scale = RENDER_DPI / PDF_POINTS_PER_INCH
 
+    # "9*" is how the PDF prints 9 May (Europe Day, footnoted): allow one trailing
+    # asterisk, or that date is never classified (25 Sep 2026).
     pattern = (r'<word xMin="([\d.]+)" yMin="([\d.]+)" '
-               r'xMax="([\d.]+)" yMax="([\d.]+)">(\d{1,2})</word>')
+               r'xMax="([\d.]+)" yMax="([\d.]+)">(\d{1,2})\*?</word>')
     cells: Dict[Tuple[int, int], List[Tuple[float, float, int]]] = defaultdict(list)
     for match in re.finditer(pattern, bbox_xml):
         x0, y0, x1, y1 = (float(match.group(i)) * scale for i in range(1, 5))
@@ -220,7 +269,7 @@ def classify_days(image: "Image.Image", bbox_xml: str,
         column = next((i for i, (a, b) in enumerate(COLUMN_BANDS)
                        if a <= cx / width < b), None)
         if block is not None and column is not None:
-            cells[(block, column)].append((cx, cy, int(match.group(5))))
+            cells[(block, column)].append((cx, cy, int(match.group(5)), x0, x1))
 
     day_activity: Dict[dt.date, str] = {}
     for (block, column), items in sorted(cells.items()):
@@ -229,26 +278,54 @@ def classify_days(image: "Image.Image", bbox_xml: str,
 
         xs = _cluster([c[0] for c in items], 20)
         ys = _cluster([c[1] for c in items], 10)
-        # The topmost row holds ISO week numbers, not days. Always drop it.
-        header_y = ys[0]
-        cell_w = (xs[1] - xs[0]) if len(xs) > 1 else 80
-        row_h = (ys[2] - ys[1]) if len(ys) > 2 else 28
+        # Column pitch from the gaps between COLUMNS: one- and two-digit numbers
+        # centre at different x, so adjacent x clusters can be 50 px apart inside
+        # one column. Only gaps >= 60 px are column gaps (~109 px at 300 dpi).
+        col_gaps = sorted(b - a for a, b in zip(xs, xs[1:]) if b - a >= 60)
+        cell_w = col_gaps[len(col_gaps) // 2] if col_gaps else 109
+        row_h = min((b - a) for a, b in zip(ys, ys[1:])) if len(ys) > 1 else 28
 
-        for cx, cy, number in items:
-            if abs(cy - header_y) < row_h * 0.5:
+        # Which numbers are dates? Decided by the calendar itself, not by page
+        # geometry (25 Sep 2026). The poppler in use now returns the circled
+        # weekday labels (1-7) as words and puts the NEXT block's ISO week-number
+        # row inside this block's band, so "drop the top row" dropped every Monday
+        # and read week numbers as dates. A weekday row holds at least four dates
+        # that all fall on the same weekday; a label column or a week-number row
+        # never does. Accept a number only if its date shares its row's weekday.
+        accepted = []
+        for row_y in ys:
+            row = [it for it in items
+                   if abs(it[1] - row_y) <= 10 and 1 <= it[2] <= days_in_month]
+            weekdays = Counter(dt.date(year, month, it[2]).weekday() for it in row)
+            if not weekdays:
                 continue
-            if not 1 <= number <= days_in_month:
+            weekday, votes = weekdays.most_common(1)[0]
+            if votes < 3:
                 continue
-            x0, x1 = int(cx - cell_w * 0.42), int(cx + cell_w * 0.42)
-            y0, y1 = int(cy - row_h * 0.40), int(cy + row_h * 0.40)
+            accepted.extend(c for c in row if dt.date(year, month, c[2]).weekday() == weekday)
+
+        for cx, cy, number, gx0, gx1 in accepted:
+            x0, x1 = int(cx - cell_w * 0.45), int(cx + cell_w * 0.45)
+            y0, y1 = int(cy - row_h * 0.35), int(cy + row_h * 0.35)
+            # Sample BESIDE the number, never the glyph itself: a public holiday
+            # prints its number in red on white, which is text, not a session fill.
             pixels = [
                 image.getpixel((x, y))
                 for x in range(max(0, x0), min(width, x1))
+                if not (gx0 - 3 <= x <= gx1 + 3)
                 for y in range(max(0, y0), min(height, y1))
             ]
-            hits = [p for p in pixels if p in LEGEND]
-            if hits and len(hits) / max(1, len(pixels)) > 0.15:
-                activity = LEGEND[Counter(hits).most_common(1)[0][0]]
+            hits = [a for a in (_legend_activity(p) for p in pixels) if a]
+            # Measured on the glyph-free samples (25 Sep 2026): a fill covers 0.46-1.0
+            # (top-row cells are shallow, hence the low end), holiday text 0.0.
+            if hits and len(hits) / max(1, len(pixels)) > 0.30:
+                counts = Counter(hits)
+                share = {k: v / len(hits) for k, v in counts.items()}
+                if (share.get("committee_week", 0) >= SPLIT_MIN_SHARE
+                        and share.get("group_week", 0) >= SPLIT_MIN_SHARE):
+                    activity = SPLIT_DAY
+                else:
+                    activity = counts.most_common(1)[0][0]
             else:
                 activity = "recess"
             day_activity[dt.date(year, month, number)] = activity
@@ -336,7 +413,11 @@ def week_label(weekday_activities: List[str]) -> str:
         return "recess"
     if "plenary_session" in working:
         return "plenary_session"
-    counts = Counter(a for a in working if a != "recess")
+    # A split day counts as a committee day AND a group day for the week label.
+    expanded = []
+    for a in working:
+        expanded.extend(["committee_week", "group_week"] if a == SPLIT_DAY else [a])
+    counts = Counter(a for a in expanded if a != "recess")
     if not counts:
         return "recess"
     return min(counts, key=lambda k: (-counts[k], PRECEDENCE.index(k)))

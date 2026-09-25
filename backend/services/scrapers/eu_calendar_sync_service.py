@@ -786,6 +786,22 @@ class EUCalendarSyncService:
             if event_data.get("venue") and existing.venue != event_data.get("venue"):
                 existing.venue = event_data.get("venue")
                 changed = True
+            # A source that produces a row again has un-cancelled it (25 Sep 2026).
+            # Cancellation used to be one-way: when stray plenary rows briefly moved
+            # the weeks of 2 Nov and 7 Dec 2026 to a Strasbourg Tuesday, the College
+            # Wednesdays were cancelled, and once the plenary rows were corrected the
+            # generator produced those Wednesdays again but they stayed cancelled, so
+            # the calendar showed NO College meeting in either week. Future rows only:
+            # a held meeting's status belongs to the sync that reads its minutes.
+            existing_status = getattr(existing.status, "value", existing.status)
+            if (
+                existing_status == "cancelled"
+                and event_data.get("status", "scheduled") != "cancelled"
+                and existing.start_date is not None
+                and existing.start_date >= date.today()
+            ):
+                existing.status = EventStatusEnum(event_data.get("status", "scheduled"))
+                changed = True
 
             if changed:
                 existing.last_updated = datetime.now()
