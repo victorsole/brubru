@@ -262,18 +262,32 @@ def main():
     # routinely cite several. Deduping on (celex, parent_celex), as the first
     # version did, therefore passed rows the database then rejected:
     # "duplicate key value violates unique constraint secondary_acts_reference_key".
-    # Dedupe on the reference, both against what is stored and within this
-    # batch, and keep the first parent seen.
-    cur.execute("SELECT reference FROM secondary_acts")
-    existing = {r["reference"] for r in cur.fetchall()}
+    # Dedupe on the CELEX, not the reference. This script writes the CELEX itself into
+    # `reference`, while the regdel register stores the same act under its Commission
+    # document number (32014R0241 here, C(2013)9763 there). Conflicting on `reference`
+    # therefore never matched, and every act already held under its C-number was inserted
+    # a SECOND time as a text-less stub: 783 CELEX values ended up with more than one row,
+    # and because GovClipping identifies acts by CELEX, the stub could overwrite the full
+    # text of the act (reported 25 Sep 2026). An act already in the table, under any
+    # reference, is not new.
+    cur.execute("SELECT reference, celex FROM secondary_acts")
+    stored = cur.fetchall()
+    existing_refs = {r["reference"] for r in stored}
+    existing_celex = {r["celex"] for r in stored if r["celex"]}
     new, seen = [], set()
+    already_by_celex = 0
     for k in kept:
         ref = k[1]
-        if ref in existing or ref in seen:
+        if ref in existing_refs or ref in seen:
+            continue
+        if ref in existing_celex:      # same act, stored under its C-number
+            already_by_celex += 1
             continue
         seen.add(ref)
         new.append(k)
-    print(f"\n  already recorded: {len(kept)-len(new)}   to insert: {len(new)}")
+    print(f"\n  already recorded: {len(kept)-len(new)} "
+          f"(of which {already_by_celex} matched an existing CELEX under another "
+          f"reference)   to insert: {len(new)}")
 
     if not apply:
         conn.rollback(); cur.close(); conn.close()
