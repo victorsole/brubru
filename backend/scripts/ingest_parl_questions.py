@@ -244,8 +244,12 @@ def main() -> int:
             return 1
         # A list shorter than what we already hold for those years is a broken
         # read, not a quiet day: never let it pass as "0 new".
+        # Not an exact comparison: EP's list drops a few questions we stored earlier
+        # (13 of 3,603 for 2026 on 25 Sep, all real, stored from EP's own pages in
+        # May), so "fewer than held" is normal by a small margin. A truncated read
+        # (a first version stopped at 300 of 500) is far below it.
         held_years = sum(1 for r in held if r.rsplit("/", 1)[-1] in {str(y) for y in years})
-        if len(listed) < held_years:
+        if len(listed) < 0.95 * held_years:
             print(f"[ERROR] listed {len(listed)} questions for {years} but {held_years} "
                   f"are already stored: the listing is incomplete")
             return 1

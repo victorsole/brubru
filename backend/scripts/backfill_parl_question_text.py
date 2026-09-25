@@ -66,19 +66,30 @@ def get_env(key: str) -> str:
     return ""
 
 
-def http_get(url: str, timeout: float = 30.0) -> Optional[bytes]:
-    req = urllib_request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
-    try:
-        with urllib_request.urlopen(req, timeout=timeout) as r:
-            return r.read()
-    except urllib_error.HTTPError as e:
-        if e.code == 404:
+def http_get(url: str, timeout: float = 30.0, attempts: int = 3) -> Optional[bytes]:
+    """Bytes, or None. EP Open Data throttles with 429 (761 of 761 failures on
+    25 Sep 2026 were 429): wait and retry, honouring Retry-After."""
+    for attempt in range(1, attempts + 1):
+        req = urllib_request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
+        try:
+            with urllib_request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib_error.HTTPError as e:
+            if e.code == 404:
+                return None
+            if e.code == 429 and attempt < attempts:
+                try:
+                    wait = float(e.headers.get("Retry-After", ""))
+                except (TypeError, ValueError):
+                    wait = 10.0 * attempt
+                time.sleep(min(max(wait, 5.0), 60.0))
+                continue
+            print(f"  [HTTP {e.code}] {url}")
             return None
-        print(f"  [HTTP {e.code}] {url}")
-        return None
-    except Exception as e:  # noqa: BLE001
-        print(f"  [{type(e).__name__}] {url}: {str(e)[:80]}")
-        return None
+        except Exception as e:  # noqa: BLE001
+            print(f"  [{type(e).__name__}] {url}: {str(e)[:80]}")
+            return None
+    return None
 
 
 def derive_ep_ref(question_reference: str) -> Optional[str]:
@@ -221,8 +232,16 @@ def main():
     n_a_filled = 0
     n_failed = 0
     processed = 0
+    consecutive_failures = 0
+    throttled = False
     for row in rows:
         if args.max_seconds and time.monotonic() - started > args.max_seconds:
+            break
+        if consecutive_failures >= 10:
+            # The source is refusing us, not ten documents being broken: stop and
+            # leave the rest for the next run instead of recording them as failures.
+            throttled = True
+            print("  [STOP] 10 consecutive failures: EP Open Data is throttling; the rest waits")
             break
         processed += 1
         ref_db = row["question_reference"]
@@ -236,6 +255,7 @@ def main():
         if not payload:
             print(f"  [MISS] {ref_db}: no EP API payload")
             n_failed += 1
+            consecutive_failures += 1
             time.sleep(args.throttle)
             continue
 
@@ -263,6 +283,7 @@ def main():
             if a_text:
                 n_a_filled += 1
 
+        consecutive_failures = 0
         print(f"  {ref_db}: q={len(q_text)}c a={len(a_text)}c (commish={commissioner})")
 
         if args.apply:
@@ -281,9 +302,13 @@ def main():
     print(f"\n[DONE] Filled q_text on {n_q_filled} rows, a_text on {n_a_filled} rows, {n_failed} failures.")
     if not args.apply:
         print("[NOTE] Dry-run — pass --apply to write to DB.")
-    if processed and n_failed == processed:
+    if processed and n_failed == processed and not throttled:
         print(f"[ERROR] all {processed} rows failed: EP Open Data unreachable or changed")
         return 1
+    if throttled:
+        print(f"[SYNC_STATUS] degraded: throttled by EP Open Data after {processed} row(s); "
+              f"{len(rows) - processed} left for the next run")
+        return 0
     left = len(rows) - processed
     if left or n_failed or (args.limit and len(rows) == args.limit):
         print(f"[SYNC_STATUS] degraded: {left} row(s) not reached this run"

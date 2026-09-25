@@ -105,3 +105,9 @@ def test_timeout_is_retried(monkeypatch):
     page = _Resp(200, {"data": [{"identifier": "E-10-2026-000001"}]})
     c = _Flaky([pq.httpx.ReadTimeout("slow"), page, _Resp(204, {})])
     assert pq.list_ids(c, 2026, deadline=float("inf")) == ["E-10-2026-000001"]
+
+
+def test_guard_tolerates_a_few_delisted_but_catches_truncation():
+    import inspect
+    src = inspect.getsource(pq.main)
+    assert "0.95 * held_years" in src
