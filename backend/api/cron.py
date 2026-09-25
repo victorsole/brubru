@@ -378,6 +378,17 @@ _TENDERATOR_CHAIN = (
     "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
 )
 
+# Daily jobs whose scripts write no sync_runs row of their own (measured 25 Sep
+# 2026: 11 of the 29, consultations and the Have Your Say sweep among them), so
+# a failure was visible only in a log line. Recorded by the tier, like the chain
+# above. A script that starts recording itself must be removed from this list,
+# or it gets two rows per run.
+_DAILY_TIER_RECORDED = (
+    "consultations", "have_your_say", "comitology", "sanctions", "infringements",
+    "transparency_register", "cor", "eesc", "jrc", "tbt",
+    "carriage_status_notifications",
+)
+
 
 def _failure_detail(stderr: str | None, stdout: str | None, returncode=None) -> str:
     """What a failed child said, for the sync_runs error column.
@@ -909,7 +920,7 @@ async def cron_sync_daily(
         from services.sync.freshness import record_run
         _db = SessionLocal()
         try:
-            for _key in _TENDERATOR_CHAIN:
+            for _key in _TENDERATOR_CHAIN + _DAILY_TIER_RECORDED:
                 _res = results.get(_key)
                 if not isinstance(_res, dict):
                     continue
