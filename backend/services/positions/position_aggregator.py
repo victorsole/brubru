@@ -477,7 +477,37 @@ class PositionAggregator:
             })
         return out
 
+    # Same group under another name (French label, or the pre-2019/2021 name).
+    # ID and EFDD have no single successor, so they are deliberately absent.
+    _GROUP_ALIASES = {"PPE": "EPP", "Verts/ALE": "Greens/EFA", "GUE/NGL": "The Left",
+                      "ALDE": "Renew"}
+    _CURRENT_GROUPS = frozenset({"EPP", "S&D", "PfE", "ECR", "Renew", "Greens/EFA",
+                                 "The Left", "ESN", "NI"})
+
+    @staticmethod
+    def _lead_rapporteur(carriage: LegislativeCarriage) -> Optional[Dict[str, Any]]:
+        """The responsible committee's rapporteur, from the roles-owned column.
+
+        Until 25 Sep 2026 the name and group were read ONLY from the raw
+        oeil_procedure_data blob, which holds no rapporteur for any of the 662
+        live files that have one: all 43 snapshots showed none, so the
+        "rapporteur's group" signal never reached the predictor.
+        """
+        raps = carriage.rapporteurs if isinstance(carriage.rapporteurs, list) else []
+        raps = [r for r in raps if isinstance(r, dict) and r.get("name")]
+        if not raps:
+            return None
+        for r in raps:
+            if carriage.lead_committee and r.get("committee") == carriage.lead_committee:
+                return r
+        return raps[0]
+
     def _rapporteur_name(self, carriage: LegislativeCarriage) -> Optional[str]:
+        lead = self._lead_rapporteur(carriage)
+        if lead:
+            return lead["name"]
+        if getattr(carriage, "rapporteur_name", None):
+            return carriage.rapporteur_name
         if not carriage.oeil_procedure_data:
             return None
         data = carriage.oeil_procedure_data or {}
@@ -494,6 +524,10 @@ class PositionAggregator:
         return None
 
     def _rapporteur_group(self, carriage: LegislativeCarriage) -> Optional[str]:
+        lead = self._lead_rapporteur(carriage)
+        if lead and lead.get("group"):
+            g = self._GROUP_ALIASES.get(lead["group"], lead["group"])
+            return g if g in self._CURRENT_GROUPS else None
         if not carriage.oeil_procedure_data:
             return None
         data = carriage.oeil_procedure_data or {}
