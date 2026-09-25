@@ -18,6 +18,7 @@ import urllib.request
 from datetime import datetime
 from html import unescape
 
+from sqlalchemy.exc import OperationalError
 from sqlalchemy import func, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
@@ -340,7 +341,14 @@ def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.
         logger.warning("[social] no fetch-enabled account matches handles=%s on platforms=%s",
                        handles, list(platforms))
     stats = {"accounts": len(rows), "fetched_ok": 0, "skipped": 0, "posts_written": 0,
-             "by_platform": {}, "skips": {}, "stopped_early": False, "dry_run": dry_run}
+             "by_platform": {}, "skips": {}, "stopped_early": False, "dry_run": dry_run,
+             "lock_skipped": 0}
+    # Two drips (the cron and a manual /social-eu top-up) pick the SAME oldest
+    # accounts, so one can wait on the other's row locks. On 25 Sep 2026 a manual
+    # run sat 14 minutes at 0% CPU holding only its database connection. A lock
+    # wait now fails after 30 s and that account is skipped and counted.
+    if not dry_run:
+        db.execute(text("SET lock_timeout = '30s'"))
     empty_streak = 0
     for a in rows:
         plat = a["platform"]
@@ -350,7 +358,15 @@ def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.
         else:
             posts, skip = fetch_for_account(plat, a["account_url"], per_account)
         if not dry_run:
-            db.execute(text("UPDATE social_accounts SET last_checked_at=now() WHERE id=:i"), {"i": a["id"]})
+            try:
+                db.execute(text("UPDATE social_accounts SET last_checked_at=now() WHERE id=:i"), {"i": a["id"]})
+            except OperationalError as exc:
+                if "lock timeout" not in str(exc).lower():
+                    raise
+                db.rollback()
+                stats["lock_skipped"] += 1
+                logger.warning("[social] %s locked by another run, skipped", a["account_url"])
+                continue
         if skip:
             stats["skipped"] += 1
             stats["skips"][skip] = stats["skips"].get(skip, 0) + 1
@@ -367,7 +383,16 @@ def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.
                     stmt = stmt.on_conflict_do_update(
                         constraint="social_posts_account_post_uq",
                         set_={c: getattr(stmt.excluded, c) for c in _REFRESH} | {"fetched_at": func.now(), "updated_at": func.now()})
-                    db.execute(stmt)
+                    try:
+                        db.execute(stmt)
+                    except OperationalError as exc:
+                        if "lock timeout" not in str(exc).lower():
+                            raise
+                        db.rollback()
+                        stats["lock_skipped"] += 1
+                        logger.warning("[social] posts of %s locked by another run, skipped",
+                                       a["account_url"])
+                        break
         if not dry_run:
             db.commit()
         # cooldown / throttle detection (mainly X syndication): stop after an empty streak
