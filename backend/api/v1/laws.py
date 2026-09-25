@@ -29,6 +29,15 @@ router = APIRouter(prefix="/laws", tags=["v1-laws"])
 
 
 class LawItem(BaseModel):
+    id: Optional[int] = Field(
+        None,
+        description=(
+            "Brubru's own permanent row id. Use this to recognise a law across syncs: it "
+            "never changes, whereas `celex` can be corrected. GovClipping reported on "
+            "25 Sep 2026 that a corrected CELEX reads to them as a brand new record, "
+            "because this id was not exposed."
+        ),
+    )
     celex: Optional[str] = None
     title: Optional[str] = None
     doc_type: Optional[str] = None
@@ -224,6 +233,7 @@ async def list_laws(
 
     data = [
         LawItem(
+            id=r.id,
             celex=r.celex,
             title=r.title,
             doc_type=r.doc_type_normalized or r.doc_type,
@@ -324,6 +334,7 @@ async def get_law_detail(
             },
         )
     return LawItem(
+        id=r.id,
         celex=r.celex,
         title=r.title,
         doc_type=r.doc_type_normalized or r.doc_type,
