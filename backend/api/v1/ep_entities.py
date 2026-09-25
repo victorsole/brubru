@@ -34,6 +34,7 @@ from ._body import body_from_html, body_from_html_or_text, body_threshold_param,
 from core.body_sources import read_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -236,7 +237,7 @@ async def list_amendments(
 
     total = query.count()
     rows = (
-        query.order_by(MEPAmendment.document_date.desc().nullslast(), MEPAmendment.amendment_number.asc())
+        stable(query.order_by(MEPAmendment.document_date.desc().nullslast(), MEPAmendment.amendment_number.asc()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -449,7 +450,7 @@ async def list_votes(
         query = query.filter(and_(*filters))
 
     total = query.count()
-    rows = query.order_by(EPVote.timestamp.desc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(EPVote.timestamp.desc())).offset((page - 1) * limit).limit(limit).all()
     data = [_vote_row_to_item(r) for r in rows]
     return build_envelope(
         data, total=total, page=page, limit=limit,
@@ -543,7 +544,7 @@ async def list_member_votes(
     if position:
         query = query.filter(EPMemberVote.position == position.upper())
     total = query.count()
-    rows = query.offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query).offset((page - 1) * limit).limit(limit).all()
     parent_url = f"https://howtheyvote.eu/votes/{vote.htv_id}" if vote.htv_id else None
     parent_date = vote.timestamp.date() if hasattr(vote.timestamp, "date") and vote.timestamp else None
     import html as _html
@@ -944,7 +945,7 @@ async def list_press_releases(
 
     total = query.count()
     rows = (
-        query.order_by(InstitutionalPublication.published_date.desc().nullslast())
+        stable(query.order_by(InstitutionalPublication.published_date.desc().nullslast()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = []
@@ -1036,7 +1037,7 @@ async def list_reports(
         aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
 
     total = aq.count()
-    rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(aq.order_by(AmendmentDocument.document_date.desc().nullslast())).offset((page - 1) * limit).limit(limit).all()
 
     AD_TYPE_MAP = {"PR": "draft_report", "RD": "draft_recommendation"}
     lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in rows])
@@ -1111,7 +1112,7 @@ async def list_opinions(
         aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
 
     total = aq.count()
-    rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(aq.order_by(AmendmentDocument.document_date.desc().nullslast())).offset((page - 1) * limit).limit(limit).all()
 
     AD_TYPE_MAP = {"AD": "opinion", "PA": "draft_opinion"}
     lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in rows])

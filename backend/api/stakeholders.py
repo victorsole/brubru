@@ -24,6 +24,7 @@ from services.tracking.pi_committee_crosswalk import (
 from services.strategy import stakeholder_map
 from services.strategy.stakeholder_map import _domains_for_committee, dg_contacts, _MEP_URL, _WIW_URL
 from .auth import get_current_user
+from api.v1._pagination import stable
 
 _BRUSSELS = ("(head_office_city ILIKE '%brussel%' OR head_office_city ILIKE '%bruxelles%' "
              "OR eu_office_city ILIKE '%brussel%' OR eu_office_city ILIKE '%bruxelles%')")
@@ -195,7 +196,7 @@ def stakeholder_directory(
         rows = db.execute(text(
             f"SELECT identification_code, original_name, acronym, website_url, public_url, "
             f"registration_category, head_office_city, eu_office_city FROM eu_transparency_register "
-            f"WHERE {where} ORDER BY original_name LIMIT :lim OFFSET :off"),
+            f"WHERE {where} ORDER BY original_name, id LIMIT :lim OFFSET :off"),
             {**params, "lim": page_size, "off": off}).fetchall()
         items = [{
             "id": f"org:{r.identification_code}", "type": "org", "institution": "stakeholder",
@@ -215,7 +216,7 @@ def stakeholder_directory(
         total = db.execute(text(f"SELECT count(distinct mep_id) FROM mep_lobby_meetings WHERE {where}"), params).scalar() or 0
         rows = db.execute(text(
             f"SELECT mep_id, max(mep_name) AS name, max(committee) AS committee "
-            f"FROM mep_lobby_meetings WHERE {where} GROUP BY mep_id ORDER BY name LIMIT :lim OFFSET :off"),
+            f"FROM mep_lobby_meetings WHERE {where} GROUP BY mep_id ORDER BY name, mep_id LIMIT :lim OFFSET :off"),
             {**params, "lim": page_size, "off": off}).fetchall()
         items = [{
             "id": f"mep:{r.mep_id}", "type": "mep", "institution": "ep",
@@ -247,7 +248,7 @@ def stakeholder_directory(
         if term:
             qry = qry.filter(LegislativeCarriage.title.ilike(f"%{term}%"))
         total = qry.count()
-        rows = qry.order_by(LegislativeCarriage.title).limit(page_size).offset(off).all()
+        rows = stable(qry.order_by(LegislativeCarriage.title).limit(page_size)).offset(off).all()
         items = [{
             "id": f"file:{c.oeil_procedure_ref or c.file_id}", "type": "file", "institution": "file",
             "label": c.title or c.oeil_procedure_ref or "File", "sublabel": c.oeil_procedure_ref,

@@ -35,6 +35,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._body import body_threshold_param
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
+from api.v1._pagination import stable
 
 router = APIRouter()
 
@@ -208,7 +209,7 @@ async def funding_startups(
 
     query = db.query(FtCallForProposals).filter(and_(*filters))
     total = query.count()
-    rows = (query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc())
+    rows = (stable(query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
             .offset((page - 1) * limit).limit(limit).all())
     return build_envelope([_to_item(r, body_threshold) for r in rows], total=total, page=page, limit=limit)
 

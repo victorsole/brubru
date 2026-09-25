@@ -28,6 +28,7 @@ from services.tracking.pi_filter import AnchorSpec, build_pi_clause
 from services.tracking.tracked_lens import tracked_anchors
 from knowledge_base.eu_calendar_institutions import COMMISSION_DG_NAME
 from .auth_optional import get_current_user_optional
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -168,10 +169,10 @@ def list_news(
         # `news_date`: inventing a publication date we were never given is the
         # thing feedback_backfill_no_hallucination forbids. The payload keeps
         # news_date null so the UI can say the date is unknown.
-        rows = (q.order_by(func.coalesce(
+        rows = (stable(q.order_by(func.coalesce(
                     EuNewsItem.news_date,
                     func.cast(EuNewsItem.created_at, Date),
-                ).desc())
+                ).desc()))
                 .offset(offset).limit(limit).all())
         # Defensive: collapse rows sharing a canonical article URL (cross-listed).
         seen: set = set()

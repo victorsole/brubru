@@ -34,6 +34,7 @@ from schemas.feedback_schemas import (
 )
 from api.auth import get_current_user
 from api.admin_auth import get_current_admin_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +112,7 @@ async def get_my_feedback(
     total = query.count()
 
     # Get paginated results
-    feedback_items = query.order_by(FeedbackSubmission.created_at.desc()) \
+    feedback_items = stable(query.order_by(FeedbackSubmission.created_at.desc())) \
         .offset((page - 1) * page_size) \
         .limit(page_size) \
         .all()
@@ -228,7 +229,7 @@ def get_all_feedback_admin(
 
     total = query.count()
 
-    feedback_items = query.order_by(FeedbackSubmission.created_at.desc()) \
+    feedback_items = stable(query.order_by(FeedbackSubmission.created_at.desc())) \
         .offset((page - 1) * page_size) \
         .limit(page_size) \
         .all()

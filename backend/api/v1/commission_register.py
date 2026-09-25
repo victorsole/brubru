@@ -33,6 +33,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from core.body_sources import read_body
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -261,7 +262,7 @@ async def list_commission_register_documents(
         order_col = CommissionDocument.last_updated.desc().nullslast()
     else:
         order_col = CommissionDocument.publication_date.desc().nullslast()
-    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
     return build_envelope(
         [_row_to_item(r, body_threshold=body_threshold) for r in rows],

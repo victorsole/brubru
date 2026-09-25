@@ -22,6 +22,7 @@ from models.dg_grow import (
 )
 from services.scrapers.dg_grow.dg_grow_sync_service import DGGrowSyncService
 from services.scrapers.dg_grow.emi_scraper import EMIScraper
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,7 @@ async def list_notified_bodies(
         query = query.filter(NotifiedBody.cpv_mapping.any(cpv_cat))
 
     total = query.count()
-    bodies = query.order_by(NotifiedBody.body_name).offset(page * limit).limit(limit).all()
+    bodies = stable(query.order_by(NotifiedBody.body_name)).offset(page * limit).limit(limit).all()
 
     return {
         "total": total,
@@ -114,7 +115,7 @@ def list_technical_regulations(
         query = query.filter(TechnicalRegulation.status == status)
 
     total = query.count()
-    regs = query.order_by(TechnicalRegulation.notification_date.desc()).offset(page * limit).limit(limit).all()
+    regs = stable(query.order_by(TechnicalRegulation.notification_date.desc())).offset(page * limit).limit(limit).all()
 
     return {
         "total": total,
@@ -150,7 +151,7 @@ def list_trade_barriers(
         query = query.filter(TradeBarrierNotification.is_eu_notification == True)
 
     total = query.count()
-    notifs = query.order_by(TradeBarrierNotification.notification_date.desc()).offset(page * limit).limit(limit).all()
+    notifs = stable(query.order_by(TradeBarrierNotification.notification_date.desc())).offset(page * limit).limit(limit).all()
 
     return {
         "total": total,
@@ -203,7 +204,7 @@ def list_ecosystem_data(
         query = query.filter(IndustrialEcosystemData.dimension == dimension)
 
     total = query.count()
-    data = query.order_by(IndustrialEcosystemData.ecosystem).offset(page * limit).limit(limit).all()
+    data = stable(query.order_by(IndustrialEcosystemData.ecosystem)).offset(page * limit).limit(limit).all()
 
     return {
         "total": total,

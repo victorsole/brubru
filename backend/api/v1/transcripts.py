@@ -44,6 +44,7 @@ from models.user import User
 from ._body import body_threshold_param
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/committee-transcripts", tags=["v1-committee-transcripts"])
 
@@ -255,7 +256,7 @@ async def list_committee_transcripts(
         base = base.filter(T.last_updated >= updated_from)
 
     total = base.count()
-    rows = base.order_by(T.meeting_date.desc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(base.order_by(T.meeting_date.desc())).offset((page - 1) * limit).limit(limit).all()
 
     data = [_row_to_item(row, threshold=body_threshold) for row in rows]
     return build_envelope(

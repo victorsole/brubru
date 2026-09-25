@@ -233,9 +233,9 @@ async def list_brussels_lobbies(
     where_sql = "WHERE " + " AND ".join(where) if where else ""
 
     order_sql = {
-        "recent": "last_item_date DESC NULLS LAST, costs_max DESC NULLS LAST",
-        "costs": "costs_max DESC NULLS LAST, last_item_date DESC NULLS LAST",
-        "name": "original_name ASC",
+        "recent": "last_item_date DESC NULLS LAST, costs_max DESC NULLS LAST, id DESC",
+        "costs": "costs_max DESC NULLS LAST, last_item_date DESC NULLS LAST, id DESC",
+        "name": "original_name ASC, id ASC",
     }[order]
 
     total = int(db.execute(

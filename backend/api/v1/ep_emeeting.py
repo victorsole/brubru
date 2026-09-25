@@ -27,6 +27,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/emeeting", tags=["v1-emeeting"])
 documents_router = APIRouter(prefix="/emeeting-documents", tags=["v1-emeeting-documents"])
@@ -148,8 +149,8 @@ async def list_emeeting_agendas(
 
     total = query.count()
     rows = (
-        query.order_by(EpEmeetingAgenda.meeting_date.desc().nullslast(),
-                       EpEmeetingAgenda.first_seen.desc())
+        stable(query.order_by(EpEmeetingAgenda.meeting_date.desc().nullslast(),
+                       EpEmeetingAgenda.first_seen.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [_to_item(r) for r in rows]
@@ -336,8 +337,8 @@ async def list_emeeting_documents(
 
     total = query.count()
     rows = (
-        query.order_by(EpEmeetingDocument.meeting_date.desc().nullslast(),
-                       EpEmeetingDocument.first_seen.desc())
+        stable(query.order_by(EpEmeetingDocument.meeting_date.desc().nullslast(),
+                       EpEmeetingDocument.first_seen.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [_to_doc(r) for r in rows]

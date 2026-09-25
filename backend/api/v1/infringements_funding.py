@@ -29,6 +29,7 @@ from ._body import (
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 
 # ============================================================================
@@ -148,10 +149,10 @@ async def list_infringements(
 
     total = query.count()
     rows = (
-        query.order_by(
+        stable(query.order_by(
             InfringementProcedure.decision_date.desc().nullslast(),
             InfringementProcedure.id.asc(),
-        )
+        ))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -354,10 +355,10 @@ async def list_funding_opportunities(
         # Default: most recent deadlines first (2025-2026 before decade-old
         # closed calls). Partners hit the endpoint to find opportunities they
         # can still apply to, not historic data.
-        query.order_by(
+        stable(query.order_by(
             FundingOpportunity.deadline.desc().nullslast(),
             FundingOpportunity.id.desc(),
-        )
+        ))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

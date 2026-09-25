@@ -25,6 +25,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -283,7 +284,7 @@ async def list_resolutions(
         order_col = EPResolution.updated_at.desc().nullslast()
     else:
         order_col = EPResolution.adoption_date.desc().nullslast()
-    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
     # Pull the cached OEIL body (backfilled by scripts/backfill_oeil_body.py)
     # for every resolution's procedure_ref in one batch — same enrichment we

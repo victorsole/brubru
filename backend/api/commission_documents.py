@@ -45,6 +45,7 @@ from services.tracking.tracked_lens import tracked_anchors
 from services.linking.emeeting_links import canon_commission_ref, commission_doc_enrichment
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -193,7 +194,7 @@ def get_items(
                 query = query.order_by(sort_column.desc().nullslast())
             else:
                 query = query.order_by(sort_column.asc().nullsfirst())
-            items = query.offset(offset).limit(limit).all()
+            items = stable(query).offset(offset).limit(limit).all()
             page = [build(it) for it in items]
 
         return CommissionDocListResponse(

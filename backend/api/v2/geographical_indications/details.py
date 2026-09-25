@@ -79,7 +79,7 @@ def register_gi_details(router):
         params.update(limit=limit, offset=(page - 1) * limit)
         rows = db.execute(text(
             f"SELECT {_DETAIL_COLS} FROM gi_details WHERE {where} "
-            "ORDER BY protected_name LIMIT :limit OFFSET :offset"), params).mappings().all()
+            "ORDER BY protected_name, id LIMIT :limit OFFSET :offset"), params).mappings().all()
         return {"total": total, "page": page, "limit": limit,
                 "items": [dict(r) for r in rows]}
 
@@ -143,7 +143,7 @@ def register_gi_details(router):
         rows = db.execute(text(
             "SELECT protected_name, gi_type, product_type, countries, competent_authority, "
             "round(geo_area_km2::numeric) AS area_km2, geo_geom_confidence, geo_geometry "
-            f"FROM gi_details WHERE {' AND '.join(where)} ORDER BY protected_name LIMIT :limit"),
+            f"FROM gi_details WHERE {' AND '.join(where)} ORDER BY protected_name, id LIMIT :limit"),
             params).mappings().all()
         feats = []
         for r in rows:

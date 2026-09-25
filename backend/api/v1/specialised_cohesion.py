@@ -156,7 +156,7 @@ async def list_cohesion(
                    public_url, api_endpoint, has_body
               FROM eu_cohesion_datasets
               {where_sql}
-             ORDER BY view_count DESC NULLS LAST, name
+             ORDER BY view_count DESC NULLS LAST, name, id
              LIMIT :limit OFFSET :offset
         """),
         {**params, "limit": limit, "offset": offset},

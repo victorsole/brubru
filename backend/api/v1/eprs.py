@@ -18,6 +18,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/eprs", tags=["v1-eprs"])
 
@@ -165,7 +166,7 @@ async def list_eprs(
     else:
         order_col = EPRSPublication.publication_date.desc().nullslast()
     rows = (
-        query.order_by(order_col)
+        stable(query.order_by(order_col))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

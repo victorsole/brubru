@@ -1451,13 +1451,13 @@ async def get_user_analysis_history(
     """
     try:
         # Get user's analyses
-        analyses = db.query(ComplianceAnalysis, LawCluster).join(
+        analyses = stable(db.query(ComplianceAnalysis, LawCluster).join(
             LawCluster, ComplianceAnalysis.cluster_id == LawCluster.id
         ).filter(
             ComplianceAnalysis.user_id == current_user.id
         ).order_by(
             ComplianceAnalysis.created_at.desc()
-        ).limit(limit).offset(offset).all()
+        ).limit(limit)).offset(offset).all()
 
         result = []
         for analysis, cluster in analyses:
@@ -2115,6 +2115,7 @@ async def get_regulatory_cascade(
 from services.compliance.maturity_assessment import (  # noqa: E402
     compose_maturity_assessment,
 )
+from api.v1._pagination import stable
 
 
 @router.get(

@@ -273,7 +273,7 @@ async def find_projects(
         SELECT *
         FROM ft_funded_projects
         WHERE {where_sql}
-        ORDER BY start_date DESC NULLS LAST
+        ORDER BY start_date DESC NULLS LAST, id DESC
         LIMIT :limit OFFSET :offset
     """)
     params["limit"] = limit
@@ -555,7 +555,7 @@ async def org_projects(
         SELECT *
         FROM ft_funded_projects
         WHERE {where_sql}
-        ORDER BY start_date DESC NULLS LAST
+        ORDER BY start_date DESC NULLS LAST, id DESC
         LIMIT :limit OFFSET :offset
     """)
     params["limit"] = limit

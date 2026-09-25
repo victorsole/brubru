@@ -67,8 +67,8 @@ def list_translations(
 
     total = query.count()
     items = (
-        query
-        .order_by(CatalanTranslation.articles_count.desc())
+        stable(query
+        .order_by(CatalanTranslation.articles_count.desc()))
         .offset(offset)
         .limit(limit)
         .all()
@@ -205,6 +205,7 @@ async def get_translation(celex: str, db: Session = Depends(get_db)):
 # EuroVocCat marriage - public endpoints for the Catalan acquis
 # ============================================================
 from sqlalchemy import text as _sqltext  # noqa: E402
+from api.v1._pagination import stable
 
 
 @router.get(
@@ -250,7 +251,7 @@ def eurovoc_acts(notation: str, limit: int = Query(50, ge=1, le=200),
         "SELECT t.celex, t.title_ca, t.siteground_url AS url, t.category "
         f"FROM catalan_law_eurovoc l JOIN catalan_translations t ON t.celex = l.celex WHERE {filt} "
         "GROUP BY t.celex, t.title_ca, t.siteground_url, t.category "
-        "ORDER BY t.title_ca LIMIT :lim OFFSET :off"),
+        "ORDER BY t.title_ca, t.celex LIMIT :lim OFFSET :off"),
         {**params, "lim": limit, "off": off}).mappings().all()
     return {"notation": notation, "concept_ca": concept["ca"], "total": total, "page": page, "limit": limit,
             "acts": [{"celex": r["celex"], "title_ca": r["title_ca"], "url": r["url"],

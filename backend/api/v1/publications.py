@@ -27,6 +27,7 @@ from ._body import body_from_html, body_from_html_or_text, body_threshold_param,
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.body_sources import read_body
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -193,7 +194,7 @@ async def list_publications(
     else:
         order_col = InstitutionalPublication.published_date.desc().nullslast()
     rows = (
-        query.order_by(order_col)
+        stable(query.order_by(order_col))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

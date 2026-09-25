@@ -55,6 +55,7 @@ from services.tracking.tracked_files_seeder import _interest_list
 from .auth import get_current_user
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +134,7 @@ def get_work_items(
             query = query.order_by(sort_column.asc())
 
         # Apply pagination
-        items = query.offset(offset).limit(limit).all()
+        items = stable(query).offset(offset).limit(limit).all()
 
         # eMeeting enrichment: attach the opinion / draft opinion this committee
         # tabled on this dossier (matched by procedure + committee). Surface-only.

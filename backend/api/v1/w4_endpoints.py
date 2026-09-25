@@ -32,6 +32,7 @@ from ._body import (
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +205,7 @@ async def list_parliamentary_questions(
 
     total = query.count()
     rows = (
-        query.order_by(ParliamentaryQuestion.submitted_date.desc().nullslast())
+        stable(query.order_by(ParliamentaryQuestion.submitted_date.desc().nullslast()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [_parl_q_to_item(r, body_threshold=body_threshold) for r in rows]
@@ -398,7 +399,7 @@ async def list_meetings(
 
     total = query.count()
     rows = (
-        query.order_by(TransparencyMeeting.meeting_date.desc())
+        stable(query.order_by(TransparencyMeeting.meeting_date.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data: list = []
@@ -576,7 +577,7 @@ async def list_rsb_opinions(
 
     total = query.count()
     rows = (
-        query.order_by(RSBOpinion.opinion_date.desc())
+        stable(query.order_by(RSBOpinion.opinion_date.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [
@@ -818,7 +819,7 @@ def _list_secondary_acts(
 
     total = query.count()
     rows = (
-        query.order_by(SecondaryAct.publication_date.desc().nullslast())
+        stable(query.order_by(SecondaryAct.publication_date.desc().nullslast()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [_secondary_act_to_item(r, body_threshold=body_threshold) for r in rows]
@@ -1166,7 +1167,7 @@ async def list_tris_notifications(
 
     total = query.count()
     rows = (
-        query.order_by(TRISNotification.notification_date.desc())
+        stable(query.order_by(TRISNotification.notification_date.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [_tris_to_item(r, body_threshold=body_threshold) for r in rows]

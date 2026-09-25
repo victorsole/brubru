@@ -62,6 +62,7 @@ from services.tracking.pi_committee_crosswalk import (
 from .auth import get_current_user
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -231,8 +232,8 @@ def list_events(
 
     total = query.count()
     events = (
-        query
-        .order_by(EUCalendarEvent.start_date.asc())
+        stable(query
+        .order_by(EUCalendarEvent.start_date.asc()))
         .offset(offset)
         .limit(limit)
         .all()

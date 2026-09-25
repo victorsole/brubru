@@ -16,6 +16,7 @@ from models.general_publication import EuGeneralPublication
 from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/general-publications", tags=["v1-general-publications"])
 
@@ -83,7 +84,7 @@ async def list_general_publications(
     if published_to:
         query = query.filter(EuGeneralPublication.publication_date <= published_to)
     total = query.count()
-    rows = (query.order_by(EuGeneralPublication.publication_date.desc().nullslast())
+    rows = (stable(query.order_by(EuGeneralPublication.publication_date.desc().nullslast()))
             .offset((page - 1) * limit).limit(limit).all())
     return build_envelope([_to_item(r) for r in rows], total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,

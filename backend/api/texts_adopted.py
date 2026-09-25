@@ -48,6 +48,7 @@ from schemas.scrapers.texts_adopted_schemas import PARLIAMENTARY_TERMS
 from .auth import get_current_user
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +133,7 @@ def get_items(
             query = query.order_by(sort_column.asc().nullslast())
 
         # Paginate
-        items = query.offset(offset).limit(limit).all()
+        items = stable(query).offset(offset).limit(limit).all()
 
         # Corpus bounds, computed from the data (D2). A zero result must be
         # readable as "outside what we hold" rather than as "no such text".

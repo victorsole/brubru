@@ -35,6 +35,7 @@ from services.tracking.pi_committee_crosswalk import (
     committees_for_interests, dgs_for_interests, council_configs_for_interests, keywords_for_interests,
 )
 from .auth import get_current_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -205,7 +206,7 @@ def list_transcripts(
         like = f"%{search}%"
         q = q.filter(or_(CMT.title.ilike(like), CMT.transcript_text.ilike(like)))
     total = q.count()
-    rows = q.order_by(CMT.meeting_date.desc()).offset(offset).limit(limit).all()
+    rows = stable(q.order_by(CMT.meeting_date.desc())).offset(offset).limit(limit).all()
     from services.linking.emeeting_links import docs_by_committee_date
     minutes_map = docs_by_committee_date(db, "minutes")
     return {"total": total, "items": [_summary(r, minutes_map) for r in rows]}

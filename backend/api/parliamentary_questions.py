@@ -33,6 +33,7 @@ from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.pi_committee_crosswalk import keywords_for_interests
 from services.tracking.tracked_lens import tracked_anchors
 from .auth import get_current_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -266,7 +267,7 @@ def list_questions(
                          ParliamentaryQuestion.text_question.ilike(like)))
     total = q.count()
     q = q.order_by(ParliamentaryQuestion.submitted_date.desc().nullslast())
-    rows = q.offset(offset).limit(limit).all()
+    rows = stable(q).offset(offset).limit(limit).all()
     return {"total": total, "pi_active": pi_active,
             "files_active": bool(my_files and (tracked_procs or tracked_celex)),
             "has_tracked_files": bool(tracked_procs or tracked_celex),

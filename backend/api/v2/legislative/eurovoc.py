@@ -266,7 +266,7 @@ def _tx_page(db: Session, where: str, params: dict, page: int, limit: int, lang:
     rows = db.execute(_sql(
         "SELECT concept_uri, notation, concept_type, labels, alt_labels, domain_uri, "
         "microthesaurus_uri, broader_uri FROM eurovoc_concepts WHERE " + where +
-        " ORDER BY notation LIMIT :lim OFFSET :off"),
+        " ORDER BY notation, concept_uri LIMIT :lim OFFSET :off"),
         {**params, "lim": limit, "off": off}).mappings().all()
     items = [_tx_item(r, lang) for r in rows]
     return build_envelope(items, total, page, limit, op_core_title="EuroVoc taxonomy", op_core_type="Thesaurus")
@@ -494,7 +494,7 @@ async def catalan_concept_acts(
         "min(l.relation) AS relation "
         f"FROM catalan_law_eurovoc l JOIN catalan_translations t ON t.celex = l.celex WHERE {filt} "
         "GROUP BY t.celex, t.title_ca, t.siteground_url, t.category "
-        "ORDER BY t.title_ca LIMIT :lim OFFSET :off"),
+        "ORDER BY t.title_ca, t.celex LIMIT :lim OFFSET :off"),
         {**params, "lim": limit, "off": off}).mappings().all()
     items = [CatalanLinkedAct(celex=r["celex"], title_ca=r["title_ca"], url=r["url"],
                               category=r["category"], relation=r["relation"]) for r in rows]

@@ -40,6 +40,7 @@ from ._body import body_threshold_param
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from services.scrapers.committee_agenda_body_extractor import ensure_agenda_body
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/committee-agendas", tags=["v1-committee-agendas"])
 
@@ -167,7 +168,7 @@ async def list_committee_agendas(
         base = base.filter(E.last_updated >= updated_from)
 
     total = base.count()
-    rows = base.order_by(E.start_date.desc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(base.order_by(E.start_date.desc())).offset((page - 1) * limit).limit(limit).all()
 
     data = []
     for event in rows:

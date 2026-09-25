@@ -813,6 +813,7 @@ from sqlalchemy import text
 # ============================================================================
 
 from pydantic import BaseModel as _PydanticBaseModel
+from api.v1._pagination import stable
 
 
 class BriefRequest(_PydanticBaseModel):
@@ -2554,7 +2555,7 @@ def get_unified_feed(
                         ted_limit = max(1, limit // 3)
                         ted_offset = 0
                     rows_ted = (
-                        qry_ted.order_by(TenderMatch.match_score.desc())
+                        stable(qry_ted.order_by(TenderMatch.match_score.desc()))
                         .offset(ted_offset)
                         .limit(ted_limit)
                         .all()
@@ -2759,25 +2760,25 @@ def get_unified_feed(
             qry = _ted_query()
             totals["ted"] = qry.count()
             if source == "ted":
-                rows = qry.order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                rows = stable(qry.order_by(Tender.submission_deadline.asc().nullslast())).offset(offset).limit(limit).all()
                 items.extend(_serialise_ted(t) for t in rows)
         if source == "ft_proposals" or source == "all":
             qry = _proposals_query()
             totals["ft_proposals"] = qry.count()
             if source == "ft_proposals":
-                rows = qry.order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                rows = stable(qry.order_by(FtCallForProposals.deadline.asc().nullslast())).offset(offset).limit(limit).all()
                 items.extend(_serialise_proposal(p) for p in rows)
         if source == "ft_tenders" or source == "all":
             qry = _tenders_query()
             totals["ft_tenders"] = qry.count()
             if source == "ft_tenders":
-                rows = qry.order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                rows = stable(qry.order_by(FtCallForTenders.deadline.asc().nullslast())).offset(offset).limit(limit).all()
                 items.extend(_serialise_tender_ft(t) for t in rows)
         if source == "ft_projects" or source == "all":
             qry = _projects_query()
             totals["ft_projects"] = qry.count()
             if source == "ft_projects":
-                rows = qry.order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(limit).all()
+                rows = stable(qry.order_by(FtFundedProject.start_date.desc().nullslast())).offset(offset).limit(limit).all()
                 items.extend(_serialise_project(p) for p in rows)
         if source == "agency" or source == "all":
             totals["agency"] = _agency_count()
@@ -2800,10 +2801,10 @@ def get_unified_feed(
         if source == "all":
             slot_count = 6 if external_action else 5
             per_source = max(1, limit // slot_count)
-            slot_ted = _ted_query().order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(per_source).all()
-            slot_prop = _proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
-            slot_tend = _tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
-            slot_proj = _projects_query().order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(per_source).all()
+            slot_ted = stable(_ted_query().order_by(Tender.submission_deadline.asc().nullslast())).offset(offset).limit(per_source).all()
+            slot_prop = stable(_proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast())).offset(offset).limit(per_source).all()
+            slot_tend = stable(_tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast())).offset(offset).limit(per_source).all()
+            slot_proj = stable(_projects_query().order_by(FtFundedProject.start_date.desc().nullslast())).offset(offset).limit(per_source).all()
             slot_agency = _agency_rows(offset, per_source)
             items = []
             items.extend(_serialise_ted(t) for t in slot_ted)

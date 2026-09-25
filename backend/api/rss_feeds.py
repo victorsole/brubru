@@ -26,6 +26,7 @@ from services.rss.rss_processor import RSSProcessor
 from models.rss_feed import RSSFeed
 from models.rss_entry import RSSEntry
 from core.database import get_db
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -298,7 +299,7 @@ async def get_entries(
         total = query.count()
 
         # Apply pagination
-        entries = query.offset(offset).limit(limit).all()
+        entries = stable(query).offset(offset).limit(limit).all()
 
         return EntryListResponse(
             total=total,

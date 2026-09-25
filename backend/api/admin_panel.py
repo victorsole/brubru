@@ -22,6 +22,7 @@ from models.user_feed_subscription import UserFeedSubscription
 from models.feedback import AdminActivityLog, SystemSettings
 from api.admin_auth import get_current_admin_user
 from pydantic import BaseModel, Field
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +199,7 @@ def get_all_users(
 
     total = query.count()
 
-    users = query.order_by(User.created_at.desc()) \
+    users = stable(query.order_by(User.created_at.desc())) \
         .offset((page - 1) * page_size) \
         .limit(page_size) \
         .all()
@@ -365,7 +366,7 @@ def get_all_feeds(
     if active_only:
         query = query.filter(RSSFeed.is_active == True)
 
-    feeds = query.offset((page - 1) * page_size).limit(page_size).all()
+    feeds = stable(query).offset((page - 1) * page_size).limit(page_size).all()
 
     # Enhance with statistics
     result = []
@@ -728,7 +729,7 @@ async def get_admin_activity_log(
 
     total = query.count()
 
-    logs = query.order_by(AdminActivityLog.created_at.desc()) \
+    logs = stable(query.order_by(AdminActivityLog.created_at.desc())) \
         .offset((page - 1) * page_size) \
         .limit(page_size) \
         .all()
@@ -1020,7 +1021,7 @@ def get_all_amendments(
 
     query = db.query(Amendment, User.email).join(User, Amendment.user_id == User.id)
     total = query.count()
-    rows = query.order_by(Amendment.updated_at.desc()) \
+    rows = stable(query.order_by(Amendment.updated_at.desc())) \
         .offset((page - 1) * page_size).limit(page_size).all()
 
     items = []
@@ -1070,7 +1071,7 @@ def get_all_documents(
 
     query = db.query(UserDocument, User.email).join(User, UserDocument.user_id == User.id)
     total = query.count()
-    rows = query.order_by(UserDocument.updated_at.desc()) \
+    rows = stable(query.order_by(UserDocument.updated_at.desc())) \
         .offset((page - 1) * page_size).limit(page_size).all()
 
     items = []

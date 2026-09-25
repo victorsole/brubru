@@ -47,6 +47,7 @@ from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
 from services.amendator.amendment_export_service import get_export_service
 from services.amendator.amendment_linker import get_amendment_linker
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +285,7 @@ async def list_amendments(
 
         # Apply pagination
         offset = (page - 1) * page_size
-        query = query.offset(offset).limit(page_size)
+        query = stable(query).offset(offset).limit(page_size)
 
         # Execute query
         amendments = db.execute(query).scalars().all()

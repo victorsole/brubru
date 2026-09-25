@@ -26,6 +26,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from ._search import text_match
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +136,7 @@ async def list_research_publications(
     total = query.count()
     rows = (
         # id breaks ties: 521 rows share 255 dates, and OFFSET over a tie is unstable.
-        query.order_by(EPRSPublication.publication_date.desc().nullslast(), EPRSPublication.id.desc())
+        stable(query.order_by(EPRSPublication.publication_date.desc().nullslast(), EPRSPublication.id.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [
@@ -334,7 +335,7 @@ async def list_officials(
 
     total = query.count()
     # id breaks ties: names repeat (7,898 rows, 7,491 names); OFFSET over a tie is unstable.
-    rows = query.order_by(EUOfficial.name.asc(), EUOfficial.id.asc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(EUOfficial.name.asc(), EUOfficial.id.asc())).offset((page - 1) * limit).limit(limit).all()
     now = datetime.utcnow()
     data: list = []
     for r in rows:
@@ -544,7 +545,7 @@ async def list_tenders(
     rows = (
         # id breaks ties. TED stamps a whole day with one publication_date, so
         # without it OFFSET pages overlapped: a 2,014-row harvest held 1,446 ids.
-        query.order_by(Tender.publication_date.desc().nullslast(), Tender.id.desc())
+        stable(query.order_by(Tender.publication_date.desc().nullslast(), Tender.id.desc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [

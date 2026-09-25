@@ -17,6 +17,7 @@ from models.chat_analytics import ChatAnalytics
 from models.knowledge_gap import KnowledgeGap
 from models.feedback import FeedbackSubmission
 from services.ai.conversation_quality import get_conversation_quality_service
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/api/admin/analytics", tags=["admin-analytics"])
 
@@ -148,7 +149,7 @@ async def get_conversation_quality_list(
     start_date = datetime.now() - timedelta(days=days)
 
     # Group analytics by conversation_id
-    conversations = db.query(
+    conversations = stable(db.query(
         ChatAnalytics.conversation_id,
         func.count(ChatAnalytics.id).label('message_count'),
         func.sum(ChatAnalytics.tokens_used).label('total_tokens'),
@@ -162,7 +163,7 @@ async def get_conversation_quality_list(
         ChatAnalytics.conversation_id
     ).order_by(
         func.max(ChatAnalytics.created_at).desc()
-    ).limit(limit).offset(offset).all()
+    ).limit(limit)).offset(offset).all()
 
     return {
         'conversations': [

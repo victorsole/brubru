@@ -24,6 +24,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from ._curated_procedures import BrubruCuration, get_curation
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -209,10 +210,10 @@ async def list_procedures(
     # share last_updated (or it's NULL) — without it page=2 could return rows
     # already on page=1.
     rows = (
-        query.order_by(
+        stable(query.order_by(
             LegislativeCarriage.last_updated.desc().nullslast(),
             LegislativeCarriage.id.asc(),
-        )
+        ))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

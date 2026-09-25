@@ -45,6 +45,7 @@ from schemas.user_document_schemas import (
 )
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +177,7 @@ def list_documents(
         total = query.count()
 
         # Apply pagination
-        documents = query.offset(offset).limit(limit).all()
+        documents = stable(query).offset(offset).limit(limit).all()
 
         # Build response with computed fields
         doc_responses = []

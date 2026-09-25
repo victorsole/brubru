@@ -35,6 +35,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 
 # --------------------------------------------------------------------------- #
@@ -138,8 +139,8 @@ def _list(
 
     total = query.count()
     rows = (
-        query.order_by(CouncilRegisterItem.document_date.desc().nullslast(),
-                       CouncilRegisterItem.first_seen.desc())
+        stable(query.order_by(CouncilRegisterItem.document_date.desc().nullslast(),
+                       CouncilRegisterItem.first_seen.desc()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

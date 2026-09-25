@@ -28,6 +28,7 @@ from models.eprs_publication import EPRSPublication
 from .auth import get_current_user
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -88,8 +89,8 @@ def search_publications(
 
         total = query.count()
         publications = (
-            query
-            .order_by(desc(EPRSPublication.publication_date))
+            stable(query
+            .order_by(desc(EPRSPublication.publication_date)))
             .offset(offset)
             .limit(limit)
             .all()

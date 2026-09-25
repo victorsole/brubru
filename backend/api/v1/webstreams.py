@@ -27,6 +27,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -222,7 +223,7 @@ async def list_webstreams(
         order_col = CommitteeMeetingTranscript.last_updated.desc().nullslast()
     else:
         order_col = CommitteeMeetingTranscript.meeting_date.desc().nullslast()
-    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
     return build_envelope(
         [_row_to_item(r) for r in rows],
@@ -310,5 +311,5 @@ async def get_webstreams_for_procedure(
         CommitteeMeetingTranscript.related_procedure_refs.any(procedure_ref)
     )
     total = query.count()
-    rows = query.order_by(CommitteeMeetingTranscript.meeting_date.desc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(CommitteeMeetingTranscript.meeting_date.desc())).offset((page - 1) * limit).limit(limit).all()
     return build_envelope([_row_to_item(r) for r in rows], total=total, page=page, limit=limit)

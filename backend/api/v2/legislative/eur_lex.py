@@ -58,6 +58,7 @@ from api.v1.cellar_discover import CellarMetadata, CellarRecentItem, CellarRelat
 from services.api_clients.cellar_sparql_client import CellarSPARQLClient
 from services.identifiers.standard_identifier_resolver import recognise
 from services.parsers.law_alias_resolver import find_alias_matches
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/eur-lex", tags=["v2-legislative-eur-lex"])
 
@@ -424,7 +425,7 @@ async def list_summaries(
             text(
                 f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at, "
                 + body_select("legissum_summaries", include_body)
-                + f" FROM public.legissum_summaries {where} ORDER BY title LIMIT :lim OFFSET :off"
+                + f" FROM public.legissum_summaries {where} ORDER BY title, id LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
         ).mappings().all()
@@ -1517,7 +1518,7 @@ async def oj_by_reference(
         ),
     )
     total = q.count()
-    rows = q.order_by(EULaw.date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(q.order_by(EULaw.date.desc().nullslast())).offset((page - 1) * limit).limit(limit).all()
     data = [
         LawItem(
             celex=r.celex,
@@ -1595,7 +1596,7 @@ async def list_xref(
         rows = db.execute(
             text(
                 f"SELECT celex, {', '.join(_XREF_COLS)} FROM public.law_xref {where} "
-                "ORDER BY computed_at DESC NULLS LAST LIMIT :lim OFFSET :off"
+                "ORDER BY computed_at DESC NULLS LAST, id DESC LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
         ).mappings().all()

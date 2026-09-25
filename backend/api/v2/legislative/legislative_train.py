@@ -27,6 +27,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.procedures import _enum_str, _latest_event_date, _law_tracker_url, _oeil_url
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/legislative-train", tags=["v2-legislative-train"])
 
@@ -138,7 +139,7 @@ async def list_carriages(
 
     total = query.count()
     rows = (
-        query.order_by(LegislativeCarriage.last_updated.desc().nullslast(), LegislativeCarriage.id.asc())
+        stable(query.order_by(LegislativeCarriage.last_updated.desc().nullslast(), LegislativeCarriage.id.asc()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

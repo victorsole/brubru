@@ -37,6 +37,7 @@ from ._body import (
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 
 # ============================================================================
@@ -197,7 +198,7 @@ async def list_calls_for_proposals(
         # Default: most recent deadlines first (2026 + open calls surface before
         # historic closed calls). Partners exploring the endpoint should land
         # on current opportunities, not on calls that closed a decade ago.
-        query.order_by(*_call_order(FtCallForProposals, order))
+        stable(query.order_by(*_call_order(FtCallForProposals, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
@@ -414,7 +415,7 @@ async def list_calls_for_tenders(
     rows = (
         # Default: most recent deadlines first (2025-2026 published-at lines
         # up well; partners want active tenders, not historic ones).
-        query.order_by(*_call_order(FtCallForTenders, order))
+        stable(query.order_by(*_call_order(FtCallForTenders, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
@@ -595,7 +596,7 @@ async def list_funded_projects(
 
     total = query.count()
     rows = (
-        query.order_by(FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc())
+        stable(query.order_by(FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)

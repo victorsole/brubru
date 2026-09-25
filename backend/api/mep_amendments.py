@@ -53,6 +53,7 @@ from services.tracking.tracked_files_seeder import _interest_list
 from models.legislative_train import LegislativeCarriage
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -240,8 +241,8 @@ async def get_amendments_by_author(
 
         # Paginated items
         items = (
-            query
-            .order_by(MEPAmendment.procedure_reference, MEPAmendment.amendment_number)
+            stable(query
+            .order_by(MEPAmendment.procedure_reference, MEPAmendment.amendment_number))
             .offset(offset)
             .limit(limit)
             .all()
@@ -731,7 +732,7 @@ async def list_amendments(
             query = query.order_by(sort_column.asc())
 
         # Paginate
-        items = query.offset(offset).limit(limit).all()
+        items = stable(query).offset(offset).limit(limit).all()
 
         # Label rapporteur amendments (no group + no authors = draft report)
         response_items = []

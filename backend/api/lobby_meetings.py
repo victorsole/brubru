@@ -32,6 +32,7 @@ from services.tracking.pi_committee_crosswalk import (
 from services.transparency_register_match import match_org
 from services.scrapers.mep_lobby_meetings_scraper import norm_org
 from .auth import get_current_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -141,7 +142,7 @@ def list_meetings(
     _require_yellow(user)
     q, pi_active = _filtered_query(db, user, my_interests, dg, search, date_from, date_to)
     total = q.count()
-    rows = q.order_by(TM.meeting_date.desc()).offset(offset).limit(limit).all()
+    rows = stable(q.order_by(TM.meeting_date.desc())).offset(offset).limit(limit).all()
     items = [_enrich_org(_summary(r), db) for r in rows]
     return {"total": total, "pi_active": pi_active, "items": items}
 
@@ -268,7 +269,7 @@ def list_parliament(
     _require_yellow(user)
     q, pi_active = _mlm_query(db, user, my_interests, committee, search)
     total = q.count()
-    rows = q.order_by(MLM.meeting_date.desc().nullslast()).offset(offset).limit(limit).all()
+    rows = stable(q.order_by(MLM.meeting_date.desc().nullslast())).offset(offset).limit(limit).all()
     distinct_meps = q.with_entities(func.count(distinct(MLM.mep_id))).scalar() or 0
     distinct_orgs = q.with_entities(func.count(distinct(MLM.organisation_norm))).scalar() or 0
     top_orgs = [

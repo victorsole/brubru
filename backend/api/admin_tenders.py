@@ -34,6 +34,7 @@ from services.tenders.tender_service import TenderService
 from services.tenders.matcher import TenderMatcher
 from services.tenders.tender_notifications import TenderNotificationService
 from .admin_auth import get_current_admin_user
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +198,7 @@ def list_tenders(
         query = query.order_by(desc(getattr(Tender, sort_by)))
 
     # Paginate
-    tenders = query.offset((page - 1) * page_size).limit(page_size).all()
+    tenders = stable(query).offset((page - 1) * page_size).limit(page_size).all()
 
     # Add match counts
     results = []
@@ -450,7 +451,7 @@ async def get_fetch_logs(
 
     total = query.count()
 
-    jobs = query.order_by(desc(TenderFetchJob.created_at))\
+    jobs = stable(query.order_by(desc(TenderFetchJob.created_at)))\
         .offset((page - 1) * page_size)\
         .limit(page_size)\
         .all()
@@ -565,7 +566,7 @@ def list_all_matches(
 
     total = query.count()
 
-    matches = query.order_by(desc(TenderMatch.created_at))\
+    matches = stable(query.order_by(desc(TenderMatch.created_at)))\
         .offset((page - 1) * page_size)\
         .limit(page_size)\
         .all()
@@ -619,7 +620,7 @@ def list_all_profiles(
 
     total = query.count()
 
-    profiles = query.order_by(desc(TenderProfile.created_at))\
+    profiles = stable(query.order_by(desc(TenderProfile.created_at)))\
         .offset((page - 1) * page_size)\
         .limit(page_size)\
         .all()

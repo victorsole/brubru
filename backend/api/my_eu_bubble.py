@@ -52,6 +52,7 @@ from services.legislative.title_display import (
     short_title as parse_short_title,
     split_celex_prefix,
 )
+from api.v1._pagination import stable
 
 
 def _display_short_title(carriage) -> str:
@@ -355,7 +356,7 @@ async def get_user_feeds(
         total = query.count()
 
         # Apply pagination
-        entries = query.offset(offset).limit(limit).all()
+        entries = stable(query).offset(offset).limit(limit).all()
 
         # Get read status for entries
         entry_ids = [e.id for e in entries]
@@ -576,7 +577,7 @@ def get_saved_entries(
                 query = query.filter(UserSavedEntry.tags.contains([tag]))
 
         query = query.order_by(UserSavedEntry.saved_at.desc())
-        saved_entries = query.offset(offset).limit(limit).all()
+        saved_entries = stable(query).offset(offset).limit(limit).all()
 
         # Load entry details
         result = []

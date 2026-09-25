@@ -220,7 +220,7 @@ async def list_tr(
                    registration_date, last_update_date, public_url, has_body
               FROM eu_transparency_register
               {where_sql}
-             ORDER BY costs_max DESC NULLS LAST, original_name
+             ORDER BY costs_max DESC NULLS LAST, original_name, id
              LIMIT :limit OFFSET :offset
         """),
         {**params, "limit": limit, "offset": offset},

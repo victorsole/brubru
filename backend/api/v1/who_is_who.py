@@ -25,6 +25,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from ._change_window import SYNC_FIELDS_DOC, SYNC_PARAMS_DOC, UpperBoundDatetime, orm_order, orm_window, validate_window
+from api.v1._pagination import stable
 
 departments_router = APIRouter(prefix="/who-is-who/departments", tags=["v1-who-is-who-departments"])
 officials_router = APIRouter(prefix="/who-is-who/officials", tags=["v1-who-is-who-officials"])
@@ -130,8 +131,8 @@ async def list_departments(
     if f:
         query = query.filter(and_(*f))
     total = query.count()
-    rows = query.order_by(WhoIsWhoDepartment.official_count.desc().nullslast(),
-                          WhoIsWhoDepartment.name).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(WhoIsWhoDepartment.official_count.desc().nullslast(),
+                          WhoIsWhoDepartment.name)).offset((page - 1) * limit).limit(limit).all()
     return build_envelope([_to_dept(r) for r in rows], total=total, page=page, limit=limit,
                           op_core_title="EU departments", op_core_type="EU department",
                           op_core_identifier=str(request.url))
@@ -203,7 +204,7 @@ async def list_officials(
     total = query.count()
     ordering = orm_order(order, WhoIsWhoOfficial.first_seen, WhoIsWhoOfficial.content_updated_at, WhoIsWhoOfficial.id) \
         or (WhoIsWhoOfficial.name, WhoIsWhoOfficial.id)
-    rows = query.order_by(*ordering).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(*ordering)).offset((page - 1) * limit).limit(limit).all()
     return build_envelope([_to_official(r) for r in rows], total=total, page=page, limit=limit,
                           op_core_title="EU officials", op_core_type="EU official",
                           op_core_identifier=str(request.url))

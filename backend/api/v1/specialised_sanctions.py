@@ -311,7 +311,7 @@ async def list_sanctions(
                legal_basis_url, citizenships, date_file
           FROM eu_sanctions
           {where_sql}
-         ORDER BY date_file DESC NULLS LAST, full_name ASC NULLS LAST
+         ORDER BY date_file DESC NULLS LAST, full_name ASC NULLS LAST, id ASC
          LIMIT :limit OFFSET :offset
         """
     )

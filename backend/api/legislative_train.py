@@ -44,6 +44,7 @@ from services.api_clients.european_parliament_client import EuropeanParliamentCl
 from .auth import get_current_user
 
 import logging
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +189,7 @@ def get_carriages(
         total = query.count()
 
         # Apply pagination
-        carriages = query.offset(offset).limit(limit).all()
+        carriages = stable(query).offset(offset).limit(limit).all()
 
         # Build filters object
         filters = CarriageSearchFilters(

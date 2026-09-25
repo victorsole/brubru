@@ -45,6 +45,7 @@ from models.catalan_translation import CatalanTranslation
 
 from ._body import body_from_html, body_threshold_param
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -442,7 +443,7 @@ async def list_catalan_translations(
 
     total = qry.count()
     rows = (
-        qry.order_by(CatalanTranslation.celex.asc())
+        stable(qry.order_by(CatalanTranslation.celex.asc()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

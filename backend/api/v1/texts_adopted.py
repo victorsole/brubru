@@ -25,6 +25,7 @@ from ._body import body_from_pdf_text, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -254,7 +255,7 @@ async def list_texts_adopted(
         order_col = TextAdopted.last_updated.desc().nullslast()
     else:
         order_col = TextAdopted.adoption_date.desc().nullslast()
-    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
     # Declare the corpus bounds (D2). Until 27 Aug 2026 this corpus opened on
     # 20 January 2026 and said nothing about it, so the EP's 26 November 2025
@@ -402,7 +403,7 @@ async def list_texts_submitted(
 
     total = query.count()
     rows = (
-        query.order_by(TextAdopted.last_updated.desc().nullslast())
+        stable(query.order_by(TextAdopted.last_updated.desc().nullslast()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()

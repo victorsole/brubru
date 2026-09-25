@@ -17,6 +17,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 router = APIRouter(prefix="/calendar", tags=["v1-calendar"])
 
@@ -243,7 +244,7 @@ async def list_calendar_events(
         order_col = EUCalendarEvent.last_updated.desc().nullslast()
     else:
         order_col = EUCalendarEvent.start_date.asc()
-    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
     data = []
     for r in rows:
         inst_value = r.institution.value if hasattr(r.institution, "value") else (str(r.institution) if r.institution else "")

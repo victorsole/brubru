@@ -21,6 +21,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
@@ -216,7 +217,7 @@ async def list_laws(
     else:
         query = query.order_by(EULaw.date.desc().nullslast())
     rows = (
-        query.offset((page - 1) * limit)
+        stable(query).offset((page - 1) * limit)
         .limit(limit)
         .all()
     )

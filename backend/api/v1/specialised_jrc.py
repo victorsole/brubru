@@ -123,7 +123,7 @@ async def list_datasets(
         SELECT uuid, title, description, publisher, keywords, modified, public_url, has_body
           FROM eu_jrc_datasets
           {where_sql}
-         ORDER BY modified DESC NULLS LAST, title
+         ORDER BY modified DESC NULLS LAST, title, id
          LIMIT :limit OFFSET :offset
     """), {**params, "limit": limit, "offset": offset}).mappings().all()
 

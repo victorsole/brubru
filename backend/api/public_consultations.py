@@ -78,6 +78,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 from pydantic import BaseModel as PydanticBaseModel
+from api.v1._pagination import stable
 
 class AnalysisResponse(PydanticBaseModel):
     """AI analysis response model."""
@@ -363,7 +364,7 @@ def get_consultations(
             query = query.order_by(sort_column.asc().nulls_last())
 
         # Apply pagination
-        consultations = query.offset(offset).limit(limit).all()
+        consultations = stable(query).offset(offset).limit(limit).all()
 
         # Get tracked IDs for current user
         tracked_ids = {

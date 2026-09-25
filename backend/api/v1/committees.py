@@ -20,6 +20,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 
 def _enum_value(v) -> Optional[str]:
@@ -558,7 +559,7 @@ async def list_committee_work(
 
     total = query.count()
     pairs = (
-        query.order_by(CommitteeWorkItem.vote_date.desc().nullslast())
+        stable(query.order_by(CommitteeWorkItem.vote_date.desc().nullslast()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -738,7 +739,7 @@ async def list_committee_minutes(
     if published_to:
         query = query.filter(CommitteeMinutes.meeting_date <= datetime.combine(published_to, datetime.max.time()))
     total = query.count()
-    rows = query.order_by(CommitteeMinutes.meeting_date.desc()).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(CommitteeMinutes.meeting_date.desc())).offset((page - 1) * limit).limit(limit).all()
     data = [
         CommitteeMinutesOut(
             id=str(r.id),

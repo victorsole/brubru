@@ -135,7 +135,7 @@ def _list_concepts(
             SELECT uri, pref_label, alt_labels, lang, source_dataset_uri, fetched_at
             FROM eu_authority_labels
             WHERE {where}
-            ORDER BY pref_label
+            ORDER BY pref_label, uri
             LIMIT :lim OFFSET :off
             """
         ),

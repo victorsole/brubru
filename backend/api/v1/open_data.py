@@ -28,6 +28,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._pagination import stable
 
 
 datasets_router = APIRouter(prefix="/open-data/datasets", tags=["v1-open-data-datasets"])
@@ -181,8 +182,8 @@ async def list_datasets(
                            format=format, catalogue=catalogue, hvd=hvd,
                            published_from=published_from, published_to=published_to)
     total = query.count()
-    rows = (query.order_by(OpenDataDataset.modified.desc().nullslast(),
-                           OpenDataDataset.first_seen.desc())
+    rows = (stable(query.order_by(OpenDataDataset.modified.desc().nullslast(),
+                           OpenDataDataset.first_seen.desc()))
             .offset((page - 1) * limit).limit(limit).all())
     data = [_to_dataset(r) for r in rows]
     return build_envelope(
@@ -242,7 +243,7 @@ async def list_high_value_datasets(
                            format=format, catalogue=catalogue, hvd=True,
                            published_from=published_from, published_to=published_to)
     total = query.count()
-    rows = (query.order_by(OpenDataDataset.modified.desc().nullslast())
+    rows = (stable(query.order_by(OpenDataDataset.modified.desc().nullslast()))
             .offset((page - 1) * limit).limit(limit).all())
     data = [_to_dataset(r) for r in rows]
     return build_envelope(
@@ -282,7 +283,7 @@ async def list_data_catalogues(
         query = query.filter(or_(OpenDataCatalogue.catalogue_id.ilike(like),
                                  OpenDataCatalogue.title.ilike(like)))
     total = query.count()
-    rows = query.order_by(OpenDataCatalogue.catalogue_id).offset((page - 1) * limit).limit(limit).all()
+    rows = stable(query.order_by(OpenDataCatalogue.catalogue_id)).offset((page - 1) * limit).limit(limit).all()
     data = [_to_catalogue(r) for r in rows]
     return build_envelope(
         data, total=total, page=page, limit=limit,
