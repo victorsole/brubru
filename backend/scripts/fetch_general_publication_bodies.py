@@ -258,12 +258,24 @@ async def _run(args) -> int:
         for start_i in range(0, len(rows), BATCH):
             chunk = rows[start_i:start_i + BATCH]
             by_uri = {r.cellar_uri: r for r in chunk}
-            try:
-                sparql_rows = await client.select(_q_batch(list(by_uri)))
-            except Exception as exc:  # noqa: BLE001
-                failed += len(chunk)
-                print(f"  [batch {start_i // BATCH + 1}] sparql {type(exc).__name__}: "
-                      f"{str(exc)[:70]}", flush=True)
+            # Retry a timed-out batch before giving up on it. Cellar times out
+            # occasionally and a bare `continue` drops all 40 rows: resumability means
+            # they come back on a later run, but only if someone runs one, and the batch
+            # line then reports 40 failures that were never really tried.
+            sparql_rows = None
+            for attempt in range(3):
+                try:
+                    sparql_rows = await client.select(_q_batch(list(by_uri)))
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    if attempt == 2:
+                        failed += len(chunk)
+                        print(f"  [batch {start_i // BATCH + 1}] sparql "
+                              f"{type(exc).__name__} after 3 tries: {str(exc)[:60]}",
+                              flush=True)
+                    else:
+                        await asyncio.sleep(3 * (attempt + 1))
+            if sparql_rows is None:
                 continue
 
             manifs: dict[str, list] = {}

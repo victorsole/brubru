@@ -98,7 +98,11 @@ def main() -> int:
             rows = db.execute(text(
                 "SELECT id, source_url, coalesce(length(body_txt),0) AS blen, "
                 "       coalesce(body_source,'') AS src, left(coalesce(title,''),70) AS title "
+                # Skip what is already fetched. Without this the job re-downloads every
+                # article on every run: a restart began COMMISSION again from the top,
+                # 1,051 rows already done, and 47 institutions would have paid that twice.
                 "FROM eu_news_items WHERE institution = :inst "
+                "  AND coalesce(body_source, '') <> 'fetched:article' "
                 "ORDER BY news_date DESC NULLS LAST, id LIMIT :n"),
                 {"inst": args.institution, "n": args.limit}).fetchall()
             label = args.institution
@@ -114,6 +118,7 @@ def main() -> int:
 
         ok = failed = 0
         gained = []
+        reasons: dict[str, int] = {}
         # Fetched in parallel and committed per batch: 7,050 institutional news rows one at
         # a time is hours, and a single commit at the end means a run that dies writes
         # nothing.
@@ -131,9 +136,12 @@ def main() -> int:
                 # killed the whole run.
                 if err or not body_txt:
                     failed += 1
-                    if failed <= 10:
-                        print(f"  [{i:5}] {(err or 'no text in page'):22} {r.title[:50]}",
-                              flush=True)
+                    why = err or "no text in page"
+                    # Tallied, not just the first ten printed: with 159 failures in a
+                    # batch the first ten say nothing about the shape of the problem.
+                    reasons[why] = reasons.get(why, 0) + 1
+                    if failed <= 5:
+                        print(f"  [{i:5}] {why:22} {r.title[:50]}", flush=True)
                     continue
                 body_txt = body_txt.replace("\x00", "")
                 body_html = (body_html or "").replace("\x00", "") or None
@@ -159,8 +167,11 @@ def main() -> int:
             if args.apply:
                 db.commit()
             avg_so_far = sum(gained) / len(gained) if gained else 0
+            top = ", ".join(f"{k} x{v}" for k, v in
+                            sorted(reasons.items(), key=lambda kv: -kv[1])[:3])
             print(f"  [{min(start + BATCH, len(targets)):5}/{len(targets)}] ok {ok}, "
-                  f"failed {failed}, avg {avg_so_far:,.0f} chars", flush=True)
+                  f"failed {failed}, avg {avg_so_far:,.0f} chars"
+                  + (f"  |  {top}" if top else ""), flush=True)
             time.sleep(args.throttle)
 
         if args.apply:
