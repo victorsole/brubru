@@ -23,6 +23,7 @@ OEIL had moved on.
 import argparse
 import time
 import asyncio
+from sqlalchemy import text
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
@@ -343,6 +344,22 @@ async def update_statuses():
             log(f"  {status.value}: {count}")
 
         log("=" * 60)
+
+        # Freshness of the whole Train, not just this run (25 Sep 2026). The job
+        # read 80 files a run, twice a day, over 1,663 live files: a 10-day cycle,
+        # so 1,123 files had an OEIL page older than 7 days while every run
+        # reported success. Say so in the ledger when the Train falls behind.
+        if not REFS:
+            stale = db.execute(text(
+                "SELECT count(*) FROM legislative_carriages "
+                "WHERE oeil_procedure_ref IS NOT NULL AND oeil_procedure_ref <> '' "
+                "AND current_status NOT IN ('ADOPTED', 'WITHDRAWN') "
+                "AND (oeil_body_fetched_at IS NULL OR oeil_body_fetched_at < now() - interval '7 days')"
+            )).scalar() or 0
+            log(f"  Live files with an OEIL page older than 7 days: {stale}")
+            if stale and not errors:
+                print(f"[SYNC_STATUS] degraded: {stale} live Legislative Train file(s) have an "
+                      f"OEIL page older than 7 days", flush=True)
 
         return 1 if errors else 0
 

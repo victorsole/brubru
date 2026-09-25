@@ -101,7 +101,12 @@ MEUB_SOURCES: List[SourceSpec] = [
     # reported by name, not counted as an error.
     SourceSpec("oeil_carriages", "Carriages - OEIL pages and status", "warm",
                "scripts/update_carriage_statuses_from_oeil.py",
-               ("--stalest-first", "--limit", "80", "--budget", "1300"),
+               # 500, not 80 (25 Sep 2026): 80 a run, twice a day, over 1,663 live
+               # files is a 10.4-day cycle, so 1,123 files always had a page older
+               # than 7 days. Measured 2.3 s a file on Railway (0 errors at 3.5 s
+               # locally over 600), so the 1,300 s budget, not the cap, ends a run:
+               # ~1,000 files a day, the whole Train about every 1.7 days.
+               ("--stalest-first", "--limit", "500", "--budget", "1300"),
                timeout=1500, stale_after_hours=48),
     SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
                "scripts/backfill_oeil_committee_roles.py", ("--apply",),
