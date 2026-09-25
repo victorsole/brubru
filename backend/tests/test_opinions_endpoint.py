@@ -146,3 +146,34 @@ def test_document_date_is_the_committees_date_not_our_capture_date(client, heade
         if item.get("document_date"):
             assert item["document_date"] <= "2020-12-31", (
                 f"{item['body_code']}/{item['id']} dated {item['document_date']} passed a to= filter")
+
+
+def test_every_declared_filter_actually_filters(client, headers):
+    """A declared parameter that changes nothing is worse than an absent one.
+
+    `?q=` on /parliament/meps returned 200 and the first page unfiltered because only `name`
+    was declared, and nothing in the response said so. Measured here 25 September 2026:
+    q="artificial intelligence" 11, q=nonsense 0, from=2026-01-01 20, has_body=false 33,
+    against 4,708 unfiltered.
+    """
+    unfiltered = _get(client, headers, "/api/v2/opinions/all?limit=1")["total"]
+
+    cases = {
+        "q=artificial+intelligence": lambda t: 0 < t < unfiltered,
+        "q=zzzzznotathing": lambda t: t == 0,
+        "from=2026-01-01": lambda t: 0 < t < unfiltered,
+        "has_body=false": lambda t: 0 <= t < unfiltered,
+        "body=eesc": lambda t: 0 < t < unfiltered,
+    }
+    for query, ok in cases.items():
+        total = _get(client, headers, f"/api/v2/opinions/all?limit=1&{query}")["total"]
+        assert ok(total), f"{query} returned {total} against {unfiltered} unfiltered"
+
+
+def test_q_matches_the_title_it_claims_to_match(client, headers):
+    """A filter that returns FEWER rows can still be matching the wrong thing."""
+    listed = _get(client, headers, "/api/v2/opinions/all?q=artificial+intelligence&limit=5")
+    assert listed["data"], "no opinions matched"
+    for item in listed["data"]:
+        assert "artificial intelligence" in (item.get("title") or "").lower(), (
+            f"q matched an opinion whose title does not contain it: {item.get('title')!r}")
