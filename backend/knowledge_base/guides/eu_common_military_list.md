@@ -1,6 +1,7 @@
 # EU Common Military List
 
 ## QUICK FACTS
+- **LATEST (24 September 2026, Advocate General opinion, NOT a judgment): AG Tamara Ćapeta in C-538/25 (an Austrian aircraft manufacturer)** proposes a BROAD reading of 'dual-use items' under the Dual-Use Regulation (EU) 2021/821, assessed on the item's physical and technical capabilities, so authorities can adapt to strategic and security concerns; Austria had refused a 2023 export of basic pilot-training aircraft to the Myanmar Air Force it had authorised in 2019. The Court's judgment will follow; do not present the opinion as the outcome. Source: CURIA press release 134/26.
 - Full name: Common Military List of the European Union
 - Latest version: Adopted by Council 23 February 2026 (published OJ 13 March 2026, CELEX 52026XG01640)
 - Legal basis: Council Common Position 2008/944/CFSP (common rules governing control of exports of military technology and equipment)

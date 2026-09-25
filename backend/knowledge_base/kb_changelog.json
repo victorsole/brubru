@@ -4,6 +4,102 @@
     {
       "date": "2026-09-25",
       "action": "updated",
+      "guide": "ai_act_regulation",
+      "title": "AI Act",
+      "summary": "Axel Voss on AI Act enforcement, attributed to POLITICO.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_common_military_list",
+      "title": "EU Common Military List",
+      "summary": "Advocate General Capeta opinion in C-538/25 on dual-use items.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_product_safety_consumer",
+      "title": "EU product safety and consumer law",
+      "summary": "Court judgment in C-900/24 on unfair contract terms under Directive 93/13.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "Competition law enforcement",
+      "summary": "Court judgment in C-503/25 and C-504/25 (Acciaierie d'Italia) on undertakings in difficulty.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "ukraine_support_loan_recovery_2026",
+      "title": "Ukraine support loan",
+      "summary": "About EUR 3 billion eighth Ukraine Facility payment, EUR 800 million from the Ukraine Support Loan; 84 of 95 steps met.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions implementation",
+      "summary": "Xenia Fedorova listed under the hybrid threats regime, now 81 individuals and 20 entities.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "EU neighbourhood policy",
+      "summary": "Commission proposes two-year trade liberalisation covering about 80% of Armenian exports.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_solidarity_fund_eusf",
+      "title": "EU Solidarity Fund",
+      "summary": "Commission proposes EUR 489 million for Portugal, Spain, Italy and Malta after the winter 2026 storms.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "innovation_fund",
+      "title": "Innovation Fund",
+      "summary": "IF26 industrial heat auction terms published; bidding opens early December; heat above 80 degrees C; small modular reactors eligible.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "Alphabet fined EUR 460 million for self-preferencing in Google Search (DMA.100193); Google Play decision of 23 July.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU trade defence",
+      "summary": "Definitive anti-dumping duties on pea protein from China (40.5% to 67.1%) and registration of Pekin duck imports.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
+      "guide": "ecb_monetary_policy",
+      "title": "ECB monetary policy",
+      "summary": "Isabel Schnabel leaves the Executive Board on 3 January 2027 for the IMF; successor appointed under Article 283(2) TFEU.",
+      "refs": []
+    },
+    {
+      "date": "2026-09-25",
+      "action": "updated",
       "guide": "ai_act_amendments_2026",
       "title": "AI Act amendments 2026",
       "summary": "Sandbox date 2 August 2027 per Regulation (EU) 2026/1744; provisional-agreement note marked superseded",

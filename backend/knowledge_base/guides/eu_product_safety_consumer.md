@@ -1,6 +1,7 @@
 # EU Product Safety and Consumer Protection
 
 ## QUICK FACTS
+- **LATEST (Court of Justice, 24 September 2026, C-900/24 SVB), Unfair Contract Terms Directive 93/13/EEC:** a national rule or practice that keeps an unfair price-adjustment term effective unless the consumer challenged the price increases within three years (a German Federal Court of Justice rule for district-heating contracts) is incompatible with the Directive; so is letting the supplier unilaterally rewrite a term declared unfair, because the court must disapply an unfair term without revising it. Source: CURIA press release 132/26.
 - General Product Safety Regulation (GPSR): Regulation (EU) 2023/988, CELEX 32023R0988, applicable from 13 December 2024
 - Replaces: General Product Safety Directive 2001/95/EC
 - Digital Services Act (DSA): Regulation (EU) 2022/2065, CELEX 32022R2065 (online marketplace obligations)

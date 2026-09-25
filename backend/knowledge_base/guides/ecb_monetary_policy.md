@@ -1,6 +1,7 @@
 # ECB Monetary Policy and Interest Rates
 
 ## QUICK FACTS
+- **LATEST (24 September 2026): ECB Executive Board member Isabel Schnabel will step down on 3 January 2027** to become the IMF's Financial Counsellor and Director of the Monetary and Capital Markets Department from 4 January 2027 (announced by IMF Managing Director Kristalina Georgieva). She stays on the Executive Board and Governing Council until then; the Governing Council, after an Ethics Committee opinion, decided no cooling-off period is required, and she will not deal with IMF matters for the rest of her term. Her successor is appointed by the European Council under the TFEU procedure (Article 283(2): on a Council recommendation, after consulting the European Parliament and the ECB Governing Council). Source: ECB press release, 24 September 2026, https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.pr260924~bea1dd9824.en.html
 Institution: European Central Bank (ECB), Frankfurt
 Primary mandate: Price stability (inflation target: 2% over the medium term)
 Key rate: Deposit Facility Rate (DFR), currently 2.00% (since 11 June 2025)

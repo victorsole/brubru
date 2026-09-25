@@ -1,6 +1,7 @@
 # EU Innovation Fund
 
 ## QUICK FACTS
+- **LATEST (24 September 2026): terms and conditions published for the second EUR 1 billion industrial heat auction (IF26 Heat Auction)**, funded from EU ETS revenues; bidding expected to open in **early December 2026**. Fixed premium per tonne of direct CO2 abated, for up to five years. Eligible: electrified heat (heat pumps, thermal storage, plasma torches, electric boilers), direct renewable heat (solar, thermal, geothermal) and, for the first time, nuclear technologies such as small modular reactors; the heat threshold is lowered to above 80 degrees C (was above 100 degrees C). Member States can top up via Auction-as-a-Service. The first auction (IF25) selected 65 projects; both are pilots for the Industrial Decarbonisation Bank (EUR 100 billion target). Source: DG CLIMA, 24 September 2026.
 - What: one of the world's largest funding programmes for deploying net-zero and innovative technologies
 - Funding source: EU Emissions Trading System (ETS) allowance auction revenues
 - Total budget: approximately EUR 40 billion (2020-2030), based on sale of 530 million ETS allowances at EUR 75/tonne
