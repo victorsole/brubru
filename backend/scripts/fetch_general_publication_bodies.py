@@ -254,7 +254,7 @@ async def _run(args) -> int:
         reasons: dict[str, int] = {}
         dated = 0
         lengths = []
-        BATCH = 40
+        BATCH = 60
         for start_i in range(0, len(rows), BATCH):
             chunk = rows[start_i:start_i + BATCH]
             by_uri = {r.cellar_uri: r for r in chunk}
@@ -299,7 +299,10 @@ async def _run(args) -> int:
 
             results = {}
             if jobs:
-                with cf.ThreadPoolExecutor(max_workers=6) as ex:
+                # 10 workers, not 6: this is network-bound on multi-megabyte PDFs,
+                # and at 6 the corpus was moving at ~112 rows an hour, which is 43
+                # hours. Each worker holds one PDF in memory, so ~10 x 4 MB.
+                with cf.ThreadPoolExecutor(max_workers=10) as ex:
                     futures = {ex.submit(fetch_one, m, t): u for u, (m, t) in jobs.items()}
                     for fut in cf.as_completed(futures):
                         results[futures[fut]] = fut.result()
