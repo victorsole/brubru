@@ -8,7 +8,12 @@ full text on 25 September 2026, but no route read either table, so 4,518 opinion
 over 20,000 characters were served to nobody. This is that route.
 
 One collection per committee, because each has its own primary key and its own
-committee-specific fields, plus `/opinions/all` for callers who want both in one page.
+committee-specific fields, plus `/advisory-opinions/all` for callers who want both in one page.
+
+Named "advisory-opinions", not "opinions": `/api/v1/opinions` already serves the PARLIAMENT's
+committee opinions on legislative files, an unrelated thing. An `/advisory-opinions/all` that excluded
+those would have been the plainest kind of inconsistency, promising everything and serving two
+kinds out of three.
 """
 from __future__ import annotations
 
@@ -28,7 +33,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
-router = APIRouter(prefix="/opinions", tags=["v1-opinions"])
+router = APIRouter(prefix="/advisory-opinions", tags=["v1-advisory-opinions"])
 
 _BODIES = {"eesc": EuEescOpinion, "cor": EuCorOpinion}
 _BODY_NAME = {"eesc": "European Economic and Social Committee",
@@ -147,14 +152,14 @@ of the Regions in one feed, newest first, with the whole text on request.
 
 **When to use it**
 When you want both committees in one call: "what have the advisory committees said about this
-act", or a daily sweep of new opinions. Use `/opinions/eesc` or `/opinions/cor` for one.
+act", or a daily sweep of new opinions. Use `/advisory-opinions/eesc` or `/advisory-opinions/cor` for one.
 {_INPUT_DOC}- `body` — `eesc`, `cor`, or omit for both.
 
 **Try it**
 ```
-GET /api/v1/opinions/all?limit=5
-GET /api/v1/opinions/all?body=cor&from=2026-01-01
-GET /api/v1/opinions/all?related_celex=52021PC0206&include_body=true
+GET /api/v1/advisory-opinions/all?limit=5
+GET /api/v1/advisory-opinions/all?body=cor&from=2026-01-01
+GET /api/v1/advisory-opinions/all?related_celex=52021PC0206&include_body=true
 ```
 
 **You get back**
@@ -245,12 +250,12 @@ def _make_list_route(code: str):
 Returns the opinions of the {name}, newest first, with the whole text on request.
 
 **When to use it**
-When you want this committee only. `/opinions/all` returns both committees in one feed.
+When you want this committee only. `/advisory-opinions/all` returns both committees in one feed.
 {_INPUT_DOC}
 **Try it**
 ```
-GET /api/v1/opinions/{code}?limit=5
-GET /api/v1/opinions/{code}?q=artificial+intelligence&include_body=true
+GET /api/v1/advisory-opinions/{code}?limit=5
+GET /api/v1/advisory-opinions/{code}?q=artificial+intelligence&include_body=true
 ```
 
 **You get back**
@@ -297,7 +302,7 @@ route always carries `body_txt` and `body_html`.
 
 **Try it**
 ```
-GET /api/v1/opinions/{code}/1
+GET /api/v1/advisory-opinions/{code}/1
 ```
 
 **You get back**

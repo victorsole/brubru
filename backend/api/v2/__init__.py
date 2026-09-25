@@ -37,7 +37,7 @@ from .transparency_register import router as _transparency_register_router
 from .open_data import router as _open_data_router
 from .who_is_who import router as _who_is_who_router
 from .general_publications import router as _general_publications_router
-from .opinions import router as _opinions_router
+from .advisory_opinions import router as _advisory_opinions_router
 from .dpp import router as _dpp_router
 from .proprietary import router as _proprietary_router
 from .ecb import router as _ecb_router
@@ -133,7 +133,7 @@ router.include_router(_transparency_register_router)
 router.include_router(_open_data_router)
 router.include_router(_who_is_who_router)
 router.include_router(_general_publications_router)
-router.include_router(_opinions_router)
+router.include_router(_advisory_opinions_router)
 router.include_router(_dpp_router)
 router.include_router(_proprietary_router)
 # Economy & Finance — folder #1 (ECB + SSM), folder #2 (the EU financial

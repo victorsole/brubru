@@ -721,7 +721,7 @@ _INSTITUTIONAL_GROUPS = [
         # The opinion REGISTER (Publications Office): 4,708 opinions of both committees with
         # their adopted text. Distinct from the two folders below, which read the committees'
         # own websites and hold 97 and 78 items.
-        ("opinions", "EESC and CoR opinions: the full register"),
+        ("advisory-opinions", "EESC and CoR opinions: the full register"),
         ("cor", "Committee of the Regions (CoR)"),
         ("eesc", "European Economic and Social Committee (EESC)"),
         ("eca", "European Court of Auditors (ECA)"),

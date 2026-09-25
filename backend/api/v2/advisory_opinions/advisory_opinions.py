@@ -1,6 +1,6 @@
 """/api/v2/opinions — thin delegation to v1, as the other folders do.
 
-The handlers live in api/v1/opinions.py; this publishes them under v2 with the same contract
+The handlers live in api/v1/advisory_opinions.py; this publishes them under v2 with the same contract
 so a v2 client never has to know which version implemented a route first.
 """
 from __future__ import annotations
@@ -11,20 +11,20 @@ from typing import Literal, Optional
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
-from api.v1 import opinions as _v1
+from api.v1 import advisory_opinions as _v1
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
-from api.v1.opinions import OpinionItem
+from api.v1.advisory_opinions import OpinionItem
 from core.database import get_db
 from models.user import User
 
-router = APIRouter(prefix="/opinions")
+router = APIRouter(prefix="/advisory-opinions")
 
-_ALL = next(r for r in _v1.router.routes if r.path == "/opinions/all")
-_EESC = next(r for r in _v1.router.routes if r.path == "/opinions/eesc")
-_EESC_ITEM = next(r for r in _v1.router.routes if r.path == "/opinions/eesc/{item_id}")
-_COR = next(r for r in _v1.router.routes if r.path == "/opinions/cor")
-_COR_ITEM = next(r for r in _v1.router.routes if r.path == "/opinions/cor/{item_id}")
+_ALL = next(r for r in _v1.router.routes if r.path == "/advisory-opinions/all")
+_EESC = next(r for r in _v1.router.routes if r.path == "/advisory-opinions/eesc")
+_EESC_ITEM = next(r for r in _v1.router.routes if r.path == "/advisory-opinions/eesc/{item_id}")
+_COR = next(r for r in _v1.router.routes if r.path == "/advisory-opinions/cor")
+_COR_ITEM = next(r for r in _v1.router.routes if r.path == "/advisory-opinions/cor/{item_id}")
 
 
 @router.get("/all", response_model=PaginatedResponse[OpinionItem], tags=["v2-opinions"],
