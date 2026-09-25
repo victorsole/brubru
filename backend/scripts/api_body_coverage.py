@@ -63,15 +63,42 @@ def _engine():
     return create_engine(url, pool_pre_ping=True)
 
 
+# A body this short is a headline and a teaser, not a document. Measured 25 Sep 2026
+# across the corpora GovClipping reads: real press releases average 5,519 characters and
+# reach 12,475, while every one of the 11,387 eu_news_items rows is composed from the
+# title and the RSS summary and averages 379.
+THIN_BODY_CHARS = 1200
+
+# Item types that ARE a document and therefore owe a full body. Everything else in
+# economy_items is a register or data row -- a trademark, a financial instrument, a
+# funding recipient, a tariff code -- where a composed one-line description is the right
+# content and a "thin body" is not a gap. Reporting those as gaps would drown the real
+# ones: 68 thin slices drops to the handful that actually owe text.
+DOCUMENT_TYPES = {
+    "news", "publication", "press_release", "opinion", "report", "study",
+    "consultation", "speech", "statement", "legal", "case_law", "tender",
+}
+
+
 def coverage(conn, min_rows: int = 10) -> list[dict]:
+    """Per slice: how many rows hold a body, and how many hold a WHOLE one.
+
+    Counting non-null was the blind spot that let this sit. The docstring above already
+    warns about checking that the field exists rather than that a value comes back; the
+    same mistake repeats one level up, because a value came back and it still is not the
+    document. GovClipping needs the whole text in body_txt and the whole HTML in
+    body_html, so the number that matters is how many bodies are of document LENGTH.
+    """
     rows = conn.execute(text("""
         SELECT body_code, item_type, count(*) AS n, count(body_txt) AS txt,
-               count(body_html) AS html
+               count(body_html) AS html,
+               count(*) FILTER (WHERE length(body_txt) >= :thin) AS full_txt,
+               coalesce(round(avg(nullif(length(body_txt), 0))), 0) AS avg_len
         FROM economy_items
         GROUP BY 1, 2
         HAVING count(*) >= :min
-        ORDER BY count(*) - count(body_txt) DESC
-    """), {"min": min_rows}).fetchall()
+        ORDER BY count(*) - count(*) FILTER (WHERE length(body_txt) >= :thin) DESC
+    """), {"min": min_rows, "thin": THIN_BODY_CHARS}).fetchall()
     out = []
     for r in rows:
         if r.item_type in NO_BODY_TYPES:
@@ -79,8 +106,13 @@ def coverage(conn, min_rows: int = 10) -> list[dict]:
         out.append({
             "slice": f"{r.body_code}/{r.item_type}",
             "rows": r.n, "with_txt": r.txt, "with_html": r.html,
+            "full_txt": r.full_txt, "avg_len": int(r.avg_len),
             "pct": round(100.0 * r.txt / r.n, 1),
+            "pct_full": round(100.0 * r.full_txt / r.n, 1),
             "empty": r.txt == 0,
+            "thin": (r.txt > 0 and r.full_txt == 0
+                     and r.item_type in DOCUMENT_TYPES),
+            "is_document": r.item_type in DOCUMENT_TYPES,
         })
     return out
 
@@ -95,26 +127,46 @@ def main() -> int:
 
     with _engine().connect() as conn:
         cov = coverage(conn, args.min_rows)
-        total, txt = conn.execute(text(
-            "SELECT count(*), count(body_txt) FROM economy_items")).fetchone()
+        total, txt, full = conn.execute(text(
+            "SELECT count(*), count(body_txt), "
+            "count(*) FILTER (WHERE length(body_txt) >= :thin) FROM economy_items"),
+            {"thin": THIN_BODY_CHARS}).fetchone()
 
     empty = [c for c in cov if c["empty"]]
+    thin = [c for c in cov if c["thin"]]
     if args.json:
         print(json.dumps({"overall_pct": round(100.0 * txt / total, 2),
+                          "overall_full_pct": round(100.0 * full / total, 2),
+                          "thin_body_chars": THIN_BODY_CHARS,
                           "slices": len(cov), "empty_slices": len(empty),
+                          "thin_slices": len(thin),
                           "coverage": cov[:args.worst]}, default=str))
-        return 1 if empty else 0
+        return 1 if (empty or thin) else 0
 
-    print(f"economy_items overall: {txt}/{total} = {100.0*txt/total:.1f}% hold a body\n")
-    print(f"{'slice':32} {'rows':>7} {'bodies':>7} {'%':>7}")
+    docs = [c for c in cov if c["is_document"]]
+    doc_rows = sum(c["rows"] for c in docs)
+    doc_full = sum(c["full_txt"] for c in docs)
+    print(f"economy_items: {txt}/{total} = {100.0*txt/total:.1f}% hold a body, but only "
+          f"{full}/{total} = {100.0*full/total:.1f}% hold a WHOLE one "
+          f"(>= {THIN_BODY_CHARS} chars)")
+    if doc_rows:
+        print(f"of the DOCUMENT slices (news, publications, opinions, reports and the "
+              f"like): {doc_full}/{doc_rows} = {100.0*doc_full/doc_rows:.1f}% whole\n")
+    print(f"{'slice':32} {'rows':>7} {'bodies':>7} {'whole':>7} {'avg len':>8}")
     for c in cov[:args.worst]:
-        mark = "  <-- NONE" if c["empty"] else ""
-        print(f"{c['slice']:32} {c['rows']:7} {c['with_txt']:7} {c['pct']:6.1f}%{mark}")
-    print(f"\n{len(empty)} slice(s) hold rows and not one body: "
-          + ", ".join(c["slice"] for c in empty))
-    print("These are SCRAPER gaps, not API defects: the endpoint would serve the "
-          "text the moment it is fetched.")
-    return 1 if empty else 0
+        mark = "  <-- NONE" if c["empty"] else ("  <-- all thin" if c["thin"] else "")
+        print(f"{c['slice']:32} {c['rows']:7} {c['with_txt']:7} {c['full_txt']:7} "
+              f"{c['avg_len']:8}{mark}")
+    if empty:
+        print(f"\n{len(empty)} slice(s) hold rows and not one body: "
+              + ", ".join(c["slice"] for c in empty))
+    if thin:
+        print(f"\n{len(thin)} slice(s) hold a body for every row and not one of document "
+              f"length: " + ", ".join(c["slice"] for c in thin))
+    print("\nBoth are SCRAPER gaps, not API defects. A body assembled from a title and a "
+          "summary is not a body: GovClipping needs the whole text in body_txt and the "
+          "whole HTML in body_html (25 Sep 2026).")
+    return 1 if (empty or thin) else 0
 
 
 if __name__ == "__main__":
