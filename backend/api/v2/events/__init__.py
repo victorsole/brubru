@@ -145,7 +145,11 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
             })
 
     if "calendar" in sources:
-        where = ["1=1"]
+        # A cancelled event is kept for the audit trail, never served (25 Sep 2026).
+        # The app's calendar routes already filtered it; this feed did not, and it
+        # carries no status field, so a cancelled row read as a live meeting: two
+        # College meetings in the weeks of 2 Nov and 7 Dec 2026.
+        where = ["status::text <> 'cancelled'"]
         params = {}
         if codes is not None:
             insts = [BODY_TO_CAL_INSTITUTION[c] for c in codes if c in BODY_TO_CAL_INSTITUTION]
