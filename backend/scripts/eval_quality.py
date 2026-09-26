@@ -91,6 +91,7 @@ class QueryResult:
     error: str = ""
     expected_features: list = field(default_factory=list)
     features_named: list = field(default_factory=list)
+    platform_retries: int = 0
 
 
 @dataclass
@@ -361,6 +362,13 @@ def check_actionable_followup(response: str, _ga: dict) -> CriterionResult:
         r"souhaitez-vous|voulez-vous|vous pouvez (aussi|également|suivre|consulter)|prochaines? étapes?",
         r"vuoi che|volete|puoi (anche|seguire|consultare)|potete (anche|seguire|consultare)|prossim[oi] pass[oi]",
         r"wilt u|wil je|u kunt (ook|volgen|raadplegen)|je kunt (ook|volgen|raadplegen)|volgende stap(pen)?",
+        # "You can track this file in My Tracked Files" is a next step too.
+        r"you can (track|monitor|explore|follow|find|see|view|consult|check|use)",
+        r"puede[sn]? (seguir|monitorizar|consultar|explorar|ver|rastrear)",
+        r"pots (seguir|monitorar|consultar|explorar|veure)|podeu (seguir|monitorar|explorar|veure)",
+        r"vous pouvez (approfondir|explorer|voir|retrouver)|pouvez suivre",
+        r"puoi (approfondire|monitorare|tracciare|esplorare|vedere)|potete (approfondire|monitorare|tracciare)",
+        r"u kunt (dit|de|deze|het) |je kunt (dit|de|deze|het) ",
     ]
     for pattern in followup_signals:
         if re.search(pattern, response, re.IGNORECASE):
@@ -404,6 +412,10 @@ FEATURE_PATTERNS = {
     "Parliamentary Questions":  r"\bParliamentary\s+Questions\b",
     "My OJ":                    r"\bMy\s+OJ\b",
     "Votes":                    r"\bVotes\s+tab\b",
+    "News":                     r"My\s+EU\s+Bubble\s*(?:>|→|\()\s*News\b|\bNews\s+(?:tab|pestanya|pestaña|onglet|scheda)\b|pestanya\s+\*{0,2}News",
+    "My Documents":             r"\bMy\s+Documents\b",
+    "Research & Evidence":      r"\bResearch\s*(?:&|and)\s*Evidence\b",
+    "Strategy Docs":            r"\bStrategy\s+Docs\b",
 }
 
 
@@ -439,9 +451,14 @@ def check_cross_link_correct(response: str, ga: dict) -> CriterionResult:
         return CriterionResult("cross_link_correct", True, detail)
 
     if named:
+        # Pointing to ANY canonical feature is the rule (CLAUDE.md cross-link
+        # mandate). The per-question expected list is a hand-made guess of the
+        # best tab; a miss against it is reported as specificity, not failure
+        # (the first baseline failed "Legislative Train" and "Position Analysis"
+        # answers against a list that happened not to include them).
         return CriterionResult(
-            "cross_link_correct", False,
-            f"Named {', '.join(named)} but expected one of {expected}"
+            "cross_link_correct", True,
+            f"SPECIFICITY MISS: named {', '.join(named)}, expected one of {expected}"
         )
     return CriterionResult(
         "cross_link_correct", False,
@@ -472,7 +489,13 @@ def check_contains_expected_facts(response: str, ga: dict) -> CriterionResult:
     groups = ga.get("expected_facts") or []
     if not groups:
         return CriterionResult("contains_expected_facts", True, "no facts specified")
-    norm = lambda t: re.sub(r"(?<=\d)[\s\u202f\u00a0.,](?=\d{3}\b)", "", (t or "").lower())
+    import unicodedata
+    def norm(t):
+        # Accent-folded: "anónima" / "anònima" must match the fact "anon"
+        # (the first baseline failed two correct answers on the accent).
+        t = unicodedata.normalize("NFKD", (t or "").lower())
+        t = "".join(ch for ch in t if not unicodedata.combining(ch))
+        return re.sub(r"(?<=\d)[\s\u202f\u00a0.,](?=\d{3}\b)", "", t)
     body = norm(response)
     missing = [g[0] for g in groups if not any(norm(v) in body for v in g)]
     if missing:
@@ -506,7 +529,10 @@ CRITERION_CHECKERS = {
 # ---------------------------------------------------------------------------
 # Query runner
 # ---------------------------------------------------------------------------
-def _read_sse(resp) -> tuple:
+QUERY_WALL_CLOCK = 240  # seconds per question, end to end
+
+
+def _read_sse(resp, deadline: float = None) -> tuple:
     """(answer_text, model, citation_count) from /api/chat/stream.
 
     Answer chunks arrive as raw text after `data: `; status and metadata events
@@ -516,6 +542,12 @@ def _read_sse(resp) -> tuple:
     parts, model, citations = [], None, 0
     buf = ""
     for chunk in resp.iter_content(chunk_size=None, decode_unicode=True):
+        # requests' timeout is per read, so a stream that keeps trickling bytes
+        # never times out: the first full baseline sat on one question for
+        # hours (25-26 Sep 2026). A wall clock ends it.
+        if deadline is not None and time.time() > deadline:
+            resp.close()
+            raise TimeoutError(f"no complete answer within {QUERY_WALL_CLOCK}s")
         buf += chunk
         while "\n\n" in buf:
             block, buf = buf.split("\n\n", 1)
@@ -525,19 +557,27 @@ def _read_sse(resp) -> tuple:
                 d = line[6:]
                 if d == "[DONE]":
                     continue
+                # Only an object is an event. A chunk that is just "460" or "2027"
+                # parses as JSON too, and was silently dropped: the first
+                # baseline read "EUR  million" and "Article  of" (25 Sep 2026).
+                if not d.lstrip().startswith("{"):
+                    parts.append(d)
+                    continue
                 try:
                     j = json.loads(d)
                 except ValueError:
                     parts.append(d)
                     continue
-                if isinstance(j, dict):
-                    if j.get("type") in (None, "content", "delta", "token"):
-                        parts.append(j.get("content") or j.get("delta") or "")
-                    model = j.get("model") or model
-                    if isinstance(j.get("citations"), list):
-                        citations = len(j["citations"])
-                elif isinstance(j, str):
-                    parts.append(j)
+                if j.get("type") == "replace" and isinstance(j.get("content"), str):
+                    # The backend's post-processed final answer replaces what was
+                    # streamed; the UI shows this, so the evaluator scores this.
+                    parts = [j["content"]]
+                    continue
+                if j.get("type") in (None, "content", "delta", "token"):
+                    parts.append(j.get("content") or j.get("delta") or "")
+                model = j.get("model") or model
+                if isinstance(j.get("citations"), list):
+                    citations = len(j["citations"])
     return "".join(parts).replace("\\n", "\n"), model, citations
 
 
@@ -554,18 +594,27 @@ def run_query(backend_url: str, ga: dict, verbose: bool = False) -> QueryResult:
 
     try:
         start = time.time()
-        resp = requests.post(
-            f"{backend_url}{CHAT_ENDPOINT}",
-            json=payload,
-            # Probe header: evaluation traffic must never count as a user.
-            headers={"Content-Type": "application/json", "X-Brubru-Probe": "1"},
-            timeout=REQUEST_TIMEOUT,
-            stream=True,
-        )
+        # A 502/503/504 is the platform (Railway restarting on a deploy), not an
+        # answer: the first baseline run lost 60 of 120 queries to one redeploy.
+        # Retry, and keep the count so a report can say so.
+        for attempt in range(1, 4):
+            resp = requests.post(
+                f"{backend_url}{CHAT_ENDPOINT}",
+                json=payload,
+                # Probe header: evaluation traffic must never count as a user.
+                headers={"Content-Type": "application/json", "X-Brubru-Probe": "1"},
+                timeout=REQUEST_TIMEOUT,
+                stream=True,
+            )
+            if resp.status_code not in (502, 503, 504) or attempt == 3:
+                break
+            result.platform_retries += 1
+            time.sleep(30 * attempt)
+            start = time.time()
         if resp.status_code != 200:
             result.error = f"HTTP {resp.status_code}: {resp.text[:200]}"
             return result
-        response_text, model, citations = _read_sse(resp)
+        response_text, model, citations = _read_sse(resp, deadline=start + QUERY_WALL_CLOCK)
         result.response_time_ms = round((time.time() - start) * 1000, 1)
         result.response_text = response_text
         result.model = model or "unknown"
@@ -574,6 +623,9 @@ def run_query(backend_url: str, ga: dict, verbose: bool = False) -> QueryResult:
             result.error = "empty answer from the stream"
             return result
 
+    except TimeoutError as e:
+        result.error = str(e)
+        return result
     except requests.exceptions.Timeout:
         result.error = f"Timeout after {REQUEST_TIMEOUT}s"
         return result
@@ -831,6 +883,7 @@ def print_report(report: EvalReport, verbose: bool = False):
     print(f"  Passed:      {report.queries_passed}")
     print(f"  Failed:      {report.total_queries - report.queries_passed - errors}")
     print(f"  Errors:      {errors}")
+    print(f"  Platform retries (502/503/504, retried): {sum(r.platform_retries for r in report.results)}")
     print(f"  Pass rate:   {report.pass_rate}%")
     print(f"  Avg time:    {report.avg_response_time_ms:.0f}ms")
     print(f"  P95 time:    {report.p95_response_time_ms:.0f}ms")
@@ -934,6 +987,9 @@ def save_json_report(report: EvalReport, path: Optional[str] = None):
                 "response_time_ms": r.response_time_ms,
                 "model": r.model,
                 "error": r.error,
+                "platform_retries": r.platform_retries,
+                # The answer itself, so a reviewer can check a score against it.
+                "response_text": r.response_text,
                 "expected_features": r.expected_features,
                 "features_named": r.features_named,
                 "criteria_details": [
@@ -963,6 +1019,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Show response text")
     parser.add_argument("--dry-run", action="store_true", help="Load and validate golden answers without querying")
     parser.add_argument("--golden", help="Path to a golden-answer set (default: the legacy 30-question file)")
+    parser.add_argument("--jsonl", help="Append each result to this JSONL file as soon as it completes, "
+                                         "so a stalled or killed run loses nothing already measured")
 
     args = parser.parse_args()
 
@@ -1025,6 +1083,10 @@ def main():
         print(f"  [{i}/{len(golden_answers)}] {ga['id']}: {ga['query'][:50]}...", end="", flush=True)
         result = run_query(args.backend, ga, verbose=args.verbose)
         results.append(result)
+        if args.jsonl:
+            from dataclasses import asdict
+            with open(args.jsonl, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(asdict(result), ensure_ascii=False, default=str) + "\n")
 
         if result.error:
             print(f" ERR ({result.error[:40]})")
