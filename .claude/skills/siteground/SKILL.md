@@ -51,7 +51,7 @@ The 9 pre-rendered routes are: `/`, `/login`, `/signup`, `/about`, `/contact`, `
 
 If the build fails, diagnose the error:
 - **Vite build error**: check the error message, likely a missing import or syntax issue
-- **Puppeteer error**: the pre-render step failed. Try `npm run build` (without pre-render) as fallback and warn the user that AI crawlers will not see content.
+- **Puppeteer error**: the pre-render step failed. Fix it and re-run `npm run build:prerender`. **Never deploy a plain `npm run build`**: it emits no `app.html`, the SPA shell every client route is rewritten to (25 Sep 2026: a plain build was pushed and its non-prerendered `index.html` overwrote the prerendered one; caught and redeployed within minutes).
 
 ## Step 3: Verify Build Output
 
@@ -296,7 +296,7 @@ flush; trust the FTP content-hash check above as the real success signal.
 - **NEVER commit the dist folder** to git -- it is deployed manually to SiteGround
 - The dist folder is gitignored except for `frontend/dist/index.html` and `frontend/dist/sitemap.xml` which are tracked for SEO
 - Use `npm run build:prerender` (not plain `npm run build`) for production deploys
-- If Puppeteer fails, `npm run build` still produces a working SPA (just without pre-rendered static pages for crawlers)
+- If Puppeteer fails, do NOT fall back to `npm run build` for a deploy: it has no `app.html` (see Step 6). Fix the pre-render first.
 - The user uploads `frontend/dist/` contents to SiteGround manually (via File Manager, SFTP, or rsync)
 - SiteGround serves from `public_html/` with Apache -- `DirectoryIndex` handles the pre-rendered route folders
 - `frontend/public/robots.txt` has AI crawler allow rules and must be included in the upload
