@@ -94,6 +94,16 @@ _CHALLENGE_MARKERS = (
     re.compile(r"(?i)please prove you are human"),
     re.compile(r"(?i)\bcf-browser-verification\b|\bcf_chl_\w+"),
     re.compile(r"(?i)access denied.{0,40}(reference|ray) (id|number)"),
+    # A WAF REJECTION is not a challenge you can pass and not a document. The JRC Product
+    # Bureau answers 244 bytes of "The requested URL was rejected. Please consult with your
+    # administrator. Your support ID is: <...>" (BIG-IP ASM). It carries no consent banner,
+    # no navigation and no listing markers, so every other guard waved it through, and the
+    # fetcher was about to store it as a 123-character body for a textiles DPP study.
+    re.compile(r"(?i)the requested url was rejected"),
+    re.compile(r"(?i)your support id is"),
+    re.compile(r"(?i)consult with your administrator"),
+    re.compile(r"(?i)\breference\s*#\s*[0-9a-f]{8,}"),
+    re.compile(r"(?i)access to this page has been denied"),
 )
 
 

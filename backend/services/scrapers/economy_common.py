@@ -116,14 +116,40 @@ def to_dt(struct) -> datetime | None:
         return None
 
 
+# The junk guards live here because this is the ONE extractor both paths use: the economy
+# scrapers on ingest and the body backfill. Putting them only in the backfill was the mistake
+# that let 100 ECA rows of pure navigation come back four days after they were cleared: the
+# cleared rows held NULL, and on the next sync anything beat NULL.
+_MIN_BODY_AFTER_STRIPPING = 200
+
+
 def extract_html(html: str) -> tuple[str | None, str | None]:
-    """(body_txt, body_html) from a server-rendered detail page."""
+    """(body_txt, body_html) from a server-rendered detail page, or (None, None).
+
+    Returns nothing rather than furniture: a bot challenge, a WAF rejection, a listing index
+    or a page that is navigation and nothing else are all long enough to pass a length check
+    and are not the document.
+    """
+    from services.news.rendered_article import (looks_like_challenge, looks_like_listing,
+                                                strip_page_furniture)
+
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup(["script", "style", "noscript", "nav", "header", "footer", "aside", "form"]):
         tag.decompose()
     node = soup.find("main") or soup.find("article") or soup.body or soup
     body_html = clean(str(node)[:_BODY_CAP])
     body_txt = clean(node.get_text("\n", strip=True)[:_BODY_CAP])
+
+    if body_txt:
+        if looks_like_challenge(body_txt) or looks_like_listing(body_txt):
+            return None, None
+        # Strip the navigation run a page opens with, then judge what is left. An article
+        # BEHIND a nav bar survives; a page that is only the nav bar does not.
+        stripped = strip_page_furniture(body_txt)
+        if len(stripped) < _MIN_BODY_AFTER_STRIPPING:
+            return None, None
+        body_txt = stripped
+
     return (body_txt or None), (body_html or None)
 
 

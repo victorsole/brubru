@@ -407,6 +407,13 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         return None, None, f"HTTP {exc.code}"
     except Exception as exc:  # noqa: BLE001
         return None, None, f"{type(exc).__name__}"
+    # Name the wall from the RAW page, before extraction. The shared extractor now refuses a
+    # challenge by returning nothing, which is right for storage and useless for diagnosis:
+    # "no text in the page" and "the host is blocking us" need different responses, and the
+    # tally is how a run reports which it met.
+    if looks_like_challenge(visible_text(html)):
+        return None, None, "bot challenge, not the document: back off and retry later"
+
     body_txt, body_html = extract_html(html)
     if looks_like_challenge(body_txt or ""):
         # Never stored, never solved. The row keeps whatever it had and is retried later.

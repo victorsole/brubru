@@ -239,3 +239,29 @@ def test_no_stored_body_still_opens_with_navigation():
             assert count == 0, f"{count} substantial row(s) in {table} still open with navigation"
     finally:
         conn.close()
+
+
+def test_a_waf_rejection_page_is_not_a_body():
+    """A WAF REJECTION is neither a challenge you can pass nor a document.
+
+    The JRC Product Bureau answers 244 bytes of "The requested URL was rejected. Please
+    consult with your administrator. Your support ID is: <...>" (BIG-IP ASM). It carries no
+    consent banner, no navigation and no listing markers, so every other guard waved it
+    through, and the fetcher was about to store it as the 123-character body of a textiles
+    DPP study. Caught before it wrote: zero rows held one.
+    """
+    from services.news.rendered_article import looks_like_challenge
+
+    for page in ("The requested URL was rejected. Please consult with your administrator. "
+                 "Your support ID is: <4742023361733581756>",
+                 "Access to this page has been denied. Reference #18.2f3a0117",
+                 "Your support ID is: 991827"):
+        assert looks_like_challenge(page), f"not refused: {page[:40]}"
+
+
+def test_a_document_discussing_administrators_is_not_a_rejection():
+    from services.news.rendered_article import looks_like_challenge
+
+    assert not looks_like_challenge(
+        "The Commission rejected the proposal after the administrator consulted the committee "
+        "on the requested derogation.")
