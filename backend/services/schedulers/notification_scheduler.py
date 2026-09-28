@@ -199,12 +199,25 @@ def _run_pq_digest() -> dict:
     from services.notifications.pq_digest import StaleFeed, run as pq_run
     from services.sync.freshness import record_run
 
+    import os as _os
+
     db = SessionLocal()
     started = datetime.now(timezone.utc)
+    # Gated like the email channel (28 Sep 2026): off until Victor has read the
+    # preview (`scripts/send_pq_digest.py --preview`). A disabled run records
+    # 'skipped' with who WOULD have received a digest, never a silent success.
+    enabled = _os.getenv("PQ_DIGEST_ENABLED", "false").strip().lower() == "true"
     try:
-        res = pq_run(db, apply=True)
+        res = pq_run(db, apply=enabled)
         detail = (f"users={res.users} with_interests={res.with_interests} "
                   f"skipped_empty={res.skipped_empty} skipped_recent={res.skipped_recent}")
+        if not enabled:
+            detail = ("DISABLED (PQ_DIGEST_ENABLED is not true) | would create "
+                      f"{len(res.previews)}: " + "; ".join(p["email"] for p in res.previews[:12]) + " | " + detail)
+            record_run(db, source_key="notifications_pq_digest", tier="notifications", status="skipped",
+                       items_added=0, error=detail[:1000], started_at=started)
+            logger.info("[NOTIFY-SCHED] pq digest: %s", detail)
+            return {"created": 0, "enabled": False}
         status = "success" if res.created or res.with_interests == res.skipped_recent else "degraded"
         record_run(db, source_key="notifications_pq_digest", tier="notifications", status=status,
                    items_added=res.created, error=detail, started_at=started)

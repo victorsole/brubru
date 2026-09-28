@@ -81,11 +81,32 @@ def _score(row, kws: List[str]) -> int:
     return score
 
 
-MIN_SCORE = 2   # a keyword in the subject, or two distinct keywords in the text
+def relevant(row, kws: List[str]) -> bool:
+    """A keyword in the subject, or at least three distinct ones in the text.
+
+    Two text hits were not enough (28 Sep preview): broad interests such as Single
+    Market carry phrases ("internal market", "free movement", "competitiveness")
+    that appear in the body of questions about seeds, housing or Mexican media."""
+    subj = (row.subject or "").lower()
+    if any(_kw_re(k).search(subj) for k in set(kws)):
+        return True
+    body = (row.text_question or "").lower()
+    return sum(1 for k in set(kws) if _kw_re(k).search(body)) >= 3
 
 
-def week_set(db: Session, user, *, days: int = 7, today: Optional[date] = None) -> WeekSet:
-    """The questions on this user's Policy Interests in the last `days` days."""
+MIN_SCORE = 2   # kept for the ranking; relevance is decided by relevant()
+
+
+def week_set(db: Session, user, *, days: int = 7, today: Optional[date] = None,
+             asked_since: Optional[date] = None, asked_until: Optional[date] = None) -> WeekSet:
+    """The questions on this user's Policy Interests for the digest week.
+
+    EP publishes a written question about a week after it is tabled (on 25 Sep
+    2026 the newest on EP's own page, E-003755/2026, was dated 18 Sep), so
+    "tabled in the last 7 days" is nearly always empty. The ASKED window is
+    anchored on the newest question EP has published (asked_until) and runs from
+    where this user's previous digest stopped (asked_since); answers arrive
+    promptly, so the ANSWERED window is the calendar week to `today`."""
     from api.parliamentary_questions import _apply_pi, _summary
     from models.w4_entities import ParliamentaryQuestion as PQ
     from services.tracking.pi_committee_crosswalk import keywords_for_interests
@@ -93,21 +114,23 @@ def week_set(db: Session, user, *, days: int = 7, today: Optional[date] = None) 
 
     today = today or date.today()
     since = today - timedelta(days=days)
-    ws = WeekSet(since=since.isoformat(), until=today.isoformat())
+    asked_until = asked_until or feed_newest(db) or today
+    asked_since = asked_since or (asked_until - timedelta(days=days))
+    ws = WeekSet(since=asked_since.isoformat(), until=asked_until.isoformat())
     kws = keywords_for_interests(_interest_list(user) or []) or []
 
     asked_q, ws.pi_active = _apply_pi(
-        db.query(PQ).filter(PQ.submitted_date > since, PQ.submitted_date <= today), user)
+        db.query(PQ).filter(PQ.submitted_date > asked_since, PQ.submitted_date <= asked_until), user)
     if not ws.pi_active:
         return ws
-    asked = [r for r in asked_q.all() if _score(r, kws) >= MIN_SCORE]
+    asked = [r for r in asked_q.all() if relevant(r, kws)]
     ws.asked_total = len(asked)
     asked.sort(key=lambda r: (-_score(r, kws), -(r.submitted_date.toordinal() if r.submitted_date else 0)))
     ws.asked = [_summary(r) for r in asked[:MAX_ASKED]]
 
     answered_q, _ = _apply_pi(
         db.query(PQ).filter(PQ.answered_date > since, PQ.answered_date <= today), user)
-    answered = [r for r in answered_q.all() if _score(r, kws) >= MIN_SCORE]
+    answered = [r for r in answered_q.all() if relevant(r, kws)]
     ws.answered_total = len(answered)
     answered.sort(key=lambda r: (-_score(r, kws), -(r.answered_date.toordinal() if r.answered_date else 0)))
     ws.answered = [_summary(r) for r in answered[:MAX_ANSWERED]]
@@ -209,15 +232,18 @@ def compose(ws: WeekSet, lang: str = "en") -> tuple[str, str]:
 
 # --------------------------------------------------------------------- run
 def eligible_users(db: Session) -> list:
+    """Paying tiers minus internal actors, by the ONE rule /users uses
+    (scripts/user_activity_report.INTERNAL_USER_SQL: admins, trainers, unclaimed
+    shells, beresol/hellobo/test/example accounts). The six seeded accounts that
+    rule leaves pending Victor's decision stay eligible, as they do there."""
     from models.user import User
+    from scripts.user_activity_report import INTERNAL_USER_SQL
     from services.notifications.notification_email import is_synthetic
-    users = db.query(User).filter(User.subscription_tier.in_(("yellow", "blue"))).all()
-    out = []
-    for u in users:
-        if is_synthetic(u.email or "") or (u.email or "").lower().endswith("@beresol.eu"):
-            continue
-        out.append(u)
-    return out
+    ids = [r[0] for r in db.execute(text(
+        f"SELECT u.id FROM users u WHERE u.subscription_tier IN ('yellow', 'blue') "
+        f"AND NOT {INTERNAL_USER_SQL}"))]
+    users = db.query(User).filter(User.id.in_(ids)).all() if ids else []
+    return [u for u in users if not is_synthetic(u.email or "")]
 
 
 @dataclass
@@ -230,7 +256,8 @@ class RunResult:
     previews: List[dict] = field(default_factory=list)
 
 
-FEED_MAX_AGE_DAYS = 5
+INGEST_MAX_AGE_HOURS = 36     # our ingest must have run cleanly this recently
+EP_MAX_AGE_DAYS = 21          # beyond EP's normal ~1 week publishing lag: something is wrong
 
 
 class StaleFeed(RuntimeError):
@@ -239,6 +266,29 @@ class StaleFeed(RuntimeError):
 
 def feed_newest(db: Session) -> Optional[date]:
     return db.execute(text("SELECT max(submitted_date) FROM parliamentary_questions")).scalar()
+
+
+def feed_problem(db: Session, today: date) -> Optional[str]:
+    """Why the feed cannot be trusted this morning, or None.
+
+    Two different failures: OUR ingest not running (no clean `parl_questions`
+    run recently), and EP's listing being unusually far behind. A digest built
+    on either would look like a quiet week."""
+    newest = feed_newest(db)
+    if newest is None:
+        return "no parliamentary questions stored"
+    if (today - newest).days > EP_MAX_AGE_DAYS:
+        return f"newest question is {newest}, {(today - newest).days} days old (EP normally lags ~7)"
+    ok = db.execute(text(
+        "SELECT max(finished_at) FROM sync_runs WHERE source_key = 'parl_questions' "
+        "AND status IN ('success', 'degraded') AND coalesce(runner, 'container') <> 'local'")).scalar()
+    if ok is None:
+        return "the parl_questions ingest has never recorded a clean run"
+    ok_utc = ok if ok.tzinfo else ok.replace(tzinfo=timezone.utc)
+    age_h = (datetime.now(timezone.utc) - ok_utc).total_seconds() / 3600
+    if age_h > INGEST_MAX_AGE_HOURS:
+        return f"last clean parl_questions run was {age_h:.0f} h ago (limit {INGEST_MAX_AGE_HOURS} h)"
+    return None
 
 
 def run(db: Session, *, apply: bool, today: Optional[date] = None, only: Optional[set] = None,
@@ -252,17 +302,29 @@ def run(db: Session, *, apply: bool, today: Optional[date] = None, only: Optiona
     from models.notification import Notification
 
     today = today or date.today()
+    problem = feed_problem(db, today)
+    if problem and not allow_stale:
+        raise StaleFeed(f"{problem}: refusing to build a digest that would under-report")
     newest = feed_newest(db)
-    if not allow_stale and (newest is None or (today - newest).days > FEED_MAX_AGE_DAYS):
-        raise StaleFeed(f"newest stored question is {newest}, more than {FEED_MAX_AGE_DAYS} days "
-                        f"before {today}: refusing to build a digest that would under-report")
     res = RunResult()
     cutoff = datetime.now(timezone.utc) - timedelta(days=6)
     for u in eligible_users(db):
         if only and (u.email or "").lower() not in only:
             continue
         res.users += 1
-        ws = week_set(db, u, today=today)
+        prev = db.execute(text(
+            "SELECT notif_metadata FROM notifications WHERE user_id = :u AND notification_type = 'pq_digest' "
+            "ORDER BY created_at DESC LIMIT 1"), {"u": u.id}).scalar()
+        prev_until = None
+        if isinstance(prev, dict) and prev.get("until"):
+            try:
+                prev_until = date.fromisoformat(prev["until"])
+            except ValueError:
+                prev_until = None
+        if prev_until and newest and prev_until >= newest:
+            res.skipped_recent += 1          # EP has published nothing new since the last digest
+            continue
+        ws = week_set(db, u, today=today, asked_since=prev_until, asked_until=newest)
         if not ws.pi_active:
             continue
         res.with_interests += 1
