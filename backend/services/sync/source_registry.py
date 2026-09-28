@@ -58,6 +58,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     # again, quietly, so it is on the warm tier. `--window-days 7` keeps each
     # window well under the register's 1,000-document cap; bodies are fetched so
     # `q` can find documents whose bureaucratic subject line omits the topic.
+    # New Council register documents discovered BY REFERENCE on data.consilium, which
+    # Railway can reach (28 Sep 2026). The search/listing route above is answered with
+    # a browser challenge from Railway's address and has failed every run since
+    # 22 Sep; references are sequential (CM notices, ST documents, WK), so asking for
+    # the numbers after the highest held finds what is new. Feeds Council Watch.
+    SourceSpec("council_register_discovery", "Documents - Council register (by reference)", "warm",
+               "scripts/discover_council_documents.py", ("--apply", "--max-seconds", "420"),
+               timeout=600, stale_after_hours=14),
     SourceSpec("council_documents", "Documents - Council", "warm",
                "scripts/ingest_council_documents.py",
                ("--apply", "--since-days", "14", "--window-days", "7", "--fetch-bodies"),

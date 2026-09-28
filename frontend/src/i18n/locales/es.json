@@ -530,7 +530,12 @@
       "kpiDocuments": "documentos del Consejo",
       "openDocument": "Abrir el documento del Consejo (PDF)",
       "openAgenda": "Abrir la reunión de comisión en la que se presentó",
-      "documentTabled": "Texto del Consejo transmitido al Parlamento Europeo y presentado en la comisión {{committee}}."
+      "documentTabled": "Texto del Consejo transmitido al Parlamento Europeo y presentado en la comisión {{committee}}.",
+      "register": "Registro del Consejo",
+      "registers": "Registro del Consejo (grupos de trabajo, órdenes del día)",
+      "kpiRegister": "documentos del registro",
+      "registerMeets": "Del registro del Consejo ({{ref}}). La reunión es el {{date}}.",
+      "registerDoc": "Del registro del Consejo ({{ref}})."
     },
     "mepw": {
       "title": "Seguimiento de eurodiputados",

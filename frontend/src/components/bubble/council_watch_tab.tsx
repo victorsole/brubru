@@ -11,7 +11,7 @@ import Icon from '@mdi/react';
 import {
   mdiAccountGroup, mdiMagnify, mdiLoading, mdiCalendarClock, mdiBullhornOutline,
   mdiGavel, mdiOpenInNew, mdiDomain, mdiClose, mdiCreation, mdiAccountMultipleOutline,
-  mdiMapMarkerOutline, mdiFileDocumentOutline,
+  mdiMapMarkerOutline, mdiFileDocumentOutline, mdiClipboardTextOutline,
 } from '@mdi/js';
 import { councilWatchService } from '../../services/council_watch_service';
 import type { CouncilItem, CouncilStats, PermRep } from '../../services/council_watch_service';
@@ -21,6 +21,7 @@ import './council_watch_tab.css';
 
 const KIND_ICON: Record<CouncilItem['kind'], string> = {
   meeting: mdiCalendarClock, outcome: mdiBullhornOutline, document: mdiFileDocumentOutline,
+  register: mdiClipboardTextOutline,
 };
 
 export function CouncilWatchTab() {
@@ -71,7 +72,8 @@ export function CouncilWatchTab() {
   const kindLabel = (k: CouncilItem['kind']) => (
     k === 'meeting' ? t('bubble.cwatch.meeting', 'Meeting')
       : k === 'outcome' ? t('bubble.cwatch.outcome', 'Outcome')
-        : t('bubble.cwatch.document', 'Council document'));
+        : k === 'register' ? t('bubble.cwatch.register', 'Council register')
+          : t('bubble.cwatch.document', 'Council document'));
 
   return (
     <div className="cwatch-tab">
@@ -106,6 +108,7 @@ export function CouncilWatchTab() {
           <option value="meeting">{t('bubble.cwatch.meetings', 'Meetings')}</option>
           <option value="outcome">{t('bubble.cwatch.outcomes', 'Outcomes')}</option>
           <option value="document">{t('bubble.cwatch.documents', 'Council documents')}</option>
+          <option value="register">{t('bubble.cwatch.registers', 'Council register (working parties, agendas)')}</option>
         </select>
         <div className="cwatch-tab__search">
           <Icon path={mdiMagnify} size={0.8} />
@@ -120,6 +123,9 @@ export function CouncilWatchTab() {
           <div className="cwatch-kpi"><Icon path={mdiGavel} size={0.9} /><div><b>{stats.council_votes}</b><span>{t('bubble.cwatch.kpiVotes', 'Council votes')}</span></div></div>
           {typeof stats.council_documents === 'number' && (
             <div className="cwatch-kpi"><Icon path={mdiFileDocumentOutline} size={0.9} /><div><b>{stats.council_documents}</b><span>{t('bubble.cwatch.kpiDocuments', 'Council documents')}</span></div></div>
+          )}
+          {typeof stats.register_documents === 'number' && (
+            <div className="cwatch-kpi"><Icon path={mdiClipboardTextOutline} size={0.9} /><div><b>{stats.register_documents}</b><span>{t('bubble.cwatch.kpiRegister', 'register documents')}</span></div></div>
           )}
           <div className="cwatch-kpi cwatch-kpi--configs">
             <Icon path={mdiDomain} size={0.9} />
@@ -147,7 +153,8 @@ export function CouncilWatchTab() {
                   <span className={`cwatch-kindchip is-${it.kind}`}>{kindLabel(it.kind)}</span>
                   {it.configuration && <CodeChip code={it.configuration} className="cwatch-chip" />}
                   {it.kind === 'document' && it.committee && <CodeChip code={it.committee} className="cwatch-chip" />}
-                  {it.date && (it.kind === 'meeting' && it.date >= today) && <span className="cwatch-soon">{t('bubble.cwatch.upcoming', 'Upcoming')}</span>}
+                  {it.date && ((it.kind === 'meeting' || (it.kind === 'register' && it.meeting_date)) && it.date >= today) && <span className="cwatch-soon">{t('bubble.cwatch.upcoming', 'Upcoming')}</span>}
+                  {it.kind === 'register' && it.reference && <span className="cwatch-chip cwatch-ref">{it.reference}</span>}
                   <span className="cwatch-item__date">{fmtDate(it.date)}</span>
                 </div>
                 <div className="cwatch-item__title">{it.title}</div>
@@ -207,6 +214,13 @@ export function CouncilWatchTab() {
             </header>
             <div className="cwatch-modal__body">
               {detail.summary && <p className="cwatch-modal__text">{detail.summary}</p>}
+              {detail.kind === 'register' && (
+                <p className="cwatch-modal__text cwatch-muted">
+                  {detail.meeting_date
+                    ? t('bubble.cwatch.registerMeets', 'From the Council register ({{ref}}). The meeting is on {{date}}.', { ref: detail.reference, date: fmtDate(detail.meeting_date) })
+                    : t('bubble.cwatch.registerDoc', 'From the Council register ({{ref}}).', { ref: detail.reference })}
+                </p>
+              )}
               {detail.kind === 'document' && detail.committee && (
                 <p className="cwatch-modal__text cwatch-muted">
                   {t('bubble.cwatch.documentTabled', 'Council text transmitted to the European Parliament and tabled in the {{committee}} committee.', { committee: detail.committee })}
@@ -224,7 +238,9 @@ export function CouncilWatchTab() {
 
               {detail.url && (
                 <a className="cwatch-source" href={detail.url} target="_blank" rel="noopener noreferrer">
-                  <Icon path={mdiOpenInNew} size={0.6} /> {detail.kind === 'document'
+                  <Icon path={mdiOpenInNew} size={0.6} /> {detail.kind === 'register'
+                    ? t('bubble.cwatch.openDocument', 'Open the Council document (PDF)')
+                    : detail.kind === 'document'
                     ? (detail.is_pdf
                       ? t('bubble.cwatch.openDocument', 'Open the Council document (PDF)')
                       : t('bubble.cwatch.openAgenda', 'Open the committee meeting where it was tabled'))

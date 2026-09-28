@@ -530,7 +530,12 @@
       "kpiDocuments": "raadsdocumenten",
       "openDocument": "Het raadsdocument openen (pdf)",
       "openAgenda": "De commissievergadering openen waarin het werd ingediend",
-      "documentTabled": "Tekst van de Raad, toegezonden aan het Europees Parlement en ingediend in de commissie {{committee}}."
+      "documentTabled": "Tekst van de Raad, toegezonden aan het Europees Parlement en ingediend in de commissie {{committee}}.",
+      "register": "Raadsregister",
+      "registers": "Raadsregister (werkgroepen, agenda's)",
+      "kpiRegister": "registerdocumenten",
+      "registerMeets": "Uit het Raadsregister ({{ref}}). De vergadering is op {{date}}.",
+      "registerDoc": "Uit het Raadsregister ({{ref}})."
     },
     "mepw": {
       "title": "EP-leden-monitor",

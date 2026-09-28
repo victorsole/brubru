@@ -530,7 +530,12 @@
       "kpiDocuments": "documents del Consell",
       "openDocument": "Obrir el document del Consell (PDF)",
       "openAgenda": "Obrir la reunió de comissió on es va presentar",
-      "documentTabled": "Text del Consell transmès al Parlament Europeu i presentat a la comissió {{committee}}."
+      "documentTabled": "Text del Consell transmès al Parlament Europeu i presentat a la comissió {{committee}}.",
+      "register": "Registre del Consell",
+      "registers": "Registre del Consell (grups de treball, ordres del dia)",
+      "kpiRegister": "documents del registre",
+      "registerMeets": "Del registre del Consell ({{ref}}). La reunió és el {{date}}.",
+      "registerDoc": "Del registre del Consell ({{ref}})."
     },
     "mepw": {
       "title": "Seguiment d'eurodiputats",

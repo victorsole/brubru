@@ -530,7 +530,12 @@
       "kpiDocuments": "documenti del Consiglio",
       "openDocument": "Apri il documento del Consiglio (PDF)",
       "openAgenda": "Apri la riunione di commissione in cui è stato presentato",
-      "documentTabled": "Testo del Consiglio trasmesso al Parlamento europeo e presentato in commissione {{committee}}."
+      "documentTabled": "Testo del Consiglio trasmesso al Parlamento europeo e presentato in commissione {{committee}}.",
+      "register": "Registro del Consiglio",
+      "registers": "Registro del Consiglio (gruppi di lavoro, ordini del giorno)",
+      "kpiRegister": "documenti del registro",
+      "registerMeets": "Dal registro del Consiglio ({{ref}}). La riunione è il {{date}}.",
+      "registerDoc": "Dal registro del Consiglio ({{ref}})."
     },
     "mepw": {
       "title": "Monitoraggio eurodeputati",

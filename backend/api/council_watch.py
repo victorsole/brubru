@@ -11,6 +11,7 @@ My EU Calendar (when). Read: Yellow+. No Anthropic.
 from __future__ import annotations
 
 import logging
+import re
 from datetime import date, timedelta
 from typing import List, Optional
 
@@ -123,17 +124,116 @@ def _document_items(db, user, my_interests, search) -> List[dict]:
     } for r in rows]
 
 
+# Council configuration code -> the name its agendas are headed with.
+_CONFIG_NAME = {
+    "AGRIFISH": "Agriculture and Fisheries", "COMPET": "Competitiveness",
+    "ECOFIN": "Economic and Financial Affairs", "EPSCO": "Employment, Social Policy",
+    "ENVI": "Environment", "ENV": "Environment", "EYCS": "Education, Youth, Culture",
+    "EDUC": "Education, Youth, Culture", "FAC": "Foreign Affairs", "GAC": "General Affairs",
+    "JHA": "Justice and Home Affairs", "TTE": "Transport, Telecommunications and Energy",
+}
+
+
+def _register_items(db, user, my_interests, search) -> List[dict]:
+    """The Council's OWN register (28 Sep 2026): working-party meeting notices,
+    Council and Coreper agendas and standard documents, discovered by reference on
+    data.consilium (scripts/discover_council_documents.py). The layer below the
+    ministerial meetings: which working party meets on what, and when.
+
+    Lens: a keyword of the user's interests in the title or the document text (an
+    agenda names its files in its items), or one of the user's Council
+    configurations (its heading name, or its code in the document header)."""
+    from sqlalchemy import text as _text
+    where = ["source_slug = 'consilium_register'", "category = 'document'"]
+    params: dict = {}
+    if my_interests:
+        configs, kws = _pi(user)
+        lens = []
+        # Word-boundary regex, not ILIKE: on full document text the keyword "sme"
+        # matched inside "assessment", so every Council document passed every lens
+        # (28 Sep 2026). \y is PostgreSQL's boundary (\b is a backspace there).
+        # Boundary at the start only, so stems ("industr") still match; at both
+        # ends for keywords deliberately padded with spaces (" ai ").
+        alts = []
+        for kw in sorted(kws):
+            core = re.escape(kw.strip().lower())
+            if not core:
+                continue
+            alts.append(rf"\y{core}\y" if kw != kw.strip() else rf"\y{core}")
+        if alts:
+            lens.append("(title ~* :kwrx OR html_content ~* :kwrx)")
+            params["kwrx"] = "(" + "|".join(alts) + ")"
+        for j, code in enumerate(sorted(configs)):
+            lens.append(f"(html_content ILIKE :cc{j} OR title ILIKE :cn{j})")
+            params[f"cc{j}"] = f"%OJ CONS {code}%"
+            params[f"cn{j}"] = f"%{_CONFIG_NAME.get(code, code)}%"
+        if not lens:
+            return []
+        where.append("(" + " OR ".join(lens) + ")")
+    if search:
+        where.append("(title ILIKE :s OR external_id ILIKE :s)")
+        params["s"] = f"%{search}%"
+    rows = db.execute(_text(f"""
+        SELECT external_id, title, url, published_date, extra_metadata->>'meeting_date' AS meeting_date,
+               left(coalesce(summary, ''), 600) AS summary, html_content
+          FROM institutional_publications
+         WHERE {' AND '.join(where)}
+         ORDER BY coalesce((extra_metadata->>'meeting_date')::date, published_date) DESC NULLS LAST, external_id
+         LIMIT 2000"""), params).mappings().all()
+    if my_interests:
+        # SQL finds candidates; relevance is decided here. Council documents are long
+        # and span many topics, so interest words are common in their text ("economic"
+        # in 43% of them, "environment" 34%): a keyword must be in the TITLE, or the
+        # document must be one of the user's Council configurations, or its text must
+        # carry at least three distinct keywords (the rule the PQ digest uses).
+        configs, kws = _pi(user)
+        rxs = [re.compile(r"\b" + re.escape(k.strip().lower()) + (r"\b" if k != k.strip() else ""))
+               for k in kws if k.strip()]
+        cfg = [(f"oj cons {c.lower()}", _CONFIG_NAME.get(c, c).lower()) for c in configs]
+
+        def relevant(r) -> bool:
+            title = (r["title"] or "").lower()
+            body = (r["html_content"] or "").lower()
+            if any(rx.search(title) for rx in rxs):
+                return True
+            if any(code in body[:3000] or name in title for code, name in cfg):
+                return True
+            # Only in SHORT documents (notices, agendas, short notes), where every term
+            # is an agenda item. A long report mentions everything: a 72,000-character
+            # macro-financial assistance paper reached a copper refiner on "energy",
+            # "emission" and "nature". Long documents must match on their title.
+            return len(body) < 15000 and sum(1 for rx in rxs if rx.search(body)) >= 3
+
+        rows = [r for r in rows if relevant(r)]
+    out = []
+    for r in rows:          # the list endpoint paginates; the KPI counts the true total
+        when = r["meeting_date"] or (r["published_date"].isoformat() if r["published_date"] else None)
+        out.append({
+            "kind": "register",
+            "date": (when or "")[:10] or None,
+            # Listing-route titles carry page furniture ("... Also available in: BG SV").
+            "title": re.sub(r"\s+Also available in:.*$", "", r["title"] or "").strip() or r["external_id"],
+            "configuration": None,
+            "summary": r["summary"] or None,
+            "url": r["url"],
+            "reference": r["external_id"],
+            "meeting_date": r["meeting_date"],
+            "is_pdf": bool(r["url"] and r["url"].endswith("/pdf")),
+        })
+    return out
+
+
 @router.get("")
 def list_activity(
     my_interests: bool = Query(True),
-    kind: str = Query("all", description="all | meeting | outcome | document"),
+    kind: str = Query("all", description="all | meeting | outcome | document | register"),
     search: Optional[str] = Query(None),
     limit: int = Query(60, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """Unified Council activity feed (meetings, outcomes and Council documents), PI-filtered, newest first."""
+    """Unified Council activity feed (meetings, outcomes, Council documents and the Council's own register), PI-filtered, newest first."""
     _require_yellow(user)
     items: List[dict] = []
     if kind in ("all", "meeting"):
@@ -142,6 +242,8 @@ def list_activity(
         items += _outcome_items(db, user, my_interests, search)
     if kind in ("all", "document"):
         items += _document_items(db, user, my_interests, search)
+    if kind in ("all", "register"):
+        items += _register_items(db, user, my_interests, search)
     items.sort(key=lambda x: x["date"] or "", reverse=True)
     pi_active = my_interests and bool(any(_pi(user)))
     return {"total": len(items), "pi_active": pi_active,
@@ -178,6 +280,8 @@ async def summarise(
     kind = {"meeting": "meeting",
             "document": "document transmitted to the European Parliament (such as a "
                         "Council decision, a first-reading position or its budget position)",
+            "register": "document from its public register (a working party's notice of "
+                        "meeting and agenda, a Council or Coreper agenda, or a standard document)",
             }.get(payload.kind, "outcome / press item")
     cfg = f" ({payload.configuration} configuration)" if payload.configuration else ""
     prompt = (
@@ -197,6 +301,23 @@ async def summarise(
     except Exception as e:
         logger.warning("[council-watch] summarise failed: %s", e)
         out = None
+    if not out:
+        # Hugging Face is out of credits (HTTP 402 since ~24 Sep 2026), which made this
+        # button fail for every item. The chat chain's open-model lanes take over.
+        import services.ai.multi_provider_service as mps
+        for name in ("CerebrasProvider", "GeminiProvider", "MistralProvider", "ScalewayProvider"):
+            try:
+                prov = getattr(mps, name)()
+                if not prov.is_available:
+                    continue
+                resp = await prov.generate(system_prompt="You explain EU Council documents plainly.",
+                                           messages=[{"role": "user", "content": prompt}],
+                                           max_tokens=260, temperature=0.2)
+                out = (getattr(resp, "message", "") or "").strip()
+                if out:
+                    break
+            except Exception as e:  # noqa: BLE001
+                logger.info("[council-watch] %s failed: %s", name, str(e)[:120])
     if not out:
         raise HTTPException(status_code=502, detail="Could not generate summary.")
     _SUM_CACHE[key] = out
@@ -229,6 +350,8 @@ def stats(
     recent_outcomes = sum(1 for o in outcomes if (o["date"] or "") >= cutoff)
     council_votes = db.query(func.count(EpVote.id)).filter(EpVote.level == "council").scalar() or 0
     council_documents = len(_document_items(db, user, my_interests, None))
+    register_items = _register_items(db, user, my_interests, None)
+    upcoming_register = sum(1 for r in register_items if (r["meeting_date"] or "") >= today)
     # configurations present in the user's meeting set
     present_configs = sorted({m["configuration"] for m in meetings if m["configuration"]})
     return {
@@ -239,4 +362,6 @@ def stats(
         "your_configurations": present_configs,
         "council_votes": int(council_votes),
         "council_documents": council_documents,
+        "register_documents": len(register_items),
+        "register_upcoming": upcoming_register,
     }

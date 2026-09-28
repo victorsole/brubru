@@ -530,7 +530,12 @@
       "kpiDocuments": "Council documents",
       "openDocument": "Open the Council document (PDF)",
       "openAgenda": "Open the committee meeting where it was tabled",
-      "documentTabled": "Council text transmitted to the European Parliament and tabled in the {{committee}} committee."
+      "documentTabled": "Council text transmitted to the European Parliament and tabled in the {{committee}} committee.",
+      "register": "Council register",
+      "registers": "Council register (working parties, agendas)",
+      "kpiRegister": "register documents",
+      "registerMeets": "From the Council register ({{ref}}). The meeting is on {{date}}.",
+      "registerDoc": "From the Council register ({{ref}})."
     },
     "mepw": {
       "title": "MEP Watch",

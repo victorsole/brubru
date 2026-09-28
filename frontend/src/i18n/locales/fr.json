@@ -530,7 +530,12 @@
       "kpiDocuments": "documents du Conseil",
       "openDocument": "Ouvrir le document du Conseil (PDF)",
       "openAgenda": "Ouvrir la réunion de commission où il a été déposé",
-      "documentTabled": "Texte du Conseil transmis au Parlement européen et déposé en commission {{committee}}."
+      "documentTabled": "Texte du Conseil transmis au Parlement européen et déposé en commission {{committee}}.",
+      "register": "Registre du Conseil",
+      "registers": "Registre du Conseil (groupes de travail, ordres du jour)",
+      "kpiRegister": "documents du registre",
+      "registerMeets": "Du registre du Conseil ({{ref}}). La réunion a lieu le {{date}}.",
+      "registerDoc": "Du registre du Conseil ({{ref}})."
     },
     "mepw": {
       "title": "Suivi des députés",
