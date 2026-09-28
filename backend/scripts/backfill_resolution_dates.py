@@ -62,6 +62,11 @@ LEFT JOIN legislative_carriages c  ON c.oeil_procedure_ref = r.procedure_ref
 ORDER BY r.procedure_ref
 """
 
+# Only touch a row that actually CHANGES. Without the IS DISTINCT FROM guard this stamped
+# updated_at on every resolution every run, and because now() is the transaction start time
+# all 351 rows ended up with one identical timestamp. That destroys the column's meaning as a
+# change signal: GovClipping's incremental pull asks for "resolutions updated since yesterday"
+# and gets the entire corpus every day, which is exactly what incremental sync exists to avoid.
 _UPDATE = """
 UPDATE ep_resolutions SET
     adoption_date  = COALESCE(CAST(:adoption AS date), adoption_date),
@@ -69,6 +74,9 @@ UPDATE ep_resolutions SET
     rapporteur     = COALESCE(:rapporteur, rapporteur),
     updated_at     = now()
 WHERE id = :id
+  AND (adoption_date  IS DISTINCT FROM COALESCE(CAST(:adoption AS date), adoption_date)
+    OR lead_committee IS DISTINCT FROM COALESCE(:lead, lead_committee)
+    OR rapporteur     IS DISTINCT FROM COALESCE(:rapporteur, rapporteur))
 """
 
 
