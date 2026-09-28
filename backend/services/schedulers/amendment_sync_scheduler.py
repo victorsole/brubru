@@ -32,7 +32,11 @@ async def _daily_amendment_sync():
 
     logger.info("[AMENDMENT-SCHEDULER] Starting daily incremental sync")
 
+    from datetime import datetime, timezone
+    from services.sync.freshness import record_run
+
     db = SessionLocal()
+    started = datetime.now(timezone.utc)
     try:
         service = BulkAmendmentSyncService(db=db)
         result = await service.sync_incremental()
@@ -45,8 +49,29 @@ async def _daily_amendment_sync():
             f"{result.documents_failed} failed "
             f"({result.duration_seconds}s)"
         )
+        # A run that discovered nothing is not a quiet day. EP Open Data answers 200
+        # with an error in the body, which used to read as an empty page, so this job
+        # stored nothing from 3 May to 28 Sep 2026 while logging success every night
+        # and leaving no durable trace at all.
+        if result.errors:
+            status = "failed"
+        elif result.documents_discovered == 0:
+            status = "failed"
+            result.errors.append("discovered 0 documents: the source is down or changed")
+        elif result.documents_failed:
+            status = "degraded"
+        else:
+            status = "success"
+        record_run(
+            db, source_key="ep_amendments", tier="warm", status=status,
+            items_added=result.amendments_stored,
+            error="; ".join(result.errors)[:2000] or None,
+            started_at=started,
+        )
     except Exception as e:
         logger.error(f"[ERROR] Daily amendment sync failed: {e}")
+        record_run(db, source_key="ep_amendments", tier="warm", status="failed",
+                   error=f"{type(e).__name__}: {e}", started_at=started)
     finally:
         db.close()
 

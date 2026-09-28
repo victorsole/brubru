@@ -17,10 +17,12 @@ Workflow:
 Created: February 2026
 """
 
+import asyncio
 import logging
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 from uuid import uuid4
 
@@ -66,6 +68,8 @@ class BulkAmendmentSyncService:
         self.db = db
         self.client = EPOpenDataClient()
         self.parser = EPAmendmentParser()
+        # doceo bytes fetched past the WAF by the browser, keyed by URL.
+        self._docx_cache: Dict[str, bytes] = {}
 
     async def sync_all(
         self,
@@ -116,6 +120,18 @@ class BulkAmendmentSyncService:
         result.documents_discovered = len(documents)
         logger.info(f"[INFO] Discovered {len(documents)} documents")
 
+        # Phase 1b: doceo answers plain HTTP with 202 and an EMPTY body for every
+        # document, so the old code handed 0 bytes to the parser (raise_for_status
+        # passes a 202) and recorded "failed". The documents are only reachable through
+        # a browser that has cleared the host's challenge, so the whole batch is warmed
+        # in one browser rather than launching one per document.
+        needed = [
+            d.get("doceo_url", "") for d in documents
+            if d.get("identifier") and d.get("doceo_url")
+            and (force_refetch or not self._is_already_parsed(d["identifier"]))
+        ]
+        await self._prefetch_walled_documents([u for u in needed if u])
+
         # Phase 2: Process each document
         for i, doc in enumerate(documents):
             ep_id = doc.get("identifier", "")
@@ -163,6 +179,51 @@ class BulkAmendmentSyncService:
         )
 
         return result
+
+    async def _prefetch_walled_documents(self, urls: List[str], chunk: int = 25) -> None:
+        """Fetch doceo documents past the WAF, a chunk per browser.
+
+        doceo returns 202 and zero bytes to plain HTTP, so a real browser has to clear
+        the host's challenge first; fetch_bytes_isolated does that once per call and
+        then pulls each document through the same cookie jar. It also reports the TRUE
+        status, which matters beyond downloading: behind the WAF a missing document and
+        a real one both looked like 202, so nothing could tell them apart.
+        """
+        if not urls:
+            return
+        try:
+            import importlib.util
+            import sys as _sys
+            spec = importlib.util.spec_from_file_location(
+                "waf_browser_fetcher",
+                str(Path(__file__).resolve().parent / "waf_browser_fetcher.py"))
+            waf = importlib.util.module_from_spec(spec)
+            _sys.modules["waf_browser_fetcher"] = waf
+            spec.loader.exec_module(waf)
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"[WARN] browser fetcher unavailable ({e}); "
+                           f"doceo documents cannot be read past the WAF")
+            return
+
+        got = missing = 0
+        for start in range(0, len(urls), chunk):
+            batch = urls[start:start + chunk]
+            try:
+                out = await asyncio.to_thread(
+                    waf.fetch_bytes_isolated, batch,
+                    warm_url="https://www.europarl.europa.eu/doceo/", timeout_s=600.0)
+            except Exception as e:  # noqa: BLE001
+                logger.warning(f"[WARN] browser batch {start}-{start+len(batch)} failed: {e}")
+                continue
+            for url, (status, body, err) in out.items():
+                if body and body[:2] == b"PK":
+                    self._docx_cache[url] = body
+                    got += 1
+                else:
+                    missing += 1
+                    logger.debug(f"[INFO] {url}: status={status} bytes={len(body or b'')} {err or ''}")
+        logger.info(f"[INFO] Browser warmed {got} document(s) past the WAF, "
+                    f"{missing} not available")
 
     async def sync_incremental(self) -> BulkSyncResult:
         """
@@ -271,11 +332,24 @@ class BulkAmendmentSyncService:
 
         logger.info(f"[INFO] Fetching {doc_type} document: {ep_id} ({pe_reference})")
 
-        # Download DOCX
-        async with httpx.AsyncClient(timeout=60, follow_redirects=True) as http:
-            response = await http.get(doceo_url)
-            response.raise_for_status()
-            docx_bytes = response.content
+        # Download DOCX. Prefer the bytes the browser already fetched past the WAF.
+        docx_bytes = self._docx_cache.pop(doceo_url, None)
+        if docx_bytes is None:
+            async with httpx.AsyncClient(timeout=60, follow_redirects=True) as http:
+                response = await http.get(doceo_url)
+                response.raise_for_status()
+                docx_bytes = response.content
+        # A DOCX is a zip. 202-with-nothing is the WAF, and an HTML body is an error
+        # page; both used to reach the parser and be recorded as a parse failure, which
+        # reads as "this document is broken" rather than "we never got it".
+        if not docx_bytes:
+            raise ValueError(
+                f"{doceo_url} returned an empty body: the document is behind the WAF "
+                f"and the browser fetch did not supply it")
+        if docx_bytes[:2] != b"PK":
+            raise ValueError(
+                f"{doceo_url} did not return a DOCX (first bytes {docx_bytes[:8]!r}, "
+                f"{len(docx_bytes)} bytes): a wall or an error page, not a document")
 
         # Parse date
         doc_date = None

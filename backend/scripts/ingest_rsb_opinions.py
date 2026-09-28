@@ -5,7 +5,8 @@ NO CURATED SEED. Crawls the RSB opinions index, extracts every
 /publications/ link, then fetches each publication page to harvest:
   - title (from <meta property="og:title">)
   - rsb-opinion PDF (from /document/download/{uuid}?filename=rsb-...)
-  - evaluation date (best-effort from filename year)
+  - publication date (the page's JSON-LD datePublished; NULL when absent,
+    never a fabricated 1 January or 1970 sentinel)
 
 Stored row's source_url is the /publications/{slug}_en page (row-specific).
 """
@@ -71,13 +72,17 @@ def parse_publication_page(html, source_url):
         text,
     )
     rsb_pdf = ("https://commission.europa.eu" + rsb_pdf_m.group(1)) if rsb_pdf_m else None
+    # The page carries its real publication date in JSON-LD. Until 28 Sep 2026 this
+    # took the YEAR out of the PDF filename and stored 1 January of it, so every one
+    # of the 44 stored rows had a fabricated day and month, and the API served them as
+    # document dates. A date we did not read from the source is not a date.
     decision_date = None
-    m_year_in_pdf = re.search(r'/document/download/[^"]+(20\d{2})[^"]*\.pdf', text)
-    if m_year_in_pdf:
+    m_pub = re.search(r'"datePublished"\s*:\s*"(\d{4})-(\d{2})-(\d{2})', text)
+    if m_pub:
         try:
-            decision_date = dt.date(int(m_year_in_pdf.group(1)), 1, 1)
-        except Exception:
-            pass
+            decision_date = dt.date(int(m_pub.group(1)), int(m_pub.group(2)), int(m_pub.group(3)))
+        except ValueError:
+            decision_date = None
     return {
         "title": title[:1000],
         "rsb_pdf_url": rsb_pdf,
@@ -106,7 +111,9 @@ def upsert(cursor, row):
         )
         ON CONFLICT (opinion_reference) DO UPDATE SET
             title = EXCLUDED.title,
-            opinion_date = COALESCE(EXCLUDED.opinion_date, rsb_opinions.opinion_date),
+            -- EXCLUDED wins: this run's date is read from the source, and the stored
+            -- one may be a fabricated 1 January or 1970 sentinel that must be replaced.
+            opinion_date = EXCLUDED.opinion_date,
             pdf_url = COALESCE(EXCLUDED.pdf_url, rsb_opinions.pdf_url),
             source_url = EXCLUDED.source_url,
             last_updated = NOW()
@@ -140,14 +147,15 @@ def main():
         parsed = parse_publication_page(b, url)
         if not parsed:
             continue
-        # rsb_opinions.opinion_date is NOT NULL — fallback to a sentinel
-        # (1970-01-01) when the year can't be derived. Better than dropping
-        # the row, and the API can filter sentinel dates if needed.
+        # No sentinel date. This used to store 1970-01-01 when the year could not be
+        # derived, and 8 rows carried it: an epoch date served to a partner as the
+        # date of an opinion. The column is nullable now (migration 250); unknown
+        # stays unknown.
         candidates.append({
             "opinion_reference": derive_reference(slug),
             "title": parsed["title"],
             "target_initiative": parsed["title"][:120],
-            "opinion_date": parsed["decision_date"] or dt.date(1970, 1, 1),
+            "opinion_date": parsed["decision_date"],
             "pdf_url": parsed["rsb_pdf_url"],
             "source_url": parsed["source_url"],
         })
@@ -155,7 +163,9 @@ def main():
 
     print(f"[INFO] Parsed {len(candidates)} pages")
     if not candidates:
-        print("[WARN] No rows produced"); sys.exit(0)
+        print("[ERROR] No rows produced: the RSB index returned nothing parseable, "
+              "so the source is down or its markup changed")
+        sys.exit(1)
     if args.dry_run:
         for c in candidates[:8]:
             print(f"  [{('PDF' if c['pdf_url'] else 'no-pdf'):6s}]  {c['title'][:60]}")

@@ -178,6 +178,11 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      ("--max-seconds", "420"), timeout=600,  stale_after_hours=14),
     SourceSpec("parl_question_text","Parliamentary Questions - question text","warm","scripts/backfill_parl_question_text.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
     SourceSpec("parl_question_answers","Parliamentary Questions - answer text","warm","scripts/backfill_parl_question_answers.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
+    # The Commission's RSB page lists opinions on evaluations and fitness checks: 44
+    # items, newest August 2022, so a daily window legitimately returns nothing. It was
+    # scheduled nowhere, which is why new items would never have arrived, and its dates
+    # were derived from PDF filenames until 28 Sep 2026 (migration 250).
+    SourceSpec("rsb_opinions", "Regulatory Scrutiny Board opinions", "warm", "scripts/ingest_rsb_opinions.py", (), timeout=600, stale_after_hours=48),
     # Links each Commission consultation to the legislative file it produced and
     # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
     SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",

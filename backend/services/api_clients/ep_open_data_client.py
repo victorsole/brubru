@@ -31,6 +31,19 @@ import httpx
 logger = logging.getLogger(__name__)
 
 # EP Open Data work-type URIs (as returned by the API)
+class EPOpenDataUpstreamError(RuntimeError):
+    """EP Open Data answered HTTP 200 with an error in the body.
+
+    The API forwards its own backend's failure as a 200 whose payload carries an
+    `error` key instead of `data`, e.g.
+      "500 Internal Server Error from POST https://admin.data.europarl.europa.eu/..."
+    It is intermittent: the same offset can fail and then succeed seconds later.
+    Reading that as an empty page made the amendment sync stop at the first blip and
+    report "0 documents discovered" as success, which is why nothing has been stored
+    since 3 May 2026.
+    """
+
+
 WORK_TYPE_AMENDMENT_LIST = "def/ep-document-types/AMENDMENT_LIST"
 WORK_TYPE_REPORT_DRAFT = "def/ep-document-types/REPORT_PARLIAMENTARY_COMMITTEE_DRAFT"
 WORK_TYPE_OPINION_DRAFT = "def/ep-document-types/OPINION_PARLIAMENTARY_COMMITTEE_DRAFT"
@@ -114,11 +127,25 @@ class EPOpenDataClient:
         url = f"{self.BASE_URL}/{endpoint}"
         params = {"offset": offset, "limit": min(limit, 100)}
 
-        response = await client.get(url, params=params)
-        response.raise_for_status()
-
-        data = response.json()
-        return data.get("data", [])
+        last_error = None
+        for attempt in range(1, 4):
+            response = await client.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            # A 200 can carry the failure in its body. "data" absent plus "error"
+            # present is an upstream fault, never an empty page.
+            if "data" not in data and data.get("error"):
+                last_error = str(data["error"])[:200]
+                logger.warning(
+                    f"[WARN] {endpoint} offset={offset}: EP answered 200 with an error "
+                    f"body (attempt {attempt}/3): {last_error}"
+                )
+                await asyncio.sleep(2.0 * attempt)
+                continue
+            return data.get("data", [])
+        raise EPOpenDataUpstreamError(
+            f"{endpoint} offset={offset} returned an error body three times: {last_error}"
+        )
 
     async def get_document_detail(
         self,
@@ -248,6 +275,7 @@ class EPOpenDataClient:
         work_types: Optional[List[str]] = None,
         years: Optional[List[int]] = None,
         progress_callback: Optional[Callable[[int, int, str], None]] = None,
+        max_am_probe: int = 120,
     ) -> List[Dict[str, Any]]:
         """
         Discover amendment-related documents from the EP Open Data API.
@@ -299,7 +327,8 @@ class EPOpenDataClient:
 
         # Phase 2: Probe for AM docs derived from PR identifiers
         if WORK_TYPE_AMENDMENTS in work_types:
-            am_docs = await self._probe_am_documents(all_docs, progress_callback)
+            am_docs = await self._probe_am_documents(
+                all_docs, progress_callback, max_am_probe=max_am_probe)
             all_docs.extend(am_docs)
             logger.info(f"[INFO] Probed {len(am_docs)} AM docs")
 
@@ -348,6 +377,7 @@ class EPOpenDataClient:
         self,
         pr_docs: List[Dict[str, Any]],
         progress_callback: Optional[Callable] = None,
+        max_am_probe: int = 120,
     ) -> List[Dict[str, Any]]:
         """
         Probe for AM documents based on discovered PR documents.
@@ -358,46 +388,84 @@ class EPOpenDataClient:
         """
         am_docs: List[Dict[str, Any]] = []
         probed: set = set()
-        client = await self._get_client()
 
+        # Newest PE numbers first, and bounded. Every candidate costs a browser fetch
+        # now that doceo can only be read past its WAF, so probing 5 deltas across all
+        # 1,127 PRs would be ~5,600 fetches in a job that has to finish daily. The new
+        # amendments are attached to the newest reports, and an older PR that gains an
+        # AM later is picked up by a full run (max_am_probe=0).
         pr_list = [d for d in pr_docs if d.get("document_type") == "PR"]
+        pr_list.sort(key=lambda d: d.get("pe_reference", ""), reverse=True)
+        if max_am_probe:
+            pr_list = pr_list[:max_am_probe]
         logger.info(f"[INFO] Probing AM docs for {len(pr_list)} PR documents...")
 
+        # Build every candidate first, then ask the browser. doceo answers plain HTTP
+        # with 202 and an empty body whether or not the document exists, so the old
+        # HEAD probe saw 202 (never 200), treated it as "no AM at this PE" and broke
+        # out of the range immediately: it discovered ZERO amendment documents on every
+        # run. Only a browser that has cleared the host's challenge sees the true
+        # status, which is what separates a real document from a 404.
+        candidates: List[tuple] = []
         for pr in pr_list:
             committee = pr.get("committee_code", "")
             pe_ref = pr.get("pe_reference", "")
             if not committee or not pe_ref:
                 continue
-
             pe_match = re.match(r'PE(\d{3})\.(\d{3})', pe_ref)
             if not pe_match:
                 continue
-
             pe_num = int(pe_match.group(1) + pe_match.group(2))
-
-            # Probe PE numbers slightly higher than the PR
             for delta in range(1, 6):
-                am_pe = pe_num + delta
-                am_id = f"{committee}-AM-{am_pe}"
-
+                am_id = f"{committee}-AM-{pe_num + delta}"
                 if am_id in probed:
                     continue
                 probed.add(am_id)
+                candidates.append((am_id, f"{DOCEO_BASE}/{am_id}_EN.docx",
+                                   pr.get("procedure_reference", "")))
 
-                # HEAD request to check if doceo URL exists (fast, no download)
-                am_url = f"{DOCEO_BASE}/{am_id}_EN.docx"
-                try:
-                    await asyncio.sleep(0.2)  # Lighter rate limit for HEAD
-                    resp = await client.head(am_url)
-                    if resp.status_code == 200:
-                        doc = self._stub_to_doc(am_id)
-                        doc["procedure_reference"] = pr.get("procedure_reference", "")
-                        am_docs.append(doc)
-                        logger.info(f"[OK] Found AM doc: {am_id}")
-                    else:
-                        break  # No AM at this PE, stop probing range
-                except Exception:
-                    break
+        if not candidates:
+            return am_docs
+
+        try:
+            import importlib.util
+            import sys as _sys
+            from pathlib import Path as _Path
+            spec = importlib.util.spec_from_file_location(
+                "waf_browser_fetcher",
+                str(_Path(__file__).resolve().parents[1] / "scrapers" / "waf_browser_fetcher.py"))
+            waf = importlib.util.module_from_spec(spec)
+            _sys.modules["waf_browser_fetcher"] = waf
+            spec.loader.exec_module(waf)
+        except Exception as e:  # noqa: BLE001
+            raise EPOpenDataUpstreamError(
+                f"doceo is behind a WAF and the browser fetcher is unavailable ({e}), "
+                f"so no amendment document can be discovered") from e
+
+        by_url = {url: (am_id, proc) for am_id, url, proc in candidates}
+        urls = list(by_url)
+        logger.info(f"[INFO] Probing {len(urls)} candidate AM URLs through the browser")
+        found = 0
+        for start in range(0, len(urls), 25):
+            batch = urls[start:start + 25]
+            try:
+                out = await asyncio.to_thread(
+                    waf.fetch_bytes_isolated, batch,
+                    warm_url="https://www.europarl.europa.eu/doceo/", timeout_s=600.0)
+            except Exception as e:  # noqa: BLE001
+                logger.warning(f"[WARN] AM probe batch {start}: {e}")
+                continue
+            for url, (status, body, err) in out.items():
+                if status == 200 and body[:2] == b"PK":
+                    am_id, proc = by_url[url]
+                    doc = self._stub_to_doc(am_id)
+                    doc["procedure_reference"] = proc
+                    am_docs.append(doc)
+                    found += 1
+            if progress_callback:
+                progress_callback(start + len(batch), len(urls),
+                                  f"AM probe: {found} found")
+        logger.info(f"[OK] AM probe: {found} real documents out of {len(urls)} candidates")
 
         return am_docs
 
@@ -456,12 +524,21 @@ class EPOpenDataClient:
                 offset += page_size
                 page += 1
 
+            except EPOpenDataUpstreamError:
+                # Never return a short list as if it were the whole one: the caller
+                # cannot tell truncation from "that is all there is", and a sync that
+                # discovers nothing would record success.
+                raise
             except httpx.HTTPStatusError as e:
-                logger.warning(f"[WARN] HTTP {e.response.status_code} on {endpoint} offset={offset}")
-                break
+                raise EPOpenDataUpstreamError(
+                    f"HTTP {e.response.status_code} on {endpoint} offset={offset} after "
+                    f"{len(stubs)} stub(s): the listing is incomplete"
+                ) from e
             except Exception as e:
-                logger.error(f"[ERROR] Failed paginating {endpoint}: {e}")
-                break
+                raise EPOpenDataUpstreamError(
+                    f"failed paginating {endpoint} at offset={offset} after "
+                    f"{len(stubs)} stub(s): {type(e).__name__}: {e}"
+                ) from e
 
         return stubs
 
