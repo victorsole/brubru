@@ -35,6 +35,7 @@ APP_URL = "https://brubru.beresol.eu"
 EMAIL_TYPES = {
     "status_change": "Your tracked files",
     "tender_digest": "Tender matches",
+    "pq_digest": "Parliamentary questions on your topics",
 }
 # Tender types honour the Tenderator profile's own email switch.
 TENDER_TYPES = {"tender_digest"}

@@ -419,7 +419,14 @@
       "question": "Pregunta",
       "answer": "Resposta",
       "officialDoc": "Document oficial a EP doceo",
-      "toMeps": "Mira quins eurodiputats pregunten més a MEP Watch"
+      "toMeps": "Mira quins eurodiputats pregunten més a MEP Watch",
+      "weekTitle": "Aquesta setmana en els vostres temes",
+      "weekAsked_one": "{{count}} pregunta nova",
+      "weekAsked_other": "{{count}} preguntes noves",
+      "weekAnswered_one": "{{count}} resposta",
+      "weekAnswered_other": "{{count}} respostes",
+      "weekActive": "Més actiu: {{name}} ({{count}} preguntes)",
+      "weekAnsweredOn": "Resposta el {{date}}"
     },
     "lobby": {
       "title": "Reunions de lobby",

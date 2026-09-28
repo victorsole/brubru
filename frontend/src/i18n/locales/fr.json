@@ -419,7 +419,14 @@
       "question": "Question",
       "answer": "Réponse",
       "officialDoc": "Document officiel sur EP doceo",
-      "toMeps": "Voir quels députés posent le plus de questions dans MEP Watch"
+      "toMeps": "Voir quels députés posent le plus de questions dans MEP Watch",
+      "weekTitle": "Cette semaine sur vos sujets",
+      "weekAsked_one": "{{count}} nouvelle question",
+      "weekAsked_other": "{{count}} nouvelles questions",
+      "weekAnswered_one": "{{count}} réponse",
+      "weekAnswered_other": "{{count}} réponses",
+      "weekActive": "Le plus actif : {{name}} ({{count}} questions)",
+      "weekAnsweredOn": "Réponse le {{date}}"
     },
     "lobby": {
       "title": "Réunions de lobbying",

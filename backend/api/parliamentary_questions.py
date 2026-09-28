@@ -289,6 +289,21 @@ def new_count(
     return {"count": q.count(), "days": days, "pi_active": pi_active}
 
 
+@router.get("/this-week")
+def this_week(
+    days: int = Query(7, ge=1, le=14),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """The week's questions on the user's Policy Interests: the SAME set the
+    weekly digest notification is built from (services.notifications.pq_digest),
+    so the email and the tab never disagree. Declared before the catch-all
+    `/{reference:path}` route, which would otherwise swallow "this-week"."""
+    _require_yellow(user)
+    from services.notifications.pq_digest import week_set
+    return week_set(db, user, days=days).as_dict()
+
+
 # ---------------------------------------------------------------------------
 # Detail + AI one-liner
 # ---------------------------------------------------------------------------

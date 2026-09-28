@@ -44,7 +44,24 @@ export interface QuestionDetail extends QuestionSummary {
   ai_explainer: string | null;
 }
 
+export interface WeekSet {
+  asked: QuestionSummary[];
+  answered: QuestionSummary[];
+  asked_total: number;
+  answered_total: number;
+  most_active: { name: string; count: number } | null;
+  since: string | null;
+  until: string | null;
+  pi_active: boolean;
+}
+
 export const parliamentaryQuestionsService = {
+  /** The week's questions on the user's interests: the same set the weekly digest uses. */
+  thisWeek: async (days = 7): Promise<WeekSet> => {
+    const r = await axios.get(`${API_BASE}/this-week?days=${days}`, { headers: authHeaders() });
+    return r.data;
+  },
+
   list: async (params: {
     myInterests: boolean; myFiles?: boolean; questionType?: string; answered?: boolean;
     search?: string; limit?: number; offset?: number;

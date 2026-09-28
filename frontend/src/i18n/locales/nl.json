@@ -419,7 +419,14 @@
       "question": "Vraag",
       "answer": "Antwoord",
       "officialDoc": "Officieel document op EP doceo",
-      "toMeps": "Bekijk welke EP-leden de meeste vragen stellen in MEP Watch"
+      "toMeps": "Bekijk welke EP-leden de meeste vragen stellen in MEP Watch",
+      "weekTitle": "Deze week over uw onderwerpen",
+      "weekAsked_one": "{{count}} nieuwe vraag",
+      "weekAsked_other": "{{count}} nieuwe vragen",
+      "weekAnswered_one": "{{count}} antwoord",
+      "weekAnswered_other": "{{count}} antwoorden",
+      "weekActive": "Meest actief: {{name}} ({{count}} vragen)",
+      "weekAnsweredOn": "Beantwoord op {{date}}"
     },
     "lobby": {
       "title": "Lobbyontmoetingen",

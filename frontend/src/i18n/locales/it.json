@@ -419,7 +419,14 @@
       "question": "Interrogazione",
       "answer": "Risposta",
       "officialDoc": "Documento ufficiale su EP doceo",
-      "toMeps": "Scopri quali eurodeputati interrogano di più in MEP Watch"
+      "toMeps": "Scopri quali eurodeputati interrogano di più in MEP Watch",
+      "weekTitle": "Questa settimana sui tuoi temi",
+      "weekAsked_one": "{{count}} nuova interrogazione",
+      "weekAsked_other": "{{count}} nuove interrogazioni",
+      "weekAnswered_one": "{{count}} risposta",
+      "weekAnswered_other": "{{count}} risposte",
+      "weekActive": "Più attivo: {{name}} ({{count}} interrogazioni)",
+      "weekAnsweredOn": "Risposta del {{date}}"
     },
     "lobby": {
       "title": "Incontri di lobbying",

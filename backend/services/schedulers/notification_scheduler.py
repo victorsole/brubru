@@ -74,6 +74,9 @@ _SAVED_SEARCH_HOUR = 7
 # 24 Sep 2026: the tender digest (in-app, weekly per user) after the producers,
 # then the email channel last, so one email carries the morning's notifications.
 _TENDER_DIGEST_TIME = (7, 30)
+# 28 Sep 2026: weekly Parliamentary Questions digest, Mondays, before the email
+# channel so the same morning email carries it.
+_PQ_DIGEST_TIME = (7, 15)
 _EMAIL_TIME = (8, 0)
 
 
@@ -186,6 +189,47 @@ def _run_tender_digest() -> dict:
         raise
     finally:
         db.close()
+
+
+def _run_pq_digest() -> dict:
+    """Weekly Parliamentary Questions digest, in-app (and by email once the email
+    channel is enabled). A stale question feed is recorded as FAILED, never as a
+    quiet week."""
+    from core.database import SessionLocal
+    from services.notifications.pq_digest import StaleFeed, run as pq_run
+    from services.sync.freshness import record_run
+
+    db = SessionLocal()
+    started = datetime.now(timezone.utc)
+    try:
+        res = pq_run(db, apply=True)
+        detail = (f"users={res.users} with_interests={res.with_interests} "
+                  f"skipped_empty={res.skipped_empty} skipped_recent={res.skipped_recent}")
+        status = "success" if res.created or res.with_interests == res.skipped_recent else "degraded"
+        record_run(db, source_key="notifications_pq_digest", tier="notifications", status=status,
+                   items_added=res.created, error=detail, started_at=started)
+        logger.info("[NOTIFY-SCHED] pq digest: created=%s %s", res.created, detail)
+        return {"created": res.created}
+    except StaleFeed as exc:
+        db.rollback()
+        record_run(db, source_key="notifications_pq_digest", tier="notifications",
+                   status="failed", error=str(exc), started_at=started)
+        logger.error("[NOTIFY-SCHED] pq digest refused: %s", exc)
+        return {"created": 0, "stale": True}
+    except Exception as exc:
+        db.rollback()
+        record_run(db, source_key="notifications_pq_digest", tier="notifications",
+                   status="failed", error=f"{type(exc).__name__}: {exc}", started_at=started)
+        raise
+    finally:
+        db.close()
+
+
+async def _pq_digest_job() -> None:
+    try:
+        await asyncio.to_thread(_run_pq_digest)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("[NOTIFY-SCHED] pq digest failed: %s: %s", type(exc).__name__, exc, exc_info=True)
 
 
 def _run_notification_email() -> dict:
@@ -301,6 +345,17 @@ def start_notification_scheduler() -> None:
         trigger=CronTrigger(hour=_TENDER_DIGEST_TIME[0], minute=_TENDER_DIGEST_TIME[1], timezone="UTC"),
         id="tender_digest",
         name="Tenderator weekly digest",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+        misfire_grace_time=3600,
+    )
+    _notification_scheduler.add_job(
+        _pq_digest_job,
+        trigger=CronTrigger(day_of_week="mon", hour=_PQ_DIGEST_TIME[0], minute=_PQ_DIGEST_TIME[1],
+                            timezone="UTC"),
+        id="pq_digest",
+        name="Parliamentary Questions weekly digest",
         replace_existing=True,
         max_instances=1,
         coalesce=True,

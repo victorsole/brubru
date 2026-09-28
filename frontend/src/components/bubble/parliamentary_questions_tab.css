@@ -81,3 +81,29 @@
   .parlq-modal__panel { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; }
   .parlq-tab__controls { gap: 0.5rem; }
 }
+
+/* "This week on your topics" strip (28 Sep 2026): the same set as the weekly digest. */
+.parlq-week {
+  border: 1px solid var(--border-color, #e3e6ef);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px 0 16px;
+  background: var(--card-bg, #fafbff);
+}
+.parlq-week__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.parlq-week__title { margin: 0; font-size: 1.05rem; }
+.parlq-week__counts { color: var(--text-secondary, #5b6275); font-size: 0.9rem; }
+.parlq-week__active { margin: 6px 0 0; font-size: 0.88rem; color: var(--text-secondary, #5b6275); }
+.parlq-week__list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.parlq-week__item {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0;
+  background: none; border: 0; padding: 6px 4px; text-align: left; cursor: pointer; border-radius: 8px;
+}
+.parlq-week__item:hover, .parlq-week__item:focus-visible { background: var(--hover-bg, #eef1fb); }
+.parlq-week__item .parlq-status { flex: 0 0 auto; }
+.parlq-week__subject { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 767px) {
+  .parlq-week { padding: 12px; }
+  .parlq-week__item { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .parlq-week__subject { white-space: normal; }
+}

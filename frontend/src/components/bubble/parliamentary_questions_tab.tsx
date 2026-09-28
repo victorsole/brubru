@@ -19,7 +19,7 @@ import {
   mdiClockOutline, mdiFileDocumentOutline,
 } from '@mdi/js';
 import { parliamentaryQuestionsService } from '../../services/parliamentary_questions_service';
-import type { QuestionSummary, QuestionDetail } from '../../services/parliamentary_questions_service';
+import type { QuestionSummary, QuestionDetail, WeekSet } from '../../services/parliamentary_questions_service';
 import './parliamentary_questions_tab.css';
 import { LensToggle, TrackedBadge, type LensMode } from './lens_toggle';
 import { MeubHeader } from './meub_header';
@@ -43,6 +43,7 @@ export function ParliamentaryQuestionsTab() {
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState<QuestionDetail | null>(null);
   const [newCount, setNewCount] = useState(0);
+  const [week, setWeek] = useState<WeekSet | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -63,6 +64,7 @@ export function ParliamentaryQuestionsTab() {
   useEffect(() => { load(); }, [load]);
   useEffect(() => {
     parliamentaryQuestionsService.newCount(14).then((r) => setNewCount(r.count)).catch(() => {});
+    parliamentaryQuestionsService.thisWeek().then(setWeek).catch(() => {});
   }, []);
 
   const openDetail = async (ref: string) => {
@@ -94,6 +96,43 @@ export function ParliamentaryQuestionsTab() {
         {t('bubble.parlq.toMeps', 'See which MEPs ask the most in MEP Watch')}
         <span className="meub-crosslink__arrow" aria-hidden="true">&rarr;</span>
       </button>
+
+      {mode === 'pi' && week && (week.asked_total > 0 || week.answered_total > 0) && (
+        <section className="parlq-week" aria-label={t('bubble.parlq.weekTitle', 'This week on your topics') as string}>
+          <div className="parlq-week__head">
+            <h3 className="parlq-week__title">{t('bubble.parlq.weekTitle', 'This week on your topics')}</h3>
+            <span className="parlq-week__counts">
+              {week.asked_total > 0 && t('bubble.parlq.weekAsked', { count: week.asked_total })}
+              {week.asked_total > 0 && week.answered_total > 0 && ' · '}
+              {week.answered_total > 0 && t('bubble.parlq.weekAnswered', { count: week.answered_total })}
+            </span>
+          </div>
+          {week.most_active && (
+            <p className="parlq-week__active">
+              {t('bubble.parlq.weekActive', 'Most active: {{name}} ({{count}} questions)',
+                { name: week.most_active.name, count: week.most_active.count })}
+            </p>
+          )}
+          <ul className="parlq-week__list">
+            {[...week.asked.slice(0, 4), ...week.answered.slice(0, 3)].map((q) => {
+              const isAnswer = week.answered.some((a) => a.reference === q.reference) && !week.asked.some((a) => a.reference === q.reference);
+              return (
+                <li key={`${isAnswer ? 'a' : 'q'}-${q.reference}`}>
+                  <button type="button" className="parlq-week__item" onClick={() => openDetail(q.reference)}>
+                    <span className={`parlq-status ${isAnswer ? 'is-answered' : 'is-awaiting'}`}>
+                      <Icon path={isAnswer ? mdiCheckCircle : mdiCommentQuestionOutline} size={0.55} />
+                      {isAnswer
+                        ? t('bubble.parlq.weekAnsweredOn', 'Answered {{date}}', { date: fmtDate(q.answered_date) })
+                        : fmtDate(q.submitted_date)}
+                    </span>
+                    <span className="parlq-week__subject">{q.subject}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       {/* Controls */}
       <div className="parlq-tab__controls">

@@ -419,7 +419,14 @@
       "question": "Question",
       "answer": "Answer",
       "officialDoc": "Official document on EP doceo",
-      "toMeps": "See which MEPs ask the most in MEP Watch"
+      "toMeps": "See which MEPs ask the most in MEP Watch",
+      "weekTitle": "This week on your topics",
+      "weekAsked_one": "{{count}} new question",
+      "weekAsked_other": "{{count}} new questions",
+      "weekAnswered_one": "{{count}} answer",
+      "weekAnswered_other": "{{count}} answers",
+      "weekActive": "Most active: {{name}} ({{count}} questions)",
+      "weekAnsweredOn": "Answered {{date}}"
     },
     "lobby": {
       "title": "Lobby Meetings",

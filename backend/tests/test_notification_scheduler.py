@@ -43,8 +43,12 @@ def test_both_producers_are_scheduled():
     async def go():
         ns.start_notification_scheduler()
         assert ns._notification_scheduler is not None, "scheduler did not start"
+        # Every producer plus the email channel (tender digest and email added 24 Sep,
+        # the Parliamentary Questions digest 28 Sep 2026; this set had not been
+        # updated, so the test failed from 24 Sep).
         assert set(_jobs()) == {
-            "carriage_status_notifications", "saved_search_notifications"
+            "carriage_status_notifications", "saved_search_notifications",
+            "tender_digest", "pq_digest", "notification_email",
         }
     asyncio.run(go())
 
@@ -99,8 +103,9 @@ def test_one_failing_producer_does_not_take_down_the_other():
 def test_starting_twice_does_not_double_register():
     async def go():
         ns.start_notification_scheduler()
+        n = len(_jobs())
         ns.start_notification_scheduler()
-        assert len(_jobs()) == 2
+        assert len(_jobs()) == n == 5
     asyncio.run(go())
 
 
