@@ -13,6 +13,7 @@ Created: February 2026
 """
 
 import logging
+import re
 import time
 from datetime import datetime, date, timedelta
 from typing import Dict, Any, List, Optional
@@ -86,6 +87,12 @@ class EUCalendarSyncService:
             results.append(self.sync_tris_standstills())
         except Exception as e:
             logger.warning(f"[WARN] TRIS standstill sync skipped in sync_all: {e}")
+
+        # JRC Product Bureau consultation workshops (28 Sep 2026)
+        try:
+            results.append(self.sync_jrc_product_bureau_workshops())
+        except Exception as e:
+            logger.warning(f"[WARN] JRC Product Bureau workshop sync skipped in sync_all: {e}")
 
         # Commission DG + executive-agency events (the ~50 DG event-page URLs)
         try:
@@ -655,6 +662,69 @@ class EUCalendarSyncService:
         logger.info(f"[OK] TRIS standstills: {result['added']} added, {result['updated']} updated")
         return result
 
+    def sync_jrc_product_bureau_workshops(self) -> Dict[str, Any]:
+        """JRC Product Bureau ESPR consultation workshops as calendar events (28 Sep 2026).
+
+        The DPP ingest stores the Product Bureau's project plan in economy_items
+        (body_code 'dpp', guid 'jrc-pb-*', item_type 'event'), and the DPP watch
+        flags a workshop 30 days out as urgent, but no calendar sync read those
+        rows: the 23 and 26 October 2026 workshops were missing from My EU
+        Calendar. Only workshops with a FIXED day are mirrored; a row saying
+        "day not yet fixed" carries an indicative month, and a first-of-month
+        date on a calendar would read as a real one.
+        """
+        from datetime import date as _date, datetime as _dt, timedelta as _td, timezone as _tz
+
+        from sqlalchemy import text as _text
+
+        start_time = time.time()
+        result = {"source": "jrc_product_bureau", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
+        today = _date.today()
+        db = self._get_db()
+        try:
+            rows = db.execute(_text("""
+                SELECT title, document_date::date AS d, public_url, summary
+                  FROM economy_items
+                 WHERE body_code = 'dpp' AND guid LIKE 'jrc-pb-%' AND item_type = 'event'
+                   AND document_date IS NOT NULL
+                   AND title !~* 'day not yet fixed'
+                   AND document_date::date >= :lo
+            """), {"lo": today - _td(days=30)}).mappings().all()
+            result["scraped"] = len(rows)
+            for r in rows:
+                try:
+                    self._upsert_event(db, jrc_workshop_event(r, today), result)
+                except Exception as e:  # noqa: BLE001 -- one row must not stop the rest
+                    logger.warning(f"[WARN] JRC workshop event {r['public_url']} failed: {e}")
+                    result["errors"] += 1
+            db.commit()
+        except Exception as e:
+            logger.error(f"[ERROR] JRC Product Bureau calendar sync failed: {e}")
+            result["errors"] += 1
+        finally:
+            if self._should_close_db():
+                db.close()
+
+        result["duration_seconds"] = round(time.time() - start_time, 2)
+        try:
+            from services.sync.freshness import record_run
+            # Zero dated workshops is a normal state between consultation rounds,
+            # so an empty read is success, not failure; a write error is not.
+            status = "degraded" if result["errors"] else "success"
+            err = f"{result['errors']} event(s) failed to write" if result["errors"] else None
+            _db = self._get_db()
+            try:
+                record_run(_db, source_key="jrc_product_bureau_calendar", tier="calendar", status=status,
+                           items_added=result["added"], error=err,
+                           started_at=_dt.now(_tz.utc) - _td(seconds=result["duration_seconds"]))
+            finally:
+                if self._should_close_db():
+                    _db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"[WARN] could not record jrc_product_bureau_calendar run: {e}")
+        logger.info(f"[OK] JRC Product Bureau workshops: {result['added']} added, {result['updated']} updated")
+        return result
+
     def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
         """Sync Council + European Council meetings from the live consilium
         calendar. SYNCHRONOUS: the scraper renders the WAF-protected page with
@@ -854,6 +924,36 @@ TRIS_COUNTRY_NAMES = {
     "LI": "Liechtenstein", "CH": "Switzerland", "TR": "Türkiye", "UK": "United Kingdom",
     "GB": "United Kingdom", "XI": "United Kingdom (Northern Ireland)",
 }
+
+
+def jrc_workshop_event(row, today) -> Dict[str, Any]:
+    """One JRC Product Bureau workshop as a calendar event dict for _upsert_event."""
+    import hashlib
+
+    title = " ".join((row["title"] or "").split())
+    # "JRC ESPR methodology consultation workshop, 23 October 2026, 9:00-13:00 CET: <topic>"
+    topic = title.split(": ", 1)[1] if ": " in title else title
+    short = topic if len(topic) <= 140 else topic[:137].rsplit(" ", 1)[0] + "..."
+    time_m = re.search(r"(\d{1,2}:\d{2})-(\d{1,2}:\d{2})", title)
+    day = row["d"]
+    return {
+        "institution": "COMMISSION",
+        "event_type": "workshop",
+        "title": f"JRC ESPR methodology workshop: {short}",
+        "description": f"{title}. {' '.join((row['summary'] or '').split())}".strip(),
+        "start_date": day,
+        "end_date": None,
+        "start_time": datetime.strptime(time_m.group(1), "%H:%M").time() if time_m else None,
+        "end_time": datetime.strptime(time_m.group(2), "%H:%M").time() if time_m else None,
+        "all_day": not time_m,
+        "status": "completed" if day < today else "scheduled",
+        "commission_dg": "JRC",
+        "policy_areas": ["Environment", "Single Market"],
+        "source": "jrc_product_bureau",
+        "external_id": "jrc_pb_" + hashlib.sha1((row["public_url"] or title).encode()).hexdigest()[:16],
+        "source_url": row["public_url"],
+        "venue": "Online",
+    }
 
 
 def tris_event(row, today) -> Dict[str, Any]:

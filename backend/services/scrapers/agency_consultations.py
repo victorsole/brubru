@@ -66,6 +66,59 @@ def _fetch(url: str) -> str:
 
 
 # --------------------------------------------------------------------------- #
+# EBA (28 Sep 2026) -- the consultations listing is plain server-rendered HTML
+# (HTTP 200, no wall), one <article class="teaser-event-calendar--consultation">
+# per consultation: start and end day/month, a year line ("2026" or
+# "2026 - 2027"), the title and the EBA/CP reference. Before this, EBA
+# consultations reached economy_items only as a press release and a PDF, so the
+# consultations hub never listed a single EBA consultation (found when
+# EBA/CP/2026/19 on joint decisions, opened 25 Sep 2026, was missing).
+_EBA = "https://www.eba.europa.eu"
+_EBA_ROW = re.compile(r'<article class="teaser-event-calendar teaser-event-calendar--consultation".*?</article>', re.S)
+_EBA_DM = re.compile(r'calendar-day">\s*(\d{1,2})\s*<.*?calendar-month">\s*([A-Z][a-z]{2})\s*<', re.S)
+_EBA_YEAR = re.compile(r'calendar-year"[^>]*>\s*(\d{4})(?:\s*-\s*(\d{4}))?', re.S)
+_EBA_TITLE = re.compile(r'<h3[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>\s*(?:<small>(.*?)</small>)?', re.S)
+
+
+def _eba_row(block: str, now: datetime) -> Item | None:
+    t = _EBA_TITLE.search(block)
+    if not t:
+        return None
+    href, title, ref = t.group(1), _txt(t.group(2)), _txt(t.group(3) or "").strip("()")
+    dm = _EBA_DM.findall(block)
+    y = _EBA_YEAR.search(block)
+    start = deadline = None
+    if y and dm:
+        y1 = int(y.group(1)); y2 = int(y.group(2) or y1)
+        start = _parse_date(f"{dm[0][0]} {dm[0][1]} {y1}")
+        if len(dm) > 1:
+            deadline = _parse_date(f"{dm[1][0]} {dm[1][1]} {y2}")
+    status = ("Open" if deadline and deadline.date() >= now.date() else "Closed") if deadline else ""
+    url = href if href.startswith("http") else _EBA + href
+    return _build(body_code="eba", title=title, url=url, status=status, topic=ref,
+                  deadline=deadline, start=start, now=now, source_kind="eba_consultations")
+
+
+def ingest_eba_consultations(*, fetch_bodies: bool = True, pages: int = 3, **_) -> list[Item]:
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for page in range(pages):
+        html = _fetch(f"{_EBA}/publications-and-media/consultations" + (f"?page={page}" if page else ""))
+        blocks = _EBA_ROW.findall(html)
+        if not blocks:
+            break
+        for b in blocks:
+            it = _eba_row(b, now)
+            if it and it.public_url not in out:
+                out[it.public_url] = it
+    if not out:
+        # A listing that parses to nothing is a changed page or a wall, never
+        # "EBA has no consultations": fail loudly so the run is not recorded green.
+        raise RuntimeError("EBA consultations listing parsed to 0 rows")
+    return list(out.values())
+
+
+# --------------------------------------------------------------------------- #
 # EMA — open consultations are draft documents (herbal monographs, scientific
 # guidelines, concept papers) rendered as file cards (file-title + PDF link).
 # --------------------------------------------------------------------------- #

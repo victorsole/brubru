@@ -195,6 +195,7 @@ AGENCY_BODY_NAME = {
     "SRB": "Single Resolution Board",
     "ERA": "European Union Agency for Railways",
     "ECB_SSM": "ECB Banking Supervision",
+    "EBA": "European Banking Authority",
 }
 
 

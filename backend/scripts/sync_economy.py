@@ -259,6 +259,7 @@ INGESTORS = {
     ("acer", "consultation"): agency_consultations.ingest_acer_consultations,
     ("srb", "consultation"): agency_consultations.ingest_srb_consultations,
     ("ecb_ssm", "consultation"): agency_consultations.ingest_ecb_ssm_consultations,
+    ("eba", "consultation"): agency_consultations.ingest_eba_consultations,
     # EASA + ERA consultations are Playwright-rendered — run with system python3.12
     # (has Chromium), local only; not on Railway cron.
     ("easa", "consultation"): agency_consultations.ingest_easa_consultations,
