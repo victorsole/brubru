@@ -33,6 +33,13 @@ if __name__ == "__main__":
         # (no worker supervisor) it forced a full container cold-start every
         # 10,000 requests, each restart a multi-second outage while the app
         # reloaded 401 KB guides. Latent full-outage trigger; removed.
+        # A redeploy used to cut chat answers mid-stream: on 28 Sep 2026 a push
+        # replaced the container while a Catalan answer was streaming, the client
+        # kept 878 characters ending "...consultar el text complet del reglament a",
+        # and nothing was saved. railway.json now gives the old container a
+        # 120 s drain after SIGTERM; uvicorn stops taking new connections, finishes
+        # the ones in flight, and must exit before Railway's SIGKILL.
+        timeout_graceful_shutdown=110,
         access_log=True,
         proxy_headers=True,
         forwarded_allow_ips="*"
