@@ -68,7 +68,7 @@ async def main() -> int:
     db = SessionLocal()
     client = EPOpenDataClient()
     started = time.time()
-    filled = no_record = still_unknown = 0
+    filled = no_record = still_unknown = blocked = 0
     try:
         sql = ("SELECT ep_identifier, pe_reference FROM amendment_documents "
                "WHERE document_date IS NULL AND ep_identifier IS NOT NULL "
@@ -84,12 +84,26 @@ async def main() -> int:
             if time.time() - started > args.max_seconds:
                 print(f"[INFO] budget reached after {i - 1} document(s)")
                 break
-            try:
-                detail = await client.get_document_detail(
-                    row.ep_identifier, endpoint="committee-documents")
-            except Exception:
-                # AM documents are not in this endpoint at all.
-                no_record += 1
+            # A 404 means the document genuinely is not in this endpoint (AM documents
+            # are not). Anything else is a wall, and calling it "no record" is how 973
+            # PR documents were written off on the first run while EP was answering 429:
+            # they are all in the endpoint, and the count said otherwise.
+            detail = None
+            for attempt in range(1, 4):
+                try:
+                    detail = await client.get_document_detail(
+                        row.ep_identifier, endpoint="committee-documents")
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    status = getattr(getattr(exc, "response", None), "status_code", None)
+                    if status == 404:
+                        no_record += 1
+                        break
+                    if attempt == 3:
+                        blocked += 1
+                        break
+                    await asyncio.sleep(5.0 * attempt)
+            if detail is None:
                 continue
             when = None
             for key in _DATE_KEYS:
@@ -112,11 +126,16 @@ async def main() -> int:
             if i % 50 == 0:
                 print(f"  [{i}/{len(rows)}] filled={filled} no_record={no_record}", flush=True)
 
-        print(f"[DONE] filled={filled}  no EP record={no_record}  "
-              f"record without a date={still_unknown}{'' if args.apply else '  (DRY-RUN)'}")
+        print(f"[DONE] filled={filled}  not in the endpoint (404)={no_record}  "
+              f"blocked or failed={blocked}  record without a date={still_unknown}"
+              f"{'' if args.apply else '  (DRY-RUN)'}")
         left = max(0, (due or 0) - filled) if args.apply else 0
         if left:
             print(f"[SYNC_STATUS] degraded: {left} document(s) still undated, resumes next run")
+        if rows and filled == 0 and blocked >= len(rows) / 2:
+            print("[ERROR] EP refused most requests (rate limit or outage): this run "
+                  "read nothing, and the documents it skipped are NOT dateless")
+            return 1
         if rows and filled == 0 and no_record == len(rows):
             print("[ERROR] not one document had an EP record: the endpoint or the "
                   "identifier format has changed")
