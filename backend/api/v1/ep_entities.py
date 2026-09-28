@@ -225,7 +225,11 @@ async def list_amendments(
     if published_to:
         filters.append(MEPAmendment.document_date <= datetime.combine(published_to, time.max))
     if updated_from:
-        filters.append(MEPAmendment.scraped_at >= updated_from)
+        # scraped_at answers "when did we last look at it", so a re-scrape that found
+        # nothing new would report the whole corpus as changed. updated_at is the
+        # change signal, populated on every row and guarded by the trigger in
+        # migration 248 so it moves only when a field actually differs.
+        filters.append(MEPAmendment.updated_at >= updated_from)
     if q:
         like = f"%{q}%"
         filters.append(or_(
@@ -759,7 +763,9 @@ async def list_ep_documents(
     if published_to:
         aq = aq.filter(AmendmentDocument.document_date <= datetime.combine(published_to, time.max))
     if updated_from:
-        aq = aq.filter(AmendmentDocument.scraped_at >= updated_from)
+        # scraped_at is when we last looked, not when it changed; see the note on
+        # MEPAmendment above. Guarded by the trigger in migration 249.
+        aq = aq.filter(AmendmentDocument.updated_at >= updated_from)
 
     a_total = aq.count()
     # Take page*limit from EACH branch, not a fixed multiple of limit. The union is merged

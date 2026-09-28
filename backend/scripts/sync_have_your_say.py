@@ -170,29 +170,11 @@ _UPSERT = text("""
         -- consultations had NULL here, so body filters and labels missed them);
         -- never overwrite an agency code with the Commission default.
         source_body = COALESCE(public_consultations.source_body, EXCLUDED.source_body),
-        -- updated_at is a CHANGE signal, scraped_at is the ingestion anchor. Stamping both
-        -- on every run made 4,114 of 4,835 consultations "updated" every night in ten bulk
-        -- statements, so an incremental caller asking for "changed since yesterday" was
-        -- handed 85% of the corpus daily. scraped_at still moves every run, which is what
-        -- answers "is this feed alive"; updated_at moves only when a field a reader cares
-        -- about actually differs.
-        updated_at = CASE WHEN (
-                 public_consultations.title             IS DISTINCT FROM EXCLUDED.title
-              OR public_consultations.short_title       IS DISTINCT FROM EXCLUDED.short_title
-              OR public_consultations.description       IS DISTINCT FROM EXCLUDED.description
-              OR public_consultations.consultation_type IS DISTINCT FROM EXCLUDED.consultation_type
-              OR public_consultations.status            IS DISTINCT FROM EXCLUDED.status
-              OR public_consultations.policy_areas      IS DISTINCT FROM EXCLUDED.policy_areas
-              OR public_consultations.start_date        IS DISTINCT FROM COALESCE(EXCLUDED.start_date, public_consultations.start_date)
-              OR public_consultations.end_date          IS DISTINCT FROM COALESCE(EXCLUDED.end_date, public_consultations.end_date)
-              OR public_consultations.portal_url        IS DISTINCT FROM EXCLUDED.portal_url
-            ) THEN EXCLUDED.updated_at ELSE public_consultations.updated_at END,
-        last_updated = CASE WHEN (
-                 public_consultations.title             IS DISTINCT FROM EXCLUDED.title
-              OR public_consultations.status            IS DISTINCT FROM EXCLUDED.status
-              OR public_consultations.description       IS DISTINCT FROM EXCLUDED.description
-              OR public_consultations.end_date          IS DISTINCT FROM COALESCE(EXCLUDED.end_date, public_consultations.end_date)
-            ) THEN EXCLUDED.last_updated ELSE public_consultations.last_updated END,
+        -- updated_at / last_updated are NOT set here. The BEFORE UPDATE trigger
+        -- update_consultation_updated_at() owns them (migration 245) and moves them
+        -- only when a content field actually differs; it runs after this clause, so
+        -- anything decided here would be overwritten. scraped_at is the ingestion
+        -- anchor and moves every run, which is what answers "is this feed alive".
         scraped_at = EXCLUDED.scraped_at
 """)
 
