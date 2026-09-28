@@ -249,10 +249,20 @@ def main() -> int:
         # May), so "fewer than held" is normal by a small margin. A truncated read
         # (a first version stopped at 300 of 500) is far below it.
         held_years = sum(1 for r in held if r.rsplit("/", 1)[-1] in {str(y) for y in years})
-        if len(listed) < 0.95 * held_years:
-            print(f"[ERROR] listed {len(listed)} questions for {years} but {held_years} "
-                  f"are already stored: the listing is incomplete")
+        # THREE states, not two. Aborting on any shortfall meant that while the listing was
+        # imperfect the job stored NOTHING, so genuinely new questions went unread for days
+        # (3,090 listed against 3,603 held, every run failing since 27 Sep). A short listing
+        # is a reason to distrust "0 new", not a reason to discard what WAS listed: the items
+        # that came back are real and upserting them is safe.
+        shortfall = None
+        if len(listed) < 0.5 * held_years:
+            print(f"[ERROR] listed {len(listed)} questions for {years} but {held_years} are "
+                  f"already stored: less than half, the read is broken rather than partial")
             return 1
+        if len(listed) < 0.95 * held_years:
+            shortfall = (f"listing incomplete: {len(listed)} listed for {years} against "
+                         f"{held_years} held, ingesting what was listed")
+            print(f"[WARN] {shortfall}")
 
         # Newest first across all question types: E-10-2026-001683 -> (2026, 1683).
         new = sorted((i for i in listed if reference(i) not in held),
@@ -303,6 +313,10 @@ def main() -> int:
         print(f"[ERROR] {errors} of {done} item fetches failed")
         return 1
     if left or errors:
+        if shortfall:
+            # Reported even when the run otherwise finished its budget: a partial listing is
+            # a partial run, and saying "success" here is how a gap stays invisible.
+            print(f"[SYNC_STATUS] degraded: {shortfall}")
         print(f"[SYNC_STATUS] degraded: {left} question(s) left for the next run, "
               f"{errors} fetch error(s)")
     return 0
