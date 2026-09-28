@@ -1,6 +1,7 @@
 # EU Space Programme and Defence
 
 ## QUICK FACTS
+- **Launch capacity gap (Commissioner Kubilius, 25 Sep 2026):** on a "launching tour" of European spaceports he said that in 2035 almost half of European launch demand will not be covered by European launch capabilities, and met the Portuguese Air Force on its plan for a new spaceport at Santa Maria, Azores. This is the Commissioner's public statement, not a Commission estimate in a published document.
 - Full name: EU Space Programme
 - Type: Regulation
 - Legal reference: Regulation (EU) 2021/696

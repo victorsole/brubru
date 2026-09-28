@@ -1,6 +1,7 @@
 # DG MENA: Middle East, North Africa and Gulf Directorate-General
 
 ## QUICK FACTS
+- **Surging Women's Employment Initiative (launched 24 Sep 2026):** a flagship of the Pact for the Mediterranean, with UN Women, unveiled by Commissioner Dubravka Šuica at the UN General Assembly. It mobilises EUR 25 million, including EUR 10 million from the EU, to help create 500,000 additional jobs for women and raise women's employment in the Middle East and North Africa by 5% by 2030 (women's labour-force participation there has stayed around 20% for two decades). Source: https://north-africa-middle-east-gulf.ec.europa.eu/news/eu-launches-new-initiative-boost-womens-employment-mediterranean-2026-09-24_en
 - **Full official name:** Directorate-General for the Middle East, North Africa and the Gulf (DG MENA)
 - **Operational since:** 1 February 2025, under the Von der Leyen II Commission (took office 1 December 2024)
 - **Commissioner:** Dubravka Suica, Commissioner for the Mediterranean

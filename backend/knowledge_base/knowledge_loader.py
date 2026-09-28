@@ -15811,6 +15811,27 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     "verifica dell'età": ['eu_minors_social_media_age_limits', 'eu_age_verification_recommendation'],
     'verifica dell’età': ['eu_minors_social_media_age_limits', 'eu_age_verification_recommendation'],
     'leeftijdsverificatie': ['eu_minors_social_media_age_limits', 'eu_age_verification_recommendation'],
+    # /social-eu 28 Sep 2026 (Victor's item 4.4): EPF EUR 6.6bn for Ukraine, the women's employment initiative, launch capacity.
+    'peace facility': ['european_peace_facility'],
+    'eumam': ['european_peace_facility'],
+    'facilité européenne pour la paix': ['european_peace_facility'],
+    'fondo europeo de apoyo a la paz': ['european_peace_facility'],
+    'fons europeu de suport a la pau': ['european_peace_facility'],
+    'fons europeu per a la pau': ['european_peace_facility'],
+    'surging women': ['dg_mena_overview'],
+    "women's employment initiative": ['dg_mena_overview'],
+    'swei': ['dg_mena_overview'],
+    'spaceport': ['eu_space_programme'],
+    'spaceports': ['eu_space_programme'],
+    'space port': ['eu_space_programme'],
+    'launch capacity': ['eu_space_programme'],
+    'launch demand': ['eu_space_programme'],
+    'european launchers': ['eu_space_programme'],
+    'port spatial': ['eu_space_programme'],
+    'puerto espacial': ['eu_space_programme'],
+    'port espacial': ['eu_space_programme'],
+    'spazioporto': ['eu_space_programme'],
+    'ruimtehaven': ['eu_space_programme'],
 }
 
 

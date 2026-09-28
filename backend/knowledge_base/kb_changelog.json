@@ -4,6 +4,30 @@
     {
       "date": "2026-09-28",
       "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "EUR 6.6 billion of EPF funds for Ukraine unblocked (25 Sep 2026): EUR 900m for EUMAM, EUR 1bn joint procurement, EUR 4.7bn reimbursements, as announced by the High Representative",
+      "refs": []
+    },
+    {
+      "date": "2026-09-28",
+      "action": "updated",
+      "guide": "dg_mena_overview",
+      "title": "DG MENA",
+      "summary": "Surging Women's Employment Initiative with UN Women (24 Sep 2026): EUR 25m incl. EUR 10m from the EU, 500,000 jobs, +5% women's employment by 2030",
+      "refs": []
+    },
+    {
+      "date": "2026-09-28",
+      "action": "updated",
+      "guide": "eu_space_programme",
+      "title": "EU Space Programme",
+      "summary": "Commissioner Kubilius on launch capacity (25 Sep 2026): almost half of European launch demand uncovered in 2035; Santa Maria (Azores) spaceport plan",
+      "refs": []
+    },
+    {
+      "date": "2026-09-28",
+      "action": "updated",
       "guide": "eu_ets_review_2026",
       "title": "EU ETS review 2026",
       "summary": "ENVI draft report PE791.996 (Liese) and ITRE draft opinion PE792.091 (Ratas) on 2026/0212(COD)",
