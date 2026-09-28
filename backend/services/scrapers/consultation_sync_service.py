@@ -375,8 +375,10 @@ class ConsultationSyncService:
             value = getattr(item, field, None)
             if value:
                 setattr(existing, field, value)
-        if item.feedback_count:
-            existing.feedback_count = item.feedback_count
+        # feedback_count on existing rows belongs to
+        # scripts/backfill_consultations_feedback_count.py (the sum of totalFeedback
+        # over the initiative's publications, 28 Sep 2026). One writer per column: a
+        # second measure written here would overwrite it every day.
         # consultation_type on EXISTING rows belongs to the Have Your Say sweep
         # (it reads the stage; this parser guessed from the act type and wrote
         # "initiative" over "call_for_evidence" every day), so it is set here only
