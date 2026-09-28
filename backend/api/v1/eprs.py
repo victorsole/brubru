@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
 from models.eprs_publication import EPRSPublication
@@ -42,8 +42,8 @@ class EPRSItem(BaseModel):
     has_full_text: bool = False
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — html_url fallback to pdf_url.")
-    body_txt: Optional[str] = Field(None, description="Plain-text body (currently the publication summary — EPRS full-text lives in the source HTML behind html_url).")
-    body_html: Optional[str] = Field(None, description="Null for this endpoint — EPRS HTML lives on europarl.europa.eu/thinktank.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body. On the ITEM route this is the whole study when Brubru holds it (backfilled 28 September 2026), falling back to the summary. On the LIST it is the summary: these studies run to hundreds of thousands of characters, so follow `self` or the item route to read one. `has_full_text` says which rows have it.")
+    body_html: Optional[str] = Field(None, description="Null for this endpoint: Brubru stores the extracted text, not the publisher HTML, which lives on europarl.europa.eu/thinktank.")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of publication_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
@@ -156,7 +156,11 @@ async def list_eprs(
         filters.append(EPRSPublication.last_updated <= updated_to)
     if q:
         like = f"%{q}%"
-        filters.append(or_(EPRSPublication.title.ilike(like), EPRSPublication.summary.ilike(like)))
+        # The full text is searched too, now that it is stored: a study's subject is often
+        # named nowhere in its title or its summary.
+        filters.append(or_(EPRSPublication.title.ilike(like),
+                           EPRSPublication.summary.ilike(like),
+                           EPRSPublication.full_text.ilike(like)))
     if filters:
         query = query.filter(and_(*filters))
 
@@ -167,6 +171,10 @@ async def list_eprs(
         order_col = EPRSPublication.publication_date.desc().nullslast()
     rows = (
         stable(query.order_by(order_col))
+        # Leave full_text in the database: the list does not serve it, and since the studies
+        # were backfilled (28 Sep 2026) these rows average tens of thousands of characters,
+        # one of them 437,919. Loading a page of them to discard them is megabytes per call.
+        .options(defer(EPRSPublication.full_text))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -265,7 +273,7 @@ async def get_eprs_detail(
         page_count=r.page_count,
         has_full_text=bool(r.has_full_text),
         public_url=r.html_url or r.pdf_url,
-        body_txt=r.summary,
+        body_txt=r.full_text or r.summary,
         body_html=None,
         document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
         creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),

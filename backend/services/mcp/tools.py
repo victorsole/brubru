@@ -863,18 +863,29 @@ def _handle_search_eprs(query: str, limit: int = 10) -> Dict[str, Any]:
     db = _get_db()
     limit = max(1, min(int(limit or 10), 30))
     try:
+        # The full text is searched, and a window around the match is returned. Until the
+        # studies were backfilled (28 Sep 2026) this table held titles and summaries and
+        # almost no documents, so searching those two columns was all there was. A study's
+        # actual subject is frequently named in neither: matching only the title and summary
+        # answers "which studies are CALLED this", not "which studies SAY this".
         rows = db.execute(
             text(
                 """
                 SELECT title, publication_type, publication_date,
-                       html_url, summary, policy_areas
+                       html_url, summary, policy_areas,
+                       has_full_text,
+                       CASE WHEN full_text ILIKE :q THEN
+                            substring(full_text
+                                      from greatest(1, position(:raw in full_text) - 200)
+                                      for 700)
+                       END AS excerpt
                 FROM eprs_publications
-                WHERE title ILIKE :q OR summary ILIKE :q
+                WHERE title ILIKE :q OR summary ILIKE :q OR full_text ILIKE :q
                 ORDER BY publication_date DESC
                 LIMIT :lim
                 """
             ),
-            {"q": f"%{query}%", "lim": limit},
+            {"q": f"%{query}%", "raw": query, "lim": limit},
         ).fetchall()
 
         pubs = [
@@ -885,6 +896,10 @@ def _handle_search_eprs(query: str, limit: int = 10) -> Dict[str, Any]:
                 "url": r[3],
                 "summary": (r[4] or "")[:400],
                 "policy_areas": r[5],
+                "has_full_text": bool(r[6]),
+                # Where the match sits in the study, when it was the text that matched.
+                # Not the whole study: these run to hundreds of thousands of characters.
+                "excerpt": (r[7] or "").strip() or None,
             }
             for r in rows
         ]
