@@ -1,6 +1,7 @@
 # EU Humanitarian Aid Reform — 2026 Communication (KALLAS)
 
 ## QUICK FACTS
+- **LATEST (26 September 2026)**: President von der Leyen announced **almost EUR 710 million** in EU support for displaced people and host communities in Sub-Saharan Africa and emergency aid for crises worldwide (Middle East, Ukraine), at the close of the UN General Assembly high-level week (Global Citizen campaign). It includes **EUR 380 million** in 2026 migration-related financing for Sub-Saharan Africa (**EUR 240 million** for the Migrant Protection, Return and Reintegration programme; **EUR 140 million** for displacement and host communities, e.g. Eastern Mauritania, Kenya), **EUR 10 million** for peace in the Great Lakes and **EUR 7.5 million** for the Ebola response in the DRC. Source: Commission press release IP/26/1985.
 - **LATEST (Wednesday 27 May 2026 — COLLEGE ADOPTION + COMMUNICATION PUBLISHED)**: The College of Commissioners adopted the Communication "Defending values, driving reform, delivering impact: new measures to strengthen EU humanitarian action" on 27 May 2026 (Commissioner for External Affairs and Crisis Management: Hadja Lahbib; DG ECHO). This was the sole substantive item on the 27 May College agenda (2567th meeting). Source: EC Press Corner IP_26_1160, 27 May 2026.
 - Communication: "Defending values, driving reform, delivering impact: new measures to strengthen EU humanitarian action"
 - Adopted: 27 May 2026, College of Commissioners (meeting #2567)

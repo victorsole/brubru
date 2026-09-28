@@ -1,6 +1,7 @@
 # Europe's Beating Cancer Plan
 
 ## QUICK FACTS
+- **Parliament (28 September 2026)**: the **SANT committee** considered the amendments (**PE787.665**) to its own-initiative report on Europe's Beating Cancer Plan (2025/2139(INI), rapporteur **Vlad Vasile-Voiculescu**, Renew; draft report PE786.738).
 - Communication: COM(2021) 44 final (3 February 2021)
 - Budget: EUR 4 billion (EU4Health, Horizon Europe, Digital Europe, cohesion policy)
 - 4 pillars: Prevention, Early detection, Diagnosis and treatment, Quality of life

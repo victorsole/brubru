@@ -1,6 +1,7 @@
 # EU Rare Diseases Policy Framework
 
 ## QUICK FACTS
+- **Parliament (28 September 2026)**: the **SANT committee** considered its **draft legislative-initiative report on an EU rare disease action plan** (2025/2130(INL), rapporteur **Nicolás González Casares**, S&D): draft report **PE785.192**, amendments **PE786.802** and **PE786.805**. An INL report asks the Commission to propose legislation; it is not itself law.
 - Topic: EU rare diseases policy, European Reference Networks, orphan medicines, diagnostics
 - EU prevalence: 27-36 million people (~8% of population), 6,000-8,000 rare diseases identified
 - Lead DG: DG SANTE (Health and Food Safety); DG RTD for research funding

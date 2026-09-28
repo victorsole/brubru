@@ -1,6 +1,7 @@
 # EU Energy Policy Framework
 
 ## QUICK FACTS
+- **Reported, not yet published (Contexte, 25 September 2026)**: a Commission draft overhaul of the EU **security of energy supply** rules would require energy infrastructure developers to assess physical risks. A **leak reported by the press**: no proposal has been adopted; never state its content as law. Same week: the **Gas Coordination Group** continued work on winter preparedness (25 September 2026).
 - Topic: EU energy policy framework -- legislation, targets, and institutional landscape
 - Legal basis: Article 194 TFEU (shared competence; taxation remains national/unanimity)
 - 2030 renewable target: 42.5% binding (45% aspirational) -- RED III, Directive (EU) 2023/2413

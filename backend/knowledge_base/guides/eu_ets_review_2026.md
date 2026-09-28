@@ -1,6 +1,7 @@
 # EU Emissions Trading System Review (2026)
 
 ## QUICK FACTS
+- **Parliament, ETS and MSR (2026/0212(COD))**: **ENVI** lead rapporteur **Peter Liese** (EPP) tabled the **draft report PE791.996**, on the ENVI agenda **1 October 2026**; **ITRE** draft opinion **PE792.091** by **Jüri Ratas** (EPP), considered **28 September 2026**. Source: EP committee meeting documents (eMeeting).
 - **LATEST (23 Sep 2026): Council (Coreper) agreed its position on the Market Stability Reserve amendment 2026/0085(COD):** invalidation suspended only until end-2030 (the Commission wanted an indefinite halt); **from 1 January 2031 the threshold doubles from 400 million to 800 million allowances.** A Council POSITION, not an adopted act: trilogues next, aim end-2026. Detail below.
 - **EARLIER (10 September 2026 — ENVI committee vote on the Market Stability Reserve).** ENVI voted
   on **2026/0085(COD)**, amending **Decision (EU) 2015/1814** as regards **ceasing the invalidation of

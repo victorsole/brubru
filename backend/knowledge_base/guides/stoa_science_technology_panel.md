@@ -1,6 +1,7 @@
 # STOA: Panel for the Future of Science and Technology
 
 ## QUICK FACTS
+- **STOA Study (25 September 2026)**: "Technology assessment for an EU digital tool for preventive healthcare": assesses the technological feasibility, system readiness and long-term sustainability of an EU digital prevention tool; finds the potential depends on systems that are interoperable, governed and trusted. Source: EP Think Tank, STOA publications.
 - **Topic:** STOA: Panel for the Future of Science and Technology (European Parliament's standing scientific foresight panel)
 - **Institution:** European Parliament (cross-committee MEP panel; not a full committee)
 - **Composition:** 28 MEPs nominated by 12 permanent EP committees (AGRI, CULT, EMPL, ENVI, IMCO, INTA, ITRE, JURI, LIBE, REGI, SANT, TRAN) plus the EP Vice-President responsible for STOA as an ex officio member; members serve renewable 2.5-year terms
