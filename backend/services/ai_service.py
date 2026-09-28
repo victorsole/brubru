@@ -763,6 +763,16 @@ _CA_DECISIVE = frozenset({
     # "espacio", "palacio" and "prefacio".
     "relacio", "informacio", "gestio", "situacio", "aplicacio", "obligacio",
     "regulacio", "adaptacio", "transposicio", "recollicio", "reutilitzacio",
+    # Added 28 Sep 2026 from the 120-question baseline: three Catalan questions
+    # held NO decisive token and fell to Spanish or French on shared "la"/"el"
+    # ("Quant proposa la Comissio del Fons de Solidaritat ... per a Espanya el
+    # setembre", "Que va resoldre el Tribunal ... en l'assumpte C-900/24 sobre
+    # clausules", "Qui va guanyar l'ultima final"). Each differs after folding:
+    # ES comision / fondos / septiembre / Espana / asunto / clausulas / ganar,
+    # FR fonds / septembre / clauses, IT commissione / settembre / clausole.
+    # Excluded: "va" (ES and IT "goes"), "quant" (FR "quant a"), "qui" (FR, IT).
+    "proposa", "comissio", "fons", "setembre", "espanya", "resoldre",
+    "assumpte", "clausules", "guanyar", "solidaritat", "recepta",
 })
 
 # Catalan plural of the -cio nouns. "-cions" has no counterpart in the other
@@ -799,7 +809,18 @@ _IT_DECISIVE = frozenset({
     # nouns/adjectives whose Spanish or Catalan form differs after folding
     "finanziamenti", "fondi", "approfondite", "approfonditi", "generiche",
     "tramite", "piattaforme", "aspetti", "premesse", "difesa",
+    # Added 28 Sep 2026 from the 120-question baseline: "Quale soglia di
+    # temperatura si applica all'asta calore industriale del Fondo per
+    # l'innovazione?" and "Qual e una buona ricetta per la paella?" held no
+    # Italian decisive token and fell to Catalan on "del"/"per". Excluded:
+    # "qual" (Catalan "el qual"), "fondo" (Spanish).
+    "quale", "soglia", "applica", "calore", "industriale", "ricetta",
+    "buona", "settembre",
 })
+
+# Italian "-zione"/"-zioni" nouns: Spanish writes "-cion(es)", Catalan "-cio(ns)",
+# French "-tion(s)", Dutch "-tie(s)". No other Brubru language ends a word so.
+_IT_DECISIVE_SUFFIX = ("zione", "zioni")
 
 # Spanish- and Dutch-exclusive tokens, same contract as _CA_DECISIVE and
 # _IT_DECISIVE (audit D1 + D3, 3 Sep 2026).
@@ -985,6 +1006,16 @@ def _resolve_answer_language(user_message: str, conversation_history=None) -> st
     return _detect_query_language(user_message)
 
 
+_DEEP_DIVE_LABEL = {
+    "EN": "Read Brubru's full deep-dive here:",
+    "ES": "Lee aquí el análisis en profundidad de Brubru:",
+    "CA": "Llegiu aquí l'anàlisi en profunditat de Brubru:",
+    "FR": "Lisez ici l'analyse approfondie de Brubru :",
+    "IT": "Leggi qui l'analisi approfondita di Brubru:",
+    "NL": "Lees hier de volledige analyse van Brubru:",
+}
+
+
 def _detect_query_language(text: str) -> str:
     """
     Cheap bag-of-words language detector. Returns two-letter upper-case code.
@@ -1043,7 +1074,9 @@ def _detect_query_language(text: str) -> str:
     _ca_hits = sum(1 for w in words if _decisive(w, _CA_DECISIVE)) + sum(
         1 for w in words if w.endswith(_CA_DECISIVE_SUFFIX)
     )
-    _it_hits = sum(1 for w in words if _decisive(w, _IT_DECISIVE))
+    _it_hits = sum(1 for w in words if _decisive(w, _IT_DECISIVE)) + sum(
+        1 for w in words if w.endswith(_IT_DECISIVE_SUFFIX)
+    )
     _es_hits = sum(1 for w in words if _decisive(w, _ES_DECISIVE))
     _nl_hits = sum(1 for w in words if _decisive(w, _NL_DECISIVE))
     _fr_hits = sum(1 for w in words if _decisive(w, _FR_DECISIVE))
@@ -2596,7 +2629,11 @@ class AIService:
         matched = next((u for u in to_add if _matches(u)), None)
         if not matched:
             return message
-        return message.rstrip() + f"\n\nRead Brubru's full deep-dive here: {matched}"
+        # In the answer's language (28 Sep 2026): a Catalan DMA answer in the
+        # baseline ended "Read Brubru's full deep-dive here", in English.
+        label = _DEEP_DIVE_LABEL.get(
+            _detect_query_language(query) if query else "EN", _DEEP_DIVE_LABEL["EN"])
+        return message.rstrip() + f"\n\n{label} {matched}"
 
     def _build_system_prompt(self, is_pre_user: bool = False, query_lang: str = "EN") -> str:
         """

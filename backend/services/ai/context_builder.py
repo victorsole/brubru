@@ -956,6 +956,8 @@ class ContextData:
     # Constraint injected when the user names a competitor (7 Aug 2026): chat
     # was asserting what rival products lack, with citation markers attached.
     competitor_guard_block: Optional[str] = None
+    # Off-topic constraint (28 Sep 2026): a paella recipe got a 2,274-char answer.
+    off_topic_guard_block: Optional[str] = None
     alerts_guard_block: Optional[str] = None
 
     # Private user/org bespoke knowledge bundle (20 May 2026).
@@ -2091,6 +2093,7 @@ class ContextBuilder:
         lobby_meetings_block = self._fetch_lobby_meetings_block(user_message)
         amendment_documents_block = self._fetch_amendment_documents_block(user_message)
         competitor_guard_block = self._build_competitor_guard_block(user_message)
+        off_topic_guard_block = self._build_off_topic_guard_block(user_message)
         alerts_guard_block = self._build_alerts_guard_block(user_message)
 
         # Calculate metadata
@@ -2188,6 +2191,7 @@ class ContextBuilder:
             lobby_meetings_block=lobby_meetings_block,
             amendment_documents_block=amendment_documents_block,
             competitor_guard_block=competitor_guard_block,
+            off_topic_guard_block=off_topic_guard_block,
             alerts_guard_block=alerts_guard_block,
             query=user_message,
             search_time_ms=search_time,
@@ -7753,6 +7757,58 @@ class ContextBuilder:
             "use today. Their tool, their judgement.\n"
         )
 
+    # Clearly non-EU topics, six languages. Narrow on purpose: replayed on 28 Sep
+    # 2026 against all 1,167 user messages ever stored, it fired on 14, every one
+    # off-topic (paella, hummus, Champions League, a haiku), and on 0 of the 108
+    # on-topic questions of the 120-question baseline. A broad "no EU vocabulary"
+    # test was tried first and fired on 249 of 896 real queries, most of them
+    # genuine ("What is the Critical Medicines Act?"), so it was dropped.
+    _OFF_TOPIC_RE = re.compile(
+        r"\b(?:recipes?|receta|recetas|recepta|receptes|recette|recettes|ricetta|ricette|recept|recepten"
+        r"|cook(?:ing)?|cocinar|cuinar|cuisiner|cucinare|koken|paella|hummus|tortilla|lasagn\w*|pizza"
+        r"|champions league|ligue des champions|premier league|la liga|serie a|bundesliga|eredivisie|ballon d'or"
+        r"|world cup|copa del mundo|mundial de f[uú]tbol|coupe du monde|coppa del mondo|wereldkampioenschap"
+        r"|who won|qui[eé]n gan[oó]|qui va guanyar|qui a gagn[eé]|chi ha vinto|wie won|wie heeft gewonnen"
+        r"|football|f[uú]tbol|futbol|calcio|voetbal|basketball|tennis|formula 1|tour de france|olympics?"
+        r"|haiku|poem|poema|po[eè]me|poesia|poesie|gedicht|joke|chiste|acudit|blague|barzelletta|mop"
+        r"|song lyrics|horoscope|hor[oó]scopo|hor[oò]scop|oroscopo|horoscoop|weather forecast)\b",
+        re.IGNORECASE)
+    # Any EU or policy vocabulary vetoes the guard: "Who won the EP elections?",
+    # "EU rules on football broadcasting rights", "CAP support for olive oil".
+    _EU_SIGNAL_RE = re.compile(
+        r"\b(?:EU|UE|EEA|EFTA|MEPs?|CELEX|TFEU|TFUE|GDPR|RGPD|DSA|DMA|CBAM|CAP|PAC|CFP)\b"
+        r"|\d{4}/\d{2,4}|europ|brussel|bruxel|brusel|commission|comisi[oó]n|comissi[oó]|commissie"
+        r"|parlament|parliament|parlement|council|consejo|conseil|consell|consiglio"
+        r"|regulat|reglament|regolament|r[eè]glement|verordening|directiv|direttiv|richtlijn"
+        r"|\blaw|\bley\b|\bllei|\bloi\b|\blegge|\bwet\b|legisla|polic|pol[ií]tic|politique|beleid"
+        r"|sanction|sancion|sanzion|tariff|arancel|dazi|subsid|fund|fondo|fonds|state aid|ayuda|aiuti|election|elecci|elezion|[ée]lection|verkiez"
+        r"|rights|derechos|drets|droits|diritti|rechten|market|mercado|mercat|march[ée]|mercato|markt",
+        re.IGNORECASE)
+
+    def _build_off_topic_guard_block(self, user_message: str) -> Optional[str]:
+        """Keep an off-topic answer to a short, polite redirect.
+
+        The 120-question baseline of 26 Sep 2026 asked for a paella recipe and a
+        football result in six languages. Three answers ran to 1,767-2,274
+        characters, one cited "sources [1] to [20]" for a recipe, and one gave a
+        Champions League result "according to the sources in the context". Chat is
+        an EU policy assistant; a long answer here is both off-brand and unsourced.
+        Per-query, so it is a context block beside the question, not a prompt rule.
+        """
+        if not user_message or not self._OFF_TOPIC_RE.search(user_message):
+            return None
+        if self._EU_SIGNAL_RE.search(user_message):
+            return None
+        return (
+            "[OFF-TOPIC QUESTION -- ANSWER CONSTRAINT]\n"
+            "This question is not about EU policy, law or institutions.\n"
+            "- Answer in AT MOST three short sentences, in the user's language.\n"
+            "- Say plainly that Brubru is an assistant for EU policy and does not cover this topic.\n"
+            "- Do NOT give the recipe, result, poem or facts asked for, and do NOT cite any source, "
+            "citation marker or EU act.\n"
+            "- Offer ONE related EU angle as a question the user could ask instead.\n"
+        )
+
     _AMDT_INTENT_RE = re.compile(
         r"amendment|amendements|esmen|enmienda|emendament|amendementen|\bPE\s?\d{3}",
         re.IGNORECASE,
@@ -11924,6 +11980,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'competitor_guard_block', None):
             sections.append(context_data.competitor_guard_block)
+        if getattr(context_data, 'off_topic_guard_block', None):
+            sections.append(context_data.off_topic_guard_block)
+            sections.append("")
 
         if getattr(context_data, 'alerts_guard_block', None):
             sections.append(context_data.alerts_guard_block)
