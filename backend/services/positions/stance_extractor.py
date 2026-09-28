@@ -130,6 +130,45 @@ async def _hf_router(feedback_text: str, organisation: str, title: Optional[str]
         return None
 
 
+# The chat chain's open-model lanes (28 Sep 2026). Qwen direct had no key and HF no
+# credits, and neither local model runs in the Railway container, so all 10,947
+# substantive consultation responses stayed "pending" and the Stakeholder Map could
+# colour none of them. Free lanes first; Scaleway is paid (EU-hosted) and is only
+# used when the caller allows it. OpenAI stays out: no credits.
+_FREE_LANES = ("CerebrasProvider", "GeminiProvider", "MistralProvider")
+_PAID_LANES = ("ScalewayProvider",)
+
+
+async def _open_lanes(feedback_text: str, organisation: str, title: Optional[str],
+                      allow_paid: bool = True) -> Optional[Dict]:
+    try:
+        import services.ai.multi_provider_service as mps
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[stance] provider module unavailable: %s", e)
+        return None
+    names = _FREE_LANES + (_PAID_LANES if allow_paid else ())
+    for name in names:
+        Provider = getattr(mps, name, None)
+        if Provider is None:
+            continue
+        try:
+            provider = Provider()
+            if not provider.is_available:   # a property on every concrete provider
+                continue
+            resp = await provider.generate(
+                system_prompt=_SYSTEM,
+                messages=[{"role": "user", "content": _build_user(feedback_text, organisation, title)}],
+                max_tokens=220, temperature=0.1,
+            )
+            parsed = _parse_llm((getattr(resp, "message", "") or "").strip())
+            if parsed:
+                parsed["engine"] = name.replace("Provider", "")
+                return parsed
+        except Exception as e:  # noqa: BLE001  quota, rate limit, network: try the next lane
+            logger.info("[stance] %s failed: %s", name, str(e)[:160])
+    return None
+
+
 def _load_local_llm():
     """Lazy-load the local instruct LLM (Apache-2.0). Returns (tok, model, device) or False."""
     global _llm
@@ -206,9 +245,14 @@ def _local_stance(feedback_text: str) -> Optional[Dict]:
         return None
 
 
-async def extract_stance(feedback_text: str, organisation: str, consultation_title: Optional[str] = None) -> Dict:
+async def extract_stance(feedback_text: str, organisation: str, consultation_title: Optional[str] = None,
+                         *, allow_paid: bool = True, local: bool = True) -> Dict:
     """Return {stance, summary}. ('attachment_only', None) when there is no text;
-    'pending' when every provider failed (so it can be retried later)."""
+    'pending' when every provider failed (so it can be retried later).
+
+    ``allow_paid=False`` keeps a bulk drain on the free lanes; ``local=False`` skips
+    the two local models (they cannot load in the Railway container, and trying
+    costs a download attempt per call)."""
     text = (feedback_text or "").strip()
     if not text:
         return {"stance": "attachment_only", "summary": None}
@@ -218,6 +262,11 @@ async def extract_stance(feedback_text: str, organisation: str, consultation_tit
         res = await provider(text, organisation, consultation_title)
         if res:
             return res
+    res = await _open_lanes(text, organisation, consultation_title, allow_paid=allow_paid)
+    if res:
+        return res
+    if not local:
+        return {"stance": "pending", "summary": None}
     # Local instruct LLM (free, offline) - stance + grounded summary.
     res = _local_llm(text, organisation, consultation_title)
     if res:

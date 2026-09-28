@@ -178,6 +178,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
     SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",
                "scripts/link_consultations_to_files.py", ("--max-seconds", "420"), timeout=600, stale_after_hours=14),
+    # Stances for those respondents (28 Sep 2026): 10,947 sat at 'pending' because no
+    # stance engine could run, so the Stakeholder Map coloured none of them. Daily
+    # (early UTC: quiet for chat, free quotas fresh), FREE lanes only and one call at
+    # a time, because those lanes are the chat chain's own and must not be crowded
+    # out; `degraded` while a backlog remains. Paid catch-ups are run by hand.
+    SourceSpec("consultation_stances", "Consultations - respondent stances", "daily",
+               "scripts/classify_pending_stances.py",
+               ("--apply", "--free-only", "--concurrency", "1", "--limit", "400", "--max-seconds", "900"),
+               timeout=1200, stale_after_hours=30),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
     # Names files that arrived without a readable one. Unlike the feeds above
     # this ingests nothing: it fills legislative_carriages.short_title for rows
