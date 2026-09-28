@@ -18,6 +18,8 @@ from __future__ import annotations
 import re
 from datetime import datetime, timezone
 
+import urllib.parse
+
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
@@ -59,7 +61,7 @@ def _mdy(s: str) -> datetime | None:
         return None
 
 
-def _parse_cards(html: str):
+def _parse_cards(html: str, page_url: str = _BASE):
     soup = BeautifulSoup(html, "html.parser")
     out = []
     for card in soup.select(".eda-card"):
@@ -71,10 +73,12 @@ def _parse_cards(html: str):
         if not title or len(title) < 8:
             continue
         href = a["href"]
-        if href.startswith("http"):
-            url = href
-        else:
-            url = _BASE + "/" + href.lstrip("/")
+        # Resolve against the PAGE, not the site root. EDA's cards carry hrefs relative to
+        # the listing they sit on ("factsheets/factsheet--captech-maritime" on
+        # /publications-and-data/publications), so rooting them at the domain produced
+        # eda.europa.eu/factsheets/... -- a 404 for all 15 stored publications. urljoin gets
+        # both cases right, absolute hrefs included.
+        url = urllib.parse.urljoin(page_url, href)
         t = card.select_one("time")
         doc_dt = _mdy(t.get("datetime") or t.get_text(" ", strip=True)) if t else None
         out.append((norm_url(url), title, doc_dt))
@@ -88,7 +92,7 @@ def _scrape(url: str, item_type: str, *, fetch_bodies: bool) -> list[Item]:
     r = http_get(url)
     if r is None:
         return items
-    for purl, title, doc_dt in _parse_cards(r.text):
+    for purl, title, doc_dt in _parse_cards(r.text, url):
         if purl in seen:
             continue
         seen.add(purl)

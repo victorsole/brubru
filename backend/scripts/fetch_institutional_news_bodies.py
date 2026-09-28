@@ -223,6 +223,24 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
     if res.error or not res.html:
         return None, None, f"{why_paid_failed}; browser {res.error or 'empty page'}"
     text_, html_, reason = _best_extraction(res.html)
+
+    # A rendered page is often still only a record: EDA's report pages render to ~1,400
+    # characters of description and a single Download link to the actual report. Follow it,
+    # exactly as the direct path does, and keep whichever is longer.
+    if len(text_ or "") < WHOLE_BODY_CHARS:
+        from_pdf = _follow_to_pdf(res.html, url)
+        if from_pdf and len(from_pdf) > len(text_ or ""):
+            return from_pdf, None, None
+
+    # The browser's own text extraction beats ours on some templates, because it reads what
+    # the page actually renders rather than guessing a container. Use it when it is richer
+    # and passes the same furniture checks.
+    if len(res.text or "") > len(text_ or ""):
+        candidate = strip_page_furniture(res.text)
+        if (not looks_like_challenge(candidate) and not looks_like_listing(candidate)
+                and len(candidate) >= 200):
+            return candidate, None, None
+
     return text_, html_, (reason if text_ else f"{why_paid_failed}; browser: {reason}")
 
 
@@ -340,6 +358,41 @@ def looks_like_pdf(raw: bytes) -> bool:
     return raw[:5] == b"%PDF-" or raw[:1024].lstrip()[:5] == b"%PDF-"
 
 
+_PDF_LINK = re.compile(r'href="([^"]+?\.pdf[^"]*)"', re.I)
+_PDF_DOWNLOAD = re.compile(r'href="([^"]*/document/download/[^"]+)"', re.I)
+
+
+def _follow_to_pdf(html: str, page_url: str, timeout: int = 60) -> str | None:
+    """The document a record page links to, when the page itself is only metadata.
+
+    An EU publication landing page is frequently a record: "Details / Publication date /
+    Author / Files" and a link. Extracting it yields ~300 characters of field labels, which
+    is not the report. The European School of Administration's annual report is 19,337
+    characters inside the PDF the page links to.
+
+    Candidates are fetched and the LONGEST text wins, which also settles annex-versus-main
+    without pattern-matching filenames: a record often links both, in either order.
+    """
+    candidates: list[str] = []
+    for pattern in (_PDF_LINK, _PDF_DOWNLOAD):
+        for href in pattern.findall(html or ""):
+            absolute = urllib.parse.urljoin(page_url, href)
+            if absolute not in candidates:
+                candidates.append(absolute)
+    best = None
+    for link in candidates[:3]:   # bounded: a record page links a handful, not hundreds
+        try:
+            raw = _read(link, timeout, accept="application/pdf,*/*")
+        except Exception:  # noqa: BLE001
+            continue
+        if not looks_like_pdf(raw):
+            continue
+        text = _pdf_text(raw)
+        if text and (best is None or len(text) > len(best)):
+            best = text
+    return best
+
+
 def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None, str | None, str | None]:
     """(body_txt, body_html, error). Never raises: a failure leaves the row alone."""
     # An EUR-Lex link is a link to a document Cellar holds. Go to the source.
@@ -415,6 +468,14 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         return None, None, "bot challenge, not the document: back off and retry later"
 
     body_txt, body_html = extract_html(html)
+
+    # A record page is not the document. When what we extracted is too thin to be the
+    # publication, follow the file it links to before giving up on it.
+    if len(body_txt or "") < WHOLE_BODY_CHARS:
+        from_pdf = _follow_to_pdf(html, url, timeout)
+        if from_pdf and len(from_pdf) > len(body_txt or ""):
+            return from_pdf, None, None
+
     if looks_like_challenge(body_txt or ""):
         # Never stored, never solved. The row keeps whatever it had and is retried later.
         return None, None, "bot challenge, not the document: back off and retry later"

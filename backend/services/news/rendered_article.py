@@ -127,6 +127,18 @@ _STRIPPABLE_OPENERS = (
     "this site uses cookies", "we use cookies",
 )
 
+# Site navigation labels. These are NOT in the list above, because each is a phrase a real
+# sentence can open with: stripping "what we do" unconditionally turned "What we do in this
+# report is assess the maritime domain" into "in this report is assess...". A nav BAR is a
+# RUN of them; a sentence starts with at most one. So a token here is only removed when at
+# least two appear back to back.
+_NAV_RUN_TOKENS = (
+    "news and events", "what we do", "who we are", "publications & data",
+    "careers", "procurement", "portals",          # EDA
+    "home", "about us", "contact", "search", "menu",
+)
+_MIN_NAV_RUN = 2
+
 
 def strip_page_furniture(text: str) -> str:
     """Remove the run of navigation phrases a page opens with. Keeps the article."""
@@ -141,9 +153,25 @@ def strip_page_furniture(text: str) -> str:
                 stripped = stripped[len(opener):]
                 break
         else:
-            return stripped.strip()
+            return _strip_nav_run(stripped).strip()
         out = stripped
-    return out.strip()
+    return _strip_nav_run(out).strip()
+
+
+def _strip_nav_run(text: str) -> str:
+    """Remove a leading RUN of navigation labels, never a single one."""
+    cursor, matched = text, 0
+    while matched < 12:
+        probe = _LEADING_JUNK.sub("", cursor)
+        lowered = probe.lower()
+        for token in _NAV_RUN_TOKENS:
+            if lowered.startswith(token):
+                cursor, matched = probe[len(token):], matched + 1
+                break
+        else:
+            break
+    # Fewer than the minimum means this was prose, not a nav bar: leave the text untouched.
+    return cursor if matched >= _MIN_NAV_RUN else text
 
 
 def is_app_shell(page_html: str) -> bool:
