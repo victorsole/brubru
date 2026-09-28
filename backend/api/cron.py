@@ -951,17 +951,24 @@ _ECONOMY_BATCHES: list[list[str]] = [
     # Playwright-fed body for this window: cepol (one heavy Chromium body per
     # window so renders never overlap; see note below).
     ["dpp", "acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa",
-     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc", "hydrogen", "euratom", "chips", "sesar"],
+     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc", "hydrogen", "euratom", "chips", "sesar",
+     "interoperable"],
     # batch 1 (15:00 UTC) — Playwright-fed bodies for this window: europol, rail.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
      "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor", "edpb", "eda", "edctp3", "aviation", "cbe", "rail"],
     # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
-     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman", "eccc", "satcen", "eurohpc", "ihi", "f4e", "sns"],
+     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman", "eccc", "satcen", "eurohpc", "ihi", "f4e", "sns",
+     "eugovtech"],
 ]
-# Playwright note: cepol/europol/eeas (and the echa-topics + eurofound resources
-# already in the batches) render through headless Chromium inside the backend
-# container. They are spread one-per-window so at most one Chromium-heavy sync
+# Playwright note: cepol/europol/eeas, interoperable and eugovtech (and the
+# echa-topics + eurofound resources already in the batches) render through
+# headless Chromium inside the backend container. interoperable joins window 0
+# and eugovtech window 2, which leaves two Chromium bodies per window rather
+# than piling both into one. Both were in sync_economy's INGESTORS and in NO
+# batch, so they were manually syncable and never auto-refreshed: last fetched
+# 17 August 2026, six weeks stale, exactly the rail/sesar failure of June. The
+# audit that catches this now runs as a test, not as a line in a memory file. They are spread one-per-window so at most one Chromium-heavy sync
 # runs at 10:00 / 15:00 / 21:00 UTC. If the container OOMs on these, move the
 # offending body to a local/manual refresh (drop it from this list).
 
