@@ -30,7 +30,7 @@ from typing import List, Optional
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from services.analysis.pdf_text_extractor import get_pdf_text
+from services.analysis.pdf_text_extractor import extract_many, get_pdf_text
 
 logger = logging.getLogger(__name__)
 
@@ -269,9 +269,13 @@ async def generate_journey(db: Session, carriage) -> Optional[dict]:
 
     doc_hash = _doc_set_hash(docs)
 
-    # Extract text for each layer (cached per PDF).
+    # Extract text for each layer (cached per PDF). Every layer still missing is
+    # fetched by ONE browser when meetdocs is walled, and off the event loop: that
+    # fallback can take minutes and would otherwise stall every other request.
+    urls = [d.get("pdf_url") for d in docs if d.get("pdf_url")]
+    await asyncio.to_thread(extract_many, db, urls)
     for d in docs:
-        ext = get_pdf_text(db, d.get("pdf_url"))
+        ext = get_pdf_text(db, d.get("pdf_url"), fetch=False)
         d["_text"] = (ext or {}).get("text", "")
         d["_char_count"] = (ext or {}).get("char_count", 0)
         d["_pdf_truncated"] = bool((ext or {}).get("truncated"))

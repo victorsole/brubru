@@ -103,7 +103,8 @@ def test_generate_journey_logs_why_it_failed(db, monkeypatch, caplog):
     _seed(db, "ready")
     monkeypatch.setattr(svc, "resolve_doc_set", lambda _db, _ref: [
         {"key": "draft_report", "label": "Draft report", "pdf_url": "u"}])
-    monkeypatch.setattr(svc, "get_pdf_text", lambda _db, _u: {"text": "t", "char_count": 1})
+    monkeypatch.setattr(svc, "extract_many", lambda _db, _urls: {u: "cached" for u in _urls})
+    monkeypatch.setattr(svc, "get_pdf_text", lambda _db, _u, **_k: {"text": "t", "char_count": 1})
 
     async def _fail(*_a, **_k):
         return None, None, None, TimeoutError("provider timed out")

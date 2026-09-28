@@ -8,6 +8,7 @@ serves them comfortably. Text + summary are cached per immutable PDF URL in
 once and reused.
 """
 
+import asyncio
 import logging
 from typing import Optional
 
@@ -60,7 +61,8 @@ async def summarise(db: Session, pdf_url: str) -> Optional[dict]:
     if cached:
         return {**cached, "cached": True}
 
-    ext = get_pdf_text(db, pdf_url)
+    # Off the event loop: at a wall the fallback starts a browser.
+    ext = await asyncio.to_thread(get_pdf_text, db, pdf_url)
     body = ((ext or {}).get("text") or "").strip()
     if len(body) < 200:
         return None

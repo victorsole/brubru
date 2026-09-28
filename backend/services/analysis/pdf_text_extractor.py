@@ -139,11 +139,15 @@ def _fetch_pdf_bytes(pdf_url: str) -> Optional[bytes]:
     return fetch_pdf_bytes_many([pdf_url])[pdf_url][0]
 
 
-def get_pdf_text(db: Session, pdf_url: str) -> Optional[dict]:
+def get_pdf_text(db: Session, pdf_url: str, *, fetch: bool = True) -> Optional[dict]:
     """Extracted text for a meetdocs PDF, cached by URL.
 
     Returns ``{text, char_count, page_count, truncated}`` or None if the document
     could not be fetched/parsed. Writes through to ``emeeting_doc_text_cache``.
+    ``fetch=False`` reads the cache only.
+
+    This BLOCKS for as long as the walled fallback takes (a browser start plus the
+    download). An async caller must run it with ``asyncio.to_thread``.
     """
     if not pdf_url:
         return None
@@ -157,6 +161,9 @@ def get_pdf_text(db: Session, pdf_url: str) -> Optional[dict]:
             return dict(row)
     except Exception:
         db.rollback()
+
+    if not fetch:
+        return None
 
     # Fetch + extract.
     raw = _fetch_pdf_bytes(pdf_url)
