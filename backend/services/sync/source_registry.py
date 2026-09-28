@@ -66,10 +66,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("council_register_discovery", "Documents - Council register (by reference)", "warm",
                "scripts/discover_council_documents.py", ("--apply", "--max-seconds", "420"),
                timeout=600, stale_after_hours=14),
-    SourceSpec("council_documents", "Documents - Council", "warm",
-               "scripts/ingest_council_documents.py",
-               ("--apply", "--since-days", "14", "--window-days", "7", "--fetch-bodies"),
-               timeout=1800, stale_after_hours=48),
+    # ingest_council_documents.py is NOT scheduled. It reads the register's search and
+    # listing pages on www.consilium.europa.eu, which answer 403 to the Railway
+    # container: 13 of 13 container runs failed in the week to 28 Sep 2026 and the only
+    # success was a local one. A job that can only fail where it runs turns the health
+    # count into noise, and a failure that always fires tells you nothing when it fires.
+    # council_register_discovery above covers the same documents from inside the
+    # container, by reference against data.consilium.europa.eu, writing through the same
+    # upsert, so nothing is lost. The script stays for local backfills.
 
     # ---- EP texts pipeline (registered 27 Aug 2026) ----------------------
     # The tier runner executes THIS LIST IN ORDER, sequentially and fail-soft,

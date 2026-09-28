@@ -351,9 +351,38 @@ class BulkAmendmentSyncService:
                 f"{doceo_url} did not return a DOCX (first bytes {docx_bytes[:8]!r}, "
                 f"{len(docx_bytes)} bytes): a wall or an error page, not a document")
 
-        # Parse date
-        doc_date = None
+        # Parse date. Discovery builds stubs from identifiers alone and never sees a
+        # date, so every amendment stored this way arrived with document_date NULL:
+        # 5,678 of the 5,695 rows from the first working run. /parliament/amendments
+        # filters published_from/published_to on that column, so undated rows are
+        # invisible to every date query, and document_date is one of the five datapoints
+        # each item is supposed to carry. One detail call per document actually parsed
+        # (117 on that run, not 1,133) is what the real date costs.
         date_str = doc.get("date", "")
+        if not date_str:
+            try:
+                detail = await self.client.get_document_detail(
+                    ep_id, endpoint="committee-documents")
+                # Verified against the live endpoint: the field is "date"
+                # (AFCO-PR-630640 -> 2018-11-23). The others are tried in case a
+                # document type carries a different one. AM documents 404 here, since
+                # /committee-documents holds PR, PA, AD, AL and AG only, so they keep a
+                # NULL date rather than an invented one.
+                for key in ("date", "document_date", "date_document", "activity_date"):
+                    value = detail.get(key) if isinstance(detail, dict) else None
+                    if isinstance(value, list):
+                        value = value[0] if value else None
+                    if value:
+                        date_str = str(value)
+                        # _upsert_document_record re-derives the date from this same
+                        # dict, so the resolved value has to go back into it or the
+                        # document row is written undated while the amendments are not.
+                        doc["date"] = date_str
+                        break
+            except Exception as exc:  # noqa: BLE001
+                # A missing date is a gap to report, never a reason to drop the document.
+                logger.debug(f"[INFO] no detail date for {ep_id}: {type(exc).__name__}")
+        doc_date = None
         if date_str:
             for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%dT%H:%M:%S"):
                 try:
@@ -489,6 +518,13 @@ class BulkAmendmentSyncService:
                 "status": status,
                 "error_message": error_message,
                 "ep_identifier": ep_id,
+                # The date was absent from this clause, so a row created before the date
+                # was resolvable kept document_date NULL for ever, however many times it
+                # was re-synced: 1,145 of 1,365 document rows and 5,678 amendments stored
+                # today. COALESCE so a document that genuinely has no date upstream is
+                # never overwritten with NULL by a later run that could not read one.
+                "document_date": func.coalesce(
+                    doc_date, AmendmentDocument.document_date),
                 "scraped_at": datetime.now(),
             },
         )

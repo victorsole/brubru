@@ -609,6 +609,26 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
 
 
 
+def _reconnect_on_drop(db):
+    """Return a session that can execute, reopening it if the server dropped the old one.
+
+    A cheap round trip is the only way to find out: Supabase closes an idle connection
+    from its side, and the failure surfaces on the next statement, whichever that is.
+    """
+    from sqlalchemy.exc import OperationalError
+    try:
+        db.execute(text("SELECT 1"))
+        return db
+    except OperationalError:
+        print("  [db] connection dropped: reopening the session", flush=True)
+        try:
+            db.rollback()
+            db.close()
+        except Exception:  # noqa: BLE001
+            pass
+        return SessionLocal()
+
+
 def _commit(db):
     """Commit, reopening the session if the server has dropped it.
 
@@ -707,6 +727,13 @@ def main() -> int:
             chunk = targets[start:start + BATCH]
             with cf.ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
                 fetched = list(ex.map(lambda row: (row, *fetch(row.source_url, render=args.render)), chunk))
+            # The batch's fetches took minutes, and Supabase closes an idle connection
+            # from its side. The write itself meets that, not only the commit: the
+            # Council run died inside an UPDATE with "SSL connection has been closed
+            # unexpectedly" although _commit already knew how to reopen. Checked once
+            # per batch, not per row.
+            if args.apply:
+                db = _reconnect_on_drop(db)
             for r, body_txt, body_html, err in fetched:
                 i += 1
                 # extract_html() returns (None, None) for a page with no <main>/<article>
