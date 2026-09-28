@@ -63,3 +63,24 @@ def test_the_cursor_table_exists_and_is_granted():
     assert "ENABLE ROW LEVEL SECURITY" in migration
     assert "GRANT ALL ON public.job_cursors TO service_role" in migration, (
         "explicit grants are mandatory on new public.* tables; a replay breaks without them")
+
+
+def test_the_cursor_is_checkpointed_periodically_not_only_at_the_end():
+    """Saving only on the budget means a HARD stop loses everything since the last run.
+
+    Observed while the catch-up drain ran: it had reached page 23 while the stored cursor
+    still read 17, because the cursor was written only when the budget was hit. A machine
+    sleeping or an OOM at minute 49 of a 50-minute run would have rewound ~500 pages. That is
+    the same defect this fix exists to remove, one level down.
+    """
+    assert "CHECKPOINT_EVERY_PAGES" in _SOURCE
+    assert "% CHECKPOINT_EVERY_PAGES == 0" in _SOURCE, "no periodic checkpoint"
+    checkpoint = _SOURCE.split("% CHECKPOINT_EVERY_PAGES == 0")[1][:200]
+    assert "write_cursor" in checkpoint
+
+
+def test_the_checkpoint_saves_the_NEXT_page_not_the_one_just_read():
+    """Saving the page just finished would re-read it on every resume."""
+    checkpoint = _SOURCE.split("% CHECKPOINT_EVERY_PAGES == 0")[1][:200]
+    assert "write_cursor(db, page + 1" in checkpoint, (
+        "the cursor must point at the next page to read, or each resume repeats a page")

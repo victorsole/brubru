@@ -194,6 +194,11 @@ ON CONFLICT (document_reference) DO UPDATE SET
 
 
 CURSOR_KEY = "comitology_documents_page"
+# Write the cursor every N pages, not only when the budget is reached. Saving it solely at the
+# end means a hard stop (the machine sleeping, an OOM, a Ctrl-C) loses everything since the
+# last run: a 50-minute catch-up would rewind ~500 pages. That is the same defect this fix
+# exists to remove, one level down. 25 pages is ~2 minutes of work at the measured rate.
+CHECKPOINT_EVERY_PAGES = 25
 
 
 def read_cursor(db) -> int:
@@ -291,6 +296,8 @@ def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int =
         if not dry_run:
             db.commit()
             print(f"  [page {page:4}] upserted={counts['upserted']:,} of {total:,}", flush=True)
+            if page and page % CHECKPOINT_EVERY_PAGES == 0:
+                write_cursor(db, page + 1, f"checkpoint after page {page}")
 
         page += 1
         if dry_run and (limit and counts["upserted"] >= limit):
