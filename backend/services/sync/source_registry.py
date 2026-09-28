@@ -210,6 +210,13 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("transparency_meetings", "Lobby meetings (Transparency Register)", "warm",
                "scripts/ingest_transparency_meetings.py", ("--apply", "--limit", "200"),
                timeout=1800, stale_after_hours=48),
+    # Commission follow-up (SP) to EP adopted texts, from EP Open Data /external-documents.
+    # No --years: the script walks newest-first and the budget stops it, so a daily run
+    # covers the current year and reaches back only as far as it has time for. Bodies it
+    # already holds are not re-downloaded.
+    SourceSpec("ep_external_documents", "Commission follow-up to adopted texts", "warm",
+               "scripts/ingest_ep_external_documents.py", ("--apply", "--max-seconds", "420"),
+               timeout=600, stale_after_hours=48),
     # Links each Commission consultation to the legislative file it produced and
     # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
     SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",
