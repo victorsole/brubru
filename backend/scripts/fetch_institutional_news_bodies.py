@@ -222,6 +222,10 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
         return None, None, f"{why_paid_failed}; browser {type(exc).__name__}"
     if res.error or not res.html:
         return None, None, f"{why_paid_failed}; browser {res.error or 'empty page'}"
+    from_po = _from_publications_office(res.html)
+    if from_po:
+        return from_po, None, None
+
     text_, html_, reason = _best_extraction(res.html)
 
     # A rendered page is often still only a record: EDA's report pages render to ~1,400
@@ -298,6 +302,7 @@ def _celex_from_url(url: str) -> str | None:
 
 
 def fetch_cellar(celex: str, timeout: int = 90) -> tuple[str | None, str | None, str | None]:
+    """`celex` may also be a Publications Office cellar UUID; the resource path differs."""
     """The document itself, from the Publications Office, not the portal around it.
 
     EUR-Lex renders a page; Cellar serves the act. For CJEU judgment 62024TJ0239 the rendered
@@ -308,13 +313,19 @@ def fetch_cellar(celex: str, timeout: int = 90) -> tuple[str | None, str | None,
     Accept-Language is required (a work-level request without one is rejected), and the type
     must be text/html: these works hold no XHTML datastream.
     """
-    url = f"https://publications.europa.eu/resource/celex/{celex}"
+    kind = "cellar" if re.fullmatch(r"[0-9a-f-]{36}", celex or "") else "celex"
+    url = f"https://publications.europa.eu/resource/{kind}/{celex}"
     # Which manifestation a work holds varies by act, and asking for the wrong one is a flat
     # 404, not a redirect to what exists: CJEU judgment 62024TJ0239 serves text/html and has
     # no XHTML, ECB decision 32026D2039 serves application/xhtml+xml and has no HTML. Try
     # both before concluding the document is not there.
     last_reason = "cellar not attempted"
-    for accept in ("text/html", "application/xhtml+xml"):
+    # application/pdf last: JRC reports and other Publications Office works are PDF-ONLY in
+    # Cellar (404 for both HTML types, 200 and 3.4 MB for the PDF), and going to the portal
+    # page instead returns op.europa.eu portlet furniture -- "Web Content Display (Global) /
+    # For a better user experience ... / Add to my publications / Rate this publication" --
+    # with the abstract somewhere below it.
+    for accept in ("text/html", "application/xhtml+xml", "application/pdf"):
         try:
             request = urllib.request.Request(url, headers={
                 "User-Agent": UA, "Accept": accept, "Accept-Language": "eng"})
@@ -325,6 +336,12 @@ def fetch_cellar(celex: str, timeout: int = 90) -> tuple[str | None, str | None,
             continue
         except Exception as exc:  # noqa: BLE001
             return None, None, f"cellar {type(exc).__name__}"
+        if looks_like_pdf(raw):
+            body_txt = _pdf_text(raw)
+            if body_txt and len(body_txt) >= WHOLE_BODY_CHARS:
+                return body_txt, None, None
+            last_reason = f"cellar pdf gave {len(body_txt or '')} characters"
+            continue
         page = raw.decode("utf-8", "replace")
         body_txt = visible_text(page)
         if len(body_txt) >= WHOLE_BODY_CHARS:
@@ -362,6 +379,26 @@ _PDF_LINK = re.compile(r'href="([^"]+?\.pdf[^"]*)"', re.I)
 _PDF_DOWNLOAD = re.compile(r'href="([^"]*/document/download/[^"]+)"', re.I)
 
 
+_PO_PUBLICATION_UUID = re.compile(
+    r"/publication/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})", re.I)
+
+
+def _from_publications_office(html: str, timeout: int = 90) -> str | None:
+    """The document behind a Publications Office record page, via Cellar.
+
+    Called BEFORE judging the page text, not after. The record page renders ~4,600 characters
+    of portlet furniture ("Web Content Display (Global) / Add to my publications / Rate this
+    publication"), which sails past any length test, so a "page looks thin" condition never
+    fires and the document is never fetched. A PO record is never the document, however long
+    its chrome is.
+    """
+    found = _PO_PUBLICATION_UUID.search(html or "")
+    if not found:
+        return None
+    text_, _html, _reason = fetch_cellar(found.group(1).lower(), timeout=timeout)
+    return text_
+
+
 def _follow_to_pdf(html: str, page_url: str, timeout: int = 60) -> str | None:
     """The document a record page links to, when the page itself is only metadata.
 
@@ -373,6 +410,17 @@ def _follow_to_pdf(html: str, page_url: str, timeout: int = 60) -> str | None:
     Candidates are fetched and the LONGEST text wins, which also settles annex-versus-main
     without pattern-matching filenames: a record often links both, in either order.
     """
+    # A Publications Office record carries the work's cellar UUID in its own links. Cellar
+    # serves the document; the portal page serves portlet furniture with the abstract buried
+    # in it. Go to Cellar first: 302,176 characters of the JRC ranking-method report against
+    # 2,877 of "Web Content Display (Global) / Add to my publications / Rate this publication".
+    uuid = re.search(r"/publication/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})",
+                     html or "", re.I)
+    if uuid:
+        from_cellar, _html, _reason = fetch_cellar(uuid.group(1).lower(), timeout=max(timeout, 90))
+        if from_cellar:
+            return from_cellar
+
     candidates: list[str] = []
     for pattern in (_PDF_LINK, _PDF_DOWNLOAD):
         for href in pattern.findall(html or ""):
@@ -465,7 +513,19 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
     # "no text in the page" and "the host is blocking us" need different responses, and the
     # tally is how a run reports which it met.
     if looks_like_challenge(visible_text(html)):
+        # A wall on the DIRECT route is a reason to try the other routes, not to stop. The
+        # JRC repository rejects plain HTTP with 244 bytes and serves the browser 3,333
+        # characters; returning here made "blocked" final and lost 2 of 10 reports.
+        if render:
+            text_, html_, reason = fetch_via_scrapedo(url, render=True)
+            if text_:
+                return text_, html_, None
+            return None, None, f"bot challenge; {reason}"
         return None, None, "bot challenge, not the document: back off and retry later"
+
+    from_po = _from_publications_office(html)
+    if from_po:
+        return from_po, None, None
 
     body_txt, body_html = extract_html(html)
 

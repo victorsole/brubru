@@ -182,4 +182,8 @@ def test_cellar_reports_which_types_it_tried_when_nothing_is_there(monkeypatch):
                         lambda req, timeout=None: (_ for _ in ()).throw(_http_error(404)))
     body_txt, _, reason = m.fetch_cellar("39999X9999")
     assert body_txt is None
-    assert reason and "404" in reason and "xhtml" in reason
+    # The reason names the LAST type tried, and the list grew: JRC reports and other
+    # Publications Office works are PDF-only in Cellar, so application/pdf was added after
+    # the two HTML types. Assert it reports a type it actually asked for, not one spelling.
+    assert reason and "404" in reason
+    assert any(t in reason for t in ("text/html", "xhtml", "pdf")), reason

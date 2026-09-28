@@ -40,6 +40,9 @@ _CHROME_OPENERS = (
     "accept all cookies",
     "filter by keywords",
     "an official website of the european union",
+    # op.europa.eu publication-detail portlets (dpp/jrc_report)
+    "web content display",
+    "for a better user experience",
 )
 
 
