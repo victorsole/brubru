@@ -137,8 +137,15 @@ def extract_docx_text(docx_bytes: bytes) -> Optional[str]:
                 xml = f.read().decode("utf-8", errors="replace")
     except Exception:
         return None
-    # Strip XML tags, preserving paragraph breaks
-    text = re.sub(r"</w:p>", "\n", xml)
+    # Strip XML tags, preserving the separators. A paragraph end is a newline, and so
+    # is <w:br/> AND <w:cr/> (EP answers use the latter): without them the text either
+    # side of a line break fuses into one word
+    # ("Executive Vice-President Fittoon behalf of the European Commission"), which is
+    # long enough to pass any length check while being wrong.
+    text = re.sub(r"<w:(br|cr)\b[^>]*/?>", "\n", xml)
+    text = re.sub(r"<w:tab\b[^>]*/?>", " ", text)
+    text = re.sub(r"</w:(p|tr)>", "\n", text)
+    text = re.sub(r"</w:tc>", " ", text)
     text = re.sub(r"<[^>]+>", "", text)
     # Decode entities
     text = (text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
@@ -166,6 +173,10 @@ def main():
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--year", type=int)
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
+    ap.add_argument("--max-seconds", type=int, default=0,
+                    help="Stop starting new fetches after this many seconds (0 = no budget). "
+                         "A scheduled run must always record a verdict, so it stops on the "
+                         "budget and reports what is left rather than being killed mid-flight.")
     args = ap.parse_args()
 
     db = get_env("DATABASE_URL")
@@ -175,14 +186,24 @@ def main():
 
     conn = psycopg2.connect(db)
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    where = "(text_answer IS NULL OR LENGTH(text_answer) < 50) AND question_reference IS NOT NULL"
+    # Only questions EP has actually answered. Without this the job spent one request
+    # per unanswered question (3,031 of them) to be told "no answer published yet".
+    # Missing answers, plus answers the old extractor damaged. Until 28 Sep 2026 it
+    # dropped <w:cr/>, so text either side of a line break fused into one word
+    # ("Executive Vice-President Fittoon behalf of the European Commission") in 2,973
+    # of 4,880 stored answers: long enough to pass any length check, wrong to read and
+    # wrong to search. A letter immediately before "on behalf of" is never valid English,
+    # so the pattern is safe, and a row stops matching once it has been re-fetched.
+    where = ("(text_answer IS NULL OR LENGTH(text_answer) < 50 "
+             " OR text_answer ~ '[a-zA-Z]on behalf of') "
+             "AND question_reference IS NOT NULL AND answered_date IS NOT NULL")
     if args.year:
         where += f" AND question_reference LIKE '%/{args.year}'"
     sql = f"""
         SELECT id, question_reference
         FROM parliamentary_questions
         WHERE {where}
-        ORDER BY question_reference DESC
+        ORDER BY answered_date DESC, question_reference DESC
     """
     if args.limit:
         sql += f" LIMIT {args.limit}"
@@ -190,8 +211,19 @@ def main():
     rows = cur.fetchall()
     print(f"[INFO] {len(rows)} candidate rows (apply={args.apply}, throttle={args.throttle}s)")
 
+    # How many are due in total, so a bounded run can say what it did not reach.
+    cur.execute(f"SELECT count(*) AS n FROM parliamentary_questions WHERE {where}")
+    due = cur.fetchone()["n"]
+
+    started = time.time()
     no_payload = no_answer_link = ok = errors = 0
+    stopped_early = 0
     for i, row in enumerate(rows, 1):
+        if args.max_seconds and time.time() - started > args.max_seconds:
+            stopped_early = len(rows) - i + 1
+            print(f"[INFO] budget of {args.max_seconds}s reached; "
+                  f"{stopped_early} of this batch not started")
+            break
         time.sleep(args.throttle if i > 1 else 0)
         qref = row["question_reference"]
         ep_id = question_ref_to_ep_id(qref)
@@ -280,10 +312,30 @@ def main():
 
     print()
     print("=" * 70)
-    print(f"[DONE] candidates={len(rows)}  filled={ok}  no_payload={no_payload}  no_answer_link={no_answer_link}  errors={errors}{' (DRY)' if not args.apply else ''}")
+    print(f"[DONE] candidates={len(rows)}  filled={ok}  no_payload={no_payload}  "
+          f"no_answer_link={no_answer_link}  errors={errors}{' (DRY)' if not args.apply else ''}")
+
+    # THREE states, never two. "no answer published yet" is a real answer from the
+    # source and must not read as breakage; a source that returns nothing at all must
+    # not read as success. This job filled nothing between 7 May and 28 Sep 2026 while
+    # being run by hand and scheduled nowhere, and no signal said so.
+    attempted = len(rows)
+    reached = ok + no_answer_link
+    if attempted and reached == 0 and (no_payload + errors) > 0:
+        print(f"[ERROR] {attempted} answered question(s) attempted and not one EP payload "
+              f"was read ({no_payload} empty, {errors} error(s)): the source is down or walled")
+        cur.close()
+        conn.close()
+        return 1
+
+    left = max(0, due - ok) if args.apply else 0
+    if left:
+        print(f"[SYNC_STATUS] degraded: {left} answered question(s) still without text, "
+              f"resumes next run")
     cur.close()
     conn.close()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

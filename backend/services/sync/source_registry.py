@@ -170,10 +170,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("lobby_meetings",    "Lobby Meetings",            "warm", "scripts/sync_mep_lobby_meetings.py",    ("--procedures", "20", "--profiles", "10"), timeout=1200, stale_after_hours=14),
     # Budgets keep the warm tier near its usual length: until 25 Sep 2026 this
     # job took seconds because it stored nothing (a walled HTML page); on EP
-    # Open Data it paces ~0.5 questions/s. The text job fills question and
-    # answer text for what the first one stored, and answers that arrive later.
+    # Open Data it paces ~0.5 questions/s. Then one job per field: the text job
+    # fills text_question, the answers job fills text_answer. They were one job
+    # until 28 Sep 2026, and that job's answer resolver was a stub returning None,
+    # so text_answer went unfilled from 7 May while every run reported success and
+    # 1,563 answered rows were re-read every night to fill nothing.
     SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      ("--max-seconds", "420"), timeout=600,  stale_after_hours=14),
-    SourceSpec("parl_question_text","Parliamentary Questions - text and answers","warm","scripts/backfill_parl_question_text.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
+    SourceSpec("parl_question_text","Parliamentary Questions - question text","warm","scripts/backfill_parl_question_text.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
+    SourceSpec("parl_question_answers","Parliamentary Questions - answer text","warm","scripts/backfill_parl_question_answers.py", ("--apply", "--limit", "300", "--max-seconds", "420"), timeout=600, stale_after_hours=14),
     # Links each Commission consultation to the legislative file it produced and
     # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
     SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",
@@ -183,6 +187,13 @@ MEUB_SOURCES: List[SourceSpec] = [
     # (early UTC: quiet for chat, free quotas fresh), FREE lanes only and one call at
     # a time, because those lanes are the chat chain's own and must not be crowded
     # out; `degraded` while a backlog remains. Paid catch-ups are run by hand.
+    # How many responses each Commission consultation drew (28 Sep 2026). The old
+    # count read the initiative id as a publication id and stored some OTHER
+    # publication's total (EU Inc.: 61 stored, 2,518 real); 24 of 4,124 had any
+    # count. Open and recently closed first, then a job_cursors drain.
+    SourceSpec("consultation_counts", "Consultations - response counts", "warm",
+               "scripts/backfill_consultations_feedback_count.py", ("--apply", "--max-seconds", "300"),
+               timeout=480, stale_after_hours=14),
     SourceSpec("consultation_stances", "Consultations - respondent stances", "daily",
                "scripts/classify_pending_stances.py",
                ("--apply", "--free-only", "--concurrency", "1", "--limit", "400", "--max-seconds", "900"),

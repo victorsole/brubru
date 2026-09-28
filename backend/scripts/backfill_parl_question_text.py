@@ -15,6 +15,7 @@ Pipeline per row:
   5. UPDATE the row.
 
 Resumable: skips rows where text_question is already populated.
+Owns text_question only; backfill_parl_question_answers.py owns text_answer.
 
 Throttle: 0.5s between EP API calls (~120/min). EP Open Data has been
 generous in practice; tighten if 429s appear.
@@ -171,19 +172,6 @@ def extract_answer_meta(json_ld: dict) -> Tuple[Optional[str], Optional[str], Op
     return work_id, answered_date, commissioner
 
 
-def fetch_answer_docx_url(answer_work_id: str) -> Optional[str]:
-    """Resolve the EP /works/{id} JSON-LD and pick the docx manifestation.
-
-    The /api/v2/works/ endpoint returns a bare Work record without
-    expressions/manifestations — answer text isn't directly fetchable from
-    the structured EP API today. Returning None signals the caller to leave
-    text_answer NULL; question text is the bigger win and ships independently.
-    """
-    # Future work: probe data.europarl.europa.eu for the canonical answer
-    # docx URL once a stable pattern is found. For now, return None.
-    return None
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=5, help="Max rows to process (0=unbounded)")
@@ -202,11 +190,13 @@ def main():
 
     conn = psycopg2.connect(db)
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    # Also rows the ingest has since seen ANSWERED but whose answer text is
-    # missing: answers arrive weeks after the question, and this job used to
-    # look only at rows with no question text, so a later answer never landed.
-    where = ("source_url IS NOT NULL AND (text_question IS NULL "
-             "OR (answered_date IS NOT NULL AND text_answer IS NULL))")
+    # text_question is this job's field. It used to select answered rows missing
+    # text_answer as well, which cost a fetch each and filled nothing: the answer
+    # resolver here was a stub returning None, so 1,563 answered rows were re-read
+    # every run and reported as processed while text_answer stayed NULL from 7 May
+    # to 28 Sep 2026. backfill_parl_question_answers.py owns text_answer and knows
+    # the real EP manifestation path; it is scheduled alongside this one.
+    where = "source_url IS NOT NULL AND text_question IS NULL"
     if args.year:
         where += f" AND question_reference LIKE '%/{args.year}'"
     sql = (f"SELECT id, question_reference, source_url, answer_url FROM parliamentary_questions "
@@ -269,19 +259,12 @@ def main():
         if q_text:
             n_q_filled += 1
 
-        # Answer
-        a_work_id, answered_date, commissioner = extract_answer_meta(payload)
+        # The answer's date and commissioner come free with this payload; the answer
+        # TEXT belongs to backfill_parl_question_answers.py, which resolves the DOCX
+        # manifestation. Nothing here writes text_answer.
+        _, answered_date, commissioner = extract_answer_meta(payload)
         a_text = ""
         a_url = None
-        if a_work_id:
-            time.sleep(args.throttle)
-            a_url = fetch_answer_docx_url(a_work_id)
-            if a_url:
-                a_blob = http_get(a_url)
-                if a_blob:
-                    a_text = extract_docx_text(a_blob)
-            if a_text:
-                n_a_filled += 1
 
         consecutive_failures = 0
         print(f"  {ref_db}: q={len(q_text)}c a={len(a_text)}c (commish={commissioner})")
