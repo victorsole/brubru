@@ -43,6 +43,10 @@ class AmendmentDocument(Base):
     error_message = Column(Text, nullable=True)
     ep_identifier = Column(String(100), nullable=True, unique=True)       # EP Open Data identifier (e.g. "LIBE-AM-779775")
     scraped_at = Column(DateTime(timezone=True), server_default=func.now())
+    # The column existed in the table but not on the model, so ?updated_from= on
+    # /parliament/ep-documents raised AttributeError and answered 500 (28 Sep 2026).
+    # It is the change signal the endpoint filters on, guarded by migration 249.
+    updated_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
         Index('ix_amendment_documents_procedure', 'procedure_reference'),
