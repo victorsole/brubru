@@ -541,7 +541,14 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             return None, None, f"HTTP {exc.code}; {browser_reason}"
         return None, None, f"HTTP {exc.code}"
     except Exception as exc:  # noqa: BLE001
-        return None, None, f"{type(exc).__name__}"
+        # A host that DROPS the connection is walling us just as surely as one that
+        # answers 403, but it arrives as an exception rather than a status, so it never
+        # reached the escalation above: all 37 EU-OSHA rows failed with
+        # RemoteDisconnected while a browser reads osha.europa.eu perfectly well.
+        text_, html_, browser_reason = _browser_page(url, type(exc).__name__)
+        if text_:
+            return text_, html_, None
+        return None, None, f"{type(exc).__name__}; {browser_reason}"
     # Name the wall from the RAW page, before extraction. The shared extractor now refuses a
     # challenge by returning nothing, which is right for storage and useless for diagnosis:
     # "no text in the page" and "the host is blocking us" need different responses, and the
