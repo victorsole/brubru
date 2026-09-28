@@ -55,7 +55,10 @@ def visible_text(fragment: str) -> str:
 # Leading punctuation a close button or icon leaves behind. EUR-Lex opens its pages with
 # "\u00d7 Skip to main content", and `startswith` missed it by exactly one character, so
 # 3,178 characters of portal navigation read as an article.
-_LEADING_JUNK = re.compile(r"^[\s\u00d7\u2715\u2716xX*\u2022\-\u2013\u2014|>\]\[]+")
+# A leading "." is how a rendered cookie banner arrives (". Visit our cookies
+# policy page..."), and it blocked every furniture token from matching. No
+# article opens with a bare period or comma, so skipping them is safe.
+_LEADING_JUNK = re.compile(r"^[\s\u00d7\u2715\u2716xX*\u2022\-\u2013\u2014|>\]\[.,]+")
 
 
 def looks_like_chrome(text: str) -> bool:
@@ -139,6 +142,19 @@ _NAV_RUN_TOKENS = (
     "news and events", "what we do", "who we are", "publications & data",
     "careers", "procurement", "portals",          # EDA
     "home", "about us", "contact", "search", "menu",
+    # Europa cookie banner, which the rendered page carries before anything else.
+    "visit our cookies policy page or click the link in any footer for more information"
+    " and to change your preferences.",
+    "accept all cookies", "accept only essential cookies", "we use cookies",
+    # EU Funding & Tenders Portal, whose Angular shell renders its whole left nav ahead
+    # of the article. All multi-word but for the two that cannot begin a sentence here;
+    # a run of two is still required, so "Funding for X" is never truncated.
+    "eu funding & tenders portal", "sign in", "calls for proposals",
+    "participant register", "projects & results", "eu funded projects",
+    "results & innovation support", "programme dashboards", "news & events",
+    "work as an expert", "guidance & documents", "guidance & manuals",
+    "reference documents", "how to participate", "faqs", "helpdesk & support",
+    "sme self-assessment tool", "videos", "sedia.global.news",
 )
 _MIN_NAV_RUN = 2
 

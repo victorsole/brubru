@@ -56,7 +56,31 @@ INSTITUTIONAL = ("europa.eu", "europarl.europa.eu", "consilium.europa.eu", "ecb.
                  # "About | Epthinktank | European Parliament" and describes EPRS as the
                  # Parliament's research service. Institutional in substance, whatever
                  # the top-level domain says.
-                 "epthinktank.eu")
+                 "epthinktank.eu",
+    # 166 EIB press items sat at title+summary only because the host was not listed.
+    "eib.org")
+
+
+def _cut_to_headline(body: str, title: str | None, window: int = 4000,
+                     keep_at_least: int = 200) -> str:
+    """Drop the page furniture that precedes the article's own headline.
+
+    Looks only at the head of the text, takes the LAST occurrence there (a breadcrumb
+    and the heading often both carry the title), and keeps the cut only when enough
+    article survives it.
+    """
+    if not body or not title:
+        return body
+    needle = " ".join(title.split())[:70].strip().lower()
+    if len(needle) < 15:
+        return body
+    head = " ".join(body.split()).lower()
+    hay = body.lower()
+    idx = hay.rfind(needle, 0, window)
+    if idx <= 0:
+        return body
+    cut = body[idx:].strip()
+    return cut if len(cut) >= keep_at_least else body
 
 
 def is_institutional(url: str) -> bool:
@@ -505,6 +529,16 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             if reason and "did not render" in reason:
                 return fetch_via_scrapedo(url, render=True)
             return None, None, f"HTTP {exc.code}; scrapedo: {reason}"
+        if exc.code in (403, 429, 503):
+            # The paid route was not asked for, but a wall still is not an absence of
+            # text: a real browser from this same address clears consilium.europa.eu,
+            # which refuses plain HTTP with 403 (152 Council rows were filed as having
+            # no body). Free, so it is tried before any credit is spent, and Scrape.do
+            # stays the answer when the block follows the address rather than the client.
+            text_, html_, browser_reason = _browser_page(url, f"HTTP {exc.code}")
+            if text_:
+                return text_, html_, None
+            return None, None, f"HTTP {exc.code}; {browser_reason}"
         return None, None, f"HTTP {exc.code}"
     except Exception as exc:  # noqa: BLE001
         return None, None, f"{type(exc).__name__}"
@@ -554,7 +588,16 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             # The page carried no prose of its own. On Europa that usually means an Angular
             # shell, so ask for it rendered rather than recording "no text available".
             return fetch_via_scrapedo(url, render=True)
-        return None, None, f"rejected:{reason or 'no text in the page'}"
+        # Still an Angular shell, and --render was not asked for. The LOCAL browser renders
+        # it for nothing, so "no text in the page" was never the end of the ladder: it only
+        # meant the cheapest route failed. All 788 Funding & Tenders Portal rows sat at
+        # composed:title+summary because of this, and the portal renders ~1,800 characters
+        # of article once JavaScript runs. Scrape.do is not the answer here: its free tier
+        # is 1,000 requests a MONTH, which one backfill of this size would exhaust.
+        text_, html_, browser_reason = _browser_page(url, "no prose in the direct fetch")
+        if text_:
+            return text_, html_, None
+        return None, None, f"rejected:{reason or 'no text in the page'}; {browser_reason}"
     return body_txt, body_html, None
 
 
@@ -592,6 +635,12 @@ def main() -> int:
                     help="economy_items.item_type; repeatable. Default: news.")
     ap.add_argument("--limit", type=int, default=500)
     ap.add_argument("--throttle", type=float, default=1.0)
+    ap.add_argument("--workers", type=int, default=6,
+                    help="Parallel fetches. Lower it for a host that answers a polite "
+                         "single stream but challenges a burst: consilium.europa.eu "
+                         "served one browser fetch fine and bot-challenged 28 of 40 at "
+                         "six workers (28 Sep 2026). Concurrency is what it objects to, "
+                         "not us, so the answer is to slow down, never to solve it.")
     ap.add_argument("--render", action="store_true",
                     help="Fall back to a rendered fetch (Scrape.do) when a page carries no prose. "
                          "Costs credits, so it is opt-in.")
@@ -649,7 +698,7 @@ def main() -> int:
         i = 0
         for start in range(0, len(targets), BATCH):
             chunk = targets[start:start + BATCH]
-            with cf.ThreadPoolExecutor(max_workers=6) as ex:
+            with cf.ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
                 fetched = list(ex.map(lambda row: (row, *fetch(row.source_url, render=args.render)), chunk))
             for r, body_txt, body_html, err in fetched:
                 i += 1
@@ -666,6 +715,17 @@ def main() -> int:
                     if failed <= 5:
                         print(f"  [{i:5}] {why:22} {r.title[:50]}", flush=True)
                     continue
+                # An article starts at its own headline. A rendered SPA hands back the
+                # whole portal before the piece: all 788 Funding & Tenders rows came out
+                # as 2,300 characters that opened with a cookie banner and the left nav,
+                # which passes any length check while being furniture. Chasing each
+                # portal's nav labels does not generalise and is dangerous, because the
+                # match is a prefix test ("en" would eat "Energy..."). The row's own
+                # title is the reliable marker, so anything before its last occurrence
+                # near the top is dropped. Only applied when that leaves a real body,
+                # so a page that merely repeats its title is never emptied.
+                body_txt = _cut_to_headline(body_txt, r.title)
+
                 # NUL and lone surrogates: PostgreSQL rejects the first outright and the
                 # second cannot be encoded to UTF-8 at all. Both have killed a run.
                 def _clean(v):
