@@ -369,6 +369,20 @@ def check_actionable_followup(response: str, _ga: dict) -> CriterionResult:
         r"vous pouvez (approfondir|explorer|voir|retrouver)|pouvez suivre",
         r"puoi (approfondire|monitorare|tracciare|esplorare|vedere)|potete (approfondire|monitorare|tracciare)",
         r"u kunt (dit|de|deze|het) |je kunt (dit|de|deze|het) ",
+        # Offers of help and imperatives, five languages (28 Sep 2026: the lists
+        # held the "would you like" shape only in English).
+        r"t'interessa|us interessa|vols que|voleu que|et puc ajudar|us puc ajudar",
+        r"¿quieres que|¿desea|te interesa|le interesa|puedo ayudar",
+        r"je peux vous aider|vous pouvez ainsi|suivez l|ajoutez le|consultez l",
+        r"ti interessa|vi interessa|desideri|posso aiutar",
+        r"wil je dat|wilt u dat|kan ik (je|u) helpen",
+        # "Next step" headings and possibility phrasing (28 Sep 2026, four answers
+        # with a real next step scored "none": "Pas seguent a Brubru: Podeu
+        # aprofundir...", "Passaggio successivo consigliato: puoi visualizzare...",
+        # "E possibile monitorare...", "Wat u nu kunt doen: Bekijk...").
+        r"pas següent|passaggio successivo|prochaine étape|siguiente paso|volgende stap|wat u nu kunt doen",
+        r"podeu aprofundir|pots aprofundir|puoi visualizzare|è possibile (monitorare|seguire|consultare)|"
+        r"es posible (seguir|consultar)|és possible (seguir|consultar)|il est possible de (suivre|consulter)|bekijk (en beheer )?de",
     ]
     for pattern in followup_signals:
         if re.search(pattern, response, re.IGNORECASE):
@@ -378,6 +392,13 @@ def check_actionable_followup(response: str, _ga: dict) -> CriterionResult:
     sentences = re.split(r"[.!?]\s+", response.strip())
     if sentences and sentences[-1].strip().endswith("?"):
         return CriterionResult("actionable_followup", True, "Ends with question")
+    # A question addressed to the user in the closing paragraph is a follow-up even
+    # when a feature pointer follows it (28 Sep 2026, instrument error: the Catalan
+    # "T'interessa que t'ajudi a redactar un comentari...? Pots gestionar-ho des de
+    # EU Public Consultations." failed because the question was not the last sentence).
+    tail = response.strip().split("\n\n")[-1]
+    if "?" in tail:
+        return CriterionResult("actionable_followup", True, "Question in closing paragraph")
 
     return CriterionResult("actionable_followup", False, "No follow-up or next step offered")
 
@@ -419,12 +440,49 @@ FEATURE_PATTERNS = {
 }
 
 
+def _localised_feature_labels() -> list:
+    """Every canonical MEUB sub-tab label in all six languages, read from the ONE
+    owner of those names (services/ai_service.py), never copied here.
+
+    Added 28 Sep 2026 (instrument error): the patterns above are English, so a
+    French answer pointing to "l'onglet Mes dossiers suivis (Mon EU Bubble)" or a
+    Catalan one to "la seccio *Votes* del vostre My EU Bubble" scored "no canonical
+    feature named". Chat is REQUIRED to use the translated labels
+    (MEUB_SUBTAB_LOCALISED), so the scorer must read them too.
+    """
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from services.ai_service import MEUB_SUBTABS, MEUB_SUBTAB_LOCALISED
+        return sorted(set(MEUB_SUBTABS) | set(MEUB_SUBTAB_LOCALISED), key=len, reverse=True)
+    except Exception:  # noqa: BLE001  the English patterns still work without it
+        return []
+
+
+_LOCALISED_LABELS = None
+_BUBBLE_RE = re.compile(r"\b(?:My|Mi|Mon|Mio|Mijn|El meu|La meva)?\s*EU\s+Bubble\b", re.IGNORECASE)
+
+
 def detect_features_named(response: str) -> list:
     """Return the list of canonical features explicitly named in the response."""
+    global _LOCALISED_LABELS
     found = []
     for feature, pattern in FEATURE_PATTERNS.items():
         if re.search(pattern, response, re.IGNORECASE):
             found.append(feature)
+    if _LOCALISED_LABELS is None:
+        _LOCALISED_LABELS = _localised_feature_labels()
+    for label in _LOCALISED_LABELS:
+        m = re.search(r"(?<!\w)" + re.escape(label) + r"(?!\w)", response, re.IGNORECASE)
+        if not m:
+            continue
+        # A one-word label ("Votes", "Comparador", "Amendments") is also an ordinary
+        # word, so it counts only near "EU Bubble"; a multi-word label counts alone.
+        if " " not in label.strip():
+            window = response[max(0, m.start() - 120): m.end() + 120]
+            if not _BUBBLE_RE.search(window):
+                continue
+        if label not in found:
+            found.append(label)
     return found
 
 

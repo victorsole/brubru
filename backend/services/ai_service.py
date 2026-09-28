@@ -1016,6 +1016,60 @@ _DEEP_DIVE_LABEL = {
 }
 
 
+# Closing next step, six languages (28 Sep 2026). Tab labels are the ones the UI
+# renders (MEUB_SUBTAB_LOCALISED), so _correct_invented_features leaves them alone.
+_NEXT_STEP_TAB = {
+    "track":   {"EN": "My Tracked Files", "ES": "Mis expedientes en seguimiento",
+                "CA": "Els meus expedients en seguiment", "FR": "Mes dossiers suivis",
+                "IT": "I miei fascicoli monitorati", "NL": "Mijn gevolgde dossiers"},
+    "consult": {"EN": "EU Public Consultations", "ES": "Consultas Públicas de la UE",
+                "CA": "Consultes Públiques de la UE", "FR": "Consultations Publiques de l'UE",
+                "IT": "Consultazioni Pubbliche dell'UE", "NL": "EU Openbare Raadplegingen"},
+    "draft":   {"EN": "My Documents", "ES": "Mis documentos", "CA": "Els meus documents",
+                "FR": "Mes documents", "IT": "I miei documenti", "NL": "Mijn documenten"},
+}
+_NEXT_STEP_POINTER = {
+    "EN": "Next step: follow this in My EU Bubble > {tab}.",
+    "ES": "Siguiente paso: sígalo en My EU Bubble > {tab}.",
+    "CA": "Pas següent: seguiu-ho a My EU Bubble > {tab}.",
+    "FR": "Prochaine étape : suivez-le dans My EU Bubble > {tab}.",
+    "IT": "Prossimo passo: seguilo in My EU Bubble > {tab}.",
+    "NL": "Volgende stap: volg dit in My EU Bubble > {tab}.",
+}
+_NEXT_STEP_POINTER_DRAFT = {
+    "EN": "Next step: save and refine this draft in My EU Bubble > {tab}.",
+    "ES": "Siguiente paso: guarde y mejore este borrador en My EU Bubble > {tab}.",
+    "CA": "Pas següent: deseu i milloreu aquest esborrany a My EU Bubble > {tab}.",
+    "FR": "Prochaine étape : enregistrez et affinez ce projet dans My EU Bubble > {tab}.",
+    "IT": "Prossimo passo: salva e perfeziona questa bozza in My EU Bubble > {tab}.",
+    "NL": "Volgende stap: bewaar en verfijn dit concept in My EU Bubble > {tab}.",
+}
+_NEXT_STEP_QUESTION = {
+    "EN": "Would you like me to go deeper on any point?",
+    "ES": "¿Quiere que profundice en algún punto?",
+    "CA": "Voleu que aprofundeixi en algun punt?",
+    "FR": "Souhaitez-vous que j'approfondisse un point ?",
+    "IT": "Vuoi che approfondisca qualche punto?",
+    "NL": "Wilt u dat ik dieper op een punt inga?",
+}
+_DRAFT_INTENT_RE = re.compile(
+    r"\b(?:draft|write|redacta|redacte|escriu|escribe|r[ée]dig\w*|redigi|scrivi|stel\s.*\sop|schrijf)\b",
+    re.IGNORECASE)
+_CONSULT_INTENT_RE = re.compile(
+    r"consult|raadpleg|comment|comentar|commenter|commentare|reageren|deadline|until when|"
+    r"hasta cu[aá]ndo|fins quan|jusqu'?[àa] quand|fino a quando|tot wanneer",
+    re.IGNORECASE)
+_OFFER_RE = re.compile(
+    r"would you like|shall I|let me know|I can (?:also |help|draft|prepare)|if you (?:would|'d) like|"
+    r"te gustar[ií]a|le gustar[ií]a|quiere que|quieres que|puedo ayudar|"
+    r"t'agradaria|us agradaria|voleu que|vols que|t'interessa|us interessa|puc ajudar|"
+    r"souhaitez|voulez-vous|je peux|n'h[ée]sitez|"
+    r"vuoi che|desideri|posso aiutar|ti interessa|fammi sapere|"
+    r"wilt u|wil je|kan ik (?:je|u) helpen|laat (?:het )?(?:me|mij) weten",
+    re.IGNORECASE)
+_BUBBLE_NEAR_RE = re.compile(r"EU\s+Bubble|burbuja|bombolla|bulle|bolla", re.IGNORECASE)
+
+
 def _detect_query_language(text: str) -> str:
     """
     Cheap bag-of-words language detector. Returns two-letter upper-case code.
@@ -1520,6 +1574,7 @@ class AIService:
         # slips (audit defect D7, 28 Jul 2026)
         assistant_message = self._fold_prose_dashes(assistant_message)
         assistant_message = self._apply_catalan_corrections(assistant_message, user_message)
+        assistant_message = self._ensure_next_step(assistant_message, user_message or "")
 
         # Ensure a guide-flagged Brubru deep-dive/explainer URL is surfaced
         assistant_message = self._append_deep_dive_link(
@@ -1973,6 +2028,7 @@ class AIService:
         message = self._fold_prose_dashes(message)
         message = self._apply_catalan_corrections(message, user_query or "")
         message = self._correct_invented_features(message)
+        message = self._ensure_next_step(message, user_query or "")
         message = self._append_deep_dive_link(message, context_str, user_query or "")
 
         if context_data is not None and getattr(
@@ -2525,6 +2581,70 @@ class AIService:
         logger.error("policy-nav: no provider chain configured")
         yield ("I could not map that to a policy area just now. "
                "Please try again in a moment.")
+
+    @staticmethod
+    def _names_a_feature(message: str) -> bool:
+        """Whether the answer points to a Brubru feature by a canonical name.
+
+        Multi-word labels count alone; a one-word label ("Votes", "News",
+        "Comparador") is also an ordinary word, so it counts only near "EU Bubble".
+        """
+        for label in ("Amendator", "EU Law Comply", "Tenderator"):
+            if label in message:
+                return True
+        low = message.lower()
+        for label in set(MEUB_SUBTABS) | set(MEUB_SUBTAB_LOCALISED):
+            i = low.find(label.lower())
+            if i < 0:
+                continue
+            if " " in label.strip():
+                return True
+            if _BUBBLE_NEAR_RE.search(message[max(0, i - 120): i + len(label) + 120]):
+                return True
+        return False
+
+    def _ensure_next_step(self, message: str, query: str = "") -> str:
+        """Close every substantive answer with a Brubru feature and a follow-up.
+
+        The system prompt asks for both, and on the 28 Sep 2026 re-run of the
+        120-question baseline 7 answers still had neither a canonical feature nor
+        a question back to the user (mostly non-English: the AI Act in Italian,
+        the Alphabet DMA fine in Spanish and Catalan, two drafting requests). The
+        answer has a deterministic correct form here, so it is added in code,
+        in the question's language, only for what is missing. Off-topic questions
+        are left alone: their guard wants a short redirect, not a tab.
+        """
+        if not message or len(message) < 300:
+            return message
+        try:
+            from services.ai.context_builder import ContextBuilder
+            if (query and ContextBuilder._OFF_TOPIC_RE.search(query)
+                    and not ContextBuilder._EU_SIGNAL_RE.search(query)):
+                return message
+        except Exception:  # noqa: BLE001
+            pass
+        lang = _detect_query_language(query) if query else "EN"
+        if lang not in _NEXT_STEP_QUESTION:
+            lang = "EN"
+        has_feature = self._names_a_feature(message)
+        # The last two paragraphs: a question to the user, an offer, or a pointer
+        # to a feature there is already a next step, and adding a second one is noise.
+        closing = "\n\n".join(message.strip().split("\n\n")[-2:])
+        has_followup = ("?" in closing or bool(_OFFER_RE.search(closing))
+                        or self._names_a_feature(closing))
+        if has_feature and has_followup:
+            return message
+        parts = []
+        if not has_feature:
+            if query and _DRAFT_INTENT_RE.search(query):
+                parts.append(_NEXT_STEP_POINTER_DRAFT[lang].format(tab=_NEXT_STEP_TAB["draft"][lang]))
+            elif query and _CONSULT_INTENT_RE.search(query):
+                parts.append(_NEXT_STEP_POINTER[lang].format(tab=_NEXT_STEP_TAB["consult"][lang]))
+            else:
+                parts.append(_NEXT_STEP_POINTER[lang].format(tab=_NEXT_STEP_TAB["track"][lang]))
+        if not has_followup:
+            parts.append(_NEXT_STEP_QUESTION[lang])
+        return message.rstrip() + "\n\n" + " ".join(parts)
 
     def _append_deep_dive_link(self, message: str, context_str: str,
                                query: str = "") -> str:

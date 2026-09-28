@@ -7806,7 +7806,8 @@ class ContextBuilder:
             "- Say plainly that Brubru is an assistant for EU policy and does not cover this topic.\n"
             "- Do NOT give the recipe, result, poem or facts asked for, and do NOT cite any source, "
             "citation marker or EU act.\n"
-            "- Offer ONE related EU angle as a question the user could ask instead.\n"
+            "- Offer ONE related EU angle as a plain question the user could ask instead, "
+            "with NO act name, number or link (the 28 Sep re-run offered a wrong directive).\n"
         )
 
     _AMDT_INTENT_RE = re.compile(
