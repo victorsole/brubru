@@ -752,7 +752,12 @@ async def cron_sync_daily(
     # this gives breadth, sync_consultations.py above enriches detail.
     results["have_your_say"] = await _run_script_async(
         "have_your_say", "scripts/sync_have_your_say.py", ["--apply"], timeout=1800)
-    results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
+    # --max-seconds is what makes this resumable: the job stops on its own BUDGET and writes
+    # its cursor, where a 900s timeout kills the process and the cursor is never written. It
+    # walked from page 0 every run and died around page 120, so the same ~12,000 documents
+    # were re-read three times a day while ~19,700 on later pages were never visited once.
+    # 720s leaves headroom inside the 900s timeout for the committee pass and the final commit.
+    results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100", "--max-seconds", "720"], timeout=900)
     # TRIS (25 Sep 2026): a time budget below the timeout, or a killed run records
     # nothing (it had NEVER written a Railway row). TRIS throttles hard and walks
     # a sparse id space, so a run may end early; it resumes from the frontier, and

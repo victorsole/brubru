@@ -193,8 +193,47 @@ ON CONFLICT (document_reference) DO UPDATE SET
 """
 
 
-def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int = 0) -> int:
-    page = 0
+CURSOR_KEY = "comitology_documents_page"
+
+
+def read_cursor(db) -> int:
+    """The page this drain should start from, or 0 when it has never run."""
+    try:
+        db.execute("SELECT cursor_value FROM job_cursors WHERE job_key = %(k)s",
+                   {"k": CURSOR_KEY})
+        row = db.fetchone()
+    except Exception:  # noqa: BLE001  table missing on an un-migrated environment
+        db.rollback()
+        return 0
+    try:
+        return max(0, int(row[0])) if row else 0
+    except (TypeError, ValueError):
+        return 0
+
+
+def write_cursor(db, page: int, note: str) -> None:
+    db.execute(
+        """
+        INSERT INTO job_cursors (job_key, cursor_value, note, updated_at)
+        VALUES (%(k)s, %(v)s, %(n)s, NOW())
+        ON CONFLICT (job_key) DO UPDATE
+           SET cursor_value = EXCLUDED.cursor_value,
+               note         = EXCLUDED.note,
+               updated_at   = NOW()
+        """,
+        {"k": CURSOR_KEY, "v": str(page), "n": note[:300]})
+    db.commit()
+
+
+def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int = 0,
+                     max_seconds: float = 0.0) -> int:
+    # RESUME. This walked from page 0 every run and the 900-second timeout killed it around
+    # page 120, so it re-read the same ~12,000 documents three times a day and never reached
+    # the tail: 95,461 of 115,206 stored, ~19,700 on pages it had never visited once. A
+    # bigger timeout does not fix a job that always starts at the beginning.
+    started = time.monotonic()
+    page = 0 if dry_run else read_cursor(db)
+    first_page = page
     total = 0
     counts = {"upserted": 0, "errors": 0}
     print("[INFO] Paging through Comitology documents...", flush=True)
@@ -257,12 +296,25 @@ def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int =
         if dry_run and (limit and counts["upserted"] >= limit):
             break
         if payload.get("last", True):
+            # End of the register: wrap to the head so new documents are picked up next run.
+            if not dry_run:
+                write_cursor(db, 0, f"completed at page {page}; wrapped to the head")
+            break
+        # Stop on the BUDGET, not on the timeout: a killed process saves no cursor and the
+        # next run starts over, which is the whole defect.
+        if max_seconds and (time.monotonic() - started) > max_seconds:
+            if not dry_run:
+                write_cursor(db, page, f"budget {max_seconds:.0f}s reached")
+                print(f"[SYNC_STATUS] degraded: stopped at page {page} of ~{(total // PAGE_SIZE) + 1} "
+                      f"after {counts['upserted']:,} document(s); resumes there next run",
+                      flush=True)
             break
         time.sleep(throttle)
 
     if not dry_run:
         db.commit()
-    print(f"[DONE documents] upserted={counts['upserted']:,} of {total:,}")
+    print(f"[DONE documents] upserted={counts['upserted']:,} of {total:,} "
+          f"(pages {first_page}..{page - 1})")
     return counts["upserted"]
 
 
@@ -274,6 +326,10 @@ def main():
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
+    ap.add_argument("--max-seconds", type=float, default=0.0,
+                    help="Stop cleanly after this long and save the cursor, so the next run "
+                         "resumes. Without it a timeout kills the process and the cursor is "
+                         "never written, which is how this job re-read page 0 forever.")
     ap.add_argument("--skip-committees", action="store_true")
     ap.add_argument("--skip-documents", action="store_true")
     args = ap.parse_args()
@@ -283,7 +339,8 @@ def main():
         if not args.skip_committees:
             upsert_committees(db, args.throttle, dry_run=not args.apply, limit=args.limit if not args.apply else 0)
         if not args.skip_documents:
-            upsert_documents(db, args.throttle, dry_run=not args.apply, limit=args.limit)
+            upsert_documents(db, args.throttle, dry_run=not args.apply, limit=args.limit,
+                             max_seconds=args.max_seconds)
     finally:
         db.close()
 
