@@ -31,6 +31,7 @@ ORGS = {
     "terraqui": ("Terraqui", "Estudi Jurídic Ambiental, S.L.P. (Terraqui), Barcelona"),
     "gbsb": ("GBSB", "GBSB Global Business School"),
     "cadence": ("Cadence", "Cadence Design Systems"),
+    "tas": ("TAS_Europrojects", "TAS Europrojects, Brussels"),
 }
 BLUE, GREEN, AMBER, GREY, LINK = "1F3A8A", "15803D", "B45309", "555555", "1D4ED8"
 HEADERS = ["#", "Match", "Opportunity (click to open)", "Programme or buyer", "Source", "Deadline",

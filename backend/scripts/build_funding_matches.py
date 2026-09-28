@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the client-facing EU funding match report for Terraqui, GBSB and Cadence.
+"""Build the client-facing EU funding match report for Terraqui, GBSB, Cadence and TAS Europrojects.
 
 Pulls live opportunities from Brubru's production API v2 (funding + agency
 folders + TED), verifies status, dates, English titles and budgets for every
@@ -654,6 +654,47 @@ PROFILES = [
         ted_foreign_malus=0,
         prog_bonus={"HORIZON-JU-CHIPS": 3, "DIGITAL-JU-CHIPS": 3, "HORIZON-KDT": 3, "HORIZON-CL4": 1, "HORIZON-MSCA": 2.5, "EDF": 0.5, "DIGITAL": 0.5, "HORIZON-CL3-2026-02-CS": 1},
     ),
+    dict(
+        slug="tas", name="TAS Europrojects",
+        legal="TAS Europrojects, a private project-management consultancy in Brussels (Rue de Trèves), established in 1993; member of the TIEG EEIG",
+        site="https://www.taseuro.com/",
+        profile=[
+            "Brussels consultancy (founded 1993) with more than 30 years in international infrastructure and economic-development projects and 300+ projects delivered. Services: technical assistance and strategic consulting, programme and project management, and internationalisation of companies (source: taseuro.com, home and Mission & Approach pages, read 28 Sep 2026).",
+            "Sectors it lists: infrastructure development, clean and safe transport, water resources management, social and economic development, private sector development and trade, climate change management and smart cities. It works on the Global Gateway, especially EU investment priorities in transport and infrastructure, including the Global Gateway Transport Support Mechanism, and holds the EU external-action framework contract SEA 2023 (Lots 5 and 8).",
+            "Its own bid tracker (46 bids, February 2025 to April 2026) shows where it competes: European Commission service contracts (22), the World Bank (8), the EIB (8, incl. EIBAS advisory), plus the Transport Community and other development banks; technical assistance, feasibility studies and evaluations in transport, logistics, connectivity, digital and circular economy, mostly in partner countries (Moldova, Ukraine, Western Balkans, Central Asia, Africa, Latin America). Median bid value about EUR 1 million.",
+        ],
+        eligibility=[
+            "A Belgian private company: eligible to tender for EU institution service contracts and for EU-funded external-action contracts under the procurement rules for external action (PRAG), which are open to EU entities.",
+            "Its framework-contract position (SEA 2023, Lots 5 and 8) means many EU assignments reach it as specific-contract requests that are not published; the matches below are the open competitions only.",
+            "Grants are secondary to its model: it is usually a service provider or a consortium partner delivering technical assistance, not a grant beneficiary.",
+        ],
+        rules=[
+            R("gg", 5, r"global gateway|connectivity|corridor|trans-caspian|team europe", why="Global Gateway and connectivity corridors are TAS's stated focus, including the Global Gateway Transport Support Mechanism."),
+            R("transport", 4, r"transport|logistic|\broads?\b|railway|\brail\b|\bports?\b|inland waterway|aviation|airport|maritime|mobility|road user charg|traffic|freight|\bten-t\b", why="Transport and logistics are TAS's core sector and the largest share of its bids."),
+            R("ta", 3.5, r"technical assistance|technical support|feasibility|pre-feasibility|evaluation of|evaluation services|support measures|project preparation|advisory|capacity building|institutional support|asistencia técnica|assistance technique|étude de faisabilité", why="Technical assistance, feasibility studies and evaluations are the services TAS sells."),
+            R("infra", 3, r"infrastructure|investment plan|project pipeline|public investment|ppp\b|public-private partnership", why="Infrastructure development and the identification of priority investments are a named TAS specialism."),
+            R("partner", 2.5, r"neighbourhood|enlargement|western balkans|eastern partnership|ukraine|moldova|georgia|armenia|azerbaijan|central asia|caucasus|africa|latin america|caribbean|asia|pakistan|bangladesh|egypt|morocco|tunisia|jordan|partner countr|delegation of the european union|cooperation facility|ndici|\bipa\b", why="TAS works mostly in EU partner countries, where external-action contracts are awarded."),
+            R("water", 3, r"water resources|water management|wastewater|irrigation|sanitation|water supply", why="Water resources management is one of TAS's listed sectors."),
+            R("psd", 2.5, r"private sector development|trade facilitation|investment climate|business environment|internationali[sz]ation|export promotion|value chain", why="Private sector development and trade, and company internationalisation, are TAS services."),
+            R("cities", 2, r"smart cit|urban development|urban mobility|climate adaptation|climate resilien|circular economy|digital ecosystem", why="Smart cities and climate change management are TAS sectors, and its recent bids include circular economy and digital ecosystem studies."),
+            R("cpv_consult", 4, cpv=("71311", "71241", "79411", "79400", "73220", "79419", "71356", "90712", "71310"), why="It is an engineering, development or management consultancy service, the category TAS bids in.", ted=True),
+            R("ted_kw", 3, r"technical assistance|feasibility study|asistencia técnica|estudio de viabilidad|assistance technique|étude de faisabilité|transport study|logistics study|mobility plan|verkehrsstudie|machbarkeitsstudie", ted=True),
+        ],
+        negative=re.compile(r"(?i)(?:-|–) works$|capacité de travail|arbeidsongeschikt|technische controle|contrôle technique|installations électriques|groenbeheer|green space|supply of|delivery of|purchase of|equipment|vehicles?\b|furniture|catering|cleaning|security guard|medical|pharma|laborator|software licen|hardware|printing|translation|interpret|insurance|fuel|uniform|construction works|works contract|nuclear|euratom|clinical|cancer"),
+        # 28 Sep 2026 audit of the first run: EU Missions, New European Bauhaus and
+        # other research topics ranked High on transport words, but they are
+        # research consortia or city-led calls a consultancy cannot lead.
+        exclude_prefix=("HORIZON", "ERC", "EDF", "ERASMUS", "DIGITAL", "EU4H", "UIA", "EUI"),
+        # A domestic Belgian notice coded as consultancy (electrical inspections,
+        # green-space plans) is not TAS's business: a TED notice must name a
+        # TAS theme in its title, in any of the languages TED publishes in.
+        ted_require=re.compile(r"(?i)transport|logisti|mobilit|verkeer|vervoer|trafic|tráfico|verkehr|corridor|railway|ferroviai|spoor|\broad|route|carretera|port\b|haven|airport|aéroport|aeropuerto|infrastructur|infraestructur|technical assistance|assistance technique|asistencia técnica|feasibility|faisabilité|viabilidad|haalbaarheid|machbarkeit|evaluation|évaluation|evaluación|evaluatie|water resources|wastewater|irrigation|development cooperation|coopération au développement|global gateway|connectivity|ukraine|moldova|balkans|africa|afrique|asia|caucasus|project management|programme management|project support"),
+        ted_high_keys=("cpv_consult",),
+        exclude_cpv=("0", "1", "2", "3", "4", "5", "6"),
+        ted_country_bonus={"BE": 1.5},
+        ted_foreign_malus=0,
+        prog_bonus={"CEF": 1.0, "SMP": 0.5},
+    ),
 ]
 
 THRESHOLDS = [("High", 8.0), ("Medium", 5.5), ("Stretch", 4.0)]
@@ -661,7 +702,7 @@ THRESHOLDS = [("High", 8.0), ("Medium", 5.5), ("Stretch", 4.0)]
 
 def role_for(org: str, opp: dict, strength: str) -> str:
     kind, action, ident = opp["kind"], (opp["action"] or "").lower(), opp["ident"].upper()
-    home = opp.get("country") in ({"terraqui": {"ES"}, "gbsb": {"ES", "MT"}, "cadence": set()}[org])
+    home = opp.get("country") in ({"terraqui": {"ES"}, "gbsb": {"ES", "MT"}, "cadence": set(), "tas": {"BE"}}[org])
     if kind == "expert_list":
         return "individual specialists from the organisation registering as external experts"
     if kind == "ted" and EU_BUYER.search(opp.get("buyer") or ""):
@@ -673,11 +714,15 @@ def role_for(org: str, opp: dict, strength: str) -> str:
     if kind == "tender":
         return {"terraqui": "consortium member or subcontractor delivering the legal and regulatory analysis",
                 "gbsb": "consortium member delivering training, entrepreneurship or skills components",
-                "cadence": "subcontractor or consortium member supplying tools and technical expertise"}[org]
+                "cadence": "subcontractor or consortium member supplying tools and technical expertise",
+                "tas": "tenderer in its own name or consortium leader delivering the technical assistance"}[org]
     if "cascade" in action or ident.startswith("HORIZON-EIT"):
         return {"gbsb": "beneficiary of cascade funding or delivery partner for the programme",
                 "terraqui": "beneficiary of cascade funding or service provider to selected projects",
-                "cadence": "technology partner to applicants"}[org]
+                "cadence": "technology partner to applicants",
+                "tas": "service provider to the programme or its beneficiaries"}[org]
+    if org == "tas":
+        return "consortium partner delivering project management and technical assistance"
     if org == "terraqui":
         if "coordination and support" in action or ident.startswith(("LIFE-2026-PLP", "LIFE-2026-SAP-ENV-GOV", "LIFE-2026-SAP-CLIMA-GOV", "LIFE-2026-SAP-NAT-GOV")):
             return "partner leading the policy and legal analysis; coordinator of a small governance proposal is possible"
@@ -700,7 +745,7 @@ def role_for(org: str, opp: dict, strength: str) -> str:
 def caveats_for(org: str, opp: dict) -> list[str]:
     ident, kind, out = opp["ident"].upper(), opp["kind"], []
     if kind == "ted":
-        if org != "cadence" and opp["country"] not in ({"terraqui": {"ES"}, "gbsb": {"ES", "MT"}}[org]):
+        if org not in ("cadence", "tas") and opp["country"] not in ({"terraqui": {"ES"}, "gbsb": {"ES", "MT"}}[org]):
             out.append(f"Foreign tender ({COUNTRY.get(opp['country'], opp['country'])}): procurement language and local qualification rules apply.")
         out.append("Check the selection criteria (turnover, insurance, references) in the tender documents.")
         if opp.get("title_note"):
@@ -969,7 +1014,7 @@ def render(today: dt.date, results: dict, closing: dict, stats: dict, problems: 
     brand_img = ('<img alt="Brubru" src="' + brubru + '">') if brubru else ""
     h.append(f'<div class="brand">{brand_img}Brubru</div>')
     h.append(f'<div class="overline">EU funding and tender matches &middot; {esc(date_txt)}</div>')
-    h.append("<h1>Where EU money fits Terraqui, GBSB Global Business School and Cadence</h1>")
+    h.append("<h1>Where EU money fits Terraqui, GBSB Global Business School, Cadence and TAS Europrojects</h1>")
     h.append(f"<p>{stats['eligible_total']:,} open or forthcoming opportunities with a deadline on or after {esc(date_txt)} were scored against each organisation's own activities. Every match below links to its public page and says why it fits, what role is realistic and what could stop it.</p>")
     h.append('<div class="stats">')
     for p in PROFILES:
