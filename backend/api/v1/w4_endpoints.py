@@ -504,6 +504,14 @@ class RSBOpinionItem(BaseModel):
     source_url: str
     policy_areas: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru datapoints. This endpoint carried two of them: the opinions'
+    # full text has been stored all along (34 of 44 rows, averaging 5,170 characters) and
+    # nothing served it, which is the same defect as the EPRS studies.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL: the opinion's page, falling back to its PDF.")
+    body_txt: Optional[str] = Field(None, description="The opinion's text when Brubru holds it, falling back to the summary. `full_text` is present for most rows.")
+    body_html: Optional[str] = Field(None, description="Null for this endpoint: the Board publishes PDFs, so Brubru stores extracted text rather than publisher HTML.")
+    document_date: Optional[date] = Field(None, description="The date the Board states (the opinion date), never the date Brubru captured it.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this opinion.")
 
 
 @rsb_router.get(
@@ -588,6 +596,11 @@ async def list_rsb_opinions(
             verdict=r.verdict.value if hasattr(r.verdict, "value") else str(r.verdict),
             opinion_date=r.opinion_date, summary=r.summary,
             pdf_url=r.pdf_url, source_url=r.source_url,
+            public_url=r.source_url or r.pdf_url,
+            body_txt=r.full_text or r.summary,
+            body_html=None,
+            document_date=r.opinion_date,
+            creation_date=r.first_seen,
             policy_areas=list(r.policy_areas or []),
             last_updated=r.last_updated,
         )
@@ -642,6 +655,11 @@ async def get_rsb_detail(
         verdict=r.verdict.value if hasattr(r.verdict, "value") else str(r.verdict),
         opinion_date=r.opinion_date, summary=r.summary,
         pdf_url=r.pdf_url, source_url=r.source_url,
+        public_url=r.source_url or r.pdf_url,
+        body_txt=r.full_text or r.summary,
+        body_html=None,
+        document_date=r.opinion_date,
+        creation_date=r.first_seen,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
     )
