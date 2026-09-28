@@ -195,6 +195,21 @@ MEUB_SOURCES: List[SourceSpec] = [
     # scheduled nowhere, which is why new items would never have arrived, and its dates
     # were derived from PDF filenames until 28 Sep 2026 (migration 250).
     SourceSpec("rsb_opinions", "Regulatory Scrutiny Board opinions", "warm", "scripts/ingest_rsb_opinions.py", (), timeout=600, stale_after_hours=48),
+    # Delegated and implementing acts, from the Commission's RegDel Excel exports.
+    # Scheduled nowhere until 28 Sep 2026, so secondary_acts had not been refreshed since
+    # 10 August and /legislative/delegated-acts and /legislative/implementing-acts both
+    # answered 0 to a daily window for seven weeks. ingest_secondary_acts.py is only a
+    # curated bootstrap seed and is deliberately NOT scheduled; this is the real feed.
+    SourceSpec("regdel_acts", "Delegated and implementing acts (RegDel)", "warm",
+               "scripts/ingest_regdel_acts.py", ("--apply",),
+               timeout=1200, stale_after_hours=48),
+    # Commissioner, DG and executive-agency lobby meetings from the Transparency
+    # Register. Also scheduled nowhere until 28 Sep 2026: last run 22 September, so
+    # /commission/meetings answered 0 to a daily window. --limit caps HOSTS per type,
+    # not meetings, and its default of 5 would read a fraction of them.
+    SourceSpec("transparency_meetings", "Lobby meetings (Transparency Register)", "warm",
+               "scripts/ingest_transparency_meetings.py", ("--apply", "--limit", "200"),
+               timeout=1800, stale_after_hours=48),
     # Links each Commission consultation to the legislative file it produced and
     # brings in who answered it, for the Stakeholder Map (25 Sep 2026).
     SourceSpec("consultation_links", "Consultations - linked to files and respondents", "warm",
