@@ -246,6 +246,7 @@ class WafBrowserFetcher:
         self._pw = None
         self._browser = None
         self._ctx = None
+        self._warmed: set[str] = set()
 
     # -- lifecycle ---------------------------------------------------------
     def __enter__(self) -> "WafBrowserFetcher":
@@ -289,6 +290,7 @@ class WafBrowserFetcher:
         except Exception:
             pass
         self._ctx = self._browser = self._pw = None
+        self._warmed = set()
 
     # -- fetch -------------------------------------------------------------
     def fetch(
@@ -382,6 +384,76 @@ class WafBrowserFetcher:
                 page.close()
             except Exception:
                 pass
+
+
+    def fetch_bytes(self, url: str, *, warm_url: str | None = None,
+                    timeout_ms: int = 150000) -> tuple[int | None, bytes, str | None]:
+        """GET ``url`` as raw bytes with this context's clearance cookie.
+
+        For a document behind the WAF (a meetdocs PDF, 202 and 0 bytes to plain
+        HTTP), navigating to it is the wrong move: Chromium treats a PDF as a
+        download and ``goto`` raises. So the host's challenge is cleared ONCE by
+        navigating to an HTML page on the same host (``warm_url``, by default the
+        host's root), and the document is then requested through the context's
+        own HTTP client, which carries the cookie. Measured 22 Sep 2026 on the
+        deep-dive tooling, which has read meetdocs this way since.
+
+        Returns ``(status, body, error)``. The caller judges the body (``%PDF``
+        magic bytes, a wall marker), never the status: meetdocs answers 202.
+        """
+        if self._ctx is None:
+            raise RuntimeError("Use WafBrowserFetcher as a context manager (`with ...:`).")
+        from urllib.parse import urlsplit
+
+        parts = urlsplit(url)
+        host = parts.netloc
+        if host not in self._warmed:
+            page = self._ctx.new_page()
+            try:
+                page.goto(warm_url or f"{parts.scheme}://{host}/",
+                          wait_until="domcontentloaded", timeout=self.nav_timeout_ms)
+                page.wait_for_timeout(self.settle_ms)
+            except Exception as exc:  # noqa: BLE001  a failed warm-up may still leave a cookie
+                logger.info("[waf] warm-up of %s raised %s; trying the request anyway",
+                            host, type(exc).__name__)
+            finally:
+                try:
+                    page.close()
+                except Exception:
+                    pass
+            self._warmed.add(host)
+        try:
+            resp = self._ctx.request.get(url, timeout=timeout_ms)
+            return resp.status, resp.body(), None
+        except Exception as exc:  # noqa: BLE001  network dependent
+            return None, b"", f"{type(exc).__name__}: {exc}"
+
+
+def fetch_bytes_isolated(urls: list[str], *, warm_url: str | None = None,
+                         timeout_s: float = 600.0, **ctor_kwargs
+                         ) -> dict[str, tuple[int | None, bytes, str | None]]:
+    """Fetch several documents past the WAF from ONE browser, in its own thread.
+
+    The free fallback when the paid tier (Scrape.do) is unavailable or out of
+    quota. It runs the whole Playwright lifecycle inside a worker thread for two
+    reasons: Playwright's sync API refuses to start inside a running asyncio
+    loop (FastAPI request handlers and the async cron jobs call the PDF
+    extractor from one), and the sync API is thread-affine, so start, use and
+    close must all happen on the same thread. ``_call_bounded`` also frees the
+    caller if Chromium wedges.
+
+    Returns ``{url: (status, body, error)}``. Raises TimeoutError past the bound
+    and ImportError when Playwright is missing; callers treat both as "no
+    fallback", never as an empty document.
+    """
+    def _run():
+        out: dict[str, tuple[int | None, bytes, str | None]] = {}
+        with WafBrowserFetcher(**ctor_kwargs) as f:
+            for u in urls:
+                out[u] = f.fetch_bytes(u, warm_url=warm_url)
+        return out
+
+    return _call_bounded(_run, timeout_s, f"browser byte fetch of {len(urls)} URL(s)")
 
 
 def fetch_one(url: str, **kwargs) -> FetchResult:

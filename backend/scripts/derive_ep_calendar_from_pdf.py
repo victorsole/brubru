@@ -212,6 +212,24 @@ def fetch_pdf(year: int, workdir: str, pdf_path: Optional[str]) -> str:
             proxied = ("https://api.scrape.do/?token=" + key + "&url="
                        + urllib.parse.quote(url, safe=""))
             _run(["curl", "-s", "-m", "120", "-o", dest, proxied])
+    # Scrape.do's plan is 1,000 requests a month and can be spent (28 Sep 2026): a
+    # headless browser clears the same WAF for free from here.
+    if not os.path.exists(dest) or os.path.getsize(dest) < 10_000:
+        print("[INFO] Still walled; retrying through a headless browser")
+        try:
+            import sys as _sys
+            _backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if _backend not in _sys.path:
+                _sys.path.insert(0, _backend)
+            from services.scrapers.waf_browser_fetcher import fetch_bytes_isolated
+            status, body, err = fetch_bytes_isolated([url], timeout_s=240)[url]
+            if body[:4] == b"%PDF":
+                with open(dest, "wb") as handle:
+                    handle.write(body)
+            else:
+                print(f"[WARN] browser fallback got HTTP {status}, {len(body)} bytes {err or ''}")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[WARN] browser fallback unavailable: {type(exc).__name__}: {exc}")
     if not os.path.exists(dest) or os.path.getsize(dest) < 10_000:
         raise RuntimeError("Downloaded calendar PDF looks empty or truncated")
     return dest

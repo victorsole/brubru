@@ -198,6 +198,34 @@ def _best_extraction(page_html: str) -> tuple[str | None, str | None, str | None
     return None, None, reason_a
 
 
+_browser_local = threading.local()
+
+
+def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | None, str | None]:
+    """The free fallback when Scrape.do is missing, spent or failing: a local browser.
+
+    One headless browser per worker thread, opened on first use and kept for the run
+    (Playwright's sync API is thread-affine, so the pool's threads cannot share one).
+    It clears JS challenges and renders the page, which covers the Angular shells
+    ``render=true`` was for. It does NOT beat an IP-reputation block from this address;
+    that is the one thing only the paid proxies do.
+    """
+    fetcher = getattr(_browser_local, "fetcher", None)
+    try:
+        if fetcher is None:
+            from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+            fetcher = WafBrowserFetcher()
+            fetcher.__enter__()
+            _browser_local.fetcher = fetcher
+        res = fetcher.fetch(url, expand_accordions=False, strip_chrome=False)
+    except Exception as exc:  # noqa: BLE001  no Playwright, or Chromium failed to start
+        return None, None, f"{why_paid_failed}; browser {type(exc).__name__}"
+    if res.error or not res.html:
+        return None, None, f"{why_paid_failed}; browser {res.error or 'empty page'}"
+    text_, html_, reason = _best_extraction(res.html)
+    return text_, html_, (reason if text_ else f"{why_paid_failed}; browser: {reason}")
+
+
 def fetch_via_scrapedo(url: str, timeout: int = 150, render: bool = True
                        ) -> tuple[str | None, str | None, str | None]:
     """A page Brubru cannot fetch directly, via Scrape.do.
@@ -210,9 +238,13 @@ def fetch_via_scrapedo(url: str, timeout: int = 150, render: bool = True
     which is a failure carried in the body. 5s was enough on every page tested; 10s added
     nothing.
     """
+    from services.scrapers import scrapedo_quota
+
     token = _scrapedo_token()
     if not token:
-        return None, None, "no SCRAPEDO_API_KEY"
+        return _browser_page(url, "no SCRAPEDO_API_KEY")
+    if scrapedo_quota.is_exhausted():
+        return _browser_page(url, "scrapedo quota spent")
     api = ("https://api.scrape.do/?token=" + token
            + "&url=" + urllib.parse.quote(url, safe=""))
     if render:
@@ -225,9 +257,13 @@ def fetch_via_scrapedo(url: str, timeout: int = 150, render: bool = True
         try:
             raw = _read(api, timeout, accept="text/html,*/*")
         except urllib.error.HTTPError as exc:
-            return None, None, f"scrapedo HTTP {exc.code}"
+            try:
+                scrapedo_quota.note(exc.code, exc.read()[:400])
+            except Exception:  # noqa: BLE001
+                pass
+            return _browser_page(url, f"scrapedo HTTP {exc.code}")
         except Exception as exc:  # noqa: BLE001
-            return None, None, f"scrapedo {type(exc).__name__}"
+            return _browser_page(url, f"scrapedo {type(exc).__name__}")
         last = _best_extraction(raw.decode("utf-8", "replace"))
         if last[0] or not render or "did not render" not in (last[2] or ""):
             return last

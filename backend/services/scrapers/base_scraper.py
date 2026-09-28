@@ -515,6 +515,12 @@ class BaseScraper(ABC):
                 "SCRAPEDO_API_KEY is not set. Tier 4 is unavailable; the caller "
                 "should report this URL as WALLED rather than as empty."
             )
+        from services.scrapers import scrapedo_quota
+        if scrapedo_quota.is_exhausted():
+            raise ScraperError(
+                "Scrape.do monthly quota is spent (the plan is 1,000 requests a "
+                "month). Tier 4 is unavailable until it resets."
+            )
 
         params = {"token": token, "url": url}
         if super_proxy:
@@ -543,6 +549,8 @@ class BaseScraper(ABC):
                 return body
             except urllib.error.HTTPError as e:           # noqa: PERF203
                 last = e.read().decode("utf-8", errors="replace")[:400]
+                if scrapedo_quota.note(e.code, last):
+                    break
                 # ROTATION_FAILED is transient and explicitly not charged.
                 if "ROTATION_FAILED" in last and attempt < retries:
                     logger.warning("%s: scrape.do rotation failure on %s, retry %d/%d",
