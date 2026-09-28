@@ -1,7 +1,8 @@
 """European Chemicals Agency — news. Backs /api/v2/echa/news.
 
-ECHA publishes its news alerts on the news archive (a Liferay page). Each item
-carries a date, a title and a link to the article. One row per news item.
+ECHA publishes its news on /news (a Liferay page); the older news-alerts archive
+stopped at 17 Aug 2026 and is kept as a secondary source. One row per news item,
+with the article's own text as the body.
 """
 from __future__ import annotations
 
@@ -78,18 +79,78 @@ def _parse(html: str, now: datetime) -> list[Item]:
     return list(out.values())
 
 
+# ECHA moved its news from the alerts archive to /news (the archive's newest entry is
+# 17 Aug 2026, while /news lists the 24 Sep release on the Management Board chair).
+# /news prints each item as <dt><a href="/-/slug">Title</a></dt><dd class="NewsDate">DD/MM/YYYY</dd>.
+_NEWS = "https://echa.europa.eu/news"
+_NEWS_ITEM = re.compile(
+    r'<a href="(/-/[^"]+)"[^>]*>([^<]{8,})</a>\s*</dt>\s*<dd class="NewsDate">\s*'
+    r'(\d{1,2})/(\d{1,2})/(\d{4})', re.S)
+
+
+def _parse_news(html: str, now: datetime) -> list[Item]:
+    out: dict[str, Item] = {}
+    for href, raw, d, m, y in _NEWS_ITEM.findall(html):
+        title = _txt(raw)
+        url = _BASE + href
+        if not title or url in out:
+            continue
+        try:
+            dt = datetime(int(y), int(m), int(d), tzinfo=timezone.utc)   # day-first, as printed
+        except ValueError:
+            dt = None
+        out[url] = Item(
+            body_code="echa", item_type="news", title=clean(title)[:120], public_url=url,
+            summary=clean(f"{dt.date() if dt else ''} - {title}")[:200],
+            document_date=dt, creation_date=now, source_kind="echa_news", guid=url)
+    return list(out.values())
+
+
 async def _scrape() -> list[Item]:
+    """/news first (where ECHA publishes now), the old alerts archive second; each new
+    article's own text is fetched, because a title and a date are not a body.
+
+    Raises when /news parses to nothing: it always lists several items, so an empty
+    parse is a wall or a layout change, and "success, 0 new" hid exactly that from
+    17 Aug to 28 Sep 2026."""
     from playwright.async_api import async_playwright
     now = datetime.now(timezone.utc)
     async with async_playwright() as p:
         b = await p.chromium.launch(headless=True)
         ctx = await b.new_context(user_agent=_UA)
         page = await ctx.new_page()
-        await page.goto(_ARCHIVE, wait_until="networkidle", timeout=55000)
-        await page.wait_for_timeout(3000)
-        items = _parse(await page.content(), now)
+        await page.goto(_NEWS, wait_until="domcontentloaded", timeout=55000)
+        await page.wait_for_timeout(4000)
+        news = _parse_news(await page.content(), now)
+        if not news:
+            # the challenge sometimes needs a second navigation to clear
+            await page.goto(_NEWS, wait_until="domcontentloaded", timeout=55000)
+            await page.wait_for_timeout(6000)
+            news = _parse_news(await page.content(), now)
+        if not news:
+            await b.close()
+            raise RuntimeError("ECHA /news parsed to 0 items: a wall or a layout change, not a quiet agency")
+        items = {i.public_url: i for i in news}
+        try:
+            await page.goto(_ARCHIVE, wait_until="domcontentloaded", timeout=55000)
+            await page.wait_for_timeout(3000)
+            for i in _parse(await page.content(), now):
+                items.setdefault(i.public_url, i)
+        except Exception:  # noqa: BLE001  the archive is secondary
+            pass
+        for it in items.values():
+            try:
+                await page.goto(it.public_url, wait_until="domcontentloaded", timeout=45000)
+                await page.wait_for_timeout(2500)
+                content = await page.content()
+                if len(content) >= 40000:          # the challenge stub is ~10 KB
+                    body_txt, body_html = extract_html(content)
+                    if body_txt and len(body_txt) > len(it.body_txt or ""):
+                        it.body_txt, it.body_html = body_txt, body_html
+            except Exception:  # noqa: BLE001  keep the listing row without a body
+                continue
         await b.close()
-    return items
+    return list(items.values())
 
 
 def ingest_echa_news(*, fetch_bodies: bool = True, **_) -> list[Item]:

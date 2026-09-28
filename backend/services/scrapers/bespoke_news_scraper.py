@@ -267,10 +267,48 @@ def _card_date(soup, key: str, is_item_link, absolute) -> Optional[date]:
         dt, _carrier = extract_item_date(card_html)
         if dt is not None:
             return dt.date()
+        nd = _card_class_numeric_date(card)
+        if nd is not None:
+            return nd
         nd = _card_text_date(card)
         if nd is not None:
             return nd
     return None
+
+
+# The date alone, or followed by ECHA's regulation tags ("17/06/2026 | REACH | CLP").
+_NUMERIC_DMY = re.compile(r"^\s*(\d{1,2})[./](\d{1,2})[./](\d{4})\s*(?:\|[\sA-Za-z0-9|&/-]*)?$")
+
+
+def _card_class_numeric_date(card) -> Optional[date]:
+    """A numeric date in an element whose CLASS says it is the date: ECHA prints
+    `<dd class="NewsDate">24/09/2026</dd>` under each headline, and its article pages
+    carry no date at all (the 24 Sep 2026 release has only "ECHA/NR/26/27"), so this
+    card is the only carrier. Every ECHA news item since 17 Aug was refused as
+    undated for want of it.
+
+    Read DAY-FIRST (the convention on every EU site) and only when the element's
+    whole text is the date, its class is not a deadline/event class, and the card
+    holds exactly one such date. A slash date in running text is never read here:
+    "09/10/2026" alone cannot say which convention its author used."""
+    found = set()
+    for el in card.find_all(class_=True):
+        tokens = [t.lower() for t in (el.get("class") or [])]
+        if not any("date" in t for t in tokens):
+            continue
+        if any(bad in t for t in tokens for bad in _NON_PUBLICATION_DATE_CLASSES):
+            continue
+        m = _NUMERIC_DMY.match(el.get_text(" ", strip=True))
+        if not m:
+            continue
+        try:
+            found.add(date(int(m.group(3)), int(m.group(2)), int(m.group(1))))
+        except ValueError:
+            continue
+    if len(found) != 1:
+        return None
+    nd = found.pop()
+    return nd if date(1990, 1, 1) <= nd <= date.today() + timedelta(days=1) else None
 
 
 _MONTHS = {m: i for i, m in enumerate(
@@ -501,6 +539,20 @@ def scrape_bespoke(cfg: Dict, fetcher) -> List[Dict]:
     # is also a 403, yet its JS challenge clears and the rendered page carries the
     # listing, so a status check on its own would fail a source that works.
     status = getattr(res, "nav_status", None)
+    if not items and isinstance(status, int) and status >= 400:
+        # ONE retry after a pause (28 Sep 2026). ECHA's e-news archive answered the
+        # Railway container with the challenge stub on 8 runs in 3 days, yet cleared on
+        # the next navigation once the browser held the challenge cookie (measured in
+        # the container: 200, 228 KB). A persistent block still fails below.
+        import time as _time
+        _time.sleep(6)
+        try:
+            res = fetcher.fetch(cfg["url"], expand_accordions=False, strip_chrome=False)
+            html = res.html or ""
+            items = parse_bespoke(html, cfg) if html else []
+            status = getattr(res, "nav_status", None)
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"[BESPOKE-NEWS] retry failed {cfg['url']}: {e}")
     if not items and isinstance(status, int) and status >= 400:
         raise BespokeFetchError(
             f"{cfg['institution']}: HTTP {status} from {cfg['url']} and 0 items parsed "
