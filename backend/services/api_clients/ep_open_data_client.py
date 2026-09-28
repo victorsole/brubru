@@ -130,6 +130,22 @@ class EPOpenDataClient:
         last_error = None
         for attempt in range(1, 4):
             response = await client.get(url, params=params)
+            # EP answers 429 with `Retry-After: 60` and means it. Raising instead of
+            # waiting turns a pause into a failed run, and swallowing it turns a pause
+            # into "there is nothing here": neither is true.
+            if response.status_code in (429, 503):
+                try:
+                    wait = int(response.headers.get("Retry-After") or 60)
+                except (TypeError, ValueError):
+                    wait = 60
+                last_error = f"HTTP {response.status_code}, Retry-After {wait}s"
+                logger.warning(f"[WARN] {endpoint} offset={offset}: EP is throttling "
+                               f"(attempt {attempt}/3), waiting {wait}s")
+                if attempt < 3:
+                    await asyncio.sleep(min(max(wait, 5), 180))
+                    continue
+                raise EPOpenDataUpstreamError(
+                    f"{endpoint} offset={offset}: {last_error}, still refused after 3 tries")
             response.raise_for_status()
             data = response.json()
             # A 200 can carry the failure in its body. "data" absent plus "error"
@@ -165,7 +181,16 @@ class EPOpenDataClient:
         client = await self._get_client()
         url = f"{self.BASE_URL}/{endpoint}/{identifier}"
 
-        response = await client.get(url)
+        for attempt in range(1, 4):
+            response = await client.get(url)
+            if response.status_code in (429, 503) and attempt < 3:
+                try:
+                    wait = int(response.headers.get("Retry-After") or 60)
+                except (TypeError, ValueError):
+                    wait = 60
+                await asyncio.sleep(min(max(wait, 5), 180))
+                continue
+            break
         response.raise_for_status()
 
         raw = response.json()

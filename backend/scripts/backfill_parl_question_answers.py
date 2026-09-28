@@ -73,18 +73,47 @@ def question_ref_to_ep_id(ref: str) -> Optional[str]:
     return f"{qtype}-{term}-{year}-{num}"
 
 
-def fetch_json(url: str, timeout: int = 30) -> Optional[dict]:
-    req = urllib_request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/ld+json"})
-    try:
-        with urllib_request.urlopen(req, timeout=timeout) as r:
-            import json
-            return json.load(r)
-    except urllib_error.HTTPError as e:
-        if e.code in (404, 410):
+class EPBlocked(RuntimeError):
+    """EP Open Data is refusing us, which is not the same as having no answer."""
+
+
+def fetch_json(url: str, timeout: int = 30, attempts: int = 4) -> Optional[dict]:
+    """The payload, or None when EP genuinely has no such record.
+
+    Raises EPBlocked when EP keeps refusing. This used to return None for EVERY
+    error including 429, so a rate limit was indistinguishable from "this question
+    has no answer": a drain scanned 1,000 rows, filled none, and logged "no EP
+    payload" on every line while the questions were all perfectly answerable.
+
+    EP sends `Retry-After: 60` with its 429 and means it, so that is honoured
+    rather than guessed at.
+    """
+    import json
+    for attempt in range(1, attempts + 1):
+        req = urllib_request.Request(
+            url, headers={"User-Agent": USER_AGENT, "Accept": "application/ld+json"})
+        try:
+            with urllib_request.urlopen(req, timeout=timeout) as r:
+                return json.load(r)
+        except urllib_error.HTTPError as e:
+            if e.code in (404, 410):
+                return None          # genuinely absent
+            if e.code in (429, 503):
+                if attempt == attempts:
+                    raise EPBlocked(f"HTTP {e.code} after {attempts} attempts: {url}")
+                wait = 60
+                try:
+                    wait = int(e.headers.get("Retry-After") or 60)
+                except (TypeError, ValueError):
+                    pass
+                time.sleep(min(max(wait, 5), 180))
+                continue
             return None
-        return None
-    except Exception:
-        return None
+        except Exception:
+            if attempt == attempts:
+                return None
+            time.sleep(2.0 * attempt)
+    return None
 
 
 def find_answer_docx_url(payload: dict) -> Optional[Dict[str, Any]]:
@@ -217,6 +246,7 @@ def main():
 
     started = time.time()
     no_payload = no_answer_link = ok = errors = 0
+    blocked = False
     stopped_early = 0
     for i, row in enumerate(rows, 1):
         if args.max_seconds and time.time() - started > args.max_seconds:
@@ -230,9 +260,18 @@ def main():
         if not ep_id:
             errors += 1
             continue
-        payload = fetch_json(
-            f"{EP_BASE}/api/v2/parliamentary-questions/{ep_id}?format=application%2Fld%2Bjson&language=en"
-        )
+        try:
+            payload = fetch_json(
+                f"{EP_BASE}/api/v2/parliamentary-questions/{ep_id}?format=application%2Fld%2Bjson&language=en"
+            )
+        except EPBlocked as exc:
+            # Stop rather than mark thousands of answerable questions as having no
+            # payload. The rows are untouched and the next run picks them up.
+            print(f"\n[ERROR] EP Open Data is refusing us ({exc}). Stopped after "
+                  f"{i - 1} row(s); filled {ok}. The remaining rows are NOT dateless "
+                  f"or answerless, they were never read.", flush=True)
+            blocked = True
+            break
         if not payload:
             no_payload += 1
             if i <= 5 or i % 100 == 0:
@@ -319,6 +358,11 @@ def main():
     # source and must not read as breakage; a source that returns nothing at all must
     # not read as success. This job filled nothing between 7 May and 28 Sep 2026 while
     # being run by hand and scheduled nowhere, and no signal said so.
+    if blocked:
+        cur.close()
+        conn.close()
+        return 1
+
     attempted = len(rows)
     reached = ok + no_answer_link
     if attempted and reached == 0 and (no_payload + errors) > 0:

@@ -20,8 +20,12 @@ from services.api_clients.ep_open_data_client import (
 
 
 class _Resp:
-    def __init__(self, payload):
+    """Enough of httpx.Response for the client: status, headers, body."""
+
+    def __init__(self, payload, status_code=200, headers=None):
         self._payload = payload
+        self.status_code = status_code
+        self.headers = headers or {}
 
     def raise_for_status(self):
         return None
@@ -75,3 +79,32 @@ def test_an_empty_page_is_still_an_empty_page():
 
 async def _done(value):
     return value
+
+
+def test_a_429_is_retried_and_then_raises_rather_than_reading_as_empty():
+    """EP sends `Retry-After: 60` with its 429. Waiting is right; so is giving up
+    loudly. Returning an empty page would say the corpus ended here."""
+    import services.api_clients.ep_open_data_client as mod
+
+    class Throttled(_Client):
+        async def get(self, url, params=None):
+            self.calls += 1
+            return _Resp({}, status_code=429, headers={"Retry-After": "1"})
+
+    c = EPOpenDataClient()
+    fake = Throttled()
+    c._get_client = lambda: _done(fake)
+    slept = []
+
+    async def _no_wait(seconds):
+        slept.append(seconds)
+
+    original = mod.asyncio.sleep
+    mod.asyncio.sleep = _no_wait
+    try:
+        with pytest.raises(EPOpenDataUpstreamError):
+            asyncio.run(c._list_endpoint("committee-documents", offset=0, limit=100))
+    finally:
+        mod.asyncio.sleep = original
+    assert fake.calls == 3, "a throttle deserves retries before giving up"
+    assert slept and all(s >= 5 for s in slept), "Retry-After must be honoured, with a floor"
