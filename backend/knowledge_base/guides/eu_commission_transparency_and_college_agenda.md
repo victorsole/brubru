@@ -1,7 +1,7 @@
 # EU Commission Transparency: College Agenda, Corporate-Body Codes, Lobby Register
 
 ## QUICK FACTS
-- **LATEST (15 September 2026): what the College plans next, from the newest primary documents.** Live agenda: **SEC(2026) 2578 final, 14 September 2026**, horizon 30 September to 28 October 2026. Every date is **(tbc)**; hedge as "the Commission currently plans".
+- **LATEST (checked 29 September 2026 against SEC(2026) 2578; the Enlargement package and the Climate resilience framework are listed for 28 October, not 20 October): what the College plans next, from the newest primary documents.** Live agenda: **SEC(2026) 2578 final, 14 September 2026**, horizon 30 September to 28 October 2026. Every date is **(tbc)**; hedge as "the Commission currently plans".
 
 | College date (tbc) | Item | Responsible |
 |---|---|---|
@@ -14,8 +14,8 @@
 | Tue 20 Oct 2026, Strasbourg | **2027 Commission work programme** | President |
 | Tue 20 Oct 2026, Strasbourg | 2026 annual overview report on simplification, implementation and enforcement | President |
 | Tue 20 Oct 2026, Strasbourg | Northern Neighbourhood: **New Arctic Strategy** | President |
-| Tue 20 Oct 2026, Strasbourg | **Enlargement package** | President |
-| Tue 20 Oct 2026, Strasbourg | Climate resilience framework | EVP Ribera |
+| Wed 28 Oct 2026 | **Enlargement package** | President |
+| Wed 28 Oct 2026 | Climate resilience framework | EVP Ribera |
 | Wed 28 Oct 2026 | **Border and migration package**: strengthening Frontex and enhancing its operations; digitalisation of the return process; European annual asylum and migration report | EVP Virkkunen |
 
 - **Today, 15 September 2026 (Strasbourg College)**: child safety online and the fair labour mobility package are the planned items. **As of the morning of 15 September no Commission press release confirmed adoption** of either (Commission press corner and DG EMPL news checked). The EP agenda does hold a **scrutiny session "Presentation of the Fair Labour Mobility Package" on Tuesday 15 September, 15:00-16:00** (https://www.europarl.europa.eu/doceo/document/OJ-10-2026-09-14-SYN_EN.html). Press reports (Reuters, POLITICO, 14-15 Sep) say the child-protection proposal, which they call an "EU Kids Act", would be presented on Thursday 17 September: **press, and in conflict with the tentative agenda date**. Say "planned", not "adopted", until a Commission press release exists.

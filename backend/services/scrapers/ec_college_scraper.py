@@ -12,6 +12,7 @@ Created: February 2026
 import json
 import logging
 import pathlib
+import re
 from datetime import date, timedelta
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -108,6 +109,22 @@ def load_tentative_agenda_from_db() -> Dict[str, Any]:
     return agenda if agenda["meetings"] else {}
 
 
+def _undash(value: Any) -> Any:
+    """Brubru text carries no en or em dashes; the Commission's titles do.
+
+    "Northern Neighbourhood \u2013 New Arctic Strategy" reached users' calendar
+    descriptions verbatim once the scraped agenda became the source (29 Sep 2026).
+    A spaced dash becomes a colon; a bare one a hyphen.
+    """
+    if isinstance(value, str):
+        return re.sub(r"[\u2013\u2014]", "-", re.sub(r"\s+[\u2013\u2014]\s+", ": ", value))
+    if isinstance(value, dict):
+        return {k: _undash(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_undash(v) for v in value]
+    return value
+
+
 def load_tentative_agenda(path: Optional[pathlib.Path] = None) -> Dict[str, Any]:
     """Return the tentative agenda: the newest scraped one, else the JSON file.
 
@@ -118,13 +135,13 @@ def load_tentative_agenda(path: Optional[pathlib.Path] = None) -> Dict[str, Any]
         try:
             agenda = load_tentative_agenda_from_db()
             if agenda:
-                return agenda
+                return _undash(agenda)
         except Exception as exc:  # noqa: BLE001 -- fall back to the file
             logger.warning("[WARN] tentative agenda not read from the database: %s", exc)
     p = path or TENTATIVE_AGENDA_PATH
     try:
         data = json.loads(p.read_text(encoding="utf-8"))
-        return data if isinstance(data.get("meetings"), dict) else {}
+        return _undash(data) if isinstance(data.get("meetings"), dict) else {}
     except (OSError, ValueError) as exc:
         logger.warning("[WARN] tentative agenda not loaded from %s: %s", p, exc)
         return {}

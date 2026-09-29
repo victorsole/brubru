@@ -7,6 +7,7 @@ emits them.
 import json
 from datetime import date
 
+from models.eu_calendar import EventStatusEnum
 from services.scrapers import ec_college_scraper as g
 
 
@@ -53,7 +54,19 @@ def test_generator_uses_the_file_for_the_strasbourg_tuesday():
                                          strasbourg_plenary_dates=[date(2026, 10, 19)])
     ev = next((e for e in events if e["start_date"] == date(2026, 10, 20)), None)
     assert ev is not None
-    assert "Climate resilience framework (Ribera)" in ev["description"]
+    # SEC(2026) 2578 lists the work programme for 20 October; the Climate
+    # resilience framework is on 28 October (the old hand-kept file had it on
+    # the 20th, which is the drift the scraped source was introduced to end).
+    assert "2027 Commission work programme (President)" in ev["description"]
+    assert "Climate resilience framework" not in ev["description"]
+    assert "\u2013" not in ev["description"] and "\u2014" not in ev["description"]
+
+
+def test_dashes_are_normalised_wherever_the_agenda_comes_from():
+    raw = {"meetings": {"2026-10-20": [{"item": "Northern Neighbourhood \u2013 New Arctic Strategy",
+                                        "responsible": "President"}]}}
+    assert g._undash(raw)["meetings"]["2026-10-20"][0]["item"] == "Northern Neighbourhood: New Arctic Strategy"
+    assert g._undash("2025\u20132026") == "2025-2026"
 
 
 def test_held_meeting_keeps_the_description_the_oj_sync_wrote():
@@ -65,7 +78,7 @@ def test_held_meeting_keeps_the_description_the_oj_sync_wrote():
                                start_date=date(2026, 9, 15), end_date=None,
                                description="Ordre du jour de la 2578eme reunion: fair labour mobility package",
                                source_url="u", agenda_url=None, policy_areas=[], organiser=None,
-                               venue=None, last_updated=None)
+                               venue=None, last_updated=None, status=EventStatusEnum.SCHEDULED)
 
     class Q:
         def filter(self, *a, **k): return self

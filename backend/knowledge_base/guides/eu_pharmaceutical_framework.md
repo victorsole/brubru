@@ -23,7 +23,7 @@
 - EP lead committee: SANT (Public Health)
 - EudraLex: 4 volumes of EU pharmaceutical rules and guidelines
 - Treaty basis: Article 114 TFEU (internal market) + Article 168 TFEU (public health)
-- REFORM: All three core acts (2001/83, 726/2004, 141/2000, 1901/2006) being replaced by the 2023 pharmaceutical package. See `eu_pharmaceutical_legislation_reform.md`.
+- REFORM: the four core acts (Directive 2001/83/EC, Regulations 726/2004, 141/2000 and 1901/2006) are being replaced by the 2023 pharmaceutical package. **Status 29 September 2026: the Council adopted its first-reading position on 28 September 2026; the package is NOT yet law** until Parliament approves it at second reading (indicative plenary 19 October 2026) and it is published in the OJ. See `eu_pharmaceutical_legislation_reform.md`.
 - AMR investment (7 April 2026): Commission invests EUR 30 million to strengthen global response to antimicrobial resistance, announced by DG SANTE
 - **European Immunization Week Joint Statement (20 April 2026, STATEMENT/26/846)**: Joint statement by European Commission, WHO Regional Office for Europe, and UNICEF Regional Office for Europe and Central Asia celebrating two decades of progress through vaccination. Context: European Immunization Week 2026; Commission calls out measles resurgence in 2024-2025 + renewed HPV uptake push. Source: ec.europa.eu/commission/presscorner/detail/en/statement_26_846.
 - **EU-funded vaccination projects factsheet (20 April 2026, DG SANTE)**: Published factsheet highlighting EU-funded projects under EU4Health + Horizon Europe on immunisation: vaccination confidence (VACCELERATE, CREATE-HYDRO), vaccine surveillance (DRIVE, I-MOVE COVID), childhood programmes. Source: health.ec.europa.eu.

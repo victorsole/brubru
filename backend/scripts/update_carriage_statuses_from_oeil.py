@@ -152,6 +152,7 @@ async def update_statuses():
         status_changes = []
         failed_refs = []
         not_on_oeil = []
+        transient = []
         no_events = []
         started = time.monotonic()
 
@@ -185,6 +186,16 @@ async def update_statuses():
                             row.oeil_body_fetched_at = datetime.now(timezone.utc).replace(tzinfo=None)
                             db.commit()
                         log("   -> [INFO] not on OEIL yet (404); retried next cycle")
+                        await asyncio.sleep(0.5)
+                        continue
+                    if fe.status and fe.status >= 500:
+                        # Transient, not a failure (29 Sep 2026): two OEIL 500s
+                        # in ~500 fetches turned the whole run red, and both refs
+                        # answered 200 minutes later. Left unstamped, so a
+                        # stalest-first queue retries them first next cycle; the
+                        # run reports degraded, and fails only if OEIL is down.
+                        transient.append(f"{procedure_ref} (HTTP {fe.status})")
+                        log(f"   -> [WARN] OEIL server error, retried next cycle: {fe}")
                         await asyncio.sleep(0.5)
                         continue
                     errors += 1
@@ -323,6 +334,13 @@ async def update_statuses():
             + (f" -> {', '.join(no_events[:12])}" if no_events else ""))
         log(f"  Not on OEIL yet (404, not an error): {len(not_on_oeil)}"
             + (f" -> {', '.join(not_on_oeil)}" if not_on_oeil else ""))
+        log(f"  OEIL server errors (5xx, retried next cycle): {len(transient)}"
+            + (f" -> {', '.join(transient)}" if transient else ""))
+        attempted = len(targets) - len(not_on_oeil)
+        if transient and attempted and len(transient) > max(5, attempted / 5):
+            # A fifth of a run hitting 5xx is OEIL being down, not noise.
+            errors += 1
+            failed_refs.append(f"{len(transient)} of {attempted} fetches got an OEIL server error: OEIL down?")
         log(f"  Fetch routes: {dict(scraper.fetch_stats)}")
         if failed_refs:
             log("\nFailed refs (fetch/parse):")
@@ -360,6 +378,9 @@ async def update_statuses():
             if stale and not errors:
                 print(f"[SYNC_STATUS] degraded: {stale} live Legislative Train file(s) have an "
                       f"OEIL page older than 7 days", flush=True)
+        if transient and not errors:
+            print(f"[SYNC_STATUS] degraded: {len(transient)} OEIL server error(s), retried next "
+                  f"cycle: {', '.join(transient[:10])}", flush=True)
 
         return 1 if errors else 0
 

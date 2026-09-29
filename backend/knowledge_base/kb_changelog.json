@@ -3,6 +3,118 @@
   "entries": [
     {
       "date": "2026-09-29",
+      "action": "updated",
+      "guide": "common_agricultural_policy",
+      "title": "Common Agricultural Policy",
+      "summary": "JRC MARS September 2026 bulletin: summer crop forecasts cut after the drought",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_energy_policy",
+      "title": "EU energy policy",
+      "summary": "STOA briefing on CO2 transport infrastructure and markets, 28 Sep 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_commission_transparency_and_college_agenda",
+      "title": "College agenda",
+      "summary": "Enlargement package and climate resilience framework moved to 28 Oct, checked against the Commission tentative agenda",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "added",
+      "guide": "eu_cardiovascular_health_safe_hearts",
+      "title": "EU cardiovascular health and the Safe Hearts Plan",
+      "summary": "New guide: proposed Council Recommendation on cardiovascular health checks, COM(2026) 481, and EU Screening Week",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_space_programme",
+      "title": "EU Space Programme",
+      "summary": "New Space Threat Response Architecture, Council Decision (CFSP) 2026/2195",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions framework",
+      "summary": "28 Sep 2026 listings: Ukrainian children (territorial-integrity regime) and the Yabloko case (Russia human rights regime)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "ukraine_children_deportation",
+      "title": "Deportation of Ukrainian children",
+      "summary": "28 Sep 2026 sanctions on 10 persons and 17 entities; ICC warrant articles corrected",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "EUR 6.6bn distribution confirmed at the Defence Council; Cabo Verde, Djibouti and Benin measures",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_defence_agency_eda",
+      "title": "European Defence Agency",
+      "summary": "Next phase of EDA strengthening approved by defence ministers, 28 Sep 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "european_defence_union",
+      "title": "European Defence Union",
+      "summary": "First five European Defence Projects of Common Interest (EUR 325m under EDIP) and EDA strengthening, 28 Sep 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "added",
+      "guide": "social_security_coordination_revision",
+      "title": "Revision of EU social security coordination",
+      "summary": "New guide: the 883/2004 revision adopted on 28 Sep 2026 (postings, prior notification, unemployment export, long-term care)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_framework",
+      "title": "EU pharmaceutical framework",
+      "summary": "Reform status updated to the Council first-reading position of 28 Sep 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "pharma_sector_regulatory_landscape",
+      "title": "Pharma sector regulatory landscape",
+      "summary": "Pharma package status updated: Council position 28 Sep 2026, Parliament second reading pending",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_legislation_reform",
+      "title": "EU pharmaceutical legislation reform",
+      "summary": "Council adopted its first-reading position on 28 Sep 2026; not law until Parliament approves at second reading (indicative 19 Oct)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
       "action": "deep_dive",
       "guide": "cloud_ai_development_act_cada",
       "title": "Cloud and AI Development Act",

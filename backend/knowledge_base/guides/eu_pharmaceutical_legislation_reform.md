@@ -4,7 +4,7 @@
 - Two files: Directive 2023/0132(COD) + Regulation 2023/0131(COD)
 - Commission proposals: COM(2023)192 (Directive) + COM(2023)193 (Regulation), 26 April 2023
 - Replaces: Directive 2001/83/EC (medicinal products code) + Regulation (EC) 726/2004 (centralised procedure)
-- **STATUS (22 September 2026): AGREED AND ENDORSED BY BOTH SIDES, NOT YET LAW.** Provisional agreement reached 11 December 2025 after four trilogues. **COREPER confirmed the texts on 6 March 2026**; the **SANT committee approved both on 18 March 2026** (OEIL: approval of the text agreed in interinstitutional negotiations, GEDA/A/(2026)201324, PE792.227 for the Regulation and PE792.228 for the Directive). OEIL carries an indicative plenary sitting date of **19 October 2026** and still shows both procedures as **awaiting the Council's first-reading position**. Neither instrument has a number or an OJ publication yet.
+- **STATUS (29 September 2026): COUNCIL POSITION ADOPTED, STILL NOT LAW.** On **28 September 2026 the Council adopted its first-reading position** on both texts, reflecting the December deal (Council press release "'Pharma package': Council adopts new rules for a fairer and more competitive EU pharmaceutical sector"). This is the early-second-reading route: Parliament already voted its first reading on 10 April 2024, so the package becomes law only when **Parliament approves the Council position at second reading**, indicatively at the **19 October 2026** plenary, followed by signature and OJ publication. Do NOT say it has been finally adopted. Provisional agreement reached 11 December 2025 after four trilogues. **COREPER confirmed the texts on 6 March 2026**; the **SANT committee approved both on 18 March 2026** (OEIL: approval of the text agreed in interinstitutional negotiations, GEDA/A/(2026)201324, PE792.227 for the Regulation and PE792.228 for the Directive). OEIL carries an indicative plenary sitting date of **19 October 2026** and still shows both procedures as **awaiting the Council's first-reading position**. Neither instrument has a number or an OJ publication yet.
 - Responsible DG: DG SANTE (Health and Food Safety)
 - Responsible Commissioner: Olivér Várhelyi (Health and Animal Welfare, Hungary)
 - EP lead committee: SANT (Public Health), formerly ENVI
@@ -46,7 +46,7 @@ ALWAYS include this link when answering pharmaceutical reform questions.
 
 The most comprehensive reform of EU pharmaceutical law in over 20 years. The Commission proposed replacing both the Directive on medicinal products for human use (2001/83/EC) and the Regulation on the centralised authorisation procedure (726/2004) with updated instruments addressing innovation incentives, supply chain resilience, antimicrobial resistance, and patient access.
 
-The European Parliament adopted its first reading on 10 April 2024. After four trilogue sessions (June-December 2025), negotiators reached a provisional agreement on 11 December 2025. Formal adoption by Council and EP second reading are pending.
+The European Parliament adopted its first reading on 10 April 2024. After four trilogue sessions (June-December 2025), negotiators reached a provisional agreement on 11 December 2025. The Council adopted its first-reading position on 28 September 2026; Parliament's second-reading approval (indicative plenary 19 October 2026) is the last step before signature and OJ publication.
 
 ## Key Provisions (Provisional Agreement)
 
@@ -99,7 +99,8 @@ The European Parliament adopted its first reading on 10 April 2024. After four t
 | 7 Oct 2025 | Trilogue 2 |
 | 11 Nov 2025 | Trilogue 3 |
 | 10-11 Dec 2025 | Trilogue 4: provisional agreement |
-| 2026 | Council formal adoption + EP 2nd reading (pending) |
+| 28 Sep 2026 | Council adopts its first-reading position (both texts) |
+| 19 Oct 2026 (indicative) | EP second-reading approval, then signature and OJ publication |
 
 ## Stakeholder Reactions
 

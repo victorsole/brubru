@@ -1,6 +1,7 @@
 # EU Space Programme and Defence
 
 ## QUICK FACTS
+- **LATEST (Monday 28 September 2026): new EU Space Threat Response Architecture.** Council Decision (CFSP) 2026/2195 on the European Union Space Threat Response Architecture repeals and replaces Decision (CFSP) 2021/698. It widens the scope to threats caused by space systems of third States or commercial companies and to threats against essential space services in the Union; it creates a **space security toolbox** complementing the cyber diplomacy and hybrid toolboxes; it covers the Union Space Programme and the Union Secure Connectivity Programme (IRIS²). Activation is the sovereign, voluntary decision of a Member State or group of Member States; in urgent cases the **High Representative can adopt provisional responses**, which the Council must review within **four weeks**. The Single Intelligence Analysis Capability's classified Space Threat Landscape Analysis is the reference for the typology of threats. Source: OJ L, 28 Sep 2026, ELI http://data.europa.eu/eli/dec/2026/2195/oj.
 - **Launch capacity gap (Commissioner Kubilius, 25 Sep 2026):** on a "launching tour" of European spaceports he said that in 2035 almost half of European launch demand will not be covered by European launch capabilities, and met the Portuguese Air Force on its plan for a new spaceport at Santa Maria, Azores. This is the Commissioner's public statement, not a Commission estimate in a published document.
 - Full name: EU Space Programme
 - Type: Regulation

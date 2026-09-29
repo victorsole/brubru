@@ -8,7 +8,7 @@
 - Deep dive: https://brubru.beresol.eu/pharma-laws/ (13 sections covering full landscape)
 - EFPIA (European Federation of Pharmaceutical Industries and Associations): main EU industry body, Brussels
 - Key DGs: DG SANTE (pharma law), DG TRADE (FTAs, tariffs), DG ENV (REACH, PFAS, UWWTD), DG GROW (procurement, competitiveness)
-- 2026 Pharma Package: provisional agreement 11 December 2025, SANT committee approved 18 March 2026, formal adoption autumn 2026
+- 2026 Pharma Package: provisional agreement 11 December 2025, SANT committee approved 18 March 2026, **Council first-reading position adopted 28 September 2026**; NOT yet law until Parliament's second-reading approval (indicative plenary 19 October 2026) and OJ publication
 - NEW: Regulatory sandboxes for the first time in EU pharma law (personalised medicines, ATMPs, AI/digital health, phage therapy)
 - NEW: Compounding clarification (Article 3 exemption boundary tightened)
 - NEW: UWWTD recast (Directive 2024/3019): Extended Producer Responsibility for pharma, 80% micropollutant removal cost

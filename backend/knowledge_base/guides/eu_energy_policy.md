@@ -1,6 +1,7 @@
 # EU Energy Policy Framework
 
 ## QUICK FACTS
+- STOA Briefing (28 September 2026): "CO₂ transportation infrastructure and markets" -- the Commission is expected to propose rules on CO₂ transport and a cross-border CO₂ market in Q3 2026; all Commission 2050 climate-neutrality scenarios converge on capturing close to 450 million tonnes of CO₂ a year, yet no cross-border market exists at that scale and the business case for capture remains weak. Source: EP STOA publications, https://www.europarl.europa.eu/stoa/en/publications/search
 - **Reported, not yet published (Contexte, 25 September 2026)**: a Commission draft overhaul of the EU **security of energy supply** rules would require energy infrastructure developers to assess physical risks. A **leak reported by the press**: no proposal has been adopted; never state its content as law. Same week: the **Gas Coordination Group** continued work on winter preparedness (25 September 2026).
 - Topic: EU energy policy framework -- legislation, targets, and institutional landscape
 - Legal basis: Article 194 TFEU (shared competence; taxation remains national/unanimity)

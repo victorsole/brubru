@@ -1,6 +1,7 @@
 # European Defence Agency (EDA): Mandate, Capability Development, PESCO/CARD/EDF Coordination
 
 ## QUICK FACTS
+- **LATEST (Monday 28 September 2026): EDA strengthening, next phase approved.** At the Foreign Affairs Council (Defence), the EDA steering board (defence ministers, chaired by HR/VP Kaja Kallas) "approved also the next phase for strengthening the European Defence Agency". Per Kallas, it lets the EDA **increase joint procurement**, **focus more on defence innovation** and help Member States **develop capabilities together**. Source: EEAS transcript of Kallas's press conference, 28 Sep 2026.
 - Topic: European Defence Agency (EDA) -- the EU's intergovernmental hub for defence capability coordination
 - Full name / seat: European Defence Agency, Brussels
 - Established: 12 July 2004 (Council Joint Action 2004/551/CFSP); current legal basis is the recast Council Decision (CFSP) 2015/1835

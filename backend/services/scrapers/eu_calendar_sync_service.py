@@ -420,8 +420,9 @@ class EUCalendarSyncService:
         from services.scrapers.dg_events_scraper import scrape_source
 
         result = {"source": "dg_events", "added": 0, "updated": 0, "skipped": 0,
-                  "errors": 0, "sources": 0, "sources_empty": 0}
+                  "errors": 0, "sources": 0, "sources_empty": 0, "merged_renamed": 0}
         db = self._get_db()
+        listed: Dict[str, List[Dict[str, Any]]] = {}
         try:
             for src in DG_EVENT_SOURCES:
                 try:
@@ -434,18 +435,92 @@ class EUCalendarSyncService:
                 if not events:
                     result["sources_empty"] += 1
                 for ev in events:
+                    listed.setdefault(ev.get("source") or "", []).append(ev)
                     try:
                         self._upsert_event(db, ev, result)
                     except Exception as e:
                         logger.warning(f"[dg_events] upsert failed: {e}")
                         result["errors"] += 1
                 db.commit()
+            for source_key, evs in listed.items():
+                if source_key:
+                    try:
+                        self._merge_renamed_dg_events(db, source_key, evs, result)
+                        db.commit()
+                    except Exception as e:
+                        db.rollback()
+                        logger.warning(f"[dg_events] merge of renamed events failed for {source_key}: {e}")
+                        result["errors"] += 1
         finally:
             if self._should_close_db():
                 db.close()
 
         result["elapsed_seconds"] = round(time.time() - start_time, 1)
         return result
+
+    def _merge_renamed_dg_events(
+        self, db: Session, source_key: str, listed: List[Dict[str, Any]], result: Dict[str, int]
+    ) -> None:
+        """Merge a future event row whose page was RENAMED into the row for its new URL.
+
+        DG event pages are keyed on their URL slug. When a DG renames the page, the
+        next run inserts a second row and the old one lingers: on 29 Sep 2026 one
+        GROW webinar sat in the calendar three times. A row is merged only on proof:
+        it is missing from this run's listing, falls on the date of a listed event,
+        and its OWN URL now redirects to that listed event's URL. Users'
+        subscriptions and archives are moved to the surviving row first, because
+        both reference the event with ON DELETE CASCADE.
+        """
+        import requests
+        from sqlalchemy import text as sql_text
+
+        by_url = {(ev.get("source_url") or "").rstrip("/"): ev for ev in listed if ev.get("source_url")}
+        listed_ids = {ev.get("external_id") for ev in listed}
+        dates = {ev.get("start_date") for ev in listed if ev.get("start_date")}
+        if not by_url or not dates:
+            return
+        stale = (
+            db.query(EUCalendarEvent)
+            .filter(
+                EUCalendarEvent.source == source_key,
+                EUCalendarEvent.start_date >= date.today(),
+                EUCalendarEvent.start_date.in_(dates),
+                ~EUCalendarEvent.external_id.in_(listed_ids),
+            )
+            .all()
+        )
+        for row in stale:
+            if not row.source_url:
+                continue
+            try:
+                r = requests.get(row.source_url, allow_redirects=True, timeout=20,
+                                 headers={"User-Agent": "Mozilla/5.0 (compatible; BrubruBot/1.0)"})
+            except requests.RequestException:
+                continue
+            final = (r.url or "").rstrip("/")
+            if r.status_code != 200 or final == row.source_url.rstrip("/") or final not in by_url:
+                continue
+            target = by_url[final]
+            survivor = (
+                db.query(EUCalendarEvent)
+                .filter(EUCalendarEvent.source == source_key,
+                        EUCalendarEvent.external_id == target.get("external_id"))
+                .first()
+            )
+            if survivor is None or survivor.id == row.id or survivor.start_date != row.start_date:
+                continue
+            params = {"old": row.id, "new": survivor.id}
+            db.execute(sql_text(
+                "UPDATE user_calendar_subscriptions s SET event_id = :new WHERE s.event_id = :old "
+                "AND NOT EXISTS (SELECT 1 FROM user_calendar_subscriptions t "
+                "WHERE t.event_id = :new AND t.user_id = s.user_id)"), params)
+            db.execute(sql_text(
+                "UPDATE user_calendar_event_archives a SET event_id = :new WHERE a.event_id = :old "
+                "AND NOT EXISTS (SELECT 1 FROM user_calendar_event_archives b "
+                "WHERE b.event_id = :new AND b.user_id = a.user_id)"), params)
+            logger.info(f"[dg_events] merged renamed event {row.external_id} -> {survivor.external_id}")
+            db.delete(row)
+            result["merged_renamed"] += 1
 
     # Commissioner slug -> their Commission DG (shared taxonomy), so commissioner
     # agenda items are filterable under Institution=Commission -> Department=<DG>
