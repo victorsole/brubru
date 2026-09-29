@@ -21,8 +21,10 @@ import services.schedulers.tender_match_scheduler as sched
 
 @pytest.fixture(autouse=True)
 def _clean():
+    # The in-process scheduler is opt-in since 29 Sep 2026 (the daily cron tier
+    # runs the matcher as a subprocess); these tests exercise the opt-in path.
     sched.stop_tender_match_scheduler()
-    os.environ.pop("ENABLE_TENDER_MATCH_SCHEDULER", None)
+    os.environ["ENABLE_TENDER_MATCH_SCHEDULER"] = "true"
     yield
     sched.stop_tender_match_scheduler()
     os.environ.pop("ENABLE_TENDER_MATCH_SCHEDULER", None)
@@ -67,13 +69,19 @@ def test_opting_out_leaves_no_scheduler():
     asyncio.run(go())
 
 
-def test_it_is_on_by_default():
-    """A matcher that is off by default reproduces the defect being fixed."""
+def test_off_by_default_because_the_daily_tier_runs_the_matcher():
+    """The defect this module was written for is a matcher with no caller. The
+    in-process job is off by default only because the daily cron tier now runs
+    the matcher as its own process; assert that caller exists, and is recorded."""
+    import pathlib
+    os.environ.pop("ENABLE_TENDER_MATCH_SCHEDULER", None)
     async def go():
-        assert "ENABLE_TENDER_MATCH_SCHEDULER" not in os.environ
         sched.start_tender_match_scheduler()
-        assert sched._tender_match_scheduler is not None
+        assert sched._tender_match_scheduler is None
     asyncio.run(go())
+    cron = (pathlib.Path(__file__).resolve().parents[1] / "api" / "cron.py").read_text()
+    assert '"scripts/run_tender_matching_daily.py"' in cron
+    assert '"tender_matching",' in cron.split("_TENDERATOR_CHAIN = (")[1].split(")")[0]
 
 
 def test_a_raising_shutdown_still_clears_the_singleton():

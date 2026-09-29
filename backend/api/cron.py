@@ -373,7 +373,7 @@ def _kill_process_group(proc, name: str) -> None:
 
 _TENDERATOR_CHAIN = (
     "tenders_fetch", "tenders", "tenders_country_repair",
-    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_tenders_bridge",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_tenders_bridge", "tender_matching",
     "tenderator_translations_ted", "tenderator_translations_ft_tenders",
     "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
 )
@@ -876,6 +876,17 @@ async def cron_sync_daily(
         "ft_tenders_bridge",
         "scripts/bridge_ft_tenders_to_tenders.py",
         ["--apply"], timeout=600,
+    )
+
+    # Tender matching, moved OUT of the web process (29 Sep 2026). It loads every
+    # open tender and used to run as an in-app 05:00 UTC job, so the memory it
+    # grew stayed with the always-on web container. As a subprocess it gives the
+    # memory back on exit. After the bridge (institution notices included), before
+    # the 07:30 UTC digest.
+    results["tender_matching"] = await _run_script_async(
+        "tender_matching",
+        "scripts/run_tender_matching_daily.py",
+        [], timeout=1500,
     )
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang

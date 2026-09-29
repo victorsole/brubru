@@ -111,15 +111,18 @@ async def _match_job() -> None:
 def start_tender_match_scheduler() -> None:
     """Start daily tender matching (called from the app lifespan).
 
-    Opt OUT with ENABLE_TENDER_MATCH_SCHEDULER=false. Defaults to ON, for the
-    same reason the notification scheduler does: the defect being fixed is a
-    matcher that never ran, and a matcher that is off by default is that defect
-    with a different cause.
+    OFF by default since 29 Sep 2026: matching now runs in the daily cron tier
+    as its own process (scripts/run_tender_matching_daily.py, sync_runs key
+    `tender_matching`), because run here it loaded every open tender into the
+    always-on web container and the memory stayed billed all day. The matcher
+    still runs daily; only where it runs changed. Opt back IN with
+    ENABLE_TENDER_MATCH_SCHEDULER=true (for example if the daily tier is down).
     """
     global _tender_match_scheduler
 
-    if os.getenv("ENABLE_TENDER_MATCH_SCHEDULER", "true").lower() == "false":
-        logger.info("[TENDER-SCHED] disabled by ENABLE_TENDER_MATCH_SCHEDULER=false")
+    if os.getenv("ENABLE_TENDER_MATCH_SCHEDULER", "false").lower() != "true":
+        logger.info("[TENDER-SCHED] off: matching runs in the daily cron tier "
+                    "(set ENABLE_TENDER_MATCH_SCHEDULER=true to run it in-process)")
         return
 
     if _tender_match_scheduler is not None:
