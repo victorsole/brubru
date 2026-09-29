@@ -45,6 +45,42 @@ ENV = ROOT / ".env"
 USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/151.0.0.0"
 BASE = "https://ec.europa.eu/transparency-initiative/meetings"
 
+# The register's link text is boilerplate plus the department's own name:
+# "Information on meetings held by Directorate-General for Trade". The name is what the
+# source says; the ACRONYM is not on the page at all, so it is resolved against the
+# curated map and left NULL when that map does not carry the spelling. Deriving an
+# acronym from a name we have not matched would be inventing an identifier.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from knowledge_base.eu_calendar_institutions import COMMISSION_DG_NAME  # noqa: E402
+
+_HOST_PREFIX_RE = re.compile(r"^\s*information on meetings held by\s+", re.I)
+_DG_PREFIX_RE = re.compile(r"^\s*directorate[-\s]general for\s+", re.I)
+
+
+def _norm(s: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", (s or "").lower()).strip()
+
+
+_DG_BY_NAME = {_norm(v): k for k, v in COMMISSION_DG_NAME.items()}
+
+
+def department_name(raw_host_name: str) -> Optional[str]:
+    """The department as the source names it, boilerplate prefix removed."""
+    core = _HOST_PREFIX_RE.sub("", raw_host_name or "").strip()
+    return core[:255] or None
+
+
+def dg_acronym(raw_host_name: str) -> Optional[str]:
+    """The DG acronym when the curated map carries this exact name, else None.
+
+    37 of the register's 52 DG hosts resolve. The 15 that do not are services, offices
+    and task forces that are not DGs, plus naming drift ("Trade" vs "Trade and Economic
+    Security"). They store NULL, which reads as not-resolved, never as a wrong DG.
+    """
+    core = department_name(raw_host_name) or ""
+    return _DG_BY_NAME.get(_norm(_DG_PREFIX_RE.sub("", core)))
+
+
 
 def get_env(k: str) -> str:
     """The value from the process environment, else from the repo-root .env.
@@ -197,8 +233,13 @@ def parse_meetings_page(host: Dict[str, str], page: int) -> List[Dict[str, objec
             "host_uuid": host["uuid"],
             "host_name": host_name[:200],
             "host_role": host["kind"].upper(),
-            "host_dg": host["name"][:200] if host["kind"] == "dg" else None,
-            "host_cabinet": host["name"][:200] if host["kind"] == "cabinet" else None,
+            # host_dg is a VARCHAR(20) ACRONYM column that the API maps back to a name.
+            # Writing host["name"] here put a 45-121 character sentence in it, so every
+            # insert for every DG host raised "value too long" and not one DG meeting was
+            # ever stored (migration 253).
+            "host_dg": dg_acronym(host["name"]) if host["kind"] == "dg" else None,
+            "host_department": department_name(host["name"]),
+            "host_cabinet": host["name"][:100] if host["kind"] == "cabinet" else None,
             "meeting_date": meeting_date.date(),
             "location": location[:200] if location else None,
             "subject": (subject or organisation)[:1000],
@@ -231,6 +272,10 @@ def main():
     ap.add_argument("--limit", type=int, default=5,
                     help="Cap number of hosts processed (per type)")
     ap.add_argument("--max-pages", type=int, default=50)
+    ap.add_argument("--max-seconds", type=int, default=0,
+                    help="Stop cleanly after this many seconds (0 = no budget). The warm "
+                         "tier passes one below its own timeout so the run ends itself "
+                         "rather than being killed mid-host.")
     args = ap.parse_args()
 
     db_url = get_env("DATABASE_URL")
@@ -247,11 +292,23 @@ def main():
             hosts = hosts[: args.limit]
         all_hosts.extend(hosts)
 
-    inserted = total_meetings = 0
+    inserted = total_meetings = rejected = 0
     conn = psycopg2.connect(db_url) if args.apply else None
     cur = conn.cursor() if conn else None
 
+    started = time.time()
+    budget_hit = False
+    host_i = 0
     for host in all_hosts:
+        # The tier kills this at 1800s. A full pass over 112 hosts takes longer than
+        # that, so without a budget of its own the run was killed mid-host every time
+        # and always covered the same prefix of the list. It now stops cleanly and the
+        # next run resumes from where the register's own ordering leaves it.
+        if args.max_seconds and time.time() - started > args.max_seconds:
+            budget_hit = True
+            print(f"  [BUDGET] {args.max_seconds}s reached after {host_i} host(s); stopping cleanly")
+            break
+        host_i += 1
         meetings = fetch_all_meetings_for_host(host, max_pages=args.max_pages)
         total_meetings += len(meetings)
         print(f"  [{host['kind']:12s}] {host['name'][:60]:60s} → {len(meetings):4d} meetings")
@@ -261,16 +318,23 @@ def main():
             attempt = 0
             while attempt < 3:
                 try:
+                    # One SAVEPOINT per row. Without it a single rejected row (a value
+                    # too long, a bad date) rolled back the open transaction and took
+                    # every row already inserted for this host with it, so one bad row
+                    # emptied a whole host's batch.
+                    cur.execute("SAVEPOINT row_sp")
                     cur.execute(
                         """
                         INSERT INTO transparency_meetings
-                          (id, host_uuid, host_name, host_role, host_dg, host_cabinet,
+                          (id, host_uuid, host_name, host_role, host_dg, host_department,
+                           host_cabinet,
                            meeting_date, location, subject, organisation_met,
                            transparency_register_id, organisation_type, representatives,
                            source_url, policy_areas, related_celex,
                            scraped_at, first_seen, last_updated)
                         VALUES
                           (%(id)s, %(host_uuid)s, %(host_name)s, %(host_role)s, %(host_dg)s,
+                           %(host_department)s,
                            %(host_cabinet)s, %(meeting_date)s, %(location)s, %(subject)s,
                            %(organisation_met)s, %(transparency_register_id)s, %(organisation_type)s,
                            %(representatives)s, %(source_url)s, %(policy_areas)s, %(related_celex)s,
@@ -279,6 +343,7 @@ def main():
                         """,
                         m,
                     )
+                    cur.execute("RELEASE SAVEPOINT row_sp")
                     inserted += 1
                     break
                 except (psycopg2.OperationalError, psycopg2.InterfaceError) as exc:
@@ -292,10 +357,15 @@ def main():
                     attempt += 1
                 except Exception as exc:
                     print(f"    [ERR] {m['meeting_date']}: {exc}")
+                    rejected += 1
                     try:
-                        conn.rollback()
+                        # Roll back THIS ROW only; the host's other rows stay staged.
+                        cur.execute("ROLLBACK TO SAVEPOINT row_sp")
                     except Exception:
-                        pass
+                        try:
+                            conn.rollback()
+                        except Exception:
+                            pass
                     break
         try:
             conn.commit()
@@ -309,7 +379,16 @@ def main():
         except Exception:
             pass
 
-    print(f"[DONE] hosts={len(all_hosts)} meetings_parsed={total_meetings} inserted={inserted}{' (applied)' if args.apply else ' (dry-run)'}")
+    print(f"[DONE] hosts={host_i}/{len(all_hosts)} meetings_parsed={total_meetings} "
+          f"inserted={inserted} rejected={rejected}"
+          f"{' (budget reached)' if budget_hit else ''}"
+          f"{' (applied)' if args.apply else ' (dry-run)'}")
+
+    # A rejected row is data the source gave us and we dropped. 16,504 DG meetings were
+    # lost this way for months while the run still exited 0, so it is a failure now.
+    if args.apply and rejected:
+        print(f"[ERROR] {rejected} row(s) rejected by the database and lost")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

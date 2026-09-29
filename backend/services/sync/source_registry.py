@@ -208,7 +208,8 @@ MEUB_SOURCES: List[SourceSpec] = [
     # /commission/meetings answered 0 to a daily window. --limit caps HOSTS per type,
     # not meetings, and its default of 5 would read a fraction of them.
     SourceSpec("transparency_meetings", "Lobby meetings (Transparency Register)", "warm",
-               "scripts/ingest_transparency_meetings.py", ("--apply", "--limit", "200"),
+               "scripts/ingest_transparency_meetings.py",
+               ("--apply", "--limit", "200", "--max-seconds", "1500"),
                timeout=1800, stale_after_hours=48),
     # Commission follow-up (SP) to EP adopted texts, from EP Open Data /external-documents.
     # No --years: the script walks newest-first and the budget stops it, so a daily run

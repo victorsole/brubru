@@ -100,7 +100,8 @@ class TransparencyMeeting(Base):
     host_uuid = Column(String(64), nullable=False, index=True)  # cabinet/DG host UUID
     host_name = Column(String(255), nullable=True)
     host_role = Column(String(255), nullable=True)  # "Commissioner", "Cabinet member", "Director-General"
-    host_dg = Column(String(20), nullable=True, index=True)
+    host_dg = Column(String(20), nullable=True, index=True)  # ACRONYM only; see migration 253
+    host_department = Column(String(255), nullable=True, index=True)
     host_cabinet = Column(String(100), nullable=True)
 
     meeting_date = Column(Date, nullable=False, index=True)

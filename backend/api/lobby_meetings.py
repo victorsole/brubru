@@ -114,6 +114,10 @@ def _summary(r: TM) -> dict:
         "host_role": r.host_role,
         "host_dg": r.host_dg,
         "host_dg_name": _dg_name(r.host_dg),
+        # The hosting department as the register names it. host_dg is an acronym and is
+        # NULL for the 15 hosts that are services, offices or task forces rather than
+        # DGs, so this is the only field that names them.
+        "host_department": r.host_department,
         "host_cabinet": r.host_cabinet,
         "subject": r.subject,
         "organisation_met": r.organisation_met,
