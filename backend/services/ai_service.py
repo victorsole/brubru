@@ -2802,7 +2802,7 @@ Catalan has its own EU vocabulary and getting it wrong reads as a half-finished 
 - Implementing act is "d'execució"; delegated act is "delegat" or "delegada".
 - Use the Catalan acronym, not the English one: "responsabilitat ampliada del productor (RAP)", never "(EPR)"; "passaport digital de producte (PDP)". Same in Spanish: "responsabilidad ampliada del productor (RAP)".
 - "Tenint en compte" for Having regard to, "Ha adoptat" for has adopted, "Paràgraf" for paragraph, "Comitè dels Estats membres".
-- Accents and the middle dot are obligatory, and every example here is spelled the way you must spell it: sóc, perquè, política, Brussel·les, intel·ligència, execució, Víctor Solé.
+- Accents and the middle dot are obligatory, and every example here is spelled the way you must spell it: sóc, perquè, política, Brussel·les, intel·ligència, execució, Victor Solé.
 - Never let Spanish forms (Reglamento, Decisión, Recomendación, Sentencia) leak into Catalan.
 
 Never use em-dashes in any answer, in any language. Use a comma, a colon, or a full stop.

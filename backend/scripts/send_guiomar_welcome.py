@@ -7,7 +7,7 @@ Modes:
   --send           send to guiomar.ibanez@gencat.cat
 
 Hard rules enforced:
-  - Catalan body, signature 'Víctor Solé' with accent
+  - Catalan body, signature 'Victor Solé' with accent
   - From: hello@beresol.eu (never victor@)
   - No em-dashes, no emojis
   - Multipart/alternative with HTML hyperlink on "dret europeu en català"
@@ -25,7 +25,7 @@ RECIPIENT       = "guiomar.ibanez@gencat.cat"
 RECIPIENT_NAME  = "Guiomar Ibáñez"
 TEST_RECIPIENT  = "hello@beresol.eu"
 FROM_ADDR       = "hello@beresol.eu"
-FROM_NAME       = "Víctor Solé (Brubru)"
+FROM_NAME       = "Victor Solé (Brubru)"
 LOGIN_URL       = "https://brubru.beresol.eu/login"
 CATALA_LAW_URL  = "https://brubru.beresol.eu/legislacio-ue-catala/"
 
@@ -33,7 +33,7 @@ SUBJECT = "Guiomar, els fitxers UE per a la detecció tecnològica d'ACCIÓ"
 
 BODY_PLAIN = f"""Hola Guiomar,
 
-Sóc el Víctor, fundador de Brubru. Vaig veure que dilluns vas crear un compte a brubru.beresol.eu però la sessió va quedar a mitges, així que t'escric per donar-te la benvinguda i explicar-te què hi trobaràs.
+Sóc el Victor, fundador de Brubru. Vaig veure que dilluns vas crear un compte a brubru.beresol.eu però la sessió va quedar a mitges, així que t'escric per donar-te la benvinguda i explicar-te què hi trobaràs.
 
 Brubru és un assistent d'IA per a afers legislatius europeus. Coneixent la teva feina a ACCIÓ com a líder de l'equip d'Anàlisi i Detecció d'Oportunitats Tecnològiques, i recordant la presentació de l'informe sobre robòtica a Catalunya del passat 4 de maig, hem deixat el teu perfil llest amb els fitxers UE que més afecten l'agenda de detecció tecnològica:
 
@@ -56,7 +56,7 @@ Si vols, faig una demo curta de quinze minuts ajustada al cas d'ús d'ACCIÓ. Re
 
 Una abraçada,
 
-Víctor Solé Ferioli
+Victor Solé Ferioli
 Fundador, Beresol BV
 {FROM_ADDR}
 """
@@ -67,7 +67,7 @@ BODY_HTML = f"""<!doctype html>
 
 <p>Hola Guiomar,</p>
 
-<p>Sóc el Víctor, fundador de Brubru. Vaig veure que dilluns vas crear un compte a <a href="https://brubru.beresol.eu" style="color: #0693e3; text-decoration: none;">brubru.beresol.eu</a> però la sessió va quedar a mitges, així que t'escric per donar-te la benvinguda i explicar-te què hi trobaràs.</p>
+<p>Sóc el Victor, fundador de Brubru. Vaig veure que dilluns vas crear un compte a <a href="https://brubru.beresol.eu" style="color: #0693e3; text-decoration: none;">brubru.beresol.eu</a> però la sessió va quedar a mitges, així que t'escric per donar-te la benvinguda i explicar-te què hi trobaràs.</p>
 
 <p>Brubru és un assistent d'IA per a afers legislatius europeus. Coneixent la teva feina a ACCIÓ com a líder de l'equip d'Anàlisi i Detecció d'Oportunitats Tecnològiques, i recordant la presentació de l'informe sobre robòtica a Catalunya del passat 4 de maig, hem deixat el teu perfil llest amb els fitxers UE que més afecten l'agenda de detecció tecnològica:</p>
 
@@ -94,7 +94,7 @@ BODY_HTML = f"""<!doctype html>
 
 <p>Una abraçada,</p>
 
-<p style="margin-bottom: 4px;"><strong>Víctor Solé Ferioli</strong><br/>
+<p style="margin-bottom: 4px;"><strong>Victor Solé Ferioli</strong><br/>
 Fundador, Beresol BV<br/>
 <a href="mailto:{FROM_ADDR}" style="color: #0693e3;">{FROM_ADDR}</a></p>
 

@@ -217,7 +217,7 @@ T = {
 "annex_m3": "Elk cijfer is met de bron vergeleken nadat de witruimte was samengevoegd, omdat een tekstextract uit een PDF zinnen midden in een zinsdeel afbreekt en een naïeve zoekopdracht faalt op feiten die wel degelijk aanwezig en juist zijn.",
 "annex_m4": "Het aantal gewijzigde handelingen is ontleend aan artikel 147, dat er veertien wijzigt, en niet aan de titel van het voorstel, die er dertien noemt. Waar beide van elkaar afwijken, gaat het dispositief voor, en de discrepantie wordt in deel 7 gemeld in plaats van stilzwijgend opgelost.",
 
-"pm": "Diepteanalyse van de wet inzake overheidsopdrachten door <a href=\"https://brubru.beresol.eu\">Brubru</a>, de AI-ondersteunde EU-beleidsassistent van <a href=\"https://beresol.eu\">Beresol</a>.<br>Víctor Solé &middot; Bijgewerkt op 11 september 2026",
+"pm": "Diepteanalyse van de wet inzake overheidsopdrachten door <a href=\"https://brubru.beresol.eu\">Brubru</a>, de AI-ondersteunde EU-beleidsassistent van <a href=\"https://beresol.eu\">Beresol</a>.<br>Victor Solé &middot; Bijgewerkt op 11 september 2026",
 "pc": "Omslagfotografie van Aimee, sectiefotografie van Samuel Wölfl, beide via Pexels.",
 }
 

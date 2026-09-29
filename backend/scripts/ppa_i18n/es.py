@@ -217,7 +217,7 @@ T = {
 "annex_m3": "Cada cifra se ha contrastado con la fuente colapsando antes los espacios en blanco, porque un extracto de texto de un PDF parte las frases a mitad de oración y una búsqueda ingenua falla con datos que están presentes y son correctos.",
 "annex_m4": "El número de actos modificados se ha tomado del artículo 147, que modifica catorce, y no del propio título de la propuesta, que nombra trece. Cuando ambos discrepan manda la parte dispositiva, y la discrepancia se informa en la sección 7 en lugar de resolverse en silencio.",
 
-"pm": "Análisis en profundidad de la Ley de Contratación Pública por <a href=\"https://brubru.beresol.eu\">Brubru</a>, el asistente de políticas de la UE con IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Víctor Solé &middot; Actualizado el 11 de septiembre de 2026",
+"pm": "Análisis en profundidad de la Ley de Contratación Pública por <a href=\"https://brubru.beresol.eu\">Brubru</a>, el asistente de políticas de la UE con IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Victor Solé &middot; Actualizado el 11 de septiembre de 2026",
 "pc": "Fotografía de portada de Aimee, fotografía de sección de Samuel Wölfl, ambas vía Pexels.",
 }
 

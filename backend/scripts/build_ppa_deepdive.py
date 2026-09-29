@@ -749,7 +749,7 @@ def main() -> int:
 </div>
 
 <div class="page-meta">
-  <p data-i18n="pm">Public Procurement Act deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>V&iacute;ctor Sol&eacute; &middot; Updated 11 September 2026</p>
+  <p data-i18n="pm">Public Procurement Act deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Updated 11 September 2026</p>
   <p class="credit" data-i18n="pc">Hero photography by Aimee, section photography by Samuel W&ouml;lfl, both via Pexels.</p>
 </div>
 

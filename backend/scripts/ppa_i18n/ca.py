@@ -217,7 +217,7 @@ T = {
 "annex_m3": "Cada xifra s'ha contrastat amb la font col·lapsant abans els espais en blanc, perquè un extracte de text d'un PDF parteix les frases a mitja oració i una cerca ingènua falla amb dades que hi són i són correctes.",
 "annex_m4": "El nombre d'actes modificats s'ha pres de l'article 147, que en modifica catorze, i no del mateix títol de la proposta, que en nomena tretze. Quan tots dos discrepen mana la part dispositiva, i la discrepància s'informa a la secció 7 en lloc de resoldre's en silenci.",
 
-"pm": "Anàlisi en profunditat de la Llei de Contractació Pública per <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistent de polítiques de la UE amb IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Víctor Solé &middot; Actualitzat l'11 de setembre de 2026",
+"pm": "Anàlisi en profunditat de la Llei de Contractació Pública per <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistent de polítiques de la UE amb IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Victor Solé &middot; Actualitzat l'11 de setembre de 2026",
 "pc": "Fotografia de portada d'Aimee, fotografia de secció de Samuel Wölfl, totes dues via Pexels.",
 }
 

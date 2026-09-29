@@ -123,7 +123,7 @@ def _build_email_html(today_iso: str) -> str:
     <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.6; color: #1a1a1a; max-width: 640px;">
     <p>Buenos d&iacute;as,</p>
 
-    <p>me llamo V&iacute;ctor Sol&eacute; y he creado Brubru, un agente de IA que ayuda en los asuntos p&uacute;blicos europeos con una API especializada muy potente. Os escribo porque vuestro fondo invierte en startups que cada vez m&aacute;s necesitan navegar el marco regulatorio europeo, y porque la mayor&iacute;a de las herramientas existentes no os lo cuentan en espa&ntilde;ol.</p>
+    <p>me llamo Victor Sol&eacute; y he creado Brubru, un agente de IA que ayuda en los asuntos p&uacute;blicos europeos con una API especializada muy potente. Os escribo porque vuestro fondo invierte en startups que cada vez m&aacute;s necesitan navegar el marco regulatorio europeo, y porque la mayor&iacute;a de las herramientas existentes no os lo cuentan en espa&ntilde;ol.</p>
 
     <p>Brubru es un asistente de IA + plataforma de inteligencia legislativa europea dise&ntilde;ado para profesionales de asuntos p&uacute;blicos. Hoy tambi&eacute;n lo usan equipos de inversi&oacute;n, porque vuestro problema operativo se parece al suyo: monitorizar m&aacute;s de 200 &aacute;reas de pol&iacute;tica p&uacute;blica europea, en 6 idiomas (incluido el espa&ntilde;ol), conectar las decisiones de Bruselas con vuestras carteras (como, por ejemplo, de IA, fintech, healthtech, climate-tech, insurtech, deeptech y construcci&oacute;n).</p>
 
@@ -142,7 +142,7 @@ def _build_email_html(today_iso: str) -> str:
     <p>Ofrecemos una prueba gratuita de 14 d&iacute;as sin tarjeta. Si os interesa una demo dirigida a vuestra tesis de inversi&oacute;n y a 3-4 portfolio cos representativas, contestad este correo y os la coordinamos esta semana.</p>
 
     <p>Saludos cordiales,<br/>
-    V&iacute;ctor Sol&eacute;<br/>
+    Victor Sol&eacute;<br/>
     Beresol &mdash; Brubru<br/>
     hello@beresol.eu<br/>
     <a href="{BRUBRU_URL}" style="color: #0693e3;">brubru.beresol.eu</a></p>
@@ -194,7 +194,7 @@ def _build_followup_email_html(today_iso: str) -> str:
     <p>Si quer&eacute;is conocer m&aacute;s y mejor lo que hacemos, solo ten&eacute;is que visitar Brubru y probarlo. Lo ten&eacute;is tambi&eacute;n en espa&ntilde;ol.</p>
 
     <p>Saludos cordiales,<br/>
-    V&iacute;ctor Sol&eacute;<br/>
+    Victor Sol&eacute;<br/>
     <a href="{BRUBRU_URL}" style="color: #0693e3;">brubru.beresol.eu</a></p>
     </div>
     """

@@ -217,7 +217,7 @@ T = {
 "annex_m3": "Chaque chiffre a été confronté à la source après réduction des espaces, car un extrait de texte issu d'un PDF coupe les phrases en plein milieu et une recherche naïve échoue sur des faits pourtant présents et exacts.",
 "annex_m4": "Le nombre d'actes modifiés est tiré de l'article 147, qui en modifie quatorze, et non du titre de la proposition, qui en nomme treize. En cas de désaccord, le dispositif l'emporte, et la discordance est signalée à la section 7 plutôt que résolue en silence.",
 
-"pm": "Analyse approfondie de la loi sur les marchés publics par <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistant de politiques européennes doté d'IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Víctor Solé &middot; Mis à jour le 11 septembre 2026",
+"pm": "Analyse approfondie de la loi sur les marchés publics par <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistant de politiques européennes doté d'IA de <a href=\"https://beresol.eu\">Beresol</a>.<br>Victor Solé &middot; Mis à jour le 11 septembre 2026",
 "pc": "Photographie de couverture par Aimee, photographie de section par Samuel Wölfl, toutes deux via Pexels.",
 }
 

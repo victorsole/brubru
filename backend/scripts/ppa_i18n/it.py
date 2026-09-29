@@ -217,7 +217,7 @@ T = {
 "annex_m3": "Ogni cifra è stata confrontata con la fonte dopo aver compresso gli spazi bianchi, perché un estratto di testo da PDF spezza le frasi a metà periodo e una ricerca ingenua fallisce su dati che sono presenti e corretti.",
 "annex_m4": "Il numero di atti modificati è tratto dall'articolo 147, che ne modifica quattordici, e non dal titolo della proposta, che ne nomina tredici. Quando i due divergono prevale il dispositivo, e la discrepanza è segnalata nella sezione 7 anziché risolta in silenzio.",
 
-"pm": "Analisi approfondita della legge sugli appalti pubblici a cura di <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistente di politiche europee con IA di <a href=\"https://beresol.eu\">Beresol</a>.<br>Víctor Solé &middot; Aggiornato l'11 settembre 2026",
+"pm": "Analisi approfondita della legge sugli appalti pubblici a cura di <a href=\"https://brubru.beresol.eu\">Brubru</a>, l'assistente di politiche europee con IA di <a href=\"https://beresol.eu\">Beresol</a>.<br>Victor Solé &middot; Aggiornato l'11 settembre 2026",
 "pc": "Fotografia di copertina di Aimee, fotografia di sezione di Samuel Wölfl, entrambe via Pexels.",
 }
 

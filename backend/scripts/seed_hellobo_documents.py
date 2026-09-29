@@ -150,7 +150,7 @@ Most GI producers are micro and small enterprises. In the regions Bo serves (Spa
 
 ### Contact
 
-Víctor Solé Ferioli, Co-Founder and CEO, Bo. contact@hellobo.eu.
+Victor Solé Ferioli, Co-Founder and CEO, Bo. contact@hellobo.eu.
 Note: Bo is not yet listed in the EU Transparency Register.
 """
 
@@ -197,7 +197,7 @@ EP_PETITION = """\
 # Petition to the European Parliament
 ## Ensure the new GI rules empower, not burden, Europe's small food and craft producers
 
-**Petitioner:** Víctor Solé Ferioli, on behalf of Bo (Hellobo 2025 SL)
+**Petitioner:** Victor Solé Ferioli, on behalf of Bo (Hellobo 2025 SL)
 **Committee:** Committee on Petitions (PETI)
 **Subject:** Implementation of Regulation (EU) 2024/1143 and the craft and industrial GI system
 
@@ -239,7 +239,7 @@ I would welcome fifteen minutes to show you how a discovery platform can help sm
 
 With kind regards,
 
-**Víctor Solé Ferioli**
+**Victor Solé Ferioli**
 Co-Founder and Chief Executive Officer, Bo (Hellobo 2025 SL)
 contact@hellobo.eu
 """
@@ -267,7 +267,7 @@ Bo is a map-based marketplace that connects visitors and consumers with local pr
 - Product families: wine, cheese, beer, fruit, vegetables, crafts.
 - Cost to a producer to join: zero.
 
-**Contact:** Víctor Solé Ferioli, CEO, Bo. contact@hellobo.eu
+**Contact:** Victor Solé Ferioli, CEO, Bo. contact@hellobo.eu
 """
 
 
@@ -285,7 +285,7 @@ PRESS_RELEASE = """\
 
 New labelling rules under the Regulation apply from 14 May 2026, and since 1 December 2025 the EUIPO has administered a parallel system protecting craft and industrial GIs.
 
-"Geographical indications are how Europe keeps value on the land," said Víctor Solé Ferioli, Co-Founder and CEO of Bo. "The new rules are the right direction. Our job, and the institutions' job, is to make sure a small cheese maker or a family winery can actually use the system, not just comply with it."
+"Geographical indications are how Europe keeps value on the land," said Victor Solé Ferioli, Co-Founder and CEO of Bo. "The new rules are the right direction. Our job, and the institutions' job, is to make sure a small cheese maker or a family winery can actually use the system, not just comply with it."
 
 Bo's marketplace is live across Spain, the Netherlands, Belgium, Italy, France and Catalonia, covering wine, cheese, beer, fruit, vegetables and crafts. Producers join for free, with the first ten bookings commission-free.
 
