@@ -1,6 +1,7 @@
 # Reform and Growth Facility: Western Balkans and Moldova
 
 ## QUICK FACTS
+- JRC Science for Policy (2026): "Navigating innovation gaps in the Western Balkans through the lenses of Economic Complexity" (EUR 40836, doi 10.2760/2336410). The region has aligned its research and innovation systems with the European Research Area and adopted Smart Specialisation Strategies, but structural constraints still hinder convergence with the EU; the report uses economic complexity to map productive capabilities and feasible diversification. https://publications.jrc.ec.europa.eu/repository/handle/JRC146646
 
 - **What it is:** Two new, RRF-style financial instruments that pay out EU money against verified reform milestones rather than against project invoices -- the **Reform and Growth Facility for the Western Balkans** and the separate **Reform and Growth Facility for Moldova**. Both entered into force in 2024-2025 and both sit alongside (not instead of) existing pre-accession funding.
 - **Western Balkans Reform and Growth Facility:** Regulation (EU) 2024/1449 of the European Parliament and of the Council, in force 25 May 2024. **EUR 6 billion total (2024-2027): EUR 2 billion in grants + EUR 4 billion in concessional loans.** At least EUR 3 billion of the envelope is channelled through the Western Balkans Investment Framework (WBIF) as grants and loans for infrastructure investment; up to EUR 2.61 billion is disbursed as loans directly to beneficiaries' national budgets to support socioeconomic reforms.
