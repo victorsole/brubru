@@ -201,6 +201,15 @@ PERSON = {
 }
 
 
+# More per-speaker emails live as data next to the recipients list, so each
+# one can be read and fact-checked on its own (29 Sep 2026, round two).
+_EXTRA = _REPO_ROOT / "docs" / "outreach" / "sifted_summit_2026_emails.json"
+if _EXTRA.exists():
+    import json as _json
+    for _k, (_subj, _paras) in _json.loads(_EXTRA.read_text(encoding="utf-8")).items():
+        PERSON[_k.lower()] = (_subj, _paras)
+
+
 def _is_generic(email: str) -> bool:
     return email.split("@", 1)[0].lower() in GENERIC_LOCAL_PARTS
 
