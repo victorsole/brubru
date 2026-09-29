@@ -373,7 +373,7 @@ def _kill_process_group(proc, name: str) -> None:
 
 _TENDERATOR_CHAIN = (
     "tenders_fetch", "tenders", "tenders_country_repair",
-    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_tenders_bridge",
     "tenderator_translations_ted", "tenderator_translations_ft_tenders",
     "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
 )
@@ -866,6 +866,16 @@ async def cron_sync_daily(
         # call and tender (~30 SEDIA pages at ~10 s each) instead of a 500-row
         # budget that never reached tenders or the English records.
         ["--apply", "--limit", "500", "--write-ft"], timeout=1800,
+    )
+
+    # Bridge the EU institutions' own contract notices into `tenders`, the only
+    # table the Tenderator matcher reads (29 Sep 2026: 211 open notices, Frontex's
+    # EUR 12m DPS among them, had never reached a profile). Runs right after the
+    # SEDIA ingest that refreshes ft_calls_for_tenders; exits 1 if it reads none.
+    results["ft_tenders_bridge"] = await _run_script_async(
+        "ft_tenders_bridge",
+        "scripts/bridge_ft_tenders_to_tenders.py",
+        ["--apply"], timeout=600,
     )
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang

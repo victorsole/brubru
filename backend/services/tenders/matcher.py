@@ -12,6 +12,7 @@ Usage:
 """
 
 import logging
+import re
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
@@ -73,6 +74,21 @@ class MatchResult:
     match_details: str
     barriers: List[str]
     opportunities: List[str]
+
+
+def _keyword_in(keyword: str, text: str) -> bool:
+    """Whole-word keyword match (29 Sep 2026), a plural ending allowed.
+
+    Substring matching let short acronyms fire inside ordinary words: "CER"
+    (the Critical Entities Resilience Directive) inside "certified", "SME"
+    inside "assessment". Once EU-institution notices without CPV codes reached
+    the matcher, that put recycled paper and interim workers in a telecom
+    association's and a business school's feeds. `text` is already lower-case.
+    """
+    kw = (keyword or "").strip().lower()
+    if not kw:
+        return False
+    return re.search(r"(?<![a-z0-9])" + re.escape(kw) + r"(?:s|es)?(?![a-z0-9])", text) is not None
 
 
 class TenderMatcher:
@@ -630,13 +646,13 @@ class TenderMatcher:
         # Check excluded keywords first
         if profile.excluded_keywords:
             for keyword in profile.excluded_keywords:
-                if keyword.lower() in text:
+                if _keyword_in(keyword, text):
                     return 0.0  # Excluded keyword found
 
         # Count matching keywords
         matches = 0
         for keyword in profile.keywords:
-            if keyword.lower() in text:
+            if _keyword_in(keyword, text):
                 matches += 1
 
         if matches == 0:
