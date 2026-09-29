@@ -18,8 +18,11 @@ Mapping notes, all grounded in a survey of the live vocabulary rather than guess
     once it has moved past that. The raw upstream stage and status are written into
     `description` so nothing is lost in the flattening.
 
-  frontEndStage  OPC_LAUNCHED -> public_consultation, PLANNING_WORKFLOW ->
-    call_for_evidence, everything else -> initiative.
+  frontEndStage  read off the SAME period as the status and the dates, never off
+    whichever entry came first: OPC_LAUNCHED -> public_consultation,
+    PLANNING_WORKFLOW -> call_for_evidence, everything else -> initiative. Where two
+    periods are open at once (5 initiatives of 4,108, always this pair) the public
+    consultation wins, because that is the exercise people can actually answer.
 
 Idempotent: public_consultations is UNIQUE on initiative_id, so every write upserts.
 Rows sourced from agencies are keyed on a different id space and are never touched.
@@ -63,7 +66,6 @@ HEADERS = {"User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
            "Accept": "application/json"}
 
 _STATUS = {"OPEN": "open", "UPCOMING": "upcoming", "CLOSED": "closed"}
-_TYPE = {"OPC_LAUNCHED": "public_consultation", "PLANNING_WORKFLOW": "call_for_evidence"}
 
 
 def slugify(s: str, limit: int = 60) -> str:
@@ -80,6 +82,38 @@ def _parse_dt(v: Optional[str]) -> Optional[date]:
         except ValueError:
             continue
     return None
+
+
+# The feedback exercise each stage IS. These are the values the API has documented all
+# along (`public_consultation / call_for_evidence / feedback / roadmap / initiative`);
+# only the first two were ever written, and everything else fell back to "initiative".
+_PERIOD_TYPE = {
+    "OPC_LAUNCHED": "public_consultation",   # an open public consultation
+    "PLANNING_WORKFLOW": "call_for_evidence",
+}
+
+# When more than one period is open, the type is the most specific exercise running.
+# 5 initiatives of 4,108 have two open at once and every one of them is this pair, so
+# the order below is the whole of the ambiguity, not a guess at a general rule.
+_TYPE_RANK = ["OPC_LAUNCHED", "PLANNING_WORKFLOW"]
+
+
+def _period_type(statuses: list, status: str, today: date) -> str:
+    """The exercise the row's OWN period is, not whichever entry came first.
+
+    status, start and end already describe one chosen period; the type was still read
+    off `currentStatuses[0]`. Initiative 19293 carries a call for evidence and a public
+    consultation OPEN together on the same 14 December window, so it was served as a
+    call for evidence while the public consultation was the thing people could answer.
+    """
+    live = [s for s in statuses if s.get("receivingFeedbackStatus") == "OPEN"]
+    pool = live if (status == "open" and live) else statuses
+    named = [s.get("frontEndStage") for s in pool
+             if s.get("frontEndStage") in _PERIOD_TYPE]
+    if not named:
+        return "initiative"
+    named.sort(key=lambda st: _TYPE_RANK.index(st) if st in _TYPE_RANK else len(_TYPE_RANK))
+    return _PERIOD_TYPE[named[0]]
 
 
 def _pick_period(statuses: list, today: date):
@@ -167,7 +201,8 @@ def map_initiative(it: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         # every stage DISABLED: still only planned, or already past feedback
         status = "upcoming" if stage == "INIT_PLANNED" else "closed"
 
-    ctype = _TYPE.get(stage, "initiative")
+    # The type describes the SAME period as the status and the dates above.
+    ctype = _period_type(statuses, status, date.today())
 
     topics = it.get("topics") or []
     dg = (topics[0].get("code") if topics else None) or None
