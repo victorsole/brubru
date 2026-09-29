@@ -19,7 +19,9 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.catalan_translate import _ensure_softcatala_model, _apply_glossary  # noqa: E402
+from scripts.catalan_translate import (  # noqa: E402
+    _ensure_softcatala_model, _apply_glossary, prune_unused_model_files, release_model_page_cache,
+)
 
 
 def load_model():
@@ -31,7 +33,10 @@ def load_model():
     if not os.path.exists(sp):
         sp = os.path.join(md, "eng-cat", "tokenizer", "sp_m.model")
         ct2 = os.path.join(md, "eng-cat", "ctranslate2")
-    return spm.SentencePieceProcessor(model_file=sp), ctranslate2.Translator(ct2)
+    translator = ctranslate2.Translator(ct2)
+    prune_unused_model_files(md)
+    release_model_page_cache(md)
+    return spm.SentencePieceProcessor(model_file=sp), translator
 
 
 NOTATION_RE = re.compile(r'^(\d[\w.]*)\s+(.*)$')

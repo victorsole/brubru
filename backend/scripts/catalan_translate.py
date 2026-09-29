@@ -989,11 +989,56 @@ SOFTCATALA_MODEL_URL = "https://www.softcatala.org/pub/softcatala/opennmt/models
 SOFTCATALA_MODEL_DIR = os.path.expanduser("~/.cache/brubru/softcatala-en-ca")
 
 
+def prune_unused_model_files(model_root: str) -> None:
+    """Delete the TensorFlow copy of the Softcatala weights (403 MB), never loaded.
+
+    Only the CTranslate2 model is used. On Railway both copies sat on disk twice
+    over and in the page cache Railway bills as memory (29 Sep 2026).
+    """
+    import shutil
+    for dirpath, dirnames, _files in os.walk(model_root):
+        if "tensorflow" in dirnames:
+            shutil.rmtree(os.path.join(dirpath, "tensorflow"), ignore_errors=True)
+            dirnames.remove("tensorflow")
+
+
+def release_model_page_cache(model_root: str) -> None:
+    """Ask the kernel to drop the model files from the page cache.
+
+    Call it AFTER ctranslate2.Translator(...) has read the weights into the
+    process: the process keeps its copy; the cached file pages were left behind
+    in the container and billed as memory until something evicted them.
+    No-op where posix_fadvise does not exist (macOS).
+    """
+    if not hasattr(os, "posix_fadvise"):
+        return
+    for dirpath, _dirs, files in os.walk(model_root):
+        for name in files:
+            try:
+                fd = os.open(os.path.join(dirpath, name), os.O_RDONLY)
+            except OSError:
+                continue
+            try:
+                os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_DONTNEED)
+            except OSError:
+                pass
+            finally:
+                os.close(fd)
+
+
 def _ensure_softcatala_model() -> str:
     """Download and extract Softcatala model if not cached. Returns model dir."""
     ct2_dir = os.path.join(SOFTCATALA_MODEL_DIR, "eng-cat", "ctranslate2")
     if os.path.exists(ct2_dir) and os.path.exists(os.path.join(ct2_dir, "model.bin")):
         return SOFTCATALA_MODEL_DIR
+
+    # The same model, downloaded by softcatala_translate_text.ensure_model() into
+    # its own directory. Reuse it rather than download a second 469 MB copy: on
+    # Railway whichever job ran first after a deploy decided which copy existed,
+    # and the other job then downloaded again (29 Sep 2026).
+    sibling = os.path.join(os.path.dirname(SOFTCATALA_MODEL_DIR), "softcatala-eng-cat")
+    if os.path.exists(os.path.join(sibling, "eng-cat", "ctranslate2", "model.bin")):
+        return sibling
 
     # Check /tmp first (from earlier download)
     tmp_dir = "/tmp/softcatala-en-ca/eng-cat/eng-cat"
@@ -1027,6 +1072,7 @@ def _ensure_softcatala_model() -> str:
         for item in os.listdir(nested):
             shutil.move(os.path.join(nested, item), os.path.join(SOFTCATALA_MODEL_DIR, item))
         shutil.rmtree(os.path.join(SOFTCATALA_MODEL_DIR, "eng-cat"))
+    prune_unused_model_files(SOFTCATALA_MODEL_DIR)
     print(f'[OK] Softcatala model cached at {SOFTCATALA_MODEL_DIR}')
     return SOFTCATALA_MODEL_DIR
 
@@ -1207,6 +1253,8 @@ def translate_segments_softcatala(parsed: dict, output_dir: str = '', celex: str
 
     sp = spm.SentencePieceProcessor(model_file=sp_path)
     translator = ctranslate2.Translator(ct2_dir)
+    prune_unused_model_files(model_dir)
+    release_model_page_cache(model_dir)
 
     def _raw(text: str) -> str:
         tokens = sp.encode(text, out_type=str)

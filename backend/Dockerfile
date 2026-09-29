@@ -7,7 +7,13 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    MALLOC_ARENA_MAX=2
+
+# MALLOC_ARENA_MAX=2 (29 Sep 2026): each tier source runs through its own thread,
+# and glibc gave every thread its own 64 MB arena: 16 arenas held 191 MB in the
+# web process and were never returned. Two arenas is the standard cap for a
+# threaded Python server. Children inherit it.
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     curl \
     git \
+    tini \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -57,5 +64,8 @@ ENV PYTHONPATH=/app
 # Expose port
 EXPOSE 8000
 
-# Use entrypoint script
-ENTRYPOINT ["/app/entrypoint.sh"]
+# tini is PID 1 (29 Sep 2026): tier scripts leave orphaned grandchildren, which
+# the kernel re-parents to PID 1. PID 1 used to be `python start.py`, which never
+# reaps them: 274 zombies after 15 hours. tini reaps them and forwards SIGTERM,
+# so the 120 s drain in railway.json still reaches uvicorn.
+ENTRYPOINT ["/usr/bin/tini", "--", "/app/entrypoint.sh"]

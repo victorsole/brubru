@@ -15,6 +15,27 @@ if app_dir not in sys.path:
 # Set PYTHONPATH environment variable for any subprocesses
 os.environ['PYTHONPATH'] = app_dir
 
+
+def _disable_transparent_huge_pages() -> None:
+    """Opt this process (and every tier script it starts) out of huge pages.
+
+    Measured 29 Sep 2026: ~390 MB of the container's memory was 2 MB huge pages,
+    each counted in full however little of it Python used. prctl(PR_SET_THP_DISABLE)
+    is per process, survives fork and exec, and needs no privileges. Linux only;
+    a failure is ignored, it only means the old behaviour.
+    """
+    if not sys.platform.startswith("linux"):
+        return
+    try:
+        import ctypes
+        PR_SET_THP_DISABLE = 41
+        ctypes.CDLL(None, use_errno=True).prctl(PR_SET_THP_DISABLE, 1, 0, 0, 0)
+    except Exception:
+        pass
+
+
+_disable_transparent_huge_pages()
+
 # Now import the app (with path already set)
 from main import app
 

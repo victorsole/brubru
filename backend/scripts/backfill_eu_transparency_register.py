@@ -472,6 +472,14 @@ def main():
     print()
     print(f"[DONE] {counts}{' (DRY)' if not args.apply else ''}")
     db.close()
+    # A scheduled run must read TODAY's export: the cached /tmp copy was reused
+    # until the next deploy, and its 110 MB sat in the page cache Railway bills
+    # as memory (29 Sep 2026). --source keeps a file for manual reuse.
+    if not args.source and args.apply:
+        try:
+            xml_path.unlink()
+        except OSError:
+            pass
 
 
 if __name__ == "__main__":

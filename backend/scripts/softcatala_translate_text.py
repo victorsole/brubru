@@ -16,7 +16,7 @@ import argparse, json, os, re, sys, glob, urllib.request, zipfile, shutil
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from catalan_translate import _apply_glossary  # shared glossary
+from catalan_translate import _apply_glossary, prune_unused_model_files, release_model_page_cache  # shared glossary + model hygiene
 
 MODELS = {
     "en": ("eng-cat", "https://www.softcatala.org/pub/softcatala/opennmt/models/2022-11-22/eng-cat-2024-09-24.zip"),
@@ -61,6 +61,7 @@ def ensure_model(src):
         for it in os.listdir(inner):
             shutil.move(os.path.join(inner, it), os.path.join(mdir, pair, it))
     os.remove(zp)
+    prune_unused_model_files(mdir)
     return mdir, pair
 
 
@@ -69,7 +70,10 @@ def load_translator(mdir, pair):
     ct2 = os.path.join(mdir, pair, "ctranslate2")
     sp_files = glob.glob(os.path.join(mdir, "**", "*.model"), recursive=True)
     sp = spm.SentencePieceProcessor(); sp.load(sp_files[0])
-    return ctranslate2.Translator(ct2), sp
+    translator = ctranslate2.Translator(ct2)
+    prune_unused_model_files(mdir)
+    release_model_page_cache(mdir)
+    return translator, sp
 
 
 def _chunk_long(sent):
