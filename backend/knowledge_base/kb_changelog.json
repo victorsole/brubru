@@ -2,6 +2,17 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "Cabo Verde second assistance measure EUR 60m (total EUR 75m, 28 Sep 2026); Djibouti measure raised to EUR 20m (22 Sep); Benin measure amended (CFSP 2026/2179)",
+      "refs": [
+        "32026D2179",
+        "32021D0509"
+      ]
+    },
+    {
       "date": "2026-09-28",
       "action": "updated",
       "guide": "european_peace_facility",
