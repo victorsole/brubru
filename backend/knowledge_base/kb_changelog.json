@@ -3,6 +3,26 @@
   "entries": [
     {
       "date": "2026-09-29",
+      "action": "deep_dive",
+      "guide": "cloud_ai_development_act_cada",
+      "title": "Cloud and AI Development Act",
+      "summary": "Deep-dive timeline and hero brought up to date in all 6 languages (co-rapporteurs, JURI opinion, 17 Sep referral)",
+      "refs": [
+        "52026PC0502"
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "action": "deep_dive",
+      "guide": "eu_chips_act_2_0",
+      "title": "Chips Act 2.0",
+      "summary": "JURI put the file on its 28 Sep agenda (Commission presentation); deep-dive timeline brought up to date in all 6 languages",
+      "refs": [
+        "52026PC0504"
+      ]
+    },
+    {
+      "date": "2026-09-29",
       "action": "updated",
       "guide": "european_peace_facility",
       "title": "European Peace Facility",
