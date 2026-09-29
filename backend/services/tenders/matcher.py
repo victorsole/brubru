@@ -77,18 +77,30 @@ class MatchResult:
 
 
 def _keyword_in(keyword: str, text: str) -> bool:
-    """Whole-word keyword match (29 Sep 2026), a plural ending allowed.
+    """Keyword match that cannot fire inside another word (29 Sep 2026).
 
     Substring matching let short acronyms fire inside ordinary words: "CER"
     (the Critical Entities Resilience Directive) inside "certified", "SME"
-    inside "assessment". Once EU-institution notices without CPV codes reached
-    the matcher, that put recycled paper and interim workers in a telecom
-    association's and a business school's feeds. `text` is already lower-case.
+    inside "assessment", "EIC" inside "scientific". Once EU-institution notices
+    without CPV codes reached the matcher, that put recycled paper and interim
+    workers in a telecom association's and a business school's feeds.
+
+    - A short keyword or an acronym (4 characters or fewer, or written in
+      capitals) must be a WHOLE word; a plural ending is allowed.
+    - A longer keyword must START a word and may continue it: "telecom" still
+      matches "telecommunications", "digital" matches "digitalisation", which
+      a whole-word rule wrongly dropped, but "fibre" never matches "microfibre".
+
+    `text` is already lower-case.
     """
-    kw = (keyword or "").strip().lower()
+    raw = (keyword or "").strip()
+    kw = raw.lower()
     if not kw:
         return False
-    return re.search(r"(?<![a-z0-9])" + re.escape(kw) + r"(?:s|es)?(?![a-z0-9])", text) is not None
+    head = r"(?<![a-z0-9])" + re.escape(kw)
+    short_or_acronym = len(kw) <= 4 or (raw.isupper() and any(c.isalpha() for c in raw))
+    tail = r"(?:s|es)?(?![a-z0-9])" if short_or_acronym else ""
+    return re.search(head + tail, text) is not None
 
 
 class TenderMatcher:

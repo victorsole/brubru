@@ -18,6 +18,13 @@ from services.tenders.matcher import _keyword_in
     ("EIC", "the eic accelerator", True),
     ("EIC", "a scientific committee", False),
     ("", "anything", False),
+    # longer keywords may continue a word: the whole-word rule wrongly dropped these
+    ("telecom", "belgium - telecommunications services", True),
+    ("digital", "digitalisation of public services", True),
+    ("fibre", "supply of microfibre cloths", False),
+    ("NIS2", "support for nis2 compliance", True),
+    ("EECC", "eeccs are not a word", True),
 ])
 def test_keyword_in(kw, text, hit):
     assert _keyword_in(kw, text) is hit
+
