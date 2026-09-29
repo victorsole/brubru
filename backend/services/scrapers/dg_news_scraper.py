@@ -142,6 +142,16 @@ def _slug_id(href: str) -> str:
 
 
 def _item_type(meta: Optional[str], default: str) -> str:
+    """The type this item's own metadata states, or the source default.
+
+    Pair it with `_item_type_is_certain`: the default is a GUESS, and a guess must
+    never overwrite a stored value. The listing markup differs between the httpx and
+    the browser fetch paths (98 vs 148 type-bearing strings on the same MENA page,
+    29 Sep 2026), so the same item is typed from its metadata on one run and from the
+    default on the next. GovClipping keys its search documents on the resulting `kind`,
+    so a flip creates a second document that nothing deletes, and their write is then
+    refused as an identity collision.
+    """
     m = (meta or "").lower()
     if "publication" in m or "report" in m or "study" in m or "factsheet" in m:
         return "publication"
@@ -152,6 +162,13 @@ def _item_type(meta: Optional[str], default: str) -> str:
     if "news" in m:
         return "news"
     return default or "news"
+
+
+def _item_type_is_certain(meta: Optional[str]) -> bool:
+    """True when the item's OWN metadata named a type, rather than us defaulting."""
+    m = (meta or "").lower()
+    return any(w in m for w in ("publication", "report", "study", "factsheet", "story",
+                                "explained", "press", "statement", "speech", "news"))
 
 
 def fetch_html(url: str, *, spa: bool = False) -> str:
@@ -210,6 +227,9 @@ def parse_ecl_news(html: str, base_url: str, default_type: str) -> List[Dict]:
             "source_url": urljoin(base_url, href),
             "external_id": ext,
             "item_type": _item_type(meta.group(1) if meta else None, default_type),
+            # Whether the line above is a reading or a guess. The writer uses it to
+            # decide if it may overwrite a type already stored.
+            "item_type_certain": _item_type_is_certain(meta.group(1) if meta else None),
         })
     return out
 
@@ -330,6 +350,7 @@ def _type_feed_items(institution: Optional[str], items: List[Dict]) -> List[Dict
             unknown.append(f"{it['source_url']} ({how})")
         else:
             it["item_type"] = outcome
+            it["item_type_certain"] = True
         kept.append(it)
     if skipped or unknown:
         logger.info(f"[DG-NEWS] {institution}: {skipped} non-content items dropped, "

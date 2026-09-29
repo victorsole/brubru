@@ -45,9 +45,20 @@ def _upsert(db, it) -> str:
     existing = db.query(EuNewsItem).filter(EuNewsItem.entry_key == it["entry_key"]).first()
     if existing:
         changed = False
-        for f in ("title", "summary", "news_date", "image_url", "source_url", "item_type"):
+        # item_type is handled apart from the rest: the scraper always supplies one,
+        # falling back to the source default when the item's own metadata says nothing,
+        # so an unconditional overwrite lets a GUESS replace a READING. That is what
+        # moved items between kind=news and kind=press_release on /api/v2/news/all
+        # (GovClipping, 23-29 Sep 2026): the listing markup differs between the httpx
+        # and browser fetch paths, so the same row was typed 'press' on one sync and
+        # 'news' on the next. A partner keying on kind gets a second search document
+        # that nothing deletes. One owner per column: only a determination may write.
+        for f in ("title", "summary", "news_date", "image_url", "source_url"):
             if it.get(f) and getattr(existing, f) != it.get(f):
                 setattr(existing, f, it.get(f)); changed = True
+        if (it.get("item_type") and it.get("item_type_certain")
+                and existing.item_type != it["item_type"]):
+            setattr(existing, "item_type", it["item_type"]); changed = True
         if changed:
             existing.policy_areas = classify(existing.title or "", existing.summary or "",
                                              dg=existing.commission_dg)

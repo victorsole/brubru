@@ -235,14 +235,31 @@ def test_date_window_applies_to_the_institutional_half(client):
 
 
 def test_kind_filter_applies_to_the_institutional_half(client):
+    """Three kinds since 29 Sep 2026: `publication` joined news and press_release.
+
+    It was in the stock all along (456 institutional + 6,383 agency rows) and served by
+    nothing, because the union filtered it out. `kind=all` must still be the exact sum,
+    with no row in two kinds and none lost between them.
+    """
     news = client.get("/api/v2/news/all?body=commission&kind=news&days=3650").json()
     press = client.get("/api/v2/news/all?body=commission&kind=press_release&days=3650").json()
+    pubs = client.get("/api/v2/news/all?body=commission&kind=publication&days=3650").json()
     both = client.get("/api/v2/news/all?body=commission&kind=all&days=3650").json()
     assert {i["kind"] for i in news["data"]} <= {"news"}
     assert {i["kind"] for i in press["data"]} <= {"press_release"}
-    assert both["total"] == news["total"] + press["total"], (
+    assert {i["kind"] for i in pubs["data"]} <= {"publication"}
+    assert both["total"] == news["total"] + press["total"] + pubs["total"], (
         "kind=all is not the sum of its parts; a source item_type is unmapped"
     )
+
+
+def test_publication_is_a_served_kind(client):
+    """Guards the regression that hid 6,814 items: publication must not 400 or come back empty."""
+    r = client.get("/api/v2/news/all?kind=publication&days=3650&limit=5")
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["total"] > 0, "publication is advertised as a kind but serves nothing"
+    assert {i["kind"] for i in body["data"]} <= {"publication"}
 
 
 def test_scoping_to_an_agency_excludes_the_institutional_half(client):
@@ -405,10 +422,12 @@ def test_the_union_never_serves_an_undated_row_with_a_date(db):
 
 def test_latest_counts_undated_rows_in_both_halves(client, db):
     """Reconciled against the RAW columns, not against the union's own projection."""
-    from api.v2.news import _INSTITUTIONAL_NEWS, _EU_NEWS_SOURCE_TYPES
+    # _NEWS_TYPES rather than a literal pair: the served kinds became three on
+    # 29 Sep 2026 and a hardcoded control silently measures the wrong corpus.
+    from api.v2.news import _INSTITUTIONAL_NEWS, _EU_NEWS_SOURCE_TYPES, _NEWS_TYPES
     eco = db.execute(text(
-        "SELECT count(*) FROM economy_items WHERE item_type IN ('news','press_release') "
-        "AND document_date IS NULL")).scalar()
+        "SELECT count(*) FROM economy_items WHERE item_type = ANY(:k) "
+        "AND document_date IS NULL"), {"k": _NEWS_TYPES}).scalar()
     inst = db.execute(text(
         "SELECT count(*) FROM eu_news_items WHERE news_date IS NULL "
         "AND institution = ANY(:i) AND item_type = ANY(:t)"),

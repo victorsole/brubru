@@ -29,8 +29,11 @@ from services.economy.body_families import (
 
 router = APIRouter(prefix="/news", tags=["v2-news"])
 
-_NEWS_TYPES = ["news", "press_release"]
-_KINDS = {"news", "press_release", "all"}
+# Three kinds as of 29 Sep 2026. `publication` was always in the stock (456
+# institutional + 6,383 agency rows) and served by nothing: /news/all filtered it
+# out, so a caller asking "what has this body published" got none of it.
+_NEWS_TYPES = ["news", "press_release", "publication"]
+_KINDS = {"news", "press_release", "publication", "all"}
 # Every order carries an `id` tiebreak. Without one, two rows with equal sort
 # keys can come back in a different relative order on each call, and LIMIT/OFFSET
 # pagination then repeats or skips rows across pages. `title` had no tiebreak; it
@@ -57,7 +60,7 @@ class NewsItem(BaseModel):
     body_code: str = Field(..., description="Canonical body code the item belongs to.")
     body_name: Optional[str] = Field(None, description="Human-readable body name.")
     families: List[str] = Field(default_factory=list, description="Brubru policy families this body belongs to.")
-    kind: str = Field(..., description="news | press_release.")
+    kind: str = Field(..., description="news | press_release | publication.")
     title: str
     summary: Optional[str] = None
     public_url: Optional[str] = Field(None, description="Canonical URL on the source website.")
@@ -223,24 +226,32 @@ _INSTITUTIONAL_NEWS = {
 _EXCLUDED_EU_NEWS_INSTITUTIONS = ("OUTLET", "FUNDING", "EU")
 
 # eu_news_items uses its own item_type vocabulary; map it onto the v2 contract
-# (`news` | `press_release`). 'publication', 'report' and 'campaign' are deliberately
-# excluded: they are documents or campaign hubs, not news, and belong elsewhere.
+# (`news` | `press_release` | `publication`). 'publication' and 'report' became a third
+# kind on 29 Sep 2026 -- they were in the stock all along and served by nothing. 'campaign'
+# stays excluded: a campaign hub is a landing page, not a document.
 # 'statement' and 'speech' ARE news -- this module's docstring has always said so -- but
 # were missing from the list, which dropped the EEAS's 303 statements and 85 speeches
 # (15 Sep 2026). 'oped' stays out: an opinion piece is not in the documented contract.
+# 'report' maps to publication alongside 'publication' itself: the scraper's own rule
+# has always classed report/study/factsheet as a publication, so the 68 rows stored as
+# 'report' are legacy stock of the same thing, not a separate kind.
 _EU_NEWS_KIND_SQL = (
-    "CASE WHEN n.item_type = 'press' THEN 'press_release' ELSE 'news' END"
+    "CASE WHEN n.item_type = 'press' THEN 'press_release' "
+    "WHEN n.item_type IN ('publication', 'report') THEN 'publication' "
+    "ELSE 'news' END"
 )
-_EU_NEWS_SOURCE_TYPES = ["news", "press", "story", "statement", "speech"]
+_EU_NEWS_SOURCE_TYPES = ["news", "press", "story", "statement", "speech",
+                         "publication", "report"]
 
 # An institutional row is served only if the agency half does not already serve its URL.
 # The item_type predicate is LITERAL on purpose: the index is partial on exactly this
-# predicate, and a bound parameter would not let the planner prove the match. It covers
-# BOTH agency news types whatever `kind` the caller asked for, so a row is either served
-# once or not at all and `kind=all` stays the sum of `kind=news` and `kind=press_release`.
+# predicate, and a bound parameter would not let the planner prove the match (the index is
+# ix_economy_items_news_url_key_v2, migration 252: keep the two lists identical). It covers
+# ALL THREE agency kinds whatever `kind` the caller asked for, so a row is either served
+# once or not at all and `kind=all` stays the sum of the three.
 _DEDUP_SQL = (
     "NOT EXISTS (SELECT 1 FROM economy_items e "
-    "WHERE e.item_type IN ('news', 'press_release') "
+    "WHERE e.item_type IN ('news', 'press_release', 'publication') "
     "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url))"
 )
 
@@ -371,6 +382,7 @@ class NewsDirectory(BaseModel):
     total_items: int
     news: int
     press_releases: int
+    publications: int
     bodies_with_news: int
     families: int
     earliest: Optional[datetime] = None
@@ -391,9 +403,11 @@ async def directory(request: Request, db: Session = Depends(get_db),
     row = db.execute(text(
         "SELECT count(*) total, count(*) FILTER (WHERE item_type='news') n, "
         "count(*) FILTER (WHERE item_type='press_release') pr, "
+        "count(*) FILTER (WHERE item_type='publication') pub, "
         "count(distinct body_code) bodies, min(document_date) lo, max(document_date) hi "
         f"FROM {src} u"), src_params).fetchone()
     return NewsDirectory(total_items=row.total, news=row.n, press_releases=row.pr,
+                         publications=row.pub,
                          bodies_with_news=row.bodies, families=len(FAMILIES),
                          earliest=row.lo, latest=row.hi)
 
@@ -405,7 +419,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "bundles latest news, press releases, stories, speeches and statements.\n\n**When to use "
                 "it**\nOne call for 'all news from the bodies I care about'. Scope with `body` "
                 "(comma-separated codes) and/or `family` (a Brubru policy family); omit both for every "
-                "body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | all), `from` / `to` "
+                "body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | publication | all), `from` / `to` "
                 "(YYYY-MM-DD), `days` (shorthand for the last N days; ignored when `from` is given), "
                 "`q` (free text), `order` (recent | oldest | title), `page`, `limit` (max "
                 "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
@@ -421,7 +435,7 @@ async def list_news(
     user: User = Depends(api_user_with_rate_limit),
     body: Optional[str] = Query(None, description="Comma-separated body codes (e.g. commission,ecb,cedefop)."),
     family: Optional[str] = Query(None, description="Comma-separated Brubru policy family slugs (see /api/v2/news/bodies)."),
-    kind: str = Query("all", description="news | press_release | all."),
+    kind: str = Query("all", description="news | press_release | publication | all."),
     from_: Optional[date] = Query(None, alias="from", description="Only items on/after this date (YYYY-MM-DD)."),
     to: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD)."),
     days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand for a recent window: only items from the last N days. Ignored if `from` is given."),
