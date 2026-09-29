@@ -267,8 +267,8 @@ def already_sent(db, emails):
 def log_send(db, r):
     db.execute(text(
         "INSERT INTO pre_user_events (id, pre_user_id, event_type, ab_variant, event_metadata, created_at) "
-        "VALUES (gen_random_uuid(), gen_random_uuid()::text, :et, :tier, "
-        "jsonb_build_object('email', :email, 'name', :name, 'org_name', :org, "
+        "VALUES (gen_random_uuid(), gen_random_uuid()::text, :et, 'A', "
+        "jsonb_build_object('email', :email, 'name', :name, 'org_name', :org, 'tier', :tier, "
         "'campaign', 'sifted_summit_2026', 'source_url', :src), NOW())"),
         {"et": EVENT_TYPE, "tier": r["t"], "email": r["email"], "name": r["name"],
          "org": r.get("organisation") or "", "src": r.get("source_url") or ""})
