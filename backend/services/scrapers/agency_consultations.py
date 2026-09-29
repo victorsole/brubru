@@ -43,14 +43,36 @@ def _parse_date(s: str) -> datetime | None:
     return None
 
 
+# The three lines below are the ONE format in which a consultation's status and its
+# two dates travel from here to public_consultations (scripts/sync_agency_consultations
+# reads them back with `parse_body_facts`). economy_items has no column for a status or
+# an opening date, so they ride in body_txt; keep writer and reader on these constants.
+_L_STATUS, _L_START, _L_CLOSE = "Status: ", "Start date: ", "Closing date: "
+
+
+def parse_body_facts(body_txt: str) -> dict:
+    """The status / start / closing date that `_build` wrote, read back.
+
+    Anything absent comes back None: a consultation whose deadline we could not read
+    stores no deadline rather than borrowing another field's date.
+    """
+    out = {"status": None, "start": None, "end": None}
+    for line in (body_txt or "").splitlines():
+        line = line.strip()
+        for label, key in ((_L_STATUS, "status"), (_L_START, "start"), (_L_CLOSE, "end")):
+            if line.startswith(label):
+                out[key] = line[len(label):].strip() or None
+    return out
+
+
 def _build(*, body_code: str, title: str, url: str, status: str = "", topic: str = "",
            deadline: datetime | None, start: datetime | None, now: datetime,
-           source_kind: str) -> Item:
+           source_kind: str, strict_deadline: bool = False) -> Item:
     bits = [b for b in [status, deadline.date().isoformat() if deadline else "", topic] if b]
     lines = [title,
-             f"Status: {status}" if status else "",
-             f"Start date: {start.date()}" if start else "",
-             f"Closing date: {deadline.date()}" if deadline else "",
+             f"{_L_STATUS}{status}" if status else "",
+             f"{_L_START}{start.date()}" if start else "",
+             f"{_L_CLOSE}{deadline.date()}" if deadline else "",
              f"Topic: {topic}" if topic else ""]
     lines = [l for l in lines if l]
     return Item(
@@ -58,12 +80,83 @@ def _build(*, body_code: str, title: str, url: str, status: str = "", topic: str
         summary=clean(" · ".join(bits)) or clean(title)[:120],
         body_txt=clean("\n".join(lines)),
         body_html=clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>"),
-        document_date=deadline or start, creation_date=now, source_kind=source_kind, guid=url)
+        # document_date is contracted as the CLOSING date. Falling back to the start
+        # date puts an opening date in a deadline field, so a caller filtering by
+        # deadline reads a date that is not one. strict_deadline keeps it NULL instead.
+        document_date=deadline if strict_deadline else (deadline or start),
+        creation_date=now, source_kind=source_kind, guid=url)
 
 
 def _fetch(url: str) -> str:
     return requests.get(url, headers=_HEADERS, timeout=40).text
 
+
+
+# --------------------------------------------------------------------------- #
+# ECL consultation listings (AMLA, EIOPA, BEREC).
+#
+# These three used the generic listing walker (services/scrapers/eu_agency_listing),
+# which takes the FIRST date in a 600-character window ENDING at the link. On an ECL
+# consultation listing every card prints its own "Opening date" and "Deadline", so
+# that look-back window reaches into the PRECEDING card and reads ITS deadline.
+# AMLA's "draft RTS on the inherent and residual risk profile" was stored closing
+# 6 October 2026, the deadline of the card above it; its own deadline was
+# 27 September 2026 and its own status Closed. The mirror derives status from that
+# date, so the consultation was served as open more than a week after it shut.
+#
+# The markup is regular, so parse the CARD, never a character window: one
+# <article class="ecl-content-item"> per consultation, carrying its own status label,
+# its title link, and a definition list of Opening date / Deadline.
+# --------------------------------------------------------------------------- #
+_ECL_ARTICLE = re.compile(r'<article\b[^>]*\bclass="[^"]*ecl-content-item\b[^"]*"[^>]*>.*?</article>', re.S)
+_ECL_STATUS = re.compile(r'ecl-label[^>]*>\s*Status:\s*([A-Za-z][A-Za-z ]*?)\s*<', re.S)
+_ECL_TITLE = re.compile(r'ecl-content-block__title.*?<a\s[^>]*href="([^"#?]+)"[^>]*>(.*?)</a>', re.S)
+
+
+def _ecl_term_date(card: str, term: str) -> datetime | None:
+    """The <time> under this card's own <dt>, or None. Never a date from elsewhere."""
+    m = re.search(r'<dt[^>]*>\s*' + re.escape(term) + r'\s*</dt>\s*<dd[^>]*>.*?<time[^>]*datetime="'
+                  r'(\d{4}-\d{2}-\d{2})', card, re.S)
+    if not m:
+        return None
+    try:
+        return datetime.strptime(m.group(1), "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def _ecl_consultations(base: str, path: str, body_code: str, source_kind: str,
+                       link_substr: str, max_pages: int = 40) -> list[Item]:
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for page in range(max_pages):
+        url = f"{base}{path}" + (f"?page={page}" if page else "")
+        try:
+            html = _fetch(url)
+        except Exception:
+            break
+        new = 0
+        for card in _ECL_ARTICLE.findall(html):
+            t = _ECL_TITLE.search(card)
+            if not t:
+                continue
+            href, title = t.group(1), _txt(t.group(2))
+            if len(title) < 12 or link_substr not in href:
+                continue
+            full = href if href.startswith("http") else base + href
+            if full in out:
+                continue
+            st = _ECL_STATUS.search(card)
+            out[full] = _build(
+                body_code=body_code, title=title, url=full,
+                status=_txt(st.group(1)) if st else "",
+                start=_ecl_term_date(card, "Opening date"),
+                deadline=_ecl_term_date(card, "Deadline"),
+                now=now, source_kind=source_kind, strict_deadline=True)
+            new += 1
+        if not new:
+            break
+    return list(out.values())
 
 # --------------------------------------------------------------------------- #
 # EBA (28 Sep 2026) -- the consultations listing is plain server-rendered HTML
@@ -149,26 +242,58 @@ def ingest_ema_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
 # --------------------------------------------------------------------------- #
 # BEREC — clean anchor-title listing (reuse the generic walker).
 # --------------------------------------------------------------------------- #
+# BEREC does NOT use the ECL card markup: each consultation is a plain <article>
+# whose CLASS carries the state ("closed-consultation-content" / "open-...") and whose
+# body prints "Deadline to submit contributions: <date>". There is no labelled opening
+# date, so none is stored -- an unlabelled date on the card is not evidence of one.
+_BEREC_ART = re.compile(r'<article\b[^>]*>.*?</article>', re.S)
+_BEREC_CLASS = re.compile(r'<article\b[^>]*\bclass="([^"]*)"')
+_BEREC_HREF = re.compile(r'href="(/en/public-consultations-calls-for-inputs/[^"#?]+)"')
+_BEREC_DEADLINE = re.compile(r"Deadline to submit contributions:\s*(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})")
+
+
 def ingest_berec_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    from services.scrapers.eu_agency_listing import walk
-    return walk("https://www.berec.europa.eu", "/en/public-consultations-calls-for-inputs",
-                "berec", "consultation", "/en/public-consultations-calls-for-inputs/",
-                "berec_consultations")
+    base = "https://www.berec.europa.eu"
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    try:
+        html = _fetch(base + "/en/public-consultations-calls-for-inputs")
+    except Exception:
+        return []
+    for card in _BEREC_ART.findall(html):
+        h = _BEREC_HREF.search(card)
+        if not h:
+            continue
+        url = base + h.group(1)
+        if url in out:
+            continue
+        text = _txt(card)
+        title = text.split(" 0")[0].strip() if text else ""
+        heading = re.search(r'<h[1-4][^>]*>(.*?)</h[1-4]>', card, re.S)
+        if heading:
+            title = _txt(heading.group(1)) or title
+        if len(title) < 12:
+            continue
+        cls = (_BEREC_CLASS.search(card).group(1) if _BEREC_CLASS.search(card) else "").lower()
+        status = "Closed" if "closed-consultation" in cls else ("Open" if "open-consultation" in cls else "")
+        d = _BEREC_DEADLINE.search(text)
+        out[url] = _build(body_code="berec", title=title, url=url, status=status,
+                          start=None, deadline=_parse_date(d.group(1)) if d else None,
+                          now=now, source_kind="berec_consultations", strict_deadline=True)
+    return list(out.values())
 
 
 def ingest_eiopa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    from services.scrapers.eu_agency_listing import walk
-    return walk("https://www.eiopa.europa.eu", "/browse/consultations-and-surveys_en",
-                "eiopa", "consultation", "/consultation", "eiopa_consultations")
+    return _ecl_consultations("https://www.eiopa.europa.eu", "/browse/consultations-and-surveys_en",
+                              "eiopa", "eiopa_consultations", "/consultation")
 
 
 # --------------------------------------------------------------------------- #
 # AMLA — clean anchor-title listing (reuse the generic walker).
 # --------------------------------------------------------------------------- #
 def ingest_amla_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    from services.scrapers.eu_agency_listing import walk
-    return walk("https://www.amla.europa.eu", "/policy/public-consultations_en",
-                "amla", "consultation", "/policy/public-consultations/", "amla_consultations")
+    return _ecl_consultations("https://www.amla.europa.eu", "/policy/public-consultations_en",
+                              "amla", "amla_consultations", "/policy/public-consultations/")
 
 
 # --------------------------------------------------------------------------- #

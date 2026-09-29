@@ -31,22 +31,60 @@ from core.database import SessionLocal
 from models.public_consultation import (
     PublicConsultation, ConsultationTypeEnum, ConsultationStatusEnum,
 )
+from services.scrapers.agency_consultations import parse_body_facts
 from services.tracking.policy_area_classifier import classify
+
+
+def _as_date(v):
+    """The ISO date `_build` wrote, or None. A value we cannot read is not a date."""
+    if not v:
+        return None
+    try:
+        return date.fromisoformat(str(v).strip()[:10])
+    except ValueError:
+        return None
 
 
 def _rows(db):
     return db.execute(text(
-        "SELECT id, body_code, title, summary, public_url, document_date "
+        "SELECT id, body_code, title, summary, public_url, document_date, body_txt "
         "FROM economy_items "
         "WHERE item_type = 'consultation' AND title IS NOT NULL "
         "ORDER BY document_date DESC NULLS LAST, id DESC"
     )).mappings().all()
 
 
-def _status(closing) -> ConsultationStatusEnum:
-    if closing and closing.date() >= date.today():
-        return ConsultationStatusEnum.OPEN
-    return ConsultationStatusEnum.CLOSED
+_SOURCE_STATUS = {"open": ConsultationStatusEnum.OPEN,
+                  "closed": ConsultationStatusEnum.CLOSED,
+                  "upcoming": ConsultationStatusEnum.UPCOMING,
+                  "forthcoming": ConsultationStatusEnum.UPCOMING}
+
+
+def _status(closing, stated: str | None) -> ConsultationStatusEnum:
+    """The status the AGENCY publishes, reconciled against the deadline it publishes.
+
+    Deriving the status from the closing date alone was wrong twice over: the closing
+    date itself was read from the neighbouring card (see agency_consultations), and a
+    derived value cannot be checked against anything. The agency states a status on its
+    own listing, so that is the authority. A stated 'open' whose deadline has passed is
+    the agency being slow to flip its own label, and the deadline it publishes wins:
+    AMLA and EIOPA both still showed rows we served as open on 29 Sep 2026, eight days
+    and seven weeks after those consultations closed.
+    """
+    said = _SOURCE_STATUS.get((stated or "").strip().lower())
+    live = closing is not None and closing.date() >= date.today()
+
+    # OPEN is a claim that needs evidence, and the evidence is a deadline that has not
+    # passed. Trusting a stated "Open" without one turned 100+ ACER rows open on
+    # 29 Sep 2026: their mirrored text still said Open from an earlier crawl, they
+    # carry no deadline, so nothing could ever contradict it and the row would have
+    # stayed open for ever. A status we cannot check against a date is not served as
+    # open.
+    if said is ConsultationStatusEnum.UPCOMING:
+        return said
+    if said is ConsultationStatusEnum.CLOSED:
+        return said
+    return ConsultationStatusEnum.OPEN if live else ConsultationStatusEnum.CLOSED
 
 
 def _best_title(title: str, summary: str):
@@ -74,7 +112,9 @@ def _upsert(db, r) -> str:
     initiative_id = f"99{r['id']}"
     closing = r.get("document_date")
     end_date = closing.date() if closing else None
-    status = _status(closing)
+    facts = parse_body_facts(r.get("body_txt") or "")
+    status = _status(closing, facts.get("status"))
+    start_date = _as_date(facts.get("start"))
     title, description = _best_title(r["title"], r.get("summary") or "")
     areas = classify(title, r.get("summary") or "")
 
@@ -83,7 +123,7 @@ def _upsert(db, r) -> str:
     if existing:
         changed = False
         for f, v in (("title", title), ("end_date", end_date), ("status", status),
-                     ("portal_url", r.get("public_url"))):
+                     ("start_date", start_date), ("portal_url", r.get("public_url"))):
             if v is not None and getattr(existing, f) != v:
                 setattr(existing, f, v); changed = True
         # description may legitimately become None (when the title now IS the
@@ -104,7 +144,7 @@ def _upsert(db, r) -> str:
         status=status,
         dg_responsible=None,
         policy_areas=areas,
-        start_date=None,
+        start_date=start_date,
         end_date=end_date,
         feedback_count=0,
         portal_url=r.get("public_url"),

@@ -82,6 +82,71 @@ def _parse_dt(v: Optional[str]) -> Optional[date]:
     return None
 
 
+def _pick_period(statuses: list, today: date):
+    """One feedback period, and its status and BOTH its dates, taken together.
+
+    An initiative has several feedback periods (a call for evidence, then a public
+    consultation, sometimes a planned one). Until 29 Sep 2026 the status was "OPEN if
+    ANY period is open" while start and end were the first non-null of each across ALL
+    periods, so a row could carry an open status beside the end date of a period that
+    closed weeks earlier. Initiative 18892 (Revision of the EIT Regulation) was stored
+    open with end_date 23 Sep, which is the end of its CLOSED call for evidence, while
+    the portal's next period is UPCOMING from 1 Oct. Four more rows were 'open' past
+    their own end date, and one 'closed' row had an end date in the future.
+
+    A record must describe ONE period. Preference: the period actually open now, else
+    the one about to open, else the one that closed most recently.
+
+    Returns (status, start, end), all three from the SAME period.
+    """
+    def end_of(s):
+        return _parse_dt(s.get("feedbackEndDate"))
+
+    def out(s, status):
+        start, end = _parse_dt(s.get("feedbackStartDate")), end_of(s)
+        # The portal itself publishes one impossible pair: initiative 14641 ("Clean
+        # corporate vehicles") has a feedback period starting 18 December 2025 and
+        # ending 2 April 2025. A start after its own end is not a start date, so it is
+        # dropped here, where the record is read, rather than written and cleaned up
+        # afterwards (which reported a repair on every run, for ever).
+        if start and end and start > end:
+            start = None
+        return status, start, end
+
+    live = [s for s in statuses if s.get("receivingFeedbackStatus") == "OPEN"]
+    # An OPEN period whose deadline has passed is the portal being slow to flip its own
+    # flag: the deadline it publishes is the fact, so it reads as closed here.
+    current = [s for s in live if (end_of(s) or today) >= today]
+    if current:
+        return out(sorted(current, key=lambda s: (not s.get("isCurrent"),))[0], "open")
+    if live:
+        return out(max(live, key=lambda s: end_of(s) or date.min), "closed")
+
+    # UPCOMING is a claim about the future and needs a window that has not already
+    # passed. The portal keeps periods it planned and never ran: initiative 12131 is
+    # still UPCOMING with a planned window of January to March 2020. Serving that as
+    # forthcoming six years later is the same defect as serving a closed consultation
+    # as open, so a planned window that has ended does not make a row upcoming.
+    upcoming = [s for s in statuses if s.get("receivingFeedbackStatus") == "UPCOMING"]
+    dated = [s for s in upcoming if end_of(s)]
+    ahead = [s for s in dated if end_of(s) >= today]
+    if ahead:
+        return out(min(ahead, key=end_of), "upcoming")
+    if dated:
+        # Every planned window has already passed: it did not happen. Reported closed
+        # with the last window published, never as still forthcoming.
+        return out(max(dated, key=end_of), "closed")
+    if upcoming:
+        # Planned, no window published: nothing contradicts "upcoming", so say it and
+        # carry no dates rather than borrowing another period's.
+        return out(upcoming[0], "upcoming")
+
+    closed = [s for s in statuses if s.get("receivingFeedbackStatus") == "CLOSED"]
+    if closed:
+        return out(max(closed, key=lambda s: end_of(s) or date.min), "closed")
+    return None, None, None
+
+
 def map_initiative(it: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     raw_id = it.get("id")
     if raw_id is None:
@@ -96,23 +161,13 @@ def map_initiative(it: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     feedback = [s.get("receivingFeedbackStatus") for s in statuses]
     stage = current.get("frontEndStage") or ""
 
-    if "OPEN" in feedback:
-        status = "open"
-    elif "UPCOMING" in feedback:
-        status = "upcoming"
-    elif "CLOSED" in feedback:
-        status = "closed"
-    else:
+    # Status and the two dates come from ONE period, never assembled across several.
+    status, start, end = _pick_period(statuses, date.today())
+    if status is None:
         # every stage DISABLED: still only planned, or already past feedback
         status = "upcoming" if stage == "INIT_PLANNED" else "closed"
 
     ctype = _TYPE.get(stage, "initiative")
-
-    start = end = None
-    for s in statuses:
-        if s.get("receivingFeedbackStatus") in ("OPEN", "CLOSED", "UPCOMING"):
-            start = start or _parse_dt(s.get("feedbackStartDate"))
-            end = end or _parse_dt(s.get("feedbackEndDate"))
 
     topics = it.get("topics") or []
     dg = (topics[0].get("code") if topics else None) or None
@@ -163,8 +218,32 @@ _UPSERT = text("""
         status = EXCLUDED.status,
         dg_responsible = COALESCE(EXCLUDED.dg_responsible, public_consultations.dg_responsible),
         policy_areas = EXCLUDED.policy_areas,
-        start_date = COALESCE(EXCLUDED.start_date, public_consultations.start_date),
-        end_date = COALESCE(EXCLUDED.end_date, public_consultations.end_date),
+        -- The two dates describe ONE feedback period, so they are written as a pair.
+        -- COALESCE alone re-created the bug this job was fixing: a run whose chosen
+        -- period had a start but no end kept a STALE end from an earlier period, and
+        -- the row came out with a start date months after its own end date. A start
+        -- that cannot belong beside the end we hold is not a start date: it is dropped
+        -- rather than kept or guessed, and the invariant then holds at write time
+        -- instead of being cleaned up afterwards (where it simply came back).
+        -- The dates belong to the ONE feedback period the status describes, so they
+        -- are replaced with it, never COALESCEd against what a previous period left.
+        -- COALESCE kept re-creating the bug this job exists to fix, in both
+        -- directions: initiative 12131 is UPCOMING with no window at the portal, and
+        -- the stored January-to-March 2020 window survived beside it, so the row read
+        -- as forthcoming with an end date six years past.
+        --
+        -- The one stored value worth keeping is a start date when this record
+        -- describes the SAME period (its end date is unchanged) and simply does not
+        -- carry a start: that is the detail endpoint, which publishes an end date and
+        -- no start. Anything else is a date from another period and is dropped.
+        start_date = CASE
+            WHEN EXCLUDED.start_date IS NOT NULL THEN EXCLUDED.start_date
+            WHEN EXCLUDED.end_date IS NOT NULL
+             AND EXCLUDED.end_date = public_consultations.end_date
+            THEN public_consultations.start_date
+            ELSE NULL
+        END,
+        end_date = EXCLUDED.end_date,
         portal_url = EXCLUDED.portal_url,
         -- Fill a body another writer left empty (23 Sep 2026: open Commission
         -- consultations had NULL here, so body filters and labels missed them);
@@ -195,6 +274,9 @@ def _fetch_page(page: int, page_size: int, attempts: int = 4) -> Optional[Dict[s
                 return None
             time.sleep(1.5 * attempt)
     return None
+
+
+SWEEP_COMPLETE = False
 
 
 def fetch_all(page_size: int = 100, delay: float = 0.4) -> List[Dict[str, Any]]:
@@ -229,6 +311,13 @@ def fetch_all(page_size: int = 100, delay: float = 0.4) -> List[Dict[str, Any]]:
     if failed:
         print(f"  [WARN] {len(failed)} page(s) never returned: {failed}. "
               f"Coverage is incomplete; re-run to pick them up.")
+    # A short sweep must not be read as "these initiatives left the portal". The
+    # reconciliation below decides that a row the sweep did not return is unlisted,
+    # and on a rate-limited run (29 Sep 2026) that turned 4 unlisted rows into 373.
+    # Nothing was wrongly closed because the guard also requires an expired or absent
+    # deadline, but the decision itself is only sound on a COMPLETE sweep.
+    global SWEEP_COMPLETE
+    SWEEP_COMPLETE = not failed
     return out
 
 
@@ -238,12 +327,19 @@ def fetch_one(initiative_id: str) -> List[Dict[str, Any]]:
     r.raise_for_status()
     d = r.json()
     pubs = d.get("publications") or []
+    # The DETAIL endpoint names these differently from the search endpoint: a
+    # publication carries `endDate` (the deadline) and, for a period that has not
+    # opened, `plannedStartDate` / `plannedEndDate`. It has no `feedbackStartDate`
+    # or `feedbackEndDate` at all, so reading those names returned None for every
+    # date and this repair path blanked both dates on any row it touched.
+    # `feedbackPeriod` is a NUMBER OF WEEKS, not a date range, so no start date is
+    # read for a period already open: unknown stays NULL rather than being computed.
     statuses = [{
         "frontEndStage": p.get("frontEndStage"),
         "receivingFeedbackStatus": p.get("receivingFeedbackStatus"),
-        "feedbackStartDate": p.get("feedbackStartDate"),
-        "feedbackEndDate": p.get("feedbackEndDate"),
-        "isCurrent": p.get("frontEndStage") == d.get("stage"),
+        "feedbackStartDate": p.get("plannedStartDate"),
+        "feedbackEndDate": p.get("endDate") or p.get("plannedEndDate"),
+        "isCurrent": bool(p.get("isCurrent")),
     } for p in pubs]
     return [{
         "id": float(initiative_id),
@@ -332,6 +428,76 @@ def main() -> int:
         db.commit()
         print(f"\n[OK] upserted {written} rows")
 
+        # ---- rows the portal no longer lists ----
+        # searchInitiatives returns only the initiatives it currently indexes. An
+        # initiative that drops out of it is never upserted again and keeps whatever
+        # status it last had, for ever: initiative 18892 (Revision of the EIT
+        # Regulation) was still served as OPEN on 29 Sep 2026, six days after its
+        # feedback period closed, because it had left the search index while the
+        # detail endpoint still answered correctly. Nothing in this job closed it,
+        # and nothing ever would have.
+        #
+        # Only rows still CLAIMING to be live are worth re-reading; a closed row that
+        # leaves the index is simply archived and cannot become wrong.
+        if not SWEEP_COMPLETE:
+            print("\n=== sweep incomplete; skipping the unlisted-row reconciliation ===")
+            print("    (a row missing from a short sweep has not necessarily left the portal)")
+            stale = []
+        else:
+            stale = [r[0] for r in db.execute(text(
+                "SELECT initiative_id FROM public_consultations "
+                "WHERE source = 'commission' AND status IN ('open', 'upcoming') "
+                "AND initiative_id <> ALL(:ids)"), {"ids": ids}).fetchall()]
+        print(f"\n=== {len(stale)} live row(s) the portal no longer lists; re-reading each ===")
+        refreshed = failed = 0
+        for iid in stale:
+            try:
+                one = fetch_one(iid)
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [WARN] {iid}: {type(exc).__name__}: {exc}")
+                failed += 1
+                continue
+            m = map_initiative(one[0]) if one else None
+            if not m:
+                failed += 1
+                continue
+            db.execute(_UPSERT, {**m, "now": datetime.now(timezone.utc)})
+            refreshed += 1
+            time.sleep(0.3)
+        db.commit()
+        print(f"  re-read {refreshed}, unreadable {failed}")
+
+        # Last resort: a consultation cannot be open after its own published deadline.
+        # This catches a row whose detail read failed as well as any future path that
+        # writes the two fields apart.
+        # A consultation cannot be open after its own published deadline; and a row the
+        # portal no longer lists, whose detail endpoint 404s and which carries no
+        # deadline at all, cannot be asserted open either -- nothing about it can ever
+        # be checked again (initiative 18657, open since 3 July 2026, is exactly this).
+        # Anything still listed is left alone: only the unreadable are closed here.
+        shut = db.execute(text(
+            "UPDATE public_consultations SET status = 'closed' "
+            "WHERE source = 'commission' AND status = 'open' AND ("
+            "  (end_date IS NOT NULL AND end_date < CURRENT_DATE)"
+            "  OR (:complete AND end_date IS NULL AND initiative_id <> ALL(:ids))"
+            ") RETURNING initiative_id"), {"ids": ids, "complete": SWEEP_COMPLETE}).fetchall()
+        db.commit()
+        print(f"  closed {len(shut)} unverifiable or expired row(s): "
+              f"{[r[0] for r in shut][:8]}")
+
+        # A start date LATER than its own end date is a leftover of the old logic,
+        # which took the two from different feedback periods: the upsert keeps a
+        # stored start when the current period supplies none (COALESCE), so a stale
+        # one outlives the fix. It cannot belong to the period the end date describes,
+        # so it is not a start date -- it is dropped rather than guessed at.
+        crossed = db.execute(text(
+            "UPDATE public_consultations SET start_date = NULL "
+            "WHERE source = 'commission' AND start_date IS NOT NULL "
+            "AND end_date IS NOT NULL AND start_date > end_date "
+            "RETURNING initiative_id")).fetchall()
+        db.commit()
+        print(f"  dropped {len(crossed)} start date(s) later than their own end date")
+
         # ---- verification ----
         # On a FRESH session (25 Sep 2026): the upsert holds this one for
         # minutes, and the server dropped it right after the last commit, so
@@ -346,10 +512,13 @@ def main() -> int:
         print("\n=== verification ===")
         print(f"  commission rows: {before} -> {after}   (+{after - before})")
         print(f"  table total    : {total}")
-        missing = [i for i in ids if i not in {
-            r[0] for r in db.execute(
-                text("SELECT initiative_id FROM public_consultations "
-                     "WHERE initiative_id = ANY(:ids)"), {"ids": ids}).fetchall()}]
+        # The set comprehension used to sit INSIDE the list comprehension, so this
+        # query ran once per fetched id: 4,114 identical round trips, each returning
+        # 4,114 rows, after every sync. Read the stored ids ONCE.
+        stored = {r[0] for r in db.execute(
+            text("SELECT initiative_id FROM public_consultations "
+                 "WHERE initiative_id = ANY(:ids)"), {"ids": ids}).fetchall()}
+        missing = [i for i in ids if i not in stored]
         print(f"  fetched ids not stored: {len(missing)}   "
               f"{'OK' if not missing else 'FAIL ' + str(missing[:5])}")
         return 0 if not missing else 1
