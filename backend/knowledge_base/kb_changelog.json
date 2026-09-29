@@ -4,6 +4,38 @@
     {
       "date": "2026-09-29",
       "action": "updated",
+      "guide": "european_defence_union",
+      "title": "European Defence Union",
+      "summary": "Defence ministers' first exchange on the emergency security protocol (28 Sep 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eeas_institution_hrvp_kallas",
+      "title": "HR/VP Kaja Kallas",
+      "summary": "Defence Council of 28 Sep 2026: EDA, EPF EUR 6.6bn, Ukraine Support Loan EUR 28.3bn, IRINI, emergency security protocol",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
+      "guide": "eu_csdp_missions_2026",
+      "title": "CSDP missions and operations",
+      "summary": "IRINI's six shadow-fleet boardings, lead actor in boarding operations (Kallas, 28 Sep 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "added",
+      "guide": "eu_infringement_procedures",
+      "title": "EU infringement procedures",
+      "summary": "New guide: Articles 258 and 260 TFEU, Brubru's infringement register, and the 156 letters of formal notice of 24 Sep 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
       "guide": "common_agricultural_policy",
       "title": "Common Agricultural Policy",
       "summary": "JRC MARS September 2026 bulletin: summer crop forecasts cut after the drought",

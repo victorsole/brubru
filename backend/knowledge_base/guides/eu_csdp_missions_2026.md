@@ -1,6 +1,7 @@
 # EU Common Security and Defence Policy (CSDP) Missions and the European Peace Facility
 
 ## QUICK FACTS
+- **LATEST (28 September 2026): EUNAVFOR MED IRINI and the shadow fleet.** HR/VP Kallas said IRINI has conducted **six boardings** of suspected Russian shadow-fleet vessels in recent months (the same six counted on 31 August, not six more), "the lead actor in boarding operations", using the existing UNCLOS framework "to inspect and seize vessels"; national boardings continue in parallel. IRINI's original task is the UN arms embargo on Libya. Source: EEAS transcript, Foreign Affairs Council (Defence), 28 Sep 2026.
 - **LATEST (12 May 2026, CFSP wave)**: **Three Council CFSP Decisions** adopted on 11-12 May 2026 in support of EU external action:
   - **Council Decision (CFSP) 2026/1082** of 12 May 2026 — **assistance measure under the European Peace Facility (EPF) to support the Armed Forces of Bosnia and Herzegovina** (CELEX **32026D1082**). The measure is an EPF financial envelope supporting equipment + capacity-building for the BiH Armed Forces in a context of Russian destabilisation pressure on the Western Balkans and renewed accession-track momentum for BiH.
   - **Council Decision (CFSP) 2026/1083** of 11 May 2026 — **amending Decision 2014/486/CFSP on the European Union Advisory Mission for Civilian Security Sector Reform Ukraine (EUAM Ukraine)** (CELEX **32026D1083**). The Decision extends and/or amends the mandate of EUAM Ukraine, which since 2014 has supported Ukrainian civilian security-sector reform from Kyiv (and from secondary offices). EUAM Ukraine is one of the two EU civilian CSDP missions currently active in Ukraine alongside EUMAM Ukraine (military assistance).
@@ -36,7 +37,7 @@ CSDP missions are deployed under Council Decisions adopted by **unanimity** in t
 - **EUTM RCA** + **EUTM Mozambique** — training missions
 - **EUNAVFOR Atalanta** — Indian Ocean / Gulf of Aden counter-piracy
 - **EUNAVFOR ASPIDES** — Red Sea / Gulf of Aden maritime security (since February 2024)
-- **EUNAVFOR MED Irini** — Mediterranean Sea, monitoring UNSC arms embargo on Libya
+- **EUNAVFOR MED Irini**: Mediterranean Sea, monitoring UNSC arms embargo on Libya. Since 2026 it also boards suspected Russian shadow-fleet vessels: on 28 September 2026 HR/VP Kallas said IRINI had conducted **six boardings in recent months** (the same six counted on 31 August, not six more), making it "the lead actor in boarding operations", with national boardings continuing in parallel and the existing UNCLOS framework used "to inspect and seize vessels" (EEAS transcript, Foreign Affairs Council (Defence), 28 Sep 2026).
 
 ## European Peace Facility (EPF)
 
