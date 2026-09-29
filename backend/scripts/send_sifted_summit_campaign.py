@@ -163,6 +163,8 @@ def render(r):
              f"hello@beresol.eu<br/><a href=\"{BRUBRU_URL}\" style=\"color:#0693e3;\">brubru.beresol.eu</a></p>"
              f"<p style=\"font-size:11px;color:#999;\">If you would rather not hear from me again, "
              f"reply with &ldquo;unsubscribe&rdquo; and I will not write again.</p>")
+    assert "Sol&eacute;" in body, "surname must be Solé"
+    assert "V&iacute;ctor" not in body and "Víctor" not in body, "first name is Victor, never Víctor"
     return SUBJECTS[r["t"]], (
         "<div style=\"font-family: Georgia, 'Times New Roman', serif; font-size:15px; "
         f"line-height:1.6; color:#1a1a1a; max-width:640px;\">{body}</div>")
