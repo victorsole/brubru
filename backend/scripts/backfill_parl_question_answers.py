@@ -54,6 +54,17 @@ MIN_BODY_LEN = 50  # answers can be quite short
 
 
 def get_env(k: str) -> str:
+    """The value from the process environment, else from the repo-root .env.
+
+    The environment comes FIRST because that is the only one that exists where this
+    runs in production: the Railway container has no .env file, so a .env-only reader
+    returns "" and the job dies with "DATABASE_URL missing". Three jobs scheduled on
+    28 Sep 2026 failed every run that way while working perfectly on a laptop.
+    """
+    import os
+    value = os.environ.get(k)
+    if value:
+        return value
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():

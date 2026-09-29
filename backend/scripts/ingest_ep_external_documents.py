@@ -167,6 +167,29 @@ ON CONFLICT (identifier) DO UPDATE SET
 """)
 
 
+def _live(db):
+    """Return a usable session, reopening it if the server dropped the old one.
+
+    These runs hold one Session across hours of network work and Supabase closes an idle
+    connection from its side. pool_pre_ping cannot help: it validates on CHECKOUT, and the
+    connection is checked out for the whole run. This backfill died at year 2014 with
+    "server closed the connection unexpectedly" after storing 2,410 documents, and the
+    Council news run died the same way earlier the same day.
+    """
+    from sqlalchemy.exc import OperationalError
+    try:
+        db.execute(text("SELECT 1"))
+        return db
+    except OperationalError:
+        print("  [db] connection dropped: reopening the session", flush=True)
+        try:
+            db.rollback()
+            db.close()
+        except Exception:  # noqa: BLE001
+            pass
+        return SessionLocal()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -185,6 +208,7 @@ def main() -> int:
     db = SessionLocal()
     started = time.time()
     seen = stored = bodies = no_body = skipped_body = 0
+    budget_hit = False
     # Identifiers whose body we already hold. A scheduled run walks newest-first every
     # day, and without this it would re-download every DOCX it has ever read: ~140 files
     # for the current year alone, to store nothing new.
@@ -196,12 +220,20 @@ def main() -> int:
     try:
         with httpx.Client(headers=HEADERS, timeout=90.0, follow_redirects=True) as client:
             for year in years:
-                if time.time() - started > args.max_seconds:
+                if budget_hit or time.time() - started > args.max_seconds:
                     print(f"[INFO] budget reached before year {year}")
                     break
                 offset = 0
                 year_count = 0
                 while True:
+                    # The budget was checked only BETWEEN years, so a year with many
+                    # pages and a few retries ran straight past it: the first scheduled
+                    # run was killed at timeout_600s with a 420s budget (28 Sep 2026).
+                    # A bound that only applies between units is not a bound.
+                    if time.time() - started > args.max_seconds:
+                        print(f"  [{year}] budget reached mid-year at offset {offset}")
+                        budget_hit = True
+                        break
                     try:
                         payload = _get(client, API, {"year": year, "limit": args.limit,
                                                      "offset": offset})
@@ -212,7 +244,18 @@ def main() -> int:
                     items = (payload or {}).get("data") or []
                     if not items:
                         break
+                    if args.apply:
+                        db = _live(db)
                     for it in items:
+                        # Per ITEM, not per page. Each item costs a detail call, and when
+                        # EP is throttling that call sleeps on Retry-After, so ONE page of
+                        # 100 items can outlast any budget: a 20s budget ran 6m39s in
+                        # testing when the check sat at the page boundary (29 Sep 2026).
+                        # The work is per item, so the bound has to be too.
+                        if time.time() - started > args.max_seconds:
+                            print(f"  [{year}] budget reached mid-page at offset {offset}")
+                            budget_hit = True
+                            break
                         seen += 1
                         ident = it.get("identifier")
                         if not ident:
@@ -265,7 +308,7 @@ def main() -> int:
                         year_count += 1
                     if args.apply:
                         db.commit()
-                    if len(items) < args.limit:
+                    if budget_hit or len(items) < args.limit:
                         break
                     offset += args.limit
                     time.sleep(0.4)

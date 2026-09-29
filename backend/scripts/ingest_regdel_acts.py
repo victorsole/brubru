@@ -33,7 +33,11 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import pandas as pd
+# xlrd, not pandas: the export is a legacy .xls and xlrd reads it in ~100 KB, where
+# pandas (plus numpy) is ~50 MB in the container for one monthly job. The container had
+# neither, so every scheduled run died with ModuleNotFoundError: No module named 'pandas'
+# while the script worked on a laptop (28-29 Sep 2026).
+import xlrd
 import psycopg2
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -104,15 +108,37 @@ _STATUS_MAP = {
 }
 
 
+def _blank(value) -> bool:
+    """True for an empty cell, whichever reader produced it."""
+    if value is None:
+        return True
+    if isinstance(value, float) and value != value:   # NaN
+        return True
+    return str(value).strip() == ""
+
+
+def _read_xls(payload: bytes) -> List[Dict[str, Any]]:
+    """Rows of the RegDel .xls export as dicts, keyed by the header row."""
+    book = xlrd.open_workbook(file_contents=payload)
+    sheet = book.sheet_by_index(0)
+    if sheet.nrows == 0:
+        return []
+    headers = [str(sheet.cell_value(0, c)).strip() for c in range(sheet.ncols)]
+    out: List[Dict[str, Any]] = []
+    for r in range(1, sheet.nrows):
+        out.append({headers[c]: sheet.cell_value(r, c) for c in range(sheet.ncols)})
+    return out
+
+
 def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]]:
     """Convert one Excel row into a secondary_acts record."""
     status_col = "Delegated act status" if act_type == "delegated" else "Implementing act status"
     title = row.get("Complete title")
     ccode = row.get("CCode")
-    # pandas gives float NaN for empty cells; treat as missing
-    if isinstance(title, float) and pd.isna(title):
+    # xlrd gives '' for an empty cell; a float NaN can still arrive from older exports.
+    if _blank(title):
         title = None
-    if isinstance(ccode, float) and pd.isna(ccode):
+    if _blank(ccode):
         ccode = None
     title = title.strip() if isinstance(title, str) else None
     ccode = ccode.strip() if isinstance(ccode, str) else None
@@ -121,7 +147,7 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
 
     celex = row.get("Celex number")
     celex = celex.strip() if isinstance(celex, str) else None
-    if celex == "" or celex is None or (isinstance(celex, float) and pd.isna(celex)):
+    if _blank(celex):
         celex = None
 
     policy = row.get("Policy area")
@@ -185,10 +211,10 @@ def main():
     for act_type in targets:
         print(f"[INFO] fetching RegDel {act_type} export...")
         bytes_ = fetch_excel(act_type)
-        df = pd.read_excel(io.BytesIO(bytes_), engine="xlrd")
-        print(f"  {len(df)} rows in Excel")
-        for _, row in df.iterrows():
-            rec = normalise_row(row.to_dict(), act_type)
+        rows = _read_xls(bytes_)
+        print(f"  {len(rows)} rows in Excel")
+        for row in rows:
+            rec = normalise_row(row, act_type)
             if rec:
                 all_rows.append(rec)
         if args.limit:
