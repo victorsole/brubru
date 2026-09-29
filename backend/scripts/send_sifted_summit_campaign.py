@@ -127,6 +127,80 @@ PARAGRAPHS = {
 }
 
 
+# Per-speaker emails, built around each speaker's own session (29 Sep 2026).
+# Facts checked against: the Public Procurement Act deep-dive (COM(2026) 590),
+# its date in Cellar (2026-09-09) and the Have Your Say feedback window
+# (open to 24 Nov 2026); the EU Inc deep-dive (COM(2026) 321). Fact-check
+# table: session MD, item 6. A speaker listed here overrides the tier template.
+LINK = "style=\"color:#0693e3;\""
+UL = "<ul style=\"padding-left:20px;\">"
+LI = "<li style=\"margin-bottom:8px;\">"
+EU_INC_LINK = f"<a href=\"https://brubru.beresol.eu/eu-inc/\" {LINK}>Where EU Inc stands, in full</a>."
+PERSON = {
+    "jmokander@generalcatalyst.com": (
+        "Your Sifted Summit panel on government contracts, and the new EU procurement law",
+        [
+            "I am Victor Sol&eacute;, and I built Brubru, an AI agent for EU public affairs.",
+            "One file sits right behind your panel: the Commission's proposal for a "
+            "<strong>Public Procurement Act</strong>, adopted on 9 September 2026. What it changes "
+            "for startups selling to governments:",
+            UL
+            + LI + "Three directives become one directly applicable Regulation of 149 articles.</li>"
+            + LI + "Quality must carry at least 30% of the weight in every award.</li>"
+            + LI + "A new innovation procedure (Articles 41 to 45) for societal challenges with no known "
+                   "solution, and bringing in start-ups, scale-ups and SMEs becomes an objective buyers "
+                   "may pursue (Article 59).</li>"
+            + LI + "Defence contracts covered by the defence procurement directive stay outside it "
+                   "(Article 78).</li>"
+            + "</ul>",
+            "The Commission is taking feedback on the proposal until 24 November 2026. "
+            f"<a href=\"https://brubru.beresol.eu/public-procurement-act/\" {LINK}>The proposal, article by article</a>.",
+            "If it helps your preparation, ask Brubru anything about it. The first 14 days are free.",
+        ],
+    ),
+    "jon.fox@lw.com": (
+        "Your Sifted Summit session on exits, and the EU Inc share rules",
+        [
+            "I am Victor Sol&eacute;, and I built Brubru, an AI agent for EU law and public affairs.",
+            "One file that could reshape European exits: <strong>EU Inc</strong>, the Commission's "
+            "proposal of 18 March 2026 for a single company form across the 27 Member States. "
+            "The parts closest to your session:",
+            UL
+            + LI + "Dematerialised shares and a chapter on share transfers (Articles 53 to 60), on which "
+                   "Parliament's largest group has tabled amendments.</li>"
+            + LI + "Multiple share classes with different voting rights, and access to SME growth "
+                   "markets.</li>"
+            + LI + "A shareholder who is oppressed can ask a court for a buyout at fair value "
+                   "(Articles 50 to 52).</li>"
+            + "</ul>",
+            "The European Parliament's Legal Affairs Committee debated the amendments on "
+            "7 September. " + EU_INC_LINK,
+            "Brubru also runs <strong>EU Law Comply</strong>, which checks a company against the "
+            "obligations of an EU act, article by article. The first 14 days are free.",
+        ],
+    ),
+    "helengoldberg@legaledge.co.uk": (
+        "Your Sifted Summit session on fundraising, and EU Inc",
+        [
+            "I am Victor Sol&eacute;, and I built Brubru, an AI agent for EU law and public affairs.",
+            "One EU file could change how European startups raise: <strong>EU Inc</strong>, "
+            "proposed by the Commission on 18 March 2026. For a founder it means:",
+            UL
+            + LI + "One company form for all 27 Member States, registered online in 48 hours, for "
+                   "EUR 100 or less, with zero minimum capital.</li>"
+            + LI + "Online share subscription, and multiple share classes with different voting "
+                   "rights.</li>"
+            + LI + "An optional EU employee stock option scheme, taxed at disposal.</li>"
+            + "</ul>",
+            "It is now in the European Parliament, where the Legal Affairs Committee debated the "
+            "amendments on 7 September. " + EU_INC_LINK,
+            "If a question from your session would be useful to test it on, ask Brubru. The "
+            "first 14 days are free.",
+        ],
+    ),
+}
+
+
 def _is_generic(email: str) -> bool:
     return email.split("@", 1)[0].lower() in GENERIC_LOCAL_PARTS
 
@@ -157,7 +231,8 @@ def render(r):
     opener = (f"I saw that you are speaking at Sifted Summit this week, on "
               f"&ldquo;{session}&rdquo;{end}" if session else
               "I saw that you are speaking at Sifted Summit this week.")
-    paras = [f"Dear {html.escape(salutation)},", opener] + PARAGRAPHS[r["t"]]
+    subject, body_paras = PERSON.get(r["email"], (SUBJECTS[r["t"]], PARAGRAPHS[r["t"]]))
+    paras = [f"Dear {html.escape(salutation)},", opener] + body_paras
     body = "".join(p if p.startswith("<ul") else f"<p>{p}</p>" for p in paras)
     body += (f"<p>Best regards,<br/>Victor Sol&eacute;<br/>Brubru, by Beresol<br/>"
              f"hello@beresol.eu<br/><a href=\"{BRUBRU_URL}\" style=\"color:#0693e3;\">brubru.beresol.eu</a></p>"
@@ -165,7 +240,7 @@ def render(r):
              f"reply with &ldquo;unsubscribe&rdquo; and I will not write again.</p>")
     assert "Sol&eacute;" in body, "surname must be Solé"
     assert "V&iacute;ctor" not in body and "Víctor" not in body, "first name is Victor, never Víctor"
-    return SUBJECTS[r["t"]], (
+    return subject, (
         "<div style=\"font-family: Georgia, 'Times New Roman', serif; font-size:15px; "
         f"line-height:1.6; color:#1a1a1a; max-width:640px;\">{body}</div>")
 
@@ -257,13 +332,14 @@ def main() -> int:
     if args.test:
         seen, msgs = set(), []
         for r in rows:
-            if r["t"] in seen:
+            key = r["email"] if r["email"] in PERSON else r["t"]
+            if key in seen:
                 continue
-            seen.add(r["t"])
+            seen.add(key)
             subject, body = render(r)
             msgs.append((TEST_ADDRESS, f"[TEST] {subject}", body, None))
         ok, fail = send_all(msgs)
-        print(f"[OK] test sent {ok}, failed {fail} (one per tier, to {TEST_ADDRESS})")
+        print(f"[OK] test sent {ok}, failed {fail} (one per distinct email, to {TEST_ADDRESS})")
         return 0 if fail == 0 else 1
 
     from core.database import SessionLocal
