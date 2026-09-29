@@ -156,14 +156,20 @@ def main() -> int:
     ap.add_argument("--slug", help="only this base_path, e.g. /chips-act-2")
     ap.add_argument("--render", action="store_true", help="also measure overflow in Chromium")
     a = ap.parse_args()
+    slug = ("/" + a.slug.strip("/")) if a.slug else None
 
-    dds = [d for d in DEEP_DIVES if not a.slug or d["base_path"] == a.slug]
+    dds = [d for d in DEEP_DIVES if not slug or d["base_path"].rstrip("/") == slug]
     paths: List[pathlib.Path] = []
     for d in dds:
         paths.extend(sorted((PUBLIC / d["base_path"].lstrip("/")).glob("*.html")))
 
     print(f"DEEP-DIVE HTML VALIDATION  {len(dds)} deep-dive(s), {len(paths)} page(s)")
     print("=" * 78)
+    # A pass over nothing is not a pass: `--slug eu-inc` once checked 0 pages
+    # and still printed "All pages pass" (29 Sep 2026).
+    if not paths:
+        print(f"[ERROR] no pages matched{f' --slug {a.slug}' if a.slug else ''}; nothing was checked.")
+        return 2
 
     bad = 0
     for path in paths:
