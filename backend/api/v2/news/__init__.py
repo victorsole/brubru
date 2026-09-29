@@ -235,11 +235,18 @@ _EXCLUDED_EU_NEWS_INSTITUTIONS = ("OUTLET", "FUNDING", "EU")
 # 'report' maps to publication alongside 'publication' itself: the scraper's own rule
 # has always classed report/study/factsheet as a publication, so the 68 rows stored as
 # 'report' are legacy stock of the same thing, not a separate kind.
-_EU_NEWS_KIND_SQL = (
-    "CASE WHEN n.item_type = 'press' THEN 'press_release' "
-    "WHEN n.item_type IN ('publication', 'report') THEN 'publication' "
-    "ELSE 'news' END"
-)
+#
+# The kind is now READ, not derived: migration 254 gave both tables a `news_kind`
+# column that is set once at insert and frozen by a trigger, because a client keys its
+# own documents on the kind we serve and an item that moves between kinds leaves them a
+# duplicate that nothing deletes. Deriving it per request meant any of the ten writers
+# of item_type could move it. The mapping itself lives in brubru_news_kind_of() and is
+# applied at write time; this expression only reads the result.
+_EU_NEWS_KIND_SQL = "n.news_kind"
+# The eu_news_items item_types that map into the feed. Since migration 254 this is no
+# longer a request filter -- membership is the pinned `news_kind` -- but it is still the
+# vocabulary that migration's backfill and brubru_news_kind_of() work from, so the two
+# must stay identical.
 _EU_NEWS_SOURCE_TYPES = ["news", "press", "story", "statement", "speech",
                          "publication", "report"]
 
@@ -287,10 +294,13 @@ def _institutional_sql(codes, kinds, since, until, q):
         f"WHEN '{inst}' THEN '{code}'" for code, inst in wanted.items()
     ) + " END"
 
-    where = ["n.institution = ANY(:i_insts)", "n.item_type = ANY(:i_srctypes)",
+    # Membership of the feed is the pinned kind, not item_type. Filtering on item_type
+    # as well would undo the pin: a row whose internal type was later corrected to
+    # something outside the list would silently leave the feed, which is the same
+    # disappearance a client sees as a deleted document.
+    where = ["n.institution = ANY(:i_insts)",
              f"({_EU_NEWS_KIND_SQL}) = ANY(:i_kinds)", _DEDUP_SQL]
     params = {"i_insts": list(wanted.values()),
-              "i_srctypes": _EU_NEWS_SOURCE_TYPES,
               "i_kinds": list(kinds)}
 
     # 883 rows across 17 bodies carry news_date IS NULL for every row they have.
@@ -791,9 +801,9 @@ async def get_news(request: Request,
                 "n.created_at AS creation_date FROM eu_news_items n "
                 # The same dedup as the list: an id the list never hands out must not
                 # resolve here either, or one article has two ids.
-                f"WHERE n.id = :id AND n.institution = ANY(:i) AND n.item_type = ANY(:t) AND {_DEDUP_SQL}"),
-                {"id": item_id, "i": list(_INSTITUTIONAL_NEWS.values()),
-                 "t": _EU_NEWS_SOURCE_TYPES}).fetchone()
+                f"WHERE n.id = :id AND n.institution = ANY(:i) "
+                f"AND n.news_kind IS NOT NULL AND {_DEDUP_SQL}"),
+                {"id": item_id, "i": list(_INSTITUTIONAL_NEWS.values())}).fetchone()
         except Exception:
             # A malformed UUID is a bad id, not a server fault. Roll back so the
             # session stays usable, then fall through to the 404 below.

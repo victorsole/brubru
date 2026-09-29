@@ -29,6 +29,12 @@ class EuNewsItem(Base):
     institution = Column(String)
     commission_dg = Column(String)
     item_type = Column(String)        # news | publication | story | press | other
+    # The kind /api/v2/news serves this row as (news | press_release | publication),
+    # or NULL when the row is not in the feed. Written once at insert and frozen by
+    # trg_eu_news_items_pin_kind (migration 254): item_type above stays free to be
+    # corrected, the published kind does not move. Do not set this from application
+    # code -- the trigger owns it.
+    news_kind = Column(String)
     source_key = Column(String)
     policy_areas = Column(ARRAY(String), default=list)
 
