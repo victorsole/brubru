@@ -150,6 +150,35 @@ CREATE TRIGGER trg_economy_items_then_carry_kind
     FOR EACH ROW EXECUTE FUNCTION brubru_carry_news_kind();
 
 
+-- Keep recording them. The backfill below is a one-off, and twins keep arriving: a
+-- verification run 40 minutes after the first backfill already found institutional ids
+-- newly hidden with no alias. An invariant that only holds at migration time is not an
+-- invariant, so the alias is written when the handover happens.
+CREATE OR REPLACE FUNCTION brubru_record_news_alias()
+RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.news_kind IS NULL THEN
+        RETURN NULL;
+    END IF;
+    INSERT INTO news_id_alias (alias_id, canonical_id, url_key)
+    SELECT n.id::text, NEW.id::text, public.news_url_key(n.source_url)
+      FROM eu_news_items n
+     WHERE n.news_kind IS NOT NULL
+       AND public.news_url_key(n.source_url) = public.news_url_key(NEW.public_url)
+       AND public.news_url_key_exact(n.source_url) = public.news_url_key_exact(NEW.public_url)
+    ON CONFLICT (alias_id) DO UPDATE
+       SET canonical_id = EXCLUDED.canonical_id, last_updated = NOW();
+    RETURN NULL;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_economy_items_record_alias ON economy_items;
+CREATE TRIGGER trg_economy_items_record_alias
+    AFTER INSERT ON economy_items
+    FOR EACH ROW EXECUTE FUNCTION brubru_record_news_alias();
+
+
 -- Record every id we have served that a twin now hides.
 -- DISTINCT ON: two agency rows can hold the exact same URL (AMLA publishes some
 -- documents twice), and an alias must name ONE id. The lowest id is the one that

@@ -156,3 +156,32 @@ class TestTheUnionStaysHonest:
             f"AND n.news_kind IS NOT NULL AND {_DEDUP_SQL}"), {"i": INSTS}).scalar()
         assert served == agency + inst, (
             f"served {served} but eligible is {agency} agency + {inst} institutional")
+
+
+class TestTheInvariantIsMaintainedNotBackfilled:
+    """A one-off backfill is not an invariant. Forty minutes after the first backfill a
+    verification run already found newly hidden ids with no alias, because twins keep
+    arriving. The alias is written when the handover happens."""
+
+    def test_a_twin_arriving_now_records_the_alias_it_hides(self, db):
+        row = db.execute(text(
+            "SELECT n.id::text, n.source_url FROM eu_news_items n "
+            "WHERE n.news_kind IS NOT NULL "
+            "  AND NOT EXISTS (SELECT 1 FROM news_id_alias a WHERE a.alias_id = n.id::text) "
+            f"  AND {'TRUE'} LIMIT 1")).fetchone()
+        if row is None:
+            pytest.skip("every institutional row already has an alias")
+        body = db.execute(text(
+            "SELECT body_code FROM economy_items WHERE news_kind IS NOT NULL LIMIT 1")).scalar()
+        try:
+            new_id = db.execute(text(
+                "INSERT INTO economy_items (body_code, item_type, title, public_url, news_kind) "
+                "VALUES (:b, 'news', 'a twin arriving now', :u, NULL) RETURNING id"),
+                {"b": body, "u": row[1]}).scalar()
+            got = db.execute(text(
+                "SELECT canonical_id FROM news_id_alias WHERE alias_id = :a"),
+                {"a": row[0]}).scalar()
+            assert got == str(new_id), (
+                "the id this twin just hid was not recorded, so it would 404")
+        finally:
+            db.rollback()
