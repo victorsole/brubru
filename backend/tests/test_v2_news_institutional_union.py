@@ -102,15 +102,26 @@ def test_statements_and_speeches_are_served_as_news(client, db):
     assert d.status_code == 200 and d.json()["kind"] == "news" and d.json()["body_code"] == "eeas"
 
 
-def test_a_duplicate_id_is_not_served_by_the_detail_route(client, db):
-    """One article, one id: the institutional copy of an agency item must 404."""
+def test_a_superseded_id_resolves_to_the_canonical_item(client, db):
+    """One article, one id -- and the id it USED to have still answers.
+
+    This asserted a 404 until 29 Sep 2026, on the reasoning that an id the list does
+    not hand out must not resolve either, or one article has two ids. The reasoning
+    held; the conclusion cost more than it saved. An institutional story is served
+    under its UUID until an agency twin arrives, and 1,113 such ids had been live for
+    more than a day (one for 99 days) when they began returning 404. A client that
+    stored one reads a deletion.
+
+    The article still has ONE id: the old one resolves to the canonical item and the
+    payload carries the canonical id, so nothing is served under two identities.
+    """
     row = db.execute(text(
-        "SELECT n.id::text FROM eu_news_items n WHERE n.institution = 'COMMISSION' "
-        "AND EXISTS (SELECT 1 FROM economy_items e WHERE e.item_type IN ('news','press_release') "
-        "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url)) LIMIT 1")).fetchone()
+        "SELECT alias_id, canonical_id FROM news_id_alias LIMIT 1")).fetchone()
     if row is None:
-        pytest.skip("no duplicate left to probe")
-    assert client.get(f"/api/v2/news/{row[0]}").status_code == 404
+        pytest.skip("no superseded id to probe")
+    r = client.get(f"/api/v2/news/{row[0]}")
+    assert r.status_code == 200, "an id we served must not vanish"
+    assert str(r.json()["id"]) == str(row[1]), "the payload must carry the canonical id"
 
 
 def test_the_institutions_are_registered_bodies(db):
@@ -468,14 +479,18 @@ def test_to_includes_the_whole_day_for_items_with_a_time(client, db):
     items of 24 Jul 2026 came back as 0 for from=to=2026-07-24."""
     row = db.execute(text(
         "SELECT body_code, document_date::date AS d FROM economy_items "
-        "WHERE item_type IN ('news','press_release') AND document_date IS NOT NULL "
+        "WHERE news_kind IS NOT NULL AND document_date IS NOT NULL "
         "AND document_date::time <> '00:00' ORDER BY document_date DESC LIMIT 1")).fetchone()
     if row is None:
         pytest.skip("no timed agency item")
     from api.v2.news import _DEDUP_SQL, _EU_NEWS_SOURCE_TYPES
+    # news_kind, not a hand-written type list: the feed has served THREE kinds since
+    # 29 Sep 2026 and this counted two, so it under-counted any day carrying a
+    # publication (EFSA published one on 29 Sep and the test failed on a date
+    # boundary it was not testing).
     on_day = db.execute(text(
         "SELECT count(*) FROM economy_items WHERE body_code = :b "
-        "AND item_type IN ('news','press_release') "
+        "AND news_kind IS NOT NULL "
         "AND coalesce(document_date, creation_date)::date = :d"), {"b": row.body_code, "d": row.d}).scalar()
     # Since 15 Sep 2026 most bodies ALSO contribute their own newsroom rows from
     # eu_news_items, so the day's total spans both halves. The first version of this
@@ -485,9 +500,9 @@ def test_to_includes_the_whole_day_for_items_with_a_time(client, db):
     inst = _INSTITUTIONAL_NEWS.get(row.body_code)
     if inst:
         on_day += db.execute(text(
-            "SELECT count(*) FROM eu_news_items n WHERE n.institution = :i AND n.item_type = ANY(:t) "
+            "SELECT count(*) FROM eu_news_items n WHERE n.institution = :i AND n.news_kind IS NOT NULL "
             f"AND {_DEDUP_SQL} AND COALESCE(n.news_date::timestamptz, n.created_at)::date = :d"),
-            {"i": inst, "t": _EU_NEWS_SOURCE_TYPES, "d": row.d}).scalar()
+            {"i": inst, "d": row.d}).scalar()
     got = client.get("/api/v2/news/all", params={
         "body": row.body_code, "from": row.d.isoformat(), "to": row.d.isoformat()}).json()["total"]
     assert got == on_day, f"{row.body_code} {row.d}: {on_day} items on the day, from=to returned {got}"

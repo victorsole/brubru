@@ -105,7 +105,9 @@ def _resolve_scope(bodies, family):
 
 
 def _build_where(codes, kinds, since, until, q):
-    where = ["item_type = ANY(:types)"]
+    # The pinned kind, not item_type: the two must select the same rows, or a row
+    # could be served under one predicate and deduped under another (migration 255).
+    where = ["news_kind = ANY(:types)"]
     params = {"types": kinds}
     if codes is not None:
         where.append("body_code = ANY(:codes)"); params["codes"] = list(codes)
@@ -256,10 +258,16 @@ _EU_NEWS_SOURCE_TYPES = ["news", "press", "story", "statement", "speech",
 # ix_economy_items_news_url_key_v2, migration 252: keep the two lists identical). It covers
 # ALL THREE agency kinds whatever `kind` the caller asked for, so a row is either served
 # once or not at all and `kind=all` stays the sum of the three.
+# news_url_key() drops the query string, which is where some EU sites keep the
+# article's identity (chips-ju.europa.eu/NewsDetails?id=... collapses ten articles onto
+# one key), so on its own it suppressed institutional rows that were not twins. It stays
+# as the INDEXED prefilter and exactness rides on top: only 2 suppressions in the corpus
+# depended on the query being stripped. See migration 255.
 _DEDUP_SQL = (
     "NOT EXISTS (SELECT 1 FROM economy_items e "
-    "WHERE e.item_type IN ('news', 'press_release', 'publication') "
-    "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url))"
+    "WHERE e.news_kind IS NOT NULL "
+    "AND public.news_url_key(e.public_url) = public.news_url_key(n.source_url) "
+    "AND public.news_url_key_exact(e.public_url) = public.news_url_key_exact(n.source_url))"
 )
 
 # Both halves must expose the SAME column types for UNION ALL, and the two id
@@ -268,8 +276,8 @@ _DEDUP_SQL = (
 # `_coerce_id`, so an agency item still serialises as the integer callers already
 # depend on. (A first cut negated the id to disambiguate, which cannot work on a
 # UUID -- `operator does not exist: - uuid`.)
-_ECONOMY_COLS = ("id::text AS id, body_code, item_type, title, summary, public_url, "
-                 "document_date, creation_date, fetched_at, body_txt, body_html")
+_ECONOMY_COLS = ("id::text AS id, body_code, news_kind AS item_type, title, summary, "
+                 "public_url, document_date, creation_date, fetched_at, body_txt, body_html")
 
 
 def _coerce_id(raw):
@@ -777,11 +785,22 @@ async def get_news(request: Request,
     # BEFORE this route and are matched first -- that ordering was already
     # load-bearing when this was int-typed, and it is more so now that a string
     # id would happily match them. Do not move this route above them.
+    # An id this API has ever served must keep resolving. A story held in both stores
+    # is served by the agency half, so the institutional id it went out under earlier
+    # stops resolving on its own the day the twin arrives -- 1,113 ids had been live
+    # for more than a day, one of them for 99 days, and every one returned 404.
+    # migration 255 records them; follow the alias before deciding an id is unknown.
+    alias = db.execute(text(
+        "SELECT canonical_id FROM news_id_alias WHERE alias_id = :i"),
+        {"i": item_id}).scalar()
+    if alias:
+        item_id = alias
+
     if item_id.isdigit():
         r = db.execute(text(
-            "SELECT id, body_code, item_type, title, summary, public_url, body_txt, body_html, "
-            "document_date, creation_date FROM economy_items "
-            "WHERE id = :id AND item_type = ANY(:t)"),
+            "SELECT id, body_code, news_kind AS item_type, title, summary, public_url, "
+            "body_txt, body_html, document_date, creation_date FROM economy_items "
+            "WHERE id = :id AND news_kind = ANY(:t)"),
             {"id": int(item_id), "t": _NEWS_TYPES}).fetchone()
     else:
         case_body = "CASE n.institution " + " ".join(
