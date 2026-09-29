@@ -11,7 +11,7 @@
   - **STEP** — EIC STEP Scale Up equity, EUR 10-30M tickets.
 - Governance: EIC Fund Board (broadest decision-making power) + EIC Fund Advisory Committee (independent advice to EIB + Fund Manager).
 - Investment advisor: EIB Group — conducts due diligence, proposes investments, supports portfolio management, acts as investor of record.
-- Distinct from the **Scaleup Europe Fund** (separate EUR 5B fund-of-funds managed by EQT under EIF; see `eic_scaleup_europe_fund_2026.md`).
+- Distinct from the **Scaleup Europe Fund** (EUR 5B target, a separate compartment under the EIC Fund umbrella managed by EQT, making DIRECT investments of EUR 100M and above per company; see `eic_scaleup_europe_fund_2026.md`).
 
 ## Investment scope
 
@@ -123,10 +123,10 @@ Themed examples (out of 255 in 12 Drupal sector themes):
 
 ## Distinct from the Scaleup Europe Fund
 
-The EIC Fund (EUR 4B+) is **NOT** the same as the Scaleup Europe Fund (EUR 5B, May 2026, fund-of-funds, managed by EQT, anchored by EIF). The two coexist:
+The EIC Fund (EUR 4B+) is **NOT** the same as the Scaleup Europe Fund (EUR 5B target, EQT selected 18 May 2026, established 4 August 2026 as a separate compartment under the EIC Fund umbrella). The Scaleup Europe Fund is NOT a fund of funds. The two coexist:
 
 - **EIC Fund** — direct equity into individual companies, EUR 0.5-30M tickets, deployed alongside Accelerator + STEP
-- **Scaleup Europe Fund** — fund-of-funds investing in PRIVATE growth-stage VC + PE funds that themselves invest in EU scale-ups; later-stage anchor (Series C+, pre-IPO)
+- **Scaleup Europe Fund** — direct equity into individual companies at growth and scaleup stage, EUR 100M and above per company including follow-ons, decided by EQT as independent manager; first investments expected autumn 2026
 
 See `eic_scaleup_europe_fund_2026.md` for full Scaleup Europe Fund detail.
 

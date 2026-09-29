@@ -1,110 +1,56 @@
-# Scaleup Europe Fund — EIC EUR 5 Billion Fund-of-Funds Selects EQT as Manager
+# Scaleup Europe Fund: the EUR 5 billion EIC growth fund managed by EQT
 
 ## QUICK FACTS
 
-- **LATEST (Monday 18 May 2026)**: **European Innovation Council selects EQT to lead the EUR 5 billion Scaleup Europe Fund** — Commission press release IP/26/1102. The Commission announced that EQT Partners (Stockholm-based global private-markets investment firm) has been selected as the manager of the Scaleup Europe Fund, a EUR 5 billion fund-of-funds anchored by the **European Investment Fund (EIF)** under the **European Innovation Council (EIC)** umbrella. The Fund is the **largest single fund commitment in EIC history** and the operational vehicle for the European Council's January 2026 mandate to close the EU late-stage scale-up financing gap.
-- **Source**: `ec.europa.eu/commission/presscorner/detail/en/ip_26_1102` (18 May 2026, DG RTD + DG ECFIN joint press release).
-- **Fund size**: **EUR 5 billion** (total committed capital across the fund-of-funds structure)
-- **Anchor investor**: European Investment Fund (EIF), with co-investment from European Investment Bank (EIB) Group and Horizon Europe Pillar III (EIC)
-- **Selected manager**: **EQT Partners** (selected via competitive call for expressions of interest launched Q4 2025)
-- **Lead DG**: **DG RTD** (Research and Innovation) for the EIC strategic anchor; **DG ECFIN** for the EIF / financial-instrument backbone
-- **Lead Commissioner**: Ekaterina Zaharieva (Commissioner for Startups, Research and Innovation, Bulgaria)
-- **Strategic anchor document**: Commission Communication "Closing the Scale-Up Gap" (early 2026, accompanying the Cyprus informal European Council strategic outlook on European Innovation)
-- **Investment thesis**: late-stage growth equity (Series C+, pre-IPO) in EU deeptech, climate tech, AI, semiconductors, biotech, advanced manufacturing scale-ups headquartered in the EU + EEA + Horizon Europe associated countries
+- **What it is**: a late-stage and growth fund, targeting **EUR 5 billion** in commitments, that makes **DIRECT equity investments in companies**. It is NOT a fund of funds: it does not invest in other VC or PE funds. The Commission says no fund of comparable size provides direct equity at the growth and scaleup stages in European strategic technology companies.
+- **Ticket size**: in the range of **EUR 100 million and above per company, including follow-on investments** (the EIC's own STEP Scale Up investments stop at EUR 30 million).
+- **Manager**: **EQT**, selected by the EIC Fund Board as preferred investment adviser and fund manager (Commission press release IP/26/1102, **18 May 2026**). EQT is an independent, market-based manager and makes every investment decision; the Commission and the other investors sit in the governance but do not direct individual investments.
+- **Structure**: part of the existing **EIC Fund umbrella**, with a privately owned fund manager. The Commission completed the final legal steps to establish it on **4 August 2026**.
+- **Money**: the **European Commission commits EUR 1 billion** as a founding investor, on equal terms with the others. Founding investors: Novo Holdings, EIFO (Export and Investment Fund of Denmark), CriteriaCaixa, Santander/Mouro Capital, Fondazione Compagnia di San Paolo / Intesa Sanpaolo / Fondazione Cariplo, ABP (with APG as asset manager), Wallenberg Investments and Allianz. A second fundraising round, led by EQT after the first closing, is open to further investors, possibly including non-European ones.
+- **First investments**: expected in **autumn 2026**, shortly after the first closing.
+- **Who can receive investment**: companies located in, or intending to locate to, an EU Member State or a country associated with Pillar III of Horizon Europe, developing strategic technologies and seeking major growth or scaleup rounds. Companies do not apply to the Commission: EQT runs deal sourcing and selection under the Fund's Investment Guidelines. Prior EIC funding gives no preferential treatment.
+- **Sectors** (EIC page): artificial intelligence, quantum, semiconductors, robotics and autonomous systems, energy, space, biotechnologies, medical technologies, advanced materials and agritech; EQT sets the specific strategy.
 
-## Why This Fund
+## Timeline
 
-The EU's **late-stage scale-up financing gap** has been the single most cited structural weakness of the European innovation ecosystem in every Commission, EIB, and EIC publication of the last decade:
+| Date | Step | Source |
+|---|---|---|
+| September 2025 | Announced in President von der Leyen's State of the Union as part of the EU Startup and Scaleup Strategy | EIC page |
+| October 2025 | Commission and private investors state their intention to set up the Fund | IP/26/1102 |
+| December 2025 to February 2026 | Public call for expressions of interest for the fund manager | IP/26/1102 |
+| 18 May 2026 | EIC Fund Board selects EQT | IP/26/1102 |
+| 3 June 2026 | Fund and manager presented at the EIC Summit | EIC page |
+| 4 August 2026 | Commission completes the final legal steps to establish the Fund | DG RTD press release, 4 Aug 2026 |
+| 22 September 2026 | European Institutional Investors Pact launched with the EIB Group; 13 institutional investors signal intent to invest, including in the Scaleup Europe Fund and the EUR 15 billion European Tech Champions Initiative 2.0 | IP/26/1937 |
+| Autumn 2026 | First investments expected | IP/26/1102, EIC page |
 
-- EU captures only **7% of global health biotech VC** investment (vs USA 63%, China 14%) — see `biotech_act.md`
-- EUR **219 billion of late-stage VC** invested in US health biotech vs EUR **25 billion in EU** (2015-2025)
-- **66 of 67 EU biotech IPOs** in the last 6 years listed on **non-EU stock exchanges**
-- US biopharma start-ups receive **9 times more late-stage funding** than EU equivalents
-- The Series C+ "deep tech valley of death" is the consistent friction point: EU early-stage funding is roughly comparable to the US in deal count, but EU Series C+ rounds are systematically smaller and less frequent, pushing EU scale-ups either to relocate to the US for capital or to be acquired by US/Asian buyers
+## How it differs from the other EU instruments
 
-The Scaleup Europe Fund is the **operational answer** to this gap. It is **not** a direct equity fund — it is a **fund-of-funds**, meaning it invests in **private VC and PE growth-stage funds** that themselves invest in EU scale-ups. This leverages private-sector deal flow + due diligence while concentrating the EIC's anchor capital where it can crowd in **5-10x private capital per public Euro** committed.
+| Instrument | What it does |
+|---|---|
+| **Scaleup Europe Fund** | Direct equity, EUR 100 million and above per company, managed by EQT, EUR 5 billion target |
+| EIC Fund (Accelerator, STEP Scale Up) | Direct equity from the EIC; STEP Scale Up up to EUR 30 million. The Scaleup Europe Fund has no formal link to the EIC portfolio, which may serve as a pipeline |
+| European Tech Champions Initiative (ETCI) | The EIB Group's fund of funds (the first ETCI invests through VC and PE funds, managed by the EIF); ETCI 2.0 is named at EUR 15 billion in IP/26/1937 |
+| European Institutional Investors Pact (EIIP) | A voluntary framework (policy dialogue led by the Commission, investment platform led by the EIB Group), not a fund |
 
-## Architecture
+Do not confuse the Scaleup Europe Fund with ETCI: ETCI is the fund of funds; the Scaleup Europe Fund invests directly in companies.
 
-```
-EIF + EIB + Horizon Europe (Pillar III/EIC)
-            |
-            v
-   Scaleup Europe Fund (EUR 5B fund-of-funds)
-            |   managed by EQT Partners
-            v
-   Tier-1 EU growth-stage VC + PE funds
-            |
-            v
-   Late-stage EU scale-ups (Series C+, pre-IPO)
-```
+## Why it exists
 
-Key structural choices:
-- **Manager**: EQT Partners (Stockholm), selected for global track record managing large private-market mandates, EU regulatory familiarity, and existing relationships with the European growth-stage VC ecosystem.
-- **Vintage**: 10-year fund life, 5-year investment period.
-- **Geographic scope**: EU + EEA + Horizon Europe associated countries (Norway, Iceland, Liechtenstein, plus all third countries with Horizon Europe association agreements).
-- **Sector focus**: deeptech, climate tech, AI, semiconductors, biotech, advanced manufacturing, defence-relevant dual-use (where compatible with EU defence frameworks).
-- **Co-investment carve-out**: a portion of the EUR 5B may be deployed as direct co-investment alongside selected underlying funds in flagship Series C+ rounds where the public-anchor signal can decisively close a round.
-- **Reporting + transparency**: EQT will report annually to the EIC Board on capital deployment, sector mix, geographic distribution, and impact metrics (jobs, IP, follow-on private capital crowded in).
+The Commission's rationale: European companies struggle to find large growth rounds in Europe, so many raise outside Europe, relocate or come under foreign control. The Fund is presented as a delivery of the Competitiveness Compass and a response to the Draghi report's call to close the deep-tech financing gap.
 
-## Why EQT (and not a Brussels-based or Member-State-controlled manager)
+## Related guides
 
-The choice of EQT (a listed Swedish private-markets firm) over a public or Brussels-based vehicle was deliberate and is signalled in the press release as a marker of the Commission's strategic shift:
-
-- The Commission wanted a manager with **proven track record at the EUR 5B+ mandate scale** — only a handful of EU-headquartered managers qualify (EQT, Permira, CVC, Bridgepoint, Cinven, Astorg, Eurazeo).
-- EQT's growth platform has the **deeptech + climate tech + biotech specialism** the Fund's mandate requires.
-- A **listed, regulated, EU-headquartered** manager satisfies both the political need for "European capital deploying European public money in Europe" and the financial-discipline need for a manager that operates by global VC/PE governance standards.
-
-The Commission notes in IP/26/1102 that the selection followed an open call for expressions of interest launched in Q4 2025 with technical evaluation by the EIF investment team and final selection by the EIC Board.
-
-## Relation to Other EU Innovation Instruments
-
-| Instrument | Stage | Vehicle | Capital |
-|---|---|---|---|
-| EIC Pathfinder (Horizon Europe) | Early-stage research | Grants | EUR 3B (2021-2027) |
-| EIC Accelerator | Late-stage start-up + scale-up | Grants + EIC Fund equity | EUR 7.6B (2021-2027) |
-| EIC Fund (existing direct equity) | Series A-B | Direct minority equity | EUR 2-3B AUM |
-| **Scaleup Europe Fund (NEW)** | **Series C+ and growth** | **Fund-of-funds via EQT** | **EUR 5B** |
-| InvestEU (Innovation + Digital window) | Late-stage scale-up + infrastructure | EIB / EIF guarantees + equity | EUR 9.9B guarantee envelope (innovation window) |
-| EIB Venture Debt | Growth-stage debt | Direct EIB lending | EUR ~1B/year run-rate |
-
-The Scaleup Europe Fund **fills the Series C+ vacuum** that no other EU instrument currently addresses at scale. It is complementary to — not a replacement for — the EIC Fund (which continues to do Series A/B direct equity) and to InvestEU (which guarantees rather than equity-invests).
-
-## What This Means for EU Scale-Ups
-
-For an EU growth-stage scale-up:
-- **Direct application**: no — the Scaleup Europe Fund invests in **private VC/PE funds**, not in companies directly. Scale-ups should pursue investment from the **underlying portfolio funds** that the Scaleup Europe Fund will back.
-- **Indirect signal**: the Fund's portfolio-fund selection will mark a public stamp on "preferred" EU growth-stage managers; expect the call for selected underlying funds in late 2026.
-- **Co-investment opportunity**: for flagship Series C+ rounds (typically EUR 100M+), the Fund may co-invest directly alongside selected underlying funds — this requires being on the radar of those funds first.
-
-## State of Play
-
-- **18 May 2026**: EQT selected as manager (today's announcement).
-- **Q3 2026 (expected)**: Fund-of-funds operating documents (LPA, side letters, fund regulations) finalised.
-- **Q4 2026 (expected)**: First call for underlying VC/PE fund applications.
-- **2027**: First capital deployment.
-- **2027-2032**: 5-year investment period.
-
-## Cross-Reference
-
-- `biotech_act.md` — biotech-sector scale-up financing gap evidence; Scaleup Europe Fund will indirectly target health biotech via underlying biotech-specialised funds.
-- `28th_regime_innovation_act.md` — EU Inc. 28th Regime is the corporate-form companion (helping scale-ups stay headquartered in the EU rather than re-incorporating in Delaware).
-- `single_market_one_europe_roadmap.md` — Single Market deepening agenda where capital mobility for scale-ups is a recurring deliverable.
-- `knowledge_valorisation_tech_transfer.md` — EIC Pathfinder + Accelerator + Pathfinder Transition Activities sit upstream of the Scaleup Europe Fund in the EU innovation funnel.
-
-## What Brubru Should Surface
-
-- Always quote the **EUR 5 billion** size and **fund-of-funds** structure (not "direct equity").
-- Always name **EQT Partners** as the selected manager (not "EQT alone" — there are multiple EQT entities; the relevant one is EQT Partners' growth platform).
-- Always cite **IP/26/1102** as the announcement reference.
-- Always cite **DG RTD + DG ECFIN** as joint leads (the EIC is in RTD; EIF/financial-instruments are in ECFIN).
-- Note the **late-stage Series C+ focus** — this is NOT for early-stage start-ups, which should look to EIC Accelerator or national VCs.
-- Do NOT conflate with the EIC Fund (the existing direct-equity arm, EUR 2-3B AUM, Series A-B) — they are different vehicles.
+- `eic_fund_equity_investment` (the EIC Fund's own direct equity)
+- `eic_step_scaleup_process` (STEP Scale Up, up to EUR 30 million)
+- `eib_eif_group_instruments_overview` (ETCI and the EIB Group's instruments)
+- `savings_and_investment_union` (the Institutional Investors Pact)
+- `28th_regime_innovation_act` (EU Inc, the company-law side of scaling in Europe)
 
 ## Sources
 
-- Commission press release IP/26/1102 (18 May 2026): `https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1102`
-- European Innovation Council (EIC) homepage: `https://eic.ec.europa.eu/`
-- European Investment Fund (EIF): `https://www.eif.org/`
-- EQT Partners corporate site: `https://eqtgroup.com/`
-- DG RTD Horizon Europe Pillar III (EIC) page: `https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe/european-innovation-council_en`
+- Commission press release IP/26/1102, 18 May 2026: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1102
+- European Innovation Council, Scaleup Europe Fund page and Q&A: https://eic.ec.europa.eu/eic-fund/scaleup-europe-fund_en
+- DG Research and Innovation press release, 4 August 2026: https://research-and-innovation.ec.europa.eu/news/all-research-and-innovation-news/scaleup-europe-fund-start-making-investments-2026-08-04_en
+- Commission and EIB Group joint press release IP/26/1937, 22 September 2026: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1937
+- Fund site (EQT, once operational): scaleupeuropefund.eu

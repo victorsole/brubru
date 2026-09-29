@@ -72,7 +72,7 @@ Advisory work is technical assistance and project-preparation support, distinct 
 - **ETCI 1** (2023, with France, Germany, Spain, Italy, Belgium, Netherlands): up to EUR 3.9 billion, ~15 growth-stage funds, targeting EUR 20 billion+ mobilised.
 - **ETCI 2.0** (December 2025): EIB + EIF Boards committed EUR 1.25 billion of own funds; targeted at roughly 4x the mobilisation of ETCI 1. A subsequent EIF fund-of-funds wave of EUR 15 billion aims to back around 100 growth-stage European VC funds.
 
-Distinguish ETCI (fund-of-funds, invests in VC/PE funds, EIF-managed) from the **EIC Fund** (direct equity into individual companies, EIB Group as investment advisor -- see `eic_fund_equity_investment.md`) and from the **Scaleup Europe Fund** (EUR 5 billion fund-of-funds managed by EQT, anchored by the EIF, later-stage focus -- see `eic_scaleup_europe_fund_2026.md`).
+Distinguish ETCI (fund-of-funds, invests in VC/PE funds, EIF-managed) from the **EIC Fund** (direct equity into individual companies, EIB Group as investment advisor -- see `eic_fund_equity_investment.md`) and from the **Scaleup Europe Fund** (EUR 5 billion target, DIRECT equity of EUR 100 million and above per company, managed by EQT under the EIC Fund umbrella, NOT a fund of funds and NOT EIF-managed -- see `eic_scaleup_europe_fund_2026.md`).
 
 ## Ukraine and defence financing
 

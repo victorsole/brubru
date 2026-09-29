@@ -79,7 +79,7 @@ Timeline: typically **2-6 months** from investment approval to first equity tran
 ## Coordination with other instruments
 
 - The **EIC Fund** is the common vehicle for both Accelerator equity and STEP Scale Up — but with different ticket sizes (Accelerator EUR 0.5-10M, STEP EUR 10-30M).
-- **Scaleup Europe Fund** (EUR 5B fund-of-funds managed by EQT, announced May 2026) is a *separate* later-stage vehicle anchored by the EIF. STEP Scale Up + Scaleup Europe Fund operate in complementary tickets. See `eic_scaleup_europe_fund_2026.md`.
+- **Scaleup Europe Fund** (EUR 5B target, managed by EQT, EQT selected May 2026) is a *separate* later-stage vehicle that invests DIRECTLY in companies, EUR 100M and above; it is not a fund of funds and not EIF-managed. STEP Scale Up (up to EUR 30M) and the Scaleup Europe Fund operate in complementary tickets. See `eic_scaleup_europe_fund_2026.md`.
 - **InvestEU Equity Window** — STEP-marked applicants may also access InvestEU-backed VC funds via partner financial intermediaries.
 
 ## Templates required

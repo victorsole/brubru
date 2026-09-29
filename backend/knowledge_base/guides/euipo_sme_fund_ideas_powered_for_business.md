@@ -62,7 +62,7 @@ This is one of the most common points of confusion for Brubru users, and worth s
 |---|---|---|
 | Runs it | EUIPO (Alicante), co-financed with the Commission | European Commission (DG RTD) via EISMEA + EIC Fund |
 | Funds what | **Registration/protection fees** for existing IP rights (trade marks, designs, patents, plant varieties, GIs) | **Innovation projects**: R&D, scale-up, deeptech development, equity investment |
-| Instrument type | Voucher reimbursement grant (fee rebate) | Blended finance: grants + equity (EIC Accelerator), pure grants (Pathfinder), fund-of-funds equity (Scaleup Europe Fund) |
+| Instrument type | Voucher reimbursement grant (fee rebate) | Blended finance: grants + equity (EIC Accelerator), pure grants (Pathfinder), direct growth equity (Scaleup Europe Fund) |
 | Typical amount | Hundreds to low thousands of EUR per voucher | Grants up to EUR 2.5 million; blended finance up to EUR 17.5 million (Accelerator) |
 | Relevant guides | This guide | `eic_overview.md`, `eic_accelerator_process.md` |
 

@@ -4,6 +4,17 @@
     {
       "date": "2026-09-29",
       "action": "updated",
+      "guide": "eic_scaleup_europe_fund_2026",
+      "title": "Scaleup Europe Fund",
+      "summary": "Corrected: the fund makes direct equity investments of EUR 100 million and above per company (not a fund of funds); Commission commits EUR 1 billion; established 4 August 2026; first investments autumn 2026. Rewritten from IP/26/1102, the EIC page and IP/26/1937.",
+      "refs": [
+        "IP/26/1102",
+        "IP/26/1937"
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "action": "updated",
       "guide": "european_defence_union",
       "title": "European Defence Union",
       "summary": "Defence ministers' first exchange on the emergency security protocol (28 Sep 2026)",
