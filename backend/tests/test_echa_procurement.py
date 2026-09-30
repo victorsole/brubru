@@ -64,3 +64,28 @@ def test_no_notice_means_no_document_date(monkeypatch):
            "deadline": datetime(2012, 1, 1, tzinfo=timezone.utc)}
     item = ap._echa_item(row, {"description": ["d"], "links": [], "notices": []}, NOW)
     assert item.document_date is None
+
+
+def test_a_market_consultation_never_carries_the_procedure_reference():
+    """It is published under the reference of the procedure it prepares (7 pairs in
+    ECHA's archive); the reference must stay unique to the procedure."""
+    row = {"title": "Market consultation on medical services providers", "url": "https://echa.europa.eu/-/mc",
+           "reference": "ECHA/2025/OP/0001", "kind": "Market consultation", "current": False,
+           "deadline": datetime(2025, 2, 14, tzinfo=timezone.utc)}
+    item = ap._echa_item(row, {"description": ["d"], "links": [], "notices": []}, NOW)
+    assert item.extras["tender_reference"] is None
+    assert "Prepares procedure: ECHA/2025/OP/0001" in item.body_txt
+    tender = ap._echa_item({**row, "kind": "Open", "title": "Medical services", "url": "https://echa.europa.eu/-/t"}, None, NOW)
+    assert tender.extras["tender_reference"] == "ECHA/2025/OP/0001"
+
+
+def test_one_procedure_listed_twice_becomes_one_row():
+    base = {"reference": "ECHA/2021/46", "kind": "Open", "current": False,
+            "deadline": datetime(2021, 5, 26, tzinfo=timezone.utc)}
+    rows = [{**base, "title": "Study on the Role of the Robust Study Summary", "url": "https://echa.europa.eu/-/a"},
+            {**base, "title": "Study on the role of the robust study summary", "url": "https://echa.europa.eu/-/a-1"}]
+    items = [ap._echa_item(rows[0], {"description": ["short"], "links": [], "notices": []}, NOW),
+             ap._echa_item(rows[1], {"description": ["a much longer description"], "links": [], "notices": []}, NOW)]
+    kept = ap._echa_merge_double_listings(items, rows)
+    assert [k.public_url for k in kept] == ["https://echa.europa.eu/-/a-1"]
+    assert "Also listed at: https://echa.europa.eu/-/a" in kept[0].body_txt

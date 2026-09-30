@@ -870,20 +870,28 @@ def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
     status = "open" if row["current"] and (deadline is None or deadline >= now) else "closed"
     ref = row["reference"]
     is_call = "interest" in row["kind"].lower() or "/CEI/" in ref.upper()
+    # A market consultation prepares a procedure and is published under THAT procedure's
+    # reference (7 pairs in ECHA's archive, 30 Sep 2026). The reference identifies the
+    # procedure, so only the procedure carries it; the consultation names it in its body.
+    # Victor, 30 Sep: identity by procedure page, the unique reference rule stays.
+    consultation = _echa_is_consultation(row)
     item = Item(
         body_code="echa", item_type="eoi_call" if is_call else "tender",
         title=clean(row["title"])[:120], public_url=row["url"],
         summary=clean(" · ".join(b for b in [ref, row["kind"],
                                                deadline.date().isoformat() if deadline else ""] if b)),
-        creation_date=now, source_kind="echa_procurement", guid=ref or row["url"],
-        extras={"tender_reference": ref or None, "status": status, "deadline": deadline},
+        creation_date=now, source_kind="echa_procurement",
+        guid=row["url"] if consultation else (ref or row["url"]),
+        extras={"tender_reference": None if consultation else (ref or None),
+                "status": status, "deadline": deadline},
     )
     if detail is None:
         return item
     notice = next((n for n in detail["notices"] if n.endswith("-CN")), None) or \
         next(iter(detail["notices"]), None)
     published = _ft_notice_date(notice) if notice else None
-    facts = [("Reference", ref), ("Procedure type", row["kind"]),
+    facts = [("Prepares procedure" if consultation else "Reference", ref),
+             ("Procedure type", row["kind"]),
              ("Status on ECHA's site", "current call" if row["current"] else "closed call"),
              ("Funding & Tenders notice", notice or ""),
              ("Notice published", published.date().isoformat() if published else ""),
@@ -901,6 +909,41 @@ def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
     # A notice cannot be published after its own deadline (see the ECDC note).
     item.document_date = published if published and (deadline is None or published <= deadline) else None
     return item
+
+
+def _echa_is_consultation(row: dict) -> bool:
+    return "consultation" in row["kind"].lower()
+
+
+def _echa_same_procedure_key(row: dict):
+    """ECHA sometimes lists ONE procedure on two pages (same reference, title and
+    deadline; ECHA/2021/46 and ECHA/2018/398 on 30 Sep 2026)."""
+    if not row["reference"] or _echa_is_consultation(row):
+        return None
+    return (row["reference"], re.sub(r"\W+", " ", row["title"].lower()).strip(), row["deadline"])
+
+
+def _echa_merge_double_listings(items: list[Item], rows: list[dict]) -> list[Item]:
+    """Keep one row per procedure listed twice: the page with the longer text; the
+    other page's address goes in its body."""
+    groups: dict = {}
+    for it, row in zip(items, rows):
+        k = _echa_same_procedure_key(row)
+        if k:
+            groups.setdefault(k, []).append(it)
+    drop: set = set()
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        keep = max(members, key=lambda it: (len(it.body_txt or ""), it.public_url))
+        others = [m.public_url for m in members if m is not keep]
+        drop.update(others)
+        if keep.body_txt:
+            keep.body_txt = clean(keep.body_txt + "\n" + "\n".join(f"Also listed at: {u}" for u in others))
+            keep.body_html = clean((keep.body_html or "") + "<ul>" + "".join(
+                f'<li>Also listed at: <a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in others)
+                + "</ul>")
+    return [it for it in items if it.public_url not in drop]
 
 
 def _echa_all(*, fetch_bodies: bool = True) -> list[Item]:
@@ -922,17 +965,25 @@ def _echa_all(*, fetch_bodies: bool = True) -> list[Item]:
                 + _echa_rows(f.fetch(_ECHA_CLOSED_URL, strip_chrome=False).html, current=False))
         if not rows:
             raise RuntimeError("ECHA business-opportunities pages parsed to zero rows")
-        for row in rows:
-            if row["url"] in seen:   # a call moving to the closed page mid-run
-                continue
-            seen.add(row["url"])
+        unique_rows = []
+        for r in rows:                  # a call moving to the closed page mid-run
+            if r["url"] not in seen:
+                seen.add(r["url"])
+                unique_rows.append(r)
+        rows = unique_rows
+        proc_keys = [_echa_same_procedure_key(r) for r in rows]
+        doubled = {k for k in proc_keys if k and proc_keys.count(k) > 1}
+        for row, proc_key in zip(rows, proc_keys):
             detail = None
-            if fetch_bodies and (row["current"] or full):
+            # Pages of a procedure listed twice are read every run, so the choice of
+            # which page to keep (the longer text) is the same every day.
+            if fetch_bodies and (row["current"] or full or proc_key in doubled):
                 try:
                     detail = _echa_detail(f.fetch(row["url"], strip_chrome=False).html)
                 except Exception as exc:  # noqa: BLE001 - one page must not stop the run
                     print(f"    [WARN] echa detail {row['url'][-60:]}: {type(exc).__name__}", flush=True)
             items.append(_echa_item(row, detail, now))
+    items = _echa_merge_double_listings(items, rows)
     _ECHA_CACHE[key] = (time.time(), items)
     return items
 
