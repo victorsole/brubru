@@ -590,63 +590,188 @@ def ingest_era_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 
 # --- ECDC — ct-procurement article cards, paginated ?page=N --------------- #
+# API audit, 30 Sep 2026 ("Walk · ECDC"): the reader took pages 0-3 only (29 of 174
+# procedures), looked for a status ECDC never prints (0 rows had one), stored the
+# deadline as document_date and composed a 3-line body. ECDC prints no status and no
+# visible publication date, but every page carries <meta property="article:published_time">.
+# Victor's decisions, 30 Sep: read every page; status derived from the deadline (open
+# while ahead); document_date = article:published_time, fallback "Page last updated",
+# else NULL; all three kinds (ex-ante publicity, call for tender, call for proposal)
+# stay under tender, with the kind in the body. Same fields as Cedefop (Item.extras).
+#
+# ECDC sits behind CloudFront, which answers 429 after about 60 quick requests with
+# Retry-After: 0 (30 Sep 2026). Every ECDC request goes through _ecdc_get: a pause
+# between requests and a growing back-off on 429.
 _ECDC = "https://www.ecdc.europa.eu"
+_ECDC_LISTING = _ECDC + "/en/about-ecdc/procurement-and-grants"
+_ECDC_MAX_PAGES = 80         # 35 pages on 30 Sep 2026; a stop, not an expectation
+_ECDC_FRESH_PAGES = 2        # re-read these pages' detail pages every run
+_ECDC_CACHE: dict = {}
+_ECDC_CACHE_TTL = 1800
+_ECDC_PAUSE = 2.0                        # seconds between ECDC requests
+_ECDC_BACKOFF = (15, 45, 90, 180, 300)   # seconds to wait after each successive 429
+_ecdc_last = [0.0]
 
 
-def _parse_ecdc_articles(html: str, base: str) -> list[Item]:
-    """ECDC <article class="ct-procurement"> cards. Reference in a
-    <span class="fw-semibold">Ref.:</span> meta-item. Deadline inside a
-    <time datetime="..."> inside its own meta-item div (NOT plain text)."""
+def _ecdc_get(url: str) -> str:
+    """ECDC GET: paced, retrying 429 with a growing back-off, failing loudly otherwise."""
+    import time
+    for wait in (*_ECDC_BACKOFF, None):
+        gap = _ECDC_PAUSE - (time.monotonic() - _ecdc_last[0])
+        if gap > 0:
+            time.sleep(gap)
+        r = requests.get(url, headers=_HEADERS, timeout=40)
+        _ecdc_last[0] = time.monotonic()
+        if r.status_code != 429:
+            r.raise_for_status()
+            return r.text
+        if wait is None:
+            r.raise_for_status()
+        print(f"    [INFO] ecdc 429, waiting {wait}s: {url[-60:]}", flush=True)
+        time.sleep(wait)
+    raise RuntimeError("unreachable")
+
+
+def _ecdc_meta(block: str, label: str) -> str:
+    m = re.search(rf'>{label}\s*:?\s*</span>(.*?)</div>', block, re.S)
+    return _txt(m.group(1)) if m else ""
+
+
+def _ecdc_deadline(block: str) -> datetime | None:
+    m = re.search(r'>Deadline[^<]*</span>.*?datetime="([^"]+)"', block, re.S)
+    if not m:
+        return None
+    try:
+        return datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def _ecdc_cards(html: str) -> list[dict]:
+    """One dict per <article class="ct-procurement"> card on a listing page."""
+    rows = []
+    for body in re.findall(
+            r'<article[^>]*class="[^"]*ct-procurement[^"]*"[^>]*>(.*?)</article>', html, re.S):
+        am = re.search(r'<a[^>]+href="([^"]+)"[^>]*hreflang="en"[^>]*>(.*?)</a>', body, re.S)
+        if not am or not _txt(am.group(2)):
+            continue
+        href = _html.unescape(am.group(1))
+        rows.append({
+            "title": _txt(am.group(2)),
+            "url": href if href.startswith("http") else _ECDC + href,
+            "reference": _ecdc_meta(body, r"Ref\."),
+            "kind": _ecdc_meta(body, "Media type"),
+            "deadline": _ecdc_deadline(body),
+        })
+    return rows
+
+
+def _iso(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+
+
+def _ecdc_detail(url: str) -> dict:
+    """Read one procedure page: publication date (metadata), description, links.
+
+    The procedure's own content runs from its <h1> to the end of its <article>;
+    "Page last updated" appears on some older pages only, so it cannot bound it."""
+    page = _ecdc_get(url.split("#")[0])
+    pub = re.search(r'property="article:published_time"\s+content="([^"]+)"', page)
+    upd = re.search(r'Page last updated.*?datetime="([^"]+)"', page, re.S)
+    m = re.search(r"<h1.*?</h1>(.*?)(?:Page last updated|</article>)", page, re.S)
+    region = m.group(1) if m else ""
+    # Description: the paragraphs after the meta list (the meta items are <div>s).
+    after_meta = region.split("</ul>", 1)[-1]
+    paras = [p for p in (_txt(x) for x in re.findall(r"<p[^>]*>(.*?)</p>", after_meta, re.S)) if p]
+    links = sorted(set(u for u in re.findall(r'href="(https?://[^"]+)"', after_meta)
+                       if "ecdc.europa.eu" not in u))
+    return {"description": paras, "links": links,
+            "published": _iso(pub.group(1) if pub else None),
+            "updated": _iso(upd.group(1) if upd else None)}
+
+
+def _ecdc_item(row: dict, detail: dict | None, now: datetime) -> Item:
+    deadline = row["deadline"]
+    status = "open" if deadline is not None and deadline >= now else "closed"
+    item = Item(
+        body_code="ecdc", item_type="tender", title=clean(row["title"])[:120],
+        public_url=row["url"],
+        summary=clean(" · ".join(b for b in [row["reference"], row["kind"],
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        creation_date=now, source_kind="ecdc_procurement",
+        guid=row["reference"] or row["url"],
+        extras={"tender_reference": row["reference"] or None, "status": status,
+                "deadline": deadline},
+    )
+    if detail is None:
+        # Not re-read this run: no date and no body, so the stored values stand.
+        return item
+    facts = [("Reference", row["reference"]), ("Procurement type", row["kind"]),
+             ("Published", detail["published"].date().isoformat() if detail["published"] else ""),
+             ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
+             ("Page last updated", detail["updated"].date().isoformat() if detail["updated"] else "")]
+    facts = [(k, v) for k, v in facts if v]
+    desc, links = detail["description"], detail["links"]
+    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1>"
+        + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
+        + "</dl>"
+        + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
+           + "</ul>" if links else ""))
+    # A notice cannot be published after its own deadline. 27 ECDC pages carry
+    # article:published_time 2017-07-27, the day ECDC's site was migrated, on
+    # procedures that closed in 2016-2017 (dry run 30 Sep 2026). Such a date is the
+    # page's re-creation, not the notice's publication: try the fallback, else NULL.
+    def _plausible(d: datetime | None) -> datetime | None:
+        return d if d is not None and (deadline is None or d <= deadline) else None
+    item.document_date = _plausible(detail["published"]) or _plausible(detail["updated"])
+    return item
+
+
+def ingest_ecdc_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """Every listing page (stop at the first empty one), plus detail pages for the
+    first pages and every procedure whose deadline is still ahead. The whole archive
+    is read once with ECDC_FULL_DETAILS=1."""
+    import os
+    import time
+    full = os.environ.get("ECDC_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _ECDC_CACHE.get(key)
+    if hit and time.time() - hit[0] < _ECDC_CACHE_TTL:
+        return hit[1]
     now = datetime.now(timezone.utc)
-    out: list[Item] = []
-    article_re = re.compile(
-        r'<article[^>]*class="[^"]*ct-procurement[^"]*"[^>]*>(.*?)</article>', re.S)
-    for body in article_re.findall(html):
-        am = re.search(r'<a[^>]+href="([^"]+)"[^>]*hreflang="en"[^>]*>(.*?)</a>',
-                       body, re.S)
-        if not am:
-            continue
-        title = _txt(am.group(2))
-        if not title:
-            continue
-        href = am.group(1)
-        url = href if href.startswith("http") else base + href
-        ref_m = re.search(r'>Ref\.\s*:?\s*</span>\s*([^<]+)', body)
-        reference = _txt(ref_m.group(1)) if ref_m else ""
-        deadline_block = re.search(r'>Deadline[^<]*</span>.*?</div>', body, re.S)
-        dl = None
-        status = ""
-        if deadline_block:
-            block = deadline_block.group(0)
-            dt_m = re.search(r'datetime="([^"]+)"', block)
-            if dt_m:
-                try:
-                    dl = datetime.fromisoformat(dt_m.group(1).replace("Z", "+00:00"))
-                except ValueError:
-                    pass
-            st_m = re.search(r'\b(Open|Closed|Awarded)\b', _txt(block))
-            status = st_m.group(1) if st_m else ""
-        out.append(_build(
-            body_code="ecdc", item_type="tender", title=title, url=url,
-            reference=reference, status=status, deadline=dl, now=now,
-            source_kind="ecdc_procurement",
-        ))
-    return out
-
-
-def ingest_ecdc_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_) -> list[Item]:
-    """ECDC paginates via ?page=N (0-indexed). Crawl up to max_pages."""
     items: list[Item] = []
-    seen = set()
-    for page in range(max_pages):
-        url = _ECDC + "/en/about-ecdc/procurement-and-grants"
-        if page:
-            url += f"?page={page}"
-        for it in _parse_ecdc_articles(_fetch(url), _ECDC):
-            if it.guid in seen:
+    seen: set = set()
+    for page in range(_ECDC_MAX_PAGES):
+        url = _ECDC_LISTING + (f"?page={page}" if page else "")
+        rows = _ecdc_cards(_ecdc_get(url))
+        if not rows:
+            break
+        for row in rows:
+            ident = row["reference"] or row["url"]
+            if ident in seen:
                 continue
-            seen.add(it.guid)
-            items.append(it)
+            seen.add(ident)
+            want = fetch_bodies and (full or page < _ECDC_FRESH_PAGES
+                                     or (row["deadline"] is not None and row["deadline"] >= now))
+            detail = None
+            if want:
+                try:
+                    detail = _ecdc_detail(row["url"])
+                except requests.RequestException as exc:
+                    print(f"    [WARN] ecdc detail {row['reference']}: {exc}", flush=True)
+            items.append(_ecdc_item(row, detail, now))
+    if not items:
+        raise RuntimeError("ECDC procurement listing parsed to zero rows")
+    _ECDC_CACHE[key] = (time.time(), items)
     return items
 
 

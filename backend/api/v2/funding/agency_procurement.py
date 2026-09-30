@@ -155,10 +155,14 @@ register_resource(
     noun="ECDC calls for tender",
     body_name="the European Centre for Disease Prevention and Control", acronym="ECDC",
     tag="v2-funding",
-    source="the ECDC procurement-and-grants listing (paginated ct-procurement cards).",
-    extra="ECDC procurement — epidemiological studies, surveillance IT, modelling, training — each "
-          "with reference and closing date. The agency mixes ex-ante publicity notices with open "
-          "calls; the listing covers both. Filter with q.",
+    source="every page of the ECDC procurement-and-grants listing and each procedure's own page.",
+    extra="ECDC procurement (epidemiological studies, surveillance IT, modelling, training), the "
+          "whole archive from 2015: ex-ante publicity notices, calls for tender and calls for "
+          "proposal, the kind stated in the body. Each item carries `tender_reference`, `status` "
+          "(open while the deadline is ahead, else closed; ECDC publishes no status) and "
+          "`deadline`; `document_date` is the page's publication date. The detail body holds "
+          "the description and, for calls for tender, the Funding & Tenders link. Filter with q.",
+    procurement=True,
 )
 
 # --- ECHA — European Chemicals Agency ------------------------------------- #
