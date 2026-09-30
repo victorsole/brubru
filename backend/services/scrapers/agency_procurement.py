@@ -1068,7 +1068,10 @@ def _eea_ft_notices(now: datetime) -> list[Item]:
                                {"terms": {"cftPartyLegalEntityId": [_EEA_FT_BUYER_ID]}}]}}
     results, page = [], 1
     while True:
-        batch = sedia.fetch_sedia_page(page, page_size=100, query=query).get("results") or []
+        # A TOTAL order, or paging repeats some notices and skips others: unsorted,
+        # SEDIA returned 212 results holding 210 distinct notices (30 Sep 2026).
+        batch = sedia.fetch_sedia_page(page, page_size=100, query=query,
+                                       sort={"field": "identifier", "order": "ASC"}).get("results") or []
         results += batch
         if len(batch) < 100:
             break
@@ -1144,7 +1147,7 @@ def _eea_own_calls(now: datetime) -> list[Item]:
                             + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
                             + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>"
                                                for k, v in facts) + "</dl>"),
-            document_date=published, creation_date=now, source_kind="eea_call_for_interest",
+            document_date=published, creation_date=now, source_kind="eea_interest_call",
             guid=page, extras={"tender_reference": None, "status": status, "deadline": deadline},
         ))
     return items

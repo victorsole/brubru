@@ -22,12 +22,13 @@ def test_notices_come_from_eea_buyer_id_and_are_deduplicated(monkeypatch):
     seen = {}
     payload = json.loads((FIX / "sedia_one_notice.json").read_text())
 
-    def fake_page(page, page_size=100, query=None, **k):
-        seen["query"] = query
+    def fake_page(page, page_size=100, query=None, sort=None, **k):
+        seen["query"], seen["sort"] = query, sort
         return payload if page == 1 else {"results": []}
     monkeypatch.setattr(sedia, "fetch_sedia_page", fake_page)
     items = ap._eea_ft_notices(NOW)
     assert {"terms": {"cftPartyLegalEntityId": ["47352390"]}} in seen["query"]["bool"]["must"]
+    assert seen["sort"] == {"field": "identifier", "order": "ASC"}   # paging needs a total order
     assert len(items) == 1                                   # the same notice twice -> one row
     it = items[0]
     assert it.extras["tender_reference"] == "2bf63f5b-712c-4567-9976-a15faa197af0-CN"
@@ -61,3 +62,17 @@ def test_no_notices_is_an_error_not_an_empty_route(monkeypatch):
     import pytest
     with pytest.raises(RuntimeError):
         ap._eea_ft_notices(NOW)
+
+
+def test_every_source_kind_fits_the_column():
+    """economy_items.source_kind is VARCHAR(20). One 21-character label
+    ('eea_call_for_interest', 30 Sep 2026) failed the whole 214-row batch."""
+    import re
+    src = (Path(__file__).resolve().parents[1] / "services" / "scrapers" / "agency_procurement.py").read_text()
+    kinds = set(re.findall(r'source_kind="([^"]+)"', src))
+    # Known, not yet fixed: 'eurofound_procurement' (21) means Eurofound's two ingestors
+    # have never written a row. Recorded for the Eurofound walk (funding rows 41-44);
+    # remove it from this set when that walk fixes it.
+    known = {"eurofound_procurement"}
+    too_long = sorted(k for k in kinds if len(k) > 20)
+    assert kinds and set(too_long) <= known, too_long
