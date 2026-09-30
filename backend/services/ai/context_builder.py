@@ -1006,6 +1006,51 @@ _PLACEHOLDER_DOC_TITLE_RE = re.compile(
 )
 
 
+
+# ---------------------------------------------------------------------------
+# Legislative-file keyword matching (used by _fetch_legislative_train_files)
+# ---------------------------------------------------------------------------
+# EU acts name a concept differently from the people asking: a Council
+# sanctions act never says "sanction", its title says "restrictive measures".
+_CARRIAGE_TERM_EQUIVALENTS = {
+    "sancti": ["restrictive measure"],
+}
+
+
+def carriage_query_patterns(query_lower: str, stopwords: set) -> List[List[str]]:
+    """One list of PostgreSQL word-start patterns per meaningful query word.
+
+    Word STARTS only, punctuation stripped, words of 7+ letters cut to their
+    first six. The old bare substring match let "over" (from "judges over
+    Yabloko") hit "s-over-eignty" in the title of the Ukrainian-children
+    sanctions decision, which then outranked the Yabloko acts on last_updated
+    alone, while "russian" never matched "Russia" and "yabloko?" kept its
+    question mark (30 Sep 2026). "ukrain" hits Ukraine and Ukrainian.
+    """
+    stems: List[str] = []
+    for raw in query_lower.split():
+        w = re.sub(r"[^\w-]", "", raw)
+        if len(w) <= 3 or w in stopwords:
+            continue
+        stem = w[:6] if len(w) >= 7 else w
+        if stem not in stems:
+            stems.append(stem)
+    return [
+        [r"\y" + re.escape(stem)]
+        + [r"\y" + re.escape(e) for e in _CARRIAGE_TERM_EQUIVALENTS.get(stem, [])]
+        for stem in stems[:8]
+    ]
+
+
+def carriage_relevance(text: str, word_patterns: List[List[str]]) -> int:
+    """How many distinct query words (any of their forms) appear in `text`."""
+    score = 0
+    for patterns in word_patterns:
+        rx = "|".join(p.replace(r"\y", r"\b") for p in patterns)
+        if re.search(rx, text, re.IGNORECASE):
+            score += 1
+    return score
+
 class ContextBuilder:
     """
     Build AI context from user queries.
@@ -4264,16 +4309,16 @@ class ContextBuilder:
                     'negative', 'positive', 'specific', 'general', 'brief',
                     'important', 'major', 'different', 'various', 'other',
                     'union', 'european', 'market', 'global',
+                    'over', 'under', 'after', 'before', 'into', 'onto', 'upon',
+                    'against', 'because', 'since', 'while', 'being', 'many',
+                    'much', 'most', 'such', 'only', 'even', 'here',
                 }
-                words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
-                if words:
-                    for word in words[:8]:
-                        match_filters.append(
-                            LegislativeCarriage.title.ilike(f"%{word}%")
-                        )
-                        match_filters.append(
-                            LegislativeCarriage.description.ilike(f"%{word}%")
-                        )
+                word_patterns = carriage_query_patterns(query_lower, stopwords)
+                if word_patterns:
+                    for patterns in word_patterns:
+                        for pattern in patterns:
+                            match_filters.append(LegislativeCarriage.title.op("~*")(pattern))
+                            match_filters.append(LegislativeCarriage.description.op("~*")(pattern))
 
                 if match_filters:
                     carriages_query = db.query(LegislativeCarriage, LegislativeTrain).join(
@@ -4284,8 +4329,28 @@ class ContextBuilder:
                         or_(*match_filters)
                     ).order_by(
                         LegislativeCarriage.last_updated.desc()
-                    ).limit(10)
-                    results = carriages_query.all()
+                    ).limit(80)
+                    candidates = carriages_query.all()
+
+                    # Rank by relevance, then recency. A procedure ref or CELEX
+                    # the user named outranks any keyword hit; otherwise the
+                    # file matching the most distinct query words wins.
+                    named_refs = [r.lower() for r in (entities.procedure_references or [])]
+                    named_celex = set(entities.celex_numbers or [])
+                    def _relevance(pair):
+                        c = pair[0]
+                        score = carriage_relevance(
+                            f"{c.title or ''} {c.description or ''}", word_patterns
+                        )
+                        ref = (c.oeil_procedure_ref or "").lower()
+                        if any(r and r in ref for r in named_refs):
+                            score += 100
+                        if named_celex & set(c.celex_numbers or []):
+                            score += 100
+                        return score
+
+                    candidates.sort(key=_relevance, reverse=True)  # stable: recency breaks ties
+                    results = candidates[:10]
                 else:
                     results = []
 
@@ -4468,6 +4533,12 @@ class ContextBuilder:
                                 result.url or ''
                             )
                             found_ref = proc_match.group(1) if proc_match else None
+                            # Only an OEIL procedure page is a legislative file.
+                            # Generic europarl pages ("Carriages preview |
+                            # Legislative Train Schedule", press items) were being
+                            # listed as files with status "unknown" (30 Sep 2026).
+                            if not found_ref:
+                                continue
 
                             train_files.append({
                                 'train_name': 'OEIL (topic search)',
