@@ -691,12 +691,47 @@ def _repoint_by_reference(db: "ChunkedDb", items) -> None:
                                       "bc": it.body_code, "ref": ref})
 
 
+def _keep_stored_type(items) -> None:
+    """A run that did not read a procedure's own page must not reclassify it.
+
+    Cedefop's reader knows tender vs call for expression of interest from the detail
+    page's Procurement type; a listing-only row falls back to a guess from the
+    reference. On 30 Sep 2026 the first daily run (10:12 UTC) guessed 9 archived calls
+    as tenders: 7 were written a second time under 'tender' and 2 were moved there.
+    Items marked type_from_page=False take the type of the row already stored for the
+    same page (or the same reference), when there is one."""
+    todo = [it for it in items if (it.extras or {}).get("type_from_page") is False]
+    if not todo:
+        return
+    from sqlalchemy import text as _text
+    from core.database import SessionLocal
+    s = SessionLocal()
+    try:
+        rows = s.execute(_text(
+            "SELECT body_code, public_url, tender_reference, item_type FROM economy_items "
+            "WHERE body_code = ANY(:b) AND (public_url = ANY(:u) OR tender_reference = ANY(:r))"),
+            {"b": sorted({it.body_code for it in todo}),
+             "u": [it.public_url for it in todo],
+             "r": [it.extras["tender_reference"] for it in todo if it.extras.get("tender_reference")]},
+        ).all()
+    finally:
+        s.close()
+    by_url = {(r[0], r[1]): r[3] for r in rows}
+    by_ref = {(r[0], r[2]): r[3] for r in rows if r[2]}
+    for it in todo:
+        stored = by_url.get((it.body_code, it.public_url)) or by_ref.get(
+            (it.body_code, it.extras.get("tender_reference")))
+        if stored:
+            it.item_type = stored
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
     if itype == "legal":
         items = fn(limit=legal_limit)
     else:
         items = fn(fetch_bodies=fetch_bodies)
+    _keep_stored_type(items)
     # Dedupe within this run by the conflict target so a single multi-row INSERT
     # never tries to upsert the same (body_code, item_type, public_url) twice
     # (ON CONFLICT DO UPDATE cannot affect one row twice in the same statement).

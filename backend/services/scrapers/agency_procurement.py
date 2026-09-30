@@ -267,7 +267,11 @@ def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
         summary=clean(" · ".join(b for b in [row["reference"], row["status_raw"],
                                                deadline.date().isoformat() if deadline else ""] if b)),
         creation_date=now, source_kind="cedefop_procurement", guid=row["reference"] or row["url"],
-        extras={"tender_reference": row["reference"] or None, "status": status},
+        extras={"tender_reference": row["reference"] or None, "status": status,
+                # item_type came from the page's Procurement type only when the page
+                # was read; otherwise it is a guess from the reference, and the writer
+                # keeps the stored type (sync_economy._keep_stored_type).
+                "type_from_page": detail is not None},
     )
     if detail is None:
         # Not re-read this run: send no date, deadline or body, so the stored values stand.

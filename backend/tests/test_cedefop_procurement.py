@@ -132,3 +132,31 @@ def test_undated_procedures_sort_by_deadline_not_ingest_time():
     assert "deadline" in _PROC_ORDER_SQL["recent"]
     assert "document_date, deadline" in _PROC_ORDER_SQL["recent"]
     assert "deadline" not in _ORDER_SQL["recent"]
+
+
+def test_a_listing_only_read_keeps_the_stored_type(monkeypatch):
+    """30 Sep 2026, first daily run: 9 archived calls whose page was not re-read were
+    guessed as tenders from their reference; 7 were duplicated, 2 moved."""
+    import sync_economy
+    from services.scrapers.economy_common import Item
+
+    class _S:
+        def execute(self, *a, **k):
+            class _R:
+                def all(self_inner):
+                    return [("cedefop", "https://x/greek-donation", None, "eoi_call"),
+                            ("cedefop", "https://x/eacea-07", "EACEA/07", "eoi_call")]
+            return _R()
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr("core.database.SessionLocal", lambda: _S())
+    guess = [Item(body_code="cedefop", item_type="tender", title="t", public_url="https://x/greek-donation",
+                  extras={"tender_reference": None, "type_from_page": False}),
+             Item(body_code="cedefop", item_type="tender", title="t", public_url="https://x/eacea-07-renamed",
+                  extras={"tender_reference": "EACEA/07", "type_from_page": False}),
+             Item(body_code="cedefop", item_type="tender", title="t", public_url="https://x/read",
+                  extras={"tender_reference": "R/1", "type_from_page": True})]
+    sync_economy._keep_stored_type(guess)
+    assert [i.item_type for i in guess] == ["eoi_call", "eoi_call", "tender"]
