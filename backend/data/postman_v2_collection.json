@@ -15613,7 +15613,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one Cedefop procedure from `/cedefop-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /cedefop-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/cedefop-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /cedefop-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
@@ -15655,7 +15655,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one Cedefop procedure from `/cedefop-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /cedefop-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/cedefop-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /cedefop-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
@@ -16988,7 +16988,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one the European Chemicals Agency procedure from `/echa-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /echa-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/echa-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /echa-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
@@ -17030,7 +17030,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one the European Chemicals Agency procedure from `/echa-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /echa-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/echa-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /echa-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
@@ -17219,7 +17219,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one the European Environment Agency procedure from `/eea-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /eea-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/eea-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /eea-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
@@ -17422,7 +17422,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one file attached to one the European Food Safety Authority procedure from `/efsa-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /efsa-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+                "description": "**What it does**\nReturns one file of a procedure listed at `/efsa-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /efsa-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
               },
               "response": []
             },
