@@ -477,15 +477,101 @@ def ingest_efca_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
                       fetch_bodies=fetch_bodies)
 
 
-# --- EFSA — positional table (col0=title+link, col1=published, col2=deadline). - #
+# --- EFSA ----------------------------------------------------------------- #
+# API audit, 30 Sep 2026 ("Walk · EFSA"): the reader took the FIRST table of
+# /en/calls/procurement only (live calls; closed calls drop off the page), stored the
+# deadline as document_date, hard-coded "Open" and kept no reference: 10 rows.
+# Victor's decisions, 30 Sep: EFSA's notices from SEDIA by its buyer id (314 notices,
+# planned calls included, the page's items among them), through the shared reader;
+# plus the closed procedures below EUR 140k that only EFSA's own site keeps.
 _EFSA = "https://www.efsa.europa.eu"
+_EFSA_FT_BUYER_ID = "47352394"
+_EFSA_NEGOTIATED = _EFSA + "/en/procurement/closed-negotiated-procedures"
+_EFSA_NP_REF = re.compile(r"(NP[/-]EFSA[/-][A-Z]+[/-]\d{4}[/-]\d{2})")
+
+
+def _efsa_negotiated_cards(html: str) -> list[dict]:
+    rows = []
+    for art in re.findall(r'<article class="node call[^"]*negotiated-procedures[^"]*">(.*?)</article>', html, re.S):
+        am = re.search(r'<a href="([^"]+)"[^>]*>(.*?)</a>', art, re.S)
+        if not am:
+            continue
+        title = _txt(am.group(2))
+        rm = _EFSA_NP_REF.search(title)
+        bm = re.search(r'field-budget.*?content="([^"]+)"', art, re.S)
+        lm = re.search(r'field-start-date.*?field__item">([^<]+)<', art, re.S)
+        dm = re.search(r'field-end-date.*?datetime="([^"]+)"', art, re.S)
+        href = _html.unescape(am.group(1))
+        rows.append({"title": title, "url": href if href.startswith("http") else _EFSA + href,
+                     "reference": rm.group(1) if rm else "",
+                     "budget": bm.group(1) if bm else "", "launch": _txt(lm.group(1)) if lm else "",
+                     "deadline": _iso(dm.group(1)) if dm else None})
+    return rows
+
+
+def _efsa_negotiated(now: datetime) -> list[Item]:
+    """EFSA's closed procedures below EUR 140k (its own archive page; no publication date there)."""
+    rows, page = [], 0
+    while page < 20:
+        batch = _efsa_negotiated_cards(_get_ok(f"{_EFSA_NEGOTIATED}?page={page}"))
+        if not batch:
+            break
+        rows += batch
+        page += 1
+    items = []
+    for r in rows:
+        deadline = r["deadline"]
+        facts = [("Reference", r["reference"]), ("Procedure type", "negotiated procedure below EUR 140,000"),
+                 ("Estimated budget", f"EUR {r['budget']}" if r["budget"] else ""),
+                 ("Approximate launch", r["launch"]),
+                 ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
+                 ("Status on EFSA's site", "deadline closed")]
+        facts = [(k, v) for k, v in facts if v]
+        items.append(Item(
+            body_code="efsa", item_type="tender", title=clean(r["title"])[:120], public_url=r["url"],
+            summary=clean(" · ".join(b for b in [r["reference"], "negotiated procedure",
+                                                   deadline.date().isoformat() if deadline else ""] if b)),
+            body_txt=clean("\n".join([r["title"], *(f"{k}: {v}" for k, v in facts), r["url"]])),
+            body_html=clean(f"<h1>{_html.escape(r['title'])}</h1><dl>"
+                            + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
+                            + "</dl>"),
+            document_date=None, creation_date=now, source_kind="efsa_negotiated",
+            guid=r["reference"] or r["url"],
+            extras={"tender_reference": r["reference"] or None,
+                    "status": "open" if deadline is not None and deadline >= now else "closed",
+                    "deadline": deadline},
+        ))
+    return items
+
+
+def _title_key(title: str) -> str:
+    """A title without its procedure reference, lower-case, words only."""
+    return re.sub(r"\W+", " ", _EFSA_NP_REF.sub("", title).lower()).strip()
+
+
+def _efsa_drop_portal_duplicates(portal: list[Item], archive: list[Item]) -> list[Item]:
+    """An archive procedure that is also on the portal (as an ex-ante notice) is ONE
+    procedure: keep the portal notice, which has a publication date (Victor, 30 Sep
+    2026; 4 of 27)."""
+    portal_text = [f"{it.title} {it.body_txt or ''}" for it in portal]
+    portal_keys = [_title_key(it.title) for it in portal]
+    kept = []
+    for it in archive:
+        ref = it.extras.get("tender_reference")
+        key = _title_key(it.title)
+        on_portal = (ref and any(ref in t for t in portal_text)) or \
+            (len(key) >= 20 and any(key in k or (len(k) >= 20 and k in key) for k in portal_keys))
+        if not on_portal:
+            kept.append(it)
+    return kept
 
 
 def ingest_efsa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return parse_positional_table(
-        _fetch(_EFSA + "/en/calls/procurement"), _EFSA, body_code="efsa",
-        item_type="tender", source_kind="efsa_procurement",
-        title_col=0, deadline_col=2, status="Open")
+    now = datetime.now(timezone.utc)
+    portal = _ft_buyer_notices(body_code="efsa", buyer_id=_EFSA_FT_BUYER_ID,
+                               source_kind="efsa_ft_notice", now=now)
+    return portal + _efsa_drop_portal_duplicates(portal, _efsa_negotiated(now))
+
 
 def parse_field_cards(html: str, base: str, *, body_code: str, item_type: str, source_kind: str,
                       title_substr: str, ref_field: str, deadline_field: str,
@@ -1156,10 +1242,17 @@ def _sedia_helpers():
     return sedia
 
 
-def _eea_ft_notices(now: datetime) -> list[Item]:
+_FT_KIND_BY_SUFFIX = {"CN": "call for tender", "EXA": "ex-ante publicity",
+                      "PIN": "prior information notice", "CAN": "contract award notice"}
+
+
+def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: datetime) -> list[Item]:
+    """Every Funding & Tenders notice of one EU buyer (SEDIA cftPartyLegalEntityId), in the
+    shared procurement shape. One reader for every agency that publishes on the portal
+    (Victor, 30 Sep 2026: EEA and EFSA first)."""
     sedia = _sedia_helpers()
     query = {"bool": {"must": [{"terms": {"type": ["0"]}},
-                               {"terms": {"cftPartyLegalEntityId": [_EEA_FT_BUYER_ID]}}]}}
+                               {"terms": {"cftPartyLegalEntityId": [buyer_id]}}]}}
     results, page = [], 1
     while True:
         # A TOTAL order, or paging repeats some notices and skips others: unsorted,
@@ -1171,7 +1264,7 @@ def _eea_ft_notices(now: datetime) -> list[Item]:
             break
         page += 1
     if not results:
-        raise RuntimeError("SEDIA returned no EEA notices for buyer id " + _EEA_FT_BUYER_ID)
+        raise RuntimeError(f"SEDIA returned no {body_code} notices for buyer id {buyer_id}")
     items, seen = [], set()
     for res in results:
         row = sedia.normalise_row(res)
@@ -1183,7 +1276,7 @@ def _eea_ft_notices(now: datetime) -> list[Item]:
         status = _SEDIA_STATUS.get((row.get("status") or "").lower(), "closed")
         if status == "open" and deadline is not None and deadline < now:
             status = "closed"
-        kind = "ex-ante publicity" if row["topic_id"].endswith("-EXA") else "call for tender"
+        kind = _FT_KIND_BY_SUFFIX.get(row["topic_id"].rsplit("-", 1)[-1], "call for tender")
         facts = [("Notice", row["topic_id"]), ("Procedure type", kind),
                  ("Contract type", row.get("contract_type") or ""),
                  ("Published", published.date().isoformat() if published else ""),
@@ -1193,7 +1286,7 @@ def _eea_ft_notices(now: datetime) -> list[Item]:
         desc = [p for p in re.split(r"\n{2,}", row.get("description") or "") if p.strip()]
         url = row.get("source_url") or ""
         items.append(Item(
-            body_code="eea", item_type="tender", title=clean(row["title"])[:120], public_url=url,
+            body_code=body_code, item_type="tender", title=clean(row["title"])[:120], public_url=url,
             summary=clean(" · ".join(b for b in [row["topic_id"], kind,
                                                    deadline.date().isoformat() if deadline else ""] if b)),
             body_txt=clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), url])),
@@ -1203,9 +1296,18 @@ def _eea_ft_notices(now: datetime) -> list[Item]:
                                                for k, v in facts) + "</dl>"
                             + f'<p><a href="{_html.escape(url)}">{_html.escape(url)}</a></p>'),
             document_date=published if published and (deadline is None or published <= deadline) else None,
-            creation_date=now, source_kind="eea_ft_notice", guid=row["topic_id"],
+            creation_date=now, source_kind=source_kind, guid=row["topic_id"],
             extras={"tender_reference": row["topic_id"], "status": status, "deadline": deadline},
         ))
+    # A prior information notice announces a call; once the call's contract notice (same
+    # id root, -CN) exists, the PIN is superseded and reads closed, whatever SEDIA's own
+    # label (Victor, 30 Sep 2026; 37 EFSA procedures have both).
+    roots_with_cn = {it.extras["tender_reference"][:-3] for it in items
+                     if it.extras["tender_reference"].endswith("-CN")}
+    for it in items:
+        ref = it.extras["tender_reference"]
+        if ref.endswith("-PIN") and ref[:-4] in roots_with_cn:
+            it.extras["status"] = "closed"
     return items
 
 
@@ -1249,7 +1351,9 @@ def _eea_own_calls(now: datetime) -> list[Item]:
 
 def ingest_eea_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     now = datetime.now(timezone.utc)
-    return _eea_ft_notices(now) + _eea_own_calls(now)
+    return (_ft_buyer_notices(body_code="eea", buyer_id=_EEA_FT_BUYER_ID,
+                              source_kind="eea_ft_notice", now=now)
+            + _eea_own_calls(now))
 
 
 # --- EU-OSHA — Drupal Views views-row + per-year archive ------------------ #

@@ -78,9 +78,15 @@ register_resource(
     router, body_code="efsa", item_type="tender", slug="efsa-tenders",
     noun="EFSA calls for tender", body_name="the European Food Safety Authority", acronym="EFSA",
     tag="v2-funding",
-    source="the EFSA procurement calls listing.",
-    extra="The European Food Safety Authority's own calls for tender, each with its publication "
-          "and closing dates. Filter with q (e.g. a scientific topic).",
+    source="the EU Funding & Tenders portal (EFSA's notices, by its buyer id) and EFSA's archive of "
+           "procedures below EUR 140k.",
+    extra="EFSA procurement, the whole archive from 2015: every EFSA notice on the Funding & Tenders "
+          "portal (calls for tender, prior information and ex-ante notices), plus EFSA's closed "
+          "procedures below EUR 140k that only its own site keeps; the kind stated in the body. Each "
+          "item carries `tender_reference` (the portal notice id, or EFSA's NP reference), `status` "
+          "(as on the portal; a prior notice is closed once its call is out) and `deadline`; "
+          "`document_date` is the publication date (null for the archive procedures). Filter with q.",
+    procurement=True,
 )
 
 # --- Eurojust ------------------------------------------------------------- #

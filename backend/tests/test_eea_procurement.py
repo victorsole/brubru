@@ -26,7 +26,7 @@ def test_notices_come_from_eea_buyer_id_and_are_deduplicated(monkeypatch):
         seen["query"], seen["sort"] = query, sort
         return payload if page == 1 else {"results": []}
     monkeypatch.setattr(sedia, "fetch_sedia_page", fake_page)
-    items = ap._eea_ft_notices(NOW)
+    items = ap._ft_buyer_notices(body_code="eea", buyer_id="47352390", source_kind="eea_ft_notice", now=NOW)
     assert {"terms": {"cftPartyLegalEntityId": ["47352390"]}} in seen["query"]["bool"]["must"]
     assert seen["sort"] == {"field": "identifier", "order": "ASC"}   # paging needs a total order
     assert len(items) == 1                                   # the same notice twice -> one row
@@ -61,7 +61,7 @@ def test_no_notices_is_an_error_not_an_empty_route(monkeypatch):
     monkeypatch.setattr(sedia, "fetch_sedia_page", lambda *a, **k: {"results": []})
     import pytest
     with pytest.raises(RuntimeError):
-        ap._eea_ft_notices(NOW)
+        ap._ft_buyer_notices(body_code="eea", buyer_id="47352390", source_kind="eea_ft_notice", now=NOW)
 
 
 def test_every_source_kind_fits_the_column():
