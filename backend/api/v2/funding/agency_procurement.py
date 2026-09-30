@@ -87,7 +87,8 @@ register_resource(
           "procedures below EUR 140k that only its own site keeps; the kind stated in the body. Each "
           "item carries `tender_reference` (the portal notice id, or EFSA's NP reference), `status` "
           "(as on the portal; a prior notice is closed once its call is out) and `deadline`; "
-          "`document_date` is the publication date (null for the archive procedures). The body lists "
+          "`document_date` is the publication date (for the archive procedures, the date on EFSA's own "
+          "procedure page; deadlines are converted from Parma time to UTC). The body lists "
           "each portal notice's files; `/{item_id}/documents` serves them with their extracted text "
           "(title, type, language and date from the portal). Filter with q.",
     procurement=True, documents=True,

@@ -52,3 +52,40 @@ def test_a_prior_notice_is_closed_once_its_contract_notice_exists(monkeypatch):
              ap._ft_buyer_notices(body_code="efsa", buyer_id="47352394", source_kind="efsa_ft_notice", now=NOW)}
     assert items["53fb5f38-b55a-46eb-b90b-d77951370687-PIN"] == "closed"
     assert items["11111111-1111-1111-1111-111111111111-PIN"] == "forthcoming"   # SEDIA's label kept
+
+
+# --- Part B (30 Sep 2026): each archive procedure's own page ------------------------ #
+_CALLS = Path(__file__).resolve().parent / "fixtures" / "efsa"
+
+
+def _call(name):
+    return ap._efsa_call_detail((_CALLS / name).read_text())
+
+
+def test_call_page_gives_the_publication_date():
+    assert _call("call_np_prev_2024_02.html")["published"] == datetime(2024, 5, 16, tzinfo=timezone.utc)
+
+
+def test_efsa_deadline_is_parma_wall_time_not_utc():
+    """<time datetime="...18:00:00Z"> is shown as "18:00 (CEST)": 16:00 UTC, not 18:00."""
+    assert _call("call_np_know_2025_01_cob.html")["deadline"] == datetime(2025, 10, 8, 16, 0, tzinfo=timezone.utc)
+    assert _call("call_np_prev_2024_02.html")["deadline"] == datetime(2024, 6, 14, 21, 59, 59, tzinfo=timezone.utc)
+    # winter: CET, one hour
+    assert _call("call_strategy_no_ref_in_title.html")["deadline"] == datetime(2023, 1, 13, 22, 59, 59, tzinfo=timezone.utc)
+    assert ap._efsa_wall_time("2025-07-31T23:59:59Z") == datetime(2025, 7, 31, 21, 59, 59, tzinfo=timezone.utc)
+
+
+def test_reference_only_from_a_labelled_line():
+    assert _call("call_strategy_no_ref_in_title.html")["reference"] == "NP/EFSA/GPS/2022/01"
+    assert _call("call_np_know_2025_01_cob.html")["reference"] == ""   # only in the title
+    # a description citing an earlier procedure does not become the reference
+    page = '<p>In 2019 EFSA launched a negotiated procedure (NP/EFSA/DATA/2019/01).</p>'
+    assert ap._efsa_call_detail(page)["reference"] == ""
+
+
+def test_call_page_description_keeps_its_structure():
+    blocks = _call("call_np_prev_2024_02.html")["blocks"]
+    assert ("h", "Background") in blocks
+    assert sum(len(t) for _k, t in blocks) > 2000
+    html = ap._efsa_blocks_html([("h", "Tasks"), ("li", "a"), ("li", "b"), ("p", "c")])
+    assert html == "<h2>Tasks</h2><ul><li>a</li><li>b</li></ul><p>c</p>"

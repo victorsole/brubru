@@ -572,12 +572,68 @@ def _efsa_negotiated_cards(html: str) -> list[dict]:
         rows.append({"title": title, "url": href if href.startswith("http") else _EFSA + href,
                      "reference": rm.group(1) if rm else "",
                      "budget": bm.group(1) if bm else "", "launch": _txt(lm.group(1)) if lm else "",
-                     "deadline": _iso(dm.group(1)) if dm else None})
+                     "deadline": _efsa_wall_time(dm.group(1)) if dm else None})
     return rows
 
 
+def _efsa_wall_time(value: str) -> datetime | None:
+    """EFSA's <time datetime="2024-06-14T23:59:59Z"> is Parma wall time labelled UTC: the
+    same page shows "14 June 2024 - 23:59 (CEST)" (checked on 4 pages, 30 Sep 2026). Read
+    it as Europe/Rome and convert, or every deadline is one or two hours late."""
+    from zoneinfo import ZoneInfo
+    try:
+        wall = datetime.strptime(value[:19], "%Y-%m-%dT%H:%M:%S")
+    except (TypeError, ValueError):
+        return None
+    return wall.replace(tzinfo=ZoneInfo("Europe/Rome")).astimezone(timezone.utc)
+
+
+_EFSA_REF_LABEL = re.compile(
+    r"(?:Ref|Reference|Call reference)\s*(?:<[^>]+>\s*)*:?\s*(?:<[^>]+>\s*)*"
+    r"(NP[/-]EFSA[/-][A-Z]+[/-]\d{4}[/-]\d{2})")
+
+
+def _efsa_call_detail(page: str) -> dict:
+    """One archive procedure's own page (efsa.europa.eu/en/call/{slug}): the publication
+    date, the deadline, the reference and the description. The reference comes from a
+    labelled line only: the text can cite earlier procedures (the IUCLID call names its
+    2019 predecessor)."""
+    out: dict = {}
+    pm = re.search(r'Published<span[^>]*>:</span></div>\s*<div[^>]*>\s*<time datetime="(\d{4}-\d{2}-\d{2})', page)
+    out["published"] = (datetime.strptime(pm.group(1), "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                        if pm else None)
+    dm = re.search(r'field-end-date.*?<time datetime="([^"]+)"', page, re.S)
+    out["deadline"] = _efsa_wall_time(dm.group(1)) if dm else None
+    refs = {r.replace("-", "/") for r in _EFSA_REF_LABEL.findall(page)}
+    out["reference"] = refs.pop() if len(refs) == 1 else ""
+    region = re.search(r'class="field-paragraphs(.*?)(?:class="inpage-nav|</main>)', page, re.S)
+    blocks = []
+    for tag, inner in re.findall(r"<(h[2-4]|p|li)\b[^>]*>(.*?)</\1>", region.group(1) if region else "", re.S):
+        text = _txt(inner)
+        if text:
+            blocks.append(("h" if tag.startswith("h") else tag, text))
+    out["blocks"] = blocks
+    return out
+
+
+def _efsa_blocks_html(blocks: list[tuple[str, str]]) -> str:
+    out, in_list = [], False
+    for kind, text in blocks:
+        if kind == "li" and not in_list:
+            out.append("<ul>"); in_list = True
+        if kind != "li" and in_list:
+            out.append("</ul>"); in_list = False
+        tag = {"h": "h2", "p": "p", "li": "li"}[kind]
+        out.append(f"<{tag}>{_html.escape(text)}</{tag}>")
+    if in_list:
+        out.append("</ul>")
+    return "".join(out)
+
+
 def _efsa_negotiated(now: datetime) -> list[Item]:
-    """EFSA's closed procedures below EUR 140k (its own archive page; no publication date there)."""
+    """EFSA's procedures below EUR 140k: the cards of its archive page (no publication
+    date there), then each procedure's own page for the publication date, the reference
+    where the title lacks it, the description and the deadline (Part B, 30 Sep 2026)."""
     rows, page = [], 0
     while page < 20:
         batch = _efsa_negotiated_cards(_get_ok(f"{_EFSA_NEGOTIATED}?page={page}"))
@@ -587,9 +643,18 @@ def _efsa_negotiated(now: datetime) -> list[Item]:
         page += 1
     items = []
     for r in rows:
-        deadline = r["deadline"]
+        try:
+            detail = _efsa_call_detail(_get_ok(r["url"]))
+        except Exception as exc:  # noqa: BLE001 - one page must not stop the run
+            print(f"    [WARN] efsa call page {r['url'][-60:]}: {type(exc).__name__}", flush=True)
+            detail = {"published": None, "deadline": None, "reference": "", "blocks": []}
+        deadline = detail["deadline"] or r["deadline"]
+        r["reference"] = r["reference"] or detail["reference"]
+        published = detail["published"]
+        blocks = detail["blocks"]
         facts = [("Reference", r["reference"]), ("Procedure type", "negotiated procedure below EUR 140,000"),
                  ("Estimated budget", f"EUR {r['budget']}" if r["budget"] else ""),
+                 ("Published", published.date().isoformat() if published else ""),
                  ("Approximate launch", r["launch"]),
                  ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
                  ("Status on EFSA's site", "deadline closed")]
@@ -598,11 +663,14 @@ def _efsa_negotiated(now: datetime) -> list[Item]:
             body_code="efsa", item_type="tender", title=clean(r["title"])[:120], public_url=r["url"],
             summary=clean(" · ".join(b for b in [r["reference"], "negotiated procedure",
                                                    deadline.date().isoformat() if deadline else ""] if b)),
-            body_txt=clean("\n".join([r["title"], *(f"{k}: {v}" for k, v in facts), r["url"]])),
-            body_html=clean(f"<h1>{_html.escape(r['title'])}</h1><dl>"
-                            + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
-                            + "</dl>"),
-            document_date=None, creation_date=now, source_kind="efsa_negotiated",
+            body_txt=clean("\n".join([r["title"], *(t for _k, t in blocks),
+                                      *(f"{k}: {v}" for k, v in facts), r["url"]])),
+            body_html=clean(f"<h1>{_html.escape(r['title'])}</h1>" + _efsa_blocks_html(blocks)
+                            + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>"
+                                               for k, v in facts) + "</dl>"),
+            # A procedure cannot be published after its own deadline (the ECDC rule).
+            document_date=published if published and (deadline is None or published <= deadline) else None,
+            creation_date=now, source_kind="efsa_negotiated",
             guid=r["reference"] or r["url"],
             extras={"tender_reference": r["reference"] or None,
                     "status": "open" if deadline is not None and deadline >= now else "closed",
