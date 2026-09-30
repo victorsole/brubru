@@ -1,24 +1,30 @@
 # EU Commission Transparency: College Agenda, Corporate-Body Codes, Lobby Register
 
 ## QUICK FACTS
-- **LATEST (checked 29 September 2026 against SEC(2026) 2578; the Enlargement package and the Climate resilience framework are listed for 28 October, not 20 October): what the College plans next, from the newest primary documents.** Live agenda: **SEC(2026) 2578 final, 14 September 2026**, horizon 30 September to 28 October 2026. Every date is **(tbc)**; hedge as "the Commission currently plans".
+- **LATEST (checked 30 September 2026 against SEC(2026) 2579 final of Tuesday 29 September 2026): what the College plans next.** Horizon **6 October to 24 November 2026**. Every date is **(tbc)** and the document says the President may change the planning at any time; hedge as "the Commission currently plans".
 
 | College date (tbc) | Item | Responsible |
 |---|---|---|
-| Tue 15 Sep 2026, Strasbourg (from SEC(2026) 2577, 8 Sep) | **Child safety online** | President |
-| Tue 15 Sep 2026, Strasbourg (from SEC(2026) 2577) | **Fair labour mobility package**: proposal for a European Social Security Pass; strengthening the European Labour Authority; skills portability initiative | EVP Mînzatu |
-| Wed 30 Sep 2026 | Pre-enlargement policy reviews | President |
-| Wed 30 Sep 2026 | European critical communication system | EVP Virkkunen |
-| Wed 30 Sep 2026 | 2040 vision for fisheries and aquaculture | EVP Fitto |
-| Tue 6 Oct 2026, Strasbourg | **European product package**: European Product Act (update of the framework for product rules and market surveillance) + Standardisation Regulation (update of rules on standardisation) | EVP Séjourné |
+| Tue 6 Oct 2026, Strasbourg | Pre-enlargement policy reviews (moved from 30 Sep) | President |
+| Tue 6 Oct 2026, Strasbourg | **Revision of the Standardisation Regulation** | EVP Séjourné |
 | Tue 20 Oct 2026, Strasbourg | **2027 Commission work programme** | President |
 | Tue 20 Oct 2026, Strasbourg | 2026 annual overview report on simplification, implementation and enforcement | President |
 | Tue 20 Oct 2026, Strasbourg | Northern Neighbourhood: **New Arctic Strategy** | President |
 | Wed 28 Oct 2026 | **Enlargement package** | President |
 | Wed 28 Oct 2026 | Climate resilience framework | EVP Ribera |
 | Wed 28 Oct 2026 | **Border and migration package**: strengthening Frontex and enhancing its operations; digitalisation of the return process; European annual asylum and migration report | EVP Virkkunen |
+| Wed 28 Oct 2026 | 2040 vision for fisheries and aquaculture (moved from 30 Sep) | EVP Fitto |
+| Wed 4 Nov 2026 | Education and skills package | EVP Mînzatu |
+| Wed 4 Nov 2026 | European strategy on sustainable tourism | EVP Fitto |
+| Wed 11 Nov 2026 | **Circular Economy Act** | EVP Ribera / EVP Séjourné |
+| Wed 11 Nov 2026 | **Consumer package**: **Digital Fairness Act** + consumer enforcement initiative | EVP Virkkunen |
+| Wed 18 Nov 2026 | **Quantum Act** | EVP Virkkunen |
+| Wed 18 Nov 2026 | **Advanced Materials Act** | EVP Séjourné |
+| Tue 24 Nov 2026, Strasbourg | European Semester autumn package | EVP Séjourné |
+| Tue 24 Nov 2026, Strasbourg | Update of rules on unfair trading practices in the food chain | EVP Fitto |
 
-- **Today, 15 September 2026 (Strasbourg College)**: child safety online and the fair labour mobility package are the planned items. **As of the morning of 15 September no Commission press release confirmed adoption** of either (Commission press corner and DG EMPL news checked). The EP agenda does hold a **scrutiny session "Presentation of the Fair Labour Mobility Package" on Tuesday 15 September, 15:00-16:00** (https://www.europarl.europa.eu/doceo/document/OJ-10-2026-09-14-SYN_EN.html). Press reports (Reuters, POLITICO, 14-15 Sep) say the child-protection proposal, which they call an "EU Kids Act", would be presented on Thursday 17 September: **press, and in conflict with the tentative agenda date**. Say "planned", not "adopted", until a Commission press release exists.
+- **Changes from SEC(2026) 2578 (14 Sep) to SEC(2026) 2579 (29 Sep)**: the **European Product Act is no longer on the list** (2578 had a "European product package" on 6 Oct = European Product Act + Standardisation Regulation; 2579 keeps only the Standardisation revision on 6 Oct and names no Product Act date up to 24 Nov: say it is "no longer scheduled on the current list", NOT that it was dropped); pre-enlargement policy reviews moved 30 Sep -> 6 Oct; the 2040 fisheries vision moved 30 Sep -> 28 Oct. The **European critical communication system** (30 Sep in 2578) is simply outside 2579's window, which starts 6 Oct: check the 30 Sep order of the day before saying anything about it. New on the list: everything from 4 Nov onwards.
+- **Other relevant events named in 2579**: EP plenaries 5-8 Oct, 19-22 Oct, 23-26 Nov; European Council 15-16 Oct and 26-27 Nov.
 - **Last College held: 2577th meeting, Wednesday 9 September 2026, Brussels** (agenda OJ(2026) 2577 final, 8 Sep 2026). B items: **Affordable Housing Act** (proposal for a Regulation, COM(2026) 599, presented by Commissioner **Jørgensen in agreement with EVP Ribera**); **Public Procurement Act** (proposal for a Regulation on public contracts and concessions repealing the 2014 procurement directives, COM(2026) 590, EVP Séjourné); **European Innovation Act** (COM(2026) 567, Commissioner Zaharieva in agreement with EVP Séjourné); **Outermost Regions**: Communication "Strengthening the Union's Global Reach: A New Strategic Vision for the EU's Outermost Regions" (COM(2026) 660) plus a proposal for a Council Regulation adapting requirements and reducing administrative burden in the outermost regions (COM(2026) 661), both EVP Fitto, finalised by written procedure with a deadline of 10:00 on 10 September. Approval of the minutes of the 2575th (17 July) and 2576th (22 July) meetings was **held over**. Adoption of the housing, procurement and innovation proposals was confirmed by Commission press releases on 9 September, and the outermost regions Communication on 10 September (Commission press corner).
 - **Slippage since SEC(2026) 2576 (20 July)**: the Affordable Housing Act was adopted on **9 September**, not 15 September as an earlier plan had it; the European Product Act moved from 30 September to **6 October**; strengthening Frontex moved from 30 September into the **28 October** border and migration package; the supply-chain dependencies proposal (aluminium scrap) previously pencilled for 23 September **no longer appears**; child safety online and the 2040 fisheries and aquaculture vision are **new** entries.
 - **What this is**: the transparency/registry surfaces of the Commission and how to read them: the **College tentative agenda**, the **corporate-body authority codes** (how bodies are tagged), the **lobby-meeting register**, **expert groups**, and **WhoisWho**.

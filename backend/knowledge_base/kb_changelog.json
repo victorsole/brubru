@@ -2,6 +2,126 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu4health_2027_priorities",
+      "title": "EU4Health",
+      "summary": "JRC TRUSTGUIDES paper (reference)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "nature_restoration_law",
+      "title": "Nature Restoration Law",
+      "summary": "JRC forest-management paper (reference)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "espr_ecodesign_regulation",
+      "title": "ESPR",
+      "summary": "JRC guidelines on absolute environmental sustainability assessment",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "savings_and_investment_union",
+      "title": "Savings and Investments Union",
+      "summary": "JRC Finflows 3.0 dataset",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_civil_protection_mechanism_resceu",
+      "title": "Civil Protection Mechanism",
+      "summary": "JRC CEMS flood-data report 2025",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "clean_industrial_deal",
+      "title": "Clean Industrial Deal",
+      "summary": "JRC paper on green startups' inventions",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_carbon_removals_farming",
+      "title": "Carbon removals in farming",
+      "summary": "JRC evidence map on agroforestry and agroecology paper",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_commission_transparency_and_college_agenda",
+      "title": "College agenda",
+      "summary": "Agenda table rebuilt from SEC(2026) 2579 (6 Oct to 24 Nov)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "copyright_generative_ai",
+      "title": "Copyright and generative AI",
+      "summary": "Consultation on technology and copyright, open to 3 Nov",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "horizon_europe_grant_management",
+      "title": "Horizon Europe grant management",
+      "summary": "+EUR 500 million for Horizon Europe 2026-2027 and two new calls",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_beating_cancer_plan",
+      "title": "Europe's Beating Cancer Plan",
+      "summary": "Consultation on the right to be forgotten for cancer survivors, open to 27 Oct",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "Council partial position on EU fisheries support 2028-2034",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "frontex_agency_overview",
+      "title": "Frontex",
+      "summary": "5-point plan announces a proposal to strengthen the Frontex mandate",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "EU Pact on Migration and Asylum",
+      "summary": "Commission 5-point plan against sudden mass illegal arrivals (29 Sep 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "eu_mercosur_trade_agreement",
+      "title": "EU-Mercosur trade agreement",
+      "summary": "Court refused Poland's request to suspend the interim agreement (C-460/26 R); annulment action and Opinion 1/26 pending",
+      "refs": []
+    },
+    {
       "date": "2026-09-29",
       "action": "updated",
       "guide": "reform_and_growth_facility_western_balkans_moldova",

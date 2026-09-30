@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 - **What it is**: the **Clean Industrial Deal** (CID), a European Commission Communication setting the umbrella industrial and decarbonisation strategy of the von der Leyen II mandate. It reframes decarbonisation as a driver of growth and competitiveness for European industry, rather than a cost to be managed.
+- JRC paper (Aug 2026): green technology-based startups produce higher-impact inventions than other startups and incumbents, most of all when they combine green and non-green capabilities; the edge fades with age (US patents 1976-2019). doi 10.1016/j.techfore.2026.124840
 - **Reference**: **COM(2025) 85**. EUR-Lex: `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2025:85:FIN`
 - **Adopted**: 26 February 2025 (College of Commissioners)
 - **Type**: Communication (non-legislative), but it launches a wave of legislative and financing follow-up (Industrial Accelerator Act, Temporary Decarbonisation Fund, CISAF, Critical Raw Materials Centre)

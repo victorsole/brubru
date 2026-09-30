@@ -1,6 +1,7 @@
 # Horizon Europe Grant Management
 
 ## QUICK FACTS
+- **LATEST (29 Sep 2026): +EUR 500 million for Horizon Europe 2026-2027**, to about **EUR 14.8 billion** (IP/26/2004), with two new calls: Nature-Positive Economy (EUR 237m) and Bridging Actions 2027 (EUR 260m, preparing Horizon Europe 2028-2034). So far: EUR 61bn in grants + EUR 1.3bn equity in nearly 23,000 projects; 55% of beneficiaries are newcomers.
 - EPRS Briefing (2 June 2026): "Boosting research and innovation in the EU: European research and innovation acts" -- reviews the policy push to strengthen the European Research Area and the proposed R&I acts. Ref: EPRS_BRI(2026)789317 (https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)789317)
 - Topic: Horizon Europe grant lifecycle -- from proposal selection to project closure
 - Programme regulation: Regulation (EU) 2021/695

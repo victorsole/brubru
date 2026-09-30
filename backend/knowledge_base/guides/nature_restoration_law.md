@@ -160,3 +160,6 @@ The Commission's Omnibus I simplification package (February 2026) targeted the C
 - `life_programme.md` -- LIFE funding for nature restoration projects
 - `eu_soil_monitoring_law.md` -- Soil health regulation (complementary instrument)
 - `eu_forests_strategy.md` -- EU Forest Strategy 2030 and forest ecosystem indicators
+
+## Research references
+- JRC Scientific paper (Trees, Forests and People, September 2026): "Pushing the limits of forest management intensity extremes in Europe" (Barredo, Pilli, Giuntoli, Mubareka) -- on the extremes of forest management intensity in Europe, given forests' place in biodiversity, climate, material-substitution and energy policies. Abstract not available to us; cite as a reference only. doi: 10.1016/j.tfp.2026.101496 (JRC146864)

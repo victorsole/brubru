@@ -1,6 +1,7 @@
 # Europe's Beating Cancer Plan
 
 ## QUICK FACTS
+- **LATEST (29 Sep 2026): Commission consultation on the RIGHT TO BE FORGOTTEN for cancer survivors, open until 27 October 2026** (DG FISMA): after a set period following treatment, a past cancer could no longer be used to price or refuse financial services such as mortgage life insurance. Not yet available in all Member States; no EU code of conduct has been agreed.
 - **Parliament (28 September 2026)**: the **SANT committee** considered the amendments (**PE787.665**) to its own-initiative report on Europe's Beating Cancer Plan (2025/2139(INI), rapporteur **Vlad Vasile-Voiculescu**, Renew; draft report PE786.738).
 - Communication: COM(2021) 44 final (3 February 2021)
 - Budget: EUR 4 billion (EU4Health, Horizon Europe, Digital Europe, cohesion policy)

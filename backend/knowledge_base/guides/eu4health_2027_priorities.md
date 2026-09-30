@@ -45,3 +45,6 @@
 - DG SANTE newsroom (4 May 2026): https://ec.europa.eu/newsroom/sante/newsletter-archives/74926
 - EU4Health Regulation: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R0522
 - HTACG flash report: https://health.ec.europa.eu/latest-updates/flash-report-member-state-coordination-group-hta-htacg-30-april-2026-2026-05-04_en
+
+## Research references
+- JRC-co-authored paper (Journal of Clinical Epidemiology, 2026): "Assessing the trustworthiness of health guidelines recommendations: the TRUSTGUIDES tools development" -- develops tools to judge whether health-guideline recommendations are trustworthy (transparent, rigorous, usable, standardised). Abstract not available to us; cite as a reference only. doi: 10.1016/j.jclinepi.2026.112348 (JRC145444)

@@ -20,6 +20,7 @@
 - EPRS Briefing (16 April 2026): "Certifying EU permanent carbon removals: State of play in implementing the EU's Carbon Removal and Carbon Farming Regulation" -- state of play on implementing acts, methodology development, certification schemes, registry rollout. Ref: EPRS_UNK_923b0e8adb0a
 - Target: Contribute to EU 2050 climate neutrality goal (European Climate Law, Reg (EU) 2021/1119) and 2040 -90% target
 - Scope: 4 activity categories -- (1) permanent carbon removals (DACCS, BECCS, biochar), (2) carbon farming (soil, wetlands, agroforestry), (3) carbon storage in products (long-lived wood products, construction), (4) emission reductions from soils
+- JRC (Sep 2026): agroforestry lifts soil carbon and soil quality in over 65% of 42 meta-analyses, yield effects vary (doi 10.1016/j.ecoser.2026.101905); agroecology needs food-system-wide change (doi 10.1016/j.gfs.2026.100943).
 
 ## Why the CRCF Regulation
 
