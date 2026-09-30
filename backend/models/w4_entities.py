@@ -243,6 +243,11 @@ class SecondaryAct(Base):
     # The act's own two dates (migration 242). Both were absent until 25 Sep 2026,
     # when the only dates served were Brubru's import timestamps.
     adoption_date = Column(Date, nullable=True)
+    # The Commission's indicative timing for an act it has announced but not adopted
+    # (migration 260). A PERIOD, not a date: the register states it as 'Q3 2026',
+    # '06/2019' or '18/10/2013', and the precision is itself information. String on
+    # purpose so it can never be coerced into adoption_date.
+    planned_adoption_period = Column(String(16), nullable=True)
     objection_deadline = Column(Date, nullable=True)
     ep_scrutiny = Column(JSONB, default=dict)  # { result, date, vote_for, vote_against, ... }
     council_scrutiny = Column(JSONB, default=dict)

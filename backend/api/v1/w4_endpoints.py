@@ -691,6 +691,15 @@ class SecondaryActItem(BaseModel):
                     "Usually earlier than publication_date. Null where Cellar's own dates "
                     "contradict each other, rather than serving a date known to be wrong.",
     )
+    planned_adoption_period: Optional[str] = Field(
+        None,
+        description="For an act the Commission has ANNOUNCED but not yet adopted, its "
+                    "indicative timing exactly as the RegDel register states it. The "
+                    "register uses three precisions and the precision is itself "
+                    "information: 'Q3 2026', '06/2019' or '18/10/2013'. A period, not a "
+                    "date, which is why it is a string and never populates adoption_date. "
+                    "Null once the act is adopted.",
+    )
     objection_deadline: Optional[date] = None
     ep_scrutiny: dict = Field(default_factory=dict)
     council_scrutiny: dict = Field(default_factory=dict)
@@ -803,6 +812,7 @@ def _secondary_act_to_item(
         status=r.status.value if hasattr(r.status, "value") else str(r.status),
         proposing_dg=r.proposing_dg, publication_date=r.publication_date,
         adoption_date=r.adoption_date,
+        planned_adoption_period=getattr(r, "planned_adoption_period", None),
         objection_deadline=r.objection_deadline,
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),

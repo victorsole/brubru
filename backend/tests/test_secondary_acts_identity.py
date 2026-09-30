@@ -468,3 +468,32 @@ def test_no_row_asserts_a_published_act_without_any_evidence(db):
         "nothing connects the claim to a source: "
         + "; ".join(f"{r[0]} {r[1]!r}" for r in rows[:5])
     )
+
+
+def test_planned_period_reaches_the_api_not_just_the_table(db):
+    """A column in the database is not a field the API serves.
+
+    planned_adoption_period was added by migration 260 and documented in the Postman
+    collection on the same day, but it was served by nothing: the ORM model had no
+    such attribute, so the response builder's getattr() returned None forever, and the
+    Pydantic schema had no field to put it in anyway. The documentation would have sent
+    a subscriber looking for a key that never appears.
+
+    Four links have to agree, and this asserts the three that live in code.
+    """
+    import sys as _sys
+    _sys.path.insert(0, str(pathlib.Path(_REPO_ROOT) / "backend"))
+    from models.w4_entities import SecondaryAct
+    from api.v1.w4_endpoints import SecondaryActItem
+
+    in_db = db.execute(text(
+        "SELECT count(*) FROM information_schema.columns "
+        "WHERE table_name = 'secondary_acts' "
+        "  AND column_name = 'planned_adoption_period'")).scalar()
+    assert in_db == 1, "migration 260 has not been applied to this database"
+    assert hasattr(SecondaryAct, "planned_adoption_period"), (
+        "the ORM model cannot read the column, so the API will serve None for every row"
+    )
+    assert "planned_adoption_period" in SecondaryActItem.model_fields, (
+        "the response schema has no field for it, so it is dropped on the way out"
+    )
