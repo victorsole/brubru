@@ -153,13 +153,14 @@ PORTALS = [
      "source": "HaDEA", "category": "agency", "priority": 5},
     {"url": "https://eismea.ec.europa.eu/news_en",
      "source": "EISMEA", "category": "agency", "priority": 5},
-    # /en/news, not /en/about-epso (fixed 11 September 2026). This source
-    # returned 0 items on every run because it pointed at EPSO's ABOUT page,
-    # which has no articles on it. Verified: /en/news answers 200 with 10 news
-    # links; /en/about-epso has none. The v2 fetcher services/scrapers/
-    # economy_epso.py has always used /en/news and holds 67 rows.
-    {"url": "https://eu-careers.europa.eu/en/news",
-     "source": "EPSO", "category": "agency", "priority": 5},
+    # EPSO moved to the Commission's web platform (30 September 2026): /en/news
+    # now answers 404 and news lives at /news_en, whose items load by script.
+    # The page's own RSS feed is the machine-readable route. On 30 Sep it
+    # answered 200 with ZERO items (the new site had published no news yet),
+    # so an empty run here means "nothing published", not "nothing fetched".
+    # History: /en/about-epso (no articles) until 11 Sep, then /en/news.
+    {"url": "https://eu-careers.europa.eu/node/2/rss_en",
+     "source": "EPSO", "category": "agency", "priority": 5, "type": "rss"},
     {"url": "https://rea.ec.europa.eu/news_en",
      "source": "REA", "category": "agency", "priority": 5},
     {"url": "https://ec.europa.eu/eurostat/en/web/main/news/news-articles",
