@@ -37,6 +37,17 @@ _ORDER_SQL = {
     "oldest": f"{_DATE_SORT} ASC NULLS LAST, id ASC",
     "title": "title ASC, id ASC",
 }
+# Procurement routes (procurement=True): some procedures have no published
+# publication date (Cedefop 2010-2014, 70 of 464), and falling back to the INGEST
+# time put 2010 tenders at the top of a newest-first list. Fall back to the
+# deadline first. Kept separate from _ORDER_SQL because /funding/all reuses that on
+# a UNION that has no deadline column.
+_PROC_DATE_SORT = "coalesce(document_date, deadline, creation_date)"
+_PROC_ORDER_SQL = {
+    "recent": f"{_PROC_DATE_SORT} DESC NULLS LAST, id DESC",
+    "oldest": f"{_PROC_DATE_SORT} ASC NULLS LAST, id ASC",
+    "title": "title ASC, id ASC",
+}
 
 
 class _DataPoints(BaseModel):
@@ -57,7 +68,21 @@ class EconomyItem(_DataPoints):
     source_kind: Optional[str] = Field(None, description="How the item was ingested: rss | html | pdf | cellar.")
 
 
-def _row_to_item(r, *, with_body: bool) -> EconomyItem:
+class ProcurementItem(EconomyItem):
+    """An EconomyItem for a procurement procedure (tender or call). The three extra
+    fields reuse the names of the Funding & Tenders routes (/funding/ft-calls-for-tenders):
+    no new datapoints (Victor, 30 Sep 2026). document_date is the publication date."""
+    tender_reference: Optional[str] = Field(None, description="The procedure's reference as published by the body, e.g. CEDEFOP/2026/OP/0012.")
+    status: Optional[str] = Field(None, description="open | forthcoming | closed, as on the Funding & Tenders routes. 'open' only while the deadline is ahead.")
+    deadline: Optional[datetime] = Field(None, description="Submission deadline; the extended closing date when the body extended it.")
+
+
+def _row_to_item(r, *, with_body: bool, procurement: bool = False) -> EconomyItem:
+    if procurement:
+        return ProcurementItem(
+            **_row_to_item(r, with_body=with_body).model_dump(),
+            tender_reference=r.tender_reference, status=r.status, deadline=r.deadline,
+        )
     return EconomyItem(
         id=r.id, body_code=r.body_code, item_type=r.item_type, title=r.title,
         summary=r.summary, source_kind=r.source_kind,
@@ -70,40 +95,46 @@ def _row_to_item(r, *, with_body: bool) -> EconomyItem:
 
 _LIST_COLS = "id, body_code, item_type, title, summary, public_url, document_date, creation_date, source_kind"
 _DETAIL_COLS = "id, body_code, item_type, title, summary, public_url, body_txt, body_html, document_date, creation_date, source_kind"
+_PROCUREMENT_COLS = ", tender_reference, status, deadline"
 
 
 def _list_items(db: Session, body_code: str, item_type: str, q, since, until, order,
-                page, limit, include_body: bool = False):
+                page, limit, include_body: bool = False, procurement: bool = False):
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": body_code, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
+    date_sort = _PROC_DATE_SORT if procurement else _DATE_SORT
+    order_sql = (_PROC_ORDER_SQL if procurement else _ORDER_SQL)[order]
     if q:
         where.append("search_vector @@ plainto_tsquery('english', :q)")
         params["q"] = q
     if since:
-        where.append(f"{_DATE_SORT} >= :since")
+        where.append(f"{date_sort} >= :since")
         params["since"] = since
     if until:
-        where.append(f"{_DATE_SORT} < CAST(:until AS date) + 1")
+        where.append(f"{date_sort} < CAST(:until AS date) + 1")
         params["until"] = until
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
     # Select the body columns only when asked: they dominate the row size, and
     # the default list is meant to stay cheap.
     cols = _DETAIL_COLS if include_body else _LIST_COLS
+    if procurement:
+        cols += _PROCUREMENT_COLS
     rows = db.execute(
         text(f"SELECT {cols} FROM economy_items WHERE {clause} "
-             f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
+             f"ORDER BY {order_sql} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return [_row_to_item(r, with_body=include_body) for r in rows], total
+    return [_row_to_item(r, with_body=include_body, procurement=procurement) for r in rows], total
 
 
-def _get_item(db: Session, body_code: str, item_type: str, item_id: int):
+def _get_item(db: Session, body_code: str, item_type: str, item_id: int, procurement: bool = False):
+    cols = _DETAIL_COLS + (_PROCUREMENT_COLS if procurement else "")
     r = db.execute(
-        text(f"SELECT {_DETAIL_COLS} FROM economy_items "
+        text(f"SELECT {cols} FROM economy_items "
              "WHERE id = :id AND body_code = :bc AND item_type = :it"),
         {"id": item_id, "bc": body_code, "it": item_type},
     ).fetchone()
-    return _row_to_item(r, with_body=True) if r else None
+    return _row_to_item(r, with_body=True, procurement=procurement) if r else None
 
 
 _DESC_LIST = """**What it does**
@@ -148,7 +179,7 @@ Refreshed from {source}."""
 
 
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
-                      source, tag, extra=""):
+                      source, tag, extra="", procurement=False):
     """Add list + detail GET routes for one (body, resource) onto `router`."""
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"
@@ -188,7 +219,8 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         since = since or from_
         until = until or to
         items, total = _list_items(db, body_code, item_type, q, since, until, order,
-                                   page, limit, include_body=include_body)
+                                   page, limit, include_body=include_body,
+                                   procurement=procurement)
         return build_envelope(items, total, page, limit)
 
     async def detail_ep(
@@ -197,21 +229,21 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         db: Session = Depends(get_db),
         user: User = Depends(api_user_with_rate_limit),
     ):
-        item = _get_item(db, body_code, item_type, item_id)
+        item = _get_item(db, body_code, item_type, item_id, procurement=procurement)
         if item is None:
             raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
         return item
 
     router.add_api_route(
         path_hint, list_ep, methods=["GET"],
-        response_model=PaginatedResponse[EconomyItem], tags=[tag],
+        response_model=PaginatedResponse[ProcurementItem if procurement else EconomyItem], tags=[tag],
         summary=f"{body_name} — {noun} (newest first)",
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
                                       source=source, extra=extra),
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}", detail_ep, methods=["GET"],
-        response_model=EconomyItem, tags=[tag],
+        response_model=ProcurementItem if procurement else EconomyItem, tags=[tag],
         summary=f"{body_name} — one {noun_singular} (full body)",
         description=_DESC_DETAIL.format(body=body_name, noun_singular=noun_singular, path=path_hint,
                                         source=source),

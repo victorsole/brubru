@@ -40,17 +40,24 @@ register_resource(
 register_resource(
     router, body_code="cedefop", item_type="tender", slug="cedefop-tenders",
     noun="Cedefop calls for tender", body_name="Cedefop", acronym="Cedefop", tag="v2-funding",
-    source="the Cedefop public-procurement listing.",
-    extra="Cedefop's own public procurement: each call for tender with reference, status and "
-          "closing date. Decentralised procurement (sub-threshold not in TED). Filter with q.",
+    source="every page of the Cedefop public-procurement listing and each procedure's own page.",
+    extra="Cedefop's own public procurement, the whole archive from 2013 (calls for tenders and "
+          "calls for proposals). Each item carries `tender_reference`, `status` "
+          "(open | closed; open only while the deadline is ahead) and `deadline` (the extended "
+          "closing date when Cedefop extended it); `document_date` is the Official Publication "
+          "Date. The detail body holds the description, the key dates and the TED and Funding & "
+          "Tenders links. Filter with q.",
+    procurement=True,
 )
 register_resource(
     router, body_code="cedefop", item_type="eoi_call", slug="cedefop-calls",
     noun="Cedefop calls for expression of interest", body_name="Cedefop", acronym="Cedefop",
     tag="v2-funding",
-    source="the Cedefop public-procurement listing (expression-of-interest entries).",
-    extra="Cedefop calls for expression of interest (e.g. lists of remunerated experts), with "
-          "reference and closing date. Filter with q.",
+    source="every page of the Cedefop public-procurement listing (expression-of-interest procedures).",
+    extra="Cedefop calls for expression of interest (e.g. lists of remunerated experts), the whole "
+          "archive. Each item carries `tender_reference`, `status` and `deadline`; "
+          "`document_date` is the Official Publication Date. Filter with q.",
+    procurement=True,
 )
 
 # --- EMA — European Medicines Agency -------------------------------------- #

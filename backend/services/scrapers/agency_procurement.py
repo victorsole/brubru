@@ -12,6 +12,11 @@ Schema packed into the 5 datapoints:
   document_date   = deadline (closing date) where present, else publication
   public_url      = the tender/call page;  guid = reference (fallback URL)
   body_code       = the agency;  item_type = tender | grant | eoi_call
+
+Cedefop (30 Sep 2026) is the first body on the corrected shape: document_date =
+publication date, and tender_reference / status / deadline as their own columns
+(migration 256), carried in Item.extras. The other agencies still use the packing
+above until each is walked in the API audit.
 """
 from __future__ import annotations
 
@@ -150,28 +155,185 @@ def _split_calls(items: list[Item]) -> tuple[list[Item], list[Item]]:
 
 
 # --------------------------------------------------------------------------- #
-# Cedefop — named Views table (field-ced-*). One page mixes tenders + EOI calls.
+# Cedefop — the WHOLE archive (every listing page) plus each procedure's own page.
+#
+# Audit 30 Sep 2026 (API Audit doc, "Walk · cedefop"): the old reader took page 0
+# only (27 of 464 procedures), dropped the listing's status column, stored the
+# closing date as document_date and never saw an EXTENDED closing date, so an open
+# tender (CEDEFOP/2026/OP/0012) read as closed. The detail page states everything:
+#   Procurement type | Status | Official Publication Date | Closing date |
+#   Extended closing date (when extended) | Reference | Downloads
+# Field names reuse the funding folder's (Victor, 30 Sep): tender_reference,
+# status (open | forthcoming | closed) and deadline travel in Item.extras; the
+# Official Publication Date is document_date.
 # --------------------------------------------------------------------------- #
 _CEDEFOP = "https://www.cedefop.europa.eu"
+_CEDEFOP_LISTING = _CEDEFOP + "/en/about-cedefop/public-procurement"
+_CEDEFOP_MAX_PAGES = 60      # 20 pages on 30 Sep 2026; a stop, not an expectation
+# Rows on the first listing pages, and every open or in-progress procedure, get a
+# fresh detail read on every run (that is where deadlines move). Older, finished
+# procedures are read once, by a run with CEDEFOP_FULL_DETAILS=1; later runs send
+# no date and no body for them, and the upsert keeps what is stored.
+_CEDEFOP_FRESH_PAGES = 2
+_CEDEFOP_LIVE = {"open", "in progress"}
+_CEDEFOP_CACHE: dict = {}    # one crawl serves both ingest functions in a run
+_CEDEFOP_CACHE_TTL = 1800
 
 
-def _cedefop_all() -> list[Item]:
-    return parse_views_table(
-        _fetch(_CEDEFOP + "/en/about-cedefop/public-procurement"), _CEDEFOP,
-        body_code="cedefop", item_type="tender", source_kind="cedefop_procurement",
-        ref_field="field-ced-procurement-reference",
-        deadline_field="field-ced-closing-date-time", status="")
+def _get_ok(url: str) -> str:
+    """GET that fails loudly: an error page must not parse to zero rows."""
+    r = requests.get(url, headers=_HEADERS, timeout=40)
+    r.raise_for_status()
+    return r.text
+
+
+def _cedefop_listing_rows(html: str) -> list[dict]:
+    body = re.search(r"<tbody>(.*?)</tbody>", html, re.S)
+    if not body:
+        return []
+    rows = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(1), re.S):
+        def cell(field: str) -> str:
+            m = re.search(rf'views-field-{field}[^>]*>(.*?)</td>', tr, re.S)
+            return m.group(1) if m else ""
+        title_cell = cell("title")
+        title = _txt(title_cell)
+        if not title:
+            continue
+        am = re.search(r'href="([^"]+)"', title_cell)
+        href = _html.unescape(am.group(1)) if am else ""
+        reference = _txt(cell("field-ced-procurement-reference"))
+        dm = _DATE.search(_txt(cell("field-ced-closing-date-time")))
+        rows.append({
+            "title": title,
+            "url": _row_url(_CEDEFOP, href, reference, title),
+            "reference": reference,
+            "closing": _parse_date(dm.group(1)) if dm else None,
+            "status_raw": _txt(cell("field-ced-procurement-status")),
+        })
+    return rows
+
+
+_CEDEFOP_LABELS = ("Procurement type", "Status", "Official Publication Date", "Closing date",
+                   "Extended closing date", "Reference", "Related Country", "Downloads")
+
+
+def _cedefop_detail(url: str) -> dict:
+    """Read one procedure page: description, the Call details block, downloads."""
+    page = _get_ok(url.split("#")[0])
+    main = re.search(r"<h1.*?</h1>(.*?)(?:<footer|region-footer)", page, re.S)
+    main = main.group(1) if main else page
+    parts = re.split(r"Call details", main, maxsplit=1)
+    desc_html = parts[0]
+    details = _txt(parts[1]) if len(parts) > 1 else ""
+    out: dict = {}
+    # "Label value Label value ..." -> dict, by the known labels in page order.
+    pat = "|".join(re.escape(l) for l in sorted(_CEDEFOP_LABELS, key=len, reverse=True))
+    marks = [(m.start(), m.end(), m.group(0)) for m in re.finditer(pat, details)]
+    for i, (_s, e, label) in enumerate(marks):
+        end = marks[i + 1][0] if i + 1 < len(marks) else len(details)
+        out.setdefault(label, details[e:end].strip())
+    paras = [p for p in (_txt(x) for x in re.findall(r"<p[^>]*>(.*?)</p>", desc_html, re.S)) if p]
+    # The first paragraph repeats the reference; keep the rest.
+    ref = out.get("Reference", "")
+    out["description"] = [p for p in paras if p != ref]
+    out["links"] = sorted(set(re.findall(
+        r'href="(https?://(?:ted\.europa\.eu|ec\.europa\.eu/info/funding-tenders)[^"]+)"', desc_html)))
+    return out
+
+
+def _cedefop_status(raw: str, deadline: datetime | None, now: datetime) -> str:
+    """Normalise to the Funding & Tenders vocabulary. "Open" is a claim that needs a
+    deadline still ahead (the consultations `_status` rule); "In progress" means
+    evaluation, closed to bidders."""
+    if raw.strip().lower() == "open" and deadline is not None and deadline >= now:
+        return "open"
+    return "closed"
+
+
+def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
+    ptype = (detail or {}).get("Procurement type", "")
+    is_call = ("expression of interest" in ptype.lower()) if ptype else (
+        "/CEI" in row["reference"].upper() or "EOI" in row["reference"].upper()
+        or "expression of interest" in row["title"].lower())
+    extended = _parse_date((detail or {}).get("Extended closing date", ""))
+    closing = _parse_date((detail or {}).get("Closing date", "")) or row["closing"]
+    deadline = extended or closing
+    published = _parse_date((detail or {}).get("Official Publication Date", ""))
+    status = _cedefop_status(row["status_raw"], deadline, now)
+    item = Item(
+        body_code="cedefop", item_type="eoi_call" if is_call else "tender",
+        title=clean(row["title"])[:120], public_url=row["url"],
+        summary=clean(" · ".join(b for b in [row["reference"], row["status_raw"],
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        creation_date=now, source_kind="cedefop_procurement", guid=row["reference"] or row["url"],
+        extras={"tender_reference": row["reference"] or None, "status": status},
+    )
+    if detail is None:
+        # Not re-read this run: send no date, deadline or body, so the stored values stand.
+        return item
+    facts = [("Reference", row["reference"]), ("Procurement type", ptype),
+             ("Status", row["status_raw"] or detail.get("Status", "")),
+             ("Official publication date", published.date().isoformat() if published else ""),
+             ("Closing date", closing.date().isoformat() if closing else ""),
+             ("Extended closing date", extended.date().isoformat() if extended else "")]
+    facts = [(k, v) for k, v in facts if v]
+    desc = detail.get("description") or []
+    links = detail.get("links") or []
+    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1>"
+        + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
+        + "</dl>"
+        + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
+           + "</ul>" if links else ""))
+    item.document_date = published
+    item.extras["deadline"] = deadline
+    return item
+
+
+def _cedefop_all(*, fetch_bodies: bool = True) -> list[Item]:
+    import os
+    import time
+    full = os.environ.get("CEDEFOP_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _CEDEFOP_CACHE.get(key)
+    if hit and time.time() - hit[0] < _CEDEFOP_CACHE_TTL:
+        return hit[1]
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set = set()
+    for page in range(_CEDEFOP_MAX_PAGES):
+        rows = _cedefop_listing_rows(_get_ok(f"{_CEDEFOP_LISTING}?page={page}"))
+        if not rows:
+            break
+        for row in rows:
+            ident = row["reference"] or row["url"]
+            if ident in seen:
+                continue
+            seen.add(ident)
+            want = fetch_bodies and (full or page < _CEDEFOP_FRESH_PAGES
+                                     or row["status_raw"].lower() in _CEDEFOP_LIVE)
+            detail = None
+            if want:
+                try:
+                    detail = _cedefop_detail(row["url"])
+                except requests.RequestException as exc:
+                    print(f"    [WARN] cedefop detail {row['reference']}: {exc}", flush=True)
+            items.append(_cedefop_item(row, detail, now))
+    if not items:
+        raise RuntimeError("Cedefop procurement listing parsed to zero rows")
+    _CEDEFOP_CACHE[key] = (time.time(), items)
+    return items
 
 
 def ingest_cedefop_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return _split_calls(_cedefop_all())[0]
+    return [it for it in _cedefop_all(fetch_bodies=fetch_bodies) if it.item_type == "tender"]
 
 
 def ingest_cedefop_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    calls = _split_calls(_cedefop_all())[1]
-    for it in calls:
-        it.item_type = "eoi_call"
-    return calls
+    return [it for it in _cedefop_all(fetch_bodies=fetch_bodies) if it.item_type == "eoi_call"]
 
 
 # --------------------------------------------------------------------------- #

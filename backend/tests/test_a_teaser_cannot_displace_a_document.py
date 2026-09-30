@@ -60,7 +60,8 @@ def cur():
 BODY = "eea"
 
 _COLS = ("body_code", "item_type", "title", "summary", "public_url", "body_txt",
-         "body_html", "document_date", "creation_date", "source_kind", "guid")
+         "body_html", "document_date", "creation_date", "source_kind", "guid",
+         "tender_reference", "status", "deadline")  # procurement fields, migration 256
 
 
 def _row(url, body_txt, body_html="<p>x</p>", item_type="news"):
@@ -68,6 +69,7 @@ def _row(url, body_txt, body_html="<p>x</p>", item_type="news"):
         "body_code": BODY, "item_type": item_type, "title": "t", "summary": "s",
         "public_url": url, "body_txt": body_txt, "body_html": body_html,
         "document_date": None, "creation_date": None, "source_kind": "rss", "guid": url,
+        "tender_reference": None, "status": None, "deadline": None,
     }
 
 

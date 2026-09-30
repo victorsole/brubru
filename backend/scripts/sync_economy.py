@@ -475,10 +475,11 @@ INGESTORS.update({("efsa", _c["item_type"]): efsa.EFSA_DATASET_INGESTORS[_c["ite
 _UPSERT = """
 INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,
-   document_date, creation_date, source_kind, guid)
+   document_date, creation_date, source_kind, guid, tender_reference, status, deadline)
 VALUES
   (%(body_code)s, %(item_type)s, %(title)s, %(summary)s, %(public_url)s, %(body_txt)s,
-   %(body_html)s, %(document_date)s, %(creation_date)s, %(source_kind)s, %(guid)s)
+   %(body_html)s, %(document_date)s, %(creation_date)s, %(source_kind)s, %(guid)s,
+   %(tender_reference)s, %(status)s, %(deadline)s)
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
   -- Content columns NEVER regress to empty. A scrape that comes back without a
   -- body or a date is almost always a transient fetch failure, a PDF we cannot
@@ -514,6 +515,11 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
                           > length(COALESCE(economy_items.body_txt, ''))
                        THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
   guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
+  -- Procurement fields (migration 256). Never regress to empty, like the content
+  -- columns above; a run that did not re-read a procedure sends NULL and keeps them.
+  tender_reference = COALESCE(NULLIF(btrim(EXCLUDED.tender_reference), ''), economy_items.tender_reference),
+  status        = COALESCE(EXCLUDED.status, economy_items.status),
+  deadline      = COALESCE(EXCLUDED.deadline, economy_items.deadline),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
   -- fetched_at is the INGESTION anchor and must still move every run, even when
   -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
@@ -525,7 +531,7 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 _UPSERT_BATCH = """
 INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,
-   document_date, creation_date, source_kind, guid)
+   document_date, creation_date, source_kind, guid, tender_reference, status, deadline)
 VALUES %s
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
   -- Content columns NEVER regress to empty. A scrape that comes back without a
@@ -562,6 +568,11 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
                           > length(COALESCE(economy_items.body_txt, ''))
                        THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
   guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
+  -- Procurement fields (migration 256). Never regress to empty, like the content
+  -- columns above; a run that did not re-read a procedure sends NULL and keeps them.
+  tender_reference = COALESCE(NULLIF(btrim(EXCLUDED.tender_reference), ''), economy_items.tender_reference),
+  status        = COALESCE(EXCLUDED.status, economy_items.status),
+  deadline      = COALESCE(EXCLUDED.deadline, economy_items.deadline),
   creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
   -- fetched_at is the INGESTION anchor and must still move every run, even when
   -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
@@ -655,6 +666,31 @@ def _refuse_undated_new_news(by_url: dict, *, existing_fn=_existing_urls, resolv
     return refused
 
 
+_REPOINT = """
+UPDATE economy_items e SET public_url = %(url)s, item_type = %(it)s
+ WHERE e.body_code = %(bc)s AND e.tender_reference = %(ref)s
+   AND (e.public_url <> %(url)s OR e.item_type <> %(it)s)
+   AND NOT EXISTS (SELECT 1 FROM economy_items x
+                    WHERE x.body_code = %(bc)s AND x.item_type = %(it)s AND x.public_url = %(url)s)
+"""
+
+
+def _repoint_by_reference(db: "ChunkedDb", items) -> None:
+    """A procurement row's identity is its reference, not its page address.
+
+    Cedefop renamed two procedure pages (old slugs 301 to the new ones) and each rename
+    created a second row, because the upsert conflicts on (body_code, item_type,
+    public_url). Before the upsert, move a row we already hold under the same
+    reference to the item's current URL and type, so the upsert updates it in place.
+    Migration 256's partial unique index on (body_code, tender_reference) backs this.
+    """
+    for it in items:
+        ref = (it.extras or {}).get("tender_reference")
+        if ref:
+            db.cur.execute(_REPOINT, {"url": it.public_url, "it": it.item_type,
+                                      "bc": it.body_code, "ref": ref})
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
     if itype == "legal":
@@ -670,8 +706,11 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
             _reject_future_news_date(it)
             by_url[(it.body_code, it.item_type, it.public_url)] = it
     _refuse_undated_new_news(by_url)
+    _repoint_by_reference(db, by_url.values())
     rows = [(it.body_code, it.item_type, it.title, it.summary, it.public_url, it.body_txt,
-             it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid)
+             it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid,
+             (it.extras or {}).get("tender_reference"), (it.extras or {}).get("status"),
+             (it.extras or {}).get("deadline"))
             for it in by_url.values()]
     # Batched multi-row upsert via execute_values — orders of magnitude fewer
     # round-trips than row-by-row (essential for large datasets like FTS ~118k).
