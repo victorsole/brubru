@@ -19,8 +19,23 @@ inherits a parent it was missing, and every deleted row is written to a backup f
 Survivor: most body text, then the row whose reference is NOT its own CELEX (a real
 register entry beats a derived stub), then the earliest first_seen.
 
+A second wave of 80 duplicates arrived on 30 September 2026, from the same root cause in
+a different script: ingest_regdel_acts.py also upserted ON CONFLICT (reference). That is
+now fixed at the source and migration 258 adds a partial unique index on celex, so the
+database itself refuses a second row for one act. This script stays for the cleanup, and
+gained two guards on that run:
+
+  * --rehearse applies the whole merge inside a transaction, checks the invariants and
+    rolls back, so the plan can be proven before anything is written.
+  * the invariants are checked BEFORE the commit, not after. A merge that loses a
+    character of body text, a distinct CELEX, or an unexpected row is rolled back. On
+    the 30 September wave 32 of 73 pairs held their full text on the row being deleted
+    (32024R0870: 120,902 characters there, none on the survivor), which rank() handles
+    correctly -- but "already correct" is not "proven correct on this run".
+
 Usage (from backend/):
     python3.12 scripts/merge_duplicate_secondary_acts.py            # dry run
+    python3.12 scripts/merge_duplicate_secondary_acts.py --rehearse # apply, check, undo
     python3.12 scripts/merge_duplicate_secondary_acts.py --apply
 """
 from __future__ import annotations
@@ -58,13 +73,35 @@ def rank(row: dict) -> tuple:
     return (-row["text_len"], 1 if is_stub else 0, row["first_seen"] or datetime.max)
 
 
+def _snapshot(db) -> dict:
+    """What must not change when rows are merged away.
+
+    Added 30 Sep 2026 after a second wave of 80 duplicates. The merge deletes rows, and
+    the thing most worth losing is text: on that wave 32 of 73 pairs held their full body
+    on the row being deleted (32024R0870 had 120,902 characters there and none on the
+    survivor). The rank() below already prefers the row with the most text, so the body
+    is kept, but "already correct" is not the same as "proven correct on this run".
+    """
+    r = db.execute(text("""
+        SELECT count(*),
+               coalesce(sum(length(text_body)), 0),
+               coalesce(sum(length(body_html)), 0),
+               count(DISTINCT celex) FILTER (WHERE celex IS NOT NULL),
+               count(*) FILTER (WHERE celex IS NULL)
+        FROM secondary_acts""")).fetchone()
+    return {"rows": r[0], "text": r[1], "html": r[2], "celex": r[3], "no_celex": r[4]}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--rehearse", action="store_true",
+                    help="apply inside a transaction, check the invariants, then ROLL BACK")
     args = ap.parse_args()
 
     db = SessionLocal()
     try:
+        before = _snapshot(db)
         rows = [dict(r._mapping) for r in db.execute(text(_FETCH)).fetchall()]
         groups: dict[str, list] = {}
         for r in rows:
@@ -103,8 +140,15 @@ def main() -> int:
             print(f"   {celex}: keep {s['reference']} ({s['text_len']:,} chars, parent {np}) "
                   f"<- drop {', '.join(l['reference'] for l in losers)}")
 
-        if not args.apply:
-            print("[DRY-RUN] re-run with --apply")
+        if not (args.apply or args.rehearse):
+            body_on_loser = sum(
+                1 for _, s, losers, _, _ in plan
+                if any(l["text_len"] > s["text_len"] for l in losers))
+            if body_on_loser:
+                print(f"[WARN] {body_on_loser} group(s) hold more text on a row that would "
+                      f"be deleted than on the survivor; rank() should prevent this")
+            print("[DRY-RUN] re-run with --rehearse to apply and roll back, "
+                  "or --apply to commit")
             return 0
 
         BACKUP_DIR.mkdir(parents=True, exist_ok=True)
@@ -128,17 +172,51 @@ def main() -> int:
                 {"m": json.dumps(absorbed), "p": new_parent, "id": survivor["id"]})
             db.execute(text("DELETE FROM secondary_acts WHERE id::text = ANY(:ids)"),
                        {"ids": [l["id"] for l in losers]})
-        db.commit()
-        print(f"[APPLIED] merged {len(plan):,} group(s)")
-
-        # Verify from the database, not from the loop that just wrote it.
+        # Verify from the database, not from the loop that just wrote it -- and BEFORE the
+        # commit, so a merge that broke an invariant can still be rolled back. Checking
+        # after committing only tells you what you have already lost.
+        after = _snapshot(db)
+        deleted = sum(len(p[2]) for p in plan)
+        problems = []
+        if after["text"] < before["text"]:
+            problems.append(f"text_body lost {before['text'] - after['text']:,} characters")
+        if after["html"] < before["html"]:
+            problems.append(f"body_html lost {before['html'] - after['html']:,} characters")
+        if after["celex"] != before["celex"]:
+            problems.append(f"distinct CELEX moved {before['celex']} -> {after['celex']}")
+        if after["no_celex"] != before["no_celex"]:
+            problems.append(f"rows without a CELEX moved "
+                            f"{before['no_celex']} -> {after['no_celex']}")
+        if after["rows"] != before["rows"] - deleted:
+            problems.append(f"row count is {after['rows']}, expected "
+                            f"{before['rows'] - deleted}")
         left = db.execute(text(
             "SELECT count(*) FROM (SELECT celex FROM secondary_acts WHERE celex IS NOT NULL "
             "GROUP BY celex HAVING count(*) > 1) z")).scalar()
+        if left:
+            problems.append(f"{left} duplicate CELEX still present")
+
+        if problems:
+            db.rollback()
+            print("\n[ROLLED BACK] the merge broke an invariant and nothing was written:")
+            for p in problems:
+                print(f"   - {p}")
+            return 1
+
         kept = db.execute(text(
             "SELECT count(*) FROM secondary_acts WHERE merged_from IS NOT NULL")).scalar()
         print(f"[VERIFY] duplicate CELEX remaining: {left}   rows carrying merged_from: {kept}")
-        return 0 if left == 0 else 1
+        print(f"[VERIFY] no text lost ({after['text']:,} chars), no CELEX lost "
+              f"({after['celex']:,}), {deleted} row(s) removed as planned")
+
+        if args.rehearse:
+            db.rollback()
+            print("[REHEARSAL] rolled back; the database is untouched")
+            return 0
+
+        db.commit()
+        print(f"[APPLIED] merged {len(plan):,} group(s)")
+        return 0
     finally:
         db.close()
 

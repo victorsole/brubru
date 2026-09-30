@@ -24,6 +24,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
 import re
 import sys
@@ -113,14 +114,69 @@ def derive_parent_celex(basic_text: Any) -> Optional[str]:
     return None
 
 
+# Every status value the RegDel exports actually use, counted from the live sheets on
+# 30 Sep 2026 (delegated: 10 distinct values, implementing: 5). The old map covered six
+# keys and everything else fell through a `.get(..., "draft")` default, so 356 acts wore
+# a status that was not theirs -- most seriously the 24 delegated acts Parliament or
+# Council had OBJECTED to, which were served as 'draft'.
+#
+# 'Published' -> 'published', corrected 30 Sep 2026 (Victor's call). It had mapped to
+# 'adopted', which collapsed the two stages RegDel actually distinguishes:
+#
+#   Planned -> Adopted -> Published
+#
+# 'Adopted' means the College has taken the decision; 'Published' means the act is in
+# the Official Journal. The gap between them is the window in which the scrutiny clock
+# runs and Parliament or Council can still object, and we hold 699 acts sitting in it
+# right now (adopted, no CELEX yet, 569 of them with 2026 C-numbers). Mapping both to
+# 'adopted' made that word mean nothing and left the enum's 'published' unused since
+# migration 038. The correction moves 6,737 rows, so GovClipping is told before it lands.
 _STATUS_MAP = {
-    "Published": "adopted",
+    "Published": "published",
     "Adoption": "adopted",
     "Adopted": "adopted",
+    "Adopted (urgency procedure)": "adopted",
     "Draft": "draft",
     "Empowerment": "draft",
+    "Planned": "planned",
+    "Objected": "objected",
+    "Cancelled": "cancelled",
     "Withdrawn": "withdrawn",
+    "On hold": "on_hold",
+    "Notified": "notified",
+    "Scrutiny finished": "scrutiny_finished",
 }
+
+# Statuses seen in an export that this map does not know. Collected rather than
+# swallowed: the register can add a value at any time and the old default turned that
+# into a silent 'draft'. Reported at the end of the run.
+_UNMAPPED_STATUSES: dict[str, int] = {}
+
+
+def _normalised_title(title: str) -> str:
+    """A title stripped of its numbering preamble, for matching one act to itself.
+
+    A planned act reads 'COMMISSION DELEGATED REGULATION (EU) .../... amending X' and the
+    same act once published reads 'Commission Delegated Regulation (EU) 2024/3199 of 15
+    October 2024 amending X'. Only the tail is stable, so the key is built from that.
+
+    Measured on the live export (30 Sep 2026): 48/48 delegated and 272/274 implementing
+    pipeline titles are distinct after this, and 7 collide with an act already held under
+    a real C-number -- which is the point, those are skipped.
+    """
+    t = re.sub(r"\s+", " ", title).strip().lower()
+    t = re.sub(r"^commission\s+(delegated|implementing)\s+"
+               r"(regulation|decision|directive)\s*", "", t)
+    t = re.sub(r"^\(eu\)\s*(no\s*)?[….\d/]*\s*", "", t)
+    t = re.sub(r"^of\s+\d{1,2}\s+\w+\s+\d{4}\s*", "", t)
+    t = re.sub(r"^(of\s+xxx|…/\.\.\.)\s*", "", t)
+    return t.strip()
+
+
+# Titles too thin to key on, and pipeline rows whose act we already hold under a real
+# C-number. Collected and reported rather than silently dropped.
+_WEAK_TITLES: List[str] = []
+_SHADOWED: List[str] = []
 
 
 def _blank(value) -> bool:
@@ -157,8 +213,28 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
         ccode = None
     title = title.strip() if isinstance(title, str) else None
     ccode = ccode.strip() if isinstance(ccode, str) else None
-    if not title or not ccode or ccode.lower() == "nan":
+    if not title:
         return None
+    if not ccode or ccode.lower() == "nan":
+        # An act the Commission has ANNOUNCED but not adopted. Until 30 Sep 2026 this
+        # returned None and 322 rows -- 207 Planned, 109 Cancelled, 6 On hold -- were
+        # discarded, so the register's whole forward pipeline was invisible to us.
+        #
+        # There is no identifier to key on: a C-number is issued at adoption, the CELEX
+        # at publication, and the register's JSON API is CSRF-protected so the Excel
+        # export is the only open source. The key is therefore SYNTHETIC, and marked as
+        # such so nothing downstream can read it as a Commission code.
+        norm = _normalised_title(title)
+        if len(norm) < 25:
+            # 'Commission Implementing Regulation (*)' carries nothing to key on. A hash
+            # of almost-nothing collides with the next almost-nothing.
+            _WEAK_TITLES.append(title[:80])
+            return None
+        digest = hashlib.sha1(f"{act_type}|{norm}".encode("utf-8")).hexdigest()[:16]
+        ccode = f"PLANNED:{digest}"
+        is_pipeline = True
+    else:
+        is_pipeline = False
 
     celex = row.get("Celex number")
     celex = celex.strip() if isinstance(celex, str) else None
@@ -174,7 +250,17 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
     dg = dg.strip() if isinstance(dg, str) and dg.strip() else None
 
     raw_status = row.get(status_col)
-    status = _STATUS_MAP.get(str(raw_status).strip(), "draft") if raw_status else "draft"
+    # 'unknown', never 'draft'. A status we do not recognise is a gap in our mapping,
+    # and calling it a draft asserts something about the act that we have not been told.
+    # The enum carries 'unknown' precisely so an honest answer is available.
+    if raw_status and str(raw_status).strip():
+        key = str(raw_status).strip()
+        status = _STATUS_MAP.get(key)
+        if status is None:
+            _UNMAPPED_STATUSES[key] = _UNMAPPED_STATUSES.get(key, 0) + 1
+            status = "unknown"
+    else:
+        status = "unknown"
 
     parent_celex = derive_parent_celex(row.get("Basic legislative act"))
 
@@ -190,6 +276,9 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
         slug_path = "delegatedActs" if act_type == "delegated" else "implementingActs"
         source_url = f"https://webgate.ec.europa.eu/regdel/#/{slug_path}?lang=en&search={urllib.parse.quote(str(ccode))}"
 
+    planned_period = row.get("Planned adoption date")
+    planned_period = planned_period.strip()[:16] if isinstance(planned_period, str) and planned_period.strip() else None
+
     return {
         "id": str(uuid.uuid4()),
         "act_type": act_type,
@@ -201,10 +290,15 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
         "proposing_dg": dg,
         "source_url": source_url,
         "policy_areas": policy_areas,
+        # The Commission's indicative timing ("Q3 2026"). A PERIOD, never a date: it
+        # must not reach adoption_date, which means the day the College adopted the act.
+        "planned_adoption_period": planned_period,
+        "is_pipeline": is_pipeline,
+        "norm_title": _normalised_title(title),
     }
 
 
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument(
@@ -236,7 +330,28 @@ def main():
             all_rows = all_rows[: args.limit]
             break
 
-    print(f"[INFO] {len(all_rows)} records normalised (apply={args.apply})")
+    # A pipeline row whose act we already hold under a real C-number is the SAME act
+    # listed twice by the register, once as planned and once as published. 7 of the 322
+    # were like that on 30 Sep 2026. The real act wins; keeping both would hand a
+    # subscriber one act twice, under two different statuses.
+    real_titles = {(r["act_type"], r["norm_title"]) for r in all_rows if not r["is_pipeline"]}
+    kept = []
+    for r in all_rows:
+        if r["is_pipeline"] and (r["act_type"], r["norm_title"]) in real_titles:
+            _SHADOWED.append(r["title"][:80])
+            continue
+        kept.append(r)
+    all_rows = kept
+
+    pipeline_n = sum(1 for r in all_rows if r["is_pipeline"])
+    print(f"[INFO] {len(all_rows)} records normalised (apply={args.apply}); "
+          f"{pipeline_n} announced-but-not-adopted")
+    if _SHADOWED:
+        print(f"[INFO] {len(_SHADOWED)} announced act(s) skipped: already held under a "
+              f"real C-number")
+    if _WEAK_TITLES:
+        print(f"[INFO] {len(_WEAK_TITLES)} announced act(s) skipped: title too thin to "
+              f"identify, e.g. {_WEAK_TITLES[0]!r}")
 
     if not args.apply:
         for r in all_rows[:5]:
@@ -246,56 +361,172 @@ def main():
 
     conn = psycopg2.connect(db_url)
     cur = conn.cursor()
-    # Wipe the original 10 fictitious seed rows. These were inserted by an
-    # earlier hand-curated dev fixture and never matched any real RegDel
-    # entry — keeping them would mean the API returns wrong title↔CELEX
-    # pairs (e.g. seed CELEX 32026R0178 was labelled "MiCA crypto-asset
-    # RTS" but actually points at a regulation about eucalyptus tincture).
-    SEED_REFS = (
-        # delegated
-        "C(2026)2456", "C(2026)2345", "C(2026)1789", "C(2026)1234",
-        "C(2026)0567", "C(2025)9012", "C(2025)8745",
-        # implementing
-        "C(2026)0234", "C(2026)1456", "C(2026)2890",
-    )
-    cur.execute("DELETE FROM secondary_acts WHERE reference IN %s", (SEED_REFS,))
-    print(f"  wiped {cur.rowcount} seed rows")
+    # The hand-curated seed rows this script once wiped are long gone: the first run
+    # removed them. The wipe itself was REMOVED on 30 Sep 2026 because it had started
+    # destroying real acts.
+    #
+    # It matched on a hard-coded list of ten C-numbers, on the assumption that those
+    # codes were invented. They were not invented for long: the Commission has since
+    # issued C(2026)1234 and C(2026)2345 to real implementing regulations (amendments to
+    # Annexes V and XIV), and the register now exports them. Every run therefore DELETED
+    # those two acts and the loop below re-inserted them seconds later with a fresh
+    # uuid4 -- so their `id`, the identifier GovClipping uses for incremental sync,
+    # changed every single day while the row looked untouched.
+    #
+    # A cleanup keyed on values someone else allocates is a cleanup with an expiry date.
+    # If fixture rows ever need removing again, match them on what makes them fixtures
+    # (their fabricated titles), never on an identifier the source controls.
 
-    inserted = updated = errors = 0
-    for r in all_rows:
-        try:
-            cur.execute(
-                """
+    # Two upsert paths, chosen by whether the act has a CELEX.
+    #
+    # CELEX is the identity. `reference` (the C(YYYY)NNNN code) is a LABEL the Commission
+    # can re-issue for the same act, so conflicting on it lets a second row in for a CELEX
+    # we already hold. That produced 783 duplicate pairs once, was cleaned up without
+    # changing this line, and produced 80 more by 30 Sep 2026. Migration 258 adds the
+    # partial unique index that backs the ON CONFLICT (celex) target.
+    #
+    # 731 acts have no CELEX yet (adopted but not published, or draft). For those the
+    # C-number is the only stable handle we have, so they keep the reference path.
+    #
+    # Every updated column is wrapped in COALESCE(EXCLUDED.x, secondary_acts.x): a later
+    # export with an empty cell must not blank a value we already hold. The old statement
+    # assigned EXCLUDED.celex directly, so one empty cell would have erased a good CELEX.
+    SET_CLAUSE = """
+                  title        = COALESCE(EXCLUDED.title, secondary_acts.title),
+                  parent_celex = COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex),
+                  status       = EXCLUDED.status,
+                  proposing_dg = COALESCE(EXCLUDED.proposing_dg, secondary_acts.proposing_dg),
+                  source_url   = COALESCE(EXCLUDED.source_url, secondary_acts.source_url),
+                  policy_areas = COALESCE(EXCLUDED.policy_areas, secondary_acts.policy_areas),
+                  planned_adoption_period = EXCLUDED.planned_adoption_period,
+                  last_updated = NOW()
+    """
+
+    INSERT_HEAD = """
                 INSERT INTO secondary_acts
                   (id, act_type, reference, title, parent_celex, celex, status,
-                   proposing_dg, source_url, policy_areas, scraped_at, first_seen, last_updated)
+                   proposing_dg, source_url, policy_areas, planned_adoption_period,
+                   scraped_at, first_seen, last_updated)
                 VALUES
                   (%(id)s, %(act_type)s, %(reference)s, %(title)s, %(parent_celex)s,
                    %(celex)s, %(status)s, %(proposing_dg)s, %(source_url)s, %(policy_areas)s,
-                   NOW(), NOW(), NOW())
+                   %(planned_adoption_period)s, NOW(), NOW(), NOW())
+    """
+
+    # On the CELEX path `reference` is deliberately NOT overwritten. When RegDel hands us
+    # a different C-number for an act we already hold, we cannot tell from the export
+    # which one is right -- and in 3 of the 7 cases found on 30 Sep the number we already
+    # had contradicted its own adoption year, so the incoming one was the better value.
+    # Keeping both, one in `reference` and the other in merged_from, leaves the evidence
+    # for a human instead of silently picking. The @> guard stops the same alternative
+    # being appended on every daily run.
+    SQL_BY_CELEX = INSERT_HEAD + """
+                ON CONFLICT (celex) WHERE celex IS NOT NULL AND celex <> ''
+                DO UPDATE SET
+    """ + SET_CLAUSE + """,
+                  merged_from = CASE
+                    WHEN secondary_acts.reference IS DISTINCT FROM EXCLUDED.reference
+                     AND NOT (COALESCE(secondary_acts.merged_from, '[]'::jsonb)
+                              @> jsonb_build_array(jsonb_build_object(
+                                   'reference', EXCLUDED.reference)))
+                    THEN COALESCE(secondary_acts.merged_from, '[]'::jsonb)
+                         || jsonb_build_array(jsonb_build_object(
+                              'reference', EXCLUDED.reference,
+                              'source', 'regdel_alternative_ccode',
+                              'seen', NOW()::text))
+                    ELSE secondary_acts.merged_from END
+                RETURNING (xmax = 0) AS was_inserted
+    """
+
+    SQL_BY_REFERENCE = INSERT_HEAD + """
                 ON CONFLICT (reference) DO UPDATE SET
-                  title = EXCLUDED.title,
-                  parent_celex = EXCLUDED.parent_celex,
-                  celex = EXCLUDED.celex,
-                  status = EXCLUDED.status,
-                  proposing_dg = EXCLUDED.proposing_dg,
-                  source_url = EXCLUDED.source_url,
-                  policy_areas = EXCLUDED.policy_areas,
-                  last_updated = NOW()
-                """,
-                r,
-            )
-            inserted += 1
+    """ + SET_CLAUSE + """,
+                  celex = COALESCE(EXCLUDED.celex, secondary_acts.celex)
+                RETURNING (xmax = 0) AS was_inserted
+    """
+
+    # Same as above but the CELEX WE hold wins. Used only on the fallback path, where the
+    # export's CELEX has already been shown to disagree with a row we corrected against
+    # Cellar. COALESCE order is reversed on purpose: ours first, theirs only if we have none.
+    SQL_BY_REFERENCE_KEEP_CELEX = INSERT_HEAD + """
+                ON CONFLICT (reference) DO UPDATE SET
+    """ + SET_CLAUSE + """,
+                  celex = COALESCE(secondary_acts.celex, EXCLUDED.celex)
+                RETURNING (xmax = 0) AS was_inserted
+    """
+
+    # Counted from what the database RETURNS, not from how many statements were sent.
+    # The old loop incremented `inserted` once per attempt, so an update and an insert
+    # were indistinguishable and the total was really "rows tried".
+    inserted = updated = errors = celex_kept = 0
+    for n, r in enumerate(all_rows, 1):
+        # SAVEPOINT per row. conn.rollback() discards every uncommitted row in the
+        # batch, not just the one that failed, so a single bad record used to throw
+        # away up to 200 good ones silently. Same fix as ingest_transparency_meetings.
+        try:
+            cur.execute("SAVEPOINT one_row")
+            try:
+                cur.execute(SQL_BY_CELEX if r.get("celex") else SQL_BY_REFERENCE, r)
+            except psycopg2.errors.UniqueViolation:
+                # The CELEX path found no row to update and tried to INSERT, but this
+                # act's C-number is already held by a row carrying a DIFFERENT CELEX.
+                # That happens when we have corrected a CELEX the register still gets
+                # wrong: C(2015)9013 is Regulation (EU) 2016/451, which RegDel exports
+                # as 32015R0451 -- a CELEX that does not exist in Cellar at all.
+                #
+                # Fall back to matching on the C-number, and let the CELEX we already
+                # hold win. Our value is the one checked against Cellar; re-applying the
+                # export's would silently undo the correction on the next daily run.
+                cur.execute("ROLLBACK TO SAVEPOINT one_row")
+                cur.execute(SQL_BY_REFERENCE_KEEP_CELEX, r)
+                celex_kept += 1
+            row = cur.fetchone()
+            if row and row[0]:
+                inserted += 1
+            else:
+                updated += 1
+            cur.execute("RELEASE SAVEPOINT one_row")
         except Exception as exc:
+            cur.execute("ROLLBACK TO SAVEPOINT one_row")
             print(f"  [ERR] {r['reference']}: {exc}")
-            conn.rollback()
             errors += 1
-        if inserted % 200 == 0 and inserted > 0:
+        # Commit on rows PROCESSED, not on rows inserted: after the first full run
+        # almost everything is an update, so an `inserted % 200` gate would hold the
+        # whole run in one transaction.
+        if n % 200 == 0:
             conn.commit()
     conn.commit()
     conn.close()
-    print(f"[DONE] upserted {inserted} errors={errors}")
+
+    print(f"[DONE] inserted={inserted} updated={updated} errors={errors} "
+          f"of {len(all_rows)} record(s)")
+    if celex_kept:
+        print(f"[INFO] {celex_kept} act(s) kept the CELEX we hold over the one the "
+              f"register exports (ours is the one verified against Cellar)")
+
+    if _UNMAPPED_STATUSES:
+        print("[WARN] status value(s) the register uses that we do not map; "
+              "stored as 'unknown':")
+        for k, v in sorted(_UNMAPPED_STATUSES.items(), key=lambda kv: -kv[1]):
+            print(f"        {k!r}: {v} act(s)")
+        print("        add them to _STATUS_MAP and to secondary_act_status_enum")
+
+    # Three states, never two. A run that stored nothing is not a success: the RegDel
+    # export can return an empty or restructured sheet, and a silent green would hide
+    # it for weeks (feedback_a_green_signal_from_a_check_that_never_looked).
+    if not all_rows:
+        print("[FATAL] the RegDel export yielded no usable rows")
+        return 1
+    if errors and inserted + updated == 0:
+        print(f"[FATAL] every row failed ({errors} error(s))")
+        return 1
+    if errors:
+        print(f"[DEGRADED] {errors} row(s) rejected, {inserted + updated} stored")
+        return 0
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    # sys.exit(main()), not main(): a script that returns 1 but exits 0 is
+    # a failure the scheduler records as a success.
+    sys.exit(main())

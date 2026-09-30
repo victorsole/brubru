@@ -187,12 +187,27 @@ class SecondaryActTypeEnum(str, enum.Enum):
 
 
 class SecondaryActStatusEnum(str, enum.Enum):
+    """Mirrors secondary_act_status_enum in the database (migrations 038 + 259).
+
+    The six below the line were added on 30 Sep 2026: the RegDel register uses ten
+    status values and only six were mapped, so 356 acts -- including 24 that Parliament
+    or Council had OBJECTED to -- were stored as 'draft', and 8 withdrawn acts could not
+    be stored at all. Any value added here must also be added to the database enum, or
+    the ingest fails on the row that first uses it.
+    """
     DRAFT = "draft"
     ADOPTED = "adopted"
     OBJECTED = "objected"
     REJECTED = "rejected"
     PUBLISHED = "published"
     UNKNOWN = "unknown"
+    # added 30 Sep 2026, see migration 259
+    WITHDRAWN = "withdrawn"
+    CANCELLED = "cancelled"
+    PLANNED = "planned"
+    ON_HOLD = "on_hold"
+    NOTIFIED = "notified"
+    SCRUTINY_FINISHED = "scrutiny_finished"
 
 
 class SecondaryAct(Base):

@@ -875,7 +875,7 @@ To monitor secondary legislation flowing from a flagship regulation (e.g. all de
 **Input**
 - `parent_celex` — CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).
 - `proposing_dg` — DG code.
-- `status` — `proposed` / `scrutiny` / `adopted` / `objected` / `withdrawn` (status enum).
+- `status` — one of `draft`, `planned`, `adopted`, `published`, `objected`, `rejected`, `withdrawn`, `cancelled`, `on_hold`, `notified`, `scrutiny_finished`, `unknown`. Mirrors the Commission RegDel register vocabulary; `unknown` means the register used a value we do not yet map.
 - `q` — substring search on title + description.
 - `published_from`, `published_to` — date filter on `publication_date`.
 - `updated_from` — incremental sync.
