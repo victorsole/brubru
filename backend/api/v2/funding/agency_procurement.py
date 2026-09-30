@@ -221,10 +221,15 @@ register_resource(
     router, body_code="eea", item_type="tender", slug="eea-tenders",
     noun="EEA calls for tender",
     body_name="the European Environment Agency", acronym="EEA", tag="v2-funding",
-    source="the EEA procurement-and-grants page (informational; opportunities live on the F&T Portal).",
-    extra="EEA publishes its open calls on the EU F&T Portal rather than on its own site. This "
-          "endpoint returns an empty list and is wired so the agency is discoverable; EEA "
-          "opportunities surface via the F&T Portal ingest (ft-calls-for-tenders / -proposals).",
+    source="the EU Funding & Tenders portal (EEA's notices, by its buyer id) and EEA's own "
+           "procurement-and-grants pages (its calls for interest).",
+    extra="EEA procurement, the whole archive from 2015: every EEA notice on the Funding & "
+          "Tenders portal (calls for tender and ex-ante notices), plus EEA's own calls for "
+          "expression of interest (remunerated experts, Topic Centres), the kind stated in the "
+          "body. Each item carries `tender_reference` (the portal notice id; none for EEA's own "
+          "calls), `status` (open, forthcoming or closed, as on the portal) and `deadline`; "
+          "`document_date` is the publication date. Filter with q.",
+    procurement=True,
 )
 
 # --- EU-OSHA — European Agency for Safety and Health at Work -------------- #

@@ -1041,12 +1041,118 @@ def ingest_fra_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
 _EEA = "https://www.eea.europa.eu"
 
 
+# EEA. API audit, 30 Sep 2026 ("Walk · EEA"): this was a stub returning [], so
+# /eea-tenders had never held a row, while the Funding & Tenders portal holds 212 EEA
+# notices (2015-2026) under EEA's buyer id, the id EEA's own procurement page links.
+# Victor's decisions, 30 Sep: read EEA's notices from SEDIA by that buyer id, in the
+# shared procurement shape; add EEA's own calls for interest (published on its Plone
+# site, whose pages have a JSON form at /++api++/), the kind in the body.
+_EEA_FT_BUYER_ID = "47352390"
+_EEA_CALLS = ("remunerated-scientific-experts", "topic-centres-call-for-interest")
+_SEDIA_STATUS = {"forthcoming": "forthcoming", "open": "open", "closed": "closed"}
+
+
+def _sedia_helpers():
+    """The Funding & Tenders reader lives in scripts/ingest_funding_sedia.py; reuse its
+    request and normaliser rather than a second copy of either."""
+    try:
+        from scripts import ingest_funding_sedia as sedia
+    except ImportError:  # run from backend/scripts (sync_economy's own directory)
+        import ingest_funding_sedia as sedia
+    return sedia
+
+
+def _eea_ft_notices(now: datetime) -> list[Item]:
+    sedia = _sedia_helpers()
+    query = {"bool": {"must": [{"terms": {"type": ["0"]}},
+                               {"terms": {"cftPartyLegalEntityId": [_EEA_FT_BUYER_ID]}}]}}
+    results, page = [], 1
+    while True:
+        batch = sedia.fetch_sedia_page(page, page_size=100, query=query).get("results") or []
+        results += batch
+        if len(batch) < 100:
+            break
+        page += 1
+    if not results:
+        raise RuntimeError("SEDIA returned no EEA notices for buyer id " + _EEA_FT_BUYER_ID)
+    items, seen = [], set()
+    for res in results:
+        row = sedia.normalise_row(res)
+        if not row or not row.get("topic_id") or row["topic_id"] in seen:
+            continue
+        seen.add(row["topic_id"])
+        deadline = _iso(str(row["deadline"])) if row.get("deadline") else None
+        published = _iso(str(row["published_at"])) if row.get("published_at") else None
+        status = _SEDIA_STATUS.get((row.get("status") or "").lower(), "closed")
+        if status == "open" and deadline is not None and deadline < now:
+            status = "closed"
+        kind = "ex-ante publicity" if row["topic_id"].endswith("-EXA") else "call for tender"
+        facts = [("Notice", row["topic_id"]), ("Procedure type", kind),
+                 ("Contract type", row.get("contract_type") or ""),
+                 ("Published", published.date().isoformat() if published else ""),
+                 ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
+                 ("Status on the portal", status)]
+        facts = [(k, v) for k, v in facts if v]
+        desc = [p for p in re.split(r"\n{2,}", row.get("description") or "") if p.strip()]
+        url = row.get("source_url") or ""
+        items.append(Item(
+            body_code="eea", item_type="tender", title=clean(row["title"])[:120], public_url=url,
+            summary=clean(" · ".join(b for b in [row["topic_id"], kind,
+                                                   deadline.date().isoformat() if deadline else ""] if b)),
+            body_txt=clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), url])),
+            body_html=clean(f"<h1>{_html.escape(row['title'])}</h1>"
+                            + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
+                            + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>"
+                                               for k, v in facts) + "</dl>"
+                            + f'<p><a href="{_html.escape(url)}">{_html.escape(url)}</a></p>'),
+            document_date=published if published and (deadline is None or published <= deadline) else None,
+            creation_date=now, source_kind="eea_ft_notice", guid=row["topic_id"],
+            extras={"tender_reference": row["topic_id"], "status": status, "deadline": deadline},
+        ))
+    return items
+
+
+def _eea_own_calls(now: datetime) -> list[Item]:
+    """EEA's own calls for interest, read from its Plone JSON API."""
+    items = []
+    for sub in _EEA_CALLS:
+        page = f"{_EEA}/en/about/procurement-and-grants/{sub}"
+        r = requests.get(f"{_EEA}/++api++/en/about/procurement-and-grants/{sub}",
+                         headers={**_HEADERS, "Accept": "application/json"}, timeout=40)
+        r.raise_for_status()
+        d = r.json()
+        import json as _json
+        text = _html.unescape(re.sub(r"\s+", " ", " ".join(
+            re.findall(r'"text": "([^"]{3,})"', _json.dumps(d.get("blocks", {}), ensure_ascii=False)))))
+        text = text.replace("\u00a0", " ").replace("\xa0", " ")
+        dm = re.search(r"Deadline for [^:]{0,80}?:?\s*(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})", text)
+        deadline = _parse_date(dm.group(1)) if dm else None
+        published = _iso(d.get("effective"))
+        status = "open" if deadline is not None and deadline >= now else "closed"
+        title = clean(d.get("title") or sub)
+        desc = [x for x in [d.get("description") or "", text[:4000]] if x]
+        facts = [("Procedure type", "call for expression of interest"),
+                 ("Published", published.date().isoformat() if published else ""),
+                 ("Deadline", deadline.date().isoformat() if deadline else "")]
+        facts = [(k, v) for k, v in facts if v]
+        items.append(Item(
+            body_code="eea", item_type="tender", title=title[:120], public_url=page,
+            summary=clean(" · ".join(b for b in ["call for expression of interest",
+                                                   deadline.date().isoformat() if deadline else ""] if b)),
+            body_txt=clean("\n".join([title, *desc, *(f"{k}: {v}" for k, v in facts)])),
+            body_html=clean(f"<h1>{_html.escape(title)}</h1>"
+                            + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
+                            + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>"
+                                               for k, v in facts) + "</dl>"),
+            document_date=published, creation_date=now, source_kind="eea_call_for_interest",
+            guid=page, extras={"tender_reference": None, "status": status, "deadline": deadline},
+        ))
+    return items
+
+
 def ingest_eea_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """EEA publishes its open calls on the EU F&T Portal, not on its own
-    site. The on-agency page is informational + past-contracts PDFs only.
-    Stub returns [] so cron does not error; EEA opportunities flow through
-    the F&T ingest (FtCallForTenders / FtCallForProposals)."""
-    return []
+    now = datetime.now(timezone.utc)
+    return _eea_ft_notices(now) + _eea_own_calls(now)
 
 
 # --- EU-OSHA — Drupal Views views-row + per-year archive ------------------ #
