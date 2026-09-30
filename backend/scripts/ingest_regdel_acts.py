@@ -49,6 +49,21 @@ EXPORT_FILTER = urllib.parse.quote('{"rowsPerPage":6,"firstRowOffset":0,"languag
 
 
 def get_env(k: str) -> str:
+    """The value from the process environment, else from the repo-root .env.
+
+    The environment comes FIRST because it is the only one that exists where this runs:
+    the Railway container ships no .env, so a .env-only reader returns "" and the job
+    dies on its first line. Three sibling jobs were fixed for this on 29 Sep 2026 and
+    this one was missed, because its visible failure was a missing `pandas` and the
+    DATABASE_URL fault was hidden behind it. Fixing the import revealed the second fault
+    on the very next run. tests/test_scheduled_scripts_read_the_environment.py now
+    asserts this for every scheduled script, so the class cannot come back one file at a
+    time.
+    """
+    import os
+    value = os.environ.get(k)
+    if value:
+        return value
     if not ENV.exists():
         return ""
     for line in ENV.read_text().splitlines():
