@@ -779,59 +779,170 @@ def ingest_ecdc_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return items
 
 
-# --- ECHA — Playwright text snapshot -------------------------------------- #
+# --- ECHA — current and closed calls, each procedure's own page ------------ #
+# API audit, 30 Sep 2026 ("Walk · ECHA"): the reader took the current page only (4 of
+# 113 procedures), pointed every row at the listing page (#reference), wrote "Open" on
+# every body, stored the deadline as document_date, dropped rows without a reference
+# and launched the browser twice. ECHA publishes no publication date. Victor's
+# decisions, 30 Sep: read the closed-calls page too; status open only for the current
+# page with the deadline ahead, closed otherwise; document_date = the publication date
+# of the linked Funding & Tenders notice (SEDIA startDate), else NULL; calls for
+# interest are eoi_call, everything else tender, with the procedure type in the body.
+# ECHA answers plain HTTP with 403 everywhere; one browser session serves the run.
 _ECHA = "https://echa.europa.eu"
 _ECHA_PROCUREMENT_URL = _ECHA + "/about-us/business-opportunities"
+_ECHA_CLOSED_URL = _ECHA_PROCUREMENT_URL + "/closed-calls"
+_ECHA_CACHE: dict = {}
+_ECHA_CACHE_TTL = 1800
+_FT_NOTICE = re.compile(
+    r"funding-tenders/opportunities/portal/screen/opportunities/tender-details/"
+    r"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-(?:CN|PIN|CAN))")
 
 
-def _parse_echa_text(text: str) -> list[Item]:
-    """ECHA WAF-blocks scripted access; Playwright (text mode) flattens the
-    listing table to per-row blocks: <title>\\n(<REF>)\\t<TYPE>\\t<DEADLINE>."""
-    now = datetime.now(timezone.utc)
-    out: list[Item] = []
-    lines = text.splitlines()
-    i = 0
-    while i < len(lines) - 1:
-        ln = lines[i].strip()
-        nxt = lines[i + 1].strip()
-        if ln and nxt.startswith("(") and ")" in nxt:
-            ref_end = nxt.find(")")
-            reference = nxt[1:ref_end]
-            rest = nxt[ref_end + 1:].lstrip("\t").strip()
-            parts = [p.strip() for p in rest.split("\t") if p.strip()]
-            if len(parts) >= 2:
-                ttype, deadline_text = parts[0], parts[1]
-                title = ln
-                dm = _DATE.search(deadline_text)
-                dl = _parse_date(dm.group(1)) if dm else None
-                url = f"{_ECHA_PROCUREMENT_URL}#{reference}"
-                is_eoi = "interest" in ttype.lower() or "CEI" in reference.upper()
-                out.append(_build(
-                    body_code="echa",
-                    item_type=("eoi_call" if is_eoi else "tender"),
-                    title=title, url=url, reference=reference, status="Open",
-                    deadline=dl, now=now, source_kind="echa_procurement",
-                ))
-                i += 2
-                continue
-        i += 1
-    return out
+def _echa_rows(html: str, *, current: bool) -> list[dict]:
+    """Rows of the business-opportunities table: title+link, (reference), Type, Deadline."""
+    m = re.search(r"<table.*?</table>", html, re.S)
+    rows = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", m.group(0) if m else "", re.S):
+        am = re.search(r'<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>', tr, re.S)
+        if not am:
+            continue
+        cells = [_txt(c) for c in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
+        first = cells[0] if cells else ""
+        rm = re.search(r"\(([^()]+)\)\s*$", first)
+        dm = _DATE.search(cells[2]) if len(cells) > 2 else None
+        href = _html.unescape(am.group(1))
+        rows.append({
+            "title": _txt(am.group(2)),
+            "url": href if href.startswith("http") else _ECHA + href,
+            "reference": rm.group(1).strip() if rm else "",
+            "kind": cells[1] if len(cells) > 1 else "",
+            "deadline": _parse_date(dm.group(1)) if dm else None,
+            "current": current,
+        })
+    return rows
 
 
-def _fetch_echa_playwright() -> str:
+def _echa_detail(html: str) -> dict:
+    m = re.search(r'<div class="single-procurement">(.*?)(?:<form |<footer)', html, re.S)
+    block = m.group(1) if m else ""
+    paras = [p for p in (_txt(x) for x in re.findall(r"<p[^>]*>(.*?)</p>", block, re.S)) if p]
+    links = sorted(set(u for u in (_html.unescape(x) for x in re.findall(r'href="(https?://[^"]+)"', block))
+                       if "echa.europa.eu" not in u))
+    notices = list(dict.fromkeys(_FT_NOTICE.findall(block)))
+    return {"description": paras, "links": links, "notices": notices}
+
+
+_SEDIA_SEARCH = "https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text={text}&pageNumber=1&pageSize=5"
+
+
+def _ft_notice_date(identifier: str) -> datetime | None:
+    """Publication date (SEDIA startDate) of one Funding & Tenders notice, by its exact id."""
+    from urllib.parse import quote as _q
+    try:
+        r = requests.post(_SEDIA_SEARCH.format(text=_q(f'"{identifier}"')),
+                          files={"languages": (None, '["en"]', "application/json")},
+                          headers=_HEADERS, timeout=40)
+        r.raise_for_status()
+        results = r.json().get("results") or []
+    except (requests.RequestException, ValueError) as exc:
+        print(f"    [WARN] F&T notice {identifier}: {exc}", flush=True)
+        return None
+    for res in results:
+        md = res.get("metadata") or {}
+        if (md.get("identifier") or [None])[0] == identifier:
+            start = (md.get("startDate") or [None])[0]
+            return _parse_iso_sedia(start)
+    return None
+
+
+def _parse_iso_sedia(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
+    deadline = row["deadline"]
+    status = "open" if row["current"] and (deadline is None or deadline >= now) else "closed"
+    ref = row["reference"]
+    is_call = "interest" in row["kind"].lower() or "/CEI/" in ref.upper()
+    item = Item(
+        body_code="echa", item_type="eoi_call" if is_call else "tender",
+        title=clean(row["title"])[:120], public_url=row["url"],
+        summary=clean(" · ".join(b for b in [ref, row["kind"],
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        creation_date=now, source_kind="echa_procurement", guid=ref or row["url"],
+        extras={"tender_reference": ref or None, "status": status, "deadline": deadline},
+    )
+    if detail is None:
+        return item
+    notice = next((n for n in detail["notices"] if n.endswith("-CN")), None) or \
+        next(iter(detail["notices"]), None)
+    published = _ft_notice_date(notice) if notice else None
+    facts = [("Reference", ref), ("Procedure type", row["kind"]),
+             ("Status on ECHA's site", "current call" if row["current"] else "closed call"),
+             ("Funding & Tenders notice", notice or ""),
+             ("Notice published", published.date().isoformat() if published else ""),
+             ("Deadline", deadline.date().isoformat() if deadline else "")]
+    facts = [(k, v) for k, v in facts if v]
+    desc, links = detail["description"], detail["links"]
+    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1>"
+        + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
+        + "</dl>"
+        + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
+           + "</ul>" if links else ""))
+    # A notice cannot be published after its own deadline (see the ECDC note).
+    item.document_date = published if published and (deadline is None or published <= deadline) else None
+    return item
+
+
+def _echa_all(*, fetch_bodies: bool = True) -> list[Item]:
+    """Current and closed calls in ONE browser session; detail pages for every current
+    call each run, and for the closed archive once, with ECHA_FULL_DETAILS=1."""
+    import os
+    import time
     from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    full = os.environ.get("ECHA_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _ECHA_CACHE.get(key)
+    if hit and time.time() - hit[0] < _ECHA_CACHE_TTL:
+        return hit[1]
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set = set()
     with WafBrowserFetcher() as f:
-        return f.fetch(_ECHA_PROCUREMENT_URL, strip_chrome=True).text
+        rows = (_echa_rows(f.fetch(_ECHA_PROCUREMENT_URL, strip_chrome=False).html, current=True)
+                + _echa_rows(f.fetch(_ECHA_CLOSED_URL, strip_chrome=False).html, current=False))
+        if not rows:
+            raise RuntimeError("ECHA business-opportunities pages parsed to zero rows")
+        for row in rows:
+            if row["url"] in seen:   # a call moving to the closed page mid-run
+                continue
+            seen.add(row["url"])
+            detail = None
+            if fetch_bodies and (row["current"] or full):
+                try:
+                    detail = _echa_detail(f.fetch(row["url"], strip_chrome=False).html)
+                except Exception as exc:  # noqa: BLE001 - one page must not stop the run
+                    print(f"    [WARN] echa detail {row['url'][-60:]}: {type(exc).__name__}", flush=True)
+            items.append(_echa_item(row, detail, now))
+    _ECHA_CACHE[key] = (time.time(), items)
+    return items
 
 
 def ingest_echa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    items = _parse_echa_text(_fetch_echa_playwright())
-    return [i for i in items if i.item_type == "tender"]
+    return [i for i in _echa_all(fetch_bodies=fetch_bodies) if i.item_type == "tender"]
 
 
 def ingest_echa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    items = _parse_echa_text(_fetch_echa_playwright())
-    return [i for i in items if i.item_type == "eoi_call"]
+    return [i for i in _echa_all(fetch_bodies=fetch_bodies) if i.item_type == "eoi_call"]
 
 
 # --- EIGE — defensive empty-listing handler ------------------------------- #

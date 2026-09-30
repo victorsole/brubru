@@ -170,17 +170,27 @@ register_resource(
     router, body_code="echa", item_type="tender", slug="echa-tenders",
     noun="ECHA calls for tender",
     body_name="the European Chemicals Agency", acronym="ECHA", tag="v2-funding",
-    source="the ECHA Business Opportunities page (Playwright-rendered, WAF-protected).",
-    extra="ECHA procurement — IUCLID and REACH-IT IT services, scientific data, translation, "
-          "chemicals studies. Each call with reference and deadline. CEIs are split into the "
-          "calls endpoint. Filter with q.",
+    source="ECHA's current and closed business-opportunity pages and each procedure's own page.",
+    extra="ECHA procurement (IUCLID and REACH-IT IT services, scientific data, translation, "
+          "chemicals studies), the whole archive from 2009: open, restricted and negotiated "
+          "procedures, market consultations, auctions and contract advertisements, the "
+          "procedure type stated in the body. Each item carries `tender_reference`, `status` "
+          "(open only while on ECHA's current page with the deadline ahead) and `deadline`; "
+          "`document_date` is the publication date of the linked Funding & Tenders notice, "
+          "null where there is none (ECHA publishes no date itself). Calls for interest are "
+          "at /echa-calls. Filter with q.",
+    procurement=True,
 )
 register_resource(
     router, body_code="echa", item_type="eoi_call", slug="echa-calls",
     noun="ECHA calls for expression of interest",
     body_name="the European Chemicals Agency", acronym="ECHA", tag="v2-funding",
-    source="the ECHA Business Opportunities page (CEI rows).",
-    extra="ECHA calls for expression of interest (e.g. external-expert lists). Filter with q.",
+    source="ECHA's current and closed business-opportunity pages (calls for interest).",
+    extra="ECHA calls for expression of interest (e.g. lists of external experts), the whole "
+          "archive. Each item carries `tender_reference`, `status` and `deadline`; "
+          "`document_date` is the linked Funding & Tenders notice's publication date, null "
+          "where there is none. Filter with q.",
+    procurement=True,
 )
 
 # --- EIGE — European Institute for Gender Equality ------------------------ #
