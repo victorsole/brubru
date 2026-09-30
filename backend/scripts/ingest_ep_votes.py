@@ -1,4 +1,23 @@
 """
+RETIRED 30 September 2026. DO NOT RUN. Kept only as the record of what it did.
+
+This script wrote a hardcoded VOTES_SEED of 15 rows into `ep_votes`, and
+/api/v2/parliament/votes served them to a paying client as the EP vote feed for four
+months. Its own docstring defended them: "Each vote is real (P10_TA references match
+Texts Adopted in our DB)". The references do exist. They belong to OTHER ACTS:
+P10_TA(2026)0104 is "Global Gateway - past impacts and future orientation", not the
+"AI Act delegated regulation on high-risk classification" the seed calls it, and
+P10_TA(2026)0105 is a request to waive the immunity of an MEP, not the Critical Raw
+Materials Act. The reference was checked for EXISTENCE and not for IDENTITY, so invented
+titles and invented tallies were pinned to real unrelated references.
+
+The real votes were already being collected the whole time: scripts/sync_ep_votes.py
+writes ep_roll_call_votes (465 votes) and ep_roll_call_records (178,542 per-MEP records)
+from the EP's own doceo register. The endpoint now reads those. The 15 rows are deleted;
+docs/backups/ep_votes_fabricated_seed_removed_2026-09-30.json holds what was removed.
+
+Original header follows.
+
 Ingest EP roll-call votes — direct DB-write path.
 
 The existing services/data_import/howtheyvote_importer.py blocks on the
@@ -9,6 +28,17 @@ script ingests a representative recent sample of votes directly.
 
 Each vote is real (P10_TA references match Texts Adopted in our DB).
 """
+
+import sys as _sys
+
+
+def _retired():
+    _sys.exit(
+        "[REFUSED] ingest_ep_votes.py is retired: it seeded 15 fabricated votes that were "
+        "served as real. Use scripts/sync_ep_votes.py, which reads the EP's doceo "
+        "roll-call register."
+    )
+
 
 import datetime as dt
 import uuid
@@ -94,4 +124,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    _retired()

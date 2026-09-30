@@ -322,6 +322,28 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                   f"Newest-first, so the next run resumes at the tail.")
         else:
             print(f"[INFO] complete in {elapsed:.0f}s, nothing skipped.")
+
+        # Three states, not two. This job reported success on 440 consecutive runs while
+        # the table the API served stood still since April, because it never returned a
+        # status at all: cron could only see "the process exited 0".
+        #
+        # "Nothing stored" is NOT a failure on its own -- during recess there is
+        # genuinely nothing to add. What IS a failure is attempting sittings, having
+        # every one of them yield no roll-call page, and storing nothing: that is the
+        # source being gone, and it must not read as a quiet week.
+        stored = sum(v for k, v in counts.items()
+                     if k.endswith("_added") or k.endswith("_updated"))
+        attempted = len(sittings)
+        if attempted == 0:
+            print("[OK] no sitting had adopted texts awaiting a vote; nothing to do.")
+            return 0
+        if stored == 0 and counts.get("no_rcv", 0) > 0:
+            print(f"[ERROR] {attempted} sitting(s) attempted, none returned a roll-call "
+                  f"page, and nothing was stored. Treating this as a dead source rather "
+                  f"than a quiet day.")
+            return 1
+        print(f"[OK] {stored} vote(s) added or updated across {attempted} sitting(s).")
+        return 0
     finally:
         db.close()
 
@@ -340,9 +362,9 @@ def main():
     args = p.parse_args()
 
     coms = [c.strip().upper() for c in args.committees.split(",")] if args.committees else None
-    run(coms, args.since, args.ta, args.limit, args.apply, args.max_sittings,
-        deadline_seconds=args.deadline_seconds)
+    return run(coms, args.since, args.ta, args.limit, args.apply, args.max_sittings,
+               deadline_seconds=args.deadline_seconds) or 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

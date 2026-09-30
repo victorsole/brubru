@@ -283,7 +283,14 @@ async def list_amendments(
 
 class VoteItem(BaseModel):
     id: str
-    htv_id: int
+    htv_id: Optional[int] = Field(
+        None,
+        description=(
+            "HowTheyVote's id. NULL since 30 Sep 2026: votes now come from the EP's own "
+            "doceo roll-call register, which has no HowTheyVote id. Kept in the response "
+            "so the field a client already reads does not disappear. Use `id`."
+        ),
+    )
     timestamp: datetime
     display_title: str
     reference: Optional[str] = None
@@ -320,6 +327,82 @@ class VoteItem(BaseModel):
     creation_date: Optional[datetime] = Field(
         None,
         description="When Brubru last refreshed this vote (alias of updated_at).",
+    )
+
+
+def _rollcall_to_item(r) -> "VoteItem":
+    """An ep_roll_call_votes row in the SHAPE A CLIENT ALREADY POLLS.
+
+    The endpoint served `ep_votes` from 13 May 2026. Migration 098 created the doceo
+    roll-call store on 4 June and said "we deliberately do NOT touch" ep_votes -- a
+    decision taken from the writer's side, with nobody asking who was reading it. Four
+    months later the endpoint was still serving 15 hardcoded seed rows while 465 real
+    votes and 178,542 per-MEP records sat one table away.
+
+    The field NAMES are kept rather than corrected, because GovClipping polls them daily
+    and a rename is the same harm we spent this week removing. `htv_id` has no meaning
+    here and is null; the new facts (level, committee, breakdowns) are additions.
+    """
+    import html as _html
+    title = r.title or (r.report_ref or "")
+    # The roll-call store writes "adopted"/"rejected"; the published contract has always
+    # said ADOPTED | REJECTED | UNKNOWN, and a client filtering on it would silently
+    # match nothing if the case changed under them.
+    result = (r.result or "").upper() or None
+    public_url = r.source_url
+    # vote_date is a DATE here and the contract's `timestamp` is a datetime. Midnight on
+    # the vote day is the honest widening: we do not know the time, and inventing one
+    # would put a precision in the field that the source never gave us.
+    # sitting_date is the source's own fallback, not an invented one. One row in 465
+    # carries neither, and it is a Council vote, which this endpoint no longer serves.
+    raw_when = r.vote_date or r.sitting_date
+    when = (datetime.combine(raw_when, datetime.min.time())
+            if isinstance(raw_when, date) and not isinstance(raw_when, datetime)
+            else raw_when)
+    lines = [title]
+    parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+    for k, v in [
+        ("Level", r.level),
+        ("Committee", r.committee_code),
+        ("Report", r.report_ref),
+        ("Procedure", r.procedure_ref),
+        ("Texts adopted", r.ta_reference),
+        ("For", r.votes_for),
+        ("Against", r.votes_against),
+        ("Abstention", r.votes_abstention),
+        ("Result", result),
+        ("Vote date", r.vote_date),
+    ]:
+        if v in (None, "") and k not in ("For", "Against", "Abstention"):
+            continue
+        lines.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    return VoteItem(
+        id=str(r.id),
+        htv_id=None,
+        timestamp=when,
+        display_title=title,
+        reference=r.report_ref,
+        description=r.subject,
+        procedure_reference=r.procedure_ref,
+        procedure_type=None,
+        procedure_stage=r.level,
+        amendment_number=None,
+        is_main=(r.level == "plenary"),
+        count_for=int(r.votes_for or 0),
+        count_against=int(r.votes_against or 0),
+        count_abstention=int(r.votes_abstention or 0),
+        count_did_not_vote=0,
+        result=result,
+        texts_adopted_reference=r.ta_reference,
+        updated_at=r.updated_at,
+        public_url=public_url,
+        body_txt="\n".join(lines),
+        body_html="".join(parts_html),
+        document_date=(raw_when if isinstance(raw_when, date)
+                       and not isinstance(raw_when, datetime)
+                       else (raw_when.date() if raw_when else None)),
+        creation_date=r.updated_at or r.created_at,
     )
 
 
@@ -429,33 +512,40 @@ async def list_votes(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[VoteItem]:
-    query = db.query(EPVote)
+    # ep_roll_call_votes, not ep_votes: the doceo store is the one the sync writes and
+    # the one MEUB reads. ep_votes held 15 hardcoded seed rows and nothing since April.
+    from models.ep_vote import EpVote as RollCallVote
+
+    # EP votes only. ep_roll_call_votes also holds 32 Council QMV votes, written by the
+    # separate votes_council sync; serving those here would attribute a Council decision
+    # to the Parliament. They need their own route under /council, which does not exist
+    # yet and is filed rather than bolted on here.
+    query = db.query(RollCallVote).filter(RollCallVote.level.in_(("plenary", "committee")))
     filters = []
     if procedure_reference:
-        filters.append(EPVote.procedure_reference == procedure_reference)
+        filters.append(RollCallVote.procedure_ref == procedure_reference)
     if reference:
-        filters.append(EPVote.reference == reference)
+        filters.append(RollCallVote.report_ref == reference)
     if is_main is not None:
-        filters.append(EPVote.is_main == is_main)
+        # "main" meant the plenary vote rather than a sub-amendment; the doceo store
+        # says the same thing with `level`.
+        filters.append(RollCallVote.level == ("plenary" if is_main else "committee"))
     if result:
-        try:
-            filters.append(EPVote.result == VoteResult(result.upper()))
-        except ValueError:
-            pass
+        filters.append(func.upper(RollCallVote.result) == result.upper())
     if q:
-        filters.append(EPVote.display_title.ilike(f"%{q}%"))
+        filters.append(RollCallVote.title.ilike(f"%{q}%"))
     if published_from:
-        filters.append(EPVote.timestamp >= published_from)
+        filters.append(RollCallVote.vote_date >= published_from)
     if published_to:
-        filters.append(EPVote.timestamp <= datetime.combine(published_to, datetime.max.time()))
+        filters.append(RollCallVote.vote_date <= datetime.combine(published_to, datetime.max.time()))
     if updated_from:
-        filters.append(EPVote.updated_at >= updated_from)
+        filters.append(RollCallVote.updated_at >= updated_from)
     if filters:
         query = query.filter(and_(*filters))
 
     total = query.count()
-    rows = stable(query.order_by(EPVote.timestamp.desc())).offset((page - 1) * limit).limit(limit).all()
-    data = [_vote_row_to_item(r) for r in rows]
+    rows = stable(query.order_by(RollCallVote.vote_date.desc())).offset((page - 1) * limit).limit(limit).all()
+    data = [_rollcall_to_item(r) for r in rows]
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
@@ -464,10 +554,25 @@ async def list_votes(
 
 
 class MemberVoteItem(BaseModel):
-    member_id: str
-    position: str
-    country_code: str
-    group_code: str
+    member_id: str = Field(
+        ...,
+        description=(
+            "The MEP as the source names them. Since 30 Sep 2026 this is the name printed "
+            "in the EP's own doceo roll-call, not a HowTheyVote numeric id."
+        ),
+    )
+    position: str = Field(..., description="FOR | AGAINST | ABSTENTION.")
+    country_code: Optional[str] = Field(
+        None,
+        description=(
+            "NULL where the roll-call does not print it: 177,705 of 178,542 records carry "
+            "no country, because doceo groups MEPs by political group and only some "
+            "pages give the delegation. Null means not published, never 'unknown EU'."
+        ),
+    )
+    group_code: Optional[str] = Field(
+        None, description="Political group as doceo prints it (ECR, S&D, Verts/ALE, The Left, NI)."
+    )
     # 5 mandatory Brubru v1 datapoints. /votes/{vote_id}/records is a per-MEP
     # subview of a single vote; the vote-level URL applies to every row.
     public_url: Optional[str] = Field(
@@ -534,44 +639,67 @@ async def list_member_votes(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[MemberVoteItem]:
-    vote = db.query(EPVote).filter(EPVote.id == vote_id).first()
+    # ep_member_votes holds 0 rows and always has; the per-MEP data lives in
+    # ep_roll_call_records (178,542 rows), written by the same doceo sync as the votes.
+    from models.ep_vote import EpVote as RollCallVote, EpVoteRecord as RollCallRecord
+
+    vote = (db.query(RollCallVote)
+              .filter(RollCallVote.id == vote_id,
+                      RollCallVote.level.in_(("plenary", "committee")))
+              .first())
     if not vote:
         raise HTTPException(status_code=404, detail={
             "error": f"Vote {vote_id} not found", "reason_code": "not_found",
             "resource": "vote", "id": vote_id,
         })
-    query = db.query(EPMemberVote).filter(EPMemberVote.vote_id == vote_id)
+    # The doceo record keeps the EP's own vocabulary: political_group, country and a
+    # vote_choice of '+' / '-' / '0'. The published contract speaks group_code,
+    # country_code and FOR / AGAINST / ABSTENTION, so the mapping happens here rather
+    # than changing words a client already filters on.
+    _CHOICE_TO_POSITION = {"+": "FOR", "-": "AGAINST", "0": "ABSTENTION"}
+    _POSITION_TO_CHOICE = {v: k for k, v in _CHOICE_TO_POSITION.items()}
+
+    query = db.query(RollCallRecord).filter(RollCallRecord.vote_id == vote_id)
     if group:
-        query = query.filter(EPMemberVote.group_code == group.upper())
+        query = query.filter(func.upper(RollCallRecord.political_group) == group.upper())
     if country:
-        query = query.filter(EPMemberVote.country_code == country.upper())
+        query = query.filter(func.upper(RollCallRecord.country) == country.upper())
     if position:
-        query = query.filter(EPMemberVote.position == position.upper())
+        choice = _POSITION_TO_CHOICE.get(position.upper())
+        if choice is None:
+            raise HTTPException(status_code=422, detail={
+                "error": f"position must be one of {sorted(_POSITION_TO_CHOICE)}",
+                "reason_code": "invalid_parameter", "resource": "vote_record",
+                "id": position,
+            })
+        query = query.filter(RollCallRecord.vote_choice == choice)
     total = query.count()
     rows = stable(query).offset((page - 1) * limit).limit(limit).all()
-    parent_url = f"https://howtheyvote.eu/votes/{vote.htv_id}" if vote.htv_id else None
-    parent_date = vote.timestamp.date() if hasattr(vote.timestamp, "date") and vote.timestamp else None
+    parent_url = vote.source_url
+    _pd = vote.vote_date or vote.sitting_date
+    parent_date = _pd.date() if hasattr(_pd, "date") else _pd
     import html as _html
     data = []
     for r in rows:
-        position = r.position.value if hasattr(r.position, "value") else str(r.position)
+        position = _CHOICE_TO_POSITION.get(r.vote_choice, str(r.vote_choice))
+        member = r.mep_name
         lines = [
-            f"MEP {r.member_id}",
+            f"MEP {member}",
             f"Position: {position}",
-            f"Country: {r.country_code}",
-            f"Group: {r.group_code}",
+            f"Country: {r.country}",
+            f"Group: {r.political_group}",
         ]
         parts_html = [
-            f"<p><strong>MEP id:</strong> {_html.escape(str(r.member_id))}</p>",
+            f"<p><strong>MEP:</strong> {_html.escape(str(member))}</p>",
             f"<p><strong>Position:</strong> {_html.escape(position)}</p>",
-            f"<p><strong>Country:</strong> {_html.escape(r.country_code or '')}</p>",
-            f"<p><strong>Group:</strong> {_html.escape(r.group_code or '')}</p>",
+            f"<p><strong>Country:</strong> {_html.escape(r.country or '')}</p>",
+            f"<p><strong>Group:</strong> {_html.escape(r.political_group or '')}</p>",
         ]
         data.append(MemberVoteItem(
-            member_id=str(r.member_id),
+            member_id=str(member),
             position=position,
-            country_code=r.country_code,
-            group_code=r.group_code,
+            country_code=r.country,
+            group_code=r.political_group,
             public_url=parent_url,
             body_txt="\n".join(lines),
             body_html="<article>" + "".join(parts_html) + "</article>",
@@ -611,13 +739,19 @@ async def get_vote_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> VoteItem:
-    r = db.query(EPVote).filter(EPVote.id == vote_id).first()
+    # Same store as the list, or every id the list hands out would 404 here.
+    from models.ep_vote import EpVote as RollCallVote
+
+    r = (db.query(RollCallVote)
+           .filter(RollCallVote.id == vote_id,
+                   RollCallVote.level.in_(("plenary", "committee")))
+           .first())
     if not r:
         raise HTTPException(status_code=404, detail={
             "error": f"Vote {vote_id} not found", "reason_code": "not_found",
             "resource": "vote", "id": vote_id,
         })
-    return _vote_row_to_item(r)
+    return _rollcall_to_item(r)
 
 
 # ============================================================================
