@@ -235,7 +235,7 @@ A paginated envelope of files in the order the body lists them. A file inside a 
 Files are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."""
 
 _DESC_DOC = """**What it does**
-Returns one file attached to one {body} procedure from `{path}`, with its full extracted text.
+Returns one file of a procedure listed at `{path}`, with its full extracted text.
 
 **When to use it**
 After listing a procedure's documents, fetch one file's complete text.
