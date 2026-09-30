@@ -215,7 +215,7 @@ Refreshed from {source}."""
 
 
 _DESC_DOCS = """**What it does**
-Lists the files {body} attached to one {noun_singular} (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.
+Lists the files {body} attached to one procedure from `{path}` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.
 
 **When to use it**
 Read what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.
@@ -235,7 +235,7 @@ A paginated envelope of files in the order the body lists them. A file inside a 
 Files are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."""
 
 _DESC_DOC = """**What it does**
-Returns one file attached to a {body} {noun_singular}, with its full extracted text.
+Returns one file attached to one {body} procedure from `{path}`, with its full extracted text.
 
 **When to use it**
 After listing a procedure's documents, fetch one file's complete text.
@@ -385,13 +385,13 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     router.add_api_route(
         f"{path_hint}/{{item_id}}/documents", documents_ep, methods=["GET"],
         response_model=PaginatedResponse[ProcurementDocument], tags=[tag],
-        summary=f"{body_name} — the files of one {noun_singular}, with their text",
+        summary=f"{body_name} — the files of one procedure, with their text",
         description=_DESC_DOCS.format(body=body_name, noun_singular=noun_singular, path=path_hint),
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}/documents/{{document_id}}", document_ep, methods=["GET"],
         response_model=ProcurementDocument, tags=[tag],
-        summary=f"{body_name} — one file of a {noun_singular} (full text)",
+        summary=f"{body_name} — one file of a procedure (full text)",
         description=_DESC_DOC.format(body=body_name, noun_singular=noun_singular, path=path_hint),
     )
 
