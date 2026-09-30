@@ -1,6 +1,7 @@
 # European Education Area 2021-2030 Strategic Framework
 
 ## QUICK FACTS
+- **LATEST (29 Sep 2026): CULT adopted Parliament's ERASMUS+ 2028-2034 position, 24-1-1** (rapporteur Bogdan Zdrojewski, EPP; 2025/0222(COD)): EUR 47.39bn vs the Commission's EUR 40.8bn (current prices); fixed shares (education 74.6%, youth 15%, sport 4.1%); grants adjusted for living and housing costs; 20% of participants with fewer opportunities; the European Solidarity Corps merges in. Plenary next; Council position agreed May 2026. Source: EP press release 20260928IPR47816.
 - **LATEST (23 Sep 2026): European Literacy Coalition launched** (Union of Skills, Warsaw Memorandum). Commission context: **OECD PISA 2025, 31.3% of EU 15-year-olds struggle with basic text.**
 
 - EPRS Study (2 June 2026): "Erasmus+: Evolution, Structural Challenges and Future Design" -- assesses the Erasmus+ programme's growth, structural challenges, and options for its post-2027 design. Ref: IUST_STU(2026)789677 (https://www.europarl.europa.eu/thinktank/en/document/IUST_STU(2026)789677)
