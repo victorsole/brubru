@@ -23,7 +23,7 @@ from __future__ import annotations
 import html as _html
 import re
 from datetime import datetime, timezone
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 import requests
 
@@ -239,7 +239,52 @@ def _cedefop_detail(url: str) -> dict:
     out["description"] = [p for p in paras if p != ref]
     out["links"] = sorted(set(re.findall(
         r'href="(https?://(?:ted\.europa\.eu|ec\.europa\.eu/info/funding-tenders)[^"]+)"', desc_html)))
+    out["documents"] = _cedefop_documents(page)
     return out
+
+
+# 27 Nov 2009 is Cedefop's site-migration stamp, not a file's date: measured 30 Sep 2026
+# over all 464 procedure pages it sits on 720 of 1,500 dated files, across 110 procedures
+# published 2004-2009, and no other date appears on more than 5 procedures (the ECDC
+# 27 Jul 2017 pattern). Those files get no date rather than a wrong one.
+_CEDEFOP_MIGRATION_STAMP = datetime(2009, 11, 27, tzinfo=timezone.utc)
+
+
+def _cedefop_documents(page: str) -> list[dict]:
+    """The Downloads block: one entry per file (a document in two languages is two files).
+      <div class="dfu-file file-pdf"> <p class="dfu-file-title">Title</p>
+        <div class="dfu-metadata"><span>27/11/2009</span></div>
+        <span class="file-lang"><a href=".." type="application/pdf; length=65714" lang="en">
+    The date is the one Cedefop shows next to the file; absent, or the site-migration
+    stamp, it stays None."""
+    group = re.search(r'id="group-downloads"(.*?)(?:id="group-(?!downloads)|<footer|$)', page, re.S)
+    if not group:
+        return []
+    docs = []
+    for block in re.split(r'<div\s+class="dfu-file[\s"]', group.group(1))[1:]:
+        tm = re.search(r'class="dfu-file-title"[^>]*>(.*?)</p>', block, re.S)
+        dm = re.search(r'class="dfu-metadata"[^>]*>\s*<span[^>]*>([^<]+)</span>', block, re.S)
+        title = _txt(tm.group(1)) if tm else ""
+        date = _parse_date(dm.group(1).strip()) if dm else None
+        if date == _CEDEFOP_MIGRATION_STAMP:
+            date = None
+        for a in re.findall(r'<span class="file-lang">\s*(<a\b[^>]*>)', block, re.S):
+            hm = re.search(r'href="([^"]+)"', a)
+            if not hm:
+                continue
+            url = _html.unescape(hm.group(1))
+            if url.startswith("/"):
+                url = _CEDEFOP + url
+            lm = re.search(r'\blang="([^"]+)"', a)
+            sm = re.search(r'length=(\d+)', a)
+            name = unquote(url.rsplit("/", 1)[-1])
+            fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+            docs.append({"title": title or name, "file_url": url, "file_name": name,
+                         "file_format": fm.group(1).lower() if fm else None,
+                         "file_size": int(sm.group(1)) if sm else None,
+                         "language": lm.group(1).lower() if lm else None,
+                         "document_date": date.date() if date else None})
+    return docs
 
 
 def _cedefop_status(raw: str, deadline: datetime | None, now: datetime) -> str:
@@ -284,14 +329,23 @@ def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
     facts = [(k, v) for k, v in facts if v]
     desc = detail.get("description") or []
     links = detail.get("links") or []
-    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links]))
+    docs = detail.get("documents") or []
+    doc_lines = [f"Document: {d['title']} ({', '.join(x for x in [(d['file_format'] or '').upper(), d['document_date'].isoformat() if d['document_date'] else ''] if x)}) {d['file_url']}"
+                 for d in docs]
+    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links,
+                                     *doc_lines]))
     item.body_html = clean(
         f"<h1>{_html.escape(row['title'])}</h1>"
         + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
         + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
         + "</dl>"
         + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
-           + "</ul>" if links else ""))
+           + "</ul>" if links else "")
+        + ("<h2>Documents</h2><ul>" + "".join(
+            f'<li><a href="{_html.escape(d["file_url"])}">{_html.escape(d["title"])}</a>'
+            + "".join(f" · {_html.escape(x)}" for x in [(d["file_format"] or "").upper(),
+                      d["document_date"].isoformat() if d["document_date"] else ""] if x)
+            + "</li>" for d in docs) + "</ul>" if docs else ""))
     item.document_date = published
     item.extras["deadline"] = deadline
     return item

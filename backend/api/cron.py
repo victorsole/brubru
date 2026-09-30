@@ -795,6 +795,14 @@ async def cron_sync_daily(
     # 22 Sep, so the API served a June directory. Marks departures (capped at 10% a run)
     # and records its own sync_runs row.
     results["who_is_who"] = await _run_script_async("who_is_who", "scripts/sync_who_is_who.py", [], timeout=900)
+    # Files attached to Cedefop procurement procedures (terms of reference, forms, Q&A,
+    # corrigenda, award notices) with their extracted text, behind
+    # /api/v2/funding/cedefop-*/{item_id}/documents (API audit, 30 Sep 2026). Live and
+    # recent procedures only; a file already stored is not downloaded again. Records its
+    # own sync_runs row (procurement_documents_cedefop).
+    results["procurement_documents_cedefop"] = await _run_script_async(
+        "procurement_documents_cedefop", "scripts/sync_procurement_documents.py",
+        ["--body", "cedefop", "--apply"], timeout=1200)
     # Brussels lobby news. The corpus was seeded by hand on 8 June 2026 and never
     # refreshed: the script had no schedule and wrote no run row, so 108 days of
     # ageing were invisible to /api/sync/health. 300 organisations a night rotates
