@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1002 requests across 49 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1007 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -1217,13 +1217,13 @@
                         },
                         {
                           "key": "updated_from",
-                          "value": "",
+                          "value": "2026-09-21",
                           "disabled": true,
                           "description": "Incremental sync lower bound (updated_at >= value)."
                         },
                         {
                           "key": "updated_to",
-                          "value": "",
+                          "value": "2026-09-22",
                           "disabled": true,
                           "description": "Incremental sync upper bound (updated_at <= value)."
                         },
@@ -1990,13 +1990,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -2694,6 +2694,12 @@
                       "description": ""
                     },
                     {
+                      "key": "celex",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Exact CELEX of the act itself (not its parent)."
+                    },
+                    {
                       "key": "proposing_dg",
                       "value": "",
                       "disabled": true,
@@ -2725,7 +2731,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -2749,7 +2755,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns Commission delegated acts \u2014 secondary legislation adopted by the Commission under powers delegated by a basic legislative act (Article 290 TFEU). Each row carries the act reference (e.g. `C(2026)1234`), the parent CELEX (the basic act granting the delegation), the parent procedure reference, the status, the proposing DG, the publication date, the EP/Council objection deadline (typically 2-3 months), the EP scrutiny status, the Council scrutiny status, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all delegated acts under the AI Act), track the EP/Council objection window for delegated acts you might want to scrutinise, or audit which DGs are most active in delegated-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 `proposed` / `scrutiny` / `adopted` / `objected` / `withdrawn` (status enum).\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts?parent_celex=32024R1689&limit=20\nGET /api/v2/legislative/delegated-acts?proposing_dg=CNECT&status=scrutiny\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `objection_deadline`, `ep_scrutiny` (dict with EP rapporteur / motion status), `council_scrutiny` (dict), `celex` (if adopted), `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex C-series. New delegated acts appear on a steady drumbeat; daily sync catches them. Backed by `backend/scripts/backfill_eu_comitology.py`."
+                "description": "**What it does**\nReturns Commission delegated acts \u2014 secondary legislation adopted by the Commission under powers delegated by a basic legislative act (Article 290 TFEU). Each row carries the act reference (e.g. `C(2026)1234`), the parent CELEX (the basic act granting the delegation), the parent procedure reference, the status, the proposing DG, the publication date, the EP/Council objection deadline (typically 2-3 months), the EP scrutiny status, the Council scrutiny status, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all delegated acts under the AI Act), track the EP/Council objection window for delegated acts you might want to scrutinise, or audit which DGs are most active in delegated-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 one of `draft`, `planned`, `adopted`, `published`, `objected`, `rejected`, `withdrawn`, `cancelled`, `on_hold`, `notified`, `scrutiny_finished`, `unknown`. Mirrors the Commission RegDel register vocabulary; `unknown` means the register used a value we do not yet map.\n- `planned_adoption_period` \u2014 the Commission's indicative timing for an act it has announced but not adopted, as the register states it (`Q3 2026`, `06/2019` or `18/10/2013`). A period, not a date: acts announced but not yet adopted carry no `celex` and no `adoption_date`.\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts?parent_celex=32024R1689&limit=20\nGET /api/v2/legislative/delegated-acts?proposing_dg=CNECT&status=objected\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `objection_deadline`, `ep_scrutiny` (dict with EP rapporteur / motion status), `council_scrutiny` (dict), `celex` (if adopted), `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced twice a day at 08:00 and 20:00 UTC (registry warm tier) from the Commission's Register of delegated and implementing acts (RegDel), by `backend/scripts/ingest_regdel_acts.py`. Acts the Commission has announced but not yet adopted are included with `status` `planned`, `cancelled` or `on_hold`; they carry no `celex` until publication in the Official Journal."
               },
               "response": []
             },
@@ -2783,6 +2789,12 @@
                       "description": ""
                     },
                     {
+                      "key": "celex",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Exact CELEX of the act itself (not its parent)."
+                    },
+                    {
                       "key": "proposing_dg",
                       "value": "",
                       "disabled": true,
@@ -2814,7 +2826,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -2838,7 +2850,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns Commission implementing acts \u2014 secondary legislation adopted by the Commission under Article 291 TFEU to ensure uniform conditions for implementation of EU law (typically with a comitology committee opinion). Each row carries the act reference (e.g. `C(2026)0234`), the parent CELEX, the parent procedure reference, the status, the proposing DG, the publication date, the comitology examination/advisory procedure outcome, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all implementing acts under MDR, REACH, CRR), track comitology committee outcomes (e.g. SCoPAFF votes on pesticides), or audit which DGs are most active in implementing-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act (e.g. `32016R0679` for GDPR).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 implementing-act status enum.\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts?proposing_dg=SANTE&q=glyphosate\nGET /api/v2/legislative/implementing-acts?parent_celex=32016R0679&limit=20\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `ep_scrutiny`, `council_scrutiny`, `celex`, `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR-Lex C-series."
+                "description": "**What it does**\nReturns Commission implementing acts \u2014 secondary legislation adopted by the Commission under Article 291 TFEU to ensure uniform conditions for implementation of EU law (typically with a comitology committee opinion). Each row carries the act reference (e.g. `C(2026)0234`), the parent CELEX, the parent procedure reference, the status, the proposing DG, the publication date, the comitology examination/advisory procedure outcome, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all implementing acts under MDR, REACH, CRR), track comitology committee outcomes (e.g. SCoPAFF votes on pesticides), or audit which DGs are most active in implementing-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act (e.g. `32016R0679` for GDPR).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 one of `draft`, `planned`, `adopted`, `published`, `objected`, `rejected`, `withdrawn`, `cancelled`, `on_hold`, `notified`, `scrutiny_finished`, `unknown`. Mirrors the Commission RegDel register vocabulary; `unknown` means the register used a value we do not yet map.\n- `planned_adoption_period` \u2014 the Commission's indicative timing for an act it has announced but not adopted, as the register states it (`Q3 2026`, `06/2019` or `18/10/2013`). A period, not a date: acts announced but not yet adopted carry no `celex` and no `adoption_date`.\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts?proposing_dg=SANTE&q=glyphosate\nGET /api/v2/legislative/implementing-acts?parent_celex=32016R0679&limit=20\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `ep_scrutiny`, `council_scrutiny`, `celex`, `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced twice a day at 08:00 and 20:00 UTC (registry warm tier) from the Commission's Register of delegated and implementing acts (RegDel), by `backend/scripts/ingest_regdel_acts.py`. Acts the Commission has announced but not yet adopted are included with `status` `planned`, `cancelled` or `on_hold`; they carry no `celex` until publication in the Official Journal."
               },
               "response": []
             },
@@ -2881,7 +2893,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nFetches a single delegated act by its Commission reference. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating a delegated act via the list endpoint, use this to fetch the full record (including body text + scrutiny details) in a deeper-link context.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. The `:path` matcher means the parentheses are accepted verbatim \u2014 no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts/C(2026)1234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the RegDel register + EUR-Lex C-series."
+                "description": "**What it does**\nFetches a single delegated act by its Commission reference. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating a delegated act via the list endpoint, use this to fetch the full record (including body text + scrutiny details) in a deeper-link context.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. The `:path` matcher means the parentheses are accepted verbatim \u2014 no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts/C(2026)1234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSynced twice a day at 08:00 and 20:00 UTC (registry warm tier) from the Commission's Register of delegated and implementing acts (RegDel), by `backend/scripts/ingest_regdel_acts.py`. Acts the Commission has announced but not yet adopted are included with `status` `planned`, `cancelled` or `on_hold`; they carry no `celex` until publication in the Official Journal."
               },
               "response": []
             },
@@ -2924,7 +2936,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nFetches a single Commission implementing act by its reference. Implementing acts (Article 291 TFEU) lay down uniform conditions for the implementation of EU legislation across Member States. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating an implementing act via the list endpoint, use this to fetch the full record in a deeper-link context. Note: the difference between delegated acts (Art. 290, modify or supplement the basic act) and implementing acts (Art. 291, uniform implementation) is constitutionally significant for legal-affairs work.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. Path-matching accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts/C(2026)0234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the Comitology Register + EUR-Lex C-series."
+                "description": "**What it does**\nFetches a single Commission implementing act by its reference. Implementing acts (Article 291 TFEU) lay down uniform conditions for the implementation of EU legislation across Member States. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating an implementing act via the list endpoint, use this to fetch the full record in a deeper-link context. Note: the difference between delegated acts (Art. 290, modify or supplement the basic act) and implementing acts (Art. 291, uniform implementation) is constitutionally significant for legal-affairs work.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. Path-matching accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts/C(2026)0234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSynced twice a day at 08:00 and 20:00 UTC (registry warm tier) from the Commission's Register of delegated and implementing acts (RegDel), by `backend/scripts/ingest_regdel_acts.py`. Acts the Commission has announced but not yet adopted are included with `status` `planned`, `cancelled` or `on_hold`; they carry no `celex` until publication in the Official Journal."
               },
               "response": []
             }
@@ -2977,7 +2989,13 @@
                       "key": "name",
                       "value": "",
                       "disabled": true,
-                      "description": ""
+                      "description": "Part of the member's name, accent- and case-insensitive. `q` is an accepted alias."
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": "Alias for `name`, the free-text parameter every other v2 list endpoint uses. An undeclared parameter is silently ignored, so a caller following that convention got the unfiltered first page and no error."
                     },
                     {
                       "key": "term",
@@ -2986,10 +3004,46 @@
                       "description": "Parliamentary term (default 10 \u2014 current). Pass term=9 for previous, etc."
                     },
                     {
-                      "key": "limit",
-                      "value": "50",
+                      "key": "created_from",
+                      "value": "2026-09-21",
                       "disabled": true,
-                      "description": "Items per page (default 50, max 100)"
+                      "description": "First recorded by Brubru on or after (current term only)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Record last changed on or after. The incremental-sync filter (current term only)."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Record last changed on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "include_former",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Current term only: also list members who have left Parliament since the election (in_office=false). Always on with an updated_ window, so a sync learns about departures."
+                    },
+                    {
+                      "key": "order",
+                      "value": "ep",
+                      "disabled": true,
+                      "description": "ep (default, the EP's own order) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100",
+                      "disabled": true,
+                      "description": "Items per page (default 100, max 500)"
                     },
                     {
                       "key": "page",
@@ -2999,7 +3053,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nLive list of MEPs from the European Parliament's Open Data REST API v2. Each MEP carries the EP-internal id, full name, party of origin + EU political group, country, parliamentary term, photo, bio URL, committee assignments, and (when hydrated) email + social media handles. Both current and historical MEPs are searchable via `term`.\n\n**When to use it**\nDrive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to one political group (`group=EPP`), or look up an MEP by name (`name=Sarri`). For historical research, set `term=9` for the 2019-2024 parliament. Per-MEP profile hydration (country / group / role) runs concurrently when the cache is warm \u2014 first cold call may take ~3-5s.\n\n**Input**\n- `country` \u2014 ISO-3166-1 alpha-2 (exact 2 chars).\n- `group` \u2014 political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) \u2014 both are accepted.\n- `name` \u2014 substring on full name.\n- `term` \u2014 parliamentary term (default 10 = current, valid range 1-10).\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/meps?country=ES&group=RENEW\nGET /api/v2/parliament/meps?name=Sarri\n```\n\n**You get back**\nA `PaginatedResponse[MEPItem]` envelope. Each item carries `mep_id`, `full_name`, `country`, `political_group`, `party_national`, `term`, `photo_url`, `bio_url`, `committee_assignments[]`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nLive pass-through to data.europarl.europa.eu (the EP's Open Data REST API v2), with a 6-hour in-process cache. MEP changes are rare (election cycles + occasional resignations); the 6h cache balances freshness against EP API rate limits."
+                "description": "**What it does**\nLive list of MEPs from the European Parliament's Open Data REST API v2. Each MEP carries the EP-internal id, full name, party of origin + EU political group, country, parliamentary term, photo, bio URL, committee assignments, and (when hydrated) email + social media handles. Both current and historical MEPs are searchable via `term`.\n\n**When to use it**\nDrive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to one political group (`group=EPP`), or look up an MEP by name (`name=Sarri`). For historical research, set `term=9` for the 2019-2024 parliament. Per-MEP profile hydration (country / group / role) runs concurrently when the cache is warm \u2014 first cold call may take ~3-5s.\n\n**Input**\n- `country` \u2014 ISO-3166-1 alpha-2 (exact 2 chars).\n- `group` \u2014 political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) \u2014 both are accepted.\n- `name` (or `q`, its alias) \u2014 part of the full name, accent- and case-insensitive (`sole` finds `Sol\u00e9`).\n- `term` \u2014 parliamentary term (default 10 = current, valid range 1-10).\n- `include_former` \u2014 current term only. By default the list holds the MEPs sitting today; `true` adds the members elected or seated this term who have since left (`in_office: false`). Any `updated_` window includes them too, so a sync sees a departure as a change.\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). Change dates are kept for the current term (10) only; a date window on an older term is a 422.\n- `limit` (default 100, max 500), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/meps?country=ES&group=RENEW\nGET /api/v2/parliament/meps?name=Sarri\nGET /api/v2/parliament/meps?updated_from=2026-09-21&order=updated_asc&limit=500\n```\n\n**You get back**\nA `PaginatedResponse[MEPItem]` envelope. Each item carries `id` (the EP's MEP id), `full_name`, `country` (ISO-3 code of citizenship, e.g. `ESP`), `group` (the EP's URI for the political group, e.g. `org/7018`), `role`, `profile_url`, `in_office`, plus the 5 datapoints (`public_url` = the EP profile page; `body_txt`/`body_html` = the MEP's card with membership history; `document_date` = start of the current mandate). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `in_office` says whether the MEP sits today.\n\n**Data freshness**\nRead from data.europarl.europa.eu (the EP's Open Data REST API v2). For the current term the list, the sitting-MEP set and each MEP's record come from Brubru's daily snapshot plus a 6-hour cache, because the EP API rate-limits per-MEP profile calls. The change dates come from that daily snapshot of every current-term MEP (group, role, country, membership history), so `updated_date` moves the day after a change reaches the EP's data."
               },
               "response": []
             },
@@ -3122,7 +3176,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -3251,7 +3305,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -3420,7 +3474,7 @@
                       "key": "document_type",
                       "value": "",
                       "disabled": true,
-                      "description": "draft_report | report | amendments | opinion | minutes | resolution"
+                      "description": "Normalised across both streams: draft_report | amendments | draft_recommendation | opinion | draft_opinion (amendment documents), or the committee-work stage (in_committee | awaiting_vote | tabled | adopted | rejected | withdrawn | pending | completed | unknown | work_item). An unserved value is a 422, not the whole corpus."
                     },
                     {
                       "key": "q",
@@ -3442,7 +3496,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -3460,7 +3514,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns a unified, cross-committee view that merges three separate document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur), (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion), and (3) `texts_adopted` (the formal plenary outputs). Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across the three.\n\n**When to use it**\nWhen you want \"everything that happened on file X across all stages\" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering \"what is the LIBE committee working on this week?\".\n\n**Input**\n- `committee` \u2014 4-letter code (e.g. `LIBE`).\n- `procedure_reference` \u2014 OEIL reference.\n- `document_type` \u2014 normalised: `draft_report` / `report` / `amendments` / `opinion` / `minutes` / `resolution`.\n- `q` \u2014 substring search across titles.\n- `published_from`, `published_to` \u2014 date filter.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/ep-documents?committee=LIBE&document_type=draft_report\nGET /api/v2/parliament/ep-documents?procedure_reference=2025/0419(COD)\n```\n\n**You get back**\nA `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences."
+                "description": "**What it does**\nReturns a unified, cross-committee view that merges two document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur) and (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion). Adopted plenary texts are NOT in this view: use `/texts-adopted` for those. Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across both.\n\n**When to use it**\nWhen you want \"everything that happened on file X across all stages\" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering \"what is the LIBE committee working on this week?\".\n\n**Input**\n- `committee` \u2014 4-letter code (e.g. `LIBE`).\n- `procedure_reference` \u2014 OEIL reference.\n- `document_type` \u2014 normalised across the two streams. From amendment documents: `draft_report`, `amendments`, `draft_recommendation`, `opinion`, `draft_opinion`. From committee work items, whose stage doubles as their type: `in_committee`, `awaiting_vote`, `tabled`, `adopted`, `rejected`, `withdrawn`, `pending`, `completed`, `unknown`, `work_item`. Anything else is a 422 listing these: it used to be accepted and answered with the whole corpus.\n- `q` \u2014 substring search across titles.\n- `published_from`, `published_to` \u2014 date filter.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/ep-documents?committee=LIBE&document_type=draft_report\nGET /api/v2/parliament/ep-documents?procedure_reference=2025/0419(COD)\n```\n\n**You get back**\nA `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences."
               },
               "response": []
             }
@@ -3823,13 +3877,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -3966,13 +4020,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4090,13 +4144,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4237,13 +4291,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": "Incremental sync \u2014 rows last_updated >= value. Returns rows ordered by last_updated desc when set."
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4384,13 +4438,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4588,7 +4642,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -4719,13 +4773,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4854,13 +4908,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -4989,7 +5043,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -5126,7 +5180,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -5561,9 +5615,41 @@
                     "v2",
                     "commission",
                     "commissioners"
+                  ],
+                  "query": [
+                    {
+                      "key": "created_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Record last changed on or after; includes commissioners who left."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Record last changed on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "order",
+                      "value": "name",
+                      "disabled": true,
+                      "description": ""
+                    }
                   ]
                 },
-                "description": "**What it does**\nReturns all 27 members of the Von der Leyen II College \u2014 for each commissioner: a stable slug, full name, portfolio title, country, the bio page on commission.europa.eu, and three working URLs to their meeting agenda: a filtered view of the unified calendar (per-commissioner), the always-working unified-calendar entry point, and a slot for a PDF agenda (most commissioners don't publish one).\n\n**When to use it**\nTo drive a commissioner dropdown in a UI, fetch a specific commissioner's meeting calendar, or label which commissioner owns a given policy file. The slugs are reused as the `commissioner_slug` filter on `/api/v1/publications`, `/api/v1/calendar`, and `/api/v2/commission/commissioners/{slug}/agenda`.\n\n**Input**\nNo parameters. Requires an `X-API-Key` header.\n\n**Try it**\n```\nGET /api/v2/commission/commissioners\n```\n\n**You get back**\nA `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) \u2014 each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`. The 5 envelope-level datapoints are null because this is a reference enumeration.\n\n**Data freshness**\nReads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration to resolve each commissioner's `leader_id` for the filtered-calendar URL (24h cached client-side). Reshuffles or portfolio changes apply on Brubru redeploy after manual JSON update. Typically refreshed weekly via the Friday sweep."
+                "description": "**What it does**\nReturns all 27 members of the Von der Leyen II College \u2014 for each commissioner: a stable slug, full name, portfolio title, country, the bio page on commission.europa.eu, and three working URLs to their meeting agenda: a filtered view of the unified calendar (per-commissioner), the always-working unified-calendar entry point, and a slot for a PDF agenda (most commissioners don't publish one).\n\n**When to use it**\nTo drive a commissioner dropdown in a UI, fetch a specific commissioner's meeting calendar, or label which commissioner owns a given policy file. The slugs are reused as the `commissioner_slug` filter on `/api/v1/publications`, `/api/v1/calendar`, and `/api/v2/commission/commissioners/{slug}/agenda`.\n\n**Input**\nNo parameters are needed: the College is 27 people, returned in one response. For a daily incremental sync:\n- `created_from`, `created_to`: when Brubru first recorded the commissioner.\n- `updated_from`, `updated_to`: when the record last changed (name, portfolio, country, bio page). With an `updated_` window, commissioners who have LEFT the College in that window are included with `removed_date` set, so a sync can delete them.\n- `order`: `name` (default) | `updated_asc` | `updated_desc` | `created_asc` | `created_desc`.\n\n**Try it**\n```\nGET /api/v2/commission/commissioners\nGET /api/v2/commission/commissioners?updated_from=2026-09-21\n```\n\n**You get back**\nA `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) \u2014 each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`, and the change dates `creation_date` (when Brubru first recorded them), `updated_date` (when the record last changed) and `removed_date` (set only on a commissioner who has left). The envelope's `creation_date` is when the call was served.\n\n**Data freshness**\nReads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration to resolve each commissioner's `leader_id` for the filtered-calendar URL (24h cached client-side). Reshuffles or portfolio changes apply on Brubru redeploy after manual JSON update. Typically refreshed weekly via the Friday sweep."
               },
               "response": []
             },
@@ -5990,13 +6076,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -6145,7 +6231,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -6274,7 +6360,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -6414,6 +6500,30 @@
                       "description": "Latest decision on or before (YYYY-MM-DD)."
                     },
                     {
+                      "key": "created_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Content last changed on or after. The incremental-sync filter."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Content last changed on or before; a bare date covers the whole day."
+                    },
+                    {
                       "key": "order",
                       "value": "recent",
                       "disabled": true,
@@ -6421,9 +6531,9 @@
                     },
                     {
                       "key": "limit",
-                      "value": "50",
+                      "value": "100",
                       "disabled": true,
-                      "description": ""
+                      "description": "Items per page (default 100, max 500)."
                     },
                     {
                       "key": "page",
@@ -6433,7 +6543,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nLists infringement cases: the legal proceedings the European Commission opens when it considers a Member State has failed to apply EU law. One item per case, with the Member State, the type of infringement (non-communication of transposition measures, non-conformity, bad application), the Commission department in charge, the subject, whether the case is still open, and its latest step (letter of formal notice, reasoned opinion, referral to the Court of Justice, closure).\n\n**When to use it**\nTo see which Member States face proceedings on a topic, how far each case has gone, and which are still open. Filter by `member_state`, `active`, `case_type`, `lead_dg` or `policy_area`, search the subject with `q`, or window on the latest decision date.\n\n**Input**\n- `member_state`: code as the Commission writes it, e.g. `PL`, `EL` (Greece; `GR` is accepted), `UK`.\n- `active`: `true` for open cases, `false` for closed ones.\n- `case_type`: `NCM` (non-communication), `NCF` (non-conformity), `BAD` (bad application), `REG` (regulations, Treaties and decisions).\n- `lead_dg`: department code, e.g. `ENV`, `GROW`, `MOVE`.\n- `policy_area`: text contained in a policy area, e.g. `waste`.\n- `latest_decision_category`: e.g. `RTC` for cases whose latest step is a referral to the Court.\n- `q`: words in the subject, or an infringement number.\n- `decision_from`, `decision_to`: bounds on the latest decision date (YYYY-MM-DD).\n- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements?member_state=PL&active=true\nGET /api/v2/commission/infringements?case_type=NCM&lead_dg=ENV&active=true\nGET /api/v2/commission/infringements?q=nitrates\n```\n\n**You get back**\nA paginated list of cases. Each carries `id`, `infringement_number`, `member_state`, `active_case`, `case_type`, `lead_dg`, `title`, `first_decision_date`, `latest_decision_date`, `latest_decision_type`, `decision_count`, `court_cases`, `press_release_urls`, and the five datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`; the bodies are on the detail endpoint).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+                "description": "**What it does**\nLists infringement cases: the legal proceedings the European Commission opens when it considers a Member State has failed to apply EU law. One item per case, with the Member State, the type of infringement (non-communication of transposition measures, non-conformity, bad application), the Commission department in charge, the subject, whether the case is still open, and its latest step (letter of formal notice, reasoned opinion, referral to the Court of Justice, closure).\n\n**When to use it**\nTo see which Member States face proceedings on a topic, how far each case has gone, and which are still open. Filter by `member_state`, `active`, `case_type`, `lead_dg` or `policy_area`, search the subject with `q`, or window on the latest decision date.\n\n**Input**\n- `member_state`: code as the Commission writes it, e.g. `PL`, `EL` (Greece; `GR` is accepted), `UK`.\n- `active`: `true` for open cases, `false` for closed ones.\n- `case_type`: `NCM` (non-communication), `NCF` (non-conformity), `BAD` (bad application), `REG` (regulations, Treaties and decisions).\n- `lead_dg`: department code, e.g. `ENV`, `GROW`, `MOVE`.\n- `policy_area`: text contained in a policy area, e.g. `waste`.\n- `latest_decision_category`: e.g. `RTC` for cases whose latest step is a referral to the Court.\n- `q`: words in the subject, or an infringement number.\n- `decision_from`, `decision_to`: bounds on the latest decision date (YYYY-MM-DD).\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`).\n- `order`: `recent` (default, latest decision first), `oldest`, or a sync order: `updated_asc`, `updated_desc`, `created_asc`, `created_desc`. `limit` (default 100, max 500), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements?member_state=PL&active=true\nGET /api/v2/commission/infringements?case_type=NCM&lead_dg=ENV&active=true\nGET /api/v2/commission/infringements?q=nitrates\nGET /api/v2/commission/infringements?updated_from=2026-09-21&order=updated_asc&limit=500\n```\n\n**You get back**\nA paginated list of cases. Each carries `id`, `infringement_number`, `member_state`, `active_case`, `case_type`, `lead_dg`, `title`, `first_decision_date`, `latest_decision_date`, `latest_decision_type`, `decision_count`, `court_cases`, `press_release_urls`, and the five datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`; the bodies are on the detail endpoint). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
               },
               "response": []
             },
@@ -6612,6 +6722,30 @@
                       "description": "Decided on or before (YYYY-MM-DD)."
                     },
                     {
+                      "key": "created_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Content last changed on or after. The incremental-sync filter."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Content last changed on or before; a bare date covers the whole day."
+                    },
+                    {
                       "key": "order",
                       "value": "recent",
                       "disabled": true,
@@ -6619,9 +6753,9 @@
                     },
                     {
                       "key": "limit",
-                      "value": "50",
+                      "value": "100",
                       "disabled": true,
-                      "description": ""
+                      "description": "Items per page (default 100, max 500)."
                     },
                     {
                       "key": "page",
@@ -6631,7 +6765,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nLists every decision the European Commission has adopted in infringement procedures since 1987: letters of formal notice, additional letters, reasoned opinions, referrals to the Court of Justice (with or without financial sanctions) and closures. One item per decision, linked to its case, with the press release, memo or Court case when there is one.\n\n**When to use it**\nTo follow the Commission's monthly infringement packages, list the referrals to the Court for one Member State, or trace how a type of decision has been used over time.\n\n**Input**\n- `member_state`: e.g. `IT`, `EL` (Greece), `UK`.\n- `infringement_number`: one case, e.g. `INFR(2026)0352`.\n- `decision_category`: `LFN` (letter of formal notice), `ALFN`, `RO` (reasoned opinion), `ARO`, `RTC` (referral to Court), `CLOSURES`, `NON_COM_RTC`, `SECOND_RTC`, and others.\n- `decision_type`: words in the decision name, e.g. `260(3)` for referrals with financial sanctions.\n- `case_type`: `NCM` | `NCF` | `BAD` | `REG`. `lead_dg`: e.g. `ENV`. `policy_area`: text.\n- `active`: `true` for decisions in open cases. `with_press_release`: `true` for decisions announced in a press release.\n- `q`: words in the subject. `decision_from`, `decision_to`: decision date bounds (YYYY-MM-DD).\n- `order`: `recent` (default) or `oldest`. `limit` (max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/decisions?decision_from=2026-07-01&decision_category=RTC\nGET /api/v2/commission/infringements/decisions?member_state=DE&decision_category=RO\n```\n\n**You get back**\nA paginated list of decisions: `id`, `case_id`, `infringement_number`, `member_state`, `decision_date`, `decision_type`, `decision_category`, `case_type`, `lead_dg`, `title`, `active_case`, `press_release_url`, `memo_url`, `court_case`, `court_case_url`, `public_url_kind`, and the five datapoints (bodies on the detail endpoint).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
+                "description": "**What it does**\nLists every decision the European Commission has adopted in infringement procedures since 1987: letters of formal notice, additional letters, reasoned opinions, referrals to the Court of Justice (with or without financial sanctions) and closures. One item per decision, linked to its case, with the press release, memo or Court case when there is one.\n\n**When to use it**\nTo follow the Commission's monthly infringement packages, list the referrals to the Court for one Member State, or trace how a type of decision has been used over time.\n\n**Input**\n- `member_state`: e.g. `IT`, `EL` (Greece), `UK`.\n- `infringement_number`: one case, e.g. `INFR(2026)0352`.\n- `decision_category`: `LFN` (letter of formal notice), `ALFN`, `RO` (reasoned opinion), `ARO`, `RTC` (referral to Court), `CLOSURES`, `NON_COM_RTC`, `SECOND_RTC`, and others.\n- `decision_type`: words in the decision name, e.g. `260(3)` for referrals with financial sanctions.\n- `case_type`: `NCM` | `NCF` | `BAD` | `REG`. `lead_dg`: e.g. `ENV`. `policy_area`: text.\n- `active`: `true` for decisions in open cases. `with_press_release`: `true` for decisions announced in a press release.\n- `q`: words in the subject. `decision_from`, `decision_to`: decision date bounds (YYYY-MM-DD).\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`).\n- `order`: `recent` (default), `oldest`, or a sync order: `updated_asc`, `updated_desc`, `created_asc`, `created_desc`. `limit` (default 100, max 500), `page`.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/decisions?decision_from=2026-07-01&decision_category=RTC\nGET /api/v2/commission/infringements/decisions?member_state=DE&decision_category=RO\nGET /api/v2/commission/infringements/decisions?created_from=2026-09-21&order=created_asc&limit=500\n```\n\n**You get back**\nA paginated list of decisions: `id`, `case_id`, `infringement_number`, `member_state`, `decision_date`, `decision_type`, `decision_category`, `case_type`, `lead_dg`, `title`, `active_case`, `press_release_url`, `memo_url`, `court_case`, `court_case_url`, `public_url_kind`, and the five datapoints (bodies on the detail endpoint). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed).\n\n**Data freshness**\nSynced daily from the European Commission's register of infringement decisions (ec.europa.eu/implementing-eu-law/search-infringement-decisions), which covers every decision since 1987. The Commission adopts infringement decisions in monthly packages."
               },
               "response": []
             },
@@ -7014,13 +7148,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": "last_updated >= value. Returns rows ordered by last_updated desc when set."
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -7226,7 +7360,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -9186,6 +9320,12 @@
                       "description": ""
                     },
                     {
+                      "key": "source",
+                      "value": "documents",
+                      "disabled": true,
+                      "description": "documents (default): the register and press corpus. meetings: Council meetings from the calendar. all: both, as this endpoint used to return by default."
+                    },
+                    {
                       "key": "document_type",
                       "value": "",
                       "disabled": true,
@@ -9217,13 +9357,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9247,7 +9387,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns a unified feed of Council of the EU + European Council documents and meetings \u2014 press releases, Council conclusions, meeting agendas, summit outcomes. Today the surface unions `institutional_publications` (Council-tagged rows) with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL events. A dedicated Council document register scraper (working-party + COREPER docs + Council conclusions full text) is queued.\n\n**When to use it**\nFor tracking Council positions on legislative files (the \"other half\" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.\n\n**Input**\n- `q` \u2014 substring search.\n- `document_type` \u2014 `press_release` / `conclusions` / `meeting_agenda` / etc.\n- `policy_area` \u2014 single policy area tag.\n- `published_from`, `published_to` (and `published_end` alias).\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-documents?document_type=conclusions&published_from=2026-01-01\nGET /api/v2/council/council-documents?policy_area=energy\n```\n\n**You get back**\nA `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries reference, title, document_type, policy_area, dates, source URL, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) for now \u2014 will move to dedicated 6h scraper once the Council document register scraper ships. Meanwhile, this surface unions data from the publications sync (every 6h) and the calendar sync (every 6h)."
+                "description": "**What it does**\nReturns a unified feed of Council of the EU + European Council documents and meetings \u2014 press releases, Council register documents (notes, working documents, presidency discussion notes), meeting agendas and summit outcomes. It unions Council-tagged `institutional_publications` with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL.\n\n**What the corpus covers, and what it does not**\nRead `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The register's SEARCH is behind a Cloudflare challenge (re-checked 24 September 2026 against plain HTTP, a stealth browser and three Scrape.do modes), so documents reach Brubru through the register's own unwalled listings (latest documents, provisional agendas) and the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence \u2014 while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.\n\n**When to use it**\nFor tracking Council positions on legislative files (the \"other half\" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.\n\n**Input**\n- `source` \u2014 `documents` (default): the register and press corpus. `meetings`: Council meetings from the calendar. `all`: both. Until 24 September 2026 there was no such parameter and the answer was always both, ordered by date; because meetings are FUTURE-dated, an endpoint called council-documents opened with next month's summits and read as a calendar.\n- `q` \u2014 substring search.\n- `document_type` \u2014 `press_release` / `conclusions` / `meeting_agenda` / etc.\n- `policy_area` \u2014 single policy area tag.\n- `published_from`, `published_to` (and `published_end` alias).\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-documents?document_type=conclusions&published_from=2026-01-01\nGET /api/v2/council/council-documents?policy_area=energy\nGET /api/v2/council/council-documents?source=meetings\n```\n\n**You get back**\nA `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries reference, title, document_type, policy_area, dates, source URL, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) for now \u2014 will move to dedicated 6h scraper once the Council document register scraper ships. Meanwhile, this surface unions data from the publications sync (every 6h) and the calendar sync (every 6h)."
               },
               "response": []
             },
@@ -9378,13 +9518,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9501,13 +9641,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9624,13 +9764,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9747,13 +9887,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9870,13 +10010,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -9993,13 +10133,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10116,13 +10256,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10239,13 +10379,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10466,13 +10606,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10577,13 +10717,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10688,13 +10828,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10799,13 +10939,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -10910,13 +11050,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11021,13 +11161,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11137,13 +11277,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11248,13 +11388,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11359,13 +11499,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11470,13 +11610,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -11581,13 +11721,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -17212,7 +17352,7 @@
                       "key": "status",
                       "value": "",
                       "disabled": true,
-                      "description": "open | forthcoming | closed | unknown. No `under-evaluation` value exists. `unknown` means the portal feed gave no status (37% of rows), not that the call is closed."
+                      "description": "open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."
                     },
                     {
                       "key": "type_of_action",
@@ -17239,10 +17379,52 @@
                       "description": ""
                     },
                     {
-                      "key": "limit",
-                      "value": "50",
+                      "key": "published_from",
+                      "value": "2026-05-01",
                       "disabled": true,
-                      "description": ""
+                      "description": "Published on the portal on or after (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Published on the portal on or before (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "created_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Content last changed on or after (ISO date or datetime). The incremental-sync filter."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Content last changed on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "order",
+                      "value": "deadline_desc",
+                      "disabled": true,
+                      "description": "deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100",
+                      "disabled": true,
+                      "description": "Items per page (default 100, max 500)."
                     },
                     {
                       "key": "page",
@@ -17258,7 +17440,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns calls for grant proposals from the EU Funding & Tenders Portal \u2014 the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope.\n\n**When to use it**\nFor consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see \"what's been funded under this programme\" \u2192 \"what's currently open\". Default ordering puts most recent deadlines first so partners land on actionable opportunities.\n\n**Input**\n- `framework_programme` \u2014 substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).\n- `status` \u2014 `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data.\n  `unknown` is the honest absence of a status, not a state of the call: the Funding & Tenders search feed omits the status field on most historical topics, and it is a large share of the corpus (37% when measured on 9 September 2026, 700 of 1,881). It is a real, filterable value \u2014 do not read it as \"closed\".\n- `type_of_action` \u2014 substring (e.g. `RIA`, `IA`, `CSA`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 deadline window (use to find calls closing in your bidding-feasible range).\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open\nGET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page).\n\n**What this corpus is, and is not**\nMostly an ARCHIVE, not a live opportunity board. Measured 9 September 2026 across all 1,881 calls: 1,078 `closed`, 700 `unknown`, 65 `open`, 38 `forthcoming` \u2014 and only **75 (4%) carried a future deadline**, of which 54 are also `status=open`. So neither `status` nor `deadline` alone answers \"what can I still apply to\": filter on BOTH (`status=open` plus `deadline_from=<today>`) and expect a small result set. The counts move with each sync; treat them as the shape of the corpus rather than today's reading.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time."
+                "description": "**What it does**\nReturns calls for grant proposals from the EU Funding & Tenders Portal \u2014 the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope.\n\n**When to use it**\nFor consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see \"what's been funded under this programme\" \u2192 \"what's currently open\". Default ordering puts most recent deadlines first so partners land on actionable opportunities.\n\n**Input**\n- `framework_programme` \u2014 substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).\n- `status` \u2014 `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data. `unknown` is the absence of a status from the source feed, not a state of the call, and it is a large share of the corpus \u2014 read it as \"not stated\", never as \"closed\".\n- `type_of_action` \u2014 substring (e.g. `RIA`, `IA`, `CSA`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 deadline window (use to find calls closing in your bidding-feasible range).\n- `published_from`, `published_to`: date the call was published on the portal.\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.\n- `limit` (default 100, max 500), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open\nGET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01\nGET /api/v2/funding/ft-calls-for-proposals?updated_from=2026-09-21&order=updated_asc&limit=500\n```\n\n**You get back**\nA `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time."
               },
               "response": []
             },
@@ -17370,10 +17552,52 @@
                       "description": ""
                     },
                     {
-                      "key": "limit",
-                      "value": "50",
+                      "key": "published_from",
+                      "value": "2026-05-01",
                       "disabled": true,
-                      "description": ""
+                      "description": "Published on the portal on or after (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Published on the portal on or before (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "created_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded by Brubru on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Content last changed on or after (ISO date or datetime). The incremental-sync filter."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Content last changed on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "order",
+                      "value": "deadline_desc",
+                      "disabled": true,
+                      "description": "deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100",
+                      "disabled": true,
+                      "description": "Items per page (default 100, max 500)."
                     },
                     {
                       "key": "page",
@@ -17389,7 +17613,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns calls for tenders (public procurement) published by EU institutions and agencies on the Funding & Tenders Portal. Each row carries the tender_reference, the contracting authority (which institution / agency is buying), the contract type, the status, the deadline, the budget, and a body composed from title + description.\n\n**When to use it**\nFor service providers, consultancies, and contractors bidding on EU institutional procurement. This is the F&T Portal-specific view; for the broader TED (Tenders Electronic Daily) feed which covers Member State buyers as well, see `/api/v2/funding/tenders`. The two surfaces overlap for some Commission contracts but TED is the authoritative legal source.\n\n**Input**\n- `contracting_authority` \u2014 substring (e.g. `European Commission`, `Frontex`, `EMA`).\n- `status` \u2014 F&T tender status enum.\n- `contract_type` \u2014 substring (e.g. `services`, `supplies`, `works`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 submission window.\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open\nGET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page).\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time."
+                "description": "**What it does**\nReturns calls for tenders (public procurement) published by EU institutions and agencies on the Funding & Tenders Portal. Each row carries the tender_reference, the contracting authority (which institution / agency is buying), the contract type, the status, the deadline, the budget, and a body composed from title + description.\n\n**When to use it**\nFor service providers, consultancies, and contractors bidding on EU institutional procurement. This is the F&T Portal-specific view; for the broader TED (Tenders Electronic Daily) feed which covers Member State buyers as well, see `/api/v2/funding/tenders`. The two surfaces overlap for some Commission contracts but TED is the authoritative legal source.\n\n**Input**\n- `contracting_authority` \u2014 substring (e.g. `European Commission`, `Frontex`, `EMA`).\n- `status` \u2014 F&T tender status enum.\n- `contract_type` \u2014 substring (e.g. `services`, `supplies`, `works`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 submission window.\n- `published_from`, `published_to`: date the call was published on the portal.\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.\n- `limit` (default 100, max 500), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open\nGET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01\nGET /api/v2/funding/ft-calls-for-tenders?updated_from=2026-09-21&order=updated_asc&limit=500\n```\n\n**You get back**\nA `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time."
               },
               "response": []
             },
@@ -17787,7 +18011,7 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": ""
                     },
@@ -19413,10 +19637,46 @@
                       "description": ""
                     },
                     {
-                      "key": "limit",
-                      "value": "25",
+                      "key": "created_from",
+                      "value": "2026-09-21",
                       "disabled": true,
-                      "description": ""
+                      "description": "First recorded by Brubru on or after (ISO date or datetime)."
+                    },
+                    {
+                      "key": "created_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "First recorded on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "2026-09-21",
+                      "disabled": true,
+                      "description": "Record last changed on or after. The incremental-sync filter; includes departures."
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "2026-09-22",
+                      "disabled": true,
+                      "description": "Record last changed on or before; a bare date covers the whole day."
+                    },
+                    {
+                      "key": "include_removed",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Include officials no longer in the directory (always on when an updated_ window is given)."
+                    },
+                    {
+                      "key": "order",
+                      "value": "name",
+                      "disabled": true,
+                      "description": "name (default) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100",
+                      "disabled": true,
+                      "description": "Items per page (default 100, max 500)."
                     },
                     {
                       "key": "page",
@@ -19426,7 +19686,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns named EU officials from the official interinstitutional directory \u2014 each with their position (job title) and the department they belong to, across all EU institutions.\n\n**When to use it**\nTo find who holds a position (e.g. the Director-General of a DG), or to list the officials of a department.\n\n**Input**\n- `q` \u2014 substring search over the official's name.\n- `department` \u2014 substring match on the department name.\n- `mnemonic` \u2014 exact department code.\n- `position` \u2014 substring match on the position / job title.\n- `limit` (default 25, max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/who-is-who/officials?position=Director-General&mnemonic=AGRI\n```\n\n**You get back**\nA `PaginatedResponse[WhoIsWhoOfficialItem]`. The five envelope datapoints are filled (`public_url` = the Who is Who page, `body_txt`/`body_html` composed, `document_date` = null, `creation_date`).\n\n**Data freshness**\nSynced from the EU SPARQL endpoint (the structured EU Whoiswho directory). Bodies composed at ingest."
+                "description": "**What it does**\nReturns named EU officials from the official interinstitutional directory \u2014 each with their position (job title) and the department they belong to, across all EU institutions.\n\n**When to use it**\nTo find who holds a position (e.g. the Director-General of a DG), or to list the officials of a department.\n\n**Input**\n- `q` \u2014 substring search over the official's name.\n- `department` \u2014 substring match on the department name.\n- `mnemonic` \u2014 exact department code.\n- `position` \u2014 substring match on the position / job title.\n- `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).\n- `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.\n- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). Also `created_desc`, `updated_desc`, `created_asc`; the default is `name`.\n- `include_removed`: officials who have left the directory are hidden by default. They are included, with `removed_date` set, when you pass `include_removed=true` OR any `updated_from`/`updated_to`, so an incremental sync sees departures and can delete them.\n- `limit` (default 100, max 500), `page`.\n\n**Try it**\n```\nGET /api/v2/who-is-who/officials?position=Director-General&mnemonic=AGRI\nGET /api/v2/who-is-who/officials?updated_from=2026-09-21&order=updated_asc&limit=500\n```\n\n**You get back**\nA `PaginatedResponse[WhoIsWhoOfficialItem]`. Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `removed_date` is set once an official is no longer listed. The five envelope datapoints are filled (`public_url` = the Who is Who page, `body_txt`/`body_html` composed, `document_date` = null, `creation_date`).\n\n**Data freshness**\nSynced from the EU SPARQL endpoint (the structured EU Whoiswho directory). Bodies composed at ingest."
               },
               "response": []
             },
@@ -44317,6 +44577,318 @@
       "name": "Advisory and Oversight Bodies",
       "item": [
         {
+          "name": "EESC and CoR opinions: the full register",
+          "item": [
+            {
+              "name": "Opinions of both EU advisory committees",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/opinions/all",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "opinions",
+                    "all"
+                  ],
+                  "query": [
+                    {
+                      "key": "body",
+                      "value": "html",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "from",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "to",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "related_celex",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "has_body",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the opinions of the European Economic and Social Committee and the European Committee\nof the Regions in one feed, newest first, with the whole text on request.\n\n**When to use it**\nWhen you want both committees in one call: \"what have the advisory committees said about this\nact\", or a daily sweep of new opinions. Use `/opinions/eesc` or `/opinions/cor` for one.\n\n**Input**\n- `q` \u2014 substring search over the title.\n- `from` / `to` (YYYY-MM-DD) \u2014 bound on `document_date`.\n- `related_celex` \u2014 only opinions about that act.\n- `has_body` \u2014 true for opinions whose full text we hold, false for those we do not.\n- `include_body` \u2014 return `body_txt` and `body_html` in the list. Off by default: these\n  opinions average over 20,000 characters, so a page of 100 with bodies is several megabytes.\n- `limit` (default 25, max 100), `page` (1-indexed).\n- `body` \u2014 `eesc`, `cor`, or omit for both.\n\n**Try it**\n```\nGET /api/v1/opinions/all?limit=5\nGET /api/v1/opinions/all?body=cor&from=2026-01-01\nGET /api/v1/opinions/all?related_celex=52021PC0206&include_body=true\n```\n\n**You get back**\nA paginated envelope. Each item carries the five datapoints, `body_code` and `body_name`\nsaying which committee adopted it, the rapporteur and session, `own_initiative`, and `self`\n\u2014 the URL for that one opinion. `id` is the opinion's key WITHIN its committee and is not\nunique across the two, so pair it with `body_code` or just follow `self`.\n\n**How this differs from `/eesc/opinions` and `/cor/opinions`**\nThose read the committees' own websites through Brubru's economy store and hold 97 EESC and\n78 CoR items, useful for what the committees are publishing right now. This reads the\nPublications Office register: 3,617 EESC and 1,091 CoR opinions with the adopted text. For\nthe full record, or for any opinion older than the websites keep, use this one.\n\n**Data freshness**\nIngested from CellarIngested from Cellar and refreshed daily; the full text is fetched separately, so a very\nrecent opinion can appear with `has_body=false` for a day. `document_date` is the date the\ncommittee states and is null when it states none."
+              },
+              "response": []
+            },
+            {
+              "name": "Opinions of the European Committee of the Regions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/opinions/cor",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "opinions",
+                    "cor"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "from",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "to",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "related_celex",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "has_body",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the opinions of the European Committee of the Regions, newest first, with the whole text on request.\n\n**When to use it**\nWhen you want this committee only. `/opinions/all` returns both committees in one feed.\n\n**Input**\n- `q` \u2014 substring search over the title.\n- `from` / `to` (YYYY-MM-DD) \u2014 bound on `document_date`.\n- `related_celex` \u2014 only opinions about that act.\n- `has_body` \u2014 true for opinions whose full text we hold, false for those we do not.\n- `include_body` \u2014 return `body_txt` and `body_html` in the list. Off by default: these\n  opinions average over 20,000 characters, so a page of 100 with bodies is several megabytes.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v1/opinions/cor?limit=5\nGET /api/v1/opinions/cor?q=artificial+intelligence&include_body=true\n```\n\n**You get back**\nA paginated envelope of opinions, each with the five datapoints, the rapporteur and session,\n`own_initiative`, `related_celex` (the act it is about) and `self`.\n\n**How this differs from `/eesc/opinions` and `/cor/opinions`**\nThose read the committees' own websites through Brubru's economy store and hold 97 EESC and\n78 CoR items, useful for what the committees are publishing right now. This reads the\nPublications Office register: 3,617 EESC and 1,091 CoR opinions with the adopted text. For\nthe full record, or for any opinion older than the websites keep, use this one.\n\n**Data freshness**\nIngested from CellarIngested from Cellar and refreshed daily; the full text is fetched separately, so a very\nrecent opinion can appear with `has_body=false` for a day. `document_date` is the date the\ncommittee states and is null when it states none."
+              },
+              "response": []
+            },
+            {
+              "name": "Opinions of the European Economic and Social Committee",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/opinions/eesc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "opinions",
+                    "eesc"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "from",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "to",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "related_celex",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "has_body",
+                      "value": "",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the opinions of the European Economic and Social Committee, newest first, with the whole text on request.\n\n**When to use it**\nWhen you want this committee only. `/opinions/all` returns both committees in one feed.\n\n**Input**\n- `q` \u2014 substring search over the title.\n- `from` / `to` (YYYY-MM-DD) \u2014 bound on `document_date`.\n- `related_celex` \u2014 only opinions about that act.\n- `has_body` \u2014 true for opinions whose full text we hold, false for those we do not.\n- `include_body` \u2014 return `body_txt` and `body_html` in the list. Off by default: these\n  opinions average over 20,000 characters, so a page of 100 with bodies is several megabytes.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v1/opinions/eesc?limit=5\nGET /api/v1/opinions/eesc?q=artificial+intelligence&include_body=true\n```\n\n**You get back**\nA paginated envelope of opinions, each with the five datapoints, the rapporteur and session,\n`own_initiative`, `related_celex` (the act it is about) and `self`.\n\n**How this differs from `/eesc/opinions` and `/cor/opinions`**\nThose read the committees' own websites through Brubru's economy store and hold 97 EESC and\n78 CoR items, useful for what the committees are publishing right now. This reads the\nPublications Office register: 3,617 EESC and 1,091 CoR opinions with the adopted text. For\nthe full record, or for any opinion older than the websites keep, use this one.\n\n**Data freshness**\nIngested from CellarIngested from Cellar and refreshed daily; the full text is fetched separately, so a very\nrecent opinion can appear with `has_body=false` for a day. `document_date` is the date the\ncommittee states and is null when it states none."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Committee of the Regions opinion by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/opinions/cor/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "opinions",
+                    "cor",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one European Committee of the Regions opinion, always with its whole text.\n\n**When to use it**\nAfter a list call, to read the opinion itself. `include_body` is not needed here: the item\nroute always carries `body_txt` and `body_html`.\n\n**Input**\n- `item_id` \u2014 the `id` from a list call (this committee's own key).\n\n**Try it**\n```\nGET /api/v1/opinions/cor/1\n```\n\n**You get back**\nOne opinion with the five datapoints filled. 404 with `reason_code: not_found` if there is no\nsuch opinion.\n\n**How this differs from `/eesc/opinions` and `/cor/opinions`**\nThose read the committees' own websites through Brubru's economy store and hold 97 EESC and\n78 CoR items, useful for what the committees are publishing right now. This reads the\nPublications Office register: 3,617 EESC and 1,091 CoR opinions with the adopted text. For\nthe full record, or for any opinion older than the websites keep, use this one.\n\n**Data freshness**\nIngested from CellarIngested from Cellar and refreshed daily; the full text is fetched separately, so a very\nrecent opinion can appear with `has_body=false` for a day. `document_date` is the date the\ncommittee states and is null when it states none."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Economic and Social Committee opinion by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/opinions/eesc/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "opinions",
+                    "eesc",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one European Economic and Social Committee opinion, always with its whole text.\n\n**When to use it**\nAfter a list call, to read the opinion itself. `include_body` is not needed here: the item\nroute always carries `body_txt` and `body_html`.\n\n**Input**\n- `item_id` \u2014 the `id` from a list call (this committee's own key).\n\n**Try it**\n```\nGET /api/v1/opinions/eesc/1\n```\n\n**You get back**\nOne opinion with the five datapoints filled. 404 with `reason_code: not_found` if there is no\nsuch opinion.\n\n**How this differs from `/eesc/opinions` and `/cor/opinions`**\nThose read the committees' own websites through Brubru's economy store and hold 97 EESC and\n78 CoR items, useful for what the committees are publishing right now. This reads the\nPublications Office register: 3,617 EESC and 1,091 CoR opinions with the adopted text. For\nthe full record, or for any opinion older than the websites keep, use this one.\n\n**Data freshness**\nIngested from CellarIngested from Cellar and refreshed daily; the full text is fetched separately, so a very\nrecent opinion can appear with `has_body=false` for a day. `document_date` is the date the\ncommittee states and is null when it states none."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "Committee of the Regions (CoR)",
           "item": [
             {
@@ -49518,13 +50090,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": "Incremental sync \u2014 events last_updated >= value."
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": ""
                     },
@@ -50169,13 +50741,13 @@
                     },
                     {
                       "key": "updated_from",
-                      "value": "",
+                      "value": "2026-09-21",
                       "disabled": true,
                       "description": "Incremental sync \u2014 rows with updated_at >= value."
                     },
                     {
                       "key": "updated_to",
-                      "value": "",
+                      "value": "2026-09-22",
                       "disabled": true,
                       "description": "Incremental sync upper bound \u2014 rows with updated_at <= value."
                     },
