@@ -93,6 +93,18 @@ EVENT_LABELS = {"EP Plenary", "European Council", "Euro Summit", "EPSCO",
                 "Informal European Council", "EU-", "G7", "G20"}
 
 
+# The page header repeats at the top of every page. On a page break it landed
+# inside the item above it: SEC(2026) 2579 glued "SEC(2026) 2579 final Tuesday,
+# 29 September 2026 Date of Commission meeting (tbc) ..." onto the Consumer
+# package (30 Sep 2026).
+HEADER_RE = re.compile(
+    r"^(SEC\(\d{4}\)\s*\d+\s*final"
+    r"|(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+\d{1,2}\s+\w+\s+\d{4}"
+    r"|Date of|Commission|meeting|\(tbc\)|Possible items for oral procedure"
+    r"|President/EVP Responsible|Other relevant events)$"
+)
+
+
 def _is_member(line: str) -> bool:
     s = line.strip()
     if not s or len(s) > 40:
@@ -166,7 +178,16 @@ def parse_items(text: str) -> list[dict]:
 
     for raw in text.splitlines():
         line = raw.strip()
-        if not line or line == "(Str)":
+        if not line:
+            # A blank line is a cell boundary. It ends a sub-bullet: without
+            # this, the next item ("2040 vision for fisheries and aquaculture",
+            # below the migration package's last bullet) was swallowed into that
+            # bullet and the item itself was reported as dropped (30 Sep 2026).
+            if in_subs and sub_buf:
+                flush_sub()
+                in_subs = False
+            continue
+        if line == "(Str)" or HEADER_RE.match(line):
             continue
         if line == "-":
             flush_sub()
@@ -350,10 +371,14 @@ def _run(a, outcome: dict) -> int:
                     (prev[0]["reference"],))
         g = cur.fetchone()
         if g and g[0]:
-            old = {(i["meeting_date_provisional"], i["item"]) for i in parse_items(g[0])}
+            old_items = parse_items(g[0])
+            old = {(i["meeting_date_provisional"], i["item"]) for i in old_items}
+            old_subs = {(i["meeting_date_provisional"], i["item"]): i.get("sub_items") or []
+                        for i in old_items}
             cur_set = {(i["meeting_date_provisional"], i["item"]) for i in rec["items"]}
             added = sorted(cur_set - old)
             gone = sorted(old - cur_set)
+
 
             # A string-exact diff is too noisy to act on. When the Commission
             # corrected its own typo "Northern Neighbourghood" the first run
@@ -376,6 +401,22 @@ def _run(a, outcome: dict) -> int:
                         reworded.append((da, tg, ta))
                         added.remove((da, ta)); gone.remove((dg_, tg)); break
 
+            # (Runs AFTER the moved/reworded pairing: an item that moved from a
+            # date before the window to one inside it is MOVED, not out of window.)
+            # Each agenda covers a window that starts at its first meeting. An
+            # item of the previous agenda dated BEFORE that start is not
+            # "gone": this list simply does not cover that meeting (30 Sep 2026:
+            # "European critical communication system", 30 Sep, was reported
+            # as GONE by an agenda starting on 6 Oct).
+            def _d(x: str) -> dt.date:
+                dd, mm, yy = (int(v) for v in x.split("/"))
+                return dt.date(yy, mm, dd)
+
+            window_start = min((_d(i["meeting_date_provisional"]) for i in rec["items"]),
+                               default=None)
+            before_window = [(d, t) for d, t in gone
+                             if window_start is not None and _d(d) < window_start]
+            gone = [x for x in gone if x not in before_window]
             print(f"\n  CHANGES vs {prev[0]['reference']} ({prev[0]['date']}):")
             print(f"    MOVED to a different meeting : {len(moved)}")
             for t, a_, b_ in moved:
@@ -385,11 +426,25 @@ def _run(a, outcome: dict) -> int:
                 print(f"       ~ {d}  {a_[:40]}")
                 print(f"              now: {b_[:56]}")
             print(f"    NEWLY ADDED                  : {len(added)}")
-            for d, t in added[:10]:
+            for d, t in added:
                 print(f"       + {d}  {t[:66]}")
             print(f"    GONE (adopted, or dropped)   : {len(gone)}")
-            for d, t in gone[:10]:
+            for d, t in gone:
                 print(f"       - {d}  {t[:66]}")
+                # A package can survive in part: print what it contained so a
+                # split is visible (2578's "European product package" = Product
+                # Act + Standardisation; 2579 keeps only the Standardisation part).
+                for sub in old_subs.get((d, t), []):
+                    head = sub.split(":")[0].strip().lower()
+                    kept = [a for _, a in added if head in a.lower() or close(sub, a) > 0.5]
+                    note = f"  (now listed as: {kept[0][:40]})" if kept else "  (not on the new list)"
+                    print(f"            . {sub[:52]}{note}")
+            if before_window:
+                print(f"    BEFORE THIS LIST'S WINDOW    : {len(before_window)}  "
+                      f"(the new list starts {window_start:%d/%m/%Y}; not a signal, "
+                      f"check that meeting's order of the day)")
+                for d, t in before_window:
+                    print(f"       . {d}  {t[:66]}")
             if not (added or gone or moved or reworded):
                 print("       (no change in the item list)")
 
