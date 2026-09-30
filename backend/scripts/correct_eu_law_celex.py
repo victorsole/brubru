@@ -56,6 +56,11 @@ def main() -> int:
 
     payload = json.loads(Path(args.input).read_text(encoding="utf-8"))
     confirmed = {bad: v["to"] for bad, v in payload["confirmed"].items()}
+    # The ROW each correction belongs to. Keying an UPDATE on the old CELEX alone is
+    # unsafe after an ordered swap: the value one row vacates is the value another row
+    # is corrected into, so a second run would move the wrong row onto an occupied
+    # target. The collision check happens to stop it; the row id makes it impossible.
+    row_of = {bad: v.get("row_id") for bad, v in payload["confirmed"].items()}
     print(f"[INFO] {len(confirmed):,} title-confirmed correction(s)")
 
     # Two different wrong values must not be corrected onto the same CELEX.
@@ -74,11 +79,36 @@ def main() -> int:
         # Re-check against the live table, not against the audit's snapshot.
         existing = {r[0] for r in db.execute(text(
             "SELECT DISTINCT celex FROM eu_laws WHERE celex IS NOT NULL")).fetchall()}
-        collide = [b for b, g in confirmed.items() if g in existing]
-        for b in collide:
+
+        # A target held by a row that is ITSELF moving is not a collision, it is an
+        # ORDERED SWAP: move the holder first and the target frees up. Treating it as a
+        # collision silently dropped all four pairs GovClipping flagged on 29 Sep 2026.
+        # 32011L0061 is held by the Israel adequacy Decision and wanted by AIFMD, which
+        # sits on 32011R0061 -- a CELEX that belongs to a real, unrelated Regulation.
+        moving = set(confirmed)
+
+        # Three states, not two. On a SECOND run every old value is gone, so every
+        # correction looks like a collision and the script reported "1,098 skipped,
+        # 4 will be applied" for a database that was already entirely correct. A run
+        # that has nothing to do must say so, or the next person reads a finished job
+        # as a broken one.
+        done = [b for b in confirmed if b not in existing]
+        for b in done:
             confirmed.pop(b)
-        if collide:
-            print(f"[INFO] {len(collide)} correction(s) now collide with a live row; skipped")
+        if done:
+            print(f"[INFO] {len(done):,} correction(s) already applied; nothing to do for them")
+
+        hard = [b for b, g in confirmed.items() if g in existing and g not in moving]
+        for b in hard:
+            confirmed.pop(b)
+        if hard:
+            print(f"[INFO] {len(hard)} correction(s) collide with a row that is NOT moving; skipped")
+        swaps = [b for b, g in confirmed.items() if g in existing]
+        if swaps:
+            print(f"[INFO] {len(swaps)} correction(s) are ordered swaps; the holder moves first")
+        if not confirmed:
+            print("[OK] nothing left to correct")
+            return 0
         print(f"[INFO] {len(confirmed):,} correction(s) will be applied")
 
         if not args.apply:
@@ -98,13 +128,55 @@ def main() -> int:
         out.write_text(json.dumps(mapping, indent=1), encoding="utf-8")
         print(f"[BACKUP] {len(mapping):,} row(s) recorded in {out}")
 
+        # Repeated passes rather than one: a correction is applied only when its target
+        # is free, so an ordered swap resolves on the pass after its holder has moved.
+        applied_ids: dict[str, str] = {}
+        pending = dict(confirmed)
         changed = 0
-        for bad, good in confirmed.items():
-            changed += db.execute(text(
-                "UPDATE eu_laws SET celex = :good, updated_at = now() WHERE celex = :bad"),
-                {"good": good, "bad": bad}).rowcount
-        db.commit()
+        for pass_no in range(1, 11):
+            taken = {r[0] for r in db.execute(text(
+                "SELECT celex FROM eu_laws WHERE celex IS NOT NULL")).fetchall()}
+            ready = {b: g for b, g in pending.items() if g not in taken}
+            if not ready:
+                break
+            for bad, good in ready.items():
+                rid = row_of.get(bad)
+                if rid:
+                    res = db.execute(text(
+                        "UPDATE eu_laws SET celex = :good, updated_at = now() "
+                        "WHERE id = :rid AND celex = :bad RETURNING id"),
+                        {"good": good, "bad": bad, "rid": int(rid)}).fetchall()
+                else:
+                    res = db.execute(text(
+                        "UPDATE eu_laws SET celex = :good, updated_at = now() "
+                        "WHERE celex = :bad RETURNING id"), {"good": good, "bad": bad}).fetchall()
+                for row in res:
+                    applied_ids[str(row[0])] = good
+                changed += len(res)
+                pending.pop(bad)
+            db.commit()
+            print(f"[PASS {pass_no}] applied {len(ready)}, {len(pending)} still waiting")
+        if pending:
+            print(f"[WARN] {len(pending)} correction(s) never became applicable: "
+                  f"{list(pending)[:5]}")
         print(f"[APPLIED] {changed:,} row(s) re-celexed")
+
+        # Records with no CELEX of their own: drafts, association-council acts, EEA
+        # declarations, annex fragments. NULL, never a fabricated identifier.
+        nulled = 0
+        for rec in payload.get("to_null", []):
+            nulled += db.execute(text(
+                "UPDATE eu_laws SET celex = NULL, updated_at = now() "
+                "WHERE id = :i AND celex = :c"),
+                {"i": int(rec["id"]), "c": rec["celex"]}).rowcount
+        db.commit()
+        print(f"[NULLED] {nulled} record(s) that have no CELEX of their own")
+
+        # The row id is the identifier that does not move; record what each row now holds
+        # so the acceptance suite can prove no row was created or replaced.
+        payload["applied_ids"] = applied_ids
+        Path(args.input).write_text(json.dumps(payload, indent=1, ensure_ascii=False),
+                                    encoding="utf-8")
 
         left = db.execute(text(
             "SELECT count(*) FROM eu_laws WHERE celex = ANY(:c)"), {"c": list(confirmed)}).scalar()
