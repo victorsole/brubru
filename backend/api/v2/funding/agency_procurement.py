@@ -87,8 +87,10 @@ register_resource(
           "procedures below EUR 140k that only its own site keeps; the kind stated in the body. Each "
           "item carries `tender_reference` (the portal notice id, or EFSA's NP reference), `status` "
           "(as on the portal; a prior notice is closed once its call is out) and `deadline`; "
-          "`document_date` is the publication date (null for the archive procedures). Filter with q.",
-    procurement=True,
+          "`document_date` is the publication date (null for the archive procedures). The body lists "
+          "each portal notice's files; `/{item_id}/documents` serves them with their extracted text "
+          "(title, type, language and date from the portal). Filter with q.",
+    procurement=True, documents=True,
 )
 
 # --- Eurojust ------------------------------------------------------------- #
@@ -189,8 +191,9 @@ register_resource(
           "(open only while on ECHA's current page with the deadline ahead) and `deadline`; "
           "`document_date` is the publication date of the linked Funding & Tenders notice, "
           "null where there is none (ECHA publishes no date itself). Calls for interest are "
-          "at /echa-calls. Filter with q.",
-    procurement=True,
+          "at /echa-calls. The body lists the files linked from the procedure page; "
+          "`/{item_id}/documents` serves them with their extracted text. Filter with q.",
+    procurement=True, documents=True,
 )
 register_resource(
     router, body_code="echa", item_type="eoi_call", slug="echa-calls",
@@ -200,8 +203,9 @@ register_resource(
     extra="ECHA calls for expression of interest (e.g. lists of external experts), the whole "
           "archive. Each item carries `tender_reference`, `status` and `deadline`; "
           "`document_date` is the linked Funding & Tenders notice's publication date, null "
-          "where there is none. Filter with q.",
-    procurement=True,
+          "where there is none. `/{item_id}/documents` serves the call's files with their "
+          "extracted text. Filter with q.",
+    procurement=True, documents=True,
 )
 
 # --- EIGE — European Institute for Gender Equality ------------------------ #
@@ -239,8 +243,10 @@ register_resource(
           "expression of interest (remunerated experts, Topic Centres), the kind stated in the "
           "body. Each item carries `tender_reference` (the portal notice id; none for EEA's own "
           "calls), `status` (open, forthcoming or closed, as on the portal) and `deadline`; "
-          "`document_date` is the publication date. Filter with q.",
-    procurement=True,
+          "`document_date` is the publication date. The body lists each notice's files; "
+          "`/{item_id}/documents` serves them with their extracted text (title, type, language and "
+          "date from the portal). Filter with q.",
+    procurement=True, documents=True,
 )
 
 # --- EU-OSHA — European Agency for Safety and Health at Work -------------- #

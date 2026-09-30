@@ -232,7 +232,7 @@ GET {path}/{{item_id}}/documents
 A paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.
 
 **Data freshness**
-Files are read from the procedure pages daily for live and recent procedures."""
+Files are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."""
 
 _DESC_DOC = """**What it does**
 Returns one file attached to a {body} {noun_singular}, with its full extracted text.

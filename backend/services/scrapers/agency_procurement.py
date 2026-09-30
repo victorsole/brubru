@@ -21,6 +21,7 @@ above until each is walked in the API audit.
 from __future__ import annotations
 
 import html as _html
+import json
 import re
 from datetime import datetime, timezone
 from urllib.parse import quote, unquote
@@ -243,6 +244,24 @@ def _cedefop_detail(url: str) -> dict:
     return out
 
 
+def _documents_txt(docs: list[dict]) -> list[str]:
+    """The procedure body's list of its files (procurement_documents holds their text)."""
+    return [f"Document: {d['title']} ("
+            + ", ".join(x for x in [(d.get("file_format") or "").upper(),
+                                    d["document_date"].isoformat() if d.get("document_date") else ""] if x)
+            + f") {d['file_url']}" for d in docs]
+
+
+def _documents_html(docs: list[dict]) -> str:
+    if not docs:
+        return ""
+    return "<h2>Documents</h2><ul>" + "".join(
+        f'<li><a href="{_html.escape(d["file_url"])}">{_html.escape(d["title"])}</a>'
+        + "".join(f" · {_html.escape(x)}" for x in [(d.get("file_format") or "").upper(),
+                  d["document_date"].isoformat() if d.get("document_date") else ""] if x)
+        + "</li>" for d in docs) + "</ul>"
+
+
 # 27 Nov 2009 is Cedefop's site-migration stamp, not a file's date: measured 30 Sep 2026
 # over all 464 procedure pages it sits on 720 of 1,500 dated files, across 110 procedures
 # published 2004-2009, and no other date appears on more than 5 procedures (the ECDC
@@ -330,10 +349,8 @@ def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
     desc = detail.get("description") or []
     links = detail.get("links") or []
     docs = detail.get("documents") or []
-    doc_lines = [f"Document: {d['title']} ({', '.join(x for x in [(d['file_format'] or '').upper(), d['document_date'].isoformat() if d['document_date'] else ''] if x)}) {d['file_url']}"
-                 for d in docs]
     item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links,
-                                     *doc_lines]))
+                                     *_documents_txt(docs)]))
     item.body_html = clean(
         f"<h1>{_html.escape(row['title'])}</h1>"
         + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
@@ -341,11 +358,7 @@ def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
         + "</dl>"
         + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
            + "</ul>" if links else "")
-        + ("<h2>Documents</h2><ul>" + "".join(
-            f'<li><a href="{_html.escape(d["file_url"])}">{_html.escape(d["title"])}</a>'
-            + "".join(f" · {_html.escape(x)}" for x in [(d["file_format"] or "").upper(),
-                      d["document_date"].isoformat() if d["document_date"] else ""] if x)
-            + "</li>" for d in docs) + "</ul>" if docs else ""))
+        + _documents_html(docs))
     item.document_date = published
     item.extras["deadline"] = deadline
     return item
@@ -1064,7 +1077,38 @@ def _echa_detail(html: str) -> dict:
     links = sorted(set(u for u in (_html.unescape(x) for x in re.findall(r'href="(https?://[^"]+)"', block))
                        if "echa.europa.eu" not in u))
     notices = list(dict.fromkeys(_FT_NOTICE.findall(block)))
-    return {"description": paras, "links": links, "notices": notices}
+    return {"description": paras, "links": links, "notices": notices,
+            "documents": _echa_documents(block)}
+
+
+_GENERIC_LINK_TEXT = {"here", "click here", "link", "this link", "download", "pdf", "[pdf]"}
+
+
+def _echa_documents(block: str) -> list[dict]:
+    """Files linked from a procedure's text (Liferay document library):
+      /documents/10162/<folder>/<file name>/<uuid>?t=<cache-buster>
+      /documents/d/guest/<name>                       (no extension: the bytes decide)
+    The link text is the title. ECHA shows no date next to a file, so none is stored.
+    The ?t= cache-buster is dropped: the same file must keep one address."""
+    docs, seen = [], set()
+    for href, inner in re.findall(r'<a\b[^>]*href="([^"]*?/documents/[^"]+)"[^>]*>(.*?)</a>', block, re.S):
+        url = _html.unescape(href).split("?", 1)[0].split("#", 1)[0]
+        if url.startswith("/"):
+            url = _ECHA + url
+        if not url.startswith(_ECHA + "/documents/") or url in seen:
+            continue
+        seen.add(url)
+        parts = [p for p in url.split("/") if p]
+        # /documents/10162/<folder>/<name>/<uuid>: the name is the segment before the uuid
+        name = unquote(parts[-2] if re.fullmatch(r"[0-9a-f-]{36}", parts[-1]) else parts[-1])
+        fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+        title = _txt(inner)
+        if title.lower().strip(" .:") in _GENERIC_LINK_TEXT:
+            title = name                      # "click here" says nothing about the file
+        docs.append({"title": title or name, "file_url": url, "file_name": name,
+                     "file_format": fm.group(1).lower() if fm else None,
+                     "file_size": None, "language": None, "document_date": None})
+    return docs
 
 
 _SEDIA_SEARCH = "https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text={text}&pageNumber=1&pageSize=5"
@@ -1132,14 +1176,17 @@ def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
              ("Deadline", deadline.date().isoformat() if deadline else "")]
     facts = [(k, v) for k, v in facts if v]
     desc, links = detail["description"], detail["links"]
-    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links]))
+    docs = detail.get("documents") or []
+    item.body_txt = clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), *links,
+                                     *_documents_txt(docs)]))
     item.body_html = clean(
         f"<h1>{_html.escape(row['title'])}</h1>"
         + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
         + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
         + "</dl>"
         + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
-           + "</ul>" if links else ""))
+           + "</ul>" if links else "")
+        + _documents_html(docs))
     # A notice cannot be published after its own deadline (see the ECDC note).
     item.document_date = published if published and (deadline is None or published <= deadline) else None
     return item
@@ -1300,10 +1347,8 @@ _FT_KIND_BY_SUFFIX = {"CN": "call for tender", "EXA": "ex-ante publicity",
                       "PIN": "prior information notice", "CAN": "contract award notice"}
 
 
-def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: datetime) -> list[Item]:
-    """Every Funding & Tenders notice of one EU buyer (SEDIA cftPartyLegalEntityId), in the
-    shared procurement shape. One reader for every agency that publishes on the portal
-    (Victor, 30 Sep 2026: EEA and EFSA first)."""
+def _ft_buyer_results(body_code: str, buyer_id: str) -> list[dict]:
+    """Every raw SEDIA result of one EU buyer (cftPartyLegalEntityId), all pages."""
     sedia = _sedia_helpers()
     query = {"bool": {"must": [{"terms": {"type": ["0"]}},
                                {"terms": {"cftPartyLegalEntityId": [buyer_id]}}]}}
@@ -1319,6 +1364,71 @@ def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: d
         page += 1
     if not results:
         raise RuntimeError(f"SEDIA returned no {body_code} notices for buyer id {buyer_id}")
+    return results
+
+
+# Each document has its own address on the portal (the Documents tab links it; plain
+# HTTP, 30 Sep 2026). Notices migrated from the old eTendering site keep their files
+# under docs/etender/{cftId}/ (file names "{cftId}_{docId}_..."); newer ones under
+# docs/{notice id}/. The "download all" archive exists for new notices only (404 on
+# etender ones), so files are read one by one.
+_FT_DOCS = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/docs"
+
+
+# New notices label a file "EN", etender ones "ENG": one language, one spelling (ISO 639-1).
+_LANG3 = {"bul": "bg", "ces": "cs", "cze": "cs", "dan": "da", "deu": "de", "ger": "de", "ell": "el",
+          "gre": "el", "eng": "en", "spa": "es", "est": "et", "fin": "fi", "fra": "fr", "fre": "fr",
+          "gle": "ga", "hrv": "hr", "hun": "hu", "ita": "it", "lit": "lt", "lav": "lv", "mlt": "mt",
+          "nld": "nl", "dut": "nl", "pol": "pl", "por": "pt", "ron": "ro", "rum": "ro", "slk": "sk",
+          "slo": "sk", "slv": "sl", "swe": "sv"}
+
+
+def _lang2(code: str) -> str:
+    return _LANG3.get(code, code)
+
+
+def _ft_notice_documents(result: dict) -> list[dict]:
+    """The notice's documents from SEDIA's cftDocuments: title, type, language and
+    publication date of each current, non-obsolete file (the ZIP holds the files)."""
+    md = result.get("metadata") or {}
+    ident = (md.get("identifier") or [None])[0]
+    raw = (md.get("cftDocuments") or [None])[0]
+    if not ident or not raw:
+        return []
+    try:
+        entries = json.loads(raw).get("cftDocuments") or []
+    except (ValueError, AttributeError):
+        return []
+    cft_id = (md.get("cftId") or [None])[0]
+    docs, seen = [], set()
+    for e in sorted(entries, key=lambda e: e.get("sortKey") or ""):
+        if e.get("obsolete"):
+            continue
+        refs = e.get("hermesDocumentReferences") or []
+        ref = next((r for r in refs if r.get("isCurrentVersion") == "Y"), refs[-1] if refs else None)
+        name = (ref or {}).get("documentFileName")
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+        pub = _parse_iso_sedia((ref or {}).get("publicationDate"))
+        folder = (f"etender/{cft_id}" if cft_id and name.startswith(f"{cft_id}_")
+                  else quote(ident, safe=""))
+        docs.append({"title": clean(e.get("documentTitle") or e.get("documentType") or name),
+                     "document_type": e.get("documentType"),
+                     "file_url": f"{_FT_DOCS}/{folder}/{quote(name, safe='')}", "file_name": name,
+                     "file_format": fm.group(1).lower() if fm else None, "file_size": None,
+                     "language": _lang2((e.get("languageCode") or "").lower()) or None,
+                     "document_date": pub.date() if pub else None})
+    return docs
+
+
+def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: datetime) -> list[Item]:
+    """Every Funding & Tenders notice of one EU buyer (SEDIA cftPartyLegalEntityId), in the
+    shared procurement shape. One reader for every agency that publishes on the portal
+    (Victor, 30 Sep 2026: EEA and EFSA first)."""
+    sedia = _sedia_helpers()
+    results = _ft_buyer_results(body_code, buyer_id)
     items, seen = [], set()
     for res in results:
         row = sedia.normalise_row(res)
@@ -1339,16 +1449,19 @@ def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: d
         facts = [(k, v) for k, v in facts if v]
         desc = [p for p in re.split(r"\n{2,}", row.get("description") or "") if p.strip()]
         url = row.get("source_url") or ""
+        docs = _ft_notice_documents(res)
         items.append(Item(
             body_code=body_code, item_type="tender", title=clean(row["title"])[:120], public_url=url,
             summary=clean(" · ".join(b for b in [row["topic_id"], kind,
                                                    deadline.date().isoformat() if deadline else ""] if b)),
-            body_txt=clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), url])),
+            body_txt=clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), url,
+                                      *_documents_txt(docs)])),
             body_html=clean(f"<h1>{_html.escape(row['title'])}</h1>"
                             + "".join(f"<p>{_html.escape(p)}</p>" for p in desc)
                             + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>"
                                                for k, v in facts) + "</dl>"
-                            + f'<p><a href="{_html.escape(url)}">{_html.escape(url)}</a></p>'),
+                            + f'<p><a href="{_html.escape(url)}">{_html.escape(url)}</a></p>'
+                            + _documents_html(docs)),
             document_date=published if published and (deadline is None or published <= deadline) else None,
             creation_date=now, source_kind=source_kind, guid=row["topic_id"],
             extras={"tender_reference": row["topic_id"], "status": status, "deadline": deadline},

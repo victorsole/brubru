@@ -210,12 +210,23 @@ def _sniff(data: bytes, fmt: str) -> str:
         return {"docx": "doc", "docm": "doc", "dot": "doc", "xlsx": "xls",
                 "xlsm": "xls"}.get(fmt, fmt or "doc")
     if data[:2] == b"PK" and fmt not in ("docx", "xlsx", "xlsm"):
+        if not fmt:           # no extension (ECHA /documents/d/guest/<name>): look inside
+            try:
+                names = set(zipfile.ZipFile(io.BytesIO(data)).namelist())
+            except zipfile.BadZipFile:
+                return "zip"
+            if "word/document.xml" in names:
+                return "docx"
+            if "xl/workbook.xml" in names:
+                return "xlsx"
         return "zip"
     return fmt
 
 
 def extract(data: bytes, filename: str, *, _depth: int = 0) -> list[Extracted]:
     fmt = _sniff(data, _fmt(filename))
+    if not data:
+        return [Extracted(filename, fmt, None, "no-text:empty-file", size=0)]
     if len(data) > MAX_BYTES:
         return [Extracted(filename, fmt, None, "no-text:too-large", size=len(data))]
     if fmt == "zip":
@@ -228,7 +239,16 @@ def extract(data: bytes, filename: str, *, _depth: int = 0) -> list[Extracted]:
             name = info.filename
             if info.is_dir() or not _is_document_member(name):
                 continue
-            inner = zf.read(info)
+            try:
+                inner = zf.read(info)
+            except (RuntimeError, NotImplementedError, zipfile.BadZipFile, OSError) as exc:
+                # A password-protected member (AES, compress_type 99) or an unsupported
+                # compression: listed, with the reason, never a stopped run.
+                why = "encrypted" if "encrypt" in str(exc).lower() or info.flag_bits & 0x1 else \
+                      f"unreadable-member:{type(exc).__name__}"
+                out.append(Extracted(name, _fmt(name), None, f"no-text:{why}", inner=True,
+                                     size=info.file_size))
+                continue
             if _depth >= 1 and _sniff(inner, _fmt(name)) == "zip":
                 out.append(Extracted(name, "zip", None, "no-text:nested-zip", inner=True, size=len(inner)))
                 continue

@@ -126,7 +126,8 @@ def test_documents_routes_exist_only_where_a_writer_fills_them():
               if p.endswith("/{item_id}/documents")}
     assert served == set(LISTERS)
     doc_routes = [r for r in router.routes if "/documents" in r.path]
-    assert len(doc_routes) == 4   # cedefop tenders + calls, list + one document
+    # cedefop tenders + calls, echa tenders + calls, eea tenders, efsa tenders; list + one doc
+    assert len(doc_routes) == 12
 
 
 def test_cedefop_body_lists_the_files(monkeypatch):
@@ -183,3 +184,88 @@ def test_zip_of_templates_only_is_one_row_saying_so():
 def test_ole_file_that_is_not_word_keeps_its_own_format():
     e = extract((DOCS / "label_inner_envelope.doc").read_bytes(), "slides.ppt")[0]
     assert e.source == "unsupported:ppt"
+
+
+ECHA = Path(__file__).resolve().parent / "fixtures" / "echa"
+FT = Path(__file__).resolve().parent / "fixtures" / "ft"
+
+
+def test_echa_detail_lists_its_files():
+    detail = ap._echa_detail((ECHA / "detail_with_documents.html").read_text(errors="ignore"))
+    docs = detail["documents"]
+    assert len(docs) == 8
+    assert docs[0]["title"] == "Contract notice"
+    assert docs[0]["file_name"] == "2015-ojs105-189904-en_en.pdf"
+    assert docs[0]["file_url"].startswith("https://echa.europa.eu/documents/")
+    assert all("?" not in d["file_url"] for d in docs)          # the ?t= cache-buster is dropped
+    assert {d["file_format"] for d in docs} == {"pdf", "doc", "xlsx"}
+    assert all(d["document_date"] is None for d in docs)        # ECHA shows none
+
+
+def test_echa_extensionless_link_and_generic_text():
+    block = ('<a href="/documents/d/guest/questionnaire_software_development_services_en">here</a>'
+             '<a href="/documents/10162/1/a.pdf/0c1f2e3d-0000-1111-2222-333344445555?t=1">Notice</a>')
+    docs = ap._echa_documents(block)
+    assert docs[0]["file_name"] == "questionnaire_software_development_services_en"
+    assert docs[0]["file_format"] is None and docs[0]["title"] == docs[0]["file_name"]
+    assert docs[1]["file_name"] == "a.pdf" and docs[1]["file_url"].endswith("a.pdf/0c1f2e3d-0000-1111-2222-333344445555")
+
+
+def test_docx_without_extension_is_sniffed_from_inside():
+    e = extract((DOCS / "reply_form.docx").read_bytes(), "questionnaire_en")[0]
+    assert e.source == "extracted:docx"
+
+
+def test_portal_documents_new_and_etender_notices():
+    import json
+    k = json.loads((FT / "sedia_notices_with_documents.json").read_text())
+    new = ap._ft_notice_documents(k["new"])
+    old = ap._ft_notice_documents(k["etender_old"])
+    assert len(new) == 5 and len(old) == 4
+    spec = next(d for d in new if "Tender Specifications" in d["title"])
+    assert spec["file_url"] == ("https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/"
+                                "opportunities/tender-details/docs/74942816-d342-424e-a7b3-7398f6f2b597-CN/"
+                                "EEA.CCE.R0.26.005_Annex%20I_Tender%20Specifications_V1.pdf")
+    assert spec["document_date"] == date(2026, 9, 9) and spec["language"] == "en"
+    assert all("/docs/etender/5689/5689_" in d["file_url"] for d in old)
+    assert {d["language"] for d in old} == {"en"}               # "ENG" normalised
+
+
+def test_empty_file_says_so():
+    assert extract(b"", "blank.pdf")[0].source == "no-text:empty-file"
+
+
+def test_encrypted_zip_member_is_listed_not_fatal():
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("open.docx", (DOCS / "reply_form.docx").read_bytes())
+        zf.writestr("secret.docx", b"x" * 50)
+    raw = bytearray(buf.getvalue())
+    # mark the second member encrypted (general-purpose flag bit 0, local + central headers)
+    name = b"secret.docx"
+    for sig in (b"PK\x03\x04", b"PK\x01\x02"):
+        i = raw.find(sig)
+        while i != -1:
+            off = 6 if sig == b"PK\x03\x04" else 8
+            nlen_off = 26 if sig == b"PK\x03\x04" else 28
+            head = 30 if sig == b"PK\x03\x04" else 46
+            nlen = int.from_bytes(raw[i + nlen_off:i + nlen_off + 2], "little")
+            if raw[i + head:i + head + nlen] == name:
+                raw[i + off] |= 0x1
+            i = raw.find(sig, i + 4)
+    out = extract(bytes(raw), "dossier.zip")
+    assert [(e.name, e.source) for e in out] == [("open.docx", "extracted:docx"),
+                                                 ("secret.docx", "no-text:encrypted")]
+
+
+def test_echa_body_lists_the_files(monkeypatch):
+    """30 Sep 2026: the list was first added to the ECDC builder (an identical block of
+    code) instead of ECHA's, and 59 ECHA bodies went without it."""
+    from datetime import datetime, timezone
+    monkeypatch.setattr(ap, "_ft_notice_date", lambda ident: None)
+    detail = ap._echa_detail((ECHA / "detail_with_documents.html").read_text(errors="ignore"))
+    row = {"title": "t", "url": "https://echa.europa.eu/-/t", "reference": "ECHA/2015/1", "kind": "Open",
+           "current": False, "deadline": None}
+    item = ap._echa_item(row, detail, datetime(2026, 9, 30, tzinfo=timezone.utc))
+    assert item.body_txt.count("\nDocument: ") == 8
+    assert "<h2>Documents</h2>" in item.body_html
