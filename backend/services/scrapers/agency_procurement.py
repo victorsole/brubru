@@ -356,31 +356,125 @@ def ingest_ema_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 # --------------------------------------------------------------------------- #
 # EFCA — European Fisheries Control Agency (Drupal Views tables).
+#
+# API audit, 30 Sep 2026 ("Walk · EFCA"): /en/content/open-calls-tender now lists JOB
+# VACANCIES (2 were served as tenders); 26 procedures were stored twice (EFCA moved
+# from /en/node/NNN to slug addresses and identity was the address); EFCA's own
+# Open/Closed column was overwritten by fixed labels; the deadline was document_date.
+# Victor's decisions, 30 Sep: stop reading the vacancies page; identity by EFCA
+# reference; status from EFCA's column (open only while Open and the deadline is
+# ahead); document_date = the linked Funding & Tenders notice's publication date.
+# About 40 pages in all, so every procedure page is read each run.
 # --------------------------------------------------------------------------- #
 _EFCA = "https://www.efca.europa.eu"
+_EFCA_PROCEDURES = _EFCA + "/en/content/negotiated-procedures"   # same table as the procurement plan
+_EFCA_CALLS = _EFCA + "/en/content/calls-expression-interest"
+
+
+def _efca_rows(html: str, *, ref_field: str, deadline_field: str, status_field: str | None) -> list[dict]:
+    body = re.search(r"<tbody>(.*?)</tbody>", html, re.S)
+    rows = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(1) if body else "", re.S):
+        def cell(field: str) -> str:
+            m = re.search(rf'views-field-{field}[^>]*>(.*?)</td>', tr, re.S)
+            return m.group(1) if m else ""
+        am = re.search(r'<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>', cell("title"), re.S)
+        if not am or not _txt(am.group(2)):
+            continue
+        dm = re.search(r'datetime="([^"]+)"', cell(deadline_field))
+        href = _html.unescape(am.group(1))
+        rows.append({
+            "title": _txt(am.group(2)),
+            "url": href if href.startswith("http") else _EFCA + href,
+            "reference": _txt(cell(ref_field)),
+            "deadline": _iso(dm.group(1)) if dm else None,
+            "status_raw": _txt(cell(status_field)) if status_field else "",
+        })
+    return rows
+
+
+def _efca_detail(url: str) -> dict:
+    page = _get_ok(url)
+    m = re.search(r"<h1.*?</h1>(.*?)(?:<footer|ecl-site-footer)", page, re.S)
+    block = m.group(1) if m else ""
+    text = _txt(block)
+    # The procedure's content starts at its "Type" label; before it sit the breadcrumb
+    # trail and the title repeated (on calls-for-interest pages).
+    start = re.search(r"\bType\s", text)
+    text = text[start.start():] if start else text
+    notices = list(dict.fromkeys(_FT_NOTICE.findall(page)))
+    kind = re.search(r"\bType\s+(.+?)\s+(?:Number|Deadline)\b", text)
+    oj = re.search(r"published in the Official Journal[^.]*?on (\d{1,2}/\d{1,2}/\d{4})", text)
+    return {"text": text[:4000], "notices": notices,
+            "kind": kind.group(1).strip() if kind else "",
+            "oj_note": oj.group(0) if oj else ""}
+
+
+def _efca_item(row: dict, detail: dict | None, *, item_type: str, now: datetime) -> Item:
+    deadline = row["deadline"]
+    said_open = row["status_raw"].lower() == "open" if row["status_raw"] else True
+    status = "open" if said_open and deadline is not None and deadline >= now else "closed"
+    ref = row["reference"]
+    item = Item(
+        body_code="efca", item_type=item_type, title=clean(row["title"])[:120], public_url=row["url"],
+        summary=clean(" · ".join(b for b in [ref, row["status_raw"],
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        creation_date=now, source_kind="efca_procurement", guid=ref or row["url"],
+        extras={"tender_reference": ref or None, "status": status, "deadline": deadline},
+    )
+    if detail is None:
+        return item
+    notice = next((n for n in detail["notices"] if n.endswith("-CN")), None) or next(iter(detail["notices"]), None)
+    published = _ft_notice_date(notice) if notice else None
+    facts = [("Reference", ref), ("Procedure type", detail["kind"]),
+             ("Status on EFCA's site", row["status_raw"]),
+             ("Funding & Tenders notice", notice or ""),
+             ("Notice published", published.date().isoformat() if published else ""),
+             ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else "")]
+    facts = [(k, v) for k, v in facts if v]
+    lines = [row["title"], detail["text"], *(f"{k}: {v}" for k, v in facts)]
+    item.body_txt = clean("\n".join(l for l in lines if l))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1><p>{_html.escape(detail['text'])}</p>"
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts)
+        + "</dl>")
+    item.document_date = published if published and (deadline is None or published <= deadline) else None
+    return item
+
+
+def _efca_read(listing: str, *, item_type: str, ref_field: str, deadline_field: str,
+               status_field: str | None, fetch_bodies: bool) -> list[Item]:
+    now = datetime.now(timezone.utc)
+    rows = _efca_rows(_get_ok(listing), ref_field=ref_field, deadline_field=deadline_field,
+                      status_field=status_field)
+    if not rows:
+        raise RuntimeError(f"EFCA listing parsed to zero rows: {listing}")
+    items, seen = [], set()
+    for row in rows:
+        ident = row["reference"] or row["url"]
+        if ident in seen:
+            continue
+        seen.add(ident)
+        detail = None
+        if fetch_bodies:
+            try:
+                detail = _efca_detail(row["url"])
+            except requests.RequestException as exc:
+                print(f"    [WARN] efca detail {row['url'][-60:]}: {exc}", flush=True)
+        items.append(_efca_item(row, detail, item_type=item_type, now=now))
+    return items
 
 
 def ingest_efca_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    items: list[Item] = []
-    for path, status in [("/en/content/open-calls-tender", "Open"),
-                         ("/en/content/negotiated-procedures", "Negotiated")]:
-        items += parse_views_table(_fetch(_EFCA + path), _EFCA, body_code="efca",
-                                   item_type="tender", source_kind="efca_procurement",
-                                   ref_field="field-number", deadline_field="field-deadline",
-                                   status=status)
-    # de-dup by guid
-    seen, uniq = set(), []
-    for it in items:
-        if it.guid not in seen:
-            seen.add(it.guid); uniq.append(it)
-    return uniq
+    return _efca_read(_EFCA_PROCEDURES, item_type="tender", ref_field="field-number",
+                      deadline_field="field-deadline", status_field="field-opencall-status",
+                      fetch_bodies=fetch_bodies)
 
 
 def ingest_efca_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return parse_views_table(_fetch(_EFCA + "/en/content/calls-expression-interest"), _EFCA,
-                             body_code="efca", item_type="eoi_call",
-                             source_kind="efca_procurement", ref_field="field-number",
-                             deadline_field="field-deadline", status="Expression of interest")
+    return _efca_read(_EFCA_CALLS, item_type="eoi_call", ref_field="field-expression-interest-number",
+                      deadline_field="field-deadline-for-applications", status_field=None,
+                      fetch_bodies=fetch_bodies)
 
 
 # --- EFSA — positional table (col0=title+link, col1=published, col2=deadline). - #

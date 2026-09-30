@@ -21,19 +21,22 @@ register_resource(
     router, body_code="efca", item_type="tender", slug="efca-tenders",
     noun="EFCA calls for tender", body_name="the European Fisheries Control Agency",
     acronym="EFCA", tag="v2-funding",
-    source="the EFCA public-procurement pages (open calls for tender + negotiated procedures).",
-    extra="The European Fisheries Control Agency's own public procurement: each call for tender "
-          "with its reference number, status and deadline, linking to the tender page. Decentralised "
-          "procurement that does not appear in TED below threshold. Filter with q (e.g. a reference "
-          "or a topic such as 'vessel').",
+    source="EFCA's procurement table (every procedure since 2015) and each procedure's own page.",
+    extra="EFCA procurement, the whole table from 2015 (open and negotiated procedures). Each item "
+          "carries `tender_reference`, `status` (EFCA's own Open/Closed, open only while the deadline "
+          "is ahead) and `deadline`; `document_date` is the publication date of the linked Funding & "
+          "Tenders notice, null where there is none. Calls for interest are at /efca-calls. Filter with q.",
+    procurement=True,
 )
 register_resource(
     router, body_code="efca", item_type="eoi_call", slug="efca-calls",
     noun="EFCA calls for expression of interest", body_name="the European Fisheries Control Agency",
     acronym="EFCA", tag="v2-funding",
-    source="the EFCA calls for expression of interest.",
-    extra="EFCA calls for expression of interest (experts, service providers), with reference and "
-          "deadline. Filter with q.",
+    source="EFCA's calls-for-expression-of-interest table and each call's own page.",
+    extra="EFCA calls for expression of interest (experts, service providers). Each item carries "
+          "`tender_reference`, `status` (open while the deadline is ahead) and `deadline`; "
+          "`document_date` is the publication date of the linked Funding & Tenders notice. Filter with q.",
+    procurement=True,
 )
 
 # --- Cedefop -------------------------------------------------------------- #
