@@ -11142,7 +11142,6 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'mutual recognition return decisions': ['eu_migration_asylum_pact'],
     'com(2025)101': ['eu_migration_asylum_pact', 'returns_policy_reform'],
     'com(2025) 101': ['eu_migration_asylum_pact'],
-    '2025/0033(cod)': ['eu_migration_asylum_pact'],
     'pacto retornos migrantes': ['eu_migration_asylum_pact'],
     'pacte retorns migrants': ['eu_migration_asylum_pact'],
     'accord retours migrants': ['eu_migration_asylum_pact'],

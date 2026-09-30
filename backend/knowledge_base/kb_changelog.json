@@ -4,6 +4,22 @@
     {
       "date": "2026-09-30",
       "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "EU Pact on Migration and Asylum",
+      "summary": "Return Regulation reference corrected to 2025/0059(COD); JHA date stated as upcoming",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
+      "guide": "returns_policy_reform",
+      "title": "Return Regulation",
+      "summary": "Parliament adopted at first reading 17 Jun 2026; awaiting the Council (OEIL, 30 Sep)",
+      "refs": []
+    },
+    {
+      "date": "2026-09-30",
+      "action": "updated",
       "guide": "mff_2028_2034",
       "title": "MFF 2028-2034",
       "summary": "Erasmus+ 2028-2034: CULT position 24-1-1, EUR 47.39bn vs EUR 40.8bn proposed",
