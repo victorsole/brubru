@@ -113,8 +113,21 @@ def attach_self(payload, base_url: str, route_map: Dict[str, Tuple[str, str]],
     Never overwrites a `self` a handler set deliberately, and never invents one
     when the item does not carry the field the route needs.
     """
+    if not isinstance(payload, dict):
+        return False
+
+    # A DETAIL response is one item, not an envelope, so the collection branch below
+    # never sees it and `self` stayed null on every item route. Declaring the field in
+    # the schema without filling it would be worse than not declaring it: a documented
+    # field that is always null reads as a broken promise. The rule is narrow on
+    # purpose -- fill `self` only where a schema already declares it and left it empty,
+    # and fill it with the URL the caller just used, which is by definition this item's.
+    if "data" not in payload and "self" in payload and not payload.get("self"):
+        payload["self"] = base_url.rstrip("/") + collection_path
+        return True
+
     target = route_map.get(collection_path)
-    if not target or not isinstance(payload, dict):
+    if not target:
         return False
     items = payload.get("data")
     if not isinstance(items, list):

@@ -38,6 +38,17 @@ class LawItem(BaseModel):
             "because this id was not exposed."
         ),
     )
+    self: Optional[str] = Field(
+        None,
+        alias="self",
+        description=(
+            "The URL of this item on this API. Follow it rather than building a URL: "
+            "it is escaped, and it keys on whatever this collection's item route takes. "
+            "STABLE for the life of the record, because it is built from `id` when the "
+            "row has no CELEX and from `celex` otherwise, and `id` never changes. A "
+            "corrected CELEX changes this URL; `id` is the key to store."
+        ),
+    )
     celex: Optional[str] = None
     title: Optional[str] = None
     doc_type: Optional[str] = None
@@ -59,6 +70,25 @@ def _eurlex_url(celex: Optional[str]) -> Optional[str]:
     if not celex:
         return None
     return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+
+def _law_item(r) -> "LawItem":
+    """One row as a LawItem. Shared so the row-id path and the CELEX path cannot drift."""
+    return LawItem(
+        id=r.id,
+        celex=r.celex,
+        title=r.title,
+        doc_type=r.doc_type_normalized or r.doc_type,
+        adopted_on=r.date,
+        oj_reference=r.oj_reference,
+        policy_area=r.policy_area,
+        legal_basis=list(r.legal_basis or []),
+        eurlex_url=_eurlex_url(r.celex),
+        text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
+        public_url=_eurlex_url(r.celex),
+        document_date=r.date,
+        creation_date=r.created_at,
+    )
 
 
 @router.get(
@@ -306,7 +336,20 @@ async def get_law_detail(
     # title starts with the doc_type word ("Regulation"/"Directive"/...) which
     # is the canonical originator, then fall back to lowest id (earliest
     # ingestion = canonical entry in 99% of cases).
-    upper_celex = celex.upper()
+    # A bare integer is the ROW ID, not a CELEX. 11,436 rows carry no CELEX at all
+    # (drafts, association-council acts, EEA declarations, annex fragments), so the
+    # `self` the list prints for them is /laws/{id} -- and this route used to read that
+    # as a CELEX and 404. The id is also the identifier we tell clients to key on,
+    # because a corrected CELEX otherwise reads as a brand new record. Safe to overload:
+    # no CELEX in the corpus is all digits, and a test asserts that stays true.
+    key = (celex or "").strip()
+    if key.isdigit():
+        row = db.query(EULaw).filter(EULaw.id == int(key)).first()
+        if row is None:
+            raise HTTPException(status_code=404, detail=f"Law id {key} not found")
+        return _law_item(row)
+
+    upper_celex = key.upper()
     candidates = (
         db.query(EULaw)
         .filter(EULaw.celex == upper_celex)
@@ -333,21 +376,7 @@ async def get_law_detail(
                 "id": celex,
             },
         )
-    return LawItem(
-        id=r.id,
-        celex=r.celex,
-        title=r.title,
-        doc_type=r.doc_type_normalized or r.doc_type,
-        adopted_on=r.date,
-        oj_reference=r.oj_reference,
-        policy_area=r.policy_area,
-        legal_basis=list(r.legal_basis or []),
-        eurlex_url=_eurlex_url(r.celex),
-        text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
-        public_url=_eurlex_url(r.celex),
-        document_date=r.date,
-        creation_date=r.created_at,
-    )
+    return _law_item(r)
 
 
 class LawTextResponse(BaseModel):

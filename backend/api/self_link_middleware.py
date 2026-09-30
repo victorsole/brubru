@@ -50,7 +50,13 @@ class SelfLinkMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         path = request.url.path
-        if request.method != "GET" or path not in self.route_map:
+        if request.method != "GET":
+            return await call_next(request)
+        # Collections are in the map by their own path. ITEM paths are not, and the
+        # guard used to drop them, so a detail response's `self` was declared by the
+        # schema and never filled. An item is one segment below its collection; a
+        # sub-resource like /laws/{celex}/text is two, and stays out.
+        if path not in self.route_map and path.rsplit("/", 1)[0] not in self.route_map:
             return await call_next(request)
 
         response = await call_next(request)
