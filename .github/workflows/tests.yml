@@ -1,0 +1,78 @@
+name: tests
+
+# Brubru had no CI until 1 October 2026. Railway deploys on every push to main and
+# nothing ran the 1,525 unit tests first, so a broken commit reached production and a
+# paying subscriber before anyone knew. GovClipping that morning:
+#
+#   "Per mi es molt important que les dades siguin correctes, coherents i consistents,
+#    i que l'API sigui estable i fiable."
+#
+# This runs the suite on every push and every pull request. It does NOT by itself stop a
+# Railway deploy: Railway deploys from the git push, independently of GitHub Actions. To
+# make this a gate, switch on "Wait for CI" in the Railway service settings, which holds
+# the deploy until the required checks pass. Without that, a red run here is a loud alarm
+# rather than a brake.
+#
+# No secrets. The job runs with DATABASE_URL deliberately unset, so the 79 test files that
+# need a live Postgres skip themselves rather than reaching for production from a CI
+# runner. That is the point: CI must never touch the database a subscriber reads.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  # A newer push supersedes an older run on the same branch; no point testing a commit
+  # that is already two commits behind.
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # 3.11-slim is what backend/Dockerfile ships, so CI must not pass on a version
+          # production does not run.
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-light.txt
+
+      - name: Install dependencies
+        # requirements-light.txt, not requirements.txt: the image installs the light file,
+        # and on 30 September a package pinned in the wrong one made a scheduled job die in
+        # the container while working on a laptop. CI installs what production installs.
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-light.txt
+          pip install pytest
+
+      - name: Run the unit suite
+        # DATABASE_URL is explicitly empty. Tests needing Postgres skip; nothing in CI is
+        # allowed to open a connection to the production database.
+        env:
+          DATABASE_URL: ""
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          pytest tests/ -q -p no:cacheprovider \
+            --ignore=tests/seeds_quarantined \
+            --junit-xml=pytest-report.xml
+
+      - name: Publish the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: backend/pytest-report.xml
+          if-no-files-found: warn
