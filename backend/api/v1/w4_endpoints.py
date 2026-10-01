@@ -428,6 +428,7 @@ async def list_meetings(
             body_html=body_html,
             meeting_start_date=r.meeting_date, document_date=r.meeting_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
+            updated_date=row_updated(r),
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
@@ -485,6 +486,7 @@ async def get_meeting_detail(
         body_html=body_html,
         meeting_start_date=r.meeting_date, document_date=r.meeting_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
+        updated_date=row_updated(r),
         policy_areas=list(r.policy_areas or []),
         related_celex=list(r.related_celex or []),
         last_updated=r.last_updated,
@@ -832,8 +834,13 @@ def _secondary_act_to_item(
         last_updated=r.last_updated,
         # 5 mandatory datapoints
         public_url=public_url,
-        document_date=r.publication_date,
+        # publication_date OR adoption_date. Using publication_date alone served an
+        # empty document_date on 70 acts that carry an adoption date -- the act was
+        # adopted and dated, we simply reported no date for it. Publication wins where
+        # both exist, because that is the date the act is citable by.
+        document_date=r.publication_date or r.adoption_date,
         creation_date=getattr(r, "first_seen", None),
+        updated_date=row_updated(r),
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,
