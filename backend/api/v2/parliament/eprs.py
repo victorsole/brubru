@@ -72,12 +72,17 @@ async def list_eprs(
     updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows last_updated >= value. Returns rows ordered by last_updated desc when set."),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
+    include_body: bool = Query(
+        True,
+        description=("Return the full study in body_txt. ON by default so the list "
+                     "and the item route agree; pass false for a light list."),
+    ),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[EPRSItem]:
-    return await _v1.list_eprs(request=request, q=q, publication_type=publication_type, committee=committee, procedure_ref=procedure_ref, celex=celex, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_eprs(request=request, q=q, publication_type=publication_type, committee=committee, procedure_ref=procedure_ref, celex=celex, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, include_body=include_body, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

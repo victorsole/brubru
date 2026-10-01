@@ -42,7 +42,7 @@ class EPRSItem(BaseModel):
     has_full_text: bool = False
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — html_url fallback to pdf_url.")
-    body_txt: Optional[str] = Field(None, description="Plain-text body. On the ITEM route this is the whole study when Brubru holds it (backfilled 28 September 2026), falling back to the summary. On the LIST it is the summary: these studies run to hundreds of thousands of characters, so follow `self` or the item route to read one. `has_full_text` says which rows have it.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body: the whole study when Brubru holds it, falling back to the summary. Identical on the list and the item route. These studies average 55,803 characters, so pass include_body=false for a light list. `has_full_text` says which rows carry the study itself.")
     body_html: Optional[str] = Field(None, description="Null for this endpoint: Brubru stores the extracted text, not the publisher HTML, which lives on europarl.europa.eu/thinktank.")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of publication_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
@@ -94,6 +94,12 @@ async def list_eprs(
     updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows last_updated >= value. Returns rows ordered by last_updated desc when set."),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
+    include_body: bool = Query(
+        True,
+        description=("Return the full study in body_txt. ON by default so the list and the "
+                     "item route agree. These studies average 55,803 characters, so pass "
+                     "false for a light list of titles and dates."),
+    ),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -172,10 +178,16 @@ async def list_eprs(
         order_col = EPRSPublication.publication_date.desc().nullslast()
     rows = (
         stable(query.order_by(order_col))
-        # Leave full_text in the database: the list does not serve it, and since the studies
-        # were backfilled (28 Sep 2026) these rows average tens of thousands of characters,
-        # one of them 437,919. Loading a page of them to discard them is megabytes per call.
-        .options(defer(EPRSPublication.full_text))
+        # full_text is loaded when a body was asked for, and left in the database when it
+        # was not. Until 1 October 2026 the list ALWAYS deferred it and served the summary
+        # as body_txt while the item route served the whole study, so one field meant two
+        # different things depending on how you reached the row. GovClipping found it the
+        # hard way: an empty-field check cannot catch a field that is populated with the
+        # wrong thing, so their rule had to fetch every item route separately for 913
+        # records. The size concern behind the original choice is real -- these studies
+        # average 55,803 characters and one is 498,369 -- which is what include_body=false
+        # is for, not a quieter field.
+        .options(*( [] if include_body else [defer(EPRSPublication.full_text)] ))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -200,7 +212,8 @@ async def list_eprs(
             page_count=r.page_count,
             has_full_text=bool(r.has_full_text),
             public_url=r.html_url or r.pdf_url,
-            body_txt=r.summary,
+            # Identical to the item route. One field, one meaning.
+            body_txt=((r.full_text or r.summary) if include_body else None),
             body_html=None,
             document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
             creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
