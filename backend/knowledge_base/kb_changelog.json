@@ -2,6 +2,121 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "nature_restoration_law",
+      "title": "Nature Restoration Law",
+      "summary": "JRC paper on marine invasive alien species (JRC147486)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "eu_beating_cancer_plan",
+      "title": "Europe's Beating Cancer Plan",
+      "summary": "JRC paper on EU cancer project funding (JRC143800)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "insurance_protection_gap_climate",
+      "title": "Insurance protection gap",
+      "summary": "EIOPA report on extreme heat and life and health insurance (30 September 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "solvency_ii_directive",
+      "title": "Solvency II",
+      "summary": "EIOPA supervisory priorities 2027-2029",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "cjeu_structure_and_procedures",
+      "title": "Court of Justice of the EU: structure",
+      "summary": "Judicial appointments of 30 September 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "Pact on Migration and Asylum",
+      "summary": "Five-point border plan on the 1 October 2026 Home Affairs Council agenda",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "returns_policy_reform",
+      "title": "Return Regulation",
+      "summary": "Eurostat Q2 2026 return statistics",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "mica_crypto_assets_regulation",
+      "title": "MiCA",
+      "summary": "ESMA and ESRB answers to the MiCA review consultation (30 September 2026)",
+      "refs": [
+        "32023R1114"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "hungary_election_2026_magyar",
+      "title": "Hungary 2026: Magyar and Brussels",
+      "summary": "General Court T-115/23 and five related cases (30 September 2026) upheld the funding ban on public interest trusts",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "batteries_regulation",
+      "title": "EU Batteries Regulation",
+      "summary": "Pending Omnibus VIII amendment (COM(2025) 981); battery passport and its 18 February 2027 date unchanged",
+      "refs": [
+        "52025PC0981"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "action": "updated",
+      "guide": "eu_food_feed_simplification_omnibus",
+      "title": "EU Food and Feed Simplification Omnibus (Omnibus X)",
+      "summary": "Rewritten status: three proposals, biocides regulation 2026/1165 adopted, Council mandates 27 May and 30 September 2026, Council changes on MRLs, plant protection, biocides, feed and GM",
+      "refs": [
+        "32026R1165",
+        "52025PC1021",
+        "52025PC1030"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "action": "added",
+      "guide": "eu_critical_communication_system",
+      "title": "EU Critical Communication System (EUCCS)",
+      "summary": "New guide: the Commission's 30 September 2026 proposal for a secure EU-wide communication system for first responders",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
+      "action": "added",
+      "guide": "omnibus_viii_environmental_simplification",
+      "title": "Omnibus VIII: Environmental Simplification Package",
+      "summary": "New guide: the six Omnibus VIII proposals (COM(2025) 981-986), Council mandates 24 June and 30 September 2026, Parliament stages, and what the batteries part does and does not change",
+      "refs": [
+        "52025PC0981",
+        "52025PC0984"
+      ]
+    },
+    {
       "date": "2026-09-30",
       "action": "updated",
       "guide": "eu_migration_asylum_pact",

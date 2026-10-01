@@ -25,6 +25,7 @@
 - LIBE vote: 9 March 2026 (41 in favour, 32 against, 1 abstention)
 - Current status: **Provisional political agreement reached in trilogue 1 June 2026** (return hubs apply immediately, remainder +1 year). EP plenary adopted it on 17 June 2026 (T10-0207/2026); Council approval still pending before OJ publication (OEIL, checked 30 Sep 2026). (Earlier milestones: LIBE mandate confirmed by plenary 26 March 2026; trilogues April-May; talks collapsed over timing in May; agreement 1 June.)
 - Implementation target: 1 July 2027
+- **Eurostat (30 Sep 2026), Q2 2026:** 110,335 ordered to leave (-12.0% year on year), 36,825 returned (+9.7%); top returns Türkiye, Syria, Georgia. National returns under current law.
 - Replaces: Directive 2008/115/EC (Return Directive), Directive 2001/40/EC, Decision 2004/191/EC
 - Part of: Post-Pact on Migration and Asylum implementation
 - Joint Declaration 2026 legislative priority

@@ -2,6 +2,8 @@
 
 ## QUICK FACTS
 
+- **LATEST (30 Sep 2026): EIOPA supervisory priorities 2027-2029:** resilience in a volatile risk environment; conduct risks in business models and distribution.
+
 - **instrument:** Directive 2009/138/EC — Solvency II
 - **celex:** 32009L0138
 - **oj:** OJ L 335, 17.12.2009, p. 1

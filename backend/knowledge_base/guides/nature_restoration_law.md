@@ -163,3 +163,7 @@ The Commission's Omnibus I simplification package (February 2026) targeted the C
 
 ## Research references
 - JRC Scientific paper (Trees, Forests and People, September 2026): "Pushing the limits of forest management intensity extremes in Europe" (Barredo, Pilli, Giuntoli, Mubareka) -- on the extremes of forest management intensity in Europe, given forests' place in biodiversity, climate, material-substitution and energy policies. Abstract not available to us; cite as a reference only. doi: 10.1016/j.tfp.2026.101496 (JRC146864)
+
+## Recent research
+
+- JRC paper (30 Sep 2026): "Mapping Cumulative Impacts of Invasive Alien species on Ecosystem Services" (CIMPAL-ES index). JRC147486, doi: 10.3389/fmars.2026.1929737

@@ -110,3 +110,7 @@ This is the EP's first comprehensive implementation review of the Beating Cancer
 - `eu_rare_diseases_policy` -- Rare diseases including rare cancers
 - `fp10_ecf_competitiveness` -- FP10 cancer research funding under Horizon successor
 - `tobacco_excise_directive` -- TEDOR and tobacco control measures
+
+## Recent research
+
+- JRC paper (30 Sep 2026): "Unveiling European cancer funding": 102 EU-funded cancer projects, over EUR 840 million. JRC143800, doi: 10.1186/s12961-026-01535-9

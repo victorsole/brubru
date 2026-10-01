@@ -1,6 +1,7 @@
 # Insurance Protection Gap (Natural Catastrophes): EIOPA Dashboard and Policy Response
 
 ## QUICK FACTS
+- **LATEST (30 Sep 2026): EIOPA** names extreme heat the leading climate risk for life and health insurers and pension funds (about 300,000 heat deaths in Europe since 2000).
 - **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said "the Commission will set up a Climate Insurance Alliance" to close the gap, stating that "only around 25 % of catastrophe losses in Europe are covered by private insurance", so that "national budgets become the insurer of last resort". **No text, no date, no defined form yet.** She also promised proposals to improve farm risk management and address the insurance gap (no text, no date). The EIOPA-ECB two-pillar idea described below remains under discussion, not legislated. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
 - Definition: the insurance protection gap is the share of economic losses from natural catastrophes (floods, storms, wildfires, droughts, earthquakes) that is NOT covered by insurance
 - Headline figure: only around a quarter (~25%) of natural-catastrophe losses in the EU were insured between 1980 and 2024, and EIOPA notes the insured share has been declining even as losses rise

@@ -1,16 +1,21 @@
 # EU Food and Feed Simplification Omnibus ("Omnibus X")
 
 ## QUICK FACTS
-- Topic: Commission omnibus proposal simplifying EU food and feed legislation -- part of the wider 2026 simplification agenda
-- Common names: "Omnibus X", "Omnibus IX" (numbering fluctuates in early 2026 discourse), "Food and Feed Simplification Omnibus", "Agri-food Omnibus"
-- Commission proposal: COM(2025) series, announced late 2025; expected formal proposal early-to-mid 2026
-- Commission simplification target: Cut reporting burdens for food and feed operators by at least 25% (35% for SMEs) by end of 2027, in line with Competitiveness Compass COM(2025) 30
-- Lead DGs: DG SANTE (Health and Food Safety) + DG AGRI (Agriculture and Rural Development)
-- Commissioners: Oliver Varhelyi (Health and Animal Welfare) + Christophe Hansen (Agriculture and Food)
-- Likely EP lead committee: ENVI (Environment, Climate, Food Safety) with opinions from AGRI and IMCO -- **not yet assigned as of mid-April 2026**
-- Council configuration: AGRIFISH (Agriculture and Fisheries)
-- Procedure status (as of 17 April 2026): Commission preparing proposal; no OEIL reference yet; EP committee assignment and rapporteur not yet designated
-- Related guides: `eu_food_safety_pesticides`, `common_agricultural_policy`, `bioeconomy_food_systems`, `novel_food_insects`
+- **What it is:** the Commission's tenth simplification omnibus ("Omnibus X"), on food and feed safety, tabled on **16 December 2025** as three proposals (verified on OEIL and Cellar, 1 October 2026). Commissioners: Olivér Várhelyi (Health and Animal Welfare) and Christophe Hansen (Agriculture and Food).
+- **The three files:**
+  - **Biocides data-protection periods:** COM(2025) 1020, procedure 2025/0408(COD). **ADOPTED**: **Regulation (EU) 2026/1165** of 20 May 2026 amending the Biocidal Products Regulation (EU) No 528/2012 (CELEX 32026R1165), published in the OJ on 26 May 2026. Parliament adopted it on 28 April 2026 (T10-0117/2026).
+  - **The directive** amending the Animal Welfare (farmed animals) Directive 98/58/EC and the **Sustainable Use of Pesticides Directive 2009/128/EC**: COM(2025) 1021, CELEX 52025PC1021, procedure **2025/0409(COD)**. Council position agreed **27 May 2026**. Parliament: joint ENVI-AGRI committee, amendments tabled (PE790.943, 20 July 2026), awaiting committee vote.
+  - **The regulation** amending ten regulations, among them **MRLs (396/2005), plant protection products (1107/2009), biocidal products (528/2012), GM food and feed (1829/2003), feed additives (1831/2003), official controls (2017/625), food hygiene (852/2004, 853/2004), TSE (999/2001) and animal welfare at slaughter (1099/2009)**: COM(2025) 1030, CELEX 52025PC1030, procedure **2025/0410(COD)**. **Council mandate agreed 30 September 2026.** Parliament: joint ENVI-AGRI committee, rapporteurs **Michele Picaro (ECR, ENVI)** and **Herbert Dorfmann (EPP, AGRI)**, awaiting committee decision.
+- **STATUS (1 October 2026):** the Council now has a mandate on everything still open; trilogues start once Parliament adopts its position. The Irish Presidency's target is a provisional agreement on the whole package **by the end of 2026**. Only the biocides data-protection regulation is law.
+- **What the Council's 30 September mandate keeps or changes:**
+  - **MRLs:** keeps lowering MRLs to **technical zero** for imported food and feed containing residues of particularly hazardous pesticides banned in the EU, after an impact assessment; **widens** it to substances whose conditions of use cause unacceptable risks to **honeybees or groundwater**; keeps transitional periods for products compliant with the old MRLs.
+  - **Plant protection products:** fast track for **biocontrol** substances; **unlimited approvals** for low-risk active substances and their products; approvals of other substances extended to **15 years (first) and 25 years (renewals)**, with exceptions; data protection extended from 10 to **13 years** (regular products) and from 13 to **15 years** (low-risk); a new EU database of studies; in return, periodic EFSA literature and monitoring reviews and more caution on substances classified CMR category 2.
+  - **Biocidal products:** approvals still expire, but last **15 years (first) and 25 years (renewals)**.
+  - **Feed additives:** no systematic renewal for most authorised additives, simpler modification procedures, digital labelling for some information.
+  - **GM food and feed:** fermentation products made with genetically modified microorganisms are **not** food or feed "produced from GMOs"; the Commission is to issue good-manufacturing-practice guidance on residual GMM material.
+- Council configuration: AGRIFISH. Lead DGs: DG SANTE and DG AGRI.
+- Related guides: `eu_food_safety_pesticides`, `biocidal_products_regulation`, `common_agricultural_policy`, `omnibus_viii_environmental_simplification`, `omnibus_vi_chemicals_simplification`.
+- Sources: OEIL 2025/0408, 0409, 0410(COD); Cellar COM(2025) 1020, 1021, 1030 and 32026R1165; Council press release, 30 September 2026, "Council agrees negotiating stance to simplify and streamline food and feed safety requirements".
 
 ## Scope of Simplification
 
@@ -89,15 +94,12 @@ Based on Commission signalling and the Competitiveness Compass:
 
 ## Parliamentary Process
 
-### Expected Timeline
-- Commission proposal: mid-to-late 2026
-- ENVI committee assignment: Q3 2026 (tentative)
-- Rapporteur designation: Q3-Q4 2026
-- First reading: 2027
-- Trilogue / adoption: 2027-2028
-
-### Known Likely Rapporteurs
-Not yet assigned. Historical food-law rapporteurs in ENVI: Pascal Canfin (Renew), Jessica Polfjard (EPP, Sweden), Tiemo Woelken (S&D, Germany).
+### Timeline (actual, checked on OEIL 1 October 2026)
+- Commission proposals: 16 December 2025 (COM(2025) 1020, 1021, 1030)
+- Biocides data-protection regulation: Parliament 28 April 2026, signed 20 May, OJ 26 May 2026 (Regulation (EU) 2026/1165)
+- Council positions: 27 May 2026 (directive), 30 September 2026 (regulation)
+- Parliament: joint ENVI-AGRI committee; rapporteurs Michele Picaro (ECR) and Herbert Dorfmann (EPP), appointed 13 March 2026; committee vote not yet held
+- Target: provisional agreement by the end of 2026 (Council Presidency)
 
 ## Interaction with Other Simplification Omnibuses
 

@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (30 Sep 2026): MiCA review answers, no proposal yet.** ESMA: curb influencer marketing, block fraud sites, freeze assets, DeFi criteria. ESRB: bar third-country multi-issuer stablecoins.
 - **Short name:** MiCA / Markets in Crypto-Assets Regulation / 2023/1114
 - **Full title:** Regulation (EU) 2023/1114 of the European Parliament and of the Council of 31 May 2023 on markets in crypto-assets, and amending Regulations (EU) No 1093/2010 and (EU) No 1095/2010 and Directives 2013/36/EU and (EU) 2019/1937
 - **CELEX:** 32023R1114
