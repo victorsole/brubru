@@ -36,22 +36,42 @@ DIRECTORY_URL = "https://op.europa.eu/en/web/who-is-who"
 #
 # PERSON_PAGE was verified against 6 random officials before being adopted: 6/6 returned
 # 200 and the page title named the person we store (EP_DPPE256815 -> "Mr Marjan SAREC",
-# COM_000037D63D -> "Cristina RUEDA CATRY"). Every one of the 18,377 rows carries a
-# person_uri, so every official can have a page that is actually theirs.
+# COM_000037D63D -> "Cristina RUEDA CATRY").
+#
+# That sample was not enough, and the claim that first stood here -- that every one of the
+# 18,377 rows carries a person_uri, so every official can have a page of their own -- was
+# wrong. 600 rows carry a person id of the form UNDEFINED_<something>: the directory's own
+# placeholder for a record with no published page. All 6 sampled ids happened to be real
+# ones, so the defect shipped. Those 600 are mostly agency staff (ENISA, EASA, CPVO, ACER,
+# Frontex...) who exist in the SPARQL directory but have no Whoiswho page, and stripping
+# the UNDEFINED_ prefix does not reveal one: both forms 404.
 PERSON_PAGE = "https://op.europa.eu/en/web/who-is-who/person/-/person/{person_id}"
 
+# The directory's placeholder for "this person has no published page".
+NO_PERSON_PAGE_MARKER = "UNDEFINED"
 
-def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> str:
-    """The official's own Whoiswho page, falling back only when there is no person id.
 
-    Fallback order matters: the TOP-LEVEL mnemonic ("EDPS" from "EDPS.EDPB.LCE"), because
-    the organisation route rejects the dotted form; then the directory. Never return a
-    URL built from a dotted mnemonic: it is a 404 dressed as a link.
+def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> Optional[str]:
+    """The official's own Whoiswho page, or None when they do not have one.
+
+    Returns None rather than a substitute. The organisation page was considered for the
+    600 and rejected: it resolves for only 123 of them, and it is a page about a body,
+    not about the person the row describes. Presenting it as that official's public_url
+    is the same error as the 404 it would replace -- a link that does not lead to the
+    thing it claims. A client can tell an empty field is empty; it cannot tell that a
+    200 points at the wrong page.
+
+    The dotted-mnemonic fallback below stays for departments, whose rows reach this with
+    no person id at all. Never return a URL built from a dotted mnemonic ("EDPS.EDPB.LCE"):
+    the organisation route rejects it, so it is a 404 dressed as a link.
     """
     if person_uri:
         pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
-        if pid:
+        if pid and NO_PERSON_PAGE_MARKER not in pid:
             return PERSON_PAGE.format(person_id=pid)
+        if pid:
+            # A placeholder id. There is no page for this person; say so with None.
+            return None
     if mnemonic:
         return ORG_PAGE.format(code=mnemonic.split(".", 1)[0])
     return DIRECTORY_URL
