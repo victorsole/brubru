@@ -17,11 +17,20 @@ name: tests
 # need a live Postgres skip themselves rather than reaching for production from a CI
 # runner. That is the point: CI must never touch the database a subscriber reads.
 
+# MANUAL ONLY, deliberately, until the suite can actually run in a runner.
+#
+# Railway has "Wait for CI" enabled, so a red run here STOPS PRODUCTION DEPLOYS.
+# Adding this workflow on 1 October 2026 skipped every deploy from 11:55 onward
+# and held back five fixes a paying subscriber was waiting on. Four attempts to
+# green it failed, each for a different environment reason, because the suite
+# genuinely needs a live Postgres: the last run was 246 failed / 167 errors, and
+# 167 of those were "connection refused" from a fake database URL.
+#
+# A gate that blocks shipping while it is being debugged is worse than no gate.
+# It runs on demand now; putting it back on `push` requires a real Postgres
+# service container (or a tested allowlist), verified on a branch first, never
+# straight onto main.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:
