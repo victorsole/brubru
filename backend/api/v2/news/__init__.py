@@ -141,10 +141,24 @@ def _build_where(codes, kinds, since, until, q, updated_from=None, updated_to=No
     # query param silently with HTTP 200, so a window in 2030 looked like a full
     # match. updated_at is maintained by brubru_touch_if_changed (migration 271), so a
     # re-scrape that finds an identical article does not read as a change.
+    # COALESCE, not a bare updated_at. The column is new (migration 271) and the
+    # 601,949 existing rows have no value in it: seeding them was attempted and
+    # abandoned, because an UPDATE over a 3.5 GB table shared with production times out
+    # even 500 rows at a time, and taking the table lock to bypass the trigger would
+    # block every live writer. Filtering on the bare column would therefore have
+    # returned almost nothing, which is a worse answer than the unfiltered one it
+    # replaced.
+    #
+    # fetched_at is the honest fallback bound: for a row that has not changed since we
+    # stored it, that IS when its record last changed. The trigger maintains updated_at
+    # from now on and COALESCE yields to it the moment a row really changes, so no row
+    # that has moved is ever reported under its old fetch time.
     if updated_from:
-        where.append("updated_at >= :updated_from"); params["updated_from"] = updated_from
+        where.append("coalesce(updated_at, fetched_at, creation_date) >= :updated_from")
+        params["updated_from"] = updated_from
     if updated_to:
-        where.append("updated_at <= :updated_to"); params["updated_to"] = updated_to
+        where.append("coalesce(updated_at, fetched_at, creation_date) <= :updated_to")
+        params["updated_to"] = updated_to
     return " AND ".join(where), params
 
 
@@ -290,7 +304,8 @@ _DEDUP_SQL = (
 # depend on. (A first cut negated the id to disambiguate, which cannot work on a
 # UUID -- `operator does not exist: - uuid`.)
 _ECONOMY_COLS = ("id::text AS id, body_code, news_kind AS item_type, title, summary, "
-                 "public_url, document_date, creation_date, fetched_at, updated_at, "
+                 "public_url, document_date, creation_date, fetched_at, "
+                 "coalesce(updated_at, fetched_at, creation_date) AS updated_at, "
                  "body_txt, body_html")
 
 
@@ -345,9 +360,11 @@ def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated
     # union would serve a filtered agency feed beside an unfiltered institutional one,
     # which reads as "the filter half-works" and is harder to spot than no filter.
     if updated_from:
-        where.append("n.updated_at >= :i_updated_from"); params["i_updated_from"] = updated_from
+        where.append("coalesce(n.updated_at, n.fetched_at, n.created_at) >= :i_updated_from")
+        params["i_updated_from"] = updated_from
     if updated_to:
-        where.append("n.updated_at <= :i_updated_to"); params["i_updated_to"] = updated_to
+        where.append("coalesce(n.updated_at, n.fetched_at, n.created_at) <= :i_updated_to")
+        params["i_updated_to"] = updated_to
 
     sql = (
         f"SELECT n.id::text AS id, {case_body} AS body_code, "
@@ -382,7 +399,7 @@ def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated
         "n.fetched_at AS fetched_at, "
         # The change signal, so both halves of the union project the same shape
         # and row_updated() can read it off either.
-        "n.updated_at AS updated_at, "
+        "coalesce(n.updated_at, n.fetched_at, n.created_at) AS updated_at, "
         # Migration 228 gave eu_news_items real body columns, composed by
         # scripts/backfill_eu_news_bodies.py from the title, summary, institution,
         # date and source link. Before that this served `summary AS body_txt` and a
