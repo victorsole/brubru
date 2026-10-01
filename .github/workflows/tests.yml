@@ -74,6 +74,16 @@ jobs:
           # died on "asyncio.run() cannot be called from a running event loop".
           # 168 of 413 failures were this, not the database.
           pip install pytest==7.4.4 pytest-asyncio==0.23.3
+          # httpx MUST stay below 0.28. fastapi==0.109.0 pins starlette 0.35, whose
+          # TestClient passes app= to httpx.Client — a parameter httpx removed in
+          # 0.28. Nothing in requirements pins httpx, so a clean runner resolves
+          # 0.28.1 and every TestClient fixture dies with
+          #   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+          # That was 126 of 397 CI failures, the single biggest cause, and it had
+          # nothing to do with the database. It does not show locally because this
+          # machine has starlette 0.52, which fastapi 0.109 does not allow and which
+          # happens to tolerate httpx 0.28.
+          pip install 'httpx<0.28'
 
       - name: Run the unit suite
         # 41 files are excluded below. They are NOT skipped because they are
