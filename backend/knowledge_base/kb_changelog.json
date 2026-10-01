@@ -3,6 +3,26 @@
   "entries": [
     {
       "date": "2026-10-01",
+      "action": "deep_dive",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "Deep-dive and guide: ENVI opinion vote scheduled for 5 October 2026, in six languages",
+      "refs": [
+        "52026PC0100"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "action": "deep_dive",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Deep-dive and guide: ENVI's 12 compromise amendments (PE790.759) and final voting list for the 1 October 2026 opinion vote, in six languages",
+      "refs": [
+        "52025PC1022"
+      ]
+    },
+    {
+      "date": "2026-10-01",
       "action": "updated",
       "guide": "nature_restoration_law",
       "title": "Nature Restoration Law",

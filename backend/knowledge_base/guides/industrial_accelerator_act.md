@@ -6,7 +6,7 @@
   - **INTA** International Trade — **CAVAZZINI Anna** (Greens/EFA)
   - **ITRE** Industry, Research and Energy — **GRUDLER Christophe** (Renew)
   - **IMCO** Internal Market and Consumer Protection — **JOUVET Pierre** (S&D)
-  - **Committee for opinion: ENVI — ANDROUËT Mathilde (PfE), appointed 26 May 2026.** **BUDG decided not to give an opinion.**
+  - **Committee for opinion: ENVI — ANDROUËT Mathilde (PfE), appointed 26 May 2026.** **BUDG decided not to give an opinion.**  **ENVI votes its opinion on 5 October 2026** (electronic vote); compromises not yet published on 1 October.
   - **Key events, both of them:** legislative proposal published **4 March 2026** (COM(2026)0100); **committee referral announced in Parliament 30 April 2026**.
   - **Forecast: indicative plenary sitting date 14 December 2026, 1st reading.** A forecast on OEIL is a plan, not a commitment: say "indicative".
   - **19 shadow rapporteurs** are listed: Gotink, De La Hoz Quintano and Sokol (EPP); Van Brempt and Geier (S&D); Borchia, Tovaglieri and Dostalova (PfE); Polato, Vivaldini and Obajtek (ECR); Minchev and Groothuis (Renew); Matthieu and Cormand (Greens/EFA); Mesure, Gedin and Kennes (The Left); Sypniewski (ESN).
