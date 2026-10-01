@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1027 requests across 49 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1033 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -14552,6 +14552,77 @@
               "response": []
             },
             {
+              "name": "the European Medicines Agency \u2014 EMA calls for expression of interest (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-calls",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-calls"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": "Free-text search over title, summary and body."
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Only items on/after this date (YYYY-MM-DD). `from` is accepted as an alias."
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Only items on/before this date (YYYY-MM-DD). `to` is accepted as an alias."
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true,
+                      "description": "recent | oldest | title."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the European Medicines Agency's EMA calls for expression of interest, newest first. EMA's calls for expression of interest for external experts (e.g. medical devices, scientific and regulatory experts): lists valid for five years, open to applications except in their last three months. Each item carries `tender_reference`, `status` and `deadline`; `/{item_id}/documents` serves the call's files with their text.\n\n**When to use it**\nTrack what EMA is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ema-calls?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from the EU Funding & Tenders portal (EMA's notices with the call-for-expression-of-interest procedure type).."
+              },
+              "response": []
+            },
+            {
               "name": "the European Medicines Agency \u2014 EMA calls for tender (newest first)",
               "request": {
                 "method": "GET",
@@ -14618,7 +14689,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nLists the European Medicines Agency's EMA calls for tender, newest first. The European Medicines Agency's own open procurement: each call for tender with reference and deadline. Filter with q (e.g. a reference or topic).\n\n**When to use it**\nTrack what EMA is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ema-tenders?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from the EMA procurement & grants listing.."
+                "description": "**What it does**\nLists the European Medicines Agency's EMA calls for tender, newest first. The European Medicines Agency's procurement, the whole archive from 2015: every EMA notice on the Funding & Tenders portal (calls for tender, prior information and ex-ante notices). Each item carries `tender_reference` (the portal notice id), `status` (as on the portal; a prior notice is closed once its call is out) and `deadline`; `document_date` is the publication date. The body names EMA's own reference (EMA/2026/OP/0015), so q finds it. `/{item_id}/documents` serves the notice's files with their extracted text. Calls for expression of interest (expert pools) are at /ema-calls.\n\n**When to use it**\nTrack what EMA is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ema-tenders?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from the EU Funding & Tenders portal (EMA's notices, by its buyer id), where EMA's own procurement page sends readers for everything but the current notices.."
               },
               "response": []
             },
@@ -18031,6 +18102,41 @@
               "response": []
             },
             {
+              "name": "the European Medicines Agency \u2014 one EMA calls for expression of interest (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-calls/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-calls",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the European Medicines Agency EMA calls for expression of interest in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /ema-calls/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU Funding & Tenders portal (EMA's notices with the call-for-expression-of-interest procedure type).."
+              },
+              "response": []
+            },
+            {
               "name": "the European Medicines Agency \u2014 one EMA calls for tender (full body)",
               "request": {
                 "method": "GET",
@@ -18061,7 +18167,203 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one the European Medicines Agency EMA calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /ema-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EMA procurement & grants listing.."
+                "description": "**What it does**\nReturns one the European Medicines Agency EMA calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /ema-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU Funding & Tenders portal (EMA's notices, by its buyer id), where EMA's own procurement page sends readers for everything but the current notices.."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Medicines Agency \u2014 one file of a procedure (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-tenders/:item_id/documents/:document_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-tenders",
+                    ":item_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "document_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one file of a procedure listed at `/ema-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /ema-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Medicines Agency \u2014 one file of a procedure (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-calls/:item_id/documents/:document_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-calls",
+                    ":item_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "document_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one file of a procedure listed at `/ema-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /ema-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Medicines Agency \u2014 the files of one procedure, with their text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-tenders/:item_id/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-tenders",
+                    ":item_id",
+                    "documents"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return each file's extracted text."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the files the European Medicines Agency attached to one procedure from `/ema-tenders` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.\n\n**When to use it**\nRead what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.\n\n**Input**\n`item_id` from the list endpoint; `include_body` (default false), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ema-tenders/{item_id}/documents\n```\n\n**You get back**\nA paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.\n\n**Data freshness**\nFiles are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Medicines Agency \u2014 the files of one procedure, with their text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ema-calls/:item_id/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ema-calls",
+                    ":item_id",
+                    "documents"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return each file's extracted text."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the files the European Medicines Agency attached to one procedure from `/ema-calls` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.\n\n**When to use it**\nRead what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.\n\n**Input**\n`item_id` from the list endpoint; `include_body` (default false), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ema-calls/{item_id}/documents\n```\n\n**You get back**\nA paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.\n\n**Data freshness**\nFiles are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."
               },
               "response": []
             },
