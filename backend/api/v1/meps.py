@@ -384,14 +384,59 @@ def _extract_active_political_group(profile: Dict[str, Any]) -> Optional[str]:
 
 
 def _extract_role(profile: Dict[str, Any]) -> Optional[str]:
-    """Return the canonical role of the MEP (e.g. MEMBER) from ep-roles URI."""
+    """The MEP's role in the CURRENT parliamentary term.
+
+    GovClipping asked on 1 October 2026 why some MEPs come back as MEMBER and others
+    as MEMBER_PARLIAMENT. There is no difference between those people: the EP publishes
+    BOTH roles for the same MEP in the same term, as two membership records --
+
+      mandate  : identifier 38542-m-..., role MEMBER_PARLIAMENT, no classification
+      function : identifier 38542-f-..., role MEMBER, classification EU_INSTITUTION
+
+    -- and this returned whichever the API happened to list first. Kristian VIGENIN
+    came back MEMBER and Johan DANIELSSON MEMBER_PARLIAMENT purely because of array
+    order. Both hold both.
+
+    Worse, it ignored WHEN. Vigenin's first match was org/ep-6, the 2007 Parliament,
+    so the role served was read from a mandate that ended seventeen years ago.
+
+    So: only memberships that have not ended, only the latest term, and the
+    EU_INSTITUTION-classified function preferred over the mandate so that every MEP
+    reports the same value for the same situation. A former MEP, whose memberships have
+    all ended, returns None rather than a role they no longer hold.
+    """
+    # An office outranks the generic membership. Without this, an MEP holding two
+    # EU_INSTITUTION roles at once (a Vice-President is also a Member) would be decided
+    # by array order again -- the very bug being fixed, one level down.
+    def rank(role: str, classified: bool) -> int:
+        if role not in ("MEMBER", "MEMBER_PARLIAMENT"):
+            return 3            # PRESIDENT_VICE, QUAESTOR, OBSERVER, ...
+        return 2 if classified else 1
+
+    best_term = -1
+    best_role = None
+    best_rank = -1
+
     for m in profile.get("hasMembership") or []:
-        cls = m.get("membershipClassification") or ""
-        # MEMBER_PARLIAMENT membership at the institution level (org/ep-10) is the canonical role.
-        if (m.get("organization") or "").startswith("org/ep-") and m.get("role"):
-            r = str(m["role"])
-            return r.rsplit("/", 1)[-1] if "/" in r else r
-    return None
+        org = str(m.get("organization") or "")
+        if not org.startswith("org/ep-") or not m.get("role"):
+            continue
+        during = m.get("memberDuring") or {}
+        if during.get("endDate"):
+            continue                      # an ended mandate is not the current role
+        try:
+            term = int(org.rsplit("-", 1)[-1])
+        except ValueError:
+            continue
+        role = str(m["role"]).rsplit("/", 1)[-1]
+        classified = "EU_INSTITUTION" in str(m.get("membershipClassification") or "")
+        r = rank(role, classified)
+        # Later term wins; within a term, the higher-ranked role wins. The choice never
+        # depends on the order the API happened to return.
+        if term > best_term or (term == best_term and r > best_rank):
+            best_term, best_role, best_rank = term, role, r
+
+    return best_role
 
 
 async def _enrich_country_group(items: List["MEPItem"], patient: bool = False, concurrency: int = 8) -> List["MEPItem"]:
