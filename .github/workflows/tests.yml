@@ -96,50 +96,9 @@ jobs:
           STRIPE_SECRET_KEY: ci-not-a-real-key
           STRIPE_PUBLISHABLE_KEY: ci-not-a-real-key
         run: |
-          pytest tests/ -q -p no:cacheprovider \
-            --ignore=tests/seeds_quarantined \
-            --ignore=tests/test_a_bot_challenge_is_never_a_body.py \
-            --ignore=tests/test_backfill_api_key_last_used.py \
-            --ignore=tests/test_celex_corrections_2026_09_30.py \
-            --ignore=tests/test_council_documents_corpus.py \
-            --ignore=tests/test_eea_news_full_bodies.py \
-            --ignore=tests/test_ep_council_pipeline.py \
-            --ignore=tests/test_ep_opendata_api.py \
-            --ignore=tests/test_eurio_client.py \
-            --ignore=tests/test_eurlex_client.py \
-            --ignore=tests/test_immc_client.py \
-            --ignore=tests/test_legislative_train_scraper.py \
-            --ignore=tests/test_news_feed_item_types.py \
-            --ignore=tests/test_oeil_scraper.py \
-            --ignore=tests/test_ontology_drift.py \
-            --ignore=tests/test_pagination_is_a_total_order.py \
-            --ignore=tests/test_procurement_documents.py \
-            --ignore=tests/test_rate_limit_is_retried_not_recorded.py \
-            --ignore=tests/test_resolution_dates.py \
-            --ignore=tests/test_response_validator.py \
-            --ignore=tests/test_secondary_acts_have_act_dates.py \
-            --ignore=tests/test_secondary_acts_identity.py \
-            --ignore=tests/test_semantic_gating.py \
-            --ignore=tests/test_social_x_tail_window.py \
-            --ignore=tests/test_stance_open_lanes.py \
-            --ignore=tests/test_tender_match_scheduler.py \
-            --ignore=tests/test_tenders/test_ted_client.py \
-            --ignore=tests/test_tenders/test_ted_full_day_ingest.py \
-            --ignore=tests/test_tenders/test_ted_sparql_client.py \
-            --ignore=tests/test_tenders/test_tender_context_provider.py \
-            --ignore=tests/test_tenders/test_tenderator_api.py \
-            --ignore=tests/test_texts_adopted_coverage.py \
-            --ignore=tests/test_tris_budget.py \
-            --ignore=tests/test_tris_feed.py \
-            --ignore=tests/test_user_agent_freshness.py \
-            --ignore=tests/test_v1_envelope.py \
-            --ignore=tests/test_v1_new_endpoints.py \
-            --ignore=tests/test_v1_publications.py \
-            --ignore=tests/test_v1_rate_limiter.py \
-            --ignore=tests/test_v2_commission.py \
-            --ignore=tests/test_v2_news_institutional_union.py \
-            --ignore=tests/test_validator_outcomes.py \
-            --junit-xml=pytest-report.xml
+          grep -v '^#' tests/ci-safe-files.txt | grep . > /tmp/ci-tests.txt
+          echo "running $(wc -l < /tmp/ci-tests.txt) CI-safe test files"
+          xargs pytest -q -p no:cacheprovider --junit-xml=pytest-report.xml < /tmp/ci-tests.txt
 
       - name: Publish the report
         if: always()
