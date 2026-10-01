@@ -3,6 +3,14 @@
   "entries": [
     {
       "date": "2026-10-01",
+      "action": "updated",
+      "guide": "eu_publications_office_and_open_data",
+      "title": "EU Publications Office and open data",
+      "summary": "EU Vocabularies release round 20260923-0 (53 vocabularies, DE-BIAS and EDCC new), INSPIRE Registry in EU Vocabularies, what Brubru mirrors and the Catalan gap",
+      "refs": []
+    },
+    {
+      "date": "2026-10-01",
       "action": "deep_dive",
       "guide": "industrial_accelerator_act",
       "title": "Industrial Accelerator Act",
