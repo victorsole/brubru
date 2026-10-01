@@ -5,7 +5,6 @@ Cross-body public-consultations aggregator — the comprehensive part of
 A query-time UNION of the two consultation stores Brubru keeps fresh:
   - public_consultations : the EC "Have Your Say" register PLUS the decentralised
                            agency consultations it mirrors (the rich source: status,
-from api.v1._row_dates import row_updated
                            closing date, responsible DG, policy areas, feedback counts).
   - economy_items        : item_type 'consultation' / 'public_consultation' — catches
                            bodies not in the register (e.g. EDPB), deduped by URL.
@@ -16,6 +15,8 @@ everything. Endpoints: directory, /all, /bodies (pick-list), /{id} (detail).
 Scope: read:economy.
 """
 from __future__ import annotations
+
+from api.v1._row_dates import row_updated
 
 from datetime import date, datetime, timezone
 from typing import List, Optional

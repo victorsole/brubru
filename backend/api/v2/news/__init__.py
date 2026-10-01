@@ -4,13 +4,14 @@
 A cross-body AGGREGATOR (ingests nothing): a query-time view over the news Brubru
 already keeps fresh in economy_items (agencies) and eu_news_items (the institutions, the
 EEAS and the bodies' own newsrooms -- see _INSTITUTIONAL_NEWS; an item whose URL is
-from api.v1._row_dates import row_updated
 already in economy_items is served once, from there), where "News" bundles item_type 'news' and
 'press_release' (latest news, press releases, stories, speeches and statements are
 all folded into 'news' at ingest). Same proprietary body/family picker as the
 events folder. The 5 mandatory datapoints. Scope: read:economy.
 """
 from __future__ import annotations
+
+from api.v1._row_dates import row_updated
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Union
