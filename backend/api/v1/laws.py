@@ -60,8 +60,8 @@ class LawItem(BaseModel):
     text_url: Optional[str] = Field(None, description="Brubru endpoint for the full body (XML or plain text). Call this URL to retrieve the actual law content.")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of eurlex_url).")
-    body_txt: Optional[str] = Field(None, description="Null on list — call /laws/{celex}/text for the body.")
-    body_html: Optional[str] = Field(None, description="Null on list — call /laws/{celex}/text for the body.")
+    body_txt: Optional[str] = Field(None, description="Plain text of the act, stored from Cellar. Pass include_body=false to omit it.")
+    body_html: Optional[str] = Field(None, description="XHTML of the act, stored from Cellar. Pass include_body=false to omit it.")
     document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
 
@@ -72,8 +72,17 @@ def _eurlex_url(celex: Optional[str]) -> Optional[str]:
     return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
 
 
-def _law_item(r) -> "LawItem":
-    """One row as a LawItem. Shared so the row-id path and the CELEX path cannot drift."""
+def _law_item(r, include_body: bool = True) -> "LawItem":
+    """One row as a LawItem. Shared so the row-id path and the CELEX path cannot drift.
+
+    The body used to be null here, with the list telling callers to fetch
+    /laws/{celex}/text instead. That route reads the act live from Cellar, so a
+    100-row page would have meant 100 live fetches; the text is now stored
+    (migration 269) and served straight from the row.
+
+    include_body=false stays available because a caller paging the whole corpus for
+    metadata should not have to carry roughly 41 KB of XHTML per row to get it.
+    """
     return LawItem(
         id=r.id,
         celex=r.celex,
@@ -86,6 +95,8 @@ def _law_item(r) -> "LawItem":
         eurlex_url=_eurlex_url(r.celex),
         text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
         public_url=_eurlex_url(r.celex),
+        body_txt=getattr(r, "body_txt", None) if include_body else None,
+        body_html=getattr(r, "body_html", None) if include_body else None,
         document_date=r.date,
         creation_date=r.created_at,
     )
@@ -134,6 +145,11 @@ async def list_laws(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
     include_orphans: bool = Query(False, description="Include rows that have no CELEX (orphaned annexes / recitals from Formex parsing). Default false — they have no useful identifier and produce all-null rows."),
+    include_body: bool = Query(
+        True,
+        description="Include body_txt and body_html. Pass false to page the corpus "
+                    "for metadata without carrying ~41 KB of XHTML per row.",
+    ),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -261,24 +277,9 @@ async def list_laws(
         .all()
     )
 
-    data = [
-        LawItem(
-            id=r.id,
-            celex=r.celex,
-            title=r.title,
-            doc_type=r.doc_type_normalized or r.doc_type,
-            adopted_on=r.date,
-            oj_reference=r.oj_reference,
-            policy_area=r.policy_area,
-            legal_basis=list(r.legal_basis or []),
-            eurlex_url=_eurlex_url(r.celex),
-            text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
-            public_url=_eurlex_url(r.celex),
-            document_date=r.date,
-            creation_date=r.created_at,
-        )
-        for r in rows
-    ]
+    # One builder for list and item alike: this list kept its own copy of the
+    # LawItem construction, which is exactly how the two drift apart.
+    data = [_law_item(r, include_body=include_body) for r in rows]
 
     return build_envelope(
         data,

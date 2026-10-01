@@ -70,6 +70,13 @@ class EULaw(Base):
     corpus_status = Column(String(20), default='active', index=True)  # active/amended/repealed
     content_hash = Column(String(64))  # SHA-256 of XML content for delta detection
 
+    # Full text, stored so the LIST can serve a body (migration 269). /laws/{celex}/text
+    # fetches live from Cellar, which cannot be done 100 times for one page of results.
+    body_html = Column(Text)
+    body_txt = Column(Text)
+    body_chars = Column(Integer)
+    body_fetched_at = Column(TIMESTAMP)
+
     # Timestamps
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
