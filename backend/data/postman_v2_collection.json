@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1021 requests across 49 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1027 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -280,13 +280,13 @@
                 },
                 {
                   "key": "include_body",
-                  "value": "False",
+                  "value": "True",
                   "disabled": true,
-                  "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because a page of full articles is large; there is no other way to get the body in bulk, so set it to true rather than calling the detail endpoint once per item."
+                  "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, so a list that nulls them does not meet the contract. Pass `include_body=false` for a light list when you only need titles and dates."
                 }
               ]
             },
-            "description": "**What it does**\nThe unified news feed across every EU body, newest first. 'News' bundles latest news, press releases, stories, speeches and statements.\n\n**When to use it**\nOne call for 'all news from the bodies I care about'. Scope with `body` (comma-separated codes) and/or `family` (a Brubru policy family); omit both for every body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | publication | all), `from` / `to` (YYYY-MM-DD), `days` (shorthand for the last N days; ignored when `from` is given), `q` (free text), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\nGET /api/v2/news/all?family=finance-economy&order=recent\nGET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are null on the list by default \u2014 pass `include_body=true` to get them in bulk**, or call `/api/v2/news/{id}` for one item. Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them.plus body_code, body_name, the policy families and kind. `published_from` / `published_to` echo the date window actually applied, so you can confirm your filter took effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; the Commission, Parliament, Council, EEAS and 44 other bodies' own newsroom items are unioned in from the institutional news store, so this feed covers both; an article held in both stores is served once, from the economy store, which carries the full article. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."
+            "description": "**What it does**\nThe unified news feed across every EU body, newest first. 'News' bundles latest news, press releases, stories, speeches and statements.\n\n**When to use it**\nOne call for 'all news from the bodies I care about'. Scope with `body` (comma-separated codes) and/or `family` (a Brubru policy family); omit both for every body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | publication | all), `from` / `to` (YYYY-MM-DD), `days` (shorthand for the last N days; ignored when `from` is given), `q` (free text), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\nGET /api/v2/news/all?family=finance-economy&order=recent\nGET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are returned on every item by default**; pass `include_body=false` for a light list of titles and dates only. (Until 1 October 2026 they were null unless `include_body=true` was passed, which broke the five-datapoint contract and was reported by a subscriber who read the list and found the text missing while the source had it.) Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them.plus body_code, body_name, the policy families and kind. `published_from` / `published_to` echo the date window actually applied, so you can confirm your filter took effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; the Commission, Parliament, Council, EEAS and 44 other bodies' own newsroom items are unioned in from the institutional news store, so this feed covers both; an article held in both stores is served once, from the economy store, which carries the full article. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."
           },
           "response": []
         },
@@ -14268,6 +14268,77 @@
               "response": []
             },
             {
+              "name": "the European Institute for Gender Equality \u2014 EIGE calls for expression of interest (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-calls",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-calls"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true,
+                      "description": "Free-text search over title, summary and body."
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Only items on/after this date (YYYY-MM-DD). `from` is accepted as an alias."
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true,
+                      "description": "Only items on/before this date (YYYY-MM-DD). `to` is accepted as an alias."
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true,
+                      "description": "recent | oldest | title."
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the European Institute for Gender Equality's EIGE calls for expression of interest, newest first. EIGE calls for expression of interest, including the standing call for its External Experts' Database (no reference or date on its page; open while the database is valid). Each item carries `tender_reference`, `status` and `deadline`; `/{item_id}/documents` serves the call's files with their text. Filter with q.\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eige-calls?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from EIGE's procurement register and its External Experts' Database page.."
+              },
+              "response": []
+            },
+            {
               "name": "the European Institute for Gender Equality \u2014 EIGE calls for tender (newest first)",
               "request": {
                 "method": "GET",
@@ -14334,7 +14405,7 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nLists the European Institute for Gender Equality's EIGE calls for tender, newest first. EIGE's own procurement \u2014 gender-equality research, indicators, communications. The listing is often empty between procurement waves; the endpoint returns [] cleanly when EIGE has no ongoing procedures. Filter with q.\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eige-tenders?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from the EIGE procurement page.."
+                "description": "**What it does**\nLists the European Institute for Gender Equality's EIGE calls for tender, newest first. EIGE's own procurement, the whole archive from 2010: calls for tender and ex-ante publicity notices (gender-equality research, indicators, surveys, services). Each item carries `tender_reference` (EIGE's reference), `status` (open | closed; open only while the closing date is ahead) and `deadline` (the closing date and time); `document_date` is the published date. The body holds the procedure's description, its Funding & Tenders link and any related notice (a site visit, a prior information notice); `/{item_id}/documents` serves the procedure's files with their extracted text. Calls for expression of interest are at /eige-calls. Filter with q.\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eige-tenders?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default \u2014 **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.\n\n**Data freshness**\nRefreshed from EIGE's procurement register (open and closed procedures) and each procedure's page.."
               },
               "response": []
             },
@@ -17624,6 +17695,41 @@
               "response": []
             },
             {
+              "name": "the European Institute for Gender Equality \u2014 one EIGE calls for expression of interest (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-calls/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-calls",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the European Institute for Gender Equality EIGE calls for expression of interest in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /eige-calls/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from EIGE's procurement register and its External Experts' Database page.."
+              },
+              "response": []
+            },
+            {
               "name": "the European Institute for Gender Equality \u2014 one EIGE calls for tender (full body)",
               "request": {
                 "method": "GET",
@@ -17654,7 +17760,203 @@
                     }
                   ]
                 },
-                "description": "**What it does**\nReturns one the European Institute for Gender Equality EIGE calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /eige-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EIGE procurement page.."
+                "description": "**What it does**\nReturns one the European Institute for Gender Equality EIGE calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /eige-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from EIGE's procurement register (open and closed procedures) and each procedure's page.."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Institute for Gender Equality \u2014 one file of a procedure (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-tenders/:item_id/documents/:document_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-tenders",
+                    ":item_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "document_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one file of a procedure listed at `/eige-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /eige-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Institute for Gender Equality \u2014 one file of a procedure (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-calls/:item_id/documents/:document_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-calls",
+                    ":item_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "document_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one file of a procedure listed at `/eige-calls`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /eige-calls/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Institute for Gender Equality \u2014 the files of one procedure, with their text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-tenders/:item_id/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-tenders",
+                    ":item_id",
+                    "documents"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return each file's extracted text."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the files the European Institute for Gender Equality attached to one procedure from `/eige-tenders` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.\n\n**When to use it**\nRead what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.\n\n**Input**\n`item_id` from the list endpoint; `include_body` (default false), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eige-tenders/{item_id}/documents\n```\n\n**You get back**\nA paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.\n\n**Data freshness**\nFiles are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Institute for Gender Equality \u2014 the files of one procedure, with their text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/eige-calls/:item_id/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "eige-calls",
+                    ":item_id",
+                    "documents"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return each file's extracted text."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the files the European Institute for Gender Equality attached to one procedure from `/eige-calls` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.\n\n**When to use it**\nRead what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.\n\n**Input**\n`item_id` from the list endpoint; `include_body` (default false), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eige-calls/{item_id}/documents\n```\n\n**You get back**\nA paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.\n\n**Data freshness**\nFiles are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."
               },
               "response": []
             },
@@ -50814,9 +51116,9 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
@@ -53472,13 +53774,13 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
-                "description": "**What it does**\nLists the Interoperable Europe Portal's events, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is hosting without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/events?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list by default \u2014 pass `include_body=true` to get them in bulk, or use the detail endpoint for one item).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+                "description": "**What it does**\nLists the Interoperable Europe Portal's events, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is hosting without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/events?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` returned by default \u2014 pass `include_body=false` for a light list).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
               },
               "response": []
             },
@@ -53549,13 +53851,13 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
-                "description": "**What it does**\nLists the Interoperable Europe Portal's news, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is publishing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/news?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list by default \u2014 pass `include_body=true` to get them in bulk, or use the detail endpoint for one item).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+                "description": "**What it does**\nLists the Interoperable Europe Portal's news, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is publishing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/news?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` returned by default \u2014 pass `include_body=false` for a light list).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
               },
               "response": []
             },
@@ -53626,13 +53928,13 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
-                "description": "**What it does**\nLists the Interoperable Europe Portal's reusable solutions, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is sharing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/solutions?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list by default \u2014 pass `include_body=true` to get them in bulk, or use the detail endpoint for one item).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
+                "description": "**What it does**\nLists the Interoperable Europe Portal's reusable solutions, newest first, drawn from across every thematic collection.\n\n**When to use it**\nTrack what the EU interoperability community is sharing without scraping the portal. Filter to one collection with `collection` (e.g. `osor`, `eugovtech`, `semic-support-centre`), or by free text / date.\n\n**Input**\n`collection` (a collection slug, e.g. `open-source-observatory-osor`), `q` free-text, `since` / `until` (YYYY-MM-DD), `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /api/v2/interoperable/solutions?collection=eugovtech&limit=10\n```\n\n**You get back**\nA paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` returned by default \u2014 pass `include_body=false` for a light list).\n\n**Data freshness**\nRendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."
               },
               "response": []
             },
@@ -53685,9 +53987,9 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
@@ -53760,9 +54062,9 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
@@ -53980,9 +54282,9 @@
                     },
                     {
                       "key": "include_body",
-                      "value": "False",
+                      "value": "True",
                       "disabled": true,
-                      "description": "Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."
+                      "description": "Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."
                     }
                   ]
                 },
