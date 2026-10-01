@@ -25,6 +25,7 @@ from models.user import User
 from ._body import body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,7 @@ class ComitologyDocItem(BaseModel):
     document_type_label: Optional[str] = None
     document_type_letter: Optional[str] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     meeting_start_date: Optional[datetime] = None
     public_url: Optional[str] = None
     has_body: bool = False
@@ -57,6 +59,7 @@ class ComitologyDocDetail(BaseModel):
     document_type_label: Optional[str] = None
     document_type_letter: Optional[str] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     update_date: Optional[datetime] = None
     meeting_start_date: Optional[datetime] = None
     meeting_end_date: Optional[datetime] = None
@@ -161,6 +164,7 @@ async def list_documents(
         document_type_label=r.get("document_type_label"),
         document_type_letter=r.get("document_type_letter"),
         creation_date=r.get("creation_date"),
+        updated_date=row_updated(r),
         meeting_start_date=r.get("meeting_start_date"),
         public_url=r.get("public_url"),
         has_body=False,
@@ -296,6 +300,7 @@ async def get_document(
         document_type_label=row.get("document_type_label"),
         document_type_letter=row.get("document_type_letter"),
         creation_date=row.get("creation_date"),
+        updated_date=row_updated(row),
         update_date=row.get("update_date"),
         meeting_start_date=row.get("meeting_start_date"),
         meeting_end_date=row.get("meeting_end_date"),

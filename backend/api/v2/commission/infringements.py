@@ -38,6 +38,7 @@ from api.v1.infringements_funding import InfringementItem
 from core.database import get_db
 from models.user import User
 from services.infringements import implementing_eu_law as iel
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/infringements", tags=["v2-commission-infringements"])
 
@@ -585,6 +586,7 @@ def get_statistics(
         parameters=r["parameters"], series=r["series"], rows=r["rows"], source_url=r["source_url"],
         public_url=r["public_url"], body_txt=body_txt, body_html=body_html,
         document_date=r["last_update"], creation_date=r["fetched_at"],
+        updated_date=row_updated(r),
         has_body=len(body_txt) >= body_threshold,
     )
 

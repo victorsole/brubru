@@ -35,6 +35,7 @@ from models.user import User
 from services.citation_verifier import verify_one
 
 from ._deps import api_user_with_rate_limit
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -136,6 +137,7 @@ class VerifyCitationItem(BaseModel):
         None,
         description="When this CELEX first entered Brubru's eu_laws corpus (our scrape date). Null when CELEX is not in the corpus.",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     document_date: Optional[_date] = Field(
         None,
         description="The document's adoption or publication date (from eu_laws). Null when CELEX is not in the corpus.",
@@ -436,6 +438,7 @@ async def _enrich(
         body_txt=out["body_text"],
         body_html=out["body_html"],
         creation_date=out["creation_date"],
+        updated_date=row_updated(out),
         document_date=out["document_date"],
     )
     return out
@@ -501,6 +504,7 @@ async def verify_citation(
             body_txt=enrichment["body_text"],
             body_html=enrichment["body_html"],
             creation_date=enrichment["creation_date"],
+            updated_date=row_updated(enrichment),
             document_date=enrichment["document_date"],
         )
     )
@@ -541,6 +545,7 @@ async def verify_citation_q(
             body_txt=enrichment["body_text"],
             body_html=enrichment["body_html"],
             creation_date=enrichment["creation_date"],
+            updated_date=row_updated(enrichment),
             document_date=enrichment["document_date"],
         )
     )

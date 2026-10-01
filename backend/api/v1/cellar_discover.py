@@ -52,6 +52,7 @@ class CellarRecentItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text body. Null by default; populated when /recent is called with include_body=true (other list endpoints stay metadata-only — use /api/v1/citations/verify for body on demand).")
     body_html: Optional[str] = Field(None, description="HTML body (Cellar XHTML manifestation). Null by default; populated when /recent is called with include_body=true.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CellarMetadata(BaseModel):
@@ -73,6 +74,7 @@ class CellarMetadata(BaseModel):
     body_txt: Optional[str] = Field(None, description="Null on this metadata-only endpoint. Use /api/v1/citations/verify for body.")
     body_html: Optional[str] = Field(None, description="Null on this metadata-only endpoint.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CellarRelation(BaseModel):
@@ -86,6 +88,7 @@ class CellarRelation(BaseModel):
     body_html: Optional[str] = Field(None, description="Null on this graph-edge endpoint.")
     document_date: Optional[date] = Field(None, description="Null on this graph-edge endpoint — Cellar relationship metadata doesn't carry the related act's date inline.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar relationship discovery call.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class EuroVocConcept(BaseModel):
@@ -97,6 +100,7 @@ class EuroVocConcept(BaseModel):
     body_html: Optional[str] = Field(None, description="Null — taxonomy nodes are labels not documents.")
     document_date: Optional[date] = Field(None, description="Null — EuroVoc concepts are taxonomy entries without an adoption date.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar EuroVoc search call.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 # ----------------------------- helpers -----------------------------

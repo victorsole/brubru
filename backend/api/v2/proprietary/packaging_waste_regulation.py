@@ -168,6 +168,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body — null.")
     document_date: Optional[date] = Field(None, description="Signature/publication date of the act.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru resolved this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TimelineEntry(BaseModel):

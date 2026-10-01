@@ -192,6 +192,7 @@ class OfficialItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields. Includes the photo when available.")
     document_date: Optional[date] = Field(None, description="Null — officials are not dated documents.")
     creation_date: Optional[datetime] = Field(None, description="Time of this fetch.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _official_public_url(r) -> Optional[str]:

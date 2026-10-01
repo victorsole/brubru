@@ -75,6 +75,7 @@ class KnowledgeGuideItem(BaseModel):
     body_html: Optional[str] = Field(None, description="Always null — guides are not rendered to HTML.")
     document_date: Optional[date] = Field(None, description="Always null — guides are not dated documents.")
     creation_date: Optional[datetime] = Field(None, description="Always null — guides are not per-row timestamped.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _loader():

@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from services.extract import extract as _extract
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/extract", tags=["v2-extract"])
 
@@ -31,6 +32,7 @@ class ExtractedItem(BaseModel):
     summary: Optional[str] = None
     document_date: Optional[datetime] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     body_txt: Optional[str] = Field(None, description="Article body — populated only with deep=true.")
     body_html: Optional[str] = Field(None, description="Article HTML — populated only with deep=true.")
     body_code: Optional[str] = None
@@ -86,6 +88,7 @@ async def extract_url(
         raise HTTPException(502, f"could not fetch the URL ({res.get('fetched_via', 'failed')})")
     items = [ExtractedItem(title=it.title, item_type=it.item_type, public_url=it.public_url,
                            summary=it.summary, document_date=it.document_date, creation_date=it.creation_date,
+                           updated_date=row_updated(it),
                            body_txt=it.body_txt, body_html=it.body_html, body_code=it.body_code,
                            guid=it.guid, source_kind=it.source_kind,
                            eurovoc_descriptors=it.extras.get("eurovoc", []))

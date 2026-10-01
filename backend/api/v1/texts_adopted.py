@@ -26,6 +26,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,7 @@ class TextItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Citizen URL — full_text_url / pdf_url / source_url fallback chain.")
     document_date: Optional[date] = Field(None, description="Adoption date (date-only view of adoption_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _row_to_item(
@@ -137,6 +139,7 @@ def _row_to_item(
         public_url=public_url,
         document_date=r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None,
         creation_date=r.last_updated,
+        updated_date=row_updated(r),
     )
 
 

@@ -34,6 +34,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from core.body_sources import read_body
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,7 @@ class CommissionRegisterItem(BaseModel):
         None,
         description="When Brubru first ingested this row (first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
     # Legacy / kept-for-compat fields (still useful for partners)
     portal_url: Optional[str] = None  # Landing page (EUR-Lex or RegDoc)
@@ -144,6 +146,7 @@ def _row_to_item(
         body_html=body_html_value,
         document_date=doc_date,
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
         # Kept fields
         portal_url=r.portal_url,
         pdf_url=pdf,

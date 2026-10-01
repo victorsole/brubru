@@ -35,6 +35,7 @@ from core.body_sources import read_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +110,7 @@ class AmendmentItem(BaseModel):
         None, description="The amendment document on doceo (its source_url).")
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this amendment.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @amendments_router.get(
@@ -414,6 +416,7 @@ def _rollcall_to_item(r) -> "VoteItem":
                        and not isinstance(raw_when, datetime)
                        else (raw_when.date() if raw_when else None)),
         creation_date=r.updated_at or r.created_at,
+        updated_date=row_updated(r),
     )
 
 
@@ -467,6 +470,7 @@ def _vote_row_to_item(r: "EPVote") -> "VoteItem":
         body_html="<article>" + "".join(parts_html) + "</article>",
         document_date=r.timestamp.date() if hasattr(r.timestamp, "date") and r.timestamp else None,
         creation_date=r.updated_at or r.timestamp,
+        updated_date=row_updated(r),
     )
 
 
@@ -606,6 +610,7 @@ class MemberVoteItem(BaseModel):
         None,
         description="When the parent vote was last refreshed.",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @votes_router.get(
@@ -716,6 +721,7 @@ async def list_member_votes(
             body_html="<article>" + "".join(parts_html) + "</article>",
             document_date=parent_date,
             creation_date=vote.updated_at,
+            updated_date=row_updated(vote),
         ))
     return build_envelope(data, total=total, page=page, limit=limit)
 
@@ -817,6 +823,7 @@ class EPDocumentItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Null for this list endpoint — fetch body via the per-source detail endpoints (committee minutes, amendment docs).")
     body_html: Optional[str] = Field(None, description="Null for this list endpoint.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated for this union view).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @ep_documents_router.get(
@@ -939,6 +946,7 @@ async def list_ep_documents(
             last_updated=r.scraped_at,
             public_url=r.doceo_url,
             creation_date=r.scraped_at,
+            updated_date=row_updated(r),
         ))
 
     # Branch 2: committee_work items
@@ -982,6 +990,7 @@ async def list_ep_documents(
             last_updated=r.last_updated,
             public_url=r.ep_page_url or r.source_url or r.eurlex_url,
             creation_date=r.last_updated,
+            updated_date=row_updated(r),
         ))
 
     # Sort union by document_date desc and apply page slice.
@@ -1023,6 +1032,7 @@ class PressReleaseItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — alias of url (the press-release page on the institutional site).")
     document_date: Optional[date] = Field(None, description="Publication date of the press release (date-only view of published_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @press_releases_router.get(
@@ -1314,6 +1324,7 @@ async def list_opinions(
             body_txt=body_txt,
             body_html=body_html,
             creation_date=r.scraped_at,
+            updated_date=row_updated(r),
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to)

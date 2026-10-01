@@ -57,6 +57,7 @@ class AgendaItemOut(BaseModel):
         None,
         description="When Brubru first observed this agenda item (commission_calendar_urls.first_seen_at).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
     # Kept-for-compat fields
     date: date

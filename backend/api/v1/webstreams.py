@@ -28,6 +28,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +72,7 @@ class WebstreamItem(BaseModel):
         None,
         description="When Brubru last refreshed this row (alias of last_updated).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     meeting_start_date: Optional[datetime] = Field(
         None,
         description="Canonical meeting-start timestamp (alias of meeting_date) — the v1 contract uses this name for meeting-bearing endpoints.",
@@ -119,6 +121,7 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         body_html="<article>" + "".join(parts_html) + "</article>",
         document_date=r.meeting_date.date() if hasattr(r.meeting_date, "date") and r.meeting_date else None,
         creation_date=r.last_updated,
+        updated_date=row_updated(r),
         meeting_start_date=r.meeting_date,
     )
 

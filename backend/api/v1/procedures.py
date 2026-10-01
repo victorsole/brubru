@@ -25,6 +25,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from ._curated_procedures import BrubruCuration, get_curation
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -95,6 +96,7 @@ class ProcedureItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML of the OEIL procedure-file page.")
     document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage (alias of first_seen).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _oeil_url(oeil_ref: Optional[str]) -> Optional[str]:
@@ -319,6 +321,7 @@ async def list_procedures(
             body_html=getattr(r, "oeil_html_body", None),
             document_date=_document_date(r),
             creation_date=r.first_seen,
+            updated_date=row_updated(r),
         )
         for r in rows
     ]
@@ -355,6 +358,7 @@ class ProcedureDetail(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body sourced from the cached OEIL page.")
     document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
     # Committees + rapporteurs
     lead_committee: Optional[str] = None
@@ -461,6 +465,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         body_html=getattr(r, "oeil_html_body", None),
         document_date=_document_date(r),
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
         # Brubru curated editorial overlay (null unless Brubru curates this file)
         curated=get_curation(r.oeil_procedure_ref),
     )

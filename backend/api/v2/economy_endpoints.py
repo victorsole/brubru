@@ -20,6 +20,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._row_dates import row_updated
 
 _ORDERS = {"recent", "oldest", "title"}
 # coalesce(document_date, creation_date), not bare document_date, in BOTH the filter
@@ -62,6 +63,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail endpoints; null on list).")
     document_date: Optional[datetime] = Field(None, description="The item's own published date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the item.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class EconomyItem(_DataPoints):
@@ -115,6 +117,7 @@ def _row_to_document(r, *, with_body: bool, self_url: str) -> ProcurementDocumen
         body_txt=(r.body_txt if with_body else None),
         body_html=(r.body_html if with_body else None),
         document_date=r.document_date, creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 
@@ -131,6 +134,7 @@ def _row_to_item(r, *, with_body: bool, procurement: bool = False) -> EconomyIte
         body_txt=(r.body_txt if with_body else None),
         body_html=(r.body_html if with_body else None),
         document_date=r.document_date, creation_date=r.creation_date,
+        updated_date=row_updated(r),
     )
 
 

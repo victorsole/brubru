@@ -5,6 +5,7 @@ Cross-body public-consultations aggregator — the comprehensive part of
 A query-time UNION of the two consultation stores Brubru keeps fresh:
   - public_consultations : the EC "Have Your Say" register PLUS the decentralised
                            agency consultations it mirrors (the rich source: status,
+from api.v1._row_dates import row_updated
                            closing date, responsible DG, policy areas, feedback counts).
   - economy_items        : item_type 'consultation' / 'public_consultation' — catches
                            bodies not in the register (e.g. EDPB), deduped by URL.
@@ -56,6 +57,7 @@ class ConsultationItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="The consultation's closing date.")
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _body_names(db: Session) -> dict:
@@ -166,6 +168,7 @@ def _to_item(it, names, *, with_body):
         summary=it["summary"], consultation_type=it["consultation_type"], status=it["status"], dg=it["dg"],
         policy_areas=it["policy_areas"], feedback_count=it["feedback_count"], public_url=it["public_url"],
         document_date=it["document_date"], creation_date=it["creation_date"],
+        updated_date=row_updated(it),
         body_txt=(it["body_txt"] if with_body else None), body_html=(it["body_html"] if with_body else None),
     )
 

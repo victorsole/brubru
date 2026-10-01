@@ -58,6 +58,7 @@ class PublicationItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — alias of url.")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(
@@ -254,6 +255,7 @@ class SourceItem(BaseModel):
     body_html: Optional[str] = Field(None, description="Null.")
     document_date: Optional[date] = Field(None, description="Null — reference data is not dated.")
     creation_date: Optional[datetime] = Field(None, description="Response generation time.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 # IMPORTANT: /sources MUST be declared BEFORE /{publication_id}, otherwise

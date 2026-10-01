@@ -33,6 +33,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,7 @@ class ParliamentaryQuestionItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Citizen URL — alias of source_url (the doceo question page).")
     document_date: Optional[date] = Field(None, description="The question's submission date (alias of submitted_date).")
     creation_date: Optional[datetime] = Field(None, description="Time the row was first ingested (alias of last_updated for now).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> ParliamentaryQuestionItem:
@@ -118,6 +120,7 @@ def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Parl
         public_url=r.source_url,
         document_date=r.submitted_date,
         creation_date=r.last_updated,
+        updated_date=row_updated(r),
     )
 
 
@@ -287,6 +290,7 @@ class TransparencyMeetingItem(BaseModel):
     # returned it null on all 117,000 rows while meeting_date sat beside it.
     document_date: Optional[date] = Field(None, description="The meeting date (alias of meeting_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _compose_meeting_body(r) -> tuple:
@@ -515,6 +519,7 @@ class RSBOpinionItem(BaseModel):
     body_html: Optional[str] = Field(None, description="Null for this endpoint: the Board publishes PDFs, so Brubru stores extracted text rather than publisher HTML.")
     document_date: Optional[date] = Field(None, description="The date the Board states (the opinion date), never the date Brubru captured it.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this opinion.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @rsb_router.get(
@@ -604,6 +609,7 @@ async def list_rsb_opinions(
             body_html=None,
             document_date=r.opinion_date,
             creation_date=r.first_seen,
+            updated_date=row_updated(r),
             policy_areas=list(r.policy_areas or []),
             last_updated=r.last_updated,
         )
@@ -663,6 +669,7 @@ async def get_rsb_detail(
         body_html=None,
         document_date=r.opinion_date,
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
     )
@@ -724,6 +731,7 @@ class SecondaryActItem(BaseModel):
         None,
         description="When Brubru first ingested this row (secondary_acts.first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     # Body fields — secondary acts are PDF-sourced (Cellar PDFs of C(YYYY)NNNN
     # delegated/implementing decisions). body_html stays None per the
     # "no PDF→HTML synthesis" rule.
@@ -1098,6 +1106,7 @@ class TRISNotificationItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — TRIS notification page (source_url).")
     document_date: Optional[date] = Field(None, description="Notification date (alias of notification_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNotificationItem:
@@ -1145,6 +1154,7 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
         public_url=r.source_url or r.pdf_url,
         document_date=r.notification_date,
         creation_date=r.last_updated,
+        updated_date=row_updated(r),
     )
 
 

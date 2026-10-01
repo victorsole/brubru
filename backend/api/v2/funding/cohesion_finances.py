@@ -38,6 +38,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="The programme's status / adoption date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CohesionFinanceItem(_DataPoints):

@@ -36,6 +36,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 
 # --------------------------------------------------------------------------- #
@@ -71,6 +72,7 @@ class CouncilRegisterItemModel(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body — composed from the real facts; null only for honest PDF-text rows.")
     document_date: Optional[date] = Field(None, description="Meeting / publication date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _to_item(r: CouncilRegisterItem) -> CouncilRegisterItemModel:
@@ -90,6 +92,7 @@ def _to_item(r: CouncilRegisterItem) -> CouncilRegisterItemModel:
         body_html=r.body_html,
         document_date=r.document_date,
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 

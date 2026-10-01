@@ -500,6 +500,7 @@ class FtFundedProjectItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal project page).")
     document_date: Optional[date] = Field(None, description="Project start date (the canonical 'when this happened' date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _project_to_item(

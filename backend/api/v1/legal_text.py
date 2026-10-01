@@ -35,6 +35,7 @@ class RecitalArticleMapResponse(BaseModel):
     body_html: Optional[str] = Field(None, description="Null — same.")
     document_date: Optional[date] = Field(None, description="Null on this derived endpoint — fetch /api/v1/laws/{celex} for the parent's date.")
     creation_date: Optional[datetime] = Field(None, description="When the recital-article map was last computed.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class DefinedTermsResponse(BaseModel):
@@ -58,6 +59,7 @@ class DefinedTermsResponse(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL of the parent law (EUR-Lex CELEX URL).")
     document_date: Optional[date] = Field(None, description="Null on this derived endpoint — fetch /api/v1/laws/{celex} for the parent's date.")
     creation_date: Optional[datetime] = Field(None, description="When the defined-terms cache was last computed.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _compose_definitions_body(terms: dict, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):

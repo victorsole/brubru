@@ -28,6 +28,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 router = APIRouter(prefix="/emeeting", tags=["v1-emeeting"])
 documents_router = APIRouter(prefix="/emeeting-documents", tags=["v1-emeeting-documents"])
@@ -53,6 +54,7 @@ class EmeetingAgendaItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML rendering of the agenda — always populated.")
     document_date: Optional[date] = Field(None, description="Meeting date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this agenda.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _to_item(r: EpEmeetingAgenda) -> EmeetingAgendaItem:
@@ -75,6 +77,7 @@ def _to_item(r: EpEmeetingAgenda) -> EmeetingAgendaItem:
         body_html=r.body_html,
         document_date=r.meeting_date,
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 
@@ -227,6 +230,7 @@ class EmeetingDocumentItem(BaseModel):
     body_html: Optional[str] = None
     document_date: Optional[date] = Field(None, description="Meeting date.")
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _to_doc(r: EpEmeetingDocument) -> EmeetingDocumentItem:
@@ -253,6 +257,7 @@ def _to_doc(r: EpEmeetingDocument) -> EmeetingDocumentItem:
         body_html=r.body_html,
         document_date=r.meeting_date,
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 

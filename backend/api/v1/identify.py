@@ -50,6 +50,7 @@ class IdentifyResult(BaseModel):
     body_html: Optional[str] = Field(None, description="Null — an identifier match has no body.")
     document_date: Optional[date] = Field(None, description="Null — identifiers are not dated documents.")
     creation_date: Optional[datetime] = Field(None, description="When this identifier was resolved (server time).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(

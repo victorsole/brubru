@@ -45,6 +45,7 @@ from ._body import body_threshold_param
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 router = APIRouter(prefix="/committee-transcripts", tags=["v1-committee-transcripts"])
 
@@ -140,6 +141,7 @@ class CommitteeTranscriptOut(BaseModel):
         None,
         description="When Brubru produced this transcript row (transcribed_at, falling back to first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _row_to_item(row: CommitteeMeetingTranscript, *, threshold: int) -> CommitteeTranscriptOut:
@@ -175,6 +177,7 @@ def _row_to_item(row: CommitteeMeetingTranscript, *, threshold: int) -> Committe
         body_html=body_html,
         document_date=row.meeting_date.date() if hasattr(row.meeting_date, "date") else row.meeting_date,
         creation_date=row.transcribed_at or row.first_seen,
+        updated_date=row_updated(row),
     )
 
 

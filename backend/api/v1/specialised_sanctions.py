@@ -32,6 +32,7 @@ from models.user import User
 from ._body import body_threshold_param, compose_html_from_sections, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ class SanctionListItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="legal_basis_publication_date (the date the listing legal act was published).")
     creation_date: Optional[datetime] = Field(None, description="Date this row was last refreshed in the upstream consolidated list (alias of date_file).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class SanctionDetail(BaseModel):
@@ -98,6 +100,7 @@ class SanctionDetail(BaseModel):
     public_url: Optional[str] = Field(None, description="Citizen URL — the legal basis URL (EUR-Lex page for the listing regulation).")
     document_date: Optional[date] = Field(None, description="Publication date of the legal basis act.")
     creation_date: Optional[datetime] = Field(None, description="Date this row was last refreshed in the upstream consolidated list.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class ProgrammeCount(BaseModel):
@@ -153,6 +156,7 @@ def _row_to_list_item(row: dict) -> SanctionListItem:
         body_html=body_html,
         document_date=row.get("legal_basis_publication_date"),
         creation_date=row.get("date_file"),
+        updated_date=row_updated(row),
     )
 
 
@@ -474,4 +478,5 @@ async def get_sanction(
         public_url=record.get("legal_basis_url"),
         document_date=record.get("legal_basis_publication_date"),
         creation_date=record.get("date_file"),
+        updated_date=row_updated(record),
     )

@@ -275,6 +275,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body — null here.")
     document_date: Optional[date] = Field(None, description="Publication/signature date of the underlying act (null for pending procedures).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru resolved this row (server time).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class Transposition(BaseModel):

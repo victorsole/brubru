@@ -29,6 +29,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 
 datasets_router = APIRouter(prefix="/open-data/datasets", tags=["v1-open-data-datasets"])
@@ -82,6 +83,7 @@ class OpenDataDatasetItem(BaseModel):
     body_html: Optional[str] = None
     document_date: Optional[date] = Field(None, description="Last modified date.")
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class OpenDataCatalogueItem(BaseModel):
@@ -95,6 +97,7 @@ class OpenDataCatalogueItem(BaseModel):
     body_html: Optional[str] = None
     document_date: Optional[date] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _to_dataset(r: OpenDataDataset) -> OpenDataDatasetItem:
@@ -105,6 +108,7 @@ def _to_dataset(r: OpenDataDataset) -> OpenDataDatasetItem:
         is_hvd=bool(r.is_hvd), distributions=list(r.distributions or []), issued=r.issued,
         public_url=r.public_url, body_txt=r.body_txt, body_html=r.body_html,
         document_date=r.modified, creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 
@@ -114,6 +118,7 @@ def _to_catalogue(r: OpenDataCatalogue) -> OpenDataCatalogueItem:
         dataset_count=r.dataset_count, public_url=r.public_url,
         body_txt=r.body_txt, body_html=r.body_html,
         document_date=None, creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 

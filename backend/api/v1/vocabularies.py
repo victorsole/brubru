@@ -71,6 +71,7 @@ class VocabularyConcept(BaseModel):
         None,
         description="When Brubru last refreshed this concept from the Cellar SPARQL endpoint (alias of fetched_at).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _row_to_concept(r) -> dict:

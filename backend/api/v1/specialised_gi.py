@@ -34,6 +34,7 @@ from models.user import User
 from ._body import body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,7 @@ class GiListItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="EU protection date (alias of eu_protection_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class GiDetail(BaseModel):
@@ -122,6 +124,7 @@ class GiDetail(BaseModel):
     # 5 mandatory Brubru v1 datapoints (public_url already present above).
     document_date: Optional[date] = Field(None, description="EU protection date (alias of eu_protection_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row (alias of fetched_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class GiTypeCount(BaseModel):
@@ -266,6 +269,7 @@ async def list_gi(
             body_html=bh,
             document_date=r.get("eu_protection_date"),
             creation_date=r.get("fetched_at") or r.get("updated_at"),
+            updated_date=row_updated(r),
         ))
 
     return build_envelope(
@@ -429,4 +433,5 @@ async def get_gi(
         # 5 mandatory datapoints
         document_date=row.get("eu_protection_date"),
         creation_date=row.get("fetched_at"),
+        updated_date=row_updated(row),
     )

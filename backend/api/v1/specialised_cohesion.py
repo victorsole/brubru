@@ -27,6 +27,7 @@ from models.user import User
 from ._body import body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class CohesionListItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="Last update date (date-only view of last_updated_at).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CohesionDetail(BaseModel):
@@ -81,6 +83,7 @@ class CohesionDetail(BaseModel):
     # 5 mandatory Brubru v1 datapoints (public_url already present above).
     document_date: Optional[date] = Field(None, description="Dataset last-update date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last fetched this dataset (alias of fetched_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CohesionCategoryCount(BaseModel):
@@ -204,6 +207,7 @@ async def list_cohesion(
             body_html=bh,
             document_date=lu.date() if hasattr(lu, "date") and lu else None,
             creation_date=r.get("fetched_at") or lu,
+            updated_date=row_updated(r),
         ))
 
     return build_envelope(
@@ -326,4 +330,5 @@ async def get_cohesion(
         # 5 mandatory datapoints
         document_date=row.get("last_updated_at").date() if hasattr(row.get("last_updated_at"), "date") and row.get("last_updated_at") else None,
         creation_date=row.get("fetched_at"),
+        updated_date=row_updated(row),
     )

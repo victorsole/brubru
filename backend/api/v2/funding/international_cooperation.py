@@ -31,6 +31,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._row_dates import row_updated
 
 router = APIRouter()
 
@@ -56,6 +57,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="FTS record date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru ingested it.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class IntlCoopItem(_DataPoints):
@@ -120,6 +122,7 @@ def _parse(r, *, with_body: bool) -> IntlCoopItem:
         body_html=(r.body_html if with_body else None),
         document_date=r.document_date,
         creation_date=r.creation_date,
+        updated_date=row_updated(r),
     )
 
 

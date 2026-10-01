@@ -29,6 +29,7 @@ from models.user import User
 from ._body import body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ class TrListItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="Registration date (date-only).")
     creation_date: Optional[datetime] = Field(None, description="Last update of this registrant (alias of last_update_date).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TrDetail(BaseModel):
@@ -125,6 +127,7 @@ class TrDetail(BaseModel):
     # 5 mandatory Brubru v1 datapoints (public_url already present above).
     document_date: Optional[date] = Field(None, description="Registration date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row (alias of fetched_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CategoryCount(BaseModel):
@@ -272,6 +275,7 @@ async def list_tr(
             body_html=bh,
             document_date=rd.date() if hasattr(rd, "date") and rd else None,
             creation_date=r.get("last_update_date"),
+            updated_date=row_updated(r),
         ))
 
     return build_envelope(
@@ -444,4 +448,5 @@ async def get_tr(
         # 5 mandatory datapoints
         document_date=row.get("registration_date").date() if hasattr(row.get("registration_date"), "date") and row.get("registration_date") else None,
         creation_date=row.get("fetched_at") or row.get("last_update_date"),
+        updated_date=row_updated(row),
     )

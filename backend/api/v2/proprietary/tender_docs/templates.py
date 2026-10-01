@@ -53,6 +53,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body: null on list, populated on detail.")
     document_date: Optional[date] = Field(None, description="Next call deadline if known (deadline_2026_cet / first cut-off / deadline_2027_indicative_cet); null for evergreen calls.")
     creation_date: Optional[datetime] = Field(None, description="When this API response was generated.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TenderTemplateItem(_DataPoints):

@@ -32,6 +32,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 router = APIRouter(prefix="/advisory-opinions", tags=["v1-advisory-opinions"])
 
@@ -58,6 +59,7 @@ class OpinionItem(BaseModel):
                                                             "filled with the date Brubru "
                                                             "captured the opinion.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested it.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
     adopted_date: Optional[date] = None
     rapporteur: Optional[str] = None
     session_label: Optional[str] = None
@@ -85,6 +87,7 @@ def _to_item(row, body_code: str, base_url: str = "", with_body: bool = False) -
         body_html=row.body_html if with_body else None,
         document_date=row.document_date,
         creation_date=row.created_at,
+        updated_date=row_updated(row),
         adopted_date=row.adopted_date,
         rapporteur=row.rapporteur,
         session_label=row.session_label,
@@ -227,6 +230,7 @@ async def list_all_opinions(
         body_txt=r["body_text"] if include_body else None,
         body_html=r["body_html"] if include_body else None,
         document_date=r["document_date"], creation_date=r["created_at"],
+        updated_date=row_updated(r),
         adopted_date=r["adopted_date"], rapporteur=r["rapporteur"],
         session_label=r["session_label"], own_initiative=r["own_initiative"],
         related_celex=r["related_celex"],

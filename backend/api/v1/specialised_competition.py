@@ -113,6 +113,7 @@ class CompetitionCaseItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="Last update date (date-only).")
     creation_date: Optional[datetime] = Field(None, description="Initiation date.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _flatten(meta_value: Any) -> Optional[str]:

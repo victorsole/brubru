@@ -482,6 +482,7 @@ class _GenericListResponse(BaseModel):
     body_html: Optional[str] = Field(None, description="Null for metadata endpoints.")
     document_date: Optional[date] = Field(None, description="Null for metadata endpoints — reference data is not dated.")
     creation_date: Optional[datetime] = Field(None, description="When this API call was served (alias of generated_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _shape(items: List[Dict[str, Any]]) -> _GenericListResponse:

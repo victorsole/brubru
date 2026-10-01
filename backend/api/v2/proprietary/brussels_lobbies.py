@@ -33,6 +33,7 @@ from models.user import User
 
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML profile composition.")
     document_date: Optional[date] = Field(None, description="Date of the organisation's most recent news item.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this profile row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class BrusselsLobby(_DataPoints):
@@ -141,6 +143,7 @@ def _to_lobby(r) -> BrusselsLobby:
         body_html=r.get("body_html"),
         document_date=li.date() if hasattr(li, "date") and li else None,
         creation_date=r.get("updated_at"),
+        updated_date=row_updated(r),
     )
 
 
@@ -389,6 +392,7 @@ async def get_lobby_news(
             body_txt=r.get("body_txt"), body_html=r.get("body_html"),
             document_date=pa.date() if hasattr(pa, "date") and pa else None,
             creation_date=r.get("fetched_at"),
+            updated_date=row_updated(r),
         ))
     return build_envelope(
         items=items, total=total, page=page, limit=limit,

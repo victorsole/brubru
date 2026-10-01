@@ -42,6 +42,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML cluster summary.")
     document_date: Optional[date] = Field(None, description="Always null: clusters are evergreen, not document-dated.")
     creation_date: Optional[datetime] = Field(None, description="When this API response was generated.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TenderComplyClusterItem(_DataPoints):

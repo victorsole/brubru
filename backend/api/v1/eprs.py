@@ -46,6 +46,7 @@ class EPRSItem(BaseModel):
     body_html: Optional[str] = Field(None, description="Null for this endpoint: Brubru stores the extracted text, not the publisher HTML, which lives on europarl.europa.eu/thinktank.")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of publication_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(

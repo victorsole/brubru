@@ -14,7 +14,7 @@ PROPOSED: /directories/legal-acts is served today via /authority/directories.
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -247,6 +247,7 @@ class EuroVocTaxonomyConcept(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the label.")
     document_date: Optional[str] = None
     creation_date: Optional[str] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _tx_item(r, lang: str) -> EuroVocTaxonomyConcept:

@@ -52,6 +52,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body — null on lists; populated on detail when include_body=true.")
     document_date: Optional[date] = Field(None, description="The underlying act's publication date (canon only); null for deep-dives.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru generated this report (null — reports are not per-row timestamped).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class CanonReport(_DataPoints):

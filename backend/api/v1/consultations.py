@@ -282,6 +282,7 @@ class ConsultationItem(BaseModel):
         None, description="The date the consultation opened (its start_date).")
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this consultation.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _consultation_body(r: PublicConsultation, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):

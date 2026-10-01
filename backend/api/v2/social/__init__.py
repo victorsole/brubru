@@ -22,6 +22,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/social", tags=["v2-social"])
 
@@ -49,6 +50,7 @@ class SocialPost(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML post body (null on list; full on detail).")
     document_date: Optional[datetime] = Field(None, description="When the post was published.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru fetched the post.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class SocialAccount(BaseModel):
@@ -70,6 +72,7 @@ class SocialAccount(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML profile (null on list; full on detail).")
     document_date: Optional[datetime] = Field(None, description="When the account was last checked / first seen.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first mapped the account.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class SocialPlatform(BaseModel):
@@ -109,7 +112,7 @@ def _post_item(r, with_body: bool) -> SocialPost:
         like_count=r["like_count"], repost_count=r["repost_count"], reply_count=r["reply_count"],
         view_count=r["view_count"], title=title, summary=summary,
         public_url=r["post_url"], body_txt=body_txt, body_html=body_html,
-        document_date=r["posted_at"], creation_date=r["created_at"])
+        document_date=r["posted_at"], creation_date=r["created_at"], updated_date=row_updated(r))
 
 
 def _account_item(r, with_body: bool) -> SocialAccount:
@@ -128,7 +131,7 @@ def _account_item(r, with_body: bool) -> SocialAccount:
         verified=r["verified"], discovery_source=r["discovery_source"],
         content_fetch_enabled=r["content_fetch_enabled"], title=title, summary=summary,
         public_url=r["account_url"], body_txt=body_txt, body_html=body_html,
-        document_date=r["last_checked_at"] or r["first_seen_at"], creation_date=r["created_at"])
+        document_date=r["last_checked_at"] or r["first_seen_at"], creation_date=r["created_at"], updated_date=row_updated(r))
 
 
 _POST_COLS = ("p.id, p.account_id, a.entity_type, a.entity_key, a.entity_name, p.platform, "

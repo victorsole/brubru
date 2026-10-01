@@ -30,6 +30,7 @@ from services.economy.body_families import (
     FAMILIES, bodies_for_family, families_for_body, family_label,
     BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES,
 )
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/events", tags=["v2-events"])
 
@@ -63,6 +64,7 @@ class EventItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="The event's own date (start datetime).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the event.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class EventBody(BaseModel):
@@ -222,6 +224,7 @@ def _to_item(it, names, *, with_body):
         families=families_for_body(it["body_code"]), source=it["source"],
         title=it["title"], summary=it["summary"], event_type=it["event_type"], venue=it["venue"],
         public_url=it["public_url"], document_date=it["document_date"], creation_date=it["creation_date"],
+        updated_date=row_updated(it),
         body_txt=(it["body_txt"] if with_body else None),
         body_html=(it["body_html"] if with_body else None),
     )

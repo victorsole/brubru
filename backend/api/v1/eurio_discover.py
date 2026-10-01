@@ -84,6 +84,7 @@ class ResearchProjectItem(BaseModel):
         None,
         description="When Brubru first ingested this project row (ft_funded_projects.scraped_at).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class ConsortiumPayload(BaseModel):
@@ -100,6 +101,7 @@ class ConsortiumPayload(BaseModel):
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project (ft_funded_projects.scraped_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class DeliverablesPayload(BaseModel):
@@ -114,6 +116,7 @@ class DeliverablesPayload(BaseModel):
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class FundingPayload(BaseModel):
@@ -132,6 +135,7 @@ class FundingPayload(BaseModel):
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 # ----------------------------- helpers -----------------------------

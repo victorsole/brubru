@@ -30,6 +30,7 @@ from models.user import User
 from ._body import body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +68,7 @@ class TradeDefenceListItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text composition: title + measure type + duty status + target country + product + dates. Full body on the detail endpoint.")
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     creation_date: Optional[datetime] = Field(None, description="Time this row was last refreshed.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TradeDefenceDetail(BaseModel):
@@ -100,6 +102,7 @@ class TradeDefenceDetail(BaseModel):
     # 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru last fetched this regulation (alias of fetched_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class TypeCount(BaseModel):
@@ -236,6 +239,7 @@ async def list_trade_defence(
             body_txt="\n".join(lines),
             body_html="<article>" + "".join(parts_html) + "</article>",
             creation_date=r.get("fetched_at") or r.get("updated_at"),
+            updated_date=row_updated(r),
         )
 
     items = [_td_list_item(r) for r in rows]
@@ -392,4 +396,5 @@ async def get_trade_defence(
         # 5 mandatory datapoints
         public_url=row["eurlex_url"],
         creation_date=row.get("fetched_at"),
+        updated_date=row_updated(row),
     )

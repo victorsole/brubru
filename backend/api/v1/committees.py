@@ -21,6 +21,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 
 def _enum_value(v) -> Optional[str]:
@@ -444,6 +445,7 @@ class CommitteeWorkOut(BaseModel):
         None,
         description="When Brubru first ingested this work-item row (committee_work.first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _oeil_url_for_ref(oeil_ref: Optional[str]) -> Optional[str]:
@@ -497,6 +499,7 @@ class CommitteeMinutesOut(BaseModel):
         None,
         description="When Brubru first ingested this minutes row (committee_minutes.first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(
@@ -760,6 +763,7 @@ async def list_committee_minutes(
             body_html=None,  # PDF source — never synthesise HTML
             meeting_start_date=r.meeting_date.date() if hasattr(r.meeting_date, "date") else r.meeting_date,
             creation_date=r.first_seen,
+            updated_date=row_updated(r),
         )
         for r in rows
     ]

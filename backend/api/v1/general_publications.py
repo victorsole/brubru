@@ -17,6 +17,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 router = APIRouter(prefix="/general-publications", tags=["v1-general-publications"])
 
@@ -31,13 +32,14 @@ class GeneralPublicationItem(BaseModel):
     body_html: Optional[str] = None
     document_date: Optional[date] = Field(None, description="Publication date.")
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _to_item(r: EuGeneralPublication) -> GeneralPublicationItem:
     return GeneralPublicationItem(
         id=str(r.id), publication_id=r.publication_id, cellar_uri=r.cellar_uri, title=r.title,
         public_url=r.public_url, body_txt=r.body_txt, body_html=r.body_html,
-        document_date=r.publication_date, creation_date=r.first_seen)
+        document_date=r.publication_date, creation_date=r.first_seen, updated_date=row_updated(r))
 
 
 @router.get(

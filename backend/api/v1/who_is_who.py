@@ -26,6 +26,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from ._change_window import SYNC_FIELDS_DOC, SYNC_PARAMS_DOC, UpperBoundDatetime, orm_order, orm_window, validate_window
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 departments_router = APIRouter(prefix="/who-is-who/departments", tags=["v1-who-is-who-departments"])
 officials_router = APIRouter(prefix="/who-is-who/officials", tags=["v1-who-is-who-officials"])
@@ -64,6 +65,7 @@ class WhoIsWhoDepartmentItem(BaseModel):
     body_html: Optional[str] = None
     document_date: Optional[date] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class WhoIsWhoOfficialItem(BaseModel):
@@ -104,7 +106,7 @@ def _to_dept(r: WhoIsWhoDepartment) -> WhoIsWhoDepartmentItem:
     return WhoIsWhoDepartmentItem(
         id=str(r.id), mnemonic=r.mnemonic, name=r.name, institution_uri=r.institution_uri,
         official_count=r.official_count or 0, public_url=r.public_url,
-        body_txt=r.body_txt, body_html=r.body_html, document_date=None, creation_date=r.first_seen)
+        body_txt=r.body_txt, body_html=r.body_html, document_date=None, creation_date=r.first_seen, updated_date=row_updated(r))
 
 
 def _to_official(r: WhoIsWhoOfficial) -> WhoIsWhoOfficialItem:

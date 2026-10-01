@@ -151,6 +151,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML summary: null on list, populated on detail.")
     document_date: Optional[date] = Field(None, description="Eurostat reported 'last update' for the dataset, if known.")
     creation_date: Optional[datetime] = Field(None, description="When this API response was generated.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class EurostatSeriesItem(_DataPoints):

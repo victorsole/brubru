@@ -15,6 +15,15 @@ time is never served as the change signal for a row that has since really change
 Only NULL updated_at values are written, so this is re-runnable and can never move a
 timestamp the trigger has already set.
 
+The trigger has to be switched off for the write itself. brubru_touch_if_changed
+treats updated_at as the signal column: seeing that nothing ELSE in the row changed,
+it concludes the row did not change and restores updated_at to its old value. A first
+attempt at this seed therefore reported 20,000 rows updated per batch while leaving
+every one of them NULL, and looped forever because the backlog never shrank. Proven on
+a single row before being worked around, not assumed. Triggers are suppressed per CONNECTION (session_replication_role), never per table:
+ALTER TABLE ... DISABLE TRIGGER takes an ACCESS EXCLUSIVE lock, and taking that on a
+3.5 GB table shared with production, once per batch, would block every live writer.
+
     python3.12 scripts/seed_news_updated_at.py --rehearse
     python3.12 scripts/seed_news_updated_at.py --apply
 """
@@ -71,6 +80,13 @@ def main() -> int:
             # Batched by primary key so each statement is short and the table is never
             # locked for the whole run.
             with engine.begin() as conn:
+                # Switch triggers off for THIS SESSION, not on the table. An
+                # ALTER TABLE ... DISABLE TRIGGER takes an ACCESS EXCLUSIVE lock, and
+                # economy_items is 3.5 GB and shared with production: taking that lock
+                # once per batch would block every live writer, which is worse than the
+                # bug being fixed. session_replication_role is scoped to this
+                # connection and takes no lock at all.
+                conn.execute(text("SET session_replication_role = replica"))
                 n = conn.execute(text(f"""
                     UPDATE {table} SET updated_at = {src}
                      WHERE id IN (SELECT id FROM {table}
@@ -78,9 +94,19 @@ def main() -> int:
                                    ORDER BY id LIMIT :b)
                        AND updated_at IS NULL
                 """), {"b": BATCH}).rowcount
+                conn.execute(text("SET session_replication_role = origin"))
             if n == 0:
                 break
             done += n
+            with engine.connect() as conn:
+                still = conn.execute(text(
+                    f"SELECT count(*) FROM {table} WHERE updated_at IS NULL")).scalar_one()
+            if still >= todo - done + BATCH:
+                # Rows reported as written are still NULL: something is undoing the
+                # write. Stop rather than loop on a backlog that never shrinks.
+                print(f"[ERROR] {table}: {n} rows written but {still} still NULL; "
+                      f"a writer is reverting the value")
+                return 1
             print(f"   ...{done}/{todo} ({time.time()-t0:.0f}s)", flush=True)
 
         with engine.connect() as conn:

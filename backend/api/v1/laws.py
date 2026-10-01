@@ -22,6 +22,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,7 @@ class LawItem(BaseModel):
     body_html: Optional[str] = Field(None, description="XHTML of the act, stored from Cellar. Pass include_body=false to omit it.")
     document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _eurlex_url(celex: Optional[str]) -> Optional[str]:
@@ -99,6 +101,7 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
         body_html=getattr(r, "body_html", None) if include_body else None,
         document_date=r.date,
         creation_date=r.created_at,
+        updated_date=row_updated(r),
     )
 
 
@@ -395,6 +398,7 @@ class LawTextResponse(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML/XHTML body — populated when format=xml (mirrors `content`).")
     document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(
@@ -485,4 +489,5 @@ async def get_law_text(
         body_html=text if format == "xml" else None,
         document_date=row.date,
         creation_date=row.created_at,
+        updated_date=row_updated(row),
     )

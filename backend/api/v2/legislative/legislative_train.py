@@ -28,6 +28,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.procedures import _enum_str, _latest_event_date, _law_tracker_url, _oeil_url
 from api.v1._pagination import stable
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/legislative-train", tags=["v2-legislative-train"])
 
@@ -53,6 +54,7 @@ class TrainCarriage(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML of the cached OEIL procedure page.")
     document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage (alias of first_seen).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _coerce_list(v) -> list:
@@ -82,6 +84,7 @@ def _to_train(r: LegislativeCarriage, *, with_timeline: bool = False) -> TrainCa
         body_html=getattr(r, "oeil_html_body", None),
         document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
         creation_date=r.first_seen,
+        updated_date=row_updated(r),
     )
 
 

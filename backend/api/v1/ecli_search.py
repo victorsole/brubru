@@ -65,6 +65,7 @@ class ECLIResolution(BaseModel):
         None,
         description="Time of this ECLI resolution call (stateless endpoint).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(

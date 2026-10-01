@@ -59,6 +59,7 @@ from services.api_clients.cellar_sparql_client import CellarSPARQLClient
 from services.identifiers.standard_identifier_resolver import recognise
 from services.parsers.law_alias_resolver import find_alias_matches
 from api.v1._pagination import stable
+from api.v1._row_dates import row_updated
 
 router = APIRouter(prefix="/eur-lex", tags=["v2-legislative-eur-lex"])
 
@@ -118,6 +119,7 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (null when the resource has no inline body).")
     document_date: Optional[date] = Field(None, description="The resource's document date, when applicable.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru generated/ingested this (server time).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 # ---------------------------------------------------------------------------
@@ -449,6 +451,7 @@ async def list_summaries(
             # The row's own creation, not this response's. utcnow() here made
             # every one of the 4,457 summaries look minted on the spot.
             creation_date=r["created_at"],
+            updated_date=row_updated(r),
         )
         for r in rows
     ]
@@ -521,6 +524,7 @@ async def get_summary(
             body_txt=row["body_txt"],
             body_html=row["body_html"],
             creation_date=row["created_at"],
+            updated_date=row_updated(row),
         )
     # Fallback when the catalogue has no row: construct the LSU URL.
     if _CELEX_RE.match(sid):
@@ -1101,6 +1105,7 @@ class XrefResult(BaseModel):
     body_txt: Optional[str] = Field(None, description="Null — call /laws/{celex}/text for the body.")
     body_html: Optional[str] = Field(None, description="Null — call /laws/{celex}/text for the body.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(
@@ -1228,6 +1233,7 @@ async def law_xref(
         public_url=_eurlex(celex),
         computed_at=datetime.utcnow(),
         creation_date=row.created_at if row else None,
+        updated_date=row_updated(row),
         **result,
     )
 
@@ -1356,6 +1362,7 @@ async def law_lifecycle(
         repealed_or_expired=bool(end_validity) if end_validity is not None else None,
         public_url=_eurlex(celex),
         creation_date=row.created_at if row else None,
+        updated_date=row_updated(row),
     )
 
 
@@ -1533,6 +1540,7 @@ async def oj_by_reference(
             public_url=_eurlex(r.celex),
             document_date=r.date,
             creation_date=r.created_at,
+            updated_date=row_updated(r),
         )
         for r in rows
     ]

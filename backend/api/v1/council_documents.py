@@ -104,6 +104,7 @@ class CouncilDocumentItem(BaseModel):
     meeting_start_date: Optional[date] = Field(None, description="For calendar_event rows: meeting date.")
     document_date: Optional[date] = Field(None, description="For publication rows: publication date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 _CONFIG_TO_SLUG = {
@@ -570,6 +571,7 @@ class CouncilConfigurationItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML description of the configuration.")
     document_date: Optional[date] = Field(None, description="Null — a configuration is reference data, not a dated document.")
     creation_date: Optional[datetime] = Field(None, description="When this response was generated (server time).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @configurations_router.get(

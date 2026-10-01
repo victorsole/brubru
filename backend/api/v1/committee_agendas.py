@@ -41,6 +41,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from services.scrapers.committee_agenda_body_extractor import ensure_agenda_body
 from api.v1._pagination import stable
+from ._row_dates import row_updated
 
 router = APIRouter(prefix="/committee-agendas", tags=["v1-committee-agendas"])
 
@@ -79,6 +80,7 @@ class CommitteeAgendaOut(BaseModel):
         None,
         description="When Brubru first ingested this agenda (eu_calendar_events.first_seen).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _row_to_item(event: EUCalendarEvent, body_txt: Optional[str], body_html: Optional[str], threshold: int) -> CommitteeAgendaOut:
@@ -99,6 +101,7 @@ def _row_to_item(event: EUCalendarEvent, body_txt: Optional[str], body_html: Opt
         body_html=body_html,
         document_date=event.start_date,
         creation_date=event.first_seen,
+        updated_date=row_updated(event),
     )
 
 

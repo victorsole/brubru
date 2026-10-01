@@ -37,6 +37,7 @@ class TimelinePrediction(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML rendering of the timeline prediction.")
     document_date: Optional[date] = Field(None, description="Null — predictions are not dated documents.")
     creation_date: Optional[datetime] = Field(None, description="Time the prediction was generated.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class OutcomeProbability(BaseModel):
@@ -62,6 +63,7 @@ class OutcomePrediction(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML rendering of the prediction breakdown.")
     document_date: Optional[date] = Field(None, description="Null — predictions are not dated documents.")
     creation_date: Optional[datetime] = Field(None, description="Time the prediction was generated.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 @router.get(

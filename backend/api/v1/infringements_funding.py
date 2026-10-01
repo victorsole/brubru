@@ -58,6 +58,7 @@ class InfringementItem(BaseModel):
     body_html: Optional[str] = Field(None, description="Null — infringement decisions are PDF-source.")
     document_date: Optional[date] = Field(None, description="Decision date (alias of decision_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
@@ -245,6 +246,7 @@ class FundingItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal topic page).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 def _funding_to_item(
