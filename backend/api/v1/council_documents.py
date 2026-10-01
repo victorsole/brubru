@@ -32,6 +32,7 @@ from models.user import User
 import html as _html
 
 from ._body import _strip_html_to_text
+from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._body import body_from_html_or_text
 from core.body_sources import read_body
@@ -273,6 +274,7 @@ def _pub_to_item(r) -> CouncilDocumentItem:
         body_html=body_html,
         document_date=pub_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "fetched_at", None) or getattr(r, "created_at", None),
+        updated_date=row_updated(r),
     )
 
 
@@ -301,6 +303,7 @@ def _cal_to_item(r) -> CouncilDocumentItem:
         meeting_start_date=r.start_date,
         document_date=r.start_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
+        updated_date=row_updated(r),
     )
 
 

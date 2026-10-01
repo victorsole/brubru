@@ -27,6 +27,7 @@ from ._body import (
     compose_html_from_sections,
     deprecated_body,
 )
+from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -423,6 +424,7 @@ async def list_consultations(
             public_url=r.portal_url,
             document_date=r.start_date,
             creation_date=getattr(r, "first_seen", None),
+            updated_date=row_updated(r),
         ))
 
     return build_envelope(
@@ -493,6 +495,7 @@ async def get_consultation_detail(
         public_url=r.portal_url,
         document_date=r.start_date,
         creation_date=getattr(r, "first_seen", None),
+        updated_date=row_updated(r),
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,
