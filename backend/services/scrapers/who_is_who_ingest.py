@@ -22,6 +22,39 @@ logger = logging.getLogger(__name__)
 SPARQL_ENDPOINT = "http://publications.europa.eu/webapi/rdf/sparql"
 ORG_PAGE = "https://op.europa.eu/en/web/who-is-who/organization/-/organization/{code}"
 DIRECTORY_URL = "https://op.europa.eu/en/web/who-is-who"
+# Each official has a REAL page on EU Whoiswho, keyed by the tail of their person URI.
+# Reported by GovClipping on 1 October 2026: "les urls a person_uri i a public_url porten
+# a pagines web que no existeixen". Both were constructed and both 404:
+#
+#   public_url  was ORG_PAGE with the FULL DOTTED mnemonic ("EDPS.EDPB.LCE") -> 404.
+#               Only the top-level code resolves ("EDPS" -> 200). Worse, 13,238 of the
+#               18,377 officials have no mnemonic at all and were handed the bare
+#               directory URL, which resolves but points at a search page, not at them.
+#   person_uri  is publications.europa.eu/resource/directory/person/<id>, which 404s as a
+#               page AND under Accept: application/rdf+xml. It is an internal SPARQL
+#               identifier, not an address, so it must never be presented as a link.
+#
+# PERSON_PAGE was verified against 6 random officials before being adopted: 6/6 returned
+# 200 and the page title named the person we store (EP_DPPE256815 -> "Mr Marjan SAREC",
+# COM_000037D63D -> "Cristina RUEDA CATRY"). Every one of the 18,377 rows carries a
+# person_uri, so every official can have a page that is actually theirs.
+PERSON_PAGE = "https://op.europa.eu/en/web/who-is-who/person/-/person/{person_id}"
+
+
+def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> str:
+    """The official's own Whoiswho page, falling back only when there is no person id.
+
+    Fallback order matters: the TOP-LEVEL mnemonic ("EDPS" from "EDPS.EDPB.LCE"), because
+    the organisation route rejects the dotted form; then the directory. Never return a
+    URL built from a dotted mnemonic: it is a 404 dressed as a link.
+    """
+    if person_uri:
+        pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
+        if pid:
+            return PERSON_PAGE.format(person_id=pid)
+    if mnemonic:
+        return ORG_PAGE.format(code=mnemonic.split(".", 1)[0])
+    return DIRECTORY_URL
 
 # The EU Whoiswho directory query (all departments + officials under EURUN).
 QUERY = """PREFIX euvoc:<http://publications.europa.eu/ontology/euvoc#>
@@ -102,7 +135,7 @@ def build() -> tuple:
         dkey = mnem or _slug(org)
         d = depts.get(dkey)
         if d is None:
-            url = ORG_PAGE.format(code=mnem) if mnem else DIRECTORY_URL
+            url = ORG_PAGE.format(code=mnem.split(".", 1)[0]) if mnem else DIRECTORY_URL
             d = {"dept_key": dkey, "mnemonic": mnem, "name": org, "institution_uri": cb,
                  "official_count": 0, "public_url": url, "_count": 0}
             depts[dkey] = d
@@ -117,7 +150,7 @@ def build() -> tuple:
         officials.append({
             "official_key": okey, "name": name, "honorific": hon, "position": position,
             "department": org, "mnemonic": mnem, "institution_uri": cb, "person_uri": person,
-            "public_url": ORG_PAGE.format(code=mnem) if mnem else DIRECTORY_URL,
+            "public_url": _person_page(person, mnem),
         })
 
     # finalise departments (count + body)

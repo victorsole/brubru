@@ -74,8 +74,24 @@ class WhoIsWhoOfficialItem(BaseModel):
     department: Optional[str] = None
     mnemonic: Optional[str] = None
     institution_uri: Optional[str] = None
-    person_uri: Optional[str] = None
-    public_url: Optional[str] = None
+    person_uri: Optional[str] = Field(
+        None,
+        description=(
+            "The Publications Office's internal identifier for this person, as returned "
+            "by its SPARQL directory. An IDENTIFIER, not an address: it returns 404 both "
+            "as a web page and under `Accept: application/rdf+xml`, so do not follow it. "
+            "Use `public_url` for the person's actual page."
+        ),
+    )
+    public_url: Optional[str] = Field(
+        None,
+        description=(
+            "The official's own page on EU Whoiswho. Until 1 October 2026 this was built "
+            "from the full dotted mnemonic ('EDPS.EDPB.LCE'), which 404s, and the 13,238 "
+            "officials with no mnemonic got the bare directory search page instead of "
+            "themselves. It is now the person page, which exists for all 18,377."
+        ),
+    )
     body_txt: Optional[str] = None
     body_html: Optional[str] = None
     document_date: Optional[date] = None
