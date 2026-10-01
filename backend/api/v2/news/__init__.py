@@ -443,7 +443,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
                 "GET /api/v2/news/all?family=finance-economy&order=recent\n"
                 "GET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated "
-                "envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are null on the list by default — pass `include_body=true` to get them in bulk**, or call `/api/v2/news/{id}` for one item. Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them."
+                "envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are returned on every item by default**; pass `include_body=false` for a light list of titles and dates only. (Until 1 October 2026 they were null unless `include_body=true` was passed, which broke the five-datapoint contract and was reported by a subscriber who read the list and found the text missing while the source had it.) Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them."
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
                 "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; the Commission, Parliament, Council, EEAS and 44 other bodies' own newsroom items are unioned in from the institutional news store, so this feed covers both; an article held in both stores is served once, from the economy store, which carries the full article. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
@@ -467,12 +467,12 @@ async def list_news(
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     include_body: bool = Query(
-        False,
+        True,
         description=(
-            "Return `body_txt` / `body_html` on every item in the list. Off by "
-            "default because a page of full articles is large; there is no other "
-            "way to get the body in bulk, so set it to true rather than calling "
-            "the detail endpoint once per item."
+            "Return `body_txt` / `body_html` on every item. ON by default: both are "
+            "part of the five datapoints every item is contracted to carry, so a list "
+            "that nulls them does not meet the contract. Pass `include_body=false` for "
+            "a light list when you only need titles and dates."
         ),
     ),
 ):

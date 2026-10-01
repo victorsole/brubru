@@ -104,7 +104,7 @@ async def list_calendar_events(
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
-    include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."),
+    include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CalendarEventV2]:

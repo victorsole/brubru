@@ -76,7 +76,7 @@ GET /api/v2/interoperable/{slug}?collection=eugovtech&limit=10
 ```
 
 **You get back**
-A paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list by default — pass `include_body=true` to get them in bulk, or use the detail endpoint for one item).
+A paginated envelope. Each item carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` returned by default — pass `include_body=false` for a light list).
 
 **Data freshness**
 Rendered from interoperable-europe.ec.europa.eu with a headless browser, refreshed regularly."""
@@ -109,7 +109,7 @@ def _register(slug, item_type, noun, noun_singular, verb):
                       q: Optional[str] = Query(None), since: Optional[date] = Query(None),
                       until: Optional[date] = Query(None), order: str = Query("recent"),
                       page: int = Query(1, ge=1), limit: int = Query(20, ge=1, le=100),
-                      include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
+                      include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only.")):
         if order not in _ORDERS:
             raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
         items, total = _list(db, item_type, q=q, since=since, until=until, order=order,
@@ -203,7 +203,7 @@ async def list_collections(request: Request, db: Session = Depends(get_db),
                            user: User = Depends(api_user_with_rate_limit),
                            q: Optional[str] = Query(None), order: str = Query("title"),
                            page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100),
-                           include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
+                           include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only.")):
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
     items, total = _list(db, "collection", q=q, since=None, until=None, order=order,
@@ -243,7 +243,7 @@ GET /api/v2/interoperable/collections/open-source-observatory-osor
 Rendered from the portal, refreshed regularly.""")
 async def collection_footprint(collection_key: str = PathParam(..., description="Collection slug."),
                                limit: int = Query(15, ge=1, le=50),
-                               include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed."),
+                               include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."),
                                db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
     # Accepts the `id` the /collections list publishes as well as the slug.
     # This resource's key lives only inside public_url -- there is no

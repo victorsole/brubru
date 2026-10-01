@@ -179,7 +179,7 @@ async def list_posts(db: Session = Depends(get_db), user: User = Depends(api_use
                      since: Optional[str] = Query(None, description="ISO date; posts on/after this"),
                      q: Optional[str] = Query(None, description="text search in post content"),
                      page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=200),
-                     include_body: bool = Query(False, description="Return `body_txt` / `body_html` on every item in the list. Off by default because bodies dominate the payload, but without it the only route to the text is one detail call PER ITEM, which is not a usable way to ingest a feed.")):
+                     include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only.")):
     where, params = ["1=1"], {}
     if platform: where.append("p.platform=:pf"); params["pf"] = platform
     if entity_type: where.append("a.entity_type=:et"); params["et"] = entity_type
