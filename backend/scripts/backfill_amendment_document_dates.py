@@ -1,150 +1,170 @@
-"""Give amendment documents (and their amendments) the date EP holds for them.
+#!/usr/bin/env python3.12
+"""Read the date each amendment document states, and date its amendments from it.
 
-Discovery builds document stubs from identifiers alone and never sees a date, and the
-document upsert did not carry document_date through ON CONFLICT, so a row created before
-the date was resolvable kept NULL however often it was re-synced. Measured 28 Sep 2026:
-1,145 of 1,365 amendment_documents and 5,678 of 5,695 newly stored amendments had no date.
+/api/v2/parliament/amendments serves document_date null on 3,406 of 64,077 rows.
+Those collapse to 22 source documents, each a .docx on doceo, and no date for them
+exists anywhere locally: 0 of the undated rows have a dated sibling sharing their PE
+reference, and 0 appear dated in amendment_documents.
 
-/parliament/amendments and /parliament/ep-documents filter published_from and
-published_to on that column, so an undated row is invisible to every date query, and
-document_date is one of the five datapoints each item must carry.
+The date is READ from inside the document, from the `<Date>{DD/MM/YYYY}</Date>` field
+the EP puts in its header, never from file metadata. That distinction is the whole
+point: ITRE-AM-788800 states 12.5.2026 in its Date field while the .docx reports
+dcterms:created 2026-05-20, eight days later. Taking the file timestamp would have
+written the wrong date onto 277 amendments, and it would have looked fine.
 
-The date comes from EP Open Data's own record for the document. AM documents are not in
-/committee-documents (it holds PR, PA, AD, AL and AG), so they keep NULL rather than an
-invented date: unknown stays unknown.
+doceo sits behind a WAF, so the .docx is fetched through Playwright. A blocked fetch
+is retried, never written, and a document whose Date field cannot be read is left
+undated rather than dated from anything else.
 
-Run:
-    python3.12 scripts/backfill_amendment_document_dates.py            # dry-run, 20 rows
-    python3.12 scripts/backfill_amendment_document_dates.py --apply --limit 0
+    python3.12 scripts/backfill_amendment_document_dates.py --rehearse
+    python3.12 scripts/backfill_amendment_document_dates.py --apply
 """
 from __future__ import annotations
 
 import argparse
-import asyncio
+import datetime as dt
+import importlib.util
+import io
+import pathlib
+import re
 import sys
-import time
-from datetime import datetime
-from pathlib import Path
+import zipfile
+from collections import Counter
 
-_REPO_ROOT = str(Path(__file__).resolve().parents[2])
-if _REPO_ROOT not in sys.path:
-    sys.path.insert(0, _REPO_ROOT)
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+BACKEND = pathlib.Path(__file__).resolve().parents[1]
+for p in (str(BACKEND.parent), str(BACKEND)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
-from sqlalchemy import text  # noqa: E402
+from sqlalchemy import create_engine, text  # noqa: E402
 
-from core.database import SessionLocal  # noqa: E402
-from services.api_clients.ep_open_data_client import EPOpenDataClient  # noqa: E402
+# The EP header field, and note what it is NOT: `<Date>` is not XML markup in these
+# documents. It is literal text the EP's template emits, so inside word/document.xml it
+# appears ESCAPED, as `&lt;Date&gt;`, in its own <w:t> run. Measured on
+# ITRE-AM-788800: "<Date>" occurs 0 times, "&lt;Date&gt;" once.
+#
+# A first version searched for a real `<Date>` tag, matched nothing in all 22 documents
+# and reported "no Date field" -- which read as "the EP states no date" while the date
+# sat in plain sight. The run guard caught it by refusing to call 0 of 22 a success.
+#
+# Both forms follow the marker: the braces hold DD/MM/YYYY, the visible text D.M.YYYY.
+# The braced one is unambiguous, so it is tried first.
+_BRACED = re.compile(r"Date&gt;.{0,160}?\{(\d{2})/(\d{2})/(\d{4})\}", re.S)
+_PLAIN = re.compile(r"Date&gt;.{0,240}?\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b", re.S)
 
-_DATE_KEYS = ("date", "document_date", "date_document", "activity_date")
+DOCS = text(
+    """
+    SELECT pe_reference, min(source_url) AS source_url, count(*) AS n
+      FROM mep_amendments
+     WHERE document_date IS NULL AND coalesce(source_url, '') <> ''
+     GROUP BY pe_reference
+     ORDER BY pe_reference
+    """
+)
+
+SET_DATE = text(
+    """
+    UPDATE mep_amendments SET document_date = :d, updated_at = now()
+     WHERE pe_reference = :pe AND document_date IS NULL
+    """
+)
+
+GAP = text("SELECT count(*) FROM mep_amendments WHERE document_date IS NULL")
 
 
-def _parse(value) -> datetime | None:
-    if isinstance(value, list):
-        value = value[0] if value else None
-    if not value:
+def _browser():
+    spec = importlib.util.spec_from_file_location(
+        "waf_browser_fetcher", str(BACKEND / "services" / "scrapers" / "waf_browser_fetcher.py"))
+    m = importlib.util.module_from_spec(spec)
+    sys.modules["waf_browser_fetcher"] = m
+    spec.loader.exec_module(m)
+    return m
+
+
+def _database_url() -> str:
+    m = re.search(r"^DATABASE_URL=(.*)$", (BACKEND / ".env").read_text(), re.M)
+    if not m:
+        raise SystemExit("[ERROR] DATABASE_URL not found in backend/.env")
+    return m.group(1).strip()
+
+
+def _stated_date(docx: bytes) -> dt.date | None:
+    """The date the document states in its own Date field, or None."""
+    if not docx or docx[:2] != b"PK":
         return None
-    for fmt in ("%Y-%m-%d", "%Y-%m-%dT%H:%M:%S", "%d/%m/%Y"):
-        try:
-            return datetime.strptime(str(value)[:len(fmt.replace("%Y", "2026")
-                                                    .replace("%m", "01")
-                                                    .replace("%d", "01")
-                                                    .replace("%H:%M:%S", "00:00:00"))], fmt)
-        except ValueError:
-            continue
     try:
-        return datetime.fromisoformat(str(value)[:19])
-    except ValueError:
+        xml = zipfile.ZipFile(io.BytesIO(docx)).read("word/document.xml").decode("utf-8", "ignore")
+    except Exception:
         return None
+    # Strip the real XML markup. That leaves the escaped `&lt;Date&gt;` literal intact
+    # and rejoins the value, which Word keeps in a separate <w:t> run from the marker.
+    flat = re.sub(r"<[^>]+>", "", xml)
+    for pattern in (_BRACED, _PLAIN):
+        m = pattern.search(flat)
+        if m:
+            d, mth, y = (int(x) for x in m.groups())
+            try:
+                return dt.date(y, mth, d)
+            except ValueError:
+                continue
+    return None
 
 
-async def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--limit", type=int, default=20, help="0 = every undated document")
-    ap.add_argument("--max-seconds", type=int, default=900)
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    g = ap.add_mutually_exclusive_group(required=True)
+    g.add_argument("--rehearse", action="store_true")
+    g.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
-    db = SessionLocal()
-    client = EPOpenDataClient()
-    started = time.time()
-    filled = no_record = still_unknown = blocked = 0
-    try:
-        sql = ("SELECT ep_identifier, pe_reference FROM amendment_documents "
-               "WHERE document_date IS NULL AND ep_identifier IS NOT NULL "
-               "ORDER BY scraped_at DESC")
-        if args.limit:
-            sql += f" LIMIT {args.limit}"
-        rows = db.execute(text(sql)).fetchall()
-        due = db.execute(text("SELECT count(*) FROM amendment_documents "
-                              "WHERE document_date IS NULL AND ep_identifier IS NOT NULL")).scalar()
-        print(f"[INFO] {len(rows)} of {due} undated document(s) this run (apply={args.apply})")
-
-        for i, row in enumerate(rows, 1):
-            if time.time() - started > args.max_seconds:
-                print(f"[INFO] budget reached after {i - 1} document(s)")
-                break
-            # A 404 means the document genuinely is not in this endpoint (AM documents
-            # are not). Anything else is a wall, and calling it "no record" is how 973
-            # PR documents were written off on the first run while EP was answering 429:
-            # they are all in the endpoint, and the count said otherwise.
-            detail = None
-            for attempt in range(1, 4):
-                try:
-                    detail = await client.get_document_detail(
-                        row.ep_identifier, endpoint="committee-documents")
-                    break
-                except Exception as exc:  # noqa: BLE001
-                    status = getattr(getattr(exc, "response", None), "status_code", None)
-                    if status == 404:
-                        no_record += 1
-                        break
-                    if attempt == 3:
-                        blocked += 1
-                        break
-                    await asyncio.sleep(5.0 * attempt)
-            if detail is None:
-                continue
-            when = None
-            for key in _DATE_KEYS:
-                when = _parse(detail.get(key) if isinstance(detail, dict) else None)
-                if when:
-                    break
-            if not when:
-                still_unknown += 1
-                continue
-            filled += 1
-            if args.apply:
-                db.execute(text("UPDATE amendment_documents SET document_date = :d "
-                                "WHERE ep_identifier = :i AND document_date IS NULL"),
-                           {"d": when, "i": row.ep_identifier})
-                # The amendments carry their own copy, joined by PE reference.
-                db.execute(text("UPDATE mep_amendments SET document_date = :d "
-                                "WHERE pe_reference = :p AND document_date IS NULL"),
-                           {"d": when, "p": row.pe_reference})
-                db.commit()
-            if i % 50 == 0:
-                print(f"  [{i}/{len(rows)}] filled={filled} no_record={no_record}", flush=True)
-
-        print(f"[DONE] filled={filled}  not in the endpoint (404)={no_record}  "
-              f"blocked or failed={blocked}  record without a date={still_unknown}"
-              f"{'' if args.apply else '  (DRY-RUN)'}")
-        left = max(0, (due or 0) - filled) if args.apply else 0
-        if left:
-            print(f"[SYNC_STATUS] degraded: {left} document(s) still undated, resumes next run")
-        if rows and filled == 0 and blocked >= len(rows) / 2:
-            print("[ERROR] EP refused most requests (rate limit or outage): this run "
-                  "read nothing, and the documents it skipped are NOT dateless")
-            return 1
-        if rows and filled == 0 and no_record == len(rows):
-            print("[ERROR] not one document had an EP record: the endpoint or the "
-                  "identifier format has changed")
-            return 1
+    engine = create_engine(_database_url())
+    with engine.connect() as conn:
+        docs = list(conn.execute(DOCS))
+        before = conn.execute(GAP).scalar_one()
+    print(f"[INFO] undated amendments : {before}")
+    print(f"[INFO] source documents   : {len(docs)}")
+    if args.rehearse:
+        for d in docs[:6]:
+            print(f"   {d.pe_reference:<14} {d.n:>4} amendments  {d.source_url[-44:]}")
+        print("[INFO] rehearsal only, nothing written")
         return 0
-    finally:
-        await client.close()
-        db.close()
+
+    browser = _browser()
+    dated = unread = 0
+    rows_dated = 0
+    why: Counter = Counter()
+    for d in docs:
+        try:
+            got = browser.fetch_bytes_isolated([d.source_url], timeout_s=150)
+            status, body, err = got[d.source_url]
+        except Exception as e:
+            unread += 1; why[type(e).__name__] += 1; continue
+        if not body:
+            unread += 1; why[f"blocked_{status}"] += 1; continue
+        stated = _stated_date(body)
+        if stated is None:
+            # No Date field we can read. Left undated rather than dated from the file's
+            # own timestamp, which is a different thing and demonstrably wrong here.
+            unread += 1; why["no Date field"] += 1
+            print(f"   [SKIP] {d.pe_reference}: no readable Date field")
+            continue
+        with engine.begin() as conn:
+            n = conn.execute(SET_DATE, {"d": stated, "pe": d.pe_reference}).rowcount
+        dated += 1; rows_dated += n
+        print(f"   [OK]   {d.pe_reference} -> {stated}  ({n} amendments)")
+
+    with engine.connect() as conn:
+        after = conn.execute(GAP).scalar_one()
+    print(f"\n[INFO] documents dated : {dated} of {len(docs)}")
+    print(f"[INFO] amendments dated: {rows_dated}")
+    print(f"[INFO] not read        : {unread}  {dict(why)}")
+    print(f"[INFO] gap             : {before} -> {after}")
+    if docs and dated == 0:
+        print("[ERROR] not one document was read; this run proves nothing")
+        return 1
+    print("[OK] every date was read from the document's own Date field")
+    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(asyncio.run(main()))
+    sys.exit(main())
