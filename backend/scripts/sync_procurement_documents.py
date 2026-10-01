@@ -31,6 +31,8 @@ Usage
 from __future__ import annotations
 
 import argparse
+import re
+from urllib.parse import unquote
 import json
 import pathlib
 import sys
@@ -133,12 +135,42 @@ class _Portal(_Source):
         return [dict(d) for d in self._docs[ref]]
 
 
+class _Eige(_Source):
+    """EIGE procedure pages (paced: EIGE answers 429 to a burst): files hosted on EIGE's site, and the documents of the Funding
+    & Tenders notice the page links (EIGE's buyer id 47352446)."""
+    source_kinds = ("eige_procurement",)
+
+    def __enter__(self):
+        self._docs: dict[str, list[dict]] = {}
+        for res in ap._ft_buyer_results("eige", "47352446"):
+            ident = ((res.get("metadata") or {}).get("identifier") or [None])[0]
+            if ident and ident not in self._docs:
+                self._docs[ident] = ap._ft_notice_documents(res)
+        return self
+
+    def list(self, page_url, ref):
+        page = ap._eige_get(page_url)
+        detail = (ap._eige_experts_detail(page) if page_url.rstrip("/").endswith("external-experts-database")
+                  else ap._eige_detail(page))
+        docs = []
+        for f in detail["files"]:
+            name = unquote(f["url"].rsplit("/", 1)[-1])
+            fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+            docs.append({"title": f["title"] or name, "file_url": f["url"], "file_name": name,
+                         "file_format": fm.group(1).lower() if fm else None, "file_size": None,
+                         "language": None, "document_date": None})
+        for notice in detail.get("portal") or []:
+            docs += [dict(d) for d in self._docs.get(notice, [])]
+        return docs
+
+
 # body_code -> the source of its procurement files
 SOURCES = {
     "cedefop": lambda: _Cedefop(),
     "echa": lambda: _Echa(),
     "eea": lambda: _Portal("eea", ap._EEA_FT_BUYER_ID, "eea_ft_notice"),
     "efsa": lambda: _Portal("efsa", ap._EFSA_FT_BUYER_ID, "efsa_ft_notice"),
+    "eige": lambda: _Eige(),
 }
 LISTERS = SOURCES   # the API registers /documents for exactly these bodies
 

@@ -214,10 +214,27 @@ register_resource(
     router, body_code="eige", item_type="tender", slug="eige-tenders",
     noun="EIGE calls for tender",
     body_name="the European Institute for Gender Equality", acronym="EIGE", tag="v2-funding",
-    source="the EIGE procurement page.",
-    extra="EIGE's own procurement — gender-equality research, indicators, communications. The "
-          "listing is often empty between procurement waves; the endpoint returns [] cleanly when "
-          "EIGE has no ongoing procedures. Filter with q.",
+    source="EIGE's procurement register (open and closed procedures) and each procedure's page.",
+    extra="EIGE's own procurement, the whole archive from 2010: calls for tender and ex-ante "
+          "publicity notices (gender-equality research, indicators, surveys, services). Each item "
+          "carries `tender_reference` (EIGE's reference), `status` (open | closed; open only while "
+          "the closing date is ahead) and `deadline` (the closing date and time); `document_date` is "
+          "the published date. The body holds the procedure's description, its Funding & Tenders "
+          "link and any related notice (a site visit, a prior information notice); "
+          "`/{item_id}/documents` serves the procedure's files with their extracted text. Calls for "
+          "expression of interest are at /eige-calls. Filter with q.",
+    procurement=True, documents=True,
+)
+register_resource(
+    router, body_code="eige", item_type="eoi_call", slug="eige-calls",
+    noun="EIGE calls for expression of interest",
+    body_name="the European Institute for Gender Equality", acronym="EIGE", tag="v2-funding",
+    source="EIGE's procurement register and its External Experts' Database page.",
+    extra="EIGE calls for expression of interest, including the standing call for its External "
+          "Experts' Database (no reference or date on its page; open while the database is valid). "
+          "Each item carries `tender_reference`, `status` and `deadline`; `/{item_id}/documents` "
+          "serves the call's files with their text. Filter with q.",
+    procurement=True, documents=True,
 )
 
 # --- FRA — EU Agency for Fundamental Rights ------------------------------- #

@@ -805,8 +805,9 @@ async def cron_sync_daily(
     # /api/v2/funding/{body}-*/{item_id}/documents (API audit, 30 Sep 2026). Live and
     # recent procedures only; a file already stored is not downloaded again. Each body
     # records its own sync_runs row (procurement_documents_<body>). Cedefop: its pages;
-    # ECHA: its pages through the WAF browser; EEA and EFSA: their portal notices.
-    for _body in ("cedefop", "echa", "eea", "efsa"):
+    # ECHA: its pages through the WAF browser; EEA and EFSA: their portal notices; EIGE:
+    # its pages (paced) and the portal notices they link.
+    for _body in ("cedefop", "echa", "eea", "efsa", "eige"):
         results[f"procurement_documents_{_body}"] = await _run_script_async(
             f"procurement_documents_{_body}", "scripts/sync_procurement_documents.py",
             ["--body", _body, "--apply"], timeout=1200)

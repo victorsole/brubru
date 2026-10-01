@@ -929,26 +929,31 @@ _ECDC_CACHE: dict = {}
 _ECDC_CACHE_TTL = 1800
 _ECDC_PAUSE = 2.0                        # seconds between ECDC requests
 _ECDC_BACKOFF = (15, 45, 90, 180, 300)   # seconds to wait after each successive 429
-_ecdc_last = [0.0]
+_paced_last: dict = {}
 
 
-def _ecdc_get(url: str) -> str:
-    """ECDC GET: paced, retrying 429 with a growing back-off, failing loudly otherwise."""
+def _paced_get(url: str, *, site: str, pause: float, backoff: tuple) -> str:
+    """GET for a site that answers 429 to a burst (ECDC behind CloudFront, EIGE's nginx):
+    paced per site, retrying 429 with a growing back-off, failing loudly otherwise."""
     import time
-    for wait in (*_ECDC_BACKOFF, None):
-        gap = _ECDC_PAUSE - (time.monotonic() - _ecdc_last[0])
+    for wait in (*backoff, None):
+        gap = pause - (time.monotonic() - _paced_last.get(site, 0.0))
         if gap > 0:
             time.sleep(gap)
         r = requests.get(url, headers=_HEADERS, timeout=40)
-        _ecdc_last[0] = time.monotonic()
+        _paced_last[site] = time.monotonic()
         if r.status_code != 429:
             r.raise_for_status()
             return r.text
         if wait is None:
             r.raise_for_status()
-        print(f"    [INFO] ecdc 429, waiting {wait}s: {url[-60:]}", flush=True)
+        print(f"    [INFO] {site} 429, waiting {wait}s: {url[-60:]}", flush=True)
         time.sleep(wait)
     raise RuntimeError("unreachable")
+
+
+def _ecdc_get(url: str) -> str:
+    return _paced_get(url, site="ecdc", pause=_ECDC_PAUSE, backoff=_ECDC_BACKOFF)
 
 
 def _ecdc_meta(block: str, label: str) -> str:
@@ -1349,16 +1354,212 @@ def ingest_echa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
 _EIGE = "https://eige.europa.eu"
 
 
+# --------------------------------------------------------------------------- #
+# EIGE — its own procurement register (API audit, 1 Oct 2026, "Walk · EIGE").
+#
+# The old reader parsed only the open-procedures page, as a Views table EIGE does not
+# use, and stored nothing, ever: /eige-tenders read an empty table while every run
+# reported success. EIGE publishes a complete register: open procedures, the closed
+# archive (266 procedures, 2010-2026, teaser cards with type, reference and closing
+# date) and a page per procedure (published date, closing date with time, the full
+# description, the Funding & Tenders link). Calls for tender and ex-ante publicity
+# notices are tenders; calls for expression of interest, with the standing External
+# Experts' Database call, are eoi_call. Closing dates are true UTC instants
+# ("2026-09-16T20:59:59Z" = 23:59 Europe/Vilnius).
+# --------------------------------------------------------------------------- #
+_EIGE_OPEN = _EIGE + "/about/procurement"
+_EIGE_CLOSED = _EIGE + "/about/procurement/closed-procedures"
+_EIGE_EXPERTS = _EIGE + "/about/procurement/external-experts-database"
+_EIGE_FRESH_PAGES = 1
+_EIGE_CACHE: dict = {}
+_EIGE_CACHE_TTL = 1800
+_EIGE_PAUSE = 1.0     # EIGE's nginx answers 429 to an unpaced run (1 Oct 2026)
+
+
+def _eige_get(url: str) -> str:
+    return _paced_get(url, site="eige", pause=_EIGE_PAUSE, backoff=_ECDC_BACKOFF)
+
+
+def _eige_iso(value: str) -> datetime | None:
+    try:
+        return datetime.strptime(value[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return None
+
+
+def _eige_cards(page: str) -> list[dict]:
+    rows = []
+    for art in re.findall(r'<article class="node node--type-procurement[^"]*">(.*?)</article>', page, re.S):
+        tm = re.search(r'teaser-title">\s*<a href="([^"]+)"[^>]*>(.*?)</a>', art, re.S)
+        if not tm:
+            continue
+        typ = re.search(r'field--name-field-procurement-type.*?<dd>\s*(.*?)\s*</dd>', art, re.S)
+        ref = re.search(r'field--name-field-ref-number.*?<dd>\s*(.*?)\s*</dd>', art, re.S)
+        cl = re.search(r'field--name-field-closing-date.*?datetime="([^"]+)"', art, re.S)
+        href = _html.unescape(tm.group(1))
+        rows.append({"url": href if href.startswith("http") else _EIGE + href,
+                     "title": _txt(tm.group(2)), "type": _txt(typ.group(1)) if typ else "",
+                     "reference": _txt(ref.group(1)) if ref else "",
+                     "closing": _eige_iso(cl.group(1)) if cl else None})
+    return rows
+
+
+def _eige_detail(page: str) -> dict:
+    out: dict = {"published": None, "closing": None, "blocks": [], "portal": [], "files": []}
+    pm = re.search(r'field--name-field-publication-date.*?datetime="([^"]+)"', page, re.S)
+    cm = re.search(r'field--name-field-closing-date.*?datetime="([^"]+)"', page, re.S)
+    out["published"] = _eige_iso(pm.group(1)) if pm else None
+    out["closing"] = _eige_iso(cm.group(1)) if cm else None
+    node = re.search(r'node--view-mode-full">(.*?)(?:</article>|<div class="region region-content-bottom|<footer)',
+                     page, re.S)
+    body = node.group(1) if node else ""
+    for tag, inner in re.findall(r"<(h[2-4]|p|li)\b[^>]*>(.*?)</\1>", body, re.S):
+        text = _txt(inner)
+        if text and "receive alerts of new procurement" not in text.lower():
+            out["blocks"].append(("h" if tag.startswith("h") else tag, text))
+    for href, inner in re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', body, re.S):
+        href = _html.unescape(href)
+        pm2 = re.search(r"tender-details/([0-9a-f-]{36}(?:-[A-Z]+)?)", href)
+        if pm2 and pm2.group(1) not in out["portal"]:
+            out["portal"].append(pm2.group(1))
+        if re.search(r"/sites/default/files/.*\.(pdf|docx?|xlsx?|zip|odt)$", href, re.I):
+            url = href if href.startswith("http") else _EIGE + href
+            if url not in [f["url"] for f in out["files"]]:
+                out["files"].append({"url": url, "title": _txt(inner)})
+    return out
+
+
+def _eige_item(row: dict, detail: dict | None, now: datetime) -> Item:
+    is_call = "expression of interest" in (row["type"] or "").lower()
+    deadline = (detail or {}).get("closing") or row["closing"]
+    status = "open" if deadline is None or deadline >= now else "closed"
+    if row.get("standing"):
+        status = "open"
+    ref = row["reference"] or None
+    item = Item(
+        body_code="eige", item_type="eoi_call" if is_call else "tender", title=clean(row["title"])[:120],
+        public_url=row["url"], creation_date=now, source_kind="eige_procurement", guid=ref or row["url"],
+        summary=clean(" · ".join(b for b in [ref or "", row["type"], status,
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        extras={"tender_reference": ref, "status": status, "deadline": deadline})
+    if detail is None:
+        return item
+    published = detail["published"]
+    facts = [("Reference", ref or ""), ("Type", row["type"]),
+             ("Published", published.date().isoformat() if published else ""),
+             ("Closing date", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else "")]
+    facts = [(k, v) for k, v in facts if v]
+    links = [f"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/{p}"
+             for p in detail["portal"]]
+    related = row.get("related") or []
+    item.body_txt = clean("\n".join([row["title"], *(t for _k, t in detail["blocks"]),
+                                     *(f"{k}: {v}" for k, v in facts), *links,
+                                     *(f"Related notice: {r['title']} {r['url']}" for r in related)]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1>" + _efsa_blocks_html(detail["blocks"])
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts) + "</dl>"
+        + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
+           + "</ul>" if links else "")
+        + ("<h2>Related notices</h2><ul>" + "".join(
+            f'<li><a href="{_html.escape(r["url"])}">{_html.escape(r["title"])}</a></li>' for r in related)
+           + "</ul>" if related else ""))
+    item.document_date = published if published and (deadline is None or published <= deadline) else None
+    return item
+
+
+def _eige_one_row_per_reference(rows: list[dict]) -> list[dict]:
+    """A procedure can sit on two pages under one reference: a call and its site-visit
+    or prior-information notice, or a re-publication (4 references, 1 Oct 2026). One
+    row per reference: the page with the latest closing date, the other linked in its
+    body (the ECHA rule)."""
+    by_ref: dict = {}
+    for r in rows:
+        by_ref.setdefault(r["reference"] or r["url"], []).append(r)
+    far = datetime.min.replace(tzinfo=timezone.utc)
+    out = []
+    for group in by_ref.values():
+        group.sort(key=lambda r: (r["closing"] or far, r["url"]))
+        main = group[-1]
+        main["related"] = [{"title": r["title"], "url": r["url"]} for r in group[:-1]]
+        out.append(main)
+    return out
+
+
+def _eige_all(*, fetch_bodies: bool = True) -> list[Item]:
+    import os
+    import time
+    full = os.environ.get("EIGE_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _EIGE_CACHE.get(key)
+    if hit and time.time() - hit[0] < _EIGE_CACHE_TTL:
+        return hit[1]
+    now = datetime.now(timezone.utc)
+    open_page = _eige_get(_EIGE_OPEN)
+    rows = [dict(r, page=0, live=True) for r in _eige_cards(open_page)]
+    first = _eige_get(_EIGE_CLOSED)
+    tm = re.search(r"(\d+)\s*</[^>]+>\s*items\s*/", first) or re.search(r"(\d+)\s*items\s*/", first)
+    advertised = int(tm.group(1)) if tm else None
+    page, html_page = 0, first
+    while html_page:
+        cards = _eige_cards(html_page)
+        if not cards:
+            break
+        rows += [dict(r, page=page, live=False) for r in cards]
+        page += 1
+        if page > 60:
+            break
+        html_page = _eige_get(f"{_EIGE_CLOSED}?page={page}")
+    closed_read = sum(1 for r in rows if not r["live"])
+    if not closed_read:
+        raise RuntimeError("EIGE closed-procedures archive parsed to zero rows")
+    if advertised and closed_read < advertised:
+        raise RuntimeError(f"EIGE archive: read {closed_read} of {advertised} advertised procedures")
+    seen, unique = set(), []
+    for r in rows:
+        if r["url"] not in seen:
+            seen.add(r["url"])
+            unique.append(r)
+    rows = _eige_one_row_per_reference(unique)
+    rows.append({"url": _EIGE_EXPERTS, "title": "External Experts' Database: call for expression of interest",
+                 "type": "Call for expression of interest", "reference": "", "closing": None,
+                 "page": 0, "live": True, "standing": True})
+    items = []
+    for r in rows:
+        detail = None
+        if fetch_bodies and (full or r["live"] or r["page"] < _EIGE_FRESH_PAGES):
+            try:
+                detail = _eige_experts_detail(_eige_get(r["url"])) if r.get("standing") else _eige_detail(_eige_get(r["url"]))
+            except requests.RequestException as exc:
+                print(f"    [WARN] eige detail {r['reference'] or r['url'][-50:]}: {type(exc).__name__}", flush=True)
+        items.append(_eige_item(r, detail, now))
+    _EIGE_CACHE[key] = (time.time(), items)
+    return items
+
+
+def _eige_experts_detail(page: str) -> dict:
+    """The standing experts call is a plain page: its text and files, no dates."""
+    out = {"published": None, "closing": None, "blocks": [], "portal": [], "files": []}
+    node = re.search(r'node--type-page node--view-mode-full"?[^>]*>(.*?)(?:</article>|<footer)', page, re.S)
+    body = node.group(1) if node else ""
+    for tag, inner in re.findall(r"<(h[2-4]|p|li)\b[^>]*>(.*?)</\1>", body, re.S):
+        text = _txt(inner)
+        if text and "receive alerts of new procurement" not in text.lower():
+            out["blocks"].append(("h" if tag.startswith("h") else tag, text))
+    for href, inner in re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', body, re.S):
+        href = _html.unescape(href)
+        if re.search(r"\.(pdf|docx?|xlsx?|zip|odt)$", href, re.I):
+            url = href if href.startswith("http") else _EIGE + href
+            if url not in [f["url"] for f in out["files"]]:
+                out["files"].append({"url": url, "title": _txt(inner)})
+    return out
+
+
 def ingest_eige_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """EIGE shows 'There are currently no ongoing procedures' when empty.
-    When EIGE publishes calls they appear as a Drupal Views table on this
-    page; parse_views_table returns [] cleanly when no <tbody> is present."""
-    html = _fetch(_EIGE + "/about/procurement")
-    return parse_views_table(
-        html, _EIGE, body_code="eige", item_type="tender",
-        source_kind="eige_procurement",
-        ref_field="reference", deadline_field="deadline", status="Open",
-    )
+    return [it for it in _eige_all(fetch_bodies=fetch_bodies) if it.item_type == "tender"]
+
+
+def ingest_eige_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return [it for it in _eige_all(fetch_bodies=fetch_bodies) if it.item_type == "eoi_call"]
 
 
 # --- FRA — Playwright (Anubis WAF) + defensive empty handling ------------- #
