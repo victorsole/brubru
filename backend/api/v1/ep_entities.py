@@ -163,6 +163,7 @@ async def get_amendment_detail(
         document_date=r.document_date, scraped_at=r.scraped_at,
         public_url=r.source_url,
         creation_date=getattr(r, "first_seen", None) or r.scraped_at,
+        updated_date=row_updated(r),
     )
 
 
@@ -279,6 +280,7 @@ async def list_amendments(
             scraped_at=r.scraped_at,
             public_url=r.source_url,
             creation_date=getattr(r, "first_seen", None) or r.scraped_at,
+            updated_date=row_updated(r),
         )
         for r in rows
     ]
@@ -341,6 +343,7 @@ class VoteItem(BaseModel):
         None,
         description="When Brubru last refreshed this vote (alias of updated_at).",
     )
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
 
 
 def _rollcall_to_item(r) -> "VoteItem":
@@ -1135,6 +1138,7 @@ async def list_press_releases(
             public_url=r.url,
             document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
             creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
+            updated_date=row_updated(r),
         ))
     return build_envelope(
         data, total=total, page=page, limit=limit,

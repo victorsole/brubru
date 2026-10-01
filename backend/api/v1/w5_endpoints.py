@@ -23,6 +23,7 @@ from models.eu_official import EUOfficial
 from models.tender import Tender
 from models.user import User
 
+from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from ._search import text_match
@@ -353,6 +354,7 @@ async def list_officials(
             body_txt=body_txt,
             body_html=body_html,
             creation_date=now,
+            updated_date=row_updated(r),
         ))
     return build_envelope(data, total=total, page=page, limit=limit, updated_from=updated_from)
 
@@ -406,6 +408,7 @@ async def get_official_detail(
         body_txt=body_txt,
         body_html=body_html,
         creation_date=datetime.utcnow(),
+        updated_date=row_updated(r),
     )
 
 
@@ -449,6 +452,7 @@ class TenderItem(BaseModel):
         None, description="The date the notice was published on TED.")
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this notice.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
 
 
 @tenders_router.get(
@@ -573,6 +577,7 @@ async def list_tenders(
             status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
             public_url=r.ted_url, document_date=r.publication_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
+            updated_date=row_updated(r),
         )
         for r in rows
     ]
@@ -631,4 +636,5 @@ async def get_tender_detail(
         status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
         public_url=r.ted_url, document_date=r.publication_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
+        updated_date=row_updated(r),
     )

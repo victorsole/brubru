@@ -22,6 +22,7 @@ from core.database import get_db
 from models.ep_resolutions import EPResolution
 from models.user import User
 
+from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -63,6 +64,7 @@ class ResolutionItem(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of updated_at).")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
 
 
 def _compose_resolution_body(r) -> tuple:
@@ -182,6 +184,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         body_html=body_html,
         document_date=doc_date,
         creation_date=r.updated_at,
+        updated_date=row_updated(r),
     )
 
 
