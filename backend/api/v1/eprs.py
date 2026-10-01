@@ -15,6 +15,7 @@ from core.database import get_db
 from models.eprs_publication import EPRSPublication
 from models.user import User
 
+from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -217,6 +218,7 @@ async def list_eprs(
             body_html=None,
             document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
             creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
+            updated_date=row_updated(r),
         )
         for r in rows
     ]
@@ -291,4 +293,5 @@ async def get_eprs_detail(
         body_html=None,
         document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
         creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
+        updated_date=row_updated(r),
     )

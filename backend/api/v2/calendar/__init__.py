@@ -13,6 +13,8 @@ Tag v2-calendar → grouped in the "EU Calendar" Postman folder.
 """
 from __future__ import annotations
 
+from api.v1._row_dates import row_updated
+
 import html as _html
 from datetime import date, datetime
 from typing import Optional
@@ -37,6 +39,7 @@ class CalendarEventV2(CalendarEventItem):
     body_html: Optional[str] = None
     document_date: Optional[date] = None
     creation_date: Optional[datetime] = None
+    updated_date: Optional[datetime] = None
 
 
 def _to_v2(it: CalendarEventItem, *, with_body: bool) -> CalendarEventV2:
@@ -66,6 +69,7 @@ def _to_v2(it: CalendarEventItem, *, with_body: bool) -> CalendarEventV2:
         # expose it; the v1 item now does, and all 48 rows in GovClipping's
         # 27-28 September window had the value all along.
         creation_date=getattr(it, "first_seen", None) or getattr(it, "creation_date", None),
+        updated_date=row_updated(it),
     )
 
 
