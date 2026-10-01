@@ -132,6 +132,8 @@ def test_undated_procedures_sort_by_deadline_not_ingest_time():
     assert "deadline" in _PROC_ORDER_SQL["recent"]
     assert "document_date, deadline" in _PROC_ORDER_SQL["recent"]
     assert "deadline" not in _ORDER_SQL["recent"]
+    # an item with neither date goes last, not first by its ingest time (EIB, 1 Oct 2026)
+    assert "creation_date" not in _PROC_ORDER_SQL["recent"] and "NULLS LAST" in _PROC_ORDER_SQL["recent"]
 
 
 def test_a_listing_only_read_keeps_the_stored_type(monkeypatch):

@@ -43,9 +43,14 @@ _ORDER_SQL = {
 # deadline first. Kept separate from _ORDER_SQL because /funding/all reuses that on
 # a UNION that has no deadline column.
 _PROC_DATE_SORT = "coalesce(document_date, deadline, creation_date)"
+# The ORDER uses only the item's own dates: a procedure with neither a publication
+# date nor a deadline (EIB forecast-only and old pages, 38 rows on 1 Oct 2026) sorted
+# by its ingest time and topped every newest-first list. It now goes last; the date
+# FILTER keeps the creation_date fallback so undated items stay findable.
+_PROC_ORDER_DATE = "coalesce(document_date, deadline)"
 _PROC_ORDER_SQL = {
-    "recent": f"{_PROC_DATE_SORT} DESC NULLS LAST, id DESC",
-    "oldest": f"{_PROC_DATE_SORT} ASC NULLS LAST, id ASC",
+    "recent": f"{_PROC_ORDER_DATE} DESC NULLS LAST, id DESC",
+    "oldest": f"{_PROC_ORDER_DATE} ASC NULLS LAST, id ASC",
     "title": "title ASC, id ASC",
 }
 
