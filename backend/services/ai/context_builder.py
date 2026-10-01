@@ -9398,7 +9398,7 @@ class ContextBuilder:
     # ------------------------------------------------------------------
 
     _SANCTIONS_INTENT = re.compile(
-        r"\b(sanction(ed|s)?|restrictive\s+measures?|asset\s+freeze|"
+        r"\b(sanction(ed|s)?|restrictive\s+measures?|asset\s+freeze|delist(?:ed|ing|ings)?|"
         r"sdn\s+list|CFSP|frozen\s+assets|EU\.\d+\.\d+|"
         r"prohibited\s+(?:from|to)\s+(?:enter|trade|do\s+business))\b",
         re.IGNORECASE,
@@ -9683,6 +9683,80 @@ class ContextBuilder:
         re.I,
     )
 
+    # Base regulations per programme hint, for the OJ delta (the Commission list's programme
+    # codes do not exist on an OJ act; the act names its base regulation instead).
+    _SANCTIONS_PROGRAMME_BASES = {
+        "UKR": ("269/2014", "833/2014", "2024/1485", "2024/2642"),
+        "IRN": ("267/2012", "359/2011", "2023/1529"),
+        "BLR": ("765/2006",),
+        "SYR": ("36/2012",),
+        "PRK": ("2017/1509",),
+        "MMR": ("401/2013",),
+        "TERR": ("2580/2001", "881/2002", "2016/1686"),
+    }
+
+    def _sanctions_oj_delta_lines(self, db, terms: list, programme: Optional[str],
+                                  temporal: bool) -> list:
+        """Changes published in the OJ after the newest act in the Commission list.
+
+        The Commission consolidated list (eu_sanctions) can lag the OJ by weeks: on 1 Oct
+        2026 it carried nothing after 23 July. eu_sanctions_oj_delta holds the entries read
+        from the later acts' annexes. Returns [] when there is nothing to add.
+        """
+        from sqlalchemy import text
+        try:
+            cutoff = db.execute(text(
+                "SELECT max(legal_basis_publication_date) FROM eu_sanctions")).scalar()
+            params: Dict[str, Any] = {}
+            where = []
+            bases = self._SANCTIONS_PROGRAMME_BASES.get(programme or "")
+            if bases:
+                where.append("base_regulation = ANY(:bases)")
+                params["bases"] = list(bases)
+            order_hits = ""
+            if not temporal and terms:
+                # Names only: the body carries reasons and addresses, so a common word in
+                # the question ("under", "Russia") would match every entry.
+                where.append("(" + " OR ".join(f"name ILIKE :t{i}" for i in range(len(terms))) + ")")
+                params.update({f"t{i}": f"%{t}%" for i, t in enumerate(terms)})
+                order_hits = "(" + " + ".join(
+                    f"(CASE WHEN name ILIKE :t{i} THEN 1 ELSE 0 END)" for i in range(len(terms))) + ") DESC, "
+            elif not temporal:
+                return []
+            where_sql = ("WHERE " + " AND ".join(where)) if where else ""
+            rows = db.execute(text(f"""
+                SELECT celex, document_date, base_regulation, annex, action, subject_type, name,
+                       date_of_listing, public_url
+                  FROM eu_sanctions_oj_delta {where_sql}
+                 ORDER BY {order_hits}document_date DESC, celex DESC,
+                          CASE action WHEN 'added' THEN 0 WHEN 'deleted' THEN 1 ELSE 2 END, entry_key
+                 LIMIT :lim
+            """), {**params, "lim": 14 if temporal else 10}).mappings().all()
+            if not rows:
+                return []
+            verb = {"added": "LISTED", "deleted": "DELISTED", "replaced": "entry replaced",
+                    "amended": "identifying data amended", "list_replaced": "list re-adopted"}
+            out = [
+                f"CHANGES IN THE OFFICIAL JOURNAL AFTER THE COMMISSION LIST (the Commission's "
+                f"consolidated list carries legal acts only up to {cutoff}; the entries below are "
+                f"read from the later regulations themselves):",
+            ]
+            for r in rows:
+                st = {"P": "person", "E": "entity", "V": "vessel"}.get(r.get("subject_type"), "entry")
+                n = r["celex"]
+                act = f"Regulation {n[1:5]}/{int(n[6:])}"
+                dol = f" | date of listing {r['date_of_listing']}" if r.get("date_of_listing") and r["action"] == "added" else ""
+                out.append(f"  - {r.get('name') or '?'} ({st}) | {verb.get(r['action'], r['action'])} "
+                           f"by {act} of {r['document_date']} in Annex {r.get('annex') or '?'} to Regulation {r.get('base_regulation') or '?'}"
+                           f"{dol} | {r.get('public_url') or ''}")
+            out.append("NOTE: an act can move the same person between annexes (DELISTED from one annex, "
+                       "LISTED in another): read the annex before saying a person was removed from sanctions.")
+            out.append("")
+            return out
+        except Exception as e:  # never let the delta break the block
+            logger.warning("[sanctions-block] OJ delta failed: %s", e)
+            return []
+
     async def _fetch_sanctions_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
         """Pull sanctions rows matching the query.
 
@@ -9762,7 +9836,8 @@ class ContextBuilder:
                          LIMIT 5
                     """), san_params).mappings().all()
 
-                    if not recent_acts and not recent_entries:
+                    delta_lines = self._sanctions_oj_delta_lines(db, [], intent.get("programme"), True)
+                    if not recent_acts and not recent_entries and not delta_lines:
                         return None
 
                     lines = [
@@ -9780,6 +9855,8 @@ class ContextBuilder:
                             dt = str(r.get("publication_date") or "—")[:10]
                             lines.append(f"  - {ref} | {title} | OJ date {dt}")
                         lines.append("")
+
+                    lines.extend(delta_lines)
 
                     if recent_entries:
                         lines.append("MOST-RECENT ADDITIONS TO CONSOLIDATED LIST (from eu_sanctions):")
@@ -9818,8 +9895,11 @@ class ContextBuilder:
                     if terms:
                         name_clauses = []
                         for i, t in enumerate(terms):
+                            # aliases too: full_name is the FIRST name variant in the
+                            # Commission file, which is often the Cyrillic one ("ПАО
+                            # Совкомфлот"), so a Latin-script name only matches an alias.
                             name_clauses.append(
-                                f"(full_name ILIKE :nm{i} OR "
+                                f"(full_name ILIKE :nm{i} OR aliases::text ILIKE :nm{i} OR "
                                 f"EXISTS (SELECT 1 FROM unnest(citizenships) c WHERE c ILIKE :nm{i}))"
                             )
                             params[f"nm{i}"] = f"%{t}%"
@@ -9841,10 +9921,11 @@ class ContextBuilder:
                          LIMIT 10
                     """), params).mappings().all()
 
-                    if not rows:
+                    delta_lines = self._sanctions_oj_delta_lines(db, terms, intent.get("programme"), False)
+                    if not rows and not delta_lines:
                         return None
 
-                    lines = [
+                    lines = delta_lines + [
                         "EU SANCTIONS / RESTRICTIVE MEASURES (from eu_sanctions; CFSP consolidated list):",
                         f"Query keyword: '{intent.get('keyword')}'"
                         + (f" | programme: {intent['programme']}" if intent.get("programme") else "")
@@ -9860,9 +9941,11 @@ class ContextBuilder:
                         leba = (r.get("legal_basis_title") or "")[:70]
                         dt = str(r.get("date_file") or "—")[:10]
                         lines.append(f"  - {name} ({st}) | EU ref {ref} | programme {prog} | citizenship {citi} | "
-                                     f"legal basis {leba} | refreshed {dt}")
+                                     f"legal basis {leba} | list file dated {dt}")
+                    if not rows:
+                        lines.append("  (no match in the Commission consolidated list)")
                     lines.append("")
-                    lines.append("Source: webgate.ec.europa.eu/fsd/fsf (daily public CSV). "
+                    lines.append("Source: webgate.ec.europa.eu/fsd/fsf (daily public CSV) and, for later changes, the OJ acts. "
                                  "Brubru endpoint: /api/v1/specialised/sanctions.")
 
                 block = "\n".join(lines)

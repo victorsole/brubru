@@ -783,6 +783,11 @@ async def cron_sync_daily(
     results["dpp_watch"] = await _run_script_async(
         "dpp_watch", "scripts/dpp_watch.py", ["--days", "1", "--record"], timeout=300)
     results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
+    # The Commission list lags the Official Journal (1 Oct 2026: nothing after 23 July while
+    # 20 listing regulations had been published). Read the later acts' annexes into
+    # eu_sanctions_oj_delta and record the gap as `sanctions_oj_delta` (degraded while it lasts).
+    results["sanctions_oj_delta"] = await _run_script_async(
+        "sanctions_oj_delta", "scripts/sync_sanctions_oj_delta.py", ["--apply", "--record"], timeout=600)
     results["transparency_register"] = await _run_script_async("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
     results["jrc"] = await _run_script_async("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)
     results["infringements"] = await _run_script_async("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
