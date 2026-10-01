@@ -71,8 +71,30 @@ jobs:
         # DATABASE_URL is explicitly empty. Tests needing Postgres skip; nothing in CI is
         # allowed to open a connection to the production database.
         env:
-          DATABASE_URL: ""
+          # A URL that PARSES but reaches nothing. An empty string does not parse:
+          # SQLAlchemy raises ArgumentError at import time and 88 modules fail to
+          # collect. Port 1 on loopback refuses instantly, so a test that really
+          # needs Postgres fails fast instead of hanging, and nothing in CI can
+          # reach the database a subscriber reads.
+          DATABASE_URL: postgresql+psycopg2://ci:ci@127.0.0.1:1/ci
           PYTHONDONTWRITEBYTECODE: "1"
+          # pytest runs from backend/, but tests/extract_engine imports `services`
+          # as a top-level package, which only resolves when backend/ is on the
+          # path. Locally that comes free from the shell; a runner has to be told.
+          PYTHONPATH: .
+          # core.config.Settings has 8 REQUIRED fields and raises at import time
+          # without them, so every test module that imports the app failed to
+          # COLLECT in CI while passing locally off the .env file. These are
+          # deliberately obvious non-secrets: CI must never hold a real key, and a
+          # value that looks real is a value someone will eventually trust.
+          SECRET_KEY: ci-not-a-real-secret
+          SUPABASE_URL: https://ci.invalid
+          SUPABASE_KEY: ci-not-a-real-key
+          SUPABASE_SERVICE_KEY: ci-not-a-real-key
+          ANTHROPIC_API_KEY: ci-not-a-real-key
+          OPENAI_API_KEY: ci-not-a-real-key
+          STRIPE_SECRET_KEY: ci-not-a-real-key
+          STRIPE_PUBLISHABLE_KEY: ci-not-a-real-key
         run: |
           pytest tests/ -q -p no:cacheprovider \
             --ignore=tests/seeds_quarantined \
