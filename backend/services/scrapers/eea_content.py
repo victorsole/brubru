@@ -30,6 +30,14 @@ _SITE = "https://www.eea.europa.eu"
 # _KEEP_TYPES re-checks client-side from the same constant, so if a future Plone
 # version ignores the parameter the assets do not silently return.
 _NEWS_TYPE = "News Item"
+# Publications (1 Oct 2026): briefings and reports were never ingested, so when the
+# newsroom went quiet after 14 Sep the client ledger read EEA as STALE while EEA had
+# published a briefing on production and consumption trends (22 Sep). 164 briefings
+# and 949 PDF reports on that day. Editorial articles live in the newsroom too.
+_PUBS = _BASE + "/en/analysis/publications/@search"
+_PUB_TYPES = ["briefing", "report_pdf"]
+_EDITORIAL = _BASE + "/en/newsroom/editorial/@search"
+_EDITORIAL_TYPE = "article"
 _EVENT_TYPE = "Event"
 
 # Curated about + thematic in-depth landing pages, snapshotted as topics.
@@ -85,7 +93,8 @@ def _walk(session: requests.Session, url: str, extra: dict, item_type: str,
             if not u or not title or u in out:
                 continue
             want = extra.get("portal_type")
-            if want and r.get("@type") not in (None, want):
+            wanted = want if isinstance(want, (list, tuple)) else ([want] if want else [])
+            if wanted and r.get("@type") not in (None, *wanted):
                 # Attachment, folder or Link, not an article. Belt and braces:
                 # portal_type should already have excluded it server-side.
                 continue
@@ -109,6 +118,19 @@ def ingest_eea_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
     return _walk(s, _NEWS, {"portal_type": _NEWS_TYPE}, "news", "effective")
+
+
+def ingest_eea_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    s = requests.Session()
+    s.headers.update(_HEADERS)
+    return _walk(s, _PUBS, {"portal_type": _PUB_TYPES}, "publication", "effective")
+
+
+def ingest_eea_editorials(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """Editorials and interviews in the EEA newsroom, stored as news."""
+    s = requests.Session()
+    s.headers.update(_HEADERS)
+    return _walk(s, _EDITORIAL, {"portal_type": _EDITORIAL_TYPE}, "news", "effective")
 
 
 def ingest_eea_events(*, fetch_bodies: bool = True, **_) -> list[Item]:

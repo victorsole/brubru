@@ -179,8 +179,10 @@ def body_freshness(db) -> list[dict]:
     out = []
     for code, name in WATCHLIST_BODIES.items():
         row = db.execute(text("""
-            SELECT count(*) FILTER (WHERE item_type IN ('news','press_release')) AS n,
-                   max(document_date) FILTER (WHERE item_type IN ('news','press_release')) AS newest
+            -- publications count as output too (1 Oct 2026): EEA's newsroom went quiet
+            -- from 14 Sep while it published a briefing on 22 Sep.
+            SELECT count(*) FILTER (WHERE item_type IN ('news','press_release','publication')) AS n,
+                   max(document_date) FILTER (WHERE item_type IN ('news','press_release','publication')) AS newest
             FROM economy_items WHERE body_code = :c"""), {"c": code}).mappings().first()
         n = (row or {}).get("n") or 0
         newest = (row or {}).get("newest")
