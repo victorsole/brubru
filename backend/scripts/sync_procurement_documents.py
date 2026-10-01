@@ -164,6 +164,34 @@ class _Eige(_Source):
         return docs
 
 
+class _Enisa(_Source):
+    """ENISA procedure pages: their downloads (not the generic privacy statement) and the
+    documents of the Funding & Tenders notice they link (ENISA's buyer id 47352382)."""
+    source_kinds = ("enisa_procurement",)
+
+    def __enter__(self):
+        self._docs: dict[str, list[dict]] = {}
+        for res in ap._ft_buyer_results("enisa", ap._ENISA_FT_BUYER_ID):
+            ident = ((res.get("metadata") or {}).get("identifier") or [None])[0]
+            if ident and ident not in self._docs:
+                self._docs[ident] = ap._ft_notice_documents(res)
+        _by_id, self._by_key = ap._enisa_notices()
+        return self
+
+    def list(self, page_url, ref):
+        detail = ap._enisa_detail(ap._enisa_get(page_url))
+        docs = []
+        for f in detail["files"]:
+            name = unquote(f["url"].rsplit("/", 1)[-1])
+            fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+            docs.append({"title": f["title"] or name, "file_url": f["url"], "file_name": name,
+                         "file_format": fm.group(1).lower() if fm else None, "file_size": None,
+                         "language": None, "document_date": None})
+        for notice in ap._enisa_linked_notices(ref or "", detail["portal"], self._by_key):
+            docs += [dict(d) for d in self._docs.get(notice, [])]
+        return docs
+
+
 # body_code -> the source of its procurement files
 SOURCES = {
     "cedefop": lambda: _Cedefop(),
@@ -172,6 +200,7 @@ SOURCES = {
     "efsa": lambda: _Portal("efsa", ap._EFSA_FT_BUYER_ID, "efsa_ft_notice"),
     "eige": lambda: _Eige(),
     "ema": lambda: _Portal("ema", ap._EMA_FT_BUYER_ID, "ema_ft_notice"),
+    "enisa": lambda: _Enisa(),
 }
 LISTERS = SOURCES   # the API registers /documents for exactly these bodies
 

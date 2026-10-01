@@ -861,14 +861,221 @@ def _parse_enisa_table(html: str, base: str) -> list[Item]:
     return out
 
 
+# --------------------------------------------------------------------------- #
+# ENISA — its procurement list and each procedure's page (API audit, 1 Oct 2026,
+# "Walk · ENISA"). The old reader took page 0 of 26 (15 of 254 procedures), stored the
+# deadline as document_date and filled no field. The list carries reference, call
+# type, deadline (a true UTC instant) and ENISA's status; the page adds the
+# description, budget, procedure type, downloads and the Funding & Tenders link. The
+# page has no publication date: it is the linked notice's (ECHA's rule), read from
+# the portal by ENISA's buyer id; procedures with no notice stay undated.
+# --------------------------------------------------------------------------- #
+_ENISA_LIST = _ENISA + "/working-with-us/procurement"
+_ENISA_FT_BUYER_ID = "47352382"
+_ENISA_FRESH_PAGES = 1
+_ENISA_LIVE = {"open", "in progress"}
+_ENISA_PAUSE = 0.5
+_ENISA_CACHE: dict = {}
+
+
+def _enisa_get(url: str) -> str:
+    return _paced_get(url, site="enisa", pause=_ENISA_PAUSE, backoff=_ECDC_BACKOFF)
+
+
+def _enisa_rows(page: str) -> list[dict]:
+    rows = []
+    body = re.search(r"<tbody.*?</tbody>", page, re.S)
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(0) if body else "", re.S):
+        def cell(label: str) -> str:
+            m = re.search(rf'data-label={re.escape(label)}>(.*?)</td>', tr, re.S)
+            return m.group(1) if m else ""
+        tm = re.search(r'href="([^"]+)"[^>]*>(.*?)</a>', cell("TITLE"), re.S)
+        if not tm:
+            continue
+        href = _html.unescape(tm.group(1))
+        dm = re.search(r'datetime="([^"]+)"', cell("DEADLINE"))
+        deadline = None
+        if dm:
+            try:
+                deadline = datetime.fromisoformat(dm.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                deadline = None
+        rows.append({"url": href if href.startswith("http") else _ENISA + href, "title": _txt(tm.group(2)),
+                     "reference": _txt(cell("REF. CODE")), "call_type": _txt(cell("CALL TYPE")),
+                     "deadline": deadline, "status_raw": _txt(cell("STATUS"))})
+    return rows
+
+
+def _enisa_detail(page: str) -> dict:
+    out: dict = {"blocks": [], "facts": {}, "files": [], "portal": []}
+    # the procedure's own text sits in "publication-content"; other body fields are menus
+    body = re.search(r'publication-content[^"]*">\s*<div[^>]*field--name-body[^>]*>(.*?)</div>', page, re.S)
+    for tag, inner in re.findall(r"<(h[2-4]|p|li)\b[^>]*>(.*?)</\1>", body.group(1) if body else "", re.S):
+        text = _txt(inner)
+        if text:
+            out["blocks"].append(("h" if tag.startswith("h") else tag, text))
+    for label, value in re.findall(r'<span class="label-detail">(.*?)</span>\s*(.*?)</li>', page, re.S):
+        out["facts"][_txt(label).rstrip(":")] = _txt(value)
+    dl = re.search(r'publication-detail download">.*?</h2>(.*?)(?:</ul>|<h2)', page, re.S)
+    for href, inner in re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', dl.group(1) if dl else "", re.S):
+        href = _html.unescape(href)
+        if "privacy" in href.lower() and "statement" in href.lower():
+            continue                      # the generic procurement privacy statement
+        if re.search(r"\.(pdf|docx?|xlsx?|zip|odt)$", href, re.I):
+            out["files"].append({"url": href if href.startswith("http") else _ENISA + href,
+                                 "title": _txt(inner)})
+    for notice in re.findall(r"tender-details/([0-9a-f-]{36}(?:-[A-Z]+)?)", page):
+        if notice not in out["portal"]:
+            out["portal"].append(notice)
+    return out
+
+
+def _enisa_status(raw: str, call_type: str, deadline: datetime | None, now: datetime) -> str:
+    if raw.strip().lower() == "open":
+        if "pre information" in call_type.lower():
+            return "forthcoming"
+        return "open" if deadline is None or deadline >= now else "closed"
+    return "closed"           # in progress, completed, cancelled, unfruitful
+
+
+def _enisa_item(row: dict, detail: dict | None, published: datetime | None, now: datetime) -> Item:
+    is_call = "expression" in row["call_type"].lower()
+    deadline = row["deadline"]
+    status = _enisa_status(row["status_raw"], row["call_type"], deadline, now)
+    ref = row["reference"] or None
+    item = Item(
+        body_code="enisa", item_type="eoi_call" if is_call else "tender", title=clean(row["title"])[:120],
+        public_url=row["url"], creation_date=now, source_kind="enisa_procurement", guid=ref or row["url"],
+        summary=clean(" · ".join(b for b in [ref or "", row["call_type"], row["status_raw"],
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        extras={"tender_reference": ref, "status": status, "deadline": deadline})
+    if detail is None:
+        return item
+    facts = [("Reference", ref or ""), ("Procedure type", detail["facts"].get("Procedure type") or row["call_type"]),
+             ("Status on ENISA's site", row["status_raw"]),
+             ("Published", published.date().isoformat() if published else ""),
+             ("Deadline", detail["facts"].get("Deadline") or (deadline.date().isoformat() if deadline else ""))]
+    facts = [(k, v) for k, v in facts if v]
+    links = [f"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/{p}"
+             for p in detail["portal"]]
+    related = row.get("related") or []
+    item.body_txt = clean("\n".join([row["title"], *(t for _k, t in detail["blocks"]),
+                                     *(f"{k}: {v}" for k, v in facts), *links,
+                                     *(f"Related page: {r['title']} {r['url']}" for r in related)]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(row['title'])}</h1>" + _efsa_blocks_html(detail["blocks"])
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts) + "</dl>"
+        + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
+           + "</ul>" if links else "")
+        + ("<h2>Related pages</h2><ul>" + "".join(
+            f'<li><a href="{_html.escape(r["url"])}">{_html.escape(r["title"])}</a></li>' for r in related)
+           + "</ul>" if related else ""))
+    item.document_date = published if published and (deadline is None or published <= deadline) else None
+    return item
+
+
+def _enisa_one_row_per_reference(rows: list[dict]) -> list[dict]:
+    """P.16.11.TCD sits on its page and on a leftover "_old" copy: one row, the live page."""
+    by_ref: dict = {}
+    for r in rows:
+        by_ref.setdefault(r["reference"] or r["url"], []).append(r)
+    far = datetime.min.replace(tzinfo=timezone.utc)
+    out = []
+    for group in by_ref.values():
+        group.sort(key=lambda r: (not r["url"].lower().endswith("_old"), r["deadline"] or far))
+        main = group[-1]
+        main["related"] = [{"title": r["title"], "url": r["url"]} for r in group[:-1]]
+        out.append(main)
+    return out
+
+
+def _enisa_ref_keys(ref: str) -> set:
+    """ENISA writes two codes in one reference, "ENISA F-EDO-23-T18 (ENISA/2023/OP/0010)",
+    and the portal's callIdentifier holds either one, sometimes with a trailing full stop
+    ("ENISA D-COD-16-T05."). Each code, normalised, is a key."""
+    ref = ref or ""
+    parts = [ref, re.sub(r"\([^)]*\)", "", ref), *re.findall(r"\(([^)]+)\)", ref)]
+    return {re.sub(r"[^A-Z0-9]", "", re.sub(r"^ENISA", "", p.strip().upper())) for p in parts if p.strip()} - {""}
+
+
+def _enisa_notices() -> tuple[dict, dict]:
+    """The portal's notices of ENISA: publication date by notice id, and notice ids by
+    every key of their ENISA reference (the contract notice first)."""
+    by_id, by_key = {}, {}
+    for res in _ft_buyer_results("enisa", _ENISA_FT_BUYER_ID):
+        md = res.get("metadata") or {}
+        ident = (md.get("identifier") or [None])[0]
+        start = _parse_iso_sedia((md.get("startDate") or [None])[0])
+        if not ident or ident in by_id:
+            continue
+        by_id[ident] = start
+        for k in _enisa_ref_keys((md.get("callIdentifier") or [""])[0]):
+            ids = by_key.setdefault(k, [])
+            ids.insert(0, ident) if ident.endswith("-CN") else ids.append(ident)
+    return by_id, by_key
+
+
+def _enisa_linked_notices(reference: str, portal_links: list, by_key: dict) -> list:
+    """The notices of one procedure: those its page links, else those its reference names."""
+    if portal_links:
+        return list(portal_links)
+    out = []
+    for k in _enisa_ref_keys(reference):
+        for ident in by_key.get(k, []):
+            if ident not in out:
+                out.append(ident)
+    return out
+
+
+def _enisa_all(*, fetch_bodies: bool = True) -> list[Item]:
+    import os
+    import time
+    full = os.environ.get("ENISA_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _ENISA_CACHE.get(key)
+    if hit and time.time() - hit[0] < 1800:
+        return hit[1]
+    now = datetime.now(timezone.utc)
+    rows, page = [], 0
+    while page < 80:
+        got = _enisa_rows(_enisa_get(f"{_ENISA_LIST}?page={page}"))
+        if not got:
+            break
+        rows += [dict(r, page=page) for r in got]
+        page += 1
+    if not rows:
+        raise RuntimeError("ENISA procurement list parsed to zero rows")
+    seen, unique = set(), []
+    for r in rows:
+        if r["url"] not in seen:
+            seen.add(r["url"])
+            unique.append(r)
+    rows = _enisa_one_row_per_reference(unique)
+    by_id, by_key = _enisa_notices() if fetch_bodies else ({}, {})
+    items = []
+    for r in rows:
+        detail = None
+        if fetch_bodies and (full or r["page"] < _ENISA_FRESH_PAGES or r["status_raw"].lower() in _ENISA_LIVE):
+            try:
+                detail = _enisa_detail(_enisa_get(r["url"]))
+            except requests.RequestException as exc:
+                print(f"    [WARN] enisa detail {r['reference'] or r['url'][-50:]}: {type(exc).__name__}", flush=True)
+        published = None
+        if detail is not None:
+            notices = _enisa_linked_notices(r["reference"], detail["portal"], by_key)
+            dates = [by_id[n] for n in notices if by_id.get(n)]
+            published = min(dates) if dates else None
+        items.append(_enisa_item(r, detail, published, now))
+    _ENISA_CACHE[key] = (time.time(), items)
+    return items
+
+
 def ingest_enisa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    items = _parse_enisa_table(_fetch(_ENISA + "/working-with-us/procurement"), _ENISA)
-    return [i for i in items if i.item_type == "tender"]
+    return [i for i in _enisa_all(fetch_bodies=fetch_bodies) if i.item_type == "tender"]
 
 
 def ingest_enisa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    items = _parse_enisa_table(_fetch(_ENISA + "/working-with-us/procurement"), _ENISA)
-    return [i for i in items if i.item_type == "eoi_call"]
+    return [i for i in _enisa_all(fetch_bodies=fetch_bodies) if i.item_type == "eoi_call"]
 
 
 # --- ERA — bespoke listing-item cards ------------------------------------- #

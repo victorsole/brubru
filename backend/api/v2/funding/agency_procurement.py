@@ -158,18 +158,29 @@ register_resource(
 # --- ENISA — EU Agency for Cybersecurity ---------------------------------- #
 register_resource(
     router, body_code="enisa", item_type="tender", slug="enisa-tenders",
-    noun="ENISA calls for tender",
-    body_name="the European Union Agency for Cybersecurity", acronym="ENISA", tag="v2-funding",
-    source="the ENISA public-procurement page (mixed open + negotiated + CEI table).",
-    extra="ENISA cybersecurity tenders — threat landscapes, exercises, certification, training — "
-          "each with reference and deadline. EOIs are split into the calls endpoint. Filter with q.",
+    noun="ENISA calls for tender", body_name="the EU Agency for Cybersecurity", acronym="ENISA",
+    tag="v2-funding",
+    source="ENISA's procurement list (every page) and each procedure's page; publication dates "
+           "from the linked Funding & Tenders notice.",
+    extra="ENISA procurement, the whole archive from 2009: open, restricted and negotiated calls, "
+          "prior information notices. Each item carries `tender_reference` (ENISA's reference), "
+          "`status` (open | forthcoming | closed; open only while ENISA says Open and the deadline "
+          "is ahead; ENISA's own word, e.g. completed or unfruitful, stays in the body) and "
+          "`deadline`; `document_date` is the publication date of the linked portal notice (none "
+          "for procedures without one). The body holds the description and budget; "
+          "`/{item_id}/documents` serves the procedure's files with their text. Calls for "
+          "expression of interest are at /enisa-calls.",
+    procurement=True, documents=True,
 )
 register_resource(
     router, body_code="enisa", item_type="eoi_call", slug="enisa-calls",
-    noun="ENISA calls for expression of interest",
-    body_name="the European Union Agency for Cybersecurity", acronym="ENISA", tag="v2-funding",
-    source="the ENISA public-procurement page (CEI rows).",
-    extra="ENISA calls for expression of interest (e.g. external-expert lists). Filter with q.",
+    noun="ENISA calls for expression of interest", body_name="the EU Agency for Cybersecurity",
+    acronym="ENISA", tag="v2-funding",
+    source="ENISA's procurement list (calls for expressions of interest) and each call's page.",
+    extra="ENISA calls for expression of interest (e.g. lists of external experts), the whole "
+          "archive. Each item carries `tender_reference`, `status` and `deadline`; "
+          "`/{item_id}/documents` serves the call's files with their text. Filter with q.",
+    procurement=True, documents=True,
 )
 
 # --- ERA — EU Agency for Railways ----------------------------------------- #

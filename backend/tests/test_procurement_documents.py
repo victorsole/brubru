@@ -126,8 +126,8 @@ def test_documents_routes_exist_only_where_a_writer_fills_them():
               if p.endswith("/{item_id}/documents")}
     assert served == set(LISTERS)
     doc_routes = [r for r in router.routes if "/documents" in r.path]
-    # cedefop, echa, eige and ema tenders + calls, eea tenders, efsa tenders; list + one doc
-    assert len(doc_routes) == 20
+    # cedefop, echa, eige, ema and enisa tenders + calls, eea, efsa tenders; list + one doc
+    assert len(doc_routes) == 24
 
 
 def test_cedefop_body_lists_the_files(monkeypatch):
