@@ -232,6 +232,9 @@ class LegislativeCarriage(Base):
     # Read by /api/v1/committees/{code}/work-items to serve body_txt/body_html.
     oeil_html_body = Column(Text)
     oeil_text_body = Column(Text)
+    # Adoption date of the act this carriage points at (migration 270). Fallback for
+    # document_date on the EURLEX rows, which are adopted acts with no OEIL timeline.
+    act_date = Column(Date)
     oeil_body_fetched_at = Column(DateTime)
     ai_entities = Column(JSON, default=[])  # Extracted MEPs, committees, legislation
     ai_policy_classifications = Column(JSON, default=[])  # {"label": "...", "score": 0.9}

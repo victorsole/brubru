@@ -143,6 +143,22 @@ def _public_url(r) -> Optional[str]:
     return stored or None
 
 
+def _document_date(r) -> Optional[date]:
+    """The date this carriage is about.
+
+    For a procedure in negotiation that is the most recent OEIL key event. The 1,090
+    EURLEX carriages are adopted acts with no OEIL timeline, so that returned nothing
+    and document_date came back empty on 1,545 of 3,382 rows. Those fall back to the
+    act's own adoption date, read from eu_laws (which takes it from Cellar) into
+    act_date by scripts/fill_carriage_bodies_from_acts.py.
+
+    The event date comes first: on a live procedure it is the more recent fact, and
+    the act date would freeze the row at adoption.
+    """
+    latest = _latest_event_date(getattr(r, "oeil_key_events", None))
+    return latest or getattr(r, "act_date", None)
+
+
 def _latest_event_date(events) -> Optional[date]:
     """Return the most recent date from oeil_key_events (or oeil_timeline)."""
     if not events or not isinstance(events, list):
@@ -301,7 +317,7 @@ async def list_procedures(
             public_url=_public_url(r),
             body_txt=getattr(r, "oeil_text_body", None),
             body_html=getattr(r, "oeil_html_body", None),
-            document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
+            document_date=_document_date(r),
             creation_date=r.first_seen,
         )
         for r in rows
@@ -443,7 +459,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         public_url=_public_url(r),
         body_txt=getattr(r, "oeil_text_body", None),
         body_html=getattr(r, "oeil_html_body", None),
-        document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
+        document_date=_document_date(r),
         creation_date=r.first_seen,
         # Brubru curated editorial overlay (null unless Brubru curates this file)
         curated=get_curation(r.oeil_procedure_ref),
