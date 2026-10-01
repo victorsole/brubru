@@ -84,6 +84,45 @@ opinions_router = APIRouter(prefix="/opinions", tags=["v1-opinions"])
 # ============================================================================
 
 
+def _amendment_body_cache(r) -> tuple:
+    """_compose_amendment_body once per row, not once per field.
+
+    The list builds 100 items a page and each needs both halves of the composition;
+    calling the composer twice doubles the string work for nothing.
+    """
+    cached = getattr(r, "_brubru_body", None)
+    if cached is None:
+        cached = _compose_amendment_body(r)
+        try:
+            object.__setattr__(r, "_brubru_body", cached)
+        except Exception:
+            pass          # a read-only row still gets a correct answer, just uncached
+    return cached
+
+
+def _compose_amendment_body(r) -> tuple:
+    """(plain, html) built from the amendment's own three text fields.
+
+    A section is omitted when its field is empty rather than printed as an empty
+    heading, so a row with no justification does not read as a document that has one.
+    Returns (None, None) when the amendment carries no text at all, because an empty
+    composition is worse than an absent one: it passes a non-null check while saying
+    nothing.
+    """
+    sections = [
+        ("Original text", getattr(r, "original_text", None)),
+        ("Amendment", getattr(r, "proposed_text", None)),
+        ("Justification", getattr(r, "justification", None)),
+    ]
+    present = [(label, value.strip()) for label, value in sections
+               if isinstance(value, str) and value.strip()]
+    if not present:
+        return None, None
+    plain = "\n\n".join(f"{label}\n{value}" for label, value in present)
+    html = "".join(f"<h3>{label}</h3><p>{value}</p>" for label, value in present)
+    return plain, html
+
+
 class AmendmentItem(BaseModel):
     id: str
     procedure_reference: str
@@ -108,6 +147,15 @@ class AmendmentItem(BaseModel):
     # doceo link sat on the same item as source_url.
     public_url: Optional[str] = Field(
         None, description="The amendment document on doceo (its source_url).")
+    # body_txt / body_html were ABSENT from this item entirely -- not null, missing --
+    # on all 64,077 rows, so the endpoint did not meet the five-datapoint contract,
+    # while the table held the amendment text all along (64,030 rows carry
+    # original_text and 64,066 proposed_text). Composed from the amendment's own
+    # fields: what the text says now, what the amendment proposes, and why.
+    body_txt: Optional[str] = Field(
+        None, description="Plain-text composition: the original text, the proposed text and the justification.")
+    body_html: Optional[str] = Field(
+        None, description="HTML composition of the same three fields.")
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this amendment.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -160,6 +208,7 @@ async def get_amendment_detail(
         element_reference=r.element_reference, amendment_type=r.amendment_type,
         original_text=r.original_text, proposed_text=r.proposed_text,
         justification=r.justification, source_url=r.source_url,
+        body_txt=_amendment_body_cache(r)[0], body_html=_amendment_body_cache(r)[1],
         document_date=r.document_date, scraped_at=r.scraped_at,
         public_url=r.source_url,
         creation_date=getattr(r, "first_seen", None) or r.scraped_at,
@@ -279,6 +328,7 @@ async def list_amendments(
             document_date=r.document_date,
             scraped_at=r.scraped_at,
             public_url=r.source_url,
+            body_txt=_amendment_body_cache(r)[0], body_html=_amendment_body_cache(r)[1],
             creation_date=getattr(r, "first_seen", None) or r.scraped_at,
             updated_date=row_updated(r),
         )
