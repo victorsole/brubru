@@ -103,6 +103,46 @@ def _oeil_url(oeil_ref: Optional[str]) -> Optional[str]:
     return f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={oeil_ref}"
 
 
+# EUR-Lex's canonical, language-explicit document address. The carriage rows store
+# "https://eur-lex.europa.eu/./legal-content/AUTO/?uri=CELEX:..." instead, which carries
+# a stray "/./" and uses AUTO: opened in a browser that renders no extractable document,
+# so it was never a usable public_url even though it returns a response.
+_EURLEX_DOC = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+
+def _public_url(r) -> Optional[str]:
+    """The citizen-facing page for a carriage, whichever register it came from.
+
+    legislative_carriages holds three populations and only one of them is an OEIL
+    procedure file. Deriving public_url from oeil_procedure_ref alone left 1,519 of
+    3,382 rows serving an empty contracted datapoint -- not because the address was
+    unknown, but because the row's own CELEX and url columns were never consulted.
+
+      OEIL_DIRECT (2,034 rows)      -> the OEIL procedure file. Always has a reference.
+      EURLEX (1,094)                -> an adopted act. It has no OEIL reference because
+                                       it is not a procedure in negotiation; its address
+                                       is its CELEX on EUR-Lex.
+      LEGISLATIVE_TRAIN (477)       -> an EP Legislative Train file, whose stored url is
+                                       its real train page (verified 200).
+
+    Order matters: a row carrying an OEIL reference is a procedure file first, and the
+    OEIL page is the richer destination. Returns None rather than a substitute when the
+    row has no address of its own.
+    """
+    oeil = _oeil_url(getattr(r, "oeil_procedure_ref", None))
+    if oeil:
+        return oeil
+
+    celex = getattr(r, "celex_numbers", None)
+    if celex:
+        first = next((c for c in celex if c and str(c).strip()), None)
+        if first:
+            return _EURLEX_DOC.format(celex=str(first).strip())
+
+    stored = (getattr(r, "url", None) or "").strip()
+    return stored or None
+
+
 def _latest_event_date(events) -> Optional[date]:
     """Return the most recent date from oeil_key_events (or oeil_timeline)."""
     if not events or not isinstance(events, list):
@@ -258,7 +298,7 @@ async def list_procedures(
             enriched_at=r.enriched_at,
             enrichment_quality=r.enrichment_quality,
             # 5 mandatory datapoints
-            public_url=_oeil_url(r.oeil_procedure_ref),
+            public_url=_public_url(r),
             body_txt=getattr(r, "oeil_text_body", None),
             body_html=getattr(r, "oeil_html_body", None),
             document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
@@ -400,7 +440,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         enriched_at=r.enriched_at,
         enrichment_quality=r.enrichment_quality,
         # 5 mandatory datapoints
-        public_url=_oeil_url(r.oeil_procedure_ref),
+        public_url=_public_url(r),
         body_txt=getattr(r, "oeil_text_body", None),
         body_html=getattr(r, "oeil_html_body", None),
         document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
