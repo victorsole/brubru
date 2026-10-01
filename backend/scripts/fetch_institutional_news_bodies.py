@@ -792,12 +792,20 @@ def main() -> int:
                             # fetched_at: economy_items has no updated_at either. Both
                             # tables were guessed and both failed the whole batch; the
                             # column list is one query away and worth the query.
-                            "UPDATE economy_items SET body_txt = :t, body_html = :h, "
+                            "UPDATE economy_items SET body_txt = :t, "
+                            # COALESCE, never a bare assignment: the PDF branch
+                            # returns no HTML on purpose, and writing that NULL
+                            # DESTROYED the HTML the row already had. On 1 Oct 2026
+                            # this emptied body_html on 1,074 rows it had just
+                            # given good text to. Never shorten a value you are
+                            # backfilling.
+                            "  body_html = COALESCE(CAST(:h AS text), body_html), "
                             "  fetched_at = now() WHERE id = :id"),
                             {"t": body_txt, "h": body_html, "id": r.id})
                     else:
                         db.execute(text(
-                            "UPDATE eu_news_items SET body_txt = :t, body_html = :h, "
+                            "UPDATE eu_news_items SET body_txt = :t, "
+                            "  body_html = COALESCE(CAST(:h AS text), body_html), "
                             # fetched_at, not last_updated: eu_news_items has no such
                             # column and the whole batch failed on it the first time.
                             "  body_source = 'fetched:article', fetched_at = now() "
