@@ -102,6 +102,13 @@ class AmendmentItem(BaseModel):
     source_url: str
     document_date: Optional[date] = None
     scraped_at: Optional[datetime] = None
+    # public_url is contracted on every item. It was absent here, so
+    # /api/v2/parliament/amendments returned it null on all 64,077 rows while the
+    # doceo link sat on the same item as source_url.
+    public_url: Optional[str] = Field(
+        None, description="The amendment document on doceo (its source_url).")
+    creation_date: Optional[datetime] = Field(
+        None, description="When Brubru first captured this amendment.")
 
 
 @amendments_router.get(
@@ -152,6 +159,8 @@ async def get_amendment_detail(
         original_text=r.original_text, proposed_text=r.proposed_text,
         justification=r.justification, source_url=r.source_url,
         document_date=r.document_date, scraped_at=r.scraped_at,
+        public_url=r.source_url,
+        creation_date=getattr(r, "first_seen", None) or r.scraped_at,
     )
 
 
@@ -266,6 +275,8 @@ async def list_amendments(
             source_url=r.source_url,
             document_date=r.document_date,
             scraped_at=r.scraped_at,
+            public_url=r.source_url,
+            creation_date=getattr(r, "first_seen", None) or r.scraped_at,
         )
         for r in rows
     ]

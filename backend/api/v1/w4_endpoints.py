@@ -283,6 +283,9 @@ class TransparencyMeetingItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text body composed from the meeting record: subject + host + organisation met + location + representatives + policy areas.")
     body_html: Optional[str] = Field(None, description="HTML rendering of the same composition (paragraphs + key:value rows).")
     meeting_start_date: Optional[date] = Field(None, description="The meeting date (alias of meeting_date — this IS a meeting endpoint).")
+    # document_date was never declared here, so /api/v2/commission/meetings
+    # returned it null on all 117,000 rows while meeting_date sat beside it.
+    document_date: Optional[date] = Field(None, description="The meeting date (alias of meeting_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
@@ -419,7 +422,7 @@ async def list_meetings(
             public_url=r.source_url,
             body_txt=body_txt,
             body_html=body_html,
-            meeting_start_date=r.meeting_date,
+            meeting_start_date=r.meeting_date, document_date=r.meeting_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
@@ -476,7 +479,7 @@ async def get_meeting_detail(
         public_url=r.source_url,
         body_txt=body_txt,
         body_html=body_html,
-        meeting_start_date=r.meeting_date,
+        meeting_start_date=r.meeting_date, document_date=r.meeting_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
         policy_areas=list(r.policy_areas or []),
         related_celex=list(r.related_celex or []),

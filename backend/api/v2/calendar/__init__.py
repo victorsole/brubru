@@ -8,7 +8,7 @@ delegates to the working v1 handlers, then remaps each event onto the mandatory
     public_url    = the event's source_url (or agenda_url)
     document_date = the event start date
     body_txt/html = composed from title + institution + type + dates + status
-    creation_date = null (not exposed by the v1 item)
+    creation_date = first_seen (when Brubru captured the event)
 Tag v2-calendar → grouped in the "EU Calendar" Postman folder.
 """
 from __future__ import annotations
@@ -61,7 +61,11 @@ def _to_v2(it: CalendarEventItem, *, with_body: bool) -> CalendarEventV2:
         body_txt=(body_txt if with_body else None),
         body_html=(body_html if with_body else None),
         document_date=it.start_date,
-        creation_date=None,
+        # first_seen is when Brubru captured the event, which is exactly what
+        # creation_date means. It was hardcoded None because the v1 item did not
+        # expose it; the v1 item now does, and all 48 rows in GovClipping's
+        # 27-28 September window had the value all along.
+        creation_date=getattr(it, "first_seen", None) or getattr(it, "creation_date", None),
     )
 
 

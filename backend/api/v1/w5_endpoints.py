@@ -438,6 +438,16 @@ class TenderItem(BaseModel):
     status: Optional[str] = None
     last_synced_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    # The contracted datapoints. Until 1 October 2026 this model carried none of
+    # them, so /api/v2/funding/tenders returned public_url and document_date null
+    # on EVERY row while the TED notice link and the publication date sat on the
+    # same item as ted_url and publication_date.
+    public_url: Optional[str] = Field(
+        None, description="The notice's page on TED (its ted_url).")
+    document_date: Optional[datetime] = Field(
+        None, description="The date the notice was published on TED.")
+    creation_date: Optional[datetime] = Field(
+        None, description="When Brubru first captured this notice.")
 
 
 @tenders_router.get(
@@ -560,6 +570,8 @@ async def list_tenders(
             has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
             summary=r.summary, sme_suitability_score=r.sme_suitability_score,
             status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
+            public_url=r.ted_url, document_date=r.publication_date,
+            creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
         )
         for r in rows
     ]
@@ -616,4 +628,6 @@ async def get_tender_detail(
         has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
         summary=r.summary, sme_suitability_score=r.sme_suitability_score,
         status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
+        public_url=r.ted_url, document_date=r.publication_date,
+        creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
     )

@@ -271,6 +271,17 @@ class ConsultationItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The five contracted datapoints. Until 1 October 2026 this model carried none
+    # of the three below, so /api/v2/commission/consultations returned public_url
+    # and document_date as null on EVERY row while the portal link and the opening
+    # date sat on the same item under other names. GovClipping reported the sibling
+    # case on who-is-who the same day; this is the same defect one layer up.
+    public_url: Optional[str] = Field(
+        None, description="The consultation's page on Have your say (its portal_url).")
+    document_date: Optional[date] = Field(
+        None, description="The date the consultation opened (its start_date).")
+    creation_date: Optional[datetime] = Field(
+        None, description="When Brubru first captured this consultation.")
 
 
 def _consultation_body(r: PublicConsultation, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
@@ -408,6 +419,9 @@ async def list_consultations(
             has_body=has_body,
             body_html=body_html,
             body_txt=body_text,
+            public_url=r.portal_url,
+            document_date=r.start_date,
+            creation_date=getattr(r, "first_seen", None),
         ))
 
     return build_envelope(
@@ -475,6 +489,9 @@ async def get_consultation_detail(
         com_references=list(r.com_references or []),
         celex_numbers=list(r.celex_numbers or []),
         last_updated=r.last_updated,
+        public_url=r.portal_url,
+        document_date=r.start_date,
+        creation_date=getattr(r, "first_seen", None),
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,

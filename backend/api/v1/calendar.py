@@ -42,6 +42,10 @@ class CalendarEventItem(BaseModel):
     agenda_url: Optional[str] = None
     # Computed: per-event webstream URL (committee_meeting events only).
     webstream_url: Optional[str] = None
+    # When Brubru captured the event. The v2 surface needs it for its
+    # contracted creation_date, which it returned null for every row until
+    # 1 October 2026 because this item did not carry the value.
+    first_seen: Optional[datetime] = None
 
 
 def _derive_webstream_url(institution: str, event_type: str, ep_committee_code: Optional[str]) -> Optional[str]:
@@ -272,6 +276,7 @@ async def list_calendar_events(
                 ),
                 agenda_url=r.agenda_url,
                 webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
+                first_seen=getattr(r, "first_seen", None),
             ))
         except Exception as exc:  # noqa: BLE001
             # One malformed row must never 500 the whole page (a field value that
