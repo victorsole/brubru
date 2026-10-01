@@ -275,13 +275,29 @@ register_resource(
     router, body_code="eib", item_type="tender", slug="eib-tenders",
     noun="EIB calls for tender",
     body_name="the European Investment Bank", acronym="EIB", tag="v2-funding",
-    source="the TED public API v3 (buyer-name=European Investment Bank).",
-    extra="EIB corporate procurement — financial advisory, IT, premises, "
-          "consultancy — pulled from TED rather than EIB's own site (EIB "
-          "publishes nothing on its site; everything is in TED). Open "
-          "calls by default; each notice carries reference, procedure type "
-          "and submission deadline. The first multilateral development bank "
-          "wired into the Tenderator. Filter with q.",
+    source="EIB's own procurement register (eib.org/en/about/procurement) and each procedure's page.",
+    extra="EIB procurement, the whole archive from 2003: corporate calls for tender (CFT-, what "
+          "EIB buys for itself) and technical-assistance calls (AA-, consultancy for projects EIB "
+          "finances). Each item carries `tender_reference` (EIB's reference), `status` (open | "
+          "forthcoming | closed; open only while the deadline is ahead, forthcoming when only a "
+          "forecast notice is out) and `deadline`; `document_date` is the publication date (the "
+          "contract notice's date in the Official Journal). The body holds the procedure's text "
+          "and every Official Journal notice (forecast, contract, modification, award) with its "
+          "TED link. Calls for expression of interest are at /eib-calls. Filter with q.",
+    procurement=True,
+)
+register_resource(
+    router, body_code="eib", item_type="eoi_call", slug="eib-calls",
+    noun="EIB calls for expression of interest",
+    body_name="the European Investment Bank", acronym="EIB", tag="v2-funding",
+    source="EIB's own procurement register (ESIF, RRF and other-mandate calls) and each call's page.",
+    extra="EIB calls for expression of interest to select financial intermediaries for "
+          "shared-management funds (ESIF), the Recovery and Resilience Facility and other mandates, "
+          "the whole archive. Each item carries `tender_reference` (CEOI-), `status` and `deadline` "
+          "(the submission deadline, with its time where EIB gives one); `document_date` is the "
+          "issue date of the call. The body holds the call's timetable and its Official Journal "
+          "notices. Filter with q.",
+    procurement=True,
 )
 
 # --- Eurofound — Foundation for Living and Working Conditions ------------- #

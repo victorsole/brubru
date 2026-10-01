@@ -1738,40 +1738,6 @@ def _ted_text(field_value):
     return ""
 
 
-def _ted_search_eib(limit: int = 200, only_open: bool = True) -> list[dict]:
-    """Hit the TED public API v3 for EIB-buyer notices. Open-only by default
-    (deadline-receipt-request >= today). Returns the raw JSON notices list."""
-    import json as _json
-    import urllib.request as _urllib_request
-    from urllib.error import HTTPError
-    today = datetime.now(timezone.utc).strftime("%Y%m%d")
-    q_parts = ['buyer-name="European Investment Bank"']
-    if only_open:
-        q_parts.append(f"deadline-receipt-request>={today}")
-    payload = _json.dumps({
-        "query": " AND ".join(q_parts),
-        "fields": [
-            "publication-number", "buyer-name", "notice-title",
-            "publication-date", "deadline-receipt-request",
-            "procedure-type", "links",
-        ],
-        "limit": limit,
-        "page": 1,
-    }).encode("utf-8")
-    req = _urllib_request.Request(
-        _TED_API, data=payload, method="POST",
-        headers={"User-Agent": _UA, "Content-Type": "application/json",
-                 "Accept": "application/json"},
-    )
-    try:
-        body = _urllib_request.urlopen(req, timeout=30).read()
-        return _json.loads(body).get("notices", [])
-    except HTTPError as e:
-        return []
-    except Exception:
-        return []
-
-
 def _ted_search(query: str, limit: int = 200) -> list[dict]:
     """Generic TED API v3 search. Public POST endpoint, no auth."""
     import json as _json
@@ -1835,52 +1801,414 @@ def _ted_to_item(n: dict, *, body_code: str, item_type: str, source_kind: str) -
     )
 
 
-def ingest_eib_procurement(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """EIB procurement opportunities pulled from TED. body_code='eib',
-    item_type='tender'. We try open-only first; if TED returns 0 (rare),
-    fall back to a recent-publications window so the feed is not empty."""
-    now = datetime.now(timezone.utc)
-    out: list[Item] = []
-    notices = _ted_search_eib(limit=200, only_open=True)
-    if not notices:
-        notices = _ted_search_eib(limit=50, only_open=False)
-    for n in notices:
-        pub_num = n.get("publication-number") or ""
-        title = _ted_text(n.get("notice-title"))
-        if not pub_num or not title:
-            continue
-        buyer = _ted_text(n.get("buyer-name")) or "European Investment Bank"
-        procedure = _ted_text(n.get("procedure-type"))
-        # Deadline can come back as ISO date or epoch-ish string; try ISO first.
-        dl_raw = n.get("deadline-receipt-request")
-        dl_str = ""
-        if isinstance(dl_raw, str):
-            dl_str = dl_raw
-        elif isinstance(dl_raw, dict):
-            for v in dl_raw.values():
-                if v: dl_str = v[0] if isinstance(v, list) else v; break
-        elif isinstance(dl_raw, list) and dl_raw:
-            dl_str = dl_raw[0]
-        deadline = None
-        if dl_str:
-            try:
-                deadline = datetime.fromisoformat(dl_str.replace("Z", "+00:00"))
-            except (ValueError, TypeError):
-                deadline = None
-        pub_str = ""
-        pub_raw = n.get("publication-date")
-        if isinstance(pub_raw, str):
-            pub_str = pub_raw
-        # TED's canonical notice URL
-        ted_url = f"https://ted.europa.eu/en/notice/-/detail/{pub_num}"
-        reference = pub_num
-        out.append(_build(
-            body_code="eib", item_type="tender", title=title, url=ted_url,
-            reference=reference,
-            status=procedure or "Open",
-            deadline=deadline, now=now, source_kind="eib_procurement",
-        ))
+# --------------------------------------------------------------------------- #
+# EIB — its own procurement register (API audit, 1 Oct 2026, "Walk · EIB").
+#
+# The old reader took TED notices whose deadline was still ahead (21 rows), stored
+# the deadline as the publication date and filled none of the procurement fields.
+# EIB publishes everything itself: a JSON list behind eib.org/en/about/procurement
+# (1,170 items, 2003-2026) and a page per procedure with its whole Official Journal
+# history. Served here: corporate calls (CFT-) and technical-assistance calls (AA-)
+# as tenders; ESIF, RRF and other-mandate calls for expression of interest as
+# eoi_call. Project procurement outside the EU is left out: EIB is not the buyer.
+#
+# Dates (read on 4 pages): the list's first date is the procedure's LATEST event
+# (an award or modification notice), not its publication. The publication date is
+# the contract notice's date in the history, or "Issue of CEOI"; the deadline is
+# the history's deadline line, or the EoI submission deadline with its time.
+# --------------------------------------------------------------------------- #
+_EIB = "https://www.eib.org"
+_EIB_LIST = _EIB + "/provider-eib/app/list/medias/procurements"
+# list filter value -> (item_type, detail path)
+_EIB_KINDS = {
+    "call": ("tender", "/en/about/procurement/calls/all/{id}"),
+    "call-technical-assistance": ("tender", "/en/about/procurement/calls-technical-assistance/all/{id}"),
+    "esif": ("eoi_call", "/en/products/mandates-partnerships/shared-management-funds/eoi/all/{id}"),
+    "rrf": ("eoi_call", "/en/products/mandates-partnerships/rrf/eoi/all/{id}"),
+    "other-mandates": ("eoi_call", "/en/products/mandates-partnerships/other-mandates/eoi/all/{id}"),
+}
+_EIB_LIVE = {"on going", "en cours"}
+_EIB_FRESH_DAYS = 60
+_EIB_CACHE: dict = {}
+_EIB_CACHE_TTL = 1800
+
+
+def _eib_list(kind: str) -> list[dict]:
+    """Every item of one kind. Paged by the advertised total, not by a short page: a
+    page can come back one item short (30 Sep 2026, page 3 of the full list had 99)."""
+    items, seen, page, total = [], set(), 0, None
+    while total is None or page * 100 < total:
+        r = requests.get(_EIB_LIST, params={
+            "sortColumn": "configuration.contentStart", "sortDir": "asc", "pageNumber": page,
+            "itemPerPage": 100, "pageable": "true", "language": "EN", "defaultLanguage": "EN",
+            "orYearTo": "true", "orYearFrom": "true", "procurementStatus": "All",
+            "_g_procurementInformations_type": kind, "or_g_procurementInformations_type": "true",
+        }, headers=_HEADERS, timeout=60)
+        r.raise_for_status()
+        d = r.json()
+        if not d.get("valid", True):
+            raise RuntimeError(f"EIB procurement list ({kind}) answered: {d.get('message')}")
+        total = int(d.get("totalItems") or 0)
+        for x in d.get("data") or []:
+            if x.get("id") not in seen:
+                seen.add(x.get("id"))
+                items.append(x)
+        page += 1
+        if page > 50:
+            break
+    if len(items) < total:
+        print(f"    [WARN] eib {kind}: {len(items)} of {total} items served", flush=True)
+    return items
+
+
+def _eib_date(value: str) -> datetime | None:
+    m = re.search(r"(\d{1,2})[./](\d{1,2})[./](\d{4})", value or "")
+    if not m:
+        return None
+    try:
+        return datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)), tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def _eib_detail(page: str) -> dict:
+    """One procedure page: description blocks, file links, the Official Journal history,
+    the publication date and the deadline."""
+    out: dict = {"blocks": [], "files": [], "history": [], "published": None, "deadline": None}
+    head = re.search(r'id="procurement-header"(.*?)</section>', page, re.S)
+    hist = re.search(r'id="procurement-history"(.*?)(?:</main>|GET OUR NEWSLETTER)', page, re.S)
+    start = head.end() if head else 0
+    end = hist.start() if hist else len(page)
+    body = page[start:end]
+    for tr in re.findall(r"<tr\b[^>]*>(.*?)</tr>", body, re.S):
+        cells = [c for c in (_txt(x) for x in re.findall(r"<t[dh]\b[^>]*>(.*?)</t[dh]>", tr, re.S)) if c]
+        if cells:
+            out["blocks"].append(("tr", " · ".join(cells)))
+    body_no_tables = re.sub(r"<table\b.*?</table>", "", body, flags=re.S)
+    for tag, inner in re.findall(r"<(h[2-4]|p|li)\b[^>]*>(.*?)</\1>", body_no_tables, re.S):
+        text = _txt(inner)
+        if text:
+            out["blocks"].append(("h" if tag.startswith("h") else tag, text))
+    for href in re.findall(r'href="\s*([^"]+?)\s*"', body):
+        href = _html.unescape(href)
+        if re.search(r"\.(pdf|docx?|xlsx?|zip|odt)(?:$|\?)", href, re.I) and href not in out["files"]:
+            out["files"].append(href if href.startswith("http") else _EIB + href)
+    # the EoI timing table: "Issue of CEOI · 10.12.2025", "Deadline for submission of EoI · 09.03.2026 · 18:00 CET"
+    for kind, text in out["blocks"]:
+        low = text.lower()
+        if kind == "tr" and low.startswith("issue of") and out["published"] is None:
+            out["published"] = _eib_date(text)
+        if kind == "tr" and "deadline for submission" in low:
+            out["deadline"] = _eib_wall_time(text) or _eib_date(text)
+    for block in re.split(r'<div class="procurement-history-item[\s"]', hist.group(1) if hist else "")[1:]:
+        km = re.search(r"<h3[^>]*>(.*?)</h3>", block, re.S)
+        kind = _txt(km.group(1)) if km else ""
+        for li in re.findall(r"<li\b[^>]*>(.*?)</li>", block, re.S):
+            am = re.search(r'href="\s*([^"]+?)\s*"[^>]*>(.*?)</a>', li, re.S)
+            if am and "NOTICE:-:" in am.group(1):
+                continue          # an empty notice slot on old pages: "OJEU /S -"
+            if am:
+                dm = re.search(r"of\s+(\d{2}/\d{2}/\d{4})", _txt(li))
+                lots = re.search(r"\(([^)]*Lot[^)]*)\)", _txt(li))
+                out["history"].append({"kind": kind, "ojeu": _txt(am.group(2)).replace("OJEU ref.", "").strip(),
+                                       "url": _html.unescape(am.group(1)).strip(),
+                                       "date": _eib_date(dm.group(1)) if dm else None,
+                                       "lots": lots.group(1) if lots else ""})
+            elif "deadline" in _txt(li).lower() and out["deadline"] is None:
+                out["deadline"] = _eib_date(_txt(li))
+    if out["published"] is None:
+        cn = [h["date"] for h in out["history"] if h["date"] and h["kind"].lower().startswith("contract notice")]
+        out["published"] = min(cn) if cn else None
+    if out["published"] is None:
+        # Pages from 2003-2009 print the notice in their text: "Contract notice: ...
+        # OJEU ref. 2005/S 111-109880 du 10.06.2005".
+        after_cn = False
+        for _kind, text in out["blocks"]:
+            # the call's notice is labelled "Contract notice" or by its procedure type
+            if re.match(r"(contract notice|open procedure|restricted procedure|negotiated procedure"
+                        r"|competitive dialogue)\b", text, re.I):
+                after_cn = True
+            if after_cn:
+                m = re.search(r"OJEU ref\.?\s*\d{4}\s*/\s*S\s*[\d-]+\s+(?:of|du)\s+(\d{1,2}[./]\d{1,2}[./]\d{4})", text)
+                if m:
+                    out["published"] = _eib_date(m.group(1))
+                    break
     return out
+
+
+def _eib_wall_time(text: str) -> datetime | None:
+    """"09.03.2026 18:00 CET": Luxembourg wall time, converted to UTC."""
+    from zoneinfo import ZoneInfo
+    m = re.search(r"(\d{1,2})[./](\d{1,2})[./](\d{4})\D+(\d{1,2})[:.](\d{2})", text or "")
+    if not m:
+        return None
+    try:
+        wall = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)), int(m.group(4)), int(m.group(5)))
+    except ValueError:
+        return None
+    return wall.replace(tzinfo=ZoneInfo("Europe/Luxembourg")).astimezone(timezone.utc)
+
+
+def _eib_status(raw: str, deadline: datetime | None, history: list[dict] | None, now: datetime) -> str:
+    """The F&T vocabulary. "Open" only while the deadline is ahead; a live procedure
+    with nothing but a forecast notice is forthcoming."""
+    if raw.strip().lower() not in _EIB_LIVE:
+        return "closed"
+    if history and all("forecast" in h["kind"].lower() or "prior information" in h["kind"].lower()
+                       for h in history):
+        return "forthcoming"
+    if deadline is not None and deadline < now:
+        return "closed"
+    return "open"
+
+
+def _eib_item(kind: str, x: dict, detail: dict | None, now: datetime) -> Item:
+    item_type, path = _EIB_KINDS[kind]
+    info = (x.get("additionalInformation") or []) + [""] * 5
+    raw_status, label, ref = info[0], info[1], info[2].strip()
+    if not re.search(r"\d", ref) or len(ref) > 40:
+        ref = ""          # ".", "HL-" or a title in the reference field: not a reference
+    url = _EIB + path.format(id=x.get("url") or "")
+    listed_deadline = _eib_date(info[4])
+    deadline = (detail or {}).get("deadline") or listed_deadline
+    status = _eib_status(raw_status, deadline, (detail or {}).get("history"), now)
+    title = clean(x.get("title") or ref)
+    item = Item(
+        body_code="eib", item_type=item_type, title=title[:120], public_url=url,
+        summary=clean(" · ".join(b for b in [ref, label, status,
+                                               deadline.date().isoformat() if deadline else ""] if b)),
+        creation_date=now, source_kind="eib_procurement", guid=ref or url,
+        extras={"tender_reference": ref or None, "status": status, "deadline": deadline},
+    )
+    if detail is None:
+        return item      # not re-read this run: the stored date and body stand
+    published = detail["published"]
+    facts = [("Reference", ref), ("Kind", label),
+             ("Status on EIB's site", raw_status),
+             ("Published", published.date().isoformat() if published else ""),
+             ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline and (deadline.hour or deadline.minute)
+              else (deadline.date().isoformat() if deadline else ""))]
+    facts = [(k, v) for k, v in facts if v]
+    hist = [f"{h['kind']}: OJEU {h['ojeu']}" + (f" of {h['date'].date().isoformat()}" if h['date'] else "")
+            + (f" ({h['lots']})" if h['lots'] else "") + f" {h['url']}" for h in detail["history"]]
+    item.body_txt = clean("\n".join([title, *(t for _k, t in detail["blocks"]),
+                                     *(f"{k}: {v}" for k, v in facts), *hist, url]))
+    item.body_html = clean(
+        f"<h1>{_html.escape(title)}</h1>" + _efsa_blocks_html(
+            [("p" if k == "tr" else k, t) for k, t in detail["blocks"]])
+        + "<dl>" + "".join(f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts) + "</dl>"
+        + ("<h2>Official Journal notices</h2><ul>" + "".join(
+            f'<li>{_html.escape(h["kind"])}: <a href="{_html.escape(h["url"])}">OJEU {_html.escape(h["ojeu"])}</a>'
+            + (f" of {h['date'].date().isoformat()}" if h["date"] else "")
+            + (f" ({_html.escape(h['lots'])})" if h["lots"] else "") + "</li>" for h in detail["history"])
+           + "</ul>" if detail["history"] else ""))
+    # A procedure cannot be published after its own deadline (the ECDC rule).
+    item.document_date = published if published and (deadline is None or published <= deadline) else None
+    return item
+
+
+def _eib_slug_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", (value or "").lower())
+
+
+def _eib_one_reference_one_procedure(items: list[Item]) -> list[Item]:
+    """EIB's register gives some references to two pages (read on their own pages,
+    1 Oct 2026). Same title: one procedure republished ("aa-000998001-updated"), keep
+    the newest page. Different titles: a data-entry slip (page hl-875 says HL-975, the
+    reference of page hl-975); the reference stays only on the page whose address is
+    that reference, and the other gets none rather than another procedure's."""
+    groups: dict = {}
+    for it in items:
+        ref = it.extras.get("tender_reference")
+        if ref:
+            groups.setdefault((it.item_type, ref), []).append(it)
+    drop = set()
+    for (_t, ref), group in groups.items():
+        if len(group) < 2:
+            continue
+        titles = {_title_key(it.title) for it in group}
+        if len(titles) == 1:
+            far = datetime.min.replace(tzinfo=timezone.utc)
+            keep = max(group, key=lambda it: (it.document_date or far, it.extras.get("deadline") or far,
+                                              len(it.public_url)))           # the newer page
+            drop |= {id(it) for it in group if it is not keep}
+            continue
+        own = [it for it in group if _eib_slug_key(it.public_url.rsplit("/", 1)[-1]) == _eib_slug_key(ref)]
+        far = datetime.min.replace(tzinfo=timezone.utc)
+        holder = max(own, key=lambda it: (it.document_date or far, len(it.public_url))) if own else None
+        for it in group:
+            if it is not holder:      # never two rows with one reference, never a borrowed one
+                it.extras["tender_reference"] = None
+                it.guid = it.public_url
+    return [it for it in items if id(it) not in drop]
+
+
+def _eib_all(*, fetch_bodies: bool = True) -> list[Item]:
+    import os
+    import time
+    full = os.environ.get("EIB_FULL_DETAILS") == "1"
+    key = (fetch_bodies, full)
+    hit = _EIB_CACHE.get(key)
+    if hit and time.time() - hit[0] < _EIB_CACHE_TTL:
+        return hit[1]
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    for kind in _EIB_KINDS:
+        for x in _eib_list(kind):
+            info = (x.get("additionalInformation") or []) + [""] * 5
+            latest = _eib_date(info[3])
+            # Live procedures and anything with a recent event are re-read every run;
+            # the archive is read once, by a run with EIB_FULL_DETAILS=1.
+            want = fetch_bodies and (full or info[0].strip().lower() in _EIB_LIVE
+                                     or (latest is not None and (now - latest).days <= _EIB_FRESH_DAYS))
+            detail = None
+            if want:
+                try:
+                    detail = _eib_detail(_get_ok(_EIB + _EIB_KINDS[kind][1].format(id=x.get("url") or "")))
+                except requests.RequestException as exc:
+                    print(f"    [WARN] eib detail {info[2]}: {type(exc).__name__}", flush=True)
+            items.append(_eib_item(kind, x, detail, now))
+    if not items:
+        raise RuntimeError("EIB procurement list returned zero items")
+    items = _eib_one_reference_one_procedure(items)
+    items += _eib_ted_supplement(items, now)
+    _EIB_CACHE[key] = (time.time(), items)
+    return items
+
+
+# TED supplement (Victor, 1 Oct 2026): EIB's register misses recent procedures (CFT-1847
+# and CFT-1856 were open on TED and absent from it). Every EIB notice on TED is read;
+# a procedure none of whose notices sits in a register page's history becomes its own
+# row. Only notices where EIB is the SOLE buyer: an interinstitutional procedure led by
+# another body (EC-COMM/2026/OP/0019, CURIA/2026/OP/0001) is not EIB's.
+_EIB_TED_FIELDS = ["publication-number", "notice-title", "publication-date", "notice-type",
+                   "form-type", "deadline-receipt-request", "deadline-receipt-tender-date-lot",
+                   "internal-identifier-proc", "buyer-name"]
+
+
+def _eib_ted_notices() -> list[dict]:
+    """Every TED notice naming EIB as a buyer, in ITERATION mode (no page skips).
+    Fails loudly: an error is not "no notices"."""
+    out, token = [], None
+    while True:
+        body = {"query": 'buyer-name="European Investment Bank"', "fields": _EIB_TED_FIELDS,
+                "limit": 250, "paginationMode": "ITERATION"}
+        if token:
+            body["iterationNextToken"] = token
+        r = requests.post(_TED_API, json=body, headers=_HEADERS, timeout=60)
+        r.raise_for_status()
+        d = r.json()
+        out += d.get("notices") or []
+        token = d.get("iterationNextToken")
+        if not token or not d.get("notices"):
+            break
+    total = d.get("totalNoticeCount")
+    if total and len(out) < total:
+        raise RuntimeError(f"TED returned {len(out)} of {total} EIB notices")
+    return out
+
+
+def _ted_first(value) -> str:
+    if isinstance(value, list):
+        return str(value[0]) if value else ""
+    if isinstance(value, dict):
+        for v in value.values():
+            if v:
+                return str(v[0] if isinstance(v, list) else v)
+        return ""
+    return str(value or "")
+
+
+def _ted_day(value: str) -> datetime | None:
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", value or "")
+    return datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)), tzinfo=timezone.utc) if m else None
+
+
+def _eib_sole_buyer(n: dict) -> bool:
+    """EIB alone: every language lists exactly one buyer. A joint procedure lists them all
+    (EC-COMM/2026/OP/0019 names 18 bodies, EIB among them)."""
+    names = n.get("buyer-name")
+    if not isinstance(names, dict) or not names:
+        return False
+    return all(len(v if isinstance(v, list) else [v]) == 1 for v in names.values())
+
+
+def _eib_ted_supplement(register: list[Item], now: datetime) -> list[Item]:
+    known = set()
+    for it in register:
+        known.update(re.findall(r"NOTICE:(\d+-\d{4}):", it.body_txt or ""))
+    register_titles = [k for k in (_title_key(it.title) for it in register) if len(k) >= 20]
+    register_refs = {(it.extras.get("tender_reference") or "").lower() for it in register} - {""}
+    groups: dict = {}
+    for n in _eib_ted_notices():
+        if not _eib_sole_buyer(n):
+            continue
+        pn = n.get("publication-number") or ""
+        key = _ted_first(n.get("internal-identifier-proc")) or pn
+        groups.setdefault(key, []).append(n)
+    items = []
+    for key, notices in groups.items():
+        if any((n.get("publication-number") or "") in known for n in notices) \
+                or key.lower() in register_refs:
+            continue                      # the register has this procedure (by notice, or TED names it: CFT-1788)
+        calls = [n for n in notices if (n.get("form-type") or "") in ("competition", "planning")]
+        if not calls:
+            continue                      # an award or change with no call: nothing to tender for
+        calls.sort(key=lambda n: _ted_first(n.get("publication-date")))
+        cn = next((n for n in calls if n.get("form-type") == "competition"), calls[0])
+        pn = cn.get("publication-number") or ""
+        title = clean(_ted_text(cn.get("notice-title")) or pn)
+        # A register page can omit one of its notices (often the planning notice): a
+        # TED title whose core matches a register title is the register's procedure.
+        core = _title_key(re.split(r"\s[–-]\s|:\s", title)[-1].replace("EIB - ", ""))
+        if len(core) >= 20 and any(core in k or k in core for k in register_titles):
+            continue
+        deadlines = [d for n in notices for d in (
+            [_ted_day(x) for x in (n.get("deadline-receipt-tender-date-lot") or [])]
+            + [_ted_day(_ted_first(n.get("deadline-receipt-request")))]) if d]
+        deadline = max(deadlines) if deadlines else None
+        competition = [n for n in calls if n.get("form-type") == "competition"]
+        published = _ted_day(_ted_first(competition[0].get("publication-date"))) if competition else None
+        latest = max((_ted_day(_ted_first(n.get("publication-date"))) for n in notices),
+                     default=None, key=lambda d: d or datetime.min.replace(tzinfo=timezone.utc))
+        if not competition:
+            # a planning notice with no call after a year announces nothing still to come
+            status = "forthcoming" if latest and (now - latest).days <= 365 else "closed"
+        elif deadline is not None and deadline >= now:
+            status = "open"
+        else:
+            status = "closed"
+        ref = _ted_first(cn.get("internal-identifier-proc")) or None
+        url = f"https://ted.europa.eu/en/notice/-/detail/{pn}"
+        hist = sorted(notices, key=lambda n: _ted_first(n.get("publication-date")))
+        lines = [f"{n.get('notice-type')}: TED {n.get('publication-number')} of "
+                 f"{_ted_first(n.get('publication-date'))[:10]} https://ted.europa.eu/en/notice/-/detail/"
+                 f"{n.get('publication-number')}" for n in hist]
+        facts = [("Reference (TED procedure identifier)", ref or ""),
+                 ("Published", published.date().isoformat() if published else ""),
+                 ("Deadline", deadline.date().isoformat() if deadline else ""),
+                 ("Source", "TED (not yet on EIB's procurement register)")]
+        facts = [(k, v) for k, v in facts if v]
+        item_type = "eoi_call" if "expression of interest" in title.lower() else "tender"
+        items.append(Item(
+            body_code="eib", item_type=item_type, title=title[:120], public_url=url,
+            summary=clean(" · ".join(b for b in [status, deadline.date().isoformat() if deadline else ""] if b)),
+            body_txt=clean("\n".join([title, *(f"{k}: {v}" for k, v in facts), *lines])),
+            body_html=clean(f"<h1>{_html.escape(title)}</h1><dl>" + "".join(
+                f"<dt>{_html.escape(k)}</dt><dd>{_html.escape(v)}</dd>" for k, v in facts) + "</dl><ul>"
+                + "".join(f"<li>{_html.escape(l)}</li>" for l in lines) + "</ul>"),
+            document_date=published if published and (deadline is None or published <= deadline) else None,
+            creation_date=now, source_kind="eib_ted", guid=ref or pn,
+            extras={"tender_reference": ref, "status": status, "deadline": deadline}))
+    return items
+
+
+def ingest_eib_procurement(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return [it for it in _eib_all(fetch_bodies=fetch_bodies) if it.item_type == "tender"]
+
+
+def ingest_eib_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return [it for it in _eib_all(fetch_bodies=fetch_bodies) if it.item_type == "eoi_call"]
 
 
 # --- Move 5 (15 Jun 2026): EU-institution framework contracts via TED ----- #
