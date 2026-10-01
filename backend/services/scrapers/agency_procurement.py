@@ -408,17 +408,33 @@ def ingest_cedefop_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 
 # --------------------------------------------------------------------------- #
-# EMA — positional Views table (value-1=published, value-2=title, value-3=ref,
-# value-4=deadline).
+# EMA — its notices on the Funding & Tenders portal (buyer 47352428).
 # --------------------------------------------------------------------------- #
 _EMA = "https://www.ema.europa.eu"
+_EMA_FT_BUYER_ID = "47352428"
+_EMA_CACHE: dict = {}
+
+
+def _ema_all() -> list[Item]:
+    """EMA's procurement page shows only what is current and links to the Funding &
+    Tenders portal for everything else (API audit, 1 Oct 2026, "Walk · EMA"): the
+    whole archive is read from the portal by EMA's buyer id, as for EEA and EFSA."""
+    import time
+    hit = _EMA_CACHE.get("all")
+    if hit and time.time() - hit[0] < 1800:
+        return hit[1]
+    items = _ft_buyer_notices(body_code="ema", buyer_id=_EMA_FT_BUYER_ID, source_kind="ema_ft_notice",
+                              now=datetime.now(timezone.utc), split_eoi=True)
+    _EMA_CACHE["all"] = (time.time(), items)
+    return items
 
 
 def ingest_ema_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return parse_positional_table(
-        _fetch(_EMA + "/en/about-us/procurement-grants"), _EMA, body_code="ema",
-        item_type="tender", source_kind="ema_procurement",
-        title_col=1, ref_col=2, deadline_col=3, status="Open")
+    return [it for it in _ema_all() if it.item_type == "tender"]
+
+
+def ingest_ema_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return [it for it in _ema_all() if it.item_type == "eoi_call"]
 
 
 # --------------------------------------------------------------------------- #
@@ -1692,7 +1708,13 @@ def _ft_notice_documents(result: dict) -> list[dict]:
     return docs
 
 
-def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: datetime) -> list[Item]:
+# The portal's procedure-type code for a call for expression of interest (EMA's expert
+# calls carry it; no call for tender does).
+_FT_EOI_PROCEDURE = "47396202"
+
+
+def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: datetime,
+                      split_eoi: bool = False) -> list[Item]:
     """Every Funding & Tenders notice of one EU buyer (SEDIA cftPartyLegalEntityId), in the
     shared procurement shape. One reader for every agency that publishes on the portal
     (Victor, 30 Sep 2026: EEA and EFSA first)."""
@@ -1710,7 +1732,13 @@ def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: d
         if status == "open" and deadline is not None and deadline < now:
             status = "closed"
         kind = _FT_KIND_BY_SUFFIX.get(row["topic_id"].rsplit("-", 1)[-1], "call for tender")
-        facts = [("Notice", row["topic_id"]), ("Procedure type", kind),
+        md = res.get("metadata") or {}
+        # The buyer's own reference (EMA/2026/OP/0015): in the body and summary so q finds it.
+        call_ref = clean((md.get("callIdentifier") or [""])[0] or "")
+        is_eoi = split_eoi and _FT_EOI_PROCEDURE in (md.get("procedureType") or [])
+        if is_eoi:
+            kind = "call for expression of interest"
+        facts = [("Notice", row["topic_id"]), ("Buyer's reference", call_ref), ("Procedure type", kind),
                  ("Contract type", row.get("contract_type") or ""),
                  ("Published", published.date().isoformat() if published else ""),
                  ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
@@ -1720,8 +1748,9 @@ def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: d
         url = row.get("source_url") or ""
         docs = _ft_notice_documents(res)
         items.append(Item(
-            body_code=body_code, item_type="tender", title=clean(row["title"])[:120], public_url=url,
-            summary=clean(" · ".join(b for b in [row["topic_id"], kind,
+            body_code=body_code, item_type="eoi_call" if is_eoi else "tender",
+            title=clean(row["title"])[:120], public_url=url,
+            summary=clean(" · ".join(b for b in [row["topic_id"], call_ref, kind,
                                                    deadline.date().isoformat() if deadline else ""] if b)),
             body_txt=clean("\n".join([row["title"], *desc, *(f"{k}: {v}" for k, v in facts), url,
                                       *_documents_txt(docs)])),

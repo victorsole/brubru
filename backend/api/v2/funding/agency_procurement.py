@@ -70,9 +70,28 @@ register_resource(
     router, body_code="ema", item_type="tender", slug="ema-tenders",
     noun="EMA calls for tender", body_name="the European Medicines Agency", acronym="EMA",
     tag="v2-funding",
-    source="the EMA procurement & grants listing.",
-    extra="The European Medicines Agency's own open procurement: each call for tender with "
-          "reference and deadline. Filter with q (e.g. a reference or topic).",
+    source="the EU Funding & Tenders portal (EMA's notices, by its buyer id), where EMA's own "
+           "procurement page sends readers for everything but the current notices.",
+    extra="The European Medicines Agency's procurement, the whole archive from 2015: every EMA "
+          "notice on the Funding & Tenders portal (calls for tender, prior information and ex-ante "
+          "notices). Each item carries `tender_reference` (the portal notice id), `status` (as on "
+          "the portal; a prior notice is closed once its call is out) and `deadline`; "
+          "`document_date` is the publication date. The body names EMA's own reference "
+          "(EMA/2026/OP/0015), so q finds it. `/{item_id}/documents` serves the notice's files with "
+          "their extracted text. Calls for expression of interest (expert pools) are at /ema-calls.",
+    procurement=True, documents=True,
+)
+register_resource(
+    router, body_code="ema", item_type="eoi_call", slug="ema-calls",
+    noun="EMA calls for expression of interest", body_name="the European Medicines Agency",
+    acronym="EMA", tag="v2-funding",
+    source="the EU Funding & Tenders portal (EMA's notices with the call-for-expression-of-interest "
+           "procedure type).",
+    extra="EMA's calls for expression of interest for external experts (e.g. medical devices, "
+          "scientific and regulatory experts): lists valid for five years, open to applications "
+          "except in their last three months. Each item carries `tender_reference`, `status` and "
+          "`deadline`; `/{item_id}/documents` serves the call's files with their text.",
+    procurement=True, documents=True,
 )
 
 # --- EFSA — European Food Safety Authority -------------------------------- #

@@ -171,6 +171,7 @@ SOURCES = {
     "eea": lambda: _Portal("eea", ap._EEA_FT_BUYER_ID, "eea_ft_notice"),
     "efsa": lambda: _Portal("efsa", ap._EFSA_FT_BUYER_ID, "efsa_ft_notice"),
     "eige": lambda: _Eige(),
+    "ema": lambda: _Portal("ema", ap._EMA_FT_BUYER_ID, "ema_ft_notice"),
 }
 LISTERS = SOURCES   # the API registers /documents for exactly these bodies
 

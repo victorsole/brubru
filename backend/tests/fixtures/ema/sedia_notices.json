@@ -1,0 +1,518 @@
+[
+ {
+  "apiVersion": "2.155",
+  "reference": "35671487-e3b2-483f-b4f3-78ab87177860-CN",
+  "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-CN",
+  "contentType": "text/plain",
+  "language": "en",
+  "databaseLabel": "SEDIA",
+  "database": "SEDIA",
+  "summary": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases",
+  "weight": 0.0,
+  "groupById": "3",
+  "content": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases",
+  "accessRestriction": false,
+  "checksum": "F25D86F8CE89A79AB9494F0F3FC2E98E4ABF0DE932991D3DCA78820899A58B60",
+  "metadata": {
+   "es_SortDate": [
+    "2026-07-31T00:00:00.000+0000"
+   ],
+   "cftPartyLegalEntityId": [
+    "47352428"
+   ],
+   "cftMaxNumberOfLots": [],
+   "contractType": [
+    "31095499"
+   ],
+   "awardMethod": [],
+   "cftContractingSystems": [],
+   "language": [
+    "en"
+   ],
+   "type": [
+    "0"
+   ],
+   "cftDocuments": [
+    "{\"cftDocuments\":[{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cd2a1\",\"sortKey\":\"00009\",\"documentType\":\"Draft contract\",\"changedNotificationText\":\"New document version since 27/08/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex VII - Draft contract v2_V2.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e532963708\",\"attachmentID\":\"090166e5329638b4\",\"publicationDate\":\"2026-08-27T00:00:00\",\"versionNR\":\"2\"},{\"documentFileName\":\"EMA-2026-OP-0015 - Annex VII - Draft contract_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"N\",\"documentID\":\"080166e5315ccf41\",\"attachmentID\":\"090166e5315cd2a1\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex VII - Draft contract\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315d5dfa\",\"sortKey\":\"00002\",\"documentType\":\"Tender specifications\",\"changedNotificationText\":\"New document version since 27/08/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Technical specifications v2_V2.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e53296203b\",\"attachmentID\":\"090166e5329629bc\",\"publicationDate\":\"2026-08-27T00:00:00\",\"versionNR\":\"2\"},{\"documentFileName\":\"EMA-2026-OP-0015 - Technical specifications_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"N\",\"documentID\":\"080166e5315d591d\",\"attachmentID\":\"090166e5315d5dfa\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Technical specifications\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cd338\",\"sortKey\":\"00010\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex VIII - Contractor Health and Safety Guidelines and House Rules_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315cdd08\",\"attachmentID\":\"090166e5315cd338\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex VIII - Contractor Health and Safety Guidelines\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315d0d16\",\"sortKey\":\"00015\",\"documentType\":\"Draft contract annex\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex XIII - Standard Contractual Clauses for Data Protection_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315d0949\",\"attachmentID\":\"090166e5315d0d16\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex XIII - Standard Contractual Clauses for Data Protection\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315b704f\",\"sortKey\":\"00005\",\"documentType\":\"Declaration on honour (tender)\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex III - Declaration on Honour_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315b5eda\",\"attachmentID\":\"090166e5315b704f\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex III - Declaration on Honour\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cdd80\",\"sortKey\":\"00011\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex IX - Declaration on health and safety_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315cdd5b\",\"attachmentID\":\"090166e5315cdd80\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex IX - Declaration on health and safety\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cdea4\",\"sortKey\":\"00012\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex X - List of existing furniture_V1.xlsx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315ceb41\",\"attachmentID\":\"090166e5315cdea4\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex X - List of existing furniture\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315b100c\",\"sortKey\":\"00003\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex I - Tender information sheet_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315b10d6\",\"attachmentID\":\"090166e5315b100c\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex I - Tenderer information sheet\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315b5d83\",\"sortKey\":\"00004\",\"documentType\":\"Financial offer form\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex II - Costing Sheet_V1.xlsx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315b560a\",\"attachmentID\":\"090166e5315b5d83\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex II - Costing sheet\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315b7992\",\"sortKey\":\"00006\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex IV - Minimum technical requirements_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315b79ec\",\"attachmentID\":\"090166e5315b7992\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex IV - Minimum technical requirements\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315d29b4\",\"sortKey\":\"00001\",\"documentType\":\"Invitation letter\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Invitation to tender_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315d25c9\",\"attachmentID\":\"090166e5315d29b4\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Invitation to tender\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cb3ee\",\"sortKey\":\"00008\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex VI - Subcontractors_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315cb72e\",\"attachmentID\":\"090166e5315cb3ee\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex VI - Subcontractors\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315d0ee3\",\"sortKey\":\"00016\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex XIV - EMA Furniture Photo Library_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315d1a69\",\"attachmentID\":\"090166e5315d0ee3\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex XIV - EMA furniture photo library\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315d0696\",\"sortKey\":\"00014\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex XII - Furniture Supplier Warranty_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315d068c\",\"attachmentID\":\"090166e5315d0696\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex XII - Furniture supplier warranty\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315b7b51\",\"sortKey\":\"00007\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex V - Power of Attorney_V1.docx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315b82dc\",\"attachmentID\":\"090166e5315b7b51\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex V - Power of Attorney\"},{\"considerChangedUntilDate\":\"2026-09-10T00:00:00\",\"documentPublicationID\":\"090166e5315cf4cc\",\"sortKey\":\"00013\",\"documentType\":\"Tender specifications - adm. part\",\"changedNotificationText\":\"Published as of 31/07/2026\",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA-2026-OP-0015 - Annex XI - List of key performance indicators_V1.xlsx\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e5315ceb0a\",\"attachmentID\":\"090166e5315cf4cc\",\"publicationDate\":\"2026-07-31T00:00:00\",\"versionNR\":\"1\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NONE\",\"languageCode\":\"EN\",\"documentTitle\":\"EMA/2026/OP/0015 - Annex XI - List of key performance indicators\"}]}"
+   ],
+   "callIdentifier": [
+    "EMA/2026/OP/0015"
+   ],
+   "cftSubmissionsAllowed": [
+    "false"
+   ],
+   "DATASOURCE": [
+    "SEDIA"
+   ],
+   "frameworkProgramme": [],
+   "cftPublicationDisplayStatus": [],
+   "identifier": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-CN"
+   ],
+   "es_ContentType": [
+    "text/plain"
+   ],
+   "geographicalZones": [],
+   "programmePeriod": [
+    "2014 - 2020",
+    "2021 - 2027"
+   ],
+   "cftSubscriptionsAllowed": [
+    "true"
+   ],
+   "deadlineDate": [
+    "2026-09-08T16:00:59.000+0000"
+   ],
+   "cftCorrigendaList": [],
+   "closingDate": [
+    "2026-09-08T16:00:59Z"
+   ],
+   "es_Combine": [
+    "3"
+   ],
+   "esST_URL": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-CN"
+   ],
+   "esDA_QueueDate": [
+    "2026-09-09T10:06:59.673+0200"
+   ],
+   "programmeDivisionProspect": [],
+   "mainCpv": [
+    "39157000",
+    "50000000",
+    "39130000"
+   ],
+   "mainCpvCode": [
+    "{\"mainCode\":\"39130000\"}"
+   ],
+   "startDate": [
+    "2026-07-31T00:00:00.000+0000"
+   ],
+   "status": [
+    "31094503"
+   ],
+   "procedureType": [
+    "47396220"
+   ],
+   "updateDate": [
+    "2026-09-09T10:00:00.000+0000"
+   ],
+   "sortStatus": [
+    "3"
+   ],
+   "conditionOfParticipation": [],
+   "description": [
+    "The provision of office furniture, decorative lighting and accessories maintenance, spare parts, warranty and ad hoc purchases, including ergonomic equipment and ad hoc services."
+   ],
+   "title": [
+    "Office furniture maintenance, spare parts, warranty and ad-hoc purchases"
+   ],
+   "esST_checksum": [
+    "F25D86F8CE89A79AB9494F0F3FC2E98E4ABF0DE932991D3DCA78820899A58B60"
+   ],
+   "cftId": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-CN"
+   ],
+   "esST_FileName": [
+    "file.txt"
+   ],
+   "REFERENCE": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-CN"
+   ],
+   "cftTendersMayBeSubmitted": [],
+   "cftTimezone": [
+    "Europe/Amsterdam"
+   ],
+   "cftEstimatedTotalProcedureValue": [
+    "1232000 EUR"
+   ],
+   "cftContractNoticeLink": [
+    "[\"532499-2026\",\"146/2026\",\"2026-07-31T00:00:00\"]"
+   ],
+   "cftRepublish": [
+    "false"
+   ],
+   "cftSubmissionMethodCode": [
+    "ESUBMISSION"
+   ],
+   "cftProcurementType": [
+    "31095499"
+   ],
+   "cftEstimatedOverallContractAmount": [
+    "1232000"
+   ],
+   "caName": [
+    "Office furniture maintenance, spare parts, warranty and ad-hoc purchases"
+   ],
+   "cftPlannedDate": [],
+   "cftPublishedPinReference": [],
+   "esDA_FirstIngestDate": [
+    "2026-07-31T05:02:25.204+0200"
+   ],
+   "esDA_IngestDate": [
+    "2026-09-09T10:06:59.682+0200"
+   ],
+   "cftInterinstitutional": [],
+   "cftQuestionsAnswersAllowed": [
+    "true"
+   ],
+   "url": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-CN"
+   ],
+   "lots": [
+    "{\"procurementProjectLots\":[{\"tenderingTerms\":{\"tendererQualificationRequest\":{\"specificTendererRequirement\":{\"tendererRequirementTypeCode\":\"epo-procurement-document\",\"tendererRequirementTypeCodeListName\":\"selection-criteria-source\"}},\"tenderValidityPeriod\":{\"durationMeasureUnitCode\":\"MONTH\",\"durationMeasure\":\"6\"},\"languages\":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],\"callForTendersDocumentReference\":{\"documentType\":\"non-restricted-document\",\"documentStatusCode\":\"official\",\"attachmentExternalReferenceURI\":\"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/3\",\"languageID\":\"ENG\",\"documentStatusCodelistName\":\"document-status\",\"id\":\"default-text\"},\"fundingProgramCode\":\"eu-funds\",\"postAwardProcess\":{\"electronicOrderUsageIndicator\":\"true\",\"electronicPaymentUsageIndicator\":\"true\"},\"contractExecutionRequirement\":[{},{},{}],\"fundingProgramCodelistName\":\"eu-funded\",\"awardingTerms\":{\"awardingCriterion\":{\"subordinateAwardingCriterion\":[{\"awardingCriterionTypeCodeListName\":\"award-criterion-type\",\"descriptionLanguageID\":\"ENG\",\"description\":\"Please consult the procurement documents.\",\"awardCriterionParameter\":[{\"parameterNumeric\":\"60\",\"parameterCodeListName\":\"number-weight\",\"parameterCode\":\"per-exa\"}],\"awardingCriterionTypeCode\":\"quality\"},{\"awardingCriterionTypeCodeListName\":\"award-criterion-type\",\"descriptionLanguageID\":\"ENG\",\"description\":\"Please consult the procurement documents.\",\"awardCriterionParameter\":[{\"parameterNumeric\":\"40\",\"parameterCodeListName\":\"number-weight\",\"parameterCode\":\"per-exa\"}],\"awardingCriterionTypeCode\":\"price\"}]}},\"appealTerms\":{\"appealReceiverPartyID\":\"ORG-0002\"}},\"programmes\":[],\"procurementProject\":{\"procurementProjectID\":\"EMA/2026/OP/0015\",\"procurementTypeCodeListName\":\"contract-nature\",\"mainCommodityClassification\":{\"itemClassificationCode\":\"39130000\",\"itemClassificationCodeListName\":\"cpv\"},\"plannedPeriod\":{\"durationMeasureUnitCode\":\"MONTH\",\"durationMeasure\":48},\"requestedTenderTotal\":{\"estimatedOverallContractAmountCurrencyId\":\"EUR\",\"estimatedOverallContractAmount\":1232000},\"procurementTypeCode\":\"supplies\",\"name\":\"Office furniture maintenance, spare parts, warranty and ad-hoc purchases\",\"description\":\"The provision of office furniture, decorative lighting and accessories maintenance, spare parts, warranty and ad hoc purchases, including ergonomic equipment and ad hoc services.\",\"contractExtension\":{\"renewal\":{\"period\":{\"descriptionLanguageID\":\"ENG\",\"description\":\"The framework contract is concluded for an initial period of 12 (twelve)     months, renewable 3 (three) time(s). Please consult the draft framework contract in the procurement documents.\"}}},\"smeSuitableIndicator\":false,\"additionalCommodityClassifications\":[{\"itemClassificationCode\":\"39157000\",\"itemClassificationCodeListName\":\"cpv\"},{\"itemClassificationCode\":\"50000000\",\"itemClassificationCodeListName\":\"cpv\"}]},\"tenderingProcess\":{\"accessToolsURI\":\"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/3\",\"governmentAgreementConstraintIndicator\":false,\"eformsExtension\":{\"accessToolName\":\"Funding and Tenders Portal\"},\"submissionMethodCodeListName\":\"esubmission\",\"auctionTerms\":{\"auctionConstraintIndicator\":\"false\"},\"contractingSystems\":[{\"contractingSystemTypeCode\":\"fa-wo-rc\",\"contractingSystemTypeCodeListName\":\"framework-agreement\"},{\"contractingSystemTypeCode\":\"none\",\"contractingSystemTypeCodeListName\":\"dps-usage\"}],\"openTenderEvent\":{\"occurrenceDate\":\"2026-09-09+02:00\",\"occurrenceTime\":\"10:00:00+02:00\"},\"tenderSubmissionDeadlinePeriod\":{\"endDate\":\"2026-09-08+02:00\",\"endTime\":\"16:00:59+02:00\"},\"submissionMethodCode\":\"required\",\"additionalInformationRequestPeriod\":{\"endDate\":\"2026-08-31+02:00\",\"endTime\":\"2026-08-31+02:00\"},\"participationRequestReceptionPeriod\":{}},\"benefittingZones\":[],\"procurementProjectLotID\":\"LOT-0001\"}]}"
+   ],
+   "cftEXARegistrationDeadline": [],
+   "indicativeLaunch": [],
+   "geographicalZone": [],
+   "cftLeadContractingAuthorityCode": [
+    "[{\"name\":\"European Medicines Agency, MED - European Medicines Agency\",\"link\":\"https://www.ema.europa.eu\",\"isLeadAuthority\":true}]"
+   ],
+   "cftBuyerProfileUrl": [],
+   "cftPublicationDateEForm": [
+    "2026-07-31T00:00:00"
+   ],
+   "cftEstimatedOverallContractCurrency": [
+    "EUR"
+   ]
+  },
+  "enrichedMetadata": {},
+  "children": [],
+  "highlightedFragments": [],
+  "citation": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases. Available at: https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-CN"
+ },
+ {
+  "apiVersion": "2.155",
+  "reference": "35671487-e3b2-483f-b4f3-78ab87177860-PIN",
+  "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-PIN",
+  "contentType": "text/plain",
+  "language": "en",
+  "databaseLabel": "SEDIA",
+  "database": "SEDIA",
+  "summary": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases",
+  "weight": 0.0,
+  "groupById": "3",
+  "content": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases",
+  "accessRestriction": false,
+  "checksum": "F25D86F8CE89A79AB9494F0F3FC2E98E4ABF0DE932991D3DCA78820899A58B60",
+  "metadata": {
+   "es_SortDate": [
+    "2024-11-20T00:00:00.000+0000"
+   ],
+   "cftPartyLegalEntityId": [
+    "47352428"
+   ],
+   "cftMaxNumberOfLots": [],
+   "contractType": [
+    "31095499"
+   ],
+   "awardMethod": [],
+   "cftContractingSystems": [],
+   "language": [
+    "en"
+   ],
+   "type": [
+    "0"
+   ],
+   "cftDocuments": [
+    "{}"
+   ],
+   "callIdentifier": [
+    "EMA/2024/OP/0022-PIN"
+   ],
+   "cftSubmissionsAllowed": [
+    "false"
+   ],
+   "DATASOURCE": [
+    "SEDIA"
+   ],
+   "frameworkProgramme": [],
+   "cftPublicationDisplayStatus": [],
+   "identifier": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+   ],
+   "es_ContentType": [
+    "text/plain"
+   ],
+   "geographicalZones": [],
+   "programmePeriod": [
+    "2014 - 2020",
+    "2021 - 2027"
+   ],
+   "cftSubscriptionsAllowed": [
+    "true"
+   ],
+   "cftCorrigendaList": [],
+   "es_Combine": [
+    "2"
+   ],
+   "esST_URL": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+   ],
+   "esDA_QueueDate": [
+    "2024-11-20T10:16:46.634+0100"
+   ],
+   "programmeDivisionProspect": [],
+   "mainCpv": [
+    "39157000",
+    "39130000"
+   ],
+   "mainCpvCode": [
+    "{\"mainCode\":\"39130000\"}"
+   ],
+   "startDate": [
+    "2024-11-20T00:00:00.000+0000"
+   ],
+   "status": [
+    "31094503"
+   ],
+   "procedureType": [
+    "47396222"
+   ],
+   "sortStatus": [
+    "3"
+   ],
+   "conditionOfParticipation": [],
+   "description": [
+    "The European Medicines Agency is planning to launch a tender procedure for the procurement of existing furniture maintenance services, spare parts, warranty and ad hoc purchases. EMA currently owns pieces of furniture at their premises in Amsterdam, the Netherlands. Most of the furniture items are still covered by the warranty for a remaining period of six years. The majority of EMA\u2019s furniture are standard market products but also include bespoke items such as storage cabinets and desk caddies. The office furniture is installed in open office spaces (approximately 1300 work stations), meeting rooms of different capacity (approximately 34 rooms), conference rooms (capacity 630 people), collaboration areas and shared workspaces (approximately 15 areas) as well as a limited number of individual offices (approximately 170). EMA\u2019s furniture also includes items installed in shared and public areas such as the reception hall, visitors/delegates lounge, restaurant, coffee bar, break out areas and lounge bar."
+   ],
+   "title": [
+    "Office furniture maintenance, spare parts, warranty and ad-hoc purchases"
+   ],
+   "esST_checksum": [
+    "F25D86F8CE89A79AB9494F0F3FC2E98E4ABF0DE932991D3DCA78820899A58B60"
+   ],
+   "cftId": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+   ],
+   "esST_FileName": [
+    "file.txt"
+   ],
+   "REFERENCE": [
+    "35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+   ],
+   "cftTendersMayBeSubmitted": [],
+   "cftTimezone": [
+    "Europe/Amsterdam"
+   ],
+   "cftEstimatedTotalProcedureValue": [],
+   "cftContractNoticeLink": [
+    "[\"706759-2024\",\"226/2024\",\"2024-11-20T00:00:00\"]"
+   ],
+   "cftRepublish": [
+    "true"
+   ],
+   "cftSubmissionMethodCode": [
+    "ESUBMISSION"
+   ],
+   "cftProcurementType": [
+    "31095499"
+   ],
+   "caName": [
+    "Office furniture maintenance, spare parts, warranty and ad-hoc purchases"
+   ],
+   "cftPlannedDate": [
+    "23/01/2025"
+   ],
+   "cftPublishedPinReference": [
+    "Y"
+   ],
+   "esDA_FirstIngestDate": [
+    "2024-11-20T10:16:46.648+0100"
+   ],
+   "esDA_IngestDate": [
+    "2024-11-20T10:16:46.648+0100"
+   ],
+   "cftInterinstitutional": [],
+   "cftQuestionsAnswersAllowed": [
+    "true"
+   ],
+   "url": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+   ],
+   "lots": [
+    "{\"procurementProjectLots\":[{\"tenderingTerms\":{\"tendererQualificationRequest\":{\"specificTendererRequirement\":{}},\"tenderValidityPeriod\":{},\"callForTendersDocumentReference\":{},\"fundingProgramCode\":\"eu-funds\",\"postAwardProcess\":{},\"fundingProgramCodelistName\":\"eu-funded\",\"awardingTerms\":{\"awardingCriterion\":{}},\"appealTerms\":{\"appealReceiverPartyID\":\"ORG-0002\"}},\"programmes\":[],\"tenderingProcess\":{\"accessToolsURI\":\"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/3\",\"governmentAgreementConstraintIndicator\":false,\"eformsExtension\":{\"accessToolName\":\"Funding and Tenders Portal\"},\"auctionTerms\":{},\"contractingSystems\":[{\"contractingSystemTypeCode\":\"fa-wo-rc\",\"contractingSystemTypeCodeListName\":\"framework-agreement\"}],\"openTenderEvent\":{},\"tenderSubmissionDeadlinePeriod\":{},\"additionalInformationRequestPeriod\":{},\"participationRequestReceptionPeriod\":{}},\"procurementProject\":{\"procurementTypeCodeListName\":\"contract-nature\",\"mainCommodityClassification\":{\"itemClassificationCode\":\"39130000\",\"itemClassificationCodeListName\":\"cpv\"},\"requestedTenderTotal\":{},\"plannedPeriod\":{\"durationMeasureUnitCode\":\"MONTH\",\"durationMeasure\":48},\"procurementTypeCode\":\"supplies\",\"name\":\"Office furniture maintenance, spare parts, warranty and ad-hoc purchases\",\"description\":\"The European Medicines Agency is planning to launch a tender procedure for the procurement of existing furniture maintenance services, spare parts, warranty and ad hoc purchases. EMA currently owns pieces of furniture at their premises in Amsterdam, the Netherlands. Most of the furniture items are still covered by the warranty for a remaining period of six years. The majority of EMA\\u2019s furniture are standard market products but also include bespoke items such as storage cabinets and desk caddies. The office furniture is installed in open office spaces (approximately 1300 work stations), meeting rooms of different capacity (approximately 34 rooms), conference rooms (capacity 630 people), collaboration areas and shared workspaces (approximately 15 areas) as well as a limited number of individual offices (approximately 170). EMA\\u2019s furniture also includes items installed in shared and public areas such as the reception hall, visitors/delegates lounge, restaurant, coffee bar, break out areas and lounge bar.\",\"contractExtension\":{\"renewal\":{\"period\":{}}},\"smeSuitableIndicator\":false,\"additionalCommodityClassifications\":[{\"itemClassificationCode\":\"39157000\",\"itemClassificationCodeListName\":\"cpv\"}]},\"benefittingZones\":[],\"procurementProjectLotID\":\"PAR-0001\"}]}"
+   ],
+   "cftEXARegistrationDeadline": [],
+   "indicativeLaunch": [],
+   "geographicalZone": [],
+   "cftLeadContractingAuthorityCode": [
+    "[{\"name\":\"European Medicines Agency, MED - European Medicines Agency\",\"link\":\"https://www.ema.europa.eu\",\"isLeadAuthority\":true}]"
+   ],
+   "cftBuyerProfileUrl": [],
+   "cftPublicationDateEForm": [
+    "2024-11-20T00:00:00"
+   ],
+   "cftEstimatedOverallContractCurrency": []
+  },
+  "enrichedMetadata": {},
+  "children": [],
+  "highlightedFragments": [],
+  "citation": "Office furniture maintenance, spare parts, warranty and ad-hoc purchases. Available at: https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/35671487-e3b2-483f-b4f3-78ab87177860-PIN"
+ },
+ {
+  "apiVersion": "2.155",
+  "reference": "e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN",
+  "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN",
+  "contentType": "text/plain",
+  "language": "en",
+  "databaseLabel": "SEDIA",
+  "database": "SEDIA",
+  "summary": "Open call for scientific and regulatory experts",
+  "weight": 0.0,
+  "groupById": "1",
+  "content": "Open call for scientific and regulatory experts",
+  "accessRestriction": false,
+  "checksum": "46D5B61FC48A5EA14F50AF196D73E93F0E569F2E4587D34B2367AFAD2F45C094",
+  "metadata": {
+   "es_SortDate": [
+    "2026-04-01T00:00:00.000+0000"
+   ],
+   "cftPartyLegalEntityId": [
+    "47352428"
+   ],
+   "cftMaxNumberOfLots": [],
+   "contractType": [
+    "31095498"
+   ],
+   "awardMethod": [],
+   "cftContractingSystems": [],
+   "language": [
+    "en"
+   ],
+   "type": [
+    "0"
+   ],
+   "cftDocuments": [
+    "{\"cftDocuments\":[{\"considerChangedUntilDate\":\"2026-04-15T00:00:00\",\"documentPublicationID\":\"090166e52b812ad6\",\"sortKey\":\"00003\",\"documentType\":\"Declaration on honour (tender)\",\"changedNotificationText\":\"New \",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"Annex_2_-_Declaration_of_honour.docx_V1.pdf\",\"publicationFormat\":\"NATIVE\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e52b81323e\",\"attachmentID\":\"090166e52b812ad6\",\"versionNR\":\"1\",\"publicationDate\":\"2026-04-01T00:00:00\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NEW\",\"languageCode\":\"EN\",\"documentTitle\":\"Annex 2 Declaration on honour\"},{\"considerChangedUntilDate\":\"2026-04-15T00:00:00\",\"documentPublicationID\":\"090166e52b813285\",\"sortKey\":\"00002\",\"documentType\":\"Other invitation to tender document\",\"changedNotificationText\":\"New \",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"Annex_1_-_Application_guidance.docx_V1.pdf\",\"publicationFormat\":\"PDF\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e52b813370\",\"attachmentID\":\"090166e52b813285\",\"versionNR\":\"1\",\"publicationDate\":\"2026-04-01T00:00:00\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NEW\",\"languageCode\":\"EN\",\"documentTitle\":\"Annex 1 Application guidance\"},{\"considerChangedUntilDate\":\"2026-04-15T00:00:00\",\"documentPublicationID\":\"090166e52b815441\",\"sortKey\":\"00004\",\"documentType\":\"Other invitation to tender document\",\"changedNotificationText\":\"New \",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"Annex_3_Data_protection_notice_CEI_EMA.20206.CEI.0005.docx_V1.pdf\",\"publicationFormat\":\"PDF\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e52b8141c3\",\"attachmentID\":\"090166e52b815441\",\"versionNR\":\"1\",\"publicationDate\":\"2026-04-01T00:00:00\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NEW\",\"languageCode\":\"EN\",\"documentTitle\":\"Annex 3 Data Protection Notice\"},{\"considerChangedUntilDate\":\"2026-04-15T00:00:00\",\"documentPublicationID\":\"090166e52b814186\",\"sortKey\":\"00005\",\"documentType\":\"Draft contract\",\"changedNotificationText\":\"New \",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"Annex_4_Model_Contract_for_Experts_Scientific_and_regulatory_experts.docx_V1.pdf\",\"publicationFormat\":\"PDF\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e52b81402d\",\"attachmentID\":\"090166e52b814186\",\"versionNR\":\"1\",\"publicationDate\":\"2026-04-01T00:00:00\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NEW\",\"languageCode\":\"EN\",\"documentTitle\":\"Annex 4 Draft Model expert Contract\"},{\"considerChangedUntilDate\":\"2026-04-15T00:00:00\",\"documentPublicationID\":\"090166e52b813175\",\"sortKey\":\"00001\",\"documentType\":\"Tender specifications\",\"changedNotificationText\":\"New \",\"obsolete\":false,\"hermesDocumentReferences\":[{\"documentFileName\":\"EMA.2026.CEI.0005_Call_for_expression_of_interest_scientific_and_regulatory_experts.docx_V1.pdf\",\"publicationFormat\":\"PDF\",\"isCurrentVersion\":\"Y\",\"documentID\":\"080166e52b813859\",\"attachmentID\":\"090166e52b813175\",\"versionNR\":\"1\",\"publicationDate\":\"2026-04-01T00:00:00\"}],\"applicableProcurementProjectLots\":[{\"procurementProjectLotID\":\"LOT-0001\"}],\"documentChangeCode\":\"NEW\",\"languageCode\":\"EN\",\"documentTitle\":\"CEI Specifications\"}]}"
+   ],
+   "callIdentifier": [
+    "EMA/2026/CEI/0005"
+   ],
+   "cftSubmissionsAllowed": [
+    "true"
+   ],
+   "DATASOURCE": [
+    "SEDIA"
+   ],
+   "frameworkProgramme": [],
+   "cftPublicationDisplayStatus": [],
+   "identifier": [
+    "e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+   ],
+   "es_ContentType": [
+    "text/plain"
+   ],
+   "geographicalZones": [],
+   "programmePeriod": [
+    "2014 - 2020",
+    "2021 - 2027"
+   ],
+   "cftSubscriptionsAllowed": [
+    "true"
+   ],
+   "cftCorrigendaList": [],
+   "es_Combine": [
+    "1"
+   ],
+   "esST_URL": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+   ],
+   "esDA_QueueDate": [
+    "2026-04-01T05:02:22.229+0200"
+   ],
+   "programmeDivisionProspect": [],
+   "mainCpv": [
+    "73200000",
+    "33000000"
+   ],
+   "mainCpvCode": [
+    "{\"mainCode\":\"73200000\"}"
+   ],
+   "startDate": [
+    "2026-04-01T00:00:00.000+0000"
+   ],
+   "status": [
+    "31094502"
+   ],
+   "procedureType": [
+    "47396202"
+   ],
+   "sortStatus": [
+    "1"
+   ],
+   "conditionOfParticipation": [],
+   "description": [
+    "The aim of this call for remunerated external experts is to establish a list of experts, individuals (natural persons) with scientific, regulatory and/or technical expertise pertaining to medicines for human use and veterinary medicinal products. External experts will support the Agency by providing advice to the Agency in scientific, regulatory and training  activities within the scope of Article 57(1) of Regulation (EC) No 726/2004  and Regulation (EU) 2022/123 , as provided in Article 242 of Regulation (EU, Euratom) 2024/2509 (EU Financial Regulation )."
+   ],
+   "title": [
+    "Open call for scientific and regulatory experts"
+   ],
+   "esST_checksum": [
+    "46D5B61FC48A5EA14F50AF196D73E93F0E569F2E4587D34B2367AFAD2F45C094"
+   ],
+   "cftId": [
+    "e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+   ],
+   "esST_FileName": [
+    "file.txt"
+   ],
+   "REFERENCE": [
+    "e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+   ],
+   "cftTendersMayBeSubmitted": [],
+   "cftTimezone": [
+    "Europe/Amsterdam"
+   ],
+   "cftEstimatedTotalProcedureValue": [],
+   "cftContractNoticeLink": [
+    "[\"223174-2026\",\"64/2026\",\"2026-04-01T00:00:00\"]"
+   ],
+   "cftRepublish": [
+    "true"
+   ],
+   "cftSubmissionMethodCode": [
+    "PAPER_COPY"
+   ],
+   "cftProcurementType": [
+    "31095498"
+   ],
+   "caName": [
+    "Open call for scientific and regulatory experts"
+   ],
+   "cftPlannedDate": [],
+   "cftPublishedPinReference": [],
+   "esDA_FirstIngestDate": [
+    "2026-04-01T05:02:22.247+0200"
+   ],
+   "esDA_IngestDate": [
+    "2026-04-01T05:02:22.247+0200"
+   ],
+   "cftInterinstitutional": [],
+   "cftQuestionsAnswersAllowed": [
+    "true"
+   ],
+   "url": [
+    "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+   ],
+   "lots": [
+    "{\"procurementProjectLots\":[{\"tenderingTerms\":{\"tendererQualificationRequest\":{\"specificTendererRequirement\":{\"tendererRequirementTypeCode\":\"epo-procurement-document\",\"tendererRequirementTypeCodeListName\":\"selection-criteria-source\"}},\"tenderValidityPeriod\":{},\"languages\":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],\"callForTendersDocumentReference\":{\"documentType\":\"non-restricted-document\",\"attachmentExternalReferenceURI\":\"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e\",\"documentStatusCode\":\"official\",\"languageID\":\"ENG\",\"documentStatusCodelistName\":\"document-status\",\"id\":\"default-text\"},\"fundingProgramCode\":\"eu-funds\",\"postAwardProcess\":{},\"contractExecutionRequirement\":[{},{}],\"fundingProgramCodelistName\":\"eu-funded\",\"awardingTerms\":{\"awardingCriterion\":{}},\"appealTerms\":{\"appealReceiverPartyID\":\"ORG-0002\"}},\"programmes\":[],\"procurementProject\":{\"procurementTypeCodeListName\":\"contract-nature\",\"mainCommodityClassification\":{\"itemClassificationCode\":\"73200000\",\"itemClassificationCodeListName\":\"cpv\"},\"requestedTenderTotal\":{},\"plannedPeriod\":{\"durationMeasureUnitCode\":\"MONTH\",\"durationMeasure\":60},\"procurementTypeCode\":\"services\",\"name\":\"Open call for scientific and regulatory experts\",\"description\":\"The aim of this call for remunerated external experts is to establish a list of experts, individuals (natural persons) with scientific, regulatory and/or technical expertise pertaining to medicines for human use and veterinary medicinal products. External experts will support the Agency by providing advice to the Agency in scientific, regulatory and training  activities within the scope of Article 57(1) of Regulation (EC) No 726/2004  and Regulation (EU) 2022/123 , as provided in Article 242 of Regulation (EU, Euratom) 2024/2509 (EU Financial Regulation ).\",\"contractExtension\":{\"renewal\":{\"period\":{}}},\"smeSuitableIndicator\":false,\"additionalCommodityClassifications\":[{\"itemClassificationCode\":\"33000000\",\"itemClassificationCodeListName\":\"cpv\"}]},\"tenderingProcess\":{\"accessToolsURI\":\"https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e\",\"governmentAgreementConstraintIndicator\":false,\"eformsExtension\":{},\"submissionMethodCodeListName\":\"esubmission\",\"auctionTerms\":{},\"openTenderEvent\":{},\"tenderSubmissionDeadlinePeriod\":{},\"submissionMethodCode\":\"not-allowed\",\"additionalInformationRequestPeriod\":{},\"participationRequestReceptionPeriod\":{}},\"benefittingZones\":[],\"procurementProjectLotID\":\"LOT-0001\"}]}"
+   ],
+   "cftEXARegistrationDeadline": [],
+   "indicativeLaunch": [],
+   "geographicalZone": [],
+   "cftLeadContractingAuthorityCode": [
+    "[{\"name\":\"European Medicines Agency, MED - European Medicines Agency\",\"link\":\"https://www.ema.europa.eu\",\"isLeadAuthority\":true}]"
+   ],
+   "cftBuyerProfileUrl": [],
+   "cftPublicationDateEForm": [
+    "2026-04-01T00:00:00"
+   ],
+   "cftEstimatedOverallContractCurrency": []
+  },
+  "enrichedMetadata": {},
+  "children": [],
+  "highlightedFragments": [],
+  "citation": "Open call for scientific and regulatory experts. Available at: https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details/e0b036c6-7fbf-4d3c-9b65-ae08ea3e157f-CN"
+ }
+]

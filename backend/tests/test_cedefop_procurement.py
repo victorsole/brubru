@@ -103,7 +103,7 @@ def test_upsert_carries_the_procurement_columns():
 
 # Bodies walked in the API audit and moved onto the procurement fields. A body is
 # added here in the same commit that switches its routes to procurement=True.
-_PROCUREMENT_BODIES = ("cedefop", "ecdc", "echa", "eea", "efca", "efsa", "eib", "eige")
+_PROCUREMENT_BODIES = ("cedefop", "ecdc", "echa", "eea", "efca", "efsa", "eib", "eige", "ema")
 
 
 def test_only_walked_bodies_expose_the_procurement_fields():
