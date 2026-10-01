@@ -4,6 +4,7 @@
 A cross-body AGGREGATOR (ingests nothing): a query-time view over the news Brubru
 already keeps fresh in economy_items (agencies) and eu_news_items (the institutions, the
 EEAS and the bodies' own newsrooms -- see _INSTITUTIONAL_NEWS; an item whose URL is
+from api.v1._row_dates import row_updated
 already in economy_items is served once, from there), where "News" bundles item_type 'news' and
 'press_release' (latest news, press releases, stories, speeches and statements are
 all folded into 'news' at ingest). Same proprietary body/family picker as the
@@ -21,6 +22,7 @@ from sqlalchemy.orm import Session
 
 from core.database import get_db
 from models.user import User
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
@@ -71,6 +73,7 @@ class NewsItem(BaseModel):
         "states none; it is never filled with the date Brubru captured the item (that is "
         "`creation_date`)."))
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the item.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
 class NewsBody(BaseModel):
@@ -104,7 +107,7 @@ def _resolve_scope(bodies, family):
     return codes or None
 
 
-def _build_where(codes, kinds, since, until, q):
+def _build_where(codes, kinds, since, until, q, updated_from=None, updated_to=None):
     # The pinned kind, not item_type: the two must select the same rows, or a row
     # could be served under one predicate and deduped under another (migration 255).
     where = ["news_kind = ANY(:types)"]
@@ -132,6 +135,16 @@ def _build_where(codes, kinds, since, until, q):
         params["until"] = until
     if q:
         where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
+    # The CHANGE window, which is a different question from the publication window
+    # above. GovClipping passed updated_from/updated_to and got the whole 25,087-row
+    # corpus back: the parameters were never declared, and FastAPI drops an unknown
+    # query param silently with HTTP 200, so a window in 2030 looked like a full
+    # match. updated_at is maintained by brubru_touch_if_changed (migration 271), so a
+    # re-scrape that finds an identical article does not read as a change.
+    if updated_from:
+        where.append("updated_at >= :updated_from"); params["updated_from"] = updated_from
+    if updated_to:
+        where.append("updated_at <= :updated_to"); params["updated_to"] = updated_to
     return " AND ".join(where), params
 
 
@@ -277,7 +290,8 @@ _DEDUP_SQL = (
 # depend on. (A first cut negated the id to disambiguate, which cannot work on a
 # UUID -- `operator does not exist: - uuid`.)
 _ECONOMY_COLS = ("id::text AS id, body_code, news_kind AS item_type, title, summary, "
-                 "public_url, document_date, creation_date, fetched_at, body_txt, body_html")
+                 "public_url, document_date, creation_date, fetched_at, updated_at, "
+                 "body_txt, body_html")
 
 
 def _coerce_id(raw):
@@ -286,7 +300,7 @@ def _coerce_id(raw):
     return int(txt) if txt.isdigit() else txt
 
 
-def _institutional_sql(codes, kinds, since, until, q):
+def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None):
     """Projection of eu_news_items onto the economy_items news shape.
 
     Returns (sql, params), or (None, {}) when the requested scope excludes all
@@ -327,6 +341,13 @@ def _institutional_sql(codes, kinds, since, until, q):
         # the `search_mode` note in the endpoint description.
         where.append("(n.title ILIKE :i_q OR coalesce(n.summary,'') ILIKE :i_q)")
         params["i_q"] = f"%{q}%"
+    # The change window, matching the economy half. Both halves must apply it or the
+    # union would serve a filtered agency feed beside an unfiltered institutional one,
+    # which reads as "the filter half-works" and is harder to spot than no filter.
+    if updated_from:
+        where.append("n.updated_at >= :i_updated_from"); params["i_updated_from"] = updated_from
+    if updated_to:
+        where.append("n.updated_at <= :i_updated_to"); params["i_updated_to"] = updated_to
 
     sql = (
         f"SELECT n.id::text AS id, {case_body} AS body_code, "
@@ -359,6 +380,9 @@ def _institutional_sql(codes, kinds, since, until, q):
         # this column exists to make trustworthy. `_classify` maps NULL to
         # `fetch_time_unknown`, never to `not_fetched`.
         "n.fetched_at AS fetched_at, "
+        # The change signal, so both halves of the union project the same shape
+        # and row_updated() can read it off either.
+        "n.updated_at AS updated_at, "
         # Migration 228 gave eu_news_items real body columns, composed by
         # scripts/backfill_eu_news_bodies.py from the title, summary, institution,
         # date and source link. Before that this served `summary AS body_txt` and a
@@ -376,11 +400,11 @@ def _institutional_sql(codes, kinds, since, until, q):
     return sql, params
 
 
-def _news_source_sql(codes, kinds, since, until, q):
+def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None):
     """The full news corpus: agencies (economy_items) + institutions (eu_news_items)."""
-    clause, params = _build_where(codes, kinds, since, until, q)
+    clause, params = _build_where(codes, kinds, since, until, q, updated_from, updated_to)
     econ = f"SELECT {_ECONOMY_COLS} FROM economy_items WHERE {clause}"
-    inst_sql, inst_params = _institutional_sql(codes, kinds, since, until, q)
+    inst_sql, inst_params = _institutional_sql(codes, kinds, since, until, q, updated_from, updated_to)
     if inst_sql is None:
         return f"({econ})", params
     return f"({econ} UNION ALL {inst_sql})", {**params, **inst_params}
@@ -391,6 +415,7 @@ def _to_item(r, names, *, with_body):
         id=_coerce_id(r.id), body_code=r.body_code, body_name=names.get(r.body_code),
         families=families_for_body(r.body_code), kind=r.item_type, title=r.title, summary=r.summary,
         public_url=r.public_url, document_date=r.document_date, creation_date=r.creation_date,
+        updated_date=row_updated(r),
         body_txt=(getattr(r, "body_txt", None) if with_body else None),
         body_html=(getattr(r, "body_html", None) if with_body else None),
     )
@@ -463,6 +488,18 @@ async def list_news(
     since: Optional[date] = Query(None, alias="since", include_in_schema=False),
     until: Optional[date] = Query(None, alias="until", include_in_schema=False),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
+    # The CHANGE window, for incremental sync. Reported by GovClipping on 1 October
+    # 2026: they passed updated_from/updated_to, the parameters were not declared, and
+    # FastAPI drops an unknown query param silently with HTTP 200 -- so a window in the
+    # year 2030 returned all 25,087 rows and every run re-pulled the whole corpus
+    # believing it was a delta. This is the FOURTH silent-drop on this one endpoint
+    # (`days` until 28 July 2026, `since`/`until` until 8 September 2026).
+    updated_from: Optional[datetime] = Query(
+        None, description="Only items whose record changed on/after this timestamp (incremental sync)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(
+        None, description="Only items whose record changed on/before this timestamp."),
+    updated_end: Optional[UpperBoundDatetime] = Query(
+        None, description="Alias of updated_to (GovClipping-compatible).", include_in_schema=False),
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
@@ -495,12 +532,19 @@ async def list_news(
         to = until
     if from_ is None and days is not None:
         from_ = date.today() - timedelta(days=days)
+    # Same alias rule as updated_to elsewhere in v1/v2: conflicting upper bounds are a
+    # caller error worth saying out loud, not something to silently pick a winner from.
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(
+            400, f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.")
+    if updated_end and not updated_to:
+        updated_to = updated_end
     kinds = _NEWS_TYPES if kind == "all" else [kind]
     codes = _resolve_scope(body, family)
     # Agencies (economy_items) UNION institutions (eu_news_items) -- see
     # _INSTITUTIONAL_NEWS. Before 25 Aug 2026 this read economy_items alone and
     # could not return a single Commission, Parliament or Council item.
-    src, params = _news_source_sql(codes, kinds, from_, to, q)
+    src, params = _news_source_sql(codes, kinds, from_, to, q, updated_from, updated_to)
     total = db.execute(text(f"SELECT count(*) FROM {src} u"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(text(
@@ -513,6 +557,7 @@ async def list_news(
     return build_envelope(
         [_to_item(r, names, with_body=include_body) for r in rows], total, page, limit,
         published_from=from_, published_to=to,
+        updated_from=updated_from, updated_to=updated_to,
     )
 
 
