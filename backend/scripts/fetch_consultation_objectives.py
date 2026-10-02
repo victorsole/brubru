@@ -140,8 +140,68 @@ def _objective(iid: str, ctx: ssl.SSLContext) -> str | None | str:
 
     best = max(candidates, key=len) if candidates else ""
     if len(best) < MIN_CHARS:
+        # No objective, summary or translation: 1,211 closed initiatives on 2 Oct 2026.
+        # Their page still publishes the document itself (2016: COM(2018)825, a
+        # 10-page proposal, in 23 languages). Its English text IS the body.
+        doc = _published_document_text(payload, ctx)
+        if len(doc) >= MIN_CHARS:
+            return doc
         return None          # published nothing substantive; leave the row alone
     return best
+
+
+DOWNLOAD = "https://ec.europa.eu/info/law/better-regulation/api/download/{doc}"
+MAX_DOC_CHARS = 2_000_000
+
+
+def _document_text(data: bytes, filename: str) -> str:
+    """Text of one attachment. Older initiatives attach .docx or legacy .doc, not PDF:
+    reading PDFs only skipped 9 of 15 in the first run."""
+    import io, subprocess, tempfile, zipfile
+    from pypdf import PdfReader
+    ext = filename.lower().rsplit(".", 1)[-1]
+    if data[:4] == b"%PDF":
+        return "\n".join((pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages)
+    if ext == "docx" or data[:2] == b"PK":
+        xml = zipfile.ZipFile(io.BytesIO(data)).read("word/document.xml").decode("utf-8", "ignore")
+        paras = re.findall(r"<w:p[ >].*?</w:p>", xml, flags=re.S)
+        import html as _h
+        return "\n".join(_h.unescape("".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", p))) for p in paras)
+    # Legacy binary .doc: macOS textutil (this backfill runs locally, not on Railway).
+    with tempfile.NamedTemporaryFile(suffix=".doc") as f:
+        f.write(data); f.flush()
+        out = subprocess.run(["textutil", "-convert", "txt", "-stdout", f.name],
+                             capture_output=True, timeout=60)
+        return out.stdout.decode("utf-8", "ignore")
+
+
+def _published_document_text(payload: dict, ctx: ssl.SSLContext) -> str:
+    """English MAIN document plus its annexes, from the latest publication that has them."""
+    import io
+    from pypdf import PdfReader
+    pubs = [p for p in (payload.get("publications") or []) if any(
+        str(a.get("language", "")).upper() == "EN" and a.get("published") is not False
+        for a in (p.get("attachments") or []))]
+    if not pubs:
+        return ""
+    pub = max(pubs, key=lambda p: str(p.get("publishedDate") or p.get("plannedPeriod") or p.get("id") or ""))
+    atts = [a for a in pub.get("attachments") or []
+            if str(a.get("language", "")).upper() == "EN" and a.get("documentId")
+            and str(a.get("filename", "")).lower().rsplit(".", 1)[-1] in ("pdf", "docx", "doc")]
+    atts.sort(key=lambda a: (0 if a.get("type") == "MAIN" else 1, str(a.get("index") or "")))
+    parts = []
+    for a in atts[:6]:
+        try:
+            req = urllib.request.Request(DOWNLOAD.format(doc=a["documentId"]), headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
+                data = r.read()
+            txt = re.sub(r"[ \t]+", " ", _document_text(data, a["filename"])).strip()
+        except Exception:
+            continue
+        if txt:
+            label = a.get("reference") or a.get("workType") or "Document"
+            parts.append(f"{label} ({a.get('type') or 'document'}):\n{txt}")
+    return "\n\n".join(parts)[:MAX_DOC_CHARS]
 
 
 def main() -> int:
@@ -153,7 +213,7 @@ def main() -> int:
     ap.add_argument("--pause", type=float, default=0.4)
     args = ap.parse_args()
 
-    engine = create_engine(_database_url())
+    engine = create_engine(_database_url(), pool_pre_ping=True, pool_recycle=300)
     with engine.connect() as conn:
         before = conn.execute(PROGRESS).one()
         rows = list(conn.execute(PICK, {"lim": args.limit}))

@@ -89,6 +89,27 @@ def _parse(docx: bytes):
     return body, "".join(f"<p>{html.escape(p)}</p>" for p in paras), stated
 
 
+def _parse_pdf(data: bytes):
+    """(text, html, stated_date) from the PDF edition; the date is read off its cover."""
+    if not data or data[:4] != b"%PDF":
+        return None
+    from pypdf import PdfReader
+    try:
+        pages = [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages]
+    except Exception:
+        return None
+    paras = [re.sub(r"\s+", " ", x).strip() for x in "\n".join(pages).split("\n")]
+    paras = [x for x in paras if x]
+    stated = None
+    m = re.search(r"\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b", "\n".join(pages)[:3000])
+    if m:
+        try:
+            stated = dt.date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        except ValueError:
+            pass
+    return "\n\n".join(paras), "".join(f"<p>{html.escape(x)}</p>" for x in paras), stated
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     g = ap.add_mutually_exclusive_group(required=True)
@@ -109,9 +130,23 @@ def main() -> int:
             got = br.fetch_bytes_isolated([r.doceo_url for r in chunk], timeout_s=900)
         except Exception as e:  # noqa: BLE001
             why[type(e).__name__] += len(chunk); continue
+        # Older documents (2016-2019) serve a legacy binary .doc under the .docx name
+        # (REGI-PR-587442: OLE header, not a zip), which read as "empty body" for 37
+        # rows. The same document is published as PDF; read that instead.
+        # Some have no .docx at all (BUDG-PR-770003: 404) but do have the PDF.
+        legacy = [r for r in chunk if (got.get(r.doceo_url, (None, b"", None))[1] or b"")[:2] != b"PK"]
+        pdfs = {}
+        if legacy:
+            try:
+                pdfs = br.fetch_bytes_isolated([r.doceo_url.replace("_EN.docx", "_EN.pdf") for r in legacy], timeout_s=900)
+            except Exception:  # noqa: BLE001
+                pdfs = {}
         for r in chunk:
             status, body, err = got.get(r.doceo_url, (None, b"", "missing"))
             parsed = _parse(body)
+            if parsed is None and r in legacy:
+                pst, pbody, _ = pdfs.get(r.doceo_url.replace("_EN.docx", "_EN.pdf"), (None, b"", None))
+                parsed = _parse_pdf(pbody) if pst == 200 else None
             if parsed is None:
                 why[f"no_docx_{status}"] += 1; continue          # blocked or not a .docx: retry, not absence
             txt, h, stated = parsed
@@ -131,7 +166,7 @@ def main() -> int:
           + f" | not stored {dict(why)} | no-text {before} -> {after} | undated {ud0} -> {ud1}")
     if rows and stored == 0:
         print("[ERROR] nothing stored; this run proves nothing"); return 1
-    print("[OK] every body came from the document's own .docx"); return 0
+    print("[OK] every body came from the document's own .docx, or its PDF edition"); return 0
 
 
 if __name__ == "__main__":
