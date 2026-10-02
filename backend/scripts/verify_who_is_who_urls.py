@@ -129,6 +129,20 @@ def _probe(url: str, ctx: ssl.SSLContext, pause: float) -> int | str:
     return "exhausted"
 
 
+def _write(engine, stmt, params, tries: int = 5):
+    """Run one write, reconnecting if the pooler dropped the connection."""
+    import time as _t
+    from sqlalchemy.exc import OperationalError
+    for n in range(tries):
+        try:
+            with engine.begin() as conn:
+                return conn.execute(stmt, params)
+        except OperationalError:
+            engine.dispose()
+            _t.sleep(2 * (n + 1))
+    raise RuntimeError("database unreachable after retries")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     g = ap.add_mutually_exclusive_group(required=True)
@@ -139,7 +153,7 @@ def main() -> int:
     ap.add_argument("--stale", type=int, default=90, help="re-check after N days")
     args = ap.parse_args()
 
-    engine = create_engine(_database_url())
+    engine = create_engine(_database_url(), pool_pre_ping=True, pool_recycle=300)
     with engine.connect() as conn:
         before = conn.execute(PROGRESS).one()
         rows = list(conn.execute(PICK, {"lim": args.limit, "stale": args.stale}))
@@ -161,8 +175,7 @@ def main() -> int:
         url = _url_for(r.person_uri)
         if url is None:
             # A placeholder id. Settled already; record it so it is never probed again.
-            with engine.begin() as conn:
-                conn.execute(RECORD_DEAD, {"rid": r.id, "st": 404})
+            _write(engine, RECORD_DEAD, {"rid": r.id, "st": 404})
             dead += 1
             seen["placeholder"] += 1
             continue
@@ -171,12 +184,10 @@ def main() -> int:
         seen[status] += 1
 
         if status == 200:
-            with engine.begin() as conn:
-                conn.execute(RECORD_ALIVE, {"rid": r.id, "st": 200, "url": url})
+            _write(engine, RECORD_ALIVE, {"rid": r.id, "st": 200, "url": url})
             alive += 1
         elif status == 404:
-            with engine.begin() as conn:
-                conn.execute(RECORD_DEAD, {"rid": r.id, "st": 404})
+            _write(engine, RECORD_DEAD, {"rid": r.id, "st": 404})
             dead += 1
         else:
             # Blocked or a transport fault. Not an answer about this person: leave the
