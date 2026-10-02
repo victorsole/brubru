@@ -13,7 +13,8 @@ LOWERCASE in the URL (an uppercase id 404s, which reads as "no such topic").
     python3.12 scripts/backfill_ft_call_descriptions.py --limit 20 --rehearse
     python3.12 scripts/backfill_ft_call_descriptions.py --limit 1300 --apply
 
-Only an empty description is written, so it can never shorten a body. The nightly ingest was
+Only an empty or stub (<400 chars, e.g. SEDIA's 151-character cut) description is
+replaced, and only by a LONGER one, so it can never shorten a body. The nightly ingest was
 changed in the same commit so that the longer value wins, otherwise it would blank this on
 its next run.
 """
@@ -35,11 +36,11 @@ MIN_CHARS = 200
 MAX_CHARS = 8000          # the same cap the ingest applies
 
 PICK = text("""SELECT topic_id FROM ft_calls_for_proposals
-                WHERE coalesce(description,'')='' ORDER BY published_at DESC NULLS LAST, topic_id
+                WHERE length(coalesce(description,'')) < 400 ORDER BY published_at DESC NULLS LAST, topic_id
                 LIMIT :lim""")
 STORE = text("""UPDATE ft_calls_for_proposals SET description=:d, last_updated=now()
-                 WHERE topic_id=:t AND coalesce(description,'')=''""")
-GAP = text("SELECT count(*) FROM ft_calls_for_proposals WHERE coalesce(description,'')=''")
+                 WHERE topic_id=:t AND length(coalesce(description,'')) < length(:d)""")
+GAP = text("SELECT count(*) FROM ft_calls_for_proposals WHERE length(coalesce(description,'')) < 400")
 
 
 def _db() -> str:
@@ -97,14 +98,18 @@ def main() -> int:
         if got.startswith(("http_", "too_short")) or (len(got) < MIN_CHARS):
             why[got if len(got) < 24 else "short"] += 1
         else:
+            wrote = 0
             for n in range(4):
                 try:
                     with eng.begin() as c:
-                        c.execute(STORE, {"d": got, "t": t})
+                        wrote = c.execute(STORE, {"d": got, "t": t}).rowcount
                     break
                 except Exception:  # noqa: BLE001 -- pooler drop: reconnect and retry
                     eng.dispose(); time.sleep(2 * (n + 1))
-            stored += 1; chars += len(got)
+            if wrote:
+                stored += 1; chars += len(got)
+            else:
+                why["portal text not longer"] += 1
         if i % 100 == 0:
             print(f"   ...{i}/{len(rows)} stored={stored} {dict(why)}", flush=True)
         time.sleep(a.pause)
