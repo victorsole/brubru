@@ -51,6 +51,28 @@ PERSON_PAGE = "https://op.europa.eu/en/web/who-is-who/person/-/person/{person_id
 NO_PERSON_PAGE_MARKER = "UNDEFINED"
 
 
+def person_page_id(pid: str) -> str:
+    """The id the Whoiswho PAGE uses, which is not always the SPARQL person id.
+
+    Found by Victor on 2 Oct 2026, after 5,311 officials had been marked as having no
+    page: the directory writes some ids differently in its page URLs.
+      COR_COR_2038234  -> COR_2038234    (the institution prefix is doubled in SPARQL)
+      EESC_EESC_2038818 -> EESC_2038818
+      EIB_EIB-2955     -> EIB_EIB2955    (the hyphen is dropped)
+    Each rule was verified on 4 random dead rows of its family, 12/12 returning 200,
+    and on the three pages Victor found by name. Hex ids (COM, ERCEA, EACI, EEAS, REA)
+    were tested with their leading zeros stripped and still 404: they keep their id.
+    """
+    fam, sep, rest = pid.partition("_")
+    if not sep:
+        return pid
+    if rest.startswith(fam + "_"):
+        rest = rest[len(fam) + 1:]
+    if fam == "EIB" and rest.startswith("EIB-"):
+        rest = "EIB" + rest[4:]
+    return f"{fam}_{rest}"
+
+
 def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> Optional[str]:
     """The official's own Whoiswho page, or None when they do not have one.
 
@@ -68,7 +90,7 @@ def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> Optional
     if person_uri:
         pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
         if pid and NO_PERSON_PAGE_MARKER not in pid:
-            return PERSON_PAGE.format(person_id=pid)
+            return PERSON_PAGE.format(person_id=person_page_id(pid))
         if pid:
             # A placeholder id. There is no page for this person; say so with None.
             return None
@@ -212,6 +234,9 @@ def _official_body(o: dict) -> tuple:
     meta = [("Position", o.get("position")), ("Department", o.get("department")),
             ("Code", o.get("mnemonic"))]
     li = "".join(f"<li><strong>{k}:</strong> {_html.escape(str(v))}</li>" for k, v in meta if v)
-    html = (f"<article><h2>{_html.escape(disp)}</h2><ul>{li}</ul>"
-            + f'<p><a href="{_html.escape(o["public_url"])}">View on EU Who is Who</a></p></article>')
+    # An official with no page has public_url None; escaping None raised and failed the
+    # whole daily sync on 2 Oct 2026. No page, no link.
+    link = (f'<p><a href="{_html.escape(o["public_url"])}">View on EU Who is Who</a></p>'
+            if o.get("public_url") else "")
+    html = f"<article><h2>{_html.escape(disp)}</h2><ul>{li}</ul>{link}</article>"
     return txt, html

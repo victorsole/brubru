@@ -25,7 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sqlalchemy import func, text
+from sqlalchemy import case, func, literal_column, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from core.database import engine
@@ -41,7 +41,10 @@ def _bulk(table, rows, conflict_col, batch=500) -> int:
         return 0
     # content_updated_at is the trigger's (migration 234); removed_at is written by
     # _mark_departures, except that a row seen again is no longer removed.
-    managed = ("id", "first_seen", "fetched_at", "content_updated_at", "removed_at")
+    # url_status and url_checked_at belong to verify_who_is_who_urls.py; they are not on
+    # the ORM model, and are listed here so a later model change cannot start nulling them.
+    managed = ("id", "first_seen", "fetched_at", "content_updated_at", "removed_at",
+               "url_status", "url_checked_at")
     cols = [c.name for c in table.columns if c.name not in managed]
     has_removed = "removed_at" in table.columns
     done = 0
@@ -49,6 +52,15 @@ def _bulk(table, rows, conflict_col, batch=500) -> int:
         chunk = [{k: r.get(k) for k in cols} for r in rows[i:i + batch]]
         stmt = pg_insert(table).values(chunk)
         set_ = {c: getattr(stmt.excluded, c) for c in cols if c != conflict_col}
+        if table.name == "who_is_who_officials" and "public_url" in set_:
+            # Once a page has been ASKED, its verdict owns public_url: the sync's derived
+            # URL would otherwise put back, every night, a link verified to be a 404.
+            # url_checked_at is not on the ORM model (the verifier added it), so it is
+            # named as a column of the existing row directly.
+            set_["public_url"] = case(
+                (literal_column("who_is_who_officials.url_checked_at").is_(None),
+                 stmt.excluded.public_url),
+                else_=table.c.public_url)
         set_["fetched_at"] = func.now()
         if has_removed:
             set_["removed_at"] = None

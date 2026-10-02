@@ -41,6 +41,13 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 import certifi  # noqa: E402
+import importlib.util as _ilu  # noqa: E402
+
+_spec = _ilu.spec_from_file_location(
+    "who_is_who_ingest", pathlib.Path(__file__).resolve().parents[1] / "services" / "scrapers" / "who_is_who_ingest.py")
+_ingest = _ilu.module_from_spec(_spec)
+sys.modules["who_is_who_ingest"] = _ingest
+_spec.loader.exec_module(_ingest)
 from sqlalchemy import create_engine, text  # noqa: E402
 
 PERSON_PAGE = "https://op.europa.eu/en/web/who-is-who/person/-/person/{person_id}"
@@ -57,10 +64,11 @@ BLOCKED = {403, 429, 503}
 
 PICK = text(
     """
-    SELECT id, person_uri, public_url
+    SELECT id, person_uri, public_url, name
       FROM who_is_who_officials
      WHERE person_uri IS NOT NULL
-       AND (url_checked_at IS NULL OR url_checked_at < now() - make_interval(days => :stale))
+       AND (url_checked_at IS NULL OR url_checked_at < now() - make_interval(days => :stale)
+            OR (url_status = 404 AND person_uri ~ :recheck))
      ORDER BY url_checked_at NULLS FIRST, id
      LIMIT :lim
     """
@@ -106,7 +114,24 @@ def _url_for(person_uri: str) -> str | None:
     pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
     if not pid or "UNDEFINED" in pid:
         return None
-    return PERSON_PAGE.format(person_id=pid)
+    # The ingest's own rule, imported, so the URL checked is the URL served.
+    return PERSON_PAGE.format(person_id=_ingest.person_page_id(pid))
+
+
+_LAST_TITLE: dict = {}
+
+
+def _names_the_person(title: str, name: str | None) -> bool:
+    """A 200 is stored only if the page title contains the name AND surname on record:
+    every word of the stored name ("Valter DRANDIĆ" -> VALTER, DRANDIĆ) must appear in the
+    title ("Mr Valter DRANDIĆ - EU Whoiswho"). Rule set by Victor, 2 Oct 2026, when the
+    page-id rule changed: a rewritten id that loads someone else would otherwise be
+    stored as this person's link, which is a hallucinated backfill."""
+    if not name or not title:
+        return False
+    words = re.findall(r"[^\s,]+", name)
+    t = title.upper()
+    return bool(words) and all(w.upper() in t for w in words)
 
 
 def _probe(url: str, ctx: ssl.SSLContext, pause: float) -> int | str:
@@ -115,6 +140,9 @@ def _probe(url: str, ctx: ssl.SSLContext, pause: float) -> int | str:
         try:
             req = urllib.request.Request(url, headers=UA)
             with urllib.request.urlopen(req, timeout=30, context=ctx) as r:
+                if r.status == 200:
+                    m = re.search(r"<title>(.*?)</title>", r.read(200_000).decode("utf-8", "ignore"), re.S)
+                    _LAST_TITLE[url] = m.group(1).strip() if m else ""
                 return r.status
         except urllib.error.HTTPError as e:
             if e.code in BLOCKED and attempt < 2:
@@ -151,12 +179,15 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=500, help="rows this run (default 500)")
     ap.add_argument("--pause", type=float, default=1.0, help="seconds between probes")
     ap.add_argument("--stale", type=int, default=90, help="re-check after N days")
+    ap.add_argument("--recheck", default="", help="regex on person_uri: re-check those rows marked 404 "
+                    "(e.g. after the page-id rule changed: '/person/(COR|EESC|EIB)_')")
     args = ap.parse_args()
 
     engine = create_engine(_database_url(), pool_pre_ping=True, pool_recycle=300)
     with engine.connect() as conn:
         before = conn.execute(PROGRESS).one()
-        rows = list(conn.execute(PICK, {"lim": args.limit, "stale": args.stale}))
+        rows = list(conn.execute(PICK, {"lim": args.limit, "stale": args.stale,
+                                        "recheck": args.recheck or "^$"}))
 
     print(f"[INFO] officials with a person id : {before.total}")
     print(f"[INFO] already checked            : {before.checked}  (alive {before.alive}, dead {before.dead})")
@@ -183,7 +214,11 @@ def main() -> int:
         status = _probe(url, ctx, args.pause)
         seen[status] += 1
 
-        if status == 200:
+        if status == 200 and not _names_the_person(_LAST_TITLE.pop(url, ""), r.name):
+            # A page loaded but it is not this person: never stored, left for review.
+            seen["200_wrong_person"] += 1
+            skipped += 1
+        elif status == 200:
             _write(engine, RECORD_ALIVE, {"rid": r.id, "st": 200, "url": url})
             alive += 1
         elif status == 404:

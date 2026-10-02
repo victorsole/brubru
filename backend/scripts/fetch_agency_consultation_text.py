@@ -88,6 +88,13 @@ def _text_of(data: bytes) -> str:
     return _main_text(data.decode("utf-8", "ignore"))
 
 
+def _clean(t: str) -> str:
+    """PDF extraction can emit NUL bytes and lone surrogates; Postgres refuses both, and
+    one such row crashed a 1,194-row run (and, written in one transaction, a 753-row
+    run). Drop them; they carry no text."""
+    return t.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8")
+
+
 def _judge(t: str) -> str | None:
     """None when t may be stored, else the reason it may not."""
     if len(t) < MIN_CHARS:
@@ -172,9 +179,13 @@ def main() -> int:
         print("[INFO] rehearsal only, nothing written")
         return 0
     n = 0
-    with engine.begin() as c:
-        for rid, (r, t) in got.items():
-            n += c.execute(STORE, {"t": t, "rid": rid}).rowcount
+    for rid, (r, t) in got.items():
+        # One transaction per row: a single bad row must not take the other 700 with it.
+        try:
+            with engine.begin() as c:
+                n += c.execute(STORE, {"t": _clean(t), "rid": rid}).rowcount
+        except Exception as e:  # noqa: BLE001
+            print(f"   [WARN] {r.source_body} {rid}: {type(e).__name__}")
     with engine.connect() as c:
         after = c.execute(GAP).scalar_one()
     print(f"[INFO] stored: {n} | no text {before} -> {after}")

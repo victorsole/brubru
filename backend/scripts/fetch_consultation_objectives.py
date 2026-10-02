@@ -204,6 +204,13 @@ def _published_document_text(payload: dict, ctx: ssl.SSLContext) -> str:
     return "\n\n".join(parts)[:MAX_DOC_CHARS]
 
 
+def _clean(t: str) -> str:
+    """PDF extraction can emit NUL bytes and lone surrogates; Postgres refuses both, and
+    one such row crashed a 1,194-row run (and, written in one transaction, a 753-row
+    run). Drop them; they carry no text."""
+    return t.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     g = ap.add_mutually_exclusive_group(required=True)
@@ -243,7 +250,7 @@ def main() -> int:
             failed += 1; why[got if len(got) < 40 else "short"] += 1
         else:
             with engine.begin() as conn:
-                conn.execute(STORE, {"t": got, "rid": r.id})
+                conn.execute(STORE, {"t": _clean(got), "rid": r.id})
             stored += 1; total_chars += len(got)
         if i % 50 == 0:
             print(f"   ...{i}/{len(rows)}  stored={stored} skipped={skipped} failed={failed}", flush=True)
