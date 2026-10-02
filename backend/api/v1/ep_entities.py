@@ -429,6 +429,8 @@ def _rollcall_to_item(r) -> "VoteItem":
     parts_html = [f"<h2>{_html.escape(title)}</h2>"]
     for k, v in [
         ("Level", r.level),
+        ("Subject", r.subject),
+        ("Vote type", r.vote_type),
         ("Committee", r.committee_code),
         ("Report", r.report_ref),
         ("Procedure", r.procedure_ref),
@@ -443,6 +445,29 @@ def _rollcall_to_item(r) -> "VoteItem":
             continue
         lines.append(f"{k}: {v}")
         parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    # The row already holds how each political group and each country voted. The body
+    # carried only the totals, so a vote read as "For 330, Against 300" with none of the
+    # content that makes a roll-call useful, and the walk showed 431 of 433 bodies under
+    # 400 characters (median 265). A vote has no document text; this is the fullest
+    # honest body it has.
+    def _tally(label, breakdown):
+        if not isinstance(breakdown, dict) or not breakdown:
+            return
+        cells = []
+        for who in sorted(breakdown):
+            t = breakdown[who]
+            if isinstance(t, dict):
+                cells.append(f"{who} {t.get('+', 0)}/{t.get('-', 0)}/{t.get('0', 0)}")
+            elif t not in (None, ""):
+                # A shape other than for/against/abstain counts: say what the source
+                # holds rather than guess at it or crash the whole page.
+                cells.append(f"{who} {t}")
+        text_line = f"{label} (for/against/abstain): " + "; ".join(cells)
+        lines.append(text_line)
+        parts_html.append(f"<p><strong>{_html.escape(label)} (for/against/abstain):</strong> "
+                          f"{_html.escape('; '.join(cells))}</p>")
+    _tally("By political group", r.group_breakdown)
+    _tally("By country", r.country_breakdown)
     return VoteItem(
         id=str(r.id),
         htv_id=None,
