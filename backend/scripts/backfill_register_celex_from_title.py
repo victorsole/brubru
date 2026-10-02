@@ -40,7 +40,7 @@ JOIN = re.compile(r"^JOIN\((\d{4})\)\s*(\d+)$")
 
 PICK = text("""
     SELECT id, reference, title FROM commission_documents
-     WHERE coalesce(text_body, '') = '' AND coalesce(celex, '') = ''""")
+     WHERE coalesce(celex, '') = ''""")
 TAKEN = text("SELECT celex FROM commission_documents WHERE coalesce(celex, '') <> ''")
 STORE = text("UPDATE commission_documents SET celex = :c, last_updated = now() "
              "WHERE id = :rid AND coalesce(celex, '') = ''")
@@ -65,16 +65,23 @@ def _candidate(reference: str, title: str) -> str | None:
 
 
 def _exists(celex: str, ctx) -> str:
-    req = urllib.request.Request(CELLAR.format(c=celex),
-                                 headers={"Accept": "application/pdf", "Accept-Language": "eng"})
+    """Cellar's answer for this CELEX in ANY format. Asking for the PDF alone called
+    32016R0399 (the Schengen Borders Code) a 404: it exists as XHTML only."""
     opener = urllib.request.build_opener(urllib.request.HTTPSHandler(context=ctx))
-    try:
-        with opener.open(req, timeout=45) as r:
-            return str(r.status)
-    except urllib.error.HTTPError as e:
-        return str(e.code)
-    except Exception as e:
-        return type(e).__name__
+    last = "none"
+    for accept in ("application/xhtml+xml", "application/pdf"):
+        req = urllib.request.Request(CELLAR.format(c=celex),
+                                     headers={"Accept": accept, "Accept-Language": "eng"})
+        try:
+            with opener.open(req, timeout=45) as r:
+                return str(r.status)
+        except urllib.error.HTTPError as e:
+            last = str(e.code)
+            if e.code in (300, 303):
+                return last
+        except Exception as e:
+            last = type(e).__name__
+    return last
 
 
 def main() -> int:
@@ -88,7 +95,7 @@ def main() -> int:
     with engine.connect() as c:
         rows = list(c.execute(PICK))
         taken = {r[0] for r in c.execute(TAKEN)}
-    print(f"[INFO] bodyless register rows with no CELEX: {len(rows)}")
+    print(f"[INFO] register rows with no CELEX: {len(rows)}")
 
     ctx = ssl.create_default_context(cafile=certifi.where())
     verdict: Counter = Counter()

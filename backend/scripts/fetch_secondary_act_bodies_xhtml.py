@@ -81,7 +81,7 @@ def _database_url() -> str:
 
 
 def _strip(raw: str) -> str:
-    out = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
+    out = re.sub(r"<(script|style|head)[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
     out = re.sub(r"<[^>]+>", " ", out)
     return re.sub(r"\s+", " ", out).strip()
 
