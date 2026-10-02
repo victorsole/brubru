@@ -48,7 +48,7 @@ PICK = text(
     """
     SELECT id, celex FROM secondary_acts
      WHERE coalesce(text_body, '') = '' AND coalesce(celex, '') <> ''
-       AND (:act_type = 'all' OR act_type = :act_type)
+       AND (:act_type = 'all' OR act_type::text = :act_type)
      ORDER BY celex
      LIMIT :lim
     """
@@ -68,7 +68,7 @@ STATE = text(
     SELECT count(*) AS total,
            count(*) FILTER (WHERE coalesce(text_body, '') = '') AS no_body
       FROM secondary_acts
-     WHERE (:act_type = 'all' OR act_type = :act_type)
+     WHERE (:act_type = 'all' OR act_type::text = :act_type)
     """
 )
 
@@ -115,6 +115,12 @@ def _fetch(celex: str, ctx: ssl.SSLContext):
         else:
             html = raw.decode("utf-8", "ignore")
             txt = _strip(html)
+            # Inline images can make one act 150 MB; that hung the write for hours
+            # (see fetch_eu_law_bodies._clean_html). Store the markup that carries text.
+            html = re.sub(r"<(script|style|svg|object|iframe|img)\b[^>]*?(/>|>.*?</\1>)", " ", html, flags=re.S | re.I)
+            html = re.sub(r"\sstyle=\"[^\"]*\"", "", html, flags=re.I)
+            if len(html) > 2_000_000:
+                html = None
         if len(txt) >= MIN_CHARS:
             return html, txt
         last = f"too_short_{len(txt)}"
@@ -131,7 +137,9 @@ def main() -> int:
     ap.add_argument("--pause", type=float, default=0.3)
     args = ap.parse_args()
 
-    engine = create_engine(_database_url())
+    engine = create_engine(_database_url(), pool_pre_ping=True, pool_recycle=300,
+                           connect_args={"keepalives": 1, "keepalives_idle": 20, "keepalives_interval": 10,
+                                         "keepalives_count": 3, "connect_timeout": 20})
     with engine.connect() as conn:
         before = conn.execute(STATE, {"act_type": args.act_type}).one()
         rows = list(conn.execute(PICK, {"act_type": args.act_type, "lim": args.limit}))

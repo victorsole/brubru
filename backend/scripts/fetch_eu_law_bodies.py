@@ -52,6 +52,7 @@ PICK = text(
     """
     SELECT id, celex FROM eu_laws
      WHERE celex IS NOT NULL AND celex <> '' AND body_fetched_at IS NULL
+       AND celex !~ '\\([0-9]+\\)$'
      ORDER BY celex
      LIMIT :lim
     """
@@ -85,9 +86,67 @@ def _database_url() -> str:
 
 
 def _strip(raw: str) -> str:
-    out = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
+    out = re.sub(r"<(script|style|head)[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
     out = re.sub(r"<[^>]+>", " ", out)
     return re.sub(r"\s+", " ", out).strip()
+
+
+MAX_HTML = 2_000_000
+
+
+def _clean_html(raw: str, txt: str) -> str:
+    """Cellar XHTML can carry 150 MB of inline images and styles around 27k characters
+    of law (32021R1471). Storing that hung the write for hours. Keep the markup that
+    carries the act, drop what carries pixels, and if it is still huge fall back to the
+    text as paragraphs."""
+    import html as _h
+    h = re.sub(r"<(script|style|svg|object|iframe|img)\b[^>]*?(/>|>.*?</\1>)", " ", raw, flags=re.S | re.I)
+    h = re.sub(r"\s(style|src|href)=\"data:[^\"]*\"|\sstyle=\"[^\"]*\"", "", h, flags=re.I)
+    m = re.search(r"<body\b[^>]*>(.*)</body>", h, flags=re.S | re.I)
+    h = (m.group(1) if m else h).strip()
+    if len(h) > MAX_HTML:
+        h = "".join("<p>" + _h.escape(x) + "</p>" for x in re.split(r"(?<=[.;:])\s{2,}|\n+", txt) if x.strip())
+    return h
+
+
+def _fetch_pdf(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
+    """Older acts and decisions exist on Cellar as PDF only: XHTML answers 404 but the
+    same resource answers 200 to Accept: application/pdf."""
+    import html as _h, io
+    from pypdf import PdfReader
+    hdrs = {"Accept": "application/pdf", "Accept-Language": "eng"}
+    try:
+        req = urllib.request.Request(CELLAR.format(celex=celex), headers=hdrs)
+        with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
+            data = r.read()
+        pages = [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages]
+    except urllib.error.HTTPError as e:
+        if e.code != 300:
+            return f"http_{e.code}"
+        # 300 Multiple Choices: a document in several files (52026PC0186 = DOC_1 the
+        # proposal, DOC_2 its annex). The document is all of them, in order.
+        listing = e.read().decode("utf-8", "ignore")
+        docs = sorted(set(re.findall(r'href="([^"]+/DOC_(\d+))"', listing)),
+                      key=lambda x: int(x[1]))
+        if not docs:
+            return "http_300_nodocs"
+        pages = []
+        try:
+            for url, _n in docs:
+                req = urllib.request.Request(url.replace("http://", "https://", 1), headers=hdrs)
+                with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
+                    pages += [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(r.read())).pages]
+        except Exception as e2:
+            return "pdf_" + type(e2).__name__
+    except Exception as e:
+        return "pdf_" + type(e).__name__
+    txt = re.sub(r"[ \t]+", " ", "\n".join(pages)).strip()
+    flat = re.sub(r"\s+", " ", txt)
+    if len(flat) < MIN_CHARS:
+        return f"too_short_{len(flat)}"
+    paras = [x.strip() for x in re.split(r"\n\s*\n|\n(?=[A-Z0-9(])", txt) if x.strip()]
+    html = "".join("<p>" + _h.escape(re.sub(r"\s+", " ", x)) + "</p>" for x in paras)
+    return html, flat
 
 
 def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
@@ -97,6 +156,8 @@ def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
         with urllib.request.urlopen(req, timeout=45, context=ctx) as r:
             raw = r.read().decode("utf-8", "ignore")
     except urllib.error.HTTPError as e:
+        if e.code in (300, 404):
+            return _fetch_pdf(celex, ctx)
         return f"http_{e.code}"
     except Exception as e:
         return type(e).__name__
@@ -106,7 +167,7 @@ def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     if len(txt) < MIN_CHARS:
         # Not an act: a challenge, a stub or a nav fragment. Never stored.
         return f"too_short_{len(txt)}"
-    return raw, txt
+    return _clean_html(raw, txt), txt
 
 
 def main() -> int:
@@ -118,7 +179,11 @@ def main() -> int:
     ap.add_argument("--pause", type=float, default=0.3)
     args = ap.parse_args()
 
-    engine = create_engine(_database_url())
+    engine = create_engine(
+        _database_url(), pool_pre_ping=True, pool_recycle=300,
+        connect_args={"keepalives": 1, "keepalives_idle": 20, "keepalives_interval": 10,
+                      "keepalives_count": 3, "connect_timeout": 20},
+    )
     with engine.connect() as conn:
         before = conn.execute(PROGRESS, {"floor": MIN_CHARS}).one()
         rows = list(conn.execute(PICK, {"lim": args.limit}))
@@ -142,9 +207,16 @@ def main() -> int:
             why[got.split("_")[0] if got.startswith("too_short") else got] += 1
         else:
             raw, txt = got
-            with engine.begin() as conn:
-                conn.execute(STORE, {"rid": r.id, "html": raw, "txt": txt,
-                                     "n": len(txt)})
+            for _try in range(5):
+                try:
+                    with engine.begin() as conn:
+                        conn.execute(STORE, {"rid": r.id, "html": raw, "txt": txt,
+                                             "n": len(txt)})
+                    break
+                except Exception:
+                    engine.dispose(); time.sleep(2 * (_try + 1))
+            else:
+                raise RuntimeError("database unreachable after retries")
             stored += 1
         if i % 100 == 0:
             print(f"   ...{i}/{len(rows)}  stored={stored} skipped={skipped}", flush=True)
