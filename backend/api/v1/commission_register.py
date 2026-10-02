@@ -121,6 +121,10 @@ def _row_to_item(
     # core/body_sources.py, so a rename does not have to be chased through
     # every handler. For commission_documents that is text_body + body_html.
     body_text_value, body_html_value = read_body("commission_documents", r)
+    if body_text_value and not (body_html_value or "").strip():
+        # PDF-sourced text (proposals, SWDs): serve it as escaped paragraphs so
+        # body_html is never empty where body_txt is not (Victor, 2 Oct 2026).
+        body_html_value = body_from_pdf_text(body_text_value)[0]
     has_body = bool(
         (body_text_value and len(body_text_value) >= body_threshold)
         or (body_html_value and len(body_html_value) >= body_threshold)

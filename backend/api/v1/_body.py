@@ -14,9 +14,9 @@ pair.
 
 Per Victor's directive (5 May 2026):
 - No truncation: full body on both list and detail responses.
-- For PDF-sourced rows (Cellar PDFs, RegDel PDFs, etc.) we DO NOT synthesise
-  HTML from the extracted text — body_html stays None to honestly represent
-  "we never saw HTML upstream, only a PDF binary".
+- For PDF-sourced rows (Cellar PDFs, RegDel PDFs, etc.) body_html is the
+  extracted text as escaped <p> paragraphs, nothing added (changed 2 Oct 2026,
+  Victor: GovClipping needs body_html on every row; it was None before).
 - For HTML-sourced rows we either capture body_html as stored, or compose it
   from canonical structured fields (Stage 1) until a re-scrape pass captures
   the byte-identical upstream body div (Stage 2, deferred).
@@ -66,10 +66,12 @@ def body_from_pdf_text(
     text: Optional[str],
     threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> Tuple[Optional[str], Optional[str], bool]:
-    """For PDF-sourced rows: return (body_html=None, body_txt=text, has_body).
+    """For PDF-sourced rows: return (body_html, body_txt=text, has_body).
 
-    Honest contract — we never invent HTML from PDF text. If a partner needs
-    HTML, they must use the source PDF URL.
+    body_html is the SAME text as escaped <p> paragraphs: no word added, no
+    markup that the PDF did not imply. Until 2 Oct 2026 it was None ("never
+    invent HTML from PDF text"); GovClipping needs body_html on every row and
+    Victor chose the paragraph wrap over the null.
 
     Args:
         text: extracted PDF text or None.
@@ -81,7 +83,23 @@ def body_from_pdf_text(
     if not text:
         return None, None, False
     has = len(text) >= threshold
-    return None, text, has
+    return _paragraphs_html(text), text, has
+
+
+# A PDF extraction stored flat (one line) still has its structure in the words:
+# break before an article, annex, numbered recital or numbered paragraph.
+_STRUCTURE_BREAK = re.compile(
+    r"(?<=[.;:])\s+(?=(?:Article \d|ANNEX\b|Annex [IVX\d]|\(\d+\) |\d+\. [A-Z]))")
+
+
+def _paragraphs_html(text: str) -> str:
+    blocks = [b for b in re.split(r"\n\s*\n|\n", text) if b.strip()]
+    if len(blocks) <= 1:
+        blocks = [b for b in _STRUCTURE_BREAK.split(text) if b.strip()]
+    return "".join("<p>" + _html_escape(_WS.sub(" ", b).strip()) + "</p>" for b in blocks)
+
+
+_WS = re.compile(r"\s+")
 
 
 def body_from_html(
