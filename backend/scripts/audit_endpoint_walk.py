@@ -34,6 +34,9 @@ def _get(path: str, key: str) -> dict:
         return json.loads(r.read())
 
 
+MAX_PAGES = 5000
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("path")
@@ -46,7 +49,7 @@ def main() -> int:
     rc = 0
     print(f"=== {a.path}", flush=True)
     for name, qs in windows:
-        page, n, ids, dup, total = 1, 0, set(), 0, None
+        page, n, ids, dup, total, capped = 1, 0, set(), 0, None, False
         empty, absent, bodies = collections.Counter(), collections.Counter(), []
         t0 = time.time()
         while True:
@@ -67,9 +70,15 @@ def main() -> int:
                 bodies.append(len(it.get("body_txt") or ""))
                 if it.get("public_url"):
                     urls.add(it["public_url"])
-            if not d.get("has_more") or page > 1500:
+            if not d.get("has_more"):
+                break
+            if page >= MAX_PAGES:
+                capped = True
                 break
             page += 1
+        if capped:
+            # A capped walk is a SKIP, not a pass: meetings stopped at 150,100 of 159,852.
+            print(f"  [WARN] {name}: stopped at the {MAX_PAGES}-page cap; NOT a full walk")
         nz = sorted(b for b in bodies if b)
         fmt = lambda c: "  ".join(f"{k}={v}" for k, v in sorted(c.items())) or "none"
         print(f"  {name:<9} total={total} walked={n} pages={page} distinct={len(ids)} "
