@@ -56,8 +56,8 @@ _REGISTER_MEMBER_STATES = {**iel.MEMBER_STATES, "UK": "United Kingdom"}
 class _DataPoints(BaseModel):
     """The five Brubru datapoints, present even when null."""
     public_url: Optional[str] = Field(None, description="The item's page on the Commission's website: its press release, memo or Court of Justice case when it has one, otherwise the register search page (see `public_url_kind`).")
-    body_txt: Optional[str] = Field(None, description="Plain-text body composed from the record (full on detail endpoints; null on lists).")
-    body_html: Optional[str] = Field(None, description="HTML body composed from the record (full on detail endpoints; null on lists).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body composed from the record. The same body on the list and the detail route; pass include_body=false on a list to omit it.")
+    body_html: Optional[str] = Field(None, description="HTML body composed from the record. The same body on the list and the detail route.")
     document_date: Optional[date] = Field(None, description="The item's own date: the decision date, or a case's latest decision date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded the item.")
     updated_date: Optional[datetime] = Field(None, description="When the item's content last changed in Brubru (a new decision in the case, a new press release, a closure...). A daily re-sync that finds the same content does not move it.")
@@ -277,6 +277,7 @@ def list_cases(
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after. The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", pattern="^(recent|oldest|updated_asc|updated_desc|created_asc|created_desc)$"),
+    include_body: bool = Query(True, description="Include body_txt and body_html on every item (the same body the detail route serves). Pass false for a lighter list."),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -309,7 +310,7 @@ def list_cases(
         or f"latest_decision_date {direction} NULLS LAST, id {direction}"
     total = int(db.execute(text(f"SELECT count(*) FROM infringement_cases {clause}"), params).scalar() or 0)
     rows = db.execute(text(
-        f"SELECT {_CASE_COLS} FROM infringement_cases {clause} "
+        f"SELECT {_CASE_COLS}{', body_txt, body_html' if include_body else ''} FROM infringement_cases {clause} "
         f"ORDER BY {ordering} LIMIT :limit OFFSET :offset"),
         {**params, "limit": limit, "offset": (page - 1) * limit}).mappings().all()
     items = []
@@ -379,6 +380,7 @@ def list_decisions(
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after. The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", pattern="^(recent|oldest|updated_asc|updated_desc|created_asc|created_desc)$"),
+    include_body: bool = Query(True, description="Include body_txt and body_html on every item (the same body the detail route serves). Pass false for a lighter list."),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -414,7 +416,7 @@ def list_decisions(
     direction = "DESC" if order == "recent" else "ASC"
     total = int(db.execute(text(f"SELECT count(*) FROM infringement_decisions d {clause}"), params).scalar() or 0)
     rows = db.execute(text(
-        f"SELECT {_DECISION_COLS} FROM infringement_decisions d "
+        f"SELECT {_DECISION_COLS}{', d.body_txt, d.body_html' if include_body else ''} FROM infringement_decisions d "
         f"LEFT JOIN infringement_cases c ON c.infringement_number = d.infringement_number {clause} "
         f"ORDER BY {sql_order(order, 'd.creation_date', 'd.content_updated_at', 'd.id') or f'd.decision_date {direction}, d.id {direction}'} "
         f"LIMIT :limit OFFSET :offset"),
