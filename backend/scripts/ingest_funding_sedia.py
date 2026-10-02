@@ -491,7 +491,11 @@ def upsert(cur, row: Dict[str, Any]) -> None:
             call_id = EXCLUDED.call_id,
             title = EXCLUDED.title,
             short_summary = EXCLUDED.short_summary,
-            description = EXCLUDED.description,
+            -- The LONGER value wins. SEDIA's search record carries no description for
+            -- older closed calls, so assigning it unconditionally would blank text a
+            -- backfill (backfill_ft_call_descriptions.py) read from the portal's own
+            -- topic page, on the very next nightly run.
+            description = CASE WHEN length(coalesce(EXCLUDED.description,'')) >= length(coalesce(funding_opportunities.description,'')) THEN EXCLUDED.description ELSE funding_opportunities.description END,
             -- The SEDIA search record carries no status field at all, so
             -- normalise_row falls back to 'unknown' on every row. Assigning
             -- that unconditionally overwrote a known 'open' or 'closed' with
@@ -585,7 +589,11 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
                 %(documents_url)s, %(published_at)s, FALSE, NOW(), NOW())
         ON CONFLICT (tender_reference) DO UPDATE SET
             title = EXCLUDED.title,
-            description = EXCLUDED.description,
+            -- The LONGER value wins. SEDIA's search record carries no description for
+            -- older closed calls, so assigning it unconditionally would blank text a
+            -- backfill (backfill_ft_call_descriptions.py) read from the portal's own
+            -- topic page, on the very next nightly run.
+            description = CASE WHEN length(coalesce(EXCLUDED.description,'')) >= length(coalesce(ft_calls_for_tenders.description,'')) THEN EXCLUDED.description ELSE ft_calls_for_tenders.description END,
             status = CASE WHEN EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
                           THEN ft_calls_for_tenders.status ELSE EXCLUDED.status END,
             deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_tenders.deadline),
@@ -638,7 +646,11 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             -- translation of the German, em-dash included.
             detected_lang = CASE WHEN EXCLUDED.title IS DISTINCT FROM ft_calls_for_proposals.title
                                  THEN NULL ELSE ft_calls_for_proposals.detected_lang END,
-            description = EXCLUDED.description,
+            -- The LONGER value wins. SEDIA's search record carries no description for
+            -- older closed calls, so assigning it unconditionally would blank text a
+            -- backfill (backfill_ft_call_descriptions.py) read from the portal's own
+            -- topic page, on the very next nightly run.
+            description = CASE WHEN length(coalesce(EXCLUDED.description,'')) >= length(coalesce(ft_calls_for_proposals.description,'')) THEN EXCLUDED.description ELSE ft_calls_for_proposals.description END,
             -- The SEDIA search record carries no status field at all, so
             -- normalise_row falls back to 'unknown' on every row. Assigning
             -- that unconditionally overwrote a known 'open' or 'closed' with
