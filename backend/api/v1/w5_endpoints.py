@@ -453,6 +453,30 @@ class TenderItem(BaseModel):
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this notice.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
+    # Absent from the payload on all 39,423 rows until 2 Oct 2026 (GovClipping walk):
+    # the notice's own text sat in description/summary but no body field carried it.
+    body_txt: Optional[str] = Field(None, description="The notice's text: its description and summary as published on TED, with buyer, procedure and value.")
+    body_html: Optional[str] = Field(None, description="The same text as HTML.")
+
+
+def _tender_body(r) -> tuple:
+    """(body_txt, body_html) from the notice's own published fields, nothing added."""
+    from api.v1._body import compose_html_from_sections
+    value = (f"{r.estimated_value:,.0f} {r.estimated_value_currency or 'EUR'}"
+             if r.estimated_value else None)
+    html, txt, _ = compose_html_from_sections([
+        ("Description", r.description),
+        ("Summary", r.summary if (r.summary or "") != (r.description or "") else None),
+        ("Buyer", r.official_name),
+        ("Buyer country", r.buyer_country),
+        ("Procedure", r.procedure_type),
+        ("Contract nature", r.contract_nature),
+        ("Estimated value", value),
+        ("Submission deadline", str(r.submission_deadline) if r.submission_deadline else None),
+    ], threshold=1)
+    if txt and r.title:
+        txt = f"{r.title}\n\n{txt}"
+    return txt, html
 
 
 @tenders_router.get(
@@ -578,6 +602,7 @@ async def list_tenders(
             public_url=r.ted_url, document_date=r.publication_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
             updated_date=row_updated(r),
+            **dict(zip(("body_txt", "body_html"), _tender_body(r))),
         )
         for r in rows
     ]
@@ -637,4 +662,5 @@ async def get_tender_detail(
         public_url=r.ted_url, document_date=r.publication_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
         updated_date=row_updated(r),
+        **dict(zip(("body_txt", "body_html"), _tender_body(r))),
     )
