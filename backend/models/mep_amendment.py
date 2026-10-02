@@ -37,6 +37,12 @@ class AmendmentDocument(Base):
     document_type = Column(String(10), nullable=False)                    # "PR", "AM", "RD", "AD", "PA"
     document_date = Column(Date, nullable=True)
     doceo_url = Column(String(500), nullable=False)
+    # The document's own text, extracted from the doceo .docx. Columns existed in the
+    # table (body_fetched_at was being stamped) but not on the model, so nothing could
+    # read or serve them.
+    text_body = Column(Text)
+    body_html = Column(Text)
+    body_fetched_at = Column(DateTime(timezone=True))
     rapporteur_name = Column(String(200), nullable=True)                  # For PR documents
     total_amendments = Column(Integer, default=0)
     status = Column(String(20), default="pending")                        # "pending", "fetched", "parsed", "failed"

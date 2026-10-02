@@ -883,6 +883,16 @@ def _servable_document_types() -> tuple:
     ) + ("work_item",)
 
 
+def _ep_doc_body(title, pairs):
+    """(plain, html) composed from the row's own fields, skipping empty ones."""
+    import html as _h
+    rows = [(k, str(v).strip()) for k, v in pairs if v not in (None, "") and str(v).strip()]
+    plain = "\n".join([title] + [f"{k}: {v}" for k, v in rows])
+    html = f"<h2>{_h.escape(title)}</h2>" + "".join(
+        f"<p><strong>{_h.escape(k)}:</strong> {_h.escape(v)}</p>" for k, v in rows)
+    return plain, html
+
+
 class EPDocumentItem(BaseModel):
     id: str
     source: str  # "committee_work" | "amendment_document" | "mep_amendment_set" | "text_adopted"
@@ -898,8 +908,8 @@ class EPDocumentItem(BaseModel):
     last_updated: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of document_url).")
-    body_txt: Optional[str] = Field(None, description="Null for this list endpoint — fetch body via the per-source detail endpoints (committee minutes, amendment docs).")
-    body_html: Optional[str] = Field(None, description="Null for this list endpoint.")
+    body_txt: Optional[str] = Field(None, description="The document's own text where Brubru holds it (the amendment .docx), otherwise a composition of the row's fields (committee, procedure, rapporteur, stage, PE reference).")
+    body_html: Optional[str] = Field(None, description="HTML of the same body.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated for this union view).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
@@ -1005,7 +1015,7 @@ async def list_ep_documents(
     # `has_more` stayed true. Only 800 of the records were reachable. The same bug was
     # fixed in /council-documents on 27 Aug 2026; this endpoint never got the fix.
     depth = page * limit
-    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(depth).all()
+    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast(), AmendmentDocument.id).limit(depth).all()
     lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in a_rows])
     for r in a_rows:
         fallback = f"{AD_TYPE_MAP.get(r.document_type, r.document_type or 'doc')} for {r.procedure_reference} ({r.committee_code})"
@@ -1023,6 +1033,14 @@ async def list_ep_documents(
             total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
             public_url=r.doceo_url,
+            body_txt=(r.text_body or _ep_doc_body(fallback, [
+                ("Committee", r.committee_code), ("Procedure", r.procedure_reference),
+                ("PE reference", r.pe_reference), ("Rapporteur", r.rapporteur_name),
+                ("Date", r.document_date), ("Amendments", r.total_amendments)])[0]),
+            body_html=(r.body_html or _ep_doc_body(fallback, [
+                ("Committee", r.committee_code), ("Procedure", r.procedure_reference),
+                ("PE reference", r.pe_reference), ("Rapporteur", r.rapporteur_name),
+                ("Date", r.document_date), ("Amendments", r.total_amendments)])[1]),
             creation_date=r.scraped_at,
             updated_date=row_updated(r),
         ))
@@ -1053,7 +1071,7 @@ async def list_ep_documents(
     # Ordered by last_updated, not vote_date: every committee_work row has a NULL
     # vote_date, so they all tie at the bottom of the merge key below and last_updated is
     # the only order that makes the page deterministic.
-    c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(depth).all()
+    c_rows = cq.order_by(CommitteeWorkItem.vote_date.desc().nullslast(), CommitteeWorkItem.id).limit(depth).all()
     for r in c_rows:
         items.append(EPDocumentItem(
             id=str(r.id),
@@ -1067,12 +1085,28 @@ async def list_ep_documents(
             document_url=r.ep_page_url or r.source_url or r.eurlex_url,
             last_updated=r.last_updated,
             public_url=r.ep_page_url or r.source_url or r.eurlex_url,
+            body_txt=_ep_doc_body(r.title or "", [
+                ("Committee", r.committee_code), ("Role", r.committee_role),
+                ("Procedure", r.procedure_ref), ("Rapporteur", r.rapporteur_name),
+                ("Stage", r.stage), ("Status", r.status_text or r.status),
+                ("Description", r.full_description or r.description)])[0],
+            body_html=_ep_doc_body(r.title or "", [
+                ("Committee", r.committee_code), ("Role", r.committee_role),
+                ("Procedure", r.procedure_ref), ("Rapporteur", r.rapporteur_name),
+                ("Stage", r.stage), ("Status", r.status_text or r.status),
+                ("Description", r.full_description or r.description)])[1],
             creation_date=r.last_updated,
             updated_date=row_updated(r),
         ))
 
     # Sort union by document_date desc and apply page slice.
     # `total` reflects the FULL DB count across both source tables (honest).
+    # A TOTAL order: date descending, then id ascending. Sorting on the date alone left
+    # thousands of rows tied (every committee-work row is undated) and each branch cut its
+    # own tied rows differently from the merge, so a full walk repeated 2 ids and skipped
+    # others in BOTH windows, which rules out a concurrent write. The branches above use
+    # the same (date desc, id asc) order, so the merged slice and the branch cutoffs agree.
+    items.sort(key=lambda x: x.id)
     items.sort(key=lambda x: x.document_date or date.min, reverse=True)
     total = a_total + c_total
     page_data = items[(page - 1) * limit : page * limit]
