@@ -157,6 +157,24 @@ def _probe(url: str, ctx: ssl.SSLContext, pause: float) -> int | str:
     return "exhausted"
 
 
+# The hex part of these ids identifies the PERSON across institutions; the page lives
+# under the institution they are listed with NOW. Victor found 3 of 3 this way on
+# 2 Oct 2026: COM_000030C040 -> EEAS_000030C040, EACI_00003DC743 -> COM_00003DC743,
+# REA_00003DC0FF -> COM_00003DC0FF. Most likely first.
+HEX_INSTITUTIONS = ("COM", "EEAS", "EACI", "EISMEA", "REA", "ERCEA", "CINEA", "HADEA",
+                    "EACEA", "CM", "EDPS", "ECB")
+_HEX_ID = re.compile(r"^([A-Z]+)_([0-9A-F]{6,14})$")
+
+
+def _alternates(person_uri: str) -> list[str]:
+    pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
+    m = _HEX_ID.match(pid)
+    if not m:
+        return []
+    return [PERSON_PAGE.format(person_id=f"{inst}_{m.group(2)}")
+            for inst in HEX_INSTITUTIONS if inst != m.group(1)]
+
+
 def _write(engine, stmt, params, tries: int = 5):
     """Run one write, reconnecting if the pooler dropped the connection."""
     import time as _t
@@ -222,8 +240,20 @@ def main() -> int:
             _write(engine, RECORD_ALIVE, {"rid": r.id, "st": 200, "url": url})
             alive += 1
         elif status == 404:
-            _write(engine, RECORD_DEAD, {"rid": r.id, "st": 404})
-            dead += 1
+            moved = None
+            for alt in _alternates(r.person_uri):
+                st2 = _probe(alt, ctx, args.pause)
+                if st2 == 200 and _names_the_person(_LAST_TITLE.pop(alt, ""), r.name):
+                    moved = alt
+                    break
+                time.sleep(args.pause / 2)
+            if moved:
+                _write(engine, RECORD_ALIVE, {"rid": r.id, "st": 200, "url": moved})
+                alive += 1
+                seen["200_other_institution"] += 1
+            else:
+                _write(engine, RECORD_DEAD, {"rid": r.id, "st": 404})
+                dead += 1
         else:
             # Blocked or a transport fault. Not an answer about this person: leave the
             # row unchecked so the next run asks again. Writing here is how a throttling
