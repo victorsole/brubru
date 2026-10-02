@@ -955,6 +955,27 @@ async def list_commissioners(
 COMMISSIONERS_DATASET = "commissioners"
 
 
+def _commissioner_datapoints(it: Dict[str, Any]) -> None:
+    """The per-item datapoints, which this list never carried.
+
+    A walk of /commission/commissioners found each of the 27 items with no public_url,
+    body_txt, body_html or document_date: the fields were ABSENT, not null, because the item
+    was a hand-built dict while the model the detail route returns already declares them. A
+    commissioner is a person, not a document, so there is no publication date (document_date
+    stays null) and the body is a composition of the profile; public_url is the bio page.
+    """
+    import html as _h
+    rows = [("Portfolio", it.get("portfolio")), ("Country", it.get("country")),
+            ("Profile", it.get("bio_url")), ("Agenda", it.get("agenda_url"))]
+    rows = [(k, str(v)) for k, v in rows if v]
+    name = it.get("name") or ""
+    it["public_url"] = it.get("bio_url")
+    it["body_txt"] = "\n".join([name] + [f"{k}: {v}" for k, v in rows])
+    it["body_html"] = f"<h2>{_h.escape(name)}</h2>" + "".join(
+        f"<p><strong>{k}:</strong> {_h.escape(v)}</p>" for k, v in rows)
+    it["document_date"] = None
+
+
 def _dated_commissioners(db: Session, items: List[Dict[str, Any]], window, order: str) -> List[Dict[str, Any]]:
     """Attach the snapshot's change dates, apply the window, add departures, and order."""
     from services import api_snapshots
@@ -971,6 +992,7 @@ def _dated_commissioners(db: Session, items: List[Dict[str, Any]], window, order
             dates[key] = d
     out = []
     for it in items:
+        _commissioner_datapoints(it)
         d = dates.get(it["slug"])
         it["creation_date"], it["updated_date"] = (d[0], d[1]) if d else (None, None)
         it["removed_date"] = d[2] if d and it.pop("removed", False) else None

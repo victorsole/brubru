@@ -24,7 +24,8 @@ from urllib import error as urllib_error
 from urllib import request as urllib_request
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, ConfigDict
+from datetime import date, datetime
+from pydantic import BaseModel, ConfigDict, Field
 
 from models.user import User
 
@@ -67,6 +68,27 @@ class CountryItem(BaseModel):
     name: str
     iso: Optional[str] = None
     is_eu_ms: bool = False
+    # The five datapoints, which this item never carried: a walk found each of the 27 rows
+    # with only code/name/iso/is_eu_ms, the other fields ABSENT rather than null. A country
+    # is a reference entry, not a document, so there is no publication date and the source is
+    # a live pass-through with no change signal; those stay null and say why. public_url is
+    # the source list itself (there is no per-country page to point at, and a constructed
+    # Access2Markets URL would need a product to mean anything).
+    public_url: Optional[str] = Field(None, description="The DG TAXUD country list this entry is read from.")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: name, ISO code, EU Member State or partner, DG TAXUD code.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="Null: a country entry has no publication date.")
+    creation_date: Optional[datetime] = Field(None, description="Null: the list is a live pass-through, so Brubru records no first-seen time for it.")
+    updated_date: Optional[datetime] = Field(None, description="Null: the source publishes no change signal for this list.")
+
+
+def _country_datapoints(code: str, name: str, iso: Optional[str], is_eu_ms: bool, source: str) -> dict:
+    import html as _h
+    kind = "EU Member State" if is_eu_ms else "partner country"
+    line = f"{name} ({iso or 'no ISO code'}): {kind}. DG TAXUD code {code}."
+    return {"public_url": source, "body_txt": line,
+            "body_html": f"<p><strong>{_h.escape(name)}</strong> ({_h.escape(iso or 'no ISO code')}): "
+                         f"{kind}. DG TAXUD code {_h.escape(code)}.</p>"}
 
 
 class ProductItem(BaseModel):
@@ -139,6 +161,10 @@ async def list_countries(
             name=c.get("name") or "?",
             iso=c.get("iso"),
             is_eu_ms=(c.get("iso") or "").upper() in ms_isos,
+            **_country_datapoints(
+                c.get("code") or "?", c.get("name") or "?", c.get("iso"),
+                (c.get("iso") or "").upper() in ms_isos,
+                f"{FLOWS_BASE}/countries?lang=EN&includeUK=false"),
         )
         for c in items_all[offset:offset + limit]
         if isinstance(c, dict)
