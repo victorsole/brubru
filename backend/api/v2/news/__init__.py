@@ -77,14 +77,40 @@ class NewsItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
-class NewsBody(BaseModel):
+_NEWS_FEED = "https://brubru-production.up.railway.app/api/v2/news/all"
+
+
+class _FacetDatapoints(BaseModel):
+    """The five datapoints on a pick-list entry, which carried none.
+
+    A walk of /news/bodies found 81 bodies and the families with only code, name, families and
+    item_count, the contracted fields ABSENT rather than null. An entry is a lookup, not a
+    document: public_url is the feed that serves its items, the body is a one-line composition,
+    and the dates are null because a count of items has no publication date and the pick-list
+    is computed live from the two news stores, which record no change time for it.
+    """
+    public_url: Optional[str] = Field(None, description="The /news/all feed that serves this entry's items.")
+    body_txt: Optional[str] = Field(None, description="One-line plain-text description of the entry.")
+    body_html: Optional[str] = Field(None, description="The same, as HTML.")
+    document_date: Optional[date] = Field(None, description="Null: a pick-list entry has no publication date.")
+    creation_date: Optional[datetime] = Field(None, description="Null: computed live, no first-seen time is recorded.")
+    updated_date: Optional[datetime] = Field(None, description="Null: computed live, no change signal is recorded.")
+
+
+def _facet_body(label: str, kind: str, count: int, members: str):
+    import html as _h
+    txt = f"{label}: {count} news items across {kind} {members}.".replace(" .", ".")
+    return txt, f"<p>{_h.escape(txt)}</p>"
+
+
+class NewsBody(_FacetDatapoints):
     code: str
     name: Optional[str] = None
     families: List[str] = Field(default_factory=list)
     item_count: int = 0
 
 
-class NewsFamily(BaseModel):
+class NewsFamily(_FacetDatapoints):
     slug: str
     label: str
     bodies: List[str]
@@ -818,13 +844,19 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
         src_params).fetchall()
     by_body = {r.body_code: r.n for r in rows}
     names = _body_names(db)
-    bodies = [NewsBody(code=c, name=names.get(c), families=families_for_body(c), item_count=n)
+    bodies = [NewsBody(code=c, name=names.get(c), families=families_for_body(c), item_count=n,
+                       public_url=f"{_NEWS_FEED}?body={c}",
+                       body_txt=_facet_body(names.get(c) or c, "its newsroom", n, f"({c})")[0],
+                       body_html=_facet_body(names.get(c) or c, "its newsroom", n, f"({c})")[1])
               for c, n in sorted(by_body.items(), key=lambda kv: -kv[1])]
     fams = []
     for slug, f in FAMILIES.items():
         member = set(f["bodies"])
-        fams.append(NewsFamily(slug=slug, label=f["label"], bodies=f["bodies"],
-                               item_count=sum(n for c, n in by_body.items() if c in member)))
+        n_items = sum(n for c, n in by_body.items() if c in member)
+        fams.append(NewsFamily(slug=slug, label=f["label"], bodies=f["bodies"], item_count=n_items,
+                               public_url=f"{_NEWS_FEED}?family={slug}",
+                               body_txt=_facet_body(f["label"], "the bodies in this policy family", n_items, "")[0],
+                               body_html=_facet_body(f["label"], "the bodies in this policy family", n_items, "")[1]))
     fams.sort(key=lambda x: -x.item_count)
     return {"bodies": [b.model_dump() for b in bodies], "families": [f.model_dump() for f in fams]}
 
