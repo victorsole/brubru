@@ -66,6 +66,16 @@ def _fetch(topic: str):
     except Exception as e:  # noqa: BLE001
         return type(e).__name__
     body = _strip(d.get("description") or "")
+    if len(body) < MIN_CHARS:
+        # Some topics publish no description at all (ISF-2024-TF2-AG-PROTECT-*: an
+        # empty field in both the topic JSON and SEDIA). What the portal shows for them
+        # is the topic's conditions and support information, which are the call's own
+        # text, so serve those, labelled, rather than nothing.
+        parts = [(lbl, _strip(d.get(k) or "")) for lbl, k in
+                 (("Call", "callTitle"), ("Topic conditions", "conditions"),
+                  ("Support information", "supportInfo"))]
+        if sum(len(v) for lbl, v in parts if lbl != "Call") >= MIN_CHARS:
+            body = "\n\n".join(f"{lbl}:\n{v}" for lbl, v in parts if v)
     return body[:MAX_CHARS] if len(body) >= MIN_CHARS else "too_short"
 
 

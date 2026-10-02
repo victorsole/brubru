@@ -92,6 +92,19 @@ def _proposal_to_item(
     body_html, body_text, has_body = compose_html_from_sections([
         ("Description", r.description),
     ], threshold=body_threshold)
+    if not body_text:
+        # 19 calls publish no text the portal serves as data: legacy EuropeAid calls
+        # (PROSPECT) and EIT/PPPA competitive calls, whose topic JSON is a 404. Compose
+        # the call's own record so the body is never empty, and point at its page.
+        body_html, body_text, has_body = compose_html_from_sections([
+            ("Call", r.title),
+            ("Call identifier", r.call_id or r.topic_id),
+            ("Programme", r.framework_programme),
+            ("Type of action", r.type_of_action),
+            ("Status", r.status),
+            ("Deadline", str(r.deadline) if r.deadline else None),
+            ("Call documents", r.documents_url),
+        ], threshold=body_threshold)
     return FtCallProposalItem(
         id=str(r.id), topic_id=r.topic_id, call_id=r.call_id,
         framework_programme=r.framework_programme, title=r.title,
