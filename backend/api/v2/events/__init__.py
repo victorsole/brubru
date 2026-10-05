@@ -31,6 +31,7 @@ from services.economy.body_families import (
     BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES,
 )
 from api.v1._row_dates import row_updated
+from api.v1._body import body_from_html_or_text, compose_html_from_sections
 
 router = APIRouter(prefix="/events", tags=["v2-events"])
 
@@ -59,9 +60,9 @@ class EventItem(BaseModel):
     summary: Optional[str] = None
     event_type: Optional[str] = Field(None, description="Event kind where known (calendar events).")
     venue: Optional[str] = Field(None, description="Venue / location where known.")
-    public_url: Optional[str] = Field(None, description="Canonical URL of the event on the source website.")
-    body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
-    body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
+    public_url: Optional[str] = Field(None, description="URL of the event on the source website; an event with none stored gets its institution's calendar page. Never null.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body: the stored text, or composed from the event's own fields. Never null.")
+    body_html: Optional[str] = Field(None, description="HTML body: the stored text, or composed from the event's own fields. Never null.")
     document_date: Optional[datetime] = Field(None, description="The event's own date (start datetime).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the event.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -89,6 +90,26 @@ def _body_names(db: Session) -> dict:
     for r in db.execute(text("SELECT code, name FROM economy_bodies")).fetchall():
         names.setdefault(r.code, r.name)
     return names
+
+
+# 48 calendar events (manual entries, some plenary and committee rows) store no URL.
+# Each falls back to its institution's own calendar page, every one opened in a real
+# browser on 5 Oct 2026 and titled as named (Consilium answers curl with 403).
+_CAL_FALLBACK_URL = {
+    "EP_PLENARY": "https://www.europarl.europa.eu/plenary/en/agendas.html",
+    "EP": "https://www.europarl.europa.eu/committees/en/meetings",
+    "COUNCIL": "https://www.consilium.europa.eu/en/meetings/calendar/",
+    "EUROPEAN_COUNCIL": "https://www.consilium.europa.eu/en/european-council/",
+}
+_CAL_DEFAULT_URL = "https://commission.europa.eu/events_en"
+
+
+def _cal_url(r) -> str:
+    if r.source_url or r.agenda_url:
+        return r.source_url or r.agenda_url
+    if r.institution == "EP" and r.event_type == "plenary_session":
+        return _CAL_FALLBACK_URL["EP_PLENARY"]
+    return _CAL_FALLBACK_URL.get(r.institution, _CAL_DEFAULT_URL)
 
 
 def _cal_dt(start_date, start_time) -> Optional[datetime]:
@@ -133,7 +154,7 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
             where.append("document_date < :now"); params["now"] = now
         if q:
             where.append("search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
-        cols = "id, body_code, title, summary, public_url, document_date, creation_date" + (
+        cols = "id, body_code, title, summary, public_url, document_date, creation_date, updated_at" + (
             ", body_txt, body_html" if with_body else "")
         rows = db.execute(text(
             f"SELECT {cols} FROM economy_items WHERE {' AND '.join(where)} LIMIT 8000"), params).fetchall()
@@ -142,7 +163,7 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
                 "id": f"e{r.id}", "body_code": r.body_code, "source": "economy",
                 "title": r.title, "summary": r.summary, "event_type": None, "venue": None,
                 "public_url": r.public_url, "document_date": r.document_date,
-                "creation_date": r.creation_date,
+                "creation_date": r.creation_date, "updated_at": r.updated_at,
                 "body_txt": getattr(r, "body_txt", None), "body_html": getattr(r, "body_html", None),
             })
 
@@ -170,17 +191,16 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
             where.append("(title ILIKE :q OR description ILIKE :q)"); params["q"] = f"%{q}%"
         rows = db.execute(text(
             "SELECT id, institution::text AS institution, title, description, source_url, agenda_url, "
-            "start_date, start_time, first_seen, event_type::text AS event_type, venue "
+            "start_date, start_time, first_seen, last_updated, event_type::text AS event_type, venue "
             f"FROM eu_calendar_events WHERE {' AND '.join(where)} LIMIT 8000"), params).fetchall()
         for r in rows:
             body = CAL_INSTITUTION_TO_BODY.get(r.institution, (r.institution or "").lower())
-            body_html = f"<p>{r.description}</p>" if (with_body and r.description) else None
             out.append({
                 "id": f"c{r.id}", "body_code": body, "source": "calendar",
                 "title": r.title, "summary": r.description, "event_type": r.event_type, "venue": r.venue,
-                "public_url": r.source_url or r.agenda_url, "document_date": _cal_dt(r.start_date, r.start_time),
-                "creation_date": r.first_seen,
-                "body_txt": (r.description if with_body else None), "body_html": body_html,
+                "public_url": _cal_url(r), "document_date": _cal_dt(r.start_date, r.start_time),
+                "creation_date": r.first_seen, "last_updated": r.last_updated,
+                "body_txt": (r.description if with_body else None), "body_html": None,
             })
 
     # Dedup carefully. The calendar's source_url is frequently a shared LISTING page
@@ -208,6 +228,19 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
     return deduped
 
 
+def _load_economy_bodies(db, window):
+    """Economy event bodies total ~30 MB, so they are read for the served page only."""
+    ids = [int(it["id"][1:]) for it in window if it["source"] == "economy"]
+    if not ids:
+        return
+    rows = {r.id: r for r in db.execute(text(
+        "SELECT id, body_txt, body_html FROM economy_items WHERE id = ANY(:ids)"), {"ids": ids})}
+    for it in window:
+        r = rows.get(int(it["id"][1:])) if it["source"] == "economy" else None
+        if r:
+            it["body_txt"], it["body_html"] = r.body_txt, r.body_html
+
+
 def _sort_key(order):
     far_past = datetime(1, 1, 1, tzinfo=timezone.utc)
     far_future = datetime(9999, 1, 1, tzinfo=timezone.utc)
@@ -218,15 +251,38 @@ def _sort_key(order):
     return (lambda it: it["document_date"] or far_past), True  # recent
 
 
+def _event_body(it, body_name):
+    """(body_txt, body_html), never null (Victor's rule, 5 Oct 2026).
+
+    The stored text wins. An event with none (3,622 calendar rows hold no description,
+    185 economy events no body) is composed from the record's own fields, so nothing
+    is invented: title, summary, date, venue, organiser, type and the source page.
+    """
+    html, txt, _ = body_from_html_or_text(it.get("body_html") or it.get("body_txt"))
+    if txt and len(txt) > len(it["title"] or "") + 20:
+        return txt, html
+    d = it.get("document_date")
+    html, txt, _ = compose_html_from_sections([
+        ("Event", it["title"]),
+        ("Summary", it.get("summary")),
+        ("Date", d.strftime("%d %B %Y") if d else None),
+        ("Venue", it.get("venue")),
+        ("Organised by", body_name),
+        ("Type", (it.get("event_type") or "").replace("_", " ") or None),
+        ("Source", it.get("public_url")),
+    ])
+    return txt, html
+
+
 def _to_item(it, names, *, with_body):
+    body_txt, body_html = _event_body(it, names.get(it["body_code"])) if with_body else (None, None)
     return EventItem(
         id=it["id"], body_code=it["body_code"], body_name=names.get(it["body_code"]),
         families=families_for_body(it["body_code"]), source=it["source"],
         title=it["title"], summary=it["summary"], event_type=it["event_type"], venue=it["venue"],
         public_url=it["public_url"], document_date=it["document_date"], creation_date=it["creation_date"],
         updated_date=row_updated(it),
-        body_txt=(it["body_txt"] if with_body else None),
-        body_html=(it["body_html"] if with_body else None),
+        body_txt=body_txt, body_html=body_html,
     )
 
 
@@ -302,6 +358,7 @@ async def list_events(
     days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand window: with when=upcoming, the next N days; otherwise the last N days. Ignored if `from`/`to` already bound that side."),
     q: Optional[str] = Query(None, description="Free-text search over title and summary."),
     source: str = Query("all", description="economy | calendar | all."),
+    include_body: bool = Query(True, description="Serve body_txt and body_html on every item (default). false gives a lighter page."),
     order: str = Query("recent", description="recent | oldest | title | soonest. With when=upcoming use `soonest` (or `oldest`): `recent` sorts date DESCENDING and returns the most DISTANT event first."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
@@ -338,9 +395,11 @@ async def list_events(
     items.sort(key=keyf, reverse=rev)
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
+    if include_body:
+        _load_economy_bodies(db, window)
     names = _body_names(db)
     return build_envelope(
-        [_to_item(it, names, with_body=False) for it in window], total, page, limit,
+        [_to_item(it, names, with_body=include_body) for it in window], total, page, limit,
         published_from=from_, published_to=to,
     )
 
@@ -388,25 +447,25 @@ async def get_event(request: Request,
     names = _body_names(db)
     if event_id.startswith("e") and event_id[1:].isdigit():
         r = db.execute(text(
-            "SELECT id, body_code, title, summary, public_url, body_txt, body_html, document_date, creation_date "
+            "SELECT id, body_code, title, summary, public_url, body_txt, body_html, document_date, creation_date, updated_at "
             "FROM economy_items WHERE id = :id AND item_type = 'event'"), {"id": int(event_id[1:])}).fetchone()
         if r:
             it = {"id": event_id, "body_code": r.body_code, "source": "economy", "title": r.title,
                   "summary": r.summary, "event_type": None, "venue": None, "public_url": r.public_url,
                   "document_date": r.document_date, "creation_date": r.creation_date,
-                  "body_txt": r.body_txt, "body_html": r.body_html}
+                  "updated_at": r.updated_at, "body_txt": r.body_txt, "body_html": r.body_html}
             return _to_item(it, names, with_body=True)
     elif event_id.startswith("c"):
         r = db.execute(text(
             "SELECT id, institution::text AS institution, title, description, source_url, agenda_url, "
-            "start_date, start_time, first_seen, event_type::text AS event_type, venue "
+            "start_date, start_time, first_seen, last_updated, event_type::text AS event_type, venue "
             "FROM eu_calendar_events WHERE id = :id"), {"id": event_id[1:]}).fetchone()
         if r:
             body = CAL_INSTITUTION_TO_BODY.get(r.institution, (r.institution or "").lower())
             it = {"id": event_id, "body_code": body, "source": "calendar", "title": r.title,
                   "summary": r.description, "event_type": r.event_type, "venue": r.venue,
-                  "public_url": r.source_url or r.agenda_url, "document_date": _cal_dt(r.start_date, r.start_time),
-                  "creation_date": r.first_seen, "body_txt": r.description,
-                  "body_html": (f"<p>{r.description}</p>" if r.description else None)}
+                  "public_url": _cal_url(r), "document_date": _cal_dt(r.start_date, r.start_time),
+                  "creation_date": r.first_seen, "last_updated": r.last_updated,
+                  "body_txt": r.description, "body_html": None}
             return _to_item(it, names, with_body=True)
     raise HTTPException(404, f"No event with id {event_id}")
