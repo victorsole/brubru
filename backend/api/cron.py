@@ -704,6 +704,12 @@ async def cron_fetch_social_posts(
     finally:
         db.close()
     logger.info(f"[CRON] fetch-social-posts mode={mode} complete: {result}")
+    # A run that checked accounts and stored nothing because the source refused us is a
+    # FAILURE, not a success (5 Oct 2026: X returned 429 for every account for weeks while
+    # this route answered 200 and the queue looked busy). 503 lets the dispatcher record it.
+    if mode == "x" and result.get("accounts") and result.get("fetched_ok", 0) == 0 \
+            and result.get("throttled", 0) > 0:
+        raise HTTPException(status_code=503, detail={"status": "throttled", "results": result})
     return {"status": "success", "results": result}
 
 
@@ -1175,6 +1181,11 @@ _COMMISSION_HEAVY_TYPES: list[str] = [
     "tariff_ruling",       # EBTI binding tariff rulings (~76k; slow EBTI export)
     "tariff_code",         # TARIC tariff codes (~13k)
     "funding_recipient",   # FTS funding recipients (~186k)
+    # Added 5 Oct 2026: the expert-groups register (~2,060 groups, incl. the Ecodesign
+    # Forum) had NO scheduler -- `commission` is excluded from _ECONOMY_BATCHES -- so
+    # it stood at its one manual run of 17 Aug and the Terraqui source ledger went STALE
+    # (49 d vs a 45 d limit). Small and fast; weekly is far inside the 45 d limit.
+    "expert_group",
 ]
 _commission_heavy_running: set = set()
 _commission_heavy_tasks: set = set()

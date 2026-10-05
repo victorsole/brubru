@@ -53,7 +53,10 @@ async def oj_today(days: int | None, hours: int | None, sectors: str | None, lim
         rows = await client.discover_by_date_range(
             date_from, date_to, sectors=sec, limit=limit
         )
+    failed = getattr(client, "failure_count", 0)
     return {
+        "query_failed": bool(failed),
+        "error": getattr(client, "last_error", None) if failed else None,
         "query": "oj-today",
         "date_from": date_from.isoformat(),
         "date_to": date_to.isoformat(),
@@ -113,6 +116,9 @@ def main() -> int:
         return 1
     if args.plain and not result.get("title"):
         return 1
+    # A transport failure must not exit 0 with count 0: that reads as a quiet OJ.
+    if result.get("query_failed"):
+        return 2
     return 0
 
 

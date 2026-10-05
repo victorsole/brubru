@@ -13,6 +13,7 @@ import json
 import logging
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime
@@ -75,6 +76,10 @@ def _dt_twitter(s):
         return None
 
 
+class XThrottled(Exception):
+    """The X syndication endpoint refused or failed; the account was NOT really checked."""
+
+
 def fetch_x(handle, n=20):
     """Recent tweets via the PUBLIC syndication embed endpoint (keyless). Parses __NEXT_DATA__."""
     handle = handle.lstrip("@")
@@ -83,8 +88,16 @@ def fetch_x(handle, n=20):
             f"https://syndication.twitter.com/srv/timeline-profile/screen-name/{urllib.parse.quote(handle)}",
             headers={"User-Agent": _BROWSER_UA})
         html = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
-    except Exception:
-        return []
+    except urllib.error.HTTPError as exc:
+        # 429/403/5xx = the endpoint refused us, NOT an empty timeline. Swallowing it
+        # as [] made a throttled run look like 80 accounts "checked" and stamped
+        # last_checked_at on every one: 570 of 1,155 X accounts went 41 days without
+        # data while the frontier looked busy (5 Oct 2026). 404 = handle gone, definitive.
+        if exc.code == 404:
+            return []
+        raise XThrottled(f"http_{exc.code}") from exc
+    except Exception as exc:
+        raise XThrottled(f"transport_{type(exc).__name__}") from exc
     m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.S)
     if not m:
         return []
@@ -265,6 +278,8 @@ def fetch_for_account(platform, account_url, n=10):
             h = account_url.rstrip("/").split("/")[-1].split("?")[0]
             return (fetch_x(h, n), None) if h else ([], "bad_x_url")
         return [], "unsupported_platform"
+    except XThrottled as e:
+        return [], f"throttled:{e}"
     except Exception as e:
         return [], f"error:{type(e).__name__}"
 
@@ -357,7 +372,11 @@ def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.
             posts, skip = (fetch_youtube(cid, per_account), None) if cid else ([], "no_channel_id")
         else:
             posts, skip = fetch_for_account(plat, a["account_url"], per_account)
-        if not dry_run:
+        # A throttled fetch is not a check: leave the account at the head of the queue.
+        throttled = bool(skip) and skip.startswith("throttled")
+        if throttled:
+            stats["throttled"] = stats.get("throttled", 0) + 1
+        if not dry_run and not throttled:
             try:
                 db.execute(text("UPDATE social_accounts SET last_checked_at=now() WHERE id=:i"), {"i": a["id"]})
             except OperationalError as exc:

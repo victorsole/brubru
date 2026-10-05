@@ -10,6 +10,7 @@ Provides functionality for:
 - Triple store interaction
 """
 
+import asyncio
 import logging
 from typing import Optional, Dict, Any, List, Union
 from enum import Enum
@@ -309,28 +310,40 @@ class BaseSPARQLClient:
         logger.info(f"Executing SPARQL query on {self.endpoint_url}")
         logger.debug(f"Query: {query_str[:200]}...")
 
-        try:
-            # Use GET for short queries, POST for long ones
-            if len(query_str) < 2000:
-                response = await self.client.get(
-                    self.endpoint_url,
-                    params=params,
-                    headers=headers
-                )
-            else:
-                # POST with URL-encoded form data
-                headers["Content-Type"] = "application/x-www-form-urlencoded"
-                response = await self.client.post(
-                    self.endpoint_url,
-                    data=urlencode(params),
-                    headers=headers
-                )
-
-            response.raise_for_status()
-
-        except httpx.HTTPError as e:
-            logger.error(f"SPARQL query failed: {str(e)}")
-            raise
+        # Retry transient failures (timeouts, connection resets, 429/5xx). A bare
+        # `str(httpx.ReadTimeout())` is EMPTY, so the old log line read "SPARQL query
+        # failed: " with no reason and the caller turned it into an empty result that
+        # looked like a quiet day (law-drop radar, 2 Oct 2026). Say what failed.
+        last_exc: Optional[Exception] = None
+        for attempt in range(3):
+            try:
+                # Use GET for short queries, POST for long ones
+                if len(query_str) < 2000:
+                    response = await self.client.get(
+                        self.endpoint_url, params=params, headers=headers)
+                else:
+                    # POST with URL-encoded form data
+                    headers["Content-Type"] = "application/x-www-form-urlencoded"
+                    response = await self.client.post(
+                        self.endpoint_url, data=urlencode(params), headers=headers)
+                response.raise_for_status()
+                last_exc = None
+                break
+            except httpx.HTTPError as e:
+                last_exc = e
+                status = getattr(getattr(e, "response", None), "status_code", None)
+                transient = status is None or status == 429 or status >= 500
+                logger.error("SPARQL query failed (attempt %d/3): %s status=%s %r",
+                             attempt + 1, type(e).__name__, status, e)
+                if not transient or attempt == 2:
+                    # Callers of this client often swallow the exception into an empty
+                    # list; this counter is how they can tell "nothing" from "failed".
+                    self.failure_count = getattr(self, "failure_count", 0) + 1
+                    self.last_error = f"{type(e).__name__} status={status} {e!r}"
+                    raise
+                await asyncio.sleep(2 * (3 ** attempt))
+        if last_exc is not None:
+            raise last_exc
 
         # Parse response based on format
         if result_format == SPARQLResultFormat.JSON:
