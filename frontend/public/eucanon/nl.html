@@ -167,6 +167,12 @@
           "position": 54,
           "url": "https://brubru.beresol.eu/eucanon/2026-1738_elv/nl.html",
           "name": "Verordening autowrakken (Verordening (EU) 2026/1738)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 55,
+          "url": "https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/nl.html",
+          "name": "Digitale omnibus over AI (Verordening (EU) 2026/1744)"
         }
       ]
     }
@@ -212,6 +218,8 @@
     .library-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     .library-wrapper .canon-card:nth-child(16) { grid-column: auto; }
+    /* a lonely last card sits centred, never stranded left (55 cards = 18 rows of 3 + 1) */
+    .library-wrapper .canon-card:last-of-type:nth-child(3n+1) { grid-column: 2; }
     .library-note { grid-column: 1 / -1; }
     .canon-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; transition: all 0.25s; position: relative; overflow: hidden; }
     .canon-card:hover { border-color: var(--color-blue); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(6,147,227,0.12); }
@@ -276,6 +284,8 @@
     @media (max-width: 1024px) { .method-grid { grid-template-columns: repeat(2, 1fr); } .features-grid { grid-template-columns: repeat(3, 1fr); } .library-wrapper { grid-template-columns: repeat(2, 1fr); } .library-wrapper .canon-card { grid-column: auto; } .library-wrapper .canon-card:nth-child(10) { grid-column: auto; } .library-wrapper .canon-card:nth-child(16) { grid-column: auto; } }
     @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } .library-wrapper { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 767px) { .library-wrapper { grid-template-columns: 1fr; } .hero__title { font-size: 1.9rem; } .hero__meta { flex-direction: column; align-items: center; gap: 0.6rem; } .method-grid { grid-template-columns: 1fr; } .features-grid { grid-template-columns: 1fr; } .canon-card__stats { grid-template-columns: repeat(2, 1fr); } .pm__inner { grid-template-columns: 1fr; gap: 1.5rem; } .pm__right { align-items: flex-start; } .pm__built { text-align: left; } .header { padding: 0.75rem 1rem; gap: 0.75rem; } .header__cta { display: none; } .container { padding: 1.25rem; } .cta-strip { padding: 2rem 1.25rem; } .cta-strip__title { font-size: 1.4rem; } }
+    @media (max-width: 1024px) { .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 0.75rem); justify-self: center; } }
+    @media (max-width: 767px) { .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: auto; width: auto; } }
   
   /* ---- CANONICAL BRUBRU FOOTER (mirrors frontend/src/components/shared/footer.css,
      tokens resolved because a standalone page never loads globals.css). Do not restyle. ---- */
@@ -1313,6 +1323,24 @@
             <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-swap-horizontal" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Ingetrokken richtlijnen</div></div>
           </div>
           <a href="2026-1738_elv/nl.html" class="canon-card__cta" aria-label="Lees de uitlegger over de Verordening autowrakken">Lees de uitlegger <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32026R1744</div>
+          <h3 class="canon-card__title">Digitale omnibus over AI</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2026/1744</p>
+          <p class="canon-card__desc">Het pakket van 2026 dat de AI-verordening wijzigt: de regels voor hoogrisicosystemen schuiven op naar december 2027 en augustus 2028, twee nieuwe verboden richten zich op niet-consensuele intieme beelden en materiaal van seksueel misbruik van kinderen, de verlichting voor het mkb wordt uitgebreid tot kleine midcapondernemingen en het AI-bureau krijgt directe handhavingsbevoegdheden over AI op basis van algemene modellen.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Artificiële intelligentie</span>
+            <span class="chip chip--green">Vereenvoudiging</span>
+            <span class="chip chip--amber">Wijzigingsverordening</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-file-document-outline" aria-hidden="true"></span> 43</div><div class="stat-mini__label">Wijzigingspunten</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-calendar-clock" aria-hidden="true"></span> 2027</div><div class="stat-mini__label">Regels bijlage III</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-cancel" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Nieuwe verboden</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-scale-balance" aria-hidden="true"></span> 75a-d</div><div class="stat-mini__label">Bevoegdheden AI-bureau</div></div>
+          </div>
+          <a href="2026-1744_aiomnibus/nl.html" class="canon-card__cta" aria-label="Lees de uitlegger over de Digitale omnibus over AI">Lees de uitlegger <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
         </article>
 
         <p class="library-note">Meer canonical entries verschijnen regelmatig. Wil je een specifieke wet volgende keer? E-mail <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>

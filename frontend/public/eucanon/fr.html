@@ -297,6 +297,12 @@
           "position": 54,
           "url": "https://brubru.beresol.eu/eucanon/2026-1738_elv/fr.html",
           "name": "Règlement sur les véhicules hors d'usage (Règlement (UE) 2026/1738)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 55,
+          "url": "https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/fr.html",
+          "name": "Omnibus numérique sur l'IA (Règlement (UE) 2026/1744)"
         }
       ]
     }
@@ -494,6 +500,8 @@
     }
     .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     .library-wrapper .canon-card:nth-child(16) { grid-column: auto; }
+    /* a lonely last card sits centred, never stranded left (55 cards = 18 rows of 3 + 1) */
+    .library-wrapper .canon-card:last-of-type:nth-child(3n+1) { grid-column: 2; }
     .library-note {
       grid-column: 1 / -1;
     }
@@ -842,6 +850,7 @@
       .library-wrapper .canon-card { grid-column: auto; }
       .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
       .library-wrapper .canon-card:nth-child(16) { grid-column: auto; }
+      .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 0.75rem); justify-self: center; }
     }
     @media (max-width: 900px) {
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -849,6 +858,7 @@
     }
     @media (max-width: 767px) {
       .library-wrapper { grid-template-columns: 1fr; }
+      .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: auto; width: auto; }
       .hero__title { font-size: 1.9rem; }
       .hero__meta { flex-direction: column; align-items: center; gap: 0.6rem; }
       .method-grid { grid-template-columns: 1fr; }
@@ -2645,6 +2655,24 @@
             <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-swap-horizontal" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Directives abrogées</div></div>
           </div>
           <a href="2026-1738_elv/fr.html" class="canon-card__cta" aria-label="Lire l'explication du Règlement sur les véhicules hors d'usage">Lire l'explication <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32026R1744</div>
+          <h3 class="canon-card__title">Omnibus numérique sur l'IA</h3>
+          <p class="canon-card__subtitle">Règlement (UE) 2026/1744</p>
+          <p class="canon-card__desc">Le paquet de 2026 qui modifie le règlement sur l'IA : les règles pour les systèmes à haut risque passent à décembre 2027 et août 2028, deux nouvelles interdictions visent les images intimes non consenties et les contenus d'abus sexuels sur enfants, l'allègement pour les PME s'étend aux petites entreprises de taille intermédiaire et le Bureau de l'IA obtient des pouvoirs d'exécution directs sur l'IA fondée sur des modèles à usage général.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Intelligence artificielle</span>
+            <span class="chip chip--green">Simplification</span>
+            <span class="chip chip--amber">Acte modificatif</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-file-document-outline" aria-hidden="true"></span> 43</div><div class="stat-mini__label">Points modifiés</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-calendar-clock" aria-hidden="true"></span> 2027</div><div class="stat-mini__label">Règles annexe III</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-cancel" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Nouvelles interdictions</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-scale-balance" aria-hidden="true"></span> 75a-d</div><div class="stat-mini__label">Pouvoirs du Bureau de l'IA</div></div>
+          </div>
+          <a href="2026-1744_aiomnibus/fr.html" class="canon-card__cta" aria-label="Lire l'explication de l'Omnibus numérique sur l'IA">Lire l'explication <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
         </article>
 
         <p class="library-note">D'autres entrées de canon arrivent régulièrement. Voulez-vous une loi spécifique ensuite ? Envoyez-moi un courriel <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>

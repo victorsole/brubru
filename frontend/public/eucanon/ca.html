@@ -303,6 +303,12 @@
           "position": 54,
           "url": "https://brubru.beresol.eu/eucanon/2026-1738_elv/ca.html",
           "name": "Reglament de vehicles fora d'ús (Reglament (UE) 2026/1738)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 55,
+          "url": "https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/ca.html",
+          "name": "Òmnibus digital sobre la IA (Reglament (UE) 2026/1744)"
         }
       ]
     }
@@ -500,6 +506,8 @@
     }
     .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     .library-wrapper .canon-card:nth-child(16) { grid-column: auto; }
+    /* a lonely last card sits centred, never stranded left (55 cards = 18 rows of 3 + 1) */
+    .library-wrapper .canon-card:last-of-type:nth-child(3n+1) { grid-column: 2; }
     .library-note {
       grid-column: 1 / -1;
     }
@@ -848,6 +856,7 @@
       .library-wrapper .canon-card { grid-column: auto; }
       .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
       .library-wrapper .canon-card:nth-child(16) { grid-column: auto; }
+      .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 0.75rem); justify-self: center; }
     }
     @media (max-width: 900px) {
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -855,6 +864,7 @@
     }
     @media (max-width: 767px) {
       .library-wrapper { grid-template-columns: 1fr; }
+      .library-wrapper .canon-card:last-of-type:nth-child(odd) { grid-column: auto; width: auto; }
       .hero__title { font-size: 1.9rem; }
       .hero__meta { flex-direction: column; align-items: center; gap: 0.6rem; }
       .method-grid { grid-template-columns: 1fr; }
@@ -2646,6 +2656,24 @@
             <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-swap-horizontal" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Directives derogades</div></div>
           </div>
           <a href="2026-1738_elv/ca.html" class="canon-card__cta" aria-label="Llegeix l'explicador sobre el Reglament de vehicles fora d'ús">Llegeix l'explicador <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32026R1744</div>
+          <h3 class="canon-card__title">Òmnibus digital sobre la IA</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2026/1744</p>
+          <p class="canon-card__desc">El paquet del 2026 que modifica el Reglament d'IA: les normes d'alt risc passen al desembre del 2027 i a l'agost del 2028, dues noves prohibicions s'adrecen a les imatges íntimes no consentides i al material d'abús sexual infantil, l'alleujament per a les pimes s'estén a les empreses de mitjana capitalització petites i l'Oficina d'IA obté competències directes d'execució sobre la IA basada en models de finalitat general.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Intel·ligència artificial</span>
+            <span class="chip chip--green">Simplificació</span>
+            <span class="chip chip--amber">Acte modificatiu</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-file-document-outline" aria-hidden="true"></span> 43</div><div class="stat-mini__label">Punts modificatius</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-calendar-clock" aria-hidden="true"></span> 2027</div><div class="stat-mini__label">Normes de l'annex III</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-cancel" aria-hidden="true"></span> 2</div><div class="stat-mini__label">Noves prohibicions</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-scale-balance" aria-hidden="true"></span> 75a-d</div><div class="stat-mini__label">Competències de l'Oficina d'IA</div></div>
+          </div>
+          <a href="2026-1744_aiomnibus/ca.html" class="canon-card__cta" aria-label="Llegeix l'explicador sobre l'Òmnibus digital sobre la IA">Llegeix l'explicador <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
         </article>
 
         <p class="library-note">Més entrades del Canon arriben regularment. Vols una llei específica següent? Envia un correu a <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>

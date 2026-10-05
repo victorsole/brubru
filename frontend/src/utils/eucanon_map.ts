@@ -59,6 +59,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32025R2509': '/eucanon/2025-2509_toys/',
   '32026R0405': '/eucanon/2026-405_detergents/',
   '32026R1778': '/eucanon/2026-1778_dpp_registry/',
+  '32026R1744': '/eucanon/2026-1744_aiomnibus/',
   '32026R1738': '/eucanon/2026-1738_elv/',
   '32026D1736': '/eucanon/2026-1736_dpp_standards/',
   '32026R0002': '/eucanon/2026-2_unsold_disclosure/',
