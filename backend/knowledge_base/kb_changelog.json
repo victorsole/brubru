@@ -3,6 +3,16 @@
   "entries": [
     {
       "date": "2026-10-05",
+      "action": "added",
+      "guide": "cyber_solidarity_act",
+      "title": "Cyber Solidarity Act",
+      "summary": "New guide from a full read of Regulation (EU) 2025/38 (consolidated text, recitals, three corrigenda): three pillars, Reserve rules, funding rates, third countries, incident review, DEP amendments; implementation status from ENISA and the Commission",
+      "refs": [
+        "32025R0038"
+      ]
+    },
+    {
+      "date": "2026-10-05",
       "action": "updated",
       "guide": "cybersecurity_act",
       "title": "Cybersecurity Act",
