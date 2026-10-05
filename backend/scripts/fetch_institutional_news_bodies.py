@@ -94,6 +94,22 @@ _SITE_FOOTER_MARKERS = ("\nAbout the secretariat\n",)
 # your browsing experience ... I accept only necessary cookies ... Skip to content" and
 # the site menu before the release itself (5 Oct 2026). The release follows its own
 # "Press release" label, so everything up to that label is page furniture.
+_FILE_URL = re.compile(r"\.(pdf|docx?|xlsx?|pptx?|zip)(\?|$)|/document/download/|/pub/pdf/", re.I)
+_STOP = set("with from that this have will their which about under into other where after "
+            "before being these those between within".split())
+
+
+def _title_words(s: str | None) -> set:
+    import unicodedata
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
+    return {w for w in re.findall(r"[a-z0-9]{4,}", s) if w not in _STOP}
+
+
+def _names_item(title: str | None, body: str) -> bool:
+    tw = _title_words(title)
+    return len(tw) < 3 or len(tw & _title_words(body)) / len(tw) >= 0.35
+
+
 _BANNER_END = "I accept only necessary cookies"
 _NOT_FOUND = re.compile(r"couldn.t find the page|^Page not found$|404 Content is no longer available"
                         r"|429 - Too Many Requests|^Server inaccessibility$",
@@ -503,6 +519,60 @@ def _office_text(raw: bytes) -> str | None:
     return "\n\n".join(p for p in parts if p).strip() or None
 
 
+def _ocr_pdf(raw: bytes, max_pages: int = 60) -> str | None:
+    """Text of an image-only PDF via pdftoppm + tesseract (English model), or None."""
+    import shutil
+    import subprocess
+    import tempfile
+    if not (shutil.which("pdftoppm") and shutil.which("tesseract")):
+        return None
+    with tempfile.TemporaryDirectory() as d:
+        pdf = Path(d) / "in.pdf"
+        pdf.write_bytes(raw)
+        try:
+            subprocess.run(["pdftoppm", "-r", "200", "-l", str(max_pages), "-png", str(pdf),
+                            str(Path(d) / "p")], check=True, capture_output=True, timeout=600)
+        except (subprocess.SubprocessError, OSError):
+            return None
+        pages = []
+        for img in sorted(Path(d).glob("p-*.png")):
+            try:
+                out = subprocess.run(["tesseract", str(img), "-", "-l", "eng"],
+                                     capture_output=True, timeout=180, text=True)
+                pages.append(out.stdout.strip())
+            except (subprocess.SubprocessError, OSError):
+                continue
+    # The English model turns other scripts into consonant soup ("UGHWUSULEU3SPL" for
+    # the Armenian half of an EPPO working arrangement). Keep a line only when most of
+    # its words are real words; refuse the page set when little survives.
+    words = _english_words()
+    kept, total = [], 0
+    for page in pages:
+        for line in page.splitlines():
+            toks = re.findall(r"[A-Za-z]{3,}", line)
+            if not toks:
+                continue
+            total += 1
+            if words is None or sum(t.lower() in words for t in toks) / len(toks) >= 0.6:
+                kept.append(line.strip())
+    if not kept or (total and len(kept) / total < 0.3):
+        return None
+    return "\n".join(kept)
+
+
+_WORDS: set | None = None
+
+
+def _english_words() -> set | None:
+    global _WORDS
+    if _WORDS is None:
+        try:
+            _WORDS = {w.strip().lower() for w in open("/usr/share/dict/words", encoding="utf-8")}
+        except OSError:
+            return None
+    return _WORDS
+
+
 def looks_like_pdf(raw: bytes) -> bool:
     return raw[:5] == b"%PDF-" or raw[:1024].lstrip()[:5] == b"%PDF-"
 
@@ -622,6 +692,10 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         if looks_like_pdf(raw):
             # A PDF is a document, not a page. Parse it or refuse it; never store the bytes.
             body_txt = _pdf_text(raw)
+            if not body_txt or len(body_txt) < 200:
+                # A scanned PDF has no text layer: EPPO working arrangements, SRB and ESRB
+                # letters (about 160 rows, 5 Oct 2026). OCR reads the page images.
+                body_txt = _ocr_pdf(raw)
             if body_txt and len(body_txt) >= 200:
                 return body_txt, None, None
             return None, None, "pdf carried no extractable text"
@@ -828,6 +902,7 @@ def main() -> int:
                 # failed was indistinguishable from one that succeeded, and the
                 # only sign was an endpoint quietly serving empty bodies. A row
                 # with nothing in it has not been fetched, whatever it is marked.
+                "  AND coalesce(body_source, '') NOT LIKE 'unfetchable:%%' "
                 "  AND (coalesce(body_source, '') <> 'fetched:article' "
                 "       OR coalesce(length(body_txt), 0) = 0 "
                 # A stored page that kept the site footer and lost the article (29 Council
@@ -901,6 +976,21 @@ def main() -> int:
                     return v or None
 
                 body_txt = _clean(_cut_site_footer(body_txt))
+                # A page links other documents, and following the wrong one stored another
+                # text under this title (a KIDS Act release under a Portugal aid item, a
+                # Dushanbe speech under a Termez one; 21 rows, 5 Oct 2026). Text taken from a
+                # web page must name its item; a direct file link is the item itself.
+                if body_txt and not _FILE_URL.search(r.source_url or "") and not _names_item(r.title, body_txt):
+                    failed += 1
+                    reasons["text does not name the item"] = reasons.get("text does not name the item", 0) + 1
+                    continue
+                # Whatever path produced it, bytes decoded as text are not a body (an EBA zip
+                # inside a zip slipped past the download check, 5 Oct 2026).
+                if body_txt and (body_txt.startswith("PK\x03\x04")
+                                 or body_txt[:2000].count("\ufffd") > 20):
+                    failed += 1
+                    reasons["binary file, not text"] = reasons.get("binary file, not text", 0) + 1
+                    continue
                 # A site's own "page not found" page, served with a 200 behind a cookie
                 # banner, was stored as the article on 16 Council rows (5 Oct 2026).
                 if body_txt and _NOT_FOUND.search(body_txt[:2500]):
