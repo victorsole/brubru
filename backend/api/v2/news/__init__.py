@@ -12,6 +12,7 @@ events folder. The 5 mandatory datapoints. Scope: read:economy.
 from __future__ import annotations
 
 from api.v1._row_dates import row_updated
+from api.v1._body import body_from_html_or_text, compose_html_from_sections, looks_like_html, _strip_html_to_text
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Union
@@ -67,7 +68,7 @@ class NewsItem(BaseModel):
     title: str
     summary: Optional[str] = None
     public_url: Optional[str] = Field(None, description="Canonical URL on the source website.")
-    body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body: the stored text, or composed from the item's own fields. Never null.")
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description=(
         "The item's own published date, as the publisher states it. Null when the publisher "
@@ -454,14 +455,37 @@ def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_t
     return f"({econ} UNION ALL {inst_sql})", {**params, **inst_params}
 
 
+def _news_body(r, body_name):
+    """(body_txt, body_html), never null (Victor's rule, 5 Oct 2026).
+
+    The stored text wins; a missing HTML form is marked up from it. An item with no
+    text at all (324 agency news and ~1,000 publications on 5 Oct) is composed from
+    its own title, summary, publisher, date and source link, inventing nothing.
+    """
+    html, txt, _ = body_from_html_or_text(getattr(r, "body_html", None) or getattr(r, "body_txt", None))
+    if txt and txt.strip():
+        if not html:
+            html = body_from_html_or_text(txt)[0]
+        return (getattr(r, "body_txt", None) or txt), html
+    d = r.document_date
+    html, txt, _ = compose_html_from_sections([
+        ("Title", r.title),
+        ("Summary", _strip_html_to_text(r.summary) if looks_like_html(r.summary) else r.summary),
+        ("Published by", body_name),
+        ("Date", d.strftime("%d %B %Y") if d else None),
+        ("Source", r.public_url),
+    ])
+    return txt, html
+
+
 def _to_item(r, names, *, with_body):
+    body_txt, body_html = _news_body(r, names.get(r.body_code)) if with_body else (None, None)
     return NewsItem(
         id=_coerce_id(r.id), body_code=r.body_code, body_name=names.get(r.body_code),
         families=families_for_body(r.body_code), kind=r.item_type, title=r.title, summary=r.summary,
         public_url=r.public_url, document_date=r.document_date, creation_date=r.creation_date,
         updated_date=row_updated(r),
-        body_txt=(getattr(r, "body_txt", None) if with_body else None),
-        body_html=(getattr(r, "body_html", None) if with_body else None),
+        body_txt=body_txt, body_html=body_html,
     )
 
 
