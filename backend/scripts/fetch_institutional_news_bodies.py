@@ -90,9 +90,29 @@ def _cut_to_headline(body: str, title: str | None, window: int = 4000,
 _SITE_FOOTER_MARKERS = ("\nAbout the secretariat\n",)
 
 
+# Where a page's cookie banner and menu end. 44 Council bodies opened with "to improve
+# your browsing experience ... I accept only necessary cookies ... Skip to content" and
+# the site menu before the release itself (5 Oct 2026). The release follows its own
+# "Press release" label, so everything up to that label is page furniture.
+_BANNER_END = "I accept only necessary cookies"
+_NOT_FOUND = re.compile(r"couldn.t find the page|^Page not found$|404 Content is no longer available",
+                        re.I | re.M)
+_HEAD_LABELS = ("\nPress release\n", "\nStatement and remarks\n", "\nMedia advisory\n")
+
+
 def _cut_site_footer(body: str | None) -> str | None:
     if not body:
         return body
+    if _BANNER_END in body[:3000]:
+        start = body.find(_BANNER_END) + len(_BANNER_END)
+        cuts = [body.find(lbl, start) for lbl in _HEAD_LABELS]
+        cuts = [c for c in cuts if 0 <= c < start + 2500]
+        if cuts:
+            c = min(cuts)
+            body = body[body.find("\n", c + 1) + 1:].lstrip()
+        else:
+            k = body.find("Skip to content", start)
+            body = body[(k + len("Skip to content")) if k >= 0 else start:].lstrip()
     for marker in _SITE_FOOTER_MARKERS:
         i = body.find(marker)
         if i > 200:
@@ -695,6 +715,10 @@ def main() -> int:
     ap.add_argument("--render", action="store_true",
                     help="Fall back to a rendered fetch (Scrape.do) when a page carries no prose. "
                          "Costs credits, so it is opt-in.")
+    ap.add_argument("--empty-only", action="store_true",
+                    help="Only rows with no body at all (body-code mode). A short body is "
+                         "often the source's whole text: Cedefop news fetched shorter than "
+                         "stored on 10 of 10 (5 Oct 2026).")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
@@ -715,7 +739,7 @@ def main() -> int:
                 "  AND coalesce(length(body_txt), 0) < :whole "
                 "ORDER BY document_date DESC NULLS LAST, id LIMIT :n"),
                 {"code": args.body_code, "types": types, "n": args.limit,
-                 "whole": WHOLE_BODY_CHARS}).fetchall()
+                 "whole": 1 if args.empty_only else WHOLE_BODY_CHARS}).fetchall()
             label = f"{args.body_code}/{','.join(types)}"
         else:
             rows = db.execute(text(
@@ -804,6 +828,12 @@ def main() -> int:
                     return v or None
 
                 body_txt = _clean(_cut_site_footer(body_txt))
+                # A site's own "page not found" page, served with a 200 behind a cookie
+                # banner, was stored as the article on 16 Council rows (5 Oct 2026).
+                if body_txt and _NOT_FOUND.search(body_txt[:2500]):
+                    failed += 1
+                    reasons["the page says it does not exist"] = reasons.get("the page says it does not exist", 0) + 1
+                    continue
                 body_html = _clean(body_html)
                 # The text path (browser, PDF) returns no HTML. Keeping the row's old HTML
                 # then paired a full text with the old title+summary card (5 Oct 2026), so
