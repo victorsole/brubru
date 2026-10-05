@@ -683,6 +683,11 @@
       .cta-strip__title { font-size: 1.5rem; }
       .hero-image img { height: 220px; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head>

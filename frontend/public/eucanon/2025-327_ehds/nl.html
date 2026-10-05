@@ -683,6 +683,11 @@
       .cta-strip__title { font-size: 1.5rem; }
       .hero-image img { height: 220px; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head>
@@ -822,7 +827,7 @@
   <div class="info-box--blue info-box">
     <h3><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-blue);"></i> Wat de EHDS wijzigt</h3>
     <p>De EHDS wijzigt <strong>Richtlijn 2011/24/EU</strong> betreffende de rechten van patiënten bij grensoverschrijdende gezondheidszorg: artikel 14, dat het vrijwillige eHealth-netwerk in het leven riep, wordt met ingang van 26 maart 2031 geschrapt zodra de eigen governancestructuur van de EHDS (de EHDS-raad en MyHealth@EU) die coördinatierol volledig overneemt.</p>
-    <p style="margin-top:0.5rem;">Zij wijzigt ook <strong>Verordening (EU) 2024/2847</strong>, de cyberweerbaarheidsverordening, door het conformiteitsbeoordelingstraject af te stemmen voor EPD-systemen die ook kwalificeren als producten met digitale elementen, zodat fabrikanten één coherent certificeringstraject volgen in plaats van twee elkaar overlappende trajecten.</p>
+    <p style="margin-top:0.5rem;">Zij wijzigt ook <strong>Verordening (EU) 2024/2847</strong>, de verordening cyberweerbaarheid, door het conformiteitsbeoordelingstraject af te stemmen voor EPD-systemen die ook kwalificeren als producten met digitale elementen, zodat fabrikanten één coherent certificeringstraject volgen in plaats van twee elkaar overlappende trajecten.</p>
   </div>
 </section>
 
@@ -1115,7 +1120,7 @@
       <li><strong>Art. 101:</strong> vertegenwoordiging door organisaties zonder winstoogmerk met doelstellingen van openbaar belang</li>
       <li><strong>Art. 102:</strong> een gerichte evaluatie uiterlijk 26 maart 2033, een algemene evaluatie uiterlijk 26 maart 2035, en een jaarlijks voortgangsverslag van de Commissie aan de Raad tot de volledige toepassing</li>
       <li><strong>Art. 103:</strong> artikel 14 van Richtlijn 2011/24/EU (het eHealth-netwerk) wordt geschrapt vanaf 26 maart 2031</li>
-      <li><strong>Art. 104:</strong> wijzigt Verordening (EU) 2024/2847, de cyberweerbaarheidsverordening, door de conformiteitsbeoordeling af te stemmen voor EPD-systemen die als producten met digitale elementen worden ingedeeld</li>
+      <li><strong>Art. 104:</strong> wijzigt Verordening (EU) 2024/2847, de verordening cyberweerbaarheid, door de conformiteitsbeoordeling af te stemmen voor EPD-systemen die als producten met digitale elementen worden ingedeeld</li>
     </ul>
   </div>
 
