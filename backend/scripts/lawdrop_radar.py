@@ -313,6 +313,51 @@ def check_calendar_only(db, ahead: int) -> list[dict]:
     """), {"ahead": ahead}).mappings().all()
     return [dict(r) for r in rows]
 
+def check_stale_canon_pages() -> list[dict]:
+    """F. STALE CANON MARKERS -- a canon page still labels a date "Upcoming"
+    after that date has passed.
+
+    Added 5 October 2026 with the AI Omnibus page, which carries a dated
+    "Upcoming" ladder (2 Dec 2026 ... 2 Aug 2030) next to its legislative
+    timeline. The calendar (check D) knows when each date arrives; nothing told
+    the PAGE to flip its marker, so a reader would have seen "Upcoming" beside a
+    date in the past. Three outcomes, never two: STALE (parsed, passed), OK is
+    not reported, UNREAD (an Upcoming item whose date could not be parsed, so
+    it cannot be judged: reported, not skipped).
+    """
+    from datetime import datetime
+    try:
+        from bs4 import BeautifulSoup
+    except ImportError:  # pragma: no cover
+        return [{"page": "(bs4 missing)", "state": "UNREAD", "date": None, "text": "install beautifulsoup4"}]
+    out = []
+    today = date.today()
+    for path in sorted(glob.glob(os.path.join(CANON_DIR, "*", "index.html"))):
+        page = os.path.basename(os.path.dirname(path))
+        try:
+            soup = BeautifulSoup(open(path, encoding="utf-8").read(), "html.parser")
+        except OSError as exc:
+            out.append({"page": page, "state": "UNREAD", "date": None, "text": str(exc)[:80]})
+            continue
+        for it in soup.select(".timeline__item--upcoming"):
+            d_el = it.select_one(".timeline__date")
+            raw = (d_el.get_text(" ", strip=True) if d_el else "").replace("Upcoming", "").strip()
+            parsed = None
+            for fmt in ("%d %B %Y", "%B %Y", "%Y"):
+                try:
+                    parsed = datetime.strptime(raw, fmt).date()
+                    break
+                except ValueError:
+                    continue
+            if parsed is None:
+                out.append({"page": page, "state": "UNREAD", "date": raw, "text": ""})
+            elif parsed <= today and fmt == "%d %B %Y":
+                out.append({"page": page, "state": "STALE", "date": parsed.isoformat(),
+                            "text": (it.select_one(".timeline__text").get_text(" ", strip=True)
+                                     if it.select_one(".timeline__text") else "")[:90]})
+    return out
+
+
 def check_uncovered(db, lo: int, hi: int) -> list[dict]:
     """Substantive acts published lo..hi days ago (so entering force about now,
     on the standard twentieth-day clause) that we hold no cluster for.
@@ -480,6 +525,7 @@ def main() -> int:
         unc = check_uncovered(db, a.force_lo, a.force_hi)
         cal = check_calendar_only(db, a.ahead)
         inf = check_in_force_now(db, a.in_force_days)
+        stale = check_stale_canon_pages()
     finally:
         # The Cellar phase can outlast the pooled connection; on 23 Sep 2026 a
         # dead connection raised here and threw away five completed checks.
@@ -490,7 +536,8 @@ def main() -> int:
 
     if a.json:
         print(json.dumps({"upcoming": up, "unmarked": un, "uncovered": unc,
-                          "calendar_only": cal, "in_force_now": inf},
+                          "calendar_only": cal, "in_force_now": inf,
+                          "stale_canon_markers": stale},
                          default=str, indent=2))
         return 0
 
@@ -568,6 +615,16 @@ def main() -> int:
         when = str(dif) if dif else 'date unknown'
         print(f"   in force {when:10s}  {r['celex']:14s} {mark}{(r['title'] or '')[:72]}")
 
+    print("\nF. STALE CANON MARKERS -- canon pages that still say 'Upcoming' next to a date")
+    print("   that has passed. Flip the marker (and the page's 'active' item) by hand.")
+    if not stale:
+        print("   none.")
+    for r in stale:
+        if r["state"] == "STALE":
+            print(f"   STALE  {r['date']}  {r['page']}  {r['text']}")
+        else:
+            print(f"   UNREAD {r['page']}  date text {r['date']!r} could not be parsed")
+
     print("\nVERDICT")
     if real_inf:
         print(f"  {len(real_inf)} act(s) ALREADY IN FORCE with no cluster -- read the final "
@@ -581,7 +638,9 @@ def main() -> int:
     if cal:
         print(f"  {len(cal)} dated milestone(s) in the calendar with NO cluster requirement "
               f"-- check A cannot see these.")
-    if not (flagged or up or unc or cal or real_inf):
+    if stale:
+        print(f"  {len(stale)} canon page marker(s) stale or unreadable -- see F.")
+    if not (flagged or up or unc or cal or real_inf or stale):
         print("  No law drop in the window.")
     return 0
 

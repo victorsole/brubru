@@ -2591,12 +2591,13 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'kefalogiannis': ['ai_act_regulation', 'ep_ai_institutional_aspects_report'],
     'ai act omnibus': ['ai_act_regulation', 'digital_omnibus_package'],
     'ai act postponement': ['ai_act_regulation'],
-    'digital omnibus': ['digital_omnibus_package', 'ai_act_regulation'],
-    'omnibus ai': ['digital_omnibus_package', 'ai_act_regulation'],
+    'digital omnibus': ['ai_omnibus_regulation_2026_1744', 'digital_omnibus_package', 'ai_act_regulation'],
+    'omnibus ai': ['ai_omnibus_regulation_2026_1744', 'digital_omnibus_package', 'ai_act_regulation'],
     # Entry into force 27 Jul 2026 as Regulation (EU) 2026/1744 -- users will
     # search by the new act number and by the plain name (added 28 Jul 2026).
-    'ai omnibus': ['ai_act_amendments_2026', 'digital_omnibus_package', 'ai_act_regulation'],
-    '2026/1744': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'ai omnibus': ['ai_omnibus_regulation_2026_1744', 'ai_act_amendments_2026', 'digital_omnibus_package', 'ai_act_regulation'],
+    '2026/1744': ['ai_omnibus_regulation_2026_1744', 'ai_act_amendments_2026', 'digital_omnibus_package'],
+    'digital omnibus on ai': ['ai_omnibus_regulation_2026_1744', 'ai_act_amendments_2026', 'digital_omnibus_package'],
     '32026r1744': ['ai_act_amendments_2026', 'digital_omnibus_package'],
     'omnibus ia': ['digital_omnibus_package', 'ai_act_regulation'],
     'omnibus ia entra en vigor': ['ai_act_amendments_2026'],

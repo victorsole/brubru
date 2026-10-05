@@ -11,6 +11,8 @@ events folder. The 5 mandatory datapoints. Scope: read:economy.
 """
 from __future__ import annotations
 
+import re
+
 from api.v1._row_dates import row_updated
 from api.v1._body import body_from_html_or_text, compose_html_from_sections, looks_like_html, _strip_html_to_text
 
@@ -455,6 +457,12 @@ def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_t
     return f"({econ} UNION ALL {inst_sql})", {**params, **inst_params}
 
 
+# The Commission presscorner template leaks a placeholder into its text
+# ("<@rel_link@>", 154 stored rows on 5 Oct 2026). Stripped on the way out so a
+# re-scrape cannot bring it back.
+_TEMPLATE_MARKER = re.compile(r"(?:<|&lt;)@[a-z_]+@(?:>|&gt;)")
+
+
 def _news_body(r, body_name):
     """(body_txt, body_html), never null (Victor's rule, 5 Oct 2026).
 
@@ -466,7 +474,8 @@ def _news_body(r, body_name):
     if txt and txt.strip():
         if not html:
             html = body_from_html_or_text(txt)[0]
-        return (getattr(r, "body_txt", None) or txt), html
+        body_txt = getattr(r, "body_txt", None) or txt
+        return _TEMPLATE_MARKER.sub("", body_txt), _TEMPLATE_MARKER.sub("", html)
     d = r.document_date
     html, txt, _ = compose_html_from_sections([
         ("Title", r.title),

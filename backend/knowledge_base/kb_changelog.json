@@ -3,6 +3,16 @@
   "entries": [
     {
       "date": "2026-10-05",
+      "action": "added",
+      "guide": "ai_omnibus_regulation_2026_1744",
+      "title": "Digital Omnibus on AI: Regulation (EU) 2026/1744",
+      "summary": "Dedicated guide: new dates, two new prohibitions, AI Office powers (Arts 75a-75d), SMC relief",
+      "refs": [
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-10-05",
       "action": "updated",
       "guide": "ehds_european_health_data_space",
       "title": "European Health Data Space",

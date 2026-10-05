@@ -46,6 +46,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import error_body_reason, extract_html  # noqa: E402
+from api.v1._body import body_from_html_or_text  # noqa: E402
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
@@ -81,6 +82,22 @@ def _cut_to_headline(body: str, title: str | None, window: int = 4000,
         return body
     cut = body[idx:].strip()
     return cut if len(cut) >= keep_at_least else body
+
+
+# Where a site's own footer starts. The browser's text read of a Consilium page runs
+# past the article into the footer ("About the secretariat ... Cookies"): 85 Council
+# bodies carried it on 5 Oct 2026. The article never contains these lines.
+_SITE_FOOTER_MARKERS = ("\nAbout the secretariat\n",)
+
+
+def _cut_site_footer(body: str | None) -> str | None:
+    if not body:
+        return body
+    for marker in _SITE_FOOTER_MARKERS:
+        i = body.find(marker)
+        if i > 200:
+            body = body[:i].rstrip()
+    return body
 
 
 def is_institutional(url: str) -> bool:
@@ -236,12 +253,19 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
     """
     fetcher = getattr(_browser_local, "fetcher", None)
     try:
-        if fetcher is None:
+        if "consilium.europa.eu" in url:
+            # Consilium serves a kept browser one page, then bot-challenges every next one
+            # (5 of 6 on 5 Oct 2026, one worker). A fresh browser per page passes each time.
+            from services.scrapers.waf_browser_fetcher import fetch_one
+            res = fetch_one(url, expand_accordions=False, strip_chrome=False)
+        elif fetcher is None:
             from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
             fetcher = WafBrowserFetcher()
             fetcher.__enter__()
             _browser_local.fetcher = fetcher
-        res = fetcher.fetch(url, expand_accordions=False, strip_chrome=False)
+            res = fetcher.fetch(url, expand_accordions=False, strip_chrome=False)
+        else:
+            res = fetcher.fetch(url, expand_accordions=False, strip_chrome=False)
     except Exception as exc:  # noqa: BLE001  no Playwright, or Chromium failed to start
         return None, None, f"{why_paid_failed}; browser {type(exc).__name__}"
     if res.error or not res.html:
@@ -701,7 +725,18 @@ def main() -> int:
                 # article on every run: a restart began COMMISSION again from the top,
                 # 1,051 rows already done, and 47 institutions would have paid that twice.
                 "FROM eu_news_items WHERE institution = :inst "
-                "  AND coalesce(body_source, '') <> 'fetched:article' "
+                # The resume guard must not trust the marker alone. On 1 Oct 2026
+                # all 35 ECA rows carried body_source='fetched:article' while 31
+                # held NO text, so the guard excluded them for good: a row that
+                # failed was indistinguishable from one that succeeded, and the
+                # only sign was an endpoint quietly serving empty bodies. A row
+                # with nothing in it has not been fetched, whatever it is marked.
+                "  AND (coalesce(body_source, '') <> 'fetched:article' "
+                "       OR coalesce(length(body_txt), 0) = 0 "
+                # A stored page that kept the site footer and lost the article (29 Council
+                # rows on 5 Oct 2026: "About the secretariat ... Cookies") is not fetched
+                # either, whatever its marker says.
+                "       OR body_txt LIKE '%About the secretariat%') "
                 "ORDER BY news_date DESC NULLS LAST, id LIMIT :n"),
                 {"inst": args.institution, "n": args.limit}).fetchall()
             label = args.institution
@@ -768,8 +803,13 @@ def main() -> int:
                     v = v.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8", "ignore")
                     return v or None
 
-                body_txt = _clean(body_txt)
+                body_txt = _clean(_cut_site_footer(body_txt))
                 body_html = _clean(body_html)
+                # The text path (browser, PDF) returns no HTML. Keeping the row's old HTML
+                # then paired a full text with the old title+summary card (5 Oct 2026), so
+                # the HTML is marked up from the text we are storing instead.
+                if body_txt and not body_html:
+                    body_html = body_from_html_or_text(body_txt)[0]
                 if not body_txt:
                     failed += 1
                     reasons["nothing left after cleaning"] = reasons.get("nothing left after cleaning", 0) + 1
