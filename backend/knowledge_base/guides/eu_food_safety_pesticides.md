@@ -1,6 +1,7 @@
 # EU Food Safety and Pesticide Regulation
 
 ## QUICK FACTS
+- STOA Study (7 July 2026): "Threats from new and emerging plant pests - Options for EU management of pest outbreaks" -- foresight study on how trade, tourism, climate change and agricultural systems spread new plant pests, with four scenarios to 2050 and policy options for prevention, preparedness and response. A study for Parliament's STOA panel, not a Commission proposal. Ref: EPRS_STU(2026)788146.
 - JRC Report (14 September 2026): "Impact-based prioritisation of the EU List of Quarantine Pests" (JRC142065) -- shortlists priority pests by economic, social and environmental impact, the evidence base for plant-health priority-pest designation under Regulation (EU) 2016/2031. Repository: https://publications.jrc.ec.europa.eu/repository/handle/JRC142065
 - **NEXT STEP (Wednesday 2 September 2026)**: the food and feed **simplification package** reaches its first joint committee meeting of the autumn -- **`CJ14(2026)0902_1`, a joint AGRI + ENVI meeting**, the second day of the committee week after the recess. Two ordinary-legislative files are on the agenda together:
   - **`2025/0409(COD)`**, **COM(2025)1021** -- *Proposal for a Directive amending Council Directive 98/58/EC and Directive 2009/128/EC as regards the simplification and strengthening of food and feed safety requirements*. Directive **98/58/EC** is the framework directive on the **protection of animals kept for farming purposes**; Directive **2009/128/EC** is the **sustainable use of pesticides** directive. EP document `C10-0361/2025`.

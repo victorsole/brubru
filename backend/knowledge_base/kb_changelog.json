@@ -4,6 +4,96 @@
     {
       "date": "2026-10-05",
       "action": "updated",
+      "guide": "ehds_european_health_data_space",
+      "title": "European Health Data Space",
+      "summary": "STOA preventive healthcare study",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_energy_policy",
+      "title": "EU Energy Policy",
+      "summary": "EPRS CO2 transport briefing",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "common_agricultural_policy",
+      "title": "Common Agricultural Policy",
+      "summary": "JRC ICE conference + FSDN LULUCF",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_water_legislation",
+      "title": "EU Water Legislation",
+      "summary": "JRC drought report Aug 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "crma_critical_raw_materials_act",
+      "title": "Critical Raw Materials Act",
+      "summary": "JRC advanced materials in construction",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_taxonomy_sustainable_finance",
+      "title": "EU Taxonomy",
+      "summary": "JRC Article 8 review evidence",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_railway_regulation",
+      "title": "EU Railway Regulation",
+      "summary": "STOA sustainable railway study",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_food_safety_pesticides",
+      "title": "EU Food Safety and Pesticides",
+      "summary": "STOA plant pests study",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "EU Neighbourhood Policy East and South",
+      "summary": "10th EU-Moldova Association Council scheduled 5 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "returns_policy_reform",
+      "title": "EU Returns Policy Reform",
+      "summary": "Council adopted the Return Regulation 1 Oct 2026, awaiting signature (OEIL)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "air_passenger_rights_regulation",
+      "title": "Air Passenger Rights Regulation",
+      "summary": "Reg 2026/2202 published 2 Oct 2026, in force 22 Oct, applies 23 Oct 2027",
+      "refs": [
+        "32026R2202"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
       "guide": "mff_2028_2034",
       "title": "Multiannual Financial Framework 2028-2034",
       "summary": "plenary debate Wed 7 Oct 2026",
