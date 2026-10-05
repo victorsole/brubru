@@ -1106,6 +1106,11 @@
     .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
     .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
     @media (max-width: 767px) { .transp-map { height: 420px; } }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script>
@@ -1383,6 +1388,49 @@
       <div class="card__title"><i class="mdi mdi-chart-timeline-variant" style="color: var(--color-amber);"></i> OEIL legislative procedure file</div>
       <p>The European Parliament's legislative procedure file for NIS2, tracking the full legislative history from the Commission proposal through first reading, trialogue and final adoption. Reference 2020/0359(COD).</p>
       <p style="margin-top: 0.75rem;"><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2020/0359%28COD%29" target="_blank" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;"><i class="mdi mdi-open-in-new"></i> OEIL procedure file</a></p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">The AI and cybersecurity entries in the Brubru EU Canon, which complement each other</p>
+
+    <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Artificial intelligence</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html">The EU AI Act: Regulation (EU) 2024/1689</a></div>
+      <div class="canon-related__desc">The horizontal rulebook for AI systems. An organisation in scope of NIS 2 that uses AI follows both: NIS 2 for its own cybersecurity, the AI Act for the AI system.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Amends the AI Act</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/index.html">The Digital Omnibus on AI: Regulation (EU) 2026/1744</a></div>
+      <div class="canon-related__desc">The 2026 Regulation that moves the AI Act's high-risk dates and gives the AI Office direct enforcement powers. It does not amend this Directive.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Financial sector</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">DORA: Regulation (EU) 2022/2554</a></div>
+      <div class="canon-related__desc">The sector-specific act for financial entities: under recital 28 and Article 4 of this Directive, its ICT risk-management and reporting rules apply instead of those of NIS 2 for the financial entities it covers.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Product-level cybersecurity</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html">The Cyber Resilience Act: Regulation (EU) 2024/2847</a></div>
+      <div class="canon-related__desc">Cybersecurity duties for products with digital elements. Manufacturers notify actively exploited vulnerabilities and severe incidents to the CSIRT designated as coordinator under this Directive and to ENISA (CRA Article 14).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certification and ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html">The Cybersecurity Act: Regulation (EU) 2019/881</a></div>
+      <div class="canon-related__desc">ENISA's mandate and the European certification framework. Member States may require entities to use ICT products, services and processes certified under its schemes (Article 24 of this Directive).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU incident response</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/index.html">The Cyber Solidarity Act: Regulation (EU) 2025/38</a></div>
+      <div class="canon-related__desc">Builds EU-level detection and response on the networks this Directive created (the CSIRTs network, EU-CyCLONe and the NIS Cooperation Group) and uses its incident definitions.</div>
     </div>
   </div>
 </section>

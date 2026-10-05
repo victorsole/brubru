@@ -719,6 +719,11 @@
       .cta-strip { padding: 2rem 1.25rem; }
       .cta-strip__title { font-size: 1.5rem; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head>
@@ -1475,12 +1480,39 @@
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
     <h2 class="section__title">Related canon entries</h2>
   </div>
-  <p class="section__subtitle">The <code>eu_artificial_intelligence</code> family in the Brubru EU Canon</p>
+  <p class="section__subtitle">The AI and cybersecurity entries in the Brubru EU Canon, which complement each other</p>
 
-  <div class="canon-related">
-    <div class="canon-related__label">Amending act</div>
-    <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/index.html">Digital Omnibus on AI: Regulation (EU) 2026/1744</a></div>
-    <div class="canon-related__desc">The 2026 Regulation that amends this Act: it moves the high-risk dates to 2 December 2027 and 2 August 2028, adds two prohibitions and gives the AI Office direct enforcement powers over AI built on general-purpose models. Read it alongside this page for the rules as they now stand.</div>
+    <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Amending act</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/index.html">The Digital Omnibus on AI: Regulation (EU) 2026/1744</a></div>
+      <div class="canon-related__desc">The 2026 Regulation that amends this Act: it moves the high-risk dates to 2 December 2027 and 2 August 2028, adds two prohibitions and gives the AI Office direct enforcement powers over AI built on general-purpose models. Read it alongside this page for the rules as they now stand.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Entity-level cybersecurity</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html">NIS 2: Directive (EU) 2022/2555</a></div>
+      <div class="canon-related__desc">Cybersecurity risk-management and incident-reporting duties for essential and important entities. The two apply side by side: this Act to the AI system, NIS 2 to the organisation that runs it.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Financial sector</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">DORA: Regulation (EU) 2022/2554</a></div>
+      <div class="canon-related__desc">Digital operational resilience rules for banks, insurers and other financial entities, which apply alongside this Act when those entities develop or use AI systems.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Product cybersecurity</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html">The Cyber Resilience Act: Regulation (EU) 2024/2847</a></div>
+      <div class="canon-related__desc">A high-risk AI system that is also a product with digital elements and meets the CRA's essential requirements is deemed to meet Article 15 of this Act (CRA Article 12; Article 42(3) of this Act, added by the Digital Omnibus on AI).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certification and ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html">The Cybersecurity Act: Regulation (EU) 2019/881</a></div>
+      <div class="canon-related__desc">High-risk AI systems certified, or covered by a statement of conformity, under a Cybersecurity Act scheme are presumed to meet the cybersecurity requirements of Article 15, in so far as the certificate covers them (Article 42(2) of this Act).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU incident response</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/index.html">The Cyber Solidarity Act: Regulation (EU) 2025/38</a></div>
+      <div class="canon-related__desc">EU-level detection and response to large-scale cyber incidents. Its Alert System contributes to developing tools such as artificial intelligence and data analytics (Article 3(2)(e) of that Regulation); it places no duties on AI providers.</div>
+    </div>
   </div>
 </section>
 

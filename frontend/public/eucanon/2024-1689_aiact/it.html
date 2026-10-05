@@ -719,6 +719,11 @@
       .cta-strip { padding: 2rem 1.25rem; }
       .cta-strip__title { font-size: 1.5rem; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head><body>
@@ -1460,12 +1465,39 @@
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
     <h2 class="section__title">Voci del canone correlate</h2>
   </div>
-  <p class="section__subtitle">La famiglia <code>eu_artificial_intelligence</code> nel Canone UE di Brubru</p>
+  <p class="section__subtitle">Le voci su IA e cibersicurezza del Canone UE di Brubru, che si completano a vicenda</p>
 
-  <div class="canon-related">
-    <div class="canon-related__label">Atto modificativo</div>
-    <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/it.html">Omnibus digitale sull'IA: regolamento (UE) 2026/1744</a></div>
-    <div class="canon-related__desc">Il regolamento del 2026 che modifica il presente atto: sposta le date per i sistemi ad alto rischio al 2 dicembre 2027 e al 2 agosto 2028, aggiunge due divieti e dà all'Ufficio per l'IA poteri di esecuzione diretti sull'IA basata su modelli per finalità generali. Da leggere insieme a questa pagina per le regole come oggi in vigore.</div>
+    <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Atto modificativo</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/it.html">L'Omnibus digitale sull'IA: regolamento (UE) 2026/1744</a></div>
+      <div class="canon-related__desc">Il regolamento del 2026 che modifica il presente atto: sposta le date per i sistemi ad alto rischio al 2 dicembre 2027 e al 2 agosto 2028, aggiunge due divieti e dà all'Ufficio per l'IA poteri di esecuzione diretti sull'IA basata su modelli per finalità generali. Da leggere insieme a questa pagina per le regole come oggi in vigore.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cibersicurezza a livello di soggetto</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/it.html">NIS 2: direttiva (UE) 2022/2555</a></div>
+      <div class="canon-related__desc">Obblighi di gestione dei rischi di cibersicurezza e di notifica degli incidenti per i soggetti essenziali e importanti. I due regimi si applicano in parallelo: il presente regolamento al sistema di IA, la NIS 2 all'organizzazione che lo gestisce.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Settore finanziario</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/it.html">DORA: regolamento (UE) 2022/2554</a></div>
+      <div class="canon-related__desc">Norme sulla resilienza operativa digitale per banche, imprese di assicurazione e altri soggetti finanziari, che si applicano insieme al presente regolamento quando tali soggetti sviluppano o utilizzano sistemi di IA.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cibersicurezza del prodotto</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/it.html">Il regolamento sulla ciberresilienza: regolamento (UE) 2024/2847</a></div>
+      <div class="canon-related__desc">Un sistema di IA ad alto rischio che sia anche un prodotto con elementi digitali e soddisfi i requisiti essenziali del regolamento sulla ciberresilienza (CRA) si considera conforme all'articolo 15 del presente regolamento (articolo 12 del CRA; articolo 42, paragrafo 3, del presente regolamento, aggiunto dall'Omnibus digitale sull'IA).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificazione ed ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/it.html">Il regolamento sulla cibersicurezza: regolamento (UE) 2019/881</a></div>
+      <div class="canon-related__desc">I sistemi di IA ad alto rischio certificati, o oggetto di una dichiarazione di conformità, nell'ambito di uno schema del regolamento sulla cibersicurezza godono di una presunzione di conformità ai requisiti di cibersicurezza di cui all'articolo 15, nella misura in cui il certificato li copre (articolo 42, paragrafo 2, del presente regolamento).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Risposta agli incidenti a livello dell'UE</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/it.html">Il regolamento sulla cibersolidarietà: regolamento (UE) 2025/38</a></div>
+      <div class="canon-related__desc">Rilevamento e risposta a livello dell'UE agli incidenti informatici su vasta scala. Il suo sistema europeo di allerta per la cibersicurezza contribuisce allo sviluppo di strumenti quali l'intelligenza artificiale e l'analisi dei dati (articolo 3, paragrafo 2, lettera e), di tale regolamento); non impone obblighi ai fornitori di IA.</div>
+    </div>
   </div>
 </section>
 

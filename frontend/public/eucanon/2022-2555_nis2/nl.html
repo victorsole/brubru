@@ -1053,6 +1053,11 @@ Nationale implementatiewetten, verkregen in mei 2026. Indien een marker "Via EUR
     .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
     .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
     @media (max-width: 767px) { .transp-map { height: 420px; } }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
@@ -1313,6 +1318,48 @@ Nationale implementatiewetten, verkregen in mei 2026. Indien een marker "Via EUR
 </div>
 </section>
 <hr class="divider"/>
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+<h2 class="section__title">Gerelateerde canonvermeldingen</h2>
+</div>
+<p class="section__subtitle">De AI- en cyberbeveiligingsitems in de Brubru EU Canon, die elkaar aanvullen</p>
+  <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Artificiële intelligentie</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/nl.html">De verordening artificiële intelligentie: Verordening (EU) 2024/1689</a></div>
+      <div class="canon-related__desc">Het horizontale regelgevingskader voor AI-systemen. Een organisatie die onder NIS 2 valt en AI gebruikt, volgt beide: NIS 2 voor haar eigen cyberbeveiliging, de verordening artificiële intelligentie voor het AI-systeem.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Wijzigt de verordening artificiële intelligentie</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/nl.html">De digitale omnibus inzake AI: Verordening (EU) 2026/1744</a></div>
+      <div class="canon-related__desc">De verordening van 2026 die de data voor AI-systemen met een hoog risico in de verordening artificiële intelligentie verschuift en het AI-bureau directe handhavingsbevoegdheden geeft. Zij wijzigt deze richtlijn niet.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Financiële sector</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/nl.html">DORA: Verordening (EU) 2022/2554</a></div>
+      <div class="canon-related__desc">De sectorspecifieke handeling voor financiële entiteiten: krachtens overweging 28 en artikel 4 van deze richtlijn zijn de regels inzake ICT-risicobeheer en rapportage van DORA van toepassing in plaats van die van NIS 2 voor de financiële entiteiten die onder DORA vallen.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cyberbeveiliging op productniveau</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/nl.html">De verordening cyberweerbaarheid: Verordening (EU) 2024/2847</a></div>
+      <div class="canon-related__desc">Verplichtingen inzake cyberbeveiliging voor producten met digitale elementen. Fabrikanten melden actief misbruikte kwetsbaarheden en ernstige incidenten aan het CSIRT dat krachtens deze richtlijn als coördinator is aangewezen en aan ENISA (artikel 14 CRA).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificering en ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/nl.html">De cyberbeveiligingsverordening: Verordening (EU) 2019/881</a></div>
+      <div class="canon-related__desc">Het mandaat van ENISA en het Europese certificeringskader. De lidstaten kunnen van entiteiten eisen dat zij ICT-producten, -diensten en -processen gebruiken die zijn gecertificeerd in het kader van de regelingen van de cyberbeveiligingsverordening (artikel 24 van deze richtlijn).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Respons op EU-niveau bij incidenten</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/nl.html">De verordening cybersolidariteit: Verordening (EU) 2025/38</a></div>
+      <div class="canon-related__desc">Bouwt detectie en respons op EU-niveau uit op de netwerken die deze richtlijn heeft opgezet (het CSIRT-netwerk, EU-CyCLONe en de NIS-samenwerkingsgroep) en gebruikt de definities van incidenten uit deze richtlijn.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- =========================================================
      SECTION 14: EXPLORE WITH BRUBRU
      ========================================================= -->

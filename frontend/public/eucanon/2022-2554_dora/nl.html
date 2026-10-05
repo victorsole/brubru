@@ -667,6 +667,11 @@
       .cta-strip__title { font-size: 1.5rem; }
       .hero-image img { height: 220px; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head>
@@ -1523,6 +1528,35 @@
       <i class="mdi mdi-umbrella-outline"></i>
       <div class="related-card__name">Solvency II</div>
       <div class="related-card__celex">32009L0138</div>
+    </a>
+  </div>
+
+  <p class="section__subtitle">De aanvullende AI- en cyberbeveiligingsregels in de EU Canon</p>
+  <div class="related-grid">
+    <a href="../2024-1689_aiact/nl.html" class="related-card">
+      <i class="mdi mdi-robot-outline"></i>
+      <div class="related-card__name">Verordening artificiële intelligentie</div>
+      <div class="related-card__celex">32024R1689</div>
+    </a>
+    <a href="../2026-1744_aiomnibus/nl.html" class="related-card">
+      <i class="mdi mdi-file-replace-outline"></i>
+      <div class="related-card__name">Digitale omnibus inzake AI</div>
+      <div class="related-card__celex">32026R1744</div>
+    </a>
+    <a href="../2024-2847_cra/nl.html" class="related-card">
+      <i class="mdi mdi-chip"></i>
+      <div class="related-card__name">Verordening cyberweerbaarheid</div>
+      <div class="related-card__celex">32024R2847</div>
+    </a>
+    <a href="../2019-881_csa/nl.html" class="related-card">
+      <i class="mdi mdi-shield-check-outline"></i>
+      <div class="related-card__name">Cyberbeveiligingsverordening</div>
+      <div class="related-card__celex">32019R0881</div>
+    </a>
+    <a href="../2025-38_cybersolidarity/nl.html" class="related-card">
+      <i class="mdi mdi-handshake-outline"></i>
+      <div class="related-card__name">Verordening cybersolidariteit</div>
+      <div class="related-card__celex">32025R0038</div>
     </a>
   </div>
 

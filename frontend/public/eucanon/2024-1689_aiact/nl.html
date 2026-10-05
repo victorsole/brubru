@@ -719,6 +719,11 @@
       .cta-strip { padding: 2rem 1.25rem; }
       .cta-strip__title { font-size: 1.5rem; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head><body>
@@ -1460,12 +1465,39 @@
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
     <h2 class="section__title">Gerelateerde canonvermeldingen</h2>
   </div>
-  <p class="section__subtitle">De <code>eu_artificial_intelligence</code>-familie in de Brubru EU Canon</p>
+  <p class="section__subtitle">De AI- en cyberbeveiligingsitems in de Brubru EU Canon, die elkaar aanvullen</p>
 
-  <div class="canon-related">
-    <div class="canon-related__label">Wijzigingsverordening</div>
-    <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/nl.html">Digitale omnibus over AI: Verordening (EU) 2026/1744</a></div>
-    <div class="canon-related__desc">De verordening van 2026 die deze verordening wijzigt: de data voor hoogrisicosystemen schuiven op naar 2 december 2027 en 2 augustus 2028, er komen twee verboden bij en het AI-bureau krijgt directe handhavingsbevoegdheden over AI op basis van algemene modellen. Lees haar samen met deze pagina voor de regels zoals ze nu gelden.</div>
+    <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Wijzigingsverordening</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/nl.html">De digitale omnibus inzake AI: Verordening (EU) 2026/1744</a></div>
+      <div class="canon-related__desc">De verordening van 2026 die deze verordening wijzigt: de data voor hoogrisicosystemen schuiven op naar 2 december 2027 en 2 augustus 2028, er komen twee verboden bij en het AI-bureau krijgt directe handhavingsbevoegdheden over AI op basis van algemene modellen. Lees haar samen met deze pagina voor de regels zoals ze nu gelden.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cyberbeveiliging op entiteitsniveau</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/nl.html">NIS 2: Richtlijn (EU) 2022/2555</a></div>
+      <div class="canon-related__desc">Verplichtingen inzake cyberbeveiligingsrisicobeheer en incidentmelding voor essentiële en belangrijke entiteiten. Beide gelden naast elkaar: deze verordening voor het AI-systeem, NIS 2 voor de organisatie die het gebruikt.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Financiële sector</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/nl.html">DORA: Verordening (EU) 2022/2554</a></div>
+      <div class="canon-related__desc">Regels inzake digitale operationele weerbaarheid voor banken, verzekeraars en andere financiële entiteiten, die naast deze verordening gelden wanneer die entiteiten AI-systemen ontwikkelen of gebruiken.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cyberbeveiliging van producten</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/nl.html">De verordening cyberweerbaarheid: Verordening (EU) 2024/2847</a></div>
+      <div class="canon-related__desc">Een AI-systeem met een hoog risico dat tevens een product met digitale elementen is en voldoet aan de essentiële eisen van de CRA, wordt geacht te voldoen aan artikel 15 van deze verordening (artikel 12 CRA; artikel 42, lid 3, van deze verordening, toegevoegd door de digitale omnibus inzake AI).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificering en ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/nl.html">De cyberbeveiligingsverordening: Verordening (EU) 2019/881</a></div>
+      <div class="canon-related__desc">AI-systemen met een hoog risico die zijn gecertificeerd, of onder een conformiteitsverklaring vallen, in het kader van een regeling uit de cyberbeveiligingsverordening, worden vermoed te voldoen aan de cyberbeveiligingseisen van artikel 15, voor zover het certificaat daarop betrekking heeft (artikel 42, lid 2, van deze verordening).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Respons op EU-niveau bij incidenten</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/nl.html">De verordening cybersolidariteit: Verordening (EU) 2025/38</a></div>
+      <div class="canon-related__desc">Detectie van en respons op grootschalige cyberincidenten op EU-niveau. Het Europees waarschuwingssysteem voor cyberbeveiliging draagt bij aan de ontwikkeling van instrumenten zoals artificiële intelligentie en data-analyse (artikel 3, lid 2, punt e), van die verordening); het legt aanbieders van AI geen verplichtingen op.</div>
+    </div>
   </div>
 </section>
 

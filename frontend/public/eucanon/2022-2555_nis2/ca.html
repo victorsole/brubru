@@ -1051,6 +1051,11 @@
     .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
     .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
     @media (max-width: 767px) { .transp-map { height: 420px; } }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
@@ -1311,6 +1316,48 @@
 </div>
 </section>
 <hr class="divider"/>
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+<h2 class="section__title">Entrades del cànon relacionades</h2>
+</div>
+<p class="section__subtitle">Les entrades d'IA i ciberseguretat del Cànon de la UE de Brubru, que es complementen entre si</p>
+  <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Intel·ligència artificial</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/ca.html">El Reglament d'intel·ligència artificial: Reglament (UE) 2024/1689</a></div>
+      <div class="canon-related__desc">El marc horitzontal per als sistemes d'IA. Una organització inclosa en l'àmbit d'aplicació de la NIS 2 que utilitzi IA ha de complir tots dos: la NIS 2 per a la seva pròpia ciberseguretat, el Reglament d'intel·ligència artificial per al sistema d'IA.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Modifica el Reglament d'IA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/ca.html">L'Òmnibus digital sobre IA: Reglament (UE) 2026/1744</a></div>
+      <div class="canon-related__desc">El Reglament del 2026 que desplaça les dates d'alt risc del Reglament d'intel·ligència artificial i atorga a l'Oficina d'IA competències d'execució directes. No modifica aquesta Directiva.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Sector financer</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">DORA: Reglament (UE) 2022/2554</a></div>
+      <div class="canon-related__desc">L'acte sectorial per a les entitats financeres: d'acord amb el considerand 28 i l'article 4 d'aquesta Directiva, les seves normes de gestió del risc de les TIC i de notificació s'apliquen en lloc de les de la NIS 2 a les entitats financeres que cobreix.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Ciberseguretat a escala de producte</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/ca.html">El Reglament de ciberresiliència: Reglament (UE) 2024/2847</a></div>
+      <div class="canon-related__desc">Obligacions de ciberseguretat per als productes amb elements digitals. Els fabricants notifiquen les vulnerabilitats explotades activament i els incidents greus al CSIRT designat com a coordinador d'acord amb aquesta Directiva i a l'ENISA (article 14 del Reglament de ciberresiliència).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificació i ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/ca.html">El Reglament de ciberseguretat: Reglament (UE) 2019/881</a></div>
+      <div class="canon-related__desc">El mandat de l'ENISA i el marc europeu de certificació. Els Estats membres poden exigir a les entitats que utilitzin productes, serveis i processos de TIC certificats en el marc dels seus esquemes (article 24 d'aquesta Directiva).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Resposta de la UE als incidents</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/ca.html">El Reglament de cibersolidaritat: Reglament (UE) 2025/38</a></div>
+      <div class="canon-related__desc">Construeix la detecció i la resposta a escala de la UE sobre les xarxes que va crear aquesta Directiva (la xarxa de CSIRT, l'EU-CyCLONe i el Grup de Cooperació SRI) i en fa servir les definicions d'incident.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- =========================================================
      SECTION 14: EXPLORE WITH BRUBRU
      ========================================================= -->

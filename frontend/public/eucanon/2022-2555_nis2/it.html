@@ -1052,6 +1052,11 @@ Misure di attuazione nazionale, recuperate nel maggio 2026. Se un indicatore mos
     .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
     .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
     @media (max-width: 767px) { .transp-map { height: 420px; } }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
@@ -1312,6 +1317,48 @@ Misure di attuazione nazionale, recuperate nel maggio 2026. Se un indicatore mos
 </div>
 </section>
 <hr class="divider"/>
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+<h2 class="section__title">Voci correlate dell'EU Canon</h2>
+</div>
+<p class="section__subtitle">Le voci su IA e cibersicurezza del Canone UE di Brubru, che si completano a vicenda</p>
+  <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Intelligenza artificiale</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/it.html">Il regolamento sull'intelligenza artificiale: regolamento (UE) 2024/1689</a></div>
+      <div class="canon-related__desc">Il quadro normativo orizzontale per i sistemi di IA. Un'organizzazione che rientra nell'ambito di applicazione della NIS 2 e usa l'IA rispetta entrambi i regimi: la NIS 2 per la propria cibersicurezza, il regolamento sull'intelligenza artificiale per il sistema di IA.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Modifica il regolamento sull'IA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/it.html">L'Omnibus digitale sull'IA: regolamento (UE) 2026/1744</a></div>
+      <div class="canon-related__desc">Il regolamento del 2026 che sposta le date di applicazione per l'alto rischio del regolamento sull'intelligenza artificiale e conferisce all'ufficio per l'IA poteri di esecuzione diretti. Non modifica la presente direttiva.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Settore finanziario</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/it.html">DORA: regolamento (UE) 2022/2554</a></div>
+      <div class="canon-related__desc">L'atto settoriale per i soggetti finanziari: ai sensi del considerando 28 e dell'articolo 4 della presente direttiva, le sue norme sulla gestione dei rischi informatici e sulla notifica si applicano al posto di quelle della NIS 2 per i soggetti finanziari che rientrano nel suo ambito.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Cibersicurezza a livello di prodotto</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/it.html">Il regolamento sulla ciberresilienza: regolamento (UE) 2024/2847</a></div>
+      <div class="canon-related__desc">Obblighi di cibersicurezza per i prodotti con elementi digitali. I fabbricanti notificano le vulnerabilità attivamente sfruttate e gli incidenti gravi al CSIRT designato come coordinatore a norma della presente direttiva e all'ENISA (articolo 14 del CRA).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificazione ed ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/it.html">Il regolamento sulla cibersicurezza: regolamento (UE) 2019/881</a></div>
+      <div class="canon-related__desc">Il mandato dell'ENISA e il quadro europeo di certificazione. Gli Stati membri possono imporre ai soggetti di utilizzare prodotti, servizi e processi TIC certificati nell'ambito dei suoi schemi (articolo 24 della presente direttiva).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Risposta agli incidenti a livello dell'UE</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/it.html">Il regolamento sulla cibersolidarietà: regolamento (UE) 2025/38</a></div>
+      <div class="canon-related__desc">Costruisce il rilevamento e la risposta a livello dell'UE sulle reti create dalla presente direttiva (la rete di CSIRT, EU-CyCLONe e il gruppo di cooperazione NIS) e ne utilizza le definizioni di incidente.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- =========================================================
      SECTION 14: EXPLORE WITH BRUBRU
      ========================================================= -->

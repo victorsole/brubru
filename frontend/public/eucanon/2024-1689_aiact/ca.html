@@ -719,6 +719,11 @@
       .cta-strip { padding: 2rem 1.25rem; }
       .cta-strip__title { font-size: 1.5rem; }
     }
+      /* phone widths: wide tables scroll inside their own box, long words wrap (5 Oct 2026) */
+    @media (max-width: 767px) {
+      table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .card, .card p, .card a, h1, h2, h3, .section__title, .figure-card, .figure-card * { overflow-wrap: anywhere; hyphens: auto; min-width: 0; }
+    }
   </style>
     <script src="/analytics.js" defer></script>
 </head><body>
@@ -1460,12 +1465,39 @@
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
     <h2 class="section__title">Entrades del cànon relacionades</h2>
   </div>
-  <p class="section__subtitle">La família <code>eu_artificial_intelligence</code> al Cànon UE de Brubru</p>
+  <p class="section__subtitle">Les entrades d'IA i ciberseguretat del Cànon de la UE de Brubru, que es complementen entre si</p>
 
-  <div class="canon-related">
-    <div class="canon-related__label">Acte modificatiu</div>
-    <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/ca.html">Òmnibus digital sobre la IA: Reglament (UE) 2026/1744</a></div>
-    <div class="canon-related__desc">El Reglament del 2026 que modifica aquest acte: trasllada les dates d'alt risc al 2 de desembre del 2027 i al 2 d'agost del 2028, afegeix dues prohibicions i dona a l'Oficina d'IA competències directes d'execució sobre la IA basada en models de finalitat general. Llegiu-lo juntament amb aquesta pàgina per conèixer les normes tal com són ara.</div>
+    <div class="two-col-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Acte modificatiu</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/ca.html">L'Òmnibus digital sobre IA: Reglament (UE) 2026/1744</a></div>
+      <div class="canon-related__desc">El Reglament del 2026 que modifica aquest acte: trasllada les dates d'alt risc al 2 de desembre del 2027 i al 2 d'agost del 2028, afegeix dues prohibicions i dona a l'Oficina d'IA competències directes d'execució sobre la IA basada en models de finalitat general. Llegiu-lo juntament amb aquesta pàgina per conèixer les normes tal com són ara.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Ciberseguretat a escala d'entitat</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/ca.html">NIS 2: Directiva (UE) 2022/2555</a></div>
+      <div class="canon-related__desc">Obligacions de gestió dels riscos de ciberseguretat i de notificació d'incidents per a les entitats essencials i importants. Les dues s'apliquen alhora: aquest Reglament al sistema d'IA, la NIS 2 a l'organització que l'explota.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Sector financer</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">DORA: Reglament (UE) 2022/2554</a></div>
+      <div class="canon-related__desc">Normes de resiliència operativa digital per a bancs, asseguradores i altres entitats financeres, que s'apliquen juntament amb aquest Reglament quan aquestes entitats desenvolupen o utilitzen sistemes d'IA.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Ciberseguretat del producte</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/ca.html">El Reglament de ciberresiliència: Reglament (UE) 2024/2847</a></div>
+      <div class="canon-related__desc">Un sistema d'IA d'alt risc que també sigui un producte amb elements digitals i compleixi els requisits essencials del Reglament de ciberresiliència es considera conforme a l'article 15 d'aquest Reglament (article 12 del Reglament de ciberresiliència; article 42, apartat 3, d'aquest Reglament, afegit per l'Òmnibus digital sobre IA).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Certificació i ENISA</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2019-881_csa/ca.html">El Reglament de ciberseguretat: Reglament (UE) 2019/881</a></div>
+      <div class="canon-related__desc">Els sistemes d'IA d'alt risc certificats, o coberts per una declaració de conformitat, en el marc d'un esquema del Reglament de ciberseguretat es presumeixen conformes als requisits de ciberseguretat de l'article 15, en la mesura que el certificat els cobreixi (article 42, apartat 2, d'aquest Reglament).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Resposta de la UE als incidents</div>
+      <div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2025-38_cybersolidarity/ca.html">El Reglament de cibersolidaritat: Reglament (UE) 2025/38</a></div>
+      <div class="canon-related__desc">Detecció i resposta a escala de la UE davant d'incidents cibernètics a gran escala. El seu Sistema Europeu d'Alerta de Ciberseguretat contribueix a desenvolupar eines com la intel·ligència artificial i l'anàlisi de dades (article 3, apartat 2, lletra e), d'aquell Reglament); no imposa cap obligació als proveïdors d'IA.</div>
+    </div>
   </div>
 </section>
 
