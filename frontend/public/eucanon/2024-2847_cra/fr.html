@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Le règlement sur la cyberrésilience expliqué : règlement (UE) 2024/2847 | Brubru</title>
+<meta content="Guide complet du règlement (UE) 2024/2847, le règlement sur la cyberrésilience : champ d'application, obligations des fabricants, signalement prévu à l'article 14 en 24 heures, 72 heures et 14 jours (déjà applicable), classes de risque, procédures d'évaluation de la conformité, organismes notifiés et sanctions jusqu'à 15 millions d'EUR ou 2,5 %." name="description"/>
+<meta content="Le règlement sur la cyberrésilience : règlement (UE) 2024/2847 | Canon UE de Brubru" property="og:title"/>
+<meta content="fr_FR" property="og:locale"/>
+<meta content="Le signalement prévu à l'article 14 s'applique depuis le 11 septembre 2026, y compris aux produits déjà mis sur le marché. L'application complète suit le 11 décembre 2027. Les amendes peuvent atteindre 15 millions d'EUR ou 2,5 % du chiffre d'affaires." property="og:description"/>
+<meta content="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="https://images.pexels.com/photos/163125/board-printed-circuit-board-computer-electronics-163125.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Cyber Resilience Act (Règl. 2024/2847) : ce qui s'applique maintenant et ce qui vient en 2027 | Canon UE de Brubru" name="twitter:title"/>
+<meta content="Signalement des vulnérabilités activement exploitées et des incidents graves : 24 heures, 72 heures, 14 jours. Via la plateforme unique de signalement de l'ENISA, opérationnelle depuis le 11 septembre 2026." name="twitter:description"/>
+<meta content="https://images.pexels.com/photos/163125/board-printed-circuit-board-computer-electronics-163125.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" name="twitter:image"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html" rel="canonical"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html" hreflang="en" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/es.html" hreflang="es" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/fr.html" hreflang="fr" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/it.html" hreflang="it" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/nl.html" hreflang="nl" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/ca.html" hreflang="ca" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html" hreflang="x-default" rel="alternate"/>
+<link href="../../assets/brubru_icon.png" rel="icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="shortcut icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="apple-touch-icon"/>
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"/>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 on horizontal cybersecurity requirements for products with digital elements and amending Regulations (EU) No 168/2013 and (EU) 2019/1020 and Directive (EU) 2020/1828 (Cyber Resilience Act)",
+    "alternateName": "Cyber Resilience Act",
+    "identifier": "CELEX:32024R2847",
+    "legislationIdentifier": "32024R2847",
+    "legislationType": "Regulation",
+    "url": "https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
+    "datePublished": "2024-11-20",
+    "dateModified": "2026-10-05",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "cybersecurity, products with digital elements, vulnerability reporting, conformity assessment, CE marking, open-source software stewards, notified bodies"
+    }
+  }
+  </script>
+<style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; min-width: 0; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image {
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+    .card ol { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ol li { margin-bottom: 0.3rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box ol { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ol li { margin-bottom: 0.4rem; }
+
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.25);
+    }
+
+    /* Tables */
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    /* Risk pyramid: 4 cards 2x2 */
+    .pyramid-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .pyramid-card {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: all 0.2s;
+      background: var(--color-bg);
+    }
+    .pyramid-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+    .pyramid-card--prohibited { border-color: var(--color-red); background: linear-gradient(135deg, rgba(220,38,38,0.05) 0%, rgba(220,38,38,0.02) 100%); }
+    .pyramid-card--high { border-color: var(--color-amber); background: linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(217,119,6,0.02) 100%); }
+    .pyramid-card--limited { border-color: var(--color-blue); background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(6,147,227,0.02) 100%); }
+    .pyramid-card--minimal { border-color: var(--color-green); background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(5,150,105,0.02) 100%); }
+    .pyramid-card__tier {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .pyramid-card__tier--prohibited { color: var(--color-red); }
+    .pyramid-card__tier--high { color: var(--color-amber); }
+    .pyramid-card__tier--limited { color: var(--color-blue); }
+    .pyramid-card__tier--minimal { color: var(--color-green); }
+    .pyramid-card__title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pyramid-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.55; }
+
+    /* 5-card grid (3+2 centred) */
+    .covers-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .covers-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+      background: var(--color-bg);
+    }
+    .covers-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .covers-card--span2 { grid-column: span 2; }
+    .covers-card--c4 { grid-column: 2 / span 2; }
+    .covers-card--c5 { grid-column: 4 / span 2; }
+    .covers-card__icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .covers-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .covers-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Three-col grid */
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Two-col grid */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Glossary */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      margin-bottom: 0.35rem;
+    }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Brubru CTA features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Related canon card */
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    /* CTA Strip */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+    .cta-strip__sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 1.5rem;
+    }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .covers-grid { grid-template-columns: repeat(2, 1fr); }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+      .pyramid-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .covers-grid { grid-template-columns: 1fr; }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .pyramid-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+
+    /* Omnibus additions */
+    .cmp-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+    .cmp-table td:first-child { font-weight: 700; min-width: 0; }
+    .cmp-table td:nth-child(3) { background: rgba(6,147,227,0.04); }
+    .tree { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; position: relative; margin-bottom: 1.5rem; }
+    .tree__node { border: 2px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; background: var(--color-bg); }
+    .tree__node--new { border-color: var(--color-blue); background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%); }
+    .tree__label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-blue); margin-bottom: 0.4rem; }
+    .tree__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .tree__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.55; }
+    .tree__arrow { text-align: center; color: var(--color-blue); font-size: 1.6rem; line-height: 1; margin: -0.5rem 0 0.5rem; }
+    .timeline__item--upcoming::before { border-color: var(--color-amber); }
+    .timeline__item--upcoming .timeline__date { color: var(--color-amber); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .section__title { min-width: 0; }
+    @media (max-width: 767px) {
+      .tree { grid-template-columns: 1fr; }
+    }
+      /* long compound words (Dutch, German-style) must wrap, never force horizontal scroll at 375px */
+    h1, h2, h3, .section__title, .hero__title, .timeline__text, .info-box p { overflow-wrap: anywhere; hyphens: auto; }
+  </style>
+<script defer="" src="/analytics.js"></script>
+</head>
+<body>
+<!-- Sticky header -->
+<header class="header" id="top">
+<a aria-label="Accueil Brubru" href="https://brubru.beresol.eu"><img alt="Brubru" class="header__logo" src="../../assets/brubru_mainlogo.png"/></a>
+<div class="header__text">
+<div class="header__title">Brubru</div>
+<div class="header__subtitle">Veille politique européenne</div>
+</div>
+<select aria-label="Language" class="header__lang" onchange="window.location.href=this.value">
+<option value="index.html">English</option>
+<option value="fr.html" selected>Français</option>
+<option value="es.html">Español</option>
+<option value="it.html">Italiano</option>
+<option value="nl.html">Nederlands</option>
+<option value="ca.html">Català</option>
+</select>
+<a class="header__cta" href="https://brubru.beresol.eu/signup">Essayer Brubru gratuitement</a>
+</header>
+<div class="container">
+<!-- Hero -->
+<section class="hero">
+<div class="hero__tag">
+<a href="../index.html">Canon de l'UE</a> / Cybersécurité / CELEX 32024R2847
+  </div>
+<h1 class="hero__title">Le <span>règlement sur la cyberrésilience</span></h1>
+<p class="hero__subtitle">
+    Le règlement (UE) 2024/2847 fixe des exigences de cybersécurité pour tout produit comportant des éléments numériques vendu dans l'UE. Ses obligations de notification au titre de l'article 14 s'appliquent depuis le 11 septembre 2026, y compris aux produits déjà mis sur le marché. Tout le reste s'applique à partir du 11 décembre 2027.
+  </p>
+<div class="hero__meta">
+<span><i class="mdi mdi-calendar"></i> Signé le 23 octobre 2024</span>
+<span><i class="mdi mdi-book-open-outline"></i> JO du 20 novembre 2024</span>
+<span><i class="mdi mdi-calendar-check"></i> En vigueur depuis le 10 décembre 2024</span>
+<span><i class="mdi mdi-tag-outline"></i> CELEX 32024R2847</span>
+<span><i class="mdi mdi-file-document-outline"></i> Règlement, directement applicable</span>
+</div>
+</section>
+<!-- Hero image -->
+<figure class="hero-image">
+<img alt="Gros plan d'un circuit imprimé vert avec des condensateurs et des micropuces, illustrant un produit comportant des éléments numériques" loading="lazy" src="https://images.pexels.com/photos/163125/board-printed-circuit-board-computer-electronics-163125.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940"/>
+<figcaption>
+    Photo : <a href="https://www.pexels.com/photo/close-up-photography-of-computer-motherboard-163125/" rel="noopener" target="_blank">Pixabay</a>
+    via <a href="https://www.pexels.com/photo/close-up-photography-of-computer-motherboard-163125/" rel="noopener" target="_blank">Pexels</a>
+    | Le règlement sur la cyberrésilience s'applique aux matériels et aux logiciels qui se connectent à un appareil ou à un réseau
+  </figcaption>
+</figure>
+<!-- Key figures strip -->
+<div class="figures">
+<div class="figure-card fc-red">
+<div class="figure-card__number">11 sept. 2026</div>
+<div class="figure-card__label">La notification au titre de l'article 14 s'applique</div>
+<div class="figure-card__context">Déjà en vigueur, y compris pour les produits déjà mis sur le marché. La plateforme unique de notification de l'ENISA a ouvert le même jour.</div>
+</div>
+<div class="figure-card fc-blue">
+<div class="figure-card__number">11 déc. 2027</div>
+<div class="figure-card__label">Application complète</div>
+<div class="figure-card__context">Les exigences essentielles, l'évaluation de la conformité, le marquage CE et la période de support s'appliquent à partir de cette date (article 71, paragraphe 2).</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">24 h</div>
+<div class="figure-card__label">Délai d'alerte précoce</div>
+<div class="figure-card__context">À compter de la prise de connaissance d'une vulnérabilité activement exploitée ou d'un incident grave, suivie d'une notification à 72 heures.</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">15 M EUR</div>
+<div class="figure-card__label">Ou 2,5 % du chiffre d'affaires mondial</div>
+<div class="figure-card__context">Le plafond maximal des amendes, le montant le plus élevé étant retenu, en cas de violation de l'annexe I, de l'article 13 ou de l'article 14 (article 64).</div>
+</div>
+</div>
+<!-- Table of Contents -->
+<nav class="toc">
+<div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Sommaire</div>
+<div class="toc__grid">
+<a class="toc__link" href="#overview"><i class="mdi mdi-information-outline"></i> Vue d'ensemble</a>
+<a class="toc__link" href="#covers"><i class="mdi mdi-view-grid-outline"></i> Ce qu'il couvre</a>
+<a class="toc__link" href="#numbers"><i class="mdi mdi-numeric"></i> Chiffres clés</a>
+<a class="toc__link" href="#scope"><i class="mdi mdi-target"></i> Champ d'application et exclusions</a>
+<a class="toc__link" href="#actors"><i class="mdi mdi-account-group-outline"></i> Qui est qui</a>
+<a class="toc__link" href="#duties"><i class="mdi mdi-clipboard-check-outline"></i> Obligations des fabricants</a>
+<a class="toc__link" href="#reporting"><i class="mdi mdi-bell-alert-outline"></i> Obligations de notification</a>
+<a class="toc__link" href="#classes"><i class="mdi mdi-layers-outline"></i> Classes de risque</a>
+<a class="toc__link" href="#notified"><i class="mdi mdi-certificate-outline"></i> Organismes notifiés</a>
+<a class="toc__link" href="#surveillance"><i class="mdi mdi-shield-search"></i> Surveillance du marché</a>
+<a class="toc__link" href="#penalties"><i class="mdi mdi-scale-balance"></i> Sanctions</a>
+<a class="toc__link" href="#fit"><i class="mdi mdi-puzzle-outline"></i> Articulation avec les autres actes</a>
+<a class="toc__link" href="#definition"><i class="mdi mdi-book-open-variant"></i> Définition clé</a>
+<a class="toc__link" href="#family"><i class="mdi mdi-family-tree"></i> Arbre généalogique</a>
+<a class="toc__link" href="#glossary"><i class="mdi mdi-alphabetical"></i> Glossaire</a>
+<a class="toc__link" href="#timeline-section"><i class="mdi mdi-timeline-outline"></i> Calendrier législatif</a>
+<a class="toc__link" href="#sources"><i class="mdi mdi-link-variant"></i> Sources officielles</a>
+<a class="toc__link" href="#related"><i class="mdi mdi-link"></i> Entrées connexes du Canon</a>
+<a class="toc__link" href="#brubru"><i class="mdi mdi-robot-outline"></i> Explorer avec Brubru</a>
+</div>
+</nav>
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+<h2 class="section__title">Vue d'ensemble</h2>
+</div>
+<p class="section__subtitle">Ce que c'est, à quoi il s'applique et pourquoi l'article 14 s'applique déjà</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> Ce que c'est</div>
+<p>Le règlement (UE) 2024/2847 du Parlement européen et du Conseil du <strong>23 octobre 2024</strong> a pour titre officiel « concernant des exigences horizontales de cybersécurité pour les produits comportant des éléments numériques et modifiant les règlements (UE) n° 168/2013 et (UE) 2019/1020 et la directive (UE) 2020/1828 (règlement sur la cyberrésilience) ». Il a été publié au Journal officiel le <strong>20 novembre 2024</strong> et est entré en vigueur le <strong>10 décembre 2024</strong>, soit le vingtième jour suivant sa publication.</p>
+<p>Il s'agit du premier cadre horizontal de l'UE qui fait de la cybersécurité une condition de la mise sur le marché des produits connectés (considérant 4). Un produit conforme au règlement porte le marquage CE. Un produit qui ne l'est pas peut être retiré ou rappelé, et son fabricant peut être sanctionné par une amende.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-target" style="color: var(--color-purple);"></i> À quoi il s'applique</div>
+<p>Il s'applique aux <strong>produits comportant des éléments numériques</strong> mis à disposition sur le marché dont l'utilisation prévue ou raisonnablement prévisible comprend une connexion de données directe ou indirecte à un appareil ou à un réseau. Cela couvre le matériel, les logiciels et les solutions de traitement de données à distance qui font partie du produit. Il classe les produits en une catégorie par défaut, les produits <strong>importants</strong> (classe I et classe II) et les produits <strong>critiques</strong> (avec des voies de conformité plus strictes à mesure que le risque augmente).</p>
+</div>
+<div class="info-box info-box--red">
+<h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Pourquoi l'article 14 s'applique déjà aux produits sur le marché</h3>
+<p>L'article 71 échelonne les dates à dessein. L'article 69, paragraphe 2, dispose que les produits mis sur le marché avant le 11 décembre 2027 ne sont concernés qu'après une modification substantielle. L'article 69, paragraphe 3, <strong>déroge ensuite à cette règle pour l'article 14</strong>: les obligations de notification s'appliquent à <strong>tous les produits relevant du champ d'application, y compris ceux déjà mis sur le marché</strong>.</p>
+<p>Les obligations ont pris effet le <strong>11 septembre 2026</strong>. Une entreprise qui ne lit que l'article 69, paragraphe 2, conclut qu'elle a jusqu'en décembre 2027 et se trompe de quinze mois. L'ENISA a ouvert le même jour la plateforme unique de notification exigée par l'article 16, de sorte qu'un canal de notification existe.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Historique de la procédure</div>
+<p>La Commission a proposé le texte sous la référence <strong>COM(2022) 0454 du 15 septembre 2022</strong>. Il s'agit de la procédure <strong>2022/0272(COD)</strong>. Le rapporteur de la commission ITRE était <strong>Nicola Danti</strong> (Renew). La commission a voté le 19 juillet 2023 (rapport A9-0253/2023), le Parlement a confirmé son mandat de négociation le 13 septembre 2023 et la commission a approuvé le texte issu du trilogue le 23 janvier 2024. Le Parlement a adopté sa position en première lecture T9-0130/2024 le 12 mars 2024. Le Conseil a adopté l'acte le 10 octobre 2024 et il a été signé le 23 octobre 2024. Trois rectificatifs ont suivi, décrits dans la section consacrée aux sanctions.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 2: WHAT IT COVERS (5 cards, 3+2 centred)
+     ========================================================= -->
+<section class="section" id="covers">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+<h2 class="section__title">Ce qu'il couvre</h2>
+</div>
+<p class="section__subtitle">Cinq domaines du règlement, en un coup d'œil</p>
+<div class="covers-grid">
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-chip covers-card__icon" style="color: var(--color-blue);"></i>
+<div class="covers-card__title">Champ d'application et produits</div>
+<div class="covers-card__desc">Matériels et logiciels dotés d'une connexion de données directe ou indirecte, y compris le traitement de données à distance. Les dispositifs médicaux, les véhicules et les produits aéronautiques sont exclus (article 2).</div>
+</div>
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-wrench-outline covers-card__icon" style="color: var(--color-green);"></i>
+<div class="covers-card__title">Obligations des fabricants et période de support</div>
+<div class="covers-card__desc">Évaluation des risques, exigences de l'annexe I, nomenclature des logiciels (SBOM) et support de sécurité pendant au moins cinq ans (article 13).</div>
+</div>
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-bell-alert-outline covers-card__icon" style="color: var(--color-red);"></i>
+<div class="covers-card__title">Notification : 24, 72 et 14 (déjà en vigueur)</div>
+<div class="covers-card__desc">Les vulnérabilités activement exploitées et les incidents graves sont notifiés à un CSIRT et à l'ENISA via une plateforme unique (articles 14 et 16).</div>
+</div>
+<div class="covers-card covers-card--c4">
+<i class="mdi mdi-layers-outline covers-card__icon" style="color: var(--color-purple);"></i>
+<div class="covers-card__title">Classes de risque et voies de conformité</div>
+<div class="covers-card__desc">Défaut, classe I (19 catégories), classe II (4) et critique (3), chacune avec sa propre voie d'évaluation (articles 7, 8 et 32).</div>
+</div>
+<div class="covers-card covers-card--c5">
+<i class="mdi mdi-scale-balance covers-card__icon" style="color: var(--color-amber);"></i>
+<div class="covers-card__title">Contrôle de l'application et sanctions</div>
+<div class="covers-card__desc">Surveillance du marché avec pouvoirs de retrait et de rappel, et amendes à trois niveaux pouvant atteindre 15 millions d'EUR ou 2,5 % (articles 52 à 64).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 3: HEADLINE NUMBERS
+     ========================================================= -->
+<section class="section" id="numbers">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+<h2 class="section__title">Chiffres clés</h2>
+</div>
+<p class="section__subtitle">Les chiffres qui comptent, chacun rattaché au texte du Journal officiel</p>
+<div class="three-col-grid">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">71</div>
+<div class="figure-card__label">Articles</div>
+<div class="figure-card__context">En huit chapitres, des dispositions générales aux dispositions transitoires et finales.</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">8</div>
+<div class="figure-card__label">Annexes</div>
+<div class="figure-card__context">Exigences essentielles, informations destinées à l'utilisateur, produits importants et critiques, déclarations, documentation technique et procédures de conformité.</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">130</div>
+<div class="figure-card__label">Considérants</div>
+<div class="figure-card__context">Expliquant les choix relatifs aux logiciels libres, aux périodes de support et à la notification.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">5 ans</div>
+<div class="figure-card__label">Période de support minimale</div>
+<div class="figure-card__context">Sauf si le produit est censé être utilisé moins longtemps (article 13).</div>
+</div>
+<div class="figure-card fc-red">
+<div class="figure-card__number">10 ans</div>
+<div class="figure-card__label">Documentation et mises à jour</div>
+<div class="figure-card__context">La documentation technique et la déclaration sont conservées pendant 10 ans, de même que chaque mise à jour de sécurité, ou pendant la période de support si elle est plus longue.</div>
+</div>
+<div class="figure-card fc-blue">
+<div class="figure-card__number">19 + 4 + 3</div>
+<div class="figure-card__label">Catégories de produits</div>
+<div class="figure-card__context">Produits de classe I, de classe II et produits critiques énumérés aux annexes III et IV.</div>
+</div>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem;">Un septième chiffre compte pour les juristes : <strong>3 dispositions rectifiées</strong>. Trois rectificatifs (5 décembre 2024, 2 juillet 2025 et 17 octobre 2025) ont corrigé le titre, l'article 64, paragraphe 10, et l'article 67.</p>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 4: SCOPE AND EXCLUSIONS
+     ========================================================= -->
+<section class="section" id="scope">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-target"></i></div>
+<h2 class="section__title">Champ d'application et exclusions</h2>
+</div>
+<p class="section__subtitle">Article 2 : les produits connectés inclus, les produits sectoriels exclus</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-check-circle-outline" style="color: var(--color-green);"></i> Ce qui est inclus</div>
+<p>Produits comportant des éléments numériques dont l'utilisation prévue ou raisonnablement prévisible comprend une <strong>connexion de données logique ou physique, directe ou indirecte</strong> à un appareil ou à un réseau. La définition d'un produit comprend ses <strong>solutions de traitement de données à distance</strong> (article 3, points 1 et 2), ainsi que les composants mis sur le marché séparément.</p>
+<p>Les logiciels libres et à code source ouvert ne sont visés que <strong>lorsqu'ils sont fournis dans le cadre d'une activité commerciale</strong> (considérants 15 à 20 et article 3, point 22). Contribuer du code, ou l'héberger sur un dépôt, ne suffit pas.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-close-circle-outline" style="color: var(--color-red);"></i> Ce qui est exclu</div>
+<ul>
+<li>Les dispositifs médicaux relevant des règlements (UE) 2017/745 et (UE) 2017/746.</li>
+<li>Les véhicules relevant du règlement (UE) 2019/2144.</li>
+<li>Les produits aéronautiques certifiés en vertu du règlement (UE) 2018/1139.</li>
+<li>Les équipements marins relevant de la directive 2014/90/UE.</li>
+<li>Les pièces de rechange identiques à l'original.</li>
+<li>Les produits développés ou modifiés à des fins de sécurité nationale ou de défense, et les produits conçus pour traiter des informations classifiées.</li>
+</ul>
+<p style="margin-top:0.5rem;">La Commission peut limiter ou exclure d'autres cas sectoriels par acte délégué (article 2, paragraphe 5).</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 5: WHO IS WHO
+     ========================================================= -->
+<section class="section" id="actors">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+<h2 class="section__title">Qui est qui</h2>
+</div>
+<p class="section__subtitle">Fabricant, importateur, distributeur et gestionnaire de logiciels libres : chapitre II, articles 13 à 26</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-factory" style="color: var(--color-blue);"></i> Fabricant</div>
+<p>La partie qui développe ou fabrique un produit, ou le fait concevoir, et le commercialise sous son propre nom. Il assume les principales obligations de l' <strong>article 13</strong> et les obligations de notification de l' <strong>article 14</strong>.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-truck-delivery-outline" style="color: var(--color-green);"></i> Importateur et distributeur</div>
+<p>Chacun a ses propres vérifications à effectuer avant la mise à disposition d'un produit, énoncées aux articles 18 à 23. Un importateur ou un distributeur qui vend sous son propre nom, ou qui modifie substantiellement un produit, <strong>devient un fabricant</strong> (article 21).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-account-switch-outline" style="color: var(--color-amber);"></i> Mandataire et autres acteurs</div>
+<p>Un fabricant peut désigner un mandataire, mais celui-ci ne peut pas reprendre les obligations du fabricant énoncées à l'article 13, paragraphes 1 à 11. Toute autre personne qui <strong>modifie substantiellement</strong> un produit et le met à disposition est considérée comme un fabricant pour la partie concernée, ou pour l'ensemble du produit (article 22).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-source-branch" style="color: var(--color-purple);"></i> Gestionnaire de logiciels libres</div>
+<p>Un acteur distinct soumis à un régime allégé (article 3, point 14, et article 24) : une politique de cybersécurité documentée, la coopération avec les autorités et la notification au titre de l'article 14 uniquement dans la mesure où le gestionnaire participe au développement. Il n'y a <strong>aucun marquage CE</strong> et <strong>aucune amende</strong>. L'article 24, paragraphe 3, s'applique à partir du 11 décembre 2027.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 6: MANUFACTURER DUTIES
+     ========================================================= -->
+<section class="section" id="duties">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-clipboard-check-outline"></i></div>
+<h2 class="section__title">Obligations des fabricants</h2>
+</div>
+<p class="section__subtitle">Article 13 et annexe I : ce qu'il faut faire avant et après la vente</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-format-list-checks" style="color: var(--color-blue);"></i> L'article 13 en bref</div>
+<ul>
+<li>Une <strong>évaluation des risques de cybersécurité</strong> documentée qui alimente la conception, le développement et la production.</li>
+<li><strong>Une diligence raisonnable à l'égard des composants tiers</strong>, y compris ceux à code source ouvert.</li>
+<li>A <strong>Une période de support d'au moins cinq ans</strong>, sauf si le produit est censé être utilisé moins longtemps.</li>
+<li>Chaque mise à jour de sécurité reste disponible pendant <strong>10 ans ou la période de support, la plus longue des deux étant retenue</strong>.</li>
+<li>Le traitement des vulnérabilités au titre de l'annexe I, partie II, y compris une <strong>nomenclature des logiciels (SBOM)</strong> couvrant au moins les dépendances de premier niveau.</li>
+<li>A <strong>Un point de contact unique</strong> pour les signalements de vulnérabilités.</li>
+<li>La <strong>fin de la période de support (mois et année) indiquée au moment de l'achat</strong>.</li>
+<li>La documentation technique et la déclaration de conformité conservées pendant 10 ans, et un préavis avant la cessation d'activité.</li>
+</ul>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-blue);"></i> Annexe I, partie I : 13 exigences relatives aux produits</div>
+<p>En résumé, le produit doit être mis sur le marché :</p>
+<ul>
+<li>sans vulnérabilité exploitable connue et sécurisé par défaut ;</li>
+<li>avec des mises à jour de sécurité, automatiques par défaut avec possibilité de désactivation ;</li>
+<li>avec un contrôle d'accès et la protection de la confidentialité et de l'intégrité ;</li>
+<li>avec une minimisation des données et la protection de la disponibilité ;</li>
+<li>avec une surface d'attaque limitée et l'atténuation des effets des exploitations ;</li>
+<li>avec une journalisation, avec possibilité de désactivation, et la suppression sécurisée des données.</li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-bug-check-outline" style="color: var(--color-green);"></i> Annexe I, partie II : 8 exigences relatives au traitement des vulnérabilités</div>
+<p>En résumé, le fabricant doit :</p>
+<ul>
+<li>identifier les composants et tenir à jour une nomenclature des logiciels (SBOM) ;</li>
+<li>remédier aux vulnérabilités sans retard et effectuer des tests réguliers ;</li>
+<li>divulguer les vulnérabilités corrigées une fois qu'un correctif est disponible ;</li>
+<li>appliquer une politique de divulgation coordonnée des vulnérabilités et partager des informations ;</li>
+<li>distribuer les mises à jour de manière sécurisée et gratuitement.</li>
+</ul>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 7: REPORTING DUTIES
+     ========================================================= -->
+<section class="section" id="reporting">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-bell-alert-outline"></i></div>
+<h2 class="section__title">Obligations de notification (en vigueur dès à présent)</h2>
+</div>
+<p class="section__subtitle">L'article 14 s'applique à partir du 11 septembre 2026 : 24 heures, 72 heures, puis 14 jours ou un mois</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-red);"></i> Deux événements à notifier</div>
+<p>Un fabricant doit notifier une <strong>vulnérabilité activement exploitée</strong> dans son produit, ainsi qu'un <strong>incident grave ayant une incidence sur la sécurité du produit</strong>. Les deux sont transmis <strong>simultanément</strong> au CSIRT désigné comme coordinateur et à l' <strong>ENISA</strong>, par l'intermédiaire de la plateforme de signalement unique mise en place en vertu de l'article 16. Le fait d'« avoir connaissance » déclenche le délai, et non la publication ni la confirmation.</p>
+</div>
+<div class="three-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-alarm" style="color: var(--color-red);"></i> Alerte précoce : 24 heures</div>
+<p>Dans un délai de <strong>24 heures</strong> après avoir pris connaissance de l'événement. Elle indique que l'événement s'est produit et, le cas échéant, dans quels États membres le produit a été mis à disposition.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-send-outline" style="color: var(--color-amber);"></i> Notification : 72 heures</div>
+<p>Dans un délai de <strong>72 heures</strong>. Elle précise le produit concerné, la nature générale de l'exploitation ou de l'incident, les mesures correctives ou d'atténuation prises, les mesures que les utilisateurs peuvent prendre, et le degré de sensibilité que le fabricant attribue aux informations.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-check-outline" style="color: var(--color-green);"></i> Rapport final : 14 jours</div>
+<p>Au plus tard <strong>14 jours</strong> après la mise à disposition d'une mesure corrective ou d'atténuation. Il décrit la vulnérabilité, sa gravité et son incidence, l'acteur malveillant lorsqu'il est connu, ainsi que la mise à jour de sécurité ou l'autre mesure.</p>
+</div>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-server-network" style="color: var(--color-blue);"></i> La plateforme de signalement unique (article 16)</div>
+<p>L'ENISA a mis en place et exploite la plateforme et a déployé sa capacité opérationnelle initiale le <strong>11 septembre 2026</strong>, jour où l'article 14 a commencé à s'appliquer. Un fabricant dépose <strong>une seule notification</strong>. Le CSIRT coordinateur la transmet aux CSIRT nationaux des autres États membres dans lesquels le produit est disponible, et elle parvient à l'ENISA en même temps. L'article 16, paragraphe 2, permet de retarder la diffusion dans des circonstances particulièrement exceptionnelles. La plateforme se trouve à l'adresse <a href="https://portal.cra-srp.enisa.europa.eu/" rel="noopener" style="color: var(--color-blue);" target="_blank">portal.cra-srp.enisa.europa.eu</a>.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-hand-heart-outline" style="color: var(--color-green);"></i> Notification volontaire (article 15)</div>
+<p>Les fabricants et d'autres personnes peuvent également notifier volontairement des vulnérabilités et des cybermenaces, en vertu de l'article 15. L'ENISA indique qu'elle continuera d'améliorer et d'étendre les fonctions de la plateforme au cours des prochains mois. Les gestionnaires de logiciels libres sont soumis à l'article 14 par l'article 24, paragraphe 3, qui s'applique à partir du 11 décembre 2027.</p>
+</div>
+</div>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-clock-alert-outline" style="color: var(--color-amber);"></i> D'où viennent les 14 jours ou le mois</h3>
+<p>Le rapport final concernant une vulnérabilité activement exploitée est dû au plus tard <strong>14 jours après la mise à disposition d'une mesure corrective ou d'atténuation</strong>. Pour un incident grave, le rapport final est dû dans un délai d' <strong>un mois</strong> à compter de la notification. Vérifiez la disposition correspondant à l'événement avant de fixer une échéance dans un calendrier de conformité.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 8: RISK CLASSES
+     ========================================================= -->
+<section class="section" id="classes">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-layers-outline"></i></div>
+<h2 class="section__title">Classes de risque et voies de conformité</h2>
+</div>
+<p class="section__subtitle">Articles 7, 8 et 32, avec les listes de produits des annexes III et IV</p>
+<div class="three-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-numeric-1-circle-outline" style="color: var(--color-blue);"></i> Annexe III, classe I : 19 catégories</div>
+<p>Systèmes de gestion des identités et des accès privilégiés, navigateurs, gestionnaires de mots de passe, logiciels anti-programmes malveillants, produits VPN, systèmes de gestion de réseau, SIEM, gestionnaires d'amorçage, infrastructures à clés publiques, interfaces réseau, systèmes d'exploitation, routeurs et commutateurs, microprocesseurs dotés de fonctionnalités de sécurité, microcontrôleurs et dispositifs ASIC ou FPGA, assistants virtuels pour la maison intelligente, produits de sécurité pour la maison intelligente, jouets connectés et objets connectés portables relatifs à la santé.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-numeric-2-circle-outline" style="color: var(--color-amber);"></i> Annexe III, classe II : 4 catégories</div>
+<p>Hyperviseurs et environnements d'exécution de conteneurs, pare-feu et systèmes de détection ou de prévention des intrusions, microprocesseurs résistants aux manipulations et microcontrôleurs résistants aux manipulations.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-shield-star-outline" style="color: var(--color-red);"></i> Annexe IV, critiques : 3 catégories</div>
+<p>Dispositifs matériels dotés de boîtiers de sécurité, passerelles de compteurs intelligents et dispositifs similaires, cartes à puce et éléments sécurisés. La Commission peut rendre la certification européenne de cybersécurité obligatoire pour ces produits par voie d'acte délégué (article 8, paragraphe 1).</p>
+</div>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">La description technique de chaque catégorie est fixée par le règlement d'exécution (UE) 2025/2392 en vertu de l'article 7, paragraphe 4, en vigueur depuis le 21 décembre 2025.</p>
+<h3 style="font-size: 1.15rem; margin-bottom: 0.75rem;">Quelle voie de conformité ?</h3>
+<div class="cmp-wrap">
+<table class="duty-table cmp-table">
+<thead>
+<tr>
+<th scope="col">Groupe de produits</th>
+<th scope="col">Voie</th>
+<th scope="col">Ce que cela signifie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Produits par défaut</td>
+<td class="rate-green">Autoévaluation (module A)</td>
+<td>Le fabricant évalue la conformité par rapport aux exigences de l'annexe I et signe lui-même la déclaration.</td>
+</tr>
+<tr>
+<td>Produits importants de classe I</td>
+<td class="rate-blue">Autoévaluation uniquement avec des normes</td>
+<td>L'autoévaluation n'est autorisée que si des normes harmonisées, des spécifications communes ou un schéma de certification au moins de niveau « substantiel » sont appliqués. À défaut, une évaluation par un tiers est requise (modules B plus C, ou H).</td>
+</tr>
+<tr>
+<td>Produits importants de classe II</td>
+<td class="rate-amber">Toujours par un tiers</td>
+<td>Modules B plus C, ou H, ou un schéma européen de certification au moins de niveau « substantiel ».</td>
+</tr>
+<tr>
+<td>Produits critiques</td>
+<td class="rate-red">Certification si la Commission le décide</td>
+<td>La certification européenne obligatoire ne s'applique que si la Commission en décide ainsi par voie d'acte délégué (article 8, paragraphe 1). Sinon, les voies de la classe II s'appliquent.</td>
+</tr>
+<tr>
+<td>Fabricants de logiciels libres de produits de l'annexe III</td>
+<td class="rate-purple">Toute voie de l'article 32, paragraphe 1</td>
+<td>Ils peuvent choisir n'importe quelle voie de l'article 32, paragraphe 1, à condition que la documentation technique soit rendue publique (article 32, paragraphe 5).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem;">Un certificat au moins de niveau « substantiel » supprime la nécessité de l'évaluation correspondante par un tiers (article 27, paragraphe 9).</p>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 9: NOTIFIED BODIES
+     ========================================================= -->
+<section class="section" id="notified">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+<h2 class="section__title">Organismes notifiés</h2>
+</div>
+<p class="section__subtitle">Chapitre IV, articles 35 à 51 : les évaluateurs dont dépendent les voies faisant appel à un tiers</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Déjà applicable depuis le 11 juin 2026</div>
+<p>Le chapitre IV, qui régit la <strong>notification des organismes d'évaluation de la conformité</strong>, s'applique depuis le <strong>11 juin 2026</strong>. Les organismes peuvent déjà demander à être notifiés, afin d'exister lorsque les voies faisant appel à un tiers commenceront à être utilisées en décembre 2027.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-flag-checkered" style="color: var(--color-amber);"></i> L'objectif du 11 décembre 2026 (article 35, paragraphe 2)</div>
+<p>D'ici le <strong>11 décembre 2026</strong>, les États membres « s'efforcent de veiller » à ce qu'il existe suffisamment d'organismes notifiés. Il s'agit d'un objectif de moyens pour les États membres. Ce n'est <strong>pas une obligation pour les entreprises</strong>.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 10: MARKET SURVEILLANCE
+     ========================================================= -->
+<section class="section" id="surveillance">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-search"></i></div>
+<h2 class="section__title">Surveillance du marché, retrait et rappel</h2>
+</div>
+<p class="section__subtitle">Chapitre V, articles 52 à 60 : le règlement 2019/1020 fournit le dispositif</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-magnify-scan" style="color: var(--color-blue);"></i> Évaluation et mesure corrective (article 54)</div>
+<p>Lorsqu'un produit présente un <strong>risque significatif en matière de cybersécurité</strong>, l'autorité de surveillance du marché l'évalue et peut exiger une mesure corrective, <strong>le retrait ou le rappel</strong>. Les autres États membres et la Commission disposent de trois mois pour formuler une objection (article 54, paragraphe 8). Un groupe de coopération administrative spécifique (ADCO) coordonne les autorités.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-earth" style="color: var(--color-purple);"></i> Action au niveau de l'Union (articles 56 et 57)</div>
+<p>Dans des circonstances exceptionnelles, la Commission peut décider au niveau de l'Union, sur la base d'une évaluation de l'ENISA et par un acte d'exécution (article 56). Même les <strong>produits conformes</strong> peuvent être restreints s'ils présentent des risques significatifs pour la sécurité, les droits fondamentaux ou les services des entités essentielles (article 57).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-alert-outline" style="color: var(--color-amber);"></i> Non-conformité formelle (article 58)</div>
+<p>Les défauts du marquage CE, de la déclaration de conformité ou de la documentation technique doivent être corrigés.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-broom" style="color: var(--color-green);"></i> Activités conjointes et opérations coordonnées de contrôle (articles 59 et 60)</div>
+<p>Les autorités peuvent mener des activités conjointes, ainsi que des <strong>opérations coordonnées de contrôle</strong> portant sur une catégorie de produits afin de vérifier la conformité.</p>
+</div>
+</div>
+<div class="info-box info-box--purple">
+<h3><i class="mdi mdi-power" style="color: var(--color-purple);"></i> Le CRA prévoit-il un interrupteur d'arrêt ?</h3>
+<p><strong>Non.</strong> Le texte ne contient aucune exigence d'arrêt ou d'interrupteur d'arrêt, ni aucune règle sur l'arrêt d'un produit à distance. Ces termes ne figurent pas dans le règlement.</p>
+<p>Ses pouvoirs les plus forts sont <strong>le retrait et le rappel</strong>, qu'une autorité de surveillance du marché peut ordonner après avoir évalué un produit (articles 54 à 57). Ce sont des mesures prises à l'encontre de produits mis sur le marché. Elles ne constituent pas une fonction intégrée au produit.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 11: PENALTIES
+     ========================================================= -->
+<section class="section" id="penalties">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-scale-balance"></i></div>
+<h2 class="section__title">Sanctions</h2>
+</div>
+<p class="section__subtitle">Article 64 : trois niveaux d'amendes administratives, fixées par le droit national dans la limite de ces plafonds</p>
+<div class="cmp-wrap">
+<table class="duty-table">
+<thead>
+<tr>
+<th scope="col">Niveau</th>
+<th scope="col">Infraction</th>
+<th scope="col">Amende maximale, le montant le plus élevé étant retenu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="highlight-row">
+<td>Niveau supérieur</td>
+<td>Les exigences essentielles de l'annexe I, ou les obligations prévues aux articles 13 et 14</td>
+<td class="rate-red">15 000 000 EUR ou 2,5 % du chiffre d'affaires annuel mondial total</td>
+</tr>
+<tr>
+<td>Niveau intermédiaire</td>
+<td>Articles 18 à 23, 28, 30, paragraphes 1 à 4, 31, paragraphes 1 à 4, 32, paragraphes 1 à 3, 33, paragraphe 5, 39, 41, 47, 49 et 53</td>
+<td class="rate-amber">10 000 000 EUR ou 2 % du chiffre d'affaires annuel mondial</td>
+</tr>
+<tr>
+<td>Niveau inférieur</td>
+<td>Fourniture d'informations inexactes, incomplètes ou trompeuses aux organismes notifiés ou aux autorités de surveillance du marché</td>
+<td class="rate-blue">5 000 000 EUR ou 1 % du chiffre d'affaires annuel mondial</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-green);"></i> Les exemptions</div>
+<ul>
+<li><strong>Les microentreprises et les petites entreprises</strong> ne sont pas sanctionnées par une amende pour le non-respect du délai de 24 heures de l'alerte précoce.</li>
+<li><strong>Les gestionnaires de logiciels libres</strong> ne sont soumis à aucune amende.</li>
+<li>Les États membres ne peuvent pas substituer d'autres sanctions pécuniaires à l'égard de ces entités.</li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-purple);"></i> Qui applique les amendes</div>
+<p>Les autorités de surveillance du marché appliquent les amendes en vertu du droit national, dans la limite des plafonds ci-dessus. Les États membres s'informent mutuellement par le système prévu à l'article 34 du règlement (UE) 2019/1020, et une règle de proportionnalité explicite régit le cumul des amendes infligées dans plusieurs États membres.</p>
+</div>
+</div>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-file-edit-outline" style="color: var(--color-amber);"></i> Le rectificatif du 2 juillet 2025 à l'article 64, paragraphe 10</h3>
+<p>Le texte original de l'article 64, paragraphe 10, mentionnait « les paragraphes 3 à 9 », ce qui ressemblait à une lacune. Le rectificatif du <strong>2 juillet 2025</strong> le fait lire <strong>« les paragraphes 2 à 9 »</strong>. Les exemptions pour les micro-fabricants et les petits fabricants (alerte précoce de 24 heures manquée) et pour les gestionnaires de logiciels libres couvrent donc le <strong>niveau de 15 millions d'euros</strong> également.</p>
+<p>Les deux autres rectificatifs datent du 5 décembre 2024, qui a corrigé le titre pour citer le règlement (UE) 2019/1020, et du 17 octobre 2025, qui a corrigé le renvoi figurant à l'article 67 vers le point 72.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 12: HOW IT FITS WITH OTHER ACTS
+     ========================================================= -->
+<section class="section" id="fit">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-puzzle-outline"></i></div>
+<h2 class="section__title">Articulation avec d'autres actes</h2>
+</div>
+<p class="section__subtitle">Le CRA impose des obligations aux produits. Ses voisins en imposent aux entités, aux agences et aux systèmes d'IA</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-lan" style="color: var(--color-blue);"></i> NIS 2 : directive (UE) 2022/2555</div>
+<p>NIS 2 impose des obligations aux <strong>entités</strong> qui exploitent des services essentiels et importants. Le CRA impose des obligations aux <strong>produits</strong>. Une organisation peut relever des deux, en notifiant un incident au titre de NIS 2 en tant qu'opérateur et au titre de l'article 14 du CRA en tant que fabricant.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-robot-outline" style="color: var(--color-green);"></i> AI Act : règlement (UE) 2024/1689</div>
+<p>En vertu de l'article 12 du CRA et du considérant 51, un système d'IA à haut risque qui est également un produit comportant des éléments numériques est réputé satisfaire aux exigences de cybersécurité de l'article 15 de l'AI Act lorsqu'il respecte l'annexe I, parties I et II, et que la déclaration de conformité atteste le niveau de l'article 15. L'omnibus sur l'IA, règlement (UE) 2026/1744, le reprend désormais sous la forme du <strong>nouvel article 42, paragraphe 3, de l'AI Act</strong>. Les organismes notifiés compétents au titre de l'AI Act peuvent également évaluer les exigences du CRA.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-shield-key-outline" style="color: var(--color-purple);"></i> Règlement sur la cybersécurité : règlement (UE) 2019/881</div>
+<p>Un règlement différent. Il fixe le mandat de l'ENISA et le cadre européen de certification de cybersécurité. Il ne comporte aucune obligation propre pour les produits. Le CRA s'appuie sur l'ENISA en tant que destinataire des notifications et sur les schémas de certification comme l'une des voies de conformité.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-store-check-outline" style="color: var(--color-amber);"></i> Surveillance du marché : règlement (UE) 2019/1020</div>
+<p>Il fournit le dispositif d'application, et le CRA le modifie. Les actions représentatives au titre de la directive (UE) 2020/1828, que le CRA modifie également, peuvent être intentées pour des infractions au CRA à partir du 11 décembre 2027.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 13: KEY DEFINITION
+     ========================================================= -->
+<section class="section" id="definition">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-book-open-variant"></i></div>
+<h2 class="section__title">Définition clé</h2>
+</div>
+<p class="section__subtitle">Le terme qui détermine si le règlement s'applique</p>
+<div class="info-box info-box--purple">
+<h3><i class="mdi mdi-book-open-variant" style="color: var(--color-purple);"></i> Produit comportant des éléments numériques (article 3, point 1)</h3>
+<p>« Un produit logiciel ou matériel et ses solutions de traitement de données à distance, y compris les composants logiciels ou matériels mis sur le marché séparément. »</p>
+<p>Le traitement de données à distance désigne un traitement de données à distance pour lequel le logiciel est conçu et développé par le fabricant, ou sous sa responsabilité, et dont l'absence empêcherait le produit d'exercer l'une de ses fonctions (article 3, point 2).</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 14: FAMILY TREE
+     ========================================================= -->
+<section class="section" id="family">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-family-tree"></i></div>
+<h2 class="section__title">Arbre généalogique</h2>
+</div>
+<p class="section__subtitle">Le cadre de cybersécurité entourant le règlement, et les actes adoptés en vertu de celui-ci</p>
+<div class="tree">
+<div class="tree__node">
+<div class="tree__label">En complément du CRA</div>
+<div class="tree__title">Règlement sur la cybersécurité : règlement (UE) 2019/881</div>
+<div class="tree__desc">Le mandat de l'ENISA et le cadre européen de certification de cybersécurité.</div>
+</div>
+<div class="tree__node">
+<div class="tree__label">En complément du CRA</div>
+<div class="tree__title">NIS 2 : directive (UE) 2022/2555</div>
+<div class="tree__desc">Obligations de cybersécurité pour les entités qui fournissent des services essentiels et importants.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree" style="grid-template-columns: minmax(0, 1fr); max-width: 560px; margin-left: auto; margin-right: auto;">
+<div class="tree__node tree__node--new">
+<div class="tree__label">Cette page</div>
+<div class="tree__title">Règlement sur la cyberrésilience : règlement (UE) 2024/2847</div>
+<div class="tree__desc">Procédure 2022/0272(COD). Publié le 20 novembre 2024 et entré en vigueur le 10 décembre 2024.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree">
+<div class="tree__node">
+<div class="tree__label">Acte d'exécution</div>
+<div class="tree__title">Règlement d'exécution (UE) 2025/2392</div>
+<div class="tree__desc">Adopté le 28 novembre 2025, entré en vigueur le 21 décembre 2025. Donne la description technique des catégories de produits importants et critiques au titre de l'article 7, paragraphe 4.</div>
+</div>
+<div class="tree__node">
+<div class="tree__label">Acte délégué</div>
+<div class="tree__title">Règlement délégué (UE) 2026/881</div>
+<div class="tree__desc">Adopté le 11 décembre 2025, entré en vigueur le 10 mai 2026. Précise dans quels cas un CSIRT peut retarder la transmission d'une notification, au titre de l'article 14, paragraphe 9, et de l'article 16, paragraphe 2.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 15: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+<h2 class="section__title">Glossaire</h2>
+</div>
+<p class="section__subtitle">Termes utilisés sur cette page</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-card__term">Produit comportant des éléments numériques</div>
+<div class="glossary-card__def">Un produit logiciel ou matériel et ses solutions de traitement de données à distance, y compris les composants mis sur le marché séparément (article 3, point 1).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Produit important</div>
+<div class="glossary-card__def">Un produit figurant à l'annexe III, classe I (19 catégories) ou classe II (4 catégories), soumis à une procédure d'évaluation de la conformité plus stricte.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Produit critique</div>
+<div class="glossary-card__def">Un produit figurant à l'annexe IV (3 catégories), pour lequel la Commission peut exiger une certification européenne de cybersécurité.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Gardien de logiciels libres et ouverts</div>
+<div class="glossary-card__def">Une personne morale, autre qu'un fabricant, qui apporte de manière systématique un soutien durable au développement de produits libres et ouverts spécifiques destinés à des activités commerciales. Il relève d'un régime allégé et n'est jamais sanctionné par une amende.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">CSIRT</div>
+<div class="glossary-card__def">Centre de réponse aux incidents de sécurité informatique (équipe de réponse aux incidents de sécurité informatique). Le CSIRT désigné comme coordinateur reçoit les notifications au titre du CRA et les transmet.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">ENISA</div>
+<div class="glossary-card__def">L'Agence de l'Union européenne pour la cybersécurité. Elle exploite la plateforme unique de signalement et reçoit chaque notification prévue à l'article 14.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Plateforme unique de signalement</div>
+<div class="glossary-card__def">Le canal établi à l'article 16 pour les notifications prévues à l'article 14. Opérationnelle depuis le 11 septembre 2026.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Nomenclature des logiciels</div>
+<div class="glossary-card__def">Une liste lisible par machine des composants d'un produit. Le CRA exige une nomenclature couvrant au moins les dépendances de premier niveau (annexe I, partie II).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Organisme notifié</div>
+<div class="glossary-card__def">Un organisme d'évaluation de la conformité notifié par un État membre au titre du chapitre IV, qui réalise des évaluations par un tiers.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 16: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-timeline-outline"></i></div>
+<h2 class="section__title">Calendrier législatif</h2>
+</div>
+<p class="section__subtitle">Procédure 2022/0272(COD) : de la proposition aux obligations de signalement applicables aujourd'hui</p>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">15 septembre 2022</div>
+<div class="timeline__text">La Commission adopte sa proposition, <strong>COM(2022) 0454</strong>.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">19 juillet 2023</div>
+<div class="timeline__text">La commission ITRE vote sur son rapport, A9-0253/2023, dont Nicola Danti est le rapporteur.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">13 septembre 2023</div>
+<div class="timeline__text">Le Parlement confirme le mandat de négociation.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">23 janvier 2024</div>
+<div class="timeline__text">La commission approuve le texte issu du trilogue.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">12 mars 2024</div>
+<div class="timeline__text">Le Parlement adopte sa position en première lecture, T9-0130/2024.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">10 octobre 2024</div>
+<div class="timeline__text">Le Conseil adopte l'acte.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">23 octobre 2024</div>
+<div class="timeline__text">Le règlement est signé.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">20 novembre 2024</div>
+<div class="timeline__text">Publication au Journal officiel.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">5 décembre 2024</div>
+<div class="timeline__text">Premier rectificatif : le titre cite désormais le règlement (UE) 2019/1020.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">10 décembre 2024</div>
+<div class="timeline__text">Entrée en vigueur, le vingtième jour suivant la publication. <a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0272(COD)" rel="noopener" target="_blank">La fiche de procédure de l'OEIL se trouve ici.</a></div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">2 juillet 2025</div>
+<div class="timeline__text">Deuxième rectificatif : l'article 64, paragraphe 10, se lit désormais « paragraphes 2 à 9 ».</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 octobre 2025</div>
+<div class="timeline__text">Troisième rectificatif : l'article 67 renvoie au point 72.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">21 décembre 2025</div>
+<div class="timeline__text">Le règlement d'exécution (UE) 2025/2392 entre en vigueur et décrit les catégories de produits importants et critiques.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">10 mai 2026</div>
+<div class="timeline__text">Le règlement délégué (UE) 2026/881 entre en vigueur, sur le retard de transmission des notifications.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">11 juin 2026</div>
+<div class="timeline__text">Le chapitre IV s'applique : notification des organismes d'évaluation de la conformité.</div>
+</div>
+<div class="timeline__item timeline__item--active">
+<div class="timeline__date">11 septembre 2026</div>
+<div class="timeline__text">Le signalement prévu à l'article 14 s'applique, y compris aux produits déjà mis sur le marché. La plateforme unique de signalement de l'ENISA est opérationnelle.</div>
+</div>
+</div>
+<h3 style="font-size: 1.15rem; margin: 2rem 0 1rem;">Dates à venir</h3>
+<div class="timeline">
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">11 décembre 2026 <span class="pill pill--amber">À venir</span></div>
+<div class="timeline__text">Les États membres s'efforcent de disposer d'un nombre suffisant d'organismes notifiés (article 35, paragraphe 2).</div>
+</div>
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">11 décembre 2027 <span class="pill pill--amber">À venir</span></div>
+<div class="timeline__text">Le règlement s'applique dans son intégralité. Les actions représentatives pour la protection des intérêts collectifs des consommateurs commencent à s'appliquer.</div>
+</div>
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">11 juin 2028 <span class="pill pill--amber">À venir</span></div>
+<div class="timeline__text">Les certificats d'examen UE de type et les approbations délivrés au titre d'autres actes de la législation d'harmonisation cessent d'être valides (article 69, paragraphe 1).</div>
+</div>
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">11 septembre 2028 <span class="pill pill--amber">À venir</span></div>
+<div class="timeline__text">La Commission fait rapport sur la plateforme unique de signalement (article 70, paragraphe 2).</div>
+</div>
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">11 décembre 2030 <span class="pill pill--amber">À venir</span></div>
+<div class="timeline__text">Première évaluation complète du règlement, puis tous les quatre ans (article 70, paragraphe 1).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 17: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+<h2 class="section__title">Sources officielles</h2>
+</div>
+<p class="section__subtitle">Documentation primaire relative au règlement (UE) 2024/2847</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> Journal officiel et EUR-Lex</div>
+<ul>
+<li><a href="https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng" rel="noopener" style="color: var(--color-blue);" target="_blank">Règlement (UE) 2024/2847 au Journal officiel (CELEX 32024R2847)</a></li>
+<li><a href="http://data.europa.eu/eli/reg_impl/2025/2392/oj" rel="noopener" style="color: var(--color-blue);" target="_blank">Règlement d'exécution (UE) 2025/2392</a></li>
+<li><a href="http://data.europa.eu/eli/reg_del/2026/881/oj" rel="noopener" style="color: var(--color-blue);" target="_blank">Règlement délégué (UE) 2026/881</a></li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-purple);"></i> Parlement et ENISA</div>
+<ul>
+<li><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0272(COD)" rel="noopener" style="color: var(--color-blue);" target="_blank">Fiche de procédure 2022/0272(COD) de l'Observatoire législatif</a></li>
+<li><a href="https://www.enisa.europa.eu/topics/product-security/single-reporting-platform-srp" rel="noopener" style="color: var(--color-blue);" target="_blank">Plateforme unique de signalement de l'ENISA : page thématique et orientations</a></li>
+<li><a href="https://portal.cra-srp.enisa.europa.eu/" rel="noopener" style="color: var(--color-blue);" target="_blank">La plateforme unique de signalement</a></li>
+</ul>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 18: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+<h2 class="section__title">Entrées connexes du Canon</h2>
+</div>
+<p class="section__subtitle">La famille <code>eu_cybersecurity</code> dans le Canon UE de Brubru</p>
+<div class="two-col-grid">
+<div class="canon-related">
+<div class="canon-related__label">Cybersécurité au niveau des entités</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html">NIS 2 : directive (UE) 2022/2555</a></div>
+<div class="canon-related__desc">Gestion des risques de cybersécurité et signalement des incidents pour les entités essentielles et importantes. Une même organisation peut effectuer des signalements au titre de NIS 2 en tant qu'opérateur et au titre du CRA en tant que fabricant.</div>
+</div>
+<div class="canon-related">
+<div class="canon-related__label">Secteur financier</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">DORA : règlement (UE) 2022/2554</a></div>
+<div class="canon-related__desc">Résilience opérationnelle numérique des entités financières, y compris le risque lié à leurs prestataires tiers de services TIC. Un régime sectoriel pour les entités financières, qui s'ajoute au CRA.</div>
+</div>
+<div class="canon-related">
+<div class="canon-related__label">IA et cybersécurité</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html">Le règlement européen sur l'IA (AI Act) : règlement (UE) 2024/1689</a></div>
+<div class="canon-related__desc">L'article 15 fixe des exigences de cybersécurité pour les systèmes d'IA à haut risque, que le CRA peut satisfaire lorsque le système d'IA est aussi un produit comportant des éléments numériques.</div>
+</div>
+<div class="canon-related">
+<div class="canon-related__label">Modifie l'AI Act</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/index.html">L'omnibus numérique sur l'IA : règlement (UE) 2026/1744</a></div>
+<div class="canon-related__desc">Ajoute l'article 42, paragraphe 3, à l'AI Act, qui relie les exigences essentielles du CRA aux exigences de cybersécurité de l'AI Act.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 19: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+<h2 class="section__title">Explorez le règlement sur la cyberrésilience avec Brubru</h2>
+</div>
+<p class="section__subtitle">Six outils pour analyser, suivre et travailler avec le règlement</p>
+<div class="features-grid">
+<div class="feature-card">
+<i class="mdi mdi-chat-outline"></i>
+<div class="feature-card__title">Brubru Chat</div>
+<div class="feature-card__desc">Demandez si votre produit entre dans le champ d'application, quelle procédure d'évaluation de la conformité s'applique, ou ce que vous devez signaler et quand. Les réponses s'appuient sur des sources officielles d'EUR-Lex.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/main">Ouvrir Chat</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-file-edit-outline"></i>
+<div class="feature-card__title">Amendator</div>
+<div class="feature-card__desc">Chargez le règlement dans l'Amendator et rédigez des amendements par rapport au texte officiel, pour les révisions à venir.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/amendator">Ouvrir Amendator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-view-dashboard-outline"></i>
+<div class="feature-card__title">My EU Bubble</div>
+<div class="feature-card__desc">Suivez les actes d'exécution et délégués, les orientations de l'ENISA et les travaux de normalisation découlant du règlement, et recevez des alertes lorsqu'ils évoluent.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/my-eu-bubble">Ouvrir My EU Bubble</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-clipboard-check-outline"></i>
+<div class="feature-card__title">EU Law Comply</div>
+<div class="feature-card__desc">Réalisez une analyse des écarts de conformité par rapport au règlement, avec les dates d'application échelonnées intégrées.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Ouvrir EU Law Comply</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-hammer-wrench"></i>
+<div class="feature-card__title">Tenderator</div>
+<div class="feature-card__desc">Trouvez des marchés publics européens liés à la cybersécurité, à la certification et aux services d'évaluation de la conformité.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/tenderator">Ouvrir Tenderator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-api"></i>
+<div class="feature-card__title">Brubru API</div>
+<div class="feature-card__desc">Un accès programmatique aux données de la législation de l'UE, au suivi des procédures et aux événements du calendrier institutionnel, pour vos propres processus de veille réglementaire.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/api">Voir la documentation de l'API</a>
+</div>
+</div>
+</section>
+</div><!-- /container -->
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image:
+  linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%),
+  url('https://images.pexels.com/photos/29091470/pexels-photo-29091470.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940');
+  background-size: cover; background-position: center;">
+<h2 class="cta-strip__title">Accédez à toute la plateforme Brubru</h2>
+<p class="cta-strip__sub">Essai gratuit de 14 jours. Sans carte bancaire.</p>
+<a class="cta-strip__btn" href="https://brubru.beresol.eu/signup">Commencer l'essai gratuit</a>
+</div>
+<!-- Footer -->
+<footer class="footer" id="footer">
+<div class="footer__inner">
+<div class="footer__col">
+<div class="footer__logos">
+<img alt="Brubru" class="footer__logo-brubru" src="../../assets/brubru_mainlogo.png"/>
+</div>
+<div class="footer__text">
+<p>Brubru est l'assistant d'intelligence des politiques de l'UE propulsé par l'IA, développé par <a href="https://beresol.eu">Beresol BV</a>.</p>
+<p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Commencez votre essai gratuit de 14 jours</a>, sans carte bancaire.</p>
+<p style="margin-top:0.4rem;">
+<a href="https://brubru.beresol.eu/main">Chat</a>  | 
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a>  | 
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a>  | 
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+</p>
+</div>
+</div>
+<div class="footer__col">
+<div class="footer__text">
+<p style="font-weight:700; margin-bottom:0.5rem;">Bibliothèque du Canon UE</p>
+<ul class="footer__nav">
+<li><a href="../index.html">Toutes les entrées du Canon</a></li>
+<li><a href="../2022-2555_nis2/index.html">NIS 2 - Dir. 2022/2555</a></li>
+<li><a href="../2022-2554_dora/index.html">DORA - Règl. 2022/2554</a></li>
+<li><a href="../2024-1689_aiact/index.html">AI Act - Règl. 2024/1689</a></li>
+<li><a href="index.html">Cyber Resilience Act - Règl. 2024/2847 (cette page)</a></li>
+</ul>
+<p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Sources officielles</p>
+<ul class="footer__nav">
+<li><a href="https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng" rel="noopener" target="_blank">Règl. 2024/2847 au Journal officiel</a></li>
+<li><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0272(COD)" rel="noopener" target="_blank">Fiche de procédure de l'OEIL 2022/0272(COD)</a></li>
+</ul>
+</div>
+</div>
+<div class="footer__col" style="text-align:right;">
+<img alt="Beresol" class="footer__logo-beresol" src="../../assets/beresol-logo.png" style="display:block; margin-left:auto; margin-bottom:0.75rem;"/>
+<div class="footer__text">
+<p style="font-weight:700;">Conçu par Beresol BV</p>
+<p>Apeldoorn, Pays-Bas</p>
+<p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+<p style="margin-top:0.5rem; font-size:0.78rem;">Ceci est une analyse indépendante et non un document officiel de l'UE. Tous les faits sont tirés du règlement (UE) 2024/2847 et de sources officielles d'EUR-Lex.</p>
+</div>
+</div>
+</div>
+<div class="footer__bottom">
+<p>Copyright Beresol BV 2026. Tous droits réservés.  |  <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>  |  <a href="https://beresol.eu">beresol.eu</a></p>
+<p style="margin-top:0.35rem;">Mis à jour le 5 octobre 2026.</p>
+<p style="margin-top:0.35rem;">Crédits photo : photo principale de <a href="https://www.pexels.com/photo/close-up-photography-of-computer-motherboard-163125/" rel="noopener" target="_blank">Pixabay via Pexels</a> (photo ID 163125) | photo du CTA de <a href="https://www.pexels.com/photo/smart-home-devices-collection-on-white-background-29091470/" rel="noopener" target="_blank">Jakub Zerdzicki via Pexels</a> (photo ID 29091470).</p>
+</div>
+</footer>
+<!-- Back to top button -->
+<a aria-label="Retour en haut" class="back-to-top" href="#top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

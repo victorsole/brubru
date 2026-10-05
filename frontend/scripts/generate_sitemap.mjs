@@ -74,6 +74,7 @@ const ROUTE_META = {
   '/eucanon/2026-405_detergents/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-1778_dpp_registry/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-1744_aiomnibus/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2024-2847_cra/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-1736_dpp_standards/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-2_unsold_disclosure/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2026-296_unsold_ban/': { priority: 0.9, changefreq: 'monthly' },

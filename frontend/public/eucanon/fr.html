@@ -303,6 +303,12 @@
           "position": 55,
           "url": "https://brubru.beresol.eu/eucanon/2026-1744_aiomnibus/fr.html",
           "name": "Omnibus numérique sur l'IA (Règlement (UE) 2026/1744)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 56,
+          "url": "https://brubru.beresol.eu/eucanon/2024-2847_cra/fr.html",
+          "name": "Règlement sur la cyberrésilience (règlement (UE) 2024/2847)"
         }
       ]
     }
@@ -920,7 +926,15 @@
     .footer__brand { flex-direction:column; align-items:flex-start; gap:.75rem; }
     .footer__logo { height:40px; }
     .footer__nav { gap:.75rem; }
-  }</style>
+  }    /* 56 cards = 18 rows of 3 + 2 centred: 6-col grid, cards span 2 (CRA added 5 Oct 2026) */
+    @media (min-width: 1025px) {
+      .library-wrapper { grid-template-columns: repeat(6, 1fr); }
+      .library-wrapper .canon-card:nth-child(n) { grid-column: span 2; }
+      .library-wrapper .canon-card:nth-last-of-type(2):nth-child(3n+1) { grid-column: 2 / span 2; }
+      .library-wrapper .canon-card:last-of-type:nth-child(3n+2) { grid-column: 4 / span 2; }
+      .library-wrapper .canon-card:last-of-type:nth-child(3n+1) { grid-column: 3 / span 2; }
+    }
+  </style>
     <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -971,7 +985,7 @@
       <p class="section__subtitle">Une bibliothèque de référence pour quiconque essaie de comprendre ce qu'une loi européenne spécifique exige réellement.</p>
       <div class="prose">
         <p>L'UE produit des centaines de règlements et de directives contraignants chaque année. Beaucoup d'entre eux sont longs, techniquement denses et rédigés pour des praticiens qui connaissent déjà le cadre environnant. L'UE Canon existe pour résoudre ce problème. Chaque entrée prend une seule loi et l'explique en intégralité : ce qu'elle couvre, qui elle s'applique, quelles sont ses obligations clés et comment elle se connecte au corpus juridique européen plus large.</p>
-        <p>Ce n'est pas un résumé d'actualités ou un commentaire politique. C'est une ressource de référence. Si vous êtes un professionnel de la politique, un responsable de la conformité, un chercheur ou simplement un citoyen curieux qui a trouvé un règlement spécifique et veut comprendre ce qu'il dit, cette bibliothèque est pour vous. Actuellement, elle couvre cinquante-trois lois. D'autres entrées de canon arrivent chaque semaine ou tous les quinze jours à mesure que la bibliothèque grandit.</p>
+        <p>Ce n'est pas un résumé d'actualités ou un commentaire politique. C'est une ressource de référence. Si vous êtes un professionnel de la politique, un responsable de la conformité, un chercheur ou simplement un citoyen curieux qui a trouvé un règlement spécifique et veut comprendre ce qu'il dit, cette bibliothèque est pour vous. Actuellement, elle couvre cinquante-six lois. D'autres entrées de canon arrivent chaque semaine ou tous les quinze jours à mesure que la bibliothèque grandit.</p>
         <p>Le suivi législatif en direct, le chat IA et l'analyse des lacunes de conformité se trouvent dans le produit Brubru sur <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>. La bibliothèque Canon est le compagnon gratuit et accessible au public de cette plateforme.</p>
       </div>
     </section>
@@ -2673,6 +2687,24 @@
             <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-scale-balance" aria-hidden="true"></span> 75a-d</div><div class="stat-mini__label">Pouvoirs du Bureau de l'IA</div></div>
           </div>
           <a href="2026-1744_aiomnibus/fr.html" class="canon-card__cta" aria-label="Lire l'explication de l'Omnibus numérique sur l'IA">Lire l'explication <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32024R2847</div>
+          <h3 class="canon-card__title">Règlement sur la cyberrésilience</h3>
+          <p class="canon-card__subtitle">Règlement (UE) 2024/2847</p>
+          <p class="canon-card__desc">Le premier cadre horizontal de l'UE sur la cybersécurité des produits comportant des éléments numériques : sécurité dès la conception, gestion des vulnérabilités pendant la période de support, marquage CE et notification obligatoire des vulnérabilités activement exploitées et des incidents graves depuis le 11 septembre 2026, avec des amendes pouvant atteindre 15 millions d'euros ou 2,5 % du chiffre d'affaires.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Cybersécurité</span>
+            <span class="chip chip--green">Sécurité des produits</span>
+            <span class="chip chip--amber">Produits numériques</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-file-document-outline" aria-hidden="true"></span> 71</div><div class="stat-mini__label">Articles</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-calendar-check" aria-hidden="true"></span> 2026</div><div class="stat-mini__label">Début de la notification</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-bell-alert-outline" aria-hidden="true"></span> 24 h</div><div class="stat-mini__label">Alerte précoce</div></div>
+            <div class="stat-mini"><div class="stat-mini__value"><span class="mdi mdi-scale-balance" aria-hidden="true"></span> 2,5 %</div><div class="stat-mini__label">Amende maximale</div></div>
+          </div>
+          <a href="2024-2847_cra/fr.html" class="canon-card__cta" aria-label="Lire l'explication du règlement sur la cyberrésilience">Lire l'explication <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
         </article>
 
         <p class="library-note">D'autres entrées de canon arrivent régulièrement. Voulez-vous une loi spécifique ensuite ? Envoyez-moi un courriel <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>
