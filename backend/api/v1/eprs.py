@@ -5,6 +5,7 @@
 from datetime import date, datetime, time
 from typing import Optional
 
+from api.v1._body import body_from_html_or_text
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
@@ -20,6 +21,14 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
+
+
+def _doc_url(r) -> Optional[str]:
+    """The publication's own page. Council research papers (ART-) carry only the
+    shared listing page as html_url, so their PDF is the document's own URL."""
+    if (r.publication_id or "").startswith("ART-") and r.pdf_url:
+        return r.pdf_url
+    return r.html_url or r.pdf_url
 
 router = APIRouter(prefix="/eprs", tags=["v1-eprs"])
 
@@ -44,7 +53,7 @@ class EPRSItem(BaseModel):
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — html_url fallback to pdf_url.")
     body_txt: Optional[str] = Field(None, description="Plain-text body: the whole study when Brubru holds it, falling back to the summary. Identical on the list and the item route. These studies average 55,803 characters, so pass include_body=false for a light list. `has_full_text` says which rows carry the study itself.")
-    body_html: Optional[str] = Field(None, description="Null for this endpoint: Brubru stores the extracted text, not the publisher HTML, which lives on europarl.europa.eu/thinktank.")
+    body_html: Optional[str] = Field(None, description="The same text as body_txt, marked up as escaped paragraphs (Brubru stores the extracted text, not the publisher HTML).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of publication_date).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -212,10 +221,10 @@ async def list_eprs(
             word_count=r.word_count,
             page_count=r.page_count,
             has_full_text=bool(r.has_full_text),
-            public_url=r.html_url or r.pdf_url,
+            public_url=_doc_url(r),
             # Identical to the item route. One field, one meaning.
             body_txt=((r.full_text or r.summary) if include_body else None),
-            body_html=None,
+            body_html=(body_from_html_or_text(r.full_text or r.summary)[0] if include_body else None),
             document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
             creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
             updated_date=row_updated(r),
@@ -288,9 +297,9 @@ async def get_eprs_detail(
         word_count=r.word_count,
         page_count=r.page_count,
         has_full_text=bool(r.has_full_text),
-        public_url=r.html_url or r.pdf_url,
+        public_url=_doc_url(r),
         body_txt=r.full_text or r.summary,
-        body_html=None,
+        body_html=body_from_html_or_text(r.full_text or r.summary)[0],
         document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
         creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
         updated_date=row_updated(r),

@@ -95,7 +95,8 @@ _SITE_FOOTER_MARKERS = ("\nAbout the secretariat\n",)
 # the site menu before the release itself (5 Oct 2026). The release follows its own
 # "Press release" label, so everything up to that label is page furniture.
 _BANNER_END = "I accept only necessary cookies"
-_NOT_FOUND = re.compile(r"couldn.t find the page|^Page not found$|404 Content is no longer available",
+_NOT_FOUND = re.compile(r"couldn.t find the page|^Page not found$|404 Content is no longer available"
+                        r"|429 - Too Many Requests|^Server inaccessibility$",
                         re.I | re.M)
 _HEAD_LABELS = ("\nPress release\n", "\nStatement and remarks\n", "\nMedia advisory\n")
 
@@ -262,6 +263,25 @@ def _best_extraction(page_html: str) -> tuple[str | None, str | None, str | None
 _browser_local = threading.local()
 
 
+def _browser_download(url: str) -> bytes | None:
+    from playwright.sync_api import sync_playwright
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_context(accept_downloads=True, user_agent=UA).new_page()
+                with page.expect_download(timeout=90000) as dl:
+                    try:
+                        page.goto(url)
+                    except Exception:  # noqa: BLE001  the goto aborts when the download starts
+                        pass
+                return Path(dl.value.path()).read_bytes()
+            finally:
+                browser.close()
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | None, str | None]:
     """The free fallback when Scrape.do is missing, spent or failing: a local browser.
 
@@ -287,6 +307,14 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
         else:
             res = fetcher.fetch(url, expand_accordions=False, strip_chrome=False)
     except Exception as exc:  # noqa: BLE001  no Playwright, or Chromium failed to start
+        if "Download is starting" in str(exc):
+            # Consilium serves its research-paper PDFs only as a browser download
+            # (ART-2025-2122, 5 Oct 2026): catch the download and parse it.
+            raw = _browser_download(url)
+            if raw and looks_like_pdf(raw):
+                pdf = _pdf_text(raw)
+                if pdf and len(pdf) >= 200:
+                    return pdf, None, None
         return None, None, f"{why_paid_failed}; browser {type(exc).__name__}"
     if res.error or not res.html:
         return None, None, f"{why_paid_failed}; browser {res.error or 'empty page'}"
@@ -439,6 +467,42 @@ def _pdf_text(raw: bytes) -> str | None:
     return text or None
 
 
+def _office_text(raw: bytes) -> str | None:
+    """Text of a .docx / .pptx / .xlsx, or of the PDFs and Office files inside a .zip."""
+    import io
+    import zipfile
+    from xml.etree import ElementTree as ET
+    try:
+        z = zipfile.ZipFile(io.BytesIO(raw))
+    except zipfile.BadZipFile:
+        return None
+    names = z.namelist()
+
+    def runs(xml: bytes, para_tag: str, text_tag: str) -> list[str]:
+        out = []
+        for el in ET.fromstring(xml).iter():
+            if el.tag.endswith(para_tag):
+                t = "".join(x.text or "" for x in el.iter() if x.tag.endswith(text_tag)).strip()
+                if t:
+                    out.append(t)
+        return out
+
+    if "word/document.xml" in names:
+        return "\n".join(runs(z.read("word/document.xml"), "}p", "}t")) or None
+    if any(n.startswith("ppt/slides/slide") for n in names):
+        slides = sorted(n for n in names if re.match(r"ppt/slides/slide\d+\.xml$", n))
+        return "\n".join(t for n in slides for t in runs(z.read(n), "}p", "}t")) or None
+    if "xl/sharedStrings.xml" in names:
+        return "\n".join(runs(z.read("xl/sharedStrings.xml"), "}si", "}t")) or None
+    parts = []
+    for n in names:
+        if n.lower().endswith(".pdf"):
+            parts.append(_pdf_text(z.read(n)) or "")
+        elif n.lower().endswith((".docx", ".pptx", ".xlsx")):
+            parts.append(_office_text(z.read(n)) or "")
+    return "\n\n".join(p for p in parts if p).strip() or None
+
+
 def looks_like_pdf(raw: bytes) -> bool:
     return raw[:5] == b"%PDF-" or raw[:1024].lstrip()[:5] == b"%PDF-"
 
@@ -561,6 +625,15 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             if body_txt and len(body_txt) >= 200:
                 return body_txt, None, None
             return None, None, "pdf carried no extractable text"
+        if raw[:4] == b"PK\x03\x04":
+            # An Office file or a zip is a document too. 229 were stored as their raw
+            # bytes decoded to text (5 Oct 2026): ESMA reply forms, EBA DPM packages.
+            body_txt = _office_text(raw)
+            if body_txt and len(body_txt) >= 200:
+                return body_txt, None, None
+            return None, None, "office/zip file carried no readable text"
+        if b"\x00" in raw[:2000]:
+            return None, None, "binary file, not a page"
         html = raw.decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         # A wall is not an absence of text. 403 means our address is blocked and a 429 that
