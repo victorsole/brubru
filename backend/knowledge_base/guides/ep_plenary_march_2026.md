@@ -1,7 +1,39 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
-**LATEST (Tuesday 15 September 2026): THE 14-17 SEPTEMBER STRASBOURG PART-SESSION IS IN PROGRESS.**
+**LATEST (Monday 5 October 2026): THE 5-8 OCTOBER STRASBOURG PART-SESSION OPENS TODAY.**
+Primary source: EP final draft agenda, last updated 2 Oct 2026
+https://www.europarl.europa.eu/doceo/document/OJ-10-2026-10-05-SYN_EN.html
+**No vote outcome is known yet: say "scheduled", never "adopted", until the minutes or votes page confirm.**
+
+- **Monday 5 Oct (from 17:00)**: Ukraine humanitarian situation; psychosocial risks, stress and mental health at
+  work (EMPL, Estelle Ceulemans, A10-0225/2026, debate today and vote Tuesday); protecting patients from illegal
+  and falsified medicines sold online; one-minute speeches.
+- **Tuesday 6 Oct**: 09:00 preparation of the **European Council of 15-16 October**; 10:30 "This is Europe"
+  with Portugal's Prime Minister Luís Montenegro. **Votes 12:00-13:00**: Matteo Ricci immunity waiver (JURI);
+  **AGILE defence innovation programme** (SEDE/ITRE, Picula and Ijabs); **carcinogens and mutagens at work**
+  (EMPL, Liesbet Sommen); the **economic governance** files (ECON, Markus Ferber and Carla Tavares: alignment and
+  simplification, surveillance of euro-area states in serious difficulty, diversified funding strategy);
+  **INSPIRE spatial data, Omnibus VIII on environmental legislation** (ENVI, Emma Wiesner); psychosocial risks;
+  corporate tax approach (ECON, Kinga Kollár). Afternoon: **Affordable Housing Act** debate (Commissioner Jørgensen
+  is listed), pilot project on European Schools Alliances, **Question Time on the Methane Regulation**,
+  protecting children in the digital world, **EU-China political relations recommendation** (AFET, Hilde Vautmans;
+  debated Tuesday, vote Wednesday), Russian State Duma elections, EU-Africa trade and investment.
+- **Wednesday 7 Oct**: 09:00 **Multiannual Financial Framework 2028-2034** debate; cost-of-living crisis.
+  **Votes 12:00-13:00**: CO2 emission class of heavy-duty vehicles with trailers (TRAN, Matteo Ricci); France
+  acceding to the Inter-American Sea Turtles Convention; consular protection for unrepresented citizens
+  (LIBE, Lena Düpont, consultation procedure); three **European Globalisation Adjustment Fund** applications
+  (Galicia automotive suppliers in Spain, Valmet Automotive in Finland, Cora in Belgium); EU-China.
+  Afternoon: tax on polluters' super profits (Greens/EFA topical debate), **EU anti-corruption strategy**,
+  clean energy, an EU strategy on Islamist entryism, **Nature Restoration Regulation implementation**, Rule 150
+  human-rights debates (Iran, Georgia, Azerbaijan).
+- **Thursday 8 Oct**: Eastern Mediterranean and the Aegean; EU strategies for islands, coastal and outermost
+  regions. **Votes 12:00-14:00**: a Rule 115 objection on lead in gunshot, the Rule 150 urgency resolutions,
+  and several Tuesday and Wednesday debate follow-ups; 15:00 UN Convention on the Rights of Older Persons.
+- **Calendar check (5 Oct)**: plenary days 1-4 are loaded in the calendar, and the **European Council is
+  15-16 October** (the Commission President is listed for the Tuesday preparation debate).
+
+**PREVIOUS BLOCK (Tuesday 15 September 2026, the 14-17 September session, now past)**
 Primary sources: EP agenda synthesis (last updated 14 Sep 2026)
 https://www.europarl.europa.eu/doceo/document/OJ-10-2026-09-14-SYN_EN.html and the EP opening press
 release 20260911IPR47447 (14 Sep 2026)

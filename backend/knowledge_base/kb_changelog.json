@@ -2,6 +2,46 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "Multiannual Financial Framework 2028-2034",
+      "summary": "plenary debate Wed 7 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "affordable_housing_act",
+      "title": "Affordable Housing Act",
+      "summary": "first plenary debate scheduled Tue 6 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "iran_strait_hormuz_eu_response",
+      "title": "Iran War, Strait of Hormuz and EU Crisis Response",
+      "summary": "Energy Union Task Force on diesel, 2 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "Children, Social Media and Age Limits",
+      "summary": "Commission feedback period on the EU Kids Act open until 26 Nov 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
+      "guide": "ep_plenary_march_2026",
+      "title": "EP Plenary Sessions 2026",
+      "summary": "5-8 October Strasbourg session agenda (final draft, 2 Oct), votes scheduled not adopted",
+      "refs": []
+    },
+    {
       "date": "2026-10-01",
       "action": "updated",
       "guide": "eu_publications_office_and_open_data",

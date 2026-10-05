@@ -1,6 +1,7 @@
 # Affordable Housing Act (proposed Regulation)
 
 ## QUICK FACTS
+- **LATEST (5 October 2026): first plenary debate.** The European Parliament's final draft agenda for the 5-8 October Strasbourg session lists an **Affordable Housing Act debate on Tuesday 6 October** (13:00-14:30, or at the end of the votes), with Commissioner Dan Jørgensen listed in the Commission calendar for it. A debate is not a vote: no Parliament position exists yet and the proposal is unchanged (source: EP agenda, https://www.europarl.europa.eu/doceo/document/OJ-10-2026-10-05-SYN_EN.html).
 - **PROPOSED Wednesday 9 September 2026. It is a PROPOSAL, not law.** Nothing in it binds anyone yet. It now goes to the European Parliament and the Council under the ordinary legislative procedure.
 - **Brubru deep dive (public, six languages)**: https://brubru.beresol.eu/affordable-housing-act/
 - Full name: **Regulation establishing a framework for measures in Member States to safeguard housing affordability and availability (Affordable Housing Act)**. **COM(2026) 599 final**, procedure **2026/0268(COD)**, legal basis **Article 114 TFEU**, EEA relevance.
