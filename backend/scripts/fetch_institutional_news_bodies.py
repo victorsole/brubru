@@ -309,7 +309,7 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
     """
     fetcher = getattr(_browser_local, "fetcher", None)
     try:
-        if "consilium.europa.eu" in url:
+        if "consilium.europa.eu" in url or "susproc.jrc.ec.europa.eu" in url:
             # Consilium serves a kept browser one page, then bot-challenges every next one
             # (5 of 6 on 5 Oct 2026, one worker). A fresh browser per page passes each time.
             from services.scrapers.waf_browser_fetcher import fetch_one
@@ -332,6 +332,16 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
                 if pdf and len(pdf) >= 200:
                     return pdf, None, None
         return None, None, f"{why_paid_failed}; browser {type(exc).__name__}"
+    if res.error and "Download is starting" in res.error:
+        raw = _browser_download(url)
+        if raw and looks_like_pdf(raw):
+            pdf = _pdf_text(raw) or _ocr_pdf(raw)
+            if pdf and len(pdf) >= 200:
+                return pdf, None, None
+        if raw and raw[:4] == b"PK\x03\x04":
+            office = _office_text(raw)
+            if office and len(office) >= 200:
+                return office, None, None
     if res.error or not res.html:
         return None, None, f"{why_paid_failed}; browser {res.error or 'empty page'}"
     from_po = _from_publications_office(res.html)
@@ -753,7 +763,10 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             if text_:
                 return text_, html_, None
             return None, None, f"bot challenge; {reason}"
-        return None, None, "bot challenge, not the document: back off and retry later"
+        # Scrape.do has no quota (28 Sep 2026), so the free local browser is the other
+        # route: the JRC Product Bureau challenges plain HTTP and serves the browser
+        # (58 DPP study documents, 5 Oct 2026).
+        return _browser_page(url, "direct: bot challenge")
 
     from_po = _from_publications_office(html)
     if from_po:
