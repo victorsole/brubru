@@ -148,6 +148,7 @@ WATCHLIST_BODIES = {
     "commission": "European Commission (economy store)",
 }
 STALE_AFTER_DAYS = 10
+RAN_WITHIN_DAYS = 3
 # TRIS publishes most working days; a week without a new notification means the
 # feed is broken, not that Member States went quiet (23 Sep 2026: it had been
 # frozen for six and a half months and a client found a Spanish textile decree
@@ -193,6 +194,20 @@ def body_freshness(db) -> list[dict]:
         else:
             age = (date.today() - newest.date()).days
             state = "OK" if age <= STALE_AFTER_DAYS else "STALE"
+            if state == "STALE":
+                # Publisher silence is not scraper failure (5 Oct 2026): ECHA's /news had
+                # two items in August and September, EEA's press releases stopped at 14 Sep,
+                # and both scrapers ran and succeeded every day. A successful RUN of the
+                # body's own sync inside RAN_WITHIN_DAYS makes this QUIET: the source was
+                # read and held nothing newer. It still prints, and it is NOT in the
+                # verdict's "bad" set. A run that parsed nothing also logs success, so
+                # spot-check the live page the first time a body turns QUIET.
+                ran = db.execute(text(
+                    "SELECT max(started_at) FROM sync_runs WHERE source_key = :k "
+                    "AND status = 'success' AND started_at > now() - make_interval(days => :d)"),
+                    {"k": f"economy_{code}", "d": RAN_WITHIN_DAYS}).scalar()
+                if ran:
+                    state = "QUIET"
         out.append({"body": code, "name": name, "news_rows": int(n),
                     "newest": newest.date().isoformat() if newest else None,
                     "age_days": age, "state": state})
@@ -380,11 +395,67 @@ def sweep(db, scope_key: str, days: int) -> list[dict]:
     return out
 
 
+# The Ecodesign Forum's MEETINGS are the primary source for "what is being discussed
+# before the delegated acts". We do not ingest them, and the expert-groups ingest only
+# holds the group list, so a fresh list said nothing about the Forum itself (the 49-day
+# "stale" sentence sent to a client on 5 Oct 2026 was about the wrong thing). This reads
+# the register's own meetings search live, every run, and fails SOFT into UNPROVEN.
+_REGISTER_API = ("https://ec.europa.eu/transparency/expert-groups-register/core/api/front"
+                 "/meetings/search?page=0&size=100")
+_REGISTER_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                   "(KHTML, like Gecko) Chrome/120 Safari/537.36"),
+    "Accept": "application/json", "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Referer": "https://ec.europa.eu/transparency/expert-groups-register/screen/expert-groups",
+}
+_FORUM_TITLE_TERMS = ("ecodesign", "product passport", "textile", "sustainable products")
+# Groups whose every meeting is on-topic, whatever its title says.
+_FORUM_GROUP_PREFIXES = ("E03969", "X03609", "E02773", "E00470")
+
+
+def forum_meetings(days: int) -> tuple[list[dict], dict]:
+    """(hits, freshness row). Hits: meetings in the last `days` days or any in the future."""
+    import requests
+    since = (date.today() - timedelta(days=days)).isoformat()
+    seen: dict = {}
+    try:
+        for term in _FORUM_TITLE_TERMS:
+            r = requests.post(_REGISTER_API, headers=_REGISTER_HEADERS,
+                              data=json.dumps({"title": term}), timeout=60)
+            r.raise_for_status()
+            for m in r.json().get("content", []):
+                seen[m["meetingId"]] = m
+    except Exception as exc:  # noqa: BLE001 - fail soft into UNPROVEN, never into "nothing"
+        return [], {"body": "forum_register", "name": "Ecodesign Forum meetings (expert-groups register)",
+                    "news_rows": 0, "newest": None, "age_days": None, "state": "FAILED",
+                    "error": f"{type(exc).__name__}: {exc}"[:200]}
+    today = date.today().isoformat()
+    past = [m["startDate"] for m in seen.values() if m["startDate"] <= today]
+    newest = max(past) if past else None
+    hits = []
+    for m in seen.values():
+        if m["startDate"] < since:
+            continue
+        upcoming = m["startDate"] >= today
+        hits.append({"body": "expert_groups_register", "item_type": "forum_meeting",
+                     "d": date.fromisoformat(m["startDate"]), "title": m["title"],
+                     "url": "https://ec.europa.eu/transparency/expert-groups-register/screen/meetings/consult?meetingId="
+                            + str(m["meetingId"]),
+                     "summary": str(m.get("refGroup", "")).strip() + (" (upcoming)" if upcoming else ""),
+                     "source": "expert_groups_register", "urgent": upcoming, "scope": "A"})
+    row = {"body": "forum_register", "name": "Ecodesign Forum meetings (expert-groups register, live)",
+           "news_rows": len(seen), "newest": newest,
+           "age_days": (date.today() - date.fromisoformat(newest)).days if newest else None,
+           "state": "OK"}
+    return hits, row
+
+
 def verdict(results: dict[str, list[dict]], fresh: list[dict]) -> tuple[str, str]:
     """URGENT / ROUTINE / NOTHING / UNPROVEN, and why in one line."""
     urgent = [h for hs in results.values() for h in hs if h["urgent"]]
     total = sum(len(hs) for hs in results.values())
-    bad = [f for f in fresh if f["state"] in ("STALE", "UNDATED", "NO-NEWS-ROWS")]
+    bad = [f for f in fresh if f["state"] in ("STALE", "UNDATED", "NO-NEWS-ROWS", "FAILED")]
 
     if urgent:
         return "URGENT", (f"{len(urgent)} item(s) matched an urgent pattern "
@@ -417,6 +488,11 @@ def main() -> int:
         results = {k: sweep(db, k, args.days) for k in keys}
     finally:
         db.close()
+    f_hits, f_row = forum_meetings(max(args.days, 35))
+    fresh.append(f_row)
+    if "A" in results:
+        results["A"] = sorted(results["A"] + f_hits,
+                              key=lambda r: (r["urgent"], r["d"] or date.min), reverse=True)
 
     vkey, why = verdict(results, fresh)
 
@@ -453,7 +529,7 @@ def main() -> int:
     for f in fresh:
         age = f"{f['age_days']}d old" if f["age_days"] is not None else "--"
         flag = {"OK": "     ", "STALE": "STALE", "UNDATED": "UNDAT",
-                "NO-NEWS-ROWS": "NOROW"}[f["state"]]
+                "NO-NEWS-ROWS": "NOROW", "QUIET": "QUIET", "FAILED": "FAIL "}[f["state"]]
         print(f"   [{flag}] {f['body']:<11} {f['news_rows']:>5} news rows  "
               f"newest {str(f['newest'] or '(none)'):<12} {age:<9} {f['name']}")
 

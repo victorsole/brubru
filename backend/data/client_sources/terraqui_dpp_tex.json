@@ -38,11 +38,11 @@
     },
     {
       "key": "ecodesign_forum",
-      "name": "Ecodesign Forum and Member States Expert Group (expert groups register)",
+      "name": "Expert groups register: group LIST only (not the Ecodesign Forum's meetings)",
       "ingested": true,
       "sql": "SELECT max(fetched_at) FROM economy_items WHERE item_type = 'expert_group'",
       "stale_after_days": 45,
-      "why": "Where sector requirements are first discussed (ESPR Articles 19 and 20)."
+      "why": "Proves the register's group list is re-read. It says NOTHING about Forum meetings or documents (5 Oct 2026: a client brief claimed 49 days 'stale' on this, about the wrong thing). Meetings are read live by dpp_watch (forum_register row)."
     },
     {
       "key": "official_journal",
@@ -75,7 +75,8 @@
       "sql": "SELECT greatest((SELECT max(document_date)::date FROM economy_items WHERE body_code = 'echa' AND item_type IN ('news','press_release')), (SELECT max(news_date)::date FROM eu_news_items WHERE institution = 'ECHA'))",
       "stale_after_days": 10,
       "why": "Substances of concern: an ESPR information requirement and a textile issue.",
-      "cadence_note": "28 Sep 2026: ECHA publishes a news release about monthly (9 Jun, 17 Jun, 17 Aug, 24 Sep 2026) and the ECHA Weekly every week; the old check read news alone at 14 days and called a normal five-week gap STALE while the Weekly was current."
+      "cadence_note": "28 Sep 2026: ECHA publishes a news release about monthly (9 Jun, 17 Jun, 17 Aug, 24 Sep 2026) and the ECHA Weekly every week; the old check read news alone at 14 days and called a normal five-week gap STALE while the Weekly was current.",
+      "scraper_key": "economy_echa"
     },
     {
       "key": "eea",
@@ -83,7 +84,8 @@
       "ingested": true,
       "sql": "SELECT max(document_date) FROM economy_items WHERE body_code = 'eea' AND item_type IN ('news','press_release','publication')",
       "stale_after_days": 14,
-      "why": "Textile waste and circularity evidence. Briefings and reports are where EEA publishes its analysis; news alone went quiet from 14 Sep 2026 while a production-and-consumption briefing came out on 22 Sep (ledger widened 1 Oct 2026)."
+      "why": "Textile waste and circularity evidence. Briefings and reports are where EEA publishes its analysis; news alone went quiet from 14 Sep 2026 while a production-and-consumption briefing came out on 22 Sep (ledger widened 1 Oct 2026).",
+      "scraper_key": "economy_eea"
     },
     {
       "key": "cinea",
@@ -110,6 +112,12 @@
       "name": "CEN-CENELEC JTC 24 (DPP standards committee) drafts",
       "ingested": false,
       "why": "Draft DPP standards before publication. Not ingested: drafts sit behind national standards body membership; only the six published EN standards are in the corpus."
+    },
+    {
+      "key": "ecodesign_forum_documents",
+      "name": "Ecodesign Forum meeting DOCUMENTS (CircaBC folder linked from the register)",
+      "ingested": false,
+      "why": "The register lists the meetings (read live by dpp_watch) but the agendas, minutes and draft measures sit on CircaBC, which we do not read. A quiet meeting list does not mean quiet documents."
     }
   ]
 }

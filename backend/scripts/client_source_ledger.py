@@ -58,6 +58,15 @@ def check(db, source: dict) -> dict:
         state = "UNMEASURED"
     else:
         state = "OK" if age <= source["stale_after_days"] else "STALE"
+        if state == "STALE" and source.get("scraper_key"):
+            # Publisher silence is not scraper failure (5 Oct 2026, ECHA and EEA): if the
+            # source's own sync succeeded in the last 3 days it was READ and held nothing
+            # newer. QUIET is reported, never hidden, and does not fail the ledger.
+            ran = db.execute(text(
+                "SELECT max(started_at) FROM sync_runs WHERE source_key = :k AND status = 'success' "
+                "AND started_at > now() - interval '3 days'"), {"k": source["scraper_key"]}).scalar()
+            if ran:
+                state = "QUIET"
     return out | {"state": state, "newest": str(newest)[:10] if newest else None,
                   "age_days": age, "threshold": source["stale_after_days"]}
 
