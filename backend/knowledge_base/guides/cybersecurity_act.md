@@ -1,127 +1,91 @@
-# EU Cybersecurity Act and Proposed Revision
+# EU Cybersecurity Act (Regulation (EU) 2019/881) and the proposed Cybersecurity Act 2
 
 ## QUICK FACTS
-- **LATEST (Tuesday 7 July 2026 — ACTION PLAN ON CYBERSECURITY AND ARTIFICIAL INTELLIGENCE)**: The Commission published a **Factsheet on the Action Plan on Cybersecurity and Artificial Intelligence** (EC Press Corner, 7 July 2026), setting out how the EU will strengthen the cybersecurity of AI systems and use AI to improve cyber-defence — the operational companion presented alongside the Commission's AI-and-cybersecurity plenary exchange with MEPs this week. It threads together ENISA's role, the AI Act (Reg (EU) 2024/1689) security requirements, NIS2, and the Cyber Resilience Act (Reg (EU) 2024/2847). Source: ec.europa.eu/commission/presscorner (FS, 7 July 2026). **Companion enforcement note (8 July 2026):** the Commission's July infringements package referred **Ireland, Spain, France and the Netherlands to the Court of Justice** for failing to transpose **NIS2** (Directive (EU) 2022/2555) — see `nis2_directive` guide.
-- **PRIOR (Wednesday 27 May 2026 — NIS2 COOPERATION GROUP: COMMON INCIDENT REPORTING TEMPLATES ADOPTED)**: The NIS2 Cooperation Group adopted common templates for incident reporting (DG CNECT, 26 May 2026). Standardises how operators of essential services and digital service providers notify national authorities of significant incidents across the EU under NIS2 Directive (EU) 2022/2555. Source: digital-strategy.ec.europa.eu/en/news/nis2-cooperation-group-adopts-common-templates-incident-reporting.
-- **LATEST (Tuesday 19 May 2026)**: **ECCC opens recruitment of cybersecurity experts to manage major funding programmes** — DG CNECT announcement "ECCC seeks cybersecurity experts for major funding programmes" (digital-strategy.ec.europa.eu/en/news, 19 May 2026). The European Cybersecurity Industrial, Technology and Research Competence Centre (ECCC, based in Bucharest, Regulation (EU) 2021/887) is hiring contract agents and seconded national experts to run the EU's main cybersecurity funding pipelines: **Digital Europe Programme (cybersecurity work programme)**, **Horizon Europe Cluster 3 (Civil Security for Society)**, and the **Connecting Europe Facility — Digital** cybersecurity strand. Open to applications from the National Coordination Centres in Member States + EU agencies + the ENISA staff pool. Cross-link: National Coordination Centres (Article 6 of Reg 2021/887), Cybersecurity Skills Academy (DG CNECT), Cyber Resilience Act (Reg (EU) 2024/2847) compliance pipeline. Source: digital-strategy.ec.europa.eu/en/news/eccc-seeks-cybersecurity-experts-major-funding-programmes.
-- Original act: Regulation (EU) 2019/881 (Cybersecurity Act), adopted 17 April 2019
-- CELEX: 32019R0881
-- Published: OJ L 151, 7.6.2019, pp. 15-69
-- Applied from: 27 June 2019
-- Legal basis: Article 114 TFEU (internal market)
-- Original procedure: 2017/0225(COD)
-- Repealed: Regulation (EU) No 526/2013 (prior ENISA mandate)
-- 2025 amendment: Regulation (EU) 2025/37 (managed security services), applied 15 January 2025
-- Consolidated text CELEX: 02019R0881-20250204
-- Proposed revision: COM(2026)11 ("Cybersecurity Act 2"), published 20 January 2026
-- Revision procedure: [2026/0011(COD)](https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD))
-- EP lead committee: ITRE (Industry, Research and Energy)
-- Rapporteur: Marketa Gregorova (Greens/EFA, Czechia), appointed ~23 March 2026
-- Shadow rapporteur: Tomas Tobe (EPP, Sweden), appointed 19 March 2026
-- Related simplification measure: 2026/0012(COD)
-- Current status: Preparatory phase in Parliament (March 2026)
+- **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2019-881_csa/index.html
+- Regulation (EU) 2019/881 of 17 April 2019 on ENISA (the European Union Agency for Cybersecurity) and on ICT cybersecurity certification, repealing Regulation (EU) No 526/2013. CELEX 32019R0881. OJ L 151, 7.6.2019, p. 15. Legal basis: Article 114 TFEU. Original procedure 2017/0225(COD).
+- Two halves: **Title II** makes ENISA permanent (Articles 3 to 45, ENISA "established for an indefinite period as of 27 June 2019", Article 68(4)); **Title III** creates the European cybersecurity certification framework (Articles 46 to 65). Title IV (Articles 66 to 69) and an Annex of 20 requirements for conformity assessment bodies close it. 69 articles plus Articles 49a and 51a.
+- Entry into force: 27 June 2019 (Article 68 repeals Regulation (EU) No 526/2013 from that date). Articles 58, 60, 61, 63, 64 and 65 (national authorities, conformity assessment bodies, notification, complaints, remedies, penalties) apply from 28 June 2021 (Article 69(2)).
+- Certification is **voluntary unless Union or Member State law says otherwise** (Article 56(2)). Three assurance levels: basic, substantial, high (Article 52). Conformity self-assessment is allowed only at level basic (Article 53(1)).
+- **Amended once**: Regulation (EU) 2025/37 of 19 December 2024 (OJ L, 15.1.2025) adds **managed security services** (incident handling, penetration testing, security audits, consulting) to the certification framework, inserts Articles 49a and 51a and amends the Annex. It entered into force on 4 February 2025 (Article 56(3) refers to managed security services "from 4 February 2025"). Consolidated text: CELEX 02019R0881-20250204.
+- First adopted scheme: the **EUCC** (European Common Criteria-based scheme), Commission Implementing Regulation (EU) 2024/482 of 31 January 2024, OJ 7.2.2024, applying from 27 February 2025; national schemes it covers cease to produce effects 12 months after its entry into force (its Article 49).
+- **Not a product-security law**: it creates no obligations on manufacturers by itself. The binding product duties are in the Cyber Resilience Act (Regulation (EU) 2024/2847), which can point to European certificates as proof of conformity. The Act still cites the NIS Directive 2016/1148, which NIS2 (Directive (EU) 2022/2555, Article 44) repealed from 18 October 2024: references are read as references to NIS2.
+- **Under revision**: the Commission proposed a new Cybersecurity Act on 20 January 2026, COM(2026)0011, procedure 2026/0011(COD) "Cybersecurity Act 2", which would **repeal Regulation 2019/881**. EP lead committee ITRE (rapporteur Markéta Gregorová, Greens/EFA), IMCO opinion, BUDG budgetary assessment. Stage on OEIL: awaiting committee decision; committee draft report PE792.222 dated 18 September 2026. Until adopted, Regulation 2019/881 as amended by 2025/37 stays the law.
+- OEIL: [2026/0011(COD)](https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD)). Consolidated text: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0881-20250204
+
+## Structure and key numbers (read from the consolidated text of 4 February 2025)
+
+### Title I: general provisions (Articles 1 to 2)
+- Article 1: subject matter (ENISA, and a certification framework "without prejudice" to specific provisions in other Union acts on voluntary or mandatory certification). It does not touch Member State competence on public security, defence, national security and criminal law (Article 1(2)).
+- Article 2: 22 definitions plus 14a (managed security service). Definitions of NIS-type terms (operator of essential services, digital service provider, incident) point to Directive 2016/1148.
+
+### Title II: ENISA (Articles 3 to 45)
+- **Mandate and objectives (Articles 3 and 4)**: a reference point for advice and expertise, acting independently and avoiding duplication of Member State activity.
+- **Tasks (Articles 5 to 12)**: policy and law support (5); capacity-building, including vulnerability disclosure policies, CERT-EU support and national CSIRTs (6); operational cooperation, including the **secretariat of the CSIRTs network**, support to Member States on incidents with significant or substantial impact, a regular **EU Cybersecurity Technical Situation Report**, and a **large-scale exercise every two years** (7); market, certification and standardisation, including preparing candidate schemes, the secretariat of the Stakeholder Cybersecurity Certification Group and support to the ECCG secretariat (8); knowledge and information (9); awareness and education (10); research and innovation (11); international cooperation, including advice on mutual recognition of certificates with third countries (12).
+- **Organisation (Articles 13 to 23)**: Management Board (one member per Member State plus two from the Commission, all voting, four-year renewable term, Article 14); Executive Board of five (Article 19); Executive Director (five-year term, extendable once by five years, Article 36); ENISA Advisory Group (two-and-a-half-year term, Article 21); National Liaison Officers Network (Article 23). Two-thirds majority needed for the single programming document, the annual budget and the Executive Director's appointment, extension or removal (Article 18(2)). Local offices: aggregate staff at most 40 % of ENISA staff in the seat Member State, each office at most 10 % (Article 20(5)).
+- **Operation, budget, staff, general (Articles 24 to 45)**: single programming document adopted by 30 November each year (24); declarations of interest (25); transparency and confidentiality (26, 27); access to documents under Regulation (EC) No 1049/2001 (28); budget revenue from the Union budget, delegation agreements and grants, third-country contributions and voluntary Member State contributions (29, 30); financial rules, anti-fraud (OLAF) and Court of Auditors audit (32, 33); staff rules and privileges (34, 35); legal personality (38); personal data under Regulation (EU) 2018/1725 (41); third-country cooperation (42); headquarters agreement with the host Member State (44, seat in Greece per recital 18); European Ombudsman supervision (45).
+
+### Title III: the cybersecurity certification framework (Articles 46 to 65)
+- **Purpose (Article 46)**: a harmonised mechanism to create European cybersecurity certification schemes for ICT products, ICT services, ICT processes and (since 2025) managed security services.
+- **Scheme pipeline (Articles 47 to 50)**: the Commission publishes a **Union rolling work programme** (first by 28 June 2020, updated at least every three years, Article 47(5)); the Commission, or the ECCG in justified cases, asks ENISA for a candidate scheme (48); ENISA prepares it with an ad hoc working group and an open consultation, the ECCG gives a non-binding opinion, and the **Commission adopts the scheme by implementing act** under the examination procedure (49); ENISA evaluates each adopted scheme at least every five years (49(8)); the European Parliament and Council may ask for quarterly updates on a draft candidate scheme (49a); ENISA keeps a certification website (50).
+- **Security objectives**: ten for products, services and processes, including secure by default and by design and no known vulnerabilities (Article 51); seven for managed security services, including staff competence and professional integrity (Article 51a).
+- **Assurance levels (Article 52)**: **basic** (technical documentation review), **substantial** (adds a review that publicly known vulnerabilities are absent and functional testing), **high** (adds state-of-the-art functional testing and penetration testing against skilled attackers). The level must match the risk of the intended use.
+- **Self-assessment (Article 53)**: only for low-risk, level basic; the provider issues an EU statement of conformity and takes responsibility; a copy goes to the national authority and ENISA. Issuing it is voluntary unless law says otherwise (53(4)).
+- **Elements of a scheme (Article 54)**: 22 elements, points (a) to (v), from scope and standards to validity period, vulnerability reporting rules and mutual recognition with third countries. Where a Union act so provides, a certificate can support a presumption of conformity with that act (54(3)).
+- **Supplementary information (Article 55)**: certified products must publish configuration guidance, the security support period, vulnerability contact details and links to public vulnerability repositories.
+- **Certification (Article 56)**: certified items are presumed to comply with the scheme (56(1)); the Commission assesses regularly, first by 31 December 2023 and then at least every two years, whether any scheme should become mandatory through other Union law (56(3)); conformity assessment bodies issue basic and substantial certificates; level high is issued by the national authority, or by a conformity assessment body after prior approval for each certificate or under a general delegation (56(6)); certificate holders must report later-detected vulnerabilities (56(8)); certificates are recognised in all Member States (56(10)).
+- **National schemes (Article 57)**: they cease to produce effects from the date set in the implementing act adopting a covering European scheme; no new national scheme for products already covered; existing certificates stay valid to expiry.
+- **National cybersecurity certification authorities (Articles 58 to 61)**: each Member State designates one or more, independent of the entities they supervise (58); minimum powers include audits, access to premises, withdrawing certificates and imposing penalties (58(8)); **peer review at least every five years** (59); conformity assessment bodies accredited for at most five years by national accreditation bodies against the Annex (60); notification to the Commission and a list published in the Official Journal (61).
+- **ECCG and remedies (Articles 62 to 65)**: the European Cybersecurity Certification Group, chaired by the Commission with ENISA's help, one member may not represent more than two Member States (62); the right to lodge a complaint and to an effective judicial remedy (63, 64); penalties set by Member States, "effective, proportionate and dissuasive" (65).
+
+### Title IV and Annex (Articles 66 to 69)
+- Committee procedure (66); **evaluation and review** by 28 June 2024 and every five years after (67), now also covering Title III and whether essential cybersecurity requirements for market access are needed; repeal and succession (68); entry into force (69).
+- Annex: 20 requirements for conformity assessment bodies (independence, impartiality, no consultancy for what they assess, liability insurance, confidentiality, SME-aware fees, harmonised accreditation standard).
+
+## Proposed Cybersecurity Act 2 (COM(2026)0011), as described by the Commission
+Source: digital-strategy.ec.europa.eu/en/policies/cybersecurity-act and OEIL 2026/0011(COD). The proposal would repeal Regulation 2019/881. Elements the Commission lists: ENISA issuing early alerts of cyber threats and incidents; support with Europol and CSIRTs for responding to and recovering from ransomware; a common Union vulnerability management service capacity; operation of the single entry point for incident reporting proposed in the Digital Omnibus; a trusted ICT supply chain security framework to reduce risks from third-country suppliers with cybersecurity concerns; and a renewed certification framework with scheme development "within 12 months by default". On the same day, 20 January 2026, the Commission also proposed targeted amendments to NIS2.
+- Reported debate (press and stakeholder positions, not legal text): sovereignty requirements for cloud certification (EUCS), mandatory versus voluntary certification, and ENISA resources.
+
+## Related EU cybersecurity instruments
+| Instrument | Reference | Relationship |
+|-----------|-----------|--------------|
+| NIS2 Directive | Directive (EU) 2022/2555 | Entity-level risk management and reporting; repealed NIS 1 from 18 October 2024 |
+| Cyber Resilience Act | Regulation (EU) 2024/2847 | Binding product security duties; may use European certificates as proof |
+| Cyber Solidarity Act | Regulation (EU) 2025/38 | EU Cybersecurity Reserve; managed security service certification can inform provider selection (recital 5 of Regulation 2025/37) |
+| EUCC | Implementing Regulation (EU) 2024/482 | First adopted scheme under Title III |
+
+## Timeline
+| Date | Event |
+|------|-------|
+| 17 April 2019 | Regulation (EU) 2019/881 adopted |
+| 27 June 2019 | Entry into force; Regulation (EU) No 526/2013 repealed; ENISA established for an indefinite period |
+| 28 June 2021 | Articles on national authorities, conformity assessment bodies, notification, complaints, remedies and penalties apply |
+| 31 January 2024 | EUCC Implementing Regulation (EU) 2024/482 adopted; applies from 27 February 2025 |
+| 28 June 2024 | First evaluation and review deadline (Article 67) |
+| 19 December 2024 | Regulation (EU) 2025/37 adopted (managed security services); published 15 January 2025 |
+| 4 February 2025 | 2025 amendment in force |
+| 20 January 2026 | COM(2026)0011 published (Cybersecurity Act 2 proposal) |
+| 18 September 2026 | Committee draft report PE792.222 (per OEIL) |
+
+## Key Documents
+- [Regulation (EU) 2019/881: Cybersecurity Act (original)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)
+- [Consolidated text (with 2025 amendment)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0881-20250204)
+- [Regulation (EU) 2025/37: managed security services amendment](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0037)
+- [Implementing Regulation (EU) 2024/482: EUCC](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R0482)
+- [EUR-Lex summary](https://eur-lex.europa.eu/EN/legal-content/summary/the-eu-cybersecurity-act.html)
+- [EC policy page: Cybersecurity Act](https://digital-strategy.ec.europa.eu/en/policies/cybersecurity-act)
+- [EPRS: Cybersecurity Act Review, what to expect (Jan 2026)](https://epthinktank.eu/2026/01/05/cybersecurity-act-review-what-to-expect/)
+
+## Related Brubru guides
+`enisa_european_cybersecurity_agency`, `eu_cybersecurity_certification_framework`, `cyber_resilience_act`, `nis2_directive`.
+
+## Recent developments ledger (news items, newest first where dated)
+- **LATEST (Tuesday 7 July 2026: ACTION PLAN ON CYBERSECURITY AND ARTIFICIAL INTELLIGENCE)**: The Commission published a **Factsheet on the Action Plan on Cybersecurity and Artificial Intelligence** (EC Press Corner, 7 July 2026), setting out how the EU will strengthen the cybersecurity of AI systems and use AI to improve cyber-defence, the operational companion presented alongside the Commission's AI-and-cybersecurity plenary exchange with MEPs this week. It threads together ENISA's role, the AI Act (Reg (EU) 2024/1689) security requirements, NIS2, and the Cyber Resilience Act (Reg (EU) 2024/2847). Source: ec.europa.eu/commission/presscorner (FS, 7 July 2026). **Companion enforcement note (8 July 2026):** the Commission's July infringements package referred **Ireland, Spain, France and the Netherlands to the Court of Justice** for failing to transpose **NIS2** (Directive (EU) 2022/2555): see `nis2_directive` guide.
+- **PRIOR (Wednesday 27 May 2026: NIS2 COOPERATION GROUP: COMMON INCIDENT REPORTING TEMPLATES ADOPTED)**: The NIS2 Cooperation Group adopted common templates for incident reporting (DG CNECT, 26 May 2026). Standardises how operators of essential services and digital service providers notify national authorities of significant incidents across the EU under NIS2 Directive (EU) 2022/2555. Source: digital-strategy.ec.europa.eu/en/news/nis2-cooperation-group-adopts-common-templates-incident-reporting.
+- **LATEST (Tuesday 19 May 2026)**: **ECCC opens recruitment of cybersecurity experts to manage major funding programmes**: DG CNECT announcement "ECCC seeks cybersecurity experts for major funding programmes" (digital-strategy.ec.europa.eu/en/news, 19 May 2026). The European Cybersecurity Industrial, Technology and Research Competence Centre (ECCC, based in Bucharest, Regulation (EU) 2021/887) is hiring contract agents and seconded national experts to run the EU's main cybersecurity funding pipelines: **Digital Europe Programme (cybersecurity work programme)**, **Horizon Europe Cluster 3 (Civil Security for Society)**, and the **Connecting Europe Facility: Digital** cybersecurity strand. Open to applications from the National Coordination Centres in Member States + EU agencies + the ENISA staff pool. Cross-link: National Coordination Centres (Article 6 of Reg 2021/887), Cybersecurity Skills Academy (DG CNECT), Cyber Resilience Act (Reg (EU) 2024/2847) compliance pipeline. Source: digital-strategy.ec.europa.eu/en/news/eccc-seeks-cybersecurity-experts-major-funding-programmes.
 - EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware remained a major cybersecurity threat in the EU in 2025. Ref: EPRS_ATA(2026)785699
 - UN Cybercrime Convention: LIBE consent vote 15 April 2026 (see un_cybercrime_convention guide)
 - EPRS Briefing (13 April 2026): "Understanding the dark web" -- overview of Tor/I2P networks, criminal markets, law enforcement operations (Operation SpecTor, Operation Cronos), EU policy gaps. Ref: EPRS_UNK_a0c8fc5a2567
 - EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware incidents up 17% in 2025, healthcare/education/public administration most targeted, NIS2 implementation status critical. Ref: EPRS_UNK_c9da880b8158
 - **Cyber Resilience Act delegated regulation** (20 April 2026 OJ): Commission Delegated Regulation (EU) **2026/881** of 11 December 2025 supplementing Regulation (EU) 2024/2847 (Cyber Resilience Act) by specifying the terms and conditions applicable to manufacturers' obligations on vulnerability handling, security updates, and reporting. CELEX 32026R0881. First substantive CRA secondary legislation. Applies alongside CRA core obligations entering force 11 December 2027.
-- **LATEST (Tuesday 5 May 2026, EP committee week)**: **Cybersecurity Act 2 / ENISA revision draft report tabled in ITRE** under procedure 2026/0011(COD). Rapporteur **Markéta Gregorová (Greens/EFA, Czech Republic)** (lead, ITRE). Shadow rapporteur Tomáš Tobé (EPP, Sweden). The draft report is the first concrete EP step on the proposal published by the Commission on 20 January 2026. Cross-references with NIS2 (Directive (EU) 2022/2555) and the AI Act (Regulation (EU) 2024/1689) for the cybersecurity-of-AI-systems intersection; also with the Cyber Resilience Act (Regulation (EU) 2024/2847) on product security. Stakeholder consultation phase continues through Q2 2026. OEIL: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?lang=en&reference=2026%2F0011%28COD%29
-
-## Key Documents
-- [Regulation (EU) 2019/881: Cybersecurity Act (original)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)
-- [Consolidated text (with 2025 amendment)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0881-20250204)
-- [EUR-Lex summary](https://eur-lex.europa.eu/EN/legal-content/summary/the-eu-cybersecurity-act.html)
-- [EC policy page: Cybersecurity Act](https://digital-strategy.ec.europa.eu/en/policies/cybersecurity-act)
-- [Regulation (EU) 2025/37: Managed security services amendment](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0037)
+- **5 May 2026 ledger entry corrected against OEIL (5 Oct 2026)**: procedure 2026/0011(COD) lists rapporteur Markéta Gregorová (Greens/EFA, appointed 26 February 2026), shadow rapporteurs Tomas Tobe (EPP), Jens Geier (S&D), Aleksandar Nikolic (PfE), Diego Solier (ECR), Bart Groothuis (Renew), Marc Botenga (The Left) and Markus Buchheit (ESN), an IMCO opinion (Maria Guzenina, S&D, appointed 25 March 2026) and a BUDG budgetary assessment (Helder Sousa Silva, EPP). The only committee draft report OEIL lists is PE792.222, dated 18 September 2026; stage reached: awaiting committee decision. OEIL: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD)
 - [EPRS: Cybersecurity Act Review - What to Expect (Jan 2026)](https://epthinktank.eu/2026/01/05/cybersecurity-act-review-what-to-expect/)
-
-## ENISA (European Union Agency for Cybersecurity)
-
-**Seat:** Athens (headquarters) + branch office in Heraklion, Crete
-**Established:** 2004 (predecessor agency); permanent mandate from 2019 Cybersecurity Act
-
-### Key tasks:
-- Support development and implementation of EU cybersecurity policy and law
-- Capacity building across Member States
-- Operational cooperation (secretariat for CSIRTs Network)
-- Manage the European cybersecurity certification framework (ECCF)
-- Research, innovation, awareness raising, education
-- International cooperation on cybersecurity
-
-### Governance:
-- Management Board, Executive Director, Advisory Group
-- Subject to European Ombudsman supervision (Article 228 TFEU)
-
-## European Cybersecurity Certification Framework (ECCF)
-
-The Regulation establishes a framework for EU-wide cybersecurity certification schemes covering ICT products, services, processes, and managed security services.
-
-### Three assurance levels:
-- **Basic** — lowest assurance, self-assessment possible
-- **Substantial** — moderate assurance
-- **High** — highest assurance, certificate issued only by national cybersecurity certification authority
-
-### Certification schemes:
-
-| Scheme | Status |
-|--------|--------|
-| EUCC (European Common Criteria) | Adopted |
-| EUCS (EU Cloud Services) | Under development |
-| EU5G | Under development |
-| EUDI Wallet | Under development |
-| EUMSS (Managed Security Services) | Under development |
-
-Schemes are **voluntary by default**. Some stakeholders propose mandatory certification for critical sectors.
-
-## 2025 Amendment: Managed Security Services
-
-Regulation (EU) 2025/37 (19 December 2024, applied 15 January 2025) extended the ECCF scope to cover managed security services:
-- Incident response services
-- Penetration testing
-- Security audits
-- Consultancy services
-
-## Proposed Revision: Cybersecurity Act 2 (COM(2026)11)
-
-Published 20 January 2026 as part of a broader EU cybersecurity package. Would **repeal and replace** Regulation (EU) 2019/881.
-
-### Four objectives:
-1. **ICT supply chain security** — new cross-cutting requirement with coordinated EU/Member State risk governance
-2. **Cyber-secure by design** — simpler certification process with 12-month default development timelines
-3. **Compliance accelerator** — ECCF certification demonstrates compliance across NIS2, Cyber Resilience Act, etc., reducing duplication
-4. **Strengthen ENISA** — expanded mandate to support Member States in managing cybersecurity threats
-
-### Key new elements:
-- ICT supply chain security becomes explicit cross-cutting Title
-- Single EU incident notification platform
-- Harmonised reporting definitions across NIS2, Cyber Resilience Act (2024/2847), and GDPR
-- EU cybersecurity reserve (EUR 36 million funding envelope)
-
-### Contentious issues:
-- **EUCS sovereignty requirements**: Data localisation and EU-based ownership ("cloud by Europe") — supported by some Member States, opposed by US hyperscalers (Microsoft, Amazon, Google)
-- **Mandatory vs voluntary certification**: Majority favour voluntary; some propose mandatory for critical sectors
-- **ENISA resources**: Stakeholders support strengthening ENISA with adequate resources for expanded mandate
-
-## Related EU Cybersecurity Instruments
-
-| Instrument | Reference | Relationship |
-|-----------|-----------|--------------|
-| NIS2 Directive | Directive (EU) 2022/2555 | Network/information security, sector-specific requirements |
-| Cyber Resilience Act | Regulation (EU) 2024/2847 | Product security requirements |
-| NIS2 Digital Omnibus | Proposed January 2026 | Simplification of NIS2 compliance |
-| GDPR | Regulation (EU) 2016/679 | Data protection, harmonised reporting |
-
-## Timeline
-
-| Date | Event |
-|------|-------|
-| 2004 | ENISA established (predecessor agency) |
-| 17 April 2019 | Regulation (EU) 2019/881 adopted |
-| 27 June 2019 | Cybersecurity Act applied; Regulation 526/2013 repealed |
-| 28 June 2021 | National authorities/conformity assessment articles applied |
-| 19 December 2024 | Regulation (EU) 2025/37 adopted (managed security services) |
-| 15 January 2025 | 2025 amendment applied |
-| 14 January 2026 | 5-year review deadline under the Act |
-| 20 January 2026 | COM(2026)11 published (Cybersecurity Act 2 proposal) |
-| ~23 March 2026 | Rapporteur Gregorova (Greens/EFA) appointed in ITRE |
-| March 2026 | Preparatory phase in Parliament |

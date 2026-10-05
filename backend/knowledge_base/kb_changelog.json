@@ -4,6 +4,18 @@
     {
       "date": "2026-10-05",
       "action": "updated",
+      "guide": "cybersecurity_act",
+      "title": "Cybersecurity Act",
+      "summary": "Full read of the consolidated text: structure and numbers for ENISA and the certification framework, 2025 amendment in force 4 Feb 2025, EUCC, and the Cybersecurity Act 2 proposal as it stands on OEIL (2026/0011(COD)); corrected rapporteur date, review deadline and high-assurance issuer rule",
+      "refs": [
+        "32019R0881",
+        "32025R0037",
+        "32024R0482"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "action": "updated",
       "guide": "cyber_resilience_act",
       "title": "Cyber Resilience Act",
       "summary": "Full read: structure and numbers, corrigenda (Art 64(10)), adopted acts 2025/2392 and 2026/881, Art 35(2) fix",

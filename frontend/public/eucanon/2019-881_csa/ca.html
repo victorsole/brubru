@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>El Reglament de ciberseguretat explicat: Reglament (UE) 2019/881 | Brubru</title>
+<meta content="Guia completa del Reglament (UE) 2019/881, el Reglament de ciberseguretat de la UE: ENISA esdevé permanent, el marc europeu de certificació de la ciberseguretat, tres nivells de garantia, els serveis de seguretat gestionats afegits el 2025, l'esquema EUCC i el Reglament de ciberseguretat 2 proposat." name="description"/>
+<meta content="El Reglament de ciberseguretat: Reglament (UE) 2019/881 | Cànon de la UE de Brubru" property="og:title"/>
+<meta content="ca_ES" property="og:locale"/>
+<meta content="ENISA esdevé permanent i s'estableix un únic marc de certificació de la UE amb tres nivells de garantia. Modificat el 2025 per cobrir els serveis de seguretat gestionats. Un Reglament de ciberseguretat 2 proposat el derogaria, però fins que no s'adopti, el Reglament del 2019 continua sent la norma vigent." property="og:description"/>
+<meta content="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="https://images.pexels.com/photos/36740854/pexels-photo-36740854.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Reglament de ciberseguretat (Reg. 2019/881): ENISA i la certificació de la ciberseguretat de la UE | Cànon de la UE de Brubru" name="twitter:title"/>
+<meta content="Voluntari per defecte, tres nivells de garantia, autoritats nacionals i avaluació entre iguals. Què fa el Reglament, què no fa i què canviaria el Reglament de ciberseguretat 2 proposat." name="twitter:description"/>
+<meta content="https://images.pexels.com/photos/36740854/pexels-photo-36740854.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" name="twitter:image"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html" rel="canonical"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html" hreflang="en" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/es.html" hreflang="es" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/fr.html" hreflang="fr" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/it.html" hreflang="it" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/nl.html" hreflang="nl" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/ca.html" hreflang="ca" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2019-881_csa/index.html" hreflang="x-default" rel="alternate"/>
+<link href="../../assets/brubru_icon.png" rel="icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="shortcut icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="apple-touch-icon"/>
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"/>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Regulation (EU) 2019/881 of the European Parliament and of the Council of 17 April 2019 on ENISA (the European Union Agency for Cybersecurity) and on information and communications technology cybersecurity certification and repealing Regulation (EU) No 526/2013 (Cybersecurity Act)",
+    "alternateName": "Cybersecurity Act",
+    "identifier": "CELEX:32019R0881",
+    "legislationIdentifier": "32019R0881",
+    "legislationType": "Regulation",
+    "url": "https://eur-lex.europa.eu/eli/reg/2019/881/oj/eng",
+    "datePublished": "2019-06-07",
+    "dateModified": "2026-10-05",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "cybersecurity, ENISA, European cybersecurity certification framework, assurance levels, conformity assessment bodies, managed security services"
+    }
+  }
+  </script>
+<style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; min-width: 0; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image {
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+    .card ol { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ol li { margin-bottom: 0.3rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box ol { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ol li { margin-bottom: 0.4rem; }
+
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.25);
+    }
+
+    /* Tables */
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    /* Risk pyramid: 4 cards 2x2 */
+    .pyramid-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .pyramid-card {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: all 0.2s;
+      background: var(--color-bg);
+    }
+    .pyramid-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+    .pyramid-card--prohibited { border-color: var(--color-red); background: linear-gradient(135deg, rgba(220,38,38,0.05) 0%, rgba(220,38,38,0.02) 100%); }
+    .pyramid-card--high { border-color: var(--color-amber); background: linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(217,119,6,0.02) 100%); }
+    .pyramid-card--limited { border-color: var(--color-blue); background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(6,147,227,0.02) 100%); }
+    .pyramid-card--minimal { border-color: var(--color-green); background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(5,150,105,0.02) 100%); }
+    .pyramid-card__tier {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .pyramid-card__tier--prohibited { color: var(--color-red); }
+    .pyramid-card__tier--high { color: var(--color-amber); }
+    .pyramid-card__tier--limited { color: var(--color-blue); }
+    .pyramid-card__tier--minimal { color: var(--color-green); }
+    .pyramid-card__title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pyramid-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.55; }
+
+    /* 5-card grid (3+2 centred) */
+    .covers-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .covers-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+      background: var(--color-bg);
+    }
+    .covers-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .covers-card--span2 { grid-column: span 2; }
+    .covers-card--c4 { grid-column: 2 / span 2; }
+    .covers-card--c5 { grid-column: 4 / span 2; }
+    .covers-card__icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .covers-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .covers-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Three-col grid */
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Two-col grid */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Glossary */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      margin-bottom: 0.35rem;
+    }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Brubru CTA features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Related canon card */
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    /* CTA Strip */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+    .cta-strip__sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 1.5rem;
+    }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .covers-grid { grid-template-columns: repeat(2, 1fr); }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+      .pyramid-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .covers-grid { grid-template-columns: 1fr; }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .pyramid-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+
+    /* Omnibus additions */
+    .cmp-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+    .cmp-table td:first-child { font-weight: 700; min-width: 0; }
+    .cmp-table td:nth-child(3) { background: rgba(6,147,227,0.04); }
+    .tree { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; position: relative; margin-bottom: 1.5rem; }
+    .tree__node { border: 2px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; background: var(--color-bg); }
+    .tree__node--new { border-color: var(--color-blue); background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%); }
+    .tree__label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-blue); margin-bottom: 0.4rem; }
+    .tree__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .tree__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.55; }
+    .tree__arrow { text-align: center; color: var(--color-blue); font-size: 1.6rem; line-height: 1; margin: -0.5rem 0 0.5rem; }
+    .timeline__item--upcoming::before { border-color: var(--color-amber); }
+    .timeline__item--upcoming .timeline__date { color: var(--color-amber); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .section__title { min-width: 0; }
+    @media (max-width: 767px) {
+      .tree { grid-template-columns: 1fr; }
+    }
+      /* long compound words (Dutch, German-style) must wrap, never force horizontal scroll at 375px */
+    h1, h2, h3, .section__title, .hero__title, .timeline__text, .info-box p, .card, .card__title { overflow-wrap: anywhere; hyphens: auto; }
+  </style>
+<script defer="" src="/analytics.js"></script>
+</head>
+<body>
+<!-- Sticky header -->
+<header class="header" id="top">
+<a aria-label="Inici de Brubru" href="https://brubru.beresol.eu"><img alt="Brubru" class="header__logo" src="../../assets/brubru_mainlogo.png"/></a>
+<div class="header__text">
+<div class="header__title">Brubru</div>
+<div class="header__subtitle">Intel·ligència sobre política de la UE</div>
+</div>
+<select aria-label="Language" class="header__lang" onchange="window.location.href=this.value">
+<option value="index.html">English</option>
+<option value="fr.html">Français</option>
+<option value="es.html">Español</option>
+<option value="it.html">Italiano</option>
+<option value="nl.html">Nederlands</option>
+<option value="ca.html" selected>Català</option>
+</select>
+<a class="header__cta" href="https://brubru.beresol.eu/signup">Prova Brubru gratis</a>
+</header>
+<div class="container">
+<!-- Hero -->
+<section class="hero">
+<div class="hero__tag">
+<a href="../index.html">Cànon de la UE</a> / Ciberseguretat / CELEX 32019R0881
+  </div>
+<h1 class="hero__title">El <span>Reglament de ciberseguretat</span></h1>
+<p class="hero__subtitle">
+    El Reglament (UE) 2019/881 fa dues coses: converteix l'ENISA, l'Agència de la Unió Europea per a la Ciberseguretat, en una agència permanent, i crea un marc europeu únic per certificar productes, serveis i processos de TIC i, des del 2025, serveis de seguretat gestionats. La certificació és voluntària tret que una altra norma disposi el contrari. Una proposta de Reglament de ciberseguretat 2 el derogaria, però fins que s'adopti, aquest Reglament, tal com ha estat modificat, continua sent la norma vigent.
+  </p>
+<div class="hero__meta">
+<span><i class="mdi mdi-calendar"></i> Adoptat el 17 d'abril del 2019</span>
+<span><i class="mdi mdi-book-open-outline"></i> DOUE L 151, 7 de juny del 2019</span>
+<span><i class="mdi mdi-calendar-check"></i> En vigor des del 27 de juny del 2019</span>
+<span><i class="mdi mdi-tag-outline"></i> CELEX 32019R0881</span>
+<span><i class="mdi mdi-file-document-outline"></i> Reglament, directament aplicable</span>
+</div>
+</section>
+<!-- Hero image -->
+<figure class="hero-image">
+<img alt="Primer pla d'una mà que sosté un cadenat de llautó, que simbolitza la seguretat i la protecció" loading="lazy" src="https://images.pexels.com/photos/36740854/pexels-photo-36740854.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940"/>
+<figcaption>
+    Foto: <a href="https://www.pexels.com/photo/close-up-of-hand-holding-a-secure-padlock-36740854/" rel="noopener" target="_blank">Nathan Thomas</a>
+    a través de <a href="https://www.pexels.com/photo/close-up-of-hand-holding-a-secure-padlock-36740854/" rel="noopener" target="_blank">Pexels</a>
+    | El Reglament de ciberseguretat genera confiança en els productes i serveis de TIC mitjançant la certificació
+  </figcaption>
+</figure>
+<!-- Key figures strip -->
+<div class="figures">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">27 de juny del 2019</div>
+<div class="figure-card__label">En vigor</div>
+<div class="figure-card__context">L'ENISA queda establerta per un període indefinit a partir d'aquesta data (article 68, apartat 4).</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">3</div>
+<div class="figure-card__label">Nivells de garantia</div>
+<div class="figure-card__context">Bàsic, substancial i alt, fixats a l'article 52 i adaptats al risc de l'ús previst.</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">4 de febrer del 2025</div>
+<div class="figure-card__label">Serveis de seguretat gestionats en vigor</div>
+<div class="figure-card__context">El Reglament (UE) 2025/37 amplia el marc a serveis com la gestió d'incidents i les proves de penetració.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">Voluntària</div>
+<div class="figure-card__label">Per defecte</div>
+<div class="figure-card__context">La certificació és voluntària tret que el dret de la Unió o d'un Estat membre disposi el contrari (article 56, apartat 2).</div>
+</div>
+</div>
+<!-- Table of Contents -->
+<nav class="toc">
+<div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contingut</div>
+<div class="toc__grid">
+<a class="toc__link" href="#overview"><i class="mdi mdi-information-outline"></i> Visió general</a>
+<a class="toc__link" href="#covers"><i class="mdi mdi-view-grid-outline"></i> Què cobreix</a>
+<a class="toc__link" href="#numbers"><i class="mdi mdi-numeric"></i> Xifres clau</a>
+<a class="toc__link" href="#scope"><i class="mdi mdi-target"></i> Àmbit i límits</a>
+<a class="toc__link" href="#enisa"><i class="mdi mdi-shield-account-outline"></i> ENISA</a>
+<a class="toc__link" href="#pipeline"><i class="mdi mdi-transit-connection-variant"></i> Com es crea un esquema</a>
+<a class="toc__link" href="#assurance"><i class="mdi mdi-layers-outline"></i> Nivells de garantia</a>
+<a class="toc__link" href="#authorities"><i class="mdi mdi-bank-outline"></i> Autoritats i organismes</a>
+<a class="toc__link" href="#eucc"><i class="mdi mdi-certificate-outline"></i> El primer esquema: EUCC</a>
+<a class="toc__link" href="#managed"><i class="mdi mdi-shield-sync-outline"></i> Serveis de seguretat gestionats</a>
+<a class="toc__link" href="#fit"><i class="mdi mdi-puzzle-outline"></i> Com encaixa amb altres actes</a>
+<a class="toc__link" href="#revision"><i class="mdi mdi-file-sign"></i> Reglament de ciberseguretat 2</a>
+<a class="toc__link" href="#definition"><i class="mdi mdi-book-open-variant"></i> Definició clau</a>
+<a class="toc__link" href="#family"><i class="mdi mdi-family-tree"></i> Arbre genealògic</a>
+<a class="toc__link" href="#glossary"><i class="mdi mdi-alphabetical"></i> Glossari</a>
+<a class="toc__link" href="#timeline-section"><i class="mdi mdi-timeline-outline"></i> Cronologia legislativa</a>
+<a class="toc__link" href="#sources"><i class="mdi mdi-link-variant"></i> Fonts oficials</a>
+<a class="toc__link" href="#related"><i class="mdi mdi-link"></i> Entrades relacionades del cànon</a>
+<a class="toc__link" href="#brubru"><i class="mdi mdi-robot-outline"></i> Explora amb Brubru</a>
+</div>
+</nav>
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+<h2 class="section__title">Visió general</h2>
+</div>
+<p class="section__subtitle">Què és, què fa i què deixa a altres normes</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> Què és</div>
+<p>El Reglament (UE) 2019/881 del Parlament Europeu i del Consell, de <strong>17 d'abril del 2019</strong> té per títol oficial «relatiu a l'ENISA (Agència de la Unió Europea per a la Ciberseguretat) i a la certificació de la ciberseguretat de les tecnologies de la informació i la comunicació, i pel qual es deroga el Reglament (UE) núm. 526/2013 (Reglament de ciberseguretat)». Es va publicar al Diari Oficial (L 151) el <strong>7 de juny del 2019</strong> i va entrar en vigor el <strong>27 de juny del 2019</strong>, el vintè dia després de la publicació. La seva base jurídica és l'article 114 del Tractat de Funcionament de la Unió Europea.</p>
+<p>Té dues meitats. <strong>Títol II</strong> (articles 3 a 45) converteix l'ENISA en una agència permanent. <strong>Títol III</strong> (articles 46 a 65) crea el marc europeu de certificació de la ciberseguretat. El títol IV (articles 66 a 69) i un annex amb els requisits dels organismes d'avaluació de la conformitat tanquen el text.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-target" style="color: var(--color-purple);"></i> Què fa per a la certificació</div>
+<p>No certifica res per si mateix. Estableix un mecanisme: la Comissió pot adoptar <strong>esquemes europeus de certificació de la ciberseguretat</strong>, a partir d'un esquema candidat elaborat per l'ENISA, per a un tipus determinat de producte, servei, procés o servei de seguretat gestionat. Un certificat emès en virtut d'un esquema d'aquest tipus és vàlid a tots els Estats membres (article 56, apartat 10). El Reglament és la caixa d'eines, i cada esquema és un acte d'execució independent.</p>
+</div>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> No és una norma de seguretat dels productes</h3>
+<p>El Reglament de ciberseguretat <strong>no crea cap obligació per als fabricants per si mateix</strong>. La certificació és voluntària per defecte (article 56, apartat 2). Només hi ha el deure de certificar quan així ho estableix un altre acte de la Unió o una llei d'un Estat membre. Les obligacions vinculants sobre els productes es troben al Reglament de ciberresiliència, Reglament (UE) 2024/2847, que pot remetre als certificats europeus com a prova de conformitat.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Procediment i modificacions</div>
+<p>El procediment original és <strong>2017/0225(COD)</strong>. El Reglament s'ha modificat una sola vegada, mitjançant el <strong>Reglament (UE) 2025/37</strong> , de 19 de desembre del 2024, que hi va afegir els serveis de seguretat gestionats. Hi ha un text consolidat del 4 de febrer del 2025 disponible a EUR-Lex amb el CELEX 02019R0881-20250204. El 20 de gener del 2026 la Comissió va proposar un nou Reglament de ciberseguretat que derogaria aquest Reglament. Encara està en negociació.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 2: WHAT IT COVERS (5 cards, 3+2 centred)
+     ========================================================= -->
+<section class="section" id="covers">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+<h2 class="section__title">Què cobreix</h2>
+</div>
+<p class="section__subtitle">Cinc àmbits del Reglament, d'un cop d'ull</p>
+<div class="covers-grid">
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-shield-account-outline covers-card__icon" style="color: var(--color-blue);"></i>
+<div class="covers-card__title">L'ENISA, feta permanent</div>
+<div class="covers-card__desc">L'Agència de la Unió Europea per a la Ciberseguretat queda establerta per un període indefinit a partir del 27 de juny del 2019, amb tasques als articles 5 a 12 i una estructura de governança als articles 13 a 23.</div>
+</div>
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-certificate-outline covers-card__icon" style="color: var(--color-green);"></i>
+<div class="covers-card__title">Un únic marc de certificació de la UE</div>
+<div class="covers-card__desc">Un mecanisme únic per crear esquemes europeus per a productes, serveis, processos i serveis de seguretat gestionats de TIC, vàlids a tots els Estats membres (articles 46 a 57).</div>
+</div>
+<div class="covers-card covers-card--span2">
+<i class="mdi mdi-layers-outline covers-card__icon" style="color: var(--color-purple);"></i>
+<div class="covers-card__title">Tres nivells de garantia</div>
+<div class="covers-card__desc">Bàsic, substancial i alt, cadascun amb activitats mínimes d'avaluació. L'autoavaluació només es permet al nivell bàsic (articles 52 i 53).</div>
+</div>
+<div class="covers-card covers-card--c4">
+<i class="mdi mdi-bank-outline covers-card__icon" style="color: var(--color-amber);"></i>
+<div class="covers-card__title">Autoritats nacionals, avaluació entre iguals i l'ECCG</div>
+<div class="covers-card__desc">Cada Estat membre designa autoritats de certificació, que se sotmeten a una avaluació entre iguals almenys cada cinc anys. L'ECCG les reuneix (articles 58 a 65).</div>
+</div>
+<div class="covers-card covers-card--c5">
+<i class="mdi mdi-shield-sync-outline covers-card__icon" style="color: var(--color-red);"></i>
+<div class="covers-card__title">Serveis de seguretat gestionats afegits el 2025</div>
+<div class="covers-card__desc">El Reglament (UE) 2025/37 incorpora al marc serveis com la gestió d'incidents i les proves de penetració, amb els seus propis objectius a l'article 51 bis.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 3: HEADLINE NUMBERS
+     ========================================================= -->
+<section class="section" id="numbers">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+<h2 class="section__title">Xifres clau</h2>
+</div>
+<p class="section__subtitle">Les xifres que compten, cadascuna llegida del text consolidat del 4 de febrer del 2025</p>
+<div class="two-col-grid">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">69</div>
+<div class="figure-card__label">Articles, més 49 bis i 51 bis</div>
+<div class="figure-card__context">Els dos articles addicionals es van inserir mitjançant la modificació del 2025.</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">3</div>
+<div class="figure-card__label">Nivells de garantia</div>
+<div class="figure-card__context">Bàsic, substancial i alt (article 52).</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">22</div>
+<div class="figure-card__label">Elements d'un esquema</div>
+<div class="figure-card__context">Tot esquema europeu ha de contenir com a mínim els elements de les lletres a) a v) de l'article 54, apartat 1.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">10 + 7</div>
+<div class="figure-card__label">Objectius de seguretat</div>
+<div class="figure-card__context">Deu per a productes, serveis i processos (article 51) i set per a serveis de seguretat gestionats (article 51 bis).</div>
+</div>
+<div class="figure-card fc-red">
+<div class="figure-card__number">5 anys</div>
+<div class="figure-card__label">Cicles de revisió</div>
+<div class="figure-card__context">Avaluació entre iguals de les autoritats nacionals, avaluació de cada esquema per l'ENISA i acreditació màxima d'un organisme d'avaluació de la conformitat.</div>
+</div>
+<div class="figure-card fc-blue">
+<div class="figure-card__number">2 anys</div>
+<div class="figure-card__label">Cicle d'exercicis i d'avaluació</div>
+<div class="figure-card__context">L'ENISA organitza un exercici a gran escala cada dos anys. La Comissió avalua si algun esquema ha de passar a ser obligatori almenys cada dos anys.</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">4 de febrer del 2025</div>
+<div class="figure-card__label">Serveis de seguretat gestionats en vigor</div>
+<div class="figure-card__context">La data a partir de la qual el marc cobreix els serveis de seguretat gestionats (article 56, apartat 3).</div>
+</div>
+<div class="figure-card fc-purple">
+<div class="figure-card__number">20</div>
+<div class="figure-card__label">Requisits de l'annex</div>
+<div class="figure-card__context">Requisits que ha de complir un organisme d'avaluació de la conformitat per ser acreditat.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">40% / 10%</div>
+<div class="figure-card__label">Límits de personal de les oficines locals</div>
+<div class="figure-card__context">Totes les oficines locals de l'ENISA juntes es mantenen en un 40% o menys del personal de l'ENISA a l'Estat membre de la seu, i cada oficina en un 10% o menys (article 20, apartat 5).</div>
+</div>
+<div class="figure-card fc-red">
+<div class="figure-card__number">27 de juny del 2019</div>
+<div class="figure-card__label">En vigor</div>
+<div class="figure-card__context">El Reglament (UE) núm. 526/2013 es deroga a partir de la mateixa data (article 68).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 4: SCOPE AND LIMITS
+     ========================================================= -->
+<section class="section" id="scope">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-target"></i></div>
+<h2 class="section__title">Àmbit i límits</h2>
+</div>
+<p class="section__subtitle">Articles 1, 2 i 56: un marc voluntari que deixa la seguretat nacional en mans dels Estats membres</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-check-circle-outline" style="color: var(--color-green);"></i> Què fa</div>
+<ul>
+<li>Fixa els objectius, les tasques i l'organització de l'ENISA.</li>
+<li>Proporciona un marc per als esquemes europeus de certificació, sense perjudici de les disposicions específiques d'altres actes de la Unió sobre certificació voluntària o obligatòria (article 1, apartat 1).</li>
+<li>Fa que la certificació sigui <strong>voluntària per defecte</strong> (article 56, apartat 2), i també fa voluntària l'emissió d'una declaració UE de conformitat (article 53, apartat 4).</li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-close-circle-outline" style="color: var(--color-red);"></i> Què no fa</div>
+<ul>
+<li>No <strong>crea cap deure per als fabricants</strong> ni per als proveïdors per si mateix.</li>
+<li>Segons l'article 1, apartat 2, s'entén sense perjudici de la competència dels Estats membres en matèria de seguretat pública, defensa, seguretat nacional i activitats de l'Estat en l'àmbit del dret penal.</li>
+<li>No fa obligatori cap esquema per si mateix. La Comissió només avalua si un esquema ha de passar a ser obligatori mitjançant una altra norma de la Unió (article 56, apartat 3).</li>
+</ul>
+</div>
+</div>
+<div class="three-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-chip" style="color: var(--color-blue);"></i> Producte de TIC</div>
+<p>Un element o un grup d'elements d'una xarxa o d'un sistema d'informació (article 2, punt 12).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-cloud-outline" style="color: var(--color-green);"></i> Servei de TIC</div>
+<p>Un servei que consisteix totalment o principalment en la transmissió, l'emmagatzematge, la recuperació o el tractament d'informació per mitjà de xarxes i sistemes d'informació (article 2, punt 13).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-cog-sync-outline" style="color: var(--color-purple);"></i> Procés de TIC</div>
+<p>Un conjunt d'activitats que es duen a terme per dissenyar, desenvolupar, subministrar o mantenir un producte de TIC o un servei de TIC (article 2, punt 14).</p>
+</div>
+</div>
+<div class="info-box info-box--purple">
+<h3><i class="mdi mdi-shield-sync-outline" style="color: var(--color-purple);"></i> Servei de seguretat gestionat (article 2, punt 14 bis)</h3>
+<p>«Un servei prestat a un tercer que consisteix a dur a terme activitats relacionades amb la gestió del risc de ciberseguretat, o a prestar-hi assistència, com ara la gestió d'incidents, les proves de penetració, les auditories de seguretat i la consultoria, inclòs l'assessorament expert, relacionades amb el suport tècnic.»</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 5: ENISA
+     ========================================================= -->
+<section class="section" id="enisa">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-shield-account-outline"></i></div>
+<h2 class="section__title">ENISA</h2>
+</div>
+<p class="section__subtitle">Títol II, articles 3 a 45: una agència permanent amb un mandat i una governança definits</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-blue);"></i> Mandat</div>
+<p>L'ENISA és el punt de referència de la Unió per a l'assessorament i l'experiència en ciberseguretat (articles 3 i 4). Actua de manera independent i evita duplicar l'activitat dels Estats membres. L'article 68, apartat 4, l'estableix per un període indefinit a partir del 27 de juny del 2019 i succeeix l'agència creada en virtut del Reglament (UE) núm. 526/2013. La seu és a Grècia: el considerant 18 recull que els representants dels Estats membres van decidir una ciutat de Grècia, i l'article 44 preveu un acord de seu amb l'Estat membre d'acollida.</p>
+</div>
+<h3 style="font-size: 1.15rem; margin-bottom: 0.75rem;">Tasques als articles 5 a 12</h3>
+<div class="three-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-blue);"></i> Política i dret (article 5)</div>
+<p>Assistir i assessorar en l'elaboració i la revisió de la política i el dret de la Unió en matèria de ciberseguretat.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-school-outline" style="color: var(--color-green);"></i> Creació de capacitats (article 6)</div>
+<p>Donar suport als Estats membres i als organismes de la Unió, també en matèria de polítiques de divulgació de vulnerabilitats i de CSIRT nacionals.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-lan-connect" style="color: var(--color-purple);"></i> Cooperació operativa (article 7)</div>
+<p>La secretaria de la xarxa de CSIRT, un informe tècnic periòdic sobre la situació de la ciberseguretat a la UE i un exercici a gran escala cada dos anys.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-certificate-outline" style="color: var(--color-amber);"></i> Mercat, certificació, normes (article 8)</div>
+<p>Elaborar esquemes candidats, exercir la secretaria del Grup de Parts Interessades en la Certificació de la Ciberseguretat i assistir la secretaria de l'ECCG.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-red);"></i> Coneixement, sensibilització, recerca (articles 9 a 11)</div>
+<p>Informació i coneixement, sensibilització i educació, i recerca i innovació.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-earth" style="color: var(--color-blue);"></i> Cooperació internacional (article 12)</div>
+<p>Inclòs l'assessorament sobre el reconeixement mutu de certificats amb tercers països.</p>
+</div>
+</div>
+<h3 style="font-size: 1.15rem; margin: 1rem 0 0.75rem;">Òrgans de govern</h3>
+<div class="cmp-wrap">
+<table class="duty-table">
+<thead>
+<tr>
+<th scope="col">Òrgan</th>
+<th scope="col">Composició</th>
+<th scope="col">Durada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consell d'Administració (article 14)</td>
+<td>Un membre per Estat membre més dos de la Comissió, cadascun amb un suplent. Tots els membres voten.</td>
+<td class="rate-blue">4 anys, renovable</td>
+</tr>
+<tr>
+<td>Consell Executiu (article 19)</td>
+<td>Cinc membres escollits entre els del Consell d'Administració, inclosos el seu president i un representant de la Comissió.</td>
+<td class="rate-blue">4 anys, renovable</td>
+</tr>
+<tr>
+<td>Director executiu (articles 20 i 36)</td>
+<td>Nomenat pel Consell d'Administració a partir d'una llista de candidats proposats per la Comissió. Independent i responsable davant del Consell d'Administració.</td>
+<td class="rate-green">5 anys, prorrogable una vegada per 5 anys</td>
+</tr>
+<tr>
+<td>Grup Consultiu de l'ENISA (article 21)</td>
+<td>Experts reconeguts que representen les parts interessades pertinents, presidit pel director executiu. Els membres del Consell d'Administració no en poden formar part.</td>
+<td class="rate-amber">2,5 anys</td>
+</tr>
+<tr>
+<td>Xarxa d'Agents d'Enllaç Nacionals (article 23)</td>
+<td>Un representant per Estat membre, creat pel Consell d'Administració a proposta del director executiu.</td>
+<td>Durada no indicada</td>
+</tr>
+<tr>
+<td>Grup de Partes Interessades sobre Certificació de la Ciberseguretat (article 22)</td>
+<td>Experts reconeguts de les parts interessades, seleccionats per la Comissió després d'una convocatòria oberta, a proposta de l'ENISA. Copresidit per la Comissió i l'ENISA.</td>
+<td>Durada no indicada</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-vote-outline" style="color: var(--color-blue);"></i> Majoria de dos terços</div>
+<p>El Consell d'Administració decideix per majoria dels seus membres (article 18(1)). Es requereix una majoria de dos terços per al document únic de programació, el pressupost anual i el nomenament, la pròrroga o el cessament del director executiu (article 18(2)).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-green);"></i> Oficines locals (article 20(5))</div>
+<p>El director executiu pot obrir oficines locals, amb el consentiment previ de la Comissió i del Consell d'Administració. Totes les oficines locals juntes es mantenen en un 40% o menys del personal de l'ENISA a l'Estat membre de la seu, i cada oficina en un 10% o menys.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 6: PIPELINE
+     ========================================================= -->
+<section class="section" id="pipeline">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-transit-connection-variant"></i></div>
+<h2 class="section__title">Com es fa un esquema</h2>
+</div>
+<p class="section__subtitle">Articles 47 a 49 bis: del programa de treball evolutiu a un acte d'execució, i després la revisió</p>
+<div class="card">
+<ol>
+<li><strong>Programa de treball evolutiu de la Unió (article 47).</strong> La Comissió publica prioritats estratègiques i una llista de productes, serveis, processos i serveis de seguretat gestionats que es podrien beneficiar d'un esquema. El primer s'havia de publicar abans del 28 de juny del 2020, i s'actualitza almenys cada tres anys.</li>
+<li><strong>Sol·licitud (article 48).</strong> La Comissió pot demanar a l'ENISA un esquema candidat sobre la base del programa. En casos degudament justificats, la Comissió o l'ECCG poden demanar-ne un que no figuri al programa.</li>
+<li><strong>Esquema candidat (article 49).</strong> L'ENISA el prepara després d'una consulta formal, oberta, transparent i inclusiva, amb un grup de treball ad hoc per a assessorament específic.</li>
+<li><strong>Dictamen de l'ECCG (article 49(5) i (6)).</strong> L'ECCG adopta un dictamen. L'ENISA el té en compte al màxim, però no és vinculant.</li>
+<li><strong>Acte d'execució (article 49(7)).</strong> La Comissió pot adoptar l'esquema mitjançant un acte d'execució d'acord amb el procediment d'examen.</li>
+<li><strong>Avaluació cada cinc anys (article 49(8)).</strong> L'ENISA avalua cada esquema adoptat almenys cada cinc anys. Després, la Comissió o l'ECCG poden demanar un esquema candidat revisat.</li>
+<li><strong>Diàleg parlamentari (article 49 bis).</strong> La Comissió fa públiques les seves sol·licituds. El Parlament Europeu i el Consell poden demanar informació trimestral sobre un projecte d'esquema candidat i poden convidar la Comissió i l'ENISA a debatre com funcionen els esquemes.</li>
+</ol>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-format-list-checks" style="color: var(--color-blue);"></i> Què conté un esquema (article 54)</div>
+<p>Com a mínim <strong>22 elements</strong>, dels punts a) a v) de l'article 54(1). Van des de l'objecte i l'àmbit d'aplicació, passant per les normes i els mètodes d'avaluació, fins a les regles sobre períodes de validesa, notificació de vulnerabilitats i reconeixement mutu amb tercers països.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-target-variant" style="color: var(--color-green);"></i> Objectius de seguretat (articles 51 i 51 bis)</div>
+<p>Un esquema per a productes, serveis o processos persegueix <strong>deu objectius</strong>, entre ells que siguin segurs per defecte i des del disseny i estiguin exempts de vulnerabilitats conegudes. Un esquema per a serveis de seguretat gestionats persegueix <strong>set</strong>, entre ells la competència del personal i la integritat professional.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 7: ASSURANCE LEVELS
+     ========================================================= -->
+<section class="section" id="assurance">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-layers-outline"></i></div>
+<h2 class="section__title">Nivells de garantia</h2>
+</div>
+<p class="section__subtitle">Articles 52, 53 i 56: fins on arriba l'avaluació i qui pot emetre el certificat</p>
+<div class="cmp-wrap">
+<table class="duty-table">
+<thead>
+<tr>
+<th scope="col">Aspecte</th>
+<th scope="col">Bàsic</th>
+<th scope="col">Substancial</th>
+<th scope="col">Alt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activitats d'avaluació (article 52(5) a (7))</td>
+<td class="rate-green">Com a mínim, una revisió de la documentació tècnica.</td>
+<td class="rate-blue">Afegeix una revisió que demostri l'absència de vulnerabilitats conegudes públicament i proves que les funcionalitats de seguretat s'apliquen correctament.</td>
+<td class="rate-purple">Afegeix proves de les funcionalitats segons l'estat de la tècnica i una avaluació de la resistència davant atacants qualificats mitjançant proves de penetració.</td>
+</tr>
+<tr>
+<td>Risc que vol minimitzar</td>
+<td>Riscos bàsics coneguts d'incidents i ciberatacs.</td>
+<td>Riscos de ciberseguretat coneguts i risc d'atacs per part d'actors amb habilitats i recursos limitats.</td>
+<td>El risc de ciberatacs d'última generació per part d'actors amb habilitats i recursos considerables.</td>
+</tr>
+<tr>
+<td>Qui pot emetre (article 56(4) a (6))</td>
+<td>Un organisme d'avaluació de la conformitat, o un organisme públic quan un esquema així ho preveu en casos degudament justificats.</td>
+<td>Un organisme d'avaluació de la conformitat, o un organisme públic quan un esquema així ho preveu en casos degudament justificats.</td>
+<td>L'autoritat nacional de certificació de la ciberseguretat, o un organisme d'avaluació de la conformitat amb aprovació prèvia per a cada certificat o en virtut d'una delegació general.</td>
+</tr>
+<tr class="highlight-row">
+<td>Autoavaluació (article 53)</td>
+<td class="rate-green">Permesa, només per a elements de risc baix, si l'esquema ho permet.</td>
+<td class="rate-red">No permesa</td>
+<td class="rate-red">No permesa</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-sign" style="color: var(--color-blue);"></i> Declaració UE de conformitat (article 53)</div>
+<p>Quan un esquema permet l'autoavaluació, el fabricant o proveïdor pot emetre una declaració UE de conformitat i assumeix aleshores la responsabilitat del compliment. La documentació s'envia a l'autoritat nacional durant el període que fixa l'esquema. Emetre la declaració és voluntari tret que el dret de la Unió o d'un Estat membre disposi el contrari (article 53(4)).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-information-variant-circle-outline" style="color: var(--color-green);"></i> Què no és un nivell de garantia</div>
+<p>L'article 2(21) estableix que un nivell de garantia indica el nivell en què s'ha avaluat un element, però «com a tal no mesura la seguretat» d'aquest element. Es presumeix que els elements certificats compleixen l'esquema (article 56(1)), i els titulars de certificats han de notificar les vulnerabilitats que detectin més endavant (article 56(8)).</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 8: AUTHORITIES
+     ========================================================= -->
+<section class="section" id="authorities">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-bank-outline"></i></div>
+<h2 class="section__title">Autoritats i organismes</h2>
+</div>
+<p class="section__subtitle">Articles 58 a 65: qui supervisa la certificació, qui emet els certificats i quins recursos existeixen</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-account-tie-outline" style="color: var(--color-blue);"></i> Autoritats nacionals (article 58)</div>
+<p>Cada Estat membre designa una o més autoritats nacionals de certificació de la ciberseguretat, independents de les entitats que supervisen pel que fa a organització, finançament, estructura jurídica i presa de decisions. D'acord amb l'article 58(8), cadascuna té com a mínim la facultat de sol·licitar informació, dur a terme auditories, prendre mesures per garantir el compliment, accedir als locals, retirar certificats i imposar sancions segons el dret nacional.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-account-search-outline" style="color: var(--color-green);"></i> Avaluació entre iguals (article 59)</div>
+<p>Les autoritats nacionals són objecte d'una avaluació entre iguals per part d'almenys dues autoritats d'altres Estats membres i la Comissió, <strong>almenys una vegada cada cinc anys</strong>. L'ENISA hi pot participar. L'ECCG n'examina els resultats i pot emetre directrius o recomanacions.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-clipboard-check-outline" style="color: var(--color-purple);"></i> Organismes d'avaluació de la conformitat (article 60 i annex)</div>
+<p>Han d'estar acreditats per un organisme nacional d'acreditació, per un màxim de cinc anys, i complir els <strong>20 requisits</strong> de l'annex, com ara la independència respecte d'allò que avaluen i la imparcialitat.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-bell-ring-outline" style="color: var(--color-amber);"></i> Notificació (article 61)</div>
+<p>Les autoritats nacionals notifiquen a la Comissió els organismes acreditats per a cada esquema. Un any després de l'entrada en vigor d'un esquema, la Comissió publica la llista d'organismes notificats al Diari Oficial.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-red);"></i> L'ECCG (article 62)</div>
+<p>El Grup Europeu de Certificació de la Ciberseguretat el formen representants de les autoritats nacionals de certificació, i el presideix la Comissió amb l'ajuda de l'ENISA. Un membre no pot representar més de dos Estats membres. Assessora la Comissió i adopta dictàmens sobre esquemes candidats.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> Reclamacions, recursos, sancions (articles 63 a 65)</div>
+<p>Les persones físiques i jurídiques poden presentar una reclamació davant l'emissor d'un certificat (article 63) i tenen dret a un recurs judicial efectiu (article 64). Els Estats membres fixen sancions, que han de ser «efectives, proporcionades i dissuasives» (article 65).</p>
+</div>
+</div>
+<div class="info-box info-box--green">
+<h3><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Data d'aplicació dels articles 58, 60, 61, 63, 64 i 65</h3>
+<p>Aquests sis articles sobre autoritats, organismes d'avaluació de la conformitat, notificació, reclamacions, recursos i sancions s'apliquen a partir del <strong>28 de juny del 2021</strong> (article 69(2)). La resta del Reglament s'aplica des de l'entrada en vigor, el 27 de juny del 2019.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 9: EUCC
+     ========================================================= -->
+<section class="section" id="eucc">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+<h2 class="section__title">El primer esquema: EUCC</h2>
+</div>
+<p class="section__subtitle">Reglament d'Execució (UE) 2024/482 de la Comissió, el primer esquema adoptat en virtut del títol III</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-certificate-outline" style="color: var(--color-blue);"></i> Què és</div>
+<p>Esquema <strong>EUCC</strong>, l'esquema europeu de certificació de la ciberseguretat basat en els Criteris Comuns, es va adoptar mitjançant el Reglament d'Execució (UE) 2024/482 de la Comissió del <strong>31 de gener del 2024</strong> i es va publicar al Diari Oficial el 7 de febrer del 2024. És el primer esquema europeu de certificació adoptat en virtut del Reglament de ciberseguretat, tal com va anunciar l'ENISA el 31 de gener del 2024. Es basa en l'Acord de reconeixement mutu SOG-IS de certificats de Criteris Comuns, tal com expliquen els seus considerands.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Quan s'aplica</div>
+<p>S'aplica a partir del <strong>27 de febrer del 2025</strong>. Els esquemes nacionals que cobreix deixen de produir efectes 12 mesos després de la seva entrada en vigor, d'acord amb l'article 49 del Reglament d'Execució. Això segueix l'article 57 del Reglament de ciberseguretat, segons el qual els esquemes nacionals deixen de produir efectes a partir de la data fixada a l'acte d'execució, i els certificats nacionals existents continuen vàlids fins que caduquen.</p>
+</div>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem;">Aquesta pàgina no descriu el contingut ni l'estat de cap altre esquema.</p>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 10: MANAGED SECURITY SERVICES
+     ========================================================= -->
+<section class="section" id="managed">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-sync-outline"></i></div>
+<h2 class="section__title">Serveis de seguretat gestionats</h2>
+</div>
+<p class="section__subtitle">Reglament (UE) 2025/37: l'única modificació del Reglament fins ara</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-red);"></i> L'acte modificatiu</div>
+<p>El Reglament (UE) 2025/37 «pel qual es modifica el Reglament (UE) 2019/881 pel que fa als serveis de seguretat gestionats» té data del <strong>19 de desembre del 2024</strong>, es va publicar al Diari Oficial el <strong>15 de gener del 2025</strong> i va entrar en vigor el <strong>4 de febrer del 2025</strong>. Es basa en l'article 114 del TFUE, igual que l'original.</p>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-plus-circle-outline" style="color: var(--color-blue);"></i> Què va afegir</div>
+<ul>
+<li>Una definició de <strong>servei de seguretat gestionat</strong> (article 2, punt 14 bis).</li>
+<li><strong>Article 51 bis</strong>, amb set objectius de seguretat per als serveis de seguretat gestionats, que cobreixen la competència i la integritat del personal, els procediments de qualitat, la protecció de dades, la restauració després d'incidents, el control d'accés, la conservació de registres i les eines segures.</li>
+<li><strong>Article 49 bis</strong>, sobre la informació i la consulta del Parlament i del Consell sobre els esquemes.</li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-pencil-outline" style="color: var(--color-green);"></i> Què va canviar</div>
+<ul>
+<li>El text dels articles 46 a 59 ara cobreix els serveis de seguretat gestionats juntament amb els productes, serveis i processos.</li>
+<li>L'avaluació de l'article 67 ara també avalua el títol III i si calen requisits essencials de ciberseguretat per a l'accés al mercat.</li>
+<li>Es va modificar l'annex, amb els requisits per als organismes d'avaluació de la conformitat.</li>
+</ul>
+</div>
+</div>
+<div class="info-box info-box--purple">
+<h3><i class="mdi mdi-link-variant" style="color: var(--color-purple);"></i> Vincle amb el Reglament de cibersolidaritat (només com a context)</h3>
+<p>Els considerands 5 i 6 del Reglament 2025/37 expliquen que la certificació dels serveis de seguretat gestionats podria tenir un paper en la selecció de proveïdors de confiança per a la Reserva de Ciberseguretat de la UE establerta pel Reglament (UE) 2025/38, i que també pot servir d'indicador de qualitat per a les entitats privades i públiques que compren aquests serveis. El Reglament de ciberseguretat en si no imposa cap regla de selecció d'aquest tipus.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 11: HOW IT FITS
+     ========================================================= -->
+<section class="section" id="fit">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-puzzle-outline"></i></div>
+<h2 class="section__title">Com encaixa amb altres actes</h2>
+</div>
+<p class="section__subtitle">El Reglament de ciberseguretat aporta la certificació i l'ENISA. Els seus veïns fixen les obligacions</p>
+<div class="cmp-wrap">
+<table class="duty-table">
+<thead>
+<tr>
+<th scope="col">Instrument</th>
+<th scope="col">Referència</th>
+<th scope="col">Relació</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reglament de ciberresiliència</td>
+<td class="rate-blue">Reglament (UE) 2024/2847</td>
+<td>Conté les obligacions vinculants de seguretat dels productes. Segons l'article 54(3) del Reglament de ciberseguretat, quan un acte específic de la Unió així ho preveu, es pot utilitzar un certificat o una declaració UE de conformitat per demostrar la presumpció de conformitat amb aquest acte. El Reglament de ciberresiliència pot remetre als certificats europeus d'aquesta manera.</td>
+</tr>
+<tr>
+<td>Directiva NIS 2</td>
+<td class="rate-green">Directiva (UE) 2022/2555</td>
+<td>Gestió de riscos i notificació a escala d'entitat. El Reglament de ciberseguretat encara cita la Directiva (UE) 2016/1148, que la NIS 2 va derogar a partir del 18 d'octubre del 2024. Segons l'article 44 de la NIS 2, les referències a l'antiga Directiva s'entenen fetes a la NIS 2.</td>
+</tr>
+<tr>
+<td>Reglament de cibersolidaritat</td>
+<td class="rate-purple">Reglament (UE) 2025/38</td>
+<td>Crea la Reserva de Ciberseguretat de la UE. La certificació dels serveis de seguretat gestionats pot orientar la selecció de proveïdors de confiança (considerand 5 del Reglament 2025/37). Segueix una entrada del cànon de Brubru sobre aquest tema.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 12: REVISION
+     ========================================================= -->
+<section class="section" id="revision">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-file-sign"></i></div>
+<h2 class="section__title">La proposta de Reglament de ciberseguretat 2</h2>
+</div>
+<p class="section__subtitle">COM(2026)0011 derogaria el Reglament 2019/881, però només és una proposta</p>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-scale-balance" style="color: var(--color-amber);"></i> El dret actual</h3>
+<p>La Comissió va proposar un nou Reglament de ciberseguretat el <strong>20 de gener del 2026</strong> com a <strong>COM(2026)0011</strong>, procediment <strong>2026/0011(COD)</strong>. Aquesta proposta <strong>derogaria el Reglament (UE) 2019/881</strong>. <strong>Fins que s'adopti, el Reglament del 2019, modificat pel Reglament 2025/37, continua sent la norma vigent.</strong> Res d'aquesta pàgina presumeix quan, ni si, s'adoptarà la proposta.</p>
+</div>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-blue);"></i> Al Parlament</div>
+<p>La comissió principal és <strong>ITRE</strong>, amb <strong>Markéta Gregorová</strong> (Greens/EFA) com a ponent. IMCO té una funció de dictamen i BUDG una avaluació pressupostària. A l'Observatori Legislatiu l'únic projecte d'informe de comissió és el <strong>PE792.222</strong>, amb data del <strong>18 de setembre del 2026</strong>, i l'etapa assolida és a l'espera de la decisió de la comissió.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-format-list-bulleted" style="color: var(--color-green);"></i> Què enumera la Comissió</div>
+<ul>
+<li>L'ENISA emet alertes primerenques sobre ciberamenaces i incidents.</li>
+<li>Suport, amb Europol i els CSIRT, per respondre al ransomware i recuperar-se'n.</li>
+<li>Una capacitat comuna de la Unió de servei de gestió de vulnerabilitats.</li>
+<li>Funcionament del punt d'entrada únic per a la notificació d'incidents proposat al Digital Omnibus.</li>
+<li>Un marc de seguretat de la cadena de subministrament de les TIC de confiança.</li>
+<li>Un marc de certificació renovat, amb el desenvolupament d'esquemes «en 12 mesos per defecte».</li>
+</ul>
+</div>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem;">El mateix dia, el 20 de gener del 2026, la Comissió també va proposar modificacions específiques de la NIS 2. La llista anterior segueix la pàgina de política de la Comissió i l'Observatori Legislatiu. És una descripció d'una proposta, no un text jurídic en vigor.</p>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 13: KEY DEFINITION
+     ========================================================= -->
+<section class="section" id="definition">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-book-open-variant"></i></div>
+<h2 class="section__title">Definició clau</h2>
+</div>
+<p class="section__subtitle">El terme central del marc</p>
+<div class="info-box info-box--purple">
+<h3><i class="mdi mdi-book-open-variant" style="color: var(--color-purple);"></i> Certificat europeu de ciberseguretat (article 2(11))</h3>
+<p>«Document emès per un organisme competent, que acredita que un producte TIC, servei TIC, procés TIC o servei de seguretat gestionat determinat ha estat avaluat respecte al compliment de requisits de seguretat específics establerts en un esquema europeu de certificació de la ciberseguretat.»</p>
+<p>Per tant, un certificat està lligat a un esquema. Sense un esquema europeu adoptat que cobreixi un element, no hi ha cap certificat europeu per a aquest element.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 14: FAMILY TREE
+     ========================================================= -->
+<section class="section" id="family">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-family-tree"></i></div>
+<h2 class="section__title">Arbre genealògic</h2>
+</div>
+<p class="section__subtitle">Del primer Reglament de l'ENISA a la proposta de Reglament de ciberseguretat 2</p>
+<div class="tree">
+<div class="tree__node">
+<div class="tree__label">2004: acte fundacional</div>
+<div class="tree__title">Reglament (CE) núm. 460/2004</div>
+<div class="tree__desc">Del 10 de març del 2004. Va crear l'Agència Europea de Seguretat de les Xarxes i de la Informació (ENISA).</div>
+</div>
+<div class="tree__node">
+<div class="tree__label">Pròrroga del mandat</div>
+<div class="tree__title">Reglament (CE) núm. 1007/2008</div>
+<div class="tree__desc">Del 24 de setembre del 2008. Va prorrogar el mandat d'ENISA fins al març del 2012.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree">
+<div class="tree__node">
+<div class="tree__label">Pròrroga del mandat</div>
+<div class="tree__title">Reglament (UE) núm. 580/2011</div>
+<div class="tree__desc">De l'8 de juny del 2011. Va prorrogar el mandat fins al 13 de setembre del 2013.</div>
+</div>
+<div class="tree__node">
+<div class="tree__label">Predecessor</div>
+<div class="tree__title">Reglament (UE) núm. 526/2013</div>
+<div class="tree__desc">Del 21 de maig del 2013. Va prorrogar el mandat fins al 19 de juny del 2020 i va ser derogat pel Reglament del 2019 a partir del 27 de juny del 2019.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree" style="grid-template-columns: minmax(0, 1fr); max-width: 560px; margin-left: auto; margin-right: auto;">
+<div class="tree__node tree__node--new">
+<div class="tree__label">Aquesta pàgina</div>
+<div class="tree__title">Reglament de ciberseguretat: Reglament (UE) 2019/881</div>
+<div class="tree__desc">Procediment 2017/0225(COD). Adoptat el 17 d'abril del 2019, publicat el 7 de juny del 2019 i en vigor el 27 de juny del 2019.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree">
+<div class="tree__node">
+<div class="tree__label">Modifica el Reglament</div>
+<div class="tree__title">Reglament (UE) 2025/37</div>
+<div class="tree__desc">Del 19 de desembre del 2024. Afegeix els serveis de seguretat gestionats. En vigor el 4 de febrer del 2025.</div>
+</div>
+<div class="tree__node">
+<div class="tree__label">Acte d'execució</div>
+<div class="tree__title">Reglament d'Execució (UE) 2024/482</div>
+<div class="tree__desc">Del 31 de gener del 2024. L'esquema EUCC, aplicable a partir del 27 de febrer del 2025.</div>
+</div>
+</div>
+<div class="tree__arrow"><i class="mdi mdi-arrow-down"></i></div>
+<div class="tree" style="grid-template-columns: minmax(0, 1fr); max-width: 560px; margin-left: auto; margin-right: auto;">
+<div class="tree__node">
+<div class="tree__label">Proposta, derogaria el Reglament</div>
+<div class="tree__title">COM(2026)0011, Reglament de ciberseguretat 2</div>
+<div class="tree__desc">Procediment 2026/0011(COD), proposat el 20 de gener del 2026. En negociació.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 15: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+<h2 class="section__title">Glossari</h2>
+</div>
+<p class="section__subtitle">Termes utilitzats en aquesta pàgina</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-card__term">ENISA</div>
+<div class="glossary-card__def">L'Agència de la Unió Europea per a la Ciberseguretat, creada per a un període indefinit a partir del 27 de juny del 2019 (article 68, apartat 4).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Esquema europeu de certificació de la ciberseguretat</div>
+<div class="glossary-card__def">Un conjunt complet de normes, requisits tècnics, estàndards i procediments establerts a escala de la Unió per a elements específics (article 2, apartat 9).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Certificat europeu de ciberseguretat</div>
+<div class="glossary-card__def">Un document que acredita que un element ha estat avaluat respecte dels requisits d'un esquema europeu (article 2, apartat 11).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Nivell de garantia</div>
+<div class="glossary-card__def">Bàsic, substancial o alt. Indica fins a quin punt es va avaluar un element en profunditat, no el seu grau de seguretat (article 2, apartat 21).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Autoavaluació de la conformitat</div>
+<div class="glossary-card__def">Una avaluació que duu a terme el mateix fabricant o proveïdor. Només es permet al nivell de garantia bàsic (article 53).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Declaració UE de conformitat</div>
+<div class="glossary-card__def">Una declaració del fabricant o proveïdor que certifica que es compleixen els requisits d'un esquema. Emetre-la és voluntari tret que la llei disposi el contrari.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">ECCG</div>
+<div class="glossary-card__def">El Grup Europeu de Certificació de la Ciberseguretat, format per representants de les autoritats nacionals i presidit per la Comissió (article 62).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Autoritat nacional de certificació de la ciberseguretat</div>
+<div class="glossary-card__def">L'autoritat independent que cada Estat membre designa per supervisar la certificació (article 58).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Organisme d'avaluació de la conformitat</div>
+<div class="glossary-card__def">Un organisme tercer acreditat que avalua elements i emet certificats de nivell bàsic o substancial (article 60 i annex).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Programa de treball evolutiu de la Unió</div>
+<div class="glossary-card__def">La llista de prioritats estratègiques de la Comissió per als futurs esquemes, actualitzada com a mínim cada tres anys (article 47).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Servei de seguretat gestionat</div>
+<div class="glossary-card__def">Un servei, com ara la gestió d'incidents, les proves de penetració, les auditories de seguretat o l'assessorament, prestat a un tercer (article 2, punt 14 bis).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">EUCC</div>
+<div class="glossary-card__def">L'esquema europeu basat en els Criteris Comuns, el primer adoptat en virtut del Reglament, mitjançant el Reglament d'Execució (UE) 2024/482.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Avaluació entre iguals</div>
+<div class="glossary-card__def">L'avaluació de les autoritats nacionals de certificació per part d'autoritats d'altres Estats membres i de la Comissió, com a mínim cada cinc anys (article 59).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Presumpció de conformitat</div>
+<div class="glossary-card__def">Quan un acte de la Unió així ho preveu, un certificat emès en virtut d'un esquema europeu es pot utilitzar per demostrar la conformitat amb aquest acte (article 54, apartat 3).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 16: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-timeline-outline"></i></div>
+<h2 class="section__title">Cronologia legislativa</h2>
+</div>
+<p class="section__subtitle">Des de l'adopció el 2019 fins a la proposta que ara es negocia</p>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">17 d'abril del 2019</div>
+<div class="timeline__text">S'adopta el Reglament (UE) 2019/881.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">7 de juny del 2019</div>
+<div class="timeline__text">Publicació al Diari Oficial, L 151.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">27 de juny del 2019</div>
+<div class="timeline__text">Entrada en vigor. ENISA esdevé permanent i es deroga el Reglament (UE) núm. 526/2013.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">28 de juny del 2021</div>
+<div class="timeline__text">S'apliquen els articles 58, 60, 61, 63, 64 i 65: autoritats nacionals, organismes d'avaluació de la conformitat, notificació, reclamacions, recursos i sancions.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">31 de gener del 2024</div>
+<div class="timeline__text">S'adopta el Reglament d'Execució (UE) 2024/482 sobre l'EUCC.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">28 de juny del 2024</div>
+<div class="timeline__text">Primer termini d'avaluació i revisió en virtut de l'article 67.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">19 de desembre del 2024</div>
+<div class="timeline__text">S'adopta el Reglament (UE) 2025/37 sobre els serveis de seguretat gestionats.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">15 de gener del 2025</div>
+<div class="timeline__text">El Reglament (UE) 2025/37 es publica al Diari Oficial.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">4 de febrer del 2025</div>
+<div class="timeline__text">Entra en vigor la modificació del 2025.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">27 de febrer del 2025</div>
+<div class="timeline__text">L'esquema EUCC comença a aplicar-se.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">20 de gener del 2026</div>
+<div class="timeline__text">La Comissió proposa el Reglament de ciberseguretat 2, <strong>COM(2026)0011</strong>.</div>
+</div>
+<div class="timeline__item timeline__item--active">
+<div class="timeline__date">18 de setembre del 2026 <span class="pill pill--blue">Proposta en negociació</span></div>
+<div class="timeline__text">Projecte d'informe de la comissió PE792.222 sobre la proposta de Reglament de ciberseguretat 2. <a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD)" rel="noopener" target="_blank">La fitxa de procediment de l'OEIL és aquí.</a> Fase assolida: pendent de la decisió de la comissió.</div>
+</div>
+</div>
+<h3 style="font-size: 1.15rem; margin: 2rem 0 1rem;">Dates encara per venir</h3>
+<div class="timeline">
+<div class="timeline__item timeline__item--upcoming">
+<div class="timeline__date">28 de juny del 2029 <span class="pill pill--amber">Properament</span></div>
+<div class="timeline__text">Proper termini d'avaluació de la Comissió en virtut de l'article 67, apartat 1: abans del 28 de juny del 2024 i cada cinc anys a partir d'aleshores. Això només s'aplica mentre el Reglament del 2019 continuï en vigor.</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 17: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+<h2 class="section__title">Fonts oficials</h2>
+</div>
+<p class="section__subtitle">Documentació primària del Reglament (UE) 2019/881</p>
+<div class="two-col-grid">
+<div class="card">
+<div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> Diari Oficial i EUR-Lex</div>
+<ul>
+<li><a href="https://eur-lex.europa.eu/eli/reg/2019/881/oj/eng" rel="noopener" style="color: var(--color-blue);" target="_blank">Reglament (UE) 2019/881 al Diari Oficial (CELEX 32019R0881)</a></li>
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0881-20250204" rel="noopener" style="color: var(--color-blue);" target="_blank">Text consolidat amb la modificació del 2025 (CELEX 02019R0881-20250204)</a></li>
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0037" rel="noopener" style="color: var(--color-blue);" target="_blank">Reglament (UE) 2025/37 sobre els serveis de seguretat gestionats</a></li>
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R0482" rel="noopener" style="color: var(--color-blue);" target="_blank">Reglament d'Execució (UE) 2024/482 (EUCC)</a></li>
+</ul>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-purple);"></i> Parlament, Comissió i ENISA</div>
+<ul>
+<li><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD)" rel="noopener" style="color: var(--color-blue);" target="_blank">Fitxa de procediment de l'Observatori Legislatiu 2026/0011(COD)</a></li>
+<li><a href="https://digital-strategy.ec.europa.eu/en/policies/cybersecurity-act" rel="noopener" style="color: var(--color-blue);" target="_blank">Pàgina de política de la Comissió sobre el Reglament de ciberseguretat</a></li>
+<li><a href="https://www.enisa.europa.eu/news/an-eu-prime-eu-adopts-first-cybersecurity-certification-scheme" rel="noopener" style="color: var(--color-blue);" target="_blank">Comunicat de premsa d'ENISA del 31 de gener del 2024: el primer esquema de certificació de la UE (EUCC)</a></li>
+<li><a href="https://www.enisa.europa.eu/" rel="noopener" style="color: var(--color-blue);" target="_blank">ENISA, l'Agència de la UE per a la Ciberseguretat</a></li>
+</ul>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 18: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+<h2 class="section__title">Entrades del cànon relacionades</h2>
+</div>
+<p class="section__subtitle">La família <code>eu_cybersecurity</code> al Cànon de la UE de Brubru</p>
+<div class="two-col-grid">
+<div class="canon-related">
+<div class="canon-related__label">Ciberseguretat a escala de producte</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2024-2847_cra/index.html">El Reglament de ciberresiliència: Reglament (UE) 2024/2847</a></div>
+<div class="canon-related__desc">Les obligacions vinculants de ciberseguretat per als productes amb elements digitals. Pot remetre als certificats europeus del Reglament de ciberseguretat com a prova de conformitat.</div>
+</div>
+<div class="canon-related">
+<div class="canon-related__label">Ciberseguretat a escala d'entitat</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html">NIS 2: Directiva (UE) 2022/2555</a></div>
+<div class="canon-related__desc">Gestió dels riscos de ciberseguretat i notificació d'incidents per a les entitats essencials i importants. Les referències del Reglament de ciberseguretat a l'antiga Directiva NIS s'entenen fetes a la NIS 2.</div>
+</div>
+<div class="canon-related">
+<div class="canon-related__label">Sector financer</div>
+<div class="canon-related__title"><a href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">DORA: Reglament (UE) 2022/2554</a></div>
+<div class="canon-related__desc">Resiliència operativa digital per a les entitats financeres, inclòs el risc de les TIC derivat de tercers. Un règim sectorial que se situa al costat dels reglaments horitzontals de ciberseguretat.</div>
+</div>
+</div>
+<p style="color: var(--color-secondary); font-size: 0.9rem;">L'entrada del Reglament de cibersolidaritat ve a continuació.</p>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 19: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+<h2 class="section__title">Exploreu el Reglament de ciberseguretat amb Brubru</h2>
+</div>
+<p class="section__subtitle">Sis eines per analitzar, seguir i treballar amb el Reglament</p>
+<div class="features-grid">
+<div class="feature-card">
+<i class="mdi mdi-chat-outline"></i>
+<div class="feature-card__title">Brubru Chat</div>
+<div class="feature-card__desc">Pregunteu com funciona el marc de certificació, quin nivell de garantia s'aplica o en quina fase és la proposta de Reglament de ciberseguretat 2. Les respostes es basen en fonts oficials d'EUR-Lex.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/main">Obre el Chat</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-file-edit-outline"></i>
+<div class="feature-card__title">Amendator</div>
+<div class="feature-card__desc">Carregueu el Reglament a l'Amendator i redacteu el text d'esmenes sobre el text oficial, per a les revisions que vindran.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/amendator">Obre l'Amendator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-view-dashboard-outline"></i>
+<div class="feature-card__title">My EU Bubble</div>
+<div class="feature-card__desc">Seguiu el procediment del Reglament de ciberseguretat 2, les notícies d'ENISA i els treballs sobre esquemes de certificació, i rebeu alertes quan avancin.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/my-eu-bubble">Obre My EU Bubble</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-clipboard-check-outline"></i>
+<div class="feature-card__title">EU Law Comply</div>
+<div class="feature-card__desc">Feu una anàlisi de bretxes de compliment dels actes de ciberseguretat de la UE que envolten el Reglament.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Obre EU Law Comply</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-hammer-wrench"></i>
+<div class="feature-card__title">Tenderator</div>
+<div class="feature-card__desc">Trobeu oportunitats de contractació pública de la UE relacionades amb la ciberseguretat, la certificació i els serveis d'avaluació de la conformitat.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/tenderator">Obre el Tenderator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-api"></i>
+<div class="feature-card__title">API de Brubru</div>
+<div class="feature-card__desc">Accés programàtic a les dades de la legislació de la UE, al seguiment de procediments i als esdeveniments del calendari institucional, per als vostres fluxos de seguiment normatiu.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/api">Consulta la documentació de l'API</a>
+</div>
+</div>
+</section>
+</div><!-- /container -->
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image:
+  linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%),
+  url('https://images.pexels.com/photos/39298464/pexels-photo-39298464.png?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940');
+  background-size: cover; background-position: center;">
+<h2 class="cta-strip__title">Obteniu la plataforma completa de Brubru</h2>
+<p class="cta-strip__sub">Prova gratuïta de 14 dies. Sense targeta.</p>
+<a class="cta-strip__btn" href="https://brubru.beresol.eu/signup">Comença la prova gratuïta</a>
+</div>
+<!-- Footer -->
+<footer class="footer" id="footer">
+<div class="footer__inner">
+<div class="footer__col">
+<div class="footer__logos">
+<img alt="Brubru" class="footer__logo-brubru" src="../../assets/brubru_mainlogo.png"/>
+</div>
+<div class="footer__text">
+<p>Brubru és l'assistent d'intel·ligència sobre polítiques de la UE basat en IA de <a href="https://beresol.eu">Beresol BV</a>.</p>
+<p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Comenceu la prova gratuïta de 14 dies</a>, sense necessitat de targeta.</p>
+<p style="margin-top:0.4rem;">
+<a href="https://brubru.beresol.eu/main">Chat</a>  | 
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a>  | 
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a>  | 
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+</p>
+</div>
+</div>
+<div class="footer__col">
+<div class="footer__text">
+<p style="font-weight:700; margin-bottom:0.5rem;">Biblioteca del Cànon de la UE</p>
+<ul class="footer__nav">
+<li><a href="../index.html">Totes les entrades del cànon</a></li>
+<li><a href="../2024-2847_cra/index.html">Reglament de ciberresiliència - Reg. 2024/2847</a></li>
+<li><a href="../2022-2555_nis2/index.html">NIS 2 - Dir. 2022/2555</a></li>
+<li><a href="../2022-2554_dora/index.html">DORA - Reg. 2022/2554</a></li>
+<li><a href="index.html">Reglament de ciberseguretat - Reg. 2019/881 (aquesta pàgina)</a></li>
+</ul>
+<p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Fonts oficials</p>
+<ul class="footer__nav">
+<li><a href="https://eur-lex.europa.eu/eli/reg/2019/881/oj/eng" rel="noopener" target="_blank">Reg. 2019/881 al Diari Oficial</a></li>
+<li><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0011(COD)" rel="noopener" target="_blank">Fitxa de procediment de l'OEIL 2026/0011(COD)</a></li>
+</ul>
+</div>
+</div>
+<div class="footer__col" style="text-align:right;">
+<img alt="Beresol" class="footer__logo-beresol" src="../../assets/beresol-logo.png" style="display:block; margin-left:auto; margin-bottom:0.75rem;"/>
+<div class="footer__text">
+<p style="font-weight:700;">Creat per Beresol BV</p>
+<p>Apeldoorn, Països Baixos</p>
+<p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+<p style="margin-top:0.5rem; font-size:0.78rem;">Aquesta és una anàlisi independent i no és un document oficial de la UE. Tots els fets es remeten al Reglament (UE) 2019/881 i a fonts oficials d'EUR-Lex.</p>
+</div>
+</div>
+</div>
+<div class="footer__bottom">
+<p>Copyright Beresol BV 2026. Tots els drets reservats.  |  <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>  |  <a href="https://beresol.eu">beresol.eu</a></p>
+<p style="margin-top:0.35rem;">Actualitzat el 5 d'octubre del 2026.</p>
+<p style="margin-top:0.35rem;">Crèdits de les imatges: foto de la capçalera de <a href="https://www.pexels.com/photo/close-up-of-hand-holding-a-secure-padlock-36740854/" rel="noopener" target="_blank">Nathan Thomas via Pexels</a> (identificador de foto 36740854) | foto de la crida a l'acció de <a href="https://www.pexels.com/photo/facade-of-european-parliament-building-in-brussels-39298464/" rel="noopener" target="_blank">Leonardo Barucci via Pexels</a> (identificador de foto 39298464).</p>
+</div>
+</footer>
+<!-- Back to top button -->
+<a aria-label="Torna a dalt" class="back-to-top" href="#top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
