@@ -105,6 +105,14 @@ def _title_words(s: str | None) -> set:
     return {w for w in re.findall(r"[a-z0-9]{4,}", s) if w not in _STOP}
 
 
+def _contains_summary(summary: str | None, body: str) -> bool:
+    sw = re.findall(r"[a-z]{4,}", (summary or "").lower())[:12]
+    if len(sw) < 6:
+        return True
+    bw = set(re.findall(r"[a-z]{4,}", body.lower()))
+    return sum(w in bw for w in sw) / len(sw) >= 0.5
+
+
 def _names_item(title: str | None, body: str) -> bool:
     tw = _title_words(title)
     return len(tw) < 3 or len(tw & _title_words(body)) / len(tw) >= 0.35
@@ -347,6 +355,17 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
     from_po = _from_publications_office(res.html)
     if from_po:
         return from_po, None, None
+
+    if "consilium.europa.eu" in url and res.text and res.title:
+        # Consilium's "Forward look" and similar releases list items with "Read more"
+        # links, which the extractors refuse as a listing and keep a 252-character card
+        # (12 rows, 6 Oct 2026). The page's own text from its headline on is the release.
+        head = res.title.rsplit(" - Consilium", 1)[0].strip()
+        i = res.text.find(head)
+        if i >= 0:
+            own = _cut_site_footer(res.text[i:])
+            if own and len(own) >= 500 and not looks_like_challenge(own):
+                return own.strip(), None, None
 
     text_, html_, reason = _best_extraction(res.html)
 
@@ -875,6 +894,9 @@ def main() -> int:
     ap.add_argument("--render", action="store_true",
                     help="Fall back to a rendered fetch (Scrape.do) when a page carries no prose. "
                          "Costs credits, so it is opt-in.")
+    ap.add_argument("--ids-file", help="Re-fetch exactly these eu_news_items ids (one per line) and "
+                                       "REPLACE their body, even when the new text is shorter: "
+                                       "for bodies that hold the wrong thing, not too little.")
     ap.add_argument("--empty-only", action="store_true",
                     help="Only rows with no body at all (body-code mode). A short body is "
                          "often the source's whole text: Cedefop news fetched shorter than "
@@ -884,7 +906,14 @@ def main() -> int:
 
     db = SessionLocal()
     try:
-        if args.body_code:
+        if args.ids_file:
+            ids = [l.strip() for l in open(args.ids_file) if l.strip()]
+            rows = db.execute(text(
+                "SELECT id, source_url, 0 AS blen, coalesce(body_source,'') AS src, "
+                "       left(coalesce(title,''),70) AS title, coalesce(summary,'') AS summ "
+                "FROM eu_news_items WHERE id = ANY(CAST(:ids AS uuid[]))"), {"ids": ids}).fetchall()
+            label = f"{len(ids)} listed ids"
+        elif args.body_code:
             types = args.item_type or ["news"]
             rows = db.execute(text(
                 "SELECT id, public_url AS source_url, coalesce(length(body_txt),0) AS blen, "
@@ -996,6 +1025,12 @@ def main() -> int:
                 if body_txt and not _FILE_URL.search(r.source_url or "") and not _names_item(r.title, body_txt):
                     failed += 1
                     reasons["text does not name the item"] = reasons.get("text does not name the item", 0) + 1
+                    continue
+                # A summary we already hold must appear in the text we store: 234 bodies held
+                # a record card or another article while their summary said otherwise.
+                if body_txt and not _contains_summary(getattr(r, "summ", ""), body_txt):
+                    failed += 1
+                    reasons["text does not contain the item's summary"] = reasons.get("text does not contain the item's summary", 0) + 1
                     continue
                 # Whatever path produced it, bytes decoded as text are not a body (an EBA zip
                 # inside a zip slipped past the download check, 5 Oct 2026).
