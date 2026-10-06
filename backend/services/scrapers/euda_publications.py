@@ -18,7 +18,7 @@ import html as _html
 
 import requests
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, known, needs_fetch
 
 _SITEMAP = "https://www.euda.europa.eu/sitemap.xml?page={page}"
 # The EUDA sitemap index has 35 sub-sitemap pages; scan them all (news/events/
@@ -110,7 +110,14 @@ def ingest_euda_publications(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s.headers.update(_HEADERS)
     now = datetime.now(timezone.utc)
     items: list[Item] = []
+    stored = known("euda", "publication")
     for url in sitemap_publication_urls(s):
+        if fetch_bodies and not needs_fetch("euda", "publication", url,
+                                            want_body=False, want_date=False):
+            # Title already stored: the sitemap walk re-fetched every page for it and
+            # ran EUDA past the 600s economy timeout on every run (6 Oct 2026).
+            items.append(_item(url, stored[url].title, now))
+            continue
         items.append(_item(url, fetch_title(s, url) if fetch_bodies else "", now))
         time.sleep(0.15)
     return items

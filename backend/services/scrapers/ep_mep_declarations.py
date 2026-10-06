@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, known, needs_fetch
 
 _API = "https://data.europarl.europa.eu/api/v2/meps"
 # Currently-sitting MEPs only. `?parliamentary-term=10` returns the whole-term
@@ -49,16 +49,35 @@ def _country(detail: dict) -> str:
 def ingest_mep_declarations(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
-    lst = s.get(_CURRENT, params={"limit": 2000}, timeout=40).json()
-    meps = lst.get("data") or []
+    # EP Open Data can answer 200 with a non-JSON body (6 Oct 2026); retry before failing.
+    for attempt in range(3):
+        try:
+            meps = s.get(_CURRENT, params={"limit": 2000},
+                         timeout=40).json().get("data") or []
+            break
+        except ValueError:
+            if attempt == 2:
+                raise
+            time.sleep(5 * (attempt + 1))
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     seen: set[str] = set()
+    # One API lookup per MEP (~720) only rebuilt names and countries already stored,
+    # and ran the body past the 600s economy timeout on every run (6 Oct 2026).
+    stored = {k.guid: url for url, k in known("parliament", "mep_declaration").items() if k.guid}
     for m in meps:
         mid = str(m.get("identifier") or "").strip()
         if not mid or mid in seen:
             continue
         seen.add(mid)
+        url = stored.get(mid)
+        if url and not needs_fetch("parliament", "mep_declaration", url, want_date=False):
+            # Stored complete: emit the identity only; the upsert keeps title and body.
+            items.append(Item(
+                body_code="parliament", item_type="mep_declaration",
+                title=known("parliament", "mep_declaration")[url].title, public_url=url,
+                creation_date=now, source_kind="ep_meps", guid=mid))
+            continue
         label = clean(m.get("label") or "")
         country = ""
         slug = None

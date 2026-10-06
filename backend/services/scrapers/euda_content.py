@@ -14,7 +14,7 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, extract_html
+from services.scrapers.economy_common import Item, clean, norm_url, extract_html, known, needs_fetch
 from services.scrapers.euda_publications import sitemap_urls, fetch_title, fetch_title_and_date, _HEADERS
 
 _SITE = "https://www.euda.europa.eu"
@@ -63,7 +63,13 @@ def _ingest(substr: str, item_type: str, fetch_bodies: bool) -> list[Item]:
     s = _cffi_session()
     now = datetime.now(timezone.utc)
     items: list[Item] = []
+    stored = known("euda", item_type)
     for url in sitemap_urls(s, substr):
+        if fetch_bodies and not needs_fetch("euda", item_type, url, want_body=False):
+            # Title and date already stored: skip the page (see euda_publications).
+            items.append(_item(url, stored[url].title, item_type, now,
+                               document_date=stored[url].document_date))
+            continue
         # One fetch yields both the title and the date. When fetch_bodies is off we
         # do not fetch at all, so the date stays None rather than being guessed.
         title, doc_dt = fetch_title_and_date(s, url) if fetch_bodies else ("", None)

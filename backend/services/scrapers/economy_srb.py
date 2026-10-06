@@ -29,7 +29,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, extract_html, extract_pdf, parse_listing_date,
+    Item, clean, norm_url, extract_html, extract_pdf, needs_fetch, parse_listing_date,
 )
 
 _BASE = "https://www.srb.europa.eu"
@@ -163,6 +163,8 @@ def ingest_srb_news(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[It
         time.sleep(4.0)
     if fetch_bodies:
         for it in items:
+            if not needs_fetch("srb", it.item_type, it.public_url):
+                continue  # stored complete; the upsert keeps it
             body_txt, body_html, kind = _fetch_detail_spaced(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":
@@ -225,6 +227,8 @@ def ingest_srb_publications(*, fetch_bodies: bool = True, max_pages: int = 10) -
         time.sleep(2.5)
     if fetch_bodies:
         for it in items:
+            if not needs_fetch("srb", it.item_type, it.public_url):
+                continue  # stored complete; the upsert keeps it
             body_txt, body_html, kind = _fetch_detail_spaced(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             it.source_kind = kind if kind in ("pdf", "html") else it.source_kind
@@ -284,6 +288,8 @@ def ingest_srb_events(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[
         time.sleep(2.5)
     if fetch_bodies:
         for it in items:
+            if not needs_fetch("srb", it.item_type, it.public_url):
+                continue  # stored complete; the upsert keeps it
             body_txt, body_html, kind = _fetch_detail_spaced(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":

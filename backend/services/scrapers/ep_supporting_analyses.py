@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, known
 
 _BASE = "https://www.europarl.europa.eu/thinktank/en/research/advanced-search"
 _DOC = "https://www.europarl.europa.eu/thinktank/en/document/{ref}"
@@ -118,14 +118,27 @@ def walk_year(session: requests.Session, year: int, *, max_pages: int = 60):
         time.sleep(0.3)  # be gentle on the Think Tank
 
 
-def ingest_supporting_analyses(*, fetch_bodies: bool = True, first_year: int = _FIRST_YEAR,
+def ingest_supporting_analyses(*, fetch_bodies: bool = True, first_year: int | None = None,
                                **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
-    this_year = datetime.now(timezone.utc).year
+    now = datetime.now(timezone.utc)
+    this_year = now.year
+    if first_year is not None or not known("parliament", "supporting_analysis"):
+        # An explicit backfill, or nothing stored yet: walk every year.
+        years = list(range(this_year, (first_year or _FIRST_YEAR) - 1, -1))
+    else:
+        # Every year back to 1992 is ~640 listing pages and 611s, past the economy
+        # timeout on every run (6 Oct 2026). New documents land in the current year
+        # (and the previous one in January); one older year per run in rotation
+        # re-checks all of them every ~17 days at two runs a day.
+        older = list(range(_FIRST_YEAR, this_year))
+        pick = older[(now.timetuple().tm_yday * 2 + (now.hour >= 12)) % len(older)]
+        years = sorted({this_year, pick} | ({this_year - 1} if now.month == 1 else set()),
+                       reverse=True)
     items: list[Item] = []
     seen: set[str] = set()
-    for year in range(this_year, first_year - 1, -1):
+    for year in years:
         for it in walk_year(s, year):
             if it.guid not in seen:
                 seen.add(it.guid)
