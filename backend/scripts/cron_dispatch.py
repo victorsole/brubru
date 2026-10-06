@@ -16,10 +16,10 @@ Schedule (from backend/config/sync_cadence.json):
     fast      → 01, 09, 15, 21 Brussels time
     economy   → 05/06/07 and 11/12/13 Brussels time (3 batches, twice a day)
     (the five above are aligned to GovClipping's 10:00 / 16:00 Brussels pulls)
-    daily     → hour 04 UTC                               (every day)
+    daily     → 03 Brussels time                          (every day)
     weekly    → Sunday hour 05 UTC                        (once per week)
     monthly   → 1st of month hour 02 UTC                  (once per month)
-    daily-brief         → hour 11 UTC                     (Brubru Brief email)
+    daily-brief         → 10 Brussels time                (saves the day's headlines)
     authority-labels    → hour 03 UTC                     (NAL sync)
     journey-precompute  → hours 01, 09, 17 UTC            (legislative-journey AI, limit=8)
 
@@ -279,8 +279,9 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour == 3:
         fires.append(("authority_labels", "/api/cron/sync/authority-labels"))
 
-    # Daily tier: 04:00 UTC daily
-    if hour == 4:
+    # Daily tier: 03:00 Brussels (was 04:00 UTC, which now landed on an economy batch
+    # in both seasons; consultations here feed a GovClipping call, done long before 10:00).
+    if lh == 3:
         fires.append(("daily", "/api/cron/sync/daily"))
 
     # Procedure-snapshot cube: 05:00 UTC daily. Builds one row per carriage (slow state +
@@ -337,7 +338,12 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
             fires.append((f"economy_b{batch}", f"/api/cron/sync/economy?batch={batch}"))
 
     # Brubru Brief: 11:00 UTC daily
-    if hour == 11:
+    # Brussels 10:00 since 6 Oct 2026 (was 11:00 UTC). At 13:00 Brussels it now shared
+    # the backend with warm_12h and an economy batch, and its 180-second news scrape
+    # failed (the dispatcher then exits 1, which Railway reports as a crash). 10:00 is
+    # free in the GovClipping-aligned schedule. The emails stopped in May (Brubru Brief
+    # replaced them); the job only saves the day's headlines.
+    if lh == 10:
         fires.append(("daily_brief", "/api/cron/daily-brief"))
 
     # Weekly tier: Sunday 05:00 UTC

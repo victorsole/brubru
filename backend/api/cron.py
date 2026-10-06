@@ -1792,7 +1792,8 @@ def cron_daily_brief(
         script_path = os.path.join(os.path.dirname(__file__), '..', 'scripts', 'scrape_eu_news.py')
         proc = subprocess.run(
             [sys.executable, script_path, '--save', '--hours', '24'],
-            capture_output=True, text=True, timeout=180,
+            # 63 s on a quiet machine (6 Oct 2026); 180 s failed when other tiers ran.
+            capture_output=True, text=True, timeout=420,
             cwd=os.path.dirname(script_path),
         )
         if proc.returncode == 0:
