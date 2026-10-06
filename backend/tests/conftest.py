@@ -327,3 +327,29 @@ def pytest_configure(config):
 # routing around it. 10 EUR against a 0.005 EUR light call is ~2,000 calls, far
 # more than any single test session makes.
 TEST_API_BALANCE_MICRO = 10_000_000  # 10.00 EUR in micro-euros
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _purge_test_rows_from_mcp_requests():
+    """Live MCP tests create throw-away users and call the real handler, which now logs
+    every request to mcp_requests (migration 274). The users are deleted but the log has
+    no foreign key, so their rows would stay in production. After the session, delete
+    every row whose user no longer exists, or that has no user (a bad-key test call).
+    Real traffic always has a user, so it is never touched. Silent when the table is
+    absent or the database is unreachable (a unit-only run)."""
+    yield
+    try:
+        from sqlalchemy import text
+
+        from core.database import SessionLocal
+
+        db = SessionLocal()
+        try:
+            db.execute(text(
+                "DELETE FROM mcp_requests r WHERE r.created_at >= now() - interval '1 day' AND "
+                "(r.user_id IS NULL OR NOT EXISTS (SELECT 1 FROM users u WHERE u.id = r.user_id))"))
+            db.commit()
+        finally:
+            db.close()
+    except Exception:  # noqa: BLE001
+        pass

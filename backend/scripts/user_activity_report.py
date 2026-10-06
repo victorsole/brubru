@@ -611,6 +611,44 @@ def section_api(conn, start, end, include_internal):
         start=start,
         end=end,
     )
+    # Three-state reading per connector (6 Oct 2026). "0 tool calls" from
+    # api_usage_events alone is UNPROVEN: that ledger is written only after the
+    # scope check and the debit succeed. mcp_requests (migration 274) records every
+    # authenticated request however it ended, but only from its first row onwards:
+    # days before that are UNMEASURED, never "no use".
+    log_start = q(conn, "SELECT min(created_at)::date AS d FROM mcp_requests")
+    log_start_day = None if errored(log_start) or not log_start or log_start[0].get("d") is None else log_start[0]["d"]
+    if not errored(connectors):
+        req = q(
+            conn,
+            f"""
+            SELECT u.email, r.server,
+                   count(*) FILTER (WHERE r.method = 'tools/call' AND r.outcome = 'ok') AS calls_ok,
+                   count(*) FILTER (WHERE r.method = 'tools/call' AND r.outcome <> 'ok') AS calls_refused,
+                   count(*) FILTER (WHERE r.method NOT IN ('tools/list', 'tools/call')) AS other_requests,
+                   max(r.created_at) FILTER (WHERE r.method = 'tools/call') AS last_call_attempt
+            FROM mcp_requests r JOIN users u ON u.id = r.user_id
+            WHERE r.created_at >= :start AND r.created_at < :end AND NOT r.is_probe {filt}
+            GROUP BY u.email, r.server
+            """,
+            start=start,
+            end=end,
+        )
+        by_key = {} if errored(req) else {(r["email"], r["server"]): r for r in req}
+        for c in connectors:
+            r = by_key.get((c["email"], c["server"]), {})
+            ok_n, ref_n = int(r.get("calls_ok") or 0), int(r.get("calls_refused") or 0)
+            c["calls_ok"], c["refused"] = ok_n, ref_n
+            c["other_req"] = int(r.get("other_requests") or 0)
+            billed = int(c.get("tool_calls") or 0)
+            if ok_n or billed:
+                c["reading"] = "PROVEN USE"
+            elif ref_n:
+                c["reading"] = "TRIED, REFUSED"
+            elif log_start_day is None or start < log_start_day:
+                c["reading"] = f"UNMEASURED (request log starts {log_start_day or 'not yet'})"
+            else:
+                c["reading"] = "LISTED ONLY"
     return {"by_caller": by_caller, "by_endpoint": by_endpoint, "connectors": connectors}
 
 
@@ -1521,7 +1559,7 @@ def render(report):
         _fmt(report["api"]["by_caller"]),
         "  By endpoint:",
         _fmt(report["api"]["by_endpoint"]),
-        "  MCP connectors active (a client listed Brubru's tools; recorded since 23 Sep 2026,",
+        "  MCP connectors (listings since 23 Sep 2026; every request since migration 274, 6 Oct 2026). READING is three-state: PROVEN USE / TRIED, REFUSED / LISTED ONLY / UNMEASURED.",
         "   earlier = not measured). NOT a core action, never counted in WAPU. Active days",
         "   with 0 tool calls = installed, not used:",
         _fmt(report["api"].get("connectors", [])),

@@ -285,6 +285,70 @@ def _record_connection(db: Session, api_key: ApiKey, server: str,
             pass
 
 
+_OUTCOME_BY_CODE = {
+    _ERR_AUTH_MISSING: "auth_invalid",
+    _ERR_AUTH_INVALID: "auth_invalid",
+    _ERR_KEY_EXPIRED: "key_expired",
+    _ERR_SCOPE_MISSING: "scope_missing",
+    _ERR_INSUFFICIENT_BALANCE: "insufficient_balance",
+    _ERR_SANDBOX_CAPPED: "sandbox_capped",
+    _ERR_TOOL_NOT_FOUND: "unknown_tool",
+    _ERR_TOOL_HANDLER_FAILED: "handler_failed",
+    -32602: "bad_arguments",
+    -32601: "method_not_found",
+}
+
+
+def _outcome_from_response(method: str, response: Any) -> Tuple[str, Optional[int]]:
+    """How an MCP request ended, as (outcome, JSON-RPC error code or None).
+
+    A response with an "error" member is a failure and the code names it; any
+    other response is a success ("listed" for tools/list, "ok" otherwise).
+    """
+    err = response.get("error") if isinstance(response, dict) else None
+    if not err:
+        return ("listed" if method == "tools/list" else "ok"), None
+    code = err.get("code") if isinstance(err, dict) else None
+    return _OUTCOME_BY_CODE.get(code, "error"), (code if isinstance(code, int) else None)
+
+
+def _record_request(db: Session, api_key: Optional[ApiKey], server: str, method: str,
+                    tool: Optional[str], response: Any, client: str,
+                    auth: Optional[str], is_probe: bool) -> None:
+    """One mcp_requests row per authenticated request (migration 274).
+
+    api_usage_events is written only after the scope check and the debit succeed,
+    so it cannot show what a client TRIED. This does, for every authenticated
+    request and however it ends. It stores the method, the tool name and the
+    outcome, never the arguments (user content). Fail-soft: bookkeeping must
+    never break the call.
+    """
+    try:
+        outcome, code = _outcome_from_response(method, response)
+        db.execute(
+            text(
+                """
+                INSERT INTO mcp_requests
+                    (api_key_id, user_id, server, method, tool, outcome, error_code, auth, client, is_probe)
+                VALUES (:k, :u, :s, :m, :t, :o, :c, :a, :cl, :p)
+                """
+            ),
+            {"k": str(api_key.id) if api_key is not None else None,
+             "u": str(api_key.user_id) if api_key is not None else None,
+             "s": (server or "")[:64], "m": (method or "")[:80],
+             "t": tool[:80] if isinstance(tool, str) and tool else None,
+             "o": outcome, "c": code, "a": auth, "cl": (client or "")[:200], "p": bool(is_probe)},
+        )
+        db.commit()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[mcp] could not record request (%s %s): %s: %s",
+                       method, tool, type(exc).__name__, exc)
+        try:
+            db.rollback()
+        except Exception:  # noqa: BLE001
+            pass
+
+
 # ---------------------------------------------------------------------------
 # JSON-RPC envelope helpers
 # ---------------------------------------------------------------------------
@@ -593,26 +657,31 @@ async def _handle_mcp(
         )
 
     db = SessionLocal()
+    server = profile.server_info.get("name", "Brubru")
+    client = request.headers.get("user-agent", "")
+    is_probe = is_probe_header(request.headers.get("X-Brubru-Probe"))
+    auth_kind = "key" if (plaintext or "").startswith(KEY_PREFIX) else "oauth"
     try:
         api_key, user, auth_err = _resolve_api_key(db, plaintext or "")
         if auth_err is not None:
             code, msg = auth_err
-            return _err(req_id, code, msg)
+            resp = _err(req_id, code, msg)
+            _record_request(db, None, server, method, None, resp, client, auth_kind, is_probe)
+            return resp
 
         if method == "tools/list":
-            if not is_probe_header(request.headers.get("X-Brubru-Probe")):
-                _record_connection(
-                    db, api_key, profile.server_info.get("name", "Brubru"),
-                    request.headers.get("user-agent", ""),
-                    "key" if (plaintext or "").startswith(KEY_PREFIX) else "oauth",
-                )
-            return _dispatch_tools_list(req_id, profile)
+            if not is_probe:
+                _record_connection(db, api_key, server, client, auth_kind)
+            resp = _dispatch_tools_list(req_id, profile)
+            _record_request(db, api_key, server, method, None, resp, client, auth_kind, is_probe)
+            return resp
 
         if method == "tools/call":
             client_ip = request.client.host if request.client else None
-            return await _dispatch_tools_call(
+            call_params = params if isinstance(params, dict) else {}
+            resp = await _dispatch_tools_call(
                 req_id,
-                params if isinstance(params, dict) else {},
+                call_params,
                 db,
                 api_key,
                 user,
@@ -620,10 +689,15 @@ async def _handle_mcp(
                 request_id=str(uuid.uuid4()),
                 caller_key=plaintext,
                 profile=profile,
-                is_probe=is_probe_header(request.headers.get("X-Brubru-Probe")),
+                is_probe=is_probe,
             )
+            _record_request(db, api_key, server, method, call_params.get("name"), resp,
+                            client, auth_kind, is_probe)
+            return resp
 
-        return _err(req_id, -32601, f"Method not found: {method!r}")
+        resp = _err(req_id, -32601, f"Method not found: {method!r}")
+        _record_request(db, api_key, server, method, None, resp, client, auth_kind, is_probe)
+        return resp
     finally:
         db.close()
 
