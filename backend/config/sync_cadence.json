@@ -10,13 +10,13 @@
     },
     "hot_6h": {
       "description": "Refreshed 4 times per day. For time-sensitive sources where same-day freshness is a conversion lever.",
-      "cron": "0 0,6,12,18 * * *",
-      "freshness_label": "Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from {source}."
+      "cron": "0 2,8,14,20 * * * (Europe/Brussels)",
+      "freshness_label": "Synced every 6 hours (02:00 / 08:00 / 14:00 / 20:00 Brussels time) from {source}."
     },
     "warm_12h": {
       "description": "Refreshed twice a day. For sources that move daily but where half-day lag is acceptable.",
-      "cron": "0 2,14 * * *",
-      "freshness_label": "Synced every 12 hours (02:00 / 14:00 UTC) from {source}."
+      "cron": "0 4,13 * * * (Europe/Brussels)",
+      "freshness_label": "Synced twice a day (04:00 / 13:00 Brussels time) from {source}."
     },
     "daily": {
       "description": "Refreshed once per night. For sources that move a few times per week.",
@@ -24,9 +24,9 @@
       "freshness_label": "Synced once per day at 04:00 UTC from {source}."
     },
     "economy_daily": {
-      "description": "v2 institutional/agency/database endpoints (economy_items). Refreshed daily, batched across 10:00 / 15:00 / 21:00 UTC to spread scraper load over ~45 EU bodies.",
-      "cron": "0 10,15,21 * * *",
-      "freshness_label": "Synced once per day (10:00 / 15:00 / 21:00 UTC, batched by body) from {source}."
+      "description": "v2 institutional/agency/database endpoints (economy_items). Refreshed twice a day in three batches, 05-07 and 11-13 Brussels time, so every body is synced before the 10:00 and 16:00 GovClipping pulls.",
+      "cron": "0 5,6,7,11,12,13 * * * (Europe/Brussels)",
+      "freshness_label": "Synced twice a day (by 08:00 and 14:00 Brussels time, batched by body) from {source}."
     },
     "weekly": {
       "description": "Refreshed once per week. For slow-moving universes (FTAs, GIs, vocabularies).",

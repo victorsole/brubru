@@ -11,8 +11,11 @@ service minimums. One dispatcher service that wakes hourly = one minimum.
 
 Schedule (from backend/config/sync_cadence.json):
 
-    hot_6h    → hours 00, 06, 12, 18 UTC                 (every 6h)
-    warm_12h  → hours 02, 14 UTC                          (every 12h)
+    hot_6h    → 02, 08, 14, 20 Brussels time (DST-aware)   (every 6h)
+    warm_12h  → 04, 13 Brussels time                      (twice a day)
+    fast      → 01, 09, 15, 21 Brussels time
+    economy   → 05/06/07 and 11/12/13 Brussels time (3 batches, twice a day)
+    (the five above are aligned to GovClipping's 10:00 / 16:00 Brussels pulls)
     daily     → hour 04 UTC                               (every day)
     weekly    → Sunday hour 05 UTC                        (once per week)
     monthly   → 1st of month hour 02 UTC                  (once per month)
@@ -53,6 +56,13 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from zoneinfo import ZoneInfo
+
+# GovClipping pulls at 10:00 and 16:00 Brussels time (Jordi, 6 Oct 2026). The tiers
+# that feed his calls are scheduled in Brussels LOCAL time so they finish before each
+# pull, and the summer/winter switch (25 Oct, 29 Mar) moves them with it. Everything
+# else stays on UTC.
+BRUSSELS = ZoneInfo("Europe/Brussels")
 
 
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://brubru-production.up.railway.app")
@@ -201,20 +211,25 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     hour = now.hour
     weekday = now.weekday()  # Mon=0 ... Sun=6
     day = now.day
+    utc = now if now.tzinfo else now.replace(tzinfo=datetime.timezone.utc)
+    lh = utc.astimezone(BRUSSELS).hour  # Brussels local hour, DST-aware
 
-    # Hot tier: every 6 hours
-    if hour in (0, 6, 12, 18):
+    # Hot tier: every 6 hours, Brussels 02/08/14/20 (calendar, OEIL, EUR-Lex, plenary):
+    # done before the 10:00 and 16:00 GovClipping pulls.
+    if lh in (2, 8, 14, 20):
         fires.append(("hot_6h", "/api/cron/sync/hot-6h"))
 
-    # Warm tier: every 12 hours (02 + 14 UTC, offset from hot tier)
-    if hour in (2, 14):
+    # Warm tier: Brussels 04 + 13 (committees, EPRS). Was 02/14 UTC = 16:00 Brussels,
+    # exactly on a GovClipping pull.
+    if lh in (4, 13):
         fires.append(("warm_12h", "/api/cron/sync/warm-12h"))
 
     # Registry FAST tier — the MEUB feeds the EU publishes intraday: News
     # (DG/EP/bespoke), My OJ, Votes (EP/Council). Runs sync_*_news.py etc. and
     # records freshness. ~every 6h on otherwise-light hours (no other tier fires
     # at 07/13/19/23). This is what keeps eu_news_items current.
-    if hour in (7, 13, 19, 23):
+    # Brussels 01/09/15/21: the 09 and 15 runs (~22 min) land before each pull.
+    if lh in (1, 9, 15, 21):
         fires.append(("registry_fast", "/api/cron/sync/tier/fast"))
 
     # EP eMeeting committee documents: daily 08:00 UTC, alongside registry_warm.
@@ -222,12 +237,14 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     # economy batches at 10/15/21. Added 26 Aug 2026: this sync had NO schedule
     # at all and had been frozen since mid-July while the EP published 17 new
     # agendas, six of them for the committee week starting 31 August.
-    if hour == 8:
+    # Brussels 08 + 14 since 6 Oct 2026 (was 10:00 Brussels, on the pull itself).
+    if lh in (8, 14):
         fires.append(("ep_emeeting", "/api/cron/sync/ep-emeeting"))
 
     # Registry WARM tier — slower MEUB feeds: My EU Calendar, Transcripts,
     # Lobby Meetings, Parliamentary Questions. Twice a day on light hours.
-    if hour in (8, 20):
+    # Brussels 08/14/20 (was 10:00 and 22:00 Brussels).
+    if lh in (8, 14, 20):
         fires.append(("registry_warm", "/api/cron/sync/tier/warm"))
 
     # Legislative-journey AI precompute: 3x/day (01, 09, 17 UTC), throttled per
@@ -294,13 +311,13 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     # Economy folders (v2 institutional/agency/database endpoints backed by
     # economy_items: per-body news, events, publications, databases, tenders,
     # grants, calls, consultations). Daily, split into three batches on quiet
-    # hours so ~34 EU sites aren't all scraped at once.
-    if hour == 10:
-        fires.append(("economy_b0", "/api/cron/sync/economy?batch=0"))
-    if hour == 15:
-        fires.append(("economy_b1", "/api/cron/sync/economy?batch=1"))
-    if hour == 21:
-        fires.append(("economy_b2", "/api/cron/sync/economy?batch=2"))
+    # hours so ~34 EU sites aren't all scraped at once. Twice a day since 6 Oct 2026,
+    # Brussels 05/06/07 and 11/12/13 (~30 min each): every body is synced before the
+    # 10:00 and the 16:00 GovClipping pulls. It was once a day at 12/17/23 Brussels, so
+    # a morning agency item missed the 10:00 pull and an afternoon one the 16:00.
+    for batch, hours in ((0, (5, 11)), (1, (6, 12)), (2, (7, 13))):
+        if lh in hours:
+            fires.append((f"economy_b{batch}", f"/api/cron/sync/economy?batch={batch}"))
 
     # Brubru Brief: 11:00 UTC daily
     if hour == 11:
