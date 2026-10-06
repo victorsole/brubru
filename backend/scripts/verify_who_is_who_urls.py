@@ -77,7 +77,11 @@ PICK = text(
 RECORD_ALIVE = text(
     """
     UPDATE who_is_who_officials
-       SET url_status = :st, url_checked_at = now(), public_url = :url
+       SET url_status = :st, url_checked_at = now(), public_url = :url,
+           -- the body's link must be the page public_url names (6 Oct 2026)
+           body_html = regexp_replace(body_html,
+               '<p><a href="[^"]*">View on EU Who is Who</a></p>',
+               '<p><a href="' || :url || '">View on EU Who is Who</a></p>')
      WHERE id = :rid
     """
 )
@@ -85,7 +89,9 @@ RECORD_ALIVE = text(
 RECORD_DEAD = text(
     """
     UPDATE who_is_who_officials
-       SET url_status = :st, url_checked_at = now(), public_url = NULL
+       SET url_status = :st, url_checked_at = now(), public_url = NULL,
+           body_html = regexp_replace(body_html,
+               '<p><a href="[^"]*">View on EU Who is Who</a></p>', '')
      WHERE id = :rid
     """
 )

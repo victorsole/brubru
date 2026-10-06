@@ -25,7 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sqlalchemy import case, func, literal_column, text
+from sqlalchemy import String, case, func, literal, literal_column, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from core.database import engine
@@ -61,6 +61,18 @@ def _bulk(table, rows, conflict_col, batch=500) -> int:
                 (literal_column("who_is_who_officials.url_checked_at").is_(None),
                  stmt.excluded.public_url),
                 else_=table.c.public_url)
+            # The incoming body links the DERIVED url too: once verified, its link is
+            # rebuilt from the kept public_url, or dropped when there is no page. Without
+            # this, 237 bodies linked a page other than public_url (6 Oct 2026).
+            link = literal('<p><a href="', String) + table.c.public_url + literal(
+                '">View on EU Who is Who</a></p>', String)
+            set_["body_html"] = case(
+                (literal_column("who_is_who_officials.url_checked_at").is_(None),
+                 stmt.excluded.body_html),
+                else_=func.regexp_replace(
+                    stmt.excluded.body_html,
+                    '<p><a href="[^"]*">View on EU Who is Who</a></p>',
+                    func.coalesce(link, literal("", String))))
         set_["fetched_at"] = func.now()
         if has_removed:
             set_["removed_at"] = None
