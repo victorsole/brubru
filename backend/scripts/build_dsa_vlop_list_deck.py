@@ -10,7 +10,7 @@ engines = 28 services. Stripchat is NOT in the notice (designation terminated by
 Commission decision of 27 May 2025, per the Commission's own list page).
 
 Logos: Simple Icons (CC0 icon geometry, brand colour from the same dataset), inlined
-as SVG. Services with no usable icon in that set (AliExpress, Shein, Temu) get a lettermark tile; the
+as SVG. AliExpress, Shein and Temu have no icon in that set: their wordmarks come from Wikimedia Commons (files marked public domain there; trademarks of their owners); the
 three adult platforms are listed as text only, by decision, on a LinkedIn post.
 Brand marks belong to their owners and are shown only to identify the service.
 
@@ -77,7 +77,15 @@ def icon_svg(slug: str, size: int) -> str:
     return svg
 
 
+WORDMARKS = {"AliExpress": "aliexpress_wm.svg", "Shein": "shein_wm.svg", "Temu": "temu_wm.svg"}
+
+
 def htile(name: str, slug: str | None, date: str, size: int) -> str:
+    wm = WORDMARKS.get(name)
+    if wm:
+        uri = base64.b64encode((CACHE / wm).read_bytes()).decode()
+        return (f'<div class="htile wm"><div class="tx"><img src="data:image/svg+xml;base64,{uri}" alt="{name}">'
+                f'<div class="dt">{date}</div></div></div>')
     if slug:
         mark = icon_svg(slug, size)
     else:
@@ -120,6 +128,7 @@ h2{font-size:80px;line-height:1.02;font-weight:700;margin-bottom:26px}
 .htile{border:3px solid #e5e7eb;background:#f9fafb;border-radius:14px;display:flex;align-items:center;gap:22px;padding:14px 22px}
 .htile .mk{height:auto;width:72px;flex:none}
 .htile .tx{min-width:0}
+.htile.wm{justify-content:center}.htile.wm .tx{text-align:center}.htile.wm img{height:46px;max-width:320px;display:block;margin:0 auto 8px}
 .htile .nm{font-size:40px;margin:0}
 .htile .dt{margin:2px 0 0}
 .mono{display:flex;align-items:center;justify-content:center;border-radius:20px;background:linear-gradient(135deg,#0693e3,#9b51e0);color:#fff;font-weight:700}
@@ -176,7 +185,7 @@ def main() -> int:
           '<div class="pt"><b>Every year</b>a systemic-risk assessment and an independent audit</div>'
           '<div class="pt"><b>Public</b>an ad repository, and data access for vetted researchers</div>'
           '<div class="pt"><b>Up to 6%</b>of worldwide annual turnover as a fine</div>'
-          '<div class="pt"><b>Four months</b>to comply after designation</div>'
+          '<div class="pt"><b>Four months</b>to comply after notification</div>'
           '<div class="note">Ask Brubru Chat who is on the list, and since when.</div></div>' + F + '</section>')
 
     html = (f'<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>DSA designated services</title>'
