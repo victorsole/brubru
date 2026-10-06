@@ -122,6 +122,7 @@ class TestCELEXFilter:
 # ----------------------------------------------------------------------
 
 class TestLiveCorpus:
+    @pytest.mark.live
     def test_validator_cli_against_real_corpus(self):
         catalan_dir = ROOT / "frontend" / "public" / "legislacio-ue-catala"
         if not catalan_dir.exists():

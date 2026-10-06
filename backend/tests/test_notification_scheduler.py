@@ -175,6 +175,7 @@ def test_unknown_scope_is_COLLECTED_not_just_logged():
     )
 
 
+@pytest.mark.live
 def test_run_all_surfaces_dead_scopes_in_its_summary():
     """The scheduler escalates on `unknown_scopes`, so run_all must actually
     return the key -- checked against the live database."""

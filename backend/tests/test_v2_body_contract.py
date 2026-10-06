@@ -35,9 +35,6 @@ NO_BODY_EXISTS = {
     "social/__init__.py::list_accounts":
         "social_accounts stores no post text -- `content_fetch_enabled` is a flag, "
         "not a body. Measured 28 Aug 2026: 3,828 rows, no content column.",
-    "events/__init__.py::list_events":
-        "The composed body is served by the detail route; the list is a calendar "
-        "index and its rows carry no stored text.",
 }
 
 # Endpoints whose backing corpus was measured as populated. Each MUST expose
@@ -156,6 +153,7 @@ def test_the_generated_economy_routes_all_carry_it(spec):
 # The other half: bodies that are null because nobody ever fetched them
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_health_reports_body_coverage():
     """The defects above are fixed and guarded. What remains is scraper gaps --
     slices holding a title and a URL and no document. Those must be countable,

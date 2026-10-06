@@ -3,6 +3,7 @@
 25 Sep 2026: 761 of 761 failures in a drain were HTTP 429. Real DB read, no writes
 (dry run), the EP fetch patched to always fail.
 """
+import pytest
 import importlib.util
 import sys
 from pathlib import Path
@@ -14,6 +15,7 @@ bt = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(bt)
 
 
+@pytest.mark.live
 def test_stops_after_ten_consecutive_failures(monkeypatch, capsys):
     monkeypatch.setattr(bt, "fetch_question_payload", lambda ref: None)
     monkeypatch.setattr(bt.time, "sleep", lambda s: None)

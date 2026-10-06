@@ -181,6 +181,7 @@ def test_tools_list_requires_auth(client):
     assert body["error"]["code"] == -32001  # _ERR_AUTH_MISSING
 
 
+@pytest.mark.live
 def test_tools_list_matches_the_published_surface(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(
@@ -207,6 +208,7 @@ def test_tools_list_matches_the_published_surface(client, user_with_key_full_sco
 # tools/call — happy path with debit
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_tools_call_search_eu_legislation_succeeds_and_debits(client, user_with_key_full_scopes):
     user, plaintext, _ = user_with_key_full_scopes
     before = _bal(user.id)
@@ -234,6 +236,7 @@ def test_tools_call_search_eu_legislation_succeeds_and_debits(client, user_with_
     assert after == before - 5000
 
 
+@pytest.mark.live
 def test_tools_call_get_calendar_events_default_args(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(
@@ -253,6 +256,7 @@ def test_tools_call_get_calendar_events_default_args(client, user_with_key_full_
 # tools/call — scope mismatch
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_tools_call_scope_missing(client, user_with_key_laws_only):
     """Key has only read:laws; calling ask_brubru (read:knowledge) must error."""
     _, plaintext = user_with_key_laws_only
@@ -274,6 +278,7 @@ def test_tools_call_scope_missing(client, user_with_key_laws_only):
 # tools/call — insufficient balance
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_tools_call_insufficient_balance(client, user_with_key_full_scopes):
     user, plaintext, _ = user_with_key_full_scopes
     _set_bal(user.id, 0)
@@ -296,6 +301,7 @@ def test_tools_call_insufficient_balance(client, user_with_key_full_scopes):
 # tools/call — unknown tool
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_tools_call_unknown_tool(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(
@@ -314,6 +320,7 @@ def test_tools_call_unknown_tool(client, user_with_key_full_scopes):
 # tools/call — bad args (refund)
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_tools_call_bad_args_refunds(client, user_with_key_full_scopes):
     """Missing required argument triggers a TypeError -> refund."""
     user, plaintext, _ = user_with_key_full_scopes
@@ -351,6 +358,7 @@ def test_notifications_initialized_no_error(client):
 # Method routing
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_unknown_method_returns_method_not_found(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(
@@ -378,6 +386,7 @@ def test_missing_method_returns_invalid_request(client):
 # Expired key
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_expired_key_returns_key_expired(client, user_with_key_full_scopes):
     user, plaintext, key_id = user_with_key_full_scopes
     db = SessionLocal()
@@ -400,6 +409,7 @@ def test_expired_key_returns_key_expired(client, user_with_key_full_scopes):
 # Bearer + X-API-Key equivalence
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_x_api_key_header_works(client, user_with_key_full_scopes):
     _, plaintext, _ = user_with_key_full_scopes
     r = client.post(

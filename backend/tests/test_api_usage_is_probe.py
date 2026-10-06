@@ -73,6 +73,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_probe_and_real_rows_round_trip_and_probe_is_not_free(db):
     """A probe row stores is_probe=TRUE, a normal row FALSE, and BOTH are billed
     the same amount. Written as one test because the invariant is the comparison.
@@ -109,6 +110,7 @@ def test_probe_and_real_rows_round_trip_and_probe_is_not_free(db):
             db.commit()
 
 
+@pytest.mark.live
 def test_column_default_is_false_for_rows_written_without_the_kwarg(db):
     """Pre-existing rows and any writer that never passes is_probe stay countable.
 

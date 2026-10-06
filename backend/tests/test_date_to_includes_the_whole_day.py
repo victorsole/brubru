@@ -24,6 +24,9 @@ from api.v1._deps import api_user_with_rate_limit
 from main import app
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 # (path, lower param, upper param, date field, extra params)
 RANGE_CASES = [
     # euipo: one of the bodies whose news carries a time of day (569 rows on 15 Sep).
@@ -89,6 +92,7 @@ def _witness_day(client, path, field, extra, max_pages=10):
     return (date.fromisoformat(first_dated[:10]), False) if first_dated else (None, False)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path,lo,hi,field,extra", RANGE_CASES,
                          ids=[f"{c[0]}:{c[2]}" for c in RANGE_CASES])
 def test_upper_bound_includes_the_whole_day(client, path, lo, hi, field, extra):

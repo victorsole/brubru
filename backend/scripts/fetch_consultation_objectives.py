@@ -58,7 +58,7 @@ API = ("https://ec.europa.eu/info/law/better-regulation/brpapi/"
        "groupInitiatives/{iid}?language=EN")
 HEADERS = {"Accept": "application/json",
            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36"}
+                         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"}
 # The id is the digits immediately after /initiatives/ in the portal URL.
 _IID = re.compile(r"/initiatives/(\d+)[-/]")
 # Below this it is a label, not an objective. The stored descriptions average 132

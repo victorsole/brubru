@@ -125,6 +125,7 @@ def test_publications_unauth_401():
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_publications_returns_envelope(auth_headers, sample_publication):
     client = TestClient(app)
     r = client.get("/api/v1/publications?limit=5", headers=auth_headers)
@@ -140,6 +141,7 @@ def test_publications_returns_envelope(auth_headers, sample_publication):
     assert body["returned"] == len(body["data"])
 
 
+@pytest.mark.live
 def test_publications_filter_by_source(auth_headers, sample_publication):
     client = TestClient(app)
     r = client.get(
@@ -152,6 +154,7 @@ def test_publications_filter_by_source(auth_headers, sample_publication):
     assert all(item["source_slug"] == "test_smoke" for item in body["data"])
 
 
+@pytest.mark.live
 def test_publications_filter_by_institution(auth_headers, sample_publication):
     client = TestClient(app)
     r = client.get(
@@ -162,6 +165,7 @@ def test_publications_filter_by_institution(auth_headers, sample_publication):
     assert r.json()["total"] >= 1
 
 
+@pytest.mark.live
 def test_publications_full_text_search(auth_headers, sample_publication):
     client = TestClient(app)
     r = client.get("/api/v1/publications?q=Smoke", headers=auth_headers)
@@ -169,6 +173,7 @@ def test_publications_full_text_search(auth_headers, sample_publication):
     assert any("Smoke" in item["title"] for item in r.json()["data"])
 
 
+@pytest.mark.live
 def test_publications_sources_endpoint(auth_headers, sample_publication):
     client = TestClient(app)
     r = client.get("/api/v1/publications/sources", headers=auth_headers)

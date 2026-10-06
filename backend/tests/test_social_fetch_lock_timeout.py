@@ -13,6 +13,9 @@ from sqlalchemy import text
 from core.database import SessionLocal
 import services.social.post_fetcher as pf
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 
 def test_locked_account_is_skipped_not_waited_on(monkeypatch):
     holder = SessionLocal()

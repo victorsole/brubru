@@ -12,13 +12,32 @@ from unittest.mock import Mock, AsyncMock, patch
 import aiohttp
 from datetime import datetime
 
-# Configure asyncio event loop for tests
-@pytest.fixture(scope="session")
-def event_loop():
-    """Create event loop for async tests"""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+# No session-wide event_loop override (removed 6 Oct 2026): pytest-asyncio 0.23 gives each
+# async test its own loop. One shared loop let a single leaking test (a browser left
+# running, an asyncio.run() in a sync test) fail every async test after it: 161 in CI.
+
+
+@pytest.fixture(autouse=True)
+def _no_real_browser(request, monkeypatch):
+    """A unit test never launches Chromium; stub the fetch or mark the test `live`.
+
+    The body fetcher falls back to a local browser on a bot challenge (5 Oct 2026). Two
+    test files reached it, fetched the live site, and Playwright's sync API left its event
+    loop running in the main thread: every later async test failed (119 in CI, 6 Oct 2026).
+    Code imports Playwright inside functions, so patching the module attribute covers it.
+    """
+    if request.node.get_closest_marker("live"):
+        return
+
+    def refuse(*_a, **_k):
+        raise RuntimeError("a unit test tried to launch a real browser: stub it or mark it live")
+
+    for mod, name in (("playwright.sync_api", "sync_playwright"),
+                      ("playwright.async_api", "async_playwright")):
+        try:
+            monkeypatch.setattr(f"{mod}.{name}", refuse)
+        except (ImportError, AttributeError):
+            pass
 
 
 # ============================================================================

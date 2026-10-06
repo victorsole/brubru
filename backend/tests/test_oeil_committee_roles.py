@@ -113,6 +113,7 @@ def test_group_and_country_tokens_are_not_read_as_committees():
 # 2. The correction actually landed
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_the_named_procedure_is_corrected_in_the_database(db):
     row = db.execute(text(
         "SELECT lead_committee, opinion_committees, rapporteur_name "
@@ -127,6 +128,7 @@ def test_the_named_procedure_is_corrected_in_the_database(db):
     assert row.rapporteur_name and "RUOTOLO" in row.rapporteur_name
 
 
+@pytest.mark.live
 def test_the_columns_that_had_never_been_written_now_are(db):
     """rapporteur was 0/2789 and opinion_committees 1/2789 before the backfill."""
     got = db.execute(text(
@@ -137,6 +139,7 @@ def test_the_columns_that_had_never_been_written_now_are(db):
     assert got.o > 100, f"only {got.o} carriages have opinion committees"
 
 
+@pytest.mark.live
 def test_unparsed_carriages_are_distinguishable_from_role_free_ones(db):
     """NULL `oeil_roles_parsed_at` must mean 'never parsed', never 'no opinions'.
 

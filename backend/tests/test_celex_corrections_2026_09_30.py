@@ -17,6 +17,9 @@ import pytest
 from pathlib import Path
 from sqlalchemy import text
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 BACKEND = Path(__file__).resolve().parents[1]
 INPUT = BACKEND / "data" / "celex" / "celex_verified_2026_09_30.json"
 

@@ -20,6 +20,9 @@ from typing import Any, Dict, List
 import pytest
 import yaml
 
+# Needs production data or files outside git: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "data" / "eu_vocabularies" / "manifest.yaml"
 

@@ -169,6 +169,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_the_register_is_loaded_and_consistent(db):
     q = lambda sql: db.execute(text(sql)).scalar()
     decisions, cases = q("SELECT count(*) FROM infringement_decisions"), q("SELECT count(*) FROM infringement_cases")
@@ -182,6 +183,7 @@ def test_the_register_is_loaded_and_consistent(db):
     assert q("SELECT count(*) FROM infringement_decisions WHERE member_state IS NULL OR decision_category IS NULL") == 0
 
 
+@pytest.mark.live
 def test_open_cases_per_member_state_match_the_commissions_dashboard(db):
     """Independent source: the dashboard's own count. The register also lists open UK
     cases, which the dashboard leaves out."""
@@ -198,6 +200,7 @@ def test_open_cases_per_member_state_match_the_commissions_dashboard(db):
     assert ours == theirs
 
 
+@pytest.mark.live
 def test_the_case_list_carries_the_contract(client, db):
     j = client.get(B, params={"limit": 3}).json()
     assert j["total"] == db.execute(text("SELECT count(*) FROM infringement_cases")).scalar()
@@ -211,6 +214,7 @@ def test_the_case_list_carries_the_contract(client, db):
     assert dates == sorted(dates, reverse=True)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("params,column,value", [
     ({"member_state": "PL", "active": "true"}, "member_state", "PL"),
     ({"member_state": "GR"}, "member_state", "EL"),
@@ -235,6 +239,7 @@ def test_bad_input_is_a_422_not_an_empty_result(client, path, params):
     assert r.status_code == 422, (path, params, r.status_code, r.text[:200])
 
 
+@pytest.mark.live
 def test_a_case_resolves_by_id_and_by_number_with_all_its_decisions(client, db):
     number, cid, count = db.execute(text("SELECT infringement_number, id, decision_count FROM infringement_cases "
                                          "WHERE decision_count >= 3 ORDER BY latest_decision_date DESC LIMIT 1")).one()
@@ -248,6 +253,7 @@ def test_a_case_resolves_by_id_and_by_number_with_all_its_decisions(client, db):
     assert sub["total"] == count
 
 
+@pytest.mark.live
 def test_a_decision_has_its_body_on_the_detail(client):
     lst = client.get(f"{B}/decisions", params={"with_press_release": "true", "limit": 1}).json()
     item = lst["data"][0]
@@ -256,6 +262,7 @@ def test_a_decision_has_its_body_on_the_detail(client):
     assert detail["id"] == item["id"] and detail["body_txt"] and item["infringement_number"] in detail["body_txt"]
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [f"{B}/INFR(1900)0000", f"{B}/decisions/999999999", f"{B}/statistics/nope", f"{B}/INFR(1900)0000/decisions"])
 def test_unknown_items_are_404(client, path):
     assert client.get(path).status_code == 404
@@ -278,11 +285,13 @@ def test_a_statistics_dataset_returns_figures_with_the_datapoints(client):
     assert j["public_url"].endswith("/member-state-infringement-cases/en") and j["document_date"] and j["body_txt"]
 
 
+@pytest.mark.live
 def test_the_press_release_collection_still_answers(client):
     j = client.get(f"{B}/press-releases", params={"limit": 1}).json()
     assert j["total"] > 0 and "inf_reference" in j["data"][0]
 
 
+@pytest.mark.live
 def test_old_press_release_urls_under_this_path_redirect(client):
     """Until 16 Sep 2026 /infringements/{ref} served a press release. Those URLs keep working."""
     r = client.get(f"{B}/IP_26_838", follow_redirects=False)

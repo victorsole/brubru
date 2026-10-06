@@ -39,6 +39,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_acts_with_a_celex_carry_a_publication_date(db):
     undated = db.execute(text(
         "SELECT count(*) FROM secondary_acts WHERE celex IS NOT NULL "
@@ -46,6 +47,7 @@ def test_acts_with_a_celex_carry_a_publication_date(db):
     assert undated == 0, f"{undated} act(s) with a CELEX still have no publication date"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("celex,adopted,published", [
     ("32014R0241", "2014-01-07", "2014-03-14"),   # OJ L 74, 14.3.2014
     ("32016R0161", "2015-10-02", "2016-02-09"),   # OJ L 32, 9.2.2016
@@ -60,6 +62,7 @@ def test_the_dates_are_the_acts_own_dates(db, celex, adopted, published):
     assert row[1] == published, f"{celex} publication date is {row[1]}, expected {published}"
 
 
+@pytest.mark.live
 def test_no_act_is_dated_by_when_we_imported_it(db):
     """The import ran on 25 Apr, 3 May and 10 Aug 2026. An act published on one of those
     exact days is possible but three clusters of them is the bug coming back."""
@@ -70,6 +73,7 @@ def test_no_act_is_dated_by_when_we_imported_it(db):
         assert n < 50, f"{n} acts are dated {import_day}, the day we imported them"
 
 
+@pytest.mark.live
 def test_an_act_is_not_published_before_it_is_adopted(db):
     """A sanity check on the two predicates: the Journal cannot precede the adoption."""
     impossible = db.execute(text(
@@ -79,6 +83,7 @@ def test_an_act_is_not_published_before_it_is_adopted(db):
     assert impossible == 0, f"{impossible} act(s) are published before they were adopted"
 
 
+@pytest.mark.live
 def test_the_corpus_spans_real_legislative_history(db):
     """If the dates were import timestamps they would all sit in 2026."""
     lo, hi = db.execute(text(
@@ -88,6 +93,7 @@ def test_the_corpus_spans_real_legislative_history(db):
     assert hi >= "2026-01-01", f"latest publication date is {hi}"
 
 
+@pytest.mark.live
 def test_a_date_window_now_selects_on_the_acts_date(db):
     """The filter the endpoint exposes has to be answerable."""
     in_2014 = db.execute(text(
@@ -111,6 +117,7 @@ def api():
     app.dependency_overrides.pop(api_user_with_rate_limit, None)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("celex,adopted,published", [
     ("32014R0241", "2014-01-07", "2014-03-14"),
     ("32016R0161", "2015-10-02", "2016-02-09"),
@@ -125,6 +132,7 @@ def test_the_endpoint_serves_both_of_the_acts_dates(api, celex, adopted, publish
     assert rows[0]["document_date"] == published
 
 
+@pytest.mark.live
 def test_filtering_by_celex_returns_that_act(api):
     """`celex` was not a declared parameter, so it was ignored and the caller got an
     unrelated act with a 200. GovClipping identifies acts by CELEX."""
@@ -133,6 +141,7 @@ def test_filtering_by_celex_returns_that_act(api):
     assert [r["celex"] for r in rows] == ["32014R0241"]
 
 
+@pytest.mark.live
 def test_a_published_window_is_answered_from_the_acts_own_dates(api):
     """Before the backfill this returned almost nothing, because the column it filters on
     was null for 7,517 of 7,521 rows."""

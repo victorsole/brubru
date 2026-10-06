@@ -75,6 +75,7 @@ def test_error_envelope_for_unknown_endpoint_404():
     assert "request_id" in body
 
 
+@pytest.mark.live
 def test_error_envelope_for_bad_query_422(blue_user_key):
     client = TestClient(app)
     r = client.get("/api/v1/laws?limit=9999", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
@@ -87,6 +88,7 @@ def test_error_envelope_for_bad_query_422(blue_user_key):
 # ------------------------- 2. X-Request-Id header ---------------------------
 
 
+@pytest.mark.live
 def test_x_request_id_on_success(blue_user_key):
     client = TestClient(app)
     r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
@@ -104,6 +106,7 @@ def test_x_request_id_on_error():
     assert header and header == body["request_id"]
 
 
+@pytest.mark.live
 def test_x_request_id_echoes_inbound(blue_user_key):
     inbound = "00000000-1111-2222-3333-444444444444"
     client = TestClient(app)
@@ -117,6 +120,7 @@ def test_x_request_id_echoes_inbound(blue_user_key):
 # ------------------------- 3. returned + coverage_complete ------------------
 
 
+@pytest.mark.live
 def test_envelope_has_returned_and_coverage_complete(blue_user_key):
     client = TestClient(app)
     r = client.get("/api/v1/laws?limit=3", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
@@ -131,6 +135,7 @@ def test_envelope_has_returned_and_coverage_complete(blue_user_key):
 # ------------------------- 4. alias params ---------------------------------
 
 
+@pytest.mark.live
 def test_published_end_alias_is_accepted(blue_user_key):
     client = TestClient(app)
     r = client.get(
@@ -148,6 +153,7 @@ def test_published_end_alias_is_accepted(blue_user_key):
 # ------------------------- 5. dual auth ------------------------------------
 
 
+@pytest.mark.live
 def test_authorization_bearer_works(blue_user_key):
     client = TestClient(app)
     r = client.get(
@@ -158,6 +164,7 @@ def test_authorization_bearer_works(blue_user_key):
     assert r.json()["tier"] == "blue"
 
 
+@pytest.mark.live
 def test_x_api_key_still_works(blue_user_key):
     client = TestClient(app)
     r = client.get("/api/v1/whoami", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})
@@ -179,6 +186,7 @@ def test_meta_enums_unauth_returns_401():
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_meta_enums_returns_expected_keys(blue_user_key):
     client = TestClient(app)
     r = client.get("/api/v1/meta/enums", headers={"X-API-Key": blue_user_key, "X-Brubru-Probe": "1"})

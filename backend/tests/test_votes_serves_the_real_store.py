@@ -57,6 +57,7 @@ def _clean(db):
 
 
 class TestItServesTheRealStore:
+    @pytest.mark.live
     def test_the_total_is_the_roll_call_store_not_fifteen(self, client, db):
         """EP levels only: the table also holds Council QMV votes."""
         real = db.execute(text(
@@ -66,6 +67,7 @@ class TestItServesTheRealStore:
         assert got == real, f"served {got}, EP roll-call store holds {real}"
         assert got > 15
 
+    @pytest.mark.live
     def test_no_council_vote_is_served_as_a_parliament_vote(self, client, db):
         council = db.execute(text(
             "SELECT count(*) FROM ep_roll_call_votes WHERE level = 'council'")).scalar()
@@ -76,6 +78,7 @@ class TestItServesTheRealStore:
         assert total == allrows - council, (
             "Council QMV votes are being attributed to the Parliament")
 
+    @pytest.mark.live
     def test_every_served_vote_has_a_date(self, client, db):
         """`timestamp` is required by the contract, so a dateless row would 500 the
         endpoint rather than be skipped."""
@@ -84,6 +87,7 @@ class TestItServesTheRealStore:
             "AND vote_date IS NULL AND sitting_date IS NULL")).scalar()
         assert n == 0, f"{n} EP vote(s) carry no date at all"
 
+    @pytest.mark.live
     def test_committee_votes_are_served_too(self, client, db):
         """The old store was plenary tallies only. The doceo store has both."""
         n = db.execute(text(
@@ -95,12 +99,14 @@ class TestItServesTheRealStore:
 
 
 class TestTheFabricatedRowsAreGone:
+    @pytest.mark.live
     def test_no_seeded_row_is_served(self, client):
         data = client.get(f"{VOTES}?limit=100").json().get("data") or []
         titles = " | ".join((i.get("display_title") or "") for i in data)
         for t in SEED_TITLES:
             assert t not in titles, f"a fabricated seed row is still served: {t}"
 
+    @pytest.mark.live
     def test_the_seed_rows_are_deleted_from_the_database(self, db):
         n = db.execute(text(
             "SELECT count(*) FROM ep_votes WHERE htv_id BETWEEN 180001 AND 180015")).scalar()
@@ -108,6 +114,7 @@ class TestTheFabricatedRowsAreGone:
 
 
 class TestTheContractDidNotBreak:
+    @pytest.mark.live
     def test_every_field_the_client_polls_is_still_present(self, client):
         data = client.get(f"{VOTES}?limit=1").json().get("data") or []
         assert data, "no votes served"
@@ -117,11 +124,13 @@ class TestTheContractDidNotBreak:
                   "public_url", "body_txt", "body_html", "document_date", "creation_date"):
             assert f in item, f"the contract lost `{f}`"
 
+    @pytest.mark.live
     def test_the_tallies_are_integers_not_null(self, client):
         item = (client.get(f"{VOTES}?limit=1").json().get("data") or [{}])[0]
         for f in ("count_for", "count_against", "count_abstention"):
             assert isinstance(item.get(f), int), f"{f} is {item.get(f)!r}"
 
+    @pytest.mark.live
     def test_public_url_points_at_the_real_source(self, client):
         item = (client.get(f"{VOTES}?limit=1").json().get("data") or [{}])[0]
         url = item.get("public_url") or ""
@@ -130,6 +139,7 @@ class TestTheContractDidNotBreak:
 
 
 class TestIncrementalSyncWorks:
+    @pytest.mark.live
     def test_updated_from_filters_instead_of_annihilating(self, client, db):
         """GovClipping's complaint: ?updated_from= returned 0 for every date, because
         not one row had updated_at."""
@@ -157,6 +167,7 @@ class TestTheItemRoutesFollowTheList:
     table, every id the list publishes 404s -- the exact identity break we spent this
     week removing, introduced by the fix for it."""
 
+    @pytest.mark.live
     def test_every_id_the_list_returns_resolves(self, client):
         data = client.get(f"{VOTES}?limit=5").json().get("data") or []
         assert data, "no votes served"
@@ -165,6 +176,7 @@ class TestTheItemRoutesFollowTheList:
             assert r.status_code == 200, f"{item['id']} 404s on the detail route"
             assert r.json()["id"] == item["id"]
 
+    @pytest.mark.live
     def test_records_serve_the_per_mep_breakdown(self, client, db):
         vid = db.execute(text(
             "SELECT vote_id::text FROM ep_roll_call_records LIMIT 1")).scalar()
@@ -178,6 +190,7 @@ class TestTheItemRoutesFollowTheList:
             assert row["position"] in ("FOR", "AGAINST", "ABSTENTION"), row["position"]
             assert row["member_id"]
 
+    @pytest.mark.live
     def test_position_filter_uses_the_published_vocabulary(self, client, db):
         vid = db.execute(text(
             "SELECT vote_id::text FROM ep_roll_call_records LIMIT 1")).scalar()

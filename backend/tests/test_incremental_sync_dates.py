@@ -87,6 +87,7 @@ def tx():
         s.close()
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("table,created,touch,content", [
     ("ft_calls_for_proposals", "first_seen_at", "scraped_at = now(), last_updated = now()", "title = title || ' x'"),
     ("ft_calls_for_tenders", "first_seen_at", "scraped_at = now(), last_updated = now()", "title = title || ' x'"),
@@ -109,6 +110,7 @@ def test_only_a_content_change_moves_the_updated_date(tx, table, created, touch,
 
 
 # --------------------------------------------------------------------------- the snapshot store
+@pytest.mark.live
 def test_the_snapshot_moves_the_date_only_on_a_new_hash_and_guards_removals(tx):
     ds = "test_incremental_sync"
     first = api_snapshots.record(tx, ds, {"a": {"v": 1}, "b": {"v": 1}}, complete=True)
@@ -124,6 +126,7 @@ def test_the_snapshot_moves_the_date_only_on_a_new_hash_and_guards_removals(tx):
         api_snapshots.record(tx, ds, {"a": {"v": 1}}, complete=True)
 
 
+@pytest.mark.live
 def test_a_flaky_field_keeps_its_known_value(tx):
     ds = "test_incremental_sync_keep"
     api_snapshots.record(tx, ds, {"m": {"country": "ESP", "name": "X"}}, complete=False, keep_known=("country",))
@@ -147,6 +150,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [p for k, p in SIX.items() if k != "meps"])
 def test_every_item_carries_both_dates(client, path):
     r = client.get(path)
@@ -158,6 +162,7 @@ def test_every_item_carries_both_dates(client, path):
     assert sum(1 for it in items if it["creation_date"] and it["updated_date"]) == len(items)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [p for k, p in SIX.items() if k not in ("meps", "commissioners")])
 def test_pages_go_to_500_and_default_to_100(client, path):
     assert len(client.get(path, params={"limit": 500}).json()["data"]) == 500
@@ -165,6 +170,7 @@ def test_pages_go_to_500_and_default_to_100(client, path):
     assert client.get(path, params={"limit": 501}).status_code == 422
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path,spec", list(TABLE_LISTS.items()))
 def test_the_updated_window_returns_exactly_what_the_table_says(client, db, path, spec):
     table, created, updated = spec
@@ -183,6 +189,7 @@ def test_the_updated_window_returns_exactly_what_the_table_says(client, db, path
     assert all(datetime.fromisoformat(s) >= pivot for s in stamps)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", list(TABLE_LISTS))
 def test_created_window_and_inverted_window(client, path):
     future = (datetime.now(UTC) + timedelta(days=2)).date().isoformat()
@@ -190,6 +197,7 @@ def test_created_window_and_inverted_window(client, path):
     assert client.get(path, params={"updated_from": "2026-09-22", "updated_to": "2026-09-21"}).status_code == 422
 
 
+@pytest.mark.live
 def test_a_bare_date_upper_bound_covers_the_whole_day(client, db):
     day = db.execute(text("SELECT max(content_updated_at)::date FROM infringement_cases")).scalar()
     n = db.execute(text("SELECT count(*) FROM infringement_cases WHERE content_updated_at::date = :d"), {"d": day}).scalar()
@@ -197,6 +205,7 @@ def test_a_bare_date_upper_bound_covers_the_whole_day(client, db):
     assert r.json()["total"] == n > 0
 
 
+@pytest.mark.live
 def test_officials_hide_departures_unless_a_sync_asks(client, db):
     gone = db.execute(text("SELECT count(*) FROM who_is_who_officials WHERE removed_at IS NOT NULL")).scalar()
     listed = db.execute(text("SELECT count(*) FROM who_is_who_officials WHERE removed_at IS NULL")).scalar()
@@ -204,6 +213,7 @@ def test_officials_hide_departures_unless_a_sync_asks(client, db):
     assert client.get(SIX["officials"], params={"include_removed": "true"}).json()["total"] == listed + gone
 
 
+@pytest.mark.live
 def test_commissioners_answer_a_window(client):
     assert client.get(SIX["commissioners"], params={"updated_from": "2099-01-01"}).json()["total"] == 0
     everyone = client.get(SIX["commissioners"], params={"updated_from": "2000-01-01"}).json()
@@ -288,6 +298,7 @@ def test_a_run_records_where_it_happened(tx, monkeypatch):
     assert freshness.current_runner() == "somewhere-else"
 
 
+@pytest.mark.live
 def test_the_tier_verdict_ignores_local_runs(tx):
     rows = tx.execute(text(
         "SELECT count(*) FILTER (WHERE runner = 'local') AS local, count(*) AS all_rows "

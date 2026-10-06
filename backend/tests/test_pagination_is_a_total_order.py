@@ -116,6 +116,7 @@ def test_an_explicit_tiebreaker_is_honoured():
 
 
 # ------------------------------------------------------------------ the corpus, walked
+@pytest.mark.live
 @pytest.mark.parametrize("table,column", [
     ("public_consultations", "last_updated"),
     ("eu_laws", "updated_at"),
@@ -197,6 +198,7 @@ def api():
     app.dependency_overrides.pop(api_user_with_rate_limit, None)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("route,key", [
     ("/api/v2/commission/consultations", "id"),
     ("/api/v2/legislative/eur-lex/laws", "celex"),

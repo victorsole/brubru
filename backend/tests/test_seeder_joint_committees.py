@@ -16,6 +16,9 @@ from core.database import SessionLocal
 from models.legislative_train import LegislativeCarriage
 import services.tracking.tracked_files_seeder as seeder
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 IAA = "2026/0068(COD)"
 
 

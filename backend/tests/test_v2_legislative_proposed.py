@@ -19,6 +19,9 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 EL = "/api/v2/legislative/eur-lex"
 OEIL = "/api/v2/legislative/oeil"
 TRAIN = "/api/v2/legislative/legislative-train"

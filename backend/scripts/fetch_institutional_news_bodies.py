@@ -49,7 +49,7 @@ from services.scrapers.economy_common import error_body_reason, extract_html  # 
 from api.v1._body import body_from_html_or_text  # noqa: E402
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 # Anything on these hosts is an EU institution or agency: a public document.
 INSTITUTIONAL = ("europa.eu", "europarl.europa.eu", "consilium.europa.eu", "ecb.int",
                  # The European Parliamentary Research Service publishes on its own

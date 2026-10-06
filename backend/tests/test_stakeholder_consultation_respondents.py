@@ -20,6 +20,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_file_map_carries_respondents_across_types(db):
     c = db.query(LegislativeCarriage).filter_by(oeil_procedure_ref=EU_INC).first()
     g = sm.build_file_graph(db, c, [], deep=True)
@@ -34,6 +35,7 @@ def test_file_map_carries_respondents_across_types(db):
     assert rels == {"responded_to_consultation"}
 
 
+@pytest.mark.live
 def test_overview_mode_leaves_respondents_out(db):
     c = db.query(LegislativeCarriage).filter_by(oeil_procedure_ref=EU_INC).first()
     g = sm.build_file_graph(db, c, [], deep=False)

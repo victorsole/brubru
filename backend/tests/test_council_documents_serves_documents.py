@@ -40,6 +40,7 @@ def client():
     app.dependency_overrides.pop(api_user_with_rate_limit, None)
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [V1, V2])
 def test_the_default_answer_is_documents_not_meetings(client, path):
     body = client.get(path, params={"limit": 25}).json()
@@ -48,12 +49,14 @@ def test_the_default_answer_is_documents_not_meetings(client, path):
     assert body["total"] > 0
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [V1, V2])
 def test_meetings_are_still_available_on_request(client, path):
     body = client.get(path, params={"limit": 10, "source": "meetings"}).json()
     assert body["data"] and {r["source"] for r in body["data"]} == {"calendar_event"}
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [V1, V2])
 def test_all_restores_the_old_answer(client, path):
     docs = client.get(path, params={"limit": 1, "source": "documents"}).json()["total"]
@@ -62,6 +65,7 @@ def test_all_restores_the_old_answer(client, path):
     assert both == docs + meets
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", [V1, V2])
 def test_the_total_counts_only_what_the_caller_asked_for(client, path):
     """A total that counts meetings while the page holds documents sends a client paging
@@ -79,6 +83,7 @@ def test_an_unknown_source_is_refused(client):
     assert client.get(V1, params={"source": "calendar"}).status_code == 422
 
 
+@pytest.mark.live
 def test_v2_asks_v1_for_the_same_thing(client):
     """v2 delegates by keyword, so a v1 parameter that was never regenerated arrives as a
     Query object and the reading branch takes neither path: v2 answered `total: 0` for

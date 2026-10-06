@@ -32,6 +32,10 @@ CEDEFOP = ("Cedefop Webportal www.cedefop.europa.eu Due to unusually high traffi
     "Checking your browser before accessing the site.",
     "Please enable JavaScript and cookies to continue.",
     "Access denied. Cloudflare Ray ID: 8f2c",
+    # EUDA, 28 Sep 2026: 72 rows stored this as the article.
+    "www.euda.europa.eu\nPerforming security verification\nThis website uses a security "
+    "service to protect against malicious bots. This page is displayed while the website "
+    "verifies you are not a bot.",
 ])
 def test_challenge_pages_are_recognised(text):
     assert looks_like_challenge(text)
@@ -59,11 +63,17 @@ def test_the_fetcher_refuses_a_challenge_page(monkeypatch):
 
     monkeypatch.setattr(fetcher, "_read",
                         lambda url, timeout, accept="*/*": f"<html><body>{CEDEFOP}</body></html>".encode())
+    # A direct-route challenge now falls back to a local browser (5 Oct 2026). Stub it as
+    # walled too: the real one launched Chromium against the live site and left its event
+    # loop running, which failed every async test after this one (145 in CI, 6 Oct 2026).
+    monkeypatch.setattr(fetcher, "_browser_page",
+                        lambda url, why: (None, None, f"{why}; browser bot challenge"))
     body_txt, body_html, reason = fetcher.fetch("https://www.cedefop.europa.eu/en/news/x")
     assert body_txt is None and body_html is None
     assert "challenge" in (reason or "").lower(), f"reason was {reason!r}"
 
 
+@pytest.mark.live
 def test_no_stored_body_is_a_challenge_page():
     """The corpus itself, not just the code path. 555 rows held one before this ran."""
     import psycopg2
@@ -121,6 +131,7 @@ def test_looks_like_pdf_does_not_fire_on_html():
     assert not fetcher.looks_like_pdf(b"<html><body><p>The Commission adopted</p></body></html>")
 
 
+@pytest.mark.live
 def test_no_stored_body_is_raw_pdf():
     """The corpus, not the code path: 135 rows held one before this ran."""
     import psycopg2
@@ -219,6 +230,7 @@ def test_an_article_that_merely_mentions_skipping_is_untouched():
     assert strip_page_furniture(real) == real
 
 
+@pytest.mark.live
 def test_no_stored_body_still_opens_with_navigation():
     """The corpus: 110 rows did before this ran; what remains was too short to keep."""
     import psycopg2

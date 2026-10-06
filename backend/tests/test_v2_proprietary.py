@@ -32,6 +32,9 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 BASE = "/api/v2/proprietary"
 DATAPOINTS = {"public_url", "body_txt", "body_html", "document_date", "creation_date"}
 

@@ -14,6 +14,9 @@ from sqlalchemy import text
 
 from scripts.backfill_api_key_last_used import _APPLY, _PENDING
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture
 def conn():

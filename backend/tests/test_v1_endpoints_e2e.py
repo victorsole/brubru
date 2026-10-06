@@ -67,12 +67,14 @@ def test_whoami_missing_key_returns_401():
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_whoami_bad_key_returns_401():
     client = TestClient(app)
     r = client.get("/api/v1/whoami", headers={"X-API-Key": "brubru_live_" + "f" * 48})
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_whoami_valid_key_returns_200_with_rate_limit_headers(blue_user_and_key):
     user, plaintext, _ = blue_user_and_key
     client = TestClient(app)
@@ -87,6 +89,7 @@ def test_whoami_valid_key_returns_200_with_rate_limit_headers(blue_user_and_key)
     assert r.headers.get("X-RateLimit-Remaining") is not None
 
 
+@pytest.mark.live
 def test_rate_limit_kicks_in_after_60_calls(blue_user_and_key):
     user, plaintext, _ = blue_user_and_key
     client = TestClient(app)

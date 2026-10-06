@@ -157,6 +157,7 @@ def test_published_is_not_collapsed_into_adopted():
     )
 
 
+@pytest.mark.live
 def test_status_enum_mirrors_the_database(db):
     """Every value the Python enum can produce must exist in the database enum.
 
@@ -196,6 +197,7 @@ def test_regdel_does_not_invent_dates():
 # The data invariants. These are the acceptance set for the merge.
 # --------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_no_celex_is_held_by_two_rows(db):
     n = db.execute(text(
         "SELECT count(*) FROM (SELECT celex FROM secondary_acts "
@@ -204,6 +206,7 @@ def test_no_celex_is_held_by_two_rows(db):
     assert n == 0, f"{n} CELEX value(s) still held by more than one row"
 
 
+@pytest.mark.live
 def test_merge_conserved_every_character_of_text(db):
     """The merge moves bodies between rows; it must never drop one.
 
@@ -221,6 +224,7 @@ def test_merge_conserved_every_character_of_text(db):
     assert bodied >= 5_053, f"bodied rows fell from 5,053 to {bodied}"
 
 
+@pytest.mark.live
 def test_no_act_lost_its_celex(db):
     """7,301 distinct CELEX before the merge; merging rows must not drop a value."""
     n = db.execute(text(
@@ -229,6 +233,7 @@ def test_no_act_lost_its_celex(db):
     assert n >= 7_301, f"distinct CELEX fell from 7,301 to {n}"
 
 
+@pytest.mark.live
 def test_undated_rows_are_only_those_with_no_celex(db):
     """After the Cellar backfill, an undated row must be one Cellar cannot date.
 
@@ -254,6 +259,7 @@ def test_undated_rows_are_only_those_with_no_celex(db):
     )
 
 
+@pytest.mark.live
 def test_no_date_was_invented(db):
     """A stored adoption date must be plausible: no act predates the ECSC treaty."""
     bad = db.execute(text(
@@ -264,6 +270,7 @@ def test_no_date_was_invented(db):
     assert bad == 0, f"{bad} row(s) carry an impossible adoption_date"
 
 
+@pytest.mark.live
 def test_adoption_never_after_publication(db):
     """An act cannot be published in the OJ before it was adopted."""
     bad = db.execute(text(
@@ -273,6 +280,7 @@ def test_adoption_never_after_publication(db):
     assert bad == 0, f"{bad} row(s) are published before they were adopted"
 
 
+@pytest.mark.live
 def test_merged_rows_kept_the_reference_they_replaced(db):
     """A merge that discards the loser's C-number destroys evidence.
 
@@ -297,6 +305,7 @@ def test_merged_rows_kept_the_reference_they_replaced(db):
     )
 
 
+@pytest.mark.live
 def test_no_merge_history_was_discarded(db):
     """Absorbing a row must never shorten another row's merge chain.
 
@@ -312,6 +321,7 @@ def test_no_merge_history_was_discarded(db):
     )
 
 
+@pytest.mark.live
 def test_a_celex_bearing_row_cannot_be_inserted_twice(db):
     """The schema, not just the script, must refuse a second row for one CELEX.
 
@@ -334,6 +344,7 @@ def test_a_celex_bearing_row_cannot_be_inserted_twice(db):
 # College has adopted the act.
 # --------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_synthetic_reference_can_never_be_read_as_a_c_number(db):
     """A pipeline row's reference is invented. It must be obviously invented.
 
@@ -352,6 +363,7 @@ def test_synthetic_reference_can_never_be_read_as_a_c_number(db):
     assert malformed == 0, f"{malformed} synthetic reference(s) are not PLANNED:<16 hex>"
 
 
+@pytest.mark.live
 def test_pipeline_rows_never_carry_an_invented_celex_or_date(db):
     """A planned act has not been adopted, so it has no CELEX and no adoption date."""
     bad = db.execute(text(
@@ -361,6 +373,7 @@ def test_pipeline_rows_never_carry_an_invented_celex_or_date(db):
     assert bad == 0, f"{bad} pipeline row(s) carry a CELEX or an adoption date"
 
 
+@pytest.mark.live
 def test_pipeline_row_does_not_shadow_a_real_act(db):
     """7 of the 322 are the same act already held under a real C-number.
 
@@ -380,6 +393,7 @@ def test_pipeline_row_does_not_shadow_a_real_act(db):
     assert dupes == 0, f"{dupes} pipeline row(s) duplicate an act we already hold"
 
 
+@pytest.mark.live
 def test_planned_period_keeps_the_registers_own_precision(db):
     """The register states its indicative timing at THREE different precisions.
 
@@ -405,6 +419,7 @@ def test_planned_period_keeps_the_registers_own_precision(db):
     assert bad == 0, f"{bad} planned period(s) are in a shape the register did not use before"
 
 
+@pytest.mark.live
 def test_planned_period_never_became_an_adoption_date(db):
     """A plan is not an event. No pipeline row may carry an adoption date."""
     bad = db.execute(text(
@@ -413,6 +428,7 @@ def test_planned_period_never_became_an_adoption_date(db):
     assert bad == 0, f"{bad} announced act(s) were given an adoption date they do not have"
 
 
+@pytest.mark.live
 def test_pipeline_ingest_is_idempotent(db):
     """The ingest runs daily. A second run must match these rows, not re-insert them.
 
@@ -429,6 +445,7 @@ def test_pipeline_ingest_is_idempotent(db):
     )
 
 
+@pytest.mark.live
 def test_no_row_asserts_a_published_act_without_any_evidence(db):
     """A title claiming "(EU) 2026/289" asserts that a specific act exists.
 
@@ -470,6 +487,7 @@ def test_no_row_asserts_a_published_act_without_any_evidence(db):
     )
 
 
+@pytest.mark.live
 def test_planned_period_reaches_the_api_not_just_the_table(db):
     """A column in the database is not a field the API serves.
 

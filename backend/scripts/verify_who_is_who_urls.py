@@ -56,7 +56,7 @@ PERSON_PAGE = "https://op.europa.eu/en/web/who-is-who/person/-/person/{person_id
 UA = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+        "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
     ),
     "Accept": "text/html,application/xhtml+xml",
 }

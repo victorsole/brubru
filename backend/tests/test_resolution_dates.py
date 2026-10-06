@@ -24,6 +24,9 @@ from api.v1._deps import api_user_with_rate_limit
 from main import app
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture(scope="module")
 def client():

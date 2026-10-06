@@ -29,6 +29,7 @@ from services.mcp.tools import _STOP, _related_laws
 
 class TestRelatedLawsRelevance:
 
+    @pytest.mark.live
     def test_the_cyber_resilience_act_leads_its_own_question(self):
         laws = _related_laws(
             "Which article of the Cyber Resilience Act imposes the 24-hour reporting duty?",
@@ -40,6 +41,7 @@ class TestRelatedLawsRelevance:
             f"{laws[0]['title'][:80]}"
         )
 
+    @pytest.mark.live
     def test_a_cybersecurity_question_returns_no_trade_defence_act(self):
         """The exact failure: 'duty' and 'imposes' dragging in countervailing duties."""
         laws = _related_laws(
@@ -63,6 +65,7 @@ class TestRelatedLawsRelevance:
         surviving = [w for w in re.findall(r"[A-Za-z]{4,}", q) if w.lower() not in _STOP]
         assert "Cyber" in surviving and "Resilience" in surviving
 
+    @pytest.mark.live
     def test_the_act_outranks_its_own_corrigenda(self):
         """A corrigendum shares the act's words, ties on rank, and used to win on
         row order alone. The act is what a reader wants named."""
@@ -73,6 +76,7 @@ class TestRelatedLawsRelevance:
             first_act = next((i for i, t in enumerate(titles) if not t.startswith("corrigendum")), None)
             assert first_act is not None and first_act < first_corr
 
+    @pytest.mark.live
     def test_topical_questions_still_return_something(self):
         """Guard against over-correction: a rank threshold tried here dropped
         genuine CBAM and payments results and was removed."""

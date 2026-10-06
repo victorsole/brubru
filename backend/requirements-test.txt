@@ -1,0 +1,7 @@
+# Test-only dependencies, installed by CI on top of requirements-light.txt (what the
+# Dockerfile ships). Pinned: a bare `pytest` pulled the latest and no pytest-asyncio.
+pytest==7.4.4
+pytest-asyncio==0.23.3
+# fastapi 0.109 pins starlette 0.35, whose TestClient passes app= to httpx.Client;
+# httpx 0.28 removed it and every TestClient fixture fails.
+httpx<0.28

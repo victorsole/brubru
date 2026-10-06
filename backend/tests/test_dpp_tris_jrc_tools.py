@@ -5,6 +5,8 @@ or the Product Bureau; both were promised to her in writing.
 """
 from __future__ import annotations
 
+import pytest
+
 import datetime as dt
 
 from services.mcp.dpp_tools import (
@@ -26,6 +28,7 @@ def test_instructions_name_the_new_sources():
     assert "TRIS" in txt and "Product Bureau" in txt and f"{len(DPP_TOOLS)} tools" in txt
 
 
+@pytest.mark.live
 def test_tris_rows_are_in_domain_and_open_first():
     import re
     from sqlalchemy import text
@@ -55,16 +58,19 @@ def test_animal_traceability_is_not_in_domain():
     assert re.search(_TRIS_DPP_RX, "product traceability in the textile supply chain", re.I)
 
 
+@pytest.mark.live
 def test_open_only_really_filters():
     for r in handle_dpp_tris(open_only=True, limit=50)["notifications"]:
         assert r["standstill_until"] >= dt.date.today()
 
 
+@pytest.mark.live
 def test_country_filter():
     for r in handle_dpp_tris(country="es", limit=50)["notifications"]:
         assert r["country"] == "ES"
 
 
+@pytest.mark.live
 def test_jrc_groups_and_per_kind_limit():
     res = handle_dpp_jrc(limit=5)["results"]
     assert set(res) == {"workshops", "reports", "textiles"}
@@ -73,6 +79,7 @@ def test_jrc_groups_and_per_kind_limit():
     assert ws == sorted(ws)                                              # soonest workshop first
 
 
+@pytest.mark.live
 def test_jrc_finds_the_dpp_method_and_textile_study():
     rep = handle_dpp_jrc(kind="reports", query="Digital Product Passport")["results"]["reports"]
     assert any("Digital Product Passport" in r["title"] for r in rep)
@@ -80,12 +87,14 @@ def test_jrc_finds_the_dpp_method_and_textile_study():
     assert tex and "textile apparel" in tex[0]["title"]
 
 
+@pytest.mark.live
 def test_ask_dpp_carries_tris_and_answers_catalan_jrc_question():
     out = handle_ask_dpp("Quan és el taller del JRC sobre el passaport digital?")
     assert out["found"] and "national_draft_rules_tris" in out
     assert any("JRC" in r["title"] for r in out["matches"].get("event", []))
 
 
+@pytest.mark.live
 def test_updates_list_upcoming_events_soonest_first():
     from services.mcp.dpp_tools import handle_dpp_updates
     ev = handle_dpp_updates(10)["events"]
@@ -108,6 +117,7 @@ def test_tris_query_substring_traps():
     assert _tris_query("the rapporteur's representative on franchise rules") == ([], None)
 
 
+@pytest.mark.live
 def test_catalan_question_finds_the_spanish_textile_decree():
     out = handle_ask_dpp("Quin és l'estat del Reial Decret espanyol de productes tèxtils i calçat?")
     assert out["national_draft_rules_tris"][0]["reference"] == "2026/0266/ES"

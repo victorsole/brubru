@@ -45,6 +45,7 @@ def db():
 # 1. The corpus
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_the_corpus_reaches_before_2026(db):
     """20 January 2026 was the floor. Anything earlier was unreachable."""
     earliest = db.execute(
@@ -56,6 +57,7 @@ def test_the_corpus_reaches_before_2026(db):
     )
 
 
+@pytest.mark.live
 def test_the_november_2025_minors_resolution_is_present(db):
     """The acceptance case: the text the API could not see.
 
@@ -72,6 +74,7 @@ def test_the_november_2025_minors_resolution_is_present(db):
     assert row.d.year == 2025
 
 
+@pytest.mark.live
 def test_it_is_reachable_through_the_api_not_just_the_table(client):
     """A row nobody can query is not coverage."""
     body = client.get("/api/texts-adopted/items?search=minors&limit=10").json()
@@ -86,6 +89,7 @@ def test_it_is_reachable_through_the_api_not_just_the_table(client):
 # 2. Honest bounds — the half that converts a false negative into a true one
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 @pytest.mark.parametrize("path,kind", [
     ("/api/texts-adopted/items?limit=1", "items"),
     ("/api/v1/texts-adopted?limit=1", "v1"),
@@ -97,6 +101,7 @@ def test_every_list_response_declares_its_coverage(client, path, kind):
     assert body.get("coverage_note"), f"{kind}: no coverage_note"
 
 
+@pytest.mark.live
 def test_coverage_note_warns_that_the_floor_is_not_the_term_start(client):
     """The whole point: `coverage_from` is what we HOLD, not when the EP began.
 
@@ -109,6 +114,7 @@ def test_coverage_note_warns_that_the_floor_is_not_the_term_start(client):
     )
 
 
+@pytest.mark.live
 def test_coverage_is_computed_from_the_data_not_hardcoded(client, db):
     """A hardcoded floor rots the moment the backfill extends."""
     from datetime import date
@@ -138,6 +144,7 @@ def test_the_scraper_refuses_to_read_a_js_shell_as_an_empty_page():
     )
 
 
+@pytest.mark.live
 @pytest.mark.asyncio
 async def test_plenary_date_discovery_actually_returns_dates():
     """It returned 0 for months. A live check, because this is the exact failure."""
@@ -166,6 +173,7 @@ def test_explicit_date_backfill_is_available():
 # 4. body_txt / body_html must be the REAL text, not the synthesised fallback
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_adopted_texts_hold_the_real_text_not_just_a_composed_body(db):
     """`body_txt` and `body_html` are 2 of the 5 mandatory datapoints.
 
@@ -190,6 +198,7 @@ def test_adopted_texts_hold_the_real_text_not_just_a_composed_body(db):
     assert with_body > total * 0.9, f"only {with_body}/{total} rows hold the real text"
 
 
+@pytest.mark.live
 def test_stored_texts_are_distinct_documents(db):
     """Identical bodies would mean one error page written N times, which a count
     of non-null rows cannot distinguish from real coverage."""
@@ -199,6 +208,7 @@ def test_stored_texts_are_distinct_documents(db):
     assert distinct >= n * 0.98, f"only {distinct} distinct bodies across {n} rows"
 
 
+@pytest.mark.live
 def test_stored_texts_are_not_navigation_chrome(db):
     """doceo wraps documents in page furniture; storing that would satisfy every
     length check while holding no document."""
@@ -245,6 +255,7 @@ def test_the_classifier_is_never_fed_a_whole_document():
     )
 
 
+@pytest.mark.live
 def test_a_resolution_is_not_classified_as_a_decision(db):
     """The concrete case: a resolution whose body mentions 'decision' in passing."""
     from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
@@ -259,6 +270,7 @@ def test_a_resolution_is_not_classified_as_a_decision(db):
     )
 
 
+@pytest.mark.live
 def test_the_unclassified_rows_are_declared_not_disguised(client):
     """437 TOC-recovered rows carry text_type='other' and it is NOT recoverable:
     the TOC has no type marker and the document header reads only

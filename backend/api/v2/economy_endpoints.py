@@ -364,10 +364,10 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         total = db.execute(text("SELECT count(*) FROM procurement_documents WHERE economy_item_id = :i"),
                            {"i": item_id}).scalar() or 0
         cols = _DOC_COLS + (", body_txt, body_html" if include_body else "")
-        # first_seen then file_url: the order the files were found, total (unique per item).
+        # first_seen then file_url: the order the files were found; id last makes it total.
         rows = db.execute(
             text(f"SELECT {cols} FROM procurement_documents WHERE economy_item_id = :i "
-                 "ORDER BY first_seen, file_url LIMIT :limit OFFSET :offset"),
+                 "ORDER BY first_seen, file_url, id LIMIT :limit OFFSET :offset"),
             {"i": item_id, "limit": limit, "offset": (page - 1) * limit},
         ).fetchall()
         items = [_row_to_document(r, with_body=include_body,

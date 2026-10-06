@@ -34,6 +34,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_word_boundaries_match_in_postgres(watch, db):
     rx = watch.SCOPES["A"]["rx"].replace("\\b", "\\y")
     assert "\\b" not in rx
@@ -41,16 +42,19 @@ def test_word_boundaries_match_in_postgres(watch, db):
     assert db.execute(text("SELECT 'ESPR working plan' ~* :rx"), {"rx": rx}).scalar() is True
 
 
+@pytest.mark.live
 def test_python_boundary_does_not_match_in_postgres(db):
     # The defect itself, pinned: if this ever starts passing, Postgres changed.
     assert db.execute(text("SELECT 'the DPP registry' ~* '\\bDPP\\b'")).scalar() is False
 
 
+@pytest.mark.live
 def test_tris_is_in_the_freshness_check(watch, db):
     rows = {r["body"]: r for r in watch.body_freshness(db)}
     assert "tris" in rows and rows["tris"]["news_rows"] > 0
 
 
+@pytest.mark.live
 def test_imminent_jrc_workshop_is_urgent(watch, db):
     nxt = db.execute(text(
         "SELECT min(document_date::date) FROM economy_items WHERE body_code='dpp' "
@@ -63,6 +67,7 @@ def test_imminent_jrc_workshop_is_urgent(watch, db):
     assert ws and all(h["urgent"] for h in ws)
 
 
+@pytest.mark.live
 def test_old_jrc_documents_are_not_news(watch, db):
     hits = watch.sweep(db, "A", 7)
     since = dt.date.today() - dt.timedelta(days=7)

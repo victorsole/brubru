@@ -54,6 +54,7 @@ def test_knowledge_guides_unauth_401():
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_knowledge_guides_list(auth_headers):
     r = TestClient(app).get("/api/v1/knowledge-guides?limit=5", headers=auth_headers)
     assert r.status_code == 200
@@ -62,6 +63,7 @@ def test_knowledge_guides_list(auth_headers):
     assert len(body["data"]) <= 5
 
 
+@pytest.mark.live
 def test_knowledge_guides_search(auth_headers):
     r = TestClient(app).get("/api/v1/knowledge-guides?q=GDPR&limit=3", headers=auth_headers)
     assert r.status_code == 200
@@ -70,6 +72,7 @@ def test_knowledge_guides_search(auth_headers):
 # ---- laws/{celex}/text ---------------------------------------------------
 
 
+@pytest.mark.live
 def test_law_text_missing_celex_returns_404(auth_headers):
     r = TestClient(app).get("/api/v1/laws/NOT_A_REAL_CELEX/text", headers=auth_headers)
     assert r.status_code == 404
@@ -79,6 +82,7 @@ def test_law_text_missing_celex_returns_404(auth_headers):
 # ---- eprs ----------------------------------------------------------------
 
 
+@pytest.mark.live
 def test_eprs_envelope(auth_headers):
     r = TestClient(app).get("/api/v1/eprs?limit=5", headers=auth_headers)
     assert r.status_code == 200
@@ -95,6 +99,7 @@ def test_eprs_envelope(auth_headers):
 # ---- committees ----------------------------------------------------------
 
 
+@pytest.mark.live
 def test_committee_work_items(auth_headers):
     r = TestClient(app).get("/api/v1/committees/LIBE/work-items?limit=3", headers=auth_headers)
     assert r.status_code == 200
@@ -102,6 +107,7 @@ def test_committee_work_items(auth_headers):
     assert body["total"] >= 0
 
 
+@pytest.mark.live
 def test_committee_minutes(auth_headers):
     r = TestClient(app).get("/api/v1/committees/LIBE/minutes?limit=3", headers=auth_headers)
     assert r.status_code == 200
@@ -110,6 +116,7 @@ def test_committee_minutes(auth_headers):
 # ---- calendar/events -----------------------------------------------------
 
 
+@pytest.mark.live
 def test_calendar_events(auth_headers):
     r = TestClient(app).get("/api/v1/calendar/events?limit=5", headers=auth_headers)
     assert r.status_code == 200
@@ -120,6 +127,7 @@ def test_calendar_events(auth_headers):
 # ---- meps ----------------------------------------------------------------
 
 
+@pytest.mark.live
 def test_meps_list_returns_envelope_or_upstream_error(auth_headers):
     with patch(
         "api.v1.meps._fetch_list",
@@ -135,6 +143,7 @@ def test_meps_list_returns_envelope_or_upstream_error(auth_headers):
     assert body["data"][0]["profile_url"] == "https://www.europarl.europa.eu/meps/en/197668"
 
 
+@pytest.mark.live
 def test_mep_profile_not_found(auth_headers):
     with patch(
         "api.v1.meps._fetch_profile",
@@ -147,6 +156,7 @@ def test_mep_profile_not_found(auth_headers):
 # ---- predictions ---------------------------------------------------------
 
 
+@pytest.mark.live
 def test_predictions_timeline_unknown_procedure(auth_headers):
     # May return 502 if predictor errors, or 200 with null fields. Accept either.
     r = TestClient(app).get("/api/v1/predictions/9999%2F0000%28COD%29/timeline?use_ml=false", headers=auth_headers)
@@ -156,6 +166,7 @@ def test_predictions_timeline_unknown_procedure(auth_headers):
 # ---- meta/enums updated --------------------------------------------------
 
 
+@pytest.mark.live
 def test_meta_enums_includes_new_datasets(auth_headers):
     r = TestClient(app).get("/api/v1/meta/enums", headers=auth_headers)
     assert r.status_code == 200

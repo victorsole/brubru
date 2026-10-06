@@ -49,6 +49,7 @@ def _witness_day(client, path):
     return None
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("path", ROUTES)
 def test_updated_to_includes_the_whole_day(client, path):
     d = _witness_day(client, path)
