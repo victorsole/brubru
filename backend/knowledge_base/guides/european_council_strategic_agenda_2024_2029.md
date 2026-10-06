@@ -1,6 +1,7 @@
 # European Council Strategic Agenda 2024-2029
 
 ## QUICK FACTS
+- **NEXT SUMMIT (Thursday 15 to Friday 16 October 2026)**: the European Council meets in Brussels on 15-16 October 2026 (Council calendar: consilium.europa.eu/en/meetings/european-council/2026/10/15-16/). The European Parliament held its preparatory plenary debate with President von der Leyen on Tuesday 6 October 2026 in Strasbourg. The conclusions are NOT yet adopted: do not state what the summit decided before it happens.
 - **What this is**: the **political compass** adopted by EU Heads of State and Government at the European Council on 27 June 2024 -- the overarching mandate that guides the EU institutions for the 2024-2029 legislative cycle.
 - **Adopted**: 27 June 2024 by the European Council; replaces the 2019-2024 Strategic Agenda.
 - **Three pillars**: (1) A free and democratic Europe; (2) A strong and secure Europe; (3) A prosperous and competitive Europe.

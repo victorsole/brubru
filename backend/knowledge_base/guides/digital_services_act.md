@@ -10,6 +10,7 @@
 - **Entry into force:** 16 November 2022
 - **General application:** 17 February 2024
 - **VLOP/VLOSE application:** from four months after individual designation (first batch: 25 August 2023)
+- **Designated today (Official Journal notice of 6 October 2026, C/2026/5181): exactly 25 VLOPs and 3 VLOSEs (Bing, ChatGPT, Google Search); Stripchat was de-designated in 2025.** Detail in `dsa_enforcement`.
 - **VLOP/VLOSE threshold:** 45 million or more average monthly active recipients in the Union (approximately 10% of EU population)
 - **Supervisory split:** Digital Services Coordinators (national) supervise all intermediary services except VLOPs/VLOSEs; the Commission has exclusive supervision of VLOPs/VLOSEs on systemic-risk obligations
 - **Maximum fine:** 6% of total worldwide annual turnover (Art 74), plus periodic penalty payments up to 5% of average daily income per day (Art 76)
@@ -154,7 +155,7 @@ The assessment must analyse how recommender systems, advertising systems, conten
 - **19 October 2022:** Adoption
 - **27 October 2022:** Publication in OJ L 277
 - **16 November 2022:** Entry into force
-- **25 April 2023:** First VLOP/VLOSE designations (19 platforms and 2 search engines)
+- **25 April 2023:** First VLOP/VLOSE designations (19 services: 17 very large online platforms and 2 very large online search engines, Bing and Google Search)
 - **25 August 2023:** VLOP/VLOSE obligations take effect for first batch
 - **17 February 2024:** General application (all intermediary services)
 
