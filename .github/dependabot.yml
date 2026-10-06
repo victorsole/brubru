@@ -1,0 +1,34 @@
+# Keep the actions in .github/workflows current.
+#
+# Why only github-actions here: a `uses: owner/action@v4` tag is MUTABLE. Whoever
+# controls that action can move the tag, and the new commit runs in our job with
+# access to everything the job can see. Pinning to a full commit SHA makes the
+# reference immutable, but a pin never moves on its own, and Dependabot raises no
+# vulnerability alert for a SHA-pinned action. So pinning without this file trades
+# one risk for another: the pin goes stale and silently keeps a known-bad version.
+# Version updates are what make SHA pinning safe to adopt.
+#
+# pip, npm and docker are deliberately NOT here. The backend pins heavy ML
+# dependencies and a monthly flood of version-bump pull requests on a repo that
+# ships by pushing straight to main would be noise nobody reads, which is how a
+# real alert gets missed. Vulnerable dependencies in those ecosystems are covered
+# by Dependabot alerts instead (enabled 6 Oct 2026), which report without opening
+# pull requests. Add an ecosystem here only when someone will actually triage it.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    # For github-actions this must be "/" regardless of where the workflows live:
+    # Dependabot then searches /.github/workflows plus any root action.yml.
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    # One pull request for all action bumps, not one per action. Without this a
+    # month with three updates is three pull requests on a repo with no reviewer.
+    groups:
+      actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"

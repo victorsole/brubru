@@ -1,0 +1,29 @@
+# Code owners for brubru.
+#
+# What this does and does NOT do, so nobody mistakes it for a gate:
+#
+# It does NOT stop a direct push to main. Nothing in CODEOWNERS blocks a push, and
+# this repo ships by pushing straight to main. CODEOWNERS only bites on PULL
+# REQUESTS: the owner is automatically requested for review, and a ruleset option
+# ("require review from Code Owners") can then make that review mandatory before a
+# merge. No such ruleset exists here yet, deliberately.
+#
+# So why have it: brubru is a PUBLIC repository. Anyone on GitHub can open a pull
+# request against it, including one that edits a workflow file. A workflow runs
+# code, so an edit to .github/ is the highest-value change a stranger could
+# propose. This file guarantees those pull requests land in Victor's review queue
+# rather than sitting unnoticed.
+#
+# Last pattern to match a file wins, so order matters: general first, specific last.
+
+# Everything, by default.
+*                       @victorsole
+
+# Workflows and repo automation: these execute code in CI with repository access.
+/.github/               @victorsole
+/.github/workflows/     @victorsole
+
+# Secrets-adjacent and deploy-adjacent configuration.
+/backend/core/config.py @victorsole
+/backend/Dockerfile     @victorsole
+/.gitignore             @victorsole
