@@ -339,7 +339,9 @@ def test_the_paid_tier_finds_its_key_in_the_repo_env(monkeypatch):
 
     def fake_load(path=None, override=False):
         loaded.append(str(path))
-        os.environ["SCRAPEDO_API_KEY"] = "from-the-env-file"
+        # Through monkeypatch, so teardown removes it: a bare os.environ write leaked the
+        # key into every later test and put the TRIS backoff test on the paid path.
+        monkeypatch.setenv("SCRAPEDO_API_KEY", "from-the-env-file")
         return True
 
     monkeypatch.setattr(dotenv, "load_dotenv", fake_load)

@@ -92,6 +92,7 @@ def _balance(user_id) -> int:
 # Parity
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_v2_laws_list_parity_with_v1(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -114,6 +115,7 @@ def test_v2_laws_list_parity_with_v1(client: TestClient, fresh_user):
             assert item["text_url"].startswith(V2 + "/laws/")
 
 
+@pytest.mark.live
 def test_v2_law_detail_parity_and_nativised_link(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -130,6 +132,7 @@ def test_v2_law_detail_parity_and_nativised_link(client: TestClient, fresh_user)
     assert v2.json()["text_url"] == f"{V2}/laws/{celex}/text"
 
 
+@pytest.mark.live
 def test_v2_text_reaches_handler(client: TestClient, fresh_user):
     """The text endpoint does a live Cellar fetch, so its terminal status is
     environment-dependent (200 cache/live hit, 404 no body, 502 upstream).
@@ -156,6 +159,7 @@ def test_v2_text_reaches_handler(client: TestClient, fresh_user):
 # Scope enforcement on v2 paths
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_v2_out_of_scope_key_403s(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:ep"])  # NOT read:laws
@@ -166,6 +170,7 @@ def test_v2_out_of_scope_key_403s(client: TestClient, fresh_user):
     assert body["required_scope"] == "read:laws"
 
 
+@pytest.mark.live
 def test_v2_in_scope_key_not_403(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -177,6 +182,7 @@ def test_v2_in_scope_key_not_403(client: TestClient, fresh_user):
 # Canonical error envelope covers v2
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_v2_error_envelope_on_missing_celex(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -193,6 +199,7 @@ def test_v2_error_envelope_on_missing_celex(client: TestClient, fresh_user):
 # Billing covers v2
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_v2_path_is_metered(client: TestClient, fresh_user):
     user, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -232,6 +239,7 @@ def test_v2_pricing_tiers():
 # Delegated endpoints — deterministic parity (no upstream network)
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_v2_identify_parity(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -243,6 +251,7 @@ def test_v2_identify_parity(client: TestClient, fresh_user):
     assert v1.json()["value"] == v2.json()["value"]
 
 
+@pytest.mark.live
 def test_v2_resolve_aliases_parity(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -257,6 +266,7 @@ def test_v2_resolve_aliases_parity(client: TestClient, fresh_user):
     assert "32016R0679" in v2_celexes  # GDPR resolved
 
 
+@pytest.mark.live
 def test_v2_resolve_references_reaches_handler(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
@@ -275,6 +285,7 @@ def test_v2_resolve_references_reaches_handler(client: TestClient, fresh_user):
 # assert it is NOT an auth/scope/billing rejection.
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 @pytest.mark.parametrize(
     "path",
     [
@@ -296,6 +307,7 @@ def test_v2_live_endpoints_reach_handler(client: TestClient, fresh_user, path):
     assert r.status_code not in (401, 402, 403), f"{path} -> {r.status_code}: {r.text[:300]}"
 
 
+@pytest.mark.live
 def test_v2_live_endpoint_out_of_scope_403(client: TestClient, fresh_user):
     """A read:ep key is rejected on every EUR-Lex path (read:laws gate)."""
     _, token = fresh_user

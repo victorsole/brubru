@@ -17,6 +17,9 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 LIST = {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
 
 

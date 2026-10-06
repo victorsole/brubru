@@ -38,11 +38,13 @@ def schema(db):
     return out
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("table", declared_tables())
 def test_the_table_exists(schema, table):
     assert table in schema, f"BODY_SOURCES declares {table}, which is not in the database"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("table", declared_tables())
 def test_the_declared_columns_exist(schema, table):
     """A rename that lands in the database and not here must fail HERE, loudly,
@@ -92,6 +94,7 @@ def test_the_alias_is_applied_to_both_columns():
     assert "d.text_body AS body_txt" in sql and "d.body_html AS body_html" in sql
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("table", declared_tables())
 def test_the_select_actually_runs(db, table):
     """Proof by execution, not by inspection: build the real SELECT and run it.

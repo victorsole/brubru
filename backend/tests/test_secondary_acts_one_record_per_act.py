@@ -43,6 +43,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_no_celex_has_more_than_one_record(db):
     """The claim itself: one act, one record."""
     dupes = db.execute(text(
@@ -51,6 +52,7 @@ def test_no_celex_has_more_than_one_record(db):
     assert dupes == 0, f"{dupes} CELEX value(s) still have more than one row"
 
 
+@pytest.mark.live
 def test_the_examples_reported_kept_their_full_text(db):
     """The three acts GovClipping named. The stub had ~0 characters; the register row had
     the act. The survivor must be the one with the text."""
@@ -62,6 +64,7 @@ def test_the_examples_reported_kept_their_full_text(db):
         assert row[0] >= minimum, f"{celex} kept the stub ({row[0]} chars, ref {row[1]})"
 
 
+@pytest.mark.live
 def test_nothing_was_deleted_without_being_recorded(db):
     """Every merge is readable and reversible: the survivor lists what it absorbed."""
     merged = db.execute(text(
@@ -73,6 +76,7 @@ def test_nothing_was_deleted_without_being_recorded(db):
     assert bad == 0, "a row claims a merge but records nothing absorbed"
 
 
+@pytest.mark.live
 def test_a_second_real_parent_survives_the_merge(db):
     """28 acts supplement two different acts. The column holds one; the other has to be
     somewhere, or the merge quietly destroyed a true relationship."""
@@ -85,6 +89,7 @@ def test_a_second_real_parent_survives_the_merge(db):
     assert kept >= 25, f"only {kept} second parents survive; 28 groups had one"
 
 
+@pytest.mark.live
 def test_the_deleted_rows_were_backed_up():
     backups = sorted((BACKEND.parent / "docs" / "backups").glob("secondary_acts_merged_*.json"))
     assert backups, "no backup of the merged-away rows"

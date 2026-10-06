@@ -47,6 +47,7 @@ def test_sourced_tables_are_exactly_the_six_track_tables():
     assert "user_feed_subscriptions" not in SOURCED_TRACK_TABLES
 
 
+@pytest.mark.live
 def test_every_surface_names_a_timestamp_column_that_exists():
     """The defect that hid 359 feed subscriptions.
 
@@ -123,6 +124,7 @@ def seeded(request):
     return conn
 
 
+@pytest.mark.live
 def test_section_9_keeps_the_three_states_apart(seeded):
     """`unknown` must never be folded into `chosen`. That fold IS the defect."""
     rows = section_meub_tracking(seeded, "2026-09-09", "2026-09-11", include_internal=False)
@@ -136,6 +138,7 @@ def test_section_9_keeps_the_three_states_apart(seeded):
     assert files["n"] == 4
 
 
+@pytest.mark.live
 def test_section_9_marks_unsourced_surfaces_as_n_a(seeded):
     """A surface with no provenance column says so; it never prints a blank that
     could be read as 'all user-chosen'."""
@@ -151,6 +154,7 @@ def test_section_9_marks_unsourced_surfaces_as_n_a(seeded):
                 assert row[col] == "n/a", f"{label}.{col} must read n/a, not a number"
 
 
+@pytest.mark.live
 def test_provenance_totals_report_all_three_states(seeded):
     out = section_tracking_provenance(seeded, include_internal=False)
     totals = {r["provenance"]: r["items"] for r in out["totals"]}
@@ -161,6 +165,7 @@ def test_provenance_totals_report_all_three_states(seeded):
     )
 
 
+@pytest.mark.live
 def test_write_shape_estimate_covers_the_unknown_bucket_ONLY(seeded):
     """The estimate is a guess. Guessing about rows whose source is RECORDED
     would be noise at best and a contradiction at worst."""

@@ -46,6 +46,7 @@ def auth_headers():
 # -- Point 11: laws filter + 422 on conflicting bounds ---------------------
 
 
+@pytest.mark.live
 def test_laws_conflicting_upper_bounds_returns_422(auth_headers):
     r = TestClient(app).get(
         "/api/v1/laws?published_to=2026-01-01&published_end=2026-03-31&limit=5",
@@ -55,6 +56,7 @@ def test_laws_conflicting_upper_bounds_returns_422(auth_headers):
     assert r.json()["reason_code"] == "conflicting_params"
 
 
+@pytest.mark.live
 def test_laws_published_to_and_end_same_value_accepted(auth_headers):
     r = TestClient(app).get(
         "/api/v1/laws?published_to=2026-01-01&published_end=2026-01-01&limit=3",
@@ -63,6 +65,7 @@ def test_laws_published_to_and_end_same_value_accepted(auth_headers):
     assert r.status_code == 200
 
 
+@pytest.mark.live
 def test_laws_inverted_range_returns_422(auth_headers):
     r = TestClient(app).get(
         "/api/v1/laws?published_from=2026-12-31&published_to=2026-01-01&limit=3",
@@ -72,6 +75,7 @@ def test_laws_inverted_range_returns_422(auth_headers):
     assert r.json()["reason_code"] == "invalid_date_range"
 
 
+@pytest.mark.live
 def test_laws_default_limit_is_50(auth_headers):
     r = TestClient(app).get("/api/v1/laws", headers=auth_headers)
     assert r.status_code == 200
@@ -81,6 +85,7 @@ def test_laws_default_limit_is_50(auth_headers):
 # -- Legal-text recital-article-map: 500 becomes 503 gracefully ------------
 
 
+@pytest.mark.live
 def test_legal_text_recital_map_503_on_parser_failure(auth_headers, monkeypatch):
     import api.v1.legal_text as lt
     # Simulate the known-bad GDPR parser crash
@@ -140,6 +145,7 @@ def test_commissioner_detail_url_cleaner():
 # -- MEPs: total is offset+len (not just limit), profile_url always set ----
 
 
+@pytest.mark.live
 def test_meps_total_computation(auth_headers):
     from unittest.mock import AsyncMock, patch
     with patch(
@@ -163,6 +169,7 @@ def test_meps_total_computation(auth_headers):
     assert isinstance(body["coverage_complete"], bool)
 
 
+@pytest.mark.live
 def test_meps_coverage_is_incomplete_only_when_the_count_falls_back(auth_headers):
     """The heuristic path: upstream count unavailable → total is a guess → partial.
 
@@ -188,6 +195,7 @@ def test_meps_coverage_is_incomplete_only_when_the_count_falls_back(auth_headers
     assert body["total"] == 51, "offset+len, +1 to hint there may be more"
 
 
+@pytest.mark.live
 def test_meps_coverage_is_complete_when_the_count_succeeds(auth_headers):
     """The normal path: an exact upstream total means coverage IS complete."""
     with patch(
@@ -203,6 +211,7 @@ def test_meps_coverage_is_complete_when_the_count_succeeds(auth_headers):
     assert body["coverage_complete"] is True
 
 
+@pytest.mark.live
 def test_the_current_term_says_when_it_answered_from_the_snapshot(auth_headers):
     """The branch the default actually takes, which the two tests above never reached.
 

@@ -109,6 +109,7 @@ def test_throttling_stops_the_run_without_counting_misses():
 
 def test_backoff_retries_then_succeeds(monkeypatch):
     import asyncio as _a
+    monkeypatch.delenv("SCRAPEDO_API_KEY", raising=False)  # the unpaid, waiting path
     s = TRISScraper()
     s.RATE_LIMIT_BACKOFF = (0, 0)
     n = {"calls": 0}

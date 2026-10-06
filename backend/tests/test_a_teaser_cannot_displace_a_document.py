@@ -32,6 +32,9 @@ from sync_economy import _UPSERT, _UPSERT_BATCH  # noqa: E402
 from ingest_ft_news_events import UPSERT as FT_NEWS_UPSERT  # noqa: E402
 from ingest_ft_programme_calls import UPSERT_SQL as FT_CALLS_UPSERT  # noqa: E402
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 DOCUMENT = ("The whole article. " * 400).strip()  # ~7,600 chars; the SQL btrims, so we do too
 TEASER = "A short RSS summary of that article."  # ~36
 

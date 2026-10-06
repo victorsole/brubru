@@ -23,6 +23,7 @@ from sqlalchemy import create_engine, text
 
 DB_URL = os.environ.get("DATABASE_URL")
 pytestmark = pytest.mark.skipif(not DB_URL, reason="DATABASE_URL not set")
+pytestmark = [*(pytestmark if isinstance(pytestmark, list) else [pytestmark]), pytest.mark.live]
 
 # Columns that are bookkeeping, not content. An ingestion anchor such as scraped_at
 # MUST keep moving every run -- it is what answers "is this feed still alive".

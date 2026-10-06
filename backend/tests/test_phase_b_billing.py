@@ -122,6 +122,7 @@ def test_pricing_table_resolution():
 # Atomic debit + refund
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_debit_atomic_decrease(fresh_user_with_balance):
     user, _, _ = fresh_user_with_balance
     db = SessionLocal()
@@ -134,6 +135,7 @@ def test_debit_atomic_decrease(fresh_user_with_balance):
         db.close()
 
 
+@pytest.mark.live
 def test_debit_insufficient_balance_no_change(fresh_user_with_balance):
     user, _, _ = fresh_user_with_balance
     _set_balance(user.id, 500)  # less than the cost
@@ -146,6 +148,7 @@ def test_debit_insufficient_balance_no_change(fresh_user_with_balance):
         db.close()
 
 
+@pytest.mark.live
 def test_refund_returns_credit(fresh_user_with_balance):
     user, _, _ = fresh_user_with_balance
     db = SessionLocal()
@@ -161,6 +164,7 @@ def test_refund_returns_credit(fresh_user_with_balance):
 # Free endpoints
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_free_ping_does_not_debit(client, fresh_user_with_balance):
     """/api/v1/ping is unauthenticated and outside the metering scope."""
     user, _, _ = fresh_user_with_balance
@@ -170,6 +174,7 @@ def test_free_ping_does_not_debit(client, fresh_user_with_balance):
     assert _get_balance(user.id) == before
 
 
+@pytest.mark.live
 def test_free_whoami_does_not_debit(client, fresh_user_with_balance):
     """/api/v1/whoami requires auth but is FREE_PATH — no debit."""
     user, _, plaintext = fresh_user_with_balance
@@ -183,6 +188,7 @@ def test_free_whoami_does_not_debit(client, fresh_user_with_balance):
 # Paid endpoints
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_paid_endpoint_debits_lightweight_cost(client, fresh_user_with_balance):
     user, _, plaintext = fresh_user_with_balance
     before = _get_balance(user.id)
@@ -193,6 +199,7 @@ def test_paid_endpoint_debits_lightweight_cost(client, fresh_user_with_balance):
     assert after == before - 1000, f"expected debit of 1000 μEUR; before={before} after={after}"
 
 
+@pytest.mark.live
 def test_paid_endpoint_402_on_zero_balance(client, fresh_user_with_balance):
     user, _, plaintext = fresh_user_with_balance
     _set_balance(user.id, 0)
@@ -204,6 +211,7 @@ def test_paid_endpoint_402_on_zero_balance(client, fresh_user_with_balance):
     assert body["cost_eur_micro"] >= 1000
 
 
+@pytest.mark.live
 def test_paid_endpoint_402_when_balance_below_cost(client, fresh_user_with_balance):
     """Balance positive but below the call cost still 402s."""
     user, _, plaintext = fresh_user_with_balance
@@ -214,6 +222,7 @@ def test_paid_endpoint_402_when_balance_below_cost(client, fresh_user_with_balan
     assert _get_balance(user.id) == 500
 
 
+@pytest.mark.live
 def test_usage_event_recorded_for_paid_call(client, fresh_user_with_balance):
     user, _, plaintext = fresh_user_with_balance
     client.get("/api/v1/laws?limit=1", headers={"X-API-Key": plaintext})
@@ -239,6 +248,7 @@ def test_usage_event_recorded_for_paid_call(client, fresh_user_with_balance):
 # Sandbox pool
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_sandbox_ip_cap_enforced():
     """The 11th sandbox call from the same IP returns False."""
     from services.billing.api_meter import sandbox_consume
@@ -268,6 +278,7 @@ def test_sandbox_ip_cap_enforced():
 # Billing endpoints
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_balance_endpoint_returns_state(client, fresh_user_with_balance):
     user, token, plaintext = fresh_user_with_balance
     # Make a paid call to create a usage event
@@ -283,6 +294,7 @@ def test_balance_endpoint_returns_state(client, fresh_user_with_balance):
     assert body["auto_topup"]["enabled"] is False
 
 
+@pytest.mark.live
 def test_topup_rejects_below_one_eur(client, fresh_user_with_balance):
     _, token, _ = fresh_user_with_balance
     r = client.post(
@@ -299,6 +311,7 @@ def test_topup_rejects_below_one_eur(client, fresh_user_with_balance):
     # If pydantic-list 422, the test still asserts >=422 (the failure mode).
 
 
+@pytest.mark.live
 def test_auto_topup_set_and_persist(client, fresh_user_with_balance):
     _, token, _ = fresh_user_with_balance
     r = client.post(
@@ -322,6 +335,7 @@ def test_auto_topup_set_and_persist(client, fresh_user_with_balance):
     assert r.json()["enabled"] is False
 
 
+@pytest.mark.live
 def test_auto_topup_enabled_requires_threshold_and_amount(client, fresh_user_with_balance):
     _, token, _ = fresh_user_with_balance
     r = client.post(

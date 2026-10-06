@@ -47,6 +47,7 @@ def db():
 # The invariant that keeps the union honest
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_no_url_is_served_by_both_stores(db):
     """The invariant, per URL since 15 Sep 2026 (it was per body, and served 274
     duplicates while hiding 2,077 official items). A URL may come from the agency
@@ -61,6 +62,7 @@ def test_no_url_is_served_by_both_stores(db):
     assert both == 0, f"{both} URL(s) served by both stores"
 
 
+@pytest.mark.live
 def test_the_274_executive_agency_duplicates_are_gone(db):
     """The concrete case the per-body rule missed: Commission-tagged rows whose URL is
     an economy_items news row of an executive agency (HaDEA, CINEA, REA, EACEA)."""
@@ -80,6 +82,7 @@ def test_non_official_stores_stay_out():
     assert not set(_INSTITUTIONAL_NEWS.values()) & set(_EXCLUDED_EU_NEWS_INSTITUTIONS)
 
 
+@pytest.mark.live
 def test_every_official_institution_is_in_the_union(db):
     """A body scraped into eu_news_items but not listed here is silently invisible to
     the API. This fails when a new one appears, so it is added on purpose."""
@@ -89,6 +92,7 @@ def test_every_official_institution_is_in_the_union(db):
     assert not missing, f"institutions in eu_news_items but not in the union: {sorted(missing)}"
 
 
+@pytest.mark.live
 def test_statements_and_speeches_are_served_as_news(client, db):
     from api.v2.news import _EU_NEWS_SOURCE_TYPES
     assert {"statement", "speech"} <= set(_EU_NEWS_SOURCE_TYPES)
@@ -102,6 +106,7 @@ def test_statements_and_speeches_are_served_as_news(client, db):
     assert d.status_code == 200 and d.json()["kind"] == "news" and d.json()["body_code"] == "eeas"
 
 
+@pytest.mark.live
 def test_a_superseded_id_resolves_to_the_canonical_item(client, db):
     """One article, one id -- and the id it USED to have still answers.
 
@@ -124,6 +129,7 @@ def test_a_superseded_id_resolves_to_the_canonical_item(client, db):
     assert str(r.json()["id"]) == str(row[1]), "the payload must carry the canonical id"
 
 
+@pytest.mark.live
 def test_the_institutions_are_registered_bodies(db):
     """They must resolve to a real body so `body_name` is not null in the feed."""
     known = {r.code for r in db.execute(
@@ -136,6 +142,7 @@ def test_the_institutions_are_registered_bodies(db):
 # The gap itself
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_commission_news_is_reachable(client):
     """The headline regression: this returned nothing, ever."""
     body = client.get("/api/v2/news/all?body=commission&days=365&limit=5").json()
@@ -144,12 +151,14 @@ def test_commission_news_is_reachable(client):
     assert all(i["body_name"] for i in body["data"]), "institutional items have no body_name"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("code", INSTITUTIONS)
 def test_each_institution_is_reachable(client, code):
     body = client.get(f"/api/v2/news/all?body={code}&days=3650&limit=3").json()
     assert body["total"] > 0, f"{code} contributes no news to /news/all"
 
 
+@pytest.mark.live
 def test_the_unified_feed_actually_mixes_both_stores(client):
     """A feed that returns only one store is not a union."""
     body = client.get("/api/v2/news/all?days=365&limit=100").json()
@@ -158,6 +167,7 @@ def test_the_unified_feed_actually_mixes_both_stores(client):
     assert codes - set(INSTITUTIONS), "no agency item -- the union dropped the economy half"
 
 
+@pytest.mark.live
 def test_pick_list_offers_the_institutions(client):
     """A body the picker cannot show is a body nobody can filter to."""
     bodies = {b["code"]: b["item_count"] for b in client.get("/api/v2/news/bodies").json()["bodies"]}
@@ -165,6 +175,7 @@ def test_pick_list_offers_the_institutions(client):
         assert bodies.get(code, 0) > 0, f"{code} missing from the /bodies pick-list"
 
 
+@pytest.mark.live
 def test_freshness_probe_covers_both_stores(client):
     """`/latest` is the staleness guard the /news skill trusts before declaring a
     quiet day. Reading only the agency store made it report the agency feed's
@@ -180,6 +191,7 @@ def test_freshness_probe_covers_both_stores(client):
 # Two id spaces, one endpoint
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_agency_ids_are_still_integers(client):
     """Contract preservation: existing consumers must not start seeing strings.
 
@@ -192,6 +204,7 @@ def test_agency_ids_are_still_integers(client):
     assert isinstance(body["data"][0]["id"], int)
 
 
+@pytest.mark.live
 def test_institutional_ids_are_uuid_strings(client):
     body = client.get("/api/v2/news/all?body=commission&days=365&limit=1").json()
     assert body["data"], "no commission item to check"
@@ -208,6 +221,7 @@ def test_coerce_id(raw, expected):
     assert _coerce_id(raw) == expected
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("scope", ["commission", "cedefop"])
 def test_detail_endpoint_round_trips_both_id_spaces(client, scope):
     """Whatever id the list hands out must work unchanged on the detail route."""
@@ -221,12 +235,14 @@ def test_detail_endpoint_round_trips_both_id_spaces(client, scope):
     assert r.json()["body_code"] == item["body_code"]
 
 
+@pytest.mark.live
 def test_a_malformed_id_is_a_404_not_a_500(client):
     """A bad UUID must not reach psycopg as a cast error."""
     r = client.get("/api/v2/news/not-a-real-id")
     assert r.status_code == 404, f"expected 404, got {r.status_code}"
 
 
+@pytest.mark.live
 def test_literal_routes_still_win_over_the_id_route(client):
     """`item_id` is now a string, so `/latest` and `/bodies` would happily match
     it. They are declared first and must stay that way."""
@@ -238,6 +254,7 @@ def test_literal_routes_still_win_over_the_id_route(client):
 # Filters must apply to BOTH halves, or the union leaks
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_date_window_applies_to_the_institutional_half(client):
     """A filter honoured on one half only would return unfiltered institutional rows."""
     narrow = client.get("/api/v2/news/all?body=commission&days=2").json()["total"]
@@ -245,6 +262,7 @@ def test_date_window_applies_to_the_institutional_half(client):
     assert narrow < wide, "the date window does not narrow the institutional half"
 
 
+@pytest.mark.live
 def test_kind_filter_applies_to_the_institutional_half(client):
     """Three kinds since 29 Sep 2026: `publication` joined news and press_release.
 
@@ -264,6 +282,7 @@ def test_kind_filter_applies_to_the_institutional_half(client):
     )
 
 
+@pytest.mark.live
 def test_publication_is_a_served_kind(client):
     """Guards the regression that hid 6,814 items: publication must not 400 or come back empty."""
     r = client.get("/api/v2/news/all?kind=publication&days=3650&limit=5")
@@ -273,12 +292,14 @@ def test_publication_is_a_served_kind(client):
     assert {i["kind"] for i in body["data"]} <= {"publication"}
 
 
+@pytest.mark.live
 def test_scoping_to_an_agency_excludes_the_institutional_half(client):
     """`body=cedefop` must not drag in the whole institutional store."""
     body = client.get("/api/v2/news/all?body=cedefop&days=3650&limit=50").json()
     assert all(i["body_code"] == "cedefop" for i in body["data"])
 
 
+@pytest.mark.live
 def test_free_text_search_applies_to_both_halves(client):
     """`q` uses FTS on the agency half and ILIKE on the institutional half; the
     filter must still NARROW both, not pass one through unfiltered."""
@@ -287,6 +308,7 @@ def test_free_text_search_applies_to_both_halves(client):
     assert filtered < unfiltered, "q does not filter the institutional half"
 
 
+@pytest.mark.live
 def test_pagination_is_stable_across_the_union(client):
     """Page 2 must not repeat page 1 -- a union without a deterministic ORDER BY
     tiebreak can interleave differently on each call."""
@@ -328,6 +350,7 @@ def test_every_order_has_a_deterministic_tiebreak(order):
     assert "id" in _ORDERS[order], f"order={order} has no id tiebreak: {_ORDERS[order]!r}"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("order", ["recent", "oldest", "title"])
 def test_pages_do_not_overlap_under_any_order(client, order):
     p1 = client.get(f"/api/v2/news/all?days=365&limit=25&page=1&order={order}").json()["data"]
@@ -351,6 +374,7 @@ def test_pages_do_not_overlap_under_any_order(client, order):
 # My audit of v2 checked envelopes, ids, filters and pagination and never asked
 # for the body. Hence the standing rule these tests enforce.
 
+@pytest.mark.live
 def test_the_union_carries_the_body_columns(db):
     """If the SELECT does not project them, no parameter can ever surface them."""
     from api.v2.news import _news_source_sql, _NEWS_TYPES
@@ -361,6 +385,7 @@ def test_the_union_carries_the_body_columns(db):
     assert {"body_txt", "body_html"} <= cols, f"union drops the body columns: {sorted(cols)}"
 
 
+@pytest.mark.live
 def test_include_body_returns_real_content(client):
     """The parameter the partner could not find. Without it there is no bulk route
     to the body at all."""
@@ -374,6 +399,7 @@ def test_include_body_returns_real_content(client):
     )
 
 
+@pytest.mark.live
 def test_agency_items_serve_the_full_article(client):
     body = client.get(
         "/api/v2/news/all?body=cedefop&days=3650&limit=5&include_body=true").json()["data"]
@@ -382,6 +408,7 @@ def test_agency_items_serve_the_full_article(client):
     assert any((i.get("body_txt") or "").strip() for i in body)
 
 
+@pytest.mark.live
 def test_institutional_items_are_not_hardcoded_null(client):
     """A Commission item used to return NULL from the list AND the detail route."""
     lst = client.get(
@@ -396,6 +423,7 @@ def test_institutional_items_are_not_hardcoded_null(client):
     )
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("scope", ["commission", "cedefop"])
 def test_the_detail_route_always_serves_a_body(client, scope):
     lst = client.get(f"/api/v2/news/all?body={scope}&days=3650&limit=1").json()["data"]
@@ -422,6 +450,7 @@ def test_the_institutional_projection_does_not_fill_the_date():
     assert "created_at) AS document_date" not in projection
 
 
+@pytest.mark.live
 def test_the_union_never_serves_an_undated_row_with_a_date(db):
     from api.v2.news import _news_source_sql, _NEWS_TYPES
     src, params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
@@ -431,6 +460,7 @@ def test_the_union_never_serves_an_undated_row_with_a_date(db):
     assert filled == 0, f"{filled} undated institutional row(s) served with a date"
 
 
+@pytest.mark.live
 def test_latest_counts_undated_rows_in_both_halves(client, db):
     """Reconciled against the RAW columns, not against the union's own projection."""
     # _NEWS_TYPES rather than a literal pair: the served kinds became three on
@@ -451,6 +481,7 @@ def test_latest_counts_undated_rows_in_both_halves(client, db):
         f"{eco} (economy) + {inst} (institutional)")
 
 
+@pytest.mark.live
 def test_an_undated_institutional_item_has_a_null_date_and_is_still_findable(client, db):
     from api.v2.news import _INSTITUTIONAL_NEWS, _EU_NEWS_SOURCE_TYPES
     code_for = {inst: code for code, inst in _INSTITUTIONAL_NEWS.items()}
@@ -473,6 +504,7 @@ def test_an_undated_institutional_item_has_a_null_date_and_is_still_findable(cli
     assert match[0]["document_date"] is None, "the list route fills the date"
 
 
+@pytest.mark.live
 def test_to_includes_the_whole_day_for_items_with_a_time(client, db):
     """`to` is documented as "on/before this date". A document_date of 10:25 on the day
     was excluded by `<= :until`, which is midnight at the START of the day: the ECB's 8
@@ -508,6 +540,7 @@ def test_to_includes_the_whole_day_for_items_with_a_time(client, db):
     assert got == on_day, f"{row.body_code} {row.d}: {on_day} items on the day, from=to returned {got}"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("scope", ["commission", "eeas"])
 def test_detail_and_list_serve_the_same_body(client, scope):
     """One item, one body: the detail route read `summary` and NULL body_html while the

@@ -3,10 +3,14 @@
 Real database, read-only: after the linking job has run, more than one live file
 is linked, and the linker's own function finds them.
 """
+import pytest
 import importlib.util
 from pathlib import Path
 
 from core.database import SessionLocal
+
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
 
 HERE = Path(__file__).resolve().parent
 _spec = importlib.util.spec_from_file_location(

@@ -30,6 +30,9 @@ from services.document_generation.det_renderer import (  # noqa: E402
     render,
 )
 
+# Needs production data or files outside git: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 ROOT = Path(__file__).resolve().parents[2]
 AKN_DIR = ROOT / "docs" / "ontologies" / "akn4eu"
 AKN_NS = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0"

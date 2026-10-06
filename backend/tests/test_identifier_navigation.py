@@ -95,6 +95,7 @@ PAIRS = [
 ]
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("collection,ref_field", PAIRS, ids=[p for p, _ in PAIRS])
 def test_the_collections_own_id_reaches_the_item(api_client, collection, ref_field):
     """The whole defect in one assertion."""
@@ -127,6 +128,7 @@ def test_the_collections_own_id_reaches_the_item(api_client, collection, ref_fie
     )
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("collection,ref_field",
                          [(c, r) for c, r in PAIRS if r],
                          ids=[c for c, r in PAIRS if r])
@@ -148,6 +150,7 @@ def test_the_reference_still_works_and_returns_the_same_row(api_client, collecti
     )
 
 
+@pytest.mark.live
 def test_a_malformed_identifier_is_a_404_not_a_500(api_client):
     """Handing a non-UUID string to a uuid column makes Postgres raise, which
     would turn 'this is a reference, not an id' into a server error. The
@@ -192,6 +195,7 @@ SELF_COLLECTIONS = [
 ]
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("collection", SELF_COLLECTIONS)
 def test_every_item_carries_a_self_link_that_resolves(api_client, collection):
     """A client should never have to choose a field or think about escaping.

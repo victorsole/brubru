@@ -47,6 +47,7 @@ def test_a_dissolved_group_keeps_its_own_code():
     assert GROUP_CODE_MAP.get("PFE") == "PFE"
 
 
+@pytest.mark.live
 def test_the_two_groups_are_two_rows_with_their_own_names(db):
     rows = dict(db.execute(text(
         "SELECT code, label FROM ep_political_groups WHERE code IN ('ID','PFE')")).fetchall())
@@ -55,6 +56,7 @@ def test_the_two_groups_are_two_rows_with_their_own_names(db):
     assert "Patriots" in rows["PFE"], rows["PFE"]
 
 
+@pytest.mark.live
 def test_the_group_label_columns_fit_the_longest_value_the_source_publishes(db):
     """63 characters is what HowTheyVote actually publishes; 20 is what the column held."""
     widths = dict(db.execute(text(
@@ -65,6 +67,7 @@ def test_the_group_label_columns_fit_the_longest_value_the_source_publishes(db):
         assert width >= 100, f"{col} is VARCHAR({width}): the 63-char legacy group name needs room"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("table,minimum", [
     ("ep_political_groups", 8),      # 8 groups sit in the current Parliament
     ("ep_members", 700),             # 720 seats; HowTheyVote also carries members who left
@@ -76,6 +79,7 @@ def test_the_table_is_not_empty(db, table, minimum):
     assert n >= minimum, f"{table} holds {n} rows: the HowTheyVote import has not run"
 
 
+@pytest.mark.live
 def test_every_membership_points_at_a_group_that_exists(db):
     """A membership whose group_code has no row joins to nothing and vanishes from any
     per-group count, without an error."""

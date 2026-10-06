@@ -4,10 +4,14 @@
 tracked-file detail only; Council Watch now lists them by the user's interests.
 Real database.
 """
+import pytest
 from types import SimpleNamespace
 
 from core.database import SessionLocal
 from api.council_watch import _document_items
+
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
 
 
 def _user(pi):

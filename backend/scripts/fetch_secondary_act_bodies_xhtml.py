@@ -41,7 +41,7 @@ import certifi  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 
 CELLAR = "https://publications.europa.eu/resource/celex/{celex}"
-UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 MIN_CHARS = 600
 
 PICK = text(

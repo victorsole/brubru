@@ -61,6 +61,7 @@ def test_laws_unauth_returns_401():
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_laws_returns_envelope_shape(auth_headers):
     client = TestClient(app)
     r = client.get("/api/v1/laws?limit=3", headers=auth_headers)
@@ -79,6 +80,7 @@ def test_laws_returns_envelope_shape(auth_headers):
     assert len(body["data"]) <= 3
 
 
+@pytest.mark.live
 def test_laws_date_filter_parses(auth_headers):
     client = TestClient(app)
     r = client.get(
@@ -94,6 +96,7 @@ def test_laws_date_filter_parses(auth_headers):
 # -------------------------------------------------------- procedures ---
 
 
+@pytest.mark.live
 def test_procedures_returns_envelope(auth_headers):
     client = TestClient(app)
     r = client.get("/api/v1/procedures?limit=2", headers=auth_headers)
@@ -104,6 +107,7 @@ def test_procedures_returns_envelope(auth_headers):
     assert isinstance(body["data"], list)
 
 
+@pytest.mark.live
 def test_procedures_reject_bad_limit(auth_headers):
     client = TestClient(app)
     r = client.get("/api/v1/procedures?limit=500", headers=auth_headers)
@@ -113,6 +117,7 @@ def test_procedures_reject_bad_limit(auth_headers):
 # ------------------------------------------------------ legal-text ---
 
 
+@pytest.mark.live
 def test_legal_text_resolve_references_ok(auth_headers):
     client = TestClient(app)
     r = client.post(
@@ -124,6 +129,7 @@ def test_legal_text_resolve_references_ok(auth_headers):
     assert "refs" in r.json()
 
 
+@pytest.mark.live
 def test_legal_text_resolve_aliases_ok(auth_headers):
     client = TestClient(app)
     r = client.post(
@@ -142,6 +148,7 @@ def test_legal_text_resolve_aliases_ok(auth_headers):
 # ------------------------------------------------------ commissioners ---
 
 
+@pytest.mark.live
 def test_commissioner_unknown_name_returns_404(auth_headers):
     client = TestClient(app)
     with patch(
@@ -152,6 +159,7 @@ def test_commissioner_unknown_name_returns_404(auth_headers):
     assert r.status_code == 404
 
 
+@pytest.mark.live
 def test_commissioner_known_name_returns_envelope(auth_headers):
     from datetime import date
     from services.api_clients.commissioner_agenda_client import (

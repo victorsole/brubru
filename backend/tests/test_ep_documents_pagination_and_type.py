@@ -55,6 +55,7 @@ def _page(api, **params):
 
 
 # --------------------------------------------------------------- the page cap
+@pytest.mark.live
 def test_the_last_page_carries_records(api):
     """Page 20 of 20 was empty. If the envelope says the page exists, it has rows."""
     first = _page(api, page=1, limit=100)
@@ -64,6 +65,7 @@ def test_the_last_page_carries_records(api):
     assert d["returned"] > 0, f"page {last} of {last} is empty while total says {d['total']}"
 
 
+@pytest.mark.live
 def test_no_page_before_the_last_is_empty(api):
     """Walks the whole envelope. Every page the envelope promises must deliver."""
     first = _page(api, page=1, limit=100)
@@ -72,6 +74,7 @@ def test_no_page_before_the_last_is_empty(api):
     assert not empty, f"empty page(s) inside a {first['pages']}-page envelope: {empty}"
 
 
+@pytest.mark.live
 def test_every_record_is_reachable_by_paging(api):
     """The sum of the pages is the total. This is the claim the envelope makes."""
     first = _page(api, page=1, limit=100)
@@ -79,6 +82,7 @@ def test_every_record_is_reachable_by_paging(api):
     assert got == first["total"], f"paged {got} of {first['total']} records"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("limit", [10, 50, 100])
 def test_the_reachable_count_does_not_depend_on_page_size(api, limit):
     """The cap was 8*limit, so it moved with the page size and looked like a data limit."""
@@ -88,6 +92,7 @@ def test_the_reachable_count_does_not_depend_on_page_size(api, limit):
         assert ninth["returned"] > 0, f"page 9 empty at limit={limit}"
 
 
+@pytest.mark.live
 def test_has_more_is_false_only_on_the_last_page(api):
     first = _page(api, page=1, limit=100)
     last = _page(api, page=first["pages"], limit=100)
@@ -96,6 +101,7 @@ def test_has_more_is_false_only_on_the_last_page(api):
 
 
 # --------------------------------------------------------------- the type filter
+@pytest.mark.live
 def test_a_filtered_total_is_never_the_whole_corpus(api):
     """`report`, `minutes` and `resolution` each returned all 1,931 records."""
     everything = _page(api, limit=1)["total"]
@@ -104,6 +110,7 @@ def test_a_filtered_total_is_never_the_whole_corpus(api):
         assert t < everything, f"document_type={value} returned the whole corpus ({t})"
 
 
+@pytest.mark.live
 def test_the_per_type_totals_do_not_exceed_the_corpus(api):
     """They summed to 8,858 against 1,931, because each type added the 575 unfiltered
     work items. A partition cannot be larger than the set."""
@@ -115,6 +122,7 @@ def test_the_per_type_totals_do_not_exceed_the_corpus(api):
         f"the amendment-document types alone sum to {total} of a {everything}-record corpus")
 
 
+@pytest.mark.live
 def test_every_row_returned_is_of_the_type_asked_for(api):
     for value in ("draft_report", "amendments"):
         rows = _page(api, limit=50, document_type=value)["data"]
@@ -140,5 +148,6 @@ def test_no_typo_can_silently_mean_no_filter(api, value):
     assert r.status_code == 422, f"{value!r} was accepted and answered with {r.json().get('total')}"
 
 
+@pytest.mark.live
 def test_a_served_type_is_accepted_case_insensitively(api):
     assert api.get(ROUTE, params={"document_type": "DRAFT_REPORT"}).status_code == 200

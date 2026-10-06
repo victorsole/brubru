@@ -41,6 +41,7 @@ LAWS = "/api/v2/legislative/eur-lex/laws"
 
 
 class TestAnOrphanIsReachable:
+    @pytest.mark.live
     def test_a_row_with_no_celex_resolves_by_its_row_id(self, client, db):
         rid = db.execute(text(
             "SELECT id FROM eu_laws WHERE celex IS NULL ORDER BY id LIMIT 1")).scalar()
@@ -50,6 +51,7 @@ class TestAnOrphanIsReachable:
         assert r.status_code == 200, f"/laws/{rid} is what the list prints as self"
         assert r.json()["id"] == rid
 
+    @pytest.mark.live
     def test_the_self_link_of_an_orphan_resolves(self, client, db):
         """Follow the link the API itself prints, not one we built."""
         rid = db.execute(text(
@@ -64,11 +66,13 @@ class TestAnOrphanIsReachable:
 
 
 class TestNothingElseChanged:
+    @pytest.mark.live
     def test_a_celex_still_resolves(self, client):
         r = client.get(f"{LAWS}/32016R0679")
         assert r.status_code == 200
         assert r.json()["celex"] == "32016R0679"
 
+    @pytest.mark.live
     def test_id_and_celex_reach_the_same_row(self, client, db):
         row = db.execute(text(
             "SELECT id, celex FROM eu_laws WHERE celex IS NOT NULL ORDER BY id LIMIT 1")).fetchone()
@@ -77,12 +81,14 @@ class TestNothingElseChanged:
         assert by_id.status_code == 200 and by_celex.status_code == 200
         assert by_id.json()["id"] == by_celex.json()["id"] == row[0]
 
+    @pytest.mark.live
     def test_an_unknown_key_still_404s(self, client):
         assert client.get(f"{LAWS}/99999999").status_code == 404
         assert client.get(f"{LAWS}/32999R9999").status_code == 404
 
 
 class TestTheKeyIsUnambiguous:
+    @pytest.mark.live
     def test_no_celex_is_purely_numeric(self, db):
         """What makes a bare integer safe to read as a row id. If this ever fails the
         route must stop guessing and take an explicit prefix instead."""
@@ -92,6 +98,7 @@ class TestTheKeyIsUnambiguous:
 
 
 class TestDetailCarriesItsOwnSelf:
+    @pytest.mark.live
     def test_a_detail_response_fills_self(self, client, db):
         """A schema that declares `self` and always returns null is a broken promise."""
         rid = db.execute(text(
@@ -101,6 +108,7 @@ class TestDetailCarriesItsOwnSelf:
         got = r.json().get("self")
         assert got and got.endswith(f"{LAWS}/{rid}"), f"self was {got!r}"
 
+    @pytest.mark.live
     def test_an_orphan_detail_fills_self_too(self, client, db):
         rid = db.execute(text(
             "SELECT id FROM eu_laws WHERE celex IS NULL ORDER BY id LIMIT 1")).scalar()

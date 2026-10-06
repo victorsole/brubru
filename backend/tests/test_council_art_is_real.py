@@ -43,6 +43,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_no_research_row_carries_a_hand_written_art_url(db):
     """The seeded ART URLs are the ones that 404. None may come back."""
     n = db.execute(text(
@@ -51,6 +52,7 @@ def test_no_research_row_carries_a_hand_written_art_url(db):
     assert n == 0, f"{n} row(s) point at a per-paper ART URL, a shape the Council does not serve"
 
 
+@pytest.mark.live
 def test_art_rows_come_from_the_listing(db):
     rows = db.execute(text(
         "SELECT publication_id, html_url, pdf_url FROM eprs_publications WHERE source = 'art'")).fetchall()
@@ -61,6 +63,7 @@ def test_art_rows_come_from_the_listing(db):
         assert pdf_url and pdf_url.lower().endswith(".pdf"), pdf_url
 
 
+@pytest.mark.live
 def test_a_paper_without_a_known_day_is_not_given_one(db):
     """The listing carries no date and the PDF name carries only a year. A year read as
     the 1st of January is how 57 FRA rows landed on 1 January (15 Sep 2026)."""

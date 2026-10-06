@@ -25,8 +25,8 @@ from sqlalchemy import text
 from services.sync.source_registry import sources_for_tier
 
 # The chain, in the order the tier runner must execute it.
+# council_documents was retired from the warm tier on 28 Sep 2026 (its pages answer 403).
 EXPECTED_ORDER = [
-    "council_documents",
     "texts_adopted",
     "texts_adopted_bodies",
     "oeil_roles",
@@ -107,12 +107,14 @@ def test_the_warm_tier_is_actually_dispatched():
 # 2. The detector
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_the_detector_reports_no_gaps_right_now(db):
     from scripts.ep_council_completeness import run_checks
     gaps = [c for c in run_checks(db.connection()) if c["gap"]]
     assert not gaps, "open gaps: " + "; ".join(f"{g['check']}: {g['detail']}" for g in gaps)
 
 
+@pytest.mark.live
 def test_every_check_names_a_fix(db):
     """A gap report that does not say what to run is an investigation, not an alert."""
     from scripts.ep_council_completeness import run_checks
@@ -138,6 +140,7 @@ def test_the_detector_exits_non_zero_on_a_gap():
     )
 
 
+@pytest.mark.live
 def test_health_endpoint_exposes_the_corpora_verdict():
     """A verdict that reaches only a log is not a monitor -- the same reason the
     scraper canary was made visible in this endpoint."""

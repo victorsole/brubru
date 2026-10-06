@@ -18,6 +18,9 @@ from sqlalchemy import text
 
 from api.v2.news import _INSTITUTIONAL_NEWS, _NEWS_TYPES
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture(scope="module")
 def db():

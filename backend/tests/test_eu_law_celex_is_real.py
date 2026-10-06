@@ -39,6 +39,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("celex,gone", [
     ("32023L2413", "32023R2413"),   # RED III is a Directive
     ("32015L1535", "32015R1535"),   # the TRIS Directive
@@ -51,6 +52,7 @@ def test_the_corrected_celex_is_the_one_that_exists(db, celex, gone):
                       {"c": gone}).scalar() == 0, f"{gone} does not exist in Cellar but we serve it"
 
 
+@pytest.mark.live
 def test_two_acts_no_longer_share_one_celex(db):
     """32013D0377 returned the Ombudsman election decision; in EUR-Lex it is Decision
     No 377/2013/EU. The Ombudsman decision is 32013D0377(01)."""
@@ -63,6 +65,7 @@ def test_two_acts_no_longer_share_one_celex(db):
     assert "Ombudsman" in rows.get("32013D0377(01)", "")
 
 
+@pytest.mark.live
 def test_no_celex_is_held_by_two_rows(db):
     """A correction must not merge two laws onto one identifier."""
     n = db.execute(text(
@@ -71,6 +74,7 @@ def test_no_celex_is_held_by_two_rows(db):
     assert n == 0, f"{n} CELEX value(s) are held by more than one law"
 
 
+@pytest.mark.live
 def test_laws_expose_a_permanent_id(db):
     """A corrected CELEX reads to a client as a new record unless there is an id that does
     not move. eu_laws has an integer primary key that the API never exposed."""
@@ -81,6 +85,7 @@ def test_laws_expose_a_permanent_id(db):
     assert src.count("id=r.id,") >= 2, "the id is declared but not populated on both routes"
 
 
+@pytest.mark.live
 def test_the_correction_was_recorded_for_the_client():
     """A changed CELEX looks like a new record downstream, so the mapping is handed over."""
     import json

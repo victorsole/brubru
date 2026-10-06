@@ -13,6 +13,9 @@ never reaches a client.
 import pytest
 from sqlalchemy import text
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 
 @pytest.fixture(scope="module")
 def db():

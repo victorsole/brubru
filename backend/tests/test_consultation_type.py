@@ -59,6 +59,7 @@ class TestItAgreesWithTheStoredData:
         yield s
         s.close()
 
+    @pytest.mark.live
     def test_19293_is_a_public_consultation(self, db):
         from sqlalchemy import text
         got = db.execute(text(
@@ -67,6 +68,7 @@ class TestItAgreesWithTheStoredData:
         assert got == "public_consultation", (
             "a public consultation is open on it until 14 December")
 
+    @pytest.mark.live
     def test_the_five_coherence_checks_stay_at_zero(self, db):
         from sqlalchemy import text
         checks = {

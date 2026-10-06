@@ -104,6 +104,7 @@ def test_wrong_prefix_returns_401(test_app):
     assert code == "auth_invalid_format"
 
 
+@pytest.mark.live
 def test_unknown_key_returns_401(test_app):
     client = TestClient(test_app)
     r = client.get(
@@ -116,6 +117,7 @@ def test_unknown_key_returns_401(test_app):
     assert code == "auth_key_not_found"
 
 
+@pytest.mark.live
 def test_valid_key_returns_200(test_app, blue_user_with_key):
     user, plaintext, _ = blue_user_with_key
     client = TestClient(test_app)
@@ -125,6 +127,7 @@ def test_valid_key_returns_200(test_app, blue_user_with_key):
     assert r.json()["user_id"] == str(user.id)
 
 
+@pytest.mark.live
 def test_revoked_key_returns_401(test_app, blue_user_with_key):
     from datetime import datetime
     user, plaintext, key_id = blue_user_with_key
@@ -142,6 +145,7 @@ def test_revoked_key_returns_401(test_app, blue_user_with_key):
     assert r.status_code == 401
 
 
+@pytest.mark.live
 def test_non_blue_tier_now_authenticates_ok(test_app, yellow_user_with_key):
     """Phase A (21 May 2026): subscription-tier gate REMOVED.
 
@@ -158,6 +162,7 @@ def test_non_blue_tier_now_authenticates_ok(test_app, yellow_user_with_key):
     assert r.json()["tier"] == "yellow"
 
 
+@pytest.mark.live
 def test_expired_key_returns_401(test_app, blue_user_with_key):
     """Self-serve keys have a non-NULL expires_at. Past expiry => 401."""
     from datetime import datetime, timedelta, timezone
@@ -179,6 +184,7 @@ def test_expired_key_returns_401(test_app, blue_user_with_key):
     assert code == "key_expired"
 
 
+@pytest.mark.live
 def test_bearer_auth_works(test_app, blue_user_with_key):
     """Authorization: Bearer <key> is accepted alongside X-API-Key."""
     _, plaintext, _ = blue_user_with_key

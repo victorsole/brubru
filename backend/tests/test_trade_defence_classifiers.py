@@ -108,6 +108,7 @@ def test_the_act_is_filed_under_what_it_does(title, expected):
 
 
 # ------------------------------------------------------------------ the corpus itself
+@pytest.mark.live
 @pytest.mark.filterwarnings("ignore")
 def test_no_measure_in_the_corpus_carries_a_clause_as_its_country():
     """The classifier can be right while the rows stay wrong: they are only rewritten when
@@ -131,6 +132,7 @@ def test_no_measure_in_the_corpus_carries_a_clause_as_its_country():
         db.close()
 
 
+@pytest.mark.live
 def test_every_status_the_data_uses_is_documented():
     """`registration` was a real value in 30 rows and absent from the endpoint's docs, so a
     caller filtering by the documented list could not reach them and had no way to know

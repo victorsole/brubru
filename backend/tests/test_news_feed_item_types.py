@@ -155,6 +155,7 @@ def test_the_sync_drops_non_content_and_types_the_rest(monkeypatch):
 # The store and the API
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_every_stored_row_of_a_ruled_body_has_a_rule(db):
     rows = db.execute(text("SELECT institution, source_url FROM eu_news_items "
                            "WHERE institution = ANY(:i)"), {"i": RULED}).fetchall()
@@ -163,6 +164,7 @@ def test_every_stored_row_of_a_ruled_body_has_a_rule(db):
                 if fit.rule_for(r.institution, r.source_url) == fit.UNKNOWN]
 
 
+@pytest.mark.live
 def test_no_stored_row_contradicts_its_url_rule(db):
     """PAGE rows are typed from their page and checked by the relabel dry run instead."""
     rows = db.execute(text("SELECT institution, item_type, source_url FROM eu_news_items "
@@ -177,6 +179,7 @@ def test_no_stored_row_contradicts_its_url_rule(db):
     assert not wrong, f"{len(wrong)} rows, e.g. {wrong[:3]}"
 
 
+@pytest.mark.live
 @pytest.mark.parametrize("body", sorted(k for k, v in _INSTITUTIONAL_NEWS.items() if v in fit.RULES))
 def test_the_news_api_serves_no_non_news_item_from_a_ruled_body(client, body):
     inst = _INSTITUTIONAL_NEWS[body]

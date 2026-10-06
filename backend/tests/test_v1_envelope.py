@@ -36,10 +36,10 @@ def test_empty_result():
     assert env.data == []
 
 
-def test_meta_attribution_is_present():
+def test_meta_block_is_not_in_the_envelope():
+    """Removed 30 Apr 2026 at the client's request; provenance is on X-Powered-By / X-Source."""
     env = build_envelope([1], total=1, page=1, limit=20)
-    assert env.meta.powered_by == "Brubru"
-    assert env.meta.source == "brubru.beresol.eu"
+    assert "meta" not in env.model_dump()
 
 
 def test_filters_echoed_back():

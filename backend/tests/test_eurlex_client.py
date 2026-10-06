@@ -224,16 +224,17 @@ class TestEURLexClientHTML:
 
             await client.get_document_html("32024R1689", "EN")
 
-            # Verify URL format
+            # Cellar, not EUR-Lex (WAF-blocked); language goes in Accept-Language.
             call_args = mock_get.call_args
-            url = call_args[0][0]
-            assert "CELEX:32024R1689" in url
-            assert "/EN/" in url
+            assert call_args[0][0] == "https://publications.europa.eu/resource/celex/32024R1689"
+            assert call_args[1]["headers"]["Accept"] == "application/xhtml+xml"
+            assert call_args[1]["headers"]["Accept-Language"] == "en"
 
     @pytest.mark.asyncio
     async def test_get_document_html_returns_content(self, client):
         """Test get_document_html returns HTML content"""
-        html_content = "<html><body><h1>AI Act</h1></body></html>"
+        # Under 5,000 characters the client treats the answer as a stub and returns None.
+        html_content = "<html><body><h1>AI Act</h1>" + "<p>Article text.</p>" * 400 + "</body></html>"
 
         mock_response = MagicMock()
         mock_response.status_code = 200

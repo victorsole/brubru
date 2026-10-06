@@ -32,6 +32,9 @@ from services.document_generation.legalhtml_renderer import (  # noqa: E402
     validate,
 )
 
+# Needs production data or files outside git: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 ROOT = Path(__file__).resolve().parents[2]
 LH_DIR = ROOT / "docs" / "ontologies" / "legalhtml"
 SPEC_HTML = LH_DIR / "LegalHTML-2024-01-15" / "legalhtml-specs" / "index.html"

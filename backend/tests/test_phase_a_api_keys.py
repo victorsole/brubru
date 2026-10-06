@@ -95,6 +95,7 @@ def test_scope_catalogue_is_public(client: TestClient):
 # Mint
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_mint_succeeds_with_valid_payload(client: TestClient, fresh_user):
     user, token = fresh_user
     r = client.post(
@@ -118,6 +119,7 @@ def test_mint_succeeds_with_valid_payload(client: TestClient, fresh_user):
     assert body["key_prefix"] == plain[len("brubru_live_"):len("brubru_live_") + 4]
 
 
+@pytest.mark.live
 def test_mint_rejects_unknown_scope(client: TestClient, fresh_user):
     _, token = fresh_user
     r = client.post(
@@ -130,6 +132,7 @@ def test_mint_rejects_unknown_scope(client: TestClient, fresh_user):
     assert detail["reason_code"] == "invalid_scopes"
 
 
+@pytest.mark.live
 def test_mint_rejects_wildcard_scope(client: TestClient, fresh_user):
     _, token = fresh_user
     r = client.post(
@@ -141,6 +144,7 @@ def test_mint_rejects_wildcard_scope(client: TestClient, fresh_user):
     assert r.json()["detail"]["reason_code"] == "invalid_scopes"
 
 
+@pytest.mark.live
 def test_mint_rejects_bad_expiry(client: TestClient, fresh_user):
     _, token = fresh_user
     r = client.post(
@@ -152,6 +156,7 @@ def test_mint_rejects_bad_expiry(client: TestClient, fresh_user):
     assert r.json()["detail"]["reason_code"] == "invalid_expiry"
 
 
+@pytest.mark.live
 def test_mint_rejects_short_name(client: TestClient, fresh_user):
     """Pydantic name min_length=3 fires before the handler runs (list-format 422)."""
     _, token = fresh_user
@@ -179,6 +184,7 @@ def test_mint_requires_auth(client: TestClient):
 # 3-key active cap
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_three_key_active_cap(client: TestClient, fresh_user):
     _, token = fresh_user
 
@@ -203,6 +209,7 @@ def test_three_key_active_cap(client: TestClient, fresh_user):
     assert body["active_count"] == 3
 
 
+@pytest.mark.live
 def test_revoked_keys_dont_count_toward_cap(client: TestClient, fresh_user):
     _, token = fresh_user
     minted_ids: list[str] = []
@@ -232,6 +239,7 @@ def test_revoked_keys_dont_count_toward_cap(client: TestClient, fresh_user):
 # List + revoke
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_list_excludes_plaintext_and_is_owner_scoped(client: TestClient, fresh_user):
     _, token = fresh_user
     r = client.post(
@@ -253,6 +261,7 @@ def test_list_excludes_plaintext_and_is_owner_scoped(client: TestClient, fresh_u
     assert row["is_expired"] is False
 
 
+@pytest.mark.live
 def test_revoke_is_idempotent(client: TestClient, fresh_user):
     _, token = fresh_user
     r = client.post(
@@ -268,6 +277,7 @@ def test_revoke_is_idempotent(client: TestClient, fresh_user):
     assert r2.status_code == 204  # idempotent
 
 
+@pytest.mark.live
 def test_revoke_other_users_key_returns_404(client: TestClient, fresh_user):
     _, token = fresh_user
     # Use a random UUID — not owned by this user
@@ -289,6 +299,7 @@ def _v1_error(body: dict) -> dict:
     return body
 
 
+@pytest.mark.live
 def test_scoped_key_403s_on_out_of_scope_endpoint(client: TestClient, fresh_user):
     """A key scoped only to read:laws gets 403 on a read:ep endpoint."""
     _, token = fresh_user
@@ -308,6 +319,7 @@ def test_scoped_key_403s_on_out_of_scope_endpoint(client: TestClient, fresh_user
     assert body["required_scope"] == "read:ep"
 
 
+@pytest.mark.live
 def test_scoped_key_allows_in_scope_endpoint(client: TestClient, fresh_user):
     """Same key with read:laws is allowed on /api/v1/laws."""
     _, token = fresh_user
@@ -323,6 +335,7 @@ def test_scoped_key_allows_in_scope_endpoint(client: TestClient, fresh_user):
     assert r.status_code != 403, r.text
 
 
+@pytest.mark.live
 def test_free_authed_endpoint_accessible_without_scope(client: TestClient, fresh_user):
     """/api/v1/whoami goes through auth + scope but is in FREE_PATH_PATTERNS,
     so any valid key with any scope should reach 200.
@@ -338,6 +351,7 @@ def test_free_authed_endpoint_accessible_without_scope(client: TestClient, fresh
     assert r.status_code == 200, r.text
 
 
+@pytest.mark.live
 def test_wildcard_key_works_everywhere(client: TestClient):
     """A wildcard key (admin-minted, scopes=['*']) passes scope check on every path.
 
@@ -373,6 +387,7 @@ def test_wildcard_key_works_everywhere(client: TestClient):
 # Expiry
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_expired_key_returns_401_on_v1(client: TestClient, fresh_user):
     """Expired key blocked at the auth layer. Hits /whoami (auth-required + free path)."""
     user, token = fresh_user
@@ -404,6 +419,7 @@ def test_expired_key_returns_401_on_v1(client: TestClient, fresh_user):
 # Sandbox isolation
 # ---------------------------------------------------------------------------
 
+@pytest.mark.live
 def test_single_active_sandbox_constraint():
     """The partial unique index on (is_sandbox) WHERE is_sandbox AND not revoked
     means we can never accidentally end up with two active sandbox keys.

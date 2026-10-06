@@ -86,6 +86,7 @@ def test_both_news_stores_are_profiled():
             assert p.get(key), f"{name} profile is missing {key}"
 
 
+@pytest.mark.live
 def test_profile_columns_exist_in_the_database():
     """A profile naming a column that does not exist fails at query time and the
     surface prints '-', which reads as 'nobody used it'. 359 feed subscriptions

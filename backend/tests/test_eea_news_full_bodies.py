@@ -40,6 +40,7 @@ def db():
     s.close()
 
 
+@pytest.mark.live
 def test_no_eea_news_url_points_at_a_private_address(db):
     """A public_url on 10.x resolves for nobody outside the EEA's own network."""
     for table, col in (("eu_news_items", "source_url"), ("economy_items", "public_url")):
@@ -49,6 +50,7 @@ def test_no_eea_news_url_points_at_a_private_address(db):
         assert n == 0, f"{n} row(s) in {table} still serve a private address"
 
 
+@pytest.mark.live
 def test_one_row_per_eea_article(db):
     n, distinct = db.execute(text(
         "SELECT count(*), count(DISTINCT source_url) FROM eu_news_items "
@@ -56,6 +58,7 @@ def test_one_row_per_eea_article(db):
     assert n == distinct, f"{n} EEA rows for {distinct} distinct articles"
 
 
+@pytest.mark.live
 def test_eea_news_carries_the_whole_article(db):
     """The table /api/v2/news/all actually serves. 490 characters was the teaser."""
     n, avg, whole = db.execute(text(
@@ -68,6 +71,7 @@ def test_eea_news_carries_the_whole_article(db):
     assert whole / n > 0.9, f"only {whole} of {n} are of document length"
 
 
+@pytest.mark.live
 def test_eea_news_carries_the_whole_html(db):
     """body_html was null or a 410-character fragment; GovClipping need the HTML too."""
     n = db.execute(text(

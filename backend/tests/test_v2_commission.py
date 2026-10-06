@@ -24,6 +24,9 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 
+# Reads production data: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 COMM = "/api/v2/commission"
 
 # (v2 tail, v1 path, scope) — DB-backed EC endpoints with a v1 twin.

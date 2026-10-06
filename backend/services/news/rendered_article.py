@@ -110,6 +110,11 @@ _CHALLENGE_MARKERS = (
     re.compile(r"(?i)consult with your administrator"),
     re.compile(r"(?i)\breference\s*#\s*[0-9a-f]{8,}"),
     re.compile(r"(?i)access to this page has been denied"),
+    # Cloudflare's newer interstitial: 72 EUDA news rows stored it as their article
+    # (fetched 28 Sep 2026; caught by CI on 6 Oct 2026).
+    re.compile(r"(?i)performing security verification"),
+    re.compile(r"(?i)security service to protect against malicious bots"),
+    re.compile(r"(?i)verifies you are not a bot"),
 )
 
 

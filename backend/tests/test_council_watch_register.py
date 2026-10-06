@@ -23,6 +23,7 @@ def _user(db, email):
     return u
 
 
+@pytest.mark.live
 def test_lens_is_selective_and_differs_by_user(db):
     everything = cw._register_items(db, None, False, None)
     if len(everything) < 100:
@@ -33,6 +34,7 @@ def test_lens_is_selective_and_differs_by_user(db):
     assert {x["reference"] for x in a} != {x["reference"] for x in b}
 
 
+@pytest.mark.live
 def test_titles_carry_no_page_furniture(db):
     for it in cw._register_items(db, None, False, None):
         assert "Also available in" not in it["title"]

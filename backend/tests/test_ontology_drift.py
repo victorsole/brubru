@@ -27,6 +27,9 @@ from typing import Set
 
 import pytest
 
+# Needs production data or files outside git: runs locally, never in CI (6 Oct 2026).
+pytestmark = pytest.mark.live
+
 # Add backend/ to sys.path so we can import from services.*
 _BACKEND = Path(__file__).resolve().parents[1]
 if str(_BACKEND) not in sys.path:
