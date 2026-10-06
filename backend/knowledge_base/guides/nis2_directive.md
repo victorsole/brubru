@@ -156,6 +156,9 @@ Where a significant cyber threat could adversely affect the recipients of a serv
 
 ---
 
+
+**Classifying an incident: the CSIRT reference taxonomy.** The EU CSIRTs Network uses the **Reference Security Incident Taxonomy** (RSIT), maintained by ENISA and the TF-CSIRT community (github.com/enisaeu/Reference-Security-Incident-Taxonomy-Task-Force, licence **CC0**, version 1003, last updated 13 May 2026). It has **exactly 11 top-level classes** and **39 incident types**: Abusive Content, Malicious Code, Information Gathering, Intrusion Attempts, Intrusions, Availability, Information Content Security, Fraud, Vulnerable, Other, Test. Examples: Malicious Code (infected system, C2 server), Intrusion Attempts (exploitation of known vulnerabilities, login attempts), Intrusions (privileged account compromise, application compromise), Availability (DDoS, sabotage, outage), Information Content Security (data loss, leak of confidential information). It is a voluntary reference scheme for CSIRTs, NOT the Article 23 reporting form: NIS 2 does not oblige entities to use it, but ENISA's Cross-Border Cyber Hub interoperability guidelines (April 2026) recommend it as the base for sharing threat information (see guide `cyber_solidarity_act`).
+
 ## European Vulnerability Database (Article 12)
 
 ENISA must develop and maintain a European vulnerability database listing publicly known vulnerabilities in ICT products and services, with details of affected products, severity, available patches and guidance on risk mitigation. This is open to all stakeholders, including entities outside the scope of NIS2. Each Member State must designate one CSIRT as a coordinator for coordinated vulnerability disclosure.
