@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, known
 
 _API = "https://data.europarl.europa.eu/api/v2/meps"
 # Currently-sitting MEPs only. `?parliamentary-term=10` returns the whole-term
@@ -80,16 +80,37 @@ def _parse_assistants(html: str) -> dict[str, list[str]]:
 def ingest_mep_assistants(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update({"User-Agent": _UA})
-    meps = s.get(_CURRENT, params={"limit": 2000},
-                 headers={"Accept": "application/ld+json"}, timeout=40).json().get("data") or []
+    # EP Open Data can answer 200 with a non-JSON body (6 Oct 2026); retry before failing.
+    for attempt in range(3):
+        try:
+            meps = s.get(_CURRENT, params={"limit": 2000}, headers={"Accept": "application/ld+json"},
+                         timeout=40).json().get("data") or []
+            break
+        except ValueError:
+            if attempt == 2:
+                raise
+            time.sleep(5 * (attempt + 1))
     now = datetime.now(timezone.utc)
     items: list[Item] = []
     seen: set[str] = set()
+    # Two requests per MEP (~1,440) took the Parliament body past the 600s economy
+    # timeout on every run (6 Oct 2026). A stored MEP is refreshed on one day in seven
+    # (each MEP weekly, twice that day); a new MEP or a thin record is fetched at once.
+    stored = known("parliament", "mep_assistant_register")
+    by_guid = {k.guid: url for url, k in stored.items() if k.guid}
+    day = now.timetuple().tm_yday % 7
     for m in meps:
         mid = str(m.get("identifier") or "").strip()
         if not mid or mid in seen:
             continue
         seen.add(mid)
+        url = by_guid.get(mid)
+        if url and stored[url].body_len >= 200 and sum(map(ord, mid)) % 7 != day:
+            items.append(Item(
+                body_code="parliament", item_type="mep_assistant_register",
+                title=stored[url].title, public_url=url, creation_date=now,
+                source_kind="ep_meps", guid=mid))
+            continue
         label = clean(m.get("label") or "")
         slug = None
         country = ""

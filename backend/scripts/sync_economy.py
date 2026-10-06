@@ -730,8 +730,29 @@ def _keep_stored_type(items) -> None:
             it.item_type = stored
 
 
+# Ingestors that skip items already stored complete (economy_common.needs_fetch). Each
+# re-fetched everything it listed and timed out at 600s on every run until 6 Oct 2026.
+_USES_KNOWN = {
+    ("srb", "news"), ("srb", "publication"), ("srb", "event"),
+    ("parliament", "mep_declaration"), ("parliament", "mep_assistant_register"),
+    ("parliament", "supporting_analysis"),
+    ("euda", "news"), ("euda", "event"), ("euda", "publication"),
+}
+
+
+def _load_known(db: ChunkedDb, body: str, itype: str) -> None:
+    from services.scrapers.economy_common import set_known
+    db.execute("SELECT public_url, title, document_date, coalesce(length(body_txt), 0), guid "
+               "FROM economy_items WHERE body_code = %s AND item_type = %s", (body, itype))
+    rows = db.fetchall()
+    db.rollback()  # read-only: never hold a transaction open while the ingestor scrapes
+    set_known(body, itype, rows)
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
+    if fetch_bodies and (body, itype) in _USES_KNOWN:
+        _load_known(db, body, itype)
     if itype == "legal":
         items = fn(limit=legal_limit)
     else:

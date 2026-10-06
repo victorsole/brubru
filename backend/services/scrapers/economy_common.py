@@ -46,6 +46,57 @@ class Item:
     extras: dict = field(default_factory=dict)
 
 
+@dataclass(frozen=True)
+class Known:
+    """What economy_items already holds for one public_url."""
+    title: str | None
+    document_date: datetime | None
+    body_len: int
+    guid: str | None
+
+
+# (body_code, item_type) -> {public_url: Known}. sync_economy fills it before each
+# ingestor runs. Empty for any other caller, so an ingestor that consults it behaves
+# exactly as before outside the sync.
+#
+# Why (6 Oct 2026): SRB, Parliament and EUDA failed EVERY economy run on the 600s
+# timeout because each run re-fetched every item it listed (every register PDF, ~720
+# MEP lookups, every sitemap page) to rebuild text and dates already stored. The
+# upsert never shortens a stored body, so skipping a known item loses nothing.
+_KNOWN: dict[tuple[str, str], dict[str, Known]] = {}
+
+# A stored item younger than this is fetched again: publishers correct recent items.
+REFETCH_RECENT_DAYS = 14
+_FULL_BODY_CHARS = 200
+
+
+def set_known(body_code: str, item_type: str, rows) -> None:
+    """rows: (public_url, title, document_date, body_len, guid) tuples."""
+    _KNOWN[(body_code, item_type)] = {
+        r[0]: Known(r[1], r[2], int(r[3] or 0), r[4]) for r in rows if r[0]}
+
+
+def known(body_code: str, item_type: str) -> dict[str, Known]:
+    return _KNOWN.get((body_code, item_type), {})
+
+
+def needs_fetch(body_code: str, item_type: str, url: str, *, want_body: bool = True,
+                want_date: bool = True, now: datetime | None = None) -> bool:
+    """False when the item is stored complete (a title; a date when `want_date`; a full
+    body when `want_body`) and is not recent. True for anything new, incomplete or recent.
+    Pass want_date=False only where the source publishes no date at all."""
+    k = known(body_code, item_type).get(url)
+    if k is None or not k.title:
+        return True
+    if want_body and k.body_len < _FULL_BODY_CHARS:
+        return True
+    if k.document_date is None:
+        return want_date
+    now = now or datetime.now(timezone.utc)
+    dd = k.document_date if k.document_date.tzinfo else k.document_date.replace(tzinfo=timezone.utc)
+    return now - dd < timedelta(days=REFETCH_RECENT_DAYS)
+
+
 _CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")  # C0 controls except \t \n \r
 
 
