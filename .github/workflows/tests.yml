@@ -7,11 +7,12 @@ name: tests
 # parses but refuses (port 1): an unmarked test that needs Postgres fails loudly here
 # instead of passing on an empty database.
 #
-# Railway "Wait for CI" is on, so a red run on main stops production deploys. The trigger
-# stays on ci/** branches until the suite is green there three runs in a row (6 Oct 2026).
+# Railway "Wait for CI" is on, so a red run on main stops production deploys. On main since
+# 6 Oct 2026, after three green runs in a row on ci/postgres-service (2,906 passed each).
 on:
   push:
-    branches: ['ci/**']
+    branches: [main, 'ci/**']
+  pull_request:
   workflow_dispatch:
 
 concurrency:
