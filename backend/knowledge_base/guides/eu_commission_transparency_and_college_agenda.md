@@ -5,8 +5,8 @@
 
 | College date (tbc) | Item | Responsible |
 |---|---|---|
-| Tue 6 Oct 2026, Strasbourg | Pre-enlargement policy reviews (moved from 30 Sep) | President |
-| Tue 6 Oct 2026, Strasbourg | **Revision of the Standardisation Regulation** | EVP Séjourné |
+| Tue 6 Oct 2026, Strasbourg | **ADOPTED 6 Oct 2026**: Pre-enlargement policy reviews, Communication "Preparing for a wider Union" (guide `pre_enlargement_policy_reviews_2026`) | President |
+| Tue 6 Oct 2026, Strasbourg | **ADOPTED 6 Oct 2026**: proposal for a new Standardisation Regulation (guide `standardisation_regulation_revision_2026`) | EVP Séjourné |
 | Tue 20 Oct 2026, Strasbourg | **2027 Commission work programme** | President |
 | Tue 20 Oct 2026, Strasbourg | 2026 annual overview report on simplification, implementation and enforcement | President |
 | Tue 20 Oct 2026, Strasbourg | Northern Neighbourhood: **New Arctic Strategy** | President |

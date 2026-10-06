@@ -1,6 +1,7 @@
 # DPP Harmonised Standards Decision - Commission Implementing Decision (EU) 2026/1736
 
 ## QUICK FACTS
+- **STANDARDISATION REFORM PROPOSED (6 October 2026):** the Commission proposed a new Regulation on European standardisation (COM(2026) 780) to replace Regulation (EU) No 1025/2012, with delivery deadlines for requested standards, harmonised standardisation deliverables, other standards bodies and common specifications as fallback, and free access to referenced standards. It is only a proposal (application six months after entry into force, expected around 2028) and the text does NOT amend this act or add a transition for standards already requested under it. Detail: guide `standardisation_regulation_revision_2026`.
 - **CELEX:** 32026D1736
 - **Full title:** Commission Implementing Decision (EU) 2026/1736 of 14 July 2026 on harmonised standards for digital product passports drafted in support of Regulation (EU) 2024/1781 of the European Parliament and of the Council (Text with EEA relevance)
 - **Common name:** DPP Harmonised Standards Decision. This is the act that publishes, in the Official Journal, the references of the first six harmonised EN standards for the digital product passport (DPP). Do not confuse it with the DPP Registry Implementing Regulation (EU) 2026/1778 (the registry rulebook) or with the ESPR itself (Regulation (EU) 2024/1781).
