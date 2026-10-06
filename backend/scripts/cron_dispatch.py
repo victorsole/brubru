@@ -62,7 +62,24 @@ from zoneinfo import ZoneInfo
 # that feed his calls are scheduled in Brussels LOCAL time so they finish before each
 # pull, and the summer/winter switch (25 Oct, 29 Mar) moves them with it. Everything
 # else stays on UTC.
-BRUSSELS = ZoneInfo("Europe/Brussels")
+try:
+    BRUSSELS = ZoneInfo("Europe/Brussels")
+except Exception:  # noqa: BLE001  no tz database in the image: never stop every sync over it
+    BRUSSELS = None
+
+
+def _brussels_hour(utc: datetime.datetime) -> int:
+    """Brussels local hour. Falls back to the EU rule (summer time from the last Sunday
+    of March to the last Sunday of October, switching at 01:00 UTC) without tzdata."""
+    if BRUSSELS is not None:
+        return utc.astimezone(BRUSSELS).hour
+
+    def last_sunday(year: int, month: int) -> datetime.datetime:
+        d = datetime.datetime(year, month, 31, 1, tzinfo=datetime.timezone.utc)
+        return d - datetime.timedelta(days=(d.weekday() + 1) % 7)
+
+    summer = last_sunday(utc.year, 3) <= utc < last_sunday(utc.year, 10)
+    return (utc.hour + (2 if summer else 1)) % 24
 
 
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://brubru-production.up.railway.app")
@@ -212,7 +229,7 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     weekday = now.weekday()  # Mon=0 ... Sun=6
     day = now.day
     utc = now if now.tzinfo else now.replace(tzinfo=datetime.timezone.utc)
-    lh = utc.astimezone(BRUSSELS).hour  # Brussels local hour, DST-aware
+    lh = _brussels_hour(utc)  # Brussels local hour, DST-aware
 
     # Hot tier: every 6 hours, Brussels 02/08/14/20 (calendar, OEIL, EUR-Lex, plenary):
     # done before the 10:00 and 16:00 GovClipping pulls.
