@@ -2,6 +2,178 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "eu_civil_protection_mechanism_resceu",
+      "title": "EU Civil Protection Mechanism and rescEU",
+      "summary": "Joint ENVI-SANT committee vote on 1 October 2026 (OEIL); ECA special report on rescEU to ENVI on 12 October",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "ep_ai_institutional_aspects_report",
+      "title": "EP report on institutional aspects of AI",
+      "summary": "AFCO committee vote on 1 October 2026; indicative plenary 19 October (OEIL)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "EU minors online: EU Kids Act",
+      "summary": "6-7 October Commission statements (games, private servers, educational platforms, messaging), scope and exclusions, corrected age staircase and enforcement fee, 2025/2081(INI) completed",
+      "refs": [
+        "52026PC0681"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "Plenary debate 7 October 2026, no vote",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "omnibus_viii_environmental_simplification",
+      "title": "Omnibus VIII environmental simplification",
+      "summary": "INSPIRE vote and referral back 6 October 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "eu_defence_procurement",
+      "title": "EU Defence Procurement",
+      "summary": "AGILE programme adopted by Parliament 6 October 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "occupational_health_safety",
+      "title": "Occupational Health and Safety",
+      "summary": "CMRD sixth revision and psychosocial risks report adopted 6 October 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "added",
+      "guide": "ep_plenary_october_2026_tuesday_adoptions",
+      "title": "European Parliament plenary 5-8 October 2026: Tuesday adoptions",
+      "summary": "AGILE, CMRD sixth revision and psychosocial risks report adopted on 6 October; INSPIRE referral back",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "added",
+      "guide": "black_sea_shipping_attacks_october_2026",
+      "title": "Attacks on commercial shipping in the Black Sea: what the EU has said",
+      "summary": "Official statements of 6 October 2026 only; no attribution; Emergency Security Protocol proposal of 16 September",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "accelerateeu_fossil_energy_crisis",
+      "title": "AccelerateEU: fossil energy crisis response",
+      "summary": "6 October 2026: refineries dialogue, demand-bundling taskforce, METSAF prolongation, G7 100 million barrel release",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "added",
+      "guide": "hta_joint_clinical_assessment_medical_devices_2026",
+      "title": "EU joint clinical assessment of medical devices: first two devices selected",
+      "summary": "Implementing Decision C(2026) 7113: SAPIEN M3 and Highlife mitral valve systems; criteria, assessors, deadlines",
+      "refs": [
+        "32021R2282",
+        "32025R2086"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "eu_equality_antidiscrimination",
+      "title": "EU Equality and Anti-Discrimination",
+      "summary": "Removed a wrong registration-decision reference and deadline for the conversion-practices ECI (procedure 2026/2539(RSP) is completed)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-07",
+      "action": "added",
+      "guide": "eci_sovereign_ai_digital_space_ia_2026",
+      "title": "ECI: European Digital Space (.IA) for Sovereign AI Governance",
+      "summary": "Registered 6 October 2026: three objectives, signature collection not yet open, what registration does not mean",
+      "refs": [
+        "32019R0788"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "european_defence_fund_edf",
+      "title": "European Defence Fund (EDF)",
+      "summary": "Record 2026 calls: 612 proposals for EUR 1.006 billion, Ukraine eligible for the first time, results by March 2027",
+      "refs": [
+        "32021R0697"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "safe_rearm_europe",
+      "title": "SAFE (Security Action for Europe)",
+      "summary": "Corrected legal basis (Article 122 only, Council Regulation 2025/1106), 18 approved plans, pre-financing payments (Poland 29 May, Belgium and Czechia 6 Oct 2026); removed wrong 'first disbursements' claim",
+      "refs": [
+        "32025R1106"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Glass fibre (GFR) from Egypt definitive countervailing duty 13.1% after expiry review; registration of Chinese glass beads",
+      "refs": [
+        "32026R2107",
+        "32026R2162"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "added",
+      "guide": "franco_german_trade_instrument_letter_oct_2026",
+      "title": "Franco-German letter and non-paper on trade resilience (5 October 2026)",
+      "summary": "Macron and Merz ask the Commission for a diversification instrument and a country-agnostic 'systemic reaction' instrument activated by reversed qualified majority; non-paper on trade defence",
+      "refs": [
+        "32023R2675"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "pre_enlargement_policy_reviews_2026",
+      "title": "Preparing for a wider Union: pre-enlargement policy reviews",
+      "summary": "Ukraine's agriculture minister on permanent versus transitional market-access limits (Politico, 6 Oct); QUICK FACTS tightened",
+      "refs": [
+        "52026DC0705"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "action": "updated",
+      "guide": "standardisation_regulation_revision_2026",
+      "title": "New Regulation on European Standardisation (COM(2026) 780)",
+      "summary": "Annexes I-III, impact assessment and 2025 evaluation read in full: speed figures reconciled (6.1 / 5.3 / 4.2 years), Annex II stakeholder criteria, costs and Regulatory Scrutiny Board opinions, errors in Annex III",
+      "refs": [
+        "52026PC0780"
+      ]
+    },
+    {
       "date": "2026-10-05",
       "action": "added",
       "guide": "cyber_solidarity_act",

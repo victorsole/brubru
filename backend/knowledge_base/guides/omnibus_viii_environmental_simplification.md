@@ -1,6 +1,7 @@
 # Omnibus VIII: Environmental Simplification Package (December 2025)
 
 ## QUICK FACTS
+- **LATEST (6 Oct 2026): INSPIRE.** Parliament voted on the INSPIRE simplification (2025/0393(COD), rapporteur Emma Wiesner). Sources conflict: ENVI said the plenary "adopts its position"; the minutes title the text "amendments adopted" and record a request for referral back to committee. The outcome is unclear: give both readings. Details: `ep_plenary_october_2026_tuesday_adoptions`.
 - **What it is:** the Commission's eighth simplification omnibus, **10 December 2025**: six proposals cutting burden in EU environmental law. All are ordinary legislative procedure, ENVI-led; references verified on OEIL and Cellar on 1 October 2026.
 - **STATUS (1 Oct 2026): none is law.** Council: Coreper mandates on 24 June 2026 (burden-reduction regulation and directive, INSPIRE); **Council mandate on the speeding-up regulation on 30 September 2026**; Presidency target: agreement with Parliament by the end of 2026. Parliament: INSPIRE voted in ENVI 10 Sep (A10-0233/2026, plenary forecast 5 Oct); EPR suspensions on ENVI's 5 Oct vote (plenary forecast 19 Oct); the other three await committee (forecast 23 Nov).
 - **The six files:**
