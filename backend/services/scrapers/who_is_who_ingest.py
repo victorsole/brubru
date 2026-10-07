@@ -73,7 +73,21 @@ def person_page_id(pid: str) -> str:
     return f"{fam}_{rest}"
 
 
-def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> Optional[str]:
+def undefined_page_id(pid: str, institution_uri: Optional[str]) -> Optional[str]:
+    """The page id for an UNDEFINED_ placeholder: the institution's code replaces the prefix.
+
+    Found by Victor on 7 Oct 2026 (UNDEFINED_EMA_I1014 -> EMEA_EMA_I1014, UNDEFINED_NRE525717
+    -> EUROFOUND_NRE525717) and verified on 25 random placeholders, 25/25 returning 200 with
+    the person named in the page title. The 575 officials this covers had been served with
+    no public_url since 2 Oct, when the placeholder was read as "no page exists".
+    """
+    code = (institution_uri or "").rstrip("/").rsplit("/", 1)[-1].strip()
+    rest = pid.split("_", 1)[1] if "_" in pid else ""
+    return f"{code}_{rest}" if code and rest else None
+
+
+def _person_page(person_uri: Optional[str], mnemonic: Optional[str],
+                 institution_uri: Optional[str] = None) -> Optional[str]:
     """The official's own Whoiswho page, or None when they do not have one.
 
     Returns None rather than a substitute. The organisation page was considered for the
@@ -92,8 +106,9 @@ def _person_page(person_uri: Optional[str], mnemonic: Optional[str]) -> Optional
         if pid and NO_PERSON_PAGE_MARKER not in pid:
             return PERSON_PAGE.format(person_id=person_page_id(pid))
         if pid:
-            # A placeholder id. There is no page for this person; say so with None.
-            return None
+            # A placeholder id: the page lives under the institution's code instead.
+            page_id = undefined_page_id(pid, institution_uri)
+            return PERSON_PAGE.format(person_id=page_id) if page_id else None
     if mnemonic:
         return ORG_PAGE.format(code=mnemonic.split(".", 1)[0])
     return DIRECTORY_URL
@@ -192,7 +207,7 @@ def build() -> tuple:
         officials.append({
             "official_key": okey, "name": name, "honorific": hon, "position": position,
             "department": org, "mnemonic": mnem, "institution_uri": cb, "person_uri": person,
-            "public_url": _person_page(person, mnem),
+            "public_url": _person_page(person, mnem, cb),
         })
 
     # finalise departments (count + body)

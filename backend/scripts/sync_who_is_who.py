@@ -76,6 +76,12 @@ def _bulk(table, rows, conflict_col, batch=500) -> int:
         set_["fetched_at"] = func.now()
         if has_removed:
             set_["removed_at"] = None
+            if table.name == "who_is_who_officials":
+                # Still listed, but its page was verified gone: it stays removed (7 Oct 2026).
+                set_["removed_at"] = case(
+                    (literal_column("who_is_who_officials.url_status") == 404,
+                     func.coalesce(table.c.removed_at, func.now())),
+                    else_=None)
         stmt = stmt.on_conflict_do_update(index_elements=[conflict_col], set_=set_)
         with engine.begin() as conn:
             conn.execute(stmt)

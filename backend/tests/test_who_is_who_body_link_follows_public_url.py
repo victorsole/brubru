@@ -54,5 +54,5 @@ def test_the_sync_rebuilds_the_body_link_once_a_page_is_verified():
 def test_the_verifier_rewrites_or_drops_the_body_link():
     verify = _load("verify_who_is_who_urls")
     alive, dead = str(verify.RECORD_ALIVE), str(verify.RECORD_DEAD)
-    assert "body_html = regexp_replace" in alive and ":url" in alive.split("body_html", 1)[1]
+    assert "body_html = CASE" in alive and "regexp_replace" in alive and ":url" in alive.split("body_html", 1)[1]
     assert "body_html = regexp_replace" in dead and "public_url = NULL" in dead

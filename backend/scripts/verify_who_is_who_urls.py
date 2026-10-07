@@ -64,10 +64,13 @@ BLOCKED = {403, 429, 503}
 
 PICK = text(
     """
-    SELECT id, person_uri, public_url, name
+    SELECT id, person_uri, public_url, name, institution_uri
       FROM who_is_who_officials
      WHERE person_uri IS NOT NULL
        AND (url_checked_at IS NULL OR url_checked_at < now() - make_interval(days => :stale)
+            -- a 404 removes the official, so it is asked again within a week: 6 of 94
+            -- "dead" pages were live when re-asked on 7 Oct 2026
+            OR (url_status = 404 AND url_checked_at < now() - interval '7 days')
             OR (url_status = 404 AND person_uri ~ :recheck))
      ORDER BY url_checked_at NULLS FIRST, id
      LIMIT :lim
@@ -79,9 +82,15 @@ RECORD_ALIVE = text(
     UPDATE who_is_who_officials
        SET url_status = :st, url_checked_at = now(), public_url = :url,
            -- the body's link must be the page public_url names (6 Oct 2026)
-           body_html = regexp_replace(body_html,
-               '<p><a href="[^"]*">View on EU Who is Who</a></p>',
-               '<p><a href="' || :url || '">View on EU Who is Who</a></p>')
+           body_html = CASE
+               WHEN body_html ~ '<p><a href="[^"]*">View on EU Who is Who</a></p>'
+               THEN regexp_replace(body_html,
+                    '<p><a href="[^"]*">View on EU Who is Who</a></p>',
+                    '<p><a href="' || :url || '">View on EU Who is Who</a></p>')
+               -- a row that had no page has no link yet: add it
+               ELSE replace(body_html, '</article>',
+                    '<p><a href="' || :url || '">View on EU Who is Who</a></p></article>')
+           END
      WHERE id = :rid
     """
 )
@@ -90,6 +99,9 @@ RECORD_DEAD = text(
     """
     UPDATE who_is_who_officials
        SET url_status = :st, url_checked_at = now(), public_url = NULL,
+           -- the publisher took the page down: stop serving the official (Victor, 7 Oct
+           -- 2026); removed_date reaches incremental syncs through updated_date
+           removed_at = coalesce(removed_at, now()),
            body_html = regexp_replace(body_html,
                '<p><a href="[^"]*">View on EU Who is Who</a></p>', '')
      WHERE id = :rid
@@ -116,10 +128,17 @@ def _database_url() -> str:
     return m.group(1).strip()
 
 
-def _url_for(person_uri: str) -> str | None:
+def _url_for(person_uri: str, institution_uri: str | None = None,
+             stored: str | None = None) -> str | None:
+    # A URL already served (an EEAS ambassador page, say) is the one to ask about.
+    if stored:
+        return stored
     pid = person_uri.rstrip("/").rsplit("/", 1)[-1].strip()
-    if not pid or "UNDEFINED" in pid:
+    if not pid:
         return None
+    if "UNDEFINED" in pid:
+        page_id = _ingest.undefined_page_id(pid, institution_uri)
+        return PERSON_PAGE.format(person_id=page_id) if page_id else None
     # The ingest's own rule, imported, so the URL checked is the URL served.
     return PERSON_PAGE.format(person_id=_ingest.person_page_id(pid))
 
@@ -218,7 +237,7 @@ def main() -> int:
     print(f"[INFO] this run                   : {len(rows)}")
     if args.rehearse:
         for r in rows[:5]:
-            print(f"   would probe {(_url_for(r.person_uri) or '(no page: placeholder id)')[-58:]}")
+            print(f"   would probe {(_url_for(r.person_uri, r.institution_uri, r.public_url) or '(no page: placeholder id)')[-58:]}")
         print("[INFO] rehearsal only, nothing written")
         return 0
 
@@ -227,7 +246,7 @@ def main() -> int:
     alive = dead = skipped = 0
 
     for i, r in enumerate(rows, 1):
-        url = _url_for(r.person_uri)
+        url = _url_for(r.person_uri, r.institution_uri, r.public_url)
         if url is None:
             # A placeholder id. Settled already; record it so it is never probed again.
             _write(engine, RECORD_DEAD, {"rid": r.id, "st": 404})
