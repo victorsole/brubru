@@ -431,6 +431,16 @@ class CommitteeTranscriptionService:
                 os.unlink(tmp_path)
                 return None
 
+            # The EP video server serves segment 1 and answers 403 to every later one;
+            # ffmpeg skips them, exits 0 and leaves 1.6 s of silence, which Whisper
+            # transcribed as "you" and the job stored as COMPLETED (7 Oct 2026). A refused
+            # segment means a truncated recording: never transcribe it.
+            full_err = proc.stderr.decode("utf-8", errors="replace")
+            if "403 Forbidden" in full_err or "failed too many times" in full_err:
+                logger.error("[TRANSCRIBE] video server refused segments (HTTP 403): recording truncated")
+                os.unlink(tmp_path)
+                return None
+
             if not os.path.exists(tmp_path) or os.path.getsize(tmp_path) < 1000:
                 logger.error("[TRANSCRIBE] ffmpeg produced empty output")
                 if os.path.exists(tmp_path):

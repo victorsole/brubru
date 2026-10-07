@@ -90,7 +90,8 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         ("Duration", f"{r.duration_seconds // 60} min" if r.duration_seconds else None),
         ("Speakers", r.speaker_count),
         ("Words", r.word_count),
-        ("Status", r.status),
+        # The enum's value, not its repr: bodies read "Status: TranscriptStatusEnum.PENDING".
+        ("Status", getattr(r.status, "value", r.status)),
         ("Language", r.language),
         ("Procedures", ", ".join(r.related_procedure_refs) if r.related_procedure_refs else None),
         ("Event id", r.event_id),
@@ -99,6 +100,13 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
             continue
         lines.append(f"{k}: {v}")
         parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    # The transcript IS the body of a meeting. 208 stored transcripts were never served:
+    # every body was the metadata above alone (7 Oct 2026).
+    transcript = (r.transcript_text or "").strip()
+    if transcript:
+        lines += ["", "Transcript:", transcript]
+        parts_html.append("<h3>Transcript</h3>" + "".join(
+            f"<p>{_html.escape(p.strip())}</p>" for p in transcript.split("\n") if p.strip()))
     return WebstreamItem(
         id=str(r.id),
         committee_code=r.committee_code,

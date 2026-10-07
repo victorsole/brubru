@@ -123,6 +123,59 @@ def _priority_committees(session) -> list:
     return ordered
 
 
+# The meeting key in a multimedia URL ("..._20260929-1000-COMMITTEE-CULT_vd").
+_MEETING_KEY = __import__("re").compile(r"_(\d{8})-(\d{4})-([A-Z]+(?:-[A-Z0-9]+)+)_vd")
+
+
+def _resolve_video_urls(session, limit: int = 40, dry_run: bool = False) -> int:
+    """Fill video_url on past PENDING rows from the meeting key in their multimedia URL.
+
+    Since June 2026 meetings arrive from the committees hub with no video_url, and this
+    job only takes rows that have one: nothing was transcribed after 15 June while the
+    job reported success (282 such rows on 7 Oct 2026). The EP video packager serves a
+    deterministic HLS master for every recorded meeting (ep_multimedia_client). The URL is
+    stored ONLY when that master answers with audio tracks; a meeting not yet online keeps
+    NULL and is asked again on the next run.
+    """
+    import urllib.request
+    from datetime import timedelta
+    from services.api_clients.ep_multimedia_client import HLS_PACKAGER
+
+    rows = (
+        session.query(CommitteeMeetingTranscript)
+        .filter(
+            CommitteeMeetingTranscript.status == TranscriptStatusEnum.PENDING,
+            CommitteeMeetingTranscript.video_url.is_(None),
+            CommitteeMeetingTranscript.meeting_date < datetime.utcnow() - timedelta(hours=6),
+        )
+        .order_by(CommitteeMeetingTranscript.meeting_date.desc())
+        .limit(limit)
+        .all()
+    )
+    found = 0
+    for row in rows:
+        m = _MEETING_KEY.search(row.multimedia_url or "")
+        if not m:
+            continue
+        ymd, hhmm, rest = m.groups()
+        key = f"{ymd}-{hhmm}-{rest}"
+        url = (f"{HLS_PACKAGER}/i/,/{ymd[:4]}/{ymd[4:6]}/{ymd[6:]}"
+               f"/{key}/{key}_,360p,540p,720p,1080p,.mp4/master.m3u8")
+        try:
+            master = urllib.request.urlopen(url, timeout=30).read(500_000).decode("utf-8", "ignore")
+        except Exception:  # noqa: BLE001 -- not online yet, or gone: leave NULL, ask again
+            continue
+        if "EXT-X-MEDIA:TYPE=AUDIO" not in master:
+            continue
+        found += 1
+        if not dry_run:
+            row.video_url = url
+    if not dry_run:
+        session.commit()
+    logger.info("[links] %d of %d past PENDING rows given a verified video_url", found, len(rows))
+    return found
+
+
 def _fetch_pending(session, committees=None, limit_per_committee=None):
     """Return PENDING rows with video_url, ordered newest-first per committee."""
     from sqlalchemy import not_, or_
@@ -187,6 +240,7 @@ async def transcribe_batch(
     dry_run=False,
     max_total=None,
     reset_stuck=False,
+    resolve_links=False,
 ):
     from services.committee_transcription_service import get_committee_transcription_service
 
@@ -194,6 +248,8 @@ async def transcribe_batch(
     try:
         if reset_stuck:
             _reset_stuck(session)
+        if resolve_links:
+            _resolve_video_urls(session, dry_run=dry_run)
         rows = _fetch_pending(session, committees=committees, limit_per_committee=limit_per_committee)
         if max_total:
             rows = rows[:max_total]
@@ -322,6 +378,12 @@ def main():
         help="Interpretation booth language (en/fr/es/it/nl/floor). Default 'en'.",
     )
     parser.add_argument(
+        "--resolve-links", action="store_true",
+        help="Fill verified video links on past PENDING rows first. OFF by default: since "
+             "Oct 2026 the EP video server refuses every segment after the first (403), so "
+             "a link alone yields no transcript.",
+    )
+    parser.add_argument(
         "--dry-run", action="store_true",
         help="Print what would be transcribed without actually running.",
     )
@@ -337,6 +399,7 @@ def main():
         dry_run=args.dry_run,
         max_total=args.max_total,
         reset_stuck=args.reset_stuck,
+        resolve_links=args.resolve_links,
     ))
 
 
