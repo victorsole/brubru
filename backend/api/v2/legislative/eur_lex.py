@@ -1450,12 +1450,45 @@ class OJDailyItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When Cellar last modified the record.")
 
 
+def _oj_clean_text(txt: str) -> str:
+    """Trim every line and keep at most one blank line between blocks: the OJ's layout
+    tables otherwise leave runs of whitespace-only lines in the text (7 Oct 2026)."""
+    lines = [ln.strip() for ln in (txt or "").splitlines()]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _oj_fragment(html: str) -> str:
+    """The act's own content as an HTML fragment, like every other body we serve: the
+    <body> only, without the XML prolog, DOCTYPE and <head>, and without the two assets
+    the OJ refers to by relative path (oj-convex-act.css, europeanflag.gif), which
+    resolve only on the Publications Office's server."""
+    m = re.search(r"<body\b[^>]*>(.*)</body>", html, flags=re.S | re.I)
+    inner = m.group(1) if m else html
+    inner = re.sub(r"<!--.*?-->", "", inner, flags=re.S)
+    inner = re.sub(r"<img\b[^>]*europeanflag[^>]*/?>", "", inner, flags=re.I)
+    inner = re.sub(r"<link\b[^>]*>", "", inner, flags=re.I)
+    return f"<article>{inner.strip()}</article>"
+
+
+def _oj_pdf_blocks(content: bytes) -> list[str]:
+    """Text blocks of a PDF with PyMuPDF. pypdf split words inside lines ("Forestr y",
+    "schem eillycaffè" on C/2026/5167, 7 Oct 2026); PyMuPDF keeps them whole and returns
+    the paragraphs as blocks."""
+    import fitz
+
+    doc = fitz.open(stream=content, filetype="pdf")
+    try:
+        return [" ".join(b[4].split()) for page in doc for b in page.get_text("blocks")
+                if b[4].strip()]
+    finally:
+        doc.close()
+
+
 async def _oj_body(client, work: str, lang3: str, fmts: dict[str, str]) -> tuple[Optional[str], Optional[str]]:
     """(body_html, body_txt) from Cellar: the XHTML manifestation through the work URI in
     the act's language, else the PDF item (state-aid and other C notices are PDF only)."""
     import asyncio
-    import io
-    from api.v1._body import body_from_html_or_text
+    import html as _html
     from api.v1.citations import _strip_html_to_text
 
     key = (work, lang3)
@@ -1473,22 +1506,17 @@ async def _oj_body(client, work: str, lang3: str, fmts: dict[str, str]) -> tuple
                 r = await client.get(work, headers={"Accept": "application/xhtml+xml, text/html",
                                                     "Accept-Language": lang2})
                 if r.status_code == 200 and len(r.text) > 200:
-                    html = r.text
-                    # The <head> carries only the file name ("L_202602251EN.000101.fmx.xml").
-                    result = (html, _strip_html_to_text(re.sub(r"<head\b.*?</head>", "", html,
-                                                                flags=re.S | re.I)))
+                    fragment = _oj_fragment(r.text)
+                    result = (fragment, _oj_clean_text(_strip_html_to_text(fragment)))
             else:
                 pdf_manif = next((fmts[f] for f in fmts if f.startswith("pdf")), None)
                 if pdf_manif:
                     r = await client.get(f"{pdf_manif}/DOC_1", headers={"Accept": "*/*"})
                     if r.status_code == 200 and r.content[:4] == b"%PDF":
-                        from pypdf import PdfReader
-                        txt = await asyncio.to_thread(
-                            lambda b: "\n\n".join((pg.extract_text() or "").strip()
-                                                   for pg in PdfReader(io.BytesIO(b)).pages), r.content)
-                        txt = txt.strip()
-                        if txt:
-                            result = (body_from_html_or_text(txt)[0], txt)
+                        blocks = await asyncio.to_thread(_oj_pdf_blocks, r.content)
+                        if blocks:
+                            result = ("<article>" + "".join(f"<p>{_html.escape(b)}</p>" for b in blocks)
+                                      + "</article>", "\n\n".join(blocks))
             if result[1] or (r is not None and r.status_code == 404):
                 break
         except Exception:  # noqa: BLE001 -- a transient Cellar failure; retried, then null

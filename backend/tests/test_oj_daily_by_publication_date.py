@@ -90,3 +90,16 @@ def test_live_cellar_returns_the_whole_official_journal_of_7_october():
         app.dependency_overrides.pop(api_user_with_rate_limit, None)
     assert (L["total"], C["total"]) == (10, 17)
     assert all(d["body_txt"] and d["title"] and d["updated_date"] for d in L["data"] + C["data"])
+
+
+def test_bodies_are_a_clean_fragment_and_tidy_text():
+    xhtml = ('<?xml version="1.0"?><!DOCTYPE html><html><!-- CONVEX --><head><link rel="stylesheet" '
+             'href="oj-convex-act.css"/><title>L_2026.fmx.xml</title></head><body><table><tr><td>'
+             '<img alt="European flag" src="europeanflag.gif"/></td></tr></table>'
+             '<p>COUNCIL DECISION</p><p>   </p><p>Article 1</p></body></html>')
+    frag = eur_lex._oj_fragment(xhtml)
+    assert frag.startswith("<article>") and frag.endswith("</article>")
+    for gone in ("<?xml", "DOCTYPE", "<head", "oj-convex-act.css", "europeanflag", "CONVEX"):
+        assert gone not in frag
+    assert "COUNCIL DECISION" in frag and "Article 1" in frag
+    assert eur_lex._oj_clean_text("A \n\n \n\n \n B\n   C  ") == "A\n\nB\nC"
