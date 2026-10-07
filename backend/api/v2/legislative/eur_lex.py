@@ -1428,52 +1428,188 @@ async def law_consolidated(
 # Official Journal (PROPOSED — native v2)
 # ---------------------------------------------------------------------------
 
+# The 24 official languages, Cellar code -> ISO 639-1, in EUR-Lex's order. A corrigendum
+# often exists in one language only (7 Oct 2026: 4 of 10 L acts had no English version).
+_OJ_LANGS = {
+    "ENG": "en", "BUL": "bg", "SPA": "es", "CES": "cs", "DAN": "da", "DEU": "de", "EST": "et",
+    "ELL": "el", "FRA": "fr", "GLE": "ga", "HRV": "hr", "ITA": "it", "LAV": "lv", "LIT": "lt",
+    "HUN": "hu", "MLT": "mt", "NLD": "nl", "POL": "pl", "POR": "pt", "RON": "ro", "SLK": "sk",
+    "SLV": "sl", "FIN": "fi", "SWE": "sv",
+}
+# Published OJ acts never change, so a fetched body is kept for the life of the process.
+_OJ_BODY_CACHE: dict[tuple[str, str], tuple[Optional[str], Optional[str]]] = {}
+
+
+class OJDailyItem(BaseModel):
+    id: str = Field(..., description="Official Journal reference: series/year/number, e.g. L/2026/2251.")
+    celex: Optional[str] = Field(None, description="CELEX number. Null for notices the OJ publishes without one.")
+    oj_reference: Optional[str] = Field(None, description="The OJ's own reference, e.g. 2026/2251 or C/2026/5167.")
+    series: str = Field(..., description="L (legislation) or C (information and notices).")
+    publication_date: date = Field(..., description="Date the Official Journal published the act.")
+    document_date: Optional[date] = Field(None, description="Date of the act itself (adoption or signature).")
+    title: Optional[str] = None
+    language: str = Field(..., description="Language of title and body: English when the act has an English version, otherwise the act's own language.")
+    work_uri: str = Field(..., description="Cellar work URI.")
+    eurlex_url: str
+    public_url: str = Field(..., description="The act on EUR-Lex, in `language`.")
+    body_txt: Optional[str] = None
+    body_html: Optional[str] = None
+    creation_date: Optional[datetime] = Field(None, description="When Cellar created the record.")
+    updated_date: Optional[datetime] = Field(None, description="When Cellar last modified the record.")
+
+
+async def _oj_body(client, work: str, lang3: str, fmts: dict[str, str]) -> tuple[Optional[str], Optional[str]]:
+    """(body_html, body_txt) from Cellar: the XHTML manifestation through the work URI in
+    the act's language, else the PDF item (state-aid and other C notices are PDF only)."""
+    import asyncio
+    import io
+    from api.v1._body import body_from_html_or_text
+    from api.v1.citations import _strip_html_to_text
+
+    key = (work, lang3)
+    if key in _OJ_BODY_CACHE:
+        return _OJ_BODY_CACHE[key]
+    lang2 = _OJ_LANGS.get(lang3, "en")
+    result: tuple[Optional[str], Optional[str]] = (None, None)
+    if not any(f in fmts for f in ("xhtml", "html")) and not any(f.startswith("pdf") for f in fmts):
+        return result  # no readable manifestation published
+    for attempt in range(3):
+        r = None
+        try:
+            if any(f in fmts for f in ("xhtml", "html")):
+                r = await client.get(work, headers={"Accept": "application/xhtml+xml, text/html",
+                                                    "Accept-Language": lang2})
+                if r.status_code == 200 and len(r.text) > 200:
+                    html = r.text
+                    # The <head> carries only the file name ("L_202602251EN.000101.fmx.xml").
+                    result = (html, _strip_html_to_text(re.sub(r"<head\b.*?</head>", "", html,
+                                                                flags=re.S | re.I)))
+            else:
+                pdf_manif = next((fmts[f] for f in fmts if f.startswith("pdf")), None)
+                if pdf_manif:
+                    r = await client.get(f"{pdf_manif}/DOC_1", headers={"Accept": "*/*"})
+                    if r.status_code == 200 and r.content[:4] == b"%PDF":
+                        from pypdf import PdfReader
+                        txt = await asyncio.to_thread(
+                            lambda b: "\n\n".join((pg.extract_text() or "").strip()
+                                                   for pg in PdfReader(io.BytesIO(b)).pages), r.content)
+                        txt = txt.strip()
+                        if txt:
+                            result = (body_from_html_or_text(txt)[0], txt)
+            if result[1] or (r is not None and r.status_code == 404):
+                break
+        except Exception:  # noqa: BLE001 -- a transient Cellar failure; retried, then null
+            pass
+        await asyncio.sleep(1.5 * (attempt + 1))
+    if result[1]:
+        _OJ_BODY_CACHE[key] = result
+    return result
+
+
 @router.get(
     "/oj/daily",
-    response_model=PaginatedResponse[CellarRecentItem],
+    response_model=PaginatedResponse[OJDailyItem],
     summary="Acts published in the Official Journal on a given date",
     description="""**What it does**
-Lists the EU acts whose document date falls on a given day — the daily Official Journal view. Backed by the Cellar SPARQL date-range discovery constrained to a single date. `series=L` narrows to legislation (CELEX sector 3); `series=C` returns the rest.
+Lists every act the Official Journal of the EU published on a given day, in series L (legislation) or C (information and notices), with each act's full text. Read live from the Publications Office (Cellar) by the OJ publication date, so it returns exactly that day's Official Journal: regular acts, corrigenda, and C notices that carry no CELEX number.
 
 **When to use it**
-Daily monitoring of what was published in the OJ on a specific date.
+Daily monitoring of the Official Journal, for example collecting the morning's OJ.
 
 **Input**
-- `date` — the publication date (YYYY-MM-DD).
-- `series` — `L` (legislation, default) or `C` (information & notices).
+- `date` — the OJ publication date (YYYY-MM-DD).
+- `series` — `L` (legislation, default) or `C` (information and notices).
+- `include_body` — full text of each act (default true).
 - `limit` (1-200, default 50), `page`.
 
 **Try it**
 ```
-GET /api/v2/legislative/eur-lex/oj/daily?date=2026-05-01&series=L
+GET /api/v2/legislative/eur-lex/oj/daily?date=2026-10-07&series=L
 ```
 
 **You get back**
-A `PaginatedResponse[CellarRecentItem]`; each row's `public_url` deep-links to EUR-Lex. Note: the OJ numbering switched to an act-by-act scheme on 1 Oct 2023; this endpoint keys on document date, which is stable across that change.
+A `PaginatedResponse[OJDailyItem]`. `language` says which language the title and body are in: English when the act has an English version; some corrigenda exist only in the language version they correct, and are served in that language. `public_url` opens the act on EUR-Lex in that language. `updated_date` is when the Publications Office last modified the record.
 
 **Data freshness**
-Live SPARQL pass-through.""",
+Live from Cellar; bodies are cached once fetched (published acts do not change).""",
 )
 async def oj_daily(
     request: Request,
-    date: date = Query(..., description="Publication date (YYYY-MM-DD)", example="2026-05-01"),  # noqa: A002
+    date: date = Query(..., description="OJ publication date (YYYY-MM-DD)", example="2026-10-07"),  # noqa: A002
     series: str = Query("L", pattern="^[LC]$", description="OJ series: L (legislation) or C (information)"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
-    include_body: bool = Query(False, description="Inline each act's full body (Cellar XHTML). Caps the page to 10. Default false."),
+    include_body: bool = Query(True, description="Include each act's full text (default true)."),
     user: User = Depends(api_user_with_rate_limit),
-) -> PaginatedResponse[CellarRecentItem]:
-    sectors = "3" if series == "L" else None
-    return await _v1_cellar.recent_cellar_acts(
-        request,
-        published_from=date,
-        published_to=date,
-        sectors=sectors,
-        language="ENG",
-        limit=limit,
-        page=page,
-        include_body=include_body,
-        user=user,
+) -> PaginatedResponse[OJDailyItem]:
+    import asyncio
+    import httpx
+    from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+
+    async with CellarSPARQLClient() as client:
+        rows = await client.oj_acts_published_on(date, series)
+
+    works: dict[str, dict] = {}
+    for r in rows:
+        w = works.setdefault(r["work"], {"meta": r, "langs": {}})
+        lang = (r.get("lang") or "").rsplit("/", 1)[-1]
+        if not lang:
+            continue
+        lg = w["langs"].setdefault(lang, {"title": None, "fmts": {}})
+        lg["title"] = lg["title"] or r.get("title")
+        if r.get("fmt") and r.get("manif"):
+            lg["fmts"].setdefault(r["fmt"], r["manif"])
+
+    def _dt(v):
+        if not v:
+            return None
+        try:
+            return datetime.fromisoformat(v.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+
+    items: list[tuple[OJDailyItem, str, dict]] = []
+    for work, w in works.items():
+        m = w["meta"]
+        if not w["langs"]:
+            continue  # no language version at all: nothing published to serve
+        # English when it exists, else the first official language the act was published in.
+        lang3 = next((l for l in _OJ_LANGS if l in w["langs"]), sorted(w["langs"])[0])
+        lang2 = _OJ_LANGS.get(lang3, "en")
+        num, year, celex = m.get("num"), m.get("year"), m.get("celex")
+        if celex:
+            url = f"https://eur-lex.europa.eu/legal-content/{lang2.upper()}/TXT/?uri=CELEX:{celex}"
+        else:
+            url = f"https://eur-lex.europa.eu/legal-content/{lang2.upper()}/TXT/?uri=OJ:{series}_{year}{int(num):05d}"
+        items.append((OJDailyItem(
+            id=f"{series}/{year}/{num}", celex=celex, oj_reference=m.get("ref"), series=series,
+            publication_date=date, document_date=_dt(m.get("docdate")).date() if _dt(m.get("docdate")) else None,
+            title=w["langs"][lang3]["title"], language=lang2, work_uri=work,
+            eurlex_url=url, public_url=url,
+            creation_date=_dt(m.get("created")), updated_date=_dt(m.get("modified")),
+        ), lang3, w["langs"][lang3]["fmts"]))
+    # OJ order: by act number within the day.
+    items.sort(key=lambda t: int(t[0].id.rsplit("/", 1)[-1]) if t[0].id.rsplit("/", 1)[-1].isdigit() else 0)
+    total = len(items)
+    page_items = items[(page - 1) * limit: page * limit]
+
+    if include_body and page_items:
+        sem = asyncio.Semaphore(6)
+        async with httpx.AsyncClient(timeout=60, follow_redirects=True) as http:
+            async def _one(entry):
+                async with sem:
+                    item, lang3, fmts = entry
+                    item.body_html, item.body_txt = await _oj_body(http, item.work_uri, lang3, fmts)
+            await asyncio.gather(*(_one(e) for e in page_items))
+
+    data = [t[0] for t in page_items]
+    return build_envelope(
+        data, total=total, page=page, limit=limit,
+        published_from=date, published_to=date,
+        coverage_complete=(not include_body) or all(d.body_txt for d in data),
+        op_core_title=f"Official Journal of the EU, series {series}, {date.isoformat()}",
+        op_core_type="Official Journal act",
+        op_core_identifier=str(request.url),
     )
 
 

@@ -267,6 +267,42 @@ class CellarSPARQLClient(BaseSPARQLClient):
             logger.error(f"Cellar SPARQL date-range query failed: {e}")
             return []
 
+    async def oj_acts_published_on(self, day: date, series: str) -> List[Dict[str, Any]]:
+        """Every act the Official Journal published on `day` in series L or C.
+
+        Keyed on cdm:official-journal-act_date_publication, the OJ publication date. The
+        date-range discovery above keys on the DOCUMENT date and requires a CELEX, so for
+        7 Oct 2026 it returned 6 L-series corrigenda (dated on publication) and none of the
+        4 Council decisions published that day (adopted earlier), and no C notice without
+        a CELEX. One row per work x language x manifestation; the caller groups them.
+        """
+        query = f"""
+        PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+        PREFIX cmr: <http://publications.europa.eu/ontology/cdm/cmr#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        SELECT ?work ?celex ?ref ?num ?year ?docdate ?modified ?created ?lang ?title ?manif ?fmt
+        WHERE {{
+          ?work cdm:official-journal-act_date_publication "{day.isoformat()}"^^xsd:date ;
+                cdm:official-journal-act_part_of_collection_document
+                    <http://publications.europa.eu/resource/authority/document-collection/OJ-{series}> .
+          OPTIONAL {{ ?work cdm:resource_legal_id_celex ?celex }}
+          OPTIONAL {{ ?work cdm:resource_legal_reference_oj-act ?ref }}
+          OPTIONAL {{ ?work cdm:official-journal-act_number ?num }}
+          OPTIONAL {{ ?work cdm:official-journal-act_year ?year }}
+          OPTIONAL {{ ?work cdm:work_date_document ?docdate }}
+          OPTIONAL {{ ?work cmr:lastModificationDate ?modified }}
+          OPTIONAL {{ ?work cmr:creationDate ?created }}
+          OPTIONAL {{
+            ?expr cdm:expression_belongs_to_work ?work ;
+                  cdm:expression_uses_language ?lang .
+            OPTIONAL {{ ?expr cdm:expression_title ?title }}
+            OPTIONAL {{ ?manif cdm:manifestation_manifests_expression ?expr ;
+                               cdm:manifestation_type ?fmt }}
+          }}
+        }}
+        """
+        return await self._cached_select(query, cache_ttl=900)
+
     # ------------------------------------------------------------------
     # Single-act metadata
     # ------------------------------------------------------------------
