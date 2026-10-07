@@ -546,13 +546,14 @@ async def get_summary(
 Full-text search over Brubru's mirror of adopted EU legislation (the LEG_2025-11 Publications Office bulk export — 8,710 distinct laws across 28,513 Official Journal publications). Each row carries the CELEX legal identifier, document type, title + subject matter, policy area, publication date, and the EUR-Lex canonical URL.
 
 **When to use it**
-To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Pair with `/api/v2/legislative/eur-lex/laws/{celex}/text` for the full body. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.
+To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Each row carries the act's full text. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.
 
 **Input**
 - `q` — full-text search on title + subject matter (PostgreSQL TSVECTOR).
 - `celex` — exact match on the legal identifier.
 - `doc_type` — `regulation` / `directive` / `decision` / `recommendation` / `opinion` / ...
-- `policy_area` — single policy tag.
+- `policy_area` — EuroVoc domain, by number (`52`), label (`52 ENVIRONMENT`) or name (`environment`).
+- `include_body` — default true; false pages the corpus for metadata only.
 - `published_from`, `published_to` — adoption-date bounds (YYYY-MM-DD).
 - `limit` (default 50, max 100), `page` (1-indexed).
 
@@ -563,7 +564,7 @@ GET /api/v2/legislative/eur-lex/laws?doc_type=regulation&policy_area=environment
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",
@@ -573,7 +574,7 @@ async def list_laws(
     q: Optional[str] = Query(None, description="Full-text search (title + subject matter)"),
     celex: Optional[str] = Query(None, description="Exact CELEX filter"),
     doc_type: Optional[str] = Query(None, description="Document type (regulation, directive, decision, ...)"),
-    policy_area: Optional[str] = Query(None, description="Policy area slug"),
+    policy_area: Optional[str] = Query(None, description="EuroVoc domain: number (52), label (52 ENVIRONMENT) or name (environment)"),
     published_from: Optional[date] = Query(None, description="Adoption date >= value (YYYY-MM-DD)"),
     published_to: Optional[date] = Query(None, description="Adoption date <= value (YYYY-MM-DD). Preferred name."),
     published_end: Optional[date] = Query(None, description="Alias of published_to (GovClipping-compatible). 422 if it conflicts."),
@@ -581,15 +582,15 @@ async def list_laws(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound (updated_at <= value)."),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)."),
     include_orphans: bool = Query(False, description="Include rows with no CELEX (orphaned annexes). Default false."),
-    include_body: bool = Query(False, description="Inline each row's full body (Cellar XHTML). Caps the page to 10 to bound latency. Default false — call /laws/{celex}/text for a single body."),
+    include_body: bool = Query(True, description="Include each row's body_txt and body_html, stored from Cellar. Pass false to page the corpus for metadata only."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[LawItem]:
-    # Body fetch is one Cellar round-trip per row; cap the page when it's on.
-    if include_body and limit > 10:
-        limit = 10
+    # Bodies are stored (migration 269), so they come from the row. This used to default
+    # to false, fetch live from Cellar and cap the page to 10 when true, while v1 served
+    # the stored body whatever was asked: a caller sending include_body=true got 10 rows.
     resp = await _v1_laws.list_laws(
         request,
         q=q,
@@ -603,6 +604,7 @@ async def list_laws(
         updated_to=updated_to,
         updated_end=updated_end,
         include_orphans=include_orphans,
+        include_body=include_body,
         limit=limit,
         page=page,
         user=user,
@@ -610,8 +612,6 @@ async def list_laws(
     )
     for it in resp.data:
         _nativise_law_links(it)
-    if include_body:
-        await _fill_bodies(resp.data)
     return resp
 
 
@@ -1660,24 +1660,9 @@ async def oj_by_reference(
     )
     total = q.count()
     rows = stable(q.order_by(EULaw.date.desc().nullslast())).offset((page - 1) * limit).limit(limit).all()
-    data = [
-        LawItem(
-            celex=r.celex,
-            title=r.title,
-            doc_type=r.doc_type_normalized or r.doc_type,
-            adopted_on=r.date,
-            oj_reference=r.oj_reference,
-            policy_area=r.policy_area,
-            legal_basis=list(r.legal_basis or []),
-            eurlex_url=_eurlex(r.celex),
-            text_url=f"{_V2_BASE}/laws/{r.celex}/text" if r.celex else None,
-            public_url=_eurlex(r.celex),
-            document_date=r.date,
-            creation_date=r.created_at,
-            updated_date=row_updated(r),
-        )
-        for r in rows
-    ]
+    # The shared builder, so this route carries id, body and EuroVoc like /laws: its own
+    # copy had drifted (no id, null body, the classifier's policy_area).
+    data = [_nativise_law_links(_v1_laws._law_item(r)) for r in rows]
     return build_envelope(
         data,
         total=total,

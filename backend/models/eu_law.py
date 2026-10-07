@@ -6,7 +6,7 @@ SQLAlchemy models for storing EU legal documents from LEG_2025-11.
 
 from sqlalchemy import Column, Integer, String, Text, Date, TIMESTAMP, ARRAY, JSON, Boolean, Index, CHAR
 from sqlalchemy.sql import func
-from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from core.database import Base
 
 
@@ -76,6 +76,12 @@ class EULaw(Base):
     body_txt = Column(Text)
     body_chars = Column(Integer)
     body_fetched_at = Column(TIMESTAMP)
+
+    # EuroVoc descriptors Cellar assigns to the act (migration 276): [{id, uri, label, domain}].
+    # eurovoc_domain is served as the API's policy_area; policy_area above is Brubru's own tag.
+    eurovoc = Column(JSONB)
+    eurovoc_domain = Column(Text)
+    eurovoc_fetched_at = Column(TIMESTAMP(timezone=True))
 
     # Timestamps
     created_at = Column(TIMESTAMP, server_default=func.now())

@@ -24,7 +24,8 @@ What it does
    lags up to two working days). They are NOT written with a placeholder:
    the rolling window picks them up on a later run.
 5. Inserts a metadata row with xml_path = cellar://..., the same convention as
-   the one-shot ingests. Full text is fetched on demand from Cellar.
+   the one-shot ingests. The hot tier then runs fetch_eu_law_bodies.py, which
+   stores the text (body_txt, body_html) of every row still without one.
 6. Records a sync_runs row (source_key eu_laws_cellar) and exits non-zero on
    failure, so a broken run is visible rather than silent.
 

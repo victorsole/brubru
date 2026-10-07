@@ -23,12 +23,14 @@ Bounded and resumable: --limit rows per run, unfetched first then stalest, so a
 from __future__ import annotations
 
 import argparse
+import os
 import pathlib
 import re
 import ssl
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections import Counter
 
@@ -41,18 +43,31 @@ for p in (_REPO_ROOT, str(BACKEND)):
 import certifi  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 
-CELLAR = "https://publications.europa.eu/resource/celex/{celex}"
+CELLAR_BASE = "https://publications.europa.eu/resource/celex/"
+
+
+def _cellar_url(celex: str) -> str:
+    # 294 laws carry a CELEX ending "(01)", "(02)"...: Cellar answers 404 to the raw
+    # parentheses and 200 to them percent-encoded (32013D0377%2801%29, 7 Oct 2026).
+    return CELLAR_BASE + urllib.parse.quote(celex, safe="")
 HEADERS = {"Accept": "application/xhtml+xml, text/html", "Accept-Language": "eng"}
 # An act shorter than this is not an act. The real floor observed on Cellar is ~10 KB
 # of XHTML for the smallest implementing decisions; 600 characters of stripped text
 # is comfortably below any genuine act and comfortably above a challenge or error page.
 MIN_CHARS = 600
+# A corrigendum can be shorter (32024D1861R(01), electing the European Council President, is
+# 440 characters). Below the floor, text is still an act when it carries the OJ masthead,
+# which no error page or stub does.
+OJ_MASTHEAD = "Official Journal of the European Union"
+
+
+def _too_short(txt: str) -> bool:
+    return len(txt) < MIN_CHARS and not (len(txt) >= 200 and OJ_MASTHEAD in txt)
 
 PICK = text(
     """
     SELECT id, celex FROM eu_laws
      WHERE celex IS NOT NULL AND celex <> '' AND body_fetched_at IS NULL
-       AND celex !~ '\\([0-9]+\\)$'
      ORDER BY celex
      LIMIT :lim
     """
@@ -79,6 +94,9 @@ PROGRESS = text(
 
 
 def _database_url() -> str:
+    # The cron runs this inside the Railway container, which has the variable and no .env.
+    if os.environ.get("DATABASE_URL"):
+        return os.environ["DATABASE_URL"]
     m = re.search(r"^DATABASE_URL=(.*)$", (BACKEND / ".env").read_text(), re.M)
     if not m:
         raise SystemExit("[ERROR] DATABASE_URL not found in backend/.env")
@@ -111,12 +129,22 @@ def _clean_html(raw: str, txt: str) -> str:
 
 def _fetch_pdf(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     """Older acts and decisions exist on Cellar as PDF only: XHTML answers 404 but the
-    same resource answers 200 to Accept: application/pdf."""
+    same resource answers 200 to Accept: application/pdf. Some hold only a PDF/A, which
+    Cellar serves only when the type is named (32013D0178: 404, then 200 as pdfa1a)."""
+    got: tuple[str, str] | str = "http_404"
+    for accept in ("application/pdf", "application/pdf;type=pdfa1a", "application/pdf;type=pdfa2a"):
+        got = _fetch_pdf_as(celex, ctx, accept)
+        if got != "http_404":
+            return got
+    return got
+
+
+def _fetch_pdf_as(celex: str, ctx: ssl.SSLContext, accept: str) -> tuple[str, str] | str:
     import html as _h, io
     from pypdf import PdfReader
-    hdrs = {"Accept": "application/pdf", "Accept-Language": "eng"}
+    hdrs = {"Accept": accept, "Accept-Language": "eng"}
     try:
-        req = urllib.request.Request(CELLAR.format(celex=celex), headers=hdrs)
+        req = urllib.request.Request(_cellar_url(celex), headers=hdrs)
         with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
             data = r.read()
         pages = [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages]
@@ -142,7 +170,7 @@ def _fetch_pdf(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
         return "pdf_" + type(e).__name__
     txt = re.sub(r"[ \t]+", " ", "\n".join(pages)).strip()
     flat = re.sub(r"\s+", " ", txt)
-    if len(flat) < MIN_CHARS:
+    if _too_short(flat):
         return f"too_short_{len(flat)}"
     paras = [x.strip() for x in re.split(r"\n\s*\n|\n(?=[A-Z0-9(])", txt) if x.strip()]
     html = "".join("<p>" + _h.escape(re.sub(r"\s+", " ", x)) + "</p>" for x in paras)
@@ -152,7 +180,7 @@ def _fetch_pdf(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
 def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     """The act's XHTML and text, or a marker string saying why not."""
     try:
-        req = urllib.request.Request(CELLAR.format(celex=celex), headers=HEADERS)
+        req = urllib.request.Request(_cellar_url(celex), headers=HEADERS)
         with urllib.request.urlopen(req, timeout=45, context=ctx) as r:
             raw = r.read().decode("utf-8", "ignore")
     except urllib.error.HTTPError as e:
@@ -164,7 +192,7 @@ def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     if not raw:
         return "empty"
     txt = _strip(raw)
-    if len(txt) < MIN_CHARS:
+    if _too_short(txt):
         # Not an act: a challenge, a stub or a nav fragment. Never stored.
         return f"too_short_{len(txt)}"
     return _clean_html(raw, txt), txt
@@ -185,7 +213,7 @@ def main() -> int:
                       "keepalives_count": 3, "connect_timeout": 20},
     )
     with engine.connect() as conn:
-        before = conn.execute(PROGRESS, {"floor": MIN_CHARS}).one()
+        before = conn.execute(PROGRESS, {"floor": 200}).one()
         rows = list(conn.execute(PICK, {"lim": args.limit}))
 
     print(f"[INFO] laws with a CELEX : {before.total}")
@@ -223,7 +251,7 @@ def main() -> int:
         time.sleep(args.pause)
 
     with engine.connect() as conn:
-        after = conn.execute(PROGRESS, {"floor": MIN_CHARS}).one()
+        after = conn.execute(PROGRESS, {"floor": 200}).one()
 
     print(f"\n[INFO] stored   : {stored}")
     print(f"[INFO] skipped  : {skipped}  {dict(why)}")

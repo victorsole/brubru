@@ -824,7 +824,7 @@ async def list_document_types(
 Returns the distinct `policy_area` values present in the `eu_laws` table — environment, internal market, justice, transport, energy, trade, agriculture, data protection, etc. — each with a normalised slug, the original label, and the count of acts tagged with that area.
 
 **When to use it**
-To build a "policy area" facet on a legislation search UI, or to scope a partner integration to acts in a specific area (e.g. `/api/v1/laws?policy_area=environment`). The slug values are reused as filters across `/api/v1/laws`, `/api/v1/publications`, `/api/v1/consultations`, `/api/v1/eprs`, and `/api/v1/predictions`.
+To build a "policy area" facet on a legislation search UI, or to scope a partner integration to acts in a specific area (e.g. `/api/v1/laws?policy_area=environment`). These are Brubru's own tags. `/api/v1/laws` filters on the act's EuroVoc domain instead (since 7 Oct 2026). The slug values are reused as filters across `/api/v1/publications`, `/api/v1/consultations`, `/api/v1/eprs`, and `/api/v1/predictions`.
 
 **Input**
 No parameters. Requires an `X-API-Key` header.

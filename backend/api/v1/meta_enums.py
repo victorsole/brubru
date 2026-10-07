@@ -87,7 +87,7 @@ GET /api/v1/meta/enums
 ```
 
 **You get back**
-A JSON object with `datasets`, `methods_by_dataset`, `doc_types` (live from `eu_laws`), `policy_areas` (live from `eu_laws`), `ep_committees` (static), `procedure_statuses` (static), `stakeholder_user_types`, `detail_levels`, `eprs_publication_types`, `calendar_institutions`, `languages`, `countries_iso3_sample`, `generated_at` (ISO timestamp), plus the 5 envelope-level datapoints (all null except `creation_date = generated_at`).
+A JSON object with `datasets`, `methods_by_dataset`, `doc_types` (live from `eu_laws`), `policy_areas` (live from `eu_laws`; Brubru's own tags), `eurovoc_domains` (live; the values `/api/v1/laws?policy_area=` filters on), `ep_committees` (static), `procedure_statuses` (static), `stakeholder_user_types`, `detail_levels`, `eprs_publication_types`, `calendar_institutions`, `languages`, `countries_iso3_sample`, `generated_at` (ISO timestamp), plus the 5 envelope-level datapoints (all null except `creation_date = generated_at`).
 
 **Data freshness**
 Mostly static (the lists are hardcoded in `backend/api/v1/meta_enums.py`). Two fields are live from the DB: `doc_types` and `policy_areas` are aggregated from the `eu_laws` table on each request — so they grow as the EUR-Lex sync (hot tier, every 6h) adds new acts.""",
@@ -100,6 +100,12 @@ async def meta_enums(
     policy_areas = [
         row[0] for row in db.execute(
             select(EULaw.policy_area).where(EULaw.policy_area.isnot(None)).distinct().order_by(EULaw.policy_area)
+        ).all()
+    ]
+    # /laws filters policy_area on the act's EuroVoc domain (since 7 Oct 2026), not the tags above.
+    eurovoc_domains = [
+        row[0] for row in db.execute(
+            select(EULaw.eurovoc_domain).where(EULaw.eurovoc_domain.isnot(None)).distinct().order_by(EULaw.eurovoc_domain)
         ).all()
     ]
     doc_types = [
@@ -116,6 +122,7 @@ async def meta_enums(
         "methods_by_dataset": HTTP_METHODS_BY_DATASET,
         "doc_types": sorted(set(doc_types)),
         "policy_areas": policy_areas,
+        "eurovoc_domains": eurovoc_domains,
         "ep_committees": EP_COMMITTEES,
         "procedure_statuses": PROCEDURE_STATUSES,
         "stakeholder_user_types": STAKEHOLDER_USER_TYPES,

@@ -6,6 +6,7 @@ Wraps the TSVECTOR-backed eu_laws table with canonical filters:
 """
 
 import logging
+import re
 from datetime import date, datetime
 from typing import Optional
 
@@ -27,6 +28,13 @@ from ._row_dates import row_updated
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/laws", tags=["v1-laws"])
+
+
+class EuroVocTerm(BaseModel):
+    id: str = Field(..., description="EuroVoc concept id, the last segment of `uri` (e.g. `3030`).")
+    uri: str = Field(..., description="The concept on the EuroVoc thesaurus, e.g. http://eurovoc.europa.eu/3030.")
+    label: Optional[str] = Field(None, description="English preferred label, e.g. `artificial intelligence`.")
+    domain: Optional[str] = Field(None, description="The EuroVoc domain the concept sits in, e.g. `64 PRODUCTION, TECHNOLOGY AND RESEARCH`.")
 
 
 class LawItem(BaseModel):
@@ -55,7 +63,22 @@ class LawItem(BaseModel):
     doc_type: Optional[str] = None
     adopted_on: Optional[date] = Field(None, description="Adoption / publication date")
     oj_reference: Optional[str] = None
-    policy_area: Optional[str] = None
+    policy_area: Optional[str] = Field(
+        None,
+        description=(
+            "The act's EuroVoc domain (e.g. `10 EUROPEAN UNION`): the domain most of its "
+            "`eurovoc` descriptors belong to, ties going to the lowest domain number. "
+            "`72 GEOGRAPHY` is chosen only when it is the act's sole domain. Null "
+            "while the Publications Office has not indexed the act yet."
+        ),
+    )
+    eurovoc: list[EuroVocTerm] = Field(
+        default_factory=list,
+        description=(
+            "The EuroVoc descriptors the Publications Office assigned to the act, read from "
+            "Cellar. Empty while the act is not indexed yet (new acts lag a few weeks)."
+        ),
+    )
     legal_basis: list = Field(default_factory=list)
     eurlex_url: Optional[str] = None
     text_url: Optional[str] = Field(None, description="Brubru endpoint for the full body (XML or plain text). Call this URL to retrieve the actual law content.")
@@ -66,6 +89,16 @@ class LawItem(BaseModel):
     document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+
+
+def _policy_area_filter(value: str):
+    """Match the EuroVoc domain by number (`52`), full label (`52 ENVIRONMENT`) or name
+    (`environment`, `agri-foodstuffs`), case-insensitively."""
+    v = value.strip()
+    if v.isdigit():
+        return EULaw.eurovoc_domain.like(f"{v.zfill(2)} %")
+    name = re.sub(r"^\d+\s+", "", v).replace("_", " ")
+    return func.regexp_replace(EULaw.eurovoc_domain, r"^\d+ ", "").ilike(name)
 
 
 def _eurlex_url(celex: Optional[str]) -> Optional[str]:
@@ -92,7 +125,10 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
         doc_type=r.doc_type_normalized or r.doc_type,
         adopted_on=r.date,
         oj_reference=r.oj_reference,
-        policy_area=r.policy_area,
+        # EuroVoc as the Publications Office indexed it (migration 276), never Brubru's
+        # classifier, which put the decision electing the European Ombudsman under "Energy".
+        policy_area=getattr(r, "eurovoc_domain", None),
+        eurovoc=list(getattr(r, "eurovoc", None) or []),
         legal_basis=list(r.legal_basis or []),
         eurlex_url=_eurlex_url(r.celex),
         text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
@@ -119,7 +155,8 @@ The single highest-traffic Brubru endpoint — used to find specific acts (e.g. 
 - `q` — full-text search on title + subject matter (PostgreSQL TSVECTOR).
 - `celex` — exact match on the legal identifier (the CELEX number).
 - `doc_type` — `regulation` / `directive` / `decision` / `recommendation` / `opinion` / etc. See `/api/v1/document-types` for the live distinct list.
-- `policy_area` — single tag (see `/api/v1/policy-areas`).
+- `policy_area` — EuroVoc domain, by number (`52`), label (`52 ENVIRONMENT`) or name (`environment`).
+- `include_body` — default true; false pages the corpus for metadata only.
 - `published_from`, `published_to` — date filter on `published_date`.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
@@ -130,7 +167,7 @@ GET /api/v1/laws?doc_type=regulation&policy_area=environment&published_from=2024
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `celex`, `title`, `doc_type`, `subject_matter`, `policy_area`, `published_date`, `eur_lex_url`, `oj_reference`, and the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3 (secondary acts). New regulations + directives published in the Official Journal L-series appear in our mirror within the same day they hit EUR-Lex.""",
@@ -140,7 +177,7 @@ async def list_laws(
     q: Optional[str] = Query(None, description="Full-text search (title + subject matter)"),
     celex: Optional[str] = Query(None, description="Exact CELEX filter"),
     doc_type: Optional[str] = Query(None, description="Document type (Regulation, Directive, Decision, ...)"),
-    policy_area: Optional[str] = Query(None, description="Policy area slug"),
+    policy_area: Optional[str] = Query(None, description="EuroVoc domain: number (52), label (52 ENVIRONMENT) or name (environment)"),
     published_from: Optional[date] = Query(None, description="Lower bound — laws with adoption date >= value (YYYY-MM-DD)"),
     published_to: Optional[date] = Query(None, description="Upper bound — laws with adoption date <= value (YYYY-MM-DD). Preferred name."),
     published_end: Optional[date] = Query(None, description="Alias of published_to for GovClipping compatibility. If both are sent with different values, returns 422."),
@@ -213,7 +250,7 @@ async def list_laws(
     if doc_type:
         filters.append(func.lower(EULaw.doc_type_normalized) == doc_type.lower())
     if policy_area:
-        filters.append(EULaw.policy_area == policy_area)
+        filters.append(_policy_area_filter(policy_area))
     if published_from:
         filters.append(EULaw.date >= published_from)
     if published_to:

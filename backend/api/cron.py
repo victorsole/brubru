@@ -550,6 +550,12 @@ async def cron_sync_hot_6h(
     results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
     # eu_laws had no recurring ingest until 15 Sep 2026 (the script above writes legislative_carriages).
     results["eu_laws_cellar"] = await _run_script_async("eu_laws_cellar", "scripts/sync_eu_laws_from_cellar.py", ["--days", "14", "--apply"], timeout=900)
+    # The sync above inserts metadata only. Nothing fetched the new acts' text until 7 Oct
+    # 2026, so every law published after the 2 Oct backfill reached /laws with a null body.
+    results["eu_laws_bodies"] = await _run_script_async("eu_laws_bodies", "scripts/fetch_eu_law_bodies.py", ["--limit", "300", "--apply"], timeout=900)
+    # /laws serves policy_area as the act's EuroVoc domain (migration 276): read it for new
+    # acts, and re-ask acts the Publications Office had not indexed a week ago.
+    results["eu_laws_eurovoc"] = await _run_script_async("eu_laws_eurovoc", "scripts/sync_eu_law_eurovoc.py", ["--limit", "600", "--apply"], timeout=600)
 
     logger.info(f"[CRON] hot-6h tier sync complete: {results}")
     return {"status": "success", "tier": "hot_6h", "results": results}

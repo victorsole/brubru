@@ -64,7 +64,7 @@
       "source": "eu_laws (same table as /api/v1/laws)",
       "script": "scripts/sync_eu_laws_from_cellar.py --days 14 --apply",
       "tier": "hot_6h",
-      "notes": "See /api/v1/laws. Consolidated versions are a live Cellar passthrough."
+      "notes": "See /api/v1/laws. Same hot tier then runs fetch_eu_law_bodies.py (body_txt/body_html from Cellar for rows without one) and sync_eu_law_eurovoc.py (EuroVoc descriptors; policy_area = EuroVoc domain), both since 7 Oct 2026. Consolidated versions are a live Cellar passthrough."
     },
     {
       "path_prefix": "/api/v1/procedures",
