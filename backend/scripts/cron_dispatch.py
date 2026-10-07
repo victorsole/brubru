@@ -254,14 +254,16 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     # economy batches at 10/15/21. Added 26 Aug 2026: this sync had NO schedule
     # at all and had been frozen since mid-July while the EP published 17 new
     # agendas, six of them for the committee week starting 31 August.
-    # Brussels 08 + 14 since 6 Oct 2026 (was 10:00 Brussels, on the pull itself).
+    # Brussels 08 + 14 since 6 Oct 2026 (was 10:00 Brussels, on the pull itself). A ~10
+    # min tier, so it shares the hour with hot_6h; registry_warm moved off it on 7 Oct.
     if lh in (8, 14):
         fires.append(("ep_emeeting", "/api/cron/sync/ep-emeeting"))
 
     # Registry WARM tier — slower MEUB feeds: My EU Calendar, Transcripts,
     # Lobby Meetings, Parliamentary Questions. Twice a day on light hours.
-    # Brussels 08/14/20 (was 10:00 and 22:00 Brussels).
-    if lh in (8, 14, 20):
+    # Brussels 09/15/21 since 7 Oct 2026, beside registry_fast (the lightest tier) and
+    # clear of hot_6h at 08/14/20; done by ~:45, before the 10:00 and 16:00 pulls.
+    if lh in (9, 15, 21):
         fires.append(("registry_warm", "/api/cron/sync/tier/warm"))
 
     # Legislative-journey AI precompute: 3x/day (01, 09, 17 UTC), throttled per
