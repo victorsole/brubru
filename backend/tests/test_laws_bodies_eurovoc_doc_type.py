@@ -109,3 +109,38 @@ def test_the_hot_tier_fetches_bodies_and_eurovoc_after_the_law_sync():
     sync = src.index("scripts/sync_eu_laws_from_cellar.py")
     assert sync < src.index("scripts/fetch_eu_law_bodies.py")
     assert sync < src.index("scripts/sync_eu_law_eurovoc.py")
+
+
+def test_oj_reference_patterns_cover_every_stored_shape():
+    import re
+    from api.v2.legislative.eur_lex import oj_reference_patterns
+
+    def hits(series, year, number, ref):
+        act, dated, issue = oj_reference_patterns(series, year, number)
+        return [bool(re.search(p, ref)) for p in (act, dated, issue)]
+
+    assert hits("L", 2024, "1689", "OJ L, 2024/1689, 12.7.2024")[0]          # the AI Act, missed until 7 Oct
+    assert not any(hits("L", 2024, "168", "OJ L, 2024/1689, 12.7.2024"))
+    assert hits("L", 2026, "1778", "OJ L, 2026/1778, 2026")[0]
+    assert hits("L", 2023, "150", "OJ L 150, 9.6.2023, p. 40")[1]
+    assert not hits("L", 2022, "150", "OJ L 150, 9.6.2023, p. 40")[1]
+    assert hits("L", 2023, "130", "OJ L 130/52, 16.5.2023")[1]
+    assert hits("R", 2011, "272", "OJ R 272, 2011-10-18")[1]
+    assert hits("C", 2022, "25", "C 025/2")[2]                                # zero-padded issue
+    assert hits("L", 2016, "11I", "L 011I/1")[2]                              # supplement issue
+    assert not hits("L", 2016, "11", "L 011I/1")[2]                           # L 11 is not L 11 I
+    assert not hits("L", 2016, "1", "L 119/1")[2]
+
+
+def test_oj_route_rejects_a_malformed_reference():
+    from fastapi.testclient import TestClient
+    from api.v1._deps import api_user_with_rate_limit
+    from main import app
+    from models.user import User
+
+    app.dependency_overrides[api_user_with_rate_limit] = lambda: User(email="t@example.com", role="admin")
+    try:
+        r = TestClient(app).get("/api/v2/legislative/eur-lex/oj/L%7C/2024/1689")
+    finally:
+        app.dependency_overrides.pop(api_user_with_rate_limit, None)
+    assert r.status_code == 422 and r.json()["reason_code"] == "invalid_oj_reference"

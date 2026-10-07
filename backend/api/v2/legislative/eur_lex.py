@@ -1611,12 +1611,44 @@ async def oj_daily(
     )
 
 
+def oj_reference_patterns(series: str, year: int, number: str) -> tuple[str, str, str]:
+    """(act by act, issue with its date, yearless issue): regexes valid in Python and PostgreSQL."""
+    n = re.escape(number.lstrip("0") or "0")
+    return (rf"^OJ {series}, {year}/0*{n}(,|$)",
+            rf"^OJ {series} 0*{n}(/[0-9]+)?, ([0-9]{{1,2}}\.[0-9]{{1,2}}\.{year}|{year}-)",
+            rf"^{series} 0*{n}/")
+
+
+def oj_reference_match(series: str, year: int, number: str):
+    """SQL condition for the acts an OJ reference (series, year, number) designates.
+
+    The route matched "L 2024/1689" while every act since October 2023 is stored as
+    "OJ L, 2024/1689, 12.7.2024", so it found none of them (May to 7 Oct 2026). Stored
+    shapes, all handled: "OJ L, 2024/1689, 12.7.2024" (act by act), "L 119/1" and
+    "C 022/8" (issue/page, zero-padded, no year), "L 455I/1" (supplement issue),
+    "OJ L 150, 9.6.2023, p. 40", "OJ L 130/52, 16.5.2023" and "OJ R 272, 2011-10-18".
+
+    The yearless issue form takes its year from the OJ publication date when stored, else
+    from the CELEX: Cellar agrees for 14,664 of 14,687 such acts, and the 23 published the
+    January after their CELEX year carry extra_metadata.oj_publication_date. The CELEX
+    string, not celex_year, which reads 1151 or 1049 on a few rows.
+    """
+    act_by_act, dated_issue, issue = oj_reference_patterns(series, year, number)
+    oj_year = text(
+        "coalesce(left(nullif(eu_laws.extra_metadata->>'oj_publication_date', ''), 4), "
+        "substr(eu_laws.celex, 2, 4)) = :oj_year"
+    ).bindparams(oj_year=str(year))
+    return (EULaw.oj_reference.op("~")(act_by_act)
+            | EULaw.oj_reference.op("~")(dated_issue)
+            | (EULaw.oj_reference.op("~")(issue) & oj_year))
+
+
 @router.get(
     "/oj/{series}/{year}/{number}",
     response_model=PaginatedResponse[LawItem],
     summary="Look up acts by an Official Journal reference (series / year / number)",
     description="""**What it does**
-Resolves an Official Journal reference to the act(s) carrying it, from Brubru's `eu_laws` mirror. Handles both the pre-2023 issue-based form (`L 187/41`) and the post-1-Oct-2023 act-by-act form (`L 2024/1689`).
+Resolves an Official Journal reference to the act(s) carrying it, from Brubru's `eu_laws` mirror. Handles both the post-1-Oct-2023 act-by-act form (`L 2024/1689`: one act per number) and the earlier issue form (`L 119`: every act in that issue, including zero-padded and supplement issues such as `455I`). The year of an issue is the year it was published, read from Cellar.
 
 **When to use it**
 When you hold an OJ citation (from a footnote or a press release) and need the act's CELEX + metadata.
@@ -1624,7 +1656,7 @@ When you hold an OJ citation (from a footnote or a press release) and need the a
 **Input**
 - `series` (path) — `L` or `C`.
 - `year` (path) — 4-digit year.
-- `number` (path) — the issue number (pre-2023) or act number (post-2023).
+- `number` (path) — the act number (since Oct 2023) or the issue number (before), with an optional supplement letter (`455I`).
 
 **Try it**
 ```
@@ -1633,7 +1665,7 @@ GET /api/v2/legislative/eur-lex/oj/L/2016/119
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` of acts whose `oj_reference` matches. Empty when no local row carries that reference.
+A `PaginatedResponse[LawItem]` of the acts carrying that reference, each as `/laws` serves it (`id`, `celex`, `title`, `doc_type`, `policy_area`, `eurovoc[]`, `body_txt`, `body_html`, plus the 5 envelope-level datapoints). Empty when no local row carries that reference. HTTP 422 when series or number is malformed.
 
 **Data freshness**
 Synced every 6 hours (hot tier) from EUR-Lex + Cellar.""",
@@ -1649,15 +1681,13 @@ async def oj_by_reference(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[LawItem]:
     series = series.upper()
-    # Post-2023 act-by-act ("L 2024/1689") OR pre-2023 issue-based ("L 187/41").
-    post_2023 = f"{series} {year}/{number}%"
-    pre_2023 = f"{series} {number}/%"
-    q = db.query(EULaw).filter(
-        EULaw.celex.isnot(None),
-        (EULaw.oj_reference.ilike(post_2023)) | (
-            (EULaw.oj_reference.ilike(pre_2023)) & (EULaw.celex_year == year)
-        ),
-    )
+    number = number.upper()
+    if not re.fullmatch(r"[A-Z]{1,2}", series) or not re.fullmatch(r"[0-9]{1,6}[A-Z]?", number):
+        raise HTTPException(status_code=422, detail={
+            "error": "series is one or two letters (L, C) and number is digits with an optional "
+                     "supplement letter (1689, 455I).",
+            "reason_code": "invalid_oj_reference"})
+    q = db.query(EULaw).filter(EULaw.celex.isnot(None), oj_reference_match(series, year, number))
     total = q.count()
     rows = stable(q.order_by(EULaw.date.desc().nullslast())).offset((page - 1) * limit).limit(limit).all()
     # The shared builder, so this route carries id, body and EuroVoc like /laws: its own
