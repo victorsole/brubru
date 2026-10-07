@@ -120,6 +120,7 @@ def _pending(limit: int, date: str | None):
             SELECT DISTINCT ON (e.oj_id) e.oj_id, e.oj_date, e.title
               FROM oj_entries e
              WHERE e.series = 'C' AND e.oj_id IS NOT NULL
+               AND e.language = 'en'  -- translated from English (7 Oct 2026)
                -- Not yet DEPLOYED (23 Sep 2026): a failed upload leaves a
                -- registered, undeployed row that must be retried.
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct

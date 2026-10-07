@@ -114,6 +114,9 @@ def _pending(limit: int, date: str | None):
               FROM oj_entries e
              WHERE e.series = 'L'
                AND COALESCE(e.celex, e.oj_id) IS NOT NULL
+               -- An act with no English version (a corrigendum to one language
+               -- version) cannot be translated from English: skip it (7 Oct 2026).
+               AND e.language = 'en'
                -- EEA Joint Committee decisions are IN again (11 Sep 2026). They
                -- were excluded in July for wrong-sector scraper CELEXes that
                -- 404ed; derive_celex has returned None for them since 23 Jul, so
@@ -121,8 +124,10 @@ def _pending(limit: int, date: str | None):
                -- "Not yet DEPLOYED", not "no row" (23 Sep 2026): a page whose
                -- upload failed is registered but undeployed, and must be picked
                -- up again or it never reaches the site.
+               -- Either key counts: 187 acts were translated under their OJ id
+               -- before sync_oj stored their real CELEX (7 Oct 2026).
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
-                                WHERE ct.celex = COALESCE(e.celex, e.oj_id)
+                                WHERE ct.celex IN (e.celex, e.oj_id)
                                   AND ct.deployed_at IS NOT NULL)
         """
         params: list = []

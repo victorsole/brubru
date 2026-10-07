@@ -224,6 +224,7 @@ class OjAct:
     series: str
     change_kind: str = "new"
     theme: str = "Other"
+    language: str = "en"    # the title's language; some corrigenda have no English version
 
 
 def parse_daily_view(html: str, series: str) -> List[OjAct]:

@@ -18,7 +18,6 @@ Usage:
 """
 
 import argparse
-import re
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -29,23 +28,57 @@ from sqlalchemy import text as sqla_text
 
 from core.database import SessionLocal
 from models.oj_entry import OjEntry
-from services.scrapers.oj_scraper import daily_view_url, parse_daily_view
-from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+from services.scrapers.oj_scraper import (
+    OjAct, category_for, derive_act_type, derive_change_kind, derive_institution, derive_theme,
+)
 
-DIRECT_ACCESS = "https://eur-lex.europa.eu/oj/direct-access.html"
-_DATE_RE = re.compile(r"ojDate=(\d{2})(\d{2})(\d{4})")
+_TYPE_BY_DESCRIPTOR = {"R": "Regulation", "L": "Directive", "D": "Decision"}
 
 
-def discover_recent_dates(fetcher) -> list:
-    """Latest OJ publication dates, newest first, from the direct-access hub."""
-    res = fetcher.fetch(DIRECT_ACCESS, expand_accordions=False, strip_chrome=False)
-    found = set()
-    for d, m, y in _DATE_RE.findall(res.html or ""):
-        try:
-            found.add(date(int(y), int(m), int(d)))
-        except ValueError:
-            pass
-    return sorted(found, reverse=True)
+def acts_from_cellar(d: date, series: str) -> list:
+    """Every act the OJ published on `d` in `series`, as OjAct rows."""
+    import asyncio
+    import re as _re
+    from services.api_clients.cellar_sparql_client import CellarSPARQLClient, group_oj_acts
+
+    async def _rows():
+        async with CellarSPARQLClient() as c:
+            return await c.oj_acts_published_on(d, series)
+
+    out = []
+    for a in group_oj_acts(asyncio.run(_rows()), series):
+        title, celex, en = a["title"] or "", a["celex"], a["language"] == "en"
+        corrigendum = bool(celex and _re.search(r"R\(\d+\)$", celex))
+        if en:
+            act_type, kind = derive_act_type(title), derive_change_kind(title)
+        else:
+            # The English keyword rules cannot read another language: take the act type
+            # from the CELEX descriptor Cellar gave, and nothing else.
+            act_type = _TYPE_BY_DESCRIPTOR.get(celex[5] if celex and len(celex) > 5 else "", "Other")
+            kind = "corrects" if corrigendum else "new"
+        out.append(OjAct(
+            oj_number=a["oj_reference"] or f"{series}/{a['year']}/{a['number']}",
+            oj_id=a["oj_id"], title=title, url=a["url"], act_type=act_type,
+            category=category_for(act_type, series),
+            institution=derive_institution(title) if en else "Other EU body",
+            celex=celex, series=series, change_kind=kind,
+            theme=derive_theme(title) if en else "Other", language=a["language"],
+        ))
+    return out
+
+
+def recent_oj_dates(days: int) -> list:
+    """The latest `days` OJ publication dates, newest first (weekends and holidays skipped)."""
+    import asyncio
+    from datetime import timedelta
+    from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+
+    async def _dates():
+        async with CellarSPARQLClient() as c:
+            today = date.today()
+            return await c.oj_publication_dates(today - timedelta(days=max(14, days * 3)), today)
+
+    return asyncio.run(_dates())[:days]
 
 
 def _match_carriage(db, celex):
@@ -85,6 +118,7 @@ def _upsert(db, act, oj_date, apply):
     e.eurlex_url = act.url
     e.change_kind = act.change_kind
     e.theme = act.theme
+    e.language = act.language
     e.carriage_id = cid
     e.matched_procedure_ref = proc
     e.matched_ta_reference = ta
@@ -125,23 +159,20 @@ def run(dates, series_list, days, apply, explain=False):
     counts = {}
     linked = 0
     try:
-        with WafBrowserFetcher(settle_ms=8000, networkidle_ms=20000) as fetcher:
-            if not dates:
-                dates = discover_recent_dates(fetcher)[:days]
-                print(f"[INFO] discovered recent OJ dates: {[d.isoformat() for d in dates]}")
-            for d in dates:
-                for series in series_list:
-                    url = daily_view_url(d, series)
-                    res = fetcher.fetch(url, expand_accordions=True, strip_chrome=False)
-                    acts = parse_daily_view(res.html or "", series)
-                    for a in acts:
-                        st = _upsert(db, a, d, apply)
-                        counts[st] = counts.get(st, 0) + 1
-                        if "linked" in st:
-                            linked += 1
-                    if apply:
-                        db.commit()
-                    print(f"  [{d} {series}] {len(acts)} acts")
+        if not dates:
+            dates = recent_oj_dates(days)
+            print(f"[INFO] recent OJ dates: {[d.isoformat() for d in dates]}")
+        for d in dates:
+            for series in series_list:
+                acts = acts_from_cellar(d, series)
+                for a in acts:
+                    st = _upsert(db, a, d, apply)
+                    counts[st] = counts.get(st, 0) + 1
+                    if "linked" in st:
+                        linked += 1
+                if apply:
+                    db.commit()
+                print(f"  [{d} {series}] {len(acts)} acts")
         print(f"\n[{'APPLIED' if apply else 'DRY-RUN'}] "
               + ", ".join(f"{k}={v}" for k, v in counts.items()) + f", linked_to_MTF={linked}")
 

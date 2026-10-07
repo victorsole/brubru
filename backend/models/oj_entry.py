@@ -30,6 +30,7 @@ class OjEntry(Base):
     celex = Column(String)                          # '32026R1144' (L-series)
 
     title = Column(Text, nullable=False)
+    language = Column(String, nullable=False, default="en", server_default="en")  # migration 275
     act_type = Column(String)
     category = Column(String)
     institution = Column(String)

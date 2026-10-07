@@ -1428,14 +1428,6 @@ async def law_consolidated(
 # Official Journal (PROPOSED — native v2)
 # ---------------------------------------------------------------------------
 
-# The 24 official languages, Cellar code -> ISO 639-1, in EUR-Lex's order. A corrigendum
-# often exists in one language only (7 Oct 2026: 4 of 10 L acts had no English version).
-_OJ_LANGS = {
-    "ENG": "en", "BUL": "bg", "SPA": "es", "CES": "cs", "DAN": "da", "DEU": "de", "EST": "et",
-    "ELL": "el", "FRA": "fr", "GLE": "ga", "HRV": "hr", "ITA": "it", "LAV": "lv", "LIT": "lt",
-    "HUN": "hu", "MLT": "mt", "NLD": "nl", "POL": "pl", "POR": "pt", "RON": "ro", "SLK": "sk",
-    "SLV": "sl", "FIN": "fi", "SWE": "sv",
-}
 # Published OJ acts never change, so a fetched body is kept for the life of the process.
 _OJ_BODY_CACHE: dict[tuple[str, str], tuple[Optional[str], Optional[str]]] = {}
 
@@ -1469,7 +1461,8 @@ async def _oj_body(client, work: str, lang3: str, fmts: dict[str, str]) -> tuple
     key = (work, lang3)
     if key in _OJ_BODY_CACHE:
         return _OJ_BODY_CACHE[key]
-    lang2 = _OJ_LANGS.get(lang3, "en")
+    from services.api_clients.cellar_sparql_client import OJ_LANGUAGES
+    lang2 = OJ_LANGUAGES.get(lang3, "en")
     result: tuple[Optional[str], Optional[str]] = (None, None)
     if not any(f in fmts for f in ("xhtml", "html")) and not any(f.startswith("pdf") for f in fmts):
         return result  # no readable manifestation published
@@ -1544,21 +1537,10 @@ async def oj_daily(
 ) -> PaginatedResponse[OJDailyItem]:
     import asyncio
     import httpx
-    from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+    from services.api_clients.cellar_sparql_client import CellarSPARQLClient, group_oj_acts
 
     async with CellarSPARQLClient() as client:
         rows = await client.oj_acts_published_on(date, series)
-
-    works: dict[str, dict] = {}
-    for r in rows:
-        w = works.setdefault(r["work"], {"meta": r, "langs": {}})
-        lang = (r.get("lang") or "").rsplit("/", 1)[-1]
-        if not lang:
-            continue
-        lg = w["langs"].setdefault(lang, {"title": None, "fmts": {}})
-        lg["title"] = lg["title"] or r.get("title")
-        if r.get("fmt") and r.get("manif"):
-            lg["fmts"].setdefault(r["fmt"], r["manif"])
 
     def _dt(v):
         if not v:
@@ -1569,27 +1551,15 @@ async def oj_daily(
             return None
 
     items: list[tuple[OJDailyItem, str, dict]] = []
-    for work, w in works.items():
-        m = w["meta"]
-        if not w["langs"]:
-            continue  # no language version at all: nothing published to serve
-        # English when it exists, else the first official language the act was published in.
-        lang3 = next((l for l in _OJ_LANGS if l in w["langs"]), sorted(w["langs"])[0])
-        lang2 = _OJ_LANGS.get(lang3, "en")
-        num, year, celex = m.get("num"), m.get("year"), m.get("celex")
-        if celex:
-            url = f"https://eur-lex.europa.eu/legal-content/{lang2.upper()}/TXT/?uri=CELEX:{celex}"
-        else:
-            url = f"https://eur-lex.europa.eu/legal-content/{lang2.upper()}/TXT/?uri=OJ:{series}_{year}{int(num):05d}"
+    for a in group_oj_acts(rows, series):
+        doc = _dt(a["document_date"])
         items.append((OJDailyItem(
-            id=f"{series}/{year}/{num}", celex=celex, oj_reference=m.get("ref"), series=series,
-            publication_date=date, document_date=_dt(m.get("docdate")).date() if _dt(m.get("docdate")) else None,
-            title=w["langs"][lang3]["title"], language=lang2, work_uri=work,
-            eurlex_url=url, public_url=url,
-            creation_date=_dt(m.get("created")), updated_date=_dt(m.get("modified")),
-        ), lang3, w["langs"][lang3]["fmts"]))
-    # OJ order: by act number within the day.
-    items.sort(key=lambda t: int(t[0].id.rsplit("/", 1)[-1]) if t[0].id.rsplit("/", 1)[-1].isdigit() else 0)
+            id=f"{series}/{a['year']}/{a['number']}", celex=a["celex"], oj_reference=a["oj_reference"],
+            series=series, publication_date=date, document_date=doc.date() if doc else None,
+            title=a["title"], language=a["language"], work_uri=a["work"],
+            eurlex_url=a["url"], public_url=a["url"],
+            creation_date=_dt(a["created"]), updated_date=_dt(a["modified"]),
+        ), a["lang3"], a["fmts"]))
     total = len(items)
     page_items = items[(page - 1) * limit: page * limit]
 

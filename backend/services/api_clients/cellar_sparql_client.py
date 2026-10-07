@@ -303,6 +303,18 @@ class CellarSPARQLClient(BaseSPARQLClient):
         """
         return await self._cached_select(query, cache_ttl=900)
 
+    async def oj_publication_dates(self, since: date, until: date) -> List[date]:
+        """The days the Official Journal published anything in [since, until], newest first."""
+        query = f"""
+        PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        SELECT DISTINCT ?d WHERE {{
+          ?w cdm:official-journal-act_date_publication ?d .
+          FILTER(?d >= "{since.isoformat()}"^^xsd:date && ?d <= "{until.isoformat()}"^^xsd:date)
+        }}"""
+        rows = await self._cached_select(query, cache_ttl=900)
+        return sorted({date.fromisoformat(r["d"][:10]) for r in rows if r.get("d")}, reverse=True)
+
     # ------------------------------------------------------------------
     # Single-act metadata
     # ------------------------------------------------------------------
@@ -916,3 +928,55 @@ class CellarSPARQLClient(BaseSPARQLClient):
         except Exception as e:
             logger.error(f"Cellar SPARQL health check failed: {e}")
             return False
+
+
+# The 24 official languages, Cellar code -> ISO 639-1, English first. A corrigendum often
+# exists in one language only (7 Oct 2026: 4 of 10 L acts had no English version).
+OJ_LANGUAGES = {
+    "ENG": "en", "BUL": "bg", "SPA": "es", "CES": "cs", "DAN": "da", "DEU": "de", "EST": "et",
+    "ELL": "el", "FRA": "fr", "GLE": "ga", "HRV": "hr", "ITA": "it", "LAV": "lv", "LIT": "lt",
+    "HUN": "hu", "MLT": "mt", "NLD": "nl", "POL": "pl", "POR": "pt", "RON": "ro", "SLK": "sk",
+    "SLV": "sl", "FIN": "fi", "SWE": "sv",
+}
+
+
+def group_oj_acts(rows: List[Dict[str, Any]], series: str) -> List[Dict[str, Any]]:
+    """One dict per act from oj_acts_published_on() rows, in OJ number order.
+
+    The single place that picks an act's language (English when it has an English
+    version, else the first official language it was published in) and its EUR-Lex URL,
+    so /oj/daily and My OJ (sync_oj) cannot disagree. Values are read from Cellar; the
+    only thing composed is the EUR-Lex URL, in the form EUR-Lex serves (CELEX, or
+    OJ:<series>_<year><number> for notices without one), verified 7 Oct 2026.
+    """
+    works: Dict[str, Dict[str, Any]] = {}
+    for r in rows:
+        w = works.setdefault(r["work"], {"meta": r, "langs": {}})
+        lang = (r.get("lang") or "").rsplit("/", 1)[-1]
+        if not lang:
+            continue
+        lg = w["langs"].setdefault(lang, {"title": None, "fmts": {}})
+        lg["title"] = lg["title"] or r.get("title")
+        if r.get("fmt") and r.get("manif"):
+            lg["fmts"].setdefault(r["fmt"], r["manif"])
+    acts = []
+    for work, w in works.items():
+        if not w["langs"]:
+            continue  # no language version published: nothing to serve
+        m = w["meta"]
+        lang3 = next((l for l in OJ_LANGUAGES if l in w["langs"]), sorted(w["langs"])[0])
+        lang2 = OJ_LANGUAGES.get(lang3, "en")
+        num, year, celex = m.get("num"), m.get("year"), m.get("celex")
+        if not (num and year):
+            continue
+        ref = f"CELEX:{celex}" if celex else f"OJ:{series}_{year}{int(num):05d}"
+        acts.append({
+            "work": work, "celex": celex, "oj_reference": m.get("ref"), "series": series,
+            "number": num, "year": year, "oj_id": f"{series}_{year}{int(num):05d}",
+            "document_date": m.get("docdate"), "modified": m.get("modified"), "created": m.get("created"),
+            "lang3": lang3, "language": lang2, "title": w["langs"][lang3]["title"],
+            "fmts": w["langs"][lang3]["fmts"],
+            "url": f"https://eur-lex.europa.eu/legal-content/{lang2.upper()}/TXT/?uri={ref}",
+        })
+    acts.sort(key=lambda a: int(a["number"]) if str(a["number"]).isdigit() else 0)
+    return acts

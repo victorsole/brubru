@@ -75,11 +75,17 @@ def _translations_map(db: Session, lang: str, entry_ids: List[str]) -> dict:
     return {str(r[0]): (r[1], r[2]) for r in rows}
 
 
-def _ca_key(e) -> Optional[str]:
-    """The corpus slug for an OJ entry: CELEX when it has one (L-series),
-    otherwise the oj_id (C-series). Keep this the single definition of the
-    slug so the lookup set and the emitted URL can never disagree."""
-    return e.celex or e.oj_id
+def _ca_keys(e) -> list:
+    """Every corpus slug an OJ entry may have been translated under: its CELEX and its
+    oj_id. 187 L acts were translated under the oj_id before sync_oj stored their real
+    CELEX (7 Oct 2026), so a lookup by CELEX alone would drop their Catalan link."""
+    return [k for k in (e.celex, e.oj_id) if k]
+
+
+def _ca_slug(e, catalan_acts) -> Optional[str]:
+    """The slug the entry's Catalan page actually lives under, or None. The single
+    definition, so the lookup set and the emitted URL can never disagree."""
+    return next((k for k in _ca_keys(e) if k in catalan_acts), None)
 
 
 def _catalan_acts(db: Session, keys: List[str]) -> set:
@@ -125,8 +131,9 @@ def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(
         "plain_explanation": t_expl or e.plain_explanation,
         "translated_from": "en" if t_title else None,
         # L-series pages are addressed by CELEX, C-series by oj_id.
-        "catalan_url": (f"https://brubru.beresol.eu/legislacio-ue-catala/{_ca_key(e)}/"
-                        if _ca_key(e) in catalan_acts else None),
+        "catalan_url": (f"https://brubru.beresol.eu/legislacio-ue-catala/{_ca_slug(e, catalan_acts)}/"
+                        if _ca_slug(e, catalan_acts) else None),
+        "language": e.language,  # the title's language; some corrigenda have no English
         "change_kind": e.change_kind,
         "theme": e.theme,
         "carriage_id": str(e.carriage_id) if e.carriage_id else None,
@@ -203,7 +210,7 @@ def oj_entries(
 
         rows = q.order_by(OjEntry.series, OjEntry.act_type, OjEntry.oj_number).all()
         trans_map = _translations_map(db, (lang or "en").lower()[:2], [str(e.id) for e in rows])
-        catalan_acts = _catalan_acts(db, [_ca_key(e) for e in rows])
+        catalan_acts = _catalan_acts(db, [k for e in rows for k in _ca_keys(e)])
         items = [_entry_dict(e, keywords, tracked_procs, tracked_celex,
                              trans_map.get(str(e.id)), catalan_acts) for e in rows]
         if my_interests and keywords:
