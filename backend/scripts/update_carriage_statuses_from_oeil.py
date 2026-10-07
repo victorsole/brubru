@@ -101,11 +101,21 @@ async def update_statuses():
         log("=" * 60)
 
         # Get all carriages with OEIL procedure refs that are not already ADOPTED
+        # Adopted files are re-read once their page is a month old (7 Oct 2026). Skipped for
+        # good, a wrong ADOPTED froze with a May page: OEIL showed 2025/2147(DEC) back
+        # awaiting a vote and five others "Procedure completed" that we still held as
+        # "Awaiting Council's 1st reading position". Status still never regresses.
+        from sqlalchemy import or_ as _or
+        from datetime import timedelta as _td
+        _month_ago = datetime.now(timezone.utc).replace(tzinfo=None) - _td(days=30)
         q = db.query(LegislativeCarriage).filter(
             LegislativeCarriage.oeil_procedure_ref != None,
             LegislativeCarriage.oeil_procedure_ref != '',
-            LegislativeCarriage.current_status != CarriageStatusEnum.ADOPTED,
-            LegislativeCarriage.current_status != CarriageStatusEnum.WITHDRAWN
+            LegislativeCarriage.current_status != CarriageStatusEnum.WITHDRAWN,
+            _or(LegislativeCarriage.current_status != CarriageStatusEnum.ADOPTED,
+                LegislativeCarriage.oeil_body_fetched_at.is_(None),
+                LegislativeCarriage.oeil_body_fetched_at < _month_ago,
+                *((LegislativeCarriage.oeil_procedure_ref.in_(REFS),) if REFS else ())),
         )
 
         # --refs narrows the sweep to named procedures (11 September 2026).
@@ -184,6 +194,10 @@ async def update_statuses():
                         row = db.get(LegislativeCarriage, carriage_id)
                         if row is not None:
                             row.oeil_body_fetched_at = datetime.now(timezone.utc).replace(tzinfo=None)
+                            # Kept out of the API until the page exists (migration 277): a
+                            # 404 public_url and no body is what GovClipping received.
+                            if row.oeil_missing_since is None:
+                                row.oeil_missing_since = datetime.now(timezone.utc)
                             db.commit()
                         log("   -> [INFO] not on OEIL yet (404); retried next cycle")
                         await asyncio.sleep(0.5)
@@ -252,12 +266,20 @@ async def update_statuses():
                         changed.append("oeil_body")
                     carriage.oeil_body_fetched_at = now.replace(tzinfo=None)
                 carriage.oeil_roles_parsed_at = now
+                if carriage.oeil_missing_since is not None:
+                    carriage.oeil_missing_since = None   # the page answers again: served again
+                    changed.append("oeil_missing_since")
 
                 # Infer status from events (+ OEIL's own stage line)
                 inferred_value = infer_carriage_status(
                     [e.event_type for e in data.key_events.events], data.basic_info.status)
                 current_value = carriage.current_status.value if carriage.current_status else None
                 new_value = advance_status(current_value, inferred_value)
+                # OEIL's "Procedure lapsed or withdrawn" is terminal and outside the
+                # progression, so advance_status can never reach it: 24 such files were
+                # still "tabled", "close to adoption" or "completed" (7 Oct 2026).
+                if "lapsed or withdrawn" in (data.basic_info.status or "").lower() and current_value != "withdrawn":
+                    new_value = "withdrawn"
                 if new_value:
                     carriage.current_status = CarriageStatusEnum(new_value)
                     log(f"   -> Status advancing: {current_value} -> {new_value}")

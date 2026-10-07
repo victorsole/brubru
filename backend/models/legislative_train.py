@@ -232,6 +232,8 @@ class LegislativeCarriage(Base):
     # Read by /api/v1/committees/{code}/work-items to serve body_txt/body_html.
     oeil_html_body = Column(Text)
     oeil_text_body = Column(Text)
+    # First 404 from the OEIL page, NULL while it exists (migration 277). Not served while set.
+    oeil_missing_since = Column(DateTime(timezone=True))
     # Adoption date of the act this carriage points at (migration 270). Fallback for
     # document_date on the EURLEX rows, which are adopted acts with no OEIL timeline.
     act_date = Column(Date)

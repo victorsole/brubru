@@ -7,6 +7,7 @@ procedure reference, status, committee, last-update date range.
 """
 
 import logging
+import re
 from datetime import date, datetime
 from typing import Any, Optional
 
@@ -17,7 +18,7 @@ from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.legislative_train import LegislativeCarriage
+from models.legislative_train import CarriageSourceEnum, LegislativeCarriage
 from models.user import User
 
 from ._deps import api_user_with_rate_limit
@@ -47,6 +48,14 @@ class ProcedureItem(BaseModel):
     oeil_procedure_ref: Optional[str] = None
 
     current_status: Optional[str] = None
+    stage: Optional[str] = Field(
+        None,
+        description=(
+            "OEIL's own 'Stage reached in procedure', word for word (e.g. 'Awaiting committee "
+            "decision', 'Procedure completed', 'Procedure lapsed or withdrawn'). `current_status` "
+            "is Brubru's grouping of the same; when they seem to disagree, this is the authority."
+        ),
+    )
     is_blocked: bool = False
     days_in_current_status: Optional[int] = None
     text_type: Optional[str] = None
@@ -59,7 +68,14 @@ class ProcedureItem(BaseModel):
     celex_numbers: list = Field(default_factory=list)
     eprs_briefing_ids: list = Field(default_factory=list)
     eprs_matched_briefings: list = Field(default_factory=list)
-    policy_areas: list = Field(default_factory=list)
+    policy_areas: list = Field(
+        default_factory=list,
+        description=(
+            "The procedure's subjects as OEIL classifies it, code and label word for word "
+            "(e.g. '3.70.03 Climate policy, climate change, ozone layer'), read from its "
+            "procedure file. Empty for the non-OEIL rows that include_other_sources adds."
+        ),
+    )
     related_themes: list = Field(default_factory=list)
     spotlight_tags: list = Field(default_factory=list)
     ec_priority_ids: list = Field(default_factory=list)
@@ -143,6 +159,28 @@ def _public_url(r) -> Optional[str]:
 
     stored = (getattr(r, "url", None) or "").strip()
     return stored or None
+
+
+_STAGE_RE = re.compile(r"Stage reached in procedure\s*\n?\s*([^\n]+)")
+_STATUS_RE = re.compile(r"\bStatus\s*\n+\s*([^\n]+)")
+
+
+def _oeil_stage(r) -> Optional[str]:
+    """OEIL's 'Stage reached in procedure' line, read from the stored page."""
+    body = getattr(r, "oeil_text_body", None) or ""
+    m = _STAGE_RE.search(body) or _STATUS_RE.search(body)
+    return (m.group(1).strip() or None) if m else None
+
+
+_SUBJECT_SECTION_RE = re.compile(
+    r"\bSubject\s*\n(.*?)(?:\n\s*(?:Geographical area|Legislative priorities|Status|Key players)\s*\n)", re.S)
+_SUBJECT_LINE_RE = re.compile(r"^\s*(\d+(?:\.\d+)*)\s+(\S.*?)\s*$", re.M)
+
+
+def _oeil_subjects(r) -> list:
+    """OEIL's subject codes and labels for the procedure, from the stored page."""
+    m = _SUBJECT_SECTION_RE.search(getattr(r, "oeil_text_body", None) or "")
+    return [f"{code} {label}" for code, label in _SUBJECT_LINE_RE.findall(m.group(1))] if m else []
 
 
 def _document_date(r) -> Optional[date]:
@@ -236,6 +274,11 @@ async def list_procedures(
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
+    include_other_sources: bool = Query(
+        False,
+        description="Also return the EUR-Lex acts and Legislative Train files the mirror holds. "
+                    "They are not OEIL procedures: no procedure file, and almost never a body.",
+    ),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -245,6 +288,20 @@ async def list_procedures(
         updated_to = updated_end
     query = db.query(LegislativeCarriage)
     filters = []
+    # The mirror also holds 1,159 EUR-Lex acts and 477 Legislative Train files. Served as
+    # "procedures" they had no OEIL page and no body (1,626 of 1,636), and 263 EUR-Lex
+    # corrigenda linked the base act instead (7 Oct 2026). Adopted acts are /laws.
+    # A procedure is served once Brubru holds its OEIL page, and not while OEIL answers
+    # 404 (migration 277): otherwise its public_url is dead and its body null.
+    oeil_served = and_(
+        LegislativeCarriage.source == CarriageSourceEnum.OEIL_DIRECT,
+        LegislativeCarriage.oeil_missing_since.is_(None),
+        func.length(LegislativeCarriage.oeil_text_body) >= 200,
+    )
+    if include_other_sources is not True:
+        filters.append(oeil_served)
+    else:
+        filters.append(or_(LegislativeCarriage.source != CarriageSourceEnum.OEIL_DIRECT, oeil_served))
     if reference:
         filters.append(LegislativeCarriage.oeil_procedure_ref == reference)
     if committee:
@@ -285,6 +342,7 @@ async def list_procedures(
             description=r.description,
             oeil_procedure_ref=r.oeil_procedure_ref,
             current_status=_enum_str(r.current_status),
+            stage=_oeil_stage(r),
             is_blocked=bool(r.is_blocked),
             days_in_current_status=r.days_in_current_status,
             text_type=_enum_str(r.text_type),
@@ -295,7 +353,9 @@ async def list_procedures(
             celex_numbers=list(r.celex_numbers or []),
             eprs_briefing_ids=list(r.eprs_briefing_ids or []),
             eprs_matched_briefings=_coerce_list(r.eprs_matched_briefings),
-            policy_areas=list(r.policy_areas or []),
+            # OEIL's own subjects, not Brubru's classifier, which tagged Solvency II
+            # standards "Migration" and air-taxi rest rules "Taxation" (7 Oct 2026).
+            policy_areas=_oeil_subjects(r),
             related_themes=list(r.related_themes or []),
             spotlight_tags=list(r.spotlight_tags or []),
             ec_priority_ids=list(r.ec_priority_ids or []),
@@ -349,6 +409,14 @@ class ProcedureDetail(BaseModel):
     oeil_procedure_ref: Optional[str] = None
 
     current_status: Optional[str] = None
+    stage: Optional[str] = Field(
+        None,
+        description=(
+            "OEIL's own 'Stage reached in procedure', word for word (e.g. 'Awaiting committee "
+            "decision', 'Procedure completed', 'Procedure lapsed or withdrawn'). `current_status` "
+            "is Brubru's grouping of the same; when they seem to disagree, this is the authority."
+        ),
+    )
     is_blocked: bool = False
     days_in_current_status: Optional[int] = None
     text_type: Optional[str] = None
@@ -370,7 +438,14 @@ class ProcedureDetail(BaseModel):
     celex_numbers: list = Field(default_factory=list)
     eprs_briefing_ids: list = Field(default_factory=list)
     eprs_matched_briefings: list = Field(default_factory=list)
-    policy_areas: list = Field(default_factory=list)
+    policy_areas: list = Field(
+        default_factory=list,
+        description=(
+            "The procedure's subjects as OEIL classifies it, code and label word for word "
+            "(e.g. '3.70.03 Climate policy, climate change, ozone layer'), read from its "
+            "procedure file. Empty for the non-OEIL rows that include_other_sources adds."
+        ),
+    )
     related_themes: list = Field(default_factory=list)
     spotlight_tags: list = Field(default_factory=list)
     ec_priority_ids: list = Field(default_factory=list)
@@ -429,6 +504,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         description=r.description,
         oeil_procedure_ref=r.oeil_procedure_ref,
         current_status=_enum_str(r.current_status),
+        stage=_oeil_stage(r),
         is_blocked=bool(r.is_blocked),
         days_in_current_status=r.days_in_current_status,
         text_type=_enum_str(r.text_type),
@@ -439,7 +515,9 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         celex_numbers=list(r.celex_numbers or []),
         eprs_briefing_ids=list(r.eprs_briefing_ids or []),
         eprs_matched_briefings=_coerce_list(r.eprs_matched_briefings),
-        policy_areas=list(r.policy_areas or []),
+        # OEIL's own subjects, not Brubru's classifier, which tagged Solvency II
+        # standards "Migration" and air-taxi rest rules "Taxation" (7 Oct 2026).
+        policy_areas=_oeil_subjects(r),
         related_themes=list(r.related_themes or []),
         spotlight_tags=list(r.spotlight_tags or []),
         ec_priority_ids=list(r.ec_priority_ids or []),

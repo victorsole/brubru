@@ -46,6 +46,7 @@ The companion to `/api/v2/legislative/eur-lex/laws` (adopted legislation). Use t
 - `rapporteur_mep_id` — filter to a specific MEP's files.
 - `status` — procedure status enum.
 - `updated_from`, `updated_to` (+ `updated_end` alias) — incremental sync.
+- `include_other_sources` — default false: only OEIL procedure files. True adds the EUR-Lex acts and Legislative Train files the mirror also holds (not procedures; adopted acts are `/api/v2/legislative/eur-lex/laws`).
 - `limit`, `page`.
 
 **Try it**
@@ -70,6 +71,10 @@ async def list_procedures(
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
+    include_other_sources: bool = Query(
+        False,
+        description="Also return the EUR-Lex acts and Legislative Train files the mirror holds (not OEIL procedures).",
+    ),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -85,6 +90,7 @@ async def list_procedures(
         updated_from=updated_from,
         updated_to=updated_to,
         updated_end=updated_end,
+        include_other_sources=include_other_sources,
         limit=limit,
         page=page,
         user=user,
@@ -135,6 +141,7 @@ async def latest_procedures(
         updated_from=since,
         updated_to=None,
         updated_end=None,
+        include_other_sources=False,
         limit=limit,
         page=1,
         user=user,
