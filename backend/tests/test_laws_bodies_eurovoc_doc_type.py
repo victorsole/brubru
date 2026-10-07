@@ -99,9 +99,11 @@ def test_v2_list_serves_stored_bodies_on_full_pages(monkeypatch):
     asyncio.run(eur_lex.list_laws(None, q=None, celex=None, doc_type=None, policy_area=None,
                                   published_from=None, published_to=None, published_end=None,
                                   updated_from=None, updated_to=None, updated_end=None,
+                                  created_from=None, created_to=None,
                                   include_orphans=False, include_body=True, limit=100, page=1,
                                   user=None, db=None))
     assert seen["include_body"] is True and seen["limit"] == 100
+    assert "created_from" in seen and "created_to" in seen
 
 
 def test_the_hot_tier_fetches_bodies_and_eurovoc_after_the_law_sync():
@@ -144,3 +146,38 @@ def test_oj_route_rejects_a_malformed_reference():
     finally:
         app.dependency_overrides.pop(api_user_with_rate_limit, None)
     assert r.status_code == 422 and r.json()["reason_code"] == "invalid_oj_reference"
+
+
+def test_laws_filters_on_created_and_rejects_an_inverted_window(monkeypatch):
+    """created_from/created_to were ignored: /laws returned all 19,136 laws (7 Oct 2026)."""
+    from fastapi.testclient import TestClient
+    from sqlalchemy.dialects import postgresql
+    from api.v1._deps import api_user_with_rate_limit
+    from core.database import get_db
+    from main import app
+    from models.user import User
+
+    class Q:
+        def __init__(self): self.filters = []
+        def filter(self, *a): self.filters += a; return self
+        def count(self): return 0
+        def order_by(self, *a): return self
+        def offset(self, n): return self
+        def limit(self, n): return self
+        def all(self): return []
+
+    q = Q()
+    monkeypatch.setattr("api.v1.laws.stable", lambda query, *a: query)
+    app.dependency_overrides[api_user_with_rate_limit] = lambda: User(email="t@example.com", role="admin")
+    app.dependency_overrides[get_db] = lambda: type("DB", (), {"query": lambda self, m: q})()
+    try:
+        c = TestClient(app)
+        r = c.get("/api/v2/legislative/eur-lex/laws?created_from=2026-09-15&created_to=2026-09-15")
+        bad = c.get("/api/v2/legislative/eur-lex/laws?created_from=2026-09-16&created_to=2026-09-15")
+    finally:
+        app.dependency_overrides.pop(api_user_with_rate_limit, None)
+        app.dependency_overrides.pop(get_db, None)
+    assert r.status_code == 200, r.text
+    sql = " ".join(str(f.compile(dialect=postgresql.dialect())) for f in q.filters)
+    assert "eu_laws.created_at >=" in sql and "eu_laws.created_at <=" in sql
+    assert bad.status_code == 422 and bad.json()["reason_code"] == "invalid_date_range"

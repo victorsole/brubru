@@ -24,6 +24,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
 from ._row_dates import row_updated
+from ._change_window import validate_window
 
 logger = logging.getLogger(__name__)
 
@@ -158,6 +159,8 @@ The single highest-traffic Brubru endpoint — used to find specific acts (e.g. 
 - `policy_area` — EuroVoc domain, by number (`52`), label (`52 ENVIRONMENT`) or name (`environment`).
 - `include_body` — default true; false pages the corpus for metadata only.
 - `published_from`, `published_to` — date filter on `published_date`.
+- `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
+- `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -184,6 +187,8 @@ async def list_laws(
     updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound — rows with updated_at >= value. Returns rows ordered by updated_at desc when set."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
+    created_from: Optional[datetime] = Query(None, description="First stored by Brubru on or after (ISO date or datetime; UTC when no zone). Matches `creation_date`."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First stored by Brubru on or before; a bare date covers the whole day."),
     include_orphans: bool = Query(False, description="Include rows that have no CELEX (orphaned annexes / recitals from Formex parsing). Default false — they have no useful identifier and produce all-null rows."),
     include_body: bool = Query(
         True,
@@ -236,6 +241,9 @@ async def list_laws(
             },
         )
 
+    # created_ was silently ignored until 7 Oct 2026: the list returned all 19,136 laws.
+    created = validate_window(created_from, created_to)
+
     query = db.query(EULaw)
 
     filters = []
@@ -259,6 +267,10 @@ async def list_laws(
         filters.append(EULaw.updated_at >= updated_from)
     if updated_to:
         filters.append(EULaw.updated_at <= updated_to)
+    if created["created_from"]:
+        filters.append(EULaw.created_at >= created["created_from"])
+    if created["created_to"]:
+        filters.append(EULaw.created_at <= created["created_to"])
 
     ts_query = None
     alias_celexes: list[str] = []
@@ -309,6 +321,8 @@ async def list_laws(
         query = query.order_by(*order_cols)
     elif updated_from or updated_to:
         query = query.order_by(EULaw.updated_at.desc().nullslast())
+    elif created_from or created_to:
+        query = query.order_by(EULaw.created_at.desc().nullslast())
     else:
         query = query.order_by(EULaw.date.desc().nullslast())
     rows = (

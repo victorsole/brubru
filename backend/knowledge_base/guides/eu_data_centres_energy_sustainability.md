@@ -1,6 +1,7 @@
 # EU Data Centres: Energy, Water, Waste Heat and the Reporting Duty
 
 ## QUICK FACTS
+- **LATEST research (Council ART, listed 7 Oct 2026):** "Data centre expansion: conflicting ambitions": the Council's own abstract describes a tension between scaling up and exhausting land, water and energy, and a debate now between several visions of sovereign interest. Only the abstract was retrievable. Details: `jrc_and_art_research_digest_oct_2026`.
 
 - **NEWEST: the Commission's data centre report, COM(2026) 500 (21 September 2026; verified 23 September 2026 against the document on Cellar).** **Report from the Commission to the European Parliament and the Council on the energy efficiency of data centres in the EU**, COM(2026) 500 final, Brussels 21.9.2026, CELEX `52026DC0500`, EUR-Lex https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026DC0500
   - **Purpose.** The assessment required by **Article 12(5) of the Energy Efficiency Directive (Directive (EU) 2023/1791)**: it analyses what data centres reported to the European database in the first reporting period (May to September 2024) and explores further measures, including minimum performance standards.

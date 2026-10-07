@@ -4,16 +4,16 @@
 - Full name: Security Action For Europe (SAFE) -- part of ReArm Europe / Readiness 2030 plan
 - Type: Regulation establishing EU defence loan instrument
 - Budget: EUR 150 billion in voluntary EU loans to Member States for defence spending
-- Adopted: Council adopted May 2025; EP consent procedure
-- Participating: 19 Member States (opt-in, voluntary)
+- **Adopted:** **Council Regulation (EU) 2025/1106 of 27 May 2025** (CELEX `32025R1106`, OJ L of 28.5.2025). Its preamble lists only the Commission proposal: it is a Council act, not a co-decided law.
+- **Participating:** voluntary. **19 Member States submitted defence investment plans** (DEFIS page); the Council had approved financial assistance for **18 by 10 April 2026**. Denmark is NOT outside it: its plan was approved by the Council on 11 February 2026.
 - Part of: Readiness 2030 package (total EUR 800 billion defence mobilisation)
 - Readiness 2030 components: SAFE (EUR 150B loans), national fiscal space (activation of escape clause), EDIP (EUR 1.5B), EDF (EUR 7.95B), private capital mobilisation
-- Legal basis: Article 122 TFEU (emergency measures) + Article 175 TFEU
-- Procedure: 2025/0076(NLE) -- non-legislative, Council decision with EP consultation
+- **Legal basis: Article 122 TFEU only** (the Regulation cites no other article).
+- Procedure reference on OEIL: not verified, so do not quote one.
 - Commission proposal: COM(2025) 120, 19 March 2025
 - Commissioner: Andrius Kubilius (Defence and Space)
 - DG: DG DEFIS
-- SAFE adopted: May 2025. 10 Member States have so far requested a SAFE loan (as of October 2025).
+- **Money flows (pre-financing of up to 15% of the loan, Article 11(1)):** the **first payment ever went to Poland on 29 May 2026: EUR 6.6 billion, 15% of its EUR 43.7 billion allocation**. On **6 October 2026 Belgium received EUR 1.2 billion (15% of EUR 8.3 billion) and Czechia EUR 309 million (15% of a loan of about EUR 2 billion)**, their first payments; the Commission says it has now paid almost **EUR 13.5 billion of pre-financing to eleven Member States**. Further payments follow as milestones are met (payment requests at most twice a year; loan availability ends 31 December 2030; a new call for interest possible by 31 December 2026; implementing decisions by 30 June 2027). Do NOT say Czechia received EUR 1.25 billion.
 - National escape clause: Council activated flexibility in EU fiscal rules at request of 15 Member States so far to increase defence spending.
 - NATO context: New 5% GDP defence spending target (The Hague 2025), minimum 3.5% for core defence needs + up to 1.5% for critical infrastructure, civil preparedness, resilience
 - Geopolitical driver: US strategic reorientation under Trump presidency, Russia-Ukraine war
@@ -43,7 +43,7 @@ The SAFE instrument is the EU's first large-scale defence financing mechanism. A
 - **Procurement preference**: Incentives for EU-manufactured equipment (European preference clause)
 - **Conditionality**: Loans tied to defence investment plans reviewed by Commission
 - **Repayment**: 30-45 year maturities, below Member State borrowing rates
-- **Non-participating MS**: Denmark (defence opt-out), Austria, Ireland, Malta among those not participating
+- **No approved plan on 10 April 2026 (nine Member States):** Austria, Germany, Hungary, Ireland, Luxembourg, Malta, the Netherlands, Slovenia, Sweden (derived from the Council's list of 18; DEFIS says 19 plans were submitted, so one of these may be pending). Denmark IS in: approved 11 February 2026.
 
 ## Institutional Landscape
 
@@ -99,7 +99,7 @@ The EUCO summit (19-20 March 2026) is expected to take stock of progress on defe
 
 ## SAFE Funding Approvals (March 2026)
 
-On 26 March 2026, DG DEFIS announced SAFE approvals unlocking defence funding for Czechia and France -- the first concrete disbursements under the SAFE instrument. This marks a milestone: EU-borrowed funds reaching Member States for defence investment.
+The Council adopted implementing decisions approving financial assistance for Czechia and France on **10 April 2026**, bringing the number of approved plans to 18. These were **approvals, not payments**: the first disbursement under SAFE was Poland's pre-financing on 29 May 2026 (see QUICK FACTS).
 
 ## Sources
 

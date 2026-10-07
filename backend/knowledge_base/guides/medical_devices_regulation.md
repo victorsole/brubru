@@ -1,6 +1,7 @@
 # Medical Devices Regulation (MDR)
 
 ## QUICK FACTS
+- **HTA link (6 Oct 2026):** the Commission selected the first two medical devices (SAPIEN M3, Highlife; both mitral valve replacement) for **joint clinical assessment** under Regulation (EU) 2021/2282; selection is expected quarterly. CE marking is separate from the JCA. Details: `hta_joint_clinical_assessment_medical_devices_2026`.
 - Full name: Regulation (EU) 2017/745 on medical devices
 - CELEX: 32017R0745
 - Replaces: Medical Device Directive 93/42/EEC (MDD) and Active Implantable Medical Device Directive 90/385/EEC (AIMDD)

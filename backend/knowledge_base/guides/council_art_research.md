@@ -1,6 +1,7 @@
 # Council of the EU: Analysis and Research Team (ART) Publications
 
 ## QUICK FACTS
+- **LATEST (listed 7 Oct 2026; paper dates not shown on the listing):** "**Data centre expansion: conflicting ambitions. Potential backlash against a strategic asset**" and "**Weaponised suspicion: how conspiracy theories fuel modern disinformation**" (drivers, context and impact of conspiratorial narratives in modern disinformation). Only the Council's abstracts were read; the PDF returned HTTP 403. Details: `jrc_and_art_research_digest_oct_2026`.
 - Publisher: Analysis and Research Team (ART), General Secretariat of the Council of the EU
 - URL: https://www.consilium.europa.eu/en/documents-publications/council-research-papers/
 - Type: Strategic analysis papers, forward-looking assessments, policy briefings

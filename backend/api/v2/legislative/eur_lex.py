@@ -555,6 +555,8 @@ To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner
 - `policy_area` — EuroVoc domain, by number (`52`), label (`52 ENVIRONMENT`) or name (`environment`).
 - `include_body` — default true; false pages the corpus for metadata only.
 - `published_from`, `published_to` — adoption-date bounds (YYYY-MM-DD).
+- `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
+- `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -581,6 +583,8 @@ async def list_laws(
     updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound (updated_at >= value)."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound (updated_at <= value)."),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)."),
+    created_from: Optional[datetime] = Query(None, description="First stored by Brubru on or after (ISO date or datetime; UTC when no zone). Matches `creation_date`."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First stored by Brubru on or before; a bare date covers the whole day."),
     include_orphans: bool = Query(False, description="Include rows with no CELEX (orphaned annexes). Default false."),
     include_body: bool = Query(True, description="Include each row's body_txt and body_html, stored from Cellar. Pass false to page the corpus for metadata only."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
@@ -603,6 +607,8 @@ async def list_laws(
         updated_from=updated_from,
         updated_to=updated_to,
         updated_end=updated_end,
+        created_from=created_from,
+        created_to=created_to,
         include_orphans=include_orphans,
         include_body=include_body,
         limit=limit,

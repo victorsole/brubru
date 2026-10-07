@@ -1,6 +1,7 @@
 # European Defence Fund (EDF)
 
 ## QUICK FACTS
+- **LATEST (DEFIS, 2 October 2026): record 2026 calls.** **612 project proposals** applied for the **EUR 1.006 billion** available under the 2026 calls: **+49% on last year**, after +38% from 2024 to 2025. For the first time the calls were **open to Ukrainian applicants**, in anticipation of the entry into force of Ukraine's association agreement to the EDF. Half of the budget goes to collaborative R&D on major defence capabilities, a quarter to the EU Defence Innovation Scheme (EUDIS). **Results are expected by March 2027.** The total EDF budget is quoted as "nearly EUR 7.3 billion" for 2021-2027 (constant prices).
 - Full name: European Defence Fund (EDF)
 - Legal basis: Regulation (EU) 2021/697 of the European Parliament and of the Council of 29 April 2021, OJ L 170, 12.5.2021 (CELEX 32021R0697)
 - Repeals: Regulation (EU) 2018/1092 (the pilot instrument that ran EDIDP)

@@ -1,6 +1,7 @@
 # EU Taxonomy and Sustainable Finance
 
 ## QUICK FACTS
+- **LATEST research (JRC, 2 Oct 2026, EUR 40864):** "EU Taxonomy Article 8 Review": group-level Taxonomy reporting is complicated by mixed groups and financial conglomerates, and firms often report OpEx in aggregated form. A JRC technical report, not a Commission position. Details: `jrc_and_art_research_digest_oct_2026`.
 - JRC Report (2 October 2026): "EU Taxonomy Article 8 Review - Evidence on the OpEx KPI and group-level Taxonomy reporting" (JRC148053) -- finds group-level reporting complicated by mixed groups and financial conglomerates, firms often reporting OpEx in aggregated form, and an R&D-only OpEx KPI materially relevant in only a limited number of sectors; it supports harmonised group-level rules and a simpler OpEx KPI. A JRC evidence report, not a Commission proposal. doi: 10.2760/6901307
 **EPRS Briefing (29 April 2026)**: "EU Taxonomy Implementation: Review of technical screening criteria — Joint ECON-ENVI Committee meeting of 5 May 2026" — background on the 17 March 2026 DA package (two delegated acts amending existing TSC, expected entry into force January 2027). Ref: ECTI_BRI(2026)788648. URL: https://www.europarl.europa.eu/thinktank/en/document/ECTI_BRI(2026)788648
 **Joint ECON-ENVI hearing**: 5 May 2026 — review of taxonomy technical screening criteria

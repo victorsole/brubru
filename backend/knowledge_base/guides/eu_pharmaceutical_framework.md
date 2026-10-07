@@ -1,6 +1,7 @@
 # EU Pharmaceutical Legal Framework
 
 ## QUICK FACTS
+- **LATEST (6 Oct 2026): first medical devices selected for joint clinical assessment** under the HTA Regulation (Commission Implementing Decision C(2026) 7113 of 2 October 2026): the SAPIEN M3 and Highlife mitral valve replacement systems. JCAs are therefore NOT limited to medicines: selected high-risk devices are now covered. Details: `hta_joint_clinical_assessment_medical_devices_2026`.
 - **LATEST (Monday 18 May 2026)**: **DG SANTE publishes updated guidance on Health Technology Assessment (HTA) Joint Clinical Assessment (JCA)** and adopts **new Implementing Regulation setting out uniform requirements for conformity assessment and notified bodies**. Three concurrent DG SANTE releases:
   - Updated **Q&A on general methodological and procedural issues for Joint Clinical Assessments** under Regulation (EU) 2021/2282 (HTA Regulation, CELEX **32021R2282**) — clarifies how JCAs published since the Regulation's 12 January 2025 application date should be interpreted, how Member State HTA bodies should integrate JCAs into national reimbursement decisions, and how health technology developers (medicinal products + medical devices) should engage with the Member State Coordination Group on HTA.
   - **New Frequently Asked Questions on the publication of the JCA report** — covers timing, redaction of confidential business information, language regime, and stakeholder access.

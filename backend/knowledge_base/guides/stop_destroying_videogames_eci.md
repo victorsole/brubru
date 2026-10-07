@@ -16,7 +16,7 @@ The European Citizens' Initiative is one of the two formal participatory-democra
 
 **ECI procedural stages**:
 1. **Registration** by the Commission — formal admissibility check
-2. **Signature collection** — 12 months to gather 1 million signatures; thresholds per Member State (sliding scale)
+2. **Signature collection** — a period of up to 12 months, starting on a date the organisers choose (no later than six months after registration, Article 8(1) of Regulation (EU) 2019/788), to gather 1 million signatures; thresholds per Member State (sliding scale)
 3. **Submission** — validated signatures submitted; Commission must publish a Communication within 6 months explaining what action (legislative or non-legislative) it intends to take, or why it does not intend to act
 
 The Commission's response is **not legally binding to propose legislation** — but a public Communication is mandatory, and the political cost of inaction on a successful ECI is significant.
