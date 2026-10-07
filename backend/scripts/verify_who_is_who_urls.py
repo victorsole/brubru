@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import pathlib
+import html as _html
 import re
 import ssl
 import sys
@@ -154,9 +155,12 @@ def _names_the_person(title: str, name: str | None) -> bool:
     stored as this person's link, which is a hallucinated backfill."""
     if not name or not title:
         return False
-    words = re.findall(r"[^\s,]+", name)
-    t = title.upper()
-    return bool(words) and all(w.upper() in t for w in words)
+    # The title arrives HTML-escaped ("O&#39;CONNOR") and either side may use a curly
+    # apostrophe: 7 officials with an apostrophe failed a correct match (7 Oct 2026).
+    norm = lambda s: re.sub(r"[\u2018\u2019\u02bc`]", "'", _html.unescape(s)).upper()
+    words = re.findall(r"[^\s,]+", norm(name))
+    t = norm(title)
+    return bool(words) and all(w in t for w in words)
 
 
 def _probe(url: str, ctx: ssl.SSLContext, pause: float) -> int | str:

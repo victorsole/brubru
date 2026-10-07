@@ -77,3 +77,10 @@ def test_the_sync_keeps_a_verified_dead_page_removed():
     removed = captured["sql"].split("removed_at = ", 1)[1]
     assert removed.startswith("CASE WHEN (who_is_who_officials.url_status =")
     assert "coalesce(who_is_who_officials.removed_at, now())" in removed
+
+
+def test_a_name_with_an_apostrophe_still_matches_its_page():
+    verify = _load("verify_who_is_who_urls")
+    assert verify._names_the_person("Mr Jack O&#39;CONNOR - EU Whoiswho", "Jack O’CONNOR")
+    assert verify._names_the_person("Mr Arnold PUECH D&#39;ALISSAC", "Arnold PUECH D'ALISSAC")
+    assert not verify._names_the_person("Mr John SMITH", "Jack O'CONNOR")
