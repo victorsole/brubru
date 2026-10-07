@@ -42,6 +42,17 @@ print("BUSY:" + ",".join(running) if running else "IDLE")
 }
 
 for attempt in {1..60}; do
+  # Railway "Wait for CI" deploys 5-8 minutes AFTER the push, and the hourly dispatcher
+  # starts its tiers at ~:03. A push between :48 and :02 lands the restart on top of them:
+  # 7 Oct 2026, pushed at 10:58 "idle", deployed 11:05, journey_precompute cut mid-run and
+  # the cron reported "Deploy crashed". Idle NOW is not idle when the deploy lands.
+  MIN=$((10#$(date -u +%M)))
+  if (( MIN >= 48 || MIN < 3 )); then
+    print "the deploy would land on the hourly dispatch (minute $MIN); waiting"
+    [ "$WAIT" = 1 ] || exit 1
+    sleep 60
+    continue
+  fi
   STATE=$(in_flight)
   if [[ "$STATE" == "UNREADABLE" ]]; then
     print -u2 "cannot read cron state: refusing to push blind"
