@@ -47,7 +47,6 @@ load_dotenv(BACKEND_DIR.parent / ".env")
 from services.matching.resolution_followups import FOLLOWUP_MATCH  # noqa: E402
 
 _PROC = re.compile(r"\d{4}/\d{4}\([A-Z]{3,4}\)")
-_CELEX = re.compile(r"[35]\d{4}[A-Z]\d{4}")
 
 # The subject of a FINAL plenary vote (resolutions and legislative texts), as
 # ep_roll_call_votes records it in EN or FR. Anything else is a vote on an
@@ -267,30 +266,25 @@ def main() -> int:
     with eng.connect() as conn:
         _report(conn, "BEFORE")
 
-        # Text-derived fields first: procedure_ref and CELEX appear inside the
-        # stored document, so they need Python rather than SQL.
+        # Text-derived procedure_ref: it appears inside the stored document, so it
+        # needs Python rather than SQL. NOT the CELEX: the first CELEX-shaped
+        # string in an adopted text is an act it CITES, never its own number
+        # (8 Oct 2026). celex_number is owned by backfill_texts_adopted_celex.py,
+        # which reads it from Cellar.
         rows = conn.execute(text(
-            "SELECT id, procedure_ref, celex_number, full_text FROM texts_adopted "
-            "WHERE full_text IS NOT NULL "
-            "AND (procedure_ref IS NULL OR celex_number IS NULL)")).fetchall()
+            "SELECT id, procedure_ref, full_text FROM texts_adopted "
+            "WHERE full_text IS NOT NULL AND procedure_ref IS NULL")).fetchall()
         derived = 0
         for r in rows:
-            proc = r.procedure_ref
-            cel = r.celex_number
-            if not proc:
-                m = _PROC.search(r.full_text or "")
-                proc = m.group(0) if m else None
-            if not cel:
-                m = _CELEX.search(r.full_text or "")
-                cel = m.group(0) if m else None
-            if (proc and proc != r.procedure_ref) or (cel and cel != r.celex_number):
+            m = _PROC.search(r.full_text or "")
+            proc = m.group(0) if m else None
+            if proc:
                 derived += 1
                 if args.apply:
                     conn.execute(text(
-                        "UPDATE texts_adopted SET procedure_ref = COALESCE(:p, procedure_ref), "
-                        "celex_number = COALESCE(:c, celex_number) WHERE id = :i"),
-                        {"p": proc, "c": cel, "i": r.id})
-        print(f"\n  from the stored text: {derived} row(s) gain a procedure_ref/CELEX")
+                        "UPDATE texts_adopted SET procedure_ref = :p "
+                        "WHERE id = :i AND procedure_ref IS NULL"), {"p": proc, "i": r.id})
+        print(f"\n  from the stored text: {derived} row(s) gain a procedure_ref")
 
         for label, sql in STEPS:
             if args.apply:

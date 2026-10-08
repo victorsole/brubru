@@ -94,6 +94,14 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("texts_adopted_bodies", "Texts adopted - full text", "warm",
                "scripts/backfill_texts_adopted_bodies.py", ("--apply", "--limit", "150"),
                timeout=1800, stale_after_hours=48),
+    # CELEX numbers for adopted texts, read from Cellar (8 Oct 2026). 97 rows held
+    # a 5YYYYAT type Cellar never issued and others a CITED act's number. Cellar
+    # links the text (immc:P10_TA(...)) to its own CELEX once it reaches the OJ C
+    # series, months after the vote, so this must run on a schedule to pick each
+    # one up. One SPARQL query per 100 texts; aborts before writing on any failure.
+    SourceSpec("texts_adopted_celex", "Texts adopted - CELEX (Cellar)", "warm",
+               "scripts/backfill_texts_adopted_celex.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
     # Procedure refs for adopted texts, from the EP Open Data API (23 Sep 2026).
     # Before resolution_dates and resolutions_corpus on purpose: the corpus only
     # admits texts WITH a procedure, and 495 of 750 had none, so it reported
