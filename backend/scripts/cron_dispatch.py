@@ -208,7 +208,12 @@ def _iter_job_statuses(payload) -> list[tuple[str, str]]:
             out.append((text.split(":", 1)[0].strip() or "?", "failed"))
 
     results = payload.get("results")
-    if isinstance(results, dict):
+    if isinstance(results, dict) and isinstance(results.get("status"), str):
+        # One script's own result ({"status": ..., "stdout_tail": ...}) from a route
+        # that runs a single script, not a map of jobs. Walking its keys read the
+        # stdout tail as a job status and failed every clean transcribe run (8 Oct 2026).
+        out.append(("script", results["status"]))
+    elif isinstance(results, dict):
         for job, status in results.items():
             if isinstance(status, str):
                 out.append((str(job), status))

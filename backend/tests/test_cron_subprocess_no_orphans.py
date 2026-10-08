@@ -134,6 +134,15 @@ def test_dispatcher_exits_non_zero_when_every_job_in_a_tier_failed():
                                      "efsa: [Errno 11] Resource temporarily unavailable"]}
     assert [j for j, _ in _iter_job_statuses(economy)] == ["eea", "efsa"]
 
+    # A route that runs ONE script returns that script's result under "results":
+    # its stdout tail is output, not a job status (8 Oct 2026).
+    single = {"status": "success", "results": {"status": "success", "stdout_tail": ""}}
+    assert _iter_job_statuses(single) == [("script", "success")]
+    failed = {"status": "success", "results": {"status": "failed", "returncode": 1, "stderr_tail": "boom"}}
+    assert _iter_job_statuses(failed) == [("script", "failed")]
+    tier = {"status": "success", "results": {"eu_laws_bodies": {"status": "success", "stdout_tail": "x"}}}
+    assert _iter_job_statuses(tier) == [("eu_laws_bodies", "success")]
+
     # A payload with nothing per-job in it must not invent failures.
     assert _iter_job_statuses({"status": "success"}) == []
     assert _iter_job_statuses(None) == []
