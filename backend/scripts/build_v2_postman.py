@@ -779,6 +779,12 @@ def _count(folder: dict) -> int:
 
 def build_collection() -> dict:
     paths = app.openapi().get("paths", {})
+    # A deprecated operation is an alias of a renamed path (e.g. /parliament/resolutions
+    # -> /parliament/resolution-procedures, 8 Oct 2026): the collection shows the
+    # current name only. The alias stays documented in the OpenAPI spec and the docs.
+    paths = {p: {m: op for m, op in ops.items() if not (isinstance(op, dict) and op.get("deprecated"))}
+             for p, ops in paths.items()}
+    paths = {p: ops for p, ops in paths.items() if ops}
     domains = [
         _build_flat_domain(paths, "events", "Events (all EU bodies)"),
         _build_flat_domain(paths, "news", "News (all EU bodies)"),
