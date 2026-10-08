@@ -239,6 +239,25 @@ def test_resolutions_serve_their_own_adopted_text_not_the_procedure_page(client,
     )
 
 
+def test_a_committee_report_is_never_served_as_the_adopted_text(client, db):
+    """texts_adopted also holds committee REPORTS (`A10/YYYY/NNNN`) under the same
+    procedure_ref as the adopted text. Until 8 Oct 2026 whichever row came last
+    won, so the draft report reached clients as the resolution for
+    2025/2039(INI) and 2025/2210(INI). Checks every procedure that has a report."""
+    refs = [r[0] for r in db.execute(text("""
+        SELECT DISTINCT ta.procedure_ref FROM texts_adopted ta
+        JOIN ep_resolutions r ON r.procedure_ref = ta.procedure_ref
+        WHERE ta.ta_reference !~ '^P[0-9]+_TA'
+    """)).fetchall()]
+    assert refs, "no procedure has a report row: the check has nothing to test"
+    served_report = []
+    for ref in refs:
+        items = client.get("/api/v1/resolutions", params={"procedure_ref": ref}).json().get("data") or []
+        if items and (items[0].get("body_txt") or "").lstrip().upper().startswith("REPORT"):
+            served_report.append(ref)
+    assert not served_report, f"committee report served as the adopted text: {served_report}"
+
+
 def test_no_resolution_body_is_navigation_chrome(client):
     """doceo hides a language picker in `.ep_hidden`; 47 stored bodies once OPENED
     with "Choisissez la langue de votre document" -- navigation saved as the text

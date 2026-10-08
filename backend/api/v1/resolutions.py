@@ -312,10 +312,18 @@ async def list_resolutions(
         # precedence; OEIL remains the fallback for procedures with no adopted
         # text yet. Read from texts_adopted rather than copied, so there stays
         # ONE source of truth for the document.
+        #
+        # Only the adopted text itself (`P10_TA(YYYY)NNNN`). texts_adopted also
+        # holds committee REPORTS (`A10/YYYY/NNNN`) under the same procedure_ref,
+        # and until 8 Oct 2026 whichever row came last won: the draft report was
+        # served as the resolution for 2025/2039(INI) and 2025/2210(INI). When
+        # the adopted text has no body yet, OEIL is the honest fallback; the
+        # report is not.
         adopted_rows = db.execute(_sql_text("""
             SELECT procedure_ref, full_text
             FROM texts_adopted
             WHERE procedure_ref = ANY(:refs) AND full_text IS NOT NULL
+              AND ta_reference ~ '^P[0-9]+_TA'
         """), {"refs": refs}).fetchall()
         adopted_bodies = {row[0]: row[1] for row in adopted_rows}
 
