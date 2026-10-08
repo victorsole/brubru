@@ -31,8 +31,18 @@ EP_SEGMENTS = (
 _URL_RE = re.compile(r"/api/v1/(" + "|".join(EP_SEGMENTS) + r")\b")
 
 
+# Renamed 8 Oct 2026 (Victor): the three names read as if they served the same thing.
+# Named now by what ONE ROW is, as one lifecycle (tabled -> adopted). The old paths stay
+# as deprecated aliases for 12 months: api/v2/parliament/deprecated_aliases.py.
+RENAMED = {
+    "texts-submitted": "plenary-tabled-texts",
+    "texts-adopted": "plenary-adopted-texts",
+    "resolutions": "resolution-procedures",
+}
+
+
 def rewrite_urls(text: str) -> str:
-    return _URL_RE.sub(r"/api/v2/parliament/\1", text)
+    return _URL_RE.sub(lambda m: f"/api/v2/parliament/{RENAMED.get(m.group(1), m.group(1))}", text)
 
 
 # module file -> list of (v1_router_var, v2_router_var, prefix, tag, [func_names])
@@ -58,13 +68,13 @@ SPEC = {
          ["list_committee_work", "list_committee_minutes"]),
     ],
     "texts_adopted": [
-        ("texts_adopted_router", "texts_adopted_router", "/texts-adopted", "v2-parliament-texts-adopted",
+        ("texts_adopted_router", "texts_adopted_router", "/plenary-adopted-texts", "v2-parliament-plenary-adopted-texts",
          ["list_texts_adopted", "get_text_adopted_detail"]),
-        ("texts_submitted_router", "texts_submitted_router", "/texts-submitted", "v2-parliament-texts-submitted",
+        ("texts_submitted_router", "texts_submitted_router", "/plenary-tabled-texts", "v2-parliament-plenary-tabled-texts",
          ["list_texts_submitted"]),
     ],
     "resolutions": [
-        ("router", "router", "/resolutions", "v2-parliament-resolutions",
+        ("router", "router", "/resolution-procedures", "v2-parliament-resolution-procedures",
          ["list_resolutions", "get_resolution_detail"]),
     ],
     "eprs": [

@@ -163,6 +163,11 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/parliament/texts-adopted(/|$)"),          "read:ep"),
     (re.compile(r"^/api/v2/parliament/texts-submitted(/|$)"),        "read:ep"),
     (re.compile(r"^/api/v2/parliament/resolutions(/|$)"),            "read:ep"),
+    # Renamed 8 Oct 2026 (the three above answer as deprecated aliases until 8 Oct 2027).
+    # Without these the new paths fell to "read:misc", which no key holds: deny-by-default.
+    (re.compile(r"^/api/v2/parliament/plenary-adopted-texts(/|$)"),  "read:ep"),
+    (re.compile(r"^/api/v2/parliament/plenary-tabled-texts(/|$)"),   "read:ep"),
+    (re.compile(r"^/api/v2/parliament/resolution-procedures(/|$)"),  "read:ep"),
     (re.compile(r"^/api/v2/parliament/webstreams(/|$)"),             "read:calendar"),
     (re.compile(r"^/api/v2/parliament/eprs(/|$)"),                   "read:knowledge"),
     (re.compile(r"^/api/v2/parliament/emeeting(/|$)"),               "read:ep"),

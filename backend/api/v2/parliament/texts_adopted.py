@@ -1,4 +1,4 @@
-"""European Parliament domain — /api/v2/parliament/texts-adopted/* and /api/v2/parliament/texts-submitted/*.
+"""European Parliament domain — /api/v2/parliament/plenary-adopted-texts/* and /api/v2/parliament/plenary-tabled-texts/*.
 
 LIVE — copy-pasted verbatim from the v1 EP surface (api.v1.texts_adopted); the body
 delegates to the v1 handler so there is exactly one implementation during the
@@ -24,9 +24,9 @@ from api.v1 import texts_adopted as _v1
 from api.v1.texts_adopted import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
 
 
-texts_adopted_router = APIRouter(prefix="/texts-adopted", tags=["v2-parliament-texts-adopted"])
+texts_adopted_router = APIRouter(prefix="/plenary-adopted-texts", tags=["v2-parliament-plenary-adopted-texts"])
 
-texts_submitted_router = APIRouter(prefix="/texts-submitted", tags=["v2-parliament-texts-submitted"])
+texts_submitted_router = APIRouter(prefix="/plenary-tabled-texts", tags=["v2-parliament-plenary-tabled-texts"])
 
 
 @texts_adopted_router.get(
@@ -37,7 +37,7 @@ texts_submitted_router = APIRouter(prefix="/texts-submitted", tags=["v2-parliame
 Returns every text adopted by the European Parliament in plenary session — legislative resolutions (the EP's formal positions on legislation), non-legislative resolutions (own-initiative + topical), decisions, recommendations. Each row carries the TA reference (e.g. `P10_TA(2025)0042`), the title, text type, procedure ref + parliamentary term, lead committee, rapporteur, adoption date, vote tallies, and the full-text URL.
 
 **When to use it**
-The authoritative record of what the EP has decided in plenary. Use to track positions on co-decision files (legislative_resolution), trace the EP's stance on a topic (resolution), or build a plenary outcomes dashboard. Pair with `/api/v2/parliament/texts-submitted` to see the pipeline from tabled → adopted.
+The authoritative record of what the EP has decided in plenary. Use to track positions on co-decision files (legislative_resolution), trace the EP's stance on a topic (resolution), or build a plenary outcomes dashboard. Pair with `/api/v2/parliament/plenary-tabled-texts` to see the pipeline from tabled → adopted.
 
 **Input**
 - `q` — substring on title + description.
@@ -52,8 +52,8 @@ The authoritative record of what the EP has decided in plenary. Use to track pos
 
 **Try it**
 ```
-GET /api/v2/parliament/texts-adopted?text_type=legislative_resolution&committee=ENVI
-GET /api/v2/parliament/texts-adopted?procedure_ref=2024/0079(COD)
+GET /api/v2/parliament/plenary-adopted-texts?text_type=legislative_resolution&committee=ENVI
+GET /api/v2/parliament/plenary-adopted-texts?procedure_ref=2024/0079(COD)
 ```
 
 **You get back**
@@ -100,7 +100,7 @@ After locating a text via the list endpoint, use this for the deep-link. Common 
 
 **Try it**
 ```
-GET /api/v2/parliament/texts-adopted/P10_TA(2025)0042
+GET /api/v2/parliament/plenary-adopted-texts/P10_TA(2025)0042
 ```
 
 **You get back**
@@ -136,8 +136,8 @@ Same shape as `/texts-adopted` — `q`, `text_type`, `procedure_ref`, `parliamen
 
 **Try it**
 ```
-GET /api/v2/parliament/texts-submitted?committee=LIBE&parliamentary_term=10
-GET /api/v2/parliament/texts-submitted?text_type=legislative_resolution
+GET /api/v2/parliament/plenary-tabled-texts?committee=LIBE&parliamentary_term=10
+GET /api/v2/parliament/plenary-tabled-texts?text_type=legislative_resolution
 ```
 
 **You get back**

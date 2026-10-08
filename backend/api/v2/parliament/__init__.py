@@ -11,9 +11,11 @@ The European Parliament as a top-level institutional domain, sibling to
     /reports                  EP committee reports / draft recommendations
     /opinions                 Associated-committee opinions
     /committees/{code}/...     Committee work-items + minutes
-    /texts-adopted            EP plenary adopted texts
-    /texts-submitted          EP plenary tabled (not-yet-adopted) texts
-    /resolutions              EP non-legislative resolutions
+    /plenary-adopted-texts    EP plenary adopted texts (was /texts-adopted)
+    /plenary-tabled-texts     EP plenary tabled (not-yet-adopted) texts (was /texts-submitted)
+    /resolution-procedures    EP non-legislative resolution procedures (was /resolutions)
+    The three old paths answer until 8 Oct 2027 as deprecated aliases
+    (deprecated_aliases.py).
     /eprs                     EPRS think-tank publications
     /webstreams               EP committee webstreams + transcripts
     /parliamentary-questions  EP questions to Commission / Council / ECB
@@ -40,6 +42,7 @@ from . import committee_agendas as _committee_agendas
 from . import mep_declarations as _mep_declarations
 from . import mep_assistants as _mep_assistants
 from . import supporting_analyses as _supporting_analyses
+from .deprecated_aliases import alias_of as _alias_of
 
 router = APIRouter(prefix="/parliament")
 router.include_router(_meps.router)
@@ -52,6 +55,10 @@ router.include_router(_committees.router)
 router.include_router(_texts_adopted.texts_adopted_router)
 router.include_router(_texts_adopted.texts_submitted_router)
 router.include_router(_resolutions.router)
+# Renamed 8 Oct 2026; the old paths answer until 8 Oct 2027 with Deprecation/Sunset/Link.
+router.include_router(_alias_of(_texts_adopted.texts_adopted_router, "/texts-adopted"))
+router.include_router(_alias_of(_texts_adopted.texts_submitted_router, "/texts-submitted"))
+router.include_router(_alias_of(_resolutions.router, "/resolutions"))
 router.include_router(_eprs.router)
 router.include_router(_webstreams.router)
 router.include_router(_parliamentary_questions.parl_q_router)

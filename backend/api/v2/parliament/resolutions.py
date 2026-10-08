@@ -1,4 +1,4 @@
-"""European Parliament domain — /api/v2/parliament/resolutions/*.
+"""European Parliament domain — /api/v2/parliament/resolution-procedures/*.
 
 LIVE — copy-pasted verbatim from the v1 EP surface (api.v1.resolutions); the body
 delegates to the v1 handler so there is exactly one implementation during the
@@ -24,7 +24,7 @@ from api.v1 import resolutions as _v1
 from api.v1.resolutions import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
 
 
-router = APIRouter(prefix="/resolutions", tags=["v2-parliament-resolutions"])
+router = APIRouter(prefix="/resolution-procedures", tags=["v2-parliament-resolution-procedures"])
 
 
 @router.get(
@@ -51,8 +51,8 @@ EP resolutions don't have legal force but signal political direction — useful 
 
 **Try it**
 ```
-GET /api/v2/parliament/resolutions?resolution_type=INL&lead_committee=ENVI
-GET /api/v2/parliament/resolutions?q=Ukraine&resolution_type=RSP
+GET /api/v2/parliament/resolution-procedures?resolution_type=INL&lead_committee=ENVI
+GET /api/v2/parliament/resolution-procedures?q=Ukraine&resolution_type=RSP
 ```
 
 **You get back**
@@ -99,7 +99,7 @@ After locating a resolution via the list endpoint, use this for the full record 
 
 **Try it**
 ```
-GET /api/v2/parliament/resolutions/2025/2125(INI)
+GET /api/v2/parliament/resolution-procedures/2025/2125(INI)
 ```
 
 **You get back**
