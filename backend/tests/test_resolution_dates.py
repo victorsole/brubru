@@ -413,6 +413,18 @@ def test_a_resolution_reads_the_same_from_the_list_and_on_its_own(client, base):
     assert not differ, f"list and detail disagree: {differ[:3]}"
 
 
+def test_creation_date_is_first_ingestion_not_last_update(client, db):
+    """creation_date repeated updated_at, so one bulk re-stamp dated all 351
+    resolutions 28 Sep 2026. It is created_at: when Brubru first held the row."""
+    real = dict((str(k), v) for k, v in db.execute(text(
+        "SELECT id::text, created_at FROM ep_resolutions")).fetchall())
+    items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
+    wrong = [i["procedure_ref"] for i in items
+             if i["creation_date"] != real[i["id"]].isoformat()
+             or i["creation_date"] > i["updated_date"]]
+    assert not wrong, f"creation_date is not created_at (or postdates updated_date): {wrong[:3]}"
+
+
 def test_unknown_classification_and_followup_are_null_not_empty(client):
     items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
     assert all(i["eurovoc_codes"] is None or i["eurovoc_codes"] for i in items), (

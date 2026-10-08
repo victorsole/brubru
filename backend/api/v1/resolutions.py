@@ -96,7 +96,7 @@ class ResolutionItem(BaseModel):
     body_txt: Optional[str] = Field(None, description="Plain-text composition: title + procedure + lead committee + rapporteur + dates + vote tally + summary.")
     body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
     document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date.")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of updated_at).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (created_at). Until 8 Oct 2026 this repeated updated_at, so a bulk re-stamp dated every resolution 28 Sep 2026.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
 
 
@@ -295,7 +295,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         body_txt=body_txt,
         body_html=body_html,
         document_date=doc_date,
-        creation_date=r.updated_at,
+        creation_date=r.created_at,
         updated_date=row_updated(r),
     )
 
