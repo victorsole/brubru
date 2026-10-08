@@ -2,6 +2,21 @@
   "_about": "Curated EIC batch calendar and Work Programme budgets that the Funding & Tenders Portal does not carry. The portal gives the EIC Accelerator topic a budget of 0 and a single end date, while the Work Programme sets monthly short-proposal batches, six full-proposal batches and a EUR 634M budget. Read by services/eic_call_calendar.py (feed 'next batch' line) and scripts/backfill_call_budgets.py (budget fallback when the portal says zero).",
   "_source": "EIC Work Programme 2026, Commission Decision C(2026) 4080, version of 17 June 2026 (Sections V, VI, VII and Annex 1); EIC call pages and Funding & Tenders Portal topic records, read 8 October 2026.",
   "_review_by": "When the 2027 EIC Work Programme is adopted, or when scripts/check_eic_sources.py reports a new Work Programme version.",
+  "_source_versions": {
+    "_note": "What Brubru's EIC guides, templates and this calendar were last checked against. scripts/check_eic_sources.py compares these with the live sources; after updating the guides, run it with --accept to store the new values.",
+    "checked_on": "2026-10-08",
+    "wp_page_date": "17 June 2026",
+    "guide_page_date": "20 November 2025",
+    "annexes_page_date": "9 July 2026",
+    "latest_news_date": "27 August 2026",
+    "short_form_version": "2.1 12.06.2026",
+    "full_form_version": "2.1 09.07.2026",
+    "portal_end_dates": {
+      "HORIZON-EIC-2026-ACCELERATOR-01": "2026-12-17",
+      "HORIZON-EIC-2026-STEP": "2026-10-08",
+      "HORIZON-EIC-2026-DEFENCE-01": "2026-10-28"
+    }
+  },
   "topics": {
     "HORIZON-EIC-2026-ACCELERATOR-01": {
       "label": "EIC Accelerator 2026",
