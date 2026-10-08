@@ -463,10 +463,11 @@ class ResolutionIndicator:
     title: str
     resolution_type: str
     adoption_date: Optional[str]
-    vote_for: int
-    vote_against: int
-    vote_abstention: int
-    vote_total: int
+    # The final plenary vote; None when not counted (never 0 for "unknown").
+    vote_for: Optional[int]
+    vote_against: Optional[int]
+    vote_abstention: Optional[int]
+    vote_total: Optional[int]
     support_percentage: float
     lead_committee: Optional[str]
     rapporteur: Optional[str]
@@ -519,10 +520,10 @@ async def find_resolutions_for_legislation(
                 title=resolution.title,
                 resolution_type=resolution.resolution_type.value if resolution.resolution_type else "OTHER",
                 adoption_date=str(resolution.adoption_date) if resolution.adoption_date else None,
-                vote_for=resolution.vote_for or 0,
-                vote_against=resolution.vote_against or 0,
-                vote_abstention=resolution.vote_abstention or 0,
-                vote_total=resolution.vote_total or 0,
+                vote_for=resolution.vote_for,
+                vote_against=resolution.vote_against,
+                vote_abstention=resolution.vote_abstention,
+                vote_total=resolution.vote_total,
                 support_percentage=support_pct,
                 lead_committee=resolution.lead_committee,
                 rapporteur=resolution.rapporteur,
@@ -592,10 +593,10 @@ async def find_related_resolutions_by_similarity(
                     title=resolution.title,
                     resolution_type=resolution.resolution_type.value if resolution.resolution_type else "OTHER",
                     adoption_date=str(resolution.adoption_date) if resolution.adoption_date else None,
-                    vote_for=resolution.vote_for or 0,
-                    vote_against=resolution.vote_against or 0,
-                    vote_abstention=resolution.vote_abstention or 0,
-                    vote_total=resolution.vote_total or 0,
+                    vote_for=resolution.vote_for,
+                    vote_against=resolution.vote_against,
+                    vote_abstention=resolution.vote_abstention,
+                    vote_total=resolution.vote_total,
                     support_percentage=support_pct,
                     lead_committee=resolution.lead_committee,
                     rapporteur=resolution.rapporteur,

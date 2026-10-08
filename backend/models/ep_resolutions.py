@@ -11,6 +11,7 @@ Resolution types:
 """
 
 import uuid
+from typing import Optional
 import enum
 from datetime import datetime, timezone
 
@@ -68,11 +69,12 @@ class EPResolution(Base):
     eurovoc_codes = Column(ARRAY(String), nullable=True)
     policy_areas = Column(ARRAY(String), nullable=True)
 
-    # Vote results (summary)
-    vote_for = Column(Integer, default=0)
-    vote_against = Column(Integer, default=0)
-    vote_abstention = Column(Integer, default=0)
-    vote_total = Column(Integer, default=0)
+    # Vote results: the final plenary vote, NULL when not counted (never 0;
+    # migration 279). Owner: scripts/enrich_ep_texts_and_resolutions.py.
+    vote_for = Column(Integer, nullable=True)
+    vote_against = Column(Integer, nullable=True)
+    vote_abstention = Column(Integer, nullable=True)
+    vote_total = Column(Integer, nullable=True)
 
     # Links
     oeil_url = Column(String(500), nullable=True)
@@ -110,13 +112,17 @@ class EPResolution(Base):
         return f"<EPResolution {self.procedure_ref}: {self.title[:50]}...>"
 
     @property
-    def vote_passed(self) -> bool:
-        """Did the resolution pass (simple majority)?"""
+    def vote_passed(self) -> Optional[bool]:
+        """Did the resolution pass (simple majority)? None when not counted."""
+        if self.vote_for is None or self.vote_against is None:
+            return None
         return self.vote_for > self.vote_against
 
     @property
-    def vote_margin(self) -> int:
-        """Margin of votes (positive = passed, negative = failed)"""
+    def vote_margin(self) -> Optional[int]:
+        """Margin of votes (positive = passed, negative = failed). None when not counted."""
+        if self.vote_for is None or self.vote_against is None:
+            return None
         return self.vote_for - self.vote_against
 
     @property

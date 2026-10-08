@@ -325,6 +325,37 @@ def test_no_summary_is_a_committee_report(db):
     assert not bad, f"summary taken from a committee report: {bad}"
 
 
+def test_an_uncounted_vote_is_null_never_zero(client, db):
+    """The vote columns defaulted to 0: 72 rows said "0 for, 0 against" for
+    resolutions nobody had counted, 35 of them never voted at all (8 Oct 2026)."""
+    zeros = db.execute(text("SELECT count(*) FROM ep_resolutions WHERE vote_total = 0")).scalar()
+    assert zeros == 0, f"{zeros} resolution(s) claim a 0-vote tally"
+    items = client.get("/api/v1/resolutions", params={"status": "pending", "limit": 5}).json()["data"]
+    assert items and all(i["vote_for"] is None and i["vote_total"] is None for i in items), (
+        "an uncounted vote is not served as null")
+
+
+def test_every_tally_is_the_final_plenary_vote(db):
+    """ep_roll_call_votes also holds the committee's final vote and votes on single
+    amendments under the same ta_reference; 21 of 88 tallies were one of those
+    (P10_TA(2026)0247 read "rejected 41-137" for a text plenary adopted 501-61)."""
+    import importlib.util, pathlib
+    path = pathlib.Path(__file__).resolve().parents[1] / "scripts" / "enrich_ep_texts_and_resolutions.py"
+    spec = importlib.util.spec_from_file_location("_enrich", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    wrong = [r[0] for r in db.execute(text("""
+        SELECT r.procedure_ref FROM ep_resolutions r
+        WHERE r.vote_total IS NOT NULL AND NOT EXISTS (
+            SELECT 1 FROM texts_adopted t JOIN ep_roll_call_votes v ON v.ta_reference = t.ta_reference
+            WHERE t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+              AND v.level = 'plenary' AND v.subject ~* :fv
+              AND v.votes_for = r.vote_for AND v.votes_against = r.vote_against
+              AND v.votes_abstention = r.vote_abstention)
+    """), {"fv": mod._FINAL_VOTE}).fetchall()]
+    assert not wrong, f"tally is not the final plenary vote: {wrong[:5]}"
+
+
 def test_no_resolution_body_is_navigation_chrome(client):
     """doceo hides a language picker in `.ep_hidden`; 47 stored bodies once OPENED
     with "Choisissez la langue de votre document" -- navigation saved as the text

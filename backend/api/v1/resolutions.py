@@ -52,10 +52,12 @@ class ResolutionItem(BaseModel):
     summary: Optional[str] = None
     eurovoc_codes: list = Field(default_factory=list)
     policy_areas: list = Field(default_factory=list)
-    vote_for: int = 0
-    vote_against: int = 0
-    vote_abstention: int = 0
-    vote_total: int = 0
+    # The final plenary vote; null when Brubru holds no count (a show-of-hands
+    # vote, or not yet ingested). Never 0 for "unknown".
+    vote_for: Optional[int] = None
+    vote_against: Optional[int] = None
+    vote_abstention: Optional[int] = None
+    vote_total: Optional[int] = None
     # `key_events` synthesised from the row itself: a single canonical event
     # (the plenary vote) plus, when present, an "adoption" entry. Each event
     # is `{date, event_type, description}`. Surfaces what Jordi flagged as
@@ -180,10 +182,10 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         summary=r.summary,
         eurovoc_codes=list(r.eurovoc_codes or []),
         policy_areas=list(r.policy_areas or []),
-        vote_for=int(r.vote_for or 0),
-        vote_against=int(r.vote_against or 0),
-        vote_abstention=int(r.vote_abstention or 0),
-        vote_total=int(r.vote_total or 0),
+        vote_for=r.vote_for,
+        vote_against=r.vote_against,
+        vote_abstention=r.vote_abstention,
+        vote_total=r.vote_total,
         key_events=_build_key_events(r, oeil_events),
         oeil_url=r.oeil_url,
         text_url=r.text_url,

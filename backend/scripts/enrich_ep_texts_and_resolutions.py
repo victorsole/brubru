@@ -49,6 +49,19 @@ _CELEX = re.compile(r"[35]\d{4}[A-Z]\d{4}")
 
 # Each step: (label, SQL). Every one is COALESCE-guarded so a re-run is a no-op
 # and an existing good value is never overwritten by a derived one.
+# The subject of a FINAL plenary vote (resolutions and legislative texts), as
+# ep_roll_call_votes records it in EN or FR. Anything else is a vote on an
+# amendment, a paragraph or a procedural motion (measured 8 Oct 2026: every
+# text has at most one such vote).
+_FINAL_VOTE = (
+    r"^((joint )?motion for a resolution( \(as a whole\))?"
+    r"|proposition (commune )?de résolution( \(ensemble du texte\))?"
+    r"|commission proposal( to the council| and amendments)?|proposition de la commission"
+    r"|draft council (decision|regulation)|projet de décision du conseil"
+    r"|proposal for a (council )?decision( \(as a whole\))?|council draft|joint text"
+    r"|provisional agreement|accord provisoire)$"
+)
+
 STEPS = [
     # --- texts_adopted --------------------------------------------------
     ("texts_adopted.legislative_carriage_id <- carriage by procedure_ref", """
@@ -77,18 +90,55 @@ STEPS = [
           AND c.oeil_procedure_ref = t.procedure_ref
           AND c.lead_committee IS NOT NULL
     """),
-    ("texts_adopted.vote_results <- ep_roll_call_votes by ta_reference", """
+    # The FINAL PLENARY vote only. ep_roll_call_votes also holds the committee's
+    # final vote and votes on single amendments/paragraphs under the same
+    # ta_reference; until 8 Oct 2026 any of them could land here, so P10_TA(2026)0247
+    # read "rejected 41-137" (a committee vote) for a text plenary adopted 501-61.
+    # Corrects stored values too, and clears them where no final vote is held.
+    ("texts_adopted.vote_results <- the final plenary vote", """
         UPDATE texts_adopted t
-        SET vote_results = jsonb_build_object(
+        SET vote_results = (
+            SELECT jsonb_build_object(
                 'for', v.votes_for, 'against', v.votes_against,
                 'abstention', v.votes_abstention, 'result', v.result,
                 'vote_date', v.vote_date, 'source', 'ep_roll_call_votes')
-        FROM ep_roll_call_votes v
-        WHERE t.vote_results IS NULL
-          AND v.ta_reference = t.ta_reference
-          AND v.votes_for IS NOT NULL
+            FROM ep_roll_call_votes v
+            WHERE v.ta_reference = t.ta_reference AND v.level = 'plenary'
+              AND v.votes_for IS NOT NULL AND v.subject ~* '""" + _FINAL_VOTE + """')
+        WHERE (t.vote_results IS NULL OR t.vote_results->>'source' = 'ep_roll_call_votes')
+          AND t.vote_results IS DISTINCT FROM (
+            SELECT jsonb_build_object(
+                'for', v.votes_for, 'against', v.votes_against,
+                'abstention', v.votes_abstention, 'result', v.result,
+                'vote_date', v.vote_date, 'source', 'ep_roll_call_votes')
+            FROM ep_roll_call_votes v
+            WHERE v.ta_reference = t.ta_reference AND v.level = 'plenary'
+              AND v.votes_for IS NOT NULL AND v.subject ~* '""" + _FINAL_VOTE + """')
     """),
     # --- ep_resolutions -------------------------------------------------
+    # The resolution's tally IS its adopted text's final plenary vote, or NULL
+    # (unknown). Never 0: the columns defaulted to 0, so 72 rows said "0 for, 0
+    # against" for resolutions nobody had counted, and 21 carried a committee or
+    # amendment vote copied in at insert time.
+    ("ep_resolutions.vote_* <- the final plenary vote, else NULL", """
+        UPDATE ep_resolutions r SET
+            vote_for = f.f, vote_against = f.a, vote_abstention = f.b,
+            vote_total = f.f + f.a + f.b
+        FROM (
+            SELECT r2.id,
+                   (t.vote_results->>'for')::int        AS f,
+                   (t.vote_results->>'against')::int    AS a,
+                   (t.vote_results->>'abstention')::int AS b
+            FROM ep_resolutions r2
+            LEFT JOIN texts_adopted t ON t.procedure_ref = r2.procedure_ref
+                                     AND t.ta_reference ~ '^P[0-9]+_TA'
+                                     AND t.vote_results->>'source' = 'ep_roll_call_votes'
+        ) f
+        WHERE f.id = r.id
+          AND (r.vote_for IS DISTINCT FROM f.f OR r.vote_against IS DISTINCT FROM f.a
+            OR r.vote_abstention IS DISTINCT FROM f.b
+            OR r.vote_total IS DISTINCT FROM f.f + f.a + f.b)
+    """),
     ("ep_resolutions.vote_date <- its own adoption_date", """
         UPDATE ep_resolutions SET vote_date = adoption_date
         WHERE vote_date IS NULL AND adoption_date IS NOT NULL

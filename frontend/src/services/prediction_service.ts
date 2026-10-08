@@ -232,10 +232,11 @@ export interface ResolutionIndicator {
   title: string;
   resolution_type: ResolutionType;
   adoption_date?: string;
-  vote_for: number;
-  vote_against: number;
-  vote_abstention: number;
-  vote_total: number;
+  // The final plenary vote; null when the vote was not counted (never 0).
+  vote_for: number | null;
+  vote_against: number | null;
+  vote_abstention: number | null;
+  vote_total: number | null;
   support_percentage: number;
   lead_committee?: string;
   rapporteur?: string;

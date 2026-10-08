@@ -253,48 +253,51 @@ const ResolutionIndicatorRow: React.FC<{
       <div className="prediction-card__resolution-title">
         {resolution.title}
       </div>
-      <div className="prediction-card__resolution-vote">
-        <div className="prediction-card__resolution-vote-bars">
-          <div
-            className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--for"
-            style={{
-              width: `${resolution.vote_total > 0 ? (resolution.vote_for / resolution.vote_total) * 100 : 0}%`,
-            }}
-            title={`For: ${resolution.vote_for}`}
-          />
-          <div
-            className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--against"
-            style={{
-              width: `${resolution.vote_total > 0 ? (resolution.vote_against / resolution.vote_total) * 100 : 0}%`,
-            }}
-            title={`Against: ${resolution.vote_against}`}
-          />
-          <div
-            className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--abstention"
-            style={{
-              width: `${resolution.vote_total > 0 ? (resolution.vote_abstention / resolution.vote_total) * 100 : 0}%`,
-            }}
-            title={`Abstention: ${resolution.vote_abstention}`}
-          />
+      {/* A vote nobody counted is null, not 0: show no bar and no "0.0% support". */}
+      {resolution.vote_total != null && resolution.vote_total > 0 && (
+        <div className="prediction-card__resolution-vote">
+          <div className="prediction-card__resolution-vote-bars">
+            <div
+              className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--for"
+              style={{
+                width: `${(resolution.vote_for ?? 0) / resolution.vote_total * 100}%`,
+              }}
+              title={`For: ${resolution.vote_for}`}
+            />
+            <div
+              className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--against"
+              style={{
+                width: `${(resolution.vote_against ?? 0) / resolution.vote_total * 100}%`,
+              }}
+              title={`Against: ${resolution.vote_against}`}
+            />
+            <div
+              className="prediction-card__resolution-vote-bar prediction-card__resolution-vote-bar--abstention"
+              style={{
+                width: `${(resolution.vote_abstention ?? 0) / resolution.vote_total * 100}%`,
+              }}
+              title={`Abstention: ${resolution.vote_abstention}`}
+            />
+          </div>
+          <div className="prediction-card__resolution-vote-stats">
+            <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--for">
+              <Icon path={mdiThumbUp} size={0.5} />
+              {resolution.vote_for}
+            </span>
+            <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--against">
+              <Icon path={mdiThumbDown} size={0.5} />
+              {resolution.vote_against}
+            </span>
+            <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--abstention">
+              <Icon path={mdiMinusCircle} size={0.5} />
+              {resolution.vote_abstention}
+            </span>
+            <span className="prediction-card__resolution-support">
+              {resolution.support_percentage.toFixed(1)}% support
+            </span>
+          </div>
         </div>
-        <div className="prediction-card__resolution-vote-stats">
-          <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--for">
-            <Icon path={mdiThumbUp} size={0.5} />
-            {resolution.vote_for}
-          </span>
-          <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--against">
-            <Icon path={mdiThumbDown} size={0.5} />
-            {resolution.vote_against}
-          </span>
-          <span className="prediction-card__resolution-vote-stat prediction-card__resolution-vote-stat--abstention">
-            <Icon path={mdiMinusCircle} size={0.5} />
-            {resolution.vote_abstention}
-          </span>
-          <span className="prediction-card__resolution-support">
-            {resolution.support_percentage.toFixed(1)}% support
-          </span>
-        </div>
-      </div>
+      )}
       <div className="prediction-card__resolution-meta">
         {resolution.lead_committee && (
           <span className="prediction-card__resolution-committee">

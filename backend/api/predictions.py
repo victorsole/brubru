@@ -1117,10 +1117,10 @@ class ResolutionIndicatorResponse(BaseModel):
     title: str
     resolution_type: str  # INL, INI, RSP
     adoption_date: Optional[str] = None
-    vote_for: int
-    vote_against: int
-    vote_abstention: int
-    vote_total: int
+    vote_for: Optional[int] = None  # null = not counted, never 0
+    vote_against: Optional[int] = None
+    vote_abstention: Optional[int] = None
+    vote_total: Optional[int] = None
     support_percentage: float
     lead_committee: Optional[str] = None
     rapporteur: Optional[str] = None
