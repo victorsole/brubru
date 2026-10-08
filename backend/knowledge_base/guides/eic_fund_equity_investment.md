@@ -6,9 +6,8 @@
 - Investment status (June 2026): **300+ companies** invested across **25 countries**, **350 investment decisions**, **EUR 1.4 billion** committed, **12 successful exits**, **EUR 5 billion** mobilised from **1,000+ co-investors**.
 - Leverage: **EUR 3.5 of private capital crowded in per EUR 1 of EIC Fund investment**.
 - Legal structure: Luxembourg-domiciled SICAV-RAIF (financial vehicle); investment advisor of record: **European Investment Bank (EIB) Group**.
-- Two compartments:
-  - **Standard** — EIC Accelerator blended-finance equity, EUR 0.5-10M tickets.
-  - **STEP** — EIC STEP Scale Up equity, EUR 10-30M tickets.
+- Ticket sizes: **EIC Accelerator EUR 1-10M** (blended finance or equity-only; up to EUR 2M extra flexibility in the award decision) · **STEP Scale Up and STEP Scale Up Defence EUR 10-30M** (equity-only; up to EUR 5M flexibility for STEP Scale Up).
+- Compartments (Work Programme 2026, Section X.1): the existing **Horizon Europe** and **EIC Pilot** compartments, plus the new **Scaleup Europe Fund** compartment.
 - Governance: EIC Fund Board (broadest decision-making power) + EIC Fund Advisory Committee (independent advice to EIB + Fund Manager).
 - Investment advisor: EIB Group — conducts due diligence, proposes investments, supports portfolio management, acts as investor of record.
 - Distinct from the **Scaleup Europe Fund** (EUR 5B target, a separate compartment under the EIC Fund umbrella managed by EQT, making DIRECT investments of EUR 100M and above per company; see `eic_scaleup_europe_fund_2026.md`).
@@ -27,12 +26,12 @@
 Triggered automatically when an Accelerator applicant chooses the **blended finance** track (grant + equity) at submission.
 
 Process:
-1. Applicant submits Step 1 (Short Proposal) opting in for blended finance.
+1. Applicant gives an indicative amount in the short proposal and chooses the funding type (blended finance or equity-only) in the full proposal.
 2. If selected at Step 3 (Jury Interview), relevant project information transmitted to the EIC Fund.
 3. EIC Fund + EIB conduct investment due diligence.
 4. EIC Fund Investment Decision: **2-6 months** from selection.
 5. If due diligence finds insufficient maturity for equity, applicant enters **grant-only mode** with re-assessment at defined GA milestones.
-6. Equity deployment: EUR 0.5-10M in tranches, typically co-invested alongside private VCs.
+6. Equity deployment: EUR 1-10M, possibly in tranches, typically alongside private co-investors.
 
 BAS (Business Acceleration Services) supports co-investor search in parallel.
 
@@ -42,8 +41,8 @@ Triggered by direct application to STEP Scale Up (separate from Accelerator).
 
 Process:
 1. Applicant submits full business plan + pitch deck + qualified investor pre-commitment (≥20% of target round).
-2. Remote evaluation → STEP Seal awarded to all qualifiers.
-3. Selected applicants invited to interview with EIC Fund + EIB team.
+2. Eligibility check (STEP scope, the investor's pre-commitment, the applicant), batched once a quarter.
+3. Eligible applicants are interviewed by an EIC jury of at most six members; GO, NO GO with Sovereignty (STEP) Seal, or NO GO.
 4. Full investment due diligence (legal, tax, technical, commercial, ESG).
 5. EIC Fund Investment Committee decision.
 6. Equity deployment: EUR 10-30M, anchoring a round of EUR 50-150M+.
@@ -125,7 +124,7 @@ Themed examples (out of 255 in 12 Drupal sector themes):
 
 The EIC Fund (EUR 4B+) is **NOT** the same as the Scaleup Europe Fund (EUR 5B target, EQT selected 18 May 2026, established 4 August 2026 as a separate compartment under the EIC Fund umbrella). The Scaleup Europe Fund is NOT a fund of funds. The two coexist:
 
-- **EIC Fund** — direct equity into individual companies, EUR 0.5-30M tickets, deployed alongside Accelerator + STEP
+- **EIC Fund** — direct equity into individual companies, EUR 1-30M tickets, deployed alongside Accelerator + STEP
 - **Scaleup Europe Fund** — direct equity into individual companies at growth and scaleup stage, EUR 100M and above per company including follow-ons, decided by EQT as independent manager; first investments expected autumn 2026
 
 See `eic_scaleup_europe_fund_2026.md` for full Scaleup Europe Fund detail.

@@ -1,110 +1,50 @@
-# EIC STEP Scale Up — Administrative Process
+# EIC STEP Scale Up — Administrative Process (2026)
 
 ## QUICK FACTS
-- **Equity-only** instrument for late-stage deeptech scale-ups; financed entirely through the EIC Fund.
-- Ticket size: **EUR 10-30 million** per company.
-- Purpose: **catalyse larger funding rounds** of EUR 50-150M+ (the EIC Fund anchors but does NOT lead).
-- 2026 budget: **EUR 300 million**.
-- 2026 cut-off dates (5pm Brussels CET): **11 February · 6 May · 9 September · 25 November**.
-- Legal anchor: **STEP Regulation (EU) 2024/795** — Strategic Technologies for Europe Platform, the EU's mid-MFF response to the IRA / sovereign-tech gap.
-- Topic ID: `HORIZON-EIC-2026-STEP-01` (also surfaces under `-SCALEUP-*` in Brubru's bucket map).
-- **STEP Seal** awarded to proposals aligned with STEP priorities, unlocking aligned funding from Cohesion / RRF / Innovation Fund.
+- **Equity-only** support from the EIC Fund for scale-ups in strategic technologies; **NO grant component**. Ticket **EUR 10 million minimum, EUR 30 million maximum** (the award decision may add up to EUR 5 million of flexibility). Companies needing less than EUR 10 million apply to the EIC Accelerator.
+- **2026 budget: EUR 300 million** (about EUR 900 million over 2025-2027). Unused money goes first to the Accelerator Open call.
+- **Who:** a single SME or small mid-cap (fewer than 500 staff) established in an EU Member State or Horizon Europe Associated Country, **excluding the UK**; or an investor applying on its behalf. A holding company used for the investment must also be established there.
+- **Scope:** STEP Regulation (EU) 2024/795 sectors: digital and deep tech (semiconductors, AI, quantum, connectivity, sensing, robotics), clean and resource-efficient technologies (net-zero, critical raw materials, advanced materials), biotechnologies (including critical medicines).
+- **Pre-commitment (eligibility condition):** from ONE qualified investor, **equity only** (quasi-equity does not count), for **at least 20%** of a target round of **EUR 50-150 million or more**, which must be **at least 3-5 times** the EIC investment; the 20% must be **fully uninvested** on the date of the letter. Syndicated pre-commitments where no single investor reaches 20% are ineligible. Official template on the Funding & Tenders Portal and the EIC website.
+- **Submit any time; batches (17:00 Brussels): 11 February, 6 May, 9 September, 25 November 2026.** Portal topic `HORIZON-EIC-2026-STEP`.
+- **Evaluation, two steps:** (1) **eligibility check** (STEP scope, the pre-commitment, the applicant), with the EIB able to help verify the pre-commitment; (2) **interview with an EIC jury of at most six members**, invitation about 4-6 weeks after the batch's evaluation starts, result about **2 weeks** after the interview session. There is NO remote scoring by a panel of experts.
+- **Outcomes:** GO + Sovereignty (STEP) Seal; NO GO + Seal (criteria met, no budget); NO GO (with feedback). "First come, first served", but juries may recommend at most 70% of the year's budget in the first six months, and the fourth batch is cancelled if the budget is used up by the third.
+- **Submission limit (since 1 January 2026):** after three unsuccessful submissions of the same or an improved proposal, the company may not apply to STEP Scale Up again under Horizon Europe. No concurrent submissions across Accelerator, STEP Scale Up and STEP Scale Up Defence.
 
-## STEP technology priorities
+## Sources
+EIC Work Programme 2026, Commission Decision C(2026) 4080 (17 June 2026), Section VI and Annex 1; EIC STEP Scale Up page on eic.ec.europa.eu (read 8 October 2026); Funding & Tenders Portal topic `HORIZON-EIC-2026-STEP` (read through the portal's search API, 8 October 2026).
 
-The STEP Regulation (2024/795) defines **3 priority technology areas** that drive eligibility:
+## Application package
+- Full business plan, maximum **50 pages**, including ownership and financial structure and the justification against the STEP objectives.
+- Pitch deck, maximum **15 pages**, PDF (the version shown to the jury).
+- Equity pre-commitment from a single qualified investor (official template). The investor may be an existing shareholder and need not lead the round. A qualified investor has know-how in the market, technology and jurisdiction and passes KYC/AML screening by the EIC Fund or EIF (or during the eligibility check).
+- Financial plan (template on the EIC website).
+- Freedom-to-operate results, or a note of up to 2 pages; a simple statement where FTO is not relevant (for example software).
+- CVs of key personnel.
+- Optional: interest in Venture Debt from InvestEU implementing partners if the company gets the Sovereignty (STEP) Seal.
+- No EU classified information in the proposal; consent to share information with the EIC Fund is required.
 
-1. **Digital and Deep Tech** — semiconductors (covered by Chips Act), AI, quantum, advanced connectivity (5G/6G), advanced manufacturing, robotics, photonics, cybersecurity, digital twins
-2. **Clean Technologies** — renewable energy generation + storage, decarbonisation, grid technologies, recycling, raw materials, smart mobility
-3. **Biotechnologies** — therapeutics, diagnostics, vaccines, agri-biotech, industrial biotech
+## Award criteria (Work Programme Table 9)
+- **Excellence:** deep-tech and breakthrough nature; technological feasibility (developed safely, assessed, validated or certified); IP protection and strategy.
+- **Impact:** market opportunity (including civilian and defence end-users where a credible business case exists in both); business model and financial projections; STEP impact (bringing an innovative, cutting-edge technology with significant economic potential to the internal market, or reducing the Union's strategic dependencies; applicants from Associated Countries must show a contribution to the EU internal market or dependencies).
+- **Level of risk, implementation and need for Union support:** team and governance; risk level of the investment (would European market actors commit the full amount without the EIC Fund?); investment leverage (a credible plan to raise at least 3-5 times the EIC amount, timeline, investors committed); risk management.
 
-Proposals must demonstrate clear alignment with one of these three areas to receive the STEP Seal (and thus catalyse access to other STEP-marked funds: ERDF, ESF+, JTF, CF, RRF redirected funds, Innovation Fund top-up).
+## After a GO
+- The Commission adopts an award decision authorising a maximum investment (the amount requested plus up to EUR 5 million flexibility).
+- The EIB, as investment adviser to the EIC Fund, carries out the detailed due diligence; the EIC Fund Investment Committee decides; the investment can be reduced or rejected for justified reasons. A lower amount frees budget for other STEP applicants.
+- Investment terms are negotiated case by case under the EIC Fund Investment Guidelines; economic-security safeguards are included in every STEP investment agreement; companies must keep most of their value and IP in the EU or Associated Countries.
+- Access to Business Acceleration Services.
 
-## Eligibility
-
-- Single applicant: **SME or small mid-cap (<500 employees)** established in an EU Member State or eligible Associated Country (excluding the UK).
-- **Investors acting on behalf of an eligible company** may also apply (typical case: existing VC putting forward a portco for STEP equity).
-- Must demonstrate **proof of initial market interest from a qualified investor covering at least 20%** of the total target funding round (the "pre-commitment letter").
-- The target round must be EUR 50-150M+ (otherwise the company is steered to Accelerator blended finance).
-
-## Application process
-
-Single-stage submission to the Funding & Tenders Portal. Required documents:
-
-- **Full business plan** — max **50 pages**, PDF
-- **Pitch deck** — max **15 pages**, PDF
-- **Pre-commitment letter** from a qualified investor (covering ≥20% of target round)
-- **Financial plan** — multi-year financial projections + agreement document
-- **Freedom-to-Operate (FTO) analysis** — IP landscape, infringement risk
-- **CVs of key personnel** — founders, CXO team, senior advisors
-- (Standard) Application Form Part A administrative info via Submission Service
-
-## Evaluation
-
-- Remote evaluation by ≥3 experts (a mix of growth-stage investors + technology evaluators).
-- Criteria: Excellence (tech defensibility) / Impact (market + STEP alignment) / Implementation (team + capital efficiency).
-- Threshold: applicants meeting all thresholds receive the **STEP Seal** even if not selected for investment.
-- Results communicated within **4-6 weeks** of the cut-off.
-- Selected applicants invited to a follow-up **interview** with the EIC Fund team + EIB Group investment advisors.
-- Interview outcome within **2 weeks** of the interview.
-
-## Due diligence (EIC Fund led)
-
-After interview success, the EIC Fund + EIB Group conduct full investment DD:
-- Corporate documents (incorporation, articles, shareholders' agreement)
-- Cap table + dilution model + option pool
-- Audited financials (last 3 years)
-- Tax + legal due diligence
-- Technical due diligence (IP, FTO, regulatory pathway)
-- Commercial due diligence (pipeline, customer references, competitive positioning)
-- ESG + dual-use screening
-
-Timeline: typically **2-6 months** from investment approval to first equity tranche disbursement, depending on round complexity.
-
-## Investment terms
-
-- **Direct equity** in the company (preferred shares typical).
-- **Co-investment requirement** — the EIC Fund will not lead the round. It anchors at 10-30M EUR alongside private VCs/PEs leading.
-- Standard institutional VC terms (information rights, board observer, ROFR, anti-dilution, tag-along/drag-along).
-- ESG covenants per EU sustainable finance framework (SFDR Article 8 alignment).
-
-## What's NOT eligible
-
-- Pure-grant tracks (use Accelerator or Transition)
-- Companies <TRL 8 / not yet at commercial deployment
-- Companies outside STEP technology priorities
-- Companies needing <EUR 10M equity (use Accelerator blended track)
-- UK-based applicants
+## Points to flag
+- **Portal date conflict:** the portal topic `HORIZON-EIC-2026-STEP` shows **8 October 2026** as its end date, while the Work Programme lists a further batch on **25 November 2026** and says applications may be submitted at any time. The Director-General may move cut-offs by up to two months. Check the portal topic before advising an applicant to aim for the November batch.
 
 ## Coordination with other instruments
-
-- The **EIC Fund** is the common vehicle for both Accelerator equity and STEP Scale Up — but with different ticket sizes (Accelerator EUR 0.5-10M, STEP EUR 10-30M).
-- **Scaleup Europe Fund** (EUR 5B target, managed by EQT, EQT selected May 2026) is a *separate* later-stage vehicle that invests DIRECTLY in companies, EUR 100M and above; it is not a fund of funds and not EIF-managed. STEP Scale Up (up to EUR 30M) and the Scaleup Europe Fund operate in complementary tickets. See `eic_scaleup_europe_fund_2026.md`.
-- **InvestEU Equity Window** — STEP-marked applicants may also access InvestEU-backed VC funds via partner financial intermediaries.
-
-## Templates required
-
-- Business plan template (downloadable from topic page, 50 pages max)
-- Pitch deck template (15 pages max)
-- Pre-commitment letter template (qualified investor declaration of ≥20% intent)
-- Financial plan template
-- FTO analysis template
-- CV format (Europass or equivalent)
+- **EIC Accelerator:** EUR 1-10 million equity (plus a grant of up to EUR 2.5 million) for earlier companies.
+- **STEP Scale Up Defence:** the same EUR 10-30 million equity format for products with a PRIMARY defence application (see `eic_step_scaleup_defence_2026`).
+- **Scaleup Europe Fund:** a separate compartment of the EIC Fund for investments around EUR 100 million and above (see `eic_scaleup_europe_fund_2026`).
 
 ## Useful URLs
-
-- STEP Scale Up instrument page: https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en
-- 2026 call: https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-step-scale_en
+- STEP Scale Up page: https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en
+- 2026 call page: https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-step-scale_en
+- Work Programme 2026: https://eic.ec.europa.eu/eic-2026-work-programme_en
 - STEP Regulation (EU) 2024/795: https://eur-lex.europa.eu/eli/reg/2024/795/oj
-- F&T Portal topic page (search "HORIZON-EIC-2026-STEP")
-
-## How Brubru helps STEP applicants
-
-Tenderator surfaces:
-- The 4 STEP 2026 cut-offs with countdowns
-- STEP-eligible past companies (Brubru's EIC Fund portfolio scrape, bucket "step-scale" → themes 100, 96, 95, 99, 97)
-- Cross-link to STEP-marked CEF / ESF+ / Innovation Fund calls
-Hand-offs:
-- Chat: "Does my technology qualify for STEP priorities?" / "Difference between Accelerator equity and STEP Scale Up"
-- EU Law Comply: SFDR Article 8, ESG covenants for the term sheet; dual-use export controls
-- MEUB Documents → future Tender Docs: 50-page business plan, pitch deck, FTO, financial plan as versioned drafts

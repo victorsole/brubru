@@ -1,99 +1,39 @@
-# EIC Transition — Administrative Process
+# EIC Transition — Administrative Process (2026)
 
 ## QUICK FACTS
-- Bridges Pathfinder / ERC PoC / RIA results into **investable, market-ready propositions**.
-- TRL range: **start at TRL 3-4 → aim at TRL 5/6**.
-- Max grant: **EUR 2.5 million** (lump sum) + optional **Booster grants EUR 50,000**.
-- 2026 budget: **EUR 100 million** (Transition Open).
-- Single 2026 deadline: **16 September 2026** (5pm Brussels CET).
-- Two-step evaluation: remote review + online Jury Interview (panel of up to 6 members).
-- Jury interview scheduled ~**11-13 weeks** after the deadline.
-- Interview results communicated indicatively within **4 weeks** from the start of the interview window.
-- Topic ID: `HORIZON-EIC-2026-TRANSITION-01`.
+- Turns a result of an earlier EU-funded project into a **validated technology and a validated business model**: from **TRL 3 completed (results not beyond TRL 4)** to **TRL 5-6** at the end of the project, with market and business readiness developed in parallel.
+- **2026 budget: EUR 100 million** (Transition Open, any field). Deadline **16 September 2026, 17:00 Brussels** (closed). Portal topic `HORIZON-EIC-2026-TRANSITIONOPEN`.
+- **Grant:** requests **above EUR 0.5 million and below EUR 2.5 million**, projects of **1 to 3 years**; **100% funding rate, lump sum**. Booster grants up to EUR 50,000 and Fast Track to the EIC Accelerator afterwards.
+- **Base project required** (cite its grant number): EIC Pathfinder and FET projects, ERC Proof of Concept, Research and Innovation Actions of Horizon Europe Pillar II or Horizon 2020 Societal Challenges/LEIT, Research Infrastructure projects (new in 2026), European Defence Fund research projects for civil (including dual-use) applications only. Ongoing base project: started **more than 18 months** before the deadline (ERC PoC: more than 6 months); finished base project: ended **less than 24 months** before the deadline.
+- **Who:** a single start-up, SME or research performing organisation (larger companies cannot apply alone); or 2 independent entities from 2 different Member States/Associated Countries; or a consortium of **3 to 5** (more than 5 is ineligible). Non-owners of the result need a commitment letter from the result owner.
+- **Part B:** cover page + sections 1-3, **maximum 22 pages**.
+- **Step 1, remote:** at least three evaluators; thresholds **Excellence 4/5, Impact 4/5, Implementation 3/5**; the best proposals worth about **2.2 times the budget** are invited to interview, extended if needed so that **at least 30% are women-led**. Result about **9 weeks** after the deadline. The European Patent Office gives a non-binding novelty assessment to the jury.
+- **Step 2, jury interview:** about **11-13 weeks** after the deadline; jury of **4 to 6 members** (plus possibly an EIC Programme Manager); up to **5 people** represent the proposal; outcome **GO, GO Reserve or NO GO**; result about 4 weeks after interviews start. Grant agreement within about **6 months** of the deadline; project starts within 2 months of signature.
+- Proposals meeting all first-step thresholds but not funded (including a jury NO GO) get a **Seal of Excellence**. Coaching is **mandatory** for funded projects unless justified. Transition is for **civil applications only**.
 
-## Eligibility
+## Sources
+EIC Work Programme 2026, Commission Decision C(2026) 4080 (17 June 2026), Section III, Annex 3 and Annex 5; Funding & Tenders Portal topic records (search API, 8 October 2026).
 
-**Two applicant configurations allowed:**
-1. **Single beneficiary**: SME, start-up, spin-off, natural person, research organisation, or university — established in an MS or Associated Country.
-2. **Small consortium**: 2-5 independent legal entities, at least 2 from different MS/AC.
+## Eligibility in detail
+- The base result must be at least experimental proof of concept (TRL 3 completed) and not beyond TRL 4; other TRLs are ineligible, and the scope can be checked at any time during evaluation.
+- If the applicant took part in the base project, it must own or hold the IP rights and be able to commercialise; otherwise it needs a letter from the result owner committing to negotiate fair, reasonable and non-discriminatory access.
+- The result must be reported somewhere checkable (periodic report, Horizon Results Platform, Innovation Radar/EIC Transition discovery tool, CORDIS). Grants given through financial support to third parties (ERA-NETs, EIT KICs) do not qualify.
+- One proposal only per ERC Proof of Concept or FET Innovation Launchpad project.
+- The proposal names its path to market: exploitation by a beneficiary, a spin-off in a Member State or Associated Country, licensing, or another route.
 
-**Mandatory pedigree requirement** — the proposal MUST build on results from at least one eligible upstream project:
-- EIC Pathfinder (Open or Challenges) including Horizon 2020 EIC pilot, FET-Open, FET-Proactive
-- **European Research Council Proof of Concept (ERC PoC)** projects funded under Horizon 2020 or Horizon Europe
-- Research and Innovation Actions (RIA) under Horizon 2020 / Horizon Europe
-- European Defence Fund **research** projects (civil applications only)
-- Research Infrastructure projects
-
-This pedigree filter is checked at eligibility stage — the upstream project ID must be cited in Part A.
-
-## Two-step evaluation process
-
-### Step 1 — Remote evaluation (after the deadline)
-
-- **Part B proposal** (max **22 A4 pages**, Sections 1-3 + cover page).
-- Reviewed by ≥3 independent expert evaluators.
-- Score on Excellence / Impact / Implementation (0-5 each).
-- Threshold typically 12/15 to qualify for Step 2.
-- Applicants meeting **all thresholds** but not invited to interview receive the **Seal of Excellence**.
-
-### Step 2 — Online jury interview
-
-- Conducted ~11-13 weeks after the deadline.
-- Panel of **up to 6 members** (mix of investors, entrepreneurs, EIC Board / experts).
-- Pitch + Q&A format.
-- Final selection based on combined remote + interview scoring.
-- Interview results communicated within **4 weeks** of the interview window.
-
-## Funding terms
-
-- **Lump sum grant**, paid in tranches tied to **work package completion** (no detailed cost reporting).
-- Up to **EUR 2.5 million** per project.
-- Project duration: typically 24-36 months.
-- Optional **Booster grant** (EUR 50K) post-GA for additional IP / market / investor work.
-- Funding rate: 100% of estimated eligible costs (in lump-sum model, agreed total at GA stage).
-
-## Templates required
-
-- **Application Form Part A** (administrative, via Submission Service)
-- **Application Form Part B** — max **22 pages** (sections 1-3 + cover) — DOCX template from the topic page
-- **Transition Plan template + guide** — optional but strongly encouraged (the EIC publishes a recommended structure for the transition roadmap from TRL 4 → 5/6 + commercial scoping)
-- **Ethics Self-Assessment** annex
-- **Security Self-Assessment** (if dual-use)
-- For Step 2 interview: refreshed pitch deck
-
-## Eligible activities (TRL 4 → 5/6 maturation)
-
-- Technology validation in relevant environment
-- Engineering / scaling-up
-- Prototyping
-- Market validation: regulatory pre-submissions, customer interviews, freedom-to-operate analysis, IP strategy
-- Business model design + commercialisation plan
-- Investor readiness
-
-## What's NOT eligible
-
-- Fundamental research below TRL 3 (use Pathfinder)
-- Late-stage commercialisation TRL 7+ (use Accelerator)
-- Pure market launch without technology maturation (use Accelerator)
+## Award criteria
+- **Remote step (scored):** Excellence (technological breakthrough and commercial potential; credible objectives for technology and business; timing/minimum TRL), Impact (credible commercial impact; economic and societal benefits for the EU; investment readiness and go-to-market strategy), Implementation (team quality and motivation; KPIs, milestones and risks; work plan and resources).
+- **Jury step (GO/NO GO on each):** breakthrough and scale-up potential, objectives, timing; business model, markets and users, financing plans after the project (for example the EIC Accelerator or private investment); team, risks, resources.
+- Reserve list ranked by the remote score; with equal scores the smaller budget comes first.
 
 ## After Transition
-
-- Beneficiaries are encouraged to apply to **EIC Accelerator** for the TRL 6 → 9 + market entry phase.
-- Transition graduates receive a **direct fast-track** option: their Step-2 results may simplify the Accelerator Step-1 screening.
-- **EIC Fund** equity is NOT part of Transition (only Accelerator + STEP).
+- **EIC Accelerator Fast Track:** a project review by the Agency can send the company straight to the Accelerator FULL proposal (it does not change the Accelerator's criteria).
+- Booster grants up to EUR 50,000; Business Acceleration Services, including Tech2Market and investor-readiness training.
 
 ## Useful URLs
-
-- Transition instrument page: https://eic.ec.europa.eu/eic-funding-opportunities/eic-transition_en
-- 2026 Work Programme: https://eic.ec.europa.eu/eic-2026-work-programme_en
-- F&T Portal topic page (search "HORIZON-EIC-2026-TRANSITION")
+- Transition page: https://eic.ec.europa.eu/eic-funding-opportunities/eic-transition_en
+- Work Programme 2026: https://eic.ec.europa.eu/eic-2026-work-programme_en
 
 ## How Brubru helps Transition applicants
-
-Tenderator surfaces:
-- The 16 September 2026 deadline with countdown
-- Past Transition beneficiaries (drawer panel) filtered to TRL 4-6 buckets
-Hand-offs:
-- Chat: "Does my ERC PoC result qualify me for Transition?" / "Which Transition Plan template section corresponds to my regulatory pre-submission?"
-- EU Law Comply: dual-use export-control (Reg 2021/821) for defence-adjacent civil research; MDR/IVDR if medical software; CSRD ESRS E1 if cleantech
-- MEUB Documents → future Tender Docs: Part B (22 pages), Transition Plan, pitch deck for the interview
+- Tenderator lists the Transition topic with its portal deadline; Tender Docs has a Transition template (22 pages).
+- Hand-offs: Chat ("Does my ERC Proof of Concept result qualify for Transition?"), EU Law Comply (medical devices, AI Act, export control under Regulation (EU) 2021/821).

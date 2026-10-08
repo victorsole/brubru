@@ -46,20 +46,24 @@ The Feb 2025 statement on **use of consultants** is particularly relevant for Br
 
 ## EIC Programme Managers — the operational deeptech experts
 
-A distinguishing feature of the EIC: **8 Programme Managers** appointed full-time for periods of up to **4 years** (renewable once), recruited from industry, academia, national labs, and federally-funded research centres.
+A distinguishing feature of the EIC: **10 Programme Managers** (EIC website, 8 October 2026) appointed full-time for periods of up to **4 years** (renewable once), recruited from industry, academia, national labs, and federally-funded research centres.
 
-### 2026 Programme Managers + portfolios
+### Programme Managers + portfolios (October 2026)
 
 | Programme Manager | Portfolio |
 |---|---|
+| Carina Faber | Renewable energy conversion and alternative resource exploitation |
+| Federica Zanca | MedTech and AI in healthcare |
+| Frédéric Voulouzan | Space |
+| Gemma Pham | Biotechnology |
+| Hedi Karray | Artificial Intelligence |
+| Michael J. Bojdys | Future-Proof Electronics |
+| Mika Rytkönen | Mobility & Transport |
+| Orsolya Symmons | Health and Biotechnology |
 | Paolo Bondavalli | Advanced materials for energy |
 | Walter Eevers | Cleantech |
-| Carina Faber | Renewable energy conversion + alternative resources |
-| Hedi Karray | Artificial Intelligence |
-| Isabel Obieta | Sustainable Semiconductors |
-| Gemma Pham | Biotechnology |
-| Orsolya Symmons | Health and Biotechnology |
-| Federica Zanca | MedTech and AI in healthcare |
+
+(List as published on the EIC Programme Managers page, read 8 October 2026; Isabel Obieta, formerly Sustainable Semiconductors, is no longer listed.)
 
 ### What Programme Managers do
 
@@ -110,7 +114,7 @@ EISMEA (executing agency)
    └── Pays beneficiaries
        │
        ▼
-EIC Programme Managers (8)
+EIC Programme Managers (10)
    ├── Design Pathfinder Challenges + AIC challenges
    ├── Select expert evaluators
    ├── Participate in jury interviews

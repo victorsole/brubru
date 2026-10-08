@@ -1,174 +1,84 @@
-# EIC Accelerator — Administrative Process
+# EIC Accelerator — Administrative Process (2026)
 
 ## QUICK FACTS
-- Single-applicant SME / start-up / spin-off scheme (NO consortia required) — the flagship blended-finance product of the EIC.
-- 2026 budget: **EUR 634 million**.
-- Funding structure: **grant up to EUR 2.5M** (lump sum, for innovation activities TRL 6-8, max 24 months) **+ equity EUR 0.5M-10M** (via the EIC Fund). Pure-grant track and pure-equity track also available.
-- Mid-caps (up to 499 employees) eligible **only for the equity-only track** (rapid TRL 9 scale-up).
-- Geographic scope: EU Member States + Horizon Europe Associated Countries. UK applicants are restricted to **grant-only**. Third-country applicants must relocate to an eligible MS/AC before Step 2.
-- The Accelerator is a **rolling/batched** process with 6 cut-off dates in 2026 (5pm Brussels time, CET):
-  **7 January · 4 March · 6 May · 8 July · 2 September · 4 November**.
-- Streamlined for 2026: full proposal cut from 50 → **20 pages**; evaluation cycles moved from 6 → 2-month intervals; deeper technology assessments.
-- 13/15 minimum threshold at the remote evaluation stage triggers Seal of Excellence (plus STEP Seal where applicable).
-- Total pathway: ~5-8 months from Short Proposal to grant + equity decision.
-- Topic ID: `HORIZON-EIC-2026-ACCELERATOR-01`.
+- **Who:** ONE company, no consortia: an SME or start-up (including spin-offs), natural persons who will set one up, or an investor applying on behalf of a company. **Small mid-caps (up to 499 staff) may apply for equity-only, or for blended finance only in exceptional cases of rapid TRL 9 scale-up; they can NEVER get grant-only.** Companies must be established in an EU Member State or a Horizon Europe Associated Country (third-country firms must relocate before submitting the full proposal). **UK companies: grant-only** (no investment component for the UK since 2024).
+- **Money:** grant component **below EUR 2.5 million (maximum EUR 2,499,999)**, a lump sum covering **at most 70%** of eligible costs of TRL 6-8 innovation activities (the other 30% from the company's own resources), normally completed within 24 months. **Investment component: EUR 1 million minimum, EUR 10 million maximum** (equity or quasi-equity, at most 25% of voting shares), managed by the EIC Fund; the award decision may add up to EUR 2 million of flexibility. Three types: **grant-only** (once per company for the whole of Horizon Europe 2021-2027), **blended finance**, **equity-only**. Larger equity (EUR 10-30 million): STEP Scale Up.
+- **2026 budget: EUR 634 million** = Accelerator Open EUR 414 million + Accelerator Challenges EUR 220 million (five Challenges).
+- **Step 1, short proposal:** submit at any time; **batched on the FIRST TUESDAY OF EVERY MONTH at 17:00 Brussels time** (the six dates below are for FULL proposals, NOT for short proposals). 12-page form + pitch deck of up to 10 slides (PDF) + video of up to 3 minutes with up to 3 team members. **Four** remote evaluators each say GO or NO GO; **GO needs at least 3 of the 4**. Result about 4-6 weeks after the batch. A GO gives 3 days of free remote coaching.
+- **Step 2, full proposal:** 2026 batches **7 January, 4 March, 6 May, 8 July, 2 September, 4 November**, 17:00 Brussels time. Part B **maximum 20 pages including the cover**, plus deck, video, lump-sum table and 10-page implementation plan (grant-only and blended), financial plan with cap table, FTO analysis, Letters of Intent, CV links. One technology expert (1-hour online interview about 3-4 weeks after the batch) and a panel of at least three experts. **Each of the three criteria must score at least 4 out of 5 AND the total at least 13 out of 15.** Proposals asking for about 2.5 times the available grant budget are invited to interview. Result about 8-9 weeks after the batch.
+- **Step 3, jury interview:** organised after every second batch (three sessions a year); jury of 4 to 6 members; 10-minute pitch + up to 35 minutes of questions, in English; invitation at least 2 weeks ahead; result about 2-3 weeks after the interview session. GO or NO GO; the jury may lower the grant if activities go beyond TRL 8 but never changes the type of funding.
+- **Step 4:** grant agreement with a first pre-financing payment; for equity, EIC Fund due diligence with the European Investment Bank as adviser, decision usually 2-6 months after selection.
+- **Seal of Excellence:** for FULL proposals reaching 13/15 that are not funded (not invited to interview, or jury NO GO). Challenge proposals also get the **Sovereignty (STEP) Seal**. A short-proposal NO GO receives no Seal.
+- **Submission limit (since 1 January 2024): after THREE unsuccessful submissions** of the same or an improved proposal (at any stage, any type of funding, Open or Challenges), the company **may not apply to the EIC Accelerator again under Horizon Europe.** Only one proposal at a time across Accelerator, STEP Scale Up and STEP Scale Up Defence.
+- Portal topic for 2026 short proposals: `HORIZON-EIC-2026-ACCELERATOR-01` (the portal shows 17 December 2026 as its end date).
 
-## The 4-step process
+## Sources
+EIC Work Programme 2026, Commission Decision C(2026) 4080, version of 17 June 2026 (Section V, Annex 1, Annex 2, Annexes 3-4); EIC Accelerator Guide for Applicants, version 6.0 of 19 November 2025; official application forms "HE EIC Accelerator stage 1 - short proposal" V2.1 (12 June 2026) and "stage 2 - full proposal" Part B V2.1 (9 July 2026); EIC Accelerator page on eic.ec.europa.eu (read 8 October 2026). Where the Guide (November 2025) and the amended Work Programme (June 2026) differ, the Work Programme prevails; differences are listed at the end.
 
-### Step 1 — Short Proposal (rolling submission)
-- Submitted any time via the Funding & Tenders Portal. Evaluations *batched* at the same 6 cut-off dates as Step 2.
-- Contents:
-  - **12-page form** answering questions on innovation, market, team
-  - **Pitch deck** (max 10 slides, PDF)
-  - **Video pitch** (max 3 minutes, featuring up to 3 core team members)
-- Remote evaluation by **4 expert evaluators**.
-- Feedback within ~**4-6 weeks** of the cut-off.
-- Outcomes: **GO** (invited to Step 2 — Full Proposal) or no-go (eligible applicants get the Seal of Excellence).
+## Eligibility in detail
+- **Eligible applicants:** a single SME (Commission Recommendation 2003/361/EC: fewer than 250 staff and turnover up to EUR 50 million or balance sheet up to EUR 43 million; start-ups included); a single small mid-cap (up to 499 staff) for equity-only, or blended finance in exceptional cases; one or more natural persons or legal entities who intend to set up an SME or small mid-cap (it must exist before the grant agreement is signed, or before the investment agreement for equity-only); an investor submitting on behalf of an SME or small mid-cap with its prior agreement (contracts are signed with the company only); a company from a non-associated third country that relocates to a Member State or Associated Country (proof of establishment required when the FULL proposal is submitted).
+- **Excluded:** legal entities established in China may not take part in Horizon Europe Innovation Actions, including the Accelerator, in any role (exceptions case by case); entities in Russia, Belarus or occupied Ukrainian territory; entities under EU sanctions. Applicants undertake that their ultimate beneficial owners are not sanctioned.
+- **Critical raw materials Challenge, grant-only:** the beneficiary must not be controlled from a non-associated third country (with listed exceptions such as OECD, African Union and partner countries) and must upload an ownership and control declaration; the same applies to Open proposals within that Challenge's scope.
+- **Concurrent submission:** a new proposal to any Accelerator call (including STEP Scale Up and STEP Scale Up Defence) before the result of the previous one is known is not allowed; only the last one submitted counts. **Concurrent implementation:** a company with an ongoing Accelerator, EIC pilot or SME Instrument grant may not submit a full proposal with a grant component; exception: an ongoing grant-only project may apply for blended finance or equity-only.
+- **TRL:** the technology must have completed all aspects of TRL 5 (validation in a relevant environment); the grant funds TRL 6-8. Exception: the fusion Challenge accepts TRL 4-6 at application.
 
-### Step 2 — Full Proposal (batched submission at cut-off)
-- Submitted at one of the 6 batching cut-off dates.
-- Contents:
-  - **20-page form** (Part B) expanding on the short proposal template
-  - Pitch deck (PDF, refined)
-  - Implementation plan
-  - Financial information
-  - **Letters of Intent** (LoIs) — from prospective customers, partners, investors
-  - **Freedom-to-Operate (FTO) analysis** — IP landscape, infringement risk
-  - 3-minute video pitch
-- Parallel evaluation by **1 technology expert** + an **evaluation panel** (minimum 3 experts).
-- ~3-4 weeks after the cut-off, the applicant has an **online interview with the technology expert**. The expert produces a report; the panel scores.
-- Threshold: **13/15** minimum → eligible for Seal of Excellence + Step 3.
-- Results within **8-9 weeks** of the cut-off.
-- Outcomes: top-ranked proposals corresponding to **2.5× the available grant budget** are invited to the EIC Jury Interview.
+## Types of support
+- **Grant-only:** lump sum via a grant agreement; once per legal entity for the duration of Horizon Europe (2021-2027); the applicant must show it can finance deployment and scale-up itself; small mid-caps excluded; UK companies can only receive this.
+- **Blended finance:** one single type of support combining a grant (TRL 6-8, lump sum, max 70%) and an investment (TRL 9 and other activities). A work package cannot be funded half by grant and half by investment. If the EIC Fund rejects the investment or the company declines the offer, the grant may be terminated.
+- **Equity-only:** EUR 1-10 million in direct equity or quasi-equity for market deployment and scale-up.
+- **Investment terms:** negotiated case by case under the EIC Fund Investment Guidelines; the EIC Fund may invest in a parent or holding company that meets the same criteria; the EIB reuses the technology due-diligence report. If no investment round is foreseen within six months, the company leaves the investment process and may re-enter within the grant period plus 12 months (or 12 months from the award decision for equity-only). If due diligence finds the company not yet ready, it may start with the grant and the investment depends on milestones; the investment decision must come during the grant or within one year after it ends.
+- **Follow-on investments** by the EIC Fund (up to EUR 10 million more) only in exceptional cases (EU interests, strategic investments, or a round that would otherwise fail).
 
-### Step 3 — EIC Jury Interview
-- Organised after each *second* batching cycle (i.e. interviews bunched, not per cut-off).
-- Panel composition: senior investors + entrepreneurs + EIC Board members.
-- Interview format: pitch + Q&A.
-- Results within **2-3 weeks** of the interview window completion.
-- Outcomes: **invited to GAP** (Grant Agreement Preparation) + EIC Fund DD, or rejected (Seal of Excellence if ≥13/15).
+## Process in detail
+1. **Short proposal** (Funding & Tenders Portal, PIC needed; natural persons too). Part A online; Part B 12 pages including cover; pitch deck up to 10 slides; 3-minute video (any EU language, subtitles allowed); indicative funding amount (may be revised in the full proposal); optional consent to share with the National Contact Point. Batched the first Tuesday of each month, 17:00. Four evaluators; GO with at least 3 GOs; a GO under the 2025 or 2026 Work Programme allows a full proposal to any 2026 batch (or 2027 dates).
+2. **Coaching:** after a GO, 3 days of remote coaching from an EIC business coach, once per proposal (Fast Track and Plug-in applicants too).
+3. **Full proposal** to one of the six 2026 batches. Required documents listed in QUICK FACTS. Choose the funding type here; keywords (fixed keywords: minimum 3, maximum 6) drive the matching with evaluators; up to three reviewers may be excluded. Proposals must not contain EU classified information. Consents: to share data with the EIC Fund and EIB (mandatory if requesting investment) and with NCPs/other funders (needed for the Seal of Excellence to work).
+4. **Remote evaluation:** technology expert (fact-check, 1-hour online interview with up to 3 company people, no consultants) + evaluation panel of at least 3 experts who set the final score. Ties: female-led companies get priority.
+5. **Jury interview:** three sessions a year; jury members are entrepreneurs, investors and ecosystem experts; EIC Programme Managers and EIB representatives may attend as observers without a vote. The jury sees the full proposal and the panel report, not the short proposal or earlier submissions.
+6. **Outcome:** GO (grant agreement preparation, and EIC Fund due diligence if equity was requested) or NO GO (with Seal of Excellence if the thresholds were met).
+7. **Redress:** a request for evaluation review on procedural grounds only, within 30 days of accessing the result, maximum 7,000 characters.
 
-### Step 4 — Grant Agreement + EIC Fund Investment Decision
-- **Grant track** (parallel): Grant Agreement Preparation (GAP) under the Horizon Europe Model Grant Agreement (MGA). Up to 50% pre-financing within 30 days of signature. GAP duration typically 3-5 months.
-- **Equity track** (in parallel for blended-finance applicants): the EIC Fund initiates due diligence. **2-6 months** to reach an investment decision.
-- If the equity DD finds insufficient maturity, the applicant starts in **grant-only** mode with re-assessment at defined milestones during execution.
-- BAS (Business Acceleration Services) supports the search for co-investors throughout.
+## Award criteria (Work Programme Table 8)
+| Criterion | Short proposal (GO/NO GO) | Full proposal (score 0-5, threshold 4/5 each, 13/15 overall) |
+|---|---|---|
+| Excellence | Deep-tech nature and improvement over alternatives; TRL 5 completed; IP protection and strategy | Same three elements |
+| Impact | Market size and realistic share | Market; business and revenue model and financial projections; broader impact (European technological leadership, reduced dependencies, environmental/social); Challenge alignment (Challenges only); STEP impact (Challenges within STEP) |
+| Level of risk, implementation, need for Union support | Team, gaps incl. gender balance; investor traction; need beyond what markets fund | Team and governance; risk management; implementation plan and lump-sum costs (grant-only, blended); investor traction; for blended and equity-only: can the EIC investment catalyse other investors within 6 months to 2 years; for grant-only: access to scale-up resources and need for the grant |
 
-## Evaluation criteria (Excellence / Impact / Implementation)
+## Accelerator Challenges 2026 (EUR 220 million)
+- Advanced Materials for Renewable Energy and Energy Storage Systems: EUR 50 million
+- Alternative Concepts and Key Enabling Technologies for Fusion Power Plants: EUR 20 million in 2026 (TRL 4-6 accepted; at least 50% of the budget to entities in countries associated to both Euratom and Horizon Europe)
+- Biotech for Regenerating Agricultural Soils: EUR 50 million
+- Boosting the European Critical Raw Materials value chain: EUR 50 million (deep-sea mining excluded; grant-only control restriction)
+- Deep Tech for Climate Adaptation: EUR 50 million
+Unused Challenge budget moves to Open proposals in the same scope.
 
-All three dimensions scored 0-5 (half-points allowed). Minimum 13/15 to pass at the remote stage. The 2026 update emphasises:
-- **Excellence**: novelty + significance vs state of the art; competitive advantage; freedom to operate
-- **Impact**: market potential; commercialisation strategy; growth & scaling; impact on EU strategic autonomy in STEP-priority sectors
-- **Implementation**: team capability; financial sustainability; risk mitigation; quality of the work plan; for blended finance, ability to absorb equity
+## Other routes into the full proposal
+- **Fast Track:** EIC Pathfinder and Transition projects, relevant EIT KIC schemes, Eurostars and the Innovative SMEs partnership, previous grant-only Accelerator companies (not for another grant-only), Pre-Accelerator and Women TechEU awardees; the funding body reviews the project and, if positive, the company goes straight to the full proposal.
+- **Plug-in:** certified national or regional programmes propose a limited number of companies for direct access to the full proposal.
+Both routes count towards the three-submission limit.
 
-## Eligibility — applicant types
+## Documents and templates
+- **Short proposal Part B** (V2.1, 12 June 2026): 1. Technology (novelty and breakthrough; TRL 5 evidence; IP and FTO status) · 2. Market (market opportunity; go-to-market; "where relevant, addressable demand across civilian and defence end-users") · 3. Team, financial needs, implementation (team and gaps incl. gender; investor traction, timing and size of the next round, why EIC funding). Annexes: video, pitch deck (max 10 pages), NCP consent. Times New Roman 11 pt minimum, A4, 15 mm margins. Generative-AI use must be disclosed.
+- **Full proposal Part B** (V2.1, 9 July 2026, max 20 pages including cover): topic choice (Open or one of five Challenges) and executive summary (half a page); 1. Technology (1.1 novelty, 1.2 TRL, 1.3 IP strategy); 2. Market (2.1 market opportunity incl. civilian and defence end-users where relevant, 2.2 business and revenue model, 2.3 broader impact, 2.4 Challenge alignment, 2.5 STEP impact); 3. Team, financial needs, implementation (3.1 team table and governance with % fully diluted, 3.2 risk level of the investment and leverage effect, 3.3 risk management incl. standards and future regulation); CV links.
+- **Full-proposal annexes** (zip of 9 July 2026): pitch deck (no slide limit; 10 minutes at interview), video, detailed lump-sum budget table (Excel; blank for equity-only), implementation plan (10 pages; blank for equity-only), financial plan and equity needed (Excel), FTO, Letters of Intent (guidance template: signed, dated, specific commitment), ownership and control declaration (critical raw materials grant-only only).
+- **Part A** (version 2.0, 10 November 2025): general information, declarations (including compliance with Regulation (EU) 2021/821 on dual-use items where relevant), participants, budget, ethics and security, other questions (funding type, gender of CEO/CTO/CSO, consents).
 
-- Single SME (per EU recommendation 2003/361/EC: <250 staff, ≤EUR 50M turnover OR ≤EUR 43M balance sheet)
-- Start-up / spin-off
-- Natural person(s) intending to establish an SME or mid-cap (must register the legal entity before signing)
-- Small mid-cap (up to 499 employees) — **equity-only track**
-- One concurrent proposal per applicant; subsequent applications allowed after results of the prior submission.
-
-## What's specifically NOT eligible
-
-- Consortia (Accelerator is single-applicant by design)
-- Large enterprises (>499 employees)
-- Activities below TRL 5 (those go to Pathfinder or Transition)
-- Activities already at TRL 9 + scale-up needing >EUR 10M equity → use STEP Scale Up instead
-
-## Resubmission rules
-
-After receiving a "no-go" (Step 1 or Step 2), an applicant may resubmit. No formal "3-strikes-out" cooling-off period is published in the 2026 Work Programme, but the EIC reserves the right to flag repeated low-quality resubmissions during eligibility check. Best practice: address evaluator feedback substantively before resubmitting.
-
-## Documents to prepare (canonical template list with section structure)
-
-The official Submission Service forms are downloaded from the Funding & Tenders Portal under the specific call topic page. The author/coordinator must have a registered EU Login account, a PIC (Participant Identification Code) for the legal entity, and a designated LEAR (Legal Entity Appointed Representative).
-
-### Stage 1 — Short Proposal templates (canonical EU sources)
-
-**Part A — Administrative Application Form** (auto-generated by the Submission System, 9 pages, version FSTSB v1.00). Sections:
-- **Section 1 — General information**: Topic, Type of Action, Type of MGA, Acronym, Proposal title (max 200 chars, no `< > " &`), Duration in months, Fixed keyword, Free keywords, Abstract (max 2000 chars), prior-submission declaration, **9 declarations** (consent, completeness, eligibility, Portal T&Cs, ethics compliance per ALLEA European Code of Conduct, civil-only focus + Regulation 428/2009 dual-use, ban on human cloning / embryonic modification / embryo destruction, third-country activities allowed in ≥1 MS).
-- **Section 2 — Participants**: organisation data per beneficiary (PIC, legal name, short name, address, webpage, legal statuses — public/non-profit/SME/international org/HEI/RPO), **SME data** (self-declared status + self-assessment + SME validation result), Departments carrying out the work, Links with other participants (Same group / Controls / Is controlled by), Main contact person + other contacts, Researchers involved (with Frascati 2015 career stage A/B/C/D).
-- **Section 3 — Budget**: total requested EU contribution.
-- Validation pass (Show Error / Show Warning) — submission blocked on Errors.
-
-**Part B — Technical description** (uploaded as PDF, **12 pages max including cover** — Stage 1 template Version 2.0, 22 October 2025, applies to 2026 calls). Hard formatting rules: A4, 15mm margins, Times New Roman 11pt min, single line spacing. Sections:
-- **Title of the proposal** + **List of participants** (Coordinator + Affiliated entity/ies with explained link and role)
-- **1. TECHNOLOGY** (Excellence criterion) — 1.1 Novelty and breakthrough nature (deep-tech evidence + disruptive potential + empirical data), 1.2 Technology Readiness Level (TRL 5 validation evidence required), 1.3 IP Protection and strategy (patents granted/pending, trade secrets, **FTO status**)
-- **2. MARKET** (Impact criterion) — 2.1 Market opportunity (TAM, realistic share target, GTM strategy, customer value proposition, partnerships)
-- **3. TEAM, FINANCIAL NEEDS, IMPLEMENTATION** (Level of Risk / Implementation / Need for Union support) — 3.1 Team capability (skills, governance, **gender balance**, gap-filling plan), 3.2 Risk level of investment and leverage effect (investor traction, future round size + timing, justification of EIC funding)
-- **Annexes (mandatory)**: Video pitch (3 min, up to 3 team members); Pitch deck (max 10 slides, PDF); Consent for data sharing with NCP (template provided).
-
-Stage 1 guidance includes a **mandatory disclosure block on use of generative AI tools** in proposal preparation (the applicant must verify AI-generated content, cite sources, avoid plagiarism, acknowledge AI limitations).
-
-### Stage 2 — Full Proposal templates (canonical EU sources)
-
-**Part A — Administrative Application Form** (auto-generated, 21 pages, version 2.0 from 6 November 2025). Sections 1-3 as above PLUS:
-- **Researchers involved** (Frascati career-stage table)
-- Up to **5 most relevant previous projects/activities**
-- Description of significant infrastructure / major equipment
-- **Gender Equality Plan (GEP)** declaration (eligibility criterion for Public bodies + HEI + RPOs from MS/AC; required before GA signature). 5 minimum process-related GEP requirements: published+signed by top management, dedicated resources, sex/gender disaggregated data collection, training, gender-equality content (work-life balance, leadership balance, recruitment/career equality, gender in research, anti-harassment).
-- **Section 3 — Budget for the proposal** (per beneficiary: name, country, role, requested grant amount)
-- **Section 4 — Ethics and Security**: ethics issues table covering 1) Human Embryonic Stem Cells / embryos, 2) Humans (with CTR 536/2014 clinical study check), 3) Human cells / tissues (incl. biobank source), 4) Personal data (incl. special categories Art. 9 GDPR, profiling, EU-to-non-EU transfers, criminal-convictions data), 5) Animals (vertebrates, NHP, GMO, cloned farm animals, endangered species), 6) Non-EU countries.
-- **Section 5 — Other questions** including two-stage call consistency declaration ("are there substantial differences vs Stage 1?" — partnership / budget / approach diffs must be listed with reasons), modular extension for clinical-studies annex (MDR 2017/745 + IVDR 2017/746 + CTR 536/2014 covered), and **EIC Accelerator-specific block**: Funding type [Grant Only / Equity Only / Blended Finance], gender of CEO / CSO / CTO, **Consent 1** (share data with EIC Fund + EIB for investment management), **Consent 2** (share with NCP + Enterprise Europe Network + Seal of Excellence supporting funders).
-
-**Part B — Technical description** (uploaded as PDF, page limit mandatory per 2025 update). Sections:
-- Cover page with **EIC topic selection**: 1) EIC Accelerator Open OR 2) EIC Accelerator Challenges 2026 with 5 challenges:
-  - 2.1 Advanced Materials for Renewable Energy and Energy Storage System
-  - 2.2 Alternative Concepts and Key Enabling Technologies for Fusion Power Plants
-  - 2.3 Biotech for Regenerating Agricultural Soils
-  - 2.4 Boosting the European Critical Raw Materials value chain
-  - 2.5 Deep Tech for Climate Adaptation
-- **Executive Summary** (max ½ page)
-- **1. TECHNOLOGY** — 1.1 Novelty + breakthrough, 1.2 TRL evidence, 1.3 IP strategy (with FTO note up to 2 pages if no FTO done)
-- **2. MARKET** — 2.1 Market opportunity, 2.2 Business + revenue model + growth strategy + financial projections, 2.3 Broader impact (European tech leadership + dependency reduction + environmental/social), 2.4 Challenge alignment (Challenges only), 2.5 **STEP Impact** (Challenges within STEP scope only — economic potential OR strategic-dependency reduction in STEP areas)
-- **3. TEAM, FINANCIAL NEEDS, IMPLEMENTATION** — 3.1 Team capability (with team table: name, gender, founder Y/N, position, key competences, % commitment 1-100%; governance description: name, type founder/investor/other, % fully diluted), 3.2 Risk level + leverage effect (blended/equity: catalyse other public+private investment within 6-24 months; grant-only: demonstrate own scale-up resources), 3.3 Risk management (technological / market / financial / regulatory + mitigation + standards/regulation compliance)
-- **CVs** — link to online CVs for key team members (LinkedIn or company website)
-
-**Stage 2 mandatory annexes** (separate uploads):
-- **Pitch deck** (no template, no slide limit — but oral presentation cap is 10 minutes at face-to-face interview)
-- **Video pitch** (up to 3 minutes; may reuse Stage 1 video)
-- **Lump Sum** template (mandatory for grant-only + blended; blank file for equity-only)
-- **Implementation plan** (max 10 pages, template with work packages + deliverables + milestones + resources + timing; mandatory for grant + blended; blank for equity-only)
-- **Financial plan and equity needed** (template provided)
-- **Freedom-to-Operate (FTO) analysis** (or a 2-page max note explaining absence; simple statement if FTO not relevant e.g. software)
-- **Letters of intent (LoIs)** — guidance template on F&T Portal
-- **Ownership control declaration** — only for Challenge 2.4 (Critical Raw Materials) and Open proposals in the same scope requesting GRANT ONLY
-
-### Stage 3 (Jury Interview)
-- Refreshed pitch deck (same as Stage 2 annex; oral pitch = 10 min)
-- Jury Q&A
-
-### Stage 4 (Grant + Equity)
-- **Grant track**: Horizon Europe Model Grant Agreement (MGA) + annexes — Annex 1 Description of Action, Annex 2 Estimated Budget, Annex 3 Accession Forms, Annex 5 Specific Ethics + Security Rules
-- **Equity track (EIC Fund DD)**: corporate documents, full cap table + dilution model, audited financials, shareholders' agreement, term sheet response, ESG declaration (SFDR Article 8), dual-use screening if defence-adjacent
-
-### Canonical EU template URLs
-
-- Stage 1 short proposal Part B template: `https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator-short_en.pdf`
-- Stage 2 full proposal Part B template: `https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator_en.pdf`
-- Annotated commentary (NCP Access2EIC): `https://horizoneuropencpportal.eu/sites/default/files/2026-03/access2eic_eic-accelerator-annotated-template_full-proposal_2026.pdf`
-
-## Communication after submission
-
-- Applicants check status via the Funding & Tenders Portal "My Proposals" area.
-- Information letter (above/below threshold) sent via the portal after each evaluation step.
-- Negative result → applicant may request a redress review on procedural grounds within 30 calendar days.
+## Points where the sources differ (say so if asked)
+- Interview place: the Guide (November 2025) says face to face in Brussels with travel not reimbursed; the June 2026 Work Programme says interviews may be physical or virtual. The invitation letter decides.
+- Coaching: the Work Programme calls EIC coaching "mandatory" in one place and optional ("up to the applicants") in others; for applicants it is offered, not imposed.
+- Portal end date (17 December 2026) is the last day for 2026 short proposals; full proposals follow the batch dates.
 
 ## Useful URLs
-
 - Instrument page: https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en
-- 2026 call: https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-accelerator-2026_en
-- F&T Portal topic page (use Brubru Tenderator EIC sub-chip "Accelerator")
-- EIC Fund (for equity track): see `eic_fund_equity_investment.md`
+- 2026 call page: https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-accelerator-2026_en
+- Work Programme 2026: https://eic.ec.europa.eu/eic-2026-work-programme_en
+- Short proposal template: https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator-short_en.pdf
+- Full proposal template: https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator_en.pdf
+- Seals of Excellence: https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator/seals-excellence_en
+- EIC Fund (equity): see `eic_fund_equity_investment`
 
 ## How Brubru helps Accelerator applicants
-
-Tenderator surfaces:
-- Open Accelerator cut-offs with countdown timer
-- The 6 batching cut-off dates as a saved view
-- Sample past beneficiaries (drawer "EIC Fund portfolio — concrete examples", filtered to step-scale / accelerator buckets)
-Hand-offs:
-- EU Law Comply: AI Act / GDPR / MDR / DORA / NIS2 audit for the applicant's stack
-- Chat: "Which 2026 cut-off should I aim for given my freedom-to-operate timing?"
-- MEUB Documents → future Tender Docs: store the Part B, FTO, pitch deck as versioned drafts with AI co-writer
+- Tenderator lists the open Accelerator topic with its portal dates and the EIC Fund portfolio as past examples.
+- Tender Docs: short-proposal and full-proposal templates with section prompts, the AI co-writer and the generative-AI disclosure.
+- Hand-offs: EU Law Comply (AI Act, GDPR, medical devices, product safety) and Chat ("Which 2026 batch should I aim for?").
