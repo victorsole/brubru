@@ -30,8 +30,10 @@ from __future__ import annotations
 
 import json
 import logging
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
@@ -148,3 +150,76 @@ def load_all(lang: Optional[str] = None) -> List[Dict[str, Any]]:
 def clear_cache() -> None:
     """Drop the in-process cache. Used by tests."""
     _CACHE.clear()
+
+
+# ---------------------------------------------------------------------------
+# The next cut-off a template's applicant can still aim for.
+#
+# Why (8 Oct 2026): three places showed `cut_offs_2026_cet[0]` as the "next"
+# deadline, so in October the EIC Accelerator templates offered 7 January and
+# 4 March 2026 and STEP offered 11 February 2026; a new draft was pre-filled with
+# a date already past and its card counted down to "overdue". The Accelerator
+# short proposal also carried the FULL-proposal batches, although short
+# proposals are batched on the first Tuesday of every month at 17:00 Brussels
+# time (EIC Work Programme 2026, Section V).
+# ---------------------------------------------------------------------------
+
+_BRUSSELS = ZoneInfo("Europe/Brussels")
+
+
+def _first_tuesday(year: int, month: int) -> date:
+    first = date(year, month, 1)
+    return first + timedelta(days=(1 - first.weekday()) % 7)
+
+
+def _parse_iso(value: str) -> Optional[datetime]:
+    """An ISO date or datetime as an aware datetime; a bare date means 17:00 Brussels."""
+    try:
+        if len(value) == 10:
+            d = date.fromisoformat(value)
+            return datetime.combine(d, time(17, 0), tzinfo=_BRUSSELS)
+        parsed = datetime.fromisoformat(value)
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=_BRUSSELS)
+    except (TypeError, ValueError):
+        return None
+
+
+def next_deadline(template: Dict[str, Any], now: Optional[datetime] = None) -> Optional[str]:
+    """The next cut-off still ahead of `now`, as the template states it.
+
+    Order: a monthly rule (`cutoff_rule: first_tuesday_monthly`, bounded by
+    `submission_end_date`), then the earliest future entry of `cut_offs_2026_cet`,
+    then the earliest future single deadline. A call whose dates are all past
+    returns its last known date, so a closed call still shows when it closed;
+    a past date is never returned while a future one exists.
+    """
+    now = (now or datetime.now(_BRUSSELS)).astimezone(_BRUSSELS)
+
+    if template.get("cutoff_rule") == "first_tuesday_monthly":
+        hh, mm = (int(x) for x in str(template.get("cutoff_time_brussels") or "17:00").split(":"))
+        end_raw = template.get("submission_end_date")
+        end = _parse_iso(end_raw) if end_raw else None
+        year, month = now.year, now.month
+        for _ in range(3):
+            cut = datetime.combine(_first_tuesday(year, month), time(hh, mm), tzinfo=_BRUSSELS)
+            if cut > now:
+                if end is not None and cut.date() > end.date():
+                    return end_raw
+                return cut.isoformat()
+            year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+        return end_raw
+
+    listed = [s for s in (template.get("cut_offs_2026_cet") or []) if isinstance(s, str)]
+    parsed = [(s, _parse_iso(s)) for s in listed]
+    future = sorted((p, s) for s, p in parsed if p is not None and p > now)
+    if future:
+        return future[0][1]
+
+    singles = [template.get(k) for k in ("deadline_2026_cet", "deadline_2027_cet", "deadline_2027_indicative_cet")]
+    singles = [s for s in singles if isinstance(s, str)]
+    future_singles = sorted((p, s) for s in singles for p in [_parse_iso(s)] if p is not None and p > now)
+    if future_singles:
+        return future_singles[0][1]
+
+    past = sorted((p, s) for s in listed + singles for p in [_parse_iso(s)] if p is not None)
+    return past[-1][1] if past else None

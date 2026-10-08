@@ -35,6 +35,7 @@ from pydantic import BaseModel, Field
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from services.funding_template_loader import next_deadline
 
 logger = logging.getLogger(__name__)
 
@@ -114,11 +115,19 @@ def _load_all() -> List[Dict[str, Any]]:
 
 
 def _representative_deadline(t: Dict[str, Any]) -> Optional[str]:
+    """The next cut-off still open (see services.funding_template_loader.next_deadline)."""
+    return next_deadline(t)
+
+
+def _first_listed_deadline(t: Dict[str, Any]) -> Optional[str]:
+    """The template's first stated date: a stable document_date that does not move day by day."""
     return (
         t.get("deadline_2026_cet")
         or (t.get("cut_offs_2026_cet") or [None])[0]
         or t.get("deadline_2027_indicative_cet")
         or t.get("deadline_2027_cet")
+        # A monthly-batch template (EIC Accelerator short proposal) states only its end date.
+        or t.get("submission_end_date")
     )
 
 
@@ -213,7 +222,7 @@ def _to_summary(t: Dict[str, Any]) -> TenderTemplateItem:
         public_url=t.get("official_template_url") or _BRUBRU_TEMPLATE_URL.format(tid=t["id"]),
         body_txt=None,
         body_html=None,
-        document_date=_parse_deadline_date(_representative_deadline(t)),
+        document_date=_parse_deadline_date(_first_listed_deadline(t)),
         creation_date=datetime.utcnow(),
     )
 
@@ -250,7 +259,7 @@ def _to_full(t: Dict[str, Any]) -> TenderTemplateItem:
         public_url=t.get("official_template_url") or _BRUBRU_TEMPLATE_URL.format(tid=t["id"]),
         body_txt=body_txt,
         body_html=body_html,
-        document_date=_parse_deadline_date(_representative_deadline(t)),
+        document_date=_parse_deadline_date(_first_listed_deadline(t)),
         creation_date=datetime.utcnow(),
     )
 

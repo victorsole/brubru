@@ -26,6 +26,7 @@ from services.funding_template_loader import (
     SUPPORTED_LANGS,
     load_all,
     load_template,
+    next_deadline,
     normalise_lang,
 )
 
@@ -68,13 +69,8 @@ async def list_templates(
         ]
     summaries = []
     for t in all_templates:
-        # Pick a representative deadline from the template if present
-        deadline = (
-            t.get("deadline_2026_cet")
-            or (t.get("cut_offs_2026_cet") or [None])[0]
-            or t.get("deadline_2027_indicative_cet")
-            or t.get("deadline_2027_cet")
-        )
+        # The next cut-off still open (never a past date while a future one exists).
+        deadline = next_deadline(t)
         summaries.append({
             "id": t["id"],
             "name": t["name"],
@@ -139,4 +135,5 @@ async def get_template(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Funding template '{template_id}' not found",
         )
-    return document
+    # The cached document is shared: return a copy carrying today's next cut-off.
+    return {**document, "next_deadline": next_deadline(document)}

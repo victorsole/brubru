@@ -8,14 +8,10 @@
   "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator-short_en.pdf",
   "kb_guide": "eic_accelerator_process",
   "topic_id_default": "HORIZON-EIC-2026-ACCELERATOR-01",
-  "cut_offs_2026_cet": [
-    "2026-01-07T17:00:00+01:00",
-    "2026-03-04T17:00:00+01:00",
-    "2026-05-06T17:00:00+02:00",
-    "2026-07-08T17:00:00+02:00",
-    "2026-09-02T17:00:00+02:00",
-    "2026-11-04T17:00:00+01:00"
-  ],
+  "cutoff_rule": "first_tuesday_monthly",
+  "cutoff_time_brussels": "17:00",
+  "submission_end_date": "2026-12-17",
+  "cutoff_note": "Short proposals may be submitted at any time and are batched for evaluation on the first Tuesday of every month at 17:00 Brussels time (EIC Work Programme 2026, Section V). The six 2026 batch dates apply to FULL proposals (stage 2). 17 December 2026 is the end date of the 2026 short-proposal topic on the Funding & Tenders Portal.",
   "documents": [
     {
       "kind": "tender_application_short",

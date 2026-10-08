@@ -27,6 +27,7 @@ interface TemplateDetail {
  topic_id_default?: string;
  funding_mode_default?: string;
  cut_offs_2026_cet?: string[];
+ next_deadline?: string | null;
  deadline_2026_cet?: string;
  deadline_2027_cet?: string;
  deadline_2027_indicative_cet?: string;
@@ -148,7 +149,8 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  // Pre-fill defaults
  setTopicId(d.topic_id_default || '');
  setFundingMode(d.funding_mode_default || '');
- const dl = d.deadline_2026_cet || d.cut_offs_2026_cet?.[0] || d.deadline_2027_cet || d.deadline_2027_indicative_cet || '';
+ // The server computes the next cut-off still open; the raw fields are a fallback only.
+ const dl = d.next_deadline || d.deadline_2026_cet || d.deadline_2027_cet || d.deadline_2027_indicative_cet || '';
  setDeadlineIso(dl || '');
  // Seed a sensible default title
  setTitle((prev) => prev || `My application ${d.name}`);
