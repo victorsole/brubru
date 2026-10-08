@@ -155,6 +155,15 @@ class TestCouncil:
         with pytest.raises(bns.BespokeFetchError, match="HTTP 403"):
             bns.scrape_bespoke(self.cfg, fetcher)
 
+    def test_a_browser_error_is_named_not_reported_as_an_empty_body(self, monkeypatch):
+        # OMBUDSMAN and EDPS failed every run from 7 Oct 2026 as "empty response body",
+        # with the fetcher's own exception discarded.
+        monkeypatch.setattr(bns, "_fetch_rss", lambda cfg: [])
+        fetcher = SimpleNamespace(fetch=lambda *a, **k: SimpleNamespace(
+            html=None, nav_status=None, error="TimeoutError: Page.goto: Timeout 45000ms exceeded."))
+        with pytest.raises(bns.BespokeFetchError, match=r"empty response body \(TimeoutError: Page.goto"):
+            bns.scrape_bespoke(self.cfg, fetcher)
+
     def test_error_status_with_a_real_listing_is_kept(self, monkeypatch):
         # ECHA: first response 403, challenge clears, listing renders.
         monkeypatch.setattr(bns, "_fetch_rss", lambda cfg: [])

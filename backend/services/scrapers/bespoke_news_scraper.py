@@ -529,7 +529,11 @@ def scrape_bespoke(cfg: Dict, fetcher) -> List[Dict]:
         raise BespokeFetchError(f"{cfg['institution']}: {type(e).__name__}: {e}") from e
     html = res.html or ""
     if not html:
-        raise BespokeFetchError(f"{cfg['institution']}: empty response body")
+        # The fetcher catches the browser's exception and returns it in `error`. Saying
+        # only "empty response body" hid it: OMBUDSMAN and EDPS failed every run from
+        # 7 Oct 2026 with nothing in the log to say why (8 Oct 2026).
+        why = getattr(res, "error", None) or "no HTML and no error"
+        raise BespokeFetchError(f"{cfg['institution']}: empty response body ({why[:300]})")
     items = parse_bespoke(html, cfg)
     # A WAF answers with a real, non-empty HTML page and an HTTP error status.
     # consilium.europa.eu returns 403 to a non-browser client (measured 15 Sep 2026),
