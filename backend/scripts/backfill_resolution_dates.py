@@ -48,7 +48,10 @@ SELECT r.id,
        r.adoption_date                       AS current_date_,
        r.lead_committee                      AS current_lead,
        r.rapporteur                          AS current_rapporteur,
+       r.status                              AS current_status,
        t.adoption_date::date                 AS ta_date,
+       (t.id IS NOT NULL)                    AS has_adopted_text,
+       c.current_status::text                AS carriage_status,
        c.lead_committee                      AS carriage_lead,
        c.rapporteur_name                     AS carriage_rapporteur,
        c.oeil_roles_parsed_at                AS roles_parsed,
@@ -57,7 +60,10 @@ SELECT r.id,
          WHERE e->>'event_type' ILIKE '%Decision by Parliament%'
            AND (e->>'date') ~ '^\\d{4}-\\d{2}-\\d{2}$')  AS oeil_date
 FROM ep_resolutions r
+-- The adopted text only (P10_TA...). texts_adopted also holds committee REPORTS
+-- (A10/...) under the same procedure_ref; joining them processed 7 resolutions twice.
 LEFT JOIN texts_adopted t          ON t.procedure_ref      = r.procedure_ref
+                                  AND t.ta_reference ~ '^P[0-9]+_TA'
 LEFT JOIN legislative_carriages c  ON c.oeil_procedure_ref = r.procedure_ref
 ORDER BY r.procedure_ref
 """
@@ -72,12 +78,28 @@ UPDATE ep_resolutions SET
     adoption_date  = COALESCE(CAST(:adoption AS date), adoption_date),
     lead_committee = COALESCE(:lead, lead_committee),
     rapporteur     = COALESCE(:rapporteur, rapporteur),
+    status         = :status,
     updated_at     = now()
 WHERE id = :id
   AND (adoption_date  IS DISTINCT FROM COALESCE(CAST(:adoption AS date), adoption_date)
     OR lead_committee IS DISTINCT FROM COALESCE(:lead, lead_committee)
-    OR rapporteur     IS DISTINCT FROM COALESCE(:rapporteur, rapporteur))
+    OR rapporteur     IS DISTINCT FROM COALESCE(:rapporteur, rapporteur)
+    OR status         IS DISTINCT FROM :status)
 """
+
+
+def _status(r, chosen) -> str:
+    """adopted | pending | closed_without_resolution. This job owns the column.
+
+    A row with no adoption date is NOT necessarily pending: 25 of 35 (8 Oct 2026)
+    were RSP debates or objections that OEIL records as completed ("End of
+    procedure in Parliament") with no text adopted. Those never will be adopted.
+    """
+    if chosen or r.current_date_ or r.has_adopted_text:
+        return "adopted"
+    if (r.carriage_status or "").upper() == "COMPLETED":
+        return "closed_without_resolution"
+    return "pending"
 
 
 def _engine():
@@ -99,6 +121,8 @@ def main() -> int:
         total = len(rows)
 
         dated = disagreed = still_null = 0
+        statuses: dict = {}
+        status_changed = 0
         lead_filled = rapp_filled = 0
         conflicts, unresolvable = [], []
 
@@ -131,12 +155,18 @@ def main() -> int:
             if rapporteur:
                 rapp_filled += 1
 
+            status = _status(r, chosen)
+            statuses[status] = statuses.get(status, 0) + 1
+            if status != r.current_status:
+                status_changed += 1
+
             if args.apply:
                 conn.execute(text(_UPDATE), {
                     "id": r.id,
                     "adoption": chosen,
                     "lead": lead,
                     "rapporteur": rapporteur,
+                    "status": status,
                 })
 
         if args.apply:
@@ -145,6 +175,7 @@ def main() -> int:
         print(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] {total} resolution(s): "
               f"dated={dated} lead_committee_filled={lead_filled} "
               f"rapporteur_filled={rapp_filled} still_undated={still_null}")
+        print(f"[INFO] status: {statuses} ({status_changed} changed)")
         if conflicts:
             print(f"[WARN] {disagreed} resolution(s) where the two EP surfaces "
                   f"give DIFFERENT adoption dates:")
@@ -158,8 +189,13 @@ def main() -> int:
         if args.apply:
             got = conn.execute(text(
                 "SELECT count(*) n, count(adoption_date) d, min(adoption_date) lo, "
-                "max(adoption_date) hi FROM ep_resolutions")).fetchone()
-            print(f"[VERIFY] rows={got.n} dated={got.d} range={got.lo}..{got.hi}")
+                "max(adoption_date) hi, count(*) FILTER (WHERE status IS NULL) nos "
+                "FROM ep_resolutions")).fetchone()
+            print(f"[VERIFY] rows={got.n} dated={got.d} range={got.lo}..{got.hi} "
+                  f"status_null={got.nos}")
+            if got.nos:
+                print("[ERROR] rows with no status after the run")
+                return 1
     return 0
 
 

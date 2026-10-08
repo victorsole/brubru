@@ -81,12 +81,12 @@ INSERT INTO ep_resolutions
     (id, procedure_ref, title, resolution_type, adoption_date, vote_date,
      lead_committee, rapporteur, summary, policy_areas,
      vote_for, vote_against, vote_abstention, vote_total,
-     oeil_url, text_url, has_commission_followup, created_at, updated_at)
+     oeil_url, text_url, has_commission_followup, status, created_at, updated_at)
 VALUES
     (gen_random_uuid(), :ref, :title, CAST(:rtype AS resolution_type_enum), :adopted, :adopted,
      :lead, :rapporteur, :summary, :policy_areas,
      :vfor, :vagainst, :vabst, :vtotal,
-     :oeil, :text_url, false, now(), now())
+     :oeil, :text_url, false, 'adopted', now(), now())
 ON CONFLICT (procedure_ref) DO UPDATE SET
     title          = EXCLUDED.title,
     adoption_date  = COALESCE(ep_resolutions.adoption_date, EXCLUDED.adoption_date),

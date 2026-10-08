@@ -9,6 +9,7 @@ Backed by the ep_resolutions table.
 """
 
 import logging
+import re
 from datetime import date, datetime
 from typing import Optional
 
@@ -32,12 +33,18 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/resolutions", tags=["v1-resolutions"])
 
+_STATUSES = ("adopted", "pending", "closed_without_resolution")
+
 
 class ResolutionItem(BaseModel):
     id: str
     procedure_ref: str
     title: str
     resolution_type: Optional[str] = None
+    status: Optional[str] = Field(None, description=(
+        "adopted | pending | closed_without_resolution. A null adoption_date is either "
+        "pending (tabled, in committee or close to adoption) or closed_without_resolution "
+        "(the debate or objection ended in Parliament with no text adopted; it never will be)."))
     adoption_date: Optional[date] = None
     vote_date: Optional[datetime] = None
     lead_committee: Optional[str] = None
@@ -93,7 +100,7 @@ def _compose_resolution_body(r) -> tuple:
     return body_txt, body_html
 
 
-def _build_key_events(r: EPResolution) -> list:
+def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None) -> list:
     """Synthesise a key-events list from the resolution row.
 
     The resolutions table doesn't carry a structured timeline; the closest
@@ -125,24 +132,27 @@ def _build_key_events(r: EPResolution) -> list:
             "event_type": "commission_followup",
             "description": "Commission has followed up on this resolution (see /api/v1/commission-register-documents)",
         })
-    # If we have nothing at all from the structured columns, fall back to the
-    # last_updated timestamp as a single "tracked" event. Better to surface a
-    # minimal timeline than to return an empty array — partners use the
-    # presence of any event as a signal that the row exists in OEIL.
-    if not events and r.updated_at:
-        events.append({
-            "date": r.updated_at.date().isoformat() if hasattr(r.updated_at, "date") else str(r.updated_at),
-            "event_type": "tracked",
-            "description": (
-                "Tracked by Brubru — vote and adoption dates not yet ingested from OEIL. "
-                "See /api/v1/procedures/{procedure_ref} for the full timeline."
-            ),
-        })
+    # Nothing from the structured columns (no vote, no adoption): serve the
+    # procedure's own OEIL key events, dated by the Parliament. Until 8 Oct 2026
+    # this emitted a "tracked" event dated with Brubru's write time, which a
+    # client reads as something the EP did on that day. No OEIL events either
+    # means an empty list: an honest absence, not an invented entry.
+    if not events:
+        for e in oeil_events or []:
+            label = (e.get("event_type") or "").strip() if isinstance(e, dict) else ""
+            if not label or not e.get("date"):
+                continue
+            events.append({
+                "date": str(e["date"])[:10],
+                "event_type": re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_"),
+                "description": label,
+            })
     return events
 
 
 def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
-                 oeil_body_html: Optional[str] = None) -> ResolutionItem:
+                 oeil_body_html: Optional[str] = None,
+                 oeil_events: Optional[list] = None) -> ResolutionItem:
     body_txt, body_html = _compose_resolution_body(r)
     # Prefer the cached OEIL body (from migration 070 backfill) when present —
     # it carries the full procedure-file content (~2KB), vs the row composition
@@ -162,6 +172,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         procedure_ref=r.procedure_ref,
         title=r.title,
         resolution_type=r.resolution_type.value if hasattr(r.resolution_type, "value") else (str(r.resolution_type) if r.resolution_type else None),
+        status=r.status,
         adoption_date=r.adoption_date,
         vote_date=r.vote_date,
         lead_committee=r.lead_committee,
@@ -173,7 +184,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         vote_against=int(r.vote_against or 0),
         vote_abstention=int(r.vote_abstention or 0),
         vote_total=int(r.vote_total or 0),
-        key_events=_build_key_events(r),
+        key_events=_build_key_events(r, oeil_events),
         oeil_url=r.oeil_url,
         text_url=r.text_url,
         has_commission_followup=bool(r.has_commission_followup),
@@ -205,6 +216,7 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `rapporteur` — name substring.
 - `procedure_ref` — OEIL reference.
 - `has_commission_followup` — boolean.
+- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
 - `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -216,7 +228,7 @@ GET /api/v1/resolutions?q=Ukraine&resolution_type=RSP
 ```
 
 **You get back**
-A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. Resolutions are adopted at EP plenary sittings; the post-plenary sync catches them inside hours.""",
@@ -229,6 +241,7 @@ async def list_resolutions(
     rapporteur: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     has_commission_followup: Optional[bool] = Query(None),
+    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution"),
     published_from: Optional[date] = Query(None, description="adoption_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),
@@ -267,6 +280,13 @@ async def list_resolutions(
         filters.append(EPResolution.procedure_ref == procedure_ref)
     if has_commission_followup is not None:
         filters.append(EPResolution.has_commission_followup == has_commission_followup)
+    if status:
+        if status not in _STATUSES:
+            raise HTTPException(status_code=422, detail={
+                "error": f"status must be one of {', '.join(_STATUSES)}; got {status!r}.",
+                "reason_code": "invalid_param",
+            })
+        filters.append(EPResolution.status == status)
     if published_from:
         filters.append(EPResolution.adoption_date >= published_from)
     if published_to:
@@ -294,6 +314,7 @@ async def list_resolutions(
     # already do for /committees/{code}/work-items.
     refs = [r.procedure_ref for r in rows if r.procedure_ref]
     oeil_bodies: dict = {}
+    oeil_events: dict = {}
     adopted_bodies: dict = {}
     if refs:
         oeil_rows = db.execute(_sql_text("""
@@ -303,6 +324,10 @@ async def list_resolutions(
               AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
         """), {"refs": refs}).fetchall()
         oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
+        oeil_events = {row[0]: row[1] for row in db.execute(_sql_text("""
+            SELECT oeil_procedure_ref, oeil_key_events FROM legislative_carriages
+            WHERE oeil_procedure_ref = ANY(:refs) AND oeil_key_events IS NOT NULL
+        """), {"refs": refs}).fetchall()}
 
         # The resolution's OWN adopted text, which is what `body_txt` should be.
         # Until 27 Aug 2026 this surface served the OEIL PROCEDURE PAGE as the
@@ -341,7 +366,8 @@ async def list_resolutions(
                     ) + "</article>")
         else:
             body = oeil_bodies.get(r.procedure_ref) or (None, None)
-        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1]))
+        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
+                                 oeil_events=oeil_events.get(r.procedure_ref)))
 
     # Declare the corpus, and say what a NULL adoption date means (D3).
     #
@@ -356,6 +382,8 @@ async def list_resolutions(
         func.count(EPResolution.id), func.count(EPResolution.adoption_date),
     ).one()
     undated = (cov[2] or 0) - (cov[3] or 0)
+    by_status = dict(db.query(EPResolution.status, func.count(EPResolution.id))
+                     .group_by(EPResolution.status).all())
 
     return build_envelope(
         data,
@@ -364,11 +392,14 @@ async def list_resolutions(
         updated_from=updated_from, updated_to=updated_to,
         coverage_from=cov[0], coverage_to=cov[1],
         coverage_note=(
-            f"{cov[3]} of {cov[2]} resolutions carry an adoption date; the other "
-            f"{undated} have none because the procedure has not been adopted yet "
-            "(still tabled or close to adoption). A null adoption_date means NOT "
-            "YET ADOPTED, not 'date unknown', and a date-filtered query therefore "
-            "excludes pending resolutions by design. "
+            f"{cov[3]} of {cov[2]} resolutions carry an adoption date. The other "
+            f"{undated} have not been adopted, for one of two reasons given in each "
+            f"item's `status`: {by_status.get('pending', 0)} are `pending` (tabled, in "
+            f"committee or close to adoption) and {by_status.get('closed_without_resolution', 0)} "
+            "are `closed_without_resolution` (the debate or objection ended in "
+            "Parliament with no text adopted, so they never will be). A null "
+            "adoption_date is therefore NOT 'date unknown', and a date-filtered query "
+            "excludes both by design; filter with `status=` instead. "
             "SCOPE: this surface holds own-initiative and topical resolutions "
             "(INI / RSP / INL). The Parliament's positions on LEGISLATIVE "
             "procedures (COD, NLE, CNS, APP) are a different instrument and live "
@@ -415,12 +446,13 @@ async def get_resolution_detail(
             "id": procedure_ref,
         })
     # Reuse the same cached-OEIL-body enrichment as the list endpoint.
-    oeil_body_txt = oeil_body_html = None
+    oeil_body_txt = oeil_body_html = oeil_events = None
     if r.procedure_ref:
         row = db.execute(_sql_text("""
-            SELECT oeil_text_body, oeil_html_body FROM legislative_carriages
+            SELECT oeil_text_body, oeil_html_body, oeil_key_events FROM legislative_carriages
             WHERE oeil_procedure_ref = :ref LIMIT 1
         """), {"ref": r.procedure_ref}).fetchone()
         if row:
-            oeil_body_txt, oeil_body_html = row[0], row[1]
-    return _row_to_item(r, oeil_body_txt=oeil_body_txt, oeil_body_html=oeil_body_html)
+            oeil_body_txt, oeil_body_html, oeil_events = row[0], row[1], row[2]
+    return _row_to_item(r, oeil_body_txt=oeil_body_txt, oeil_body_html=oeil_body_html,
+                        oeil_events=oeil_events)

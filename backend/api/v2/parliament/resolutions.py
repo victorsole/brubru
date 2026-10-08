@@ -44,6 +44,7 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `rapporteur` — name substring.
 - `procedure_ref` — OEIL reference.
 - `has_commission_followup` — boolean.
+- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
 - `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -55,7 +56,7 @@ GET /api/v2/parliament/resolutions?q=Ukraine&resolution_type=RSP
 ```
 
 **You get back**
-A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. Resolutions are adopted at EP plenary sittings; the post-plenary sync catches them inside hours.""",
@@ -68,6 +69,7 @@ async def list_resolutions(
     rapporteur: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     has_commission_followup: Optional[bool] = Query(None),
+    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution"),
     published_from: Optional[date] = Query(None, description="adoption_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),
@@ -79,7 +81,7 @@ async def list_resolutions(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ResolutionItem]:
-    return await _v1.list_resolutions(request=request, q=q, resolution_type=resolution_type, lead_committee=lead_committee, rapporteur=rapporteur, procedure_ref=procedure_ref, has_commission_followup=has_commission_followup, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_resolutions(request=request, q=q, resolution_type=resolution_type, lead_committee=lead_committee, rapporteur=rapporteur, procedure_ref=procedure_ref, has_commission_followup=has_commission_followup, status=status, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

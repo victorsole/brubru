@@ -83,24 +83,69 @@ def test_dates_agree_with_the_other_ep_surface(db):
 # ---------------------------------------------------------------------------
 
 def test_undated_resolutions_are_genuinely_unadopted(db):
-    """No date was invented. Every remaining NULL must belong to a procedure that
-    has not been adopted, otherwise the backfill simply missed it."""
+    """No date was invented. Every remaining NULL is either PENDING or CLOSED
+    WITHOUT A RESOLUTION, and `status` says which.
+
+    Until 8 Oct 2026 all 35 undated rows were declared "still tabled or close to
+    adoption"; 25 were RSP debates or objections that OEIL records as completed
+    with no text adopted. This test failed then, but runs only locally."""
     rows = db.execute(text("""
-        SELECT c.current_status::text s, count(*) n
+        SELECT r.procedure_ref, r.status, c.current_status::text cs,
+               EXISTS (SELECT 1 FROM texts_adopted t WHERE t.procedure_ref = r.procedure_ref
+                         AND t.ta_reference ~ '^P[0-9]+_TA') has_text
         FROM ep_resolutions r
-        JOIN legislative_carriages c ON c.oeil_procedure_ref = r.procedure_ref
+        LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = r.procedure_ref
         WHERE r.adoption_date IS NULL
-        GROUP BY 1
     """)).fetchall()
     if not rows:
         pytest.skip("no undated resolutions left")
-    adopted_but_undated = [
-        r.s for r in rows
-        if r.s.upper() not in ("TABLED", "CLOSE_TO_ADOPTION", "IN_COMMITTEE", "PENDING")
+    wrong = [
+        (r.procedure_ref, r.status, r.cs) for r in rows
+        if r.has_text
+        or r.status not in ("pending", "closed_without_resolution")
+        or (r.status == "pending") != ((r.cs or "").upper() != "COMPLETED")
     ]
-    assert not adopted_but_undated, (
-        f"undated resolutions sit on adopted procedures: {adopted_but_undated}"
-    )
+    assert not wrong, f"undated rows with the wrong status: {wrong[:5]}"
+
+
+def test_every_resolution_has_a_status(db):
+    n = db.execute(text("SELECT count(*) FROM ep_resolutions WHERE status IS NULL")).scalar()
+    assert n == 0, f"{n} resolution(s) have no status: run scripts/backfill_resolution_dates.py --apply"
+
+
+@pytest.mark.parametrize("path", ["/api/v1/resolutions", "/api/v2/parliament/resolutions"])
+def test_the_status_filter_matches_the_table(client, db, path):
+    real = dict(db.execute(text(
+        "SELECT status, count(*) FROM ep_resolutions GROUP BY 1")).fetchall())
+    for st in ("adopted", "pending", "closed_without_resolution"):
+        body = client.get(path, params={"status": st, "limit": 100}).json()
+        assert body["total"] == real.get(st, 0), f"{path} status={st}: {body['total']} vs {real.get(st)}"
+        assert all(i["status"] == st for i in body["data"]), f"{path} status={st} leaks other rows"
+    assert client.get(path, params={"status": "nonsense"}).status_code == 422
+
+
+def test_the_note_names_both_kinds_of_undated_row(client, db):
+    note = client.get("/api/v1/resolutions?limit=1").json()["coverage_note"]
+    real = dict(db.execute(text(
+        "SELECT status, count(*) FROM ep_resolutions GROUP BY 1")).fetchall())
+    assert f"{real.get('pending', 0)} are `pending`" in note, note
+    assert f"{real.get('closed_without_resolution', 0)} are `closed_without_resolution`" in note, note
+    assert "still tabled or close to adoption" not in note, "the old, false explanation is back"
+
+
+def test_no_key_event_is_dated_with_brubrus_own_write_time(client):
+    """key_events once held a synthetic "tracked" event dated with updated_at,
+    which reads as something the Parliament did that day."""
+    items = client.get("/api/v1/resolutions", params={
+        "status": "closed_without_resolution", "limit": 100}).json()["data"]
+    assert items, "no closed rows to check"
+    tracked = [i["procedure_ref"] for i in items
+               if any(e.get("event_type") == "tracked" for e in i["key_events"])]
+    assert not tracked, f"synthetic 'tracked' events still served: {tracked[:3]}"
+    with_end = [i for i in items
+                if any(e.get("event_type") == "end_of_procedure_in_parliament" for e in i["key_events"])]
+    assert len(with_end) >= len(items) - 1, (
+        f"only {len(with_end)}/{len(items)} closed rows carry OEIL's 'End of procedure' event")
 
 
 @pytest.mark.parametrize("path", [
