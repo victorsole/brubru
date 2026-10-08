@@ -72,8 +72,12 @@ class ResolutionItem(BaseModel):
     rapporteur: Optional[str] = None
     summary: Optional[str] = None
     eurovoc_codes: Optional[list] = Field(None, description=(
-        "EuroVoc descriptors. null = not classified yet (Brubru does not hold them), "
-        "which is not the same as 'no subject'."))
+        "EuroVoc descriptor ids, as the Publications Office indexed the resolution. "
+        "null = not read yet (the text is not in the Official Journal yet)."))
+    eurovoc: Optional[list] = Field(None, description=(
+        "The same descriptors with labels: [{id, uri, label, domain}]. [] = in the OJ, "
+        "not indexed yet; null = not read yet."))
+    eurovoc_domain: Optional[str] = Field(None, description="The EuroVoc domain most descriptors belong to.")
     policy_areas: list = Field(default_factory=list)
     # The final plenary vote; null when Brubru holds no count (a show-of-hands
     # vote, or not yet ingested). Never 0 for "unknown".
@@ -280,7 +284,9 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         lead_committee=r.lead_committee,
         rapporteur=r.rapporteur,
         summary=r.summary,
-        eurovoc_codes=list(r.eurovoc_codes) if r.eurovoc_codes else None,
+        eurovoc_codes=(list(r.eurovoc_codes or []) if r.eurovoc_fetched_at else None),
+        eurovoc=(list(r.eurovoc or []) if r.eurovoc_fetched_at else None),
+        eurovoc_domain=r.eurovoc_domain,
         policy_areas=list(r.policy_areas or []),
         vote_for=r.vote_for,
         vote_against=r.vote_against,
@@ -331,7 +337,7 @@ GET /api/v1/resolutions?q=Ukraine&resolution_type=RSP
 ```
 
 **You get back**
-A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur`, `adoption_date`, `vote_date`, the final plenary vote (`vote_for` / `vote_against` / `vote_abstention` / `vote_total`, null when not counted), `has_commission_followup`, `key_events` (the plenary vote, the Commission's dated follow-ups, or OEIL's own events for a resolution not adopted), `oeil_url`, `text_url`, plus `public_url` (the adopted text's own page), `body_txt` / `body_html` (the adopted text; the OEIL procedure page when Parliament has not published it yet), `document_date`, `creation_date` and `updated_date`.
+A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur`, `adoption_date`, `vote_date`, the final plenary vote (`vote_for` / `vote_against` / `vote_abstention` / `vote_total`, null when not counted), `has_commission_followup`, `eurovoc` / `eurovoc_codes` / `eurovoc_domain` (the Publications Office's EuroVoc indexing, once the text is in the Official Journal), `key_events` (the plenary vote, the Commission's dated follow-ups, or OEIL's own events for a resolution not adopted), `oeil_url`, `text_url`, plus `public_url` (the adopted text's own page), `body_txt` / `body_html` (the adopted text; the OEIL procedure page when Parliament has not published it yet), `document_date`, `creation_date` and `updated_date`.
 
 **Data freshness**
 Refreshed about every 6 hours (warm tier) from the Parliament's own sources: texts adopted and their full text (doceo), procedure pages and events (OEIL), final roll-call votes, and the Commission's follow-ups (EP Open Data). A resolution adopted at a plenary sitting appears once Parliament publishes its text, usually within a few days.""",

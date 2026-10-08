@@ -102,6 +102,11 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("texts_adopted_celex", "Texts adopted - CELEX (Cellar)", "warm",
                "scripts/backfill_texts_adopted_celex.py", ("--apply",),
                timeout=600, stale_after_hours=48),
+    # EuroVoc for resolutions, read from Cellar once their CELEX is known (8 Oct
+    # 2026; was empty on all 353). After texts_adopted_celex on purpose.
+    SourceSpec("resolution_eurovoc", "Resolutions - EuroVoc (Cellar)", "warm",
+               "scripts/sync_resolution_eurovoc.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
     # Procedure refs for adopted texts, from the EP Open Data API (23 Sep 2026).
     # Before resolution_dates and resolutions_corpus on purpose: the corpus only
     # admits texts WITH a procedure, and 495 of 750 had none, so it reported

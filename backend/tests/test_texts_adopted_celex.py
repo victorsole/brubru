@@ -38,7 +38,7 @@ def test_only_parliament_celex_types_are_stored(db):
     bad = db.execute(text("""
         SELECT ta_reference, celex_number FROM texts_adopted
         WHERE celex_number IS NOT NULL
-          AND (celex_number !~ '^5[0-9]{4}[A-Z]{2}[0-9]{4}$' OR celex_number ~ '^5[0-9]{4}AT')
+          AND (celex_number !~ '^5[0-9]{4}[A-Z]{2}[0-9]{4}(\\([0-9]{2}\\))?$' OR celex_number ~ '^5[0-9]{4}AT')
     """)).fetchall()
     assert not bad, f"not an EP text's own CELEX: {bad[:5]}"
 
@@ -58,7 +58,10 @@ def test_every_stored_celex_is_the_one_cellar_links_to_the_text(db):
         WHERE celex_number IS NOT NULL ORDER BY random() LIMIT 40
     """)).fetchall()
     assert rows, "no CELEX stored at all: the job has not run"
-    found = asyncio.run(_job()._cellar_celex([r.ta_reference for r in rows]))
+    dates = dict(db.execute(text(
+        "SELECT ta_reference, adoption_date::date::text FROM texts_adopted WHERE ta_reference = ANY(:r)"),
+        {"r": [r.ta_reference for r in rows]}).fetchall())
+    found = asyncio.run(_job()._cellar_celex([r.ta_reference for r in rows], dates))
     wrong = [(r.ta_reference, r.celex_number, sorted(found.get(r.ta_reference, [])))
              for r in rows if r.celex_number not in found.get(r.ta_reference, set())]
     assert not wrong, f"stored CELEX is not Cellar's: {wrong[:5]}"

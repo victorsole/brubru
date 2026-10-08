@@ -66,7 +66,11 @@ class EPResolution(Base):
 
     # Content
     summary = Column(Text, nullable=True)
-    eurovoc_codes = Column(ARRAY(String), nullable=True)
+    eurovoc_codes = Column(ARRAY(String), nullable=True)  # descriptor ids
+    # EuroVoc from Cellar (migration 281). Writer: scripts/sync_resolution_eurovoc.py.
+    eurovoc = Column(JSONB, nullable=True)  # [{id, uri, label, domain}]; [] = none yet
+    eurovoc_domain = Column(Text, nullable=True)
+    eurovoc_fetched_at = Column(DateTime(timezone=True), nullable=True)
     policy_areas = Column(ARRAY(String), nullable=True)
 
     # Vote results: the final plenary vote, NULL when not counted (never 0;

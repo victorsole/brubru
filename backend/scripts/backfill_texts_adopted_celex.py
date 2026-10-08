@@ -47,11 +47,19 @@ BATCH = 100
 
 _QUERY = """PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-SELECT ?id ?celex WHERE {{
+SELECT ?id ?celex ?d WHERE {{
   VALUES ?id {{ {values} }}
   ?w cdm:work_id_document ?id .
   ?w cdm:resource_legal_id_celex ?celex .
+  OPTIONAL {{ ?w cdm:work_date_document ?d }}
 }}"""
+
+
+def _cellar_typo(ref: str) -> str:
+    """Cellar records some EP texts with the term number dropped: P10_TA(2025)0057
+    is filed as immc:P0_TA(2025)0057 (measured 8 Oct 2026: 136 texts). Only ever
+    accepted when Cellar's document date equals our adoption date."""
+    return "P0_TA" + ref.split("_TA", 1)[1]
 
 # Only the row's value moves; the touch trigger stamps last_updated when it changes.
 _UPDATE = """
@@ -69,20 +77,40 @@ def _engine():
     return create_engine(url, pool_pre_ping=True)
 
 
-async def _cellar_celex(refs: list[str]) -> dict[str, set[str]]:
-    """ta_reference -> the CELEX numbers Cellar links to it. Raises on any failure."""
+async def _lookup(client, ids: list[str]) -> dict[str, list[tuple[str, str]]]:
+    """Cellar id -> [(celex, document date)]. Raises on any failure."""
+    out: dict[str, list[tuple[str, str]]] = {}
+    for i in range(0, len(ids), BATCH):
+        chunk = ids[i:i + BATCH]
+        values = " ".join(f'"immc:{r}"^^xsd:string' for r in chunk)
+        rows = await client.select(_QUERY.format(values=values))
+        if rows is None:
+            raise RuntimeError(f"Cellar returned nothing usable for batch {i // BATCH + 1}")
+        for row in rows:
+            ref = (row.get("id") or "").removeprefix("immc:")
+            if ref and row.get("celex"):
+                out.setdefault(ref, []).append((row["celex"], str(row.get("d") or "")[:10]))
+    return out
+
+
+async def _cellar_celex(refs: list[str], adopted_on: dict | None = None) -> dict[str, set[str]]:
+    """ta_reference -> the CELEX numbers Cellar links to it. Raises on any failure.
+
+    Exact id first. With `adopted_on` ({ref: 'YYYY-MM-DD'}), refs Cellar does not
+    hold under their own id are retried under its dropped-term spelling, accepted
+    only when Cellar's document date equals the adoption date."""
     found: dict[str, set[str]] = {}
     async with CellarSPARQLClient(enable_cache=False) as client:
-        for i in range(0, len(refs), BATCH):
-            chunk = refs[i:i + BATCH]
-            values = " ".join(f'"immc:{r}"^^xsd:string' for r in chunk)
-            rows = await client.select(_QUERY.format(values=values))
-            if rows is None:
-                raise RuntimeError(f"Cellar returned nothing usable for batch {i // BATCH + 1}")
-            for row in rows:
-                ref = (row.get("id") or "").removeprefix("immc:")
-                if ref and row.get("celex"):
-                    found.setdefault(ref, set()).add(row["celex"])
+        for ref, hits in (await _lookup(client, refs)).items():
+            found[ref] = {c for c, _ in hits}
+        if adopted_on:
+            missing = [r for r in refs if r not in found and adopted_on.get(r)]
+            typo = {_cellar_typo(r): r for r in missing}
+            for alt, hits in (await _lookup(client, list(typo))).items():
+                ref = typo[alt]
+                dated = {c for c, d in hits if d and d == adopted_on[ref]}
+                if dated:
+                    found[ref] = dated
     return found
 
 
@@ -94,7 +122,8 @@ def main() -> int:
     eng = _engine()
     with eng.connect() as conn:
         rows = conn.execute(text(
-            "SELECT id, ta_reference, celex_number, ta_reference ~ '^P[0-9]+_TA' AS adopted "
+            "SELECT id, ta_reference, celex_number, ta_reference ~ '^P[0-9]+_TA' AS adopted, "
+            "adoption_date::date AS adopted_on "
             "FROM texts_adopted ORDER BY ta_reference")).fetchall()
     # Committee REPORTS (A10/...) share the table but are not published in the OJ,
     # so they have no CELEX of their own: A10/2026/0100 carried 32004L0037, a
@@ -104,7 +133,9 @@ def main() -> int:
           f"({len(rows) - len(adopted)} report row(s) carry no CELEX of their own)")
 
     try:
-        found = asyncio.run(_cellar_celex([r.ta_reference for r in adopted]))
+        found = asyncio.run(_cellar_celex(
+            [r.ta_reference for r in adopted],
+            {r.ta_reference: str(r.adopted_on) for r in adopted if r.adopted_on}))
     except Exception as exc:  # noqa: BLE001 -- any failure aborts before a write
         print(f"[ERROR] Cellar lookup failed, nothing written: {type(exc).__name__}: {exc}")
         return 1

@@ -450,10 +450,21 @@ def test_the_docs_name_fields_that_exist(client):
             assert ghost not in desc, f"{path} description still mentions {ghost!r}"
 
 
-def test_unknown_classification_and_followup_are_null_not_empty(client):
-    items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
-    assert all(i["eurovoc_codes"] is None or i["eurovoc_codes"] for i in items), (
-        "eurovoc_codes served as [] (reads as 'no subject') instead of null")
+def test_eurovoc_is_read_from_cellar_and_null_only_when_unread(client, db):
+    """eurovoc_codes was [] on all 353 rows: nothing filled it. Now read from Cellar
+    (sync_resolution_eurovoc.py); null means not read yet, never 'no subject'."""
+    unread_but_listed = db.execute(text("""
+        SELECT count(*) FROM ep_resolutions r
+        JOIN texts_adopted t ON t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+        WHERE t.celex_number IS NOT NULL AND r.eurovoc_fetched_at IS NULL
+    """)).scalar()
+    assert unread_but_listed == 0, f"{unread_but_listed} resolution(s) in the OJ were never read for EuroVoc"
+    items = client.get("/api/v1/resolutions", params={"status": "adopted", "limit": 100}).json()["data"]
+    assert any(i["eurovoc"] for i in items), "no adopted resolution carries EuroVoc"
+    for i in items:
+        if i["eurovoc"]:
+            assert i["eurovoc_codes"] == [t["id"] for t in i["eurovoc"]] and i["eurovoc_domain"]
+            assert all(t["label"] for t in i["eurovoc"]), f"{i['procedure_ref']}: unlabelled descriptor"
 
 
 def test_no_resolution_body_is_navigation_chrome(client):
