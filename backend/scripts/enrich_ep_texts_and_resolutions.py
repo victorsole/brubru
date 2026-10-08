@@ -44,11 +44,11 @@ if str(BACKEND_DIR) not in sys.path:
 load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(BACKEND_DIR.parent / ".env")
 
+from services.matching.resolution_followups import FOLLOWUP_MATCH  # noqa: E402
+
 _PROC = re.compile(r"\d{4}/\d{4}\([A-Z]{3,4}\)")
 _CELEX = re.compile(r"[35]\d{4}[A-Z]\d{4}")
 
-# Each step: (label, SQL). Every one is COALESCE-guarded so a re-run is a no-op
-# and an existing good value is never overwritten by a derived one.
 # The subject of a FINAL plenary vote (resolutions and legislative texts), as
 # ep_roll_call_votes records it in EN or FR. Anything else is a vote on an
 # amendment, a paragraph or a procedural motion (measured 8 Oct 2026: every
@@ -62,6 +62,8 @@ _FINAL_VOTE = (
     r"|provisional agreement|accord provisoire)$"
 )
 
+# Each step: (label, SQL). Every one is COALESCE-guarded so a re-run is a no-op
+# and an existing good value is never overwritten by a derived one.
 STEPS = [
     # --- texts_adopted --------------------------------------------------
     ("texts_adopted.legislative_carriage_id <- carriage by procedure_ref", """
@@ -138,6 +140,33 @@ STEPS = [
           AND (r.vote_for IS DISTINCT FROM f.f OR r.vote_against IS DISTINCT FROM f.a
             OR r.vote_abstention IS DISTINCT FROM f.b
             OR r.vote_total IS DISTINCT FROM f.f + f.a + f.b)
+    """),
+    # Commission follow-up, from ep_external_documents (EP Open Data ACT_FOLLOWUP),
+    # matched by the document's own reference line, not EP's `answers_to` metadata
+    # (wrong for ~1 in 10; see services/matching/resolution_followups.py).
+    # Until 8 Oct 2026 nothing ever checked, and
+    # the column's default made all 353 rows read "no follow-up"; 143 had one.
+    # A row with no adopted text cannot have one (false). A row whose adopted text
+    # Brubru does not hold stays unchecked (NULL), served as unknown.
+    # followup_checked_at moves only when the answer changes, so the trigger does not
+    # re-stamp updated_at on every run.
+    ("ep_resolutions.has_commission_followup <- ep_external_documents",
+     """
+        UPDATE ep_resolutions r SET
+            has_commission_followup = x.has, followup_checked_at = now()
+        FROM (
+            SELECT r2.id,
+                   CASE WHEN r2.status <> 'adopted' THEN false
+                        WHEN t.ta_reference IS NULL THEN NULL
+                        ELSE EXISTS (SELECT 1 FROM ep_external_documents f WHERE """ + FOLLOWUP_MATCH + """)
+                   END AS has
+            FROM ep_resolutions r2
+            LEFT JOIN texts_adopted t ON t.procedure_ref = r2.procedure_ref
+                                     AND t.ta_reference ~ '^P[0-9]+_TA'
+        ) x
+        WHERE x.id = r.id AND x.has IS NOT NULL
+          AND (r.followup_checked_at IS NULL
+               OR r.has_commission_followup IS DISTINCT FROM x.has)
     """),
     ("ep_resolutions.vote_date <- its own adoption_date", """
         UPDATE ep_resolutions SET vote_date = adoption_date

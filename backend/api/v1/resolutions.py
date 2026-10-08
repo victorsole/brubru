@@ -27,6 +27,7 @@ from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from services.matching.resolution_followups import FOLLOWUP_MATCH
 from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,24 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/resolutions", tags=["v1-resolutions"])
 
 _STATUSES = ("adopted", "pending", "closed_without_resolution")
+
+# The Commission's follow-ups to each procedure's adopted text. The match is the
+# one the enrichment job stores as has_commission_followup, so flag and events agree.
+_FOLLOWUPS_SQL = (
+    "SELECT t.procedure_ref, f.document_date, f.identifier, f.title "
+    "FROM texts_adopted t JOIN ep_external_documents f ON " + FOLLOWUP_MATCH + " "
+    "WHERE t.procedure_ref = ANY(:refs) AND t.ta_reference ~ '^P[0-9]+_TA' "
+    "ORDER BY f.document_date"
+)
+
+
+def _followups_by_ref(db, refs: list) -> dict:
+    """The Commission's follow-up documents for each procedure's adopted text."""
+    out: dict = {}
+    if refs:
+        for ref, d, ident, title in db.execute(_sql_text(_FOLLOWUPS_SQL), {"refs": refs}).fetchall():
+            out.setdefault(ref, []).append((d, ident, title))
+    return out
 
 
 class ResolutionItem(BaseModel):
@@ -50,7 +69,9 @@ class ResolutionItem(BaseModel):
     lead_committee: Optional[str] = None
     rapporteur: Optional[str] = None
     summary: Optional[str] = None
-    eurovoc_codes: list = Field(default_factory=list)
+    eurovoc_codes: Optional[list] = Field(None, description=(
+        "EuroVoc descriptors. null = not classified yet (Brubru does not hold them), "
+        "which is not the same as 'no subject'."))
     policy_areas: list = Field(default_factory=list)
     # The final plenary vote; null when Brubru holds no count (a show-of-hands
     # vote, or not yet ingested). Never 0 for "unknown".
@@ -65,7 +86,10 @@ class ResolutionItem(BaseModel):
     key_events: list = Field(default_factory=list)
     oeil_url: Optional[str] = None
     text_url: Optional[str] = None
-    has_commission_followup: bool = False
+    has_commission_followup: Optional[bool] = Field(None, description=(
+        "Whether the Commission has published its follow-up to the adopted text (EP "
+        "Open Data ACT_FOLLOWUP). null = not checked (Brubru does not hold the adopted "
+        "text's reference); the follow-up itself is in key_events."))
     updated_at: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — text_url (the doceo text) when present, else oeil_url.")
@@ -102,7 +126,8 @@ def _compose_resolution_body(r) -> tuple:
     return body_txt, body_html
 
 
-def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None) -> list:
+def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None,
+                      followups: Optional[list] = None) -> list:
     """Synthesise a key-events list from the resolution row.
 
     The resolutions table doesn't carry a structured timeline; the closest
@@ -128,11 +153,13 @@ def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None) -> li
             "event_type": "adopted",
             "description": "Resolution adopted",
         })
-    if r.has_commission_followup:
+    # The Commission's published follow-up, dated and named from EP Open Data.
+    # (Was a dateless placeholder, emitted only when the never-computed flag was set.)
+    for d, ident, title in followups or []:
         events.append({
-            "date": None,
+            "date": d.isoformat() if hasattr(d, "isoformat") else (str(d) if d else None),
             "event_type": "commission_followup",
-            "description": "Commission has followed up on this resolution (see /api/v1/commission-register-documents)",
+            "description": f"Commission follow-up {ident}" + (f": {title}" if title else ""),
         })
     # Nothing from the structured columns (no vote, no adoption): serve the
     # procedure's own OEIL key events, dated by the Parliament. Until 8 Oct 2026
@@ -154,7 +181,8 @@ def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None) -> li
 
 def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
                  oeil_body_html: Optional[str] = None,
-                 oeil_events: Optional[list] = None) -> ResolutionItem:
+                 oeil_events: Optional[list] = None,
+                 followups: Optional[list] = None) -> ResolutionItem:
     body_txt, body_html = _compose_resolution_body(r)
     # Prefer the cached OEIL body (from migration 070 backfill) when present —
     # it carries the full procedure-file content (~2KB), vs the row composition
@@ -180,16 +208,17 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         lead_committee=r.lead_committee,
         rapporteur=r.rapporteur,
         summary=r.summary,
-        eurovoc_codes=list(r.eurovoc_codes or []),
+        eurovoc_codes=list(r.eurovoc_codes) if r.eurovoc_codes else None,
         policy_areas=list(r.policy_areas or []),
         vote_for=r.vote_for,
         vote_against=r.vote_against,
         vote_abstention=r.vote_abstention,
         vote_total=r.vote_total,
-        key_events=_build_key_events(r, oeil_events),
+        key_events=_build_key_events(r, oeil_events, followups),
         oeil_url=r.oeil_url,
         text_url=r.text_url,
-        has_commission_followup=bool(r.has_commission_followup),
+        has_commission_followup=(bool(r.has_commission_followup)
+                                 if r.followup_checked_at else None),
         updated_at=r.updated_at,
         # 5 mandatory datapoints
         public_url=r.text_url or r.oeil_url,
@@ -354,6 +383,7 @@ async def list_resolutions(
         """), {"refs": refs}).fetchall()
         adopted_bodies = {row[0]: row[1] for row in adopted_rows}
 
+    followups = _followups_by_ref(db, refs)
     data = []
     for r in rows:
         adopted = adopted_bodies.get(r.procedure_ref)
@@ -369,7 +399,8 @@ async def list_resolutions(
         else:
             body = oeil_bodies.get(r.procedure_ref) or (None, None)
         data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
-                                 oeil_events=oeil_events.get(r.procedure_ref)))
+                                 oeil_events=oeil_events.get(r.procedure_ref),
+                                 followups=followups.get(r.procedure_ref)))
 
     # Declare the corpus, and say what a NULL adoption date means (D3).
     #
@@ -457,4 +488,5 @@ async def get_resolution_detail(
         if row:
             oeil_body_txt, oeil_body_html, oeil_events = row[0], row[1], row[2]
     return _row_to_item(r, oeil_body_txt=oeil_body_txt, oeil_body_html=oeil_body_html,
-                        oeil_events=oeil_events)
+                        oeil_events=oeil_events,
+                        followups=_followups_by_ref(db, [r.procedure_ref]).get(r.procedure_ref))

@@ -356,6 +356,52 @@ def test_every_tally_is_the_final_plenary_vote(db):
     assert not wrong, f"tally is not the final plenary vote: {wrong[:5]}"
 
 
+def test_the_followup_flag_is_read_from_ep_open_data(client, db):
+    """has_commission_followup was never computed: the column default made all 353
+    rows read "no follow-up" while 143 had one in ep_external_documents (8 Oct 2026).
+    Same match as the writer and the API (one definition)."""
+    from services.matching.resolution_followups import FOLLOWUP_MATCH
+    wrong = db.execute(text("""
+        SELECT count(*) FROM ep_resolutions r
+        JOIN texts_adopted t ON t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+        WHERE r.followup_checked_at IS NOT NULL
+          AND r.has_commission_followup IS DISTINCT FROM EXISTS (
+              SELECT 1 FROM ep_external_documents f WHERE """ + FOLLOWUP_MATCH + """)
+    """)).scalar()
+    assert wrong == 0, f"{wrong} follow-up flag(s) disagree with ep_external_documents"
+    real = db.execute(text(
+        "SELECT count(*) FROM ep_resolutions WHERE has_commission_followup AND followup_checked_at IS NOT NULL"
+    )).scalar()
+    body = client.get("/api/v1/resolutions", params={"has_commission_followup": "true", "limit": 100}).json()
+    assert body["total"] == real and real > 0
+    item = body["data"][0]
+    events = [e for e in item["key_events"] if e["event_type"] == "commission_followup"]
+    assert events and all(e["date"] for e in events), f"{item['procedure_ref']}: follow-up not dated in key_events"
+
+
+def test_no_followup_predates_the_text_it_answers(client):
+    """EP's answers_to metadata is wrong for ~1 in 10 follow-ups: it attached the
+    drones follow-up (26 May 2026) to the 28th-regime resolution adopted 9 July 2026.
+    Matching on the document's own reference line fixed it; a follow-up dated before
+    the adoption is the tell."""
+    early = []
+    for page in (1, 2, 3, 4):
+        for i in client.get("/api/v1/resolutions", params={"limit": 100, "page": page}).json()["data"]:
+            for e in i["key_events"]:
+                if e["event_type"] == "commission_followup" and i["adoption_date"] and e["date"] < i["adoption_date"]:
+                    early.append((i["procedure_ref"], i["adoption_date"], e["date"]))
+    assert not early, f"follow-up dated before the adoption it answers: {early[:3]}"
+    flags = {ref: client.get(f"/api/v1/resolutions/{ref}").json()["has_commission_followup"]
+             for ref in ("2025/2088(INI)", "2025/2211(INI)")}
+    assert flags == {"2025/2088(INI)": True, "2025/2211(INI)": False}, flags
+
+
+def test_unknown_classification_and_followup_are_null_not_empty(client):
+    items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
+    assert all(i["eurovoc_codes"] is None or i["eurovoc_codes"] for i in items), (
+        "eurovoc_codes served as [] (reads as 'no subject') instead of null")
+
+
 def test_no_resolution_body_is_navigation_chrome(client):
     """doceo hides a language picker in `.ep_hidden`; 47 stored bodies once OPENED
     with "Choisissez la langue de votre document" -- navigation saved as the text
