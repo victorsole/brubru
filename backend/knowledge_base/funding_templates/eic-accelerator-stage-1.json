@@ -4,7 +4,7 @@
   "programme": "EIC",
   "sub_instrument": "accelerator",
   "stage": "stage-1",
-  "scaffold_version": "2.0-22.10.2025",
+  "scaffold_version": "2.1-12.06.2026",
   "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator-short_en.pdf",
   "kb_guide": "eic_accelerator_process",
   "topic_id_default": "HORIZON-EIC-2026-ACCELERATOR-01",
@@ -95,7 +95,8 @@
                 "What and how big is the total market to be addressed by your innovation (TAM/SAM/SOM)?",
                 "What is the realistic share of the total market you plan to achieve?",
                 "Describe your go-to-market and commercialisation strategy to scale up.",
-                "Describe your customer value proposition, partnerships, who your customers are, why they will adopt your solution."
+                "Describe your customer value proposition, partnerships, who your customers are, why they will adopt your solution.",
+                "Where relevant, this includes addressable demand across civilian and defence end-users where a credible business case exists in both (dual-use innovation is eligible since 9 July 2026, same criteria, no preference)."
               ]
             }
           ]

@@ -4,10 +4,10 @@
   "programme": "EIC",
   "sub_instrument": "step",
   "stage": "single-stage",
-  "scaffold_version": "2026-WP",
+  "scaffold_version": "2026-WP (amended 17.06.2026)",
   "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en",
   "kb_guide": "eic_step_scaleup_process",
-  "topic_id_default": "HORIZON-EIC-2026-STEP-01",
+  "topic_id_default": "HORIZON-EIC-2026-STEP",
   "cut_offs_2026_cet": [
     "2026-02-11T17:00:00+01:00",
     "2026-05-06T17:00:00+02:00",
@@ -44,7 +44,8 @@
               "id": "1.2",
               "label": "1.2 Strategic dependency or market opportunity",
               "prompts": [
-                "Bring to the EU internal market an innovative + cutting-edge innovation with significant economic potential, OR reduce/prevent strategic dependencies of the Union."
+                "Bring to the EU internal market an innovative + cutting-edge innovation with significant economic potential, OR reduce/prevent strategic dependencies of the Union.",
+                "Applicants from Associated Countries must show a contribution to the EU internal market or to reducing strategic dependencies. Dual-use innovations are eligible since the June 2026 amendment; products whose primary use is defence go to the STEP Scale Up Defence call."
               ]
             }
           ]
@@ -66,7 +67,7 @@
               "id": "2.2",
               "label": "2.2 Technology + IP + FTO",
               "prompts": [
-                "Technology description; TRL 8/9 evidence; IP portfolio; FTO analysis."
+                "Technology description and technological feasibility: has it been developed in a safe, secure and reliable manner, and adequately assessed, validated or certified? IP portfolio and FTO."
               ]
             },
             {
@@ -117,7 +118,7 @@
               "id": "4.1",
               "label": "4.1 Historical financials",
               "prompts": [
-                "Last 3 years audited financials."
+                "Ownership and financial structure of the company (required in the business plan), with recent financial statements."
               ]
             },
             {
@@ -190,7 +191,7 @@
       "kind": "tender_letters_of_intent",
       "title": "Pre-commitment letter from qualified investor (≥20% of target round)",
       "render": "external-upload-or-link",
-      "note": "Mandatory eligibility check. The qualified investor must commit ≥20% of the EUR 50-150M+ target round."
+      "note": "Mandatory eligibility condition: ONE qualified investor, equity only (quasi-equity does not count), at least 20% of a target round of EUR 50-150M or more that is at least 3-5 times the EIC investment; that 20% must be fully uninvested on the letter's date; syndicated pre-commitments where no single investor reaches 20% are ineligible. Use the official template."
     },
     {
       "kind": "tender_financial_plan",
@@ -201,7 +202,8 @@
       "kind": "tender_fto_analysis",
       "title": "Freedom-to-Operate (FTO) analysis",
       "render": "ai-narrative",
-      "page_limit": 10
+      "page_limit": null,
+      "note": "Upload the FTO results; if there is no FTO analysis, a note of maximum 2 pages; where FTO is not relevant (e.g. software), a simple statement."
     }
   ],
   "comply_targets": [

@@ -11,8 +11,8 @@
   "documents": [
     {
       "kind": "tender_application_short",
-      "title": "Part B  AIC Stage 1 proposal",
-      "page_limit": 15,
+      "title": "Part B  AIC Stage 1 proposal (cover + sections 1-3: 11 pages max)",
+      "page_limit": 11,
       "formatting": {
         "font": "Times New Roman 11pt min",
         "page_size": "A4",
@@ -39,7 +39,7 @@
         {
           "id": "1-excellence",
           "label": "1. Excellence  demand-driven innovation",
-          "page_budget": 5,
+          "page_budget": 4,
           "criterion": "Excellence",
           "sub": [
             {
@@ -61,7 +61,7 @@
         {
           "id": "2-impact",
           "label": "2. Impact + commercialisation pathway",
-          "page_budget": 4,
+          "page_budget": 3,
           "criterion": "Impact",
           "sub": [
             {
@@ -83,7 +83,7 @@
         {
           "id": "3-implementation",
           "label": "3. Implementation  9-month PoC plan",
-          "page_budget": 5,
+          "page_budget": 3,
           "criterion": "Implementation",
           "sub": [
             {
@@ -189,5 +189,9 @@
       "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
       "category": "Eligibility"
     }
+  ],
+  "topic_ids": [
+    "HORIZON-EIC-2026-AIC-01",
+    "HORIZON-EIC-2026-AIC-02"
   ]
 }

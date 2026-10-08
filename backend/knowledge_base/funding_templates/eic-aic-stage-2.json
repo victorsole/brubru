@@ -11,15 +11,15 @@
   "documents": [
     {
       "kind": "tender_application_full",
-      "title": "Part B  AIC Stage 2 Scale-up demonstration",
-      "page_limit": 30,
+      "title": "Part B  AIC Stage 2 (cover + sections 1-3: 22 pages max)",
+      "page_limit": 22,
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
         {
           "id": "0-stage-1-results",
           "label": "0. Stage 1 PoC results",
-          "page_budget": 4,
+          "page_budget": 3,
           "criterion": null,
           "sub": [
             {
@@ -34,7 +34,7 @@
         {
           "id": "1-excellence",
           "label": "1. Excellence  extended demonstration",
-          "page_budget": 8,
+          "page_budget": 6,
           "criterion": "Excellence",
           "sub": [
             {
@@ -49,7 +49,7 @@
         {
           "id": "2-impact",
           "label": "2. Impact + commercialisation roadmap (30 months)",
-          "page_budget": 8,
+          "page_budget": 6,
           "criterion": "Impact",
           "sub": [
             {
@@ -64,7 +64,7 @@
         {
           "id": "3-implementation",
           "label": "3. Implementation  Stage 2 work plan (max 30 months, EUR 2.5M)",
-          "page_budget": 10,
+          "page_budget": 7,
           "criterion": "Implementation",
           "sub": [
             {
@@ -90,7 +90,8 @@
             }
           ]
         }
-      ]
+      ],
+      "note": "Restricted to Stage 1 projects (2027 Work Programme, indicative deadline 18 June 2027, indicative EUR 25M). Evaluated by a live pitch (virtual or physical) before an independent expert jury chaired by the EIC Programme Manager. Thresholds 4/5, 4/5, 3/5."
     }
   ],
   "comply_targets": [

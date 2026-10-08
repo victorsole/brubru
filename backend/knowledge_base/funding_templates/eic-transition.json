@@ -7,7 +7,7 @@
   "scaffold_version": "2026-WP",
   "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/eic-transition_en",
   "kb_guide": "eic_transition_process",
-  "topic_id_default": "HORIZON-EIC-2026-TRANSITION-01",
+  "topic_id_default": "HORIZON-EIC-2026-TRANSITIONOPEN",
   "deadline_2026_cet": "2026-09-16T17:00:00+02:00",
   "documents": [
     {
@@ -127,7 +127,8 @@
             }
           ]
         }
-      ]
+      ],
+      "note": "Thresholds: Excellence 4/5, Impact 4/5, Implementation 3/5; best proposals worth about 2.2 times the budget go to a jury interview (at least 30% women-led where possible). Requests above EUR 0.5M and below EUR 2.5M, 1-3 years, lump sum, 100%."
     },
     {
       "kind": "tender_implementation_plan",

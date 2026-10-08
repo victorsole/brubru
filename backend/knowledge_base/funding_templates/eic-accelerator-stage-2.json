@@ -4,7 +4,7 @@
   "programme": "EIC",
   "sub_instrument": "accelerator",
   "stage": "stage-2",
-  "scaffold_version": "2.0-06.11.2025",
+  "scaffold_version": "2.1-09.07.2026",
   "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator_en.pdf",
   "kb_guide": "eic_accelerator_process",
   "topic_id_default": "HORIZON-EIC-2026-ACCELERATOR-01",
@@ -18,8 +18,8 @@
   "documents": [
     {
       "kind": "tender_application_full",
-      "title": "Part B  Full Proposal",
-      "page_limit": null,
+      "title": "Part B  Full Proposal (20 pages max, including the cover page)",
+      "page_limit": 20,
       "formatting": {
         "font": "Times New Roman 11pt min",
         "page_size": "A4",
@@ -38,7 +38,8 @@
               "id": "cover.title",
               "label": "Title",
               "prompts": [
-                "State the proposal title (max 200 chars)."
+                "State the proposal title (max 200 chars).",
+                "Part A (online): select minimum 3 and maximum 6 fixed keywords; they drive the matching with evaluators and the jury panel."
               ]
             },
             {
@@ -121,7 +122,8 @@
               "id": "2.1",
               "label": "2.1 Market opportunity",
               "prompts": [
-                "TAM/SAM/SOM; share target; GTM strategy; customer value proposition; partnerships."
+                "TAM/SAM/SOM; share target; GTM strategy; customer value proposition; partnerships.",
+                "Where relevant, this includes addressable demand across civilian and defence end-users where a credible business case exists in both (dual-use innovation is eligible since 9 July 2026, same criteria, no preference)."
               ]
             },
             {
@@ -228,7 +230,7 @@
     },
     {
       "kind": "tender_pitch_deck",
-      "title": "Pitch deck (PDF, 10-min oral cap at face-to-face interview)",
+      "title": "Pitch deck (PDF, no slide limit; 10 minutes at the jury interview)",
       "render": "scaffold-only",
       "constraints": {
         "format": "pdf",
@@ -329,7 +331,8 @@
     {
       "kind": "tender_letters_of_intent",
       "title": "Letters of Intent (LoIs)  guidance template",
-      "render": "external-upload-or-link"
+      "render": "external-upload-or-link",
+      "note": "Merge all letters into one PDF. Each letter: identification and signature of an authorised representative, a clear statement of intent (investment, partnership, pilot or purchase) tied to this project, the nature and size of the commitment with a timeline, why the partner is interested, mutual benefit, date and validity. Avoid generic, unsigned or undated support letters (EIC guidance template, July 2026)."
     },
     {
       "kind": "tender_ownership_control",
