@@ -102,8 +102,9 @@ def test_undated_resolutions_are_genuinely_unadopted(db):
     wrong = [
         (r.procedure_ref, r.status, r.cs) for r in rows
         if r.has_text
-        or r.status not in ("pending", "closed_without_resolution")
-        or (r.status == "pending") != ((r.cs or "").upper() != "COMPLETED")
+        or r.status not in ("pending", "closed_without_resolution", "rejected")
+        or (r.status != "rejected"
+            and (r.status == "pending") != ((r.cs or "").upper() != "COMPLETED"))
     ]
     assert not wrong, f"undated rows with the wrong status: {wrong[:5]}"
 
@@ -117,7 +118,7 @@ def test_every_resolution_has_a_status(db):
 def test_the_status_filter_matches_the_table(client, db, path):
     real = dict(db.execute(text(
         "SELECT status, count(*) FROM ep_resolutions GROUP BY 1")).fetchall())
-    for st in ("adopted", "pending", "closed_without_resolution"):
+    for st in ("adopted", "pending", "closed_without_resolution", "rejected"):
         body = client.get(path, params={"status": st, "limit": 100}).json()
         assert body["total"] == real.get(st, 0), f"{path} status={st}: {body['total']} vs {real.get(st)}"
         assert all(i["status"] == st for i in body["data"]), f"{path} status={st} leaks other rows"
@@ -130,6 +131,7 @@ def test_the_note_names_both_kinds_of_undated_row(client, db):
         "SELECT status, count(*) FROM ep_resolutions GROUP BY 1")).fetchall())
     assert f"{real.get('pending', 0)} are `pending`" in note, note
     assert f"{real.get('closed_without_resolution', 0)} are `closed_without_resolution`" in note, note
+    assert f"{real.get('rejected', 0)} are `rejected`" in note, note
     assert "still tabled or close to adoption" not in note, "the old, false explanation is back"
 
 
@@ -417,6 +419,34 @@ def test_a_resolution_reads_the_same_from_the_list_and_on_its_own(client, base):
         if diff:
             differ.append((item["procedure_ref"], diff))
     assert not differ, f"list and detail disagree: {differ[:3]}"
+
+
+def test_an_adopted_resolution_always_has_an_adopted_text(db):
+    """OEIL's "Decision by Parliament" marks a decision EITHER way. Taking it as an adoption
+    served 2025/2138(INI), voted down 233-250-76, as adopted (8 Oct 2026)."""
+    orphans = [r[0] for r in db.execute(text("""
+        SELECT procedure_ref FROM ep_resolutions r WHERE status = 'adopted'
+          AND NOT EXISTS (SELECT 1 FROM texts_adopted t WHERE t.procedure_ref = r.procedure_ref
+                            AND t.ta_reference ~ '^P[0-9]+_TA')
+    """)).fetchall()]
+    assert not orphans, f"'adopted' with no adopted text (adopted, or rejected?): {orphans}"
+
+
+def test_a_rejected_resolution_keeps_its_lost_final_vote(client):
+    i = client.get("/api/v1/resolutions/2025/2138(INI)").json()
+    assert i["status"] == "rejected" and i["adoption_date"] is None, i["status"]
+    assert (i["vote_for"], i["vote_against"], i["vote_abstention"]) == (233, 250, 76)
+    assert any(e["description"].startswith("Rejected.") for e in i["key_events"]), i["key_events"]
+
+
+def test_a_resolutions_title_is_its_english_adopted_texts_title(db):
+    """One source of truth for the title: the adopted text, once it is in English."""
+    differ = db.execute(text("""
+        SELECT r.procedure_ref FROM ep_resolutions r
+        JOIN texts_adopted t ON t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+        WHERE t.full_text_url ~ '_EN[.](html|pdf)$' AND r.title IS DISTINCT FROM t.title
+    """)).fetchall()
+    assert not differ, f"title differs from the English adopted text: {[d[0] for d in differ][:5]}"
 
 
 def test_creation_date_is_first_ingestion_not_last_update(client, db):

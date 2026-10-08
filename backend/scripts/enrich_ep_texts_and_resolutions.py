@@ -138,6 +138,9 @@ STEPS = [
                                      AND t.vote_results->>'source' IN ('ep_roll_call_votes', 'ep_open_data')
         ) f
         WHERE f.id = r.id
+          -- a rejected resolution has no adopted text; its tally is the lost final vote,
+          -- written by sync_texts_adopted_final_votes.py
+          AND r.status IS DISTINCT FROM 'rejected'
           AND (r.vote_for IS DISTINCT FROM f.f OR r.vote_against IS DISTINCT FROM f.a
             OR r.vote_abstention IS DISTINCT FROM f.b
             OR r.vote_total IS DISTINCT FROM f.f + f.a + f.b)
@@ -194,6 +197,19 @@ STEPS = [
           AND u.url IS NOT NULL
           AND (r.text_url IS NULL OR btrim(r.text_url) = '' OR r.text_url ~ '-TOC_')
           AND r.text_url IS DISTINCT FROM u.url
+    """),
+    # A resolution's title IS its adopted text's English title (one source of truth,
+    # 8 Oct 2026): 12 of 254 differed, each time in the adopted text's favour ("Towards new
+    # rules for European elections?" vs "Election of the Members of the European Parliament
+    # by direct universal suffrage"). Only from an ENGLISH text: on the day of the vote the
+    # adopted text is provisional and French, and that title must not be copied.
+    ("ep_resolutions.title <- its adopted text's English title", """
+        UPDATE ep_resolutions r SET title = t.title
+        FROM texts_adopted t
+        WHERE t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+          AND t.full_text_url ~ '_EN[.](html|pdf)$'
+          AND btrim(coalesce(t.title, '')) <> ''
+          AND r.title IS DISTINCT FROM t.title
     """),
     # A summary taken from a committee REPORT is not the resolution: reset it to
     # the adopted text's opening, or NULL until that body exists (the next rule

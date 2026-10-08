@@ -14,6 +14,7 @@ Created: February 2026
 """
 
 import logging
+import re
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Set, Callable
 
@@ -300,7 +301,12 @@ class TextsAdoptedSyncService:
                 ).first()
 
                 if existing:
-                    if skip_existing:
+                    # A text first seen in its provisional non-English version (on the
+                    # day of the vote the EN contents page links the _FR.html text, and
+                    # its title is French) is revisited until the English one appears.
+                    # Skipping it kept the French title for good (8 Oct 2026).
+                    provisional = _is_non_english(existing.full_text_url) and not _is_non_english(item.full_text_url)
+                    if skip_existing and not provisional:
                         result['skipped'] += 1
                         continue
                     else:
@@ -382,6 +388,10 @@ class TextsAdoptedSyncService:
 
     def _update_text(self, existing: TextAdopted, item: ScrapedTextAdopted):
         """Update an existing TextAdopted with new scraped data."""
+        if _is_non_english(existing.full_text_url) and item.full_text_url and not _is_non_english(item.full_text_url):
+            # The provisional body is the non-English page (often only its navigation
+            # box): clear it so backfill_texts_adopted_bodies.py reads the English text.
+            existing.full_text = None
         existing.title = item.title
         if item.description:
             existing.description = item.description
@@ -402,6 +412,12 @@ class TextsAdoptedSyncService:
             ).first()
             if carriage:
                 existing.legislative_carriage_id = carriage.id
+
+
+def _is_non_english(url) -> bool:
+    """True for a doceo text in another language (..._FR.html), not for _EN or no URL."""
+    m = re.search(r"_([A-Z]{2})\.(?:html|pdf)$", url or "")
+    return bool(m) and m.group(1) != "EN"
 
 
 # Convenience functions

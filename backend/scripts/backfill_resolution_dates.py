@@ -95,6 +95,11 @@ def _status(r, chosen) -> str:
     were RSP debates or objections that OEIL records as completed ("End of
     procedure in Parliament") with no text adopted. Those never will be adopted.
     """
+    # 'rejected' is set by sync_texts_adopted_final_votes.py from the final vote itself;
+    # only an adopted text can overturn it (OEIL's "Decision by Parliament" marks a
+    # decision either way: 2025/2138(INI) was voted down 233-250-76).
+    if r.current_status == "rejected" and not r.has_adopted_text:
+        return "rejected"
     if chosen or r.current_date_ or r.has_adopted_text:
         return "adopted"
     if (r.carriage_status or "").upper() == "COMPLETED":
@@ -156,6 +161,8 @@ def main() -> int:
                 rapp_filled += 1
 
             status = _status(r, chosen)
+            if status == "rejected":
+                chosen = None  # never re-date a rejected resolution from OEIL's decision event
             statuses[status] = statuses.get(status, 0) + 1
             if status != r.current_status:
                 status_changed += 1

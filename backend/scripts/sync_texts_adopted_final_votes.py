@@ -71,6 +71,53 @@ RCV = text("""
 """)
 STORE = text("UPDATE texts_adopted SET vote_results = CAST(:v AS jsonb) WHERE id = :id")
 
+# Resolution procedures Parliament DECIDED on (OEIL) but for which no adopted text exists:
+# either the text has not reached us yet, or the final vote was lost. Only the second is
+# written here (8 Oct 2026: 2025/2138(INI), the Ombudsman report, read "adopted" while EP
+# Open Data records its final vote REJECTED 233-250-76).
+UNADOPTED = text("""
+    SELECT r.id, r.procedure_ref, r.status, c.oeil_key_events::text AS events
+    FROM ep_resolutions r
+    JOIN legislative_carriages c ON c.oeil_procedure_ref = r.procedure_ref
+    WHERE NOT EXISTS (SELECT 1 FROM texts_adopted t WHERE t.procedure_ref = r.procedure_ref
+                        AND t.ta_reference ~ '^P[0-9]+_TA')
+      AND c.oeil_key_events::text ~ '(Decision by Parliament|Results of vote in Parliament)'
+""")
+REJECT = text("""
+    UPDATE ep_resolutions SET status = 'rejected', adoption_date = NULL, vote_date = :d,
+           vote_for = :f, vote_against = :a, vote_abstention = :b,
+           vote_total = :f + :a + :b
+    WHERE id = :id
+""")
+_TABLED = re.compile(r"^(RC-)?([AB])(\d+)-(\d{4})/(\d{4})$")
+
+
+def _tabled_eli(events: list) -> tuple[set, str | None]:
+    """The tabled document(s) OEIL names, as EP Open Data ids, and the vote date."""
+    docs, day = set(), None
+    for e in events or []:
+        m = _TABLED.match((e.get("description") or "").strip())
+        if m:
+            rc, kind, term, num, year = m.groups()
+            docs.add(f"eli/dl/doc/{rc or ''}{kind}-{term}-{year}-{num}")
+        if e.get("event_type") in ("Results of vote in Parliament", "Decision by Parliament") and e.get("date"):
+            day = max(day or "", str(e["date"])[:10])
+    return docs, day
+
+
+def _final_any_outcome(meeting: "Meeting", adopts: set) -> dict | None:
+    """The single final-vote decision on these documents, ADOPTED or REJECTED."""
+    finals = {}
+    for it in meeting.items:
+        if adopts & set(it.get("based_on_a_realization_of") or []):
+            for did in it.get("consists_of") or []:
+                d = meeting.decisions.get(did)
+                label = ((d or {}).get("referenceText") or {}).get("en") or ""
+                first = label.strip().splitlines()[0].strip() if label.strip() else ""
+                if d and _FINAL.match(first):
+                    finals[did] = d
+    return next(iter(finals.values())) if len(finals) == 1 else None
+
 
 def _ta_id(ref: str) -> str | None:
     m = _TA.match(ref)
@@ -230,6 +277,32 @@ def main() -> int:
         for row_id, _, rec in plan:
             conn.execute(STORE, {"id": row_id, "v": json.dumps(rec)})
     print(f"[APPLIED] {len(plan)} row(s) written")
+
+    # Phase 2: resolutions decided without an adopted text. Rejected -> recorded as such.
+    with engine.connect() as conn:
+        pending = list(conn.execute(UNADOPTED))
+    rejected = 0
+    for r in pending:
+        try:
+            docs, day = _tabled_eli(json.loads(r.events or "[]"))
+            if not docs or not day:
+                continue
+            meetings.setdefault(day, None)
+            if meetings[day] is None:
+                meetings[day] = Meeting(day)
+            d = _final_any_outcome(meetings[day], docs)
+        except RuntimeError as exc:
+            fetch_failed += 1
+            print(f"   [UNREACHABLE] {r.procedure_ref}: {exc}")
+            continue
+        if d and str(d.get("decision_outcome", "")).endswith("REJECTED"):
+            f, a, b = _counts(d)
+            print(f"   [REJECTED] {r.procedure_ref}: final vote {f}/{a}/{b} on {day}")
+            if f is not None and a is not None and b is not None:
+                rejected += 1
+                with engine.begin() as conn:
+                    conn.execute(REJECT, {"id": r.id, "d": day, "f": f, "a": a, "b": b})
+    print(f"[INFO] resolutions decided without an adopted text: {len(pending)}; recorded rejected: {rejected}")
     if fetch_failed:
         print(f"[ERROR] {fetch_failed} text(s) not reachable on EP Open Data this run")
         return 1

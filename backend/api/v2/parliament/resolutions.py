@@ -44,7 +44,7 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `rapporteur` — name substring.
 - `procedure_ref` — OEIL reference.
 - `has_commission_followup` — boolean.
-- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted).
+- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted) / `rejected` (the final vote was lost).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
 - `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -69,7 +69,7 @@ async def list_resolutions(
     rapporteur: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     has_commission_followup: Optional[bool] = Query(None),
-    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution"),
+    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution | rejected"),
     published_from: Optional[date] = Query(None, description="adoption_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),

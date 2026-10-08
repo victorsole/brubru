@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/resolutions", tags=["v1-resolutions"])
 
-_STATUSES = ("adopted", "pending", "closed_without_resolution")
+_STATUSES = ("adopted", "pending", "closed_without_resolution", "rejected")
 
 # The Commission's follow-ups to each procedure's adopted text. The match is the
 # one the enrichment job stores as has_commission_followup, so flag and events agree.
@@ -61,9 +61,10 @@ class ResolutionItem(BaseModel):
     title: str
     resolution_type: Optional[str] = None
     status: Optional[str] = Field(None, description=(
-        "adopted | pending | closed_without_resolution. A null adoption_date is either "
-        "pending (tabled, in committee or close to adoption) or closed_without_resolution "
-        "(the debate or objection ended in Parliament with no text adopted; it never will be)."))
+        "adopted | pending | closed_without_resolution | rejected. A null adoption_date is "
+        "pending (tabled, in committee or close to adoption), closed_without_resolution (the "
+        "debate or objection ended with no text put to a final vote) or rejected (the final "
+        "vote was lost; its tally is in vote_for / vote_against / vote_abstention)."))
     adoption_date: Optional[date] = None
     # The plenary vote that adopted the resolution: a DATE. The stored value carried
     # a fabricated 00:00:00; the vote's time is not held (8 Oct 2026).
@@ -154,7 +155,9 @@ def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None,
         events.append({
             "date": r.vote_date.date().isoformat() if hasattr(r.vote_date, "date") else str(r.vote_date),
             "event_type": "plenary_vote",
-            "description": " (".join(descr_parts) + ")" if len(descr_parts) > 1 else (descr_parts[0] if descr_parts else "Plenary vote"),
+            "description": (("Rejected. " if r.status == "rejected" else "")
+                            + (" (".join(descr_parts) + ")" if len(descr_parts) > 1
+                               else (descr_parts[0] if descr_parts else "Plenary vote"))),
         })
     if r.adoption_date and (not r.vote_date or r.adoption_date != getattr(r.vote_date, "date", lambda: None)()):
         events.append({
@@ -339,7 +342,7 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `rapporteur` — name substring.
 - `procedure_ref` — OEIL reference.
 - `has_commission_followup` — boolean.
-- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted).
+- `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted) / `rejected` (the final vote was lost).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
 - `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -364,7 +367,7 @@ async def list_resolutions(
     rapporteur: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     has_commission_followup: Optional[bool] = Query(None),
-    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution"),
+    status: Optional[str] = Query(None, description="adopted | pending | closed_without_resolution | rejected"),
     published_from: Optional[date] = Query(None, description="adoption_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None),
@@ -458,11 +461,12 @@ async def list_resolutions(
         coverage_from=cov[0], coverage_to=cov[1],
         coverage_note=(
             f"{cov[3]} of {cov[2]} resolutions carry an adoption date. The other "
-            f"{undated} have not been adopted, for one of two reasons given in each "
-            f"item's `status`: {by_status.get('pending', 0)} are `pending` (tabled, in "
-            f"committee or close to adoption) and {by_status.get('closed_without_resolution', 0)} "
+            f"{undated} have not been adopted, for the reason given in each item's "
+            f"`status`: {by_status.get('pending', 0)} are `pending` (tabled, in "
+            f"committee or close to adoption), {by_status.get('closed_without_resolution', 0)} "
             "are `closed_without_resolution` (the debate or objection ended in "
-            "Parliament with no text adopted, so they never will be). A null "
+            "Parliament with no text adopted, so they never will be) and "
+            f"{by_status.get('rejected', 0)} are `rejected` (the final vote was lost). A null "
             "adoption_date is therefore NOT 'date unknown', and a date-filtered query "
             "excludes both by design; filter with `status=` instead. "
             "SCOPE: this surface holds own-initiative and topical resolutions "

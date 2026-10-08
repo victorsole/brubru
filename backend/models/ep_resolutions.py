@@ -85,7 +85,7 @@ class EPResolution(Base):
     text_url = Column(String(500), nullable=True)  # Final adopted text
 
     # Status
-    # adopted | pending | closed_without_resolution (migration 278). Owner:
+    # adopted | pending | closed_without_resolution | rejected (migrations 278, 282). Owner:
     # scripts/backfill_resolution_dates.py.
     status = Column(Text, nullable=True, index=True)
     has_commission_followup = Column(Boolean, default=False)
