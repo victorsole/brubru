@@ -85,6 +85,9 @@ class ResolutionItem(BaseModel):
     vote_against: Optional[int] = None
     vote_abstention: Optional[int] = None
     vote_total: Optional[int] = None
+    vote_method: Optional[str] = Field(None, description=(
+        "How the final vote was taken: roll-call | electronic | show of hands. A show of "
+        "hands has no count, so the tallies are null. null = vote not held by Brubru."))
     # `key_events` synthesised from the row itself: a single canonical event
     # (the plenary vote) plus, when present, an "adoption" entry. Each event
     # is `{date, event_type, description}`. Surfaces what Jordi flagged as
@@ -196,6 +199,7 @@ def _items_for(db, rows: list) -> list:
     refs = [r.procedure_ref for r in rows if r.procedure_ref]
     oeil_bodies: dict = {}
     oeil_events: dict = {}
+    vote_methods: dict = {}
     adopted_bodies: dict = {}
     if refs:
         oeil_rows = db.execute(_sql_text("""
@@ -205,6 +209,14 @@ def _items_for(db, rows: list) -> list:
               AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
         """), {"refs": refs}).fetchall()
         oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
+        vote_methods = {row[0]: row[1] for row in db.execute(_sql_text("""
+            SELECT procedure_ref,
+                   CASE vote_results->>'source' WHEN 'ep_open_data' THEN vote_results->>'method'
+                        WHEN 'ep_roll_call_votes' THEN 'roll-call' END
+            FROM texts_adopted
+            WHERE procedure_ref = ANY(:refs) AND ta_reference ~ '^P[0-9]+_TA'
+              AND vote_results IS NOT NULL
+        """), {"refs": refs}).fetchall()}
         oeil_events = {row[0]: row[1] for row in db.execute(_sql_text("""
             SELECT oeil_procedure_ref, oeil_key_events FROM legislative_carriages
             WHERE oeil_procedure_ref = ANY(:refs) AND oeil_key_events IS NOT NULL
@@ -248,9 +260,11 @@ def _items_for(db, rows: list) -> list:
                     ) + "</article>")
         else:
             body = oeil_bodies.get(r.procedure_ref) or (None, None)
-        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
-                                 oeil_events=oeil_events.get(r.procedure_ref),
-                                 followups=followups.get(r.procedure_ref)))
+        item = _row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
+                            oeil_events=oeil_events.get(r.procedure_ref),
+                            followups=followups.get(r.procedure_ref))
+        item.vote_method = vote_methods.get(r.procedure_ref)
+        data.append(item)
 
     return data
 

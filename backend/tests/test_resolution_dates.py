@@ -338,7 +338,9 @@ def test_an_uncounted_vote_is_null_never_zero(client, db):
 def test_every_tally_is_the_final_plenary_vote(db):
     """ep_roll_call_votes also holds the committee's final vote and votes on single
     amendments under the same ta_reference; 21 of 88 tallies were one of those
-    (P10_TA(2026)0247 read "rejected 41-137" for a text plenary adopted 501-61)."""
+    (P10_TA(2026)0247 read "rejected 41-137" for a text plenary adopted 501-61).
+    Since 8 Oct 2026 most tallies come from EP Open Data's final-vote decision; any that
+    still come from ep_roll_call_votes must be a FINAL PLENARY vote there."""
     import importlib.util, pathlib
     path = pathlib.Path(__file__).resolve().parents[1] / "scripts" / "enrich_ep_texts_and_resolutions.py"
     spec = importlib.util.spec_from_file_location("_enrich", path)
@@ -346,14 +348,18 @@ def test_every_tally_is_the_final_plenary_vote(db):
     spec.loader.exec_module(mod)
     wrong = [r[0] for r in db.execute(text("""
         SELECT r.procedure_ref FROM ep_resolutions r
-        WHERE r.vote_total IS NOT NULL AND NOT EXISTS (
-            SELECT 1 FROM texts_adopted t JOIN ep_roll_call_votes v ON v.ta_reference = t.ta_reference
-            WHERE t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
-              AND v.level = 'plenary' AND v.subject ~* :fv
-              AND v.votes_for = r.vote_for AND v.votes_against = r.vote_against
-              AND v.votes_abstention = r.vote_abstention)
+        JOIN texts_adopted t ON t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+        WHERE r.vote_total IS NOT NULL
+          AND NOT (
+            (t.vote_results->>'source' = 'ep_open_data'
+             AND r.vote_for = (t.vote_results->>'for')::int)
+            OR EXISTS (
+              SELECT 1 FROM ep_roll_call_votes v
+              WHERE v.ta_reference = t.ta_reference AND v.level = 'plenary' AND v.subject ~* :fv
+                AND v.votes_for = r.vote_for AND v.votes_against = r.vote_against
+                AND v.votes_abstention = r.vote_abstention))
     """), {"fv": mod._FINAL_VOTE}).fetchall()]
-    assert not wrong, f"tally is not the final plenary vote: {wrong[:5]}"
+    assert not wrong, f"tally is not a final plenary vote: {wrong[:5]}"
 
 
 def test_the_followup_flag_is_read_from_ep_open_data(client, db):
@@ -465,6 +471,51 @@ def test_eurovoc_is_read_from_cellar_and_null_only_when_unread(client, db):
         if i["eurovoc"]:
             assert i["eurovoc_codes"] == [t["id"] for t in i["eurovoc"]] and i["eurovoc_domain"]
             assert all(t["label"] for t in i["eurovoc"]), f"{i['procedure_ref']}: unlabelled descriptor"
+
+
+@pytest.mark.parametrize("ta, expected", [
+    ("P10_TA(2026)0190", (263, 83, 154)),   # care society: matches the EP's own RCV XML
+    ("P10_TA(2026)0217", (483, 103, 70)),   # Albania: title matching once stored another report's vote
+    ("P10_TA(2026)0017", (582, 0, 35)),     # EP Open Data OMITS a zero count; attendees 617 = 582 + 35
+])
+def test_final_votes_from_ep_open_data_are_the_real_tallies(db, ta, expected):
+    vr = db.execute(text("SELECT vote_results FROM texts_adopted WHERE ta_reference = :t"), {"t": ta}).scalar()
+    assert vr and vr.get("source") == "ep_open_data", f"{ta}: no EP Open Data final vote stored"
+    assert (vr["for"], vr["against"], vr["abstention"]) == expected, f"{ta}: {vr}"
+
+
+def test_a_counted_vote_never_stores_a_missing_count(db):
+    """A roll-call or electronic vote with a null count is the omitted-zero trap (8 rows on
+    8 Oct 2026); only a show of hands has no count."""
+    n = db.execute(text("""
+        SELECT count(*) FROM texts_adopted
+        WHERE vote_results->>'source' = 'ep_open_data'
+          AND vote_results->>'method' IN ('roll-call', 'electronic')
+          AND (vote_results->'for' = 'null'::jsonb OR vote_results->'against' = 'null'::jsonb
+               OR vote_results->'abstention' = 'null'::jsonb)
+    """)).scalar()
+    assert n == 0, f"{n} counted vote(s) stored with a missing count"
+
+
+def test_resolution_tallies_equal_their_adopted_texts_final_vote(db):
+    wrong = db.execute(text("""
+        SELECT r.procedure_ref FROM ep_resolutions r
+        JOIN texts_adopted t ON t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+        WHERE t.vote_results->>'source' = 'ep_open_data'
+          AND (r.vote_for IS DISTINCT FROM (t.vote_results->>'for')::int
+            OR r.vote_against IS DISTINCT FROM (t.vote_results->>'against')::int
+            OR r.vote_abstention IS DISTINCT FROM (t.vote_results->>'abstention')::int)
+    """)).fetchall()
+    assert not wrong, f"resolution tally differs from its adopted text's final vote: {wrong[:5]}"
+
+
+def test_vote_method_explains_every_null_tally(client):
+    items = client.get("/api/v1/resolutions", params={"status": "adopted", "limit": 100}).json()["data"]
+    assert {i["vote_method"] for i in items} <= {"roll-call", "electronic", "show of hands", "other", None}
+    hands = [i for i in items if i["vote_method"] == "show of hands"]
+    assert all(i["vote_total"] is None for i in hands), "a show-of-hands vote carries a count"
+    counted = [i for i in items if i["vote_method"] in ("roll-call", "electronic")]
+    assert counted and all(i["vote_total"] for i in counted), "a counted vote is served without a tally"
 
 
 def test_no_resolution_body_is_navigation_chrome(client):

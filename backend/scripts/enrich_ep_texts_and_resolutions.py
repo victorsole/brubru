@@ -58,6 +58,7 @@ _FINAL_VOTE = (
     r"|commission proposal( to the council| and amendments)?|proposition de la commission"
     r"|draft council (decision|regulation)|projet de décision du conseil"
     r"|proposal for a (council )?decision( \(as a whole\))?|council draft|joint text"
+    r"|draft recommendation( \(as a whole\))?|proposal for a recommendation( \(as a whole\))?"
     r"|provisional agreement|accord provisoire)$"
 )
 
@@ -118,7 +119,8 @@ STEPS = [
     """),
     # --- ep_resolutions -------------------------------------------------
     # The resolution's tally IS its adopted text's final plenary vote, or NULL
-    # (unknown). Never 0: the columns defaulted to 0, so 72 rows said "0 for, 0
+    # (unknown, or a show-of-hands vote, which has no count). Since 8 Oct 2026 the
+    # vote mostly comes from EP Open Data (sync_texts_adopted_final_votes.py). Never 0: the columns defaulted to 0, so 72 rows said "0 for, 0
     # against" for resolutions nobody had counted, and 21 carried a committee or
     # amendment vote copied in at insert time.
     ("ep_resolutions.vote_* <- the final plenary vote, else NULL", """
@@ -133,7 +135,7 @@ STEPS = [
             FROM ep_resolutions r2
             LEFT JOIN texts_adopted t ON t.procedure_ref = r2.procedure_ref
                                      AND t.ta_reference ~ '^P[0-9]+_TA'
-                                     AND t.vote_results->>'source' = 'ep_roll_call_votes'
+                                     AND t.vote_results->>'source' IN ('ep_roll_call_votes', 'ep_open_data')
         ) f
         WHERE f.id = r.id
           AND (r.vote_for IS DISTINCT FROM f.f OR r.vote_against IS DISTINCT FROM f.a

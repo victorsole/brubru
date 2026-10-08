@@ -102,6 +102,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("texts_adopted_celex", "Texts adopted - CELEX (Cellar)", "warm",
                "scripts/backfill_texts_adopted_celex.py", ("--apply",),
                timeout=600, stale_after_hours=48),
+    # The final plenary vote on each adopted text, from EP Open Data (8 Oct 2026):
+    # adopted-text -> tabled document -> the sitting's vote item -> its ADOPTED
+    # final-vote decision, with counts, method and time. 202 resolutions had no
+    # count from the title-matched doceo scrape. Only texts still without one are
+    # read, so a run is cheap. An unreachable text is skipped and the run exits 1;
+    # five failures in a row stop it as an outage. It only adds validated votes.
+    SourceSpec("texts_adopted_final_votes", "Texts adopted - final votes (EP Open Data)", "warm",
+               "scripts/sync_texts_adopted_final_votes.py", ("--apply", "--deadline-seconds", "1200"),
+               timeout=1500, stale_after_hours=48),
     # EuroVoc for resolutions, read from Cellar once their CELEX is known (8 Oct
     # 2026; was empty on all 353). After texts_adopted_celex on purpose.
     SourceSpec("resolution_eurovoc", "Resolutions - EuroVoc (Cellar)", "warm",

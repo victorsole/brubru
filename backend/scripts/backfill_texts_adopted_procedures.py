@@ -77,6 +77,12 @@ def _get(path: str, attempts: int = 4) -> dict | None:
         try:
             with urllib.request.urlopen(
                     urllib.request.Request(url, headers={"User-Agent": "Brubru/1.0"}), timeout=90) as r:
+                # 204 No Content is the API's answer for a document it has not published
+                # (yet): TA-10-2026-0335 on its adoption day, 8 Oct 2026. Same meaning as
+                # 404. Parsing the empty body raised, was retried 4 times, and the caller
+                # read a fast, explicit "none" as the API being unreachable.
+                if r.status == 204:
+                    return None
                 body = json.load(r)
             if isinstance(body, dict) and "error" in body and "data" not in body:
                 raise RuntimeError(str(body["error"])[:120])
