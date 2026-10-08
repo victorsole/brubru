@@ -425,6 +425,31 @@ def test_creation_date_is_first_ingestion_not_last_update(client, db):
     assert not wrong, f"creation_date is not created_at (or postdates updated_date): {wrong[:3]}"
 
 
+def test_every_report_names_its_committee_and_rapporteur(db):
+    """6 own-initiative reports had neither (no OEIL carriage to read them from);
+    filled from their OEIL pages 8 Oct 2026. Topical RSP resolutions often have none."""
+    missing = [r[0] for r in db.execute(text("""
+        SELECT procedure_ref FROM ep_resolutions
+        WHERE resolution_type IN ('INI', 'INL') AND (lead_committee IS NULL OR rapporteur IS NULL)
+    """)).fetchall()]
+    assert not missing, f"report(s) without lead committee/rapporteur: {missing}"
+
+
+def test_vote_date_is_a_date_not_a_fabricated_midnight(client):
+    items = client.get("/api/v2/parliament/resolutions", params={"status": "adopted", "limit": 20}).json()["data"]
+    bad = [i["vote_date"] for i in items if i["vote_date"] and "T" in i["vote_date"]]
+    assert not bad, f"vote_date still carries a time Brubru does not hold: {bad[:2]}"
+
+
+def test_the_docs_name_fields_that_exist(client):
+    """The description promised `rapporteur_name` and `full_text_url`, which no item carries."""
+    spec = client.get("/openapi.json").json()
+    for path in ("/api/v1/resolutions", "/api/v2/parliament/resolutions"):
+        desc = spec["paths"][path]["get"]["description"]
+        for ghost in ("rapporteur_name", "full_text_url", "OEIL XML feeds"):
+            assert ghost not in desc, f"{path} description still mentions {ghost!r}"
+
+
 def test_unknown_classification_and_followup_are_null_not_empty(client):
     items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
     assert all(i["eurovoc_codes"] is None or i["eurovoc_codes"] for i in items), (

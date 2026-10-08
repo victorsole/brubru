@@ -65,7 +65,9 @@ class ResolutionItem(BaseModel):
         "pending (tabled, in committee or close to adoption) or closed_without_resolution "
         "(the debate or objection ended in Parliament with no text adopted; it never will be)."))
     adoption_date: Optional[date] = None
-    vote_date: Optional[datetime] = None
+    # The plenary vote that adopted the resolution: a DATE. The stored value carried
+    # a fabricated 00:00:00; the vote's time is not held (8 Oct 2026).
+    vote_date: Optional[date] = None
     lead_committee: Optional[str] = None
     rapporteur: Optional[str] = None
     summary: Optional[str] = None
@@ -93,8 +95,8 @@ class ResolutionItem(BaseModel):
     updated_at: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — text_url (the doceo text) when present, else oeil_url.")
-    body_txt: Optional[str] = Field(None, description="Plain-text composition: title + procedure + lead committee + rapporteur + dates + vote tally + summary.")
-    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    body_txt: Optional[str] = Field(None, description="The adopted text itself; the OEIL procedure page when Parliament has not published it yet; a composition of the row's fields only when neither exists.")
+    body_html: Optional[str] = Field(None, description="The same body as HTML.")
     document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (created_at). Until 8 Oct 2026 this repeated updated_at, so a bulk re-stamp dated every resolution 28 Sep 2026.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
@@ -274,7 +276,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         resolution_type=r.resolution_type.value if hasattr(r.resolution_type, "value") else (str(r.resolution_type) if r.resolution_type else None),
         status=r.status,
         adoption_date=r.adoption_date,
-        vote_date=r.vote_date,
+        vote_date=(r.vote_date.date() if hasattr(r.vote_date, "date") else r.vote_date),
         lead_committee=r.lead_committee,
         rapporteur=r.rapporteur,
         summary=r.summary,
@@ -329,10 +331,10 @@ GET /api/v1/resolutions?q=Ukraine&resolution_type=RSP
 ```
 
 **You get back**
-A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `status`, `lead_committee`, `rapporteur`, `adoption_date`, `vote_date`, the final plenary vote (`vote_for` / `vote_against` / `vote_abstention` / `vote_total`, null when not counted), `has_commission_followup`, `key_events` (the plenary vote, the Commission's dated follow-ups, or OEIL's own events for a resolution not adopted), `oeil_url`, `text_url`, plus `public_url` (the adopted text's own page), `body_txt` / `body_html` (the adopted text; the OEIL procedure page when Parliament has not published it yet), `document_date`, `creation_date` and `updated_date`.
 
 **Data freshness**
-Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. Resolutions are adopted at EP plenary sittings; the post-plenary sync catches them inside hours.""",
+Refreshed about every 6 hours (warm tier) from the Parliament's own sources: texts adopted and their full text (doceo), procedure pages and events (OEIL), final roll-call votes, and the Commission's follow-ups (EP Open Data). A resolution adopted at a plenary sitting appears once Parliament publishes its text, usually within a few days.""",
 )
 async def list_resolutions(
     request: Request,
@@ -473,7 +475,7 @@ GET /api/v1/resolutions/2025/2125(INI)
 A single `ResolutionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
 
 **Data freshness**
-Same as the list endpoint — synced every 6 hours from OEIL XML feeds.""",
+Same as the list endpoint: refreshed about every 6 hours from the Parliament's own sources.""",
 )
 async def get_resolution_detail(
     procedure_ref: str,
