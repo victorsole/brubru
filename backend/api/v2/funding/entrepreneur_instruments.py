@@ -48,6 +48,7 @@ _FAMILIES = [
     # EIC sub-instruments first (most specific), then the generic EIC catch-all.
     ("HORIZON-EIC%ACCELERATOR%", "HORIZON (EIC)", "EIC Accelerator",        "EIC Fund (direct equity) + EISMEA"),
     ("HORIZON-EIC%STEP%",        "HORIZON (EIC)", "EIC STEP Scale-up",      "EIC Fund (equity)"),
+    ("HORIZON-EIC%DEFENCE%",     "HORIZON (EIC)", "EIC STEP Scale Up Defence", "EIC Fund (equity)"),
     ("HORIZON-EIC%TRANSITION%",  "HORIZON (EIC)", "EIC Transition",         "EISMEA (grant)"),
     ("HORIZON-EIC%PATHFINDER%",  "HORIZON (EIC)", "EIC Pathfinder",         "EISMEA (grant)"),
     ("HORIZON-EIC%",             "HORIZON (EIC)", "EIC (other)",            "EISMEA / EIC Fund"),

@@ -42,6 +42,7 @@ load_dotenv(project_root / ".env")
 from sqlalchemy import text
 
 from core.database import SessionLocal
+from services.eic_call_calendar import wp_budget
 
 DETAILS = ("https://ec.europa.eu/info/funding-tenders/opportunities/data/"
            "topicDetails/{topic}.json")
@@ -144,6 +145,12 @@ def main() -> int:
         found, missing, shared_envelopes = [], [], []
         for r in rows:
             total, why, shared = fetch_budget(r.topic_id)
+            if total is None and why == "budget present but zero" and wp_budget(r.topic_id):
+                # EIC topics the portal books at zero (the Accelerator short-proposal
+                # topic) carry their budget in the Work Programme instead; the
+                # curated figure and its source are in data/eic_call_calendar.json.
+                total, why = wp_budget(r.topic_id), "work programme (portal says zero)"
+                print(f"  [WP] {r.topic_id:<34} portal budget is zero; using the EIC Work Programme figure")
             if total is None:
                 missing.append((r.topic_id, why))
                 print(f"  [--] {r.topic_id:<34} {why}")

@@ -1,0 +1,49 @@
+{
+  "_about": "Curated EIC batch calendar and Work Programme budgets that the Funding & Tenders Portal does not carry. The portal gives the EIC Accelerator topic a budget of 0 and a single end date, while the Work Programme sets monthly short-proposal batches, six full-proposal batches and a EUR 634M budget. Read by services/eic_call_calendar.py (feed 'next batch' line) and scripts/backfill_call_budgets.py (budget fallback when the portal says zero).",
+  "_source": "EIC Work Programme 2026, Commission Decision C(2026) 4080, version of 17 June 2026 (Sections V, VI, VII and Annex 1); EIC call pages and Funding & Tenders Portal topic records, read 8 October 2026.",
+  "_review_by": "When the 2027 EIC Work Programme is adopted, or when scripts/check_eic_sources.py reports a new Work Programme version.",
+  "topics": {
+    "HORIZON-EIC-2026-ACCELERATOR-01": {
+      "label": "EIC Accelerator 2026",
+      "indicative_budget_eur": 634000000,
+      "budget_note": "Accelerator Open EUR 414M + Accelerator Challenges EUR 220M (WP Section V; Annex 1 grant 165+88, equity 249+132).",
+      "short_proposals": {
+        "cutoff_rule": "first_tuesday_monthly",
+        "cutoff_time_brussels": "17:00",
+        "submission_end_date": "2026-12-17"
+      },
+      "full_proposals": {
+        "cut_offs_2026_cet": [
+          "2026-01-07T17:00:00+01:00",
+          "2026-03-04T17:00:00+01:00",
+          "2026-05-06T17:00:00+02:00",
+          "2026-07-08T17:00:00+02:00",
+          "2026-09-02T17:00:00+02:00",
+          "2026-11-04T17:00:00+01:00"
+        ]
+      }
+    },
+    "HORIZON-EIC-2026-STEP": {
+      "label": "EIC STEP Scale Up 2026",
+      "indicative_budget_eur": 300000000,
+      "budget_note": "WP Section VI, equity only.",
+      "batches": {
+        "cut_offs_2026_cet": [
+          "2026-02-11T17:00:00+01:00",
+          "2026-05-06T17:00:00+02:00",
+          "2026-09-09T17:00:00+02:00",
+          "2026-11-25T17:00:00+01:00"
+        ]
+      },
+      "conflict_note": "The portal topic shows 8 October 2026 as its end date; the Work Programme lists a 25 November 2026 batch. Check the portal topic before aiming for November."
+    },
+    "HORIZON-EIC-2026-DEFENCE-01": {
+      "label": "EIC STEP Scale Up Defence 2026",
+      "indicative_budget_eur": 100000000,
+      "budget_note": "WP Section VII, equity only, single batch.",
+      "batches": {
+        "deadline_2026_cet": "2026-10-28T17:00:00+01:00"
+      }
+    }
+  }
+}

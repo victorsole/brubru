@@ -27,6 +27,7 @@ from uuid import UUID
 from core.database import get_db
 from models.user import User
 from models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
+from services.eic_call_calendar import next_batches as _eic_next_batches, conflict_note as _eic_conflict_note
 from services.tenders.tender_service import TenderService
 from services.tenders.matcher import TenderMatcher
 from schemas.tender_schemas import (
@@ -2337,6 +2338,10 @@ def get_unified_feed(
             "programme": p.framework_programme,
             "published_at": p.published_at.isoformat() if p.published_at else None,
             "detected_lang": getattr(p, "detected_lang", None),
+            # EIC calls batch on dates the portal does not carry (curated from the
+            # 2026 Work Programme); None for every other call.
+            "next_batches": _eic_next_batches(p.topic_id),
+            "batch_note": _eic_conflict_note(p.topic_id),
         }
 
     def _serialise_tender_ft(t):

@@ -45,6 +45,10 @@ export interface UnifiedOpportunity {
   // Only present when source=='intl_coop' (FTS award):
   funding_type?: string | null;
   dg?: string | null;
+  // EIC calls only: next evaluation batch(es) from the curated Work Programme
+  // calendar (the portal carries a single end date), and a source-conflict note.
+  next_batches?: { short?: string; full?: string; batch?: string } | null;
+  batch_note?: string | null;
 }
 
 export type MatchSubSource = 'all' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'agency';
@@ -438,6 +442,18 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                         {formatDeadline(item.deadline, t)}
                       </span>
                     )}
+                    {item.next_batches && (['short', 'full', 'batch'] as const).map((kind) => {
+                      const iso = item.next_batches?.[kind];
+                      if (!iso) return null;
+                      const key = kind === 'short' ? 'nextShortBatch' : kind === 'full' ? 'nextFullBatch' : 'nextBatch';
+                      const date = new Date(iso).toLocaleDateString(uiDateLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
+                      return (
+                        <span key={kind} className="tenderator-feed__meta-item" title={item.batch_note || undefined}>
+                          <span className="mdi mdi-calendar-clock" aria-hidden="true" />
+                          {t(`tenderator.unifiedFeed.${key}`, { date })}
+                        </span>
+                      );
+                    })}
                   </div>
                 </button>
               </li>

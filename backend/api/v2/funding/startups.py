@@ -52,6 +52,7 @@ _RULES = [
     ("topic_id", "%EIC%PREACC%",     "seed",     "grant"),
     ("topic_id", "%EIC%PRE-ACC%",    "seed",     "grant"),
     ("topic_id", "%STEP%",           "scale-up", "equity"),
+    ("topic_id", "%EIC%DEFENCE%",    "scale-up", "equity"),   # STEP Scale Up Defence: equity-only, EUR 10-30M
     ("topic_id", "%EIC%ACCELERATOR%","growth",   "blended"),
     ("topic_id", "%EIC%CHALLENGE%",  "growth",   "grant"),
     ("topic_id", "%EIC%PRIZE%",      "growth",   "prize"),
