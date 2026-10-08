@@ -97,27 +97,31 @@
     },
     {
       "key": "boe",
-      "name": "BOE (Spanish official gazette)",
-      "ingested": false,
-      "why": "Where the Spanish textile and footwear Royal Decree will be published once adopted. Not ingested: a gap."
+      "name": "BOE (Spanish official gazette): textile, footwear, ecodesign, passport, EPR, waste, environment",
+      "ingested": true,
+      "sql": "SELECT max(finished_at) FROM sync_runs WHERE source_key = 'official_gazettes_boe' AND status = 'success'",
+      "stale_after_days": 4,
+      "why": "Where the Spanish textile and footwear Royal Decree will be published once adopted. Ingested from 8 Oct 2026 through the BOE open-data daily summary (Mon to Sat). Freshness here is the last SUCCESSFUL READ of the gazette (the table holds only matching items, so the newest item says nothing about whether it was read); the daily sync fails on a window it read nothing from, so a success cannot be vacuous."
     },
     {
       "key": "dogc",
-      "name": "DOGC (Official Gazette of the Government of Catalonia)",
-      "ingested": false,
-      "why": "Catalan waste and circular economy rules, Terraqui's home ground. Not ingested: a gap."
+      "name": "DOGC (Catalan official gazette, section-1 norms): laws, decrees, orders on the remit",
+      "ingested": true,
+      "sql": "SELECT max(finished_at) FROM sync_runs WHERE source_key = 'official_gazettes_dogc' AND status = 'success'",
+      "stale_after_days": 4,
+      "why": "Catalan waste and circular-economy rules, Terraqui's home ground. Ingested from 8 Oct 2026 from the Generalitat open-data dataset 'Normativa del DOGC' (laws, decrees and orders of section 1 only: ~0.5 norms a day, a matching one a few times a year). Freshness here is the last SUCCESSFUL READ of the gazette (the table holds only matching items, so the newest item says nothing about whether it was read); the daily sync fails on a window it read nothing from, so a success cannot be vacuous. Anything published in other DOGC sections (resolutions, announcements) is NOT covered."
     },
     {
       "key": "cen_cenelec_jtc24",
       "name": "CEN-CENELEC JTC 24 (DPP standards committee) drafts",
       "ingested": false,
-      "why": "Draft DPP standards before publication. Not ingested: drafts sit behind national standards body membership; only the six published EN standards are in the corpus."
+      "why": "Draft DPP standards before publication. Not ingested and not ingestible by us: drafts sit behind national standards body membership (checked 8 Oct 2026, no open feed); only the six published EN standards are in the corpus. The one public signal is a prEN entering CEN's public enquiry or formal vote, which is listed on a JavaScript application with no API. Remains a documented gap, not a quiet source."
     },
     {
       "key": "ecodesign_forum_documents",
-      "name": "Ecodesign Forum meeting DOCUMENTS (CircaBC folder linked from the register)",
+      "name": "Ecodesign Forum meeting DOCUMENTS: CircaBC folder with draft measures (agendas, minutes, slides ARE read live)",
       "ingested": false,
-      "why": "The register lists the meetings (read live by dpp_watch) but the agendas, minutes and draft measures sit on CircaBC, which we do not read. A quiet meeting list does not mean quiet documents."
+      "why": "PARTLY read since 8 Oct 2026: dpp_watch lists the agenda, minutes and presentations the expert-groups register itself publishes for each Forum meeting (public download links on the meeting record; checked on meetings 76062 and 69322). NOT read: the CircaBC folder linked from the register, where draft measures and working documents sit. A quiet meeting list does not mean quiet documents; a meeting with no published document is reported as 'none published'."
     }
   ]
 }

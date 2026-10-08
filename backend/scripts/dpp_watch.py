@@ -46,7 +46,7 @@ import logging
 import os
 import re
 import sys
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 logging.disable(logging.WARNING)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -227,6 +227,33 @@ def body_freshness(db) -> list[dict]:
     out.append({"body": "tris", "name": "TRIS (national draft technical rules, Directive (EU) 2015/1535)",
                 "news_rows": n, "newest": newest.isoformat() if newest else None,
                 "age_days": age, "state": state})
+
+    # BOE and DOGC (8 Oct 2026). These tables hold only items that MATCH the client's remit, so
+    # the newest matching item says nothing about whether the gazette was READ: a quiet fortnight
+    # is normal. Freshness is therefore the sync's own last run: a success inside RAN_WITHIN_DAYS
+    # is OK (read, and held nothing newer if the newest item is old), a latest run that failed is
+    # FAILED, and no recent run at all is STALE. The sync fails on a window it read nothing from.
+    for code, name in (("boe", "BOE (Spanish official gazette)"),
+                       ("dogc", "DOGC (Catalan official gazette, section-1 norms)")):
+        row = db.execute(text(
+            "SELECT count(*) AS n, max(published_date) AS newest "
+            "FROM official_gazette_items WHERE gazette = :g AND is_test = false"), {"g": code}).mappings().first()
+        last = db.execute(text(
+            "SELECT status, started_at FROM sync_runs WHERE source_key = :k "
+            "ORDER BY started_at DESC LIMIT 1"), {"k": f"official_gazettes_{code}"}).mappings().first()
+        n, newest = int((row or {}).get("n") or 0), (row or {}).get("newest")
+        if last is None:
+            state = "STALE"
+        elif last["status"] == "failed":
+            state = "FAILED"
+        elif (datetime.now(timezone.utc) - (last["started_at"] if last["started_at"].tzinfo
+                                            else last["started_at"].replace(tzinfo=timezone.utc))).days > RAN_WITHIN_DAYS:
+            state = "STALE"
+        else:
+            state = "OK"
+        out.append({"body": code, "name": name, "news_rows": n,
+                    "newest": newest.isoformat() if newest else None,
+                    "age_days": (date.today() - newest).days if newest else None, "state": state})
     return out
 
 
@@ -374,6 +401,24 @@ def sweep(db, scope_key: str, days: int) -> list[dict]:
             "tris_open": open_, "tris_country": r["country"],
         })
 
+    # BOE / DOGC items (8 Oct 2026). They are classified by their own Spanish/Catalan matcher,
+    # not by this scope's English pattern: STRICT items (textile, footwear, ecodesign, passport,
+    # extended producer responsibility) belong in scope A, BROAD items (waste, packaging,
+    # climate, biodiversity, water, environmental assessment) in scope C. A strict item in a
+    # rule section (BOE 1 or 3) or any DOGC norm is a published rule: urgent by construction.
+    gtier = {"A": "strict", "C": "broad"}.get(scope_key)
+    if gtier:
+        for r in db.execute(text("""
+            SELECT gazette, published_date AS d, title, url, section
+            FROM official_gazette_items
+            WHERE is_test = false AND match_tier = :tier AND published_date >= :since
+            ORDER BY published_date DESC LIMIT 100"""), {"tier": gtier, "since": since}).mappings().all():
+            hits.append({
+                "source": "official_gazettes", "body": r["gazette"].upper(), "item_type": "gazette_item",
+                "d": r["d"], "title": f"[{r['gazette'].upper()}] {r['title']}", "url": r["url"], "summary": "",
+                "gazette_urgent": gtier == "strict" and (r["gazette"] == "dogc" or r["section"] in ("1", "3")),
+            })
+
     seen, out = set(), []
     for h in hits:
         k = _norm(h["title"])
@@ -382,12 +427,14 @@ def sweep(db, scope_key: str, days: int) -> list[dict]:
         seen.add(k)
         blob = f"{h['title']} {h.get('summary','')}"
         h["urgent"] = (h["item_type"] in ("consultation", "jrc_workshop")
+                       or bool(h.get("gazette_urgent"))
                        or bool(re.search(urgent_rx, blob, re.I))
                        or (h["item_type"] == "tris_notification" and h.get("tris_open") and (
                            h.get("tris_country") in TRIS_HOME_COUNTRIES
                            or (h["d"] - date.today()).days <= TRIS_URGENT_WITHIN_DAYS)))
         h.pop("tris_open", None)
         h.pop("tris_country", None)
+        h.pop("gazette_urgent", None)
         h["scope"] = scope_key
         h.pop("summary", None)
         out.append(h)
@@ -412,6 +459,35 @@ _REGISTER_HEADERS = {
 _FORUM_TITLE_TERMS = ("ecodesign", "product passport", "textile", "sustainable products")
 # Groups whose every meeting is on-topic, whatever its title says.
 _FORUM_GROUP_PREFIXES = ("E03969", "X03609", "E02773", "E00470")
+
+
+_REGISTER_BASE = "https://ec.europa.eu/transparency/expert-groups-register/core/api/front"
+# reftable codes seen on Forum meetings (8 Oct 2026): 00001 agenda, 00002 minutes, 00004 presentation.
+_DOC_KINDS = {"00001": "agenda", "00002": "minutes", "00004": "presentation"}
+
+
+def meeting_documents(meeting_id) -> list[dict] | None:
+    """Documents the register itself publishes for one meeting (agenda, minutes, slides).
+
+    The ledger said Forum documents "sit on CircaBC, which we do not read". That is true of the
+    CircaBC folder with draft measures, but the register's own meeting record lists the agenda,
+    minutes and presentations with public download links (checked 8 Oct 2026 on meetings 76062
+    and 69322). None means the lookup FAILED; [] means the meeting has no document published.
+    """
+    import requests
+    try:
+        r = requests.get(f"{_REGISTER_BASE}/meetings/{meeting_id}", headers=_REGISTER_HEADERS, timeout=60)
+        r.raise_for_status()
+        docs = r.json().get("documents") or []
+    except Exception:  # noqa: BLE001 - a failed lookup is reported as None, never as "no documents"
+        return None
+    out = []
+    for d in docs:
+        code = str(d.get("type") or "")[-5:]
+        link = d.get("urlDownload") or ""
+        out.append({"kind": _DOC_KINDS.get(code, "document"), "filename": d.get("filename") or d.get("title"),
+                    "url": ("https://ec.europa.eu" + link) if link.startswith("/") else link})
+    return out
 
 
 def forum_meetings(days: int) -> tuple[list[dict], dict]:
@@ -443,7 +519,8 @@ def forum_meetings(days: int) -> tuple[list[dict], dict]:
                      "url": "https://ec.europa.eu/transparency/expert-groups-register/screen/meetings/consult?meetingId="
                             + str(m["meetingId"]),
                      "summary": str(m.get("refGroup", "")).strip() + (" (upcoming)" if upcoming else ""),
-                     "source": "expert_groups_register", "urgent": upcoming, "scope": "A"})
+                     "source": "expert_groups_register", "urgent": upcoming, "scope": "A",
+                     "documents": meeting_documents(m["meetingId"])})
     row = {"body": "forum_register", "name": "Ecodesign Forum meetings (expert-groups register, live)",
            "news_rows": len(seen), "newest": newest,
            "age_days": (date.today() - date.fromisoformat(newest)).days if newest else None,
@@ -544,6 +621,10 @@ def main() -> int:
             mark = "URGENT" if h["urgent"] else "      "
             print(f"   [{mark}] {str(h['d']):<11} {str(h['body'])[:22]:<22} "
                   f"{h['source']:<14} {str(h['title'])[:80]}")
+            if h.get("item_type") == "forum_meeting":
+                docs = h.get("documents")
+                print("            documents: " + ("lookup FAILED" if docs is None else
+                      ", ".join(f"{d['kind']}: {d['filename']}" for d in docs) if docs else "none published"))
         if len(hs) > args.limit:
             print(f"   ... and {len(hs) - args.limit} more (--limit / --json for the rest)")
 

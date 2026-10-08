@@ -786,6 +786,11 @@ async def cron_sync_daily(
     # Brubru DPP connector and dpp_watch read.
     results["jrc_product_bureau"] = await _run_script_async(
         "jrc_product_bureau", "scripts/sync_jrc_product_bureau.py", [], timeout=300)
+    # BOE + DOGC (8 Oct 2026): where a Spanish textile Royal Decree or a Catalan waste rule
+    # first becomes binding. Before the ledger and the watch, which read what it stores. It
+    # exits non-zero (and records `failed`) on a window it read nothing from.
+    results["official_gazettes"] = await _run_script_async(
+        "official_gazettes", "scripts/sync_official_gazettes.py", ["--apply"], timeout=300)
     # Client watches (23 Sep 2026): the Terraqui/DPP-TEX source ledger and the
     # DPP watch were MANDATORY DAILY in /news, i.e. reminders nobody executed
     # unless a human ran the skill. They run here, after the feeds they read,
