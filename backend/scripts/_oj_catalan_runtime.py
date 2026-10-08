@@ -139,13 +139,19 @@ class ActBudget:
     def __init__(self, total_s: int, per_act_max_s: int = 900):
         self.deadline = time.monotonic() + total_s
         self.per_act_max_s = per_act_max_s
+        # True when the last timeout handed out was set by the RUN budget, not the
+        # per-act ceiling. An act cut short that way started late; it is not too
+        # long, so it must not be cooled down for 72h (8 Oct 2026).
+        self.cut_by_run = False
 
     def remaining(self) -> float:
         return self.deadline - time.monotonic()
 
     def act_timeout(self) -> int:
         # Keep 30s back so the loop can record the outcome before the tier kill.
-        return int(max(1, min(self.per_act_max_s, self.remaining() - 30)))
+        left = self.remaining() - 30
+        self.cut_by_run = left < self.per_act_max_s
+        return int(max(1, min(self.per_act_max_s, left)))
 
 
 def run_bounded(cmd: list[str], cwd: Path, timeout: int) -> subprocess.CompletedProcess:

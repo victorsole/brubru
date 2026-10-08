@@ -440,6 +440,10 @@ def run(limit: int, date: str | None) -> int:
         try:
             out = _translate(celex, r, html_path)
         except subprocess.TimeoutExpired:
+            if _BUDGET and _BUDGET.cut_by_run:
+                print(f"[INFO] run budget spent mid-act; {len(rows) - i + 1} act(s) left "
+                      f"for the next run, no cooldown", flush=True)
+                break
             print(f"  [SKIP] out of time; retry in {TIMEOUT_COOLDOWN_H}h, "
                   f"or clear it with a local run (no --budget)", flush=True)
             _record_failure(celex, TIMEOUT_COOLDOWN_H)

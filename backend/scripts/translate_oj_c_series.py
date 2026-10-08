@@ -248,6 +248,10 @@ def run(limit: int, date: str | None) -> int:
                     [sys.executable, "scripts/catalan_translate.py", "--html", tmp, "--celex", oj_id],
                     cwd=BACKEND, timeout=_timeout(3600))
             except subprocess.TimeoutExpired:
+                if _BUDGET and _BUDGET.cut_by_run:
+                    print(f"[INFO] run budget spent mid-item; {len(rows) - i + 1} item(s) left "
+                          f"for the next run, no cooldown", flush=True)
+                    break
                 print(f"  [SKIP] out of time; retry in {TIMEOUT_COOLDOWN_H}h, "
                       f"or clear it with a local run (no --budget)", flush=True)
                 _record_failure(oj_id, TIMEOUT_COOLDOWN_H); failed += 1; continue

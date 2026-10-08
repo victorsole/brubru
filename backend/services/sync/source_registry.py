@@ -324,8 +324,15 @@ MEUB_SOURCES: List[SourceSpec] = [
     # the same run (scripts/_oj_catalan_runtime.py), and take --budget 1500 so an
     # oversized act is skipped and cooled down inside the 1800s kill instead of
     # getting the whole job killed at the head of the queue on every run.
-    SourceSpec("oj_acts_ca", "My OJ - Catalan full text (L)", "fast", "scripts/translate_oj_daily_acts.py", ("--limit", "10", "--budget", "1500"), timeout=1800, stale_after_hours=14),
-    SourceSpec("oj_c_ca",    "My OJ - Catalan full text (C)", "fast", "scripts/translate_oj_c_series.py",   ("--limit", "10", "--budget", "1500"), timeout=1800, stale_after_hours=14),
+    #
+    # 8 Oct 2026: 480s each, 360s per act. Two 1500s budgets on top of the ~22 min
+    # the rest of the fast tier takes ended 75 min after the hour, past the
+    # dispatcher's 50-min wait, so the run was reported unfinished and Railway mailed
+    # a crash. An act cut by the run budget is retried next run, never cooled down.
+    # 360 leaves 90s for setup and the C-series page fetch, so the act at the head of
+    # the queue always gets its full ceiling and a too-long one is still cooled down.
+    SourceSpec("oj_acts_ca", "My OJ - Catalan full text (L)", "fast", "scripts/translate_oj_daily_acts.py", ("--limit", "10", "--budget", "480", "--per-act", "360"), timeout=1800, stale_after_hours=14),
+    SourceSpec("oj_c_ca",    "My OJ - Catalan full text (C)", "fast", "scripts/translate_oj_c_series.py",   ("--limit", "10", "--budget", "480", "--per-act", "360"), timeout=1800, stale_after_hours=14),
 ]
 # fmt: on
 

@@ -120,3 +120,26 @@ def test_budget_caps_each_act_and_the_run(runtime):
     b = runtime.ActBudget(total_s=100, per_act_max_s=900)
     assert b.act_timeout() <= 70  # the run budget, less the 30s reserve, wins over 900
     assert runtime.ActBudget(total_s=5000, per_act_max_s=900).act_timeout() == 900
+
+
+def test_a_timeout_set_by_the_run_budget_is_not_the_act_being_too_long(runtime):
+    """8 Oct 2026: an act that started late must be retried next run, not cooled down 72h."""
+    head = runtime.ActBudget(total_s=480 - 85, per_act_max_s=360)  # 85s of setup + page fetch
+    assert head.act_timeout() == 360 and head.cut_by_run is False   # its own ceiling: too long
+    late = runtime.ActBudget(total_s=200, per_act_max_s=360)
+    assert late.act_timeout() <= 170 and late.cut_by_run is True    # the run ran out
+    for script in ("translate_oj_daily_acts.py", "translate_oj_c_series.py"):
+        src = (_SCRIPTS / script).read_text()
+        handler = src[src.index("except subprocess.TimeoutExpired"):]
+        assert handler.index("_BUDGET.cut_by_run") < handler.index("TIMEOUT_COOLDOWN_H)"), script
+
+
+def test_the_catalan_jobs_fit_inside_the_dispatchers_wait():
+    """Two 1500s budgets ended the fast tier 75 min after the hour; the dispatcher waits 50."""
+    sys.path.insert(0, str(_SCRIPTS.parent))
+    from services.sync.source_registry import MEUB_SOURCES
+    budgets = {s.key: int(s.args[s.args.index("--budget") + 1])
+               for s in MEUB_SOURCES if s.key in ("oj_acts_ca", "oj_c_ca")}
+    assert set(budgets) == {"oj_acts_ca", "oj_c_ca"}
+    # ~8 min start delay + ~23 min for the rest of the fast tier, measured 4-7 Oct 2026.
+    assert 8 * 60 + 23 * 60 + sum(budgets.values()) <= 50 * 60
