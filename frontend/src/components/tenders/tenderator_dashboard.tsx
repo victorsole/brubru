@@ -498,7 +498,8 @@ export const TenderatorDashboard = ({
 
       {/* EIC 2026 at-a-glance tile — visible only when the EIC lens is active.
           Static budget data from eic.ec.europa.eu/eic-2026-work-programme_en.
-          Total 2026 budget: €1.4B across 5 funding strands + prizes. */}
+          Total 2026 budget: over EUR 2.1B (WP C(2026) 4080, 17 June 2026): six funding
+          schemes, the Scaleup Europe Fund contribution, prizes and support actions. */}
       {source === 'ft_proposals' && programmeCode === 'EIC' && (
         <section className="tenderator-dashboard__eic-glance" aria-label={t('tenderator.dashboard.eicGlanceLabel')}>
           <div className="tenderator-dashboard__eic-glance-title">
@@ -508,6 +509,8 @@ export const TenderatorDashboard = ({
           <ul className="tenderator-dashboard__eic-glance-list">
             <li><strong>€634M</strong> {t('tenderator.dashboard.eicAccelerator')}</li>
             <li><strong>€300M</strong> {t('tenderator.dashboard.eicStep')}</li>
+            <li><strong>€100M</strong> {t('tenderator.dashboard.eicStepDefence')}</li>
+            <li><strong>€600M</strong> {t('tenderator.dashboard.eicScaleupEurope')}</li>
             <li><strong>€262M</strong> {t('tenderator.dashboard.eicPathfinder')}</li>
             <li><strong>€100M</strong> {t('tenderator.dashboard.eicTransition')}</li>
             <li><strong>€6M</strong> {t('tenderator.dashboard.eicAdvancedInnovation')}</li>
