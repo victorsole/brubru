@@ -292,7 +292,7 @@ def main():
             hosts = hosts[: args.limit]
         all_hosts.extend(hosts)
 
-    inserted = total_meetings = rejected = 0
+    inserted = already_held = total_meetings = rejected = 0
     conn = psycopg2.connect(db_url) if args.apply else None
     cur = conn.cursor() if conn else None
 
@@ -339,12 +339,21 @@ def main():
                            %(organisation_met)s, %(transparency_register_id)s, %(organisation_type)s,
                            %(representatives)s, %(source_url)s, %(policy_areas)s, %(related_celex)s,
                            NOW(), NOW(), NOW())
-                        ON CONFLICT DO NOTHING
+                        ON CONFLICT (meeting_key) DO NOTHING
+                        RETURNING id
                         """,
                         m,
                     )
+                    # A meeting already held keeps its row and its id: the conflict is
+                    # on meeting_key (migration 283), the register row's content. Until
+                    # 8 Oct 2026 the only unique key was the random id, so this inserted
+                    # every meeting again on every run (475,782 rows for 30,155 meetings)
+                    # and counted each as "inserted".
+                    if cur.fetchone():
+                        inserted += 1
+                    else:
+                        already_held += 1
                     cur.execute("RELEASE SAVEPOINT row_sp")
-                    inserted += 1
                     break
                 except (psycopg2.OperationalError, psycopg2.InterfaceError) as exc:
                     print(f"    [RECONNECT] {exc}")
@@ -380,7 +389,7 @@ def main():
             pass
 
     print(f"[DONE] hosts={host_i}/{len(all_hosts)} meetings_parsed={total_meetings} "
-          f"inserted={inserted} rejected={rejected}"
+          f"inserted={inserted} already_held={already_held} rejected={rejected}"
           f"{' (budget reached)' if budget_hit else ''}"
           f"{' (applied)' if args.apply else ' (dry-run)'}")
 
