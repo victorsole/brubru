@@ -45,6 +45,7 @@ import json
 import logging
 import os
 import re
+import time
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 
@@ -55,6 +56,17 @@ from typing import List, Dict, Any, Optional
 # chat stream that has produced no token in half a minute is simply stuck.
 PROVIDER_TIMEOUT_S = float(os.getenv("PROVIDER_TIMEOUT_S", "90"))
 FIRST_TOKEN_TIMEOUT_S = float(os.getenv("FIRST_TOKEN_TIMEOUT_S", "30"))
+# One extra pass over the providers whose failure was TRANSIENT (rate limit,
+# timeout, connection, 5xx, empty output) when the whole chain produced nothing.
+# Added 8 Oct 2026: on 7 Oct three consecutive requests got "providers are
+# temporarily unavailable" within two minutes while Cerebras was already 402 and
+# every other lane was a one-shot try; a single transient refusal from the last
+# working lane was therefore a total outage. 0 turns the second pass off.
+CHAIN_RETRY_PASSES = int(os.getenv("CHAIN_RETRY_PASSES", "1"))
+CHAIN_RETRY_BACKOFF_S = float(os.getenv("CHAIN_RETRY_BACKOFF_S", "2.5"))
+# No second pass when the first one already took this long (a chain of timeouts): the user has
+# waited enough, and a retry would double a wait that is already the worst case.
+CHAIN_RETRY_MAX_ELAPSED_S = float(os.getenv("CHAIN_RETRY_MAX_ELAPSED_S", "45"))
 from datetime import datetime, date
 from dataclasses import dataclass, field
 
@@ -897,6 +909,73 @@ class AnthropicProvider(AIProvider):
         )
 
 
+# Words that turn a 429 from "wait a moment" into "this lane is dead until a
+# human tops it up". OpenAI reports exhausted credits as a 429 with the code
+# insufficient_quota, so a status check alone would retry a hopeless lane.
+_EXHAUSTED_MARKERS = ("insufficient_quota", "no credits", "billing", "payment required",
+                      "exceeded your current quota")
+_TRANSIENT_STATUS = {408, 409, 425, 429, 500, 502, 503, 504}
+_STATUS_IN_TEXT = re.compile(r"\b([45]\d\d)\b")
+
+
+def _failure_status(exc: BaseException) -> Optional[int]:
+    """The HTTP status behind a provider failure, if there is one.
+
+    The OpenAI-compatible providers raise openai.APIStatusError (status on the
+    exception); Gemini raises RuntimeError("Gemini stream 429: ...") so its
+    status only exists in the text.
+    """
+    status = getattr(exc, "status_code", None)
+    if isinstance(status, int):
+        return status
+    m = _STATUS_IN_TEXT.search(str(exc)[:80])
+    return int(m.group(1)) if m else None
+
+
+def _failure_reason(exc: BaseException) -> str:
+    """Short, loggable reason a provider failed: '429', 'timeout', 'empty output'.
+
+    Until 8 Oct 2026 the attempts list held only the exception CLASS
+    ("Scaleway: APIStatusError"), which cannot tell a 402 from a 429 from a 503,
+    so the 7 Oct all-providers-down window could not be diagnosed afterwards.
+    """
+    if isinstance(exc, (asyncio.TimeoutError, openai.APITimeoutError)):
+        return "timeout"
+    if isinstance(exc, openai.APIConnectionError):
+        return "connection error"
+    status = _failure_status(exc)
+    if status is not None:
+        return f"HTTP {status}"
+    text = str(exc).strip().lower()
+    if "empty" in text:
+        return "empty output"
+    if "not configured" in text:
+        return "not configured"
+    return type(exc).__name__
+
+
+def _is_transient_failure(exc: BaseException) -> bool:
+    """True when asking the same provider again a moment later can succeed.
+
+    Transient: timeout, dropped connection, empty output, 408/409/425/429/5xx.
+    Permanent: 401/402/403/404/410/413 (key, billing, retired model, request
+    too large), an exhausted-credits 429, or a provider that is not configured.
+    Anything unclassified is NOT retried: an unknown error should reach the log
+    once, not be repeated.
+    """
+    if isinstance(exc, (asyncio.TimeoutError, openai.APITimeoutError, openai.APIConnectionError)):
+        return True
+    text = str(exc).lower()
+    if any(marker in text for marker in _EXHAUSTED_MARKERS):
+        return False
+    status = _failure_status(exc)
+    if status is not None:
+        return status in _TRANSIENT_STATUS
+    if "empty" in text:
+        return True
+    return False
+
+
 class MultiProviderService:
     """
     Orchestrates AI providers with automatic fallback.
@@ -1234,70 +1313,94 @@ class MultiProviderService:
         defect in the product could not be attributed to a provider.
         """
         errors: List[str] = []
-        for provider in self.providers:
-            produced = False
-            try:
-                # Any provider exposing generate_stream streams. Testing for
-                # _OpenAICompatibleProvider instead meant Gemini -- about a
-                # quarter of traffic -- was forced down the single-blob path
-                # even after it grew a working generate_stream.
-                if hasattr(provider, "generate_stream"):
-                    provider._last_stream_tokens = 0
-                    agen = provider.generate_stream(
-                        system_prompt, messages, max_tokens, temperature
-                    )
-                    # Bound the wait for the FIRST delta. Once tokens are
-                    # flowing we let the provider finish; before that, a silent
-                    # provider must not stall the chain.
-                    # StopAsyncIteration must not escape an async generator
-                    # (Python turns that into RuntimeError); convert it to the
-                    # empty-output signal the loop below already handles.
-                    try:
-                        first = await asyncio.wait_for(
-                            agen.__anext__(), timeout=FIRST_TOKEN_TIMEOUT_S
-                        )
-                    except StopAsyncIteration:
-                        raise RuntimeError("empty output")
-                    produced = True
-                    yield first
-                    async for delta in agen:
-                        yield delta
-                    _tokens = getattr(provider, "_last_stream_tokens", 0) or 0
-                else:
-                    resp = await asyncio.wait_for(
-                        provider.generate(
+        # provider name -> was its latest failure transient? Drives the retry pass.
+        transient: Dict[str, bool] = {}
+        candidates = list(self.providers)
+        started = time.monotonic()
+        for pass_no in range(1 + max(0, CHAIN_RETRY_PASSES)):
+            if pass_no > 0:
+                # Second pass only over lanes whose failure can pass on its own.
+                # Nothing has been emitted yet (a mid-stream error re-raises),
+                # so retrying is invisible to the user apart from the wait.
+                candidates = [p for p in candidates if transient.get(p.name)]
+                if not candidates:
+                    break
+                if time.monotonic() - started > CHAIN_RETRY_MAX_ELAPSED_S:
+                    logger.warning("[stream] first pass took too long to retry; giving up")
+                    break
+                logger.warning(
+                    f"[stream] no provider answered; retrying "
+                    f"{[p.name for p in candidates]} after {CHAIN_RETRY_BACKOFF_S}s"
+                )
+                await asyncio.sleep(CHAIN_RETRY_BACKOFF_S)
+            suffix = " (retry)" if pass_no else ""
+            for provider in candidates:
+                produced = False
+                try:
+                    # Any provider exposing generate_stream streams. Testing for
+                    # _OpenAICompatibleProvider instead meant Gemini -- about a
+                    # quarter of traffic -- was forced down the single-blob path
+                    # even after it grew a working generate_stream.
+                    if hasattr(provider, "generate_stream"):
+                        provider._last_stream_tokens = 0
+                        agen = provider.generate_stream(
                             system_prompt, messages, max_tokens, temperature
-                        ),
-                        timeout=PROVIDER_TIMEOUT_S,
-                    )
-                    if resp.message:
-                        produced = True
-                        yield resp.message
-                    _tokens = getattr(resp, "tokens_used", 0) or 0
-                if produced:
-                    logger.info(f"[stream] {provider.name} produced response")
-                    if telemetry is not None:
-                        telemetry["provider"] = provider.name
-                        # _OpenAICompatibleProvider carries an instance `model`;
-                        # Gemini/Mistral/Anthropic/OpenAI carry a class `MODEL`.
-                        # Reading only the lowercase one recorded provider=Gemini
-                        # with model=NULL on the first production probe.
-                        telemetry["model"] = (
-                            getattr(provider, "model", "")
-                            or getattr(provider, "MODEL", "")
-                            or ""
                         )
-                        telemetry["tokens_used"] = _tokens
-                        telemetry["attempts"] = list(errors)
-                    return
-                raise RuntimeError("empty output")
-            except Exception as e:
-                if produced:
-                    logger.error(f"[stream] {provider.name} failed mid-stream (cannot fall back): {e}")
-                    raise
-                errors.append(f"{provider.name}: {type(e).__name__}")
-                logger.warning(f"[stream] {provider.name} unavailable, trying next: {e}")
-                continue
+                        # Bound the wait for the FIRST delta. Once tokens are
+                        # flowing we let the provider finish; before that, a silent
+                        # provider must not stall the chain.
+                        # StopAsyncIteration must not escape an async generator
+                        # (Python turns that into RuntimeError); convert it to the
+                        # empty-output signal the loop below already handles.
+                        try:
+                            first = await asyncio.wait_for(
+                                agen.__anext__(), timeout=FIRST_TOKEN_TIMEOUT_S
+                            )
+                        except StopAsyncIteration:
+                            raise RuntimeError("empty output")
+                        produced = True
+                        yield first
+                        async for delta in agen:
+                            yield delta
+                        _tokens = getattr(provider, "_last_stream_tokens", 0) or 0
+                    else:
+                        resp = await asyncio.wait_for(
+                            provider.generate(
+                                system_prompt, messages, max_tokens, temperature
+                            ),
+                            timeout=PROVIDER_TIMEOUT_S,
+                        )
+                        if resp.message:
+                            produced = True
+                            yield resp.message
+                        _tokens = getattr(resp, "tokens_used", 0) or 0
+                    if produced:
+                        logger.info(f"[stream] {provider.name} produced response")
+                        if telemetry is not None:
+                            telemetry["provider"] = provider.name
+                            # _OpenAICompatibleProvider carries an instance `model`;
+                            # Gemini/Mistral/Anthropic/OpenAI carry a class `MODEL`.
+                            # Reading only the lowercase one recorded provider=Gemini
+                            # with model=NULL on the first production probe.
+                            telemetry["model"] = (
+                                getattr(provider, "model", "")
+                                or getattr(provider, "MODEL", "")
+                                or ""
+                            )
+                            telemetry["tokens_used"] = _tokens
+                            telemetry["attempts"] = list(errors)
+                        return
+                    raise RuntimeError("empty output")
+                except Exception as e:
+                    if produced:
+                        logger.error(f"[stream] {provider.name} failed mid-stream (cannot fall back): {e}")
+                        raise
+                    # The reason, not just the class: "Scaleway: HTTP 429" and
+                    # "Cerebras: HTTP 402" are different problems.
+                    errors.append(f"{provider.name}: {_failure_reason(e)}{suffix}")
+                    transient[provider.name] = _is_transient_failure(e)
+                    logger.warning(f"[stream] {provider.name} unavailable, trying next: {e}")
+                    continue
 
         if telemetry is not None:
             telemetry["attempts"] = list(errors)

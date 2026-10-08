@@ -2342,6 +2342,20 @@ class AIService:
             except Exception as e:
                 logger.error(f"[stream] free open-model chain failed: {e}")
                 stream_failed = True
+                # A total failure used to leave NOTHING durable: provider NULL,
+                # no validator row, and the per-provider reasons only in a log
+                # that is gone by morning. On 7 Oct 2026 three answers died this
+                # way in two minutes and the cause could not be established.
+                # Record the reasons where /audit-queries already looks
+                # (chat_validations, outcome 'error', generator 'chain_failed').
+                await self._record_chain_failure(
+                    user_message=user_message,
+                    context_str=context_str,
+                    language=_qlang,
+                    user_id=user_id,
+                    attempts=telemetry.get("attempts") or [],
+                    error=str(e),
+                )
                 yield ("I could not generate a response just now because the AI "
                        "providers are temporarily unavailable. Please try again "
                        "in a moment.")
@@ -5627,6 +5641,40 @@ USER QUESTION: {user_message}
             if len(titles) >= limit:
                 break
         return titles
+
+    async def _record_chain_failure(
+        self,
+        user_message: str,
+        context_str: Optional[str],
+        language: Optional[str],
+        user_id: Optional[str],
+        attempts: List[str],
+        error: str,
+    ) -> None:
+        """Persist the per-provider reasons behind an all-providers-failed answer.
+
+        One chat_validations row: outcome 'error', generator 'chain_failed',
+        `error` = 'chain_failed: Cerebras: HTTP 402; Scaleway: HTTP 429; ...'.
+        Never raises: this is observability on a path that is already failing.
+        """
+        reason = "chain_failed: " + ("; ".join(attempts) if attempts else (error or "no detail"))[:900]
+        logger.error(f"[stream] {reason}")
+        try:
+            from services.ai.validator_settings import VALIDATOR_SHADOW_MODE as _shadow
+            await self._log_chat_validation(
+                query=user_message,
+                response="",
+                context_length=len(context_str or ""),
+                generator="chain_failed",
+                language=language,
+                result=None,
+                shadow_mode=_shadow,
+                user_id=user_id,
+                outcome="error",
+                reason=reason,
+            )
+        except Exception as exc:  # noqa: BLE001 -- observability never breaks chat
+            logger.warning("[stream] could not record chain failure: %s", exc)
 
     async def _log_chat_validation(
         self,

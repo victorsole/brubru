@@ -45,6 +45,7 @@ import logging
 import re
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional
 
 from services.ai.multi_provider_service import (
@@ -164,6 +165,49 @@ def _brubru_product_facts() -> str:
     return _PRODUCT_FACTS_CACHE
 
 
+# The College of Commissioners as ground truth (A3/A4, 8 Oct 2026).
+#
+# Two opposite failures came from the same gap. The CONTEXT often names a
+# Commissioner by surname only ("chaired by Commissioners Jorgensen and
+# Kubilius"), so a correct answer that added the given names and portfolios
+# ("Dan Jorgensen (Energy), Andrius Kubilius (Defence and Space)") was scored
+# CRITICAL as a fabricated role: a false positive on an accurate answer. And a
+# generator that "corrected" the guide's Agriculture Commissioner Hansen into
+# Wojciechowski (the previous holder) had nothing to be checked against.
+# knowledge_base/institutions/commissioners.json is the College the rest of the
+# product already serves; handing it to the judge settles both directions.
+_COLLEGE_FACTS_CACHE: Optional[str] = None
+
+
+def _college_facts() -> str:
+    """One line per member of the College: name, country, portfolio.
+
+    Fails soft: if the file cannot be read the validator runs without this
+    section, exactly as it did before.
+    """
+
+    global _COLLEGE_FACTS_CACHE
+    if _COLLEGE_FACTS_CACHE is not None:
+        return _COLLEGE_FACTS_CACHE
+
+    try:
+        path = Path(__file__).resolve().parents[2] / "knowledge_base" / "institutions" / "commissioners.json"
+        college = json.loads(path.read_text(encoding="utf-8"))["college"]
+        members = [college["president"], *college["executive_vice_presidents"], *college["commissioners"]]
+        lines = []
+        for m in members:
+            role = m.get("portfolio") or m.get("position") or ""
+            extra = m.get("additional_portfolio")
+            if extra:
+                role = f"{role}; {extra}"
+            lines.append(f"- {m['name']} ({m.get('country', '?')}): {role}")
+        _COLLEGE_FACTS_CACHE = "\n".join(lines)
+    except Exception as exc:  # noqa: BLE001 -- never break validation over this
+        logger.warning("validator college facts unavailable: %s", exc)
+        _COLLEGE_FACTS_CACHE = ""
+    return _COLLEGE_FACTS_CACHE
+
+
 _VALIDATOR_SYSTEM = (
     "You are a strict fact-checker for an EU policy assistant. Your only job is to "
     "detect hallucinations, incomplete answers, and user-claim capitulations by comparing "
@@ -182,6 +226,16 @@ _VALIDATOR_SYSTEM = (
     "a NAMED product or sub-tab appearing in NEITHER list, and that is a warning, "
     "never critical -- a product name is not a named person, a meeting, a future "
     "date, a quote or a citation.\n\n"
+    "COLLEGE FACTS ARE GROUND TRUTH TOO. The user message may include the current "
+    "College of Commissioners (name, country, portfolio). When the CONTEXT names a "
+    "Commissioner only by surname, or without a portfolio, the RESPONSE adding that "
+    "same person's given name or portfolio AS LISTED THERE is correct: do NOT flag it. "
+    "The reverse still counts: a RESPONSE that names a DIFFERENT person for a "
+    "portfolio the list assigns to someone else, that replaces a surname the CONTEXT "
+    "gives with another person's, or that gives a listed Commissioner a portfolio the "
+    "list does not, is a critical fabricated-role violation. Names or portfolios of "
+    "people who are not in the list (former Commissioners, MEPs, officials) are NOT "
+    "covered by it and still need the CONTEXT.\n\n"
     "Guiding principle: you are catching FABRICATIONS that would mislead a specialist "
     "reader, not policing every sentence. General EU legal and procedural background, "
     "explanations of how a mechanism works, and reasonable inferences that are consistent "
@@ -245,6 +299,12 @@ _VALIDATOR_SYSTEM = (
 
 def _build_user_message(query: str, context_blocks: str, response: str) -> str:
     facts = _brubru_product_facts()
+    college = _college_facts()
+    college_section = (
+        "EU COMMISSION COLLEGE (authoritative reference, always true):\n"
+        f"{college}\n\n"
+        "---\n\n"
+    ) if college else ""
     facts_section = (
         "BRUBRU PRODUCT FACTS (authoritative, always true):\n"
         f"{facts}\n\n"
@@ -255,6 +315,7 @@ def _build_user_message(query: str, context_blocks: str, response: str) -> str:
         f"{context_blocks}\n\n"
         "---\n\n"
         f"{facts_section}"
+        f"{college_section}"
         "QUERY:\n"
         f"{query}\n\n"
         "---\n\n"
