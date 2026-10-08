@@ -396,6 +396,23 @@ def test_no_followup_predates_the_text_it_answers(client):
     assert flags == {"2025/2088(INI)": True, "2025/2211(INI)": False}, flags
 
 
+@pytest.mark.parametrize("base", ["/api/v1/resolutions", "/api/v2/parliament/resolutions"])
+def test_a_resolution_reads_the_same_from_the_list_and_on_its_own(client, base):
+    """Until 8 Oct 2026 the detail route served the OEIL procedure page as the
+    body (~2k chars) while the list served the adopted text (~19k)."""
+    listed = client.get(base, params={"limit": 30}).json()["data"]
+    assert listed
+    differ = []
+    for item in listed:
+        one = client.get(f"{base}/{item['id']}").json()
+        # `self` is added to LISTED items only (core/self_links.py): the detail
+        # response is the item the link points at.
+        diff = sorted(k for k in item if k != "self" and item[k] != one.get(k))
+        if diff:
+            differ.append((item["procedure_ref"], diff))
+    assert not differ, f"list and detail disagree: {differ[:3]}"
+
+
 def test_unknown_classification_and_followup_are_null_not_empty(client):
     items = client.get("/api/v1/resolutions", params={"limit": 100}).json()["data"]
     assert all(i["eurovoc_codes"] is None or i["eurovoc_codes"] for i in items), (

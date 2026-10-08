@@ -179,6 +179,76 @@ def _build_key_events(r: EPResolution, oeil_events: Optional[list] = None,
     return events
 
 
+def _items_for(db, rows: list) -> list:
+    """ResolutionItems for `rows`, enriched in one batch. The list AND the detail
+    route call this, so a resolution reads the same whichever way it is fetched
+    (until 8 Oct 2026 the detail route served the OEIL page as the body while the
+    list served the adopted text)."""
+    # Pull the cached OEIL body (backfilled by scripts/backfill_oeil_body.py)
+    # for every resolution's procedure_ref in one batch — same enrichment we
+    # already do for /committees/{code}/work-items.
+    refs = [r.procedure_ref for r in rows if r.procedure_ref]
+    oeil_bodies: dict = {}
+    oeil_events: dict = {}
+    adopted_bodies: dict = {}
+    if refs:
+        oeil_rows = db.execute(_sql_text("""
+            SELECT oeil_procedure_ref, oeil_text_body, oeil_html_body
+            FROM legislative_carriages
+            WHERE oeil_procedure_ref = ANY(:refs)
+              AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
+        """), {"refs": refs}).fetchall()
+        oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
+        oeil_events = {row[0]: row[1] for row in db.execute(_sql_text("""
+            SELECT oeil_procedure_ref, oeil_key_events FROM legislative_carriages
+            WHERE oeil_procedure_ref = ANY(:refs) AND oeil_key_events IS NOT NULL
+        """), {"refs": refs}).fetchall()}
+
+        # The resolution's OWN adopted text, which is what `body_txt` should be.
+        # Until 27 Aug 2026 this surface served the OEIL PROCEDURE PAGE as the
+        # body -- real content, but a description of the file rather than the
+        # text the Parliament adopted. Now that `texts_adopted.full_text` is
+        # populated (703/703), the actual resolution is available and takes
+        # precedence; OEIL remains the fallback for procedures with no adopted
+        # text yet. Read from texts_adopted rather than copied, so there stays
+        # ONE source of truth for the document.
+        #
+        # Only the adopted text itself (`P10_TA(YYYY)NNNN`). texts_adopted also
+        # holds committee REPORTS (`A10/YYYY/NNNN`) under the same procedure_ref,
+        # and until 8 Oct 2026 whichever row came last won: the draft report was
+        # served as the resolution for 2025/2039(INI) and 2025/2210(INI). When
+        # the adopted text has no body yet, OEIL is the honest fallback; the
+        # report is not.
+        adopted_rows = db.execute(_sql_text("""
+            SELECT procedure_ref, full_text
+            FROM texts_adopted
+            WHERE procedure_ref = ANY(:refs) AND full_text IS NOT NULL
+              AND ta_reference ~ '^P[0-9]+_TA'
+        """), {"refs": refs}).fetchall()
+        adopted_bodies = {row[0]: row[1] for row in adopted_rows}
+
+    followups = _followups_by_ref(db, refs)
+    data = []
+    for r in rows:
+        adopted = adopted_bodies.get(r.procedure_ref)
+        if adopted:
+            # Minimal, faithful HTML: the adopted text is plain text, so it is
+            # wrapped rather than invented.
+            import html as _html_mod
+            body = (adopted,
+                    "<article>" + "".join(
+                        f"<p>{_html_mod.escape(p)}</p>"
+                        for p in adopted.split("\n") if p.strip()
+                    ) + "</article>")
+        else:
+            body = oeil_bodies.get(r.procedure_ref) or (None, None)
+        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
+                                 oeil_events=oeil_events.get(r.procedure_ref),
+                                 followups=followups.get(r.procedure_ref)))
+
+    return data
+
+
 def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
                  oeil_body_html: Optional[str] = None,
                  oeil_events: Optional[list] = None,
@@ -340,67 +410,7 @@ async def list_resolutions(
         order_col = EPResolution.adoption_date.desc().nullslast()
     rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
-    # Pull the cached OEIL body (backfilled by scripts/backfill_oeil_body.py)
-    # for every resolution's procedure_ref in one batch — same enrichment we
-    # already do for /committees/{code}/work-items.
-    refs = [r.procedure_ref for r in rows if r.procedure_ref]
-    oeil_bodies: dict = {}
-    oeil_events: dict = {}
-    adopted_bodies: dict = {}
-    if refs:
-        oeil_rows = db.execute(_sql_text("""
-            SELECT oeil_procedure_ref, oeil_text_body, oeil_html_body
-            FROM legislative_carriages
-            WHERE oeil_procedure_ref = ANY(:refs)
-              AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
-        """), {"refs": refs}).fetchall()
-        oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
-        oeil_events = {row[0]: row[1] for row in db.execute(_sql_text("""
-            SELECT oeil_procedure_ref, oeil_key_events FROM legislative_carriages
-            WHERE oeil_procedure_ref = ANY(:refs) AND oeil_key_events IS NOT NULL
-        """), {"refs": refs}).fetchall()}
-
-        # The resolution's OWN adopted text, which is what `body_txt` should be.
-        # Until 27 Aug 2026 this surface served the OEIL PROCEDURE PAGE as the
-        # body -- real content, but a description of the file rather than the
-        # text the Parliament adopted. Now that `texts_adopted.full_text` is
-        # populated (703/703), the actual resolution is available and takes
-        # precedence; OEIL remains the fallback for procedures with no adopted
-        # text yet. Read from texts_adopted rather than copied, so there stays
-        # ONE source of truth for the document.
-        #
-        # Only the adopted text itself (`P10_TA(YYYY)NNNN`). texts_adopted also
-        # holds committee REPORTS (`A10/YYYY/NNNN`) under the same procedure_ref,
-        # and until 8 Oct 2026 whichever row came last won: the draft report was
-        # served as the resolution for 2025/2039(INI) and 2025/2210(INI). When
-        # the adopted text has no body yet, OEIL is the honest fallback; the
-        # report is not.
-        adopted_rows = db.execute(_sql_text("""
-            SELECT procedure_ref, full_text
-            FROM texts_adopted
-            WHERE procedure_ref = ANY(:refs) AND full_text IS NOT NULL
-              AND ta_reference ~ '^P[0-9]+_TA'
-        """), {"refs": refs}).fetchall()
-        adopted_bodies = {row[0]: row[1] for row in adopted_rows}
-
-    followups = _followups_by_ref(db, refs)
-    data = []
-    for r in rows:
-        adopted = adopted_bodies.get(r.procedure_ref)
-        if adopted:
-            # Minimal, faithful HTML: the adopted text is plain text, so it is
-            # wrapped rather than invented.
-            import html as _html_mod
-            body = (adopted,
-                    "<article>" + "".join(
-                        f"<p>{_html_mod.escape(p)}</p>"
-                        for p in adopted.split("\n") if p.strip()
-                    ) + "</article>")
-        else:
-            body = oeil_bodies.get(r.procedure_ref) or (None, None)
-        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1],
-                                 oeil_events=oeil_events.get(r.procedure_ref),
-                                 followups=followups.get(r.procedure_ref)))
+    data = _items_for(db, rows)
 
     # Declare the corpus, and say what a NULL adoption date means (D3).
     #
@@ -478,15 +488,4 @@ async def get_resolution_detail(
             "resource": "resolution",
             "id": procedure_ref,
         })
-    # Reuse the same cached-OEIL-body enrichment as the list endpoint.
-    oeil_body_txt = oeil_body_html = oeil_events = None
-    if r.procedure_ref:
-        row = db.execute(_sql_text("""
-            SELECT oeil_text_body, oeil_html_body, oeil_key_events FROM legislative_carriages
-            WHERE oeil_procedure_ref = :ref LIMIT 1
-        """), {"ref": r.procedure_ref}).fetchone()
-        if row:
-            oeil_body_txt, oeil_body_html, oeil_events = row[0], row[1], row[2]
-    return _row_to_item(r, oeil_body_txt=oeil_body_txt, oeil_body_html=oeil_body_html,
-                        oeil_events=oeil_events,
-                        followups=_followups_by_ref(db, [r.procedure_ref]).get(r.procedure_ref))
+    return _items_for(db, [r])[0]
