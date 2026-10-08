@@ -62,7 +62,10 @@ _CANDIDATES = """
 SELECT t.procedure_ref,
        t.title,
        t.adoption_date::date            AS adoption_date,
-       t.source_url                     AS text_url,
+       -- The adopted text's own page. source_url is where the scraper FOUND it,
+       -- usually the sitting's table of contents (219 rows pointed there).
+       COALESCE(t.full_text_url,
+                CASE WHEN t.source_url !~ '-TOC_' THEN t.source_url END) AS text_url,
        left(t.full_text, 1200)          AS summary,
        t.vote_results,
        COALESCE(c.lead_committee, NULL) AS lead_committee,

@@ -303,6 +303,28 @@ def test_a_committee_report_is_never_served_as_the_adopted_text(client, db):
     assert not served_report, f"committee report served as the adopted text: {served_report}"
 
 
+def test_no_resolution_points_at_a_sittings_table_of_contents(client, db):
+    """`text_url` / `public_url` must be the resolution's own page. The writers
+    copied texts_adopted.source_url, which is where the scraper FOUND the text:
+    the sitting's table of contents (219 of 353 rows until 8 Oct 2026)."""
+    n = db.execute(text("SELECT count(*) FROM ep_resolutions WHERE text_url ~ '-TOC_'")).scalar()
+    assert n == 0, f"{n} resolution(s) store a table-of-contents page as text_url"
+    items = client.get("/api/v1/resolutions", params={"status": "adopted", "limit": 100}).json()["data"]
+    toc = [i["procedure_ref"] for i in items if "-TOC_" in (i.get("public_url") or "")]
+    assert not toc, f"public_url is a table of contents: {toc[:3]}"
+
+
+def test_no_summary_is_a_committee_report(db):
+    """The summary rule joined committee REPORTS too (2025/2210(INI), 2026/2023(INL))."""
+    bad = [r[0] for r in db.execute(text("""
+        SELECT r.procedure_ref FROM ep_resolutions r
+        WHERE r.summary ~* '^[[:space:]]*REPORT'
+          AND EXISTS (SELECT 1 FROM texts_adopted a WHERE a.procedure_ref = r.procedure_ref
+                        AND a.ta_reference !~ '^P[0-9]+_TA')
+    """)).fetchall()]
+    assert not bad, f"summary taken from a committee report: {bad}"
+
+
 def test_no_resolution_body_is_navigation_chrome(client):
     """doceo hides a language picker in `.ep_hidden`; 47 stored bodies once OPENED
     with "Choisissez la langue de votre document" -- navigation saved as the text

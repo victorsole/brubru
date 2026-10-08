@@ -100,18 +100,39 @@ STEPS = [
           AND c.oeil_procedure_ref = r.procedure_ref
           AND array_length(c.policy_areas, 1) > 0
     """),
+    # The adopted text's OWN page: full_text_url, else source_url unless that is
+    # the sitting's table of contents (where the scraper found the text). Until
+    # 8 Oct 2026 this copied source_url, so 219 resolutions pointed at a TOC.
+    # Only P*_TA rows: texts_adopted also holds committee REPORTS (A10/...).
     ("ep_resolutions.text_url <- the adopted text's own url", """
-        UPDATE ep_resolutions r SET text_url = t.source_url
-        FROM texts_adopted t
-        WHERE (r.text_url IS NULL OR btrim(r.text_url) = '')
-          AND t.procedure_ref = r.procedure_ref
-          AND t.source_url IS NOT NULL
+        UPDATE ep_resolutions r SET text_url = u.url
+        FROM (SELECT procedure_ref,
+                     COALESCE(full_text_url,
+                              CASE WHEN source_url !~ '-TOC_' THEN source_url END) AS url
+              FROM texts_adopted WHERE ta_reference ~ '^P[0-9]+_TA') u
+        WHERE u.procedure_ref = r.procedure_ref
+          AND u.url IS NOT NULL
+          AND (r.text_url IS NULL OR btrim(r.text_url) = '' OR r.text_url ~ '-TOC_')
+          AND r.text_url IS DISTINCT FROM u.url
+    """),
+    # A summary taken from a committee REPORT is not the resolution: reset it to
+    # the adopted text's opening, or NULL until that body exists (the next rule
+    # fills it then). 2025/2210(INI) and 2026/2023(INL) carried one (8 Oct 2026).
+    ("ep_resolutions.summary is never a committee report", """
+        UPDATE ep_resolutions r SET summary = (
+            SELECT left(t.full_text, 1200) FROM texts_adopted t
+            WHERE t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
+              AND t.full_text IS NOT NULL AND length(t.full_text) > 250)
+        WHERE r.summary ~* '^[[:space:]]*REPORT'
+          AND EXISTS (SELECT 1 FROM texts_adopted a WHERE a.procedure_ref = r.procedure_ref
+                        AND a.ta_reference !~ '^P[0-9]+_TA')
     """),
     ("ep_resolutions.summary <- opening of the adopted text", """
         UPDATE ep_resolutions r SET summary = left(t.full_text, 1200)
         FROM texts_adopted t
         WHERE (r.summary IS NULL OR btrim(r.summary) = '')
           AND t.procedure_ref = r.procedure_ref
+          AND t.ta_reference ~ '^P[0-9]+_TA'
           AND t.full_text IS NOT NULL
           AND length(t.full_text) > 250
     """),
