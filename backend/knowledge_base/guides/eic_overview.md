@@ -101,4 +101,4 @@ Topic-ID prefixes (used for the filter in Brubru Tenderator):
 - Demand-driven thematic moonshot in 2026 priorities (Physical AI Robotics, NAMs) → **AIC**
 - Widening-country SME wanting to join an ongoing Horizon Europe consortium → **Pre-Accelerator (Hop-On)** — wait for 5 May 2027 call
 
-For each instrument's detailed admin process see the dedicated guides: `eic_accelerator_process.md`, `eic_pathfinder_process.md`, `eic_transition_process.md`, `eic_step_scaleup_process.md`, `eic_advanced_innovation_challenges_process.md`, `eic_pre_accelerator_widening.md`, `eic_fund_equity_investment.md`, `eic_prizes.md`, `eic_board_governance.md`.
+For each instrument's detailed admin process see the dedicated guides: `eic_accelerator_process.md`, `eic_pathfinder_process.md`, `eic_transition_process.md`, `eic_step_scaleup_process.md`, `eic_step_scaleup_defence_2026.md`, `eic_advanced_innovation_challenges_process.md`, `eic_pre_accelerator_widening.md`, `eic_fund_equity_investment.md`, `eic_prizes.md`, `eic_board_governance.md`.

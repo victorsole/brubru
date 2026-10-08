@@ -3,6 +3,38 @@
   "entries": [
     {
       "date": "2026-10-08",
+      "action": "created",
+      "guide": "eic_step_scaleup_defence_2026",
+      "title": "EIC STEP Scale Up Defence — 2026 call",
+      "summary": "New: EUR 100m equity-only call (EUR 10-30m), deadline 28 October 2026, EU/Ukraine/associated EEA firms, third-country control guarantees, classified-information route, Table 10 criteria, limit from 1 April 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "eic_accelerator_process",
+      "title": "EIC Accelerator — Administrative Process (2026)",
+      "summary": "Dual-use innovation eligible from 9 July 2026 (first at the 2 September batch), same criteria; defence-only products to STEP Scale Up Defence.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "eic_step_scaleup_process",
+      "title": "EIC STEP Scale Up — Administrative Process (2026)",
+      "summary": "Dual-use eligible since the June 2026 amendment (first at the 9 September batch).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "eic_fund_equity_investment",
+      "title": "EIC Fund — Equity Investment Vehicle",
+      "summary": "Investment Guidelines updated 27 August 2026 (defence-related activities, STEP tickets, safeguards, TRL, follow-on, IP).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
       "action": "updated",
       "guide": "eic_accelerator_process",
       "title": "EIC Accelerator — Administrative Process (2026)",

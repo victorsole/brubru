@@ -8,6 +8,7 @@
 - Legal structure: Luxembourg-domiciled SICAV-RAIF (financial vehicle); investment advisor of record: **European Investment Bank (EIB) Group**.
 - Ticket sizes: **EIC Accelerator EUR 1-10M** (blended finance or equity-only; up to EUR 2M extra flexibility in the award decision) · **STEP Scale Up and STEP Scale Up Defence EUR 10-30M** (equity-only; up to EUR 5M flexibility for STEP Scale Up).
 - Compartments (Work Programme 2026, Section X.1): the existing **Horizon Europe** and **EIC Pilot** compartments, plus the new **Scaleup Europe Fund** compartment.
+- **Investment Guidelines updated on 27 August 2026** for the Accelerator (blended and equity-only) and STEP calls: they now cover defence-related activities and the larger STEP tickets, and align investment safeguards, TRL, follow-on investments and IP rights with the Work Programme. Scaleup Europe Fund guidelines are separate.
 - Governance: EIC Fund Board (broadest decision-making power) + EIC Fund Advisory Committee (independent advice to EIB + Fund Manager).
 - Investment advisor: EIB Group — conducts due diligence, proposes investments, supports portfolio management, acts as investor of record.
 - Distinct from the **Scaleup Europe Fund** (EUR 5B target, a separate compartment under the EIC Fund umbrella managed by EQT, making DIRECT investments of EUR 100M and above per company; see `eic_scaleup_europe_fund_2026.md`).
