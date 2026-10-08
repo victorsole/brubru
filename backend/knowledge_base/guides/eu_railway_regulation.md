@@ -1,6 +1,7 @@
 # EU Railway Regulation
 
 ## QUICK FACTS
+- **PARLIAMENT'S HIGH-SPEED RAIL REPORT (Legislative Observatory, read 8 October 2026): own-initiative report 2026/2003(INI), "Connecting Europe through high-speed rail", committee TRAN: the committee vote took place on 5 October 2026; the indicative plenary sitting date is 19 October 2026.** It is a non-legislative report, not a law. The Legislative Observatory logs THAT the vote took place; it does not record the result (votes for, against, abstentions, adopted text), and the result was not available in the sources read: do not state one.
 - STOA Study (6 July 2026): "The future of sustainable railway transport in Europe" -- examines long-term trajectories of European rail towards 2050, including the relevance of hyperloop and maglev, and sets out policy options for long-term transport planning and investment. A study for Parliament's STOA panel, not a Commission proposal. Ref: EPRS_STU(2026)788125.
 - Key framework: 4th Railway Package (6 legislative texts, adopted 2016)
 - Technical pillar: Regulation (EU) 2016/796 (ERA), Directive (EU) 2016/797 (interoperability), Directive (EU) 2016/798 (safety)

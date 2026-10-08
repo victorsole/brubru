@@ -1,6 +1,7 @@
 # EU Annual Budgetary Procedure (Article 314 TFEU)
 
 ## QUICK FACTS
+- **2027 BUDGET, where it stands (Legislative Observatory, read 8 October 2026), procedure 2026/0196(BUD):** the Commission published its draft budget as COM(2026) 300 on 9 July 2026; the **Council published its position on the draft budget (document 11547/2026) on 11 September 2026**; the file was referred to Parliament's budget committee on 14 September; the **indicative plenary sitting date is 19 October 2026**. The BUDG committee had amendments on a voting list on 5 October; the result is not recorded in the Observatory and was not read.
 - **Legal basis**: Article 314 TFEU (annual budgetary procedure); Article 312 TFEU (MFF, multi-annual envelope that caps all annual budgets)
 - **Annual calendar in brief**: Institutional estimates submitted by 1 July; Commission adopts Draft Budget (DB) by 1 September; Council adopts its position and notifies EP by 1 October; EP first reading (42-day window); if amendments adopted, Conciliation Committee convened within 10 days; 21-day conciliation; EP and Council each vote within 14 days of agreement; budget declared adopted by EP President
 - **Budget 2026**: Procedure 2025/0210(BUD) -- General Budget of the European Union for the financial year 2026. OEIL page: `https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0210%28BUD%29`

@@ -1,11 +1,11 @@
 # European Public Prosecutor's Office (EPPO)
 
 ## QUICK FACTS
+- **NEW (7 October 2026): two European Prosecutors appointed, and the Chief Prosecutor succession is already settled.** Council Decision (EU) 2026/2244 of 28 September 2026 appoints **Tanja Frank Eler (Slovenia, from 7 October 2026)** and **Christopher Wenzl (Germany, from 1 November 2026)** as European Prosecutors. **Andrés Ritter (Germany)** becomes European Chief Prosecutor on **1 November 2026** (Decision (EU) 2026/800, adopted 25 March 2026): the appointment procedure 2025/0803(NLE) is COMPLETED. Primary sources: the decision texts in the Official Journal and the Legislative Observatory.
 - **NEW (published 18 September 2026): the Commission evaluated BOTH halves of the EU's anti-fraud architecture on the same day.** Read in full on 22 September 2026.
   - **EPPO: `COM(2026) 491 final`, CELEX `52026DC0491`** (with `SWD(2026) 278 final`), report on the implementation and impact of **Regulation (EU) 2017/1939**. **HUNGARY NOTIFIED THE COMMISSION ON 29 MAY 2026 OF ITS INTENTION TO JOIN THE EPPO.** During the evaluation period the three non-participating Member States were **Denmark, Hungary and Ireland**; with Hungary's notification that set is changing, so do not state the current membership as a settled 3-out list without checking. Commission's verdict: the EPPO "has successfully put in place a well-functioning EU criminal investigative and prosecutorial system", its strongest achievements being institutional capacity, coordinated cross-border investigations and new operational capabilities, with clear EU added value "particularly in cross-border coordination and enforcement". **The caveat is explicit**: it is "still a relatively young body", the full impact is "not yet measurable in a precise and quantifiable manner", and outcome-level results (final convictions, confirmed financial recoveries, deterrence) need more time and more mature data. It also notes the EPPO "evolved under operational pressures that diverged significantly from the assumptions underlying the original legislative design, particularly in relation to caseload and resource demands".
   - **OLAF: `COM(2026) 493 final`, CELEX `52026DC0493`** (with `SWD(2026) 280 final`), evaluation of **Regulation (EU, Euratom) No 883/2013**. Covers **2020 to 2025**: investigation activity "remained consistent, reflecting sustained operational effectiveness and efficiency overall". Improvement areas named: **communication, information exchange and simplification of certain procedures**. On the boundary with the EPPO: the two mandates are "clearly defined", but **cooperation and coordination between OLAF and the EPPO "could be further improved"**. On powers, it flags fine-tuning on **internal investigations, access to bank account information and transaction records**, and the definition of **"privately owned devices used for work"**.
   - **Neither is a legislative proposal.** Both are evaluation reports under the review clauses. Do not describe either as amending anything.
-- **LATEST (Thursday 21 May 2026 — LIBE TABLES NLE DRAFT ON APPOINTMENT OF CHIEF PROSECUTOR)**: The Committee on Civil Liberties, Justice and Home Affairs (LIBE) tabled the draft report on procedure **2025/0803(NLE)** "Appointment of the European Chief Prosecutor". Source: EP committees portal — LIBE Draft Report listing (21 May 2026). The NLE procedure (consent procedure) covers the next-term appointment of EPPO's head following Laura Codruța Kövesi's seven-year non-renewable term that started in October 2019. The appointment requires **Council common accord with the European Parliament's consent** (Article 14 of Regulation (EU) 2017/1939 setting up the EPPO). Selection process: independent selection panel of 7-12 persons (former CJEU judges, members of national supreme courts, public prosecutors of acknowledged competence) draws up a shortlist, Council and Parliament then exchange views and decide by mutual agreement. The LIBE consent vote will follow the committee scrutiny phase.
 - Full name: European Public Prosecutor's Office
 - Founding regulation: Council Regulation (EU) 2017/1939 of 12 October 2017 implementing enhanced cooperation on the establishment of the EPPO
 - CELEX: 32017R1939
@@ -13,12 +13,7 @@
 - Headquarters: Luxembourg
 - Operational since: 1 June 2021
 - Legal basis: Article 86 TFEU (European Public Prosecutor's Office) + Article 20 TEU (enhanced cooperation) + Articles 325 TFEU (protection of EU financial interests)
-- Current European Chief Prosecutor: Laura Codruta Kovesi (Romania) -- 7-year term, ends 2026
-- LIBE draft report (17 April 2026): Appointment of the European Chief Prosecutor [2025/0803(NLE)] -- LIBE committee report on next EPPO Chief Prosecutor succession process
-- **LIBE draft report visible in EP portal (22 April 2026)**: procedure 2025/0803(NLE) active during Week 17 Group Week. Kovesi's 7-year term ends October 2026; Council + EP joint selection committee has shortlisted candidates (confidential). NLE consent procedure -- EP approves or rejects, no amendments. Expected plenary vote: June or July 2026 plenary (TBC)
-- **LATEST (23 April 2026)**: LIBE draft report re-surfaced on LIBE committee archive page as of 23 April 2026 scrape -- confirms procedure remains live through Week 17 Group Week. Awaiting LIBE committee vote during May 2026 committee week.
-- **LATEST (Wednesday 6 May 2026)**: LIBE draft report on 2025/0803(NLE) **Appointment of the European Chief Prosecutor** re-surfaced on the LIBE committee portal during the 4-8 May committee week. Procedure remains active; Kovesi's 7-year term ends October 2026; Council + EP joint selection committee shortlist remains confidential. NLE consent procedure (no amendments). LIBE committee vote expected later in May or in June 2026; plenary consent vote earliest June or July 2026 Strasbourg. Source: EP committees portal scrape, 6 May 2026.
-- **LATEST (Monday 18 May 2026, Strasbourg plenary week)**: LIBE draft report on 2025/0803(NLE) Appointment of the European Chief Prosecutor re-surfaced for the third time on the LIBE committee portal as the 19-22 May Strasbourg plenary opens. Procedure remains in committee stage; no LIBE vote scheduled this plenary week (the file remains in pre-vote preparation). Council + EP joint shortlist still confidential. Kovesi's 7-year term ends October 2026 — selection process must conclude before then; binding plenary consent vote earliest June or July 2026 Strasbourg. Source: EP committees portal scrape, 18 May 2026.
+- European Chief Prosecutor: **Laura Codruța Kövesi (Romania)** until the end of October 2026; **Andrés Ritter (Germany)** takes over on **1 November 2026** for a non-renewable seven years (Decision (EU) 2026/800, see below).
 - Participating Member States: 22 (as of 2026) -- all except Denmark, Ireland, Hungary, Poland, Sweden
 - Non-participating: Denmark (opt-out), Ireland (opt-out), Hungary (refusal), Poland (joined 24 May 2025), Sweden (joined 1 Jan 2023)
 - Independent body: neither EU institution nor agency in traditional sense; legally independent from Member States and other EU institutions (Article 6 Reg 2017/1939)
@@ -77,17 +72,15 @@ The EPPO investigates and prosecutes:
 - EDPs retain dual roles: EPPO cases + national prosecutor functions
 - Conduct investigations and prosecutions in national courts, applying national procedural law
 
-## European Chief Prosecutor Succession (2026 process)
+## European Chief Prosecutor succession: COMPLETED in March 2026
 
-Laura Codruta Kovesi's 7-year mandate (June 2019 -- June 2026) is ending. The appointment procedure:
+The appointment procedure **2025/0803(NLE)** is **finished** (Legislative Observatory, read 8 October 2026): LIBE vote 23 February 2026, report A10-0027/2026 tabled 25 February, **plenary decision 10 March 2026** (T10-0062/2026), **Council act 25 March 2026**, final act published in the Official Journal on **1 April 2026** as **Decision (EU) 2026/800 of the European Parliament and of the Council of 25 March 2026** (ELI http://data.europa.eu/eli/dec/2026/800/oj). It appoints **Andrés Ritter** (Germany; European Prosecutor for Germany since 2020, mandate extended to 30 June 2029 by Decision (EU) 2024/1751) as **European Chief Prosecutor for a non-renewable period of 7 years from 1 November 2026**. Earlier versions of this guide described the file as still open in April and May 2026; that was wrong.
 
-1. **Call for applications**: issued by Commission
-2. **Selection Panel** (Article 14): 12 members -- former CJEU judges, former members of national supreme courts, national prosecutors of highest competence -- appointed jointly by Council and Commission
-3. **Shortlist**: Panel draws up shortlist of candidates
-4. **EP-Council agreement**: Chief Prosecutor appointed by **common accord** of European Parliament and Council from the shortlist
-5. **Term**: 7 years, non-renewable
+How the post is filled (Article 14 of Regulation (EU) 2017/1939): the Chief Prosecutor is appointed by **common accord of the European Parliament and the Council**, after a selection panel has assessed the candidates; the term is 7 years and not renewable.
 
-**LIBE draft report 17 April 2026** (reference 2025/0803(NLE)): LIBE committee's opinion on the appointment, typically after a public hearing with the shortlisted candidate(s). The EP and Council must then reach common accord.
+## European Prosecutors: Council Decision (EU) 2026/2244 (28 September 2026)
+
+The College is the European Chief Prosecutor plus **one European Prosecutor per participating Member State**. Each Member State nominates three candidates; the selection panel ranks them and the **Council** appoints (Article 16). **Council Decision (EU) 2026/2244 of 28 September 2026** (published in the Official Journal on 7 October 2026; ELI http://data.europa.eu/eli/dec/2026/2244/oj) fills the two seats that are or become vacant: **Tanja FRANK ELER**, nominated by **Slovenia**, for 6 non-renewable years **from 7 October 2026** (the seat of Jaka Brezigar, whose six-year term ended on 28 July 2026), and **Christopher WENZL**, nominated by **Germany**, for 6 non-renewable years **from 1 November 2026** (the German seat that Andrés Ritter leaves to become Chief Prosecutor).
 
 ## EPPO Performance (2021-2025)
 
@@ -144,5 +137,4 @@ The EPPO's material competence may be extended through:
 - Council Regulation (EU) 2017/1939: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R1939
 - PIF Directive (2017/1371): https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017L1371
 - EPPO official site: https://www.eppo.europa.eu/
-- LIBE draft report 2025/0803(NLE) (17 April 2026): Appointment of European Chief Prosecutor
 - EPPO annual reports: https://www.eppo.europa.eu/en/annual-reports

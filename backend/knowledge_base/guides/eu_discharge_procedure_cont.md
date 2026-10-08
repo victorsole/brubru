@@ -1,6 +1,7 @@
 # EU Discharge Procedure (CONT, ECA, Council)
 
 ## QUICK FACTS
+- **2024 DISCHARGE, European Council and Council part (Legislative Observatory, read 8 October 2026), procedure 2025/2147(DEC):** the Observatory lists a Parliament decision on 29 April 2026 (T10-0127/2026) marked "Report referred back to committee", a final act published in the Official Journal on 10 September 2026, a **new committee vote on 1 October 2026**, the report **A10-0258/2026 tabled for plenary on 6 October 2026**, and an **indicative plenary sitting date of 19 October 2026**. The Observatory does not explain the referral back and the committee result is not recorded there; do not state either.
 - **Legal basis**: Article 319 TFEU grants the European Parliament the power to give discharge to the Commission in respect of the implementation of the budget.
 - **Financial Regulation**: Regulation (EU, Euratom) 2024/2509 of the European Parliament and of the Council governs the rules applicable to the general budget of the Union, including discharge obligations. Earlier programming periods fall under Regulation (EU, Euratom) 2018/1046.
 - **ECA feed**: The European Court of Auditors publishes its Annual Report on the implementation of the EU budget (covering both the general budget and the European Development Fund) each October/November. This report, with the Statement of Assurance (DAS), is the principal audit input to the discharge procedure.
