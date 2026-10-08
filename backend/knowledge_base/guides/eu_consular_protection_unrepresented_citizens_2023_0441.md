@@ -1,6 +1,7 @@
 # Consular Protection for Unrepresented Citizens of the Union in Third Countries (2023/0441(CNS))
 
 ## QUICK FACTS
+- **LATEST (Wednesday 7 October 2026): Parliament gave its opinion in plenary** (consultation procedure; rapporteur Lena Düpont, EPP, report A10-0254/2026). The committee's amendments 1-18 and 20-37 were adopted collectively; S&D amendments 41 and 42 and ECR amendments 39 and 40 were rejected; committee amendments 19 and 38 were adopted (38 by 457-193-17, roll call); the **vote on the Commission proposal, as recorded in the minutes, was 470 in favour, 180 against, 18 abstentions (adopted)** (plenary minutes, "Results of votes" 7 October, item 8.3). The Council now decides: Parliament's role is consultation. The proposal amends Directive (EU) 2015/637.
 - **LATEST (Thursday 21 May 2026 — LIBE DRAFT REPORT TABLED)**: The Committee on Civil Liberties, Justice and Home Affairs (LIBE) **tabled the draft report** on procedure 2023/0441(CNS) — "Consular protection for unrepresented citizens of the Union in third countries". Source: EP committees portal — LIBE Draft Report listing (21 May 2026, europarl.europa.eu/committees/en/libe).
 - **Procedure**: **2023/0441(CNS)** — Consultation procedure (Article 25 + Article 23 TFEU; Council acts after consulting Parliament)
 - **Commission proposal**: **COM(2023) 930** — adopted by the Commission (von der Leyen I) in late 2023 as part of the EU Citizenship package

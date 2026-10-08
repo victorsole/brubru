@@ -4,6 +4,78 @@
     {
       "date": "2026-10-08",
       "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. (28th regime)",
+      "summary": "Wording: do not state that the JURI vote went ahead as planned.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "eu_consular_protection_unrepresented_citizens_2023_0441",
+      "title": "Consular protection for unrepresented citizens",
+      "summary": "Parliament consultation vote of 7 October 2026: 470-180-18 (A10-0254/2026).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "pact_for_skills",
+      "title": "Pact for Skills",
+      "summary": "EMPL result on the VET skills report: 38-1-4 (A10-0259/2026).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "eu_discharge_procedure_cont",
+      "title": "EU discharge procedure",
+      "summary": "CONT result on the 2024 European Council and Council discharge: 1-19-1 on a proposed refusal (A10-0258/2026).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "omnibus_viii_environmental_simplification",
+      "title": "Omnibus VIII environmental simplification",
+      "summary": "INSPIRE referred back; ENVI vote counts on the EPR authorised-representative suspension (74-0-4, 72-0-5).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "ep_plenary_october_2026_tuesday_adoptions",
+      "title": "Parliament plenary 6 October 2026",
+      "summary": "INSPIRE outcome settled by the plenary minutes: 515-108-35 then referred back to committee.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
+      "guide": "ep_plenary_october_2026_wednesday_adoptions",
+      "title": "Parliament plenary 7 October 2026",
+      "summary": "Report numbers from the plenary minutes; Eurovignette, sea turtles, consular protection added.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "added",
+      "guide": "eurovignette_road_charging_co2_classes_2026",
+      "title": "Road charging: CO2 emission classes for trucks and buses",
+      "summary": "Parliament approved the provisional agreement on 7 October 2026 (475-96-70); Council approval pending.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "added",
+      "guide": "ep_plenary_october_2026_thursday_votes",
+      "title": "Parliament plenary 8 October 2026: votes",
+      "summary": "Russian Duma non-recognition 482-41-39; Iran, Georgia, Azerbaijan resolutions; European school alliances 443-98-47.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-08",
+      "action": "updated",
       "guide": "jrc_and_art_research_digest_oct_2026",
       "title": "JRC and ART research digest, October 2026",
       "summary": "Wind decommissioning brief: capacity installed up to 2023, 32-year lifetime assumption.",
