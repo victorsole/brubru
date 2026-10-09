@@ -53,6 +53,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.database import SessionLocal  # noqa: E402
 from services.mcp.dpp_tools import _TRIS_DPP_RX  # noqa: E402  one definition, shared with the connector
+from services.clients import told_ledger  # noqa: E402  what the client has already been sent
 from sqlalchemy import text  # noqa: E402
 
 # --------------------------------------------------------------------------
@@ -161,6 +162,10 @@ TRIS_URGENT_WITHIN_DAYS = 30
 TRIS_HOME_COUNTRIES = {"ES"}
 # How far ahead an open consultation still counts as actionable.
 CONSULTATION_HORIZON_DAYS = 30
+# The client whose sent mail decides what is NEW (key of backend/data/client_sources/<key>.json and of
+# the client_sent_mails table). URGENT means new AND dated: an item the client already has is not
+# urgent again tomorrow (9 Oct 2026: five mornings of URGENT about mail sent on 5 Oct).
+CLIENT_KEY = "terraqui_dpp_tex"
 
 
 def _norm(title: str) -> str:
@@ -528,23 +533,43 @@ def forum_meetings(days: int) -> tuple[list[dict], dict]:
     return hits, row
 
 
-def verdict(results: dict[str, list[dict]], fresh: list[dict]) -> tuple[str, str]:
-    """URGENT / ROUTINE / NOTHING / UNPROVEN, and why in one line."""
+def verdict(results: dict[str, list[dict]], fresh: list[dict], ledger: dict | None = None) -> tuple[str, str]:
+    """URGENT / ROUTINE / NOTHING / UNPROVEN, and why in one line.
+
+    URGENT counts only items the client has NOT already been sent (told_ledger.annotate clears the
+    flag on the rest). The ledger's own state is part of the sentence: an unreadable or empty ledger
+    is said out loud, because then "urgent" may be repetition and the reader must know."""
+    ledger = ledger or {}
     urgent = [h for hs in results.values() for h in hs if h["urgent"]]
     total = sum(len(hs) for hs in results.values())
     bad = [f for f in fresh if f["state"] in ("STALE", "UNDATED", "NO-NEWS-ROWS", "FAILED")]
 
+    tail = ""
+    if ledger.get("error"):
+        tail = (f" WARNING: told-ledger unreadable ({ledger['error']}); URGENT may include items the "
+                f"client already has.")
+    elif ledger.get("mails") == 0:
+        tail = (" WARNING: the told-ledger holds no entries for this client, so URGENT cannot tell new "
+                "from already sent.")
+    elif ledger.get("told"):
+        tail = (f" {ledger['told']} item(s) already sent to the client"
+                + (f" ({ledger['cleared']} of them were urgent)" if ledger.get("cleared") else "")
+                + " are not counted.")
+    if ledger.get("remind"):
+        tail += f" REMINDER due: {ledger['remind']} already-sent deadline(s) within the next few days."
+
     if urgent:
-        return "URGENT", (f"{len(urgent)} item(s) matched an urgent pattern "
-                          f"across {len({h['scope'] for h in urgent})} scope(s).")
+        word = "" if (ledger.get("error") or ledger.get("mails") == 0) else "NEW "      # only claim "new" when the ledger could say
+        return "URGENT", (f"{len({str(h['title']) for h in urgent})} {word}item(s) matched an urgent pattern "
+                          f"across {len({h['scope'] for h in urgent})} scope(s)." + tail)
     if total:
-        return "ROUTINE", (f"{total} relevant item(s), none urgent. "
-                           f"Fold into the monthly brief.")
+        return "ROUTINE", (f"{total} relevant item(s), none new and urgent. "
+                           f"Fold into the monthly brief." + tail)
     if bad:
         return "UNPROVEN", (f"No hits, but {len(bad)} of {len(fresh)} watchlist bodies are "
                             f"stale/undated ({', '.join(b['body'] for b in bad)}). "
-                            f"A zero here is not evidence of quiet.")
-    return "NOTHING", "No hits, and every watchlist body is fresh. Genuinely quiet."
+                            f"A zero here is not evidence of quiet." + tail)
+    return "NOTHING", "No hits, and every watchlist body is fresh. Genuinely quiet." + tail
 
 
 def main() -> int:
@@ -571,7 +596,21 @@ def main() -> int:
         results["A"] = sorted(results["A"] + f_hits,
                               key=lambda r: (r["urgent"], r["d"] or date.min), reverse=True)
 
-    vkey, why = verdict(results, fresh)
+    # What has the client already been sent? Fail LOUD: an unreadable ledger is said in the verdict.
+    ledger: dict = {"mails": None, "told": 0, "cleared": 0, "remind": 0, "error": None}
+    ldb = SessionLocal()
+    try:
+        mails = told_ledger.load_mails(ldb, CLIENT_KEY)
+        ledger["mails"] = len(mails)
+        ledger.update(told_ledger.annotate(results, mails))
+    except Exception as e:  # noqa: BLE001
+        ledger["error"] = f"{type(e).__name__}: {str(e)[:80]}"
+    finally:
+        ldb.close()
+    for k_ in results:
+        results[k_].sort(key=lambda r: (r["urgent"], bool(r.get("remind")), r["d"] or date.min), reverse=True)
+
+    vkey, why = verdict(results, fresh, ledger)
 
     if args.record:
         # A daily job, not a reminder (23 Sep 2026): the watch ran only when
@@ -581,13 +620,16 @@ def main() -> int:
         # morning routine reads them from sync_runs; UNPROVEN is degraded.
         from services.sync.freshness import record_run
         urgent = [h for hs in results.values() for h in hs if h["urgent"]]
-        names = "; ".join(sorted({str(h["title"])[:90] for h in urgent}))[:1700]
+        names = "; ".join(sorted({str(h["title"])[:90] for h in urgent}))[:1500]
+        remind_names = "; ".join(sorted({str(h["title"])[:70] for hs in results.values()
+                                         for h in hs if h.get("remind")}))[:400]
         rdb = SessionLocal()
         try:
             record_run(rdb, source_key="dpp_watch", tier="daily",
                        status="degraded" if vkey == "UNPROVEN" else "success",
                        items_added=len(urgent),
-                       error=f"{vkey}: {why}" + (f" URGENT: {names}" if names else ""))
+                       error=(f"{vkey}: {why}" + (f" URGENT: {names}" if names else "")
+                              + (f" REMIND: {remind_names}" if remind_names else ""))[:2000])
         finally:
             rdb.close()
 
@@ -613,14 +655,20 @@ def main() -> int:
     for k in keys:
         hs = results[k]
         nu = sum(1 for h in hs if h["urgent"])
+        nt = sum(1 for h in hs if h.get("told"))
         print(f"\n{k}. {SCOPES[k]['label']}")
-        print(f"   {len(hs)} item(s), {nu} urgent")
+        print(f"   {len(hs)} item(s), {nu} urgent" + (f", {nt} already sent" if nt else ""))
         if not hs:
             print("   (none)")
         for h in hs[:args.limit]:
-            mark = "URGENT" if h["urgent"] else "      "
+            t_ = h.get("told")
+            mark = ("URGENT" if h["urgent"] else "REMIND" if h.get("remind")
+                    else ("dismis" if t_ and t_["channel"] == "dismissed" else "sent  ") if t_ else "      ")
             print(f"   [{mark}] {str(h['d']):<11} {str(h['body'])[:22]:<22} "
                   f"{h['source']:<14} {str(h['title'])[:80]}")
+            if t_:
+                print(f"            {'dismissed' if t_['channel'] == 'dismissed' else 'sent'} "
+                      f"{t_['sent_at']:%d %b}: {str(t_['subject'])[:60]}")
             if h.get("item_type") == "forum_meeting":
                 docs = h.get("documents")
                 print("            documents: " + ("lookup FAILED" if docs is None else
