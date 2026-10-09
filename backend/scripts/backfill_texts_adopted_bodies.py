@@ -93,16 +93,21 @@ async def _run(args) -> int:
         # (..._EN.pdf). doceo serves the same document as HTML at the same path,
         # so the HTML URL is derivable and those rows are NOT unreachable -- they
         # only looked that way because one column was empty.
+        # Both tables: committee reports tabled for a plenary vote moved out of
+        # texts_adopted into plenary_tabled_texts (migration 285, 9 Oct 2026) and their
+        # bodies are read the same way.
+        _pick = ("SELECT id, ta_reference, adoption_date, '{t}' AS tbl, "
+                 "       COALESCE(full_text_url, "
+                 "                CASE WHEN source_url LIKE '%.pdf' "
+                 "                     THEN left(source_url, length(source_url)-4) || '.html' "
+                 "                END) AS url "
+                 "FROM {t} "
+                 "WHERE full_text IS NULL "
+                 "  AND COALESCE(full_text_url, "
+                 "               CASE WHEN source_url LIKE '%.pdf' THEN source_url END) IS NOT NULL ")
         rows = conn.execute(text(
-            "SELECT id, ta_reference, "
-            "       COALESCE(full_text_url, "
-            "                CASE WHEN source_url LIKE '%.pdf' "
-            "                     THEN left(source_url, length(source_url)-4) || '.html' "
-            "                END) AS url "
-            "FROM texts_adopted "
-            "WHERE full_text IS NULL "
-            "  AND COALESCE(full_text_url, "
-            "               CASE WHEN source_url LIKE '%.pdf' THEN source_url END) IS NOT NULL "
+            "SELECT * FROM (" + _pick.format(t="texts_adopted") + " UNION ALL "
+            + _pick.format(t="plenary_tabled_texts") + ") x "
             "ORDER BY adoption_date DESC NULLS LAST"
             + (" LIMIT :lim" if args.limit else "")),
             ({"lim": args.limit} if args.limit else {})).fetchall()
@@ -126,13 +131,14 @@ async def _run(args) -> int:
     conn = engine2.connect()
     reconnects = 0
 
-    def _write(row_id, body):
+    def _write(table, row_id, body):
+        assert table in ("texts_adopted", "plenary_tabled_texts"), table
         nonlocal conn, reconnects
         from sqlalchemy.exc import OperationalError
         for attempt in (1, 2):
             try:
                 conn.execute(text(
-                    "UPDATE texts_adopted SET full_text = :b, last_updated = now() "
+                    f"UPDATE {table} SET full_text = :b, last_updated = now() "
                     "WHERE id = :i"), {"b": body, "i": row_id})
                 return True
             except OperationalError:
@@ -164,7 +170,7 @@ async def _run(args) -> int:
 
             ok += 1
             if args.apply:
-                _write(r.id, body)
+                _write(r.tbl, r.id, body)
                 # Commit per batch: a long browser walk that dies at row 300 must
                 # not discard the first 299.
                 if ok % 25 == 0:

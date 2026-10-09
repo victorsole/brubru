@@ -1,19 +1,20 @@
 """
 Ingest "texts submitted" (committee reports tabled for plenary, not yet adopted)
-into texts_adopted with adoption_date=NULL — the v1 /texts-submitted endpoint
-filters precisely on that condition.
+into plenary_tabled_texts, served by /api/v2/parliament/plenary-tabled-texts.
+Until 9 Oct 2026 they went into texts_adopted with adoption_date=NULL; a report is
+not an adopted text, so they have their own table now (migration 285).
 
 Source: https://www.europarl.europa.eu/plenary/en/texts-submitted.html
 
 The page lists A-NN-YYYY-XXXX references with HTML/PDF/DOCX links. Each row
-becomes a texts_adopted entry with:
+becomes a plenary_tabled_texts entry with:
   ta_reference   = "A10/{NNNN}/{YYYY}" (provisional reference until adoption)
   title          = derived from page (committee+procedure)
   procedure_ref  = parsed from page if available
   source_url     = doceo HTML
   full_text_url  = doceo HTML
   pdf_url        = doceo PDF
-  adoption_date  = NULL  (THIS is what makes it appear in /texts-submitted)
+  adoption_date  = NULL  (a tabled text has not been adopted)
 """
 
 from __future__ import annotations
@@ -126,7 +127,7 @@ def main():
     for r in rows:
         try:
             cur.execute("""
-                INSERT INTO texts_adopted
+                INSERT INTO plenary_tabled_texts
                     (ta_reference, title, parliamentary_term, source_url, full_text_url, pdf_url,
                      adoption_date, scraped_at, last_updated)
                 VALUES (%(ta_reference)s, %(title)s, %(parliamentary_term)s, %(source_url)s,

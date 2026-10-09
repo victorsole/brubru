@@ -291,10 +291,10 @@ def test_a_committee_report_is_never_served_as_the_adopted_text(client, db):
     procedure_ref as the adopted text. Until 8 Oct 2026 whichever row came last
     won, so the draft report reached clients as the resolution for
     2025/2039(INI) and 2025/2210(INI). Checks every procedure that has a report."""
+    # Committee reports live in plenary_tabled_texts since 9 Oct 2026 (migration 285).
     refs = [r[0] for r in db.execute(text("""
-        SELECT DISTINCT ta.procedure_ref FROM texts_adopted ta
-        JOIN ep_resolutions r ON r.procedure_ref = ta.procedure_ref
-        WHERE ta.ta_reference !~ '^P[0-9]+_TA'
+        SELECT DISTINCT p.procedure_ref FROM plenary_tabled_texts p
+        JOIN ep_resolutions r ON r.procedure_ref = p.procedure_ref
     """)).fetchall()]
     assert refs, "no procedure has a report row: the check has nothing to test"
     served_report = []
@@ -321,8 +321,7 @@ def test_no_summary_is_a_committee_report(db):
     bad = [r[0] for r in db.execute(text("""
         SELECT r.procedure_ref FROM ep_resolutions r
         WHERE r.summary ~* '^[[:space:]]*REPORT'
-          AND EXISTS (SELECT 1 FROM texts_adopted a WHERE a.procedure_ref = r.procedure_ref
-                        AND a.ta_reference !~ '^P[0-9]+_TA')
+          AND EXISTS (SELECT 1 FROM plenary_tabled_texts a WHERE a.procedure_ref = r.procedure_ref)
     """)).fetchall()]
     assert not bad, f"summary taken from a committee report: {bad}"
 

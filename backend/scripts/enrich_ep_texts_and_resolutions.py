@@ -220,8 +220,7 @@ STEPS = [
             WHERE t.procedure_ref = r.procedure_ref AND t.ta_reference ~ '^P[0-9]+_TA'
               AND t.full_text IS NOT NULL AND length(t.full_text) > 250)
         WHERE r.summary ~* '^[[:space:]]*REPORT'
-          AND EXISTS (SELECT 1 FROM texts_adopted a WHERE a.procedure_ref = r.procedure_ref
-                        AND a.ta_reference !~ '^P[0-9]+_TA')
+          AND EXISTS (SELECT 1 FROM plenary_tabled_texts a WHERE a.procedure_ref = r.procedure_ref)
     """),
     ("ep_resolutions.summary <- opening of the adopted text", """
         UPDATE ep_resolutions r SET summary = left(t.full_text, 1200)

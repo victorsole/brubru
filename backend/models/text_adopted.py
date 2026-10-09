@@ -115,6 +115,47 @@ class TextAdopted(Base):
         return f"<TextAdopted {self.ta_reference}: {self.title[:50]}>"
 
 
+class PlenaryTabledText(Base):
+    """A document tabled for a plenary vote: a committee report (A10/YYYY/NNNN).
+
+    Same columns as TextAdopted (migration 285 created the table LIKE texts_adopted), so
+    /api/v2/parliament/plenary-tabled-texts serves the same item shape. Until 9 Oct 2026
+    these rows lived in texts_adopted with adoption_date NULL; they moved with their ids.
+    Writer: scripts/ingest_texts_submitted.py.
+    """
+    __tablename__ = "plenary_tabled_texts"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    ta_reference = Column(String, nullable=False, unique=True)  # e.g. "A10/2026/0100"
+    title = Column(String, nullable=False)
+    description = Column(Text)
+    text_type = Column(
+        SQLEnum('resolution', 'legislative_resolution', 'decision', 'recommendation', 'other',
+                name='adopted_text_type', create_type=False),
+        default='other', nullable=False,
+    )
+    procedure_ref = Column(String)
+    parliamentary_term = Column(Integer, default=10, nullable=False)
+    full_text = Column(Text)
+    adoption_date = Column(DateTime, nullable=True)  # a tabled text has not been adopted
+    committees = Column(ARRAY(String), default=[])
+    rapporteur_name = Column(String)
+    rapporteur_mep_id = Column(String)
+    celex_number = Column(String)
+    vote_results = Column(JSON)
+    related_documents = Column(JSON, default=[])
+    source_url = Column(String)
+    full_text_url = Column(String)
+    pdf_url = Column(String)
+    legislative_carriage_id = Column(UUID(as_uuid=True), ForeignKey("legislative_carriages.id"), nullable=True)
+    scraped_at = Column(DateTime, default=datetime.now)
+    first_seen = Column(DateTime, default=datetime.now, nullable=False)
+    last_updated = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
+
+    def __repr__(self):
+        return f"<PlenaryTabledText {self.ta_reference}: {self.title[:50]}>"
+
+
 class UserTextAdoptedTrack(Base):
     """
     User subscription to an adopted text.

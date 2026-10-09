@@ -18,7 +18,7 @@ from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.text_adopted import TextAdopted
+from models.text_adopted import PlenaryTabledText, TextAdopted
 from models.user import User
 
 from ._body import body_from_pdf_text, body_threshold_param, deprecated_body
@@ -383,30 +383,31 @@ async def list_texts_submitted(
     if updated_end and not updated_to:
         updated_to = updated_end
 
-    # Texts-submitted = rows in the same table without an adoption_date yet.
-    query = db.query(TextAdopted).filter(TextAdopted.adoption_date.is_(None))
+    # Tabled texts live in their own table since 9 Oct 2026 (migration 285). They were
+    # rows of texts_adopted without an adoption_date; a report is not an adopted text.
+    query = db.query(PlenaryTabledText)
     filters = []
     if text_type:
-        filters.append(TextAdopted.text_type == text_type.lower())
+        filters.append(PlenaryTabledText.text_type == text_type.lower())
     if procedure_ref:
-        filters.append(TextAdopted.procedure_ref == procedure_ref)
+        filters.append(PlenaryTabledText.procedure_ref == procedure_ref)
     if parliamentary_term is not None:
-        filters.append(TextAdopted.parliamentary_term == parliamentary_term)
+        filters.append(PlenaryTabledText.parliamentary_term == parliamentary_term)
     if committee:
-        filters.append(TextAdopted.committees.any(committee.upper()))
+        filters.append(PlenaryTabledText.committees.any(committee.upper()))
     if updated_from:
-        filters.append(TextAdopted.last_updated >= updated_from)
+        filters.append(PlenaryTabledText.last_updated >= updated_from)
     if updated_to:
-        filters.append(TextAdopted.last_updated <= updated_to)
+        filters.append(PlenaryTabledText.last_updated <= updated_to)
     if q:
         like = f"%{q}%"
-        filters.append(or_(TextAdopted.title.ilike(like), TextAdopted.description.ilike(like)))
+        filters.append(or_(PlenaryTabledText.title.ilike(like), PlenaryTabledText.description.ilike(like)))
     if filters:
         query = query.filter(and_(*filters))
 
     total = query.count()
     rows = (
-        stable(query.order_by(TextAdopted.last_updated.desc().nullslast()))
+        stable(query.order_by(PlenaryTabledText.last_updated.desc().nullslast()))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
