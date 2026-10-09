@@ -19,8 +19,12 @@ TABLES = ["eu_calendar_events", "commission_documents", "public_consultations", 
           "legislative_carriages", "eu_news_items", "mep_amendments", "amendment_documents",
           "committee_work_items", "eprs_publications", "parliamentary_questions", "texts_adopted",
           "ep_resolutions", "ep_roll_call_votes", "committee_meeting_transcripts", "who_is_who_officials",
-          "eurovoc_concepts"]
-BOOKKEEPING = {"id", "first_seen", "last_updated", "scraped_at", "search_vector", "meeting_key", "ref_ta", "ref_procedure"}
+          "eurovoc_concepts",
+          # Not synced by GovClipping, but documented as a stable id and once reloaded
+          # weekly with new serial ids (migration 284, 9 Oct 2026).
+          "eu_solidarity_fund"]
+BOOKKEEPING = {"id", "first_seen", "last_updated", "scraped_at", "search_vector", "meeting_key", "ref_ta", "ref_procedure",
+               "case_key"}
 
 
 @pytest.fixture(scope="module")

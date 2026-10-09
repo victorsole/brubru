@@ -1,8 +1,14 @@
 """
 Backfill ``eu_solidarity_fund`` from the DG REGIO Cohesion Open Data Platform
 (Socrata 7a49-av34, "EU Solidarity Fund (cases 2002 to 2021)"). One row per
-disaster case. Amounts in the source are EUR million, comma-formatted. Full
-refresh. Backs /api/v2/funding/eusf.
+disaster case. Amounts in the source are EUR million, comma-formatted. Backs
+/api/v2/funding/eusf.
+
+Upsert on case_key (CCI number + disaster name, migration 284), so a case keeps its id
+and created_at across refreshes and updated_at moves only when its content changes.
+Until 9 Oct 2026 this deleted the table and re-inserted every case, so the "stable" id
+the endpoint documents changed every week. Cases the source no longer lists are
+removed, but never on an empty fetch and never more than 10% of the table at once.
 
 Run:
     python3.12 backend/scripts/backfill_eusf.py            # dry-run
@@ -108,9 +114,13 @@ def main() -> None:
     print(f"[EUSF] fetched {len(rows)} disaster cases | total EUSF paid EUR {total_paid:,.0f}m")
     if not args.apply:
         print("[EUSF] [DRY-RUN] use --apply"); return
+    if not rows:
+        print("[EUSF] [ERROR] the source returned no cases: a failed fetch, not an empty fund")
+        sys.exit(1)
     db = ChunkedDb()
+    inserted = updated = unchanged = 0
+    keys = set()
     try:
-        db.execute("DELETE FROM eu_solidarity_fund")
         for r in rows:
             vals = {
                 "damage": _num(r.get("total_direct_damage_accepted")),
@@ -130,6 +140,20 @@ def main() -> None:
                   (%(yr)s,%(cci)s,%(cc)s,%(name)s,%(dtype)s,%(status)s,%(cat)s,%(fdd)s,%(doia)s,
                    %(damage)s,%(emerg)s,%(pct)s,%(paid)s,
                    %(url)s,%(bt)s,%(bh)s,'composed',%(docdate)s,%(raw)s)
+                ON CONFLICT (case_key) DO UPDATE SET
+                  year_of_occurrence = EXCLUDED.year_of_occurrence, applicant_country = EXCLUDED.applicant_country,
+                  disaster_type = EXCLUDED.disaster_type, status = EXCLUDED.status, category = EXCLUDED.category,
+                  first_damage_date = EXCLUDED.first_damage_date,
+                  date_of_initial_application = EXCLUDED.date_of_initial_application,
+                  total_direct_damage_meur = EXCLUDED.total_direct_damage_meur,
+                  eligible_emergency_cost_meur = EXCLUDED.eligible_emergency_cost_meur,
+                  damage_pct = EXCLUDED.damage_pct, eusf_grant_paid_meur = EXCLUDED.eusf_grant_paid_meur,
+                  public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt, body_html = EXCLUDED.body_html,
+                  document_date = EXCLUDED.document_date, raw = EXCLUDED.raw,
+                  updated_at = now(), fetched_at = now()
+                WHERE (eu_solidarity_fund.raw, eu_solidarity_fund.body_txt, eu_solidarity_fund.public_url)
+                      IS DISTINCT FROM (EXCLUDED.raw, EXCLUDED.body_txt, EXCLUDED.public_url)
+                RETURNING (xmax = 0) AS inserted
                 """,
                 {
                     "yr": _int(r.get("year_of_occurance")), "cci": r.get("cci_number"),
@@ -143,8 +167,27 @@ def main() -> None:
                     "docdate": _date(r.get("first_damage_date")), "raw": Json(r),
                 },
             )
+            got = db.cur.fetchone()
+            if got is None:
+                unchanged += 1          # held, and nothing in it changed: id, dates untouched
+            elif got[0]:
+                inserted += 1
+            else:
+                updated += 1
+            keys.add(f"{r.get('cci_number') or ''}|{r.get('name_of_disaster') or ''}")
+        db.execute("SELECT case_key FROM eu_solidarity_fund")
+        gone = [k for (k,) in db.cur.fetchall() if k not in keys]
+        db.execute("SELECT count(*) FROM eu_solidarity_fund")
+        held = db.cur.fetchone()[0]
+        if gone and len(gone) > 0.1 * held:
+            db.conn.rollback()
+            print(f"[EUSF] [ERROR] {len(gone)} of {held} cases missing from the source; refusing to delete")
+            sys.exit(1)
+        for k in gone:
+            db.execute("DELETE FROM eu_solidarity_fund WHERE case_key = %(k)s", {"k": k})
         db.commit()
-        print(f"[EUSF] [OK] wrote {len(rows)} cases")
+        print(f"[EUSF] [OK] {len(rows)} cases: inserted={inserted} updated={updated} "
+              f"unchanged={unchanged} removed={len(gone)}")
     finally:
         db.close()
 
