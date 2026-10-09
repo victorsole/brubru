@@ -168,6 +168,23 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("committee_agenda_bodies", "Committee agendas - full text", "warm",
                "scripts/backfill_committee_agenda_bodies.py", ("--apply", "--limit", "40"),
                timeout=1800, stale_after_hours=48),
+    # OEIL probe audit (9 Oct 2026). Nothing asked OEIL itself "what do you have that
+    # Brubru does not": the feeds see only OEIL's "latest" lists and what carriages already
+    # point at. A probe of every 2026 reference number found 518 procedure pages; 11 were not
+    # held (10 debate-only resolutions and one censure motion) and nothing had said so. A gap
+    # counts only for a type some Brubru procedure table holds, so the censure motion (INS,
+    # which no table is meant to hold) is listed apart and never degrades the run.
+    # This asks, per run, for the numbers just above what Brubru holds in each number series
+    # plus a window over the numbers it does not hold (advancing per six-hour slot), reads
+    # legislative_carriages and ep_resolutions READ ONLY, and writes nothing. It is an AUDIT:
+    # exit 1 means "OEIL serves procedures Brubru lacks", recorded as `degraded`, with the
+    # names as the stderr tail in sync_runs.error. Expect `degraded` until those procedures
+    # are ingested (the resolution-procedures work); that is the job working. Exit 2 (a wall,
+    # an outage, nothing probed) is a real failure. --max-seconds 420 + the DB read stays
+    # inside the 600s timeout. ~2.5 requests/s at 800 requests is about 6 minutes.
+    SourceSpec("oeil_probe_audit", "OEIL - probe against Brubru", "warm",
+               "scripts/oeil_probe_scan.py", ("--mode", "audit", "--max-requests", "800", "--max-seconds", "420"),
+               timeout=600, stale_after_hours=48, is_audit=True),
     SourceSpec("ep_council_gaps", "EP + Council completeness", "warm",
                "scripts/ep_council_completeness.py", (),
                timeout=300, stale_after_hours=48, is_audit=True),
