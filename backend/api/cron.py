@@ -546,6 +546,10 @@ async def cron_sync_hot_6h(
     # commission_documents held zero rows of the type. Page 1 is the newest 20,
     # which is all a daily run needs; --backfill walks the other 600.
     results["college_tentative_agendas"] = await _run_script_async("college_tentative_agendas", "scripts/sync_college_tentative_agendas.py", [], timeout=600)
+    # The Commission's own document register shows a COM document on its date; Cellar and EUR-Lex RSS
+    # (everything else here) can take two days (COM(2026) 546 final, 7 Oct: in Cellar on the 9th). This
+    # reads the register and reports what it holds that Cellar does not; it ingests nothing. 9 Oct 2026.
+    results["com_register"] = await _run_script_async("com_register", "scripts/sync_com_register.py", ["--apply", "--record"], timeout=300)
     results["calendar"] = await _run_script_async("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
     results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
     # eu_laws had no recurring ingest until 15 Sep 2026 (the script above writes legislative_carriages).
