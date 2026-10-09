@@ -145,6 +145,17 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("oeil_roles", "Carriages - committee roles", "warm",
                "scripts/backfill_oeil_committee_roles.py", ("--apply",),
                timeout=900, stale_after_hours=48),
+    # OEIL procedure files (9 Oct 2026): the only writer of oeil_procedures (migration 288),
+    # which /resolution-procedures needs to hold EVERY INI/RSP/INL procedure, debate-only RSPs
+    # included (Victor, 9 Oct). Carriages cannot say which procedures exist: they missed all of
+    # 2026/2560-2576. Re-reads unfinished procedures stalest first, then probes numbers no
+    # Brubru table holds (services/scrapers/oeil_probe.py). Before the resolutions jobs, which
+    # read it. 300s, not more: this tier already runs 53-60 min against the dispatcher's
+    # 50-min wait (measured 8-9 Oct); ~360 requests at 0.35s pace fit.
+    SourceSpec("oeil_procedures", "OEIL - procedure files", "warm",
+               "scripts/sync_oeil_procedures.py",
+               ("--apply", "--refresh-limit", "120", "--discover-requests", "240", "--budget", "300"),
+               timeout=480, stale_after_hours=48),
     SourceSpec("resolution_dates", "Resolutions - adoption dates", "warm",
                "scripts/backfill_resolution_dates.py", ("--apply",),
                timeout=600, stale_after_hours=48),
