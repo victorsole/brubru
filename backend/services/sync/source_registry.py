@@ -110,7 +110,10 @@ MEUB_SOURCES: List[SourceSpec] = [
     # read, so a run is cheap. An unreachable text is skipped and the run exits 1;
     # five failures in a row stop it as an outage. It only adds validated votes.
     SourceSpec("texts_adopted_final_votes", "Texts adopted - final votes (EP Open Data)", "warm",
-               "scripts/sync_texts_adopted_final_votes.py", ("--apply", "--deadline-seconds", "1200"),
+               # Recent texts every run, every unresolved one on Sunday morning (9 Oct 2026):
+               # re-reading ~100 old texts that never resolve cost ~10 min of every warm run.
+               "scripts/sync_texts_adopted_final_votes.py",
+               ("--apply", "--deadline-seconds", "1200", "--recent-days", "45", "--all-on-weekday", "6"),
                timeout=1500, stale_after_hours=48),
     # EuroVoc for resolutions, read from Cellar once their CELEX is known (8 Oct
     # 2026; was empty on all 353). After texts_adopted_celex on purpose.

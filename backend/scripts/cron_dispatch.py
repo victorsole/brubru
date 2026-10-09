@@ -55,6 +55,7 @@ import os
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from zoneinfo import ZoneInfo
 
@@ -94,6 +95,19 @@ EDGE_TIMEOUT = 280
 DETACHED = "detached"
 POLL_SECONDS = 60
 MAX_WAIT_SECONDS = 50 * 60
+
+# A tier may outlive one dispatcher run: the warm tier needs 60-79 minutes (32 sources,
+# measured 9 Oct 2026) against the 50-minute wait, and calling that a failure mailed
+# "Deploy crashed" after every warm run while no source had failed. So "still working at
+# the deadline" is not a verdict. Every run judges the ledger rows that FINISHED since the
+# previous run's verdict, which is recorded as a `cron_judged` mark at the database's own
+# clock: the tail of a long tier is judged, exactly once, by the next run. A call in
+# flight for longer than HUNG_SECONDS is the failure that remains.
+HUNG_SECONDS = 3 * 3600
+LEDGER_MINUTES = 360
+FIRST_LOOKBACK_MINUTES = 70
+JUDGED_KEY = "cron_judged"
+OK_STATUSES = ("success", "ok", "skipped", "degraded")
 
 
 def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
@@ -156,11 +170,13 @@ def _wait_for_detached(started: float, endpoints: list[str] | None = None) -> tu
     """
     wanted = [_endpoint_path(e) for e in (endpoints or [])]
     last = None
+    last_status = None
     while time.time() - started < MAX_WAIT_SECONDS:
         time.sleep(POLL_SECONDS)
         status = _status_since(int((time.time() - started) / 60) + 2)
         if status is None:
             continue
+        last_status = status
         last = status.get("runs") or []
         in_flight = status.get("in_flight") or []
         if not in_flight:
@@ -172,8 +188,56 @@ def _wait_for_detached(started: float, endpoints: list[str] | None = None) -> tu
                           if float((completed.get(p) or {}).get("seconds_ago", 1e9)) > time.time() - started]
             return last, unfinished
         print(f"[WAIT] still running: {', '.join(in_flight)} ({len(last)} recorded)", flush=True)
-    print(f"[ERR]  still working after {MAX_WAIT_SECONDS // 60} minutes; judging what there is", flush=True)
-    return last, ["timed out: " + ",".join(wanted)]
+    in_flight = (last_status or {}).get("in_flight") or []
+    print(f"[WAIT] still working after {MAX_WAIT_SECONDS // 60} minutes: {', '.join(in_flight) or '?'}; "
+          "what finishes later is judged by the next run", flush=True)
+    # Not in flight and never reached its end in this process: the container was replaced.
+    completed = (last_status or {}).get("completed") or {}
+    unfinished = [p for p in wanted if p not in in_flight
+                  and float((completed.get(p) or {}).get("seconds_ago", 1e9)) > time.time() - started]
+    return last, unfinished
+
+
+def _ts(value):
+    """An ISO timestamp from the backend as an aware UTC datetime (None when absent)."""
+    if not value:
+        return None
+    d = datetime.datetime.fromisoformat(value)
+    return d if d.tzinfo else d.replace(tzinfo=datetime.timezone.utc)
+
+
+def _judge_ledger(status: dict | None) -> tuple[list[str], str | None]:
+    """Failures among the sources that finished since the previous run's verdict, plus the
+    instant (the database's clock) to record as this run's verdict. Pure: unit-tested."""
+    if status is None:
+        return ["runs-since=unreadable"], None
+    runs = status.get("runs") or []
+    now_s = status.get("now")
+    now = _ts(now_s)
+    marks = [m for m in (_ts(r.get("finished_at")) for r in runs if r.get("source_key") == JUDGED_KEY) if m]
+    if marks:
+        cursor = max(marks)
+    else:  # first run with this rule, or no mark within LEDGER_MINUTES
+        cursor = (now or datetime.datetime.now(datetime.timezone.utc)) - datetime.timedelta(minutes=FIRST_LOOKBACK_MINUTES)
+    failures = []
+    for r in runs:
+        if r.get("source_key") in (JUDGED_KEY, "cron_dispatch"):
+            continue
+        fin = _ts(r.get("finished_at"))
+        if fin is None or fin <= cursor or (now is not None and fin > now):
+            continue
+        if r.get("status") not in OK_STATUSES:
+            failures.append(f"{r.get('source_key')}={r.get('status')}")
+    for path, age in sorted((status.get("in_flight_seconds") or {}).items()):
+        if float(age) > HUNG_SECONDS:
+            failures.append(f"{path}=in flight for {float(age) / 3600:.1f}h (hung)")
+    return failures, now_s
+
+
+def _mark_judged(at: str | None) -> None:
+    """Record where this run's verdict stopped; the next run judges what finishes after it."""
+    if at:
+        _fire("/api/cron/heartbeat?judged_at=" + urllib.parse.quote(at), timeout=60)
 
 
 def _iter_job_statuses(payload) -> list[tuple[str, str]]:
@@ -402,7 +466,15 @@ def main():
 
     fires = decide_tiers(now)
     if not fires:
-        print(f"[CRON-DISPATCH] No tiers due at hour {now.hour:02d} UTC. Exiting.", flush=True)
+        # Nothing to fire, but a tier fired earlier may have finished since the last
+        # verdict: judge it now, or a failure in its tail would never be reported.
+        failures, at = _judge_ledger(_status_since(LEDGER_MINUTES))
+        _mark_judged(at)
+        print(f"[CRON-DISPATCH] No tiers due at hour {now.hour:02d} UTC. "
+              f"Ledger since the last verdict: {len(failures)} failed.", flush=True)
+        if failures:
+            print(f"[CRON-DISPATCH] FAILED JOBS: {', '.join(failures[:40])}", flush=True)
+            sys.exit(1)
         sys.exit(0)
 
     print(f"[CRON-DISPATCH] Firing {len(fires)} tier(s): {[label for label, _ in fires]}", flush=True)
@@ -440,11 +512,7 @@ def main():
         elif not runs:
             job_failures.append(f"{','.join(detached)}=no runs recorded")
         else:
-            for r in runs:
-                if r.get("status") not in ("success", "ok", "skipped", "degraded"):
-                    job_failures.append(f"{r.get('source_key')}={r.get('status')}")
-            print(f"[CRON-DISPATCH] Ledger: {len(runs)} run(s), "
-                  f"{len(job_failures)} failed", flush=True)
+            print(f"[CRON-DISPATCH] Ledger: {len(runs)} run(s) recorded by this run's tiers so far", flush=True)
     for label, payload in results.items():
         for job, status in _iter_job_statuses(payload):
             # "degraded" = an AUDIT source found gaps (it exits non-zero to say
@@ -454,6 +522,12 @@ def main():
             # sync_runs and /api/sync/health.
             if status not in ("success", "ok", "skipped", "degraded"):
                 job_failures.append(f"{label}/{job}={status}")
+
+    # Every source that finished since the previous verdict, this run's and the tail of
+    # earlier ones alike, then the mark the next run starts from.
+    ledger_failures, at = _judge_ledger(_status_since(LEDGER_MINUTES))
+    job_failures.extend(ledger_failures)
+    _mark_judged(at)
 
     print(
         f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed} "

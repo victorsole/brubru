@@ -31,6 +31,7 @@ was found is written and the run exits 1, so sync_runs records the failure.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import re
 import sys
@@ -56,7 +57,7 @@ _METHOD = {
 }
 
 PICK = text("""
-    SELECT id, ta_reference, vote_results FROM texts_adopted
+    SELECT id, ta_reference, vote_results, adoption_date::date AS adopted FROM texts_adopted
     WHERE ta_reference ~ '^P[0-9]+_TA'
       AND (vote_results IS NULL OR vote_results->>'source' IS DISTINCT FROM 'ep_open_data'
            -- a counted vote stored with a missing count (zero omitted by the source)
@@ -195,11 +196,25 @@ def main() -> int:
     ap.add_argument("--deadline-seconds", type=int, default=0,
                     help="Stop reading after this long and store what was found (0 = no limit). "
                          "The run is resumable: the next one starts where this stopped.")
+    ap.add_argument("--recent-days", type=int, default=0,
+                    help="Read only texts adopted in the last N days (0 = all). About 100 old texts "
+                         "never get an EP Open Data final vote (show of hands, not published) and "
+                         "re-reading them cost ~10 min of every warm run (9 Oct 2026).")
+    ap.add_argument("--all-on-weekday", type=int, default=None,
+                    help="With --recent-days: read ALL unresolved texts on this weekday's morning run "
+                         "(0=Mon .. 6=Sun, before 12:00 UTC), because a vote can be published late.")
     args = ap.parse_args()
 
     engine = create_engine(_database_url(), pool_pre_ping=True)
     with engine.connect() as conn:
         rows = list(conn.execute(PICK))
+    now = dt.datetime.now(dt.timezone.utc)
+    weekly = args.all_on_weekday is not None and now.weekday() == args.all_on_weekday and now.hour < 12
+    if args.recent_days and not weekly:
+        cutoff = now.date() - dt.timedelta(days=args.recent_days)
+        older = sum(1 for r in rows if not (r.adopted and r.adopted >= cutoff))
+        rows = [r for r in rows if r.adopted and r.adopted >= cutoff]
+        print(f"[INFO] {older} older unresolved text(s) left for the weekly run")
     if args.limit:
         rows = rows[:args.limit]
     print(f"[INFO] adopted texts without an EP Open Data final vote: {len(rows)}")

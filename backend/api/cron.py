@@ -9,6 +9,8 @@ Railway cron service calls these endpoints on a schedule.
 
 import logging
 import time as _time
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Header, Query, Request
 from sqlalchemy.orm import Session
 
@@ -1631,10 +1633,20 @@ async def cron_runs_since(
                AND runner IS DISTINCT FROM 'local'
              ORDER BY started_at
         """), {"m": minutes}).mappings().all()
+        server_now = db.execute(text("SELECT now()")).scalar()
     finally:
         db.close()
+    oldest: dict = {}
+    for k, t0 in _IN_FLIGHT.items():
+        p = k.split("#")[0]
+        oldest[p] = max(oldest.get(p, 0.0), _time.time() - t0)
     return {
         "minutes": minutes,
+        # The database's clock, which stamps the ledger: the dispatcher records its verdict
+        # at THIS instant, so the next run judges exactly the rows that finished after it.
+        "now": server_now.isoformat() if server_now else None,
+        # How long each call has been working, so a tier that never ends can be called hung.
+        "in_flight_seconds": {p: round(a, 1) for p, a in oldest.items()},
         # What is still working right now. An empty list is the only honest way for the
         # dispatcher to know a detached tier has ended.
         "in_flight": sorted(k.split("#")[0] for k in _IN_FLIGHT),
@@ -1650,18 +1662,32 @@ async def cron_runs_since(
 
 
 @router.post("/heartbeat")
-async def cron_heartbeat(authorization: str = Header(...)):
+async def cron_heartbeat(authorization: str = Header(...), judged_at: Optional[str] = None):
     """Dispatcher liveness ping.
 
     `scripts/cron_dispatch.py` fires this every hour regardless of which tiers
     run, so `/api/sync/health` can tell whether the hourly Railway cron is
     actually alive (vs the app being up but the cron not scheduled).
+
+    With `judged_at` (9 Oct 2026) it instead records where the dispatcher's verdict
+    stopped: a `cron_judged` row stamped with that instant. The next run judges every
+    source that finished after it, so a tier that outlives one dispatcher run is judged
+    by the next one instead of being reported as a crash.
     """
     _verify_cron_secret(authorization)
+    from datetime import datetime as _dt
     from services.sync.freshness import record_run
     db = SessionLocal()
     try:
-        record_run(db, source_key="cron_dispatch", tier="heartbeat", status="ok", items_added=0)
+        if judged_at:
+            try:
+                at = _dt.fromisoformat(judged_at)
+            except ValueError:
+                raise HTTPException(status_code=400, detail="judged_at must be an ISO timestamp")
+            record_run(db, source_key="cron_judged", tier="heartbeat", status="ok", items_added=0,
+                       started_at=at, finished_at=at)
+        else:
+            record_run(db, source_key="cron_dispatch", tier="heartbeat", status="ok", items_added=0)
     finally:
         db.close()
     return {"status": "ok"}
