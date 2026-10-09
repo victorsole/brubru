@@ -4,6 +4,17 @@
     {
       "date": "2026-10-09",
       "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "Recovery and Resilience Facility",
+      "summary": "Fifth annual report is COM(2026) 546 final of 7 October 2026, with EUR-Lex and Commission links",
+      "refs": [
+        "52026DC0546",
+        "32021R0241"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "updated",
       "guide": "ep_plenary_october_2026_thursday_votes",
       "title": "EP plenary 8 October 2026 votes",
       "summary": "EU-Africa resolution adopted by show of hands; all eight final votes confirmed",

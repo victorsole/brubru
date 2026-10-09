@@ -17678,6 +17678,27 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'antidrons': ['eu_counter_drone_funding_bmvi_2026'],
     'antidrone': ['eu_counter_drone_funding_bmvi_2026'],
     'tegen drones': ['eu_counter_drone_funding_bmvi_2026'],
+    # 9 Oct 2026 /news + /social-eu + /emeetings guides (Uber fine, Kingspan fine, CJEU 8 Oct, hybrid sanctions renewal, winter gas, EUCO 15-16 Oct, Armenia, BMVI counter-drone)
+    'com(2026) 546': ['eu_recovery_resilience_facility'],
+    'com(2026)546': ['eu_recovery_resilience_facility'],
+    'com(2026) 546 final': ['eu_recovery_resilience_facility'],
+    'recovery and resilience facility annual report': ['eu_recovery_resilience_facility'],
+    'fifth annual report on the rrf': ['eu_recovery_resilience_facility'],
+    'rrf implementation report': ['eu_recovery_resilience_facility'],
+    'report on the implementation of the recovery and resilience facility': ['eu_recovery_resilience_facility'],
+    'annual report on the recovery and resilience facility': ['eu_recovery_resilience_facility'],
+    'rapport annuel sur la facilité pour la reprise et la résilience': ['eu_recovery_resilience_facility'],
+    'rapport annuel sur la facilite pour la reprise et la resilience': ['eu_recovery_resilience_facility'],
+    'rapport annuel de la frr': ['eu_recovery_resilience_facility'],
+    'informe anual del mecanismo de recuperación y resiliencia': ['eu_recovery_resilience_facility'],
+    'informe anual del mecanismo de recuperacion y resiliencia': ['eu_recovery_resilience_facility'],
+    'informe anual mrr': ['eu_recovery_resilience_facility'],
+    'informe anual del mecanisme de recuperació i resiliència': ['eu_recovery_resilience_facility'],
+    'informe anual del mecanisme de recuperacio i resiliencia': ['eu_recovery_resilience_facility'],
+    'relazione annuale sul dispositivo per la ripresa e la resilienza': ['eu_recovery_resilience_facility'],
+    'relazione annuale dispositivo ripresa e resilienza': ['eu_recovery_resilience_facility'],
+    'jaarverslag over de herstel- en veerkrachtfaciliteit': ['eu_recovery_resilience_facility'],
+    'jaarverslag rrf': ['eu_recovery_resilience_facility'],
 }
 
 
