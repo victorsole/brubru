@@ -30,8 +30,12 @@ EXPECTED_ORDER = [
     "texts_adopted",
     "texts_adopted_bodies",
     "oeil_roles",
-    "resolution_dates",
+    # 9 Oct 2026: the corpus adds every INI/RSP/INL procedure OEIL serves (read by
+    # oeil_procedures) with status NULL, and resolution_dates, the only writer of status,
+    # sets it in the same run. The old order left a new row a whole run without a status.
+    "oeil_procedures",
     "resolutions_corpus",
+    "resolution_dates",
     "ep_enrich",
     "ep_council_gaps",
 ]
