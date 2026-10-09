@@ -2,6 +2,155 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-09",
+      "action": "updated",
+      "guide": "ep_plenary_october_2026_thursday_votes",
+      "title": "EP plenary 8 October 2026 votes",
+      "summary": "EU-Africa resolution adopted by show of hands; all eight final votes confirmed",
+      "refs": []
+    },
+    {
+      "date": "2026-10-09",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions implementation framework",
+      "summary": "Hybrid-threats regime renewed 8 October 2026; flight-ban list ruling",
+      "refs": [
+        "32024D2643"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "updated",
+      "guide": "air_passenger_rights_regulation",
+      "title": "Air passenger rights",
+      "summary": "Court of Justice C-108/26 RX of 8 October 2026 on air traffic management decisions",
+      "refs": [
+        "32004R0261"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "updated",
+      "guide": "industrial_emissions_directive",
+      "title": "Industrial Emissions Directive 2.0",
+      "summary": "UCOL for pig and poultry farms adopted 8 October 2026; applies 2030 to 2032",
+      "refs": [
+        "32024L1785"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "eu_counter_drone_funding_bmvi_2026",
+      "title": "EUR 130 million BMVI top-up for drone and counter-drone capabilities",
+      "summary": "Announced at the JHA Council 1 October 2026; more than half a billion euro in total",
+      "refs": []
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "eu_armenia_trade_liberalisation_regulation_2026_2269",
+      "title": "Regulation (EU) 2026/2269: temporary trade liberalisation for Armenia",
+      "summary": "Duty-free access and quotas until 11 October 2028; in force 10 October 2026",
+      "refs": [
+        "32026R2269"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "european_council_15_16_october_2026",
+      "title": "European Council 15-16 October 2026 (preview from the invitation letter)",
+      "summary": "Energy prices, MFF 2028-2034, Ukraine, hybrid attacks, migration, enlargement, Middle East",
+      "refs": []
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "eu_gas_winter_2026_2027_supply_outlook",
+      "title": "EU gas security of supply, winter 2026-2027",
+      "summary": "Commission and ENTSOG winter outlook of 8 October 2026; storage below historical levels",
+      "refs": [
+        "32024R1789"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "eu_russia_hybrid_destabilisation_sanctions_regime",
+      "title": "Russia hybrid-threats sanctions regime renewed to 9 October 2027",
+      "summary": "Decision (CFSP) 2026/2258; 80 individuals and 20 entities; Belyavtseva moved to the Ukraine regime",
+      "refs": [
+        "32024D2643",
+        "32024R2642",
+        "32026D2258",
+        "32026R2257",
+        "32026D2264",
+        "32026R2263"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "ag_medina_c_222_25_fiu_law_enforcement_directive",
+      "title": "AG Medina C-222/25: FIUs fall under the Law Enforcement Directive (opinion)",
+      "summary": "Advocate General opinion, not a judgment; access may be restricted with safeguards",
+      "refs": [
+        "32016L0680"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "cjeu_c_706_23_multiple_contracts_annual_leave",
+      "title": "CJEU C-706/23: several contracts, pro rata annual leave pay",
+      "summary": "Working Time, part-time and fixed-term directives preclude computing leave pay on the full-time contract only",
+      "refs": [
+        "32003L0088",
+        "31997L0081",
+        "31999L0070"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "cjeu_c_482_24_p_global_8_airlines_flight_ban",
+      "title": "CJEU C-482/24 P Global 8 Airlines v Commission",
+      "summary": "Inclusion of aircraft on the flight-ban list can be challenged; case referred back to the General Court",
+      "refs": []
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "cjeu_c_108_26_air_traffic_management_compensation",
+      "title": "CJEU C-108/26 RX: air traffic management decision is not in itself extraordinary",
+      "summary": "Passenger compensation under Regulation 261/2004; General Court judgment set aside on review",
+      "refs": [
+        "32004R0261"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "kingspan_trimo_merger_information_fine_2026",
+      "title": "Commission fines Kingspan EUR 40 million (misleading merger information)",
+      "summary": "Four infringements of EUR 10m each under EUMR Article 14(1); Trimo deal abandoned 2022",
+      "refs": [
+        "32004R0139"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "action": "added",
+      "guide": "uber_gdpr_fine_automated_decisions_2026",
+      "title": "Dutch DPA fines Uber EUR 824.99 million (automated decisions)",
+      "summary": "AP fine under GDPR Articles 22 and 13; 171 French drivers; Uber appealed",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
       "date": "2026-10-08",
       "action": "created",
       "guide": "eic_step_scaleup_defence_2026",

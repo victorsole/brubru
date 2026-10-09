@@ -1,0 +1,14 @@
+# Regulation (EU) 2026/2269: temporary trade liberalisation for products from Armenia (in force 10 October 2026)
+
+## QUICK FACTS
+- **Act:** **Regulation (EU) 2026/2269 of the European Parliament and of the Council of 7 October 2026** on temporary trade-liberalisation measures applicable to certain products originating in the **Republic of Armenia** (CELEX 32026R2269). Adopted under the ordinary legislative procedure and Article 207(2) TFEU; Parliament's position **15 September 2026**, Council decision **24 September 2026**, signed **7 October 2026** in Strasbourg; published in the Official Journal on **9 October 2026**.
+- **Dates:** enters into force the day after publication (**10 October 2026**) and **applies until 11 October 2028** (two years).
+- **What it does (exactly two measures):** (a) the products in **Annex I** are admitted to the EU **free of ad valorem import duties** (a long list of agricultural and industrial products by Combined Nomenclature code); (b) the products in **Annex II** are duty-free **within annual tariff quotas** (tonnes per calendar year): cucumbers and gherkins 6,500; grapes 5,000; pears 750; apricots 7,000; cherries 2,000; peaches and nectarines 3,500; plums 1,500; strawberries 2,500. In the year of entry into force the quota period runs from the entry-into-force date to 31 December. The Commission manages the quotas under Articles 49 to 54 of Implementing Regulation (EU) 2015/2447.
+- **Why:** since **May 2026** Russia has introduced large-scale trade measures hitting imports of, and transit for, key Armenian exports (alcoholic beverages, mineral water, fruit and vegetables). The Regulation supports Armenia's trade diversification under the EU-Armenia Comprehensive and Enhanced Partnership Agreement (in force since 1 March 2021) and the Strategic Agenda for the EU-Armenia Partnership of 2 December 2025.
+- **Conditions (Article 2, exactly four):** respect of the rules of origin; close administrative cooperation with the EU on origin verification; no new duties, charges or quantitative restrictions on EU exports and no increase of existing ones; respect for democratic principles, the rule of law and human rights and countering proliferation of weapons of mass destruction (Articles 2 and 9 of the Partnership Agreement).
+- **Safeguards:** the Commission can **suspend** the measures in whole or part by implementing act if Armenia fails the conditions (Article 3, examination procedure), and can impose **safeguard measures** if imports harm the EU market for like or directly competing products (Article 4). The Commission reports on implementation in the Partnership Committee in trade configuration.
+- Source (text on EUR-Lex): https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R2269
+
+## Related
+
+- EU trade agreements and unilateral preferences: `eu_neighbourhood_policy_east_south`
