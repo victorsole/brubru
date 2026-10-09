@@ -40,6 +40,8 @@ if str(BACKEND_DIR) not in sys.path:
 load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(BACKEND_DIR.parent / ".env")
 
+from services.matching.oeil_status import is_finished  # noqa: E402
+
 # One row per resolution, with both candidate dates side by side so they can be
 # compared rather than coalesced blindly.
 _CANDIDATES = """
@@ -58,13 +60,28 @@ SELECT r.id,
        (SELECT max((e->>'date')::date)
           FROM json_array_elements(COALESCE(c.oeil_key_events, '[]'::json)) e
          WHERE e->>'event_type' ILIKE '%Decision by Parliament%'
-           AND (e->>'date') ~ '^\\d{4}-\\d{2}-\\d{2}$')  AS oeil_date
+           AND (e->>'date') ~ '^\\d{4}-\\d{2}-\\d{2}$')  AS oeil_date,
+       -- The procedure page as OEIL serves it (oeil_procedures, migration 288): the status
+       -- line, and whether Parliament decided anything. Carriages miss whole blocks of
+       -- procedures (2026/2560-2576), so a row without a carriage still gets a status.
+       o.oeil_status                         AS oeil_page_status,
+       -- Adopted per OEIL: the page lists the adopted text (T9-/T10-...) and the decision
+       -- date. The only date source for a resolution whose text Brubru never holds, such as
+       -- a 9th-term text (P9_TA), which texts_adopted does not cover.
+       CASE WHEN cardinality(o.text_refs) > 0 THEN (
+            SELECT max((e->>'date')::date) FROM jsonb_array_elements(o.key_events) e
+             WHERE e->>'event' ILIKE '%Decision by Parliament%'
+               AND (e->>'date') ~ '^\\d{4}-\\d{2}-\\d{2}$') END  AS oeil_page_text_date,
+       (o.id IS NOT NULL AND (cardinality(o.text_refs) > 0 OR EXISTS (
+            SELECT 1 FROM jsonb_array_elements(o.key_events) e
+             WHERE e->>'event' ILIKE '%Decision by Parliament%')))  AS oeil_page_decided
 FROM ep_resolutions r
 -- The adopted text only (P10_TA...). texts_adopted also holds committee REPORTS
 -- (A10/...) under the same procedure_ref; joining them processed 7 resolutions twice.
 LEFT JOIN texts_adopted t          ON t.procedure_ref      = r.procedure_ref
                                   AND t.ta_reference ~ '^P[0-9]+_TA'
 LEFT JOIN legislative_carriages c  ON c.oeil_procedure_ref = r.procedure_ref
+LEFT JOIN oeil_procedures o        ON o.procedure_ref      = r.procedure_ref AND o.served
 ORDER BY r.procedure_ref
 """
 
@@ -100,9 +117,16 @@ def _status(r, chosen) -> str:
     # decision either way: 2025/2138(INI) was voted down 233-250-76).
     if r.current_status == "rejected" and not r.has_adopted_text:
         return "rejected"
+    # OEIL's own verdict on a lost final vote ("Procedure rejected", 7 procedures 2024-2026).
+    if (r.oeil_page_status or "").strip().lower().startswith("procedure rejected") and not r.has_adopted_text:
+        return "rejected"
     if chosen or r.current_date_ or r.has_adopted_text:
         return "adopted"
-    if (r.carriage_status or "").upper() == "COMPLETED":
+    # Closed without a resolution only when the procedure is over AND Parliament decided
+    # nothing: a decision whose text Brubru has not fetched yet is pending, not "none".
+    finished = ((r.carriage_status or "").upper() == "COMPLETED"
+                or is_finished(r.oeil_page_status))
+    if finished and not r.oeil_page_decided:
         return "closed_without_resolution"
     return "pending"
 
@@ -129,10 +153,10 @@ def main() -> int:
         statuses: dict = {}
         status_changed = 0
         lead_filled = rapp_filled = 0
-        conflicts, unresolvable = [], []
+        conflicts, unresolvable, changes = [], [], []
 
         for r in rows:
-            chosen = r.ta_date or r.oeil_date
+            chosen = r.ta_date or r.oeil_date or r.oeil_page_text_date
 
             if r.ta_date and r.oeil_date and r.ta_date != r.oeil_date:
                 # Do not hide it. Two EP surfaces disagreeing about when the
@@ -166,6 +190,7 @@ def main() -> int:
             statuses[status] = statuses.get(status, 0) + 1
             if status != r.current_status:
                 status_changed += 1
+                changes.append(f"{r.procedure_ref:20} {r.current_status} -> {status}")
 
             if args.apply:
                 conn.execute(text(_UPDATE), {
@@ -183,6 +208,9 @@ def main() -> int:
               f"dated={dated} lead_committee_filled={lead_filled} "
               f"rapporteur_filled={rapp_filled} still_undated={still_null}")
         print(f"[INFO] status: {statuses} ({status_changed} changed)")
+        # Named, so a status flip is something to read, not a number to trust.
+        for c in [c for c in changes if not c.split()[1] == "None"][:25]:
+            print("   " + c)
         if conflicts:
             print(f"[WARN] {disagreed} resolution(s) where the two EP surfaces "
                   f"give DIFFERENT adoption dates:")

@@ -212,6 +212,15 @@ def _items_for(db, rows: list) -> list:
               AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
         """), {"refs": refs}).fetchall()
         oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
+        # The same OEIL page, kept by sync_oeil_procedures.py (migration 289) for the
+        # procedures no carriage holds: debates such as 2026/2561(RSP), 9th-term texts.
+        no_body = [ref for ref in refs if ref not in oeil_bodies]
+        if no_body:
+            for ref, txt, html in db.execute(_sql_text("""
+                SELECT procedure_ref, body_txt, body_html FROM oeil_procedures
+                WHERE procedure_ref = ANY(:refs) AND body_txt IS NOT NULL
+            """), {"refs": no_body}).fetchall():
+                oeil_bodies[ref] = (txt, html)
         vote_methods = {row[0]: row[1] for row in db.execute(_sql_text("""
             SELECT procedure_ref,
                    CASE vote_results->>'source' WHEN 'ep_open_data' THEN vote_results->>'method'
@@ -224,6 +233,18 @@ def _items_for(db, rows: list) -> list:
             SELECT oeil_procedure_ref, oeil_key_events FROM legislative_carriages
             WHERE oeil_procedure_ref = ANY(:refs) AND oeil_key_events IS NOT NULL
         """), {"refs": refs}).fetchall()}
+        # A procedure no carriage holds (2026/2561(RSP) and the rest of a January block)
+        # still has its OEIL page in oeil_procedures (migration 288): same events, read
+        # from the page's Key events table, in the shape _build_key_events expects.
+        missing = [ref for ref in refs if not oeil_events.get(ref)]
+        if missing:
+            for ref, events in db.execute(_sql_text("""
+                SELECT procedure_ref, key_events FROM oeil_procedures
+                WHERE procedure_ref = ANY(:refs) AND served
+                  AND jsonb_array_length(key_events) > 0
+            """), {"refs": missing}).fetchall():
+                oeil_events[ref] = [{"date": e.get("date"), "event_type": e.get("event")}
+                                    for e in events if isinstance(e, dict)]
 
         # The resolution's OWN adopted text, which is what `body_txt` should be.
         # Until 27 Aug 2026 this surface served the OEIL PROCEDURE PAGE as the
@@ -331,6 +352,8 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
     summary="EP non-legislative resolutions — own-initiative reports, legislative initiatives, topical resolutions",
     description="""**What it does**
 Returns EP non-legislative outputs — files where the Parliament expresses a position WITHOUT directly amending EU law. Covers: `INL` (legislative initiative reports — EP asks the Commission to propose), `INI` (own-initiative reports — EP positions on horizontal themes), `RSP` (topical resolutions — urgent matters of EU concern, e.g. human rights, foreign policy). Each row carries the procedure ref, title, type, lead committee, rapporteur, adoption date, vote tallies, Commission follow-up status, and full text URL.
+
+One row per procedure, whatever its outcome: every INI, INL and RSP procedure the Legislative Observatory (OEIL) serves from 2024 onwards, read from OEIL itself. So a topical debate that ended with no motion voted is here as `closed_without_resolution`, and an own-initiative report still in committee as `pending`. Use `status=adopted` for adopted resolutions only.
 
 **When to use it**
 EP resolutions don't have legal force but signal political direction — useful for advocacy work tracking what the EP demands of the Commission, urgent geopolitical positions, or thematic priorities. Filter by `has_commission_followup=true` to find resolutions where the Commission has actually responded.

@@ -78,8 +78,9 @@ MEUB_SOURCES: List[SourceSpec] = [
     # ---- EP texts pipeline (registered 27 Aug 2026) ----------------------
     # The tier runner executes THIS LIST IN ORDER, sequentially and fail-soft,
     # so the order below IS the dependency chain: fetch texts -> fetch their
-    # bodies -> parse OEIL roles -> date the resolutions -> grow the resolutions
-    # corpus -> fill the joined columns -> check for gaps.
+    # bodies -> parse OEIL roles -> read OEIL procedure files -> grow the resolutions
+    # corpus -> date the resolutions and set their status -> fill the joined columns ->
+    # check for gaps.
     #
     # Every one of these was a manual command on 27 Aug. `sync_texts_adopted`
     # had NEVER been scheduled at all, which is why the corpus sat frozen at 251
@@ -156,11 +157,14 @@ MEUB_SOURCES: List[SourceSpec] = [
                "scripts/sync_oeil_procedures.py",
                ("--apply", "--refresh-limit", "120", "--discover-requests", "240", "--budget", "300"),
                timeout=480, stale_after_hours=48),
-    SourceSpec("resolution_dates", "Resolutions - adoption dates", "warm",
-               "scripts/backfill_resolution_dates.py", ("--apply",),
-               timeout=600, stale_after_hours=48),
+    # Corpus BEFORE dates (9 Oct 2026): the corpus now also adds every INI/RSP/INL procedure
+    # OEIL serves, with status NULL, and resolution_dates (the only writer of status) sets it
+    # in the same run. In the old order a new row waited a whole run with no status.
     SourceSpec("resolutions_corpus", "Resolutions - corpus", "warm",
                "scripts/backfill_ep_resolutions_corpus.py", ("--apply",),
+               timeout=600, stale_after_hours=48),
+    SourceSpec("resolution_dates", "Resolutions - adoption dates", "warm",
+               "scripts/backfill_resolution_dates.py", ("--apply",),
                timeout=600, stale_after_hours=48),
     SourceSpec("ep_enrich", "EP texts - joined columns", "warm",
                "scripts/enrich_ep_texts_and_resolutions.py", ("--apply",),

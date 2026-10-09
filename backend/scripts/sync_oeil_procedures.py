@@ -49,7 +49,12 @@ load_dotenv(BACKEND_DIR.parent / ".env")
 
 from sqlalchemy import text  # noqa: E402
 
+import httpx  # noqa: E402
+
 from core.database import SessionLocal  # noqa: E402
+from services.scrapers.oeil_body_scraper import parse_body  # noqa: E402
+from services.scrapers.user_agent import BOT_UA  # noqa: E402
+from services.matching.oeil_status import is_finished  # noqa: E402,F401  (re-exported for tests)
 from services.scrapers.oeil_probe import (  # noqa: E402
     PROCEDURE_URL,
     OeilProber,
@@ -67,11 +72,11 @@ FINISHED_RECHECK_DAYS = 30
 UPSERT = text("""
 INSERT INTO oeil_procedures
     (procedure_ref, procedure_year, procedure_number, procedure_type, title, type_label, instrument,
-     subject, oeil_status, key_events, motion_refs, text_refs, public_url,
+     subject, oeil_status, key_events, motion_refs, text_refs, public_url, body_txt, body_html,
      served, last_served_at, unserved_since, scraped_at)
 VALUES
     (:ref, :year, :number, :ptype, :title, :type_label, :instrument,
-     :subject, :status, CAST(:key_events AS jsonb), :motion_refs, :text_refs, :url,
+     :subject, :status, CAST(:key_events AS jsonb), :motion_refs, :text_refs, :url, :body_txt, :body_html,
      true, :served_at, NULL, now())
 ON CONFLICT (procedure_ref) DO UPDATE SET
     title          = COALESCE(EXCLUDED.title, oeil_procedures.title),
@@ -83,6 +88,10 @@ ON CONFLICT (procedure_ref) DO UPDATE SET
     motion_refs    = EXCLUDED.motion_refs,
     text_refs      = EXCLUDED.text_refs,
     public_url     = EXCLUDED.public_url,
+    -- A feed record carries no page, and a page that parses to nothing is no body: keep the
+    -- stored one rather than blank it.
+    body_txt       = COALESCE(EXCLUDED.body_txt, oeil_procedures.body_txt),
+    body_html      = COALESCE(EXCLUDED.body_html, oeil_procedures.body_html),
     served         = true,
     last_served_at = GREATEST(oeil_procedures.last_served_at, EXCLUDED.last_served_at),
     unserved_since = NULL,
@@ -105,20 +114,14 @@ def err(msg: str) -> None:
     print(msg, file=sys.stderr, flush=True)
 
 
-def is_finished(status: Optional[str]) -> bool:
-    """True for OEIL statuses after which Parliament does nothing more on the file."""
-    s = (status or "").strip().lower()
-    if s.startswith("procedure completed"):
-        return "awaiting" not in s           # 'completed, awaiting publication in Official Journal'
-    return s.startswith(("procedure rejected", "procedure lapsed", "procedure withdrawn"))
-
-
-def row_params(ref: str, rec: dict, served_at: Optional[datetime] = None) -> dict:
-    """Bind parameters for UPSERT from a probe record (parse_procedure) or a feed record."""
+def row_params(ref: str, rec: dict, served_at: Optional[datetime] = None, html: Optional[str] = None) -> dict:
+    """Bind parameters for UPSERT from a probe record (parse_procedure) or a feed record.
+    `html` is the page itself when it was just read; a feed record has none."""
     p = parse_ref(ref)
     if not p:
         raise ValueError(f"not an OEIL reference: {ref!r}")
     year, number, ptype = p
+    body = parse_body(html) if html else None
     return {
         "ref": ref, "year": year, "number": number, "ptype": ptype,
         "title": rec.get("title") or None,
@@ -130,8 +133,31 @@ def row_params(ref: str, rec: dict, served_at: Optional[datetime] = None) -> dic
         "motion_refs": list(rec.get("motion_refs") or []),
         "text_refs": list(rec.get("text_refs") or []),
         "url": PROCEDURE_URL + ref,
+        "body_txt": (body.text_body or None) if body else None,
+        "body_html": (body.html_body or None) if body else None,
         "served_at": served_at or datetime.now(timezone.utc),
     }
+
+
+class LastPage:
+    """httpx response hook: keeps the last page the prober received, so the writer can store
+    the page itself without asking OEIL twice. Public API only (OeilProber takes a client)."""
+
+    def __init__(self):
+        self.response: Optional[httpx.Response] = None
+
+    def __call__(self, response: httpx.Response) -> None:
+        self.response = response
+
+    def html_for(self, ref: str) -> Optional[str]:
+        r = self.response
+        if r is None or r.status_code != 200:
+            return None
+        # The prober checked the page names `ref`; this checks the hook saw that same page.
+        if httpx.URL(PROCEDURE_URL + ref).params.get("reference") != r.url.params.get("reference"):
+            return None
+        r.read()
+        return r.text
 
 
 class Writer:
@@ -142,8 +168,8 @@ class Writer:
         self.apply = apply
         self.inserted = self.updated = self.unserved = 0
 
-    def upsert(self, ref: str, rec: dict, served_at: Optional[datetime] = None) -> None:
-        params = row_params(ref, rec, served_at)
+    def upsert(self, ref: str, rec: dict, served_at: Optional[datetime] = None, html: Optional[str] = None) -> None:
+        params = row_params(ref, rec, served_at, html)
         if not self.apply:
             info(f"  would write {ref}: {params['status']!r}, {len(rec.get('key_events') or [])} events")
             return
@@ -180,19 +206,22 @@ def _refs(sql: str, **params) -> List[str]:
 
 
 def refresh_queue(limit: int) -> List[str]:
-    """Unfinished procedures stalest first, then finished ones not read for FINISHED_RECHECK_DAYS."""
+    """Pages never kept (loaded from a feed), then unfinished procedures stalest first, then
+    finished ones not read for FINISHED_RECHECK_DAYS."""
     rows = []
     db = SessionLocal()
     try:
         rows = db.execute(text(
-            "SELECT procedure_ref, oeil_status, scraped_at FROM oeil_procedures ORDER BY scraped_at")).fetchall()
+            "SELECT procedure_ref, oeil_status, scraped_at, body_txt IS NULL AND served "
+            "FROM oeil_procedures ORDER BY scraped_at")).fetchall()
     finally:
         db.close()
     now = datetime.now(timezone.utc)
-    open_ = [r[0] for r in rows if not is_finished(r[1])]
-    stale_done = [r[0] for r in rows if is_finished(r[1])
+    no_page = [r[0] for r in rows if r[3]]
+    open_ = [r[0] for r in rows if not r[3] and not is_finished(r[1])]
+    stale_done = [r[0] for r in rows if not r[3] and is_finished(r[1])
                   and (now - r[2]).days >= FINISHED_RECHECK_DAYS]
-    return (open_ + stale_done)[:limit]
+    return (no_page + open_ + stale_done)[:limit]
 
 
 def held_refs() -> Set[str]:
@@ -242,7 +271,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         info(f"[{'APPLIED' if args.apply else 'DRY-RUN'}] feed records={n} inserted={writer.inserted} updated={writer.updated}")
         return 0 if n else 1
 
-    prober = OeilProber(pace=args.pace)
+    page = LastPage()
+    prober = OeilProber(pace=args.pace, client=httpx.Client(
+        headers={"User-Agent": BOT_UA}, timeout=30, follow_redirects=True,
+        event_hooks={"response": [page]}))
     deadline = time.monotonic() + args.budget
     read = served = new = 0
     try:
@@ -256,7 +288,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             read += 1
             if res.kind == "hit":
                 served += 1
-                writer.upsert(ref, res.record)
+                writer.upsert(ref, res.record, html=page.html_for(ref))
             else:
                 writer.mark_unserved(ref)
 
@@ -276,7 +308,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                     res = prober.sweep(year, number, types)
                     if res:
                         new += 1
-                        writer.upsert(res.ref, res.record)
+                        writer.upsert(res.ref, res.record, html=page.html_for(res.ref))
                         info(f"  new: {res.ref} {res.record.get('status')!r}")
     except ProbeBlocked as exc:
         err(f"[ERROR] OEIL probe stopped: {exc}")

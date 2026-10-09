@@ -94,3 +94,46 @@ def test_stored_rows_match_their_reference_and_none_was_deleted_as_absent():
         assert bad == 0
     finally:
         db.close()
+
+
+# --- the page itself (migration 289) ---------------------------------------------------
+
+def _fixture(name):
+    import gzip
+    return gzip.decompress((BACKEND / "tests" / "fixtures" / "oeil_probe" / name).read_bytes()).decode("utf-8")
+
+
+def test_a_page_read_now_is_kept_as_the_body_cleaned_like_the_carriage_copy():
+    from services.scrapers.oeil_body_scraper import parse_body
+    html = _fixture("rsp_debate_only_2026_2561.html.gz")
+    p = s.row_params("2026/2561(RSP)", {"title": "T"}, html=html)
+    expected = parse_body(html)
+    assert p["body_txt"] == expected.text_body and len(p["body_txt"]) > 500
+    assert p["body_html"] == expected.html_body
+    assert "Debate in Parliament" in p["body_txt"]
+
+
+def test_a_feed_record_has_no_page_and_the_upsert_keeps_the_stored_body():
+    p = s.row_params("2026/2561(RSP)", {"title": "T"})
+    assert p["body_txt"] is None and p["body_html"] is None
+    sql = str(s.UPSERT)
+    assert "COALESCE(EXCLUDED.body_txt, oeil_procedures.body_txt)" in sql
+    assert "COALESCE(EXCLUDED.body_html, oeil_procedures.body_html)" in sql
+
+
+def test_the_hook_hands_over_only_the_page_of_the_reference_asked_for():
+    import httpx
+    html = "<html>page</html>"
+    url = s.PROCEDURE_URL + "2026/2561(RSP)"
+    resp = httpx.Response(200, text=html, request=httpx.Request("GET", url))
+    page = s.LastPage()
+    page(resp)
+    assert page.html_for("2026/2561(RSP)") == html
+    assert page.html_for("2026/2562(RSP)") is None
+    page(httpx.Response(404, text="does not exist", request=httpx.Request("GET", url)))
+    assert page.html_for("2026/2561(RSP)") is None
+
+
+def test_pages_never_kept_are_read_first():
+    src = (BACKEND / "scripts" / "sync_oeil_procedures.py").read_text()
+    assert "return (no_page + open_ + stale_done)[:limit]" in src

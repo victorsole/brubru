@@ -78,6 +78,37 @@ WHERE t.text_type::text IN ('resolution', 'legislative_resolution')
   AND NOT EXISTS (SELECT 1 FROM ep_resolutions r WHERE r.procedure_ref = t.procedure_ref)
 """
 
+# Every INI / RSP / INL procedure OEIL serves (Victor, 9 Oct 2026): /resolution-procedures
+# holds the procedure whatever its outcome, so a debate with no resolution is a row too
+# (status closed_without_resolution) and an own-initiative report still in committee is a row
+# (pending). oeil_procedures (migration 288) is the list of what exists; legislative_carriages
+# missed whole blocks (2026/2560-2576). Runs AFTER the adopted-text insert in the same
+# transaction, so a procedure with an adopted text gets that row, not this thinner one.
+# status stays NULL here: scripts/backfill_resolution_dates.py owns the column and runs next.
+_OEIL_CANDIDATES = """
+SELECT o.procedure_ref, o.title, o.procedure_type AS kind,
+       c.lead_committee, c.rapporteur_name AS rapporteur, c.policy_areas
+FROM oeil_procedures o
+LEFT JOIN legislative_carriages c ON c.oeil_procedure_ref = o.procedure_ref
+WHERE o.served
+  AND o.procedure_type IN ('INI', 'RSP', 'INL')
+  AND btrim(coalesce(o.title, '')) <> ''
+  AND NOT EXISTS (SELECT 1 FROM ep_resolutions r WHERE r.procedure_ref = o.procedure_ref)
+ORDER BY o.procedure_ref
+"""
+
+# DO NOTHING: a row that exists keeps its id and everything the other jobs wrote into it.
+_OEIL_INSERT = """
+INSERT INTO ep_resolutions
+    (id, procedure_ref, title, resolution_type, lead_committee, rapporteur, policy_areas,
+     oeil_url, status, created_at, updated_at)
+VALUES
+    (gen_random_uuid(), :ref, :title, CAST(:rtype AS resolution_type_enum), :lead, :rapporteur,
+     :policy_areas, :oeil, NULL, now(), now())
+ON CONFLICT (procedure_ref) DO NOTHING
+RETURNING id
+"""
+
 # ON CONFLICT on the real unique key. A re-run updates rather than duplicating.
 _INSERT = """
 INSERT INTO ep_resolutions
@@ -98,6 +129,28 @@ ON CONFLICT (procedure_ref) DO UPDATE SET
     updated_at     = now()
 RETURNING (xmax = 0) AS inserted
 """
+
+
+def _oeil_rows(conn, *, apply: bool) -> int:
+    """Insert the INI/RSP/INL procedures OEIL serves that have no row yet. Returns rows added."""
+    rows = conn.execute(text(_OEIL_CANDIDATES)).mappings().all()
+    by_kind: dict = {}
+    for r in rows:
+        by_kind[r["kind"]] = by_kind.get(r["kind"], 0) + 1
+    print(f"[INFO] {len(rows)} procedure(s) OEIL serves have no row here {by_kind}")
+    if not apply:
+        for r in rows[:10]:
+            print(f"   [{r['kind']}] {r['procedure_ref']:20} {str(r['title'])[:60]}")
+        return 0
+    added = 0
+    for r in rows:
+        got = conn.execute(text(_OEIL_INSERT), {
+            "ref": r["procedure_ref"], "title": r["title"], "rtype": r["kind"],
+            "lead": r["lead_committee"], "rapporteur": r["rapporteur"],
+            "policy_areas": r["policy_areas"] or [], "oeil": _oeil_url(r["procedure_ref"]),
+        }).fetchone()
+        added += 1 if got else 0
+    return added
 
 
 def _engine():
@@ -154,6 +207,7 @@ def main() -> int:
                 print(f"   [{kind}] {r['procedure_ref']:20} {str(r['adoption_date']):11} "
                       f"{str(r['title'])[:48]}")
             print(f"\n[DRY-RUN] {len(accepted)} row(s) would be written.")
+            _oeil_rows(conn, apply=False)
             return 0
 
         ins = upd = 0
@@ -171,10 +225,11 @@ def main() -> int:
                 ins += 1
             else:
                 upd += 1
+        oeil_ins = _oeil_rows(conn, apply=True)
         conn.commit()
 
         after = conn.execute(text("SELECT count(*) FROM ep_resolutions")).scalar()
-        print(f"[APPLIED] inserted={ins} updated={upd} | ep_resolutions {before} -> {after}")
+        print(f"[APPLIED] inserted={ins} updated={upd} from_oeil={oeil_ins} | ep_resolutions {before} -> {after}")
 
         # Verify from the table, per column, testing MEANING not non-NULL.
         for col, cond in (("adoption_date", "adoption_date IS NOT NULL"),

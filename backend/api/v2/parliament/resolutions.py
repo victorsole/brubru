@@ -34,6 +34,8 @@ router = APIRouter(prefix="/resolution-procedures", tags=["v2-parliament-resolut
     description="""**What it does**
 Returns EP non-legislative outputs — files where the Parliament expresses a position WITHOUT directly amending EU law. Covers: `INL` (legislative initiative reports — EP asks the Commission to propose), `INI` (own-initiative reports — EP positions on horizontal themes), `RSP` (topical resolutions — urgent matters of EU concern, e.g. human rights, foreign policy). Each row carries the procedure ref, title, type, lead committee, rapporteur, adoption date, vote tallies, Commission follow-up status, and full text URL.
 
+One row per procedure, whatever its outcome: every INI, INL and RSP procedure the Legislative Observatory (OEIL) serves from 2024 onwards, read from OEIL itself. So a topical debate that ended with no motion voted is here as `closed_without_resolution`, and an own-initiative report still in committee as `pending`. Use `status=adopted` for adopted resolutions only.
+
 **When to use it**
 EP resolutions don't have legal force but signal political direction — useful for advocacy work tracking what the EP demands of the Commission, urgent geopolitical positions, or thematic priorities. Filter by `has_commission_followup=true` to find resolutions where the Commission has actually responded.
 
