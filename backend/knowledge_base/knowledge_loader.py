@@ -6949,7 +6949,7 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # Critical Raw Materials amendment (ITRE, 30 Mar 2026)
     'critical raw materials amendment': ['industrial_accelerator_act'],
-    'crma amendment': ['industrial_accelerator_act'],
+    'crma amendment': ['industrial_accelerator_act', 'crma_critical_raw_materials_act'],
     '2024/1252 amendment': ['industrial_accelerator_act'],
 
     # GDPR / Data Protection (training 31 Mar 2026)
@@ -18020,6 +18020,30 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'sancions complex militar i industrial rus 826 entitats': ['eu_sanctions_implementation_framework'],
     'sanzioni complesso militare-industriale russo 826 entità': ['eu_sanctions_implementation_framework'],
     'sanzioni complesso militare-industriale russo 826 entita': ['eu_sanctions_implementation_framework'],
+    'amendments to the critical raw materials act': ['crma_critical_raw_materials_act'],
+    'crma amendments itre vote': ['crma_critical_raw_materials_act'],
+    'chahim crma': ['crma_critical_raw_materials_act'],
+    'critical raw materials act revision': ['crma_critical_raw_materials_act'],
+    'crma revision october 2026': ['crma_critical_raw_materials_act'],
+    '2025/0385': ['crma_critical_raw_materials_act'],
+    'modification du règlement sur les matières premières critiques': ['crma_critical_raw_materials_act'],
+    'modification du reglement sur les matieres premieres critiques': ['crma_critical_raw_materials_act'],
+    'révision du règlement sur les matières premières critiques': ['crma_critical_raw_materials_act'],
+    'revision du reglement sur les matieres premieres critiques': ['crma_critical_raw_materials_act'],
+    'modificación del reglamento de materias primas fundamentales': ['crma_critical_raw_materials_act'],
+    'modificacion del reglamento de materias primas fundamentales': ['crma_critical_raw_materials_act'],
+    'modificación de la ley de materias primas críticas': ['crma_critical_raw_materials_act'],
+    'modificacion de la ley de materias primas criticas': ['crma_critical_raw_materials_act'],
+    'enmiendas a la ley de materias primas críticas': ['crma_critical_raw_materials_act'],
+    'enmiendas a la ley de materias primas criticas': ['crma_critical_raw_materials_act'],
+    'modificació de la llei de matèries primeres crítiques': ['crma_critical_raw_materials_act'],
+    'modificacio de la llei de materies primeres critiques': ['crma_critical_raw_materials_act'],
+    'modificació del reglament de matèries primeres crítiques': ['crma_critical_raw_materials_act'],
+    'modificacio del reglament de materies primeres critiques': ['crma_critical_raw_materials_act'],
+    'modifiche al regolamento sulle materie prime critiche': ['crma_critical_raw_materials_act'],
+    'revisione del regolamento sulle materie prime critiche': ['crma_critical_raw_materials_act'],
+    'wijziging van de verordening kritieke grondstoffen': ['crma_critical_raw_materials_act'],
+    'herziening van de verordening kritieke grondstoffen': ['crma_critical_raw_materials_act'],
 }
 
 
