@@ -51,9 +51,30 @@ class BulkSyncResult:
     documents_skipped: int = 0  # already parsed
     documents_parsed: int = 0
     documents_failed: int = 0
+    documents_unsupported: int = 0  # legacy Word .doc: a format, not a failure
+    documents_not_found: int = 0    # HTTP 404 at doceo
     amendments_stored: int = 0
+    # `errors` is the RUN failing (the listing could not be read). A document that could
+    # not be read goes to `document_errors`: 41 such documents made every nightly run
+    # "failed" from 29 Sep to 12 Oct 2026 while the sync itself worked.
     errors: List[str] = field(default_factory=list)
+    document_errors: List[str] = field(default_factory=list)
     duration_seconds: float = 0.0
+
+
+class UnsupportedDocumentFormat(ValueError):
+    """The document exists but is not a DOCX (a legacy Word .doc): nothing to retry."""
+
+
+class DocumentNotFound(ValueError):
+    """doceo answered 404 for the document."""
+
+
+# First bytes of an OLE2 compound file: Word 97-2003 `.doc`. doceo serves 38 documents of
+# 2005-2016 in that format under a `.docx` address.
+OLE2_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"
+# A document doceo answers 404 for is asked again after this many days, not every night.
+NOT_FOUND_RETRY_DAYS = 7
 
 
 class BulkAmendmentSyncService:
@@ -70,6 +91,9 @@ class BulkAmendmentSyncService:
         self.parser = EPAmendmentParser()
         # doceo bytes fetched past the WAF by the browser, keyed by URL.
         self._docx_cache: Dict[str, bytes] = {}
+        # What the browser got for a URL that is NOT a DOCX: (HTTP status, kind), kind being
+        # 'legacy_doc', 'not_found' or 'other'. The browser's answer is the true one.
+        self._fetch_facts: Dict[str, tuple] = {}
 
     async def sync_all(
         self,
@@ -128,7 +152,7 @@ class BulkAmendmentSyncService:
         needed = [
             d.get("doceo_url", "") for d in documents
             if d.get("identifier") and d.get("doceo_url")
-            and (force_refetch or not self._is_already_parsed(d["identifier"]))
+            and (force_refetch or not self._is_settled(d["identifier"]))
         ]
         await self._prefetch_walled_documents([u for u in needed if u])
 
@@ -140,8 +164,9 @@ class BulkAmendmentSyncService:
             if not ep_id:
                 continue
 
-            # Skip already parsed (unless forced)
-            if not force_refetch and self._is_already_parsed(ep_id):
+            # Skip what is settled: parsed, a format this parser cannot read, or a 404
+            # asked about recently (unless forced)
+            if not force_refetch and self._is_settled(ep_id):
                 result.documents_skipped += 1
                 continue
 
@@ -156,10 +181,22 @@ class BulkAmendmentSyncService:
                         f"Parsed {ep_id}: {count} amendments"
                     )
 
+            except UnsupportedDocumentFormat as e:
+                result.documents_unsupported += 1
+                self._upsert_document_record(
+                    doc, status="unsupported", error_message=str(e), total_amendments=0)
+                self.db.commit()
+                continue
+            except DocumentNotFound as e:
+                result.documents_not_found += 1
+                self._upsert_document_record(
+                    doc, status="not_found", error_message=str(e), total_amendments=0)
+                self.db.commit()
+                continue
             except Exception as e:
                 error_msg = f"Failed {ep_id}: {str(e)}"
                 logger.warning(f"[WARN] {error_msg}")
-                result.errors.append(error_msg)
+                result.document_errors.append(error_msg)
                 result.documents_failed += 1
 
                 # Record failure
@@ -175,6 +212,8 @@ class BulkAmendmentSyncService:
         logger.info(
             f"[OK] Bulk sync complete: {result.documents_parsed} parsed, "
             f"{result.documents_skipped} skipped, {result.documents_failed} failed, "
+            f"{result.documents_unsupported} unsupported format, "
+            f"{result.documents_not_found} not found, "
             f"{result.amendments_stored} amendments ({result.duration_seconds}s)"
         )
 
@@ -221,6 +260,9 @@ class BulkAmendmentSyncService:
                     got += 1
                 else:
                     missing += 1
+                    kind = ("legacy_doc" if (body or b"")[:8] == OLE2_MAGIC
+                            else "not_found" if status == 404 else "other")
+                    self._fetch_facts[url] = (status, kind)
                     logger.debug(f"[INFO] {url}: status={status} bytes={len(body or b'')} {err or ''}")
         logger.info(f"[INFO] Browser warmed {got} document(s) past the WAF, "
                     f"{missing} not available")
@@ -298,6 +340,27 @@ class BulkAmendmentSyncService:
             "by_committee": by_committee,
         }
 
+    def _is_settled(self, ep_identifier: str) -> bool:
+        """True when the nightly run should leave this document alone: it is parsed, it is
+        in a format this parser cannot read, or doceo said 404 less than a week ago.
+
+        A `failed` document is NOT settled: it is tried again every night.
+        """
+        row = (
+            self.db.query(AmendmentDocument.status, AmendmentDocument.scraped_at)
+            .filter(AmendmentDocument.ep_identifier == ep_identifier)
+            .first()
+        )
+        if row is None:
+            return False
+        status, scraped_at = row
+        if status in ("parsed", "unsupported"):
+            return True
+        if status == "not_found" and scraped_at is not None:
+            age = datetime.now() - scraped_at.replace(tzinfo=None)
+            return age.days < NOT_FOUND_RETRY_DAYS
+        return False
+
     def _is_already_parsed(self, ep_identifier: str) -> bool:
         """Check if a document with this EP identifier is already parsed."""
         exists = (
@@ -334,6 +397,16 @@ class BulkAmendmentSyncService:
 
         # Download DOCX. Prefer the bytes the browser already fetched past the WAF.
         docx_bytes = self._docx_cache.pop(doceo_url, None)
+        # The browser already has the true answer for this address: say that, instead of
+        # asking again over plain HTTP (202, zero bytes) and blaming the WAF for a document
+        # that arrived whole in a format this parser does not read.
+        status_seen, kind = self._fetch_facts.get(doceo_url, (None, None))
+        if docx_bytes is None and kind == "legacy_doc":
+            raise UnsupportedDocumentFormat(
+                f"{doceo_url} is a legacy Word .doc (OLE2) served under a .docx address; "
+                f"this parser reads DOCX only")
+        if docx_bytes is None and kind == "not_found":
+            raise DocumentNotFound(f"{doceo_url} answered HTTP 404 at doceo")
         if docx_bytes is None:
             async with httpx.AsyncClient(timeout=60, follow_redirects=True) as http:
                 response = await http.get(doceo_url)

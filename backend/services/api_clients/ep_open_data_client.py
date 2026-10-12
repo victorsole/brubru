@@ -89,6 +89,7 @@ class EPOpenDataClient:
 
     BASE_URL = "https://data.europarl.europa.eu/api/v2"
     RATE_LIMIT_DELAY = 0.7  # seconds between requests (500 req / 5 min safe margin)
+    TRANSIENT_WAITS = (15, 60)  # seconds before the 2nd and 3rd try of a page that errored
 
     def __init__(self, timeout: int = 60):
         self._timeout = timeout
@@ -129,7 +130,28 @@ class EPOpenDataClient:
 
         last_error = None
         for attempt in range(1, 4):
-            response = await client.get(url, params=params)
+            # A transient upstream fault (HTTP 500/502/504, a dropped connection) on ONE of
+            # the ~25 pages used to abort the whole listing at once: it raised on the first
+            # try, and the nightly amendment sync died at a different offset on 3, 8 and
+            # 12 Oct 2026 (300, 900, 1200). Wait and ask again, like a throttle.
+            try:
+                response = await client.get(url, params=params)
+            except (httpx.TimeoutException, httpx.TransportError) as exc:
+                last_error = type(exc).__name__
+                logger.warning(f"[WARN] {endpoint} offset={offset}: {last_error} (attempt {attempt}/3)")
+                if attempt < 3:
+                    await asyncio.sleep(self.TRANSIENT_WAITS[attempt - 1])
+                    continue
+                raise EPOpenDataUpstreamError(
+                    f"{endpoint} offset={offset}: {last_error}, still failing after 3 tries") from exc
+            if response.status_code in (500, 502, 504):
+                last_error = f"HTTP {response.status_code}"
+                logger.warning(f"[WARN] {endpoint} offset={offset}: {last_error} (attempt {attempt}/3)")
+                if attempt < 3:
+                    await asyncio.sleep(self.TRANSIENT_WAITS[attempt - 1])
+                    continue
+                raise EPOpenDataUpstreamError(
+                    f"{last_error} on {endpoint} offset={offset}, still failing after 3 tries")
             # EP answers 429 with `Retry-After: 60` and means it. Raising instead of
             # waiting turns a pause into a failed run, and swallowing it turns a pause
             # into "there is nothing here": neither is true.

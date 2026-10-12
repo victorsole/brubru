@@ -46,7 +46,9 @@ async def _daily_amendment_sync():
             f"{result.documents_parsed} docs parsed, "
             f"{result.amendments_stored} amendments stored, "
             f"{result.documents_skipped} skipped, "
-            f"{result.documents_failed} failed "
+            f"{result.documents_failed} failed, "
+            f"{result.documents_unsupported} unsupported format, "
+            f"{result.documents_not_found} not found "
             f"({result.duration_seconds}s)"
         )
         # A run that discovered nothing is not a quiet day. EP Open Data answers 200
@@ -62,10 +64,15 @@ async def _daily_amendment_sync():
             status = "degraded"
         else:
             status = "success"
+        # `failed` is the run failing (above). A document that could not be read makes the
+        # run `degraded`, and its reason is recorded: until 12 Oct 2026 every such document
+        # was also a run error, so `degraded` could never be reached and 41 documents kept
+        # the job red for two weeks while it stored amendments normally.
+        notes = list(result.errors) + list(result.document_errors)
         record_run(
             db, source_key="ep_amendments", tier="warm", status=status,
             items_added=result.amendments_stored,
-            error="; ".join(result.errors)[:2000] or None,
+            error="; ".join(notes)[:2000] or None,
             started_at=started,
         )
     except Exception as e:
