@@ -31,7 +31,6 @@ Usage:
 """
 import argparse
 import os
-import re
 import sys
 from pathlib import Path
 
@@ -45,8 +44,6 @@ load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(BACKEND_DIR.parent / ".env")
 
 from services.matching.resolution_followups import FOLLOWUP_MATCH  # noqa: E402
-
-_PROC = re.compile(r"\d{4}/\d{4}\([A-Z]{3,4}\)")
 
 # The subject of a FINAL plenary vote (resolutions and legislative texts), as
 # ep_roll_call_votes records it in EN or FR. Anything else is a vote on an
@@ -283,26 +280,13 @@ def main() -> int:
     with eng.connect() as conn:
         _report(conn, "BEFORE")
 
-        # Text-derived procedure_ref: it appears inside the stored document, so it
-        # needs Python rather than SQL. NOT the CELEX: the first CELEX-shaped
-        # string in an adopted text is an act it CITES, never its own number
-        # (8 Oct 2026). celex_number is owned by backfill_texts_adopted_celex.py,
-        # which reads it from Cellar.
-        rows = conn.execute(text(
-            "SELECT id, procedure_ref, full_text FROM texts_adopted "
-            "WHERE full_text IS NOT NULL AND procedure_ref IS NULL")).fetchall()
-        derived = 0
-        for r in rows:
-            m = _PROC.search(r.full_text or "")
-            proc = m.group(0) if m else None
-            if proc:
-                derived += 1
-                if args.apply:
-                    conn.execute(text(
-                        "UPDATE texts_adopted SET procedure_ref = :p "
-                        "WHERE id = :i AND procedure_ref IS NULL"), {"p": proc, "i": r.id})
-        print(f"\n  from the stored text: {derived} row(s) gain a procedure_ref")
-
+        # Nothing is read out of the stored text any more (12 Oct 2026). The text is
+        # stored from below its heading, where its own reference sits, so the first
+        # procedure reference in it is one the text CITES: four adopted texts were
+        # filed under a cited procedure, and their resolutions were served without
+        # their text. The same holds for the first CELEX-shaped string (8 Oct 2026).
+        # procedure_ref is owned by backfill_texts_adopted_procedures.py (EP Open
+        # Data, checked against OEIL), celex_number by backfill_texts_adopted_celex.py.
         for label, sql in STEPS:
             if args.apply:
                 n = conn.execute(text(sql)).rowcount

@@ -300,6 +300,20 @@ def main() -> int:
     none("no item is without events when OEIL lists some",
          lambda i: not i.get("key_events") and i.get("procedure_ref") in oeil_has_events)
     none("body_txt is not page navigation", lambda i: (i.get("body_txt") or "").lstrip().lower().startswith("select a document"))
+    # Asked of OEIL, not of the procedure the text is stored under: four adopted texts were
+    # filed under a procedure they only cite, so their resolutions were served as adopted
+    # with the OEIL page for a body and no link to the text Brubru held (12 Oct 2026).
+    with engine.connect() as c:
+        text_held = {r[0] for r in c.execute(text(
+            r"SELECT DISTINCT o.procedure_ref FROM oeil_procedures o "
+            r"CROSS JOIN LATERAL unnest(o.text_refs) AS t "
+            r"JOIN texts_adopted ta ON ta.ta_reference = "
+            r"regexp_replace(t, '^T(\d+)-(\d{4})/(\d{4})$', 'P\1_TA(\3)\2') "
+            r"WHERE ta.full_text IS NOT NULL"))}
+    none("an adopted resolution whose adopted text Brubru holds links it and serves it",
+         lambda i: i.get("status") == "adopted" and i.get("procedure_ref") in text_held
+         and not (str(i.get("text_url") or "").startswith("https://")
+                  and "/doceo/" in str(i.get("public_url") or "")))
     none("has_commission_followup is true, false or null", lambda i: i.get("has_commission_followup") not in (True, False, None))
     none("every item carries its own `self` link", lambda i: V2 + "/" not in str(i.get("self") or ""))
     by_status = {s: sum(1 for i in everything if i.get("status") == s) for s in STATUSES}

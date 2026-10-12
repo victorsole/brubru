@@ -606,12 +606,17 @@ class TextsAdoptedScraper(BaseScraper):
                 "html) -- the doceo markup may have changed again", ta_reference, len(html)
             )
 
-        # Extract procedure reference
+        # The text's OWN procedure, from the two places the page states it: the
+        # "Procedure :" box and the heading above the text. Never the first reference
+        # anywhere on the page (12 Oct 2026): where neither is there, the first one is a
+        # procedure the text CITES, and "none" is the honest answer.
         page_text = soup.get_text()
         procedure_ref = None
-        proc_match = self.PROCEDURE_REF_PATTERN.search(page_text)
-        if proc_match:
-            procedure_ref = proc_match.group(0)
+        for _own in soup.select('a.ring_ref_link, tr.doc_title'):
+            proc_match = self.PROCEDURE_REF_PATTERN.search(_own.get_text(' ', strip=True))
+            if proc_match:
+                procedure_ref = proc_match.group(0)
+                break
 
         # Extract committees
         committees = []
