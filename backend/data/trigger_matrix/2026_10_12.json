@@ -1,0 +1,147 @@
+{
+ "_about": "Natural questions, one per language in this order: en, fr, nl, es, ca, it. Key = guide id, optionally '#label' to test a second topic of the same guide. Written 12 Oct 2026 after 27 of 90 questions missed.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "eu_defence_readiness_omnibus_v_and_agile_2026": [
+   "What did the Council adopt on defence simplification, the defence omnibus?",
+   "Qu'a adopté le Conseil dans l'omnibus sur la défense ?",
+   "Wat heeft de Raad aangenomen in de defensie-omnibus?",
+   "¿Qué aprobó el Consejo en el ómnibus de defensa?",
+   "Què va aprovar el Consell a l'òmnibus de defensa?",
+   "Cosa ha adottato il Consiglio con l'omnibus sulla difesa?"
+  ],
+  "eu_ets_review_2026": [
+   "How did the ETS2 market stability reserve change?",
+   "Qu'est-ce qui change dans la réserve de stabilité du marché du SEQE 2 ?",
+   "Wat verandert er aan de marktstabiliteitsreserve van ETS2?",
+   "¿Qué cambia en la reserva de estabilidad del mercado del ETS2?",
+   "Què canvia a la reserva d'estabilitat del mercat de l'ETS2?",
+   "Cosa cambia nella riserva stabilizzatrice del mercato dell'ETS2?"
+  ],
+  "crma_critical_raw_materials_act": [
+   "How many new strategic projects under the Critical Raw Materials Act were selected?",
+   "Combien de nouveaux projets stratégiques matières premières critiques la Commission a-t-elle retenus ?",
+   "Hoeveel nieuwe strategische projecten kritieke grondstoffen heeft de Commissie geselecteerd?",
+   "¿Cuántos nuevos proyectos estratégicos de materias primas críticas ha seleccionado la Comisión?",
+   "Quants nous projectes estratègics de matèries primeres crítiques ha seleccionat la Comissió?",
+   "Quanti nuovi progetti strategici sulle materie prime critiche ha selezionato la Commissione?"
+  ],
+  "crma_critical_raw_materials_act#amend": [
+   "Where does the amendment of the Critical Raw Materials Act stand in Parliament?",
+   "Où en est la révision du règlement sur les matières premières critiques au Parlement ?",
+   "Waar staat de herziening van de verordening kritieke grondstoffen in het Parlement?",
+   "¿En qué punto está la modificación del reglamento de materias primas críticas?",
+   "En quin punt és la modificació del reglament de matèries primeres crítiques?",
+   "A che punto è la revisione del regolamento sulle materie prime critiche?"
+  ],
+  "eu_china_trade_investment_consultations_2026": [
+   "What was agreed at the EU-China Trade and Investment Consultations?",
+   "Qu'est-ce qui a été convenu lors des consultations UE-Chine sur le commerce et l'investissement ?",
+   "Wat is afgesproken bij de handels- en investeringsconsultaties tussen de EU en China?",
+   "¿Qué se acordó en las consultas comerciales y de inversión UE-China?",
+   "Què es va acordar a les consultes comercials entre la UE i la Xina?",
+   "Cosa è stato concordato nelle consultazioni UE-Cina su commercio e investimenti?"
+  ],
+  "eu_list_of_non_cooperative_jurisdictions_for_tax_purposes": [
+   "Which countries are on the EU tax blacklist?",
+   "Quels pays figurent sur la liste noire fiscale de l'UE ?",
+   "Welke landen staan op de zwarte lijst belastingparadijzen van de EU?",
+   "¿Qué países están en la lista negra fiscal de la UE?",
+   "Quins països són a la llista negra fiscal de la UE?",
+   "Quali paesi sono nella lista nera fiscale dell'UE?"
+  ],
+  "us_sanctions_on_the_international_criminal_court_2026": [
+   "How did the EU react to the US sanctions on the ICC?",
+   "Comment l'UE a-t-elle réagi aux sanctions américaines contre la Cour pénale internationale ?",
+   "Hoe reageerde de EU op de Amerikaanse sancties tegen het Internationaal Strafhof?",
+   "¿Cómo reaccionó la UE a las sanciones de Estados Unidos contra la Corte Penal Internacional?",
+   "Com va reaccionar la UE a les sancions dels Estats Units contra la Cort Penal Internacional?",
+   "Come ha reagito l'UE alle sanzioni degli Stati Uniti contro la Corte penale internazionale?"
+  ],
+  "esma_supervisory_oversight_mandates": [
+   "Who is the new ESMA chair?",
+   "Qui est le nouveau président de l'ESMA ?",
+   "Wie is de nieuwe voorzitter van ESMA?",
+   "¿Quién es el nuevo presidente de la ESMA?",
+   "Qui és el nou president de l'ESMA?",
+   "Chi è il nuovo presidente dell'ESMA?"
+  ],
+  "eu_sanctions_implementation_framework": [
+   "Which sanctions did the Council adopt on 12 October 2026 against Russia's military-industrial complex?",
+   "Quelles sanctions le Conseil a-t-il adoptées le 12 octobre 2026 contre le complexe militaro-industriel russe ?",
+   "Welke sancties nam de Raad op 12 oktober 2026 tegen het Russische militair-industriële complex?",
+   "¿Qué sanciones adoptó el Consejo el 12 de octubre de 2026 contra el complejo militar-industrial ruso?",
+   "Quines sancions va adoptar el Consell el 12 d'octubre de 2026 contra el complex militar i industrial rus?",
+   "Quali sanzioni ha adottato il Consiglio il 12 ottobre 2026 contro il complesso militare-industriale russo?"
+  ],
+  "eu_sanctions_implementation_framework#duma": [
+   "Why did the EU list 77 people over the Duma elections in occupied Ukraine?",
+   "Pourquoi l'UE a-t-elle sanctionné 77 personnes pour les élections à la Douma dans les territoires occupés ?",
+   "Waarom sanctioneerde de EU 77 personen voor de Doema-verkiezingen in bezette gebieden?",
+   "¿Por qué sancionó la UE a 77 personas por las elecciones a la Duma en los territorios ocupados?",
+   "Per què la UE va sancionar 77 persones per les eleccions a la Duma als territoris ocupats?",
+   "Perché l'UE ha sanzionato 77 persone per le elezioni della Duma nei territori occupati?"
+  ],
+  "eu_support_mission_lebanon_eusm_lebanon_2026": [
+   "What is the new EU mission in Lebanon?",
+   "Qu'est-ce que la nouvelle mission de l'UE au Liban ?",
+   "Wat is de nieuwe EU-missie in Libanon?",
+   "¿Qué es la nueva misión de la UE en el Líbano?",
+   "Què és la nova missió de la UE al Líban?",
+   "Cos'è la nuova missione dell'UE in Libano?"
+  ],
+  "eu_port_services_regulation_report_2026": [
+   "What does the Commission report on the Port Services Regulation conclude?",
+   "Que conclut le rapport sur le règlement relatif aux services portuaires ?",
+   "Wat concludeert het verslag over de verordening havendiensten?",
+   "¿Qué concluye el informe sobre el reglamento de servicios portuarios?",
+   "Què conclou l'informe sobre el reglament de serveis portuaris?",
+   "Cosa conclude la relazione sul regolamento sui servizi portuali?"
+  ],
+  "eu_vat_anti_fraud_tools_extension_proposal_2026": [
+   "What is proposed for the VAT reverse charge mechanism until 2030?",
+   "Que propose la Commission pour le mécanisme d'autoliquidation de la TVA jusqu'en 2030 ?",
+   "Wat wordt voorgesteld voor de btw-verleggingsregeling tot 2030?",
+   "¿Qué propone la Comisión sobre el mecanismo de inversión del sujeto pasivo del IVA hasta 2030?",
+   "Què proposa la Comissió sobre el mecanisme d'inversió del subjecte passiu de l'IVA fins al 2030?",
+   "Cosa propone la Commissione sul meccanismo di inversione contabile dell'IVA fino al 2030?"
+  ],
+  "eu_economic_governance_reform_2024": [
+   "Can Italy use the national escape clause for defence?",
+   "L'Italie peut-elle utiliser la clause dérogatoire nationale pour la défense ?",
+   "Kan Italië de nationale ontsnappingsclausule gebruiken voor defensie?",
+   "¿Puede Italia usar la cláusula de salvaguardia nacional para defensa?",
+   "Pot Itàlia utilitzar la clàusula de salvaguarda nacional per a la defensa?",
+   "L'Italia può usare la clausola di salvaguardia nazionale per la difesa?"
+  ],
+  "mff_2028_2034": [
+   "What did the Irish presidency's MFF negotiating box propose?",
+   "Que propose la boîte de négociation de la présidence irlandaise sur le cadre financier pluriannuel ?",
+   "Wat stelt de onderhandelingsbox van het Ierse voorzitterschap voor het meerjarig financieel kader voor?",
+   "¿Qué propone la caja de negociación de la presidencia irlandesa sobre el marco financiero plurianual?",
+   "Què proposa la caixa de negociació de la presidència irlandesa sobre el marc financer plurianual?",
+   "Cosa propone la scatola negoziale della presidenza irlandese sul quadro finanziario pluriennale?"
+  ]
+ },
+ "negatives": [
+  "What is the EU Space Act?",
+  "How does registration in the Digital Product Passport registry work?",
+  "What does the Digital Markets Act require from gatekeepers?",
+  "Qui est le commissaire européen chargé du commerce ?",
+  "¿Qué es el Pacto de Migración y Asilo?",
+  "Cos'è la legge europea sull'intelligenza artificiale?",
+  "Wat is de rol van het Europees Parlement bij de benoeming van de Commissie?",
+  "Com funciona la política agrícola comuna?",
+  "What are the rules on VAT for cross-border e-commerce?",
+  "How does Parliament's plenary vote on the Chips Act work?",
+  "What is the EU's position on the war in Gaza?",
+  "Explain the Common Foreign and Security Policy decision-making"
+ ]
+}
