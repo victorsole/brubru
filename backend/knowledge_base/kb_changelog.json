@@ -2,6 +2,120 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "european_defence_fund_edf",
+      "title": "European Defence Fund",
+      "summary": "Omnibus V regulation simplifies EDF management",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_china_relations",
+      "title": "EU-China relations",
+      "summary": "Pointer to the 8-9 Oct Trade and Investment Consultations",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_csdp_missions_2026",
+      "title": "EU CSDP missions 2026",
+      "summary": "EUNAVFOR MED IRINI new mandate (Decision (CFSP) 2026/2243)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_defence_procurement",
+      "title": "EU Defence Procurement",
+      "summary": "AGILE adopted by the Council 12 Oct; Omnibus V directive amending Directive 2009/81/EC",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "12 Oct: 826 entities and 743 persons plus 77 persons added (Russia); Nicaragua, Sudan, Niger, Libya, DPRK acts",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "esma_supervisory_oversight_mandates",
+      "title": "ESMA supervisory and oversight mandates",
+      "summary": "Carlo Comporti appointed ESMA Chair; Council position on the market integration and supervision package",
+      "refs": [
+        "32026D2276"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "european_council_15_16_october_2026",
+      "title": "European Council 15-16 October 2026",
+      "summary": "Update of 12 Oct: MFF box, press briefing 13 Oct, China consultations, Omnibus V",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "Irish presidency negotiating box (10 Oct) and Parliament's rejection",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "crma_critical_raw_materials_act",
+      "title": "Critical Raw Materials Act",
+      "summary": "46 new Strategic Projects selected on 9 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU ETS Review (2026)",
+      "summary": "Council adopted the ETS2 market stability reserve amendment (2025/0380(COD)) on 9 Oct",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "us_sanctions_on_the_international_criminal_court_2026",
+      "title": "US sanctions on the ICC and the EU response",
+      "summary": "Commission and High Representative statements of 9-10 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_list_of_non_cooperative_jurisdictions_for_tax_purposes",
+      "title": "EU list of non-cooperative jurisdictions for tax purposes",
+      "summary": "9 Oct 2026 update: eight jurisdictions; Panama and Viet Nam moved to Annex II",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_china_trade_investment_consultations_2026",
+      "title": "EU-China Trade and Investment Consultations (Beijing, 8-9 Oct 2026)",
+      "summary": "Second TIC meeting: hybrids, tariffs, rare-earth licences; next meetings Jan and Mar 2027",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_defence_readiness_omnibus_v_and_agile_2026",
+      "title": "Defence simplification (Omnibus V) and AGILE",
+      "summary": "Council adopted the three Omnibus V acts (9 Oct) and the AGILE programme (12 Oct); procedures verified at OEIL",
+      "refs": []
+    },
+    {
       "date": "2026-10-09",
       "action": "updated",
       "guide": "eu_recovery_resilience_facility",
