@@ -64,8 +64,11 @@ def archive_carriages(db, dry_run: bool) -> int:
     db.execute(
         text(
             "UPDATE user_carriage_tracks SET archived_at = NOW(), "
-            "archived_reason = 'auto:' || lower((SELECT current_status FROM legislative_carriages WHERE id = "
-            "(SELECT carriage_id FROM user_carriage_tracks WHERE user_carriage_tracks.id = ANY(:ids) LIMIT 1))) "
+            # Per row, and cast: current_status is an enum (lower() has no enum overload, which
+            # crashed the sweep the first day a carriage qualified), and a LIMIT 1 subquery over
+            # ANY(:ids) would have stamped the FIRST row's status on every row of the batch.
+            "archived_reason = 'auto:' || lower(COALESCE((SELECT lc.current_status::text "
+            "FROM legislative_carriages lc WHERE lc.id = user_carriage_tracks.carriage_id), 'unknown')) "
             "WHERE id = ANY(:ids)"
         ),
         {"ids": ids},
