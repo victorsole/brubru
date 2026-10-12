@@ -75,7 +75,7 @@ def _stats(conn) -> dict:
 
 
 async def _run(args) -> int:
-    from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper
+    from services.scrapers.texts_adopted_scraper import TextsAdoptedScraper, is_page_furniture
 
     engine = _engine()
     with engine.connect() as conn:
@@ -102,7 +102,9 @@ async def _run(args) -> int:
                  "                     THEN left(source_url, length(source_url)-4) || '.html' "
                  "                END) AS url "
                  "FROM {t} "
-                 "WHERE full_text IS NULL "
+                 # ...or a stored header box: doceo's document picker saved as the text
+                 # (six adopted resolutions, 12 Oct 2026). Such a row has no body yet.
+                 "WHERE (full_text IS NULL OR full_text ~* '^\\s*Select a document\\s*:') "
                  "  AND COALESCE(full_text_url, "
                  "               CASE WHEN source_url LIKE '%.pdf' THEN source_url END) IS NOT NULL ")
         rows = conn.execute(text(
@@ -164,7 +166,7 @@ async def _run(args) -> int:
                 failed += 1
                 continue
 
-            if len(body.strip()) < MIN_BODY_CHARS:
+            if len(body.strip()) < MIN_BODY_CHARS or is_page_furniture(body):
                 too_short += 1
                 continue
 

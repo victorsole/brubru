@@ -21,7 +21,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
-from core.self_links import attach_self
+from core.self_links import attach_self, collection_of
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,9 @@ class SelfLinkMiddleware(BaseHTTPMiddleware):
         # guard used to drop them, so a detail response's `self` was declared by the
         # schema and never filled. An item is one segment below its collection; a
         # sub-resource like /laws/{celex}/text is two, and stays out.
-        if path not in self.route_map and path.rsplit("/", 1)[0] not in self.route_map:
+        # ...and an identifier can itself contain slashes (a procedure reference), which
+        # `collection_of` resolves for collections whose item route takes a `:path` value.
+        if path not in self.route_map and collection_of(path, self.route_map) is None:
             return await call_next(request)
 
         response = await call_next(request)

@@ -34,6 +34,16 @@ from schemas.scrapers.texts_adopted_schemas import (
 logger = logging.getLogger(__name__)
 
 
+# doceo's document-picker box, the first thing on an adopted-text page.
+_FURNITURE = re.compile(r'^\s*Select a document\s*:', re.IGNORECASE)
+
+
+def is_page_furniture(text: Optional[str]) -> bool:
+    """True when `text` is doceo's header box rather than a document: it opens with the
+    document picker. Length cannot tell: a real consent resolution is 555 characters."""
+    return bool(text) and bool(_FURNITURE.match(text))
+
+
 class TextsAdoptedScraper(BaseScraper):
     """
     Scraper for EP Texts Adopted.
@@ -573,15 +583,21 @@ class TextsAdoptedScraper(BaseScraper):
         # it as a class cost a round of debugging). Measured on live pages:
         # a 721KB A-document matched NONE of the TA selectors and silently
         # yielded no body, which is why all 18 submitted texts had none.
+        # `table.doc_box_header` is NOT in this list any more (12 Oct 2026). It is the
+        # page's own header box ("Select a document : ... Texts tabled : ... Debates : ..."),
+        # and doceo publishes that box BEFORE the text: fetched in that gap, it was the only
+        # candidate, so it won, and six adopted resolutions were stored and served with
+        # 260 characters of navigation as their full text. No container means no text yet.
         for _sel in ('.ep_content', '.doc-content', '#TextesAdoptes',
-                     'tr.contents', 'table.doc_box_header',
-                     'main#website-body', 'main'):
+                     'tr.contents', 'main#website-body', 'main'):
             _el = soup.select_one(_sel)
             if not _el:
                 continue
             _txt = _el.get_text(separator='\n', strip=True)
             if len(_txt) > _best:
                 full_text, _best = _txt, len(_txt)
+        if full_text and is_page_furniture(full_text):
+            full_text = None
         if not full_text:
             # Loud, not silent: a body we could not find is a parser problem and
             # must not be indistinguishable from a document with no text.

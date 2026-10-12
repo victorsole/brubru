@@ -48,7 +48,9 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `has_commission_followup` — boolean.
 - `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted) / `rejected` (the final vote was lost).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
-- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync: when the row's content last changed. A window in the past can be empty even though rows exist, because a later correction moves a row out of it; the response's `coverage_note` then says where the dates lie.
+- `created_from`, `created_to` — when Brubru first recorded the procedure (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `order` — `updated_asc` (the order to page an incremental window in; ties broken by `id`), `updated_desc`, `created_asc`, `created_desc`.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -78,12 +80,15 @@ async def list_resolutions(
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru at or after this instant"),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru at or before this instant"),
+    order: Optional[str] = Query(None, description="updated_asc | updated_desc | created_asc | created_desc"),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ResolutionItem]:
-    return await _v1.list_resolutions(request=request, q=q, resolution_type=resolution_type, lead_committee=lead_committee, rapporteur=rapporteur, procedure_ref=procedure_ref, has_commission_followup=has_commission_followup, status=status, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_resolutions(request=request, q=q, resolution_type=resolution_type, lead_committee=lead_committee, rapporteur=rapporteur, procedure_ref=procedure_ref, has_commission_followup=has_commission_followup, status=status, published_from=published_from, published_to=published_to, published_end=published_end, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, created_from=created_from, created_to=created_to, order=order, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

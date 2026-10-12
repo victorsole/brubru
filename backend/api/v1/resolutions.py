@@ -24,6 +24,7 @@ from models.ep_resolutions import EPResolution
 from models.user import User
 
 from ._row_dates import row_updated
+from ._change_window import SYNC_ORDERS, orm_order, orm_window, validate_window
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -35,6 +36,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/resolutions", tags=["v1-resolutions"])
 
 _STATUSES = ("adopted", "pending", "closed_without_resolution", "rejected")
+_TYPES = ("INL", "INI", "RSP", "OTHER")
 
 # The Commission's follow-ups to each procedure's adopted text. The match is the
 # one the enrichment job stores as has_commission_followup, so flag and events agree.
@@ -59,6 +61,9 @@ class ResolutionItem(BaseModel):
     id: str
     procedure_ref: str
     title: str
+    # Filled by the v2 self-link middleware, on the list AND on the item route (declared
+    # here so the item route carries it too: it answered no `self` at all until 12 Oct 2026).
+    self: Optional[str] = Field(None, description="URL of this procedure on the Brubru API.")
     resolution_type: Optional[str] = None
     status: Optional[str] = Field(None, description=(
         "adopted | pending | closed_without_resolution | rejected. A null adoption_date is "
@@ -367,7 +372,9 @@ EP resolutions don't have legal force but signal political direction — useful 
 - `has_commission_followup` — boolean.
 - `status` — `adopted` / `pending` / `closed_without_resolution` (a debate or objection that ended in Parliament with no text adopted) / `rejected` (the final vote was lost).
 - `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
-- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync: when the row's content last changed. A window in the past can be empty even though rows exist, because a later correction moves a row out of it; the response's `coverage_note` then says where the dates lie.
+- `created_from`, `created_to` — when Brubru first recorded the procedure (ISO date or datetime; a bare date as `_to` covers the whole day).
+- `order` — `updated_asc` (the order to page an incremental window in; ties broken by `id`), `updated_desc`, `created_asc`, `created_desc`.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -397,6 +404,9 @@ async def list_resolutions(
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
     updated_end: Optional[UpperBoundDatetime] = Query(None),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru at or after this instant"),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru at or before this instant"),
+    order: Optional[str] = Query(None, description="updated_asc | updated_desc | created_asc | created_desc"),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -416,10 +426,24 @@ async def list_resolutions(
         })
     if updated_end and not updated_to:
         updated_to = updated_end
+    # An inverted window answers 422 and says which bound is wrong; it used to answer an
+    # empty page, which reads exactly like "nothing changed".
+    window = validate_window(created_from, created_to, updated_from, updated_to)
+    if order is not None and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=422, detail={
+            "error": f"order must be one of {', '.join(SYNC_ORDERS)}; got {order!r}.",
+            "reason_code": "invalid_param",
+        })
 
     query = db.query(EPResolution)
     filters = []
     if resolution_type:
+        # The column is an enum: an unknown value used to reach PostgreSQL and answer 500.
+        if resolution_type.upper() not in _TYPES:
+            raise HTTPException(status_code=422, detail={
+                "error": f"resolution_type must be one of {', '.join(_TYPES)}; got {resolution_type!r}.",
+                "reason_code": "invalid_param",
+            })
         filters.append(EPResolution.resolution_type == resolution_type.upper())
     if lead_committee:
         filters.append(EPResolution.lead_committee == lead_committee.upper())
@@ -440,23 +464,27 @@ async def list_resolutions(
         filters.append(EPResolution.adoption_date >= published_from)
     if published_to:
         filters.append(EPResolution.adoption_date <= published_to)
-    if updated_from:
-        filters.append(EPResolution.updated_at >= updated_from)
-    if updated_to:
-        filters.append(EPResolution.updated_at <= updated_to)
     if q:
         like = f"%{q}%"
         from sqlalchemy import or_
         filters.append(or_(EPResolution.title.ilike(like), EPResolution.summary.ilike(like)))
     if filters:
         query = query.filter(and_(*filters))
+    # created_at / updated_at are `timestamp without time zone` holding UTC: compare like
+    # with like, so the answer does not depend on the connection's TimeZone setting.
+    naive = {k: (v.replace(tzinfo=None) if v is not None else None) for k, v in window.items()}
+    query = orm_window(query, naive, EPResolution.created_at, EPResolution.updated_at)
 
     total = query.count()
-    if updated_from or updated_to:
-        order_col = EPResolution.updated_at.desc().nullslast()
+    if order:
+        by = orm_order(order, EPResolution.created_at, EPResolution.updated_at, EPResolution.id)
+    elif updated_from or updated_to:
+        by = (EPResolution.updated_at.desc().nullslast(),)
+    elif created_from or created_to:
+        by = (EPResolution.created_at.desc().nullslast(),)
     else:
-        order_col = EPResolution.adoption_date.desc().nullslast()
-    rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
+        by = (EPResolution.adoption_date.desc().nullslast(),)
+    rows = stable(query.order_by(*by)).offset((page - 1) * limit).limit(limit).all()
 
     data = _items_for(db, rows)
 
@@ -475,6 +503,25 @@ async def list_resolutions(
     undated = (cov[2] or 0) - (cov[3] or 0)
     by_status = dict(db.query(EPResolution.status, func.count(EPResolution.id))
                      .group_by(EPResolution.status).all())
+    # The path of the adopted-texts list in the version being answered (the note named
+    # the v1 path on every version).
+    texts_path = ("/api/v2/parliament/plenary-adopted-texts"
+                  if request.url.path.startswith("/api/v2") else "/api/v1/texts-adopted")
+    # An empty date window is a fact about the window, not a fault: say where the dates
+    # actually lie. On 12 Oct 2026 a window ending 28 Sep answered 0 of 957 because every
+    # row had been corrected on 8-9 Oct, and nothing in the response said so.
+    empty_window_note = ""
+    if total == 0 and any(v is not None for v in window.values()):
+        span = db.query(func.min(EPResolution.updated_at), func.max(EPResolution.updated_at),
+                        func.min(EPResolution.created_at), func.max(EPResolution.created_at)).one()
+        if span[0] is not None:
+            empty_window_note = (
+                f" EMPTY WINDOW: no row matches the requested date window. `updated_date` "
+                f"runs from {span[0].isoformat()}Z to {span[1].isoformat()}Z and `creation_date` "
+                f"from {span[2].isoformat()}Z to {span[3].isoformat()}Z across all {cov[2]} rows, so "
+                "widen or move the window (an `updated_to` in the past excludes every row "
+                "corrected since)."
+            )
 
     return build_envelope(
         data,
@@ -495,7 +542,8 @@ async def list_resolutions(
             "SCOPE: this surface holds own-initiative and topical resolutions "
             "(INI / RSP / INL). The Parliament's positions on LEGISLATIVE "
             "procedures (COD, NLE, CNS, APP) are a different instrument and live "
-            "in /api/v1/texts-adopted -- their absence here is scope, not a gap."
+            f"in {texts_path} -- their absence here is scope, not a gap."
+            + empty_window_note
         ),
     )
 

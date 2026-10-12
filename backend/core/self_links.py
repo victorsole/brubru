@@ -92,6 +92,26 @@ def build_route_map(app) -> Dict[str, Tuple[str, str]]:
     return out
 
 
+def collection_of(path: str, route_map: Dict[str, Tuple[str, str]]) -> Optional[str]:
+    """The collection an ITEM path belongs to, or None.
+
+    An item is usually one segment below its collection. A procedure reference is not:
+    `/resolution-procedures/2026/2561(RSP)` is three segments below, so "one segment"
+    dropped every item route whose identifier contains a slash and its `self` stayed null
+    (12 Oct 2026). Only a collection whose item route takes a `:path` parameter can have
+    such an identifier, so a sub-resource like `/laws/{celex}/text` still stays out.
+    """
+    head = path.rsplit("/", 1)[0]
+    if head in route_map:
+        return head
+    best = None
+    for collection, (item_route, _field) in route_map.items():
+        if ":path}" in item_route and path.startswith(collection + "/"):
+            if best is None or len(collection) > len(best):
+                best = collection
+    return best
+
+
 def self_url(base_url: str, item_route: str, value) -> Optional[str]:
     """Substitute `value` into the item route, escaped.
 
@@ -123,7 +143,15 @@ def attach_self(payload, base_url: str, route_map: Dict[str, Tuple[str, str]],
     # purpose -- fill `self` only where a schema already declares it and left it empty,
     # and fill it with the URL the caller just used, which is by definition this item's.
     if "data" not in payload and "self" in payload and not payload.get("self"):
-        payload["self"] = base_url.rstrip("/") + collection_path
+        # The SAME link the list gives this item, built from the item's own identifier, so
+        # an item reads the same from the list and on its own whichever identifier (its
+        # reference or its id) the caller fetched it by. The caller's URL is the fallback.
+        url = None
+        collection = collection_of(collection_path, route_map)
+        if collection:
+            item_route, field = route_map[collection]
+            url = self_url(base_url, item_route, _identifier_value(payload, field))
+        payload["self"] = url or (base_url.rstrip("/") + collection_path)
         return True
 
     target = route_map.get(collection_path)
