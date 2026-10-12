@@ -1,6 +1,7 @@
 # SAFE Instrument and ReArm Europe (Readiness 2030)
 
 ## QUICK FACTS
+- **LATEST (8 October 2026):** in its proposal on Italy's national escape clause (COM(2026) 553 final) the Commission notes that expenditure financed by SAFE loans (Council Regulation (EU) 2025/1106) benefits automatically from the escape-clause flexibility, with Member States reporting such expenditure to Eurostat under the categories 'defence products' and 'other products for defence purpose'. See `eu_economic_governance_reform_2024`.
 - Full name: Security Action For Europe (SAFE) -- part of ReArm Europe / Readiness 2030 plan
 - Type: Regulation establishing EU defence loan instrument
 - Budget: EUR 150 billion in voluntary EU loans to Member States for defence spending

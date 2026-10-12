@@ -4,6 +4,48 @@
     {
       "date": "2026-10-12",
       "action": "updated",
+      "guide": "eu_vat_anti_fraud_tools_extension_proposal_2026",
+      "title": "VAT anti-fraud tools extension proposal",
+      "summary": "Document identified at Cellar: COM(2026) 515 final",
+      "refs": [
+        "52026PC0515"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "safe_rearm_europe",
+      "title": "SAFE",
+      "summary": "SAFE-financed expenditure benefits automatically from the escape-clause flexibility (COM(2026) 553)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_economic_governance_reform_2024",
+      "title": "EU economic governance reform",
+      "summary": "Commission proposal on Italy's national escape clause (COM(2026) 553)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_vat_anti_fraud_tools_extension_proposal_2026",
+      "title": "VAT anti-fraud tools extension proposal",
+      "summary": "Proposal to extend the reverse charge and quick reaction mechanisms to 30 June 2030",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_port_services_regulation_report_2026",
+      "title": "Port Services Regulation report (COM(2026) 535)",
+      "summary": "Commission report of 8 Oct 2026 under Article 20 of Regulation (EU) 2017/352",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
       "guide": "crma_critical_raw_materials_act",
       "title": "Critical Raw Materials Act",
       "summary": "Amendment file 2025/0385(COD): ITRE vote 8 Oct, report A10-0265/2026, plenary indicated 19 Oct",
