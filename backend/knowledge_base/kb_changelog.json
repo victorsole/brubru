@@ -4,6 +4,38 @@
     {
       "date": "2026-10-12",
       "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "12 Oct: both Russia packages with their Implementing Regulations (2026/2281, 2026/2292), DPRK Regulation 2026/2278",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "lebanon_humanitarian_crisis",
+      "title": "Lebanon humanitarian crisis",
+      "summary": "EUSM Lebanon established 12 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
+      "guide": "eu_csdp_missions_2026",
+      "title": "EU CSDP missions 2026",
+      "summary": "EUSM Lebanon established 12 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "added",
+      "guide": "eu_support_mission_lebanon_eusm_lebanon_2026",
+      "title": "EUSM Lebanon (EU Support Mission in Lebanon)",
+      "summary": "Established by the Council on 12 Oct 2026: three-year mandate, military and civilian pillars, not yet launched",
+      "refs": []
+    },
+    {
+      "date": "2026-10-12",
+      "action": "updated",
       "guide": "eu_vat_anti_fraud_tools_extension_proposal_2026",
       "title": "VAT anti-fraud tools extension proposal",
       "summary": "Document identified at Cellar: COM(2026) 515 final",

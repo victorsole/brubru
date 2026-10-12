@@ -1,6 +1,7 @@
 # Lebanon Humanitarian Crisis and EU Response
 
 ## QUICK FACTS
+- **LATEST (12 October 2026): the Council established the EU Support Mission in Lebanon (EUSM Lebanon)**, a CSDP mission with a three-year initial mandate to advise and train the Lebanese Armed Forces and the Internal Security Forces (border security, maritime security, cybercrime, anti-smuggling, port security including the Port of Beirut). It is established, not yet launched. Details: `eu_support_mission_lebanon_eusm_lebanon_2026`.
 - **LATEST (Wednesday 23 September 2026): EUR 505 million for Lebanon for 2026-2027**, the second half of the EUR 1 billion package announced in Beirut in May 2024: basic services and support for the vulnerable (incl. durable solutions for refugees from Syria), recovery, reforms and security, civil society and culture. Source: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1946
 - Context: Israel's ongoing assault on Lebanon (2024-2026), massive humanitarian crisis
 - EP DEVE committee debate: 14 April 2026 (Tuesday), with WFP and Lebanon Humanitarian and Development Forum (online) + EU Commission representatives
