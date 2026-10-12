@@ -1,7 +1,26 @@
 """The College meets on Tuesday in Strasbourg plenary weeks (15 Sep 2026 fix)."""
 from datetime import date
 
+import pytest
+
+import services.scrapers.ec_college_scraper as college
 from services.scrapers.ec_college_scraper import generate_college_meetings
+
+
+class _FrozenDate(date):
+    """`date` whose today() is the day the fix was made."""
+
+    @classmethod
+    def today(cls):
+        return cls(2026, 9, 15)
+
+
+@pytest.fixture(autouse=True)
+def today_is_15_september_2026(monkeypatch):
+    """The generator starts from date.today(), and these tests name October 2026 dates:
+    they passed until 6 October passed, then failed for every push (12 Oct 2026: main went
+    red on a calendar date, with no code change). Freeze the day the tests were written for."""
+    monkeypatch.setattr(college, "date", _FrozenDate)
 
 PLENARY = [
     date(2026, 10, 5), date(2026, 10, 6), date(2026, 10, 7), date(2026, 10, 8),    # Strasbourg
