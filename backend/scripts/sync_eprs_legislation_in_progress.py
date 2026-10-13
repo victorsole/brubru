@@ -73,6 +73,12 @@ async def sync_legislation_in_progress(
         stats['total_scraped'] = len(procedures)
         logger.info(f"Found {len(procedures)} procedures")
 
+        if not procedures:
+            # The scraper returns an empty list for a refused or changed page (HTTP 403 gave
+            # "scraped 0" and exit 0). The page lists some 200 files, so none is never a result.
+            stats['errors'].append("the EPRS page listed no procedure: it was refused, or its layout changed")
+            return stats
+
         if dry_run:
             logger.info("DRY RUN - showing first 10 procedures:")
             for proc in procedures[:10]:

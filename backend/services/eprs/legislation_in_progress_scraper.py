@@ -29,6 +29,19 @@ from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
 
+_REF_PARTS = re.compile(r'(\d{4})/(\d{3,4})(\([A-Z]+\))')
+
+
+def canonical_procedure_ref(ref: str) -> str:
+    """The reference as OEIL writes it, with a four-digit number.
+
+    The EPRS page prints three digits for some old files (2013/403(COD)). OEIL answers that
+    form with a 404 and holds the file as 2013/0403(COD), which is how it is stored. The job
+    did not find the stored row, tried to create it again and failed on its id, at every run
+    from 8 to 13 October 2026."""
+    m = _REF_PARTS.fullmatch(ref or "")
+    return f"{m.group(1)}/{int(m.group(2)):04d}{m.group(3)}" if m else ref
+
 
 @dataclass
 class LegislationInProgressEntry:
@@ -413,7 +426,7 @@ class LegislationInProgressScraper:
                     # Extract procedure reference
                     proc_match = self.PROCEDURE_REF_PATTERN.search(parent_text)
                     if proc_match:
-                        procedure_ref = proc_match.group(1)
+                        procedure_ref = canonical_procedure_ref(proc_match.group(1))
 
                         # Skip duplicates
                         if procedure_ref in seen_procedures:
