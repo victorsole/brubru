@@ -100,7 +100,7 @@ export const Header = () => {
     <header className="header">
       <div className="header__container">
         <div className="header__brand">
-          <Link to="/subscription" className="header__logo">
+          <Link to="/" className="header__logo">
             <img
               src="/assets/brubru_mainlogo.png"
               alt={t('header.brubruLogoAlt')}
@@ -238,16 +238,6 @@ export const Header = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     {t('header.viewProfile')}
-                  </Link>
-                  <Link
-                    to="/subscription"
-                    className="header__user-menu-item"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    <svg className="header__user-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    {t('header.subscription')}
                   </Link>
                   {user.role === 'admin' && (
                     <Link

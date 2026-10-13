@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { demoMailto } from '../utils/demo_invitation';
 import { TenderDetail } from '../components/tenders/tender_detail';
 import { BidChecklist } from '../components/tenders/bid_checklist';
 import { TenderCalendar } from '../components/tenders/tender_calendar';
@@ -289,7 +290,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
             </ul>
             <button
               className="tenderator-page__upgrade-button"
-              onClick={() => navigate('/subscription')}
+              onClick={() => { window.location.href = demoMailto(t); }}
             >
               <span className="mdi mdi-arrow-up-circle"></span>
               {t('tenderator.upgradeButton')}

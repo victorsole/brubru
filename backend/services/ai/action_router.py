@@ -230,7 +230,7 @@ def compute_actions(
         for action in actions:
             if action.pre_user_label:
                 action.label = action.pre_user_label
-                action.route = "/subscription"
+                action.route = "/#demo"
                 action.params = {}
 
     logger.info(f"[ACTION_ROUTER] Computed {len(actions)} actions: "

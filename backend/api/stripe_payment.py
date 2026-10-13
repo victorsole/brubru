@@ -127,7 +127,7 @@ async def create_checkout_session(
                 }
             ],
             success_url=f"{settings.APP_URL}/profile?checkout=success&session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{settings.APP_URL}/subscription?checkout=canceled",
+            cancel_url=f"{settings.APP_URL}/profile?checkout=canceled",
             metadata={
                 "user_id": str(current_user.id),
                 "plan": plan,

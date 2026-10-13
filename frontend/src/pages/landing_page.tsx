@@ -1,10 +1,11 @@
 // Landing page for Brubru - Full rewrite from approved mockup
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../i18n/config';
 import type { SupportedLanguage } from '../i18n/config';
 import { CarouselSection } from '../components/carousel/carousel_section';
+import { demoMailto } from '../utils/demo_invitation';
 import Icon from '@mdi/react';
 import { mdiInstagram } from '@mdi/js';
 import './landing_page.css';
@@ -133,6 +134,27 @@ export const LandingPage = () => {
 
   const ctaWords = t('landing.cta.title').split(/\s+/);
 
+  // Arriving with a hash (/subscription redirects to /#demo) must land on that section.
+  const { hash } = useLocation();
+  // Layout keeps shifting for a moment after mount (images, snap points), so scroll twice
+  // and stop as soon as the visitor scrolls themselves.
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash.slice(1));
+    if (!el) return;
+    // 'instant': the page is smooth-scroll + mandatory snap, and a long smooth jump is cancelled by the snap.
+    const go = () => el.scrollIntoView({ behavior: 'instant', block: 'start' });
+    const timers = [250, 1000].map((ms) => window.setTimeout(go, ms));
+    const cancel = () => timers.forEach(window.clearTimeout);
+    window.addEventListener('wheel', cancel, { once: true, passive: true });
+    window.addEventListener('touchstart', cancel, { once: true, passive: true });
+    return () => {
+      cancel();
+      window.removeEventListener('wheel', cancel);
+      window.removeEventListener('touchstart', cancel);
+    };
+  }, [hash]);
+
   // Effect 1: IntersectionObserver for .fade-up elements
   useEffect(() => {
     const elements = document.querySelectorAll('.landing .fade-up');
@@ -195,9 +217,9 @@ export const LandingPage = () => {
             <span className="nav-link-text">{t('landing.nav.features')}</span>
             <span className="nav-link-text nav-link-text--hover">{t('landing.nav.features')}</span>
           </a>
-          <a href="#pricing" className="nav-link">
-            <span className="nav-link-text">{t('landing.nav.pricing')}</span>
-            <span className="nav-link-text nav-link-text--hover">{t('landing.nav.pricing')}</span>
+          <a href="#demo" className="nav-link">
+            <span className="nav-link-text">{t('landing.nav.demo')}</span>
+            <span className="nav-link-text nav-link-text--hover">{t('landing.nav.demo')}</span>
           </a>
           <a href="#about" className="nav-link">
             <span className="nav-link-text">{t('landing.nav.about')}</span>
@@ -321,83 +343,28 @@ export const LandingPage = () => {
           </div>
         </section>
 
-        {/* ========== 6. PRICING ========== */}
-        <section className="pricing-section" id="pricing">
-          <p className="pricing__eyebrow">{t('landing.pricing.eyebrow')}</p>
+        {/* ========== 6. DEMO INVITATION ========== */}
+        <section className="demo-section" id="demo">
+          <p className="demo__eyebrow">{t('landing.demo.eyebrow')}</p>
           <h2
-            className="pricing__title fade-up"
-            dangerouslySetInnerHTML={{ __html: t('landing.pricing.title') }}
+            className="demo__title fade-up"
+            dangerouslySetInnerHTML={{ __html: t('landing.demo.title') }}
           />
-          <p className="pricing__subtitle fade-up">{t('landing.pricing.subtitle')}</p>
+          <p className="demo__subtitle fade-up">{t('landing.demo.subtitle')}</p>
 
-          <div className="pricing__grid">
-            {/* Starter */}
-            <div className="pricing__card fade-up">
-              <div className="pricing__badge pricing__badge--green">
-                {t('landing.pricing.starter.badge')}
-              </div>
-              <h3>{t('landing.pricing.starter.name')}</h3>
-              <div className="pricing__price">
-                <span className="pricing__amount">{t('landing.pricing.starter.price')}</span>
-                <span className="pricing__period">{t('landing.pricing.starter.period')}</span>
-              </div>
-              <p className="pricing__savings">{t('landing.pricing.starter.savings')}</p>
-              <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f4')}</li>
-              </ul>
-              <Link to="/subscription" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.starter.button')}</Link>
-            </div>
+          <ul className="demo__points fade-up">
+            <li><span className="mdi mdi-check" /> {t('landing.demo.p1')}</li>
+            <li><span className="mdi mdi-check" /> {t('landing.demo.p2')}</li>
+            <li><span className="mdi mdi-check" /> {t('landing.demo.p3')}</li>
+          </ul>
 
-            {/* Advocate */}
-            <div className="pricing__card pricing__card--featured fade-up">
-              <div className="pricing__badge pricing__badge--yellow">
-                {t('landing.pricing.advocate.badge')}
-              </div>
-              <h3>{t('landing.pricing.advocate.name')}</h3>
-              <div className="pricing__price">
-                <span className="pricing__amount">{t('landing.pricing.advocate.price')}</span>
-                <span className="pricing__period">{t('landing.pricing.advocate.period')}</span>
-              </div>
-              <p className="pricing__savings">{t('landing.pricing.advocate.savings')}</p>
-              <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f4')}</li>
-              </ul>
-              <Link to="/subscription" className="btn btn--primary" style={{ width: '100%' }}>{t('landing.pricing.advocate.button')}</Link>
-            </div>
-
-            {/* Professional */}
-            <div className="pricing__card fade-up">
-              <div className="pricing__badge pricing__badge--blue">
-                {t('landing.pricing.professional.badge')}
-              </div>
-              <h3>{t('landing.pricing.professional.name')}</h3>
-              <div className="pricing__price">
-                <span className="pricing__amount">{t('landing.pricing.professional.price')}</span>
-                <span className="pricing__period">{t('landing.pricing.professional.period')}</span>
-              </div>
-              <p className="pricing__savings">{t('landing.pricing.professional.savings')}</p>
-              <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f4')}</li>
-                {t('landing.pricing.professional.f5', '') && (
-                  <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f5')}</li>
-                )}
-              </ul>
-              <Link to="/subscription" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.professional.button')}</Link>
-            </div>
+          <div className="demo__cta fade-up">
+            <a href={demoMailto(t)} className="btn demo__button">
+              <span className="mdi mdi-calendar-check" aria-hidden="true" />
+              {t('landing.demo.button')}
+            </a>
+            <p className="demo__note">{t('landing.demo.note')}</p>
           </div>
-
-          <p className="pricing__all-plans fade-up">
-            <Link to="/subscription">{t('landing.pricing.allPlans')}</Link>
-          </p>
         </section>
 
         {/* ========== 7. CLIENTS ========== */}

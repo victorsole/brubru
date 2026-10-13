@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { demoMailto } from '../../utils/demo_invitation';
 import { useAuth } from '../../hooks/use_auth';
 import './tenderator_widget.css';
 import { uiDateLocale } from '../../i18n/config';
@@ -109,7 +110,7 @@ export const TenderatorWidget = () => {
         <div className="tenderator-widget__locked-content">
           <span className="mdi mdi-lock-outline"></span>
           <p>{t('tenderWidget.monitoring')}</p>
-          <button onClick={() => navigate('/subscription')}>
+          <button onClick={() => { window.location.href = demoMailto(t); }}>
             {t('tenderWidget.getProfessional')}
           </button>
         </div>

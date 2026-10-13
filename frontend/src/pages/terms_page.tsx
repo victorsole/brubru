@@ -1,6 +1,7 @@
 // frontend/src/pages/terms_page.tsx
 import { Link } from 'react-router-dom';
 import './policy_pages.css';
+import { DEMO_MAILTO_EN } from '../utils/demo_invitation';
 
 export const TermsPage = () => {
   return (
@@ -104,8 +105,8 @@ export const TermsPage = () => {
             <li><strong>EP Plan:</strong> &euro;49/month (for verified APAs and MEPs)</li>
           </ul>
           <p>
-            See our <Link to="/subscription" className="policy-page__link">Subscription page</Link> for current pricing and features.
-            All prices are indicative and may be updated; the Subscription page reflects the most current pricing.
+            For current pricing and features, <a href={DEMO_MAILTO_EN} className="policy-page__link">request a demo</a>.
+            All prices are indicative and may be updated; the price confirmed in your order or invoice applies.
           </p>
 
           <h3>4.2 Payment Terms</h3>

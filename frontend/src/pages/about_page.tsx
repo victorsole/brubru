@@ -1,6 +1,7 @@
 // frontend/src/pages/about_page.tsx
 import { Link } from 'react-router-dom';
 import './policy_pages.css';
+import { DEMO_MAILTO_EN } from '../utils/demo_invitation';
 
 export const AboutPage = () => {
   return (
@@ -112,7 +113,7 @@ export const AboutPage = () => {
           </div>
 
           <p className="policy-page__cta">
-            <Link to="/subscription" className="policy-page__link">View Detailed Pricing →</Link>
+            <a href={DEMO_MAILTO_EN} className="policy-page__link">Request a demo →</a>
           </p>
         </section>
 

@@ -8,7 +8,6 @@
     "profile": "Perfil",
     "adminPanel": "Panel de Admin",
     "viewProfile": "Ver Perfil",
-    "subscription": "Suscripción",
     "takeTour": "Hacer un tour",
     "logOut": "Cerrar Sesión",
     "onlyForUsers": "{{feature}} solo está disponible para usuarios registrados",
@@ -749,216 +748,6 @@
     },
     "basicPlanName": "Básico"
   },
-  "subscription": {
-    "hero": {
-      "title": "Elige tu Plan Brubru",
-      "subtitle": "Inteligencia politica de la UE modular, elige lo que necesitas",
-      "description": "Empieza con modulos individuales o ahorra con paquetes. Todos los planes incluyen 14 dias de prueba gratuita."
-    },
-    "toggle": {
-      "monthly": "Mensual",
-      "annual": "Anual",
-      "saveTag": "Ahorra hasta un 20%"
-    },
-    "bundles": {
-      "title": "Paquetes",
-      "subtitle": "Ahorra combinando modulos"
-    },
-    "modules": {
-      "title": "Modulos Individuales",
-      "subtitle": "Elige solo lo que necesitas",
-      "subscribe": "Suscribirse"
-    },
-    "starter": {
-      "name": "Starter",
-      "badge": "STARTER",
-      "priceMonthly": "39",
-      "priceAnnual": "33",
-      "annualTotal": "396",
-      "includes": "Chat + My EU Bubble",
-      "description": "Chat IA esencial y seguimiento de politicas para empezar",
-      "f1": "AI Policy Chat (ilimitado)",
-      "f2": "My EU Bubble dashboard",
-      "f3": "Agregacion de feeds RSS",
-      "f4": "Seguimiento Legislative Train",
-      "f5": "Exportaciones basicas (XML, HTML)",
-      "button": "Obtener Starter"
-    },
-    "advocate": {
-      "name": "Advocate",
-      "badge": "ADVOCATE · MAS POPULAR",
-      "priceMonthly": "59",
-      "priceAnnual": "42",
-      "annualTotal": "499",
-      "includes": "Chat + Bubble + Amendator",
-      "description": "Kit completo de advocacy con redaccion de enmiendas y analisis IA",
-      "f1": "Todo en Starter",
-      "f2": "Amendator (enmiendas ilimitadas)",
-      "f3": "Sugerencias de enmiendas con IA",
-      "f4": "Exportaciones PDF/Word (sin marca de agua)",
-      "f5": "Tiempos de respuesta prioritarios",
-      "button": "Obtener Advocate"
-    },
-    "professional": {
-      "name": "Professional",
-      "badge": "PROFESSIONAL · MEJOR VALOR",
-      "priceMonthly": "99",
-      "priceAnnual": "67",
-      "annualTotal": "799",
-      "includes": "Los 5 modulos",
-      "description": "Acceso completo a la plataforma con verificacion de cumplimiento y analisis de licitaciones",
-      "f1": "Todo en Advocate",
-      "f2": "EU Law Comply",
-      "f3": "Tenderator",
-      "f4": "Predicciones de votos del Consejo",
-      "f5": "Soporte dedicado (24h)",
-      "f6": "Acceso API",
-      "button": "Obtener Professional"
-    },
-    "ep": {
-      "name": "EP Plan",
-      "badge": "EP PLAN · PARA APAs Y MEPs",
-      "priceMonthly": "49",
-      "priceAnnual": "45",
-      "annualTotal": "539",
-      "includes": "Chat + Bubble + Amendator",
-      "description": "Disenado para asistentes parlamentarios acreditados y eurodiputados.",
-      "f1": "Chat IA con contexto EP",
-      "f2": "My EU Bubble + seguimiento de comisiones",
-      "f3": "Amendator con formato EP",
-      "f4": "Generador de preguntas escritas EP",
-      "f5": "Soporte EP prioritario",
-      "button": "Obtener EP Plan",
-      "note": "Requiere verificacion de acreditacion EP"
-    },
-    "module": {
-      "chat": {
-        "name": "AI Chat",
-        "price": "29",
-        "description": "Asistente de chat IA para politicas de la UE",
-        "planId": "chat"
-      },
-      "bubble": {
-        "name": "My EU Bubble",
-        "price": "29",
-        "description": "Feeds RSS, seguimiento legislativo, predicciones",
-        "planId": "bubble"
-      },
-      "amendator": {
-        "name": "Amendator",
-        "price": "19",
-        "description": "Herramienta de redaccion de enmiendas legislativas",
-        "planId": "amendator"
-      },
-      "comply": {
-        "name": "EU Law Comply",
-        "price": "29",
-        "description": "Analisis de cumplimiento",
-        "planId": "comply"
-      },
-      "tenderator": {
-        "name": "Tenderator",
-        "price": "49",
-        "description": "Analisis y busqueda de licitaciones UE",
-        "planId": "tenderator"
-      }
-    },
-    "features": {
-      "title": "Comparacion de Funciones",
-      "subtitle": "Mira lo que incluye cada plan",
-      "columns": {
-        "feature": "Funcion",
-        "free": "Prueba Gratuita",
-        "starter": "Starter",
-        "advocate": "Advocate",
-        "professional": "Professional"
-      },
-      "rows": {
-        "chat": "Chat de Politica IA",
-        "chatFree": "5 mensajes/dia",
-        "chatStarter": "Ilimitado",
-        "chatAdvocate": "Ilimitado",
-        "chatProfessional": "Ilimitado + prioridad",
-        "amendments": "Enmiendas",
-        "amendmentsFree": "5/mes",
-        "amendmentsStarter": "--",
-        "amendmentsAdvocate": "Ilimitadas",
-        "amendmentsProfessional": "Ilimitadas",
-        "rss": "RSS y Seguimiento Legislativo",
-        "rssFree": "Limitado",
-        "rssStarter": "Acceso completo",
-        "rssAdvocate": "Acceso completo",
-        "rssProfessional": "Acceso completo",
-        "predictions": "Predicciones Legislativas",
-        "predictionsFree": "--",
-        "predictionsStarter": "Votos EP",
-        "predictionsAdvocate": "Votos EP",
-        "predictionsProfessional": "EP + Consejo",
-        "comply": "EU Law Comply",
-        "complyFree": "--",
-        "complyStarter": "--",
-        "complyAdvocate": "--",
-        "complyProfessional": "Acceso completo",
-        "tenderator": "Tenderator",
-        "tenderatorFree": "--",
-        "tenderatorStarter": "--",
-        "tenderatorAdvocate": "--",
-        "tenderatorProfessional": "Acceso completo",
-        "exports": "Formatos de Exportacion",
-        "exportsFree": "XML, HTML",
-        "exportsStarter": "XML, HTML",
-        "exportsAdvocate": "Todos los formatos",
-        "exportsProfessional": "Todos los formatos",
-        "support": "Soporte",
-        "supportFree": "Comunidad",
-        "supportStarter": "Email (48h)",
-        "supportAdvocate": "Email (48h)",
-        "supportProfessional": "Dedicado (24h)"
-      }
-    },
-    "faq": {
-      "title": "Preguntas Frecuentes",
-      "q1": "Que metodos de pago aceptan?",
-      "a1": "Aceptamos todas las principales tarjetas de credito, debito y transferencias bancarias a traves de Stripe.",
-      "q2": "Puedo cambiar mi plan despues?",
-      "a2": "Si, puedes cambiar entre modulos y paquetes en cualquier momento. Las mejoras se aplican inmediatamente; las rebajas al final del ciclo de facturacion.",
-      "q3": "Cual es su politica de reembolso?",
-      "a3": "Ofrecemos una garantia de devolucion de dinero de 14 dias para todos los planes. Los planes mensuales se pueden cancelar en cualquier momento.",
-      "q4": "Ofrecen prueba gratuita?",
-      "a4": "Si, todos los planes incluyen una prueba gratuita de 14 dias. No se requiere tarjeta de credito para empezar.",
-      "q5": "Puedo combinar modulos individuales?",
-      "a5": "Puedes suscribirte a modulos individuales por separado, pero los paquetes ofrecen ahorros significativos.",
-      "q6": "Que es el EP Plan?",
-      "a6": "El EP Plan esta disenado para asistentes parlamentarios acreditados y eurodiputados. Incluye Chat, Bubble y Amendator con contexto IA especifico de EP."
-    },
-    "trust": {
-      "title": "De confianza para profesionales de politicas en toda Europa",
-      "subtitle": "Unete a las organizaciones que ya usan Brubru"
-    },
-    "cta": {
-      "title": "Listo para empezar?",
-      "subtitle": "Empieza tu prueba gratuita de 14 dias hoy, sin tarjeta de credito",
-      "button": "Empezar Prueba Gratuita",
-      "contact": "O contactanos para necesidades empresariales"
-    },
-    "contactEmail": "hello@beresol.eu",
-    "enterprise": {
-      "name": "Empresa",
-      "badge": "Para equipos y socios",
-      "priceLabel": "Precio personalizado",
-      "priceHint": "Adaptado al tamaño de tu equipo y uso",
-      "description": "Para empresas con exposición regulatoria relevante en la UE y un equipo reducido en Bruselas. Acceso multi-usuario, claves API con límites más altos, análisis regulatorios a medida con marca propia, onboarding dedicado y soporte prioritario.",
-      "f1": "Multi-usuario (desde 5 plazas) con SSO",
-      "f2": "Claves API con mayor límite + créditos de uso",
-      "f3": "Análisis regulatorios a medida e informes con marca",
-      "f4": "Soporte prioritario por chat y email, con SLA",
-      "f5": "Onboarding dedicado y revisión trimestral",
-      "f6": "Transcripciones de comisiones bajo demanda y análisis profundos",
-      "note": "Los planes Enterprise se adaptan a cada equipo. Cuéntanos tu alcance y te ofreceremos una cotización en 48 horas.",
-      "button": "Contactar con ventas"
-    },
-    "checkoutError": "No se ha podido iniciar el pago. Inténtalo de nuevo."
-  },
   "euLawComply": {
     "history": "Historial de Análisis",
     "completed": "Completado",
@@ -1015,7 +804,7 @@
   "landing": {
     "nav": {
       "features": "Funciones",
-      "pricing": "Precios",
+      "demo": "Demo",
       "about": "Nosotros",
       "logIn": "Iniciar sesión",
       "startFree": "Empezar gratis"
@@ -1075,48 +864,17 @@
       "step4Title": "Genera documentos",
       "step4Content": "Produce documentos de posición, notas informativas para eurodiputados y puntos de discusión adaptados a tu área política con IA. Ejecuta análisis de brechas de cumplimiento con EU Law Comply para verificar cómo la nueva legislación afecta a tu organización o sector."
     },
-    "pricing": {
-      "eyebrow": "Precios",
-      "title": "<strong>Elige tu Plan</strong>",
-      "subtitle": "14 dias de prueba gratuita en todos los planes",
-      "starter": {
-        "badge": "STARTER",
-        "name": "Starter",
-        "price": "€39",
-        "period": "/mes",
-        "savings": "o €396/ano (ahorra €72)",
-        "f1": "AI Policy Chat (ilimitado)",
-        "f2": "My EU Bubble dashboard",
-        "f3": "Agregacion de feeds RSS",
-        "f4": "Seguimiento Legislative Train",
-        "button": "Empezar Prueba Gratuita"
-      },
-      "advocate": {
-        "badge": "ADVOCATE - MAS POPULAR",
-        "name": "Advocate",
-        "price": "€59",
-        "period": "/mes",
-        "savings": "o €499/ano (ahorra €209)",
-        "f1": "Todo en Starter",
-        "f2": "Amendator (ilimitado)",
-        "f3": "Sugerencias de enmiendas con IA",
-        "f4": "Exportaciones PDF/Word",
-        "button": "Empezar Prueba Gratuita"
-      },
-      "professional": {
-        "badge": "PROFESSIONAL - MEJOR VALOR",
-        "name": "Professional",
-        "price": "€99",
-        "period": "/mes",
-        "savings": "o €799/ano (ahorra €389)",
-        "f1": "Todo en Advocate",
-        "f2": "EU Law Comply",
-        "f3": "Tenderator",
-        "f4": "Predicciones de votos del Consejo",
-        "f5": "Soporte dedicado (24h)",
-        "button": "Empezar Prueba Gratuita"
-      },
-      "allPlans": "Ver todos los planes y modulos"
+    "demo": {
+      "eyebrow": "Demo",
+      "title": "<strong>Mira Brubru en directo</strong>",
+      "subtitle": "Una breve presentación de Brubru con los expedientes y las áreas políticas que sigues. Cuéntanos en qué trabajas y acordaremos un momento.",
+      "p1": "Tus propios expedientes: usamos Brubru con los textos que sigues",
+      "p2": "Chat, Amendator, EU Law Comply y la API, con datos reales de la UE",
+      "p3": "Tus preguntas sobre planes y precios, respondidas directamente",
+      "button": "Solicitar una demo",
+      "note": "Abre un correo a hello@beresol.eu.",
+      "mailSubject": "Brubru - solicitud de demo",
+      "mailBody": "Hola:\n\nMe gustaría recibir una demo de Brubru.\n\nNombre:\nOrganización:\nÁreas políticas que sigo:\n\nGracias."
     },
     "clients": {
       "eyebrow": "Enterprise",
@@ -1165,7 +923,6 @@
     "lede": "Brubru es un proveedor vertical de datos de la UE. Nuestra API REST ya abarca todas las instituciones, órganos y agencias de la UE: 935 endpoints en 88 carpetas, una carpeta por institución. Tienes acceso en tiempo real a más de 28.500 leyes adoptadas, más de 1.200 procedimientos legislativos, la retroalimentación de las consultas en directo, las agendas de los comisarios, las predicciones de resultados legislativos con IA, el calendario institucional unificado de la UE, el Registro de Transparencia y la capa de inteligencia sobre el texto jurídico que impulsa el propio chatbot y el Amendator de Brubru. Brubru es el primer usuario de su propia API.",
     "cta": {
       "reference": "Referencia de la API",
-      "trial": "Prueba Professional gratuita",
       "contact": "Hablar con ventas",
       "openRef": "Abrir la referencia",
       "ping": "/api/v1/ping (público)",
@@ -1190,7 +947,7 @@
     "quickstart": {
       "intro": "Obtén tu primera respuesta de la API en menos de dos minutos.",
       "step1Title": "Consigue una suscripción Professional",
-      "step1": "Regístrate en brubru.beresol.eu/subscription. Tu clave de API aparecerá en los ajustes de tu cuenta en unos minutos.",
+      "step1": "Solicita una demo en hello@beresol.eu para acordar tu plan Professional. Tu clave de API aparecerá después en los ajustes de tu cuenta.",
       "step2Title": "Haz tu primera petición",
       "step3Title": "Procesa la respuesta",
       "step3": "Cada endpoint devuelve el mismo sobre paginado. Extrae el array data para iterar sobre los resultados. Comprueba has_more y next_page para paginar."

@@ -126,5 +126,4 @@ Brubru offers a 14-day free trial. There is no permanent free tier. Annual billi
 
 - [Login](https://brubru.beresol.eu/login): User authentication with Google and LinkedIn OAuth
 - [Sign Up](https://brubru.beresol.eu/signup): Create a new account with free trial
-- [Subscription Management](https://brubru.beresol.eu/subscription): Stripe-powered plan management
 - [Backend API Documentation](https://brubru-production.up.railway.app/docs): Swagger UI for the REST API (requires authentication for most endpoints)

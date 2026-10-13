@@ -10,7 +10,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { demoMailto } from '../../utils/demo_invitation';
 import Icon from '@mdi/react';
 import {
   mdiCalendarMonth,
@@ -120,7 +120,6 @@ const styles = {
 
 export const EUCalendarCTA: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const features = [
     {
@@ -158,7 +157,7 @@ export const EUCalendarCTA: React.FC = () => {
   ];
 
   const handleUpgrade = () => {
-    navigate('/subscription');
+    window.location.href = demoMailto(t);
   };
 
   return (

@@ -833,9 +833,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   };
 
   const handleActionClick = (action: ChatAction) => {
-    // Pre-user: always navigate to subscription
+    // Pre-user: send to the demo invitation on the landing page
     if (!isAuthenticated) {
-      navigate('/subscription');
+      navigate('/#demo');
       return;
     }
 

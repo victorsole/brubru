@@ -23,7 +23,6 @@ import { ClaimPage } from './pages/claim_page';
 import { MainPage } from './pages/main_page';
 import { AmendatorPage } from './pages/amendator_page';
 import { ProfilePage } from './pages/profile_page';
-import { SubscriptionPage } from './pages/subscription_page';
 import { MyEUBubblePage } from './pages/my_eu_bubble_page';
 import { AdminPanelPage } from './pages/admin_panel_page';
 import { EUComplyPage } from './pages/eu_comply_page';
@@ -228,20 +227,7 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/subscription"
-            element={
-              <ProtectedRoute showPreview={false}>
-                <>
-                  <Header />
-                  <AnimatedPage>
-                    <SubscriptionPage />
-                  </AnimatedPage>
-                  <Footer isSidebarOpen={isSidebarOpen} />
-                </>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/subscription" element={<Navigate to="/#demo" replace />} />
           <Route
             path="/my-eu-bubble"
             element={

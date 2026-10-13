@@ -1,6 +1,7 @@
 // frontend/src/pages/profile_page.tsx
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { demoMailto } from '../utils/demo_invitation';
 import { useAuth } from '../hooks/use_auth';
 import { useSubscription } from '../hooks/use_subscription';
 import { Link } from 'react-router-dom';
@@ -348,10 +349,10 @@ export const ProfilePage = () => {
             {t('profile.policyInterests')} ({policyInterests.length})
           </button>
           {user?.subscription_tier !== 'blue' && (
-            <Link to="/#pricing" className="profile-dashboard__btn profile-dashboard__btn--upgrade">
+            <a href={demoMailto(t)} className="profile-dashboard__btn profile-dashboard__btn--upgrade">
               <Icon path={mdiArrowUpBold} size={0.8} />
               {t('profile.upgrade')}
-            </Link>
+            </a>
           )}
         </div>
       </div>
@@ -560,13 +561,13 @@ export const ProfilePage = () => {
               {t('profile.stripePortal', 'Stripe Customer Portal')}
             </button>
             {user?.subscription_tier !== 'blue' && (
-              <Link
-                to="/#pricing"
+              <a
+                href={demoMailto(t)}
                 className="profile-dashboard__btn profile-dashboard__btn--upgrade"
               >
                 <Icon path={mdiArrowUpBold} size={0.8} />
                 {t('profile.upgrade')}
-              </Link>
+              </a>
             )}
           </div>
         </div>

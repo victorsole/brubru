@@ -18,6 +18,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { demoMailto } from '../../utils/demo_invitation';
 import Icon from '@mdi/react';
 import {
   mdiCrystalBall,
@@ -899,8 +900,8 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
 
   // Handle upgrade
   const handleUpgrade = useCallback(() => {
-    window.location.href = '/subscription';
-  }, []);
+    window.location.href = demoMailto(t);
+  }, [t]);
 
   // Render White tier locked state
   if (isWhiteTier) {

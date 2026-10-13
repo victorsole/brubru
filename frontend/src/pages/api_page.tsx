@@ -117,9 +117,6 @@ export const ApiPage = () => {
             <Link to="/mcp" className="api-page__cta api-page__cta--secondary">
               <span className="mdi mdi-connection" /> {t('api.cta.mcp')}
             </Link>
-            <a className="api-page__cta api-page__cta--secondary" href="/subscription">
-              <span className="mdi mdi-rocket-launch" /> {t('api.cta.trial')}
-            </a>
             <a className="api-page__cta api-page__cta--secondary" href="mailto:hello@beresol.eu?subject=Brubru%20API%20access">
               <span className="mdi mdi-email" /> {t('api.cta.contact')}
             </a>
