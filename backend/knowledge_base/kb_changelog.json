@@ -2,6 +2,145 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "european_pillar_social_rights_action_plan",
+      "title": "European Pillar of Social Rights",
+      "summary": "Pointer to the 2026 Employment and Social Outlook and the Quality Jobs Act announcement.",
+      "refs": [
+        "IP/26/2147"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "pre_enlargement_policy_reviews_2026",
+      "title": "Pre-enlargement policy reviews",
+      "summary": "13 October General Affairs Council lunch discussion and the Montenegro closures.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU sanctions implementation",
+      "summary": "Chemical weapons regime renewal pointer.",
+      "refs": [
+        "32026D2286"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "european_council_15_16_october_2026",
+      "title": "European Council 15-16 October",
+      "summary": "General Affairs Council programme of 13 October; the Merz-Meloni-De Wever 'emergency brake' letter as reported by POLITICO.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "eu_defence_readiness_omnibus_v_and_agile_2026",
+      "title": "Omnibus V and AGILE",
+      "summary": "AGILE figures from the Commission press release IP/26/2132 (EUR 115 million, 20 to 30 projects, four-month time-to-grant).",
+      "refs": [
+        "IP/26/2132"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "european_democracy_shield",
+      "title": "European Democracy Shield",
+      "summary": "European Centre for Democratic Resilience opens to candidate countries and Kosovo; pilot political-ads repository pointer.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "eu_uk_security_defence_partnership",
+      "title": "EU-UK partnership",
+      "summary": "Second EU-UK summit set for 20 November 2026 in Brussels (Council release of 12 October).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "cop31_antalya_eu_position_2026",
+      "title": "COP31 and the EU position",
+      "summary": "Council conclusions of 12 October for COP31 and COP17 summarised; climate finance conclusions of 9 October.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "eu_csdp_missions_2026",
+      "title": "CSDP missions",
+      "summary": "EUAM Iraq extended to 31 October 2028 (Decision (CFSP) 2026/2285, EUR 63.7 million); EUSM Lebanon legal act in the OJ.",
+      "refs": [
+        "32026D2285",
+        "32026D2296"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "eu_support_mission_lebanon_eusm_lebanon_2026",
+      "title": "EUSM Lebanon",
+      "summary": "Legal act Decision (CFSP) 2026/2296 read in the OJ: three years from launch, Litani condition, structure, financial reference amounts.",
+      "refs": [
+        "32026D2296"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "eu_political_advertising_regulation_2024_900",
+      "title": "Political advertising Regulation and the European Repository",
+      "summary": "Pilot European Repository launched 12 October 2026 for voluntary use; obligations only from the official deployment date; Implementation Dialogue 4 November.",
+      "refs": [
+        "32024R0900"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "european_employment_and_social_outlook_2026_job_quality",
+      "title": "2026 European Employment and Social Outlook",
+      "summary": "Job quality report of 13 October 2026; 2026 job-creation outlook; Quality Jobs Act announced for later in 2026.",
+      "refs": [
+        "IP/26/2147"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "xxxlutz_porta_merger_in_depth_investigation_2026",
+      "title": "XXXLutz / Porta in-depth merger investigation",
+      "summary": "Phase II opened 12 October 2026 (M.11895), decision deadline 25 February 2027; two markets of concern; separate gun-jumping case.",
+      "refs": [
+        "IP/26/2126"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "eu_chemical_weapons_sanctions_regime",
+      "title": "EU chemical weapons sanctions regime",
+      "summary": "Regime renewed by Decision (CFSP) 2026/2286: framework to 30 October 2031, listings (31 persons, 6 entities) to 30 October 2027.",
+      "refs": [
+        "32026D2286"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "eu_accession_negotiations_state_of_play_october_2026",
+      "title": "EU accession negotiations, October 2026",
+      "summary": "Montenegro provisionally closed chapters 17, 18 and 19 on 12 October (21 of 33 closed); programme of the 13 October accession conferences with Albania, Moldova and Ukraine, outcomes pending.",
+      "refs": []
+    },
+    {
       "date": "2026-10-12",
       "action": "updated",
       "guide": "eu_sanctions_implementation_framework",

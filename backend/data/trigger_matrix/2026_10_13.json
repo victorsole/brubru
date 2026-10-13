@@ -1,0 +1,125 @@
+{
+ "_about": "Natural questions, one per language in this order: en, fr, nl, es, ca, it. Key = guide id, optionally '#label' to test a second topic of the same guide. Written 13 Oct 2026 for the guides of the 13 Oct /news run.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "eu_accession_negotiations_state_of_play_october_2026": [
+   "Which accession negotiation chapters did Montenegro close on 12 October?",
+   "Quels chapitres de négociation d'adhésion le Monténégro a-t-il clôturés le 12 octobre ?",
+   "Welke onderhandelingshoofdstukken heeft Montenegro op 12 oktober afgesloten?",
+   "¿Qué capítulos de negociación de adhesión cerró Montenegro el 12 de octubre?",
+   "Quins capítols de negociació d'adhesió va tancar Montenegro el 12 d'octubre?",
+   "Quali capitoli negoziali di adesione ha chiuso il Montenegro il 12 ottobre?"
+  ],
+  "eu_accession_negotiations_state_of_play_october_2026#conferences": [
+   "What happened at the accession conferences with Albania, Moldova and Ukraine on 13 October?",
+   "Que s'est-il passé lors des conférences d'adhésion avec l'Albanie, la Moldavie et l'Ukraine le 13 octobre ?",
+   "Wat gebeurde er op de toetredingsconferenties met Albanië, Moldavië en Oekraïne op 13 oktober?",
+   "¿Qué pasó en las conferencias de adhesión con Albania, Moldavia y Ucrania el 13 de octubre?",
+   "Què va passar a les conferències d'adhesió amb Albània, Moldàvia i Ucraïna el 13 d'octubre?",
+   "Cosa è successo alle conferenze di adesione con Albania, Moldova e Ucraina il 13 ottobre?"
+  ],
+  "eu_chemical_weapons_sanctions_regime": [
+   "Was the EU chemical weapons sanctions regime renewed?",
+   "Le régime de sanctions de l'UE sur les armes chimiques a-t-il été renouvelé ?",
+   "Is het sanctieregime van de EU voor chemische wapens verlengd?",
+   "¿Se renovó el régimen de sanciones de la UE sobre armas químicas?",
+   "S'ha renovat el règim de sancions de la UE sobre armes químiques?",
+   "Il regime di sanzioni dell'UE sulle armi chimiche è stato rinnovato?"
+  ],
+  "xxxlutz_porta_merger_in_depth_investigation_2026": [
+   "Why did the Commission open an in-depth investigation into XXXLutz and Porta?",
+   "Pourquoi la Commission a-t-elle ouvert une enquête approfondie sur XXXLutz et Porta ?",
+   "Waarom heeft de Commissie een diepgaand onderzoek geopend naar XXXLutz en Porta?",
+   "¿Por qué abrió la Comisión una investigación en profundidad sobre XXXLutz y Porta?",
+   "Per què ha obert la Comissió una investigació en profunditat sobre XXXLutz i Porta?",
+   "Perché la Commissione ha aperto un'indagine approfondita su XXXLutz e Porta?"
+  ],
+  "european_employment_and_social_outlook_2026_job_quality": [
+   "What does the 2026 Employment and Social Outlook say about job quality and the Quality Jobs Act?",
+   "Que disent les perspectives de l'emploi et de la situation sociale 2026 sur la qualité des emplois ?",
+   "Wat zeggen de Europese werkgelegenheids- en sociale vooruitzichten 2026 over de kwaliteit van banen?",
+   "¿Qué dicen las perspectivas de empleo y sociales de 2026 sobre la calidad del empleo?",
+   "Què diuen les perspectives d'ocupació i socials del 2026 sobre la qualitat de l'ocupació?",
+   "Cosa dicono le prospettive occupazionali e sociali 2026 sulla qualità del lavoro?"
+  ],
+  "eu_political_advertising_regulation_2024_900": [
+   "What is the European Repository for political advertising launched on 12 October?",
+   "Qu'est-ce que le répertoire européen de la publicité politique lancé le 12 octobre ?",
+   "Wat is de Europese databank voor politieke advertenties die op 12 oktober is gelanceerd?",
+   "¿Qué es el repositorio europeo de publicidad política lanzado el 12 de octubre?",
+   "Què és el repositori europeu de publicitat política llançat el 12 d'octubre?",
+   "Cos'è il repertorio europeo della pubblicità politica lanciato il 12 ottobre?"
+  ],
+  "eu_csdp_missions_2026#euam_iraq": [
+   "Until when is the EU advisory mission EUAM Iraq extended?",
+   "Jusqu'à quand la mission EUAM Iraq est-elle prolongée ?",
+   "Tot wanneer is de EU-adviesmissie EUAM Iraq verlengd?",
+   "¿Hasta cuándo se ha prorrogado la misión EUAM Iraq?",
+   "Fins quan s'ha prorrogat la missió EUAM Iraq?",
+   "Fino a quando è stata prorogata la missione EUAM Iraq?"
+  ],
+  "cop31_antalya_eu_position_2026": [
+   "What did the Council decide on the EU position for COP31 and COP17?",
+   "Quelle position le Conseil a-t-il adoptée pour la COP31 et la COP17 ?",
+   "Welk standpunt heeft de Raad aangenomen voor COP31 en COP17?",
+   "¿Qué posición adoptó el Consejo para la COP31 y la COP17?",
+   "Quina posició va adoptar el Consell per a la COP31 i la COP17?",
+   "Quale posizione ha adottato il Consiglio per la COP31 e la COP17?"
+  ],
+  "eu_uk_security_defence_partnership": [
+   "When is the second EU-UK summit?",
+   "Quand aura lieu le deuxième sommet UE-Royaume-Uni ?",
+   "Wanneer is de tweede EU-VK-top?",
+   "¿Cuándo es la segunda cumbre UE-Reino Unido?",
+   "Quan és la segona cimera UE-Regne Unit?",
+   "Quando si terrà il secondo vertice UE-Regno Unito?"
+  ],
+  "eu_defence_readiness_omnibus_v_and_agile_2026": [
+   "How much money does the AGILE defence programme have?",
+   "De quel budget dispose le programme AGILE pour la défense ?",
+   "Hoeveel geld heeft het AGILE-programma voor defensie?",
+   "¿Cuánto dinero tiene el programa AGILE de defensa?",
+   "Quants diners té el programa AGILE de defensa?",
+   "Di quanti fondi dispone il programma AGILE per la difesa?"
+  ],
+  "european_council_15_16_october_2026": [
+   "What is the 'emergency brake' that Germany, Italy and Belgium asked for?",
+   "Qu'est-ce que le « frein d'urgence » demandé par l'Allemagne, l'Italie et la Belgique ?",
+   "Wat is de 'noodrem' die Duitsland, Italië en België vragen?",
+   "¿Qué es el «freno de emergencia» que piden Alemania, Italia y Bélgica?",
+   "Què és el «fre d'emergència» que demanen Alemanya, Itàlia i Bèlgica?",
+   "Cos'è il «freno di emergenza» chiesto da Germania, Italia e Belgio?"
+  ],
+  "european_democracy_shield": [
+   "Which countries were associated with the European Centre for Democratic Resilience?",
+   "Quels pays ont été associés au Centre européen pour la résilience démocratique ?",
+   "Welke landen zijn betrokken bij het Europees Centrum voor democratische weerbaarheid?",
+   "¿Qué países se asociaron al Centro Europeo para la Resiliencia Democrática?",
+   "Quins països es van associar al Centre Europeu per a la Resiliència Democràtica?",
+   "Quali paesi sono stati associati al Centro europeo per la resilienza democratica?"
+  ],
+  "eu_support_mission_lebanon_eusm_lebanon_2026": [
+   "How much does EUSM Lebanon cost and where does it operate?",
+   "Combien coûte l'EUSM Lebanon et où opère-t-elle ?",
+   "Hoeveel kost EUSM Lebanon en waar opereert de missie?",
+   "¿Cuánto cuesta EUSM Lebanon y dónde opera?",
+   "Quant costa l'EUSM Lebanon i on opera?",
+   "Quanto costa l'EUSM Lebanon e dove opera?"
+  ]
+ },
+ "negatives": [
+  "What is the capital of Montenegro?",
+  "Quelle est la capitale du Monténégro ?",
+  "Where can I buy a sofa in Vienna?",
+  "How many chemical elements are in the periodic table?",
+  "Cuántos habitantes tiene Italia?",
+  "Hoeveel mensen wonen er in Luxemburg?"
+ ]
+}
