@@ -740,23 +740,38 @@ _USES_KNOWN = {
 }
 
 
-def _load_known(db: ChunkedDb, body: str, itype: str) -> None:
-    from services.scrapers.economy_common import set_known
+def _known_rows(db: ChunkedDb, body: str, itype: str) -> list:
     db.execute("SELECT public_url, title, document_date, coalesce(length(body_txt), 0), guid "
                "FROM economy_items WHERE body_code = %s AND item_type = %s", (body, itype))
     rows = db.fetchall()
     db.rollback()  # read-only: never hold a transaction open while the ingestor scrapes
-    set_known(body, itype, rows)
+    return rows
 
 
-def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
+def _load_known(db: ChunkedDb, body: str, itype: str) -> None:
+    from services.scrapers.economy_common import set_known
+    set_known(body, itype, _known_rows(db, body, itype))
+
+
+def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int,
+             refetch_all: bool = False) -> int:
+    from services.scrapers import economy_common as ec
     fn = INGESTORS[(body, itype)]
     if fetch_bodies and (body, itype) in _USES_KNOWN:
         _load_known(db, body, itype)
-    if itype == "legal":
-        items = fn(limit=legal_limit)
-    else:
-        items = fn(fetch_bodies=fetch_bodies)
+    # Every ingestor reaches an item's page through economy_common.fetch_detail_dated,
+    # which skips an item this scope already holds complete (13 Oct 2026). The stored
+    # rows are read on the first item page asked for, not here: the bulk datasets
+    # (118,000 FTS rows, 97,000 ESMA instruments) read no item page at all.
+    if fetch_bodies and not refetch_all:
+        ec.set_scope(body, itype, lambda: _known_rows(db, body, itype))
+    try:
+        if itype == "legal":
+            items = fn(limit=legal_limit)
+        else:
+            items = fn(fetch_bodies=fetch_bodies)
+    finally:
+        ec.clear_scope()
     _keep_stored_type(items)
     # Dedupe within this run by the conflict target so a single multi-row INSERT
     # never tries to upsert the same (body_code, item_type, public_url) twice
@@ -810,6 +825,8 @@ def main() -> None:
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
     ap.add_argument("--no-bodies", action="store_true", help="skip detail-page body fetch (faster)")
+    ap.add_argument("--refetch-all", action="store_true",
+                    help="fetch every listed item's page again, including the ones stored complete")
     ap.add_argument("--legal-limit", type=int, default=200)
     args = ap.parse_args()
 
@@ -831,7 +848,7 @@ def main() -> None:
         for body, itype in targets:
             try:
                 total += _run_one(db, body, itype, fetch_bodies=not args.no_bodies,
-                                  legal_limit=args.legal_limit)
+                                  legal_limit=args.legal_limit, refetch_all=args.refetch_all)
             except Exception as exc:  # one resource failing must not abort the rest
                 db.rollback()
                 print(f"[ERROR] {body}/{itype}: {exc}", flush=True)

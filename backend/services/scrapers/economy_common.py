@@ -97,6 +97,48 @@ def needs_fetch(body_code: str, item_type: str, url: str, *, want_body: bool = T
     return now - dd < timedelta(days=REFETCH_RECENT_DAYS)
 
 
+# The (body_code, item_type) sync_economy is running, and how to read what is stored for
+# it. While set, fetch_detail_dated answers "known" for an item stored complete, without
+# touching the network. None everywhere else, so every other caller fetches as before.
+#
+# Why here and not in each ingestor (13 Oct 2026): the 6 Oct skip was written into three
+# scrapers. The other 43 kept re-fetching every item they listed on every run, and timed
+# out whenever a source was slow: 10 of the 54 "Deploy Crashed" mails of 6-13 October.
+# ESMA lists about 140 publication PDFs and had no new one in a week; reading them all
+# again ran past 16 minutes against a 10-minute limit. Every ingestor reaches an item's
+# page through this one function, so the rule lives in it.
+_SCOPE: tuple[str, str, object] | None = None
+
+
+def set_scope(body_code: str, item_type: str, loader=None) -> None:
+    """`loader()` returns set_known's rows for this scope. It is called once, on the first
+    item page asked for, so an ingestor that reads no item page never pays for it."""
+    global _SCOPE
+    _SCOPE = (body_code, item_type, loader)
+
+
+def clear_scope() -> None:
+    global _SCOPE
+    _SCOPE = None
+
+
+def stored_complete(url: str) -> bool:
+    """True when the running sync already holds this item complete and it is not recent."""
+    if _SCOPE is None:
+        return False
+    body_code, item_type, loader = _SCOPE
+    if (body_code, item_type) not in _KNOWN:
+        rows = []
+        if loader is not None:
+            try:
+                rows = loader() or []
+            except Exception as exc:  # noqa: BLE001 -- unknown means fetch, as before
+                print(f"[WARN] {body_code}/{item_type}: stored items unreadable "
+                      f"({type(exc).__name__}); fetching every item", flush=True)
+        set_known(body_code, item_type, rows)
+    return not needs_fetch(body_code, item_type, url)
+
+
 _CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")  # C0 controls except \t \n \r
 
 
@@ -240,7 +282,13 @@ def fetch_detail_dated(url: str):
     two carriers the EIB and EU-Rail publish their dates in -- are gone by the time
     body_html exists. Extracting the date here means one request, not two, on
     scrapers that already fetch every item page.
+
+    Inside a sync, an item already stored complete is not fetched: the answer is
+    (None, None, "known", None, None), and the upsert keeps what is stored (it never
+    shortens a body, never nulls a date, and source_kind follows the body it kept).
     """
+    if stored_complete(url):
+        return None, None, "known", None, None
     r = http_get(url)
     if r is None:
         return None, None, "unreachable", None, None
