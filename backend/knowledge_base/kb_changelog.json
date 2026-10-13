@@ -4,6 +4,16 @@
     {
       "date": "2026-10-13",
       "action": "updated",
+      "guide": "safe_rearm_europe",
+      "title": "SAFE (Security Action for Europe)",
+      "summary": "Commission proposal COM(2026) 561 to reduce Italy's SAFE loan to EUR 8,000,958,000 (amended request of 19 August); Council adoption pending.",
+      "refs": [
+        "2026/0321(NLE)"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
       "guide": "european_pillar_social_rights_action_plan",
       "title": "European Pillar of Social Rights",
       "summary": "Pointer to the 2026 Employment and Social Outlook and the Quality Jobs Act announcement.",

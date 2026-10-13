@@ -18512,6 +18512,21 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'armas quimicas': ['eu_chemical_weapons_sanctions_regime'],
     'armi chimiche': ['eu_chemical_weapons_sanctions_regime'],
     'chemical weapons': ['eu_chemical_weapons_sanctions_regime'],
+    # --- 13 Oct 2026 (/news): accession state of play, chemical weapons regime, XXXLutz/Porta, job quality, political ads ---
+    "italy's safe": ['safe_rearm_europe'],
+    'italy safe loan': ['safe_rearm_europe'],
+    'safe loan': ['safe_rearm_europe'],
+    'prêt safe': ['safe_rearm_europe'],
+    'pret safe': ['safe_rearm_europe'],
+    'lening safe': ['safe_rearm_europe'],
+    'safe-lening': ['safe_rearm_europe'],
+    'préstamo safe': ['safe_rearm_europe'],
+    'prestamo safe': ['safe_rearm_europe'],
+    'préstec safe': ['safe_rearm_europe'],
+    'prestec safe': ['safe_rearm_europe'],
+    'prestito safe': ['safe_rearm_europe'],
+    '2026/0321': ['safe_rearm_europe'],
+    'com(2026) 561': ['safe_rearm_europe'],
 }
 
 
