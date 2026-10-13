@@ -20,7 +20,8 @@ document the opinion's text.
 A corrigendum (32011L0089R(02)) is its own document, with its own date, and exists only in the
 languages it corrects: 274 of the 293 held on 13 Oct 2026 have no English version, 236 exist in one
 language. Its title and text are stored in English where there is one, otherwise in the first of
-French, Spanish, Italian, Dutch, German, then any; `languages` lists that language first.
+French, Spanish, Italian, Dutch, German, then any; `languages` lists that language first. The page
+is stored only if it names the act it corrects or carries the title Cellar gives the document.
 
 Left alone, and counted: a row still filed under the act its corrigendum corrects (title
 "CELEX:32011L0089R(02)", reference 32011L0089). refile_register_documents.py refiles those.
@@ -137,7 +138,7 @@ SET_TITLE = text(f"""
 # The feed reader writes {{EN}} on every row; a corrigendum exists in the languages it corrects.
 NO_LANGUAGES = text(f"""
     SELECT id, celex, languages FROM commission_documents
-     WHERE celex ~ '^3.*R\\([0-9]{{2}}\\)$' AND coalesce(languages::text, '{{}}') IN ('{{}}', '{{EN}}')
+     WHERE celex ~ 'R\\([0-9]{{2}}\\)$' AND coalesce(languages::text, '{{}}') IN ('{{}}', '{{EN}}')
        AND {_scope()}""")
 SET_LANGUAGES = text("""
     UPDATE commission_documents SET languages = :v, last_updated = now()
@@ -173,8 +174,9 @@ def stated_celex(reference: str | None, title: str | None, link: str | None) -> 
 
 
 def is_corrigendum(celex: str | None) -> bool:
-    """A corrigendum to an act of the Official Journal: sector 3 with an R(NN) suffix."""
-    return bool(celex) and celex[0] == "3" and bool(re.search(r"R\([0-9]{2}\)$", celex))
+    """A corrigendum, or a later version of a Commission document: an R(NN) suffix. It exists only in
+    the languages it concerns (52025PC0435R(01) corrects the Latvian text of a proposal)."""
+    return bool(celex) and bool(re.search(r"R\([0-9]{2}\)$", celex))
 
 
 def pick_language(titles: dict[str, str] | None) -> str | None:
@@ -209,6 +211,17 @@ def names_its_act(celex: str, txt: str) -> bool:
     year, num = m.group(2), str(int(m.group(4)))
     flat = re.sub(r"\s+", "", txt or "")
     return any(f"{a}/{b}" in flat for a, b in ((year, num), (num, year), (year[2:], num), (num, year[2:])))
+
+
+def _words(s: str | None) -> str:
+    return " ".join(re.sub(r"[\W_]+", " ", (s or "").casefold()).split())
+
+
+def carries_title(title: str | None, txt: str) -> bool:
+    """The page prints the title Cellar gives the document. For a document with no number to name:
+    32011D0402(01)R(02) corrects Parliament's rules on smoking, published under a date, not a number."""
+    key = _words(title)[:40]
+    return len(key) >= MIN_TITLE and key in _words(txt)
 
 
 def answered(got) -> bool:
@@ -267,7 +280,7 @@ def facts_for(celexes: list[str], ctx) -> tuple[dict[str, dict], int]:
     return found, reached
 
 
-def _fetch_in(celex: str, lang: str, ctx) -> tuple[str, str] | str:
+def _fetch_in(celex: str, lang: str, ctx, title: str | None = None) -> tuple[str, str] | str:
     """A corrigendum's page in one language, or a marker saying why not."""
     try:
         req = urllib.request.Request(_laws._cellar_url(celex), headers={
@@ -281,7 +294,7 @@ def _fetch_in(celex: str, lang: str, ctx) -> tuple[str, str] | str:
     txt = _laws._strip(raw)
     if len(txt) < MIN_CORRIGENDUM:
         return f"too_short_{len(txt)}"
-    if not names_its_act(celex, txt):
+    if not (names_its_act(celex, txt) or carries_title(title, txt)):
         return "names_another_act"
     return _laws._clean_html(raw, txt), txt
 
@@ -292,7 +305,11 @@ def text_for(celex: str, titles: dict[str, str] | None, ctx) -> tuple[str, str] 
     lang = pick_language(titles)
     if lang is None:
         return "no_language"
-    return _fetch_in(celex, lang, ctx)
+    got = _fetch_in(celex, lang, ctx, (titles or {}).get(lang))
+    if isinstance(got, str) and lang == "ENG":
+        whole = _laws._fetch(celex, ctx)  # a later version of a proposal is a PDF, like the proposal
+        return got if isinstance(whole, str) else whole
+    return got
 
 
 def complete(engine, ctx, since: dt.datetime, apply: bool, limit: int) -> tuple[int, int, dict]:

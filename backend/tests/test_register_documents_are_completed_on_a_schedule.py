@@ -72,7 +72,7 @@ def _cellar(monkeypatch, holds=None, text=TEXT, in_language=None):
     monkeypatch.setattr(job.time, "sleep", lambda _s: None)
     monkeypatch.setattr(job, "_facts", facts)
     monkeypatch.setattr(job._laws, "_fetch", lambda celex, ctx: text)
-    monkeypatch.setattr(job, "_fetch_in", lambda celex, lang, ctx: (in_language or {}).get(lang, "http_404"))
+    monkeypatch.setattr(job, "_fetch_in", lambda celex, lang, ctx, title=None: (in_language or {}).get(lang, "http_404"))
     return asked
 
 
@@ -227,8 +227,9 @@ def test_a_corrigendum_is_read_in_a_language_it_exists_in():
     assert job.one_title({"RON": "Rectificare la Directiva 2011/89/UE a Parlamentului European"}) \
         == "Rectificare la Directiva 2011/89/UE a Parlamentului European"
     assert job.is_corrigendum("32011L0089R(02)") and job.is_corrigendum("32011D0402(01)R(02)")
-    # A proposal's later version is a full English document, read like any other.
-    assert not job.is_corrigendum("52024SC0029R(02)") and not job.is_corrigendum("32011L0089")
+    # A proposal's later version too: 52025PC0435R(01) corrects the Latvian text only.
+    assert job.is_corrigendum("52025PC0435R(01)") and job.is_corrigendum("52024SC0029R(02)")
+    assert not job.is_corrigendum("32011L0089") and not job.is_corrigendum("52026SC0050(01)")
 
 
 def test_a_corrigendum_gets_its_own_date_text_title_and_languages(monkeypatch):
@@ -256,6 +257,12 @@ def test_a_page_about_another_act_is_not_stored_as_the_corrigendum(monkeypatch):
     assert job.names_its_act("32011L0089R(02)", "Rectificare la Directiva 2011/ 89/UE")
     assert not job.names_its_act("32011L0089R(02)", "Corrigendum to Directive (EU) 2024/2841")
     assert not job.names_its_act("not a celex", "2011/89")
+    # A document published under a date has no number to name: its page carries its own title.
+    irish = "Rialacha maidir leis an gCosc ar Chaitheamh Tobac ar\xa0Áitribh Pharlaimint na\xa0hEorpa\xa0— Cinneadh ón mBiúró"
+    page = "Iris Oifigiúil an Aontais Eorpaigh GA Sraith C 15.4.2026 RIALACHA MAIDIR LEIS AN GCOSC AR CHAITHEAMH TOBAC AR ÁITRIBH PHARLAIMINT NA HEORPA Cinneadh"
+    assert not job.names_its_act("32011D0402(01)R(02)", page) and job.carries_title(irish, page)
+    assert not job.carries_title(irish, "Corrigendum to Directive (EU) 2024/2841")
+    assert not job.carries_title("Corrigendum", "Corrigendum to Directive") and not job.carries_title(None, page)
 
     class _Page:
         def __init__(self, body):
@@ -290,6 +297,15 @@ def test_a_document_cellar_lists_in_no_language_is_not_fetched(monkeypatch):
     assert job.text_for("32026D2285", None, None) == TEXT  # an act is read in English, as before
 
 
+def test_a_later_version_in_english_is_read_as_the_pdf_it_is(monkeypatch):
+    # SWD(2024) 29 final/3 has no web page: Cellar answers 404, then serves the PDF.
+    _cellar(monkeypatch, holds={})
+    assert job.text_for("52024SC0029R(02)", {"ENG": "EVALUATION Accompanying the document REPORT"}, None) == TEXT
+    # One that exists in Latvian only is never asked for in English.
+    monkeypatch.setattr(job._laws, "_fetch", lambda celex, ctx: (_ for _ in ()).throw(AssertionError("asked in English")))
+    assert job.text_for("52025PC0435R(01)", {"LAV": "Priekšlikums EIROPAS PARLAMENTA UN PADOMES REGULA"}, None) == "http_404"
+
+
 def test_a_row_still_filed_under_the_act_it_corrects_is_left_alone():
     # "CELEX:32011L0089R(02)" stored under 32011L0089: that act's 2011 date and text are not its own.
     for stmt in (job.NO_CELEX, job.NO_DATE, job.NO_TEXT, job.FROM_LAWS, job.LAWS_HAVE, job.NO_TITLE,
@@ -317,4 +333,4 @@ def test_only_an_empty_cell_is_written():
     assert not re.search(job.PLACEHOLDER, "COMMISSION STAFF WORKING DOCUMENT Evaluation")
     # Languages: only the feed reader's default is replaced, and only on a corrigendum.
     assert "IN ('{}', '{EN}')" in str(job.SET_LANGUAGES)
-    assert "celex ~ '^3.*R\\([0-9]{2}\\)$'" in str(job.NO_LANGUAGES)
+    assert "celex ~ 'R\\([0-9]{2}\\)$'" in str(job.NO_LANGUAGES)
