@@ -164,3 +164,63 @@ class TestBerecOpenConsultationDeadline:
     def test_unreadable_page_stores_no_deadline_and_does_not_crash(self, monkeypatch):
         items, _ = self._run(monkeypatch, None)
         assert items["draft-work-programme-2027"].document_date is None
+
+
+class TestSrbConsultationsAreConsultations:
+    """13 Oct 2026: 8 of the 11 SRB 'consultation' rows were lists, overviews, PDFs or the
+    SRB's response to someone else's consultation, and none carried a deadline."""
+
+    TITLES = {
+        "SRB publishes its response to Commission consultation on Markets in Crypto-Assets Regulation (MiCA)": False,
+        "SRB publishes the list of consultations and simplifies its requests to the industry from 2027": False,
+        "List of consultation requests for 2027": False,
+        "List of SRB Consultations in 2025": False,
+        "Single Resolution Board publishes the list of consultations and requests to the industry for 2025": False,
+        "2025 List of consultations and requests to the industry": False,
+        "Consultations and requests to industry for 2024 An overview of public consultations that the SRB planned over the course": False,
+        "SRB launches its consultation on updated operational guidance on liquidity and funding in resolution": True,
+        "SRB opens public consultation on resolvability self-assessment": True,
+        # a real consultation may mention a list or a response: only the shapes above are lists
+        "SRB launches a consultation on the list of eligible liabilities": True,
+        "SRB opens consultation on its approach, in response to the banking sector": True,
+    }
+
+    def test_titles_seen_on_13_oct_2026(self):
+        from services.scrapers.agency_consultations import srb_is_consultation
+        got = {t: srb_is_consultation(t, "https://www.srb.europa.eu/en/content/x") for t in self.TITLES}
+        assert got == self.TITLES
+
+    def test_a_pdf_is_never_a_consultation(self):
+        from services.scrapers.agency_consultations import srb_is_consultation
+        assert not srb_is_consultation("SRB consultation on something real", "https://www.srb.europa.eu/system/files/a.pdf")
+
+    def _run(self, monkeypatch, pages):
+        from services.scrapers import agency_consultations as ac
+        listing = "".join(f'<a href="{u}">{t}</a>' for u, t in pages["links"])
+
+        def fake_fetch(url, *a, **k):
+            if url.endswith("/en/content/consultations-and-requests-industry"):
+                return listing
+            if url not in pages:
+                raise RuntimeError("page unreachable")
+            return pages[url]
+
+        monkeypatch.setattr(ac, "_fetch", fake_fetch)
+        return {it.public_url.rsplit("/", 1)[-1]: it for it in ac.ingest_srb_consultations()}
+
+    def test_dates_come_from_the_consultation_page_and_lists_are_dropped(self, monkeypatch):
+        base = "https://www.srb.europa.eu/en/content/"
+        pages = {
+            "links": [("/en/content/launch", "SRB launches its consultation on liquidity"),
+                      ("/en/content/opens", "SRB opens public consultation on self-assessment"),
+                      ("/en/content/lst", "List of SRB Consultations in 2025"),
+                      ("/en/content/unread", "SRB launches its consultation on an unread page")],
+            base + "launch": "<main>Press releases | Monday, 11 May 2026 The consultation will run until 6 July 2026. text</main>",
+            base + "opens": "<main>The consultation will run from 3 December 2024 to 7 February 2025. text Related news The consultation will run until 1 January 2030.</main>",
+        }
+        items = self._run(monkeypatch, pages)
+        assert set(items) == {"launch", "opens", "unread"}
+        assert items["launch"].document_date.date() == date(2026, 7, 6)
+        assert items["opens"].document_date.date() == date(2025, 2, 7)       # not the 'Related news' date
+        assert "Start date: 2024-12-03" in items["opens"].body_txt
+        assert items["unread"].document_date is None                          # never guessed

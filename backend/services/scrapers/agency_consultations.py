@@ -394,6 +394,44 @@ _SRB_NAV = {"engagement and consultations", "public consultations",
             "consultations and requests to industry"}
 
 
+# The word "consultation" is in far more SRB titles than there are consultations. On
+# 13 Oct 2026 the three newest rows of the SRB consultation list (and eight of its eleven)
+# were not consultations: the SRB's RESPONSE to a Commission consultation, the lists of
+# consultation requests it publishes each year (a press release, a page and a PDF per
+# year) and the overview of a past year's plan. Each was stored closed with no end date,
+# which read as a consultation we failed to date. A consultation's dates are on its own
+# page, in the sentence "The consultation will run [from X] until|to Y".
+_SRB_NOT_A_CONSULTATION = re.compile(
+    r"^(?:\d{4}\s+)?list of\b|\bpublishes (?:the |its )?(?:list of|response to)\b"
+    r"|\brequests to (?:the )?industry for \d{4}\b", re.I)
+_SRB_DATE = r"(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})"
+_SRB_RUN = re.compile(r"consultation will run\s+(?:from\s+" + _SRB_DATE + r"\s+)?(?:to|until)\s+" + _SRB_DATE)
+
+
+def srb_is_consultation(title: str, url: str) -> bool:
+    """False for an SRB list, overview, PDF or response that merely mentions consultations."""
+    if (url or "").lower().split("?")[0].endswith(".pdf"):
+        return False
+    return not _SRB_NOT_A_CONSULTATION.search(title or "")
+
+
+def srb_page_dates(url: str):
+    """(start, end) the SRB prints on a consultation's own page, each None when absent.
+
+    None for both when the page cannot be read or has no 'will run' sentence: an unread
+    deadline is never guessed. Only the page's own text counts (everything from 'Related
+    news' on belongs to other items)."""
+    try:
+        page = _txt(_fetch(url))
+    except Exception:
+        return None, None
+    page = page.split("Related news")[0]
+    m = _SRB_RUN.search(page)
+    if not m:
+        return None, None
+    return (_parse_date(m.group(1)) if m.group(1) else None), _parse_date(m.group(2))
+
+
 def ingest_srb_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
     html = _fetch(_SRB + "/en/content/consultations-and-requests-industry")
     now = datetime.now(timezone.utc)
@@ -404,10 +442,12 @@ def ingest_srb_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
         if "consultation" not in low or len(title) < 18 or low in _SRB_NAV:
             continue
         url = href if href.startswith("http") else _SRB + href
-        if url in out:
+        if url in out or not srb_is_consultation(title, url):
             continue
+        start, deadline = srb_page_dates(url)
         out[url] = _build(body_code="srb", title=title, url=url, status="",
-                          deadline=None, start=None, now=now, source_kind="srb_consultations")
+                          deadline=deadline, start=start, now=now,
+                          source_kind="srb_consultations", strict_deadline=True)
     return list(out.values())
 
 
