@@ -6,6 +6,8 @@
 - **Why Brubru cares**: ELI is the **stable, citable link** Brubru should emit instead of `eur-lex.europa.eu/legal-content/...` URLs. It dereferences to the act on EUR-Lex, survives the Official Journal's act-by-act change, and (without `/oj`) returns the latest **consolidated** version.
 - **Relationship to CELEX**: every act has both. CELEX (`32016R0679`) is the Publications-Office catalogue key; ELI is the dereferenceable URI. A single Cellar SPARQL query returns the ELI for any CELEX (`cdm:resource_legal_eli`). See `celex_number_format.md` and `finding_and_citing_eu_law.md`.
 - **Source spec**: https://eur-lex.europa.eu/eli-register/about.html (Publications Office); deployed voluntarily across EU + national publishers.
+- **Four pillars** (ELI is built on these, which can be adopted together or one by one): **1 identification** (a URI), **2 description** (a metadata ontology following FRBR), **3 publication** (the metadata embedded in the page as RDFa or JSON-LD), **4 synchronisation** (an ELI sitemap and an Atom feed so others can fetch every identifier and be told about new ones). Older documents number them I to IV.
+- **Sources read in full on 13 Oct 2026**: EUR-Lex "What is ELI?" (last updated 27 Jan 2026) https://eur-lex.europa.eu/eli-register/what_is_eli.html and the EU Vocabularies ELI page https://op.europa.eu/en/web/eu-vocabularies/eli.
 
 ## The URI structure
 ```
@@ -37,6 +39,26 @@ ELI extends to parts of an act: `https://eur-lex.europa.eu/eli/reg/2019/1241/art
 | Water Framework Directive 2000/60/EC | `http://data.europa.eu/eli/dir/2000/60/oj` |
 | AI Act — Regulation (EU) 2024/1689 | `http://data.europa.eu/eli/reg/2024/1689/oj` |
 | Decision 2009/496/EC (latest consolidated) | `http://data.europa.eu/eli/dec/2009/496` |
+
+## The four pillars in detail
+1. **Identification**: every legal text gets a URI built from recommended template components (type, year, number, date, language, format...) that each publisher may arrange in the order it prefers. The URIs defined by the national official journals and by the Publications Office (the "ELI publishers") are global web identifiers, readable by humans and machines. On EUR-Lex the components are type, year, number and `/oj`.
+2. **Description**: the **ELI ontology** (OWL) is a common data model for legislation metadata (type of act, date of adoption, jurisdiction, relations to other acts). It follows the **FRBR** principles (work, expression, manifestation). The reference files are the OWL file, a table of metadata elements, model diagrams, an alignment with the **schema.org** legal extension (OWL and XLSX) and release notes; all versions are on EU Vocabularies.
+3. **Publication**: the metadata must be encoded in **RDFa** (W3C Recommendation of 14 October 2008) or **JSON-LD**. The EUR-Lex page names JSON-LD 1.1 (W3C Recommendation of 16 July 2020); the older EU Vocabularies page still names JSON-LD 1.0 (2014). Publishers may offer further serialisations. Because the metadata sits in the HTML page, a consumer can extract it from the page itself.
+4. **Synchronisation**: a protocol in which each publisher provides an **ELI sitemap** (the list of all identifiers) and an **ELI Atom feed** (new identifiers), so users keep their data up to date and a central graph of ELI data from several countries can be built. The specification is "ELI Pillar 4".
+
+Implementing all four, even gradually, is what gives ELI its full value.
+
+## Extensions and tools
+- **ELI-DL** (2021-2022): ELI for draft legislation, to follow legislative initiatives across the EU.
+- **ELI-I (ELI-Impact)**: a data model for the impact of legislative acts: how an amendment changes the original text or the latest consolidated version, the analysis of that impact, and impacts from other sources such as court decisions.
+- **schema.org**: an ELI extension to the schema.org vocabulary so search engines can process legislation.
+- **ELI/XML**: an XSD encoding of ELI metadata with transformations to RDF/XML, RDFa header or HTML+RDFa; not a dissemination format.
+- **Tools** (Publications Office): the **ELI Validator** (checks published ELI metadata and produces a report), the **ELI annotation tool** (free, open source), the **Pillar 4 helper** (command-line Java application that generates sitemaps and RSS feeds).
+- **N-Lex** has an ELI-based search across national legislation websites.
+- The Publications Office aligns the CDM ontology used by Cellar with ELI and ELI-DL for the EU Law Tracker (formerly the Joint Legislative Portal), so Cellar can be fed from the European Parliament Open Data Portal.
+
+## ELI in the Brubru corpus
+Each OJ publication folder of the LEG_2026-10 export carries, in its `tree_non_inferred.rdf`, an `eli/<type>/<year>/<number>/oj` URI (as `owl:sameAs`), its own CELEX and its EuroVoc concept URIs, so CELEX, ELI and EuroVoc can be joined from the metadata alone, without a network call.
 
 ## How Brubru should use ELI
 - **In chat citations and the daily brief**, link the ELI rather than a `legal-content` URL — it is stable and won't 404 behind the WAF.

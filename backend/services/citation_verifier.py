@@ -33,9 +33,11 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Optional
+from urllib.parse import quote
 
 import aiohttp
 from sqlalchemy.orm import Session
+from yarl import URL
 
 from models.citation_verification import CitationVerification
 
@@ -63,9 +65,26 @@ TTL_OK = timedelta(days=30)
 TTL_BROKEN = timedelta(hours=24)
 TTL_UNKNOWN = timedelta(hours=1)
 
-# CELEX: sector(1) + year(4) + type(1-2 letters) + seq(4)
-# Examples: 32024R1689, 52021PC0206, 32016L0680
-CELEX_RE = re.compile(r"\b[1-9]\d{4}[A-Z]{1,2}\d{4}\b")
+# CELEX: sector(1) + year(4) + descriptor(1-3 letters) + number(4-6 digits),
+# plus the suffixes the Publications Office adds (checked against Cellar's own
+# identifiers on 13 Oct 2026, a few hundred per sector):
+#   (nn)        a further OJ publication of the same work    32014H0729(21)
+#   R(nn)       corrigendum (every sector but 0 and 7)       32000R1602R(05)
+#   -YYYYMMDD   consolidated text, sector 0                  02003D0565-20110614
+#   _XXX        sector 6 summary/information notice          62023CJ0294_SUM
+# Sector 7 (national transposition) is country code + `_` + 5-9 digits, sector E
+# (EFTA) has a 4-digit number, sector C (OJ C notices) is `C/YYYY/NNNNN`.
+# Sector 1 (treaties) is deliberately NOT matched: its identifiers have no fixed
+# shape (12005SA051, 12008M/PRO/07). Examples: 32024R1689, 52021PC0206, 32016L0680.
+_Y = r"\d{4}"  # any year: a fabricated 2099 must still be extracted and flagged
+CELEX_RE = re.compile(
+    r"(?<!\w)(?:"
+    rf"[02-689]{_Y}[A-Z]{{1,3}}\d{{4,6}}(?:\(\d{{2}}\)){{0,2}}(?:R\(\d{{2}}\)){{0,2}}(?:_[A-Z]{{3}})?(?:-\d{{8}})?"
+    rf"|7{_Y}[A-Z]\d{{4}}[A-Z]{{3}}_\d{{5,9}}"
+    rf"|E{_Y}[A-Z]\d{{4,5}}(?:\(\d{{2}}\)){{0,2}}(?:R\(\d{{2}}\)){{0,2}}"
+    rf"|C/{_Y}/\d{{5}}"
+    r")(?!\w)"
+)
 
 # COM: COM(YYYY) NNN, COM (YYYY) NNN, COM(YYYY)NNN, optional " final"
 COM_RE = re.compile(
@@ -260,21 +279,27 @@ def _cache_write(db: Optional[Session], result: VerifyResult) -> None:
 def _url_for(ref: str, kind: str) -> str:
     if kind == "oeil":
         return f"{OEIL_BASE}?reference={ref}"
-    # celex and com_as_celex both resolve via Cellar
-    return f"{CELLAR_BASE}/{ref}"
+    # celex and com_as_celex both resolve via Cellar. Percent-encode the ref:
+    # a corrigendum `...R(02)` answers 404 with raw parentheses and 303 with
+    # `%28`/`%29`, so an unencoded URL reads a real act as broken.
+    return f"{CELLAR_BASE}/{quote(ref, safe='')}"
 
 
 async def _head_or_get(session: aiohttp.ClientSession, url: str, *, accept: str,
-                       accept_language: Optional[str] = None) -> tuple[int, Optional[str]]:
+                       accept_language: Optional[str] = None,
+                       follow: bool = True) -> tuple[int, Optional[str]]:
     """
     HEAD first; on 405 fall back to GET with a Range header for a cheap probe.
     Returns (http_status, resolved_url or None).
     """
+    # encoded=True: yarl otherwise turns %28/%29 back into raw parentheses, which
+    # Cellar answers 404 for a real corrigendum `...R(02)`.
+    url = URL(url, encoded=True)
     headers = {"User-Agent": BROWSER_UA, "Accept": accept}
     if accept_language:
         headers["Accept-Language"] = accept_language
     try:
-        async with session.head(url, headers=headers, allow_redirects=True,
+        async with session.head(url, headers=headers, allow_redirects=follow,
                                 timeout=aiohttp.ClientTimeout(total=HEAD_TIMEOUT_S)) as resp:
             if resp.status != 405:
                 return resp.status, str(resp.url) if resp.status == 200 else None
@@ -284,7 +309,7 @@ async def _head_or_get(session: aiohttp.ClientSession, url: str, *, accept: str,
     # Fallback: GET with Range
     range_headers = dict(headers)
     range_headers["Range"] = "bytes=0-1023"
-    async with session.get(url, headers=range_headers, allow_redirects=True,
+    async with session.get(url, headers=range_headers, allow_redirects=follow,
                            timeout=aiohttp.ClientTimeout(total=HEAD_TIMEOUT_S)) as resp:
         # Drain a tiny bit to free the connection
         _ = await resp.content.read(1024)
@@ -389,6 +414,25 @@ async def _verify_one_ref(session: aiohttp.ClientSession, match: RefMatch) -> Ve
         logger.warning(f"verify_one_ref attempt1 unexpected error for {match.ref}: {e}")
 
     status = _classify_status(http_status)
+
+    # --- Attempt 1b: existence without an XHTML manifestation ---
+    # Asking for XHTML 404s on every act that has no XHTML (most pre-2000 acts,
+    # many consolidated texts, sectors 7-9): 13 Oct 2026, 3 of 4 real sector-3
+    # numbers of 1986-1997 read "broken". Cellar answers a wildcard Accept with
+    # 303 (exists) or 406 (exists, nothing to negotiate) and 404 only for an
+    # identifier it does not hold (impossible-number controls, 9 sectors, all 404).
+    if status == "broken" and match.kind in ("celex", "com_as_celex"):
+        try:
+            any_status, _ = await _head_or_get(session, url, accept="*/*",
+                                               accept_language="en", follow=False)
+            if any_status in (300, 301, 302, 303, 307, 308, 406):
+                status = "ok"
+                http_status = any_status
+                resolved = None  # no XHTML manifestation to point a machine at
+        except (aiohttp.ClientError, asyncio.TimeoutError):
+            pass  # keep the Cellar verdict
+        except Exception as e:
+            logger.warning(f"verify_one_ref attempt1b unexpected error for {match.ref}: {e}")
 
     # --- Attempt 2: EUR-Lex HEAD fallback for CELEX-shape refs only ---
     if status != "ok" and match.kind in ("celex", "com_as_celex"):

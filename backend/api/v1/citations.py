@@ -283,7 +283,7 @@ def parse_document_date_from_body(body_txt: Optional[str]) -> Optional[_date]:
     if not body_txt:
         return None
     # Limit search to first 4 KB — date is always in the preamble
-    head = body_text[:4096]
+    head = body_txt[:4096]
     m = _BODY_DATE_PATTERN.search(head)
     if not m:
         return None

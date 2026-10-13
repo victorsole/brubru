@@ -1,0 +1,85 @@
+{
+ "_about": "13 Oct 2026: natural questions that must reach the CELEX, ELI and EuroVoc guides after their rewrite. One question per language per intent.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "celex_number_format#what_is": [
+   "What is a CELEX number and how is it built?",
+   "Qu'est-ce qu'un numéro CELEX et comment est-il construit ?",
+   "Wat is een CELEX-nummer en hoe is het opgebouwd?",
+   "¿Qué es un número CELEX y cómo se construye?",
+   "Què és un número CELEX i com es construeix?",
+   "Che cos'è un numero CELEX e come è costruito?"
+  ],
+  "celex_number_format#corrigendum": [
+   "What does R(01) at the end of a CELEX number mean?",
+   "Que signifie R(01) à la fin d'un numéro CELEX ?",
+   "Wat betekent R(01) aan het einde van een CELEX-nummer?",
+   "¿Qué significa R(01) al final de un número CELEX?",
+   "Què significa R(01) al final d'un número CELEX?",
+   "Cosa significa R(01) alla fine di un numero CELEX?"
+  ],
+  "celex_number_format#consolidated": [
+   "What is the CELEX number of the consolidated version of the GDPR?",
+   "Quel est le numéro CELEX de la version consolidée du RGPD ?",
+   "Wat is het CELEX-nummer van de geconsolideerde versie van de AVG?",
+   "¿Cuál es el número CELEX de la versión consolidada del RGPD?",
+   "Quin és el número CELEX de la versió consolidada del RGPD?",
+   "Qual è il numero CELEX della versione consolidata del GDPR?"
+  ],
+  "celex_number_format#sectors": [
+   "What do the first digits of a CELEX number stand for, for example 3 or 5 or 6?",
+   "Que représente le premier chiffre d'un numéro CELEX, par exemple 3, 5 ou 6 ?",
+   "Waar staat het eerste cijfer van een CELEX-nummer voor, bijvoorbeeld 3, 5 of 6?",
+   "¿Qué significa el primer dígito de un número CELEX, por ejemplo 3, 5 o 6?",
+   "Què significa el primer dígit d'un número CELEX, per exemple 3, 5 o 6?",
+   "Cosa significa la prima cifra di un numero CELEX, ad esempio 3, 5 o 6?"
+  ],
+  "eli_european_legislation_identifier#what_is": [
+   "What is the European Legislation Identifier (ELI)?",
+   "Qu'est-ce que l'identifiant européen de la législation (ELI) ?",
+   "Wat is de Europese wetgevingsidentificator (ELI)?",
+   "¿Qué es el identificador europeo de legislación (ELI)?",
+   "Què és l'identificador europeu de legislació (ELI)?",
+   "Che cos'è l'identificatore europeo della legislazione (ELI)?"
+  ],
+  "eli_european_legislation_identifier#pillars": [
+   "What are the four pillars of ELI?",
+   "Quels sont les quatre piliers de l'ELI ?",
+   "Wat zijn de vier pijlers van ELI?",
+   "¿Cuáles son los cuatro pilares del ELI?",
+   "Quins són els quatre pilars de l'ELI?",
+   "Quali sono i quattro pilastri dell'ELI?"
+  ],
+  "eurovoc_thesaurus#what_is": [
+   "What is EuroVoc and how many languages does it cover?",
+   "Qu'est-ce qu'EuroVoc et combien de langues couvre-t-il ?",
+   "Wat is EuroVoc en hoeveel talen omvat het?",
+   "¿Qué es EuroVoc y cuántos idiomas cubre?",
+   "Què és EuroVoc i quantes llengües cobreix?",
+   "Che cos'è EuroVoc e quante lingue copre?"
+  ],
+  "eurovoc_thesaurus#concept_id": [
+   "What is the EuroVoc concept id for data protection?",
+   "Quel est l'identifiant EuroVoc du concept protection des données ?",
+   "Wat is de EuroVoc-id van het begrip gegevensbescherming?",
+   "¿Cuál es el identificador EuroVoc del concepto protección de datos?",
+   "Quin és l'identificador EuroVoc del concepte protecció de dades?",
+   "Qual è l'identificativo EuroVoc del concetto protezione dei dati?"
+  ]
+ },
+ "negatives": [
+  "What is the European Case Law Identifier (ECLI) of a judgment?",
+  "How does the ordinary legislative procedure work?",
+  "What does the Digital Markets Act require from gatekeepers?",
+  "Who chairs the ENVI committee?",
+  "What is the next plenary session of the Parliament?",
+  "How does registration in the Digital Product Passport registry work?"
+ ]
+}

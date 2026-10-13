@@ -107,6 +107,50 @@ class TestExtractRefs:
         assert kinds == {"celex", "com_as_celex", "oeil"}
 
 
+# Real identifiers read from Cellar's own CELEX field on 13 Oct 2026 (one or
+# more per shape class); the regex must take each whole, with no clipping.
+REAL_CELEX_SHAPES = [
+    "32024R1689", "52021PC0206", "32023D00161",          # 4- and 5-digit numbers
+    "52026XC01937", "52026M12317",                          # sector 5, 5-digit
+    "32000R1602R(05)", "52008DC0782R(01)", "42011D0050R(01)",  # corrigendum
+    "32014H0729(21)", "22009A0619(01)", "52007XC0720(01)",     # further OJ publication
+    "22009A0619(01)R(01)", "42006X1227(05)R(01)",             # both suffixes
+    "02003D0565-20110614", "02006D0771(01)-20090514",         # consolidated
+    "62012CJ0320", "62023CJ0294_SUM", "62025TO0653(01)",      # case-law
+    "72015L2366HRV_279843", "72023L1791LVA_202601970",        # national transposition
+    "82003PT1111(51)",                                        # national case-law
+    "91980E001013", "91997E002167(01)",                       # parliamentary questions
+    "E2016C0186", "E2014J0006", "E2008C0605(01)",            # EFTA
+    "C/2026/01104",                                           # OJ C notice
+]
+
+
+class TestCelexShapes:
+    @pytest.mark.parametrize("celex", REAL_CELEX_SHAPES)
+    def test_whole_identifier_is_one_ref(self, celex):
+        refs = [r.ref for r in extract_refs(f"The text cites {celex}.") if r.kind == "celex"]
+        assert refs == [celex]
+
+    def test_inside_urls(self):
+        for text in (
+            "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679&from=EN",
+            "https://publications.europa.eu/resource/celex/32016R0679",
+        ):
+            assert [r.ref for r in extract_refs(text)] == ["32016R0679"]
+
+    @pytest.mark.parametrize("text", [
+        "Regulation 2024/1689", "COM(2021) 206 final", "2024/1689(COD)",
+        "timestamp 20240315T120000", "code 12345A678", "IBAN ES9121000418450200051332",
+        "glued x32024R1689", "52021PC0206X", "version v2.0.1R3",
+    ])
+    def test_things_that_are_not_celex(self, text):
+        assert [r for r in extract_refs(text) if r.kind == "celex"] == []
+
+    def test_treaties_are_deliberately_not_matched(self):
+        # Sector 1 identifiers have no fixed shape (12005SA051, 12008M/PRO/07)
+        assert [r for r in extract_refs("Treaty 12008M/PRO/07 and 12005SA051") if r.kind == "celex"] == []
+
+
 class TestComToCelexCandidates:
     def test_pads_number(self):
         assert _com_to_celex_candidates("2024", "5") == ["52024PC0005", "52024DC0005"]
@@ -133,6 +177,12 @@ class TestUrlBuilders:
     def test_oeil_url(self):
         assert _url_for("2021/0106(COD)", "oeil") == \
             "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2021/0106(COD)"
+
+    def test_celex_url_is_percent_encoded(self):
+        # Cellar 404s `R(02)` with raw parentheses and 303s the %28/%29 form
+        assert _url_for("31962R0031R(02)", "celex") == \
+            "https://publications.europa.eu/resource/celex/31962R0031R%2802%29"
+        assert _url_for("C/2026/01104", "celex").endswith("/C%2F2026%2F01104")
 
 
 # ---------------------------------------------------------------------------
@@ -392,3 +442,60 @@ class TestVerifyOne:
         assert r.from_cache is False
         db.add.assert_called()
         db.commit.assert_called()
+
+
+# ---------------------------------------------------------------------------
+# Existence without an XHTML manifestation (13 Oct 2026)
+# ---------------------------------------------------------------------------
+@pytest.mark.asyncio
+class TestExistenceWithoutXhtml:
+    """Cellar 404s an XHTML request for an act that has no XHTML (1986-1997
+    regulations, most consolidated texts, sectors 7-9). A wildcard Accept
+    answers 303/406 for a held identifier and 404 for an unknown one."""
+
+    async def _run(self, answers):
+        from services.citation_verifier import _verify_one_ref
+        calls = []
+
+        async def fake(session, url, *, accept, accept_language=None, follow=True):
+            calls.append((accept, follow))
+            return answers.pop(0), None
+
+        match = RefMatch(ref="31997R0149", kind="celex", original_form="31997R0149")
+        with patch("services.citation_verifier._head_or_get", side_effect=fake):
+            return await _verify_one_ref(MagicMock(), match), calls
+
+    async def test_xhtml_404_but_wildcard_303_is_ok(self):
+        r, calls = await self._run([404, 303])
+        assert r.status == "ok" and r.http_status == 303
+        assert r.resolved_url is None  # nothing a machine can fetch as XHTML
+        assert calls[1] == ("*/*", False)
+
+    async def test_wildcard_406_is_ok(self):
+        r, _ = await self._run([404, 406])
+        assert r.status == "ok"
+
+    async def test_unknown_identifier_stays_broken(self):
+        r, _ = await self._run([404, 404, 404])  # xhtml, wildcard, EUR-Lex
+        assert r.status == "broken"
+
+    async def test_xhtml_200_needs_no_second_request(self):
+        r, calls = await self._run([200])
+        assert r.status == "ok" and len(calls) == 1
+
+
+class TestDocumentDateFromBody:
+    """parse_document_date_from_body read an undefined name and raised NameError
+    for every non-empty body (found 13 Oct 2026); /verify-citation then failed for
+    any CELEX that eu_laws does not hold (proposals, case-law, newest acts)."""
+
+    def test_reads_the_adoption_date(self):
+        from datetime import date
+        from api.v1.citations import parse_document_date_from_body
+        body = "REGULATION (EU) 2024/1689 OF THE EUROPEAN PARLIAMENT of 13 June 2024 laying down"
+        assert parse_document_date_from_body(body) == date(2024, 6, 13)
+
+    def test_empty_and_dateless_bodies_return_none(self):
+        from api.v1.citations import parse_document_date_from_body
+        assert parse_document_date_from_body(None) is None
+        assert parse_document_date_from_body("no preamble date here") is None
