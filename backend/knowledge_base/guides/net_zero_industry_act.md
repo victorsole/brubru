@@ -88,5 +88,5 @@ A contracting authority buying, say, rooftop solar PV within the procurement dir
 - **My EU Bubble > My Tracked Files** — track Regulation (EU) 2024/1735 to catch each new implementing act as it lands.
 
 eurovoc_concepts:
-  - http://eurovoc.europa.eu/4636   # public contract
-  - http://eurovoc.europa.eu/2916   # industrial policy
+  - http://eurovoc.europa.eu/1810   # public contract
+  - http://eurovoc.europa.eu/2507   # industrial policy

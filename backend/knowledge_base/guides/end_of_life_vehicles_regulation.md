@@ -78,5 +78,5 @@ Vehicle manufacturers and importers, dismantlers and ATFs, recyclers (especially
 - **Digital product passport family**: this is the fourteenth EU act to impose a product passport. See the DPP regime hub at `/eucanon/digital-product-passport/`
 
 eurovoc_concepts:
-  - http://eurovoc.europa.eu/2511   # waste management
-  - http://eurovoc.europa.eu/5237   # motor vehicle
+  - http://eurovoc.europa.eu/1158   # waste management
+  - http://eurovoc.europa.eu/4654   # motor vehicle

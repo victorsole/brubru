@@ -36,18 +36,20 @@ log = logging.getLogger("seed-catalog")
 BRUBRU_BASE = "https://brubru.beresol.eu"
 
 # ----------------------------------------------------------------------
-# EuroVoc themes used as dcat:theme tags. Real concept IRIs from the live
-# EuroVoc 4.23 graph (verified 2026-05-02).
+# EuroVoc themes used as dcat:theme tags. Each id was looked up by its exact
+# English label on Cellar (EuroVoc 4.24) on 13 Oct 2026; the earlier values,
+# described as verified, were other concepts (911 is Northern Europe, 8500 is
+# Brasov) and one id (c_82c4f1a7) does not exist. Keep the label beside the id.
 # ----------------------------------------------------------------------
 EUROVOC_THEMES = {
-    "law":              "http://eurovoc.europa.eu/2462",
-    "european_union":   "http://eurovoc.europa.eu/911",
-    "regulation":       "http://eurovoc.europa.eu/1646",
-    "data_protection":  "http://eurovoc.europa.eu/3028",
-    "ai":               "http://eurovoc.europa.eu/8500",
-    "translation":      "http://eurovoc.europa.eu/3911",
-    "open_data":        "http://eurovoc.europa.eu/c_82c4f1a7",
-    "official_journal": "http://eurovoc.europa.eu/233",
+    "law":              "http://eurovoc.europa.eu/525",          # EU law
+    "european_union":   "http://eurovoc.europa.eu/4060",         # European Union
+    "regulation":       "http://eurovoc.europa.eu/3102",         # regulation (EU)
+    "data_protection":  "http://eurovoc.europa.eu/5181",         # data protection
+    "ai":               "http://eurovoc.europa.eu/3030",         # artificial intelligence
+    "translation":      "http://eurovoc.europa.eu/4478",         # translation
+    "open_data":        "http://eurovoc.europa.eu/c_5ea6e5c4",   # open data
+    "official_journal": "http://eurovoc.europa.eu/3032",         # EU Official Journal
 }
 
 # CC-BY-4.0 — Brubru's default reuse policy (mirrors the EU PSI reuse policy).

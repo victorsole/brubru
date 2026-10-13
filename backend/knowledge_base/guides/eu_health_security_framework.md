@@ -13,9 +13,9 @@
 - **Treaty basis**: TFEU Articles **168** (public health) and **114** (internal market) — the EU complements, not replaces, Member State health competence.
 
 eurovoc_concepts:
-  - http://eurovoc.europa.eu/4636   # public health
-  - http://eurovoc.europa.eu/2473   # communicable disease
-  - http://eurovoc.europa.eu/1351   # health policy
+  - http://eurovoc.europa.eu/3885   # public health
+  - http://eurovoc.europa.eu/1759   # infectious disease
+  - http://eurovoc.europa.eu/2479   # health policy
 
 ## Context
 
