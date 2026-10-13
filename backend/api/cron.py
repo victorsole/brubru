@@ -559,6 +559,10 @@ async def cron_sync_hot_6h(
     # The sync above inserts metadata only. Nothing fetched the new acts' text until 7 Oct
     # 2026, so every law published after the 2 Oct backfill reached /laws with a null body.
     results["eu_laws_bodies"] = await _run_script_async("eu_laws_bodies", "scripts/fetch_eu_law_bodies.py", ["--limit", "300", "--apply"], timeout=900)
+    # commission_docs above stores a reference and a title. The CELEX, date and text were added
+    # by scripts run by hand, so 110 of the 111 documents that arrived after 5 Oct 2026 served
+    # no text. After the eu_laws text fetch, because an act's text is copied from there first.
+    results["commission_docs_complete"] = await _run_script_async("commission_docs_complete", "scripts/complete_commission_documents.py", ["--apply", "--limit", "60"], timeout=900)
     # /laws serves policy_area as the act's EuroVoc domain (migration 276): read it for new
     # acts, and re-ask acts the Publications Office had not indexed a week ago.
     results["eu_laws_eurovoc"] = await _run_script_async("eu_laws_eurovoc", "scripts/sync_eu_law_eurovoc.py", ["--limit", "600", "--apply"], timeout=600)
