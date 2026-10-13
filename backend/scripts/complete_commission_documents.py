@@ -6,17 +6,24 @@ of them no date and no link. A document arrives from the EUR-Lex feeds as a refe
 CELEX, date and text were added by scripts run by hand, last on 2 October, so every later row stayed
 as it arrived: 110 of the 111 that came after 5 October had no text.
 
-This runs the same steps on a schedule, each on what the step before it stored:
-  1. CELEX  the one the row's own reference, title or link states, once Cellar confirms it
+This runs those steps on a schedule, each on what the step before it stored:
+  1. CELEX  the one the row's own title, link or reference states, once Cellar holds it
   2. date   Cellar's work_date_document for that CELEX
   3. text   the act's text from eu_laws where it is held, otherwise from Cellar
-  4. title  Cellar's English title, where the row holds a placeholder ("SWD document 52026SC0702")
+  4. title  Cellar's title, where the row holds a placeholder ("SWD document 52026SC0702")
 
-The parsers and fetchers are the ones those scripts use, imported, so there is one of each. Only an
-empty cell is written (a placeholder title counts as empty) and nothing is derived.
+Only an empty cell is written (a placeholder title counts as empty) and nothing is derived. The CELEX
+is read whole: a suffix is part of it. 52026SC0050 is an opinion of the Regulatory Scrutiny Board and
+52026SC0050(01) the staff working document SWD(2026) 50; a CELEX rebuilt from "SWD(2026) 50" gave that
+document the opinion's text.
 
-Left alone, and counted: a row whose title is a corrigendum's CELEX ("CELEX:32011L0089R(02)"). It is
-filed under the act it corrects, so that act's date and text are not its own.
+A corrigendum (32011L0089R(02)) is its own document, with its own date, and exists only in the
+languages it corrects: 274 of the 293 held on 13 Oct 2026 have no English version, 236 exist in one
+language. Its title and text are stored in English where there is one, otherwise in the first of
+French, Spanish, Italian, Dutch, German, then any; `languages` lists that language first.
+
+Left alone, and counted: a row still filed under the act its corrigendum corrects (title
+"CELEX:32011L0089R(02)", reference 32011L0089). refile_register_documents.py refiles those.
 
 Usage (from backend/):
     python3.12 scripts/complete_commission_documents.py                    # dry run, writes nothing
@@ -37,6 +44,7 @@ import re
 import ssl
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -48,33 +56,43 @@ for p in (str(BACKEND.parent), str(BACKEND)):
 import certifi  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 
+_spec = importlib.util.spec_from_file_location("fetch_eu_law_bodies", BACKEND / "scripts" / "fetch_eu_law_bodies.py")
+_laws = importlib.util.module_from_spec(_spec)  # _fetch, _cellar_url, _strip, _clean_html, _database_url
+sys.modules["fetch_eu_law_bodies"] = _laws
+_spec.loader.exec_module(_laws)
 
-def _load(name: str):
-    spec = importlib.util.spec_from_file_location(name, BACKEND / "scripts" / f"{name}.py")
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
-
-_celex = _load("backfill_register_celex_from_title")    # _candidate, _exists
-_date = _load("backfill_dates_from_cellar_by_celex")    # _dates
-_laws = _load("fetch_eu_law_bodies")                    # _fetch, _database_url
-
+SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
 DAYS = 30        # rows first seen in this window are worked on
 GRACE_DAYS = 3   # Cellar can hold a document two days after its date (COM(2026) 546, 9 Oct 2026)
-BATCH = 60
+BATCH = 40
 MIN_TITLE = 20   # Cellar's short form is "SWD/2026/119 final", and one title came back empty
+MIN_CORRIGENDUM = 150  # a corrigendum is a few lines: the 600-character floor for acts would refuse it
 
-# A corrigendum arrives titled with its own CELEX but filed under the act it corrects.
-CORRIGENDUM = r"^CELEX:\S*R\(\d+\)"
-PLACEHOLDER = r"^(SWD|JOIN|COM) document "
+# A CELEX, whole. "(01)" marks a second document under one number, "R(02)" a corrigendum or a
+# later version (SWD(2024) 29 final/3 is 52024SC0029R(02)).
+CELEX = r"[1-9][0-9]{4}[A-Z]{1,2}[0-9]{4,5}(?:\([0-9]{2}\))?(?:R\([0-9]{2}\))?"
+_IS_CELEX = re.compile(rf"^{CELEX}$")
+_IN_TITLE = re.compile(rf"^(?:(?:SWD|JOIN|COM|SEC) document |CELEX:)({CELEX})(?![0-9A-Za-z(])")
+_IN_LINK = re.compile(rf"[?&]uri=CELEX:({CELEX})$")
+_PARTS = re.compile(r"^([1-9])([0-9]{4})([A-Z]{1,2})([0-9]{4,5})")
 
-_SCOPE = f"first_seen >= :since AND title !~ '{CORRIGENDUM}'"
+PLACEHOLDER = r"^((SWD|JOIN|COM|SEC) document |CELEX:)"
+# Still filed under the act its corrigendum corrects: that act's date and text are not its own.
+MISFILED = r"({a}title ~ '^CELEX:\S*R\([0-9]+\)' AND {a}reference !~ 'R\([0-9]{{2}}\)$')"
+LANGUAGES = {"BUL": "BG", "CES": "CS", "DAN": "DA", "DEU": "DE", "ELL": "EL", "ENG": "EN", "EST": "ET",
+             "FIN": "FI", "FRA": "FR", "GLE": "GA", "HRV": "HR", "HUN": "HU", "ITA": "IT", "LAV": "LV",
+             "LIT": "LT", "MLT": "MT", "NLD": "NL", "POL": "PL", "POR": "PT", "RON": "RO", "SLK": "SK",
+             "SLV": "SL", "SPA": "ES", "SWE": "SV"}
+PREFERRED = ("ENG", "FRA", "SPA", "ITA", "NLD", "DEU")
+
+
+def _scope(alias: str = "") -> str:
+    return f"{alias}first_seen >= :since AND NOT {MISFILED.format(a=alias)}"
+
 
 NO_CELEX = text(f"""
     SELECT id, reference, title, portal_url FROM commission_documents
-     WHERE coalesce(celex, '') = '' AND {_SCOPE}
+     WHERE coalesce(celex, '') = '' AND {_scope()}
      ORDER BY first_seen DESC""")
 TAKEN = text("SELECT celex FROM commission_documents WHERE coalesce(celex, '') <> ''")
 SET_CELEX = text("""
@@ -83,7 +101,7 @@ SET_CELEX = text("""
 
 NO_DATE = text(f"""
     SELECT id, celex FROM commission_documents
-     WHERE publication_date IS NULL AND coalesce(celex, '') <> '' AND {_SCOPE}""")
+     WHERE publication_date IS NULL AND coalesce(celex, '') <> '' AND {_scope()}""")
 SET_DATE = text("""
     UPDATE commission_documents SET publication_date = :v, last_updated = now()
      WHERE id = :rid AND publication_date IS NULL""")
@@ -95,14 +113,13 @@ FROM_LAWS = text(f"""
            last_updated = now()
       FROM eu_laws l
      WHERE l.celex = d.celex AND coalesce(d.text_body, '') = '' AND coalesce(l.body_txt, '') <> ''
-       AND d.first_seen >= :since AND d.title !~ '{CORRIGENDUM}'""")
+       AND {_scope('d.')}""")
 LAWS_HAVE = text(f"""
     SELECT count(*) FROM commission_documents d JOIN eu_laws l ON l.celex = d.celex
-     WHERE coalesce(d.text_body, '') = '' AND coalesce(l.body_txt, '') <> ''
-       AND d.first_seen >= :since AND d.title !~ '{CORRIGENDUM}'""")
+     WHERE coalesce(d.text_body, '') = '' AND coalesce(l.body_txt, '') <> '' AND {_scope('d.')}""")
 NO_TEXT = text(f"""
     SELECT id, celex FROM commission_documents d
-     WHERE coalesce(text_body, '') = '' AND coalesce(celex, '') <> '' AND {_SCOPE}
+     WHERE coalesce(text_body, '') = '' AND coalesce(celex, '') <> '' AND {_scope()}
        AND NOT EXISTS (SELECT 1 FROM eu_laws l WHERE l.celex = d.celex AND coalesce(l.body_txt, '') <> '')
      ORDER BY first_seen DESC LIMIT :lim""")
 SET_TEXT = text("""
@@ -112,50 +129,93 @@ SET_TEXT = text("""
 
 NO_TITLE = text(f"""
     SELECT id, celex, title FROM commission_documents
-     WHERE title ~ '{PLACEHOLDER}' AND coalesce(celex, '') <> '' AND first_seen >= :since""")
+     WHERE title ~ '{PLACEHOLDER}' AND coalesce(celex, '') <> '' AND {_scope()}""")
 SET_TITLE = text(f"""
     UPDATE commission_documents SET title = :v, last_updated = now()
      WHERE id = :rid AND title ~ '{PLACEHOLDER}'""")
 
-STILL = text(f"""
-    SELECT reference,
-           publication_date IS NULL AS no_date,
-           coalesce(text_body, '') = '' AS no_text
-      FROM commission_documents
-     WHERE (publication_date IS NULL OR coalesce(text_body, '') = '')
-       AND first_seen < :settled AND {_SCOPE}
-     ORDER BY first_seen DESC""")
-CORRIGENDA = text(f"""
-    SELECT count(*) FROM commission_documents
-     WHERE title ~ '{CORRIGENDUM}' AND first_seen >= :since
-       AND (publication_date IS NULL OR coalesce(text_body, '') = '')""")
+# The feed reader writes {{EN}} on every row; a corrigendum exists in the languages it corrects.
+NO_LANGUAGES = text(f"""
+    SELECT id, celex, languages FROM commission_documents
+     WHERE celex ~ '^3.*R\\([0-9]{{2}}\\)$' AND coalesce(languages::text, '{{}}') IN ('{{}}', '{{EN}}')
+       AND {_scope()}""")
+SET_LANGUAGES = text("""
+    UPDATE commission_documents SET languages = :v, last_updated = now()
+     WHERE id = :rid AND coalesce(languages::text, '{}') IN ('{}', '{EN}')""")
 
-_TITLES = (
+STILL = text(f"""
+    SELECT reference FROM commission_documents
+     WHERE (publication_date IS NULL OR coalesce(text_body, '') = '')
+       AND first_seen < :settled AND {_scope()}
+     ORDER BY first_seen DESC""")
+MISFILED_ROWS = text(f"SELECT count(*) FROM commission_documents WHERE first_seen >= :since AND {MISFILED.format(a='')}")
+
+_FACTS = (
     "PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> "
-    "SELECT ?c ?t WHERE {{ VALUES ?c {{ {vals} }} ?w cdm:resource_legal_id_celex ?c . "
-    "?e cdm:expression_belongs_to_work ?w ; cdm:expression_uses_language "
-    "<http://publications.europa.eu/resource/authority/language/ENG> ; cdm:expression_title ?t . }}")
+    "SELECT ?c ?d ?lang ?t WHERE {{ VALUES ?c {{ {vals} }} ?w cdm:resource_legal_id_celex ?c . "
+    "OPTIONAL {{ ?w cdm:work_date_document ?d }} "
+    "OPTIONAL {{ ?e cdm:expression_belongs_to_work ?w ; cdm:expression_uses_language ?lang . "
+    "OPTIONAL {{ ?e cdm:expression_title ?t }} }} }}")
 
 
 # --------------------------------------------------------------------------
 # Pure functions (tested without a network or a database)
 # --------------------------------------------------------------------------
 
-def one_title(titles: set[str] | None) -> str | None:
-    """Cellar's English title, or nothing: an empty or short string is not a title, and two
-    different titles for one CELEX are not settled here."""
-    real = {" ".join(t.split()) for t in (titles or ()) if len(" ".join(t.split())) >= MIN_TITLE}
-    return next(iter(real))[:1000] if len(real) == 1 else None
+def stated_celex(reference: str | None, title: str | None, link: str | None) -> str | None:
+    """The CELEX the row itself states, whole. Never one rebuilt from "SWD(2026) 50"."""
+    for rx, s in ((_IN_TITLE, title), (_IN_LINK, link)):
+        m = rx.search((s or "").strip())
+        if m:
+            return m.group(1)
+    ref = (reference or "").strip()
+    return ref if _IS_CELEX.match(ref) else None
+
+
+def is_corrigendum(celex: str | None) -> bool:
+    """A corrigendum to an act of the Official Journal: sector 3 with an R(NN) suffix."""
+    return bool(celex) and celex[0] == "3" and bool(re.search(r"R\([0-9]{2}\)$", celex))
+
+
+def pick_language(titles: dict[str, str] | None) -> str | None:
+    """English where the document exists in English, else the first language we can read."""
+    have = set(titles or ())
+    return next((lang for lang in PREFERRED if lang in have), min(have) if have else None)
+
+
+def language_codes(titles: dict[str, str] | None) -> list[str]:
+    """Two-letter codes, the language of the stored title and text first."""
+    first = pick_language(titles)
+    rest = sorted(LANGUAGES[x] for x in (titles or ()) if x in LANGUAGES and x != first)
+    return ([LANGUAGES[first]] if first in LANGUAGES else []) + rest
+
+
+def one_title(titles: dict[str, str] | None) -> str | None:
+    """Cellar's title in the document's language, or nothing: an empty or short string is not a title."""
+    lang = pick_language(titles)
+    t = " ".join(((titles or {}).get(lang) or "").split()) if lang else ""
+    return t[:1000] if len(t) >= MIN_TITLE else None
 
 
 def one_date(dates: set[str] | None) -> dt.date | None:
     return dt.date.fromisoformat(next(iter(dates))) if dates and len(dates) == 1 else None
 
 
+def names_its_act(celex: str, txt: str) -> bool:
+    """A corrigendum names the act it corrects: "2024/2841", "No 36/2012", "85/374/EEC"."""
+    m = _PARTS.match(celex or "")
+    if not m:
+        return False
+    year, num = m.group(2), str(int(m.group(4)))
+    flat = re.sub(r"\s+", "", txt or "")
+    return any(f"{a}/{b}" in flat for a, b in ((year, num), (num, year), (year[2:], num), (num, year[2:])))
+
+
 def answered(got) -> bool:
-    """Did Cellar answer about this text? A 404 and a too-short page are answers; a refusal, a
-    timeout or a broken PDF is not, and must never read as 'no text exists'."""
-    return not isinstance(got, str) or got.startswith(("http_404", "too_short", "http_300_nodocs"))
+    """Did Cellar answer about this text? A 404, a too-short page and a page about another act are
+    answers; a refusal, a timeout or a broken PDF is not, and must never read as 'no text exists'."""
+    return not isinstance(got, str) or got.startswith(
+        ("http_404", "too_short", "http_300_nodocs", "names_another_act", "no_language"))
 
 
 def verdict(work: int, reached: int, still: list[str]) -> tuple[int, str | None]:
@@ -173,27 +233,33 @@ def verdict(work: int, reached: int, still: list[str]) -> tuple[int, str | None]
 # I/O
 # --------------------------------------------------------------------------
 
-def _titles(celexes: list[str], ctx) -> dict[str, set[str]]:
+def _facts(celexes: list[str], ctx) -> dict[str, dict]:
+    """What Cellar holds for each CELEX: {"dates": {...}, "titles": {"ENG": "...", ...}}. A CELEX
+    missing from the answer is one Cellar does not hold."""
     vals = " ".join(f'"{c}"^^<http://www.w3.org/2001/XMLSchema#string>' for c in celexes)
     req = urllib.request.Request(
-        _date.SPARQL + "?" + urllib.parse.urlencode({"query": _TITLES.format(vals=vals)}),
+        SPARQL, data=urllib.parse.urlencode({"query": _FACTS.format(vals=vals)}).encode(),
         headers={"Accept": "application/sparql-results+json"})
-    with urllib.request.urlopen(req, timeout=90, context=ctx) as r:
+    with urllib.request.urlopen(req, timeout=120, context=ctx) as r:
         data = json.load(r)
-    out: dict[str, set[str]] = {}
+    out: dict[str, dict] = {}
     for b in data["results"]["bindings"]:
-        out.setdefault(b["c"]["value"], set()).add(b["t"]["value"])
+        x = out.setdefault(b["c"]["value"], {"dates": set(), "titles": {}})
+        if "d" in b:
+            x["dates"].add(b["d"]["value"][:10])
+        if "lang" in b:
+            x["titles"][b["lang"]["value"].rsplit("/", 1)[-1]] = b.get("t", {}).get("value") or ""
     return out
 
 
-def _batched(fn, celexes: list[str], ctx) -> tuple[dict[str, set[str]], int]:
-    """(answers, CELEX asked in a batch Cellar answered)."""
-    found: dict[str, set[str]] = {}
+def facts_for(celexes: list[str], ctx) -> tuple[dict[str, dict], int]:
+    """(facts, CELEX asked in a batch Cellar answered)."""
+    found: dict[str, dict] = {}
     reached = 0
     for i in range(0, len(celexes), BATCH):
         part = celexes[i:i + BATCH]
         try:
-            found.update(fn(part, ctx))
+            found.update(_facts(part, ctx))
             reached += len(part)
         except Exception as e:  # noqa: BLE001
             print(f"[ERROR] Cellar did not answer for {len(part)} documents: {type(e).__name__}: {e}")
@@ -201,9 +267,37 @@ def _batched(fn, celexes: list[str], ctx) -> tuple[dict[str, set[str]], int]:
     return found, reached
 
 
+def _fetch_in(celex: str, lang: str, ctx) -> tuple[str, str] | str:
+    """A corrigendum's page in one language, or a marker saying why not."""
+    try:
+        req = urllib.request.Request(_laws._cellar_url(celex), headers={
+            "Accept": "application/xhtml+xml, text/html", "Accept-Language": lang.lower()})
+        with urllib.request.urlopen(req, timeout=45, context=ctx) as r:
+            raw = r.read().decode("utf-8", "ignore")
+    except urllib.error.HTTPError as e:
+        return f"http_{e.code}"
+    except Exception as e:  # noqa: BLE001
+        return type(e).__name__
+    txt = _laws._strip(raw)
+    if len(txt) < MIN_CORRIGENDUM:
+        return f"too_short_{len(txt)}"
+    if not names_its_act(celex, txt):
+        return "names_another_act"
+    return _laws._clean_html(raw, txt), txt
+
+
+def text_for(celex: str, titles: dict[str, str] | None, ctx) -> tuple[str, str] | str:
+    if not is_corrigendum(celex):
+        return _laws._fetch(celex, ctx)
+    lang = pick_language(titles)
+    if lang is None:
+        return "no_language"
+    return _fetch_in(celex, lang, ctx)
+
+
 def complete(engine, ctx, since: dt.datetime, apply: bool, limit: int) -> tuple[int, int, dict]:
-    """Run the four steps. Returns (work that needed Cellar, work Cellar answered, counts)."""
-    n = {"celex": 0, "date": 0, "text_from_laws": 0, "text_from_cellar": 0, "title": 0}
+    """Run the steps. Returns (work that needed Cellar, work Cellar answered, counts)."""
+    n = {"celex": 0, "date": 0, "text_from_laws": 0, "text_from_cellar": 0, "title": 0, "languages": 0}
     work = reached = 0
     scope = {"since": since}
 
@@ -217,36 +311,26 @@ def complete(engine, ctx, since: dt.datetime, apply: bool, limit: int) -> tuple[
     with engine.connect() as c:
         rows = list(c.execute(NO_CELEX, scope))
         taken = {r[0] for r in c.execute(TAKEN)}
-    stated = unconfirmed = 0
-    for r in rows:
-        # A staff working document arrives as "SWD(2026) 702": its CELEX is in the link it came with.
-        cand = _celex._candidate(r.reference, r.title) or _celex._candidate("", r.portal_url or "")
-        if not cand or cand in taken:
-            continue
-        stated += 1
-        if stated > limit:  # the rest wait for the next run: a backlog must not outlast the cron's timeout
-            continue
-        work += 1
-        st = _celex._exists(cand, ctx)
-        if st.isdigit():
-            reached += 1
-        if st in ("200", "300", "303"):
+    stating = [(r, cand) for r in rows for cand in [stated_celex(r.reference, r.title, r.portal_url)]
+               if cand and cand not in taken][:limit]  # the rest wait for the next run
+    found, got = facts_for(sorted({cand for _, cand in stating}), ctx)
+    work += len(stating)
+    reached += len(stating) if got else 0
+    for r, cand in stating:
+        if cand in found and cand not in taken:
             n["celex"] += store(SET_CELEX, {"rid": r.id, "v": cand})
             taken.add(cand)
-        else:
-            unconfirmed += 1
-        time.sleep(0.2)
-    print(f"[INFO] CELEX : {len(rows)} rows without one | {stated} state one | stored {n['celex']} "
-          f"| not confirmed by Cellar {unconfirmed}")
+    print(f"[INFO] CELEX : {len(rows)} rows without one | {len(stating)} state one | stored {n['celex']} "
+          f"| not held by Cellar {len(stating) - n['celex']}")
 
     # 2. date
     with engine.connect() as c:
         rows = list(c.execute(NO_DATE, scope))
-    found, got = _batched(_date._dates, sorted({r.celex for r in rows}), ctx)
+    found, got = facts_for(sorted({r.celex for r in rows}), ctx)
     work += len(rows)
     reached += len(rows) if got else 0
     for r in rows:
-        d = one_date(found.get(r.celex))
+        d = one_date((found.get(r.celex) or {}).get("dates"))
         if d:
             n["date"] += store(SET_DATE, {"rid": r.id, "v": d})
     print(f"[INFO] date  : {len(rows)} rows without one | stored {n['date']}")
@@ -261,10 +345,11 @@ def complete(engine, ctx, since: dt.datetime, apply: bool, limit: int) -> tuple[
         n["text_from_laws"] = held
     with engine.connect() as c:
         rows = list(c.execute(NO_TEXT, {**scope, "lim": limit}))
+    found, _ = facts_for(sorted({r.celex for r in rows if is_corrigendum(r.celex)}), ctx)
     why: dict[str, int] = {}
     for r in rows:
         work += 1
-        got = _laws._fetch(r.celex, ctx)
+        got = text_for(r.celex, (found.get(r.celex) or {}).get("titles"), ctx)
         reached += answered(got)
         if isinstance(got, str):
             key = "too_short" if got.startswith("too_short") else got
@@ -276,17 +361,23 @@ def complete(engine, ctx, since: dt.datetime, apply: bool, limit: int) -> tuple[
     print(f"[INFO] text  : copied from eu_laws {n['text_from_laws']} | asked Cellar for {len(rows)} "
           f"| stored {n['text_from_cellar']} | not stored {why or 0}")
 
-    # 4. title
+    # 4. title, and the languages of a corrigendum
     with engine.connect() as c:
         rows = list(c.execute(NO_TITLE, scope))
-    found, got = _batched(_titles, sorted({r.celex for r in rows}), ctx)
-    work += len(rows)
-    reached += len(rows) if got else 0
+        langs = list(c.execute(NO_LANGUAGES, scope))
+    found, got = facts_for(sorted({r.celex for r in rows} | {r.celex for r in langs}), ctx)
+    work += len(rows) + len(langs)
+    reached += (len(rows) + len(langs)) if got else 0
     for r in rows:
-        t = one_title(found.get(r.celex))
+        t = one_title((found.get(r.celex) or {}).get("titles"))
         if t:
             n["title"] += store(SET_TITLE, {"rid": r.id, "v": t})
-    print(f"[INFO] title : {len(rows)} placeholders | stored {n['title']}")
+    for r in langs:
+        codes = language_codes((found.get(r.celex) or {}).get("titles"))
+        if codes and codes != list(r.languages or []):
+            n["languages"] += store(SET_LANGUAGES, {"rid": r.id, "v": codes})
+    print(f"[INFO] title : {len(rows)} placeholders | stored {n['title']} "
+          f"| languages of corrigenda stored {n['languages']}")
     return work, reached, n
 
 
@@ -311,9 +402,9 @@ def main() -> int:
     with engine.connect() as c:
         still = [r.reference for r in c.execute(
             STILL, {"since": since, "settled": now - dt.timedelta(days=GRACE_DAYS)})]
-        corrigenda = c.execute(CORRIGENDA, {"since": since}).scalar_one()
-    if corrigenda:
-        print(f"[INFO] {corrigenda} corrigenda left as they arrived: filed under the act they correct")
+        misfiled = c.execute(MISFILED_ROWS, {"since": since}).scalar_one()
+    if misfiled:
+        print(f"[INFO] {misfiled} corrigenda left as they arrived: filed under the act they correct")
     if not args.apply:
         print(f"[INFO] dry run, nothing written (each step sees only what is already stored): {n}")
         return 0

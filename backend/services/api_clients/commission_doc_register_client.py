@@ -38,6 +38,7 @@ Created: February 2026
 
 import asyncio
 import logging
+import re
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 
@@ -53,6 +54,41 @@ from schemas.scrapers.commission_doc_register_schemas import (
 )
 
 logger = logging.getLogger(__name__)
+
+_CORRIGENDUM_ENTRY = re.compile(
+    r'^CELEX:([1-9]\d{4}[A-Z]{1,2}\d{4,5}(?:\(\d{2}\))?R\(\d{2}\))(?::\s*(.*))?$', re.S)
+_SECTOR_5 = re.compile(r'^5(\d{4})[A-Z]{2}(\d+)')
+
+
+def corrigendum_entry(title: str) -> Optional[Tuple[str, str]]:
+    """(CELEX, title) of a feed entry that is a corrigendum or a later version, else None.
+
+    The EUR-Lex feed lists a corrigendum as "CELEX:32011L0089R(02)", with its title after it only
+    where an English version exists. EURLexClient reads the digits before the R, so until 13 Oct
+    2026 the row was filed under the act being corrected and took that act's date and text (294
+    rows). The corrigendum is its own document: 32011L0089R(02) is dated 2026 and exists in
+    Romanian only. Without a title the CELEX stays as the placeholder the fill-in replaces."""
+    m = _CORRIGENDUM_ENTRY.match((title or '').strip())
+    if not m:
+        return None
+    return m.group(1), (m.group(2) or '').strip() or f"CELEX:{m.group(1)}"
+
+
+def own_reference(celex: str, prefix: Optional[str], asked: str) -> Tuple[str, str]:
+    """(reference, document type) as Cellar numbers the document.
+
+    5YYYYSC numbers staff working documents AND SEC documents: 52026SC0133 is SEC(2026) 133, an
+    opinion of the Regulatory Scrutiny Board, and was filed as "SWD(2026) 133". Cellar states the
+    series (resource_legal_internal_number_prefix); `asked` is used only where it states none.
+    SEC documents are written as the register writes them, without a space."""
+    series = (prefix or '').upper()
+    if series not in ('SWD', 'SEC', 'JOIN'):
+        series = asked
+    m = _SECTOR_5.match(celex or '')
+    if not m:
+        return celex, asked
+    number = m.group(2).lstrip('0') or '0'
+    return (f"SEC({m.group(1)}){number}" if series == 'SEC' else f"{series}({m.group(1)}) {number}"), series
 
 
 class ServiceUnavailableError(Exception):
@@ -672,10 +708,15 @@ class CommissionDocRegisterClient:
                 reference = item.get('celex', '')
                 title = item.get('title', '')
 
-                # Try to extract COM(YYYY) NNN from title
-                com_match = re.search(r'COM\(\d{4}\)\s*\d+', title)
-                if com_match:
-                    reference = com_match.group(0)
+                entry = corrigendum_entry(title)
+                if entry:
+                    # A later version of a proposal is its own document, under its own CELEX.
+                    reference, title = entry
+                else:
+                    # Try to extract COM(YYYY) NNN from title
+                    com_match = re.search(r'COM\(\d{4}\)\s*\d+', title)
+                    if com_match:
+                        reference = com_match.group(0)
 
                 results.append(CommissionDocItem(
                     reference=reference,
@@ -717,9 +758,13 @@ class CommissionDocRegisterClient:
             items = await client.get_latest_legislation(days=days)
             results = []
             for item in items:
+                reference, title = item.get('celex', ''), item.get('title', '')
+                entry = corrigendum_entry(title)
+                if entry:
+                    reference, title = entry
                 results.append(CommissionDocItem(
-                    reference=item.get('celex', ''),
-                    title=item.get('title', ''),
+                    reference=reference,
+                    title=title,
                     doc_type=CommissionDocType.OJ,
                     publication_date=item.get('date'),
                     dg_responsible=None,
@@ -767,7 +812,7 @@ class CommissionDocRegisterClient:
             sparql_query = f"""
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
 
-SELECT DISTINCT ?celex ?title ?date
+SELECT DISTINCT ?celex ?title ?date ?prefix
 WHERE {{
   ?doc cdm:resource_legal_id_celex ?celex .
   ?doc cdm:work_date_document ?date .
@@ -775,6 +820,7 @@ WHERE {{
     ?doc cdm:resource_legal_title ?title .
     FILTER(LANG(?title) = 'en')
   }}
+  OPTIONAL {{ ?doc cdm:resource_legal_internal_number_prefix ?prefix . }}
   FILTER(STRSTARTS(STR(?celex), "5"))
   FILTER(CONTAINS(STR(?celex), "SC"))
   FILTER(?date >= "{date_from.strftime('%Y-%m-%d')}"^^xsd:date)
@@ -791,17 +837,12 @@ LIMIT {limit}
                 title = row.get('title', '')
                 date_str = row.get('date')
 
+                # The series is the one Cellar states: SC also numbers SEC documents.
+                swd_ref, series = own_reference(celex, row.get('prefix'), 'SWD')
+
                 # Skip entries without a title
                 if not title:
-                    title = f"SWD document {celex}"
-
-                # Parse SWD reference from CELEX: 5YYYYSCNNNN -> SWD(YYYY) NNN
-                swd_ref = celex
-                swd_match = re.match(r'5(\d{4})SC(\d+)', celex)
-                if swd_match:
-                    year = swd_match.group(1)
-                    number = swd_match.group(2).lstrip('0') or '0'
-                    swd_ref = f"SWD({year}) {number}"
+                    title = f"{series} document {celex}"
 
                 # Parse date
                 pub_date = None
@@ -819,7 +860,7 @@ LIMIT {limit}
                 items.append(CommissionDocItem(
                     reference=swd_ref,
                     title=title,
-                    doc_type=CommissionDocType.SWD,
+                    doc_type=CommissionDocType(series),
                     publication_date=pub_date,
                     dg_responsible=None,
                     languages=['EN'],
@@ -865,7 +906,7 @@ LIMIT {limit}
             sparql_query = f"""
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
 
-SELECT DISTINCT ?celex ?title ?date
+SELECT DISTINCT ?celex ?title ?date ?prefix
 WHERE {{
   ?doc cdm:resource_legal_id_celex ?celex .
   ?doc cdm:work_date_document ?date .
@@ -873,6 +914,7 @@ WHERE {{
     ?doc cdm:resource_legal_title ?title .
     FILTER(LANG(?title) = 'en')
   }}
+  OPTIONAL {{ ?doc cdm:resource_legal_internal_number_prefix ?prefix . }}
   FILTER(STRSTARTS(STR(?celex), "5"))
   FILTER(CONTAINS(STR(?celex), "JC"))
   FILTER(?date >= "{date_from.strftime('%Y-%m-%d')}"^^xsd:date)
@@ -889,16 +931,10 @@ LIMIT {limit}
                 title = row.get('title', '')
                 date_str = row.get('date')
 
-                if not title:
-                    title = f"JOIN document {celex}"
+                join_ref, series = own_reference(celex, row.get('prefix'), 'JOIN')
 
-                # Parse JOIN reference from CELEX: 5YYYYJCNNNN -> JOIN(YYYY) NNN
-                join_ref = celex
-                join_match = re.match(r'5(\d{4})JC(\d+)', celex)
-                if join_match:
-                    year = join_match.group(1)
-                    number = join_match.group(2).lstrip('0') or '0'
-                    join_ref = f"JOIN({year}) {number}"
+                if not title:
+                    title = f"{series} document {celex}"
 
                 pub_date = None
                 if date_str:
@@ -915,7 +951,7 @@ LIMIT {limit}
                 items.append(CommissionDocItem(
                     reference=join_ref,
                     title=title,
-                    doc_type=CommissionDocType.JOIN,
+                    doc_type=CommissionDocType(series),
                     publication_date=pub_date,
                     dg_responsible=None,
                     languages=['EN'],
