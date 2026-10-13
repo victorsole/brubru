@@ -59,7 +59,7 @@ CELEX_RE = re.compile(r"^(?P<s>[0-9CE])(?P<y>\d{4})(?P<t>[A-Z]{1,3})(?P<n>\d{4,6
 TABLE_HEADERS = ["CELEX", "Sector", "Year", "Type of document", "Number of document", "Title of document",
                  "Alias of document", "Acronym of the alias"]
 EXTRA_HEADERS = ["base_celex", "date_document", "in_force", "eli", "author", "eurovoc_count",
-                 "eurovoc_domains", "title_source"]
+                 "eurovoc_domains", "title_source", "kind_sheet", "eurovoc_microthesauri", "eurovoc_concepts"]
 EV_HEADERS = ["celex", "concept_id", "concept_uri", "label_en", "microthesaurus", "domain"]
 
 
@@ -207,6 +207,99 @@ def pick_eli(rec, celex):
     return hits[0] if len(hits) == 1 else ""
 
 
+ISSUER_HEADER = "issuer_in_title"
+# One sheet per kind of act (instrument + who adopted it). Names are <= 31 characters (Excel limit).
+KIND_SHEETS = [
+    ("Regulations", "Title starts with 'Regulation' and the title does not say the Council or the Commission adopted it (Parliament and Council, a few Parliament-only and European Central Bank acts)."),
+    ("Commission Impl. Regulations", "Commission Implementing Regulations."),
+    ("Commission Regulations", "Commission Regulations, plus older acts titled 'Regulation ... of the Commission'."),
+    ("Commission Deleg. Regulations", "Commission Delegated Regulations."),
+    ("Council Regulations", "Council Regulations, plus older acts titled 'Regulation ... of the Council'."),
+    ("Council Impl. Regulations", "Council Implementing Regulations."),
+    ("Directives", "Title starts with 'Directive' and the title does not say the Council or the Commission adopted it (all are Parliament and Council)."),
+    ("Council+Commission Directives", "Council Directives, Commission Directives, Commission Delegated and Implementing Directives."),
+    ("Council Decisions", "Council Decisions and European Council Decisions, including CFSP decisions."),
+    ("Commission Decisions", "Commission Decisions."),
+    ("Commission Impl. Decisions", "Commission Implementing Decisions."),
+    ("Council Impl. Decisions", "Council Implementing Decisions."),
+    ("Parliament+Council Decisions", "Decisions adopted by the European Parliament and the Council (or by Parliament alone)."),
+    ("Commission Deleg. Decisions", "Commission Delegated Decisions."),
+    ("Other decisions and regulations", "Decisions of agencies and bodies (political parties authority, High Representative, ECB, administrative commissions, Political and Security Committee) and the few regulation titles no rule recognised."),
+    ("Recommendations", "CELEX type H: Council and Commission Recommendations."),
+    ("Opinions", "CELEX type A: Council and Commission Opinions."),
+    ("ECB guidelines", "CELEX type O."),
+    ("CFSP and justice acts (E,F)", "CELEX types E and F: pre-Lisbon common positions, joint actions, framework decisions."),
+    ("Institutional arrangements (Q)", "CELEX type Q: rules of procedure and internal rules of institutions and bodies."),
+    ("OJ C documents (Y)", "CELEX type Y: other documents published in the OJ C series (interinstitutional agreements, ECB and ESRB decisions)."),
+    ("Budget (B)", "CELEX type B: discharge decisions and amending budgets."),
+    ("Council resolutions (G)", "CELEX type G."),
+    ("Other OJ L documents (X,S)", "CELEX type X (other documents published in OJ L: agreements, addenda) and S (ECSC decision of general interest)."),
+    ("Corrigenda", "Every corrigendum, whatever the type of the act it corrects (title starts 'Corrigendum')."),
+]
+KIND_NAMES = [k for k, _ in KIND_SHEETS]
+assert all(len(k) <= 31 for k in KIND_NAMES) and len(set(KIND_NAMES)) == len(KIND_NAMES)
+
+
+def issuer_of(title):
+    """Who the title says adopted the act (first 250 characters, case-insensitive)."""
+    t = title[:250].lower()
+    if "of the european parliament and of the council" in t or "of the european parliament and the council" in t:
+        return "European Parliament and Council"
+    if "of the european parliament" in t:
+        return "European Parliament"
+    if "of the european central bank" in t:
+        return "European Central Bank"
+    if re.search(r"of the council\b", t):
+        return "Council"
+    if "of the commission" in t:
+        return "Commission"
+    return "not stated"
+
+
+def kind_of(letter, title):
+    """The ONE sheet an act belongs to, from its CELEX descriptor and the start of its title."""
+    if title.startswith("Corrigendum"):
+        return "Corrigenda"
+    t = re.sub(r"^[\d/]+[A-Z,/ .]*?:\s*", "", title)  # old "2004/741/EC:" prefix
+    low, iss = t.lower(), issuer_of(t)
+    if letter == "R":
+        if low.startswith("commission implementing regulation"):
+            return "Commission Impl. Regulations"
+        if low.startswith("commission delegated regulation"):
+            return "Commission Deleg. Regulations"
+        if low.startswith("council implementing regulation") or low.startswith("implementing regulation"):
+            return "Council Impl. Regulations"
+        if low.startswith("regulation") and iss not in ("Council", "Commission"):
+            return "Regulations"
+        if low.startswith("commission regulation") or (low.startswith("regulation") and iss == "Commission"):
+            return "Commission Regulations"
+        if low.startswith("council regulation") or (low.startswith("regulation") and iss == "Council"):
+            return "Council Regulations"
+        return "Other decisions and regulations"
+    if letter == "L":
+        if low.startswith("directive") and iss not in ("Council", "Commission"):
+            return "Directives"
+        return "Council+Commission Directives"
+    if letter == "D":
+        if low.startswith("commission implementing decision"):
+            return "Commission Impl. Decisions"
+        if low.startswith("commission delegated decision"):
+            return "Commission Deleg. Decisions"
+        if low.startswith("commission decision") or (low.startswith("decision") and iss == "Commission"):
+            return "Commission Decisions"
+        if low.startswith("council implementing decision"):
+            return "Council Impl. Decisions"
+        if low.startswith("council decision") or low.startswith("european council decision") or (low.startswith("decision") and iss == "Council"):
+            return "Council Decisions"
+        if low.startswith("decision") and iss in ("European Parliament and Council", "European Parliament"):
+            return "Parliament+Council Decisions"
+        return "Other decisions and regulations"
+    return {"H": "Recommendations", "A": "Opinions", "O": "ECB guidelines", "E": "CFSP and justice acts (E,F)",
+            "F": "CFSP and justice acts (E,F)", "Q": "Institutional arrangements (Q)", "Y": "OJ C documents (Y)",
+            "B": "Budget (B)", "G": "Council resolutions (G)", "X": "Other OJ L documents (X,S)",
+            "S": "Other OJ L documents (X,S)"}.get(letter, "Other decisions and regulations")
+
+
 def col_letter(i):
     s = ""
     i += 1
@@ -216,7 +309,7 @@ def col_letter(i):
     return s
 
 
-def write_xlsx(path, table, ev_rows, qa, domains, built_on):
+def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     """Read me (method check), Table, EuroVoc, Statistics. Statistics are live formulas."""
     import xlsxwriter
     wb = xlsxwriter.Workbook(str(path), {"constant_memory": True})
@@ -225,14 +318,17 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
     f = lambda **k: wb.add_format({"font_name": "Arial", "font_size": 10, **k})
     head, bold, wrap, num, title_f = f(bold=True, bg_color="#1F3864", font_color="#FFFFFF"), f(bold=True), f(text_wrap=True, valign="top"), f(num_format="0"), f(bold=True, font_size=14)
     n, nev = len(table), len(ev_rows)
-    rng = lambda sheet, col, last: f"{sheet}!${col}$2:${col}${last}"
+    qs = lambda name: "'" + name.replace("'", "''") + "'"
+    rng = lambda sheet, col, last: f"{qs(sheet)}!${col}$2:${col}${last}"
     T = lambda col: rng("Table", col, n + 1)
     E = lambda col: rng("EuroVoc", col, nev + 1)
 
     # ---- Read me (written first so it is the first tab); formulas reference the later sheets
     rm = wb.add_worksheet("Read me")
     st = wb.add_worksheet("Statistics")
+    tp = wb.add_worksheet("Topics")
     tb = wb.add_worksheet("Table")
+    kind_ws = {name: wb.add_worksheet(name) for name in KIND_NAMES}
     ev = wb.add_worksheet("EuroVoc")
     rm.set_column(0, 0, 44); rm.set_column(1, 1, 22); rm.set_column(2, 2, 22); rm.set_column(3, 3, 12); rm.set_column(4, 4, 90)
 
@@ -251,6 +347,16 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
         ("Rows with an alias", f"=COUNTIF({T('G')},\"?*\")", qa["rows_with_alias"], "chk", "Rows of aliases.csv whose CELEX is in the dump", "row"),
         ("Rows with an ELI", f"=COUNTIF({T('L')},\"?*\")", qa["rows_with_eli"], "chk", "ELI URI matching the act's own type, year and number, counted while building", "row"),
         ("Rows with no title", f"=COUNTBLANK({T('F')})", qa["rows_without_title"], "chk", "Counted while building", "row"),
+        ("", None, None, None, None, "text"),
+        ("Sheets (click a name to jump)", "Rows in the sheet", "Rows of that kind in Table", "Check", "What it holds. Every act is in exactly one of these sheets; the second count is a different formula, over the kind_sheet column of Table.", "header"),
+        *[(name, f"=COUNTA({rng(name, 'A', len(kinds[name]) + 1)})", f"=COUNTIF({T('Q')},\"{name}\")", "sheetrow", desc, "sheetrow") for name, desc in KIND_SHEETS],
+        ("All kind sheets together", None, None, "sheettotal", f"Must equal the {n:,} rows of Table.", "sheettotal"),
+        ("", None, None, None, None, "text"),
+        ("How to find laws on a topic (filters are on every header row)", None, None, None, None, "header"),
+        ("1. Broad field", "eurovoc_domains", None, None, "EuroVoc has 21 domains, e.g. '12 LAW', '52 ENVIRONMENT', '28 SOCIAL QUESTIONS'. Filter the column with Text Filters > Contains.", "row"),
+        ("2. Sub-field", "eurovoc_microthesauri", None, None, "127 microthesauri, e.g. '2841 health', '3236 information technology and data processing'. The Topics sheet lists them with act counts.", "row"),
+        ("3. Precise subject", "eurovoc_concepts", None, None, "The act's EuroVoc concepts as words, e.g. 'digital single market', 'sustainable development', 'public health'. Contains 'digital' finds 195 acts.", "row"),
+        ("4. Words in the title", "Title of document", None, None, "Contains 'digital' finds 116 acts by title alone; combine it with the three columns above for the widest net.", "row"),
         (f"All {qa['distinct_celex']:,} CELEX are distinct (asserted by the builder before writing; a COUNTIF-based distinct count over 30,000 rows would take minutes to recalculate).", None, None, None, None, "text"),
         ("Columns", "Source", None, None, "Definition", "header"),
         ("CELEX", "resource_legal_id_celex", None, None, "Own CELEX of the OJ publication. Sector, Year, Type and Number are read from the CELEX string; the metadata fields agree in all rows but " + str(sum(qa["celex_string_vs_metadata_disagreements"].values())) + " field(s): " + json.dumps(qa["celex_string_vs_metadata_disagreements"]), "row"),
@@ -267,6 +373,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
         ("author", "work_created_by_agent", None, None, "Authority-table code(s) of the creating body, '|' separated.", "row"),
     ]
     r = 0
+    idx_first = idx_last = None
     for lab, a, b, c, d, kind in rows:
         if kind == "title":
             rm.write(r, 0, lab, title_f)
@@ -276,6 +383,20 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
         elif kind == "header":
             for j, v in enumerate((lab, a, b, c, d)):
                 rm.write(r, j, v if v is not None else "", head)
+        elif kind == "sheetrow":
+            idx_first = r if idx_first is None else idx_first
+            idx_last = r
+            rm.write_url(r, 0, f"internal:{qs(lab)}!A1", string=lab)
+            rm.write_formula(r, 1, a, num)
+            rm.write_formula(r, 2, b, num)
+            rm.write_formula(r, 3, f'=IF(B{r + 1}=C{r + 1},"OK","DIFF")', bold)
+            rm.write(r, 4, d, wrap)
+        elif kind == "sheettotal":
+            rm.write(r, 0, lab, bold)
+            rm.write_formula(r, 1, f"=SUM(B{idx_first + 1}:B{idx_last + 1})", num)
+            rm.write_formula(r, 2, f"=COUNTA({T('A')})", num)
+            rm.write_formula(r, 3, f'=IF(B{r + 1}=C{r + 1},"OK","DIFF")', bold)
+            rm.write(r, 4, d, wrap)
         else:
             rm.write(r, 0, lab, wrap)
             if isinstance(a, str) and a.startswith("="):
@@ -297,7 +418,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
     heads = TABLE_HEADERS + EXTRA_HEADERS
     for j, h in enumerate(heads):
         tb.write(0, j, h, head)
-    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12]
+    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12, 30, 60, 90]
     for j, w in enumerate(widths):
         tb.set_column(j, j, w)
     for i, row in enumerate(table, start=1):
@@ -308,6 +429,40 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
                 tb.write_string(i, j, str(v))
     tb.freeze_panes(1, 1)
     tb.autofilter(0, 0, n, len(heads) - 1)
+
+    # ---- One sheet per kind of act: same columns as Table plus who adopted the act, read from the title
+    sub_heads = heads + [ISSUER_HEADER]
+    for name in KIND_NAMES:
+        w_, rows_ = kind_ws[name], kinds[name]
+        for j, h in enumerate(sub_heads):
+            w_.write(0, j, h, head)
+        for j, wd in enumerate(widths + [32]):
+            w_.set_column(j, j, wd)
+        for i, row in enumerate(rows_, start=1):
+            for j, v in enumerate(row):
+                if j in (1, 2, 4, 13):
+                    w_.write_number(i, j, v, num)
+                else:
+                    w_.write_string(i, j, str(v))
+        w_.freeze_panes(1, 1)
+        w_.autofilter(0, 0, max(len(rows_), 1), len(sub_heads) - 1)
+
+    # ---- Topics: every EuroVoc domain and microthesaurus with the number of acts (live COUNTIF over Table)
+    tp.set_column(0, 0, 48); tp.set_column(1, 1, 58); tp.set_column(2, 2, 14)
+    tp.write(0, 0, "Domain (broad field)", head); tp.write(0, 1, "Microthesaurus (sub-field)", head); tp.write(0, 2, "Acts", head)
+    mts_used = sorted({m for v in meta["mts"].values() for m in v})
+    r_ = 1
+    for code in sorted(domains):
+        dom = f"{code} {domains[code]}"
+        tp.write(r_, 0, dom, bold)
+        tp.write_formula(r_, 2, f'=COUNTIF({T("O")},"*"&A{r_ + 1}&"*")', f(bold=True, num_format="0"))
+        r_ += 1
+        for m in (x for x in mts_used if x[:2] == code):
+            tp.write(r_, 1, m)
+            tp.write_formula(r_, 2, f'=COUNTIF({T("R")},"*"&B{r_ + 1}&"*")', num)
+            r_ += 1
+    tp.freeze_panes(1, 0)
+    tp.autofilter(0, 0, r_ - 1, 2)
 
     # ---- EuroVoc
     for j, h in enumerate(EV_HEADERS):
@@ -348,6 +503,14 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on):
     r += 1
     block("In force (metadata flag)", ["true", "false", "unknown"], lambda lab, rr: f"=COUNTIF({T('K')},A{rr + 1})")
     block("Title source", ["rdf", "cellar", "formex"], lambda lab, rr: f"=COUNTIF({T('P')},A{rr + 1})")
+    for name in ("Regulations", "Directives"):
+        rows_ = kinds[name]
+        st.write(r, 0, f"{name} sheet: who the title says adopted the act", head); st.write(r, 1, "Rows", head); st.write(r, 2, "Share", head); r += 1
+        for iss in sorted({x[-1] for x in rows_}):
+            st.write(r, 0, iss)
+            st.write_formula(r, 1, f"=COUNTIF({rng(name, 'T', len(rows_) + 1)},A{r + 1})", num)
+            st.write_formula(r, 2, f"=B{r + 1}/{len(rows_)}", f(num_format="0.0%")); r += 1
+        r += 1
     st.write(r, 0, "EuroVoc", head); st.write(r, 1, "Value", head); r += 1
     st.write(r, 0, "Acts with at least one EuroVoc concept"); st.write_formula(r, 1, f'=COUNTIF({T("N")},">0")', num); r += 1
     st.write(r, 0, "Act-concept pairs"); st.write_formula(r, 1, f"=COUNTA({E('A')})", num); r += 1
@@ -434,7 +597,9 @@ def main():
         domains = sorted({d for i in r["eurovoc"] for d in (mt_domain(i)[1].split(" | ") if mt_domain(i)[1] else [])})
         table.append([r["celex"], int(m["s"]) if m["s"].isdigit() else m["s"], int(m["y"]), type_cell, int(m["n"]), r["title"], alias, acro,
                       SUFFIX_RE.sub("", r["celex"]), r["date"], r["in_force"] or "unknown", pick_eli(r, r["celex"]), r["author"],
-                      len(r["eurovoc"]), " | ".join(domains), r["title_source"]])
+                      len(r["eurovoc"]), " | ".join(domains), r["title_source"], kind_of(m["t"], r["title"]),
+                      " | ".join(sorted({x for i in r["eurovoc"] for x in meta["mts"].get(i, [])})),
+                      " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"]))])
         for i in sorted(r["eurovoc"], key=lambda x: (meta["concept"].get(x, "~"), x)):
             mt, dom = mt_domain(i)
             ev_rows.append([r["celex"], i, f"http://eurovoc.europa.eu/{i}", meta["concept"].get(i, ""), mt, dom])
@@ -454,7 +619,15 @@ def main():
             w.writerows(rows)
     (out / "qa.json").write_text(json.dumps(qa, indent=1, ensure_ascii=False))
     import datetime
-    write_xlsx(out / "leg_2026-10_table.xlsx", table, ev_rows, qa, doms, datetime.date.today().isoformat())
+    for stale in ("leg_2026-10_regulations.csv", "leg_2026-10_directives.csv"):  # earlier two-sheet version
+        (out / stale).unlink(missing_ok=True)
+    kinds = {k: [] for k in KIND_NAMES}
+    for t in table:
+        kinds[t[16]].append(list(t) + [issuer_of(t[5])])
+    assert sum(len(v) for v in kinds.values()) == len(table) == len({t[0] for rows_ in kinds.values() for t in rows_}), "partition is not exact"
+    qa["rows_per_sheet"] = {k: len(v) for k, v in kinds.items()}
+    (out / "qa.json").write_text(json.dumps(qa, indent=1, ensure_ascii=False))
+    write_xlsx(out / "leg_2026-10_table.xlsx", table, ev_rows, qa, doms, datetime.date.today().isoformat(), kinds, meta)
     print(json.dumps(qa, indent=1, ensure_ascii=False))
     print("CSV written to", out)
 
