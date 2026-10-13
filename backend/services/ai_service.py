@@ -780,6 +780,16 @@ _CA_DECISIVE = frozenset({
     "repositori", "publicitat", "europeu", "europeus", "llancat", "llancada",
     # "missio" folds from Catalan "missio"; ES mision, FR mission, IT missione (and "missions" is French).
     "missio",
+    # Added 13 Oct 2026 from 8 natural Catalan questions on the AgRI 2040 guides that scored ES, FR,
+    # NL or EN ("Que diu AgRI 2040 sobre la ramaderia i la sanitat animal?" was answered in Spanish):
+    # ES writes enfoque / investigacion / innovacion / estrategico / personas / segun / sanidad /
+    # asociacion / anunciado / financiar / sistemas; FR approche / recherche / innovation /
+    # strategique / personnes / selon / associations. Excluded: "informe", "invertir", "taller" (shared
+    # with Spanish), "quant" (French), "centre" (French).
+    "enfocament", "recerca", "innovacio", "estrategic", "estrategica", "prioritats",
+    "interessades", "enquesta", "persones", "respondre", "projectes", "segons",
+    "ramaderia", "sanitat", "associacio", "anunciat", "sortir", "financar", "diu",
+    "agroalimentaries", "laboratoris", "sistemes", "coneixement", "agraris",
 })
 
 # Catalan plural of the -cio nouns. "-cions" has no counterpart in the other
@@ -828,6 +838,17 @@ _IT_DECISIVE = frozenset({
     # answer came back in English. ES writes cuanto / donde / mision; CA quant / on / missio;
     # FR combien / ou / mission. Excluded: "costa" (ES and CA), "come" (English), "cosa" (ES).
     "quanto", "quanta", "quanti", "quante", "dove", "missione", "missioni",
+    # Added 13 Oct 2026 from 11 natural Italian questions on the AgRI 2040 guides that scored FR or EN
+    # ("Quando si tiene la conferenza europea AgRI 2040 e chi la apre?" tied IT "chi" against ES
+    # "tiene" and fell to French; "Cosa dice Food 2040 su ..." held no Italian token and scored EN).
+    # ES writes cuando / conferencia / abre / ganaderia / salud / fertilizantes / sistemas /
+    # alimentarios / dietas / locales / desperdicio / envases; FR quand / conference / ouvre / elevage /
+    # sante; CA quan / conferencia / ramaderia / salut. Excluded: "cosa" and "dice" (Spanish),
+    # "come" (English), "animale" (French), "europea" (Spanish), "pesca" (ES, CA and IT).
+    "quando", "conferenza", "apre", "sull", "nell", "dall", "allevamento", "salute",
+    "fertilizzanti", "sistemi", "alimentari", "diete", "locali", "spreco", "imballaggi",
+    "ambienti", "acquatici", "acquacoltura", "trattano", "progetti", "approccio",
+    "inseriscono", "gruppi", "operativi", "nei", "agricoli",
 })
 
 # Italian "-zione"/"-zioni" nouns: Spanish writes "-cion(es)", Catalan "-cio(ns)",
@@ -913,6 +934,11 @@ _FR_DECISIVE = frozenset({
     # domain nouns and verbs whose form differs in ES, CA, IT and NL
     "conseil", "reglement", "delai", "delais", "loi", "donnees",
     "entreprises", "transposer", "respecter",
+    # Added 13 Oct 2026: "Combien de domaines d'action AgRI 2040 compte-t-il et lesquels ?" scored IT
+    # and "De combien d'argent dispose l'entreprise commune CBE-JU et que fait EIT Food ?" scored NL.
+    # ES writes cuantos / dominios / cual / empresa; IT quanti / ambiti / quali / impresa; CA quants /
+    # dominis / empresa. Excluded: "compte" (also Catalan "compte").
+    "combien", "domaines", "lesquels", "lesquelles", "argent", "dispose", "entreprise", "commune",
 })
 
 
