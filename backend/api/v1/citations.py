@@ -335,8 +335,13 @@ def _write_enrichment_cache(
     body_html: Optional[str],
     creation_date: Optional[datetime],
     document_date: Optional[_date],
+    updated_date: Optional[datetime] = None,
 ) -> None:
-    """Update the row written by services.citation_verifier with body + dates."""
+    """Update the row written by services.citation_verifier with body + dates.
+
+    `updated_date` is accepted because _enrich passes it (commit bc3f5a18 added it to the call
+    only, so every uncached verify answered HTTP 500 from 1 to 13 Oct 2026); the table has no
+    such column, so it is not stored."""
     try:
         db.execute(
             text("""
@@ -353,7 +358,7 @@ def _write_enrichment_cache(
             {
                 "ref": ref,
                 "public_url": public_url,
-                "body_text": body_text,
+                "body_text": body_txt,
                 "body_html": body_html,
                 "creation_date": creation_date,
                 "document_date": document_date,

@@ -499,3 +499,25 @@ class TestDocumentDateFromBody:
         from api.v1.citations import parse_document_date_from_body
         assert parse_document_date_from_body(None) is None
         assert parse_document_date_from_body("no preamble date here") is None
+
+
+class TestEnrichmentCacheWriter:
+    """_enrich called _write_enrichment_cache with updated_date, which the function did not accept,
+    and the function read an undefined name: every uncached /verify answered HTTP 500."""
+
+    def test_accepts_exactly_what_enrich_passes_and_writes(self):
+        from api.v1.citations import _write_enrichment_cache
+        db = MagicMock()
+        _write_enrichment_cache(db, "32024R1689", public_url="u", body_txt="text", body_html="<p>x</p>",
+                                creation_date=None, updated_date=None, document_date=None)
+        params = db.execute.call_args[0][1]
+        assert params["body_text"] == "text" and params["body_html"] == "<p>x</p>"
+        db.commit.assert_called_once()
+
+    def test_call_in_enrich_matches_the_signature(self):
+        import inspect, re
+        from api.v1 import citations
+        src = inspect.getsource(citations._enrich)
+        call = re.search(r"_write_enrichment_cache\((.*?)\n    \)", src, re.S).group(1)
+        kwargs = set(re.findall(r"(\w+)=", call))
+        assert kwargs <= set(inspect.signature(citations._write_enrichment_cache).parameters)
