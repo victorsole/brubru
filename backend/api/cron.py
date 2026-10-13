@@ -797,14 +797,12 @@ async def cron_sync_daily(
     # exits non-zero (and records `failed`) on a window it read nothing from.
     results["official_gazettes"] = await _run_script_async(
         "official_gazettes", "scripts/sync_official_gazettes.py", ["--apply"], timeout=300)
-    # Client watches (23 Sep 2026): the Terraqui/DPP-TEX source ledger and the
-    # DPP watch were MANDATORY DAILY in /news, i.e. reminders nobody executed
-    # unless a human ran the skill. They run here, after the feeds they read,
-    # and write sync_runs rows the morning routine and /api/sync/health see.
-    results["client_source_ledger"] = await _run_script_async(
-        "client_source_ledger", "scripts/client_source_ledger.py", ["--record"], timeout=120)
-    results["dpp_watch"] = await _run_script_async(
-        "dpp_watch", "scripts/dpp_watch.py", ["--days", "1", "--record"], timeout=300)
+    # Client watches RETIRED 13 Oct 2026. They ran here from 23 Sep (the Terraqui / LIFE DPP-TEX
+    # source ledger and the DPP watch, after the feeds they read). The engagement ended on
+    # 12 Oct (the client cancelled) and nobody else reads either. The scripts stay
+    # (scripts/client_source_ledger.py, scripts/dpp_watch.py), and so do the feeds above, which
+    # also serve the Brubru DPP API. To bring a client watch back, restore the two
+    # `_run_script_async` calls from git history (commit of 23 Sep 2026).
     results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
     # The Commission list lags the Official Journal (1 Oct 2026: nothing after 23 July while
     # 20 listing regulations had been published). Read the later acts' annexes into
