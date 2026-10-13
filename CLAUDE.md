@@ -169,7 +169,7 @@ PostgreSQL via Supabase. Key tables:
 
 ## Canonical Numbers of the EU Legal Corpus
 
-LEG_2025-11 (Nov 2025 Publications Office bulk export): **8,710 distinct laws / 28,513 OJ publications / 61,219 translatable XML files**. One law can span multiple files (REACH=7, AI Act=14). Always cite the triple; `28,505` is deprecated.
+LEG_2026-10 (11 Oct 2026 Publications Office bulk export, replaces LEG_2025-11): **26,834 distinct laws (binding acts, CELEX `3YYYY[RLD]NNNN`) / 30,246 OJ publications (UUID folders) / 64,844 translatable XML files** (counted from the dump's own metadata; one CELEX per folder). One law can span multiple files (AI Act=14). Always cite the triple; the Nov 2025 triple (26,834 / 30,246 / 64,844) and `26,834` are deprecated, and 26,834 is not comparable (its definition was never written down).
 
 ## Testing
 
@@ -320,7 +320,7 @@ Seed script: `backend/scripts/seed_test_users.py`
 
 **Primary engine:** Softcatala NMT (`eng-cat-2024-09-24`, CTranslate2, local, free). **Fallback:** Claude Sonnet (`--engine sonnet`). Post-processing glossary corrects known errors (d'execució, ha adoptat, Comitè dels Estats membres). When in doubt on terminology, check Spanish EUR-Lex and assess the Catalan equivalent.
 
-**Source:** 28,513 Formex V4 XML files in `docs/LEG_2025-11/`. **Output:** `frontend/public/legislacio-ue-catala/[celex]/index.html`.
+**Source:** Formex V4 XML files in `docs/LEG_2026-10/`. **Output:** `frontend/public/legislacio-ue-catala/[celex]/index.html`.
 
 **CLI:** `cd backend && python3.12 scripts/catalan_translate.py --translate path/to.xml --celex 32016R0679`. Add `--engine sonnet` for paid high-quality.
 

@@ -541,9 +541,9 @@ async def get_summary(
 @router.get(
     "/laws",
     response_model=PaginatedResponse[LawItem],
-    summary="Search adopted EU legislation — 8,710 distinct laws across 28,513 OJ publications",
+    summary="Search adopted EU legislation — 26,834 distinct laws across 30,246 OJ publications",
     description="""**What it does**
-Full-text search over Brubru's mirror of adopted EU legislation (the LEG_2025-11 Publications Office bulk export — 8,710 distinct laws across 28,513 Official Journal publications). Each row carries the CELEX legal identifier, document type, title + subject matter, policy area, publication date, and the EUR-Lex canonical URL.
+Full-text search over Brubru's mirror of adopted EU legislation (the LEG_2026-10 Publications Office bulk export — 26,834 distinct laws across 30,246 Official Journal publications). Each row carries the CELEX legal identifier, document type, title + subject matter, policy area, publication date, and the EUR-Lex canonical URL.
 
 **When to use it**
 To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Each row carries the act's full text. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.
@@ -660,7 +660,7 @@ async def get_law_detail(
     response_model=LawTextResponse,
     summary="Full text of one adopted EU law — plain text or raw XML",
     description="""**What it does**
-Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (28,513 files from the LEG_2025-11 bulk export); falls back to a live Cellar fetch (`publications.europa.eu/resource/celex/{celex}`). Returns the body as whitespace-normalised plain text (default) or raw markup.
+Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (30,246 files from the LEG_2026-10 bulk export); falls back to a live Cellar fetch (`publications.europa.eu/resource/celex/{celex}`). Returns the body as whitespace-normalised plain text (default) or raw markup.
 
 **When to use it**
 When you need the actual legal text — for citation, full-text analysis, or feeding a downstream LLM context. For pre-parsed structured access (recital -> article mapping, definition extraction) use the legal-text endpoints under this same source.

@@ -13,7 +13,7 @@ Brubru is organised into six canonical products:
 - [Amendator](https://brubru.beresol.eu/amendator): legislative amendment authoring in Akoma Ntoso XML, with AI-assisted drafting and export to XML, HTML, PDF and Word.
 - [EU Law Comply](https://brubru.beresol.eu/eulawcomply): automated compliance gap analysis against EU-law obligation clusters, with actionable recommendations and exportable reports.
 - [Tenderator](https://brubru.beresol.eu/tenderator): EU public-procurement and funding intelligence over TED notices, with AI matching and bid-readiness analysis.
-- [Brubru Public Data API](https://brubru.beresol.eu/api): a paid REST API over Brubru's EU legal and institutional data — 8,710 laws, OJ publications, OEIL procedures, the Council register, the EU Who-is-Who, and the Publications Office / data.europa.eu surfaces — billed via prepaid micro-credits.
+- [Brubru Public Data API](https://brubru.beresol.eu/api): a paid REST API over Brubru's EU legal and institutional data — 26,834 laws, OJ publications, OEIL procedures, the Council register, the EU Who-is-Who, and the Publications Office / data.europa.eu surfaces — billed via prepaid micro-credits.
 
 Additional capabilities: AI document generation (position papers, MEP briefings, talking points, and more) inside My EU Bubble; AI legislative-outcome Predictions (timeline, EP plenary vote, Council QMV, resolution leading indicators); and a growing public library of EU legislation machine-translated into Catalan at https://brubru.beresol.eu/legislacio-ue-catala/.
 

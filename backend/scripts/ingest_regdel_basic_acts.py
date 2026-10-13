@@ -8,7 +8,7 @@ Source:
 Each row has: Complete title, Celex number, Policy area, Type of act, Status.
 
 We don't import these as new eu_laws (the corpus is already populated from
-LEG_2025-11). Instead, we update the `policy_area` column on existing rows
+LEG_2026-10). Instead, we update the `policy_area` column on existing rows
 when RegDel has a real DG-level classification (e.g. "SANTE", "TAXUD",
 "AGRI") and our row's policy_area is null.
 

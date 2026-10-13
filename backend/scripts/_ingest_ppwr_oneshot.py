@@ -26,7 +26,7 @@ from backend.services.parsers.formex_parser import FormexParser
 from backend.scripts.import_leg_archive import import_document
 
 uuid = "d34251c8-d865-11ef-be2a-01aa75ed71a1"
-xml_path = project_root / "docs/LEG_2025-11" / uuid / "fmx4/L_202500040EN.000101.fmx.xml"
+xml_path = project_root / "docs/LEG_2026-10" / uuid / "fmx4/L_202500040EN.000101.fmx.xml"
 
 CELEX = "32025R0040"
 TITLE = (

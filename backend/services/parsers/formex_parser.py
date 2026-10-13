@@ -1,7 +1,7 @@
 """
 Formex XML Parser
 
-Parses EU legal documents in Formex XML format (from EUR-Lex/LEG_2025-11 archive).
+Parses EU legal documents in Formex XML format (from EUR-Lex/LEG_2026-10 archive).
 
 Formex is the official XML format used by the Publications Office of the EU.
 This parser extracts structured data from these documents including:

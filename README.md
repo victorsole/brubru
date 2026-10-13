@@ -623,21 +623,21 @@ Brubru aggregates information from 15+ authoritative EU institutional sources.
 
 ### Canonical numbers of the EU legal corpus
 
-Brubru is built on the LEG_2025-11 corpus (Publications Office bulk export, November 2025):
+Brubru is built on the LEG_2026-10 corpus (Publications Office bulk export, 11 October 2026):
 
 | Metric | Exact count |
 |---|---|
-| Distinct laws (unique acts with a main text) | **8,710** |
-| OJ publications (UUID directories) | **28,513** |
-| Total translatable XML files (main + annexes) | **61,219** |
+| Distinct laws (binding acts: regulations, directives, decisions; CELEX 3YYYY[R/L/D]NNNN) | **26,834** |
+| OJ publications (UUID directories) | **30,246** |
+| Total translatable XML files (main + annexes) | **64,844** |
 
-When people ask "how many EU laws in Brubru?", the honest answer is: **8,710 distinct laws across 28,513 OJ entries, represented by 61,219 XML files** (main texts + annexes). A single law's text is often split across multiple pages/files (e.g. REACH spans 7 files, AI Act spans 14 files).
+When people ask "how many EU laws in Brubru?", the honest answer is: **26,834 distinct laws across 30,246 OJ entries, represented by 64,844 XML files** (main texts + annexes). A single law's text is often split across multiple pages/files (e.g. the AI Act spans 14 files).
 
 ### Legislative & Legal Databases
 - **[EUR-Lex](https://eur-lex.europa.eu)** - Official legislative texts, consolidated acts, case law
 - **[OEIL](https://oeil.secure.europarl.europa.eu)** - Legislative procedure tracking (21,600+ files)
 - **[EU Law Tracker](https://law-tracker.europa.eu)** - Commission legislative initiative tracking
-- **[Publications Office](https://op.europa.eu)** - Official documents archive (LEG_2025-11 corpus: 61,219 XML files spanning 28,513 OJ entries, 8,710 distinct laws)
+- **[Publications Office](https://op.europa.eu)** - Official documents archive (LEG_2026-10 corpus: 64,844 XML files spanning 30,246 OJ entries, 26,834 distinct laws)
 
 ### Parliamentary Data
 - **[European Parliament](https://www.europarl.europa.eu)** - MEP data, committees, voting records

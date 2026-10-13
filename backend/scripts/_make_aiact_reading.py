@@ -12,7 +12,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).parent.parent.parent
-DIR = ROOT / "docs/LEG_2025-11/dc8116a1-3fe6-11ef-865a-01aa75ed71a1/fmx4"
+DIR = ROOT / "docs/LEG_2026-10/dc8116a1-3fe6-11ef-865a-01aa75ed71a1/fmx4"
 MAIN = DIR / "L_202401689EN.000101.fmx.xml"
 ANNEX_FILES = [
     "L_202401689EN.012401.fmx.xml", "L_202401689EN.012601.fmx.xml",

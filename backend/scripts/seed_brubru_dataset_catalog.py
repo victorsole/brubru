@@ -140,15 +140,15 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
             "title": "EU legislation TSVECTOR corpus (eu_laws)",
             "description": {
                 "en": (
-                    "8,710 distinct adopted EU laws (28,513 OJ publications, "
-                    "61,219 translatable XML files). Sourced from LEG_2025-11 "
+                    "26,834 distinct adopted EU laws (30,246 OJ publications, "
+                    "64,844 translatable XML files). Sourced from LEG_2026-10 "
                     "Publications Office bulk export and the Cellar SPARQL "
                     "delta sync. Indexed via PostgreSQL TSVECTOR for full-text "
                     "search."
                 ),
                 "ca": (
-                    "Corpus TSVECTOR de 8.710 lleis adoptades de la UE — "
-                    "exportació massiva LEG_2025-11 + delta SPARQL Cellar — "
+                    "Corpus TSVECTOR de 26.834 lleis adoptades de la UE — "
+                    "exportació massiva LEG_2026-10 + delta SPARQL Cellar — "
                     "indexat per cerca de text complet."
                 ),
             },

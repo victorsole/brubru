@@ -4,7 +4,7 @@ Brubru MCP corpus stats — computed at runtime, never hardcoded.
 Every number the MCP surface states to a caller (laws, guides, procedures,
 calendar events, EPRS publications) is read live from the database + the
 KnowledgeLoader here, then cached for an hour. This kills the recurring
-"the server advertises 28,505 laws but the DB has 16,998" drift: there is
+"the server advertises 26,834 laws but the DB has 16,998" drift: there is
 one function, it reads the source of truth, and the descriptions/instructions
 call it instead of embedding a literal.
 
@@ -14,7 +14,7 @@ Design notes:
       we return the last good snapshot, or FALLBACK constants if we never
       succeeded. The MCP must never 500 because a count could not be read.
     - Honest: the law figure is DISTINCT celex in eu_laws (what search
-      actually covers), not the LEG_2025-11 bulk-export corpus triple.
+      actually covers), not the LEG_2026-10 bulk-export corpus triple.
 """
 
 from __future__ import annotations

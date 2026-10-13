@@ -1,7 +1,7 @@
 """
 EU Law Indexer
 
-Indexes EU laws from LEG_2025-11 directory into database and provides
+Indexes EU laws from LEG_2026-10 directory into database and provides
 search functionality for the chatbot context builder.
 
 Main functions:
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 class EULawIndexer:
     """
-    Index and search EU laws from LEG_2025-11.
+    Index and search EU laws from LEG_2026-10.
 
     Provides fast access to 50k+ EU legal documents for:
     - Chatbot context injection
@@ -40,7 +40,7 @@ class EULawIndexer:
 
     def __init__(
         self,
-        leg_directory: str = "docs/LEG_2025-11",
+        leg_directory: str = "docs/LEG_2026-10",
         batch_size: int = 100,
         enable_policy_classification: bool = True
     ):
@@ -48,7 +48,7 @@ class EULawIndexer:
         Initialize indexer.
 
         Args:
-            leg_directory: Path to LEG_2025-11 directory
+            leg_directory: Path to LEG_2026-10 directory
             batch_size: Number of laws to process in each batch
             enable_policy_classification: Automatically classify laws by policy area
         """
@@ -88,7 +88,7 @@ class EULawIndexer:
         max_laws: Optional[int] = None
     ) -> Dict[str, Any]:
         """
-        Index all laws from LEG_2025-11 directory.
+        Index all laws from LEG_2026-10 directory.
 
         This is a long-running operation that parses ~117k XML files
         from ~50k law directories.

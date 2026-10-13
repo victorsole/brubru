@@ -436,7 +436,7 @@ export const LandingPage = () => {
               The EU, structured. REST API and MCP server.
             </h2>
             <p style={{ color: '#6b7280', fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '32px' }}>
-              Brubru is a vertical EU data provider. The same 28,505 laws, 1,296 procedures,
+              Brubru is a vertical EU data provider. The same 26,834 laws, 1,296 procedures,
               live consultation feedback, commissioner agendas, and legal-text intelligence
               that power the Brubru app are exposed as a paid <strong>REST API</strong> and as an{' '}
               <strong>MCP server</strong>. Brubru itself is the first user of its own API.
@@ -479,7 +479,7 @@ export const LandingPage = () => {
             }}>
               {[
                 { icon: 'mdi-bullhorn-variant', name: 'GET /api/v2/proprietary/brussels-lobbies', desc: 'Every Brussels-based EUTR org, ranked, with their own news' },
-                { icon: 'mdi-scale-balance', name: 'GET /api/v2/legislative/eur-lex/laws', desc: '28,505 adopted EU laws, full-text + filters' },
+                { icon: 'mdi-scale-balance', name: 'GET /api/v2/legislative/eur-lex/laws', desc: '26,834 adopted EU laws, full-text + filters' },
                 { icon: 'mdi-train', name: 'GET /api/v2/legislative/oeil/procedures', desc: '1,200+ legislative files in flight' },
                 { icon: 'mdi-account-tie', name: 'GET /api/v2/commission/commissioners/{name}/agenda', desc: 'Live calendar for all 27 college members' },
                 { icon: 'mdi-message-text', name: 'GET /api/v2/commission/consultations/.../feedback', desc: 'Live Have Your Say stakeholder input' },
@@ -510,7 +510,7 @@ export const LandingPage = () => {
             }}>
               {[
                 { icon: 'mdi-chat-question', name: 'ask_brubru', desc: 'Ask any EU policy question' },
-                { icon: 'mdi-scale-balance', name: 'search_eu_legislation', desc: 'Search 28,505 EU laws' },
+                { icon: 'mdi-scale-balance', name: 'search_eu_legislation', desc: 'Search 26,834 EU laws' },
                 { icon: 'mdi-book-open-variant', name: 'search_knowledge_guides', desc: '128 curated policy guides' },
                 { icon: 'mdi-file-document-check', name: 'get_procedure_status', desc: 'Legislative procedure tracker' },
                 { icon: 'mdi-calendar-clock', name: 'get_calendar_events', desc: 'EU institutional calendar' },

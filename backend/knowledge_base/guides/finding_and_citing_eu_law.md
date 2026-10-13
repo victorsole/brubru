@@ -6,7 +6,7 @@
 - **Never HTML-scrape `eur-lex.europa.eu`**: it returns **HTTP 202 + an empty body** to any non-browser client (a JavaScript-challenge WAF). For data, go through Cellar; for the rare prose page, use a headless browser. See `feedback_cellar_needs_accept_language.md`.
 - **Emit ELI links in citations, not `legal-content` URLs**: ELI is a stable HTTP URI that dereferences to the consolidated version of an act and survives the Official Journal's act-by-act change (see `official_journal_explained.md`).
 - **Source spec**: https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html (Publications Office). Full Brubru engineering reference: `docs/api/eu_legal_data_access.md`.
-- **Why Brubru relies on it**: chat citations, the citation verifier, the `eu_laws` table (28,513 OJ publications), the Catalan corpus, and the public API all key off this system.
+- **Why Brubru relies on it**: chat citations, the citation verifier, the `eu_laws` table (30,246 OJ publications), the Catalan corpus, and the public API all key off this system.
 
 ## Where EU law physically lives — Cellar
 EUR-Lex displays documents, but they are stored in **Cellar**, modelled by the **Common Data Model (CDM)** ontology (`http://publications.europa.eu/ontology/cdm#`). Controlled values (country, language, treaty, corporate body, subject) come from the **EU Vocabularies authority tables** (see `eurovoc_thesaurus.md`). Cataloguing follows the **Legal Analysis Methodology (LAM)**.
@@ -16,7 +16,7 @@ EUR-Lex displays documents, but they are stored in **Cellar**, modelled by the *
 |---|---|---|
 | **Cellar SPARQL** | `http://publications.europa.eu/webapi/rdf/sparql` | Querying all metadata + relationships between acts (the real query API) |
 | **Cellar REST** | `https://publications.europa.eu/resource/celex/{CELEX}` | One document's notice + content; send **both** `Accept` and lowercase `Accept-Language` or it 400s |
-| **Data dump** | `https://datadump.publications.europa.eu` | Bulk download of in-force sector-3 acts per language (EU Login) — origin of Brubru's `LEG_2025-11` corpus |
+| **Data dump** | `https://datadump.publications.europa.eu` | Bulk download of in-force sector-3 acts per language (EU Login) — origin of Brubru's `LEG_2026-10` corpus |
 | **SOAP webservice** | registered; expert-query → XML | Full-text search; **10,000-result cap since 1 Jan 2026** — page or use Cellar/dump |
 
 The **`data.europa.eu`** open-data portal (DCAT-AP) is a separate stack: Search API `/api/hub/search/`, SPARQL `/sparql`, Registry `/api/hub/repo/`.

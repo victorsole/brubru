@@ -3,7 +3,7 @@
 ## QUICK FACTS
 - **Purpose**: A CELEX number is a **unique, language-independent identifier** assigned to EU legal documents on EUR-Lex. Every Regulation, Directive, Decision, Court judgment, Treaty, COM proposal, Council common position, and consolidated text has one.
 - **Source spec**: https://eur-lex.europa.eu/content/help/eurlex-content/celex-number.html (Publications Office of the EU)
-- **Why Brubru relies on it**: every chat answer that cites EU law uses CELEX as the canonical reference; the citation verifier validates CELEX refs against the Cellar API; the `eu_laws` table indexes 28,513 OJ publications by CELEX; all 203 knowledge guides cite CELEX numbers in their QUICK FACTS sections.
+- **Why Brubru relies on it**: every chat answer that cites EU law uses CELEX as the canonical reference; the citation verifier validates CELEX refs against the Cellar API; the `eu_laws` table indexes 30,246 OJ publications by CELEX; all 203 knowledge guides cite CELEX numbers in their QUICK FACTS sections.
 - **Canonical regex (Brubru `services/citation_verifier.py`)**: `\b[1-9]\d{4}[A-Z]{1,2}\d{4}\b` — sector(1) + year(4) + type(1-2 letters) + sequence(4)
 - **Cellar URL pattern**: `https://publications.europa.eu/resource/celex/{CELEX}` (requires headers `Accept: application/xhtml+xml` AND `Accept-Language: en` — both mandatory; without `Accept-Language` Cellar 400s)
 - **EUR-Lex URL pattern**: `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{CELEX}` (use the HEAD method only — body scraping is forbidden per CLAUDE.md learned rule)
@@ -130,9 +130,9 @@ Consolidated texts have CELEX numbers starting with `0` and often include a date
 | Layer | Use of CELEX |
 |---|---|
 | Knowledge guides (203 files) | Every QUICK FACTS section cites the CELEX of the anchor regulation. Required for every new guide. |
-| `eu_laws` DB (28,513 OJ publications) | Primary key is CELEX. Search via TSVECTOR; lookup by CELEX is O(log n). |
+| `eu_laws` DB (30,246 OJ publications) | Primary key is CELEX. Search via TSVECTOR; lookup by CELEX is O(log n). |
 | Citation verifier (`services/citation_verifier.py`) | Regex `\b[1-9]\d{4}[A-Z]{1,2}\d{4}\b` extracts CELEX from any free text; per-ref Cellar + EUR-Lex HEAD verification with DB cache (TTLs 30d ok / 24h broken / 1h unknown). |
-| Catalan corpus (28,513 Formex V4 XML) | Each Formex file is named by its CELEX; output HTML at `frontend/public/legislacio-ue-catala/{celex}/index.html`. |
+| Catalan corpus (30,246 Formex V4 XML) | Each Formex file is named by its CELEX; output HTML at `frontend/public/legislacio-ue-catala/{celex}/index.html`. |
 | MCP `search_eu_legislation` | Returns CELEX + title + document_type, exposed to external LLM agents (GovClipping et al). |
 | Daily brief headlines | Headlines naming a CELEX are auto-linkified by `_linkify_legislation()` in `ai_service.py`. |
 | System prompt rule | "NEVER INVENT IDENTIFIERS" — describes the FORMAT (`PE-numbers: PE followed by digits and a sub-version`) without naming specific values, after the negation-paradox lesson of 27-28 April 2026. |
@@ -171,5 +171,5 @@ These appear alongside CELEX in policy work and Brubru must NOT confuse them:
 - `feedback_cellar_needs_accept_language.md` — the Cellar Accept-Language gotcha
 - `feedback_negation_paradox_in_warnings.md` + `feedback_seed_fixtures_contaminate_prod.md` — why Brubru describes the FORMAT and never names specific values in warnings
 - `eu_regulation_linguistic_patterns.md` — drafting conventions of EU regulations (modal verbs, recital structure)
-- `data/LEG_2025-11/` — 28,513 Formex V4 XML files, each named by CELEX
-- CLAUDE.md "Canonical Numbers of the EU Legal Corpus" section — LEG_2025-11 reference numbers (8,710 distinct laws / 28,513 OJ publications / 61,219 translatable XML files)
+- `docs/LEG_2026-10/` — 30,246 Formex V4 XML files, each named by CELEX
+- CLAUDE.md "Canonical Numbers of the EU Legal Corpus" section — LEG_2026-10 reference numbers (26,834 distinct laws / 30,246 OJ publications / 64,844 translatable XML files)

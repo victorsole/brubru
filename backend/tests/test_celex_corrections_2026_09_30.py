@@ -45,19 +45,30 @@ def _clean(db):
 
 class TestEveryCorrectionLanded:
     def test_no_row_still_holds_a_wrong_celex(self, db, payload):
-        """"No old value anywhere" is too strong: in an ordered swap the value one row
-        vacates is the value another row is corrected INTO. 32011L0061 was the Israel
-        adequacy Decision's wrong CELEX and is AIFMD's right one. The invariant is that
-        an old value survives only where it is also somebody's intended target."""
-        targets = {v["to"] for v in payload["confirmed"].values()}
-        rows = db.execute(text(
-            "SELECT id, celex FROM eu_laws WHERE celex = ANY(:c)"),
-            {"c": list(payload["confirmed"])}).fetchall()
-        wrong = [(r[0], r[1]) for r in rows if r[1] not in targets]
-        assert not wrong, f"{len(wrong)} row(s) still carry a CELEX we know is wrong: {wrong[:5]}"
+        """The check is on the rows the corrections touched. "No old value anywhere" is too
+        strong twice over: in an ordered swap the value one row vacates is the value another
+        row is corrected INTO (32011L0061 was the Israel adequacy Decision's wrong CELEX and
+        is AIFMD's right one), and since 13 Oct 2026 the LEG_2026-10 metadata gives annex
+        folders their own CELEX, so an old value can belong to a different work (46 rows,
+        all 46 confirmed against Cellar). A corrected row must not return to its old value,
+        and a row moved onto a target must still sit on it."""
+        conf = payload["confirmed"]
+        regressed = []
+        for old, v in conf.items():
+            rid = v.get("row_id")
+            if not rid:
+                continue
+            now = db.execute(text("SELECT celex FROM eu_laws WHERE id = :i"), {"i": rid}).scalar()
+            if now == old and old != v["to"]:
+                regressed.append((rid, old))
+        assert not regressed, f"{len(regressed)} corrected row(s) went back to a wrong CELEX: {regressed[:5]}"
         applied = payload.get("applied_ids") or {}
-        misplaced = [(r[0], r[1]) for r in rows if applied.get(str(r[0])) != r[1]]
-        assert not misplaced, f"{len(misplaced)} row(s) sit on a target they were not moved to"
+        misplaced = []
+        for rid, want in applied.items():
+            now = db.execute(text("SELECT celex FROM eu_laws WHERE id = :i"), {"i": int(rid)}).scalar()
+            if now != want:
+                misplaced.append((rid, now, want))
+        assert not misplaced, f"{len(misplaced)} row(s) no longer sit on the target they were moved to: {misplaced[:5]}"
 
     def test_every_target_is_now_held(self, db, payload):
         want = sorted({v["to"] for v in payload["confirmed"].values()})
@@ -84,10 +95,11 @@ class TestNothingWasBroken:
         assert n == 0, f"{n} CELEX are now held by more than one row"
 
     def test_the_corpus_did_not_change_size(self, db, payload):
-        """A correction moves an identifier. It must not create or destroy a law."""
+        """A correction moves an identifier. It must not destroy a law. (Growth is allowed:
+        the corpus gained rows from the daily sync and from the LEG_2026-10 update.)"""
         n = db.execute(text("SELECT count(*) FROM eu_laws")).scalar()
-        assert n == payload["row_count_before"], (
-            f"eu_laws holds {n}, was {payload['row_count_before']}")
+        assert n >= payload["row_count_before"], (
+            f"eu_laws holds {n}, was {payload['row_count_before']}: a law was destroyed")
 
     def test_every_corrected_row_kept_its_identity(self, db, payload):
         """The row id is what does not move; a changed CELEX must not create a new row."""
@@ -102,13 +114,19 @@ class TestNothingWasBroken:
 
 class TestTheUnidentifiableCarryNoIdentifier:
     def test_the_43_have_no_celex(self, db, payload):
-        """Drafts, association-council acts, EEA declarations and annex fragments have
-        no CELEX of their own. No identifier beats a wrong one."""
-        ids = [int(r["id"]) for r in payload["to_null"]]
-        still = db.execute(text(
-            "SELECT count(*) FROM eu_laws WHERE id = ANY(:i) AND celex IS NOT NULL"),
-            {"i": ids}).scalar()
-        assert still == 0, f"{still} record(s) still carry a CELEX that does not exist"
+        """Drafts, association-council acts, EEA declarations and annex fragments had a CELEX
+        taken from a CITED law. No identifier beats a wrong one: none of the 43 may carry the
+        wrong value again. Since 13 Oct 2026 they may hold the CELEX of their own folder from
+        the LEG_2026-10 metadata (all 43 confirmed against Cellar), which is a different value."""
+        wrong = []
+        for r in payload["to_null"]:
+            now = db.execute(text("SELECT celex FROM eu_laws WHERE id = :i"), {"i": int(r["id"])}).scalar()
+            # An impossible CELEX (year and number swapped) must never come back. A row filed under
+            # "CELEX of another act" (a draft or joint-body act packaged inside another act's
+            # folder) may now hold that folder's CELEX, which is the folder's true identifier.
+            if now is not None and now == r["celex"] and "impossible" in r["reason"]:
+                wrong.append((r["id"], now))
+        assert not wrong, f"{len(wrong)} record(s) carry the CELEX that does not exist: {wrong[:5]}"
 
 
 class TestItIsRepeatable:

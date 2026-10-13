@@ -2,7 +2,7 @@
 Test Law Extraction
 
 Test script to validate XML parsing and metadata extraction
-on sample files from LEG_2025-11.
+on sample files from LEG_2026-10.
 
 Usage:
     python -m backend.scripts.test_law_extraction
@@ -30,9 +30,9 @@ def test_xml_parser():
 
     # Test files (we saw this one in the directory listing)
     test_files = [
-        "docs/LEG_2025-11/1a1e8486-a474-11e9-9d01-01aa75ed71a1/fmx4/L_2019187EN.01004101.xml",
-        "docs/LEG_2025-11/65a9ddff-3e78-403b-ab34-98d7973be2b3/fmx4/L_2010117EN.01006001.xml",
-        "docs/LEG_2025-11/a4d26b15-882d-11e9-9369-01aa75ed71a1/fmx4/L_2019148EN.01000101.xml",
+        "docs/LEG_2026-10/1a1e8486-a474-11e9-9d01-01aa75ed71a1/fmx4/L_2019187EN.01004101.xml",
+        "docs/LEG_2026-10/65a9ddff-3e78-403b-ab34-98d7973be2b3/fmx4/L_2010117EN.01006001.xml",
+        "docs/LEG_2026-10/a4d26b15-882d-11e9-9369-01aa75ed71a1/fmx4/L_2019148EN.01000101.xml",
     ]
 
     results = []

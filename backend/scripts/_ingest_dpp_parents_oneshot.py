@@ -67,7 +67,7 @@ def main() -> int:
     rc = 0
     try:
         for a in ACTS:
-            xml = project_root / "docs/LEG_2025-11" / a["uuid"] / a["rel"]
+            xml = project_root / "docs/LEG_2026-10" / a["uuid"] / a["rel"]
             print(f"\n=== {a['celex']} ===")
             print(f"xml exists: {xml.exists()}"
                   f"{' size=' + str(xml.stat().st_size) if xml.exists() else ''}")

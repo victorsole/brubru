@@ -94,7 +94,7 @@ A single Cellar SPARQL query resolves CELEX to ELI (`cdm:resource_legal_eli`), a
 
 Beyond the SPARQL endpoint and single-document content negotiation, Cellar offers:
 - **RSS and Atom feeds** announcing new or updated publications, so downstream systems can poll for changes rather than re-crawling.
-- **Bulk download** of whole categories of content (for example, the full Formex XML acquis dump), which is how large-scale corpora such as the Publications Office's Nov 2025 bulk export (8,710 laws / 28,513 OJ publications / 61,219 translatable XML files, Brubru's canonical numbers for the EU legal corpus) are distributed and consumed.
+- **Bulk download** of whole categories of content (for example, the full Formex XML acquis dump), which is how large-scale corpora such as the Publications Office's Oct 2026 bulk export (26,834 laws / 30,246 OJ publications / 64,844 translatable XML files, Brubru's canonical numbers for the EU legal corpus) are distributed and consumed.
 - **Web services (SOAP)** for EUR-Lex-specific search, a separate, registration-required interface layered on top of the same underlying Cellar content, primarily used for keyword search rather than metadata graph queries.
 
 ## Why it matters to a policy professional

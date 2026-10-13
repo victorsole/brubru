@@ -1,7 +1,7 @@
 """
 Formex XML Parser for EU Laws
 
-Parses EU legal documents in Formex XML format from LEG_2025-11 directory.
+Parses EU legal documents in Formex XML format from LEG_2026-10 directory.
 Extracts metadata including CELEX, title, date, legal basis, citations, and full text.
 
 Formex is the EU Publications Office standard XML format used for
@@ -78,7 +78,7 @@ class FormexXMLParser:
         """
         Extract UUID from file path.
 
-        Path structure: docs/LEG_2025-11/{UUID}/fmx4/filename.xml
+        Path structure: docs/LEG_2026-10/{UUID}/fmx4/filename.xml
         """
         path = Path(xml_path)
         # Get parent's parent (the UUID directory)

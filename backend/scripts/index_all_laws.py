@@ -1,7 +1,7 @@
 """
 Index All EU Laws
 
-Management script to index all 50k+ laws from LEG_2025-11 directory.
+Management script to index all 50k+ laws from LEG_2026-10 directory.
 
 This is a long-running operation (estimated 2-3 hours for full indexing).
 
@@ -49,7 +49,7 @@ def format_duration(seconds: float) -> str:
 async def main():
     """Main indexing function"""
     parser = argparse.ArgumentParser(
-        description="Index all EU laws from LEG_2025-11",
+        description="Index all EU laws from LEG_2026-10",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

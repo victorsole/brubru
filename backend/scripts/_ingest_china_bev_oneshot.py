@@ -23,7 +23,7 @@ from backend.services.parsers.formex_parser import FormexParser
 from backend.scripts.import_leg_archive import import_document
 
 # Resolve from the CSV register so we never hard-code the wrong UUID
-xml_path = project_root / "docs/LEG_2025-11/0109a10f-9621-11ef-a130-01aa75ed71a1/fmx4/L_202402754EN.000101.fmx.xml"
+xml_path = project_root / "docs/LEG_2026-10/0109a10f-9621-11ef-a130-01aa75ed71a1/fmx4/L_202402754EN.000101.fmx.xml"
 uuid = "0109a10f-9621-11ef-a130-01aa75ed71a1"
 
 print(f"xml exists: {xml_path.exists()} | size: {xml_path.stat().st_size if xml_path.exists() else 'n/a'}")

@@ -2,7 +2,7 @@
 EU Law Parsers and Fetchers
 
 Parsers for different EU legal document formats:
-- formex_parser: Parse Formex XML from EUR-Lex (LEG_2025-11 archive)
+- formex_parser: Parse Formex XML from EUR-Lex (LEG_2026-10 archive)
 - eurlex_parser: Parse EUR-Lex XHTML (web format)
 - eurlex_fetcher: Fetch laws from local DB or EUR-Lex web
 """

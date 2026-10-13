@@ -87,7 +87,7 @@ Also track language distribution: EN (~75%), ES (~5%), CA (~4%), IT (~2%), FR (~
 
 ### Step 2: Select Random Laws
 
-**Primary source: `eu_laws` PostgreSQL table** (28,505 laws with titles, policy areas, TSVECTOR search). This is much faster than reading XML files from disk.
+**Primary source: `eu_laws` PostgreSQL table** (26,834 laws with titles, policy areas, TSVECTOR search). This is much faster than reading XML files from disk.
 
 ```python
 import psycopg2, os
@@ -132,7 +132,7 @@ cur.execute("""
 """)
 ```
 
-**Fallback:** If the database is unavailable, use the XML corpus at `docs/LEG_2025-11/` (see `memory/reference_leg_2025_11.md`).
+**Fallback:** If the database is unavailable, use the XML corpus at `docs/LEG_2026-10/`.
 
 ### Step 3: Generate Synthetic Queries
 

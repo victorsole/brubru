@@ -1,7 +1,7 @@
 """
-Import LEG_2025-11 Archive into eu_laws Table
+Import LEG_2026-10 Archive into eu_laws Table
 
-This script indexes the 71K EU law documents from the LEG_2025-11 Formex XML archive
+This script indexes the 71K EU law documents from the LEG_2026-10 Formex XML archive
 into the Supabase eu_laws table.
 
 Usage:
@@ -45,7 +45,7 @@ def find_main_xml_files(archive_path: Path) -> list[tuple[str, Path]]:
     Find all main XML files in the LEG archive.
 
     Returns list of (uuid, xml_path) tuples.
-    Main files are those in fmx4/ directories that don't end with .doc.fmx.xml or .toc.fmx.xml
+    Main files are those in fmx4/ directories that are not .doc/.toc wrapper files
     """
     results = []
 
@@ -60,25 +60,18 @@ def find_main_xml_files(archive_path: Path) -> list[tuple[str, Path]]:
         uuid = uuid_dir.name
 
         # Find main XML file (usually the one with .000101. in the name or first page)
-        xml_files = list(fmx4_dir.glob('*.xml'))
+        xml_files = sorted(fmx4_dir.glob('*.xml'), key=lambda x: x.name)
 
-        # Filter out metadata files
-        main_files = [
-            f for f in xml_files
-            if not f.name.endswith('.doc.fmx.xml')
-            and not f.name.endswith('.toc.fmx.xml')
-            and '.000101.' in f.name  # Main document is usually page 1
-        ]
+        # Filter out wrapper files: *.doc.xml / *.toc.xml (and the .fmx. variants) hold
+        # bibliographic references only, no CELEX and no act text (LEG_2026-10: 23,709 of
+        # 30,238 folders would otherwise select a wrapper)
+        wrappers = ('.doc.fmx.xml', '.toc.fmx.xml', '.doc.xml', '.toc.xml')
+        content_files = [f for f in xml_files if not f.name.endswith(wrappers)]
+        main_files = [f for f in content_files if '.000101.' in f.name]  # Main document is usually page 1
 
-        # If no .000101. file, try to find the first page
+        # If no .000101. file, take the first page (sorted by name, so the pick is deterministic)
         if not main_files:
-            main_files = [
-                f for f in xml_files
-                if not f.name.endswith('.doc.fmx.xml')
-                and not f.name.endswith('.toc.fmx.xml')
-            ]
-            # Sort to get the first page
-            main_files.sort(key=lambda x: x.name)
+            main_files = content_files
 
         if main_files:
             results.append((uuid, main_files[0]))
@@ -226,11 +219,11 @@ def import_document(
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Import LEG_2025-11 archive into eu_laws table')
+    parser = argparse.ArgumentParser(description='Import LEG_2026-10 archive into eu_laws table')
     parser.add_argument('--limit', type=int, default=None, help='Limit number of documents to process')
     parser.add_argument('--dry-run', action='store_true', help='Parse but do not insert into database')
     parser.add_argument('--verbose', action='store_true', help='Show detailed progress')
-    parser.add_argument('--archive-path', type=str, default='docs/LEG_2025-11',
+    parser.add_argument('--archive-path', type=str, default='docs/LEG_2026-10',
                         help='Path to LEG archive directory')
 
     args = parser.parse_args()

@@ -956,7 +956,7 @@ LAW_PACKAGES = {
     },
 
     # =========================================================================
-    # STARTUP-FOCUSED COMPLIANCE PACKAGES (LEG_2025-11)
+    # STARTUP-FOCUSED COMPLIANCE PACKAGES (LEG_2026-10)
     # =========================================================================
 
     'fintech_startup': {

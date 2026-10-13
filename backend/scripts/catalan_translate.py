@@ -879,7 +879,7 @@ def fetch_fmx4_xml_via_notice(celex: str, language: str = 'ENG') -> str:
     return path
 
 
-def find_xml(search_term: str, base_dir: str = 'docs/LEG_2025-11') -> list:
+def find_xml(search_term: str, base_dir: str = 'docs/LEG_2026-10') -> list:
     """Find XML files matching an OJ reference pattern."""
     results = []
     for dirpath, dirnames, filenames in os.walk(base_dir):
@@ -1868,7 +1868,7 @@ def main():
     args = parser.parse_args()
 
     if args.find:
-        base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '..', 'docs', 'LEG_2025-11')
+        base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '..', 'docs', 'LEG_2026-10')
         results = find_xml(args.find, base_dir)
         if results:
             print(f'Found {len(results)} files:')

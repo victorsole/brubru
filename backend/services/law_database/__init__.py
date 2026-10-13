@@ -2,7 +2,7 @@
 EU Law Database Services
 
 Services for indexing, searching, and managing the 50k+ EU laws
-from the LEG_2025-11 directory.
+from the LEG_2026-10 directory.
 
 Modules:
 - xml_parser: Parse Formex XML files and extract metadata

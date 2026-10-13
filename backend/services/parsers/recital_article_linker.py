@@ -182,7 +182,7 @@ def link_recitals_to_articles_json(parsed_law: Any, top_n: int = 3) -> dict[str,
 # ---------------------------------------------------------------------------
 # CLI for quick manual testing against a Formex XML file or a CELEX via Cellar.
 # Example:
-#   python3.12 -m services.parsers.recital_article_linker --formex docs/LEG_2025-11/.../file.xml
+#   python3.12 -m services.parsers.recital_article_linker --formex docs/LEG_2026-10/.../file.xml
 #   python3.12 -m services.parsers.recital_article_linker --celex 32016R0679
 # ---------------------------------------------------------------------------
 def _main() -> int:

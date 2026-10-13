@@ -3,7 +3,7 @@ EUR-Lex Document Fetcher
 
 Fetches and parses EU legal documents from EUR-Lex.
 Strategy:
-1. Check local database (28k+ laws from LEG_2025-11 archive)
+1. Check local database (28k+ laws from LEG_2026-10 archive)
 2. Fall back to EUR-Lex web API if not found locally
 
 Usage:
@@ -67,7 +67,7 @@ class EurlexFetcher:
     """
     Fetches EU legal documents from local archive or EUR-Lex web.
 
-    The fetcher prioritizes local documents from the LEG_2025-11 archive
+    The fetcher prioritizes local documents from the LEG_2026-10 archive
     (28k+ documents) for speed and reliability, falling back to web
     fetch for documents not in the archive.
     """
@@ -87,7 +87,7 @@ class EurlexFetcher:
 
         Args:
             db: SQLAlchemy database session (for local lookups)
-            archive_path: Path to LEG_2025-11 archive (for XML parsing)
+            archive_path: Path to LEG_2026-10 archive (for XML parsing)
         """
         self.db = db
         self.archive_path = Path(archive_path) if archive_path else None

@@ -781,7 +781,7 @@ class ContextData:
     # Legislative Train Schedule (EC priorities tracking)
     legislative_train_files: List[Dict[str, Any]]
 
-    # Local EU Laws Database (50k+ laws from LEG_2025-11)
+    # Local EU Laws Database (50k+ laws from LEG_2026-10)
     local_eu_laws: List[Dict[str, Any]]
 
     # Real-time web search (Tavily)
@@ -6100,7 +6100,7 @@ class ContextBuilder:
         entities: ExtractedEntities
     ) -> List[Dict[str, Any]]:
         """
-        Fetch EU laws from local LEG_2025-11 database (28K+ laws).
+        Fetch EU laws from local LEG_2026-10 database (30K+ laws).
 
         Uses PostgreSQL TSVECTOR full-text search (GIN-indexed) for fast,
         relevance-ranked results. Falls back to CELEX direct lookup when
@@ -12617,7 +12617,7 @@ class ContextBuilder:
                 sections.append(f"  Generated: {briefing['generated_at']}")
                 sections.append("")
 
-        # Local EU Laws Database (28K+ laws from LEG_2025-11, TSVECTOR-ranked)
+        # Local EU Laws Database (30K+ laws from LEG_2026-10, TSVECTOR-ranked)
         if context_data.local_eu_laws:
             sections.append(f"\nEU LAWS DATABASE ({len(context_data.local_eu_laws)} relevant laws from Brubru's EU legislation database):")
             sections.append("These are adopted EU laws matched by full-text relevance ranking.")

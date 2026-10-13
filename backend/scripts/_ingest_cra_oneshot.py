@@ -15,7 +15,7 @@ Source
 Every fact below is read from the Formex text in the November 2025 bulk export,
 not from recollection or a summary:
 
-  docs/LEG_2025-11/21b7d4eb-a6e2-11ef-85f0-01aa75ed71a1/fmx4/
+  docs/LEG_2026-10/21b7d4eb-a6e2-11ef-85f0-01aa75ed71a1/fmx4/
       L_202402847EN.000101.fmx.xml     71 articles, main operative text
 
 Verified from that file: the application dates in Article 71 (the Regulation
@@ -28,7 +28,7 @@ Why a raw INSERT and not the ORM
 --------------------------------
 `eu_laws.search_vector` is GENERATED ALWAYS in Postgres but declared writable on
 the model, so any ORM insert raises. The fix is an explicit column list that
-omits it. `corpus_version` is varchar(20), which 'LEG_2025-11' fits.
+omits it. `corpus_version` is varchar(20), which 'LEG_2026-10' fits.
 
 Usage:
   python3.12 -m scripts._ingest_cra_oneshot --dry-run
@@ -67,8 +67,8 @@ DATE = "2024-10-23"
 OJ_REFERENCE = "OJ L, 2024/2847, 20.11.2024"
 DOC_TYPE = "Regulation"
 POLICY_AREA = "Digital Policy and Digital Economy"
-CORPUS_VERSION = "LEG_2025-11"
-XML_PATH = ("docs/LEG_2025-11/21b7d4eb-a6e2-11ef-85f0-01aa75ed71a1/fmx4/"
+CORPUS_VERSION = "LEG_2026-10"
+XML_PATH = ("docs/LEG_2026-10/21b7d4eb-a6e2-11ef-85f0-01aa75ed71a1/fmx4/"
             "L_202402847EN.000101.fmx.xml")
 
 SAAS_CLUSTER = 21

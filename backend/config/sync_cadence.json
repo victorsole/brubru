@@ -54,7 +54,7 @@
     },
     {
       "path_prefix": "/api/v1/laws",
-      "source": "eu_laws: LEG_2025-11 bulk export + Cellar SPARQL (OJ L regulations, directives, decisions)",
+      "source": "eu_laws: LEG_2026-10 bulk export + Cellar SPARQL (OJ L regulations, directives, decisions)",
       "script": "scripts/sync_eu_laws_from_cellar.py --days 14 --apply (hot-6h cron, since 15 Sep 2026)",
       "tier": "hot_6h",
       "notes": "Until 15 Sep 2026 eu_laws had NO recurring ingest: sync_eurlex_via_sparql.py and sync_eurlex_feeds.py write legislative_carriages, not eu_laws, so 1,880 acts published after the Nov 2025 export were missing (backfilled 15 Sep). Rolling 14-day window by OJ publication date; acts without an English title yet are deferred, never written with a placeholder. Runs recorded in sync_runs as eu_laws_cellar."

@@ -1,5 +1,5 @@
 """
-Extract Legislation Acronyms from LEG_2025-11 Directory
+Extract Legislation Acronyms from LEG_2026-10 Directory
 
 Parses 50k+ EU law XML files to build a comprehensive acronym-to-CELEX mapping database.
 Extracts:
@@ -283,7 +283,7 @@ class LegislationAcronymExtractor:
             'metadata': {
                 'title': 'EU Legislation Acronyms - Complete Database',
                 'description': 'Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation',
-                'source': 'docs/LEG_2025-11/ + manual curation',
+                'source': 'docs/LEG_2026-10/ + manual curation',
                 'extraction_date': '2025-11-19',
                 'total_entries': len(merged_acronyms),
                 'auto_extracted': len(self.acronym_map),
@@ -307,7 +307,7 @@ class LegislationAcronymExtractor:
 def main():
     """Main execution"""
     # Paths
-    source_dir = Path(__file__).parent.parent.parent / 'docs' / 'LEG_2025-11'
+    source_dir = Path(__file__).parent.parent.parent / 'docs' / 'LEG_2026-10'
     output_path = Path(__file__).parent.parent / 'knowledge_base' / 'institutions' / 'legislation_acronyms.json'
 
     # Check if source directory exists
