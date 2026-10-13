@@ -1,0 +1,390 @@
+{
+ "_about": "Natural questions, one per language in this order: en, fr, nl, es, ca, it. Key = guide id, optionally '#label' to test a second topic of the same guide. Written 13 Oct 2026 for the AgRI 2040 / Food 2040 guide set (COM(2026) 453).",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "agri_food_research_innovation_strategy": [
+   "What is the EU's new strategic approach to research and innovation for agri-food, AgRI 2040 and Food 2040?",
+   "Qu'est-ce que la nouvelle approche stratégique de l'UE pour la recherche et l'innovation agroalimentaires, AgRI 2040 et Food 2040 ?",
+   "Wat is de nieuwe strategische aanpak van de EU voor onderzoek en innovatie in de agrovoedingssector, AgRI 2040 en Food 2040?",
+   "¿Qué es el nuevo enfoque estratégico de la UE para la investigación y la innovación agroalimentarias, AgRI 2040 y Food 2040?",
+   "Què és el nou enfocament estratègic de la UE per a la recerca i la innovació agroalimentàries, AgRI 2040 i Food 2040?",
+   "Che cos'è il nuovo approccio strategico dell'UE per la ricerca e l'innovazione agroalimentari, AgRI 2040 e Food 2040?"
+  ],
+  "agri_food_research_innovation_strategy#noname": [
+   "What strategy did the Commission adopt in September 2026 for agricultural research and innovation?",
+   "Quelle stratégie la Commission a-t-elle adoptée en septembre 2026 pour la recherche et l'innovation agricoles ?",
+   "Welke strategie heeft de Commissie in september 2026 aangenomen voor onderzoek en innovatie in de landbouw?",
+   "¿Qué estrategia adoptó la Comisión en septiembre de 2026 para la investigación y la innovación agrícolas?",
+   "Quina estratègia va adoptar la Comissió el setembre del 2026 per a la recerca i la innovació agrícoles?",
+   "Quale strategia ha adottato la Commissione a settembre 2026 per la ricerca e l'innovazione agricole?"
+  ],
+  "agri_food_research_innovation_strategy#conference": [
+   "When is the EU AgRI 2040 conference and who opens it?",
+   "Quand a lieu la conférence européenne AgRI 2040 et qui l'ouvre ?",
+   "Wanneer is de EU-conferentie AgRI 2040 en wie opent haar?",
+   "¿Cuándo es la conferencia europea AgRI 2040 y quién la inaugura?",
+   "Quan se celebra la conferència europea AgRI 2040 i qui la inaugura?",
+   "Quando si tiene la conferenza europea AgRI 2040 e chi la apre?"
+  ],
+  "agri_2040_eight_areas_of_action": [
+   "How many areas of action does AgRI 2040 have and what are they?",
+   "Combien de domaines d'action AgRI 2040 compte-t-il et lesquels ?",
+   "Hoeveel actiegebieden heeft AgRI 2040 en welke zijn dat?",
+   "¿Cuántas áreas de actuación tiene AgRI 2040 y cuáles son?",
+   "Quantes àrees d'actuació té AgRI 2040 i quines són?",
+   "Quanti ambiti d'azione ha AgRI 2040 e quali sono?"
+  ],
+  "food_2040_six_areas_and_food_2030_legacy": [
+   "What are the six areas of action of Food 2040?",
+   "Quels sont les six domaines d'action de Food 2040 ?",
+   "Wat zijn de zes actiegebieden van Food 2040?",
+   "¿Cuáles son las seis áreas de actuación de Food 2040?",
+   "Quines són les sis àrees d'actuació de Food 2040?",
+   "Quali sono i sei ambiti d'azione di Food 2040?"
+  ],
+  "food_2040_six_areas_and_food_2030_legacy#food2030": [
+   "What were the 11 pathways for action of Food 2030?",
+   "Quelles étaient les 11 voies d'action de Food 2030 ?",
+   "Wat waren de 11 actietrajecten van Food 2030?",
+   "¿Cuáles eran las 11 vías de acción de Food 2030?",
+   "Quines eren les 11 vies d'acció de Food 2030?",
+   "Quali erano gli 11 percorsi d'azione di Food 2030?"
+  ],
+  "agri_2040_open_consultation_results_2026": [
+   "How many replies did the AgRI 2040 open consultation receive and who answered?",
+   "Combien de réponses la consultation publique sur AgRI 2040 a-t-elle reçues et qui a répondu ?",
+   "Hoeveel reacties kreeg de openbare raadpleging over AgRI 2040 en wie heeft geantwoord?",
+   "¿Cuántas respuestas recibió la consulta pública sobre AgRI 2040 y quién respondió?",
+   "Quantes respostes va rebre la consulta pública sobre AgRI 2040 i qui va respondre?",
+   "Quante risposte ha ricevuto la consultazione pubblica su AgRI 2040 e chi ha risposto?"
+  ],
+  "building_food_2040_stakeholder_input_2026": [
+   "What did the Building Food 2040 report say about stakeholder priorities?",
+   "Que dit le rapport Building Food 2040 sur les priorités des parties prenantes ?",
+   "Wat zegt het rapport Building Food 2040 over de prioriteiten van de belanghebbenden?",
+   "¿Qué dice el informe Building Food 2040 sobre las prioridades de las partes interesadas?",
+   "Què diu l'informe Building Food 2040 sobre les prioritats de les parts interessades?",
+   "Cosa dice il rapporto Building Food 2040 sulle priorità dei portatori di interessi?"
+  ],
+  "building_food_2040_stakeholder_input_2026#survey": [
+   "How many people answered the Food 2040 survey and what were the top priorities?",
+   "Combien de personnes ont répondu à l'enquête Food 2040 et quelles étaient les priorités principales ?",
+   "Hoeveel mensen beantwoordden de Food 2040-enquête en wat waren de belangrijkste prioriteiten?",
+   "¿Cuántas personas respondieron a la encuesta Food 2040 y cuáles fueron las principales prioridades?",
+   "Quantes persones van respondre a l'enquesta Food 2040 i quines van ser les prioritats principals?",
+   "Quante persone hanno risposto al sondaggio Food 2040 e quali erano le priorità principali?"
+  ],
+  "agri_food_research_evidence_2014_2024_swd_2026_271": [
+   "How much did the EU invest in agricultural research projects in 2014-2024 according to SWD(2026) 271?",
+   "Combien l'UE a-t-elle investi dans les projets de recherche agricole en 2014-2024 selon le document SWD(2026) 271 ?",
+   "Hoeveel heeft de EU in 2014-2024 geïnvesteerd in landbouwonderzoeksprojecten volgens SWD(2026) 271?",
+   "¿Cuánto invirtió la UE en proyectos de investigación agrícola en 2014-2024 según el documento SWD(2026) 271?",
+   "Quant va invertir la UE en projectes de recerca agrícola el 2014-2024 segons el document SWD(2026) 271?",
+   "Quanto ha investito l'UE in progetti di ricerca agricola nel 2014-2024 secondo il documento SWD(2026) 271?"
+  ],
+  "agri_food_innovation_uptake_multi_actor_living_labs_akis": [
+   "What is the multi-actor approach in Horizon Europe agricultural projects and how do Operational Groups fit in?",
+   "Qu'est-ce que l'approche multi-acteurs dans les projets agricoles d'Horizon Europe et comment les groupes opérationnels s'y intègrent-ils ?",
+   "Wat is de multi-actorbenadering in landbouwprojecten van Horizon Europe en hoe passen operationele groepen daarin?",
+   "¿Qué es el enfoque multiactor en los proyectos agrícolas de Horizonte Europa y cómo encajan los grupos operativos?",
+   "Què és l'enfocament multiactor en els projectes agrícoles d'Horitzó Europa i com encaixen els grups operatius?",
+   "Cos'è l'approccio multi-attore nei progetti agricoli di Horizon Europe e come si inseriscono i gruppi operativi?"
+  ],
+  "agri_food_research_flagship_projects_2014_2025": [
+   "What is the Climate Farm Demo project and how many demonstration farms does it have?",
+   "Qu'est-ce que le projet Climate Farm Demo et combien de fermes de démonstration compte-t-il ?",
+   "Wat is het project Climate Farm Demo en hoeveel demonstratiebedrijven heeft het?",
+   "¿Qué es el proyecto Climate Farm Demo y cuántas granjas de demostración tiene?",
+   "Què és el projecte Climate Farm Demo i quantes granges de demostració té?",
+   "Cos'è il progetto Climate Farm Demo e quante aziende dimostrative ha?"
+  ],
+  "agri_food_strategy_measures_lab_to_fab_investment_and_scale_up": [
+   "What does the strategy propose to help agri-food startups and scaleups, such as innovation vouchers and cascade funding?",
+   "Que propose la stratégie pour aider les start-up et scale-up agroalimentaires, comme les bons d'innovation et le financement en cascade ?",
+   "Wat stelt de strategie voor om agrovoedingsstartups en scale-ups te helpen, zoals innovatievouchers en cascadefinanciering?",
+   "¿Qué propone la estrategia para ayudar a las startups y scaleups agroalimentarias, como los bonos de innovación y la financiación en cascada?",
+   "Què proposa l'estratègia per ajudar les startups i scaleups agroalimentàries, com els xecs d'innovació i el finançament en cascada?",
+   "Cosa propone la strategia per aiutare le startup e scaleup agroalimentari, come i buoni per l'innovazione e il finanziamento a cascata?"
+  ],
+  "agri_food_strategy_measures_food_technology_and_fermentation": [
+   "Why does the Commission talk about a shortage of fermentation capacity and a second valley of death for food technology?",
+   "Pourquoi la Commission parle-t-elle d'un manque de capacité de fermentation et d'une deuxième vallée de la mort pour les technologies alimentaires ?",
+   "Waarom spreekt de Commissie over een tekort aan fermentatiecapaciteit en een tweede valley of death voor voedseltechnologie?",
+   "¿Por qué la Comisión habla de una escasez de capacidad de fermentación y de un segundo valle de la muerte para la tecnología alimentaria?",
+   "Per què la Comissió parla d'una manca de capacitat de fermentació i d'una segona vall de la mort per a la tecnologia alimentària?",
+   "Perché la Commissione parla di carenza di capacità di fermentazione e di una seconda valle della morte per la tecnologia alimentare?"
+  ],
+  "agri_food_research_five_co_funded_partnerships": [
+   "How much money does the European partnership on agroecology have and who coordinates it?",
+   "De quel budget dispose le partenariat européen sur l'agroécologie et qui le coordonne ?",
+   "Hoeveel geld heeft het Europese partnerschap voor agro-ecologie en wie coördineert het?",
+   "¿Cuánto dinero tiene la asociación europea sobre agroecología y quién la coordina?",
+   "Quants diners té l'associació europea sobre agroecologia i qui la coordina?",
+   "Quanto denaro ha il partenariato europeo sull'agroecologia e chi lo coordina?"
+  ],
+  "mission_soil_a_soil_deal_for_europe_research_mission": [
+   "What is the EU Mission A Soil Deal for Europe and how many living labs has it set up?",
+   "Qu'est-ce que la mission européenne Un pacte pour les sols en Europe et combien de laboratoires vivants a-t-elle créés ?",
+   "Wat is de EU-missie A Soil Deal for Europe en hoeveel living labs heeft die opgezet?",
+   "¿Qué es la misión de la UE Un pacto por el suelo en Europa y cuántos laboratorios vivientes ha creado?",
+   "Què és la missió de la UE Un pacte pels sòls a Europa i quants laboratoris vius ha creat?",
+   "Cos'è la missione UE Un patto per il suolo in Europa e quanti laboratori viventi ha creato?"
+  ],
+  "agri_food_research_2016_strategic_approach_and_13_thematic_areas": [
+   "What were the objectives of the 2016 strategic approach to EU agricultural research and innovation and what did it achieve?",
+   "Quels étaient les objectifs de l'approche stratégique de 2016 pour la recherche et l'innovation agricoles de l'UE et qu'a-t-elle accompli ?",
+   "Wat waren de doelstellingen van de strategische aanpak van 2016 voor landbouwonderzoek en innovatie in de EU en wat heeft die bereikt?",
+   "¿Cuáles eran los objetivos del enfoque estratégico de 2016 para la investigación e innovación agrícolas de la UE y qué logró?",
+   "Quins eren els objectius de l'enfocament estratègic del 2016 per a la recerca i la innovació agrícoles de la UE i què va aconseguir?",
+   "Quali erano gli obiettivi dell'approccio strategico del 2016 per la ricerca e l'innovazione agricole dell'UE e cosa ha ottenuto?"
+  ],
+  "agri_food_innovation_operational_groups_akis_and_knowledge_networks": [
+   "What are AKIS, the agricultural knowledge and innovation systems, and are they compulsory in the CAP?",
+   "Que sont les AKIS, les systèmes de connaissances et d'innovation agricoles, et sont-ils obligatoires dans la PAC ?",
+   "Wat zijn AKIS, de agrarische kennis- en innovatiesystemen, en zijn ze verplicht in het GLB?",
+   "¿Qué son los AKIS, los sistemas de conocimiento e innovación agrarios, y son obligatorios en la PAC?",
+   "Què són els AKIS, els sistemes de coneixement i innovació agraris, i són obligatoris a la PAC?",
+   "Cosa sono gli AKIS, i sistemi della conoscenza e dell'innovazione in agricoltura, e sono obbligatori nella PAC?"
+  ],
+  "agri_2040_area_1_soil_agri_ecosystems_water_nutrients": [
+   "What does AgRI 2040 say about soil health, water and nutrients?",
+   "Que dit AgRI 2040 sur le sol, l'eau et les nutriments ?",
+   "Wat zegt AgRI 2040 over de bodem, het water en de nutriënten?",
+   "¿Qué dice AgRI 2040 sobre el suelo, el agua y los nutrientes?",
+   "Què diu AgRI 2040 sobre el sòl, l'aigua i els nutrients?",
+   "Cosa dice AgRI 2040 sul suolo, l'acqua e i nutrienti?"
+  ],
+  "agri_2040_area_2_cropping_systems_plant_health_protein_crops": [
+   "What does AgRI 2040 propose on plant health, breeding and protein crops?",
+   "Que propose AgRI 2040 sur la santé des végétaux, la sélection végétale et les protéagineux ?",
+   "Wat stelt AgRI 2040 voor over plantgezondheid, veredeling en eiwitgewassen?",
+   "¿Qué propone AgRI 2040 sobre la sanidad vegetal, la mejora vegetal y los cultivos proteicos?",
+   "Què proposa AgRI 2040 sobre la sanitat vegetal, la millora vegetal i els cultius proteics?",
+   "Cosa propone AgRI 2040 su salute delle piante, miglioramento genetico e colture proteiche?"
+  ],
+  "agri_2040_area_3_livestock_systems": [
+   "What does AgRI 2040 say about livestock systems and animal health?",
+   "Que dit AgRI 2040 sur l'élevage et la santé animale ?",
+   "Wat zegt AgRI 2040 over de veehouderij en de dierlijke gezondheid?",
+   "¿Qué dice AgRI 2040 sobre la ganadería y la sanidad animal?",
+   "Què diu AgRI 2040 sobre la ramaderia i la sanitat animal?",
+   "Cosa dice AgRI 2040 sull'allevamento e la salute animale?"
+  ],
+  "agri_2040_area_4_bioeconomy_agriculture_forestry_rural": [
+   "What does AgRI 2040 say about the bioeconomy, biomass and bio-based fertilisers?",
+   "Que dit AgRI 2040 sur la bioéconomie, la biomasse et les engrais biosourcés ?",
+   "Wat zegt AgRI 2040 over de bio-economie, biomassa en biogebaseerde meststoffen?",
+   "¿Qué dice AgRI 2040 sobre la bioeconomía, la biomasa y los fertilizantes de origen biológico?",
+   "Què diu AgRI 2040 sobre la bioeconomia, la biomassa i els fertilitzants d'origen biològic?",
+   "Cosa dice AgRI 2040 su bioeconomia, biomassa e fertilizzanti biobased?"
+  ],
+  "agri_2040_area_5_multi_functional_forests": [
+   "What does AgRI 2040 propose for forests and foresters?",
+   "Que propose AgRI 2040 pour les forêts et les forestiers ?",
+   "Wat stelt AgRI 2040 voor voor bossen en boseigenaren?",
+   "¿Qué propone AgRI 2040 para los bosques y los selvicultores?",
+   "Què proposa AgRI 2040 per als boscos i els silvicultors?",
+   "Cosa propone AgRI 2040 per le foreste e i silvicoltori?"
+  ],
+  "agri_2040_area_6_rural_areas_generational_renewal": [
+   "What does AgRI 2040 say about rural areas and generational renewal?",
+   "Que dit AgRI 2040 sur les zones rurales et le renouvellement des générations ?",
+   "Wat zegt AgRI 2040 over plattelandsgebieden en generatiewissel?",
+   "¿Qué dice AgRI 2040 sobre las zonas rurales y el relevo generacional?",
+   "Què diu AgRI 2040 sobre les zones rurals i el relleu generacional?",
+   "Cosa dice AgRI 2040 sulle aree rurali e il ricambio generazionale?"
+  ],
+  "agri_2040_area_7_stronger_agri_food_value_chain": [
+   "What does AgRI 2040 say about the value chain, short supply chains and geographical indications?",
+   "Que dit AgRI 2040 sur la chaîne de valeur, les circuits courts et les indications géographiques ?",
+   "Wat zegt AgRI 2040 over de waardeketen, korte ketens en geografische aanduidingen?",
+   "¿Qué dice AgRI 2040 sobre la cadena de valor, los circuitos cortos y las indicaciones geográficas?",
+   "Què diu AgRI 2040 sobre la cadena de valor, els circuits curts i les indicacions geogràfiques?",
+   "Cosa dice AgRI 2040 su filiera, filiere corte e indicazioni geografiche?"
+  ],
+  "agri_2040_area_8_digitalisation_ai_robotics": [
+   "What does AgRI 2040 say about digitalisation, artificial intelligence and robotics?",
+   "Que dit AgRI 2040 sur la numérisation, l'intelligence artificielle et la robotique ?",
+   "Wat zegt AgRI 2040 over digitalisering, kunstmatige intelligentie en robotica?",
+   "¿Qué dice AgRI 2040 sobre la digitalización, la inteligencia artificial y la robótica?",
+   "Què diu AgRI 2040 sobre la digitalització, la intel·ligència artificial i la robòtica?",
+   "Cosa dice AgRI 2040 su digitalizzazione, intelligenza artificiale e robotica?"
+  ],
+  "food_2040_areas_place_based_and_healthy_diets": [
+   "What does Food 2040 say about place-based food systems and healthy diets?",
+   "Que dit Food 2040 sur les systèmes alimentaires territoriaux et les régimes alimentaires sains ?",
+   "Wat zegt Food 2040 over lokale voedselsystemen en gezonde voedingspatronen?",
+   "¿Qué dice Food 2040 sobre los sistemas alimentarios locales y las dietas saludables?",
+   "Què diu Food 2040 sobre els sistemes alimentaris locals i les dietes saludables?",
+   "Cosa dice Food 2040 su sistemi alimentari locali e diete sane?"
+  ],
+  "food_2040_areas_resource_efficiency_and_food_environments": [
+   "What does Food 2040 say about food waste, packaging and food environments?",
+   "Que dit Food 2040 sur le gaspillage alimentaire, les emballages et les environnements alimentaires ?",
+   "Wat zegt Food 2040 over voedselverspilling, verpakkingen en de voedselomgeving?",
+   "¿Qué dice Food 2040 sobre el desperdicio de alimentos, los envases y los entornos alimentarios?",
+   "Què diu Food 2040 sobre el malbaratament alimentari, els envasos i els entorns alimentaris?",
+   "Cosa dice Food 2040 su spreco alimentare, imballaggi e ambienti alimentari?"
+  ],
+  "food_2040_areas_scaling_innovations_and_aquatic_food": [
+   "What does Food 2040 say about aquatic food, fisheries and aquaculture?",
+   "Que dit Food 2040 sur les produits aquatiques, la pêche et l'aquaculture ?",
+   "Wat zegt Food 2040 over aquatisch voedsel, visserij en aquacultuur?",
+   "¿Qué dice Food 2040 sobre los alimentos acuáticos, la pesca y la acuicultura?",
+   "Què diu Food 2040 sobre els aliments aquàtics, la pesca i l'aqüicultura?",
+   "Cosa dice Food 2040 su alimenti acquatici, pesca e acquacoltura?"
+  ],
+  "food_2030_funding_results_and_evaluation": [
+   "How much funding did Food 2030 get and what were its results and evaluation?",
+   "Quel financement Food 2030 a-t-il reçu et quels ont été ses résultats et son évaluation ?",
+   "Hoeveel financiering kreeg Food 2030 en wat waren de resultaten en de evaluatie?",
+   "¿Cuánta financiación recibió Food 2030 y cuáles fueron sus resultados y su evaluación?",
+   "Quin finançament va rebre Food 2030 i quins van ser els seus resultats i la seva avaluació?",
+   "Quanto finanziamento ha ricevuto Food 2030 e quali sono stati i suoi risultati e la sua valutazione?"
+  ],
+  "agri_food_strategy_annex_1_actions_1_to_19": [
+   "What are the 19 actions of Annex 1 of the AgRI 2040 and Food 2040 strategy and when do they start?",
+   "Quelles sont les 19 actions de l'annexe 1 de la stratégie AgRI 2040 et Food 2040 et quand commencent-elles ?",
+   "Wat zijn de 19 acties van bijlage 1 van de strategie AgRI 2040 en Food 2040 en wanneer beginnen ze?",
+   "¿Cuáles son las 19 acciones del anexo 1 de la estrategia AgRI 2040 y Food 2040 y cuándo empiezan?",
+   "Quines són les 19 accions de l'annex 1 de l'estratègia AgRI 2040 i Food 2040 i quan comencen?",
+   "Quali sono le 19 azioni dell'allegato 1 della strategia AgRI 2040 e Food 2040 e quando iniziano?"
+  ],
+  "agri_food_strategy_timeline_2025_2028": [
+   "What is the timeline of AgRI 2040 and Food 2040 from 2025 to 2028?",
+   "Quel est le calendrier d'AgRI 2040 et de Food 2040 de 2025 à 2028 ?",
+   "Wat is de tijdlijn van AgRI 2040 en Food 2040 van 2025 tot 2028?",
+   "¿Cuál es el calendario de AgRI 2040 y Food 2040 de 2025 a 2028?",
+   "Quin és el calendari d'AgRI 2040 i Food 2040 del 2025 al 2028?",
+   "Qual è il calendario di AgRI 2040 e Food 2040 dal 2025 al 2028?"
+  ],
+  "agri_food_strategy_six_priorities_and_three_enablers": [
+   "What are the six shared priorities and three enablers of AgRI 2040 and Food 2040?",
+   "Quelles sont les six priorités communes et les trois catalyseurs d'AgRI 2040 et Food 2040 ?",
+   "Wat zijn de zes gedeelde prioriteiten en drie randvoorwaarden van AgRI 2040 en Food 2040?",
+   "¿Cuáles son las seis prioridades compartidas y los tres facilitadores de AgRI 2040 y Food 2040?",
+   "Quines són les sis prioritats compartides i els tres facilitadors d'AgRI 2040 i Food 2040?",
+   "Quali sono le sei priorità condivise e i tre fattori abilitanti di AgRI 2040 e Food 2040?"
+  ],
+  "agri_food_strategy_context_problem_and_sector_figures": [
+   "Why did the Commission write AgRI 2040 and how big is the EU agri-food sector?",
+   "Pourquoi la Commission a-t-elle rédigé AgRI 2040 et quelle est la taille du secteur agroalimentaire de l'UE ?",
+   "Waarom schreef de Commissie AgRI 2040 en hoe groot is de agrovoedingssector van de EU?",
+   "¿Por qué redactó la Comisión AgRI 2040 y qué tamaño tiene el sector agroalimentario de la UE?",
+   "Per què va redactar la Comissió AgRI 2040 i quina mida té el sector agroalimentari de la UE?",
+   "Perché la Commissione ha redatto AgRI 2040 e quanto è grande il settore agroalimentare dell'UE?"
+  ],
+  "edic_for_agri_food_implementing_decision_2026_1978": [
+   "What is the EDIC for Agri-Food set up by Implementing Decision (EU) 2026/1978?",
+   "Qu'est-ce que l'EDIC pour l'agroalimentaire créé par la décision d'exécution (UE) 2026/1978 ?",
+   "Wat is de EDIC voor agrovoeding, opgericht bij uitvoeringsbesluit (EU) 2026/1978?",
+   "¿Qué es el EDIC para la agroalimentación creado por la Decisión de Ejecución (UE) 2026/1978?",
+   "Què és l'EDIC per a l'agroalimentació creat per la Decisió d'execució (UE) 2026/1978?",
+   "Cos'è l'EDIC per l'agroalimentare istituito dalla decisione di esecuzione (UE) 2026/1978?"
+  ],
+  "agri_food_strategy_measures_regulatory_learning_partnerships_and_jrc_centre": [
+   "What is the JRC Science for Policy Centre announced in the agri-food research strategy?",
+   "Qu'est-ce que le centre Science pour la politique du JRC annoncé dans la stratégie de recherche agroalimentaire ?",
+   "Wat is het Science for Policy Centre van het JRC dat in de agrovoedingsonderzoeksstrategie is aangekondigd?",
+   "¿Qué es el centro Science for Policy del JRC anunciado en la estrategia de investigación agroalimentaria?",
+   "Què és el centre Science for Policy del JRC anunciat en l'estratègia de recerca agroalimentària?",
+   "Cos'è il centro Science for Policy del JRC annunciato nella strategia di ricerca agroalimentare?"
+  ],
+  "agri_food_strategy_measures_uptake_by_farmers_and_foresters": [
+   "How does the Commission want to speed up the uptake of innovation by farmers under the new strategy?",
+   "Comment la Commission veut-elle accélérer l'adoption de l'innovation par les agriculteurs dans la nouvelle stratégie ?",
+   "Hoe wil de Commissie de uptake van innovatie door landbouwers versnellen in de nieuwe strategie?",
+   "¿Cómo quiere la Comisión acelerar la adopción de la innovación por los agricultores en la nueva estrategia?",
+   "Com vol la Comissió accelerar l'adopció de la innovació pels agricultors en la nova estratègia?",
+   "Come vuole la Commissione accelerare l'adozione dell'innovazione da parte degli agricoltori nella nuova strategia?"
+  ],
+  "food_2040_workshops_cluster_events_and_scar_consultation_2026": [
+   "What came out of the Food 2040 stakeholder workshop of 25 March 2026?",
+   "Qu'est-ce qui est ressorti de l'atelier des parties prenantes Food 2040 du 25 mars 2026 ?",
+   "Wat kwam er uit de Food 2040-workshop met belanghebbenden van 25 maart 2026?",
+   "¿Qué resultó del taller de partes interesadas de Food 2040 del 25 de marzo de 2026?",
+   "Què va sortir del taller de parts interessades de Food 2040 del 25 de març del 2026?",
+   "Cosa è emerso dal workshop dei portatori di interessi Food 2040 del 25 marzo 2026?"
+  ],
+  "cbe_ju_eit_food_eic_and_regional_tools_for_agri_food_research": [
+   "How much money does the Circular Bio-based Europe Joint Undertaking CBE-JU have and what does EIT Food do?",
+   "De combien d'argent dispose l'entreprise commune CBE-JU et que fait EIT Food ?",
+   "Hoeveel geld heeft de gemeenschappelijke onderneming CBE-JU en wat doet EIT Food?",
+   "¿De cuánto dinero dispone la empresa común CBE-JU y qué hace EIT Food?",
+   "De quants diners disposa l'empresa comuna CBE-JU i què fa EIT Food?",
+   "Di quanto denaro dispone l'impresa comune CBE-JU e cosa fa EIT Food?"
+  ],
+  "agri_food_research_international_cooperation_fnssa_prima_china": [
+   "What are the EU-African Union FNSSA partnership and the PRIMA partnership?",
+   "Que sont le partenariat UE-Union africaine FNSSA et le partenariat PRIMA ?",
+   "Wat zijn het FNSSA-partnerschap tussen de EU en de Afrikaanse Unie en het PRIMA-partnerschap?",
+   "¿Qué son la asociación UE-Unión Africana FNSSA y la asociación PRIMA?",
+   "Què són l'associació UE-Unió Africana FNSSA i l'associació PRIMA?",
+   "Cosa sono il partenariato UE-Unione africana FNSSA e il partenariato PRIMA?"
+  ],
+  "agri_food_research_key_numbers_by_thematic_area": [
+   "How much did the EU fund for organic farming research and for rural areas in SWD(2026) 271?",
+   "Combien l'UE a-t-elle financé pour la recherche sur l'agriculture biologique et les zones rurales selon le SWD(2026) 271 ?",
+   "Hoeveel financierde de EU voor onderzoek naar biologische landbouw en plattelandsgebieden volgens SWD(2026) 271?",
+   "¿Cuánto financió la UE para la investigación sobre agricultura ecológica y zonas rurales según el SWD(2026) 271?",
+   "Quant va finançar la UE per a la recerca sobre agricultura ecològica i zones rurals segons el SWD(2026) 271?",
+   "Quanto ha finanziato l'UE per la ricerca sull'agricoltura biologica e le aree rurali secondo il SWD(2026) 271?"
+  ],
+  "agri_food_research_flagship_projects_livestock_bioeconomy_rural_organic_digital": [
+   "What are the SafeHabitus and FLIARA projects about?",
+   "De quoi traitent les projets SafeHabitus et FLIARA ?",
+   "Waar gaan de projecten SafeHabitus en FLIARA over?",
+   "¿De qué tratan los proyectos SafeHabitus y FLIARA?",
+   "De què tracten els projectes SafeHabitus i FLIARA?",
+   "Di cosa trattano i progetti SafeHabitus e FLIARA?"
+  ],
+  "food_2030_flagship_projects_alternative_proteins_nutrition_waste_microbiome": [
+   "What are the Giant Leaps and LIKE-A-PRO projects on alternative proteins?",
+   "De quoi traitent les projets Giant Leaps et LIKE-A-PRO sur les protéines alternatives ?",
+   "Waar gaan de projecten Giant Leaps en LIKE-A-PRO over alternatieve eiwitten over?",
+   "¿De qué tratan los proyectos Giant Leaps y LIKE-A-PRO sobre proteínas alternativas?",
+   "De què tracten els projectes Giant Leaps i LIKE-A-PRO sobre proteïnes alternatives?",
+   "Di cosa trattano i progetti Giant Leaps e LIKE-A-PRO sulle proteine alternative?"
+  ],
+  "eu_agri_2040_conference_24_25_september_2026": [
+   "Where and when was the EU AgRI 2040 conference held and who spoke at it?",
+   "Où et quand la conférence européenne AgRI 2040 a-t-elle eu lieu et qui y est intervenu ?",
+   "Waar en wanneer vond de EU-conferentie AgRI 2040 plaats en wie sprak er?",
+   "¿Dónde y cuándo se celebró la conferencia europea AgRI 2040 y quién intervino?",
+   "On i quan es va celebrar la conferència europea AgRI 2040 i qui hi va intervenir?",
+   "Dove e quando si è tenuta la conferenza europea AgRI 2040 e chi è intervenuto?"
+  ],
+  "eu_agri_2040_conference_nine_breakout_sessions": [
+   "What were the nine breakout sessions of the AgRI 2040 conference?",
+   "Quelles étaient les neuf séances parallèles de la conférence AgRI 2040 ?",
+   "Wat waren de negen parallelle sessies van de AgRI 2040-conferentie?",
+   "¿Cuáles fueron las nueve sesiones paralelas de la conferencia AgRI 2040?",
+   "Quines van ser les nou sessions paral·leles de la conferència AgRI 2040?",
+   "Quali sono state le nove sessioni parallele della conferenza AgRI 2040?"
+  ]
+ },
+ "negatives": [
+  "What is the Horizon Europe budget for 2028-2034?",
+  "How does the AI Act regulate chatbots?",
+  "What are the rules on novel foods and insects in the EU?",
+  "Quelle est la position du Parlement européen sur la politique agricole commune après 2027 ?",
+  "Wat is de status van de Soil Monitoring Law?",
+  "¿Cuándo entra en vigor el reglamento sobre deforestación?",
+  "Quin és el calendari de la reforma de les pensions a Espanya?",
+  "Qual è il calendario del Consiglio europeo di ottobre?",
+  "Where can I buy a sofa in Vienna?",
+  "What are living labs in smart cities?",
+  "What are the eight areas of the EU Space Programme?",
+  "Quelles sont les priorités du Conseil européen d'octobre ?",
+  "What are the pathways for action on EU climate neutrality?",
+  "How many farms are there in the EU according to the CAP?",
+  "Where can I find the Horizon Europe work programme for health?"
+ ]
+}

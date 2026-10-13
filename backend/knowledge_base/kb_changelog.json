@@ -3,6 +3,371 @@
   "entries": [
     {
       "date": "2026-10-13",
+      "action": "added",
+      "guide": "eu_agri_2040_conference_nine_breakout_sessions",
+      "title": "EU AgRI 2040 Conference: the nine thematic breakout sessions (24-25 September 2026)",
+      "summary": "The nine thematic breakout sessions: the eight AgRI 2040 areas plus climate change and biodiversity, with their focus and schedule.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "eu_agri_2040_conference_24_25_september_2026",
+      "title": "EU AgRI 2040 Conference, Brussels, 24-25 September 2026: what took place, programme, speakers",
+      "summary": "The conference took place on 24-25 September 2026 in Brussels (Charlemagne building): programme, speakers, nine breakout sessions; the event page published no conclusions.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2030_flagship_projects_alternative_proteins_nutrition_waste_microbiome",
+      "title": "Food 2030 flagship projects: alternative proteins, nutrition, food waste, microbiome, food safety, aquatic, urban",
+      "summary": "Food 2030 flagship projects named in SWD(2026) 271: alternative proteins, nutrition, food waste, microbiome, food safety, aquatic, urban.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_flagship_projects_livestock_bioeconomy_rural_organic_digital",
+      "title": "EU agri-food research flagships (2): livestock, bioeconomy, rural, organic, socio-economics, digital",
+      "summary": "Flagship projects named in SWD(2026) 271 for livestock, bioeconomy, rural areas, organic, socio-economics and digital.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_flagship_projects_2014_2025",
+      "title": "EU agri-food research flagships (1): climate, soil, biodiversity, forests, plant health, crops",
+      "summary": "Flagship projects named in SWD(2026) 271: Climate Farm Demo (1,460 demo farms), ClimateSmartAdvisors, SHOWCASE, XF-ACTORS, ADAPT, GEN4OLIVE and more.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_innovation_operational_groups_akis_and_knowledge_networks",
+      "title": "How agri-food innovation reaches farmers (2): EIP-AGRI Operational Groups, AKIS, knowledge networks, barriers",
+      "summary": "AKIS (agricultural knowledge and innovation systems): \"the combined organisation and knowledge flows between individuals, organisations, and institutions who use and produce knowledge for agriculture.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_innovation_uptake_multi_actor_living_labs_akis",
+      "title": "How agri-food innovation reaches farmers (1): multi-actor approach, Living Labs, cascade funding",
+      "summary": "Multi-actor approach (mandatory in over 70% of relevant Horizon calls), Living Labs, cascade funding and social sciences in agri-food R&I.",
+      "refs": [
+        "32024R2509"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_international_cooperation_fnssa_prima_china",
+      "title": "International cooperation in agri-food research: EU-AU FNSSA, PRIMA, EU-China (SWD(2026) 271)",
+      "summary": "Reach: partners from third countries in 34% of Horizon 2020 and 19% of Horizon Europe projects on agriculture, forestry and rural areas.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "cbe_ju_eit_food_eic_and_regional_tools_for_agri_food_research",
+      "title": "CBE-JU, EIT Food, the EIC and regional tools for agri-food innovation (SWD(2026) 271)",
+      "summary": "CBE-JU (Circular Bio-based Europe Joint Undertaking): a EUR 2 billion partnership between the EU and the Bio-based Industries Consortium, 2021-2031, successor of BBI JU (2014-2020); legal base.",
+      "refs": [
+        "32021R2085"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "mission_soil_a_soil_deal_for_europe_research_mission",
+      "title": "EU Mission \"A Soil Deal for Europe\" (Mission Soil): aims, numbers, projects",
+      "summary": "Aim: healthy soils by 2050; one of the five EU Missions under Horizon Europe (the others: adaptation to climate change, cancer, climate-neutral and smart cities, restore our ocean and waters). Goal.",
+      "refs": [
+        "32025L2360"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_five_co_funded_partnerships",
+      "title": "The five co-funded European partnerships for agri-food research (SWD(2026) 271)",
+      "summary": "Five co-funded partnerships serve agri-food R&I under Horizon Europe: Agroecology, Animal Health and Welfare (EUPAHW), Agriculture of Data (AgData), Forests (FOREST) and FutureFoodS. Together: 421.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_key_numbers_by_thematic_area",
+      "title": "Key numbers by theme in SWD(2026) 271: Mission Soil, bioeconomy, rural, organic, digital, knowledge, international",
+      "summary": "Soil (Mission Soil, \"A Soil Deal for Europe\"): since 2021 45 living labs set up (target 100 by 2030); 63 projects funded 2021-2024, EUR 469 million, nearly 1,400 organisations; Manifesto over 3,500.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_2016_strategic_approach_and_13_thematic_areas",
+      "title": "The 2016 strategic approach to EU agricultural R&I and its 13 thematic areas",
+      "summary": "What it was: the Commission's 2016 strategic approach to EU agricultural research and innovation, which guided Horizon 2020 (Societal Challenge 2) and Horizon Europe 2021-2027 (Cluster 6). AgRI 2040.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_research_evidence_2014_2024_swd_2026_271",
+      "title": "EU agri-food research 2014-2024: headline evidence in SWD(2026) 271",
+      "summary": "What it is: Commission Staff Working Document SWD(2026) 271 final (8 September 2026, 91 pages, CELEX 52026SC0271), \"Analytical overview of the achievements of the 2016 strategic approach to.",
+      "refs": [
+        "52026SC0271"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2040_workshops_cluster_events_and_scar_consultation_2026",
+      "title": "Food 2040: stakeholder workshop, project cluster workshops and the SCAR consultation (2025-2026)",
+      "summary": "Food 2040 workshop (25 March 2026, 80 participants), project cluster workshops, the EU survey and the SCAR consultation.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "building_food_2040_stakeholder_input_2026",
+      "title": "Building Food 2040: stakeholder input (631 survey responses, 63 submissions, July 2026)",
+      "summary": "What it is: the report \"Building FOOD 2040: Stakeholder Input for the new EU R&I Strategic Agenda for Food Systems\", DG Research and Innovation (Directorate B Healthy Planet, Unit B.2 Bioeconomy and.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_open_consultation_findings_by_area",
+      "title": "AgRI 2040 open consultation: findings by area (what 701 respondents said)",
+      "summary": "What 701 respondents said, area by area: scope (94%), investment journey (31% adequate), uptake (36%, 88%), cooperation, 13 thematic priorities.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_open_consultation_results_2026",
+      "title": "AgRI 2040 open consultation (2025-2026): 701 replies, who answered, headline results",
+      "summary": "What it was: the Commission's open consultation (online survey) to prepare the new EU strategic approach to R&I for agriculture, forestry and rural areas, adopted as COM(2026) 453 (AgRI 2040 and Food.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_measures_food_technology_and_fermentation",
+      "title": "Strategy measures: boosting food technology, fermentation capacity and the health-food link",
+      "summary": "Food technology measures: the second valley of death, fermentation capacity at TRL 8-9, bioprocessing infrastructure, health-food link.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_measures_uptake_by_farmers_and_foresters",
+      "title": "Strategy measures: accelerating uptake of knowledge and innovation by farmers, foresters and rural actors",
+      "summary": "Uptake measures: multi-actor approach, Living Labs, EIP-AGRI links, practice abstracts, skills, citizen science.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_measures_regulatory_learning_partnerships_and_jrc_centre",
+      "title": "Strategy measures: experimentation, regulatory learning, partnerships and the JRC Science for Policy Centre",
+      "summary": "Experimentation, risk assessment and regulatory sandboxes, partnerships, and the JRC Science for Policy Centre (Q4 2027).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_measures_lab_to_fab_investment_and_scale_up",
+      "title": "Strategy measures: closing the gap from lab to fab (investment, valorisation, scale-up)",
+      "summary": "Lab-to-fab measures: cascade funding, scale-up pathways, ECF InvestEU Instrument, fast-track-to-innovation, top-up funding, innovation vouchers.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2030_funding_results_and_evaluation",
+      "title": "Food 2030: funding, results and evaluation (SWD(2026) 271)",
+      "summary": "Food 2030: the R&I framework for food systems transformation under Horizon 2020 and Horizon Europe 2021-2027, dating from 2016 (first calls 2017); 11 pathways and four cross-cutting priorities. Its.",
+      "refs": [
+        "52026SC0271"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2040_areas_scaling_innovations_and_aquatic_food",
+      "title": "Food 2040 areas 5 and 6: scaling innovations and fair solutions; aquatic food",
+      "summary": "Food 2040 areas 5 and 6 in detail: scaling innovations and fair solutions; aquatic food (fisheries, aquaculture, blue bioeconomy).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2040_areas_resource_efficiency_and_food_environments",
+      "title": "Food 2040 areas 3 and 4: resource efficiency and zero-pollution; food environments and consumer empowerment",
+      "summary": "Food 2040 areas 3 and 4 in detail: resource efficiency and zero-pollution; food environments and consumer empowerment.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2040_areas_place_based_and_healthy_diets",
+      "title": "Food 2040 areas 1 and 2: place-based food systems; healthy and sustainable diets",
+      "summary": "Food 2040 areas 1 and 2 in detail: place-based food systems; healthy and sustainable diets.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "food_2040_six_areas_and_food_2030_legacy",
+      "title": "Food 2040: the six areas of action, and the Food 2030 pathways it builds on",
+      "summary": "Food 2040 has exactly SIX areas of action (AgRI 2040, for agriculture, forestry and rural areas, has EIGHT; the strategy's shared priorities are a separate list of six). Source: COM(2026) 453 final.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_8_digitalisation_ai_robotics",
+      "title": "AgRI 2040 area 8 of 8: digitalisation, AI and robotics",
+      "summary": "AgRI 2040 area 8 of 8 in detail: data valorisation, generative AI, robots, drones, sensing, lower administrative burden.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_7_stronger_agri_food_value_chain",
+      "title": "AgRI 2040 area 7 of 8: stronger agri-food value chain",
+      "summary": "AgRI 2040 area 7 of 8 in detail: farmers' position, short supply chains, organic and geographical indications.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_6_rural_areas_generational_renewal",
+      "title": "AgRI 2040 area 6 of 8: rural areas (services and generational renewal)",
+      "summary": "AgRI 2040 area 6 of 8 in detail: rural attractiveness, generational renewal, services, women and young people.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_5_multi_functional_forests",
+      "title": "AgRI 2040 area 5 of 8: multi-functional forests",
+      "summary": "AgRI 2040 area 5 of 8 in detail: active sustainable forest management, resilience, carbon sinks, rewarding foresters.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_4_bioeconomy_agriculture_forestry_rural",
+      "title": "AgRI 2040 area 4 of 8: bioeconomy in agriculture, forestry and rural areas",
+      "summary": "AgRI 2040 area 4 of 8 in detail: biomass, biomanufacturing, bio-based fertilisers, cascading use, wood products.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_3_livestock_systems",
+      "title": "AgRI 2040 area 3 of 8: livestock systems (animal health and welfare)",
+      "summary": "AgRI 2040 area 3 of 8 in detail: animal health and welfare, biosecurity, vaccines, antimicrobials, feed, pasture.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_2_cropping_systems_plant_health_protein_crops",
+      "title": "AgRI 2040 area 2 of 8: cropping systems (plant health, breeding, protein crops)",
+      "summary": "AgRI 2040 area 2 of 8 in detail: stress adaptation, plant health, low-risk crop protection, breeding, protein crops.",
+      "refs": [
+        "32026R1388"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_area_1_soil_agri_ecosystems_water_nutrients",
+      "title": "AgRI 2040 area 1 of 8: soil, agri-ecosystems, water and nutrient capital",
+      "summary": "AgRI 2040 area 1 of 8 in detail: soil health, water, nutrients, agroecology, carbon farming, circular nutrient recovery.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_2040_eight_areas_of_action",
+      "title": "AgRI 2040: the eight preliminary areas of action (COM(2026) 453, section 3.3)",
+      "summary": "AgRI 2040 has EIGHT preliminary areas of action. Three lists, three numbers: AgRI 2040 has eight areas, Food 2040 (the food-systems framework) has six areas, and the strategy has six shared.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "edic_for_agri_food_implementing_decision_2026_1978",
+      "title": "EDIC for Agri-Food: Commission Implementing Decision (EU) 2026/1978 of 8 September 2026",
+      "summary": "Act: Commission Implementing Decision (EU) 2026/1978 of 8 September 2026 setting up the European Digital Infrastructure Consortium for Agri-Food (EDIC for Agri-Food), CELEX 32026D1978, published in.",
+      "refs": [
+        "32026D1978",
+        "32022D2481"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_context_problem_and_sector_figures",
+      "title": "AgRI 2040 and Food 2040: why the Commission wrote the strategy, EU agri-food sector figures, related strategies",
+      "summary": "The problem (COM(2026) 453, section 1): agri-food tech investment in Europe fell 67% from 2020 to 2024, while levels in the United States and Canada were 50-70% higher (AgFunder data quoted by the.",
+      "refs": [
+        "52025DC0075",
+        "52025DC0525",
+        "52025DC0960",
+        "52025DC0872",
+        "52026DC0310",
+        "52025PC1022",
+        "52025PC0555",
+        "52025DC1024"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_six_priorities_and_three_enablers",
+      "title": "AgRI 2040 and Food 2040: the six shared priorities and three common enablers",
+      "summary": "Six shared priorities (COM(2026) 453, section 3.1) guide both frameworks: they are NOT areas of action. Three common enablers (section 3.2) support them. AgRI 2040 has eight areas and Food 2040 six.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_annex_1_actions_1_to_19",
+      "title": "AgRI 2040 and Food 2040: the 19 actions of Annex 1 of COM(2026) 453 and when each starts",
+      "summary": "Annex 1 of the Communication lists 19 key actions in five groups, each with a starting quarter (Commission work-planning dates, NOT legal deadlines; all \"without prejudice\" to the next.",
+      "refs": [
+        "52026DC0453"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "action": "added",
+      "guide": "agri_food_strategy_timeline_2025_2028",
+      "title": "AgRI 2040 and Food 2040: timeline from the Vision (2025) to the Food 2040 conference (2028)",
+      "summary": "February 2025: the Vision for Agriculture and Food (COM(2025) 75) announces a new strategic approach to.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-13",
+      "action": "updated",
+      "guide": "agri_food_research_innovation_strategy",
+      "title": "EU strategic approach to agri-food research and innovation: AgRI 2040 and Food 2040 (COM(2026) 453)",
+      "summary": "Corrected: AgRI 2040 has EIGHT preliminary areas of action, not six (livestock systems and the bioeconomy were missing); cut to fit the 4,000-character window the chat reads; the EU AgRI 2040 Conference (24-25 Sep 2026) took place; detail moved to 41 focused guides.",
+      "refs": [
+        "52026DC0453",
+        "52026SC0271"
+      ]
+    },
+    {
+      "date": "2026-10-13",
       "action": "updated",
       "guide": "safe_rearm_europe",
       "title": "SAFE (Security Action for Europe)",

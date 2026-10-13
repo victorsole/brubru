@@ -1,0 +1,18 @@
+# Strategy measures: boosting food technology, fermentation capacity and the health-food link
+
+## QUICK FACTS
+- **Source:** COM(2026) 453 final, section 2.3. Intentions, not obligations. The Communication says fermentation scale-up must **fully respect the EU risk assessment and authorisation framework**: it changes no authorisation rule.
+- **Second valley of death:** the EU finances early-stage innovation well but scaling **new sustainable food ingredients** needs more support to cross the "second valley of death", defined in the Communication as the stage "from pilot/demo to market scale" (it gives no TRL range for the valley itself; TRL 8-9 appears only for the manufacturing-capacity shortage below); capital expenditure is high and private investors hesitate to finance infrastructure. The Commission will explore more investment, including through the **ECF InvestEU Instrument**.
+- **Fermentation capacity:** the capacity that is missing is at **industrial scale (TRL 8-9), not at pilot scale**: a **continent-wide shortage of industrial-scale contract manufacturing capacity at TRL 8-9 for fermentation-based technologies** (biorefineries and advanced fermentation with yeasts, algae, bacteria and other microorganisms) for food and feed ingredients.
+- **Advanced fermentation** is a **lead technology in the EU bioeconomy strategy**; the Commission will explore how to encourage **private investment in open-access pilot and demo-scale bioprocessing infrastructure** so SMEs can test and de-risk processes without prohibitive up-front capital (action 14, **Q1 2028**); Member States are encouraged to do the same.
+- **Infrastructure and tools:** the Industrial Biotechnology Innovation and Synthetic Biology Accelerator (**IBISBA**), universities, research institutes, biomanufacturing facilities, technology transfer offices, the **EU biotech and biomanufacturing hub**; **quantum computing** with digital and AI tools for downstream processing, new ingredients and personalised nutrition.
+- **Supply and security:** domestic supply chains for **vitamins, amino acids and enzymes**; **Important Projects of Common European Interest (IPCEI)** as an example of pooling Member State investment in strategic food and bio-based value chains; applications: less food loss and waste, better food safety surveillance and traceability including **fighting food fraud**, lower costs, prediction of climate-induced risks.
+- **Health and food:** reinforce R&I on the link between health and food for **cardiometabolic and neurological** diseases, including **personalised nutrition**; the Safe Hearts Plan **COM(2025) 1024** (action 15, **Q1 2027**).
+- **Related evidence (SWD(2026) 271):** only a few microbial protein products are authorised in the EU; the EIC Accelerator challenge on food from precision fermentation and algae had a **EUR 50 million** budget in 2025.
+- **Search words (other languages):** fermentation, capacité de production, vallée de la mort, nutrition personnalisée (FR); fermentatie, productiecapaciteit, valley of death, gepersonaliseerde voeding (NL); fermentación, capacidad de producción, valle de la muerte, nutrición personalizada (ES); fermentació, capacitat de producció, vall de la mort, nutrició personalitzada (CA); fermentazione, capacità produttiva, valle della morte, nutrizione personalizzata (IT).
+
+## Related guides
+`agri_food_strategy_measures_lab_to_fab_investment_and_scale_up`, `novel_food_insects`, `biotech_act`, `bioeconomy_food_systems`.
+
+## Source
+COM(2026) 453 final, section 2.3; SWD(2026) 271 final, section 4.2.5; read on 13 October 2026.

@@ -1,0 +1,15 @@
+# AgRI 2040 and Food 2040: why the Commission wrote the strategy, EU agri-food sector figures, related strategies
+
+## QUICK FACTS
+- **The problem (COM(2026) 453, section 1):** agri-food tech investment in Europe **fell 67% from 2020 to 2024**, while levels in the United States and Canada were **50-70% higher** (AgFunder data quoted by the Commission). R&I output does not convert into proportionate productivity gains; without change, agricultural total factor productivity growth stays modest. Dependencies on third countries for technology, **fertilisers, energy and protein feed**; an ageing and shrinking workforce; land and resource pressure; climate change, pollution, biodiversity loss.
+- **Sector figures (Commission, 2023 unless stated):** **450 million** Europeans rely on the agri-food system; EU agriculture and food systems generated **more than EUR 1 trillion added value** and employ **about 30 million people (15% of all EU jobs)**. Food and drink is the EU's **largest manufacturing sector**: **4.8 million people, 309,000 businesses, EUR 1.5 trillion turnover, EUR 296 billion value added**. The EU is the **world's largest agri-food exporter**, **EUR 50 billion trade surplus in 2025**. Rural areas: **25% of the population, more than 75% of the territory**; forests and other wooded land **nearly 44%**.
+- **Policy documents it builds on (identifiers checked at the Publications Office on 13 October 2026):** Vision for Agriculture and Food **COM(2025) 75** (CELEX 52025DC0075); life sciences strategy "Choose Europe for life sciences" **COM(2025) 525** (52025DC0525); bioeconomy strategy "A Strategic Framework for a Competitive and Sustainable EU Bioeconomy" **COM(2025) 960** (52025DC0960); strategy for generational renewal in agriculture **COM(2025) 872** (52025DC0872); Fertiliser Action Plan **COM(2026) 310** (52026DC0310); European Biotech Act proposal **COM(2025) 1022** (52025PC1022); European Competitiveness Fund proposal **COM(2025) 555** (52025PC0555); Safe Hearts Plan **COM(2025) 1024** (52025DC1024).
+- **Also named:** the Letta and Draghi reports, the EU startup and scaleup strategy, the Choose Europe initiative, the European Preparedness Union Strategy.
+- The Commission says the strategy "gives long-term policy direction without prejudging the next EU budget negotiations" and complements the bioeconomy strategy.
+- **Search words (other languages):** contexte, taille, secteur, chiffres, investissement, emploi (FR); context, groot, grootte, agrovoedingssector, sector, cijfers, investeringen, werkgelegenheid (NL); contexto, tamaño, sector, cifras, inversión, empleo (ES); context, mida, sector, xifres, inversió, ocupació (CA); contesto, dimensione, grande, settore, cifre, investimenti, occupazione (IT).
+
+## Related guides
+`agri_food_research_innovation_strategy`, `bioeconomy_food_systems`, `fertilisers_action_plan_2026`, `biotech_act`, `european_competitiveness_fund`, `common_agricultural_policy`.
+
+## Source
+COM(2026) 453 final, section 1 and footnotes; Commission news of 8 September 2026; read on 13 October 2026.
