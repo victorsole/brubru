@@ -58,7 +58,7 @@ Implementing all four, even gradually, is what gives ELI its full value.
 - The Publications Office aligns the CDM ontology used by Cellar with ELI and ELI-DL for the EU Law Tracker (formerly the Joint Legislative Portal), so Cellar can be fed from the European Parliament Open Data Portal.
 
 ## ELI in the Brubru corpus
-Each OJ publication folder of the LEG_2026-10 export carries, in its `tree_non_inferred.rdf`, an `eli/<type>/<year>/<number>/oj` URI (as `owl:sameAs`), its own CELEX and its EuroVoc concept URIs, so CELEX, ELI and EuroVoc can be joined from the metadata alone, without a network call.
+Measured on the LEG_2026-10 export (13 Oct 2026, 30,246 OJ publication folders): the `tree_non_inferred.rdf` of **29,275** folders (97%) mentions an `eli/<type>/<year>/<number>/oj` URI (143 mention more than one, so match the URI to the folder's own CELEX); every folder carries its own CELEX, and 30,244 carry EuroVoc concept URIs. The English title is the `expression_title` of the expression whose `expression_uses_language` is ENG; half of the files give the titles with no `xml:lang`, so match on the language resource, not the attribute. CELEX, ELI, title and EuroVoc can therefore be joined from the metadata alone, without a network call.
 
 ## How Brubru should use ELI
 - **In chat citations and the daily brief**, link the ELI rather than a `legal-content` URL — it is stable and won't 404 behind the WAF.
