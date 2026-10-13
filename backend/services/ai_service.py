@@ -773,6 +773,13 @@ _CA_DECISIVE = frozenset({
     # Excluded: "va" (ES and IT "goes"), "quant" (FR "quant a"), "qui" (FR, IT).
     "proposa", "comissio", "fons", "setembre", "espanya", "resoldre",
     "assumpte", "clausules", "guanyar", "solidaritat", "recepta",
+    # Added 13 Oct 2026: "Que es el repositori europeu de publicitat politica llancat el 12
+    # d'octubre?" scored ES and was answered in Spanish; not one of its words was in this
+    # set. ES writes repositorio / publicidad / europeo / lanzado; FR repertoire / publicite /
+    # europeen; IT repertorio / pubblicita / europeo. Excluded: "octubre" (same in Spanish).
+    "repositori", "publicitat", "europeu", "europeus", "llancat", "llancada",
+    # "missio" folds from Catalan "missio"; ES mision, FR mission, IT missione (and "missions" is French).
+    "missio",
 })
 
 # Catalan plural of the -cio nouns. "-cions" has no counterpart in the other
@@ -816,6 +823,11 @@ _IT_DECISIVE = frozenset({
     # "qual" (Catalan "el qual"), "fondo" (Spanish).
     "quale", "soglia", "applica", "calore", "industriale", "ricetta",
     "buona", "settembre",
+    # Added 13 Oct 2026: "Quanto costa l'EUSM Lebanon e dove opera?" scored EN (English
+    # "opera") and "Quanto costa la missione EUSM Lebanon e dove opera?" scored FR, so the
+    # answer came back in English. ES writes cuanto / donde / mision; CA quant / on / missio;
+    # FR combien / ou / mission. Excluded: "costa" (ES and CA), "come" (English), "cosa" (ES).
+    "quanto", "quanta", "quanti", "quante", "dove", "missione", "missioni",
 })
 
 # Italian "-zione"/"-zioni" nouns: Spanish writes "-cion(es)", Catalan "-cio(ns)",
