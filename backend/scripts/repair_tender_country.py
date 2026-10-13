@@ -17,6 +17,13 @@ The repair reads `cac:Country/cbc:IdentificationCode` from the row's own
 does not state a country is left alone rather than filled from its title
 language, which is exactly the inference that created the mess.
 
+It reads the XML of the rows that need it, and only those (13 October 2026). The first
+version loaded every notice with its XML to look at each country: 386 rows in August,
+49,701 rows and 1.25 GB in October, and the platform killed the job every night (rc=-9,
+no output) from 6 October. Measured that day: 260 rows had no valid country, 4 of them
+had any XML. So the countries are read first, without the XML, and the XML is fetched
+in small batches for the rows whose country is not valid.
+
 Run:
     python3.12 backend/scripts/repair_tender_country.py            # dry run
     python3.12 backend/scripts/repair_tender_country.py --apply
@@ -30,8 +37,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from sqlalchemy import text  # noqa: E402
+
 from core.database import SessionLocal  # noqa: E402
-from models.tender import Tender  # noqa: E402
 from services.tenders.country_codes import (  # noqa: E402
     normalise_country,
     is_valid_country,
@@ -58,40 +66,56 @@ def country_from_xml(xml: str | None) -> str | None:
     return None
 
 
+# Never the XML here: this is every row of the table.
+_COUNTRIES = text("SELECT id, publication_number, buyer_country FROM tenders ORDER BY id")
+_XML = text("SELECT id, xml_content FROM tenders WHERE id = ANY(:ids)")
+_SET = text("UPDATE tenders SET buyer_country = :c, updated_at = now() WHERE id = :id")
+_BATCH = 100
+_LEAVES_LISTED = 20
+
+
+def repair(db, *, apply: bool, limit: int | None = None) -> tuple[int, int, int]:
+    """(fixed, unresolved, already_valid). Reads XML only for rows without a valid country."""
+    rows = db.execute(_COUNTRIES).all()
+    todo = [r for r in rows if not is_valid_country(r.buyer_country)]
+    skipped = len(rows) - len(todo)
+    if limit:
+        todo = todo[:limit]
+
+    fixed = unresolved = 0
+    for start in range(0, len(todo), _BATCH):
+        chunk = todo[start:start + _BATCH]
+        xml_by_id = {r.id: r.xml_content
+                     for r in db.execute(_XML, {"ids": [r.id for r in chunk]}).all()}
+        for row in chunk:
+            resolved = country_from_xml(xml_by_id.get(row.id))
+            if not resolved:
+                unresolved += 1
+                if unresolved <= _LEAVES_LISTED:
+                    print(f"  [leave] {row.publication_number}: "
+                          f"{row.buyer_country!r} -> no country in its own XML")
+                continue
+            print(f"  [fix]   {row.publication_number}: {row.buyer_country!r} -> {resolved}")
+            if apply:
+                db.execute(_SET, {"c": resolved, "id": row.id})
+            fixed += 1
+        if apply:
+            db.commit()
+    if unresolved > _LEAVES_LISTED:
+        print(f"  [leave] ...and {unresolved - _LEAVES_LISTED} more")
+    return fixed, unresolved, skipped
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="write changes")
-    ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--limit", type=int, default=None,
+                    help="at most this many rows WITHOUT a valid country")
     args = ap.parse_args()
 
     db = SessionLocal()
-    fixed = unresolved = skipped = 0
     try:
-        rows = db.query(Tender).order_by(Tender.id).all()
-        if args.limit:
-            rows = rows[: args.limit]
-
-        for tender in rows:
-            current = tender.buyer_country
-            if is_valid_country(current):
-                skipped += 1
-                continue
-
-            resolved = country_from_xml(tender.xml_content)
-            if not resolved:
-                unresolved += 1
-                print(f"  [leave] {tender.publication_number}: "
-                      f"{current!r} -> no country in its own XML")
-                continue
-
-            print(f"  [fix]   {tender.publication_number}: {current!r} -> {resolved}")
-            if args.apply:
-                tender.buyer_country = resolved
-            fixed += 1
-
-        if args.apply:
-            db.commit()
-
+        fixed, unresolved, skipped = repair(db, apply=args.apply, limit=args.limit)
         print(f"\n[repair] fixed={fixed} unresolved={unresolved} "
               f"already_valid={skipped} applied={args.apply}")
         return 0
