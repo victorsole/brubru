@@ -108,6 +108,61 @@ def test_refusals_are_recorded_as_a_failure_outside_every_feed(monkeypatch):
     assert row["error"].endswith("...and 5 more")
 
 
+class _Ledger:
+    """Answers the one 'last refusal row' query with the text it was built with."""
+    def __init__(self, last_error):
+        self.last_error = last_error
+
+    def execute(self, _stmt, _params):
+        return SimpleNamespace(scalar=lambda: self.last_error)
+
+
+def _recorded_status(monkeypatch, db, refused):
+    calls = []
+    monkeypatch.setattr(write_guard, "record_run", lambda db, **kw: calls.append(kw))
+    record_refusals(db, "economy_satcen", refused)
+    assert len(calls) == 1
+    return calls[0]["status"], calls[0]["error"]
+
+
+def test_the_same_items_refused_again_are_a_standing_gap_not_a_new_failure(monkeypatch):
+    # 13 Oct 2026: the same 8 undatable items turned the hourly cron red every day
+    # for three weeks. Said once as a failure; after that, degraded.
+    refused = [dict(_item(f"s{n}", sk="satcen/news"), undated_reason="no_carrier") for n in range(4)]
+    first, text_ = _recorded_status(monkeypatch, _Ledger(None), refused)
+    assert first == "failed"
+    again, _ = _recorded_status(monkeypatch, _Ledger(text_), refused)
+    assert again == "degraded"
+    # One of them got a date and is no longer refused: the rest are still known.
+    fewer, _ = _recorded_status(monkeypatch, _Ledger(text_), refused[:3])
+    assert fewer == "degraded"
+
+
+def test_a_newly_refused_item_is_a_failure_again(monkeypatch):
+    refused = [dict(_item(f"s{n}", sk="satcen/news"), undated_reason="no_carrier") for n in range(4)]
+    _, text_ = _recorded_status(monkeypatch, _Ledger(None), refused)
+    one_more = refused + [dict(_item("new", sk="satcen/news"), undated_reason="no_carrier")]
+    status, _ = _recorded_status(monkeypatch, _Ledger(text_), one_more)
+    assert status == "failed"
+
+
+def test_a_list_too_long_to_name_or_an_unreadable_ledger_stays_a_failure(monkeypatch):
+    many = [dict(_item(f"s{n}", sk="COR"), undated_reason="no_carrier") for n in range(45)]
+    _, text_ = _recorded_status(monkeypatch, _Ledger(None), many)
+    # 45 refused, 40 named: nothing proves the other 5 were reported before.
+    assert _recorded_status(monkeypatch, _Ledger(text_), many)[0] == "failed"
+
+    class _Broken:
+        def execute(self, *_a, **_k):
+            raise RuntimeError("ledger unreachable")
+    few = many[:2]
+    assert _recorded_status(monkeypatch, _Broken(), few)[0] == "failed"
+    # A URL that only shares a prefix with a reported one is not that item.
+    _, reported = _recorded_status(monkeypatch, _Ledger(None), few)
+    lookalike = [dict(few[0], source_url=few[0]["source_url"] + "-part-2")]
+    assert _recorded_status(monkeypatch, _Ledger(reported), lookalike)[0] == "failed"
+
+
 # --- economy_items: the same rule in sync_economy ----------------------------
 
 def test_economy_new_undated_news_is_dated_or_refused(monkeypatch):

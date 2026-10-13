@@ -36,6 +36,15 @@ Two deliberate choices in that record:
 * Its key is not a registered MEUB source and its tier is NULL, so it reaches the
   admin panel's failure count and recent-failures list without touching any feed's
   freshness or /api/sync/health tier verdicts.
+
+Said once as a failure, then as a standing gap (13 October 2026)
+----------------------------------------------------------------
+An item nobody can date is refused again on every run, for as long as its page carries
+no date. Since the hourly cron judges every ledger row (9 October), the same 8 items
+turned a run red every day for three weeks: 17 of the 54 "Deploy Crashed" mails of
+6-13 October. So the FIRST refusal of an item is `failed`, and a run that refuses only
+items the previous row already named is `degraded`: still in the ledger and in
+/api/sync/health, no longer an alarm. A new item in the list is a failure again.
 """
 from __future__ import annotations
 
@@ -82,11 +91,35 @@ def date_new_items(db, items: Iterable[dict], *, fetcher=None) -> Tuple[List[dic
     return keep, refused
 
 
+def _already_reported(db, source_key: str, refused: List[dict]) -> bool:
+    """True when the last refusal recorded under this key named every one of these items.
+
+    False whenever that cannot be shown: a list longer than the row can name, an item
+    without a URL, a ledger that cannot be read. Unproven means it is said as a failure."""
+    urls = [i.get("source_url") or "" for i in refused]
+    if len(urls) > _MAX_LISTED or not all(urls):
+        return False
+    try:
+        last = db.execute(
+            text("SELECT error FROM sync_runs WHERE source_key = :k "
+                 "ORDER BY started_at DESC LIMIT 1"), {"k": source_key}).scalar()
+    except Exception:  # noqa: BLE001 -- bookkeeping must never break the writer
+        try:
+            db.rollback()
+        except Exception:  # noqa: BLE001
+            pass
+        return False
+    named = set((last or "").split())
+    return all(u in named for u in urls)
+
+
 def record_refusals(db, writer_key: str, refused: List[dict]) -> None:
     """Write one ledger row naming every refused item, and say it on stderr.
 
-    Call once at the END of a run, after the writer's own commits: record_run commits,
-    and calling it mid-source would commit that source's half-written transaction.
+    `failed` the first time an item is refused, `degraded` while the same items are
+    refused again. Call once at the END of a run, after the writer's own commits:
+    record_run commits, and calling it mid-source would commit that source's
+    half-written transaction.
     """
     if not refused:
         return
@@ -98,5 +131,6 @@ def record_refusals(db, writer_key: str, refused: List[dict]) -> None:
            "listing or on the item's own page.\n" + "\n".join(lines)
            + (f"\n...and {more} more" if more > 0 else ""))
     print(f"[{writer_key}] REFUSED undated items:\n{msg}", file=sys.stderr)
-    record_run(db, source_key=f"{writer_key}{REFUSAL_SOURCE_SUFFIX}", tier=None,
-               status="failed", items_added=0, error=msg)
+    key = f"{writer_key}{REFUSAL_SOURCE_SUFFIX}"
+    status = "degraded" if _already_reported(db, key, refused) else "failed"
+    record_run(db, source_key=key, tier=None, status=status, items_added=0, error=msg)
