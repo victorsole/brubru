@@ -121,3 +121,46 @@ class TestBodyFacts:
 
     def test_absent_facts_are_none_never_borrowed(self):
         assert parse_body_facts("Just a title") == {"status": None, "start": None, "end": None}
+
+class TestBerecOpenConsultationDeadline:
+    """13 Oct 2026: BEREC's open consultations are 'square-teaser' cards with a date and a
+    title only; their deadline is on the consultation's own page. All four open ones were stored
+    as closed with no end date."""
+
+    LISTING = (
+        '<article class="square-teaser-content pink-bg">'
+        '<a href="/en/public-consultations-calls-for-inputs/draft-work-programme-2027">'
+        '<h3>Public consultation on the draft BEREC Work Programme 2027</h3></a>'
+        '<span>01 October 2026</span></article>'
+        '<article class="closed-consultation-content container">'
+        '<a href="/en/public-consultations-calls-for-inputs/old-call">'
+        '<h3>Call for Inputs on interfaces for mobile networks for developers</h3></a>'
+        ' 02 July 2026 Deadline to submit contributions: 26 August 2026, 17:00 CEST</article>'
+    )
+    PAGE = "<html><body><h1>Public consultation</h1> Deadline to submit contributions: 31 October 2026 <p>text</p></body></html>"
+
+    def _run(self, monkeypatch, page):
+        from services.scrapers import agency_consultations as ac
+        calls = []
+
+        def fake_fetch(url, *a, **k):
+            calls.append(url)
+            if url.endswith("/en/public-consultations-calls-for-inputs"):
+                return self.LISTING
+            if page is None:
+                raise RuntimeError("page unreachable")
+            return page
+
+        monkeypatch.setattr(ac, "_fetch", fake_fetch)
+        return {it.public_url.rsplit("/", 1)[-1]: it for it in ac.ingest_berec_consultations()}, calls
+
+    def test_open_card_takes_its_deadline_from_its_own_page(self, monkeypatch):
+        items, calls = self._run(monkeypatch, self.PAGE)
+        assert items["draft-work-programme-2027"].document_date.date() == date(2026, 10, 31)
+        # the closed card already carries its deadline: its page is NOT fetched
+        assert items["old-call"].document_date.date() == date(2026, 8, 26)
+        assert sum("old-call" in c for c in calls) == 0
+
+    def test_unreadable_page_stores_no_deadline_and_does_not_crash(self, monkeypatch):
+        items, _ = self._run(monkeypatch, None)
+        assert items["draft-work-programme-2027"].document_date is None

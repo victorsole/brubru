@@ -277,10 +277,30 @@ def ingest_berec_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
         cls = (_BEREC_CLASS.search(card).group(1) if _BEREC_CLASS.search(card) else "").lower()
         status = "Closed" if "closed-consultation" in cls else ("Open" if "open-consultation" in cls else "")
         d = _BEREC_DEADLINE.search(text)
+        deadline = _parse_date(d.group(1)) if d else None
+        if deadline is None and "closed-consultation" not in cls:
+            # An OPEN consultation sits in a "square-teaser" card that carries only a date and
+            # a title: the deadline is on its own page. Without this read, all four consultations
+            # open on 13 Oct 2026 (WP 2027, two draft reports, one call for inputs) were stored
+            # as closed with no deadline, because OPEN needs a deadline that has not passed.
+            deadline = _berec_page_deadline(url)
         out[url] = _build(body_code="berec", title=title, url=url, status=status,
-                          start=None, deadline=_parse_date(d.group(1)) if d else None,
+                          start=None, deadline=deadline,
                           now=now, source_kind="berec_consultations", strict_deadline=True)
     return list(out.values())
+
+
+def _berec_page_deadline(url: str):
+    """The 'Deadline to submit contributions' printed on a consultation's own page, or None.
+
+    None when the page cannot be read or states no deadline: an unread deadline is never
+    guessed, so the row stays closed (unproven) rather than open (unproven)."""
+    try:
+        page = _txt(_fetch(url))
+    except Exception:
+        return None
+    m = _BEREC_DEADLINE.search(page or "")
+    return _parse_date(m.group(1)) if m else None
 
 
 def ingest_eiopa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
