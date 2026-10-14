@@ -58,6 +58,9 @@ class EULaw(Base):
     extra_metadata = Column(JSON)  # Extra fields (language, pages, EEA relevance, etc.)
 
     # CELEX-derived fields (parsed from celex string for fast filtering)
+    # The next three are DERIVED from celex by the database trigger eu_laws_celex_parts (migration 291):
+    # any value a writer sets is replaced. celex_number is the CELEX string's number part (a date for
+    # type A agreements), not always the act's natural number, and the three together are not a key.
     celex_year = Column(Integer, index=True)  # e.g., 2024
     celex_type = Column(CHAR(1))  # R=Regulation, L=Directive, D=Decision, H=Recommendation
     celex_number = Column(Integer)  # e.g., 1689
