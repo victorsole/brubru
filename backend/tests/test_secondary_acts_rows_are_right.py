@@ -77,3 +77,13 @@ def test_the_repair_states_values_read_from_their_authority_and_guards_each_writ
     assert "WHERE id = :id AND coalesce(celex, '') = ''" in src
     # An act Cellar does not hold is left alone; its type comes from Cellar, not the title.
     assert "if not t:\n            continue" in src and "IMPLEMENTING_TYPES and not t & DELEGATED_TYPES" in src
+
+
+def test_an_act_held_twice_is_merged_only_into_the_register_row_from_a_row_outside_it():
+    src = (BACKEND / "scripts" / "repair_secondary_acts.py").read_text(encoding="utf-8")
+    # The CELEX holder must be outside the register and labelled by its own CELEX; any
+    # other holder is a conflict printed for a person, never merged.
+    assert "if holder.regdel_id is None and holder.reference == celex:" in src
+    assert "[left for a person]" in src
+    # The C-number to CELEX link is Cellar's own, and only one-to-one links are used.
+    assert "cdm:resource_legal_manuscript_ref" in src and "if len(celexes) != 1 or len(ids) != 1:" in src

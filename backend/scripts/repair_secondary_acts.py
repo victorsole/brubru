@@ -17,6 +17,12 @@ Official Journal header, or Cellar's title), never derived:
      and the text; the other row is recorded in its merged_from and removed.
   5. Published acts still titled as drafts ("(EU) …/...") take the final title the
      Publications Office gives the CELEX.
+  6. The same as 4 for every act Cellar shows held twice: a register row under the
+     C-number without a CELEX (the register lags the Official Journal), and a row
+     inserted on 10 Aug outside the register holding the CELEX and the Official Journal
+     text. Cellar's cdm:resource_legal_manuscript_ref says which C-number each CELEX is.
+     73 implementing acts on 14 Oct 2026. A pair where the CELEX holder is itself a
+     register row, or carries another C-number, is printed and left for a person.
 
 Not here, because the feed now does them on every run: policy areas kept whole, a CELEX
 used as a reference replaced by the C-number, planned rows the register no longer lists.
@@ -85,6 +91,45 @@ def cellar_types(celexes: list[str]) -> dict[str, set[str]]:
     return out
 
 
+def held_twice(conn) -> tuple[list[dict], list[str]]:
+    """(merges, conflicts): register rows without a CELEX whose act another row holds."""
+    from scripts.sync_secondary_act_bodies import ADOPTED_STAGES, UNRESOLVED, c_number
+    wanted: dict = {}
+    for r in conn.execute(UNRESOLVED, {"stages": list(ADOPTED_STAGES)}).fetchall():
+        m = re.fullmatch(r"C\((\d{4})\)\s?(\d{1,5})", c_number(r.reference, r.merged_from) or "")
+        if m:
+            wanted.setdefault((m.group(1), int(m.group(2))), []).append(r.id)
+    found: dict = {}
+    for year in sorted({y for y, _ in wanted}):
+        q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?m ?celex WHERE { "
+             "?w cdm:resource_legal_manuscript_ref ?m . "
+             f'FILTER(STRSTARTS(STR(?m), "C({year})")) ?w cdm:resource_legal_id_celex ?celex . '
+             'FILTER(REGEX(STR(?celex), "^3[0-9]{4}[A-Z][0-9]{4}$")) }')
+        req = urllib.request.Request(SPARQL, data=urllib.parse.urlencode({"query": q}).encode(),
+                                     headers={"Accept": "application/sparql-results+json"})
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            for b in json.loads(resp.read())["results"]["bindings"]:
+                m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
+                if m:
+                    found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
+    merges, conflicts = [], []
+    for key, ids in wanted.items():
+        celexes = found.get(key, set())
+        if len(celexes) != 1 or len(ids) != 1:
+            continue
+        celex = next(iter(celexes))
+        holder = conn.execute(text("SELECT id, reference, regdel_id FROM secondary_acts WHERE celex = :c"),
+                              {"c": celex}).first()
+        if not holder:
+            continue                       # free: the text job assigns it
+        if holder.regdel_id is None and holder.reference == celex:
+            merges.append({"fix": 6, "id": ids[0], "ref": f"C({key[0]}){key[1]}", "col": "merge",
+                           "old": str(holder.id), "new": celex})
+        else:
+            conflicts.append(f"C({key[0]}){key[1]} -> {celex}, held by {holder.reference}")
+    return merges, conflicts
+
+
 def plan(conn) -> list[dict]:
     """Every change, with the value it replaces."""
     changes: list[dict] = []
@@ -127,6 +172,10 @@ def plan(conn) -> list[dict]:
     for r in titles:
         changes.append({"fix": 5, "id": r.id, "ref": r.reference, "col": "title", "old": r.old,
                         "new": re.sub(r"\s+", " ", r.new).strip()})
+    merges, conflicts = held_twice(conn)
+    changes.extend(merges)
+    for c in conflicts:
+        print(f"  [left for a person] {c}")
     return changes
 
 
@@ -134,21 +183,23 @@ def apply(engine, changes: list[dict]) -> int:
     written = 0
     with engine.begin() as conn:
         for c in changes:
-            if c["fix"] == 4:
+            if c["fix"] in (4, 6):
                 gone_id = c["old"]
                 src = conn.execute(text("SELECT reference, first_seen, text_body, body_html FROM secondary_acts "
                                         "WHERE id = :g"), {"g": gone_id}).one()
                 conn.execute(text("UPDATE secondary_acts SET celex = NULL WHERE id = :g"), {"g": gone_id})
                 entry = json.dumps([{"id": gone_id, "reference": src.reference, "first_seen": str(src.first_seen),
                                      "source": "regulatory_cascade_duplicate", "merged": "2026-10-14"}])
+                pub = conn.execute(text("SELECT publication_date FROM secondary_acts WHERE id = :g"),
+                                   {"g": gone_id}).scalar()
                 n = conn.execute(text("""
                     UPDATE secondary_acts
                        SET celex = :celex, status = 'published', text_body = :txt, body_html = :html,
-                           body_source = 'official_journal',
+                           body_source = 'official_journal', publication_date = coalesce(publication_date, :pub),
                            merged_from = coalesce(merged_from, '[]'::jsonb) || CAST(:entry AS jsonb)
                      WHERE id = :id AND coalesce(celex, '') = ''"""),
                                  {"celex": c["new"], "txt": src.text_body, "html": src.body_html,
-                                  "entry": entry, "id": c["id"]}).rowcount
+                                  "entry": entry, "id": c["id"], "pub": pub}).rowcount
                 if n:
                     conn.execute(text("DELETE FROM secondary_acts WHERE id = :g"), {"g": gone_id})
                 written += n
