@@ -45,3 +45,6 @@ class InstitutionalPublication(Base):
 
     fetched_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    # The change signal (migration 290): moved by the trigger only when content changes.
+    # fetched_at is when we last looked, not when the document changed.
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

@@ -28,6 +28,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.body_sources import read_body
 from api.v1._pagination import stable
+from api.v1._row_dates import row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ The single most useful endpoint for "what is the EU saying right now" — used b
 - `category` — `press_release` / `report` / `consultation` / `agenda` / ...
 - `policy_area` — single policy area tag.
 - `published_from`, `published_to` (and `published_end` as alias for `published_to`).
-- `updated_from`, `updated_to` (and `updated_end` as alias) — incremental sync on `fetched_at`.
+- `updated_from`, `updated_to` (and `updated_end` as alias) — incremental sync on the date a row's content last changed, which every item carries as `updated_date`.
 - `limit` (default 50, max 100), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -90,7 +91,7 @@ GET /api/v1/publications?policy_area=environment&published_from=2026-05-01
 ```
 
 **You get back**
-A `PaginatedResponse[PublicationItem]` envelope. Each item carries `institution_slug`, `source_slug`, `title`, `summary`, `url`, `language`, `published_date`, `policy_areas`, `tags`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints (`public_url = url`, `document_date = published_date`, `creation_date = fetched_at`).
+A `PaginatedResponse[PublicationItem]` envelope. Each item carries `institution_slug`, `source_slug`, `title`, `summary`, `url`, `language`, `published_date`, `policy_areas`, `tags`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints (`public_url = url`, `document_date = published_date`, `creation_date` = when Brubru first stored the row, `updated_date` = when its content last changed).
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 26+ institutional RSS feeds. Press releases typically appear in the feed within minutes of being posted on the institutional site; the 6h sync cadence catches them inside a quarter-day.""",
@@ -105,8 +106,8 @@ async def list_publications(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
-    updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows fetched_at >= value. Returns rows ordered by fetched_at desc when set."),
-    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound — rows fetched_at <= value."),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (their updated_date). Rows are ordered by that date, newest first, when set."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Incremental sync upper bound: rows whose content last changed at or before this time."),
     updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
@@ -169,14 +170,13 @@ async def list_publications(
         filters.append(
             InstitutionalPublication.published_date <= datetime.combine(published_to, datetime.max.time())
         )
-    # Incremental sync filter: use fetched_at (when row first appeared in our DB).
-    # InstitutionalPublication has no row-level updated_at; updated_date is the
-    # source-side publication update time. fetched_at is the partner-friendly
-    # signal for "what's new to me since X".
+    # Incremental sync filter: updated_at, the change signal of migration 290. It moves
+    # only when a row's content changes; fetched_at, used until 14 Oct 2026, moves on
+    # every upsert, so "what changed since X" answered with every row looked at again.
     if updated_from:
-        filters.append(InstitutionalPublication.fetched_at >= updated_from)
+        filters.append(InstitutionalPublication.updated_at >= updated_from)
     if updated_to:
-        filters.append(InstitutionalPublication.fetched_at <= updated_to)
+        filters.append(InstitutionalPublication.updated_at <= updated_to)
     if q:
         like = f"%{q}%"
         filters.append(
@@ -191,7 +191,7 @@ async def list_publications(
 
     total = query.count()
     if updated_from or updated_to:
-        order_col = InstitutionalPublication.fetched_at.desc().nullslast()
+        order_col = InstitutionalPublication.updated_at.desc().nullslast()
     else:
         order_col = InstitutionalPublication.published_date.desc().nullslast()
     rows = (
@@ -226,7 +226,8 @@ async def list_publications(
             body=deprecated_body(body_text, body_html),
             public_url=r.url,
             document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
-            creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
+            creation_date=r.created_at,
+            updated_date=row_updated(r),
         ))
 
     return build_envelope(
@@ -406,5 +407,6 @@ async def get_publication_detail(
         body=deprecated_body(body_text, body_html),
         public_url=r.url,
         document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
-        creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
+        creation_date=r.created_at,
+        updated_date=row_updated(r),
     )

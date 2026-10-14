@@ -1162,7 +1162,7 @@ A first-class semantic alias over `/api/v1/publications?category=press_release`.
 - `q` — substring search on title + summary.
 - `policy_area` — single policy area tag.
 - `published_from`, `published_to` — date filter.
-- `updated_from` — incremental sync (rows where `fetched_at >= value`).
+- `updated_from` — incremental sync: rows whose content changed at or after this time (their `updated_date`).
 - `limit` (default 50, max 100), `page` (1-indexed).
 - `body_threshold` — int, minimum body chars for `has_body=true` (defaults to module default).
 
@@ -1208,7 +1208,7 @@ async def list_press_releases(
     if published_to:
         query = query.filter(InstitutionalPublication.published_date <= datetime.combine(published_to, datetime.max.time()))
     if updated_from:
-        query = query.filter(InstitutionalPublication.fetched_at >= updated_from)
+        query = query.filter(InstitutionalPublication.updated_at >= updated_from)
     if q:
         like = f"%{q}%"
         query = query.filter(or_(
@@ -1246,7 +1246,7 @@ async def list_press_releases(
             # 5 mandatory datapoints
             public_url=r.url,
             document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
-            creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
+            creation_date=r.created_at,
             updated_date=row_updated(r),
         ))
     return build_envelope(

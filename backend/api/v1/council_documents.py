@@ -276,7 +276,7 @@ def _pub_to_item(r) -> CouncilDocumentItem:
         body_txt=body_txt,
         body_html=body_html,
         document_date=pub_date,
-        creation_date=getattr(r, "first_seen", None) or getattr(r, "fetched_at", None) or getattr(r, "created_at", None),
+        creation_date=r.created_at,
         updated_date=row_updated(r),
     )
 
@@ -403,10 +403,13 @@ async def list_council_documents(
         pub_filters.append(InstitutionalPublication.published_date >= published_from)
     if published_to:
         pub_filters.append(InstitutionalPublication.published_date <= datetime.combine(published_to, datetime.max.time()))
+    # updated_at, the change signal of migration 290, which is what each item serves as
+    # updated_date. Until 14 Oct 2026 this filtered on fetched_at, which every upsert
+    # moves and no item showed: 672 of 672 items carried updated_date null.
     if updated_from:
-        pub_filters.append(InstitutionalPublication.fetched_at >= updated_from)
+        pub_filters.append(InstitutionalPublication.updated_at >= updated_from)
     if updated_to:
-        pub_filters.append(InstitutionalPublication.fetched_at <= updated_to)
+        pub_filters.append(InstitutionalPublication.updated_at <= updated_to)
     if q:
         like = f"%{q}%"
         # Search the BODY as well as the title. Council register subject lines are

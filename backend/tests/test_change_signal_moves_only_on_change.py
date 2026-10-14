@@ -63,6 +63,9 @@ TABLES = [
     ("tenders", "updated_at"),
     ("transparency_meetings", "last_updated"),
     ("tris_notifications", "last_updated"),
+    # /council/council-documents, /publications and /press-releases (migration 290,
+    # 14 Oct 2026): filtered on fetched_at, which every upsert moves, until then.
+    ("institutional_publications", "updated_at"),
 ]
 
 
