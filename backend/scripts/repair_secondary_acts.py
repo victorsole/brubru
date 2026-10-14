@@ -29,6 +29,13 @@ Official Journal header, or Cellar's title), never derived:
   8. Published acts whose title names another act's number (the register typed 2018/815
      for Regulation 2019/815, 2022/262 for 2023/262) take the Publications Office's title,
      where that title names the CELEX the row holds.
+  9. C(2026)1112 is an invented row from the bootstrap seed (ingest_secondary_acts.py:
+     "harmonised standards for medical device software"); it held CELEX 32026D0378 and
+     its text, which Cellar gives to C(2026)973 (etofenprox). C(2026)973 takes them;
+     the seed row is recorded in its merged_from and removed.
+ 10. Every Commission-document text links to its PDF in the document register; the two
+     acts whose CELEX was a corrigendum's drop the corrigendum's link.
+ Fix 5 also reads Cellar's English title where eu_laws does not hold the act.
 
 Not here, because the feed now does them on every run: policy areas kept whole, a CELEX
 used as a reference replaced by the C-number, planned rows the register no longer lists.
@@ -71,6 +78,9 @@ CORRIGENDUM_CELEX = {
 }
 # Fix 4: the register row and the duplicate holding the CELEX.
 DUPLICATE = ("C(2025)885", "32025R1190")
+# Fix 9: the invented seed row and the act its CELEX belongs to (Cellar
+# cdm:resource_legal_manuscript_ref of 32026D0378 = C(2026)973, 14 Oct 2026).
+SEED = ("C(2026)1112", "C(2026)973", "32026D0378")
 
 
 def database_url() -> str:
@@ -146,6 +156,36 @@ def held_twice(conn) -> tuple[list[dict], list[str]]:
     return merges, conflicts
 
 
+def cellar_titles(celexes: list[str]) -> dict[str, str]:
+    """Each CELEX's English title in Cellar."""
+    out: dict[str, str] = {}
+    for i in range(0, len(celexes), 100):
+        values = " ".join(f'"{c}"^^<http://www.w3.org/2001/XMLSchema#string>' for c in celexes[i:i + 100])
+        q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?celex ?title WHERE { "
+             f"VALUES ?celex {{ {values} }} ?w cdm:resource_legal_id_celex ?celex . "
+             "?e cdm:expression_belongs_to_work ?w ; cdm:expression_title ?title ; "
+             "cdm:expression_uses_language <http://publications.europa.eu/resource/authority/language/ENG> . }")
+        req = urllib.request.Request(SPARQL, data=urllib.parse.urlencode({"query": q}).encode(),
+                                     headers={"Accept": "application/sparql-results+json"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            for b in json.loads(r.read())["results"]["bindings"]:
+                out[b["celex"]["value"]] = re.sub(r"\s+", " ", b["title"]["value"]).strip()
+    return out
+
+
+def register_pdf_url(ref: str):
+    """The document register's link to the main English file of a C-document, or None."""
+    from scripts.sync_secondary_act_bodies import REGISTER, _get, english_files
+    q = urllib.parse.quote(ref.replace(" ", ""))
+    try:
+        found = json.loads(_get(f"{REGISTER}/api/search/{q}?lang=en"))
+    except Exception:
+        return None
+    record = found[0] if isinstance(found, list) and found else found
+    files = english_files(record) if isinstance(record, dict) else []
+    return f"{REGISTER}/api/files/{q}?ersIds={files[0]}" if files else None
+
+
 def plan(conn) -> list[dict]:
     """Every change, with the value it replaces."""
     changes: list[dict] = []
@@ -194,7 +234,7 @@ def plan(conn) -> list[dict]:
            AND celex ~ '^3[0-9]{4}[A-Z][0-9]{4}$' AND body_source = 'official_journal'""")).fetchall()
     held = cellar_types([r.celex for r in adopted]) if adopted else {}
     for r in adopted:
-        if held.get(r.celex):
+        if held.get(r.celex) and r.reference != SEED[0]:     # the seed row is merged by fix 9
             changes.append({"fix": 7, "id": r.id, "ref": r.reference, "col": "status",
                             "old": "adopted", "new": "published"})
     own = r"^\s*Commission (?:Delegated |Implementing )?(Regulation|Decision|Directive) \(EU\)\s*(20[0-9]{2})/([0-9]{1,4})\y"
@@ -213,6 +253,33 @@ def plan(conn) -> list[dict]:
     for r in typos:
         changes.append({"fix": 8, "id": r.id, "ref": r.reference, "col": "title", "old": r.title,
                         "new": re.sub(r"\s+", " ", r.oj_title).strip()})
+    # Fix 5, from Cellar: published acts still titled as drafts that eu_laws does not hold.
+    drafts = conn.execute(text(f"""
+        SELECT s.id, s.reference, s.celex, s.title FROM secondary_acts s
+         WHERE s.status = 'published' AND s.title ~ '{DRAFT}' AND s.celex ~ '^3[0-9]{{4}}[A-Z][0-9]{{4}}$'
+           AND NOT EXISTS (SELECT 1 FROM eu_laws l WHERE l.celex = s.celex AND l.title !~ '{DRAFT}')""")).fetchall()
+    titles_found = cellar_titles([r.celex for r in drafts]) if drafts else {}
+    for r in drafts:
+        t = titles_found.get(r.celex)
+        if t and not re.search(DRAFT, t) and re.match(r"\s*Commission ", t, re.I):
+            changes.append({"fix": 5, "id": r.id, "ref": r.reference, "col": "title", "old": r.title, "new": t})
+    # Fix 9
+    seed = conn.execute(text("SELECT id, celex FROM secondary_acts WHERE reference = :r AND regdel_id IS NULL"),
+                        {"r": SEED[0]}).first()
+    real = conn.execute(text("SELECT id, celex FROM secondary_acts WHERE reference = :r"), {"r": SEED[1]}).first()
+    if seed and real and seed.celex == SEED[2] and not real.celex:
+        changes.append({"fix": 9, "id": real.id, "ref": SEED[1], "col": "merge", "old": str(seed.id), "new": SEED[2]})
+    # Fix 10
+    for ref in CORRIGENDUM_CELEX:
+        row = conn.execute(text("SELECT id, pdf_url FROM secondary_acts WHERE reference = :r"), {"r": ref}).first()
+        if row and row.pdf_url and re.search(r"R\(\d{2}\)", row.pdf_url):
+            changes.append({"fix": 10, "id": row.id, "ref": ref, "col": "pdf_url", "old": row.pdf_url, "new": None})
+    docs = conn.execute(text("""SELECT id, reference FROM secondary_acts
+                                 WHERE body_source = 'commission_document' AND pdf_url IS NULL""")).fetchall()
+    for r in docs:
+        url = register_pdf_url(r.reference)
+        if url:
+            changes.append({"fix": 10, "id": r.id, "ref": r.reference, "col": "pdf_url", "old": None, "new": url})
     merges, conflicts = held_twice(conn)
     changes.extend(merges)
     for c in conflicts:
@@ -224,6 +291,29 @@ def apply(engine, changes: list[dict]) -> int:
     written = 0
     with engine.begin() as conn:
         for c in changes:
+            if c["fix"] == 9:
+                seed_id = c["old"]
+                src = conn.execute(text("SELECT reference, first_seen, text_body, body_html, body_source, "
+                                        "publication_date, merged_from FROM secondary_acts WHERE id = :g"),
+                                   {"g": seed_id}).one()
+                history = [m for m in (src.merged_from or []) if m.get("reference") != SEED[1]]
+                entry = json.dumps(history + [{"id": seed_id, "reference": src.reference,
+                                               "first_seen": str(src.first_seen), "source": "invented_seed_row",
+                                               "merged": "2026-10-14"}])
+                conn.execute(text("UPDATE secondary_acts SET celex = NULL WHERE id = :g"), {"g": seed_id})
+                n = conn.execute(text("""
+                    UPDATE secondary_acts
+                       SET celex = :celex, status = 'published', text_body = :txt, body_html = :html,
+                           body_source = :src, publication_date = coalesce(publication_date, :pub),
+                           merged_from = coalesce(merged_from, '[]'::jsonb) || CAST(:entry AS jsonb)
+                     WHERE id = :id AND coalesce(celex, '') = ''"""),
+                                 {"celex": c["new"], "txt": src.text_body, "html": src.body_html,
+                                  "src": src.body_source, "pub": src.publication_date, "entry": entry,
+                                  "id": c["id"]}).rowcount
+                if n:
+                    conn.execute(text("DELETE FROM secondary_acts WHERE id = :g"), {"g": seed_id})
+                written += n
+                continue
             if c["fix"] in (4, 6):
                 gone_id = c["old"]
                 src = conn.execute(text("SELECT reference, first_seen, text_body, body_html FROM secondary_acts "
