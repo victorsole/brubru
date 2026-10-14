@@ -271,6 +271,9 @@ class SecondaryAct(Base):
     # HTML body backfilled from Cellar XHTML manifestation (migration 071).
     body_html = Column(Text, nullable=True)
     body_fetched_at = Column(DateTime, nullable=True)
+    # official_journal (Cellar) or commission_document (the document register, before
+    # publication); the Official Journal's text replaces the other (migration 292).
+    body_source = Column(String(24), nullable=True)
     # Internal record id in the Interinstitutional Register of Delegated Acts.
     # Lets the v1 endpoint build a specific /delegatedActs/{regdel_id}?lang=en
     # citizen URL instead of a generic search URL (migration 071).

@@ -291,6 +291,12 @@ MEUB_SOURCES: List[SourceSpec] = [
     SourceSpec("consultation_counts", "Consultations - response counts", "warm",
                "scripts/backfill_consultations_feedback_count.py", ("--apply", "--max-seconds", "300"),
                timeout=480, stale_after_hours=14),
+    # The text of delegated and implementing acts (14 Oct 2026). Scheduled nowhere until
+    # then: the last bodies were written by hand on 1-2 Oct, so later acts had none. Also
+    # fetches the Commission's adopted document for acts not in the Official Journal.
+    SourceSpec("secondary_act_bodies", "Delegated and implementing acts - full text", "daily",
+               "scripts/sync_secondary_act_bodies.py", ("--apply", "--max-seconds", "300"),
+               timeout=480, stale_after_hours=30),
     SourceSpec("consultation_stances", "Consultations - respondent stances", "daily",
                "scripts/classify_pending_stances.py",
                ("--apply", "--free-only", "--concurrency", "1", "--limit", "400", "--max-seconds", "900"),

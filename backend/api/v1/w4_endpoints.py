@@ -756,6 +756,14 @@ class SecondaryActItem(BaseModel):
         description="The Council's scrutiny, same keys as ep_scrutiny.",
     )
     celex: Optional[str] = None
+    body_source: Optional[str] = Field(
+        None,
+        description="Where body_txt and body_html come from: 'official_journal' (the "
+                    "published act, from the Publications Office) or 'commission_document' "
+                    "(the act as the Commission adopted it, from its document register, "
+                    "for an act not in the Official Journal: adopted, objected, withdrawn). "
+                    "Null when the act has no text: a planned or cancelled act has none.",
+    )
     source_url: str
     pdf_url: Optional[str] = None
     policy_areas: list = Field(default_factory=list)
@@ -888,6 +896,7 @@ def _secondary_act_to_item(
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),
         celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
+        body_source=getattr(r, "body_source", None) if r.text_body else None,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
         # 5 mandatory datapoints
