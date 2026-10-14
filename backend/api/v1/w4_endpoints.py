@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 from models.w4_entities import (
-    ParliamentaryQuestion, RSBOpinion, SecondaryAct, TRISNotification,
+    ParliamentaryQuestion, RSBOpinion, SecondaryAct, SecondaryActStatusEnum, TRISNotification,
     TransparencyMeeting,
 )
 
@@ -32,6 +32,7 @@ from ._body import (
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
 from ._row_dates import row_updated
 
@@ -143,7 +144,7 @@ To track what MEPs are asking on a given policy area, find the official Commissi
 - `procedure_ref` — OEIL reference (e.g. `2026/0419(COD)`).
 - `committee` — 4-letter committee code (e.g. `ENVI`).
 - `published_from`, `published_to` — date filter on `submitted_date`.
-- `updated_from` — incremental sync (rows where `last_updated >= value`).
+- `updated_from`, `updated_to` — incremental sync (rows whose `last_updated` falls in that window).
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -170,6 +171,7 @@ async def list_parliamentary_questions(
     published_from: Optional[date] = Query(None, description="submitted_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -196,6 +198,8 @@ async def list_parliamentary_questions(
         filters.append(ParliamentaryQuestion.submitted_date <= published_to)
     if updated_from:
         filters.append(ParliamentaryQuestion.last_updated >= updated_from)
+    if updated_to:
+        filters.append(ParliamentaryQuestion.last_updated <= updated_to)
     if q:
         like = f"%{q}%"
         filters.append(or_(
@@ -214,7 +218,7 @@ async def list_parliamentary_questions(
     data = [_parl_q_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @parl_q_router.get(
@@ -353,7 +357,7 @@ To audit who lobbied which Commissioner on a given topic, build a "meetings on T
 - `transparency_register_id` — filter to a specific registered entity.
 - `q` — substring search on the meeting subject.
 - `published_from`, `published_to` — date filter on `meeting_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -378,6 +382,7 @@ async def list_meetings(
     published_from: Optional[date] = Query(None, description="meeting_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -401,6 +406,8 @@ async def list_meetings(
         filters.append(TransparencyMeeting.meeting_date <= published_to)
     if updated_from:
         filters.append(TransparencyMeeting.last_updated >= updated_from)
+    if updated_to:
+        filters.append(TransparencyMeeting.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -432,7 +439,7 @@ async def list_meetings(
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @meetings_router.get(
@@ -541,7 +548,7 @@ A negative RSB opinion is a red flag that a forthcoming proposal has methodologi
 - `opinion_type` — `impact_assessment` / `evaluation` / `fitness_check`.
 - `q` — substring search on title + summary.
 - `published_from`, `published_to` — date filter on `opinion_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -566,6 +573,7 @@ async def list_rsb_opinions(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -590,6 +598,8 @@ async def list_rsb_opinions(
         filters.append(RSBOpinion.opinion_date <= published_to)
     if updated_from:
         filters.append(RSBOpinion.last_updated >= updated_from)
+    if updated_to:
+        filters.append(RSBOpinion.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -619,7 +629,7 @@ async def list_rsb_opinions(
     ]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @rsb_router.get(
@@ -915,13 +925,25 @@ def _secondary_act_to_item(
     )
 
 
+_SECONDARY_STATUSES = tuple(s.value for s in SecondaryActStatusEnum)
+
+
 def _list_secondary_acts(
     db: Session, act_type: str,
     parent_celex, proposing_dg, status, q, celex,
     published_from, published_to, updated_from,
     limit, page,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+    updated_to=None,
 ) -> PaginatedResponse[SecondaryActItem]:
+    # A value outside the enum reached PostgreSQL and answered 500 (`status=scrutiny`,
+    # the documented example, 14 Oct 2026). It is the caller's error: say so, and how.
+    if status and status.lower() not in _SECONDARY_STATUSES:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Unknown status '{status}'.",
+            "reason_code": "invalid_param",
+            "allowed": list(_SECONDARY_STATUSES),
+        })
     query = db.query(SecondaryAct).filter(SecondaryAct.act_type == act_type)
     filters = []
     if celex:
@@ -943,6 +965,8 @@ def _list_secondary_acts(
         filters.append(SecondaryAct.publication_date <= published_to)
     if updated_from:
         filters.append(SecondaryAct.last_updated >= updated_from)
+    if updated_to:
+        filters.append(SecondaryAct.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -954,7 +978,7 @@ def _list_secondary_acts(
     data = [_secondary_act_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @delegated_router.get(
@@ -998,6 +1022,7 @@ async def list_delegated_acts(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -1006,21 +1031,39 @@ async def list_delegated_acts(
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
-                                body_threshold=body_threshold)
+                                body_threshold=body_threshold, updated_to=updated_to)
 
 
 def _secondary_act_detail(
     db: Session, reference: str, expected_type: str,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> SecondaryActItem:
-    r = resolve_row(db, SecondaryAct, reference, natural_keys=("reference",))
+    # Its own type only: /delegated-acts/C(2026)1234 answered with an implementing act
+    # (14 Oct 2026). By id, C-number or CELEX (a row labelled by its CELEX until 14 Oct
+    # now carries its C-number), and by the id or reference of a row merged into it.
+    act_type = "delegated" if expected_type == "delegated_act" else "implementing"
+    r = resolve_row(db, SecondaryAct, reference, natural_keys=("reference", "celex"),
+                    extra_filters=(SecondaryAct.act_type == act_type,))
+    if not r and reference:
+        raw = reference.strip()
+        r = (db.query(SecondaryAct)
+             .filter(SecondaryAct.act_type == act_type,
+                     or_(SecondaryAct.merged_from.contains([{"id": raw}]),
+                         SecondaryAct.merged_from.contains([{"reference": raw}])))
+             .first())
     if not r:
-        raise HTTPException(status_code=404, detail={
+        other = resolve_row(db, SecondaryAct, reference, natural_keys=("reference", "celex"))
+        detail = {
             "error": f"Secondary act {reference} not found",
             "reason_code": "not_found",
             "resource": expected_type,
             "id": reference,
-        })
+        }
+        if other is not None:
+            kind = _type_value(other.act_type)
+            detail["error"] = f"{reference} is a{'n' if kind == 'implementing' else ''} {kind} act"
+            detail["see"] = f"/api/v2/legislative/{kind}-acts/{other.reference}"
+        raise HTTPException(status_code=404, detail=detail)
     return _secondary_act_to_item(r, body_threshold=body_threshold)
 
 
@@ -1139,7 +1182,7 @@ async def list_implementing_acts(
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "implementing", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
-                                body_threshold=body_threshold)
+                                body_threshold=body_threshold, updated_to=updated_to)
 
 
 # ============================================================================
@@ -1247,7 +1290,7 @@ Critical for anyone tracking single-market barriers — a French draft law on pa
 - `sector` — TRIS sector code (substring).
 - `q` — substring search on title + short summary + main content.
 - `published_from`, `published_to` — date filter on `notification_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -1270,6 +1313,7 @@ async def list_tris_notifications(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -1295,6 +1339,8 @@ async def list_tris_notifications(
         filters.append(TRISNotification.notification_date <= published_to)
     if updated_from:
         filters.append(TRISNotification.last_updated >= updated_from)
+    if updated_to:
+        filters.append(TRISNotification.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -1306,7 +1352,7 @@ async def list_tris_notifications(
     data = [_tris_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @tris_router.get(

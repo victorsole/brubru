@@ -54,7 +54,7 @@ This is the canonical surface for amendment-tracking advocacy. Common patterns: 
 - `element_type` — `recital` / `article` / `paragraph` / `subparagraph`.
 - `q` — substring search on element_reference + proposed_text.
 - `published_from`, `published_to` — date filter on `document_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -81,12 +81,13 @@ async def list_amendments(
     published_from: Optional[date] = Query(None, description="document_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[AmendmentItem]:
-    return await _v1.list_amendments(request=request, procedure_reference=procedure_reference, committee=committee, political_group=political_group, pe_reference=pe_reference, amendment_type=amendment_type, element_type=element_type, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_amendments(request=request, procedure_reference=procedure_reference, committee=committee, political_group=political_group, pe_reference=pe_reference, amendment_type=amendment_type, element_type=element_type, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @amendments_router.get(
@@ -143,7 +144,7 @@ Filterable by procedure, vote reference, main-vote-only, result, full-text searc
 - `result` — `ADOPTED | REJECTED | UNKNOWN`.
 - `q` — substring on `display_title`.
 - `published_from` / `published_to` — timestamp range.
-- `updated_from` — incremental-sync upper-bound.
+- `updated_from`, `updated_to` — incremental-sync window.
 - `limit` (1–100, default 50), `page` (default 1).
 
 **Try it**
@@ -169,12 +170,15 @@ async def list_votes(
     published_from: Optional[date] = Query(None, description="timestamp >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[VoteItem]:
-    return await _v1.list_votes(request=request, procedure_reference=procedure_reference, reference=reference, is_main=is_main, result=result, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, user=user, db=db)
+    # ep_roll_call_votes, not ep_votes: the doceo store is the one the sync writes and
+    # the one MEUB reads. ep_votes held 15 hardcoded seed rows and nothing since April.
+    return await _v1.list_votes(request=request, procedure_reference=procedure_reference, reference=reference, is_main=is_main, result=result, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @votes_router.get(
@@ -207,6 +211,7 @@ async def get_vote_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> VoteItem:
+    # Same store as the list, or every id the list hands out would 404 here.
     return await _v1.get_vote_detail(vote_id=vote_id, user=user, db=db)
 
 
@@ -252,6 +257,8 @@ async def list_member_votes(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[MemberVoteItem]:
+    # ep_member_votes holds 0 rows and always has; the per-MEP data lives in
+    # ep_roll_call_records (178,542 rows), written by the same doceo sync as the votes.
     return await _v1.list_member_votes(vote_id=vote_id, group=group, country=country, position=position, limit=limit, page=page, user=user, db=db)
 
 
@@ -271,7 +278,7 @@ When you want "everything that happened on file X across all stages" without mak
 - `document_type` — normalised across the two streams. From amendment documents: `draft_report`, `amendments`, `draft_recommendation`, `opinion`, `draft_opinion`. From committee work items, whose stage doubles as their type: `in_committee`, `awaiting_vote`, `tabled`, `adopted`, `rejected`, `withdrawn`, `pending`, `completed`, `unknown`, `work_item`. Anything else is a 422 listing these: it used to be accepted and answered with the whole corpus.
 - `q` — substring search across titles.
 - `published_from`, `published_to` — date filter.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -295,12 +302,13 @@ async def list_ep_documents(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[EPDocumentItem]:
-    return await _v1.list_ep_documents(request=request, committee=committee, procedure_reference=procedure_reference, document_type=document_type, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_ep_documents(request=request, committee=committee, procedure_reference=procedure_reference, document_type=document_type, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @reports_router.get(

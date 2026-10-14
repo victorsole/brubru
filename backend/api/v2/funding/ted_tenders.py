@@ -38,7 +38,7 @@ Returns public-procurement tender notices from TED (Tenders Electronic Daily) �
 For consultancies / SMEs looking for EU funding opportunities — filter by `cpv_main` for your sector, set `min_value` / `max_value` for relevant contract sizes, and use `deadline_from` / `deadline_to` to scope to bidding-feasible windows. The `sme_suitability_score` (0-1) is Brubru's heuristic on how SME-friendly a tender is based on value + lots + complexity.
 
 **Input**
-- `q` — substring search on title + description + summary + `official_name`, so a buyer name such as `European High Performance Computing Joint Undertaking` matches.
+- `q` — substring search on title + description + summary.
 - `buyer_country` — ISO-2.
 - `procedure_type` — TED procedure type code.
 - `contract_nature` — `works` / `supplies` / `services`.
@@ -47,7 +47,7 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `min_value`, `max_value` — estimated-value range in EUR.
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -64,7 +64,7 @@ Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publish
 )
 async def list_tenders(
     request: Request,
-    q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
+    q: Optional[str] = Query(None, description="Substring on title + description + summary"),
     buyer_country: Optional[str] = Query(None, description="ISO 3166-1 alpha-2"),
     procedure_type: Optional[str] = Query(None),
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
@@ -78,12 +78,13 @@ async def list_tenders(
     published_from: Optional[date] = Query(None, description="publication_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    return await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @tenders_router.get(

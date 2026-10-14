@@ -44,7 +44,7 @@ To audit who lobbied which Commissioner on a given topic, build a "meetings on T
 - `transparency_register_id` — filter to a specific registered entity.
 - `q` — substring search on the meeting subject.
 - `published_from`, `published_to` — date filter on `meeting_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -69,12 +69,13 @@ async def list_meetings(
     published_from: Optional[date] = Query(None, description="meeting_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TransparencyMeetingItem]:
-    return await _v1_w4_endpoints.list_meetings(request=request, host_uuid=host_uuid, host_dg=host_dg, organisation_met=organisation_met, transparency_register_id=transparency_register_id, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, user=user, db=db)
+    return await _v1_w4_endpoints.list_meetings(request=request, host_uuid=host_uuid, host_dg=host_dg, organisation_met=organisation_met, transparency_register_id=transparency_register_id, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

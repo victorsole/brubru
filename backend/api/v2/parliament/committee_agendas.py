@@ -43,7 +43,7 @@ To see what is coming up in a committee — which files are tabled for discussio
 - `q` — substring search on the agenda title.
 - `upcoming` — `true` returns only agendas dated today or later (the planning view); default `false` returns all.
 - `published_from` / `published_to` (aliased `date_from` / `date_to`) — meeting-date range.
-- `updated_from` — rows updated at/after this timestamp (incremental sync).
+- `updated_from`, `updated_to` — rows updated in that window (incremental sync).
 - `body_threshold` — minimum agenda-text length (chars) for `has_body=true`. Default 500.
 - `limit` (default 10, max 25 — the agenda document is fetched + cached on first access), `page` (1-indexed).
 
@@ -68,13 +68,14 @@ async def list_committee_agendas(
     published_from: Optional[date] = Query(None, alias="date_from"),
     published_to: Optional[date] = Query(None, alias="date_to"),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     body_threshold: int = Depends(body_threshold_param),
     limit: int = Query(10, ge=1, le=25, description="Items per page (default 10, max 25 — each agenda document is fetched + cached on first access)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CommitteeAgendaOut]:
-    return await _v1.list_committee_agendas(request=request, committee=committee, procedure_reference=procedure_reference, q=q, upcoming=upcoming, published_from=published_from, published_to=published_to, updated_from=updated_from, body_threshold=body_threshold, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_committee_agendas(request=request, committee=committee, procedure_reference=procedure_reference, q=q, upcoming=upcoming, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, body_threshold=body_threshold, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

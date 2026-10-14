@@ -27,6 +27,7 @@ from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from ._search import text_match
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
@@ -499,7 +500,7 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `min_value`, `max_value` — estimated-value range in EUR.
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -530,6 +531,7 @@ async def list_tenders(
     published_from: Optional[date] = Query(None, description="publication_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -563,6 +565,8 @@ async def list_tenders(
         filters.append(Tender.publication_date <= datetime.combine(published_to, time.max))
     if updated_from:
         filters.append(Tender.updated_at >= updated_from)
+    if updated_to:
+        filters.append(Tender.updated_at <= updated_to)
     if q:
         # official_name is the CONTRACTING AUTHORITY, and profiling by organisation is
         # the commonest thing a caller does with a tender API. It was returned in every
@@ -608,7 +612,7 @@ async def list_tenders(
     ]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
-                          updated_from=updated_from)
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @tenders_router.get(

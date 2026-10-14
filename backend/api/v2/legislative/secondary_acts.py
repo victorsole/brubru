@@ -23,6 +23,7 @@ from models.user import User
 
 from api.v1 import w4_endpoints as _v1
 from api.v1._body import body_threshold_param
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
 from api.v1.w4_endpoints import SecondaryActItem
@@ -72,6 +73,7 @@ async def list_delegated_acts(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -81,7 +83,7 @@ async def list_delegated_acts(
     return await _v1.list_delegated_acts(
         request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
-        limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
+        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
     )
 
 
@@ -159,6 +161,7 @@ async def list_implementing_acts(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -168,7 +171,7 @@ async def list_implementing_acts(
     return await _v1.list_implementing_acts(
         request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
-        limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
+        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
     )
 
 

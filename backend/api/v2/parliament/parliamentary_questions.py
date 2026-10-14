@@ -46,7 +46,7 @@ To track what MEPs are asking on a given policy area, find the official Commissi
 - `procedure_ref` — OEIL reference (e.g. `2026/0419(COD)`).
 - `committee` — 4-letter committee code (e.g. `ENVI`).
 - `published_from`, `published_to` — date filter on `submitted_date`.
-- `updated_from` — incremental sync (rows where `last_updated >= value`).
+- `updated_from`, `updated_to` — incremental sync (rows whose `last_updated` falls in that window).
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -73,13 +73,14 @@ async def list_parliamentary_questions(
     published_from: Optional[date] = Query(None, description="submitted_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ParliamentaryQuestionItem]:
-    return await _v1.list_parliamentary_questions(request=request, q=q, question_type=question_type, parliamentary_term=parliamentary_term, asking_mep_id=asking_mep_id, answering_institution=answering_institution, procedure_ref=procedure_ref, committee=committee, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_parliamentary_questions(request=request, q=q, question_type=question_type, parliamentary_term=parliamentary_term, asking_mep_id=asking_mep_id, answering_institution=answering_institution, procedure_ref=procedure_ref, committee=committee, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @parl_q_router.get(

@@ -44,7 +44,7 @@ To read what was actually said in a committee debate — search a committee's de
 - `has_transcript` — `true` (default) returns only meetings with a completed transcript; set `false` to also see scheduled/pending/failed rows.
 - `status` — filter on processing status (`completed`, `pending`, `transcribing`, `failed`).
 - `published_from` / `published_to` (aliased `date_from` / `date_to`) — `meeting_date` range.
-- `updated_from` — rows updated at/after this timestamp (incremental sync).
+- `updated_from`, `updated_to` — rows updated in that window (incremental sync).
 - `body_threshold` — minimum transcript length (chars) for `has_body=true`. Default 500.
 - `limit` (default 10, max 50 — bodies are always returned and each is large), `page` (1-indexed).
 
@@ -71,13 +71,14 @@ async def list_committee_transcripts(
     published_from: Optional[date] = Query(None, alias="date_from"),
     published_to: Optional[date] = Query(None, alias="date_to"),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     body_threshold: int = Depends(body_threshold_param),
     limit: int = Query(10, ge=1, le=50, description="Items per page (default 10, max 50 — full body is always returned, each transcript is large)."),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CommitteeTranscriptOut]:
-    return await _v1.list_committee_transcripts(request=request, committee=committee, procedure_reference=procedure_reference, q=q, has_transcript=has_transcript, status=status, published_from=published_from, published_to=published_to, updated_from=updated_from, body_threshold=body_threshold, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_committee_transcripts(request=request, committee=committee, procedure_reference=procedure_reference, q=q, has_transcript=has_transcript, status=status, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, body_threshold=body_threshold, limit=limit, page=page, user=user, db=db)
 
 
 @router.get(

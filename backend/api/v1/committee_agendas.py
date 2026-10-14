@@ -40,6 +40,7 @@ from ._body import body_threshold_param
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from services.scrapers.committee_agenda_body_extractor import ensure_agenda_body
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
 from ._row_dates import row_updated
 
@@ -121,7 +122,7 @@ To see what is coming up in a committee — which files are tabled for discussio
 - `q` — substring search on the agenda title.
 - `upcoming` — `true` returns only agendas dated today or later (the planning view); default `false` returns all.
 - `published_from` / `published_to` (aliased `date_from` / `date_to`) — meeting-date range.
-- `updated_from` — rows updated at/after this timestamp (incremental sync).
+- `updated_from`, `updated_to` — rows updated in that window (incremental sync).
 - `body_threshold` — minimum agenda-text length (chars) for `has_body=true`. Default 500.
 - `limit` (default 10, max 25 — the agenda document is fetched + cached on first access), `page` (1-indexed).
 
@@ -146,6 +147,7 @@ async def list_committee_agendas(
     published_from: Optional[date] = Query(None, alias="date_from"),
     published_to: Optional[date] = Query(None, alias="date_to"),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     body_threshold: int = Depends(body_threshold_param),
     limit: int = Query(10, ge=1, le=25, description="Items per page (default 10, max 25 — each agenda document is fetched + cached on first access)."),
     page: int = Query(1, ge=1),
@@ -169,6 +171,8 @@ async def list_committee_agendas(
         base = base.filter(E.start_date <= published_to)
     if updated_from:
         base = base.filter(E.last_updated >= updated_from)
+    if updated_to:
+        base = base.filter(E.last_updated <= updated_to)
 
     total = base.count()
     rows = stable(base.order_by(E.start_date.desc())).offset((page - 1) * limit).limit(limit).all()
@@ -185,7 +189,7 @@ async def list_committee_agendas(
         limit=limit,
         published_from=published_from,
         published_to=published_to,
-        updated_from=updated_from,
+        updated_from=updated_from, updated_to=updated_to,
         coverage_complete=True,
         op_core_title="EP committee draft agendas",
         op_core_type="EP committee draft agenda",

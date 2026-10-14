@@ -34,6 +34,7 @@ from ._body import body_from_html, body_from_html_or_text, body_threshold_param,
 from core.body_sources import read_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
 from ._row_dates import row_updated
 
@@ -235,7 +236,7 @@ This is the canonical surface for amendment-tracking advocacy. Common patterns: 
 - `element_type` — `recital` / `article` / `paragraph` / `subparagraph`.
 - `q` — substring search on element_reference + proposed_text.
 - `published_from`, `published_to` — date filter on `document_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -262,6 +263,7 @@ async def list_amendments(
     published_from: Optional[date] = Query(None, description="document_date >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -291,6 +293,8 @@ async def list_amendments(
         # change signal, populated on every row and guarded by the trigger in
         # migration 248 so it moves only when a field actually differs.
         filters.append(MEPAmendment.updated_at >= updated_from)
+    if updated_to:
+        filters.append(MEPAmendment.updated_at <= updated_to)
     if q:
         like = f"%{q}%"
         filters.append(or_(
@@ -337,7 +341,7 @@ async def list_amendments(
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
-        updated_from=updated_from,
+        updated_from=updated_from, updated_to=updated_to,
     )
 
 
@@ -574,7 +578,7 @@ Filterable by procedure, vote reference, main-vote-only, result, full-text searc
 - `result` — `ADOPTED | REJECTED | UNKNOWN`.
 - `q` — substring on `display_title`.
 - `published_from` / `published_to` — timestamp range.
-- `updated_from` — incremental-sync upper-bound.
+- `updated_from`, `updated_to` — incremental-sync window.
 - `limit` (1–100, default 50), `page` (default 1).
 
 **Try it**
@@ -600,6 +604,7 @@ async def list_votes(
     published_from: Optional[date] = Query(None, description="timestamp >= value"),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -633,6 +638,8 @@ async def list_votes(
         filters.append(RollCallVote.vote_date <= datetime.combine(published_to, datetime.max.time()))
     if updated_from:
         filters.append(RollCallVote.updated_at >= updated_from)
+    if updated_to:
+        filters.append(RollCallVote.updated_at <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -642,7 +649,7 @@ async def list_votes(
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
-        updated_from=updated_from,
+        updated_from=updated_from, updated_to=updated_to,
     )
 
 
@@ -930,7 +937,7 @@ When you want "everything that happened on file X across all stages" without mak
 - `document_type` — normalised across the two streams. From amendment documents: `draft_report`, `amendments`, `draft_recommendation`, `opinion`, `draft_opinion`. From committee work items, whose stage doubles as their type: `in_committee`, `awaiting_vote`, `tabled`, `adopted`, `rejected`, `withdrawn`, `pending`, `completed`, `unknown`, `work_item`. Anything else is a 422 listing these: it used to be accepted and answered with the whole corpus.
 - `q` — substring search across titles.
 - `published_from`, `published_to` — date filter.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -954,6 +961,7 @@ async def list_ep_documents(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -1006,6 +1014,8 @@ async def list_ep_documents(
         # scraped_at is when we last looked, not when it changed; see the note on
         # MEPAmendment above. Guarded by the trigger in migration 249.
         aq = aq.filter(AmendmentDocument.updated_at >= updated_from)
+    if updated_to:
+        aq = aq.filter(AmendmentDocument.updated_at <= updated_to)
 
     a_total = aq.count()
     # Take page*limit from EACH branch, not a fixed multiple of limit. The union is merged
@@ -1055,6 +1065,8 @@ async def list_ep_documents(
         cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if updated_from:
         cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
+    if updated_to:
+        cq = cq.filter(CommitteeWorkItem.last_updated <= updated_to)
     if document_type:
         # This branch never applied the filter, so every document_type query returned all
         # 575 work items on top of whatever branch 1 matched: that is why the per-type
@@ -1113,7 +1125,7 @@ async def list_ep_documents(
     return build_envelope(
         page_data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
-        updated_from=updated_from,
+        updated_from=updated_from, updated_to=updated_to,
     )
 
 

@@ -44,6 +44,7 @@ from models.user import User
 from ._body import body_threshold_param
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
 from ._row_dates import row_updated
 
@@ -198,7 +199,7 @@ To read what was actually said in a committee debate — search a committee's de
 - `has_transcript` — `true` (default) returns only meetings with a completed transcript; set `false` to also see scheduled/pending/failed rows.
 - `status` — filter on processing status (`completed`, `pending`, `transcribing`, `failed`).
 - `published_from` / `published_to` (aliased `date_from` / `date_to`) — `meeting_date` range.
-- `updated_from` — rows updated at/after this timestamp (incremental sync).
+- `updated_from`, `updated_to` — rows updated in that window (incremental sync).
 - `body_threshold` — minimum transcript length (chars) for `has_body=true`. Default 500.
 - `limit` (default 10, max 50 — bodies are always returned and each is large), `page` (1-indexed).
 
@@ -225,6 +226,7 @@ async def list_committee_transcripts(
     published_from: Optional[date] = Query(None, alias="date_from"),
     published_to: Optional[date] = Query(None, alias="date_to"),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     body_threshold: int = Depends(body_threshold_param),
     limit: int = Query(10, ge=1, le=50, description="Items per page (default 10, max 50 — full body is always returned, each transcript is large)."),
     page: int = Query(1, ge=1),
@@ -257,6 +259,8 @@ async def list_committee_transcripts(
         base = base.filter(T.meeting_date <= datetime.combine(published_to, datetime.max.time()))
     if updated_from:
         base = base.filter(T.last_updated >= updated_from)
+    if updated_to:
+        base = base.filter(T.last_updated <= updated_to)
 
     total = base.count()
     rows = stable(base.order_by(T.meeting_date.desc())).offset((page - 1) * limit).limit(limit).all()
@@ -269,7 +273,7 @@ async def list_committee_transcripts(
         limit=limit,
         published_from=published_from,
         published_to=published_to,
-        updated_from=updated_from,
+        updated_from=updated_from, updated_to=updated_to,
         coverage_complete=True,
         op_core_title="EP committee meeting transcripts",
         op_core_type="EP committee transcript",

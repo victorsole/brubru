@@ -42,7 +42,7 @@ Critical for anyone tracking single-market barriers — a French draft law on pa
 - `sector` — TRIS sector code (substring).
 - `q` — substring search on title + short summary + main content.
 - `published_from`, `published_to` — date filter on `notification_date`.
-- `updated_from` — incremental sync.
+- `updated_from`, `updated_to` — incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -65,13 +65,14 @@ async def list_tris_notifications(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TRISNotificationItem]:
-    return await _v1_w4_endpoints.list_tris_notifications(request=request, notifying_country=notifying_country, sector=sector, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1_w4_endpoints.list_tris_notifications(request=request, notifying_country=notifying_country, sector=sector, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @router.get(
