@@ -100,8 +100,8 @@ class CouncilDocumentItem(BaseModel):
     calendar_filter_url: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of `url`).")
-    body_txt: Optional[str] = Field(None, description="Plain-text body — the document summary when present.")
-    body_html: Optional[str] = Field(None, description="Null — Council documents are PDF/external links.")
+    body_txt: Optional[str] = Field(None, description="The whole text of the document, as plain text. The summary only when no text is held.")
+    body_html: Optional[str] = Field(None, description="The same whole text as HTML, one paragraph per block.")
     meeting_start_date: Optional[date] = Field(None, description="For calendar_event rows: meeting date.")
     document_date: Optional[date] = Field(None, description="For publication rows: publication date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
@@ -196,9 +196,12 @@ def _derive_consilium_url(
 
 
 def _pub_body(r) -> tuple:
-    """Body for an institutional-publication row. body_html prefers the stored
-    html_content; body_txt is the summary or the stripped HTML. Never drops
-    real content (the old endpoint hard-coded body_html=None)."""
+    """Body for an institutional-publication row: the whole stored text, in both forms.
+
+    The summary is only the fallback for a row that holds no text. Until 14 October
+    2026 it came first, and for Council register documents the summary is the text's
+    first 900 characters, so `body_txt` stopped at 900 characters on 524 of 615
+    documents while `body_html` carried the whole document."""
     # Column name comes from core/body_sources.py, not from here.
     _, _html_src = read_body("institutional_publications", r)
     html_c = (_html_src or "").strip() or None
@@ -208,7 +211,7 @@ def _pub_body(r) -> tuple:
         # it through as body_html told clients prose was markup. Compose real
         # markup from it instead; genuine HTML still passes through untouched.
         composed_html, text_form, _ = body_from_html_or_text(html_c)
-        return (summ or text_form or None), composed_html
+        return (text_form or summ or None), composed_html
     if summ:
         return summ, f"<article><p>{_html.escape(summ)}</p></article>"
     return None, None
