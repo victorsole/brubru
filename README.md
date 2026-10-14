@@ -627,17 +627,17 @@ Brubru is built on the LEG_2026-10 corpus (Publications Office bulk export, 11 O
 
 | Metric | Exact count |
 |---|---|
-| Distinct laws (binding acts: regulations, directives, decisions; CELEX 3YYYY[R/L/D]NNNN) | **26,834** |
-| OJ publications (UUID directories) | **30,246** |
-| Total translatable XML files (main + annexes) | **64,844** |
+| Distinct laws described (binding acts: regulations, directives, decisions; CELEX 3YYYY + R, L or D + 4 to 6 digits, no suffix) | **34,309** (27,103 with text) |
+| OJ publications described (UUID directories) | **59,010** (30,246 with text; 28,764 older acts, merger-control decisions and corrigenda are metadata only) |
+| Total translatable XML files (main + annexes; only publications with text) | **64,844** |
 
-When people ask "how many EU laws in Brubru?", the honest answer is: **26,834 distinct laws across 30,246 OJ entries, represented by 64,844 XML files** (main texts + annexes). A single law's text is often split across multiple pages/files (e.g. the AI Act spans 14 files).
+When people ask "how many EU laws in Brubru?", the honest answer is: **27,103 distinct laws with full text, across 30,246 OJ publications, represented by 64,844 XML files** (the export describes 34,309 laws in 59,010 publications; the 28,764 without text, older acts, merger-control decisions and corrigenda, are metadata only) (main texts + annexes). A single law's text is often split across multiple pages/files (e.g. the AI Act spans 14 files).
 
 ### Legislative & Legal Databases
 - **[EUR-Lex](https://eur-lex.europa.eu)** - Official legislative texts, consolidated acts, case law
 - **[OEIL](https://oeil.secure.europarl.europa.eu)** - Legislative procedure tracking (21,600+ files)
 - **[EU Law Tracker](https://law-tracker.europa.eu)** - Commission legislative initiative tracking
-- **[Publications Office](https://op.europa.eu)** - Official documents archive (LEG_2026-10 corpus: 64,844 XML files spanning 30,246 OJ entries, 26,834 distinct laws)
+- **[Publications Office](https://op.europa.eu)** - Official documents archive (LEG_2026-10 corpus: 59,010 OJ publications described, 30,246 with full text in 64,844 XML files, 27,103 distinct laws with text (34,309 described))
 
 ### Parliamentary Data
 - **[European Parliament](https://www.europarl.europa.eu)** - MEP data, committees, voting records

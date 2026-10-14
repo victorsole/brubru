@@ -2,14 +2,14 @@
 
 The catalogue was written for a data engineer. Rendered as cards in My EU
 Bubble it read as: "Memoria cau local de skos:prefLabel + skos:altLabel des de
-les taules d'autoritat", "Corpus TSVECTOR de 26.834 lleis", "resolt en directe
+les taules d'autoritat", "Corpus TSVECTOR de 27.103 lleis", "resolt en directe
 des de Cellar", "RAP textil". Victor could not understand his own product's
 cards, which is the only test that matters.
 
 Every description now answers two questions in two sentences: what is in this,
 and what can I do with it. Internal machinery (TSVECTOR, SKOS, Formex, Cellar,
 SPARQL) is gone from the reader-facing text; it is implementation, not content.
-Where a number makes the thing concrete it stays, because "26,834 laws" tells a
+Where a number makes the thing concrete it stays, because "27,103 laws" tells a
 reader more than "a corpus does".
 
 Also fixes two things the rewrite exposed: three descriptions contained
@@ -84,12 +84,12 @@ COPY = {
  "nl": "Alles wat de EU van een digitaal productpaspoort eist, op één plek: welke wetten het opleggen, wanneer elke productsector moet voldoen, hoe het centrale register werkt, en de 71 gegevenspunten van een batterijpaspoort.",
 },
 "eu-laws-tsvector": {
- "en": "26,834 adopted EU laws, searchable by any word in their text rather than only by number. Brubru refreshes them from the Publications Office so a search reaches the version in force.",
- "ca": "26.834 lleis adoptades de la UE, cercables per qualsevol paraula del text i no només pel número. Brubru les actualitza des de l'Oficina de Publicacions perquè una cerca arribi a la versió vigent.",
- "es": "26.834 leyes adoptadas de la UE, buscables por cualquier palabra de su texto y no solo por número. Brubru las actualiza desde la Oficina de Publicaciones para que una búsqueda llegue a la versión vigente.",
- "fr": "26 834 actes de l'UE adoptés, interrogeables par n'importe quel mot de leur texte et pas seulement par numéro. Brubru les actualise depuis l'Office des publications pour qu'une recherche atteigne la version en vigueur.",
- "it": "26.834 atti dell'UE adottati, ricercabili per qualsiasi parola del testo e non solo per numero. Brubru li aggiorna dall'Ufficio delle pubblicazioni perché una ricerca raggiunga la versione in vigore.",
- "nl": "26.834 aangenomen EU-wetten, doorzoekbaar op elk woord in de tekst en niet alleen op nummer. Brubru werkt ze bij vanuit het Publicatiebureau, zodat een zoekopdracht de geldende versie vindt.",
+ "en": "27,103 adopted EU laws, searchable by any word in their text rather than only by number. Brubru refreshes them from the Publications Office so a search reaches the version in force.",
+ "ca": "27.103 lleis adoptades de la UE, cercables per qualsevol paraula del text i no només pel número. Brubru les actualitza des de l'Oficina de Publicacions perquè una cerca arribi a la versió vigent.",
+ "es": "27.103 leyes adoptadas de la UE, buscables por cualquier palabra de su texto y no solo por número. Brubru las actualiza desde la Oficina de Publicaciones para que una búsqueda llegue a la versión vigente.",
+ "fr": "27 103 actes de l'UE adoptés, interrogeables par n'importe quel mot de leur texte et pas seulement par numéro. Brubru les actualise depuis l'Office des publications pour qu'une recherche atteigne la version en vigueur.",
+ "it": "27.103 atti dell'UE adottati, ricercabili per qualsiasi parola del testo e non solo per numero. Brubru li aggiorna dall'Ufficio delle pubblicazioni perché una ricerca raggiunga la versione in vigore.",
+ "nl": "27.103 aangenomen EU-wetten, doorzoekbaar op elk woord in de tekst en niet alleen op nummer. Brubru werkt ze bij vanuit het Publicatiebureau, zodat een zoekopdracht de geldende versie vindt.",
 },
 "textile-circularity-corpus": {
  "en": "The EU law that governs a textile product from design to waste, gathered into one list: producer responsibility, ecodesign, packaging, waste shipments, raw materials and carbon at the border, plus the acts still being written. Each title and its in-force status are checked against the Publications Office as you read them. Built for the LIFE DPP-TEX project.",

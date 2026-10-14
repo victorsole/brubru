@@ -145,9 +145,9 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
 @router.get(
     "",
     response_model=PaginatedResponse[LawItem],
-    summary="Search adopted EU legislation — 26,834 distinct laws across 30,246 OJ publications",
+    summary="Search adopted EU legislation — 27,103 distinct laws across 30,246 OJ publications with full text",
     description="""**What it does**
-Full-text search over Brubru's mirror of adopted EU legislation — the LEG_2026-10 bulk export from the Publications Office, covering 26,834 distinct laws across 30,246 Official Journal publications. Each row carries the EU's legal identifier, the document type (regulation / directive / decision / recommendation / opinion / communication / agreement), the title + subject matter, the policy area, the publication date, the CELEX number, and a link to the EUR-Lex canonical URL.
+Full-text search over Brubru's mirror of adopted EU legislation — the LEG_2026-10 bulk export from the Publications Office, covering 27,103 distinct laws across 30,246 Official Journal publications with full text. Each row carries the EU's legal identifier, the document type (regulation / directive / decision / recommendation / opinion / communication / agreement), the title + subject matter, the policy area, the publication date, the CELEX number, and a link to the EUR-Lex canonical URL.
 
 **When to use it**
 The single highest-traffic Brubru endpoint — used to find specific acts (e.g. "the AI Act"), enumerate laws by topic (e.g. all environment regulations from 2024), or build a partner integration that needs the live adopted-legislation corpus. Pair with `/api/v1/laws/{celex}/text` for the full legal text body. For procedures still in negotiation, use `/api/v1/procedures` instead.
@@ -457,7 +457,7 @@ class LawTextResponse(BaseModel):
     response_model=LawTextResponse,
     summary="Full text of one adopted EU law — plain text or raw XML",
     description="""**What it does**
-Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (30,246 files from the LEG_2026-10 bulk export); falls back to live fetch from Cellar (`publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`). Returns the body as either whitespace-normalised plain text (default) or raw markup.
+Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (the 30,246 publications with text of the LEG_2026-10 bulk export); falls back to live fetch from Cellar (`publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`). Returns the body as either whitespace-normalised plain text (default) or raw markup.
 
 **When to use it**
 When you need the actual legal text — for citation, full-text analysis, or feeding into a downstream LLM context. The local Formex cache is fast (~50ms); Cellar fallback is slower (~2-3s) but always works for any post-1952 CELEX. For pre-parsed structured access (recital ↔ article mapping, definition extraction), use the `/api/v1/legal-text/*` endpoints instead.

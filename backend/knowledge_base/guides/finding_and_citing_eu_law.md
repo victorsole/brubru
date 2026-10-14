@@ -6,7 +6,7 @@
 - **Never HTML-scrape `eur-lex.europa.eu`**: it returns **HTTP 202 + an empty body** to any non-browser client (a JavaScript-challenge WAF). For data, go through Cellar; for the rare prose page, use a headless browser. See `feedback_cellar_needs_accept_language.md`.
 - **Emit ELI links in citations, not `legal-content` URLs**: ELI is a stable HTTP URI that dereferences to the consolidated version of an act and survives the Official Journal's act-by-act change (see `official_journal_explained.md`).
 - **Source spec**: https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html (Publications Office). Full Brubru engineering reference: `docs/api/eu_legal_data_access.md`.
-- **Why Brubru relies on it**: chat citations, the citation verifier, the `eu_laws` table (30,246 OJ publications), the Catalan corpus, and the public API all key off this system.
+- **Why Brubru relies on it**: chat citations, the citation verifier, the `eu_laws` table (30,246 OJ publications with full text), the Catalan corpus, and the public API all key off this system.
 
 ## Where EU law physically lives — Cellar
 EUR-Lex displays documents, but they are stored in **Cellar**, modelled by the **Common Data Model (CDM)** ontology (`http://publications.europa.eu/ontology/cdm#`). Controlled values (country, language, treaty, corporate body, subject) come from the **EU Vocabularies authority tables** (see `eurovoc_thesaurus.md`). Cataloguing follows the **Legal Analysis Methodology (LAM)**.

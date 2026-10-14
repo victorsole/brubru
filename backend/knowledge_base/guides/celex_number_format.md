@@ -52,7 +52,7 @@ Checked against Cellar's own CELEX field on 13 Oct 2026 (hundreds of identifiers
 | Layer | Use |
 |---|---|
 | Knowledge guides | every QUICK FACTS block cites the anchor act's CELEX |
-| `eu_laws` | the corpus LEG_2026-10: 26,834 distinct laws / 30,246 OJ publications / 64,844 translatable XML files; each OJ publication folder carries exactly one CELEX in its metadata (`tree_non_inferred.rdf`) |
+| `eu_laws` | the corpus LEG_2026-10: 34,309 distinct laws described (27,103 with text) / 59,010 OJ publications described (30,246 with text) / 64,844 translatable XML files; each OJ publication folder carries exactly one CELEX in its metadata (`tree_non_inferred.rdf`) |
 | Citation verifier (`services/citation_verifier.py`) | extracts every CELEX shape above from a chat answer and checks it; used by the chat log and the public verify-citation endpoint |
 | Catalan corpus | Formex V4 files in `docs/LEG_2026-10/`; output `frontend/public/legislacio-ue-catala/{celex}/index.html` |
 | MCP `search_eu_legislation` | returns CELEX, title, document type |

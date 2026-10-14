@@ -2,7 +2,7 @@
 Fill eu_laws.celex (and its year/type/number parts) from the dump's own metadata (MTD).
 
 Each text folder of a Publications Office dump holds tree_non_inferred.rdf with exactly one
-own-work CELEX literal (LEG_2026-10: 30,246 of 30,246 folders). The XML parser only finds
+own-work CELEX literal (LEG_2026-10: 30,246 of 30,246 folders with text). The XML parser only finds
 a CELEX in about 59% of main files, so the rest were NULL.
 
 Rules:

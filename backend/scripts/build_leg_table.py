@@ -13,6 +13,9 @@ Formex title for the few acts whose RDF has no English title). No LLM, no networ
 EuroVoc labels (Cellar SPARQL, cached in --out). NULL (empty) when unknown: an alias or acronym is
 never derived, only taken from aliases.csv.
 
+After a build, run `scripts/recalc.py` of the xlsx skill (LibreOffice) so the formulas carry values; it
+re-saves the workbook, which is why docProps shows LibreOffice.
+
 Usage (from the repo root):
     python3.12 backend/scripts/build_leg_table.py [--dump docs/LEG_2026-10] [--out backend/data/leg_2026-10_table]
 """
@@ -89,7 +92,7 @@ def parse_folder(args):
         return sorted({e.get(RDF + "resource") for e in root.iter(CDM + tag) if e.get(RDF + "resource")})
 
     title = None
-    title_other = ""
+    others = {}
     for d in root.findall(RDF + "Description"):
         lang = d.find(CDM + "expression_uses_language")
         t = d.find(CDM + "expression_title")
@@ -98,8 +101,14 @@ def parse_folder(args):
         code = lang.get(RDF + "resource", "").rsplit("/", 1)[-1]
         if code == "ENG":
             title = " ".join(t.text.split())
-        elif not title_other:
-            title_other = f"{code}: " + " ".join(t.text.split())
+        else:
+            others.setdefault(code, " ".join(t.text.split()))
+    title_other = ""
+    if not title and others:  # deterministic: FRA, SPA, ITA, NLD, DEU first, then alphabetical
+        for code in ("FRA", "SPA", "ITA", "NLD", "DEU") + tuple(sorted(others)):
+            if code in others:
+                title_other = f"{code}: {others[code]}"
+                break
     source = "rdf" if title else ""
     title_formex = ""
     has_text = (base / "fmx4").is_dir()
@@ -243,7 +252,7 @@ KIND_SHEETS = [
     ("Council Impl. Decisions", "Council Implementing Decisions."),
     ("Parliament+Council Decisions", "Decisions adopted by the European Parliament and the Council (or by Parliament alone)."),
     ("Commission Deleg. Decisions", "Commission Delegated Decisions."),
-    ("Other decisions and regulations", "Decisions of agencies and bodies (political parties authority, High Representative, ECB, administrative commissions, Political and Security Committee) and the few regulation titles no rule recognised."),
+    ("Other decisions and regulations", "CELEX types M (non-opposition to a notified concentration, merger control), J (joint ventures) and K, which together are about nine in ten rows here; decisions of agencies and bodies (political parties authority, High Representative, ECB, administrative commissions, Political and Security Committee); untitled acts of types R, L and D; and the few regulation titles no rule recognised."),
     ("Recommendations", "CELEX type H: Council and Commission Recommendations."),
     ("Opinions", "CELEX type A: Council and Commission Opinions."),
     ("ECB guidelines", "CELEX type O."),
@@ -259,40 +268,54 @@ KIND_NAMES = [k for k, _ in KIND_SHEETS]
 assert all(len(k) <= 31 for k in KIND_NAMES) and len(set(KIND_NAMES)) == len(KIND_NAMES)
 
 
+ISSUER_RE = re.compile(r"\bof the (european parliament and (?:of )?the council|european parliament|european central bank|council|commission)\b", re.I)
+
+
 def issuer_of(title):
-    """Who the title says adopted the act (first 250 characters, case-insensitive)."""
-    t = title[:250].lower()
-    if "of the european parliament and of the council" in t or "of the european parliament and the council" in t:
+    """Who the title says adopted the act: the issuer named right after the act's number
+    ("Regulation (EU) 2016/679 of the European Parliament and of the Council"). An issuer that comes
+    after another "of" ("Decision No A2 of 12 June 2009 ... Regulation ... of the European Parliament
+    and of the Council") is a cited act, not the author."""
+    t = title[:250]
+    m = ISSUER_RE.search(t)
+    if not m or re.search(r"\bof\b", t[:m.start()], re.I):
+        return "not stated"
+    g = m.group(1).lower()
+    if g.startswith("european parliament and"):
         return "European Parliament and Council"
-    if "of the european parliament" in t:
-        return "European Parliament"
-    if "of the european central bank" in t:
-        return "European Central Bank"
-    if re.search(r"of the council\b", t):
-        return "Council"
-    if "of the commission" in t:
-        return "Commission"
-    return "not stated"
+    return {"european parliament": "European Parliament", "european central bank": "European Central Bank",
+            "council": "Council", "commission": "Commission"}[g]
+
+
+LETTER_SHEET = {"H": "Recommendations", "A": "Opinions", "O": "ECB guidelines", "E": "CFSP and justice acts (E,F)",
+                "F": "CFSP and justice acts (E,F)", "Q": "Institutional arrangements (Q)", "Y": "OJ C documents (Y)",
+                "B": "Budget (B)", "G": "Council resolutions (G)", "X": "Other OJ L documents (X,S)",
+                "S": "Other OJ L documents (X,S)"}
 
 
 def kind_of(letter, title, celex=""):
     """The ONE sheet an act belongs to, from its CELEX descriptor and the start of its title.
-    A corrigendum is recognised by its title ("Corrigendum to ...") or by the R(NN) suffix of its CELEX,
-    because many corrigenda have no English title."""
+    A corrigendum is recognised by its title ("Corrigendum to ...", any case) or by the R(NN) suffix
+    of its CELEX, because many corrigenda have no English title. For types other than R, L and D the
+    CELEX letter decides, title or not."""
     if title.lower().startswith("corrigendum") or CORR_RE.search(celex):
         return "Corrigenda"
-    if not title:
+    if letter in LETTER_SHEET:
+        return LETTER_SHEET[letter]
+    if letter not in ("R", "L", "D") or not title:
         return "Other decisions and regulations"
-    t = re.sub(r"^[\d/]+[A-Z,/ .]*?:\s*", "", title)  # old "2004/741/EC:" prefix
+    t = re.sub(r"^[\d/]+[A-Za-z,/ .\-]*?:\s*", "", title)  # old tags: "2004/741/EC:", "74/296/Euratom:"
     low, iss = t.lower(), issuer_of(t)
     if letter == "R":
         if low.startswith("commission implementing regulation"):
             return "Commission Impl. Regulations"
         if low.startswith("commission delegated regulation"):
             return "Commission Deleg. Regulations"
-        if low.startswith("council implementing regulation") or low.startswith("implementing regulation"):
+        if low.startswith("implementing regulation"):  # "Implementing Regulation Commission (EU) ..." is a Commission act
+            return "Commission Impl. Regulations" if "commission" in low[:45] else "Council Impl. Regulations"
+        if low.startswith("council implementing regulation"):
             return "Council Impl. Regulations"
-        if low.startswith("regulation") and iss not in ("Council", "Commission"):
+        if low.startswith("european central bank") or (low.startswith("regulation") and iss not in ("Council", "Commission")):
             return "Regulations"
         if low.startswith("commission regulation") or (low.startswith("regulation") and iss == "Commission"):
             return "Commission Regulations"
@@ -303,24 +326,19 @@ def kind_of(letter, title, celex=""):
         if low.startswith("directive") and iss not in ("Council", "Commission"):
             return "Directives"
         return "Council+Commission Directives"
-    if letter == "D":
-        if low.startswith("commission implementing decision"):
-            return "Commission Impl. Decisions"
-        if low.startswith("commission delegated decision"):
-            return "Commission Deleg. Decisions"
-        if low.startswith("commission decision") or (low.startswith("decision") and iss == "Commission"):
-            return "Commission Decisions"
-        if low.startswith("council implementing decision"):
-            return "Council Impl. Decisions"
-        if low.startswith("council decision") or low.startswith("european council decision") or (low.startswith("decision") and iss == "Council"):
-            return "Council Decisions"
-        if low.startswith("decision") and iss in ("European Parliament and Council", "European Parliament"):
-            return "Parliament+Council Decisions"
-        return "Other decisions and regulations"
-    return {"H": "Recommendations", "A": "Opinions", "O": "ECB guidelines", "E": "CFSP and justice acts (E,F)",
-            "F": "CFSP and justice acts (E,F)", "Q": "Institutional arrangements (Q)", "Y": "OJ C documents (Y)",
-            "B": "Budget (B)", "G": "Council resolutions (G)", "X": "Other OJ L documents (X,S)",
-            "S": "Other OJ L documents (X,S)"}.get(letter, "Other decisions and regulations")
+    if low.startswith("commission implementing decision"):
+        return "Commission Impl. Decisions"
+    if low.startswith("commission delegated decision"):
+        return "Commission Deleg. Decisions"
+    if low.startswith("commission decision") or (low.startswith("decision") and iss == "Commission"):
+        return "Commission Decisions"
+    if low.startswith("council implementing decision"):
+        return "Council Impl. Decisions"
+    if low.startswith("council decision") or low.startswith("european council decision") or (low.startswith("decision") and iss == "Council"):
+        return "Council Decisions"
+    if low.startswith("european parliament decision") or (low.startswith("decision") and iss in ("European Parliament and Council", "European Parliament")):
+        return "Parliament+Council Decisions"
+    return "Other decisions and regulations"
 
 
 def col_letter(i):
@@ -361,12 +379,12 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
         ("LEG_2026-10: summary table by CELEX and EuroVoc", None, None, None, None, "title"),
         (f"Built on {built_on} by backend/scripts/build_leg_table.py. Source: docs/LEG_2026-10, the Publications Office bulk export of 11 Oct 2026 (legislation in force, Formex 4 + metadata). One row = one OJ publication (one UUID folder, one CELEX). has_text = yes when the folder holds Formex text; the others (older acts, corrigenda) are described by metadata only.", None, None, None, None, "text"),
         ("", None, None, None, None, "text"),
-        ("Method check", "Formula", "Independent count", "Check", "How the independent count was made", "header"),
+        ("Method check", "Formula", "Second count", "Check", "How the second count was made. Only 'Rows in Table' and 'Rows with text' are read from disk; the others check that the sheets agree with each other. An independent audit (re-derived from the raw files) was run separately.", "header"),
         ("Rows in Table", f"=COUNTA({T('A')})", qa["folders_in_export"], "chk", "Folders of the export, counted on disk before parsing (each holds a metadata file)", "row"),
         ("Rows with text (has_text = yes)", f"=COUNTIF({T('T')},\"yes\")", qa["folders_with_text"], "chk", "Folders holding an fmx4 directory (Formex text), counted on disk", "row"),
-        ("Sector 3 rows", f"=COUNTIF({T('B')},3)", py_sector.get(3, 0), "chk", "Counter over the parsed sector values", "row"),
-        ("Regulations (R)", f"=COUNTIF({T('D')},\"R = Regulation\")", py_type.get("R = Regulation", 0), "chk", "Counter over the parsed type letters", "row"),
-        ("Directives (L)", f"=COUNTIF({T('D')},\"L = Directive\")", py_type.get("L = Directive", 0), "chk", "Counter over the parsed type letters", "row"),
+        ("Sector 3 rows", f"=COUNTIF({T('B')},3)", py_sector.get(3, 0), "chk", "Counted from the table rows in the builder", "row"),
+        ("Regulations (R)", f"=COUNTIF({T('D')},\"R = Regulation\")", py_type.get("R = Regulation", 0), "chk", "Counted from the table rows in the builder", "row"),
+        ("Directives (L)", f"=COUNTIF({T('D')},\"L = Directive\")", py_type.get("L = Directive", 0), "chk", "Counted from the table rows in the builder", "row"),
         ("EuroVoc pairs in EuroVoc sheet", f"=COUNTA({E('A')})", f"=SUM({T('N')})", "chk", "Sum of eurovoc_count in Table (two sheets built from the same RDF; they must agree)", "row"),
         ("Rows with an alias", f"=COUNTIF({T('G')},\"?*\")", qa["rows_with_alias"], "chk", "Rows of aliases.csv whose CELEX is in the dump", "row"),
         ("Rows with an ELI", f"=COUNTIF({T('L')},\"?*\")", qa["rows_with_eli"], "chk", "ELI URI matching the act's own type, year and number, counted while building", "row"),
@@ -379,20 +397,20 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
         ("How to find laws on a topic (filters are on every header row)", None, None, None, None, "header"),
         ("1. Broad field", "eurovoc_domains", None, None, "EuroVoc has 21 domains, e.g. '12 LAW', '52 ENVIRONMENT', '28 SOCIAL QUESTIONS'. Filter the column with Text Filters > Contains.", "row"),
         ("2. Sub-field", "eurovoc_microthesauri", None, None, "127 microthesauri, e.g. '2841 health', '3236 information technology and data processing'. The Topics sheet lists them with act counts.", "row"),
-        ("3. Precise subject", "eurovoc_concepts", None, None, "The act's EuroVoc concepts as words, e.g. 'digital single market', 'sustainable development', 'public health'. Contains 'digital' finds 195 acts.", "row"),
-        ("4. Words in the title", "Title of document", None, None, "Contains 'digital' finds 116 acts by title alone; combine it with the three columns above for the widest net.", "row"),
-        (f"All {qa['distinct_celex']:,} CELEX are distinct (asserted by the builder before writing; a COUNTIF-based distinct count over 30,000 rows would take minutes to recalculate).", None, None, None, None, "text"),
+        ("3. Precise subject", "eurovoc_concepts", None, None, f"The act's EuroVoc concepts as words, e.g. 'digital single market', 'sustainable development', 'public health'. Contains 'digital' finds {qa['topic']['digital']['concepts']:,} acts here.", "row"),
+        ("4. Words in the title", "Title of document", None, None, f"Contains 'digital' finds {qa['topic']['digital']['title']:,} acts by title alone. Searching title, eurovoc_concepts and eurovoc_microthesauri together (case-insensitive) finds {qa['topic']['digital']['any']:,} for 'digital', {qa['topic']['health']['any']:,} for 'health' and {qa['topic']['sustainab']['any']:,} for 'sustainab'.", "row"),
+        (f"All {qa['distinct_celex']:,} CELEX are distinct (asserted by the builder before writing; a COUNTIF-based distinct count over {n:,} rows would take minutes to recalculate).", None, None, None, None, "text"),
         ("Columns", "Source", None, None, "Definition", "header"),
         ("CELEX", "resource_legal_id_celex", None, None, "Own CELEX of the OJ publication. Sector, Year, Type and Number are read from the CELEX string; the metadata fields agree in all rows but " + str(sum(qa["celex_string_vs_metadata_disagreements"].values())) + " field(s): " + json.dumps(qa["celex_string_vs_metadata_disagreements"]), "row"),
-        ("Sector", "resource_legal_id_sector", None, None, "First CELEX character (3 = legal acts, 5 = preparatory documents).", "row"),
+        ("Sector", "resource_legal_id_sector", None, None, "First CELEX character (2 = international agreements, 3 = legal acts, 5 = preparatory documents).", "row"),
         ("Year", "resource_legal_year", None, None, "Year in the CELEX. In the one row where the metadata year differs (a corrigendum) the CELEX year is shown.", "row"),
         ("Type of document", "resource_legal_type", None, None, "Descriptor letter and its meaning in the EUR-Lex table 'Types of documents in EUR-Lex'.", "row"),
         ("Number of document", "resource_legal_number_natural_celex", None, None, "Natural number of the act, without leading zeros (CELEX 32016R0679 gives 679).", "row"),
-        ("Title of document", "expression_title (ENG)", None, None, f"Official English title. {qa['title_from_cellar'] + qa['title_from_formex']} acts have none in the RDF: {qa['title_from_cellar']} were read from Cellar (title_source = cellar), {qa['title_from_formex']} from the Formex TITLE (title_source = formex).", "row"),
+        ("Title of document", "expression_title (ENG)", None, None, f"Official English title. {qa['title_from_cellar'] + qa['title_from_formex'] + qa['rows_without_title']:,} acts have none in the RDF: {qa['title_from_cellar']} were read from Cellar (title_source = cellar) and {qa['rows_without_title']:,} stay blank (title_source = none), mostly corrigenda issued in one language; their title is in title_other_language.", "row"),
         ("Alias of document / Acronym of the alias", "aliases.csv", None, None, f"Not in the dump. Filled only from aliases.csv ({qa['rows_with_alias']} acts, seeded from the curated full_name entries of legislation_acronyms.json). Empty = unknown, never derived. Add rows to aliases.csv and rebuild.", "row"),
         ("base_celex", "derived from CELEX", None, None, "CELEX without a corrigendum suffix R(NN), so a corrigendum is grouped with its act. A plain (NN) suffix is a different act and is kept; a consolidated text maps to its sector-3 act.", "row"),
-        ("title_other_language", "expression_title (not ENG)", None, None, "When an act has no English title in the metadata (mostly corrigenda, issued in one language), the title in the language that exists, prefixed with its code (DEU: ...). The Title column stays English-only.", "row"),
-        ("has_text", "folder content", None, None, "yes = the export holds the Formex text of the act; no = metadata only (older acts and corrigenda, whose scans were not extracted).", "row"),
+        ("title_other_language", "expression_title (not ENG)", None, None, "Only for acts with no English title: the title in the language that exists, prefixed with its code (FRA: ...). If several languages exist, the first of FRA, SPA, ITA, NLD, DEU, then alphabetical. Empty for every act that has an English title.", "row"),
+        ("has_text", "folder content", None, None, "yes = the export holds the Formex text of the act; no = metadata only (older acts, merger-control decisions and corrigenda; the scans were not extracted).", "row"),
         ("date_document / in_force", "work_date_document / resource_legal_in-force", None, None, "in_force is 'unknown' when the metadata carries no flag (not the same as false).", "row"),
         ("eli", "ELI URI in the RDF", None, None, "Only the URI whose type, year and number match the act; empty when none or several match.", "row"),
         ("eurovoc_count / eurovoc_domains", "work_is_about_concept_eurovoc", None, None, "Number of EuroVoc concepts of the act and the EuroVoc domains of their microthesauri (code and name). Concept labels and microthesauri: EuroVoc 4.24 on Cellar. Detail in the EuroVoc sheet.", "row"),
@@ -528,7 +546,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
         st.write_formula(r, 2, f"=B{r + 1}/{n}", f(num_format="0.0%")); r += 1
     r += 1
     block("In force (metadata flag)", ["true", "false", "unknown"], lambda lab, rr: f"=COUNTIF({T('K')},A{rr + 1})")
-    block("Title source", ["rdf", "cellar", "formex"], lambda lab, rr: f"=COUNTIF({T('P')},A{rr + 1})")
+    block("Title source", ["rdf", "cellar", "formex", "none"], lambda lab, rr: f"=COUNTIF({T('P')},A{rr + 1})")
     block("Has text (Formex text in the export)", ["yes", "no"], lambda lab, rr: f"=COUNTIF({T('T')},A{rr + 1})")
     for name in ("Regulations", "Directives"):
         rows_ = kinds[name]
@@ -627,13 +645,15 @@ def main():
         domains = sorted({d for i in r["eurovoc"] for d in (mt_domain(i)[1].split(" | ") if mt_domain(i)[1] else [])})
         table.append([r["celex"], int(m["s"]) if m["s"].isdigit() else m["s"], int(m["y"]), type_cell, int(m["n"]), r["title"], alias, acro,
                       base_of(r["celex"]), r["date"], r["in_force"] or "unknown", pick_eli(r, r["celex"]), r["author"],
-                      len(r["eurovoc"]), " | ".join(domains), r["title_source"], kind_of(m["t"], r["title"], r["celex"]),
+                      len(r["eurovoc"]), " | ".join(domains), r["title_source"] or "none", kind_of(m["t"], r["title"], r["celex"]),
                       " | ".join(sorted({x for i in r["eurovoc"] for x in meta["mts"].get(i, [])})),
                       " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"])),
-                      "yes" if r["has_text"] else "no", r["title_other"]])
+                      "yes" if r["has_text"] else "no", r["title_other"] if not r["title"] else ""])
         for i in sorted(r["eurovoc"], key=lambda x: (meta["concept"].get(x, "~"), x)):
             mt, dom = mt_domain(i)
             ev_rows.append([r["celex"], i, f"http://eurovoc.europa.eu/{i}", meta["concept"].get(i, ""), mt, dom])
+    qa["topic"] = {w: {"concepts": sum(1 for t in table if w in t[18].lower()), "title": sum(1 for t in table if w in t[5].lower()),
+                       "any": sum(1 for t in table if w in (t[18] + " " + t[17] + " " + t[5]).lower())} for w in ("digital", "health", "sustainab")}
     qa["rows_without_title"] = sum(1 for t in table if not t[5])
     qa["rows_without_english_title_but_with_another_language"] = sum(1 for t in table if not t[5] and t[20])
     qa["corrigenda_by_title"] = sum(1 for t in table if t[5].lower().startswith("corrigendum"))
