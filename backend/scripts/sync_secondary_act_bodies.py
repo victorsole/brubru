@@ -9,7 +9,7 @@ Two gaps found auditing GovClipping's /legislative/delegated-acts request:
     adopted, the ones whose objection period may still run; 24 objected; 12 scrutiny
     finished; 8 withdrawn; 1 notified) had no text at all, and the endpoint composed a
     "body" from their metadata. The Commission's document register serves the text it
-    adopted: C(2026)5161 gave 15 pages, 41,797 characters.
+    adopted: C(2026)5161 gave 15 pages, about 41,000 characters.
 
 So, in order:
   1. an act with a CELEX and no Official Journal text gets it from Cellar (XHTML, then
@@ -54,15 +54,21 @@ from sqlalchemy import create_engine, text  # noqa: E402
 from scripts.fetch_secondary_act_bodies_xhtml import MIN_CHARS, _fetch as fetch_from_cellar  # noqa: E402
 
 REGISTER = "https://ec.europa.eu/transparency/documents-register"
+SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) BrubruIngest/1.0",
            "Referer": f"{REGISTER}/", "Accept": "application/json"}
 C_NUMBER = re.compile(r"C\(\d{4}\)\s?\d{1,5}")
 # Stages at which the Commission has adopted the act, so the document exists.
 ADOPTED_STAGES = ("adopted", "objected", "scrutiny_finished", "withdrawn", "notified", "published")
 
-DUE_OJ = text("""
+# An act's own CELEX, in either form ('32026R1536', '32014D0029(01)', '52021XC0922(01)'),
+# never a corrigendum's ('32014R1014R(03)'). Nine rows with a CELEX were matched by
+# neither query until 14 Oct 2026 and counted nowhere.
+OWN_CELEX = "'^[35][0-9]{4}[A-Z]{1,2}[0-9]{4}([(][0-9]{2}[)])?$'"
+
+DUE_OJ = text(f"""
     SELECT id, celex FROM secondary_acts
-     WHERE act_type IN ('delegated', 'implementing') AND celex ~ '^3\\d{4}[A-Z]\\d{4}$'
+     WHERE act_type IN ('delegated', 'implementing') AND celex ~ {OWN_CELEX}
        AND (coalesce(text_body, '') = '' OR body_source = 'commission_document')
        AND (body_fetched_at IS NULL OR body_fetched_at < now() - interval '20 hours')
      ORDER BY publication_date DESC NULLS LAST, celex""")
@@ -76,10 +82,35 @@ DUE_DOC = text("""
 
 # Only over what was checked: an empty text, or a Commission document the Official
 # Journal now replaces. A text another writer stored meanwhile is never overwritten.
+# Dates and the PDF link only fill empty cells; the Commission document's link goes when
+# the Official Journal's text replaces it, so pdf_url always points at the text served.
 STORE = text("""
     UPDATE secondary_acts
-       SET text_body = :txt, body_html = :html, body_source = :src, body_fetched_at = now()
+       SET text_body = :txt, body_html = :html, body_source = :src, body_fetched_at = now(),
+           adoption_date = coalesce(adoption_date, :adopt),
+           publication_date = coalesce(publication_date, :pub),
+           pdf_url = CASE WHEN :src = 'official_journal' AND body_source = 'commission_document'
+                          THEN NULL ELSE coalesce(pdf_url, :pdf) END
      WHERE id = :id AND (coalesce(text_body, '') = '' OR body_source = 'commission_document')""")
+
+# Acts we hold without a CELEX at a stage where one may exist. The register can lag the
+# Official Journal by years: C(2025)885 is Regulation 2025/1190, published 18 Jun 2025,
+# and RegDel still gave it no CELEX on 14 Oct 2026. Cellar records each act's C-number
+# (cdm:resource_legal_manuscript_ref), so it answers that question for us.
+UNRESOLVED = text("""
+    SELECT id, reference, merged_from FROM secondary_acts
+     WHERE act_type IN ('delegated', 'implementing') AND coalesce(celex, '') = ''
+       AND status::text = ANY(:stages)""")
+ASSIGN = text("""
+    UPDATE secondary_acts SET celex = :celex, status = 'published', body_fetched_at = NULL
+     WHERE id = :id AND coalesce(celex, '') = ''
+       AND NOT EXISTS (SELECT 1 FROM secondary_acts o WHERE o.celex = :celex)""")
+
+# Answers that settle the question for a week. Anything else (a 403, 429 or 5xx, a
+# timeout, a cut connection) is a fault: it is retried on the next run, never parked for
+# seven days, and enough of them make the run degraded.
+SETTLED = ("not_in_register", "no_english_file", "too_short", "wrong_document", "no_c_number",
+           "http_404", "register_http_404", "file_http_404")
 TRIED = text("UPDATE secondary_acts SET body_fetched_at = now() WHERE id = :id")
 
 
@@ -126,7 +157,8 @@ def _get(url: str, timeout: int = 60) -> bytes:
 def pdf_text(data: bytes) -> str:
     from pypdf import PdfReader
     pages = PdfReader(io.BytesIO(data)).pages
-    return clean(" ".join((p.extract_text() or "") for p in pages))
+    # "EN 3 EN" is the page furniture of a Commission document, not its text.
+    return clean(re.sub(r"\bEN(?: \d{1,3})? EN\b", " ", clean(" ".join((p.extract_text() or "") for p in pages))))
 
 
 def clean(txt: str) -> str:
@@ -151,6 +183,7 @@ def fetch_commission_document(ref: str):
     if not files:
         return "no_english_file"
     parts = []
+    pdf = f"{REGISTER}/api/files/{q}?ersIds={files[0]}"
     for ers in files:
         try:
             parts.append(pdf_text(_get(f"{REGISTER}/api/files/{q}?ersIds={ers}", timeout=120)))
@@ -159,19 +192,87 @@ def fetch_commission_document(ref: str):
         except Exception as e:
             return f"file_{type(e).__name__}"
         time.sleep(0.3)
-    body = "\n\n".join(p for p in parts if p)
+    # One running text: separate blocks per file left the API's paragraph split with two
+    # blocks, so an act with annexes became two 60,000-character paragraphs.
+    body = clean(" ".join(p for p in parts if p))
     if len(body) < MIN_CHARS:
         return f"too_short_{len(body)}"
     # The document prints its own number on its cover ("C(2026) 7021 final"): a file that
     # does not is not this act's, whatever the register filed it under.
     if not names_itself(body, ref):
         return "wrong_document"
-    return body, None
+    return body, pdf
 
 
 def names_itself(body: str, ref: str) -> bool:
+    """The cover reads "C(2026) 7021 final", and no "draft" comes before it.
+
+    A number cited further down (an act amending Decision C(2021) 1051) is not the cover,
+    and a draft that quotes the number is not the adopted act.
+    """
     m = re.fullmatch(r"C\((\d{4})\)\s?(\d{1,5})", ref.strip())
-    return bool(m) and re.search(rf"C\(\s?{m.group(1)}\s?\)\s?0*{int(m.group(2))}\b", body[:5000]) is not None
+    if not m:
+        return False
+    head = body[:3000]
+    cover = re.search(rf"C\s?\(\s?{m.group(1)}\s?\)\s?0*{int(m.group(2))}\s+final\b", head)
+    return bool(cover) and not re.search(r"\bdraft\b", head[:cover.start()], re.I)
+
+
+_COVER_DATE = re.compile(r"Brussels,\s+(\d{1,2})\.(\d{1,2})\.(\d{4})")
+_OJ_HEADER = re.compile(r"L series \d{4}/\d+ (\d{1,2})\.(\d{1,2})\.(\d{4})")
+
+
+def dated(pattern: re.Pattern, txt: str):
+    """The first date the pattern finds in the opening of a text, or None."""
+    from datetime import date
+    m = pattern.search(txt[:600])
+    try:
+        return date(int(m.group(3)), int(m.group(2)), int(m.group(1))) if m else None
+    except ValueError:
+        return None
+
+
+def resolve_celex(engine) -> dict:
+    """Give acts held without a CELEX the one Cellar records for their C-number.
+
+    One query per year of the C-numbers in question (about a second each). A CELEX
+    another row already holds is not assigned: the act is held twice, and that is
+    reported for a person to merge, never resolved by deleting a row here.
+    """
+    with engine.connect() as conn:
+        rows = conn.execute(UNRESOLVED, {"stages": list(ADOPTED_STAGES)}).fetchall()
+    wanted: dict = {}
+    for r in rows:
+        ref = c_number(r.reference, r.merged_from)
+        m = re.fullmatch(r"C\((\d{4})\)\s?(\d{1,5})", ref or "")
+        if m:
+            wanted.setdefault((m.group(1), int(m.group(2))), []).append(r.id)
+    found: dict = {}
+    for year in sorted({y for y, _ in wanted}):
+        q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?m ?celex WHERE { "
+             "?w cdm:resource_legal_manuscript_ref ?m . "
+             f'FILTER(STRSTARTS(STR(?m), "C({year})")) ?w cdm:resource_legal_id_celex ?celex . '
+             'FILTER(REGEX(STR(?celex), "^3[0-9]{4}[A-Z][0-9]{4}$")) }')
+        req = urllib.request.Request(SPARQL, data=urllib.parse.urlencode({"query": q}).encode(),
+                                     headers={"Accept": "application/sparql-results+json"})
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            for b in json.loads(resp.read())["results"]["bindings"]:
+                m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
+                if m:
+                    found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
+    out = {"asked": len(wanted), "assigned": 0, "ambiguous": 0, "held_twice": []}
+    with engine.begin() as conn:
+        for key, ids in wanted.items():
+            celexes = found.get(key, set())
+            if len(celexes) != 1 or len(ids) != 1:
+                out["ambiguous"] += int(len(celexes) > 1 or len(ids) > 1)
+                continue
+            celex = celexes.pop()
+            if conn.execute(ASSIGN, {"id": ids[0], "celex": celex}).rowcount:
+                out["assigned"] += 1
+            else:
+                out["held_twice"].append(f"C({key[0]}){key[1]}={celex}")
+    return out
 
 
 def main(argv=None) -> int:
@@ -182,6 +283,18 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     engine = create_engine(database_url(), pool_pre_ping=True, pool_recycle=300)
+    resolved = None
+    if args.apply:
+        try:
+            resolved = resolve_celex(engine)
+            print(f"[INFO] Cellar: {resolved['assigned']} act(s) held without a CELEX are in the Official "
+                  f"Journal and took theirs ({resolved['asked']} asked, {resolved['ambiguous']} ambiguous)")
+            if resolved["held_twice"]:
+                print(f"[WARN] {len(resolved['held_twice'])} act(s) held twice, under a C-number and a CELEX: "
+                      + ", ".join(resolved["held_twice"][:20]))
+        except Exception as exc:
+            resolved = {"error": f"{type(exc).__name__}: {exc}"}
+            print(f"[WARN] Cellar lookup failed: {resolved['error']}")
     with engine.connect() as conn:
         due_oj = conn.execute(DUE_OJ).fetchall()
         due_doc = conn.execute(DUE_DOC, {"stages": list(ADOPTED_STAGES)}).fetchall()
@@ -194,7 +307,7 @@ def main(argv=None) -> int:
 
     start, why = time.monotonic(), Counter()
     stored = Counter()
-    answered = attempted = 0
+    answered = attempted = faults = 0
     out_of_time = False
     for kind, rows in (("official_journal", due_oj), ("commission_document", due_doc)):
         for r in rows:
@@ -203,23 +316,30 @@ def main(argv=None) -> int:
                 break
             if kind == "official_journal":
                 got = fetch_from_cellar(r.celex, ssl.create_default_context(cafile=certifi.where()))
-                got = (clean(got[1]), (got[0] or "").replace("\x00", "") or None) if not isinstance(got, str) else got
+                if not isinstance(got, str):
+                    txt = clean(got[1])
+                    got = {"txt": txt, "html": (got[0] or "").replace("\x00", "") or None,
+                           "pub": dated(_OJ_HEADER, txt), "adopt": None, "pdf": None}
             else:
                 ref = c_number(r.reference, r.merged_from)
                 got = fetch_commission_document(ref) if ref else "no_c_number"
+                if not isinstance(got, str):
+                    got = {"txt": got[0], "html": None, "pub": None,
+                           "adopt": dated(_COVER_DATE, got[0]), "pdf": got[1]}
             attempted += 1
             try:
                 with engine.begin() as conn:
                     if isinstance(got, str):
-                        why[f"{kind}:{re.sub(r'_[0-9]+$', '', got)}"] += 1
-                        # An answer that says "no text" is an answer; a network fault is not.
-                        answered += int(not re.search(r"Error|Timeout|URLError|Remote", got))
-                        conn.execute(TRIED, {"id": r.id})
+                        marker = re.sub(r"_[0-9]+$", "", got) if got.startswith("too_short") else got
+                        why[f"{kind}:{marker}"] += 1
+                        if marker in SETTLED:
+                            answered += 1
+                            conn.execute(TRIED, {"id": r.id})
+                        else:
+                            faults += 1
                     else:
                         answered += 1
-                        txt, html = got
-                        stored[kind] += conn.execute(STORE, {"id": r.id, "txt": txt, "html": html,
-                                                             "src": kind}).rowcount
+                        stored[kind] += conn.execute(STORE, {"id": r.id, "src": kind, **got}).rowcount
             except Exception as exc:  # one row's write: counted, the run goes on
                 why[f"{kind}:store_{type(exc).__name__}"] += 1
                 print(f"  [ERR] storing {getattr(r, 'celex', None) or r.reference}: {exc}"[:300])
@@ -230,9 +350,17 @@ def main(argv=None) -> int:
     if attempted and not answered:
         print("[FATAL] no source answered: Cellar and the document register were unreachable")
         return 1
+    reasons = []
     if out_of_time:
-        left = len(due_oj) + len(due_doc) - attempted
-        print(f"[SYNC_STATUS] degraded: {left} act(s) left for the next run (time budget)")
+        reasons.append(f"{len(due_oj) + len(due_doc) - attempted} act(s) left for the next run (time budget)")
+    if faults and faults > 0.2 * attempted:
+        reasons.append(f"{faults} of {attempted} fetch(es) failed (blocked, rate-limited or cut); retried next run")
+    if resolved and resolved.get("error"):
+        reasons.append(f"Cellar CELEX lookup failed ({resolved['error']})")
+    if resolved and resolved.get("held_twice"):
+        reasons.append(f"{len(resolved['held_twice'])} act(s) held twice, to merge")
+    if reasons:
+        print(f"[SYNC_STATUS] degraded: {'; '.join(reasons)}")
     return 0
 
 
