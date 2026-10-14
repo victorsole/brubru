@@ -170,3 +170,38 @@ def test_page_furniture_is_dropped():
     finally:
         if old is not None:
             sys.modules["pypdf"] = old
+
+
+def test_one_slow_year_at_cellar_skips_that_year_not_the_lookup(monkeypatch):
+    """Cellar timed out on two years' queries on 14 Oct 2026; the others still answered."""
+    from types import SimpleNamespace
+
+    rows = [SimpleNamespace(id="a", reference="C(2012)100", merged_from=None),
+            SimpleNamespace(id="b", reference="C(2026)200", merged_from=None)]
+
+    class Conn:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def execute(self, stmt, params=None):
+            if "SELECT id, reference, merged_from" in str(stmt):
+                return SimpleNamespace(fetchall=lambda: rows)
+            self.assigned = params
+            return SimpleNamespace(rowcount=1)
+
+    engine = SimpleNamespace(connect=Conn, begin=Conn)
+
+    class Resp:
+        def __init__(self, body): self.body = body
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return self.body
+
+    def fake_urlopen(req, timeout=0):
+        q = req.data.decode()
+        if "C%282012%29" in q:
+            raise TimeoutError("The read operation timed out")
+        return Resp(json.dumps({"results": {"bindings": [
+            {"m": {"value": "C(2026)200/123 - PE"}, "celex": {"value": "32026R0999"}}]}}).encode())
+    monkeypatch.setattr(job.urllib.request, "urlopen", fake_urlopen)
+    out = job.resolve_celex(engine)
+    assert out["assigned"] == 1 and out["failed_years"] == ["2012 (TimeoutError)"]

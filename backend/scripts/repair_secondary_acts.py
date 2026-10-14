@@ -23,6 +23,12 @@ Official Journal header, or Cellar's title), never derived:
      text. Cellar's cdm:resource_legal_manuscript_ref says which C-number each CELEX is.
      73 implementing acts on 14 Oct 2026. A pair where the CELEX holder is itself a
      register row, or carries another C-number, is printed and left for a person.
+  7. Acts holding their own CELEX and the Official Journal text but still 'adopted' (the
+     implementing register lists 688 acts as adopted without a CELEX, and older backfills
+     gave many their CELEX): Cellar holds each, so they are published. 491 on 14 Oct.
+  8. Published acts whose title names another act's number (the register typed 2018/815
+     for Regulation 2019/815, 2022/262 for 2023/262) take the Publications Office's title,
+     where that title names the CELEX the row holds.
 
 Not here, because the feed now does them on every run: policy areas kept whole, a CELEX
 used as a reference replaced by the C-number, planned rows the register no longer lists.
@@ -100,6 +106,7 @@ def held_twice(conn) -> tuple[list[dict], list[str]]:
         if m:
             wanted.setdefault((m.group(1), int(m.group(2))), []).append(r.id)
     found: dict = {}
+    failed_years: list[str] = []
     for year in sorted({y for y, _ in wanted}):
         q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?m ?celex WHERE { "
              "?w cdm:resource_legal_manuscript_ref ?m . "
@@ -107,11 +114,18 @@ def held_twice(conn) -> tuple[list[dict], list[str]]:
              'FILTER(REGEX(STR(?celex), "^3[0-9]{4}[A-Z][0-9]{4}$")) }')
         req = urllib.request.Request(SPARQL, data=urllib.parse.urlencode({"query": q}).encode(),
                                      headers={"Accept": "application/sparql-results+json"})
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            for b in json.loads(resp.read())["results"]["bindings"]:
-                m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
-                if m:
-                    found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
+        # One slow year (Cellar timed out on one on 14 Oct 2026) skips that year, not all.
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                bindings = json.loads(resp.read())["results"]["bindings"]
+        except Exception as exc:
+            failed_years.append(f"{year} ({type(exc).__name__})")
+            wanted = {k: v for k, v in wanted.items() if k[0] != year}
+            continue
+        for b in bindings:
+            m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
+            if m:
+                found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
     merges, conflicts = [], []
     for key, ids in wanted.items():
         celexes = found.get(key, set())
@@ -127,6 +141,8 @@ def held_twice(conn) -> tuple[list[dict], list[str]]:
                            "old": str(holder.id), "new": celex})
         else:
             conflicts.append(f"C({key[0]}){key[1]} -> {celex}, held by {holder.reference}")
+    for y in failed_years:
+        conflicts.append(f"Cellar did not answer for {y}: those acts were not checked")
     return merges, conflicts
 
 
@@ -172,6 +188,31 @@ def plan(conn) -> list[dict]:
     for r in titles:
         changes.append({"fix": 5, "id": r.id, "ref": r.reference, "col": "title", "old": r.old,
                         "new": re.sub(r"\s+", " ", r.new).strip()})
+    adopted = conn.execute(text("""
+        SELECT id, reference, celex FROM secondary_acts
+         WHERE act_type IN ('delegated', 'implementing') AND status = 'adopted'
+           AND celex ~ '^3[0-9]{4}[A-Z][0-9]{4}$' AND body_source = 'official_journal'""")).fetchall()
+    held = cellar_types([r.celex for r in adopted]) if adopted else {}
+    for r in adopted:
+        if held.get(r.celex):
+            changes.append({"fix": 7, "id": r.id, "ref": r.reference, "col": "status",
+                            "old": "adopted", "new": "published"})
+    own = r"^\s*Commission (?:Delegated |Implementing )?(Regulation|Decision|Directive) \(EU\)\s*(20[0-9]{2})/([0-9]{1,4})\y"
+    # The pattern is a bound value: text() reads "(?:" as a parameter named after it.
+    typos = conn.execute(text("""
+        WITH t AS (SELECT s.id, s.reference, s.celex, s.title, l.title AS oj_title,
+                          (regexp_match(s.title, :own, 'i'))::text[] m,
+                          (regexp_match(l.title, :own, 'i'))::text[] lm
+                     FROM secondary_acts s JOIN eu_laws l ON l.celex = s.celex
+                    WHERE s.status = 'published' AND s.act_type IN ('delegated', 'implementing'))
+        SELECT id, reference, title, oj_title FROM t
+         WHERE m IS NOT NULL AND lm IS NOT NULL
+           AND celex <> '3' || m[2] || substr(upper(m[1]), 1, 1) || lpad(m[3], 4, '0')
+           AND celex = '3' || lm[2] || substr(upper(lm[1]), 1, 1) || lpad(lm[3], 4, '0')"""),
+                         {"own": own}).fetchall()
+    for r in typos:
+        changes.append({"fix": 8, "id": r.id, "ref": r.reference, "col": "title", "old": r.title,
+                        "new": re.sub(r"\s+", " ", r.oj_title).strip()})
     merges, conflicts = held_twice(conn)
     changes.extend(merges)
     for c in conflicts:

@@ -248,6 +248,7 @@ def resolve_celex(engine) -> dict:
         if m:
             wanted.setdefault((m.group(1), int(m.group(2))), []).append(r.id)
     found: dict = {}
+    failed_years: list[str] = []
     for year in sorted({y for y, _ in wanted}):
         q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?m ?celex WHERE { "
              "?w cdm:resource_legal_manuscript_ref ?m . "
@@ -255,12 +256,20 @@ def resolve_celex(engine) -> dict:
              'FILTER(REGEX(STR(?celex), "^3[0-9]{4}[A-Z][0-9]{4}$")) }')
         req = urllib.request.Request(SPARQL, data=urllib.parse.urlencode({"query": q}).encode(),
                                      headers={"Accept": "application/sparql-results+json"})
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            for b in json.loads(resp.read())["results"]["bindings"]:
-                m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
-                if m:
-                    found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
-    out = {"asked": len(wanted), "assigned": 0, "ambiguous": 0, "held_twice": []}
+        # One slow year (Cellar timed out on one on 14 Oct 2026) skips that year, not all.
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                bindings = json.loads(resp.read())["results"]["bindings"]
+        except Exception as exc:
+            failed_years.append(f"{year} ({type(exc).__name__})")
+            wanted = {k: v for k, v in wanted.items() if k[0] != year}
+            continue
+        for b in bindings:
+            m = re.match(r"C\((\d{4})\)\s?0*(\d{1,5})\s*(/|$)", b["m"]["value"])
+            if m:
+                found.setdefault((m.group(1), int(m.group(2))), set()).add(b["celex"]["value"])
+    out = {"asked": len(wanted), "assigned": 0, "ambiguous": 0, "held_twice": [],
+           "failed_years": failed_years}
     with engine.begin() as conn:
         for key, ids in wanted.items():
             celexes = found.get(key, set())
@@ -357,6 +366,8 @@ def main(argv=None) -> int:
         reasons.append(f"{faults} of {attempted} fetch(es) failed (blocked, rate-limited or cut); retried next run")
     if resolved and resolved.get("error"):
         reasons.append(f"Cellar CELEX lookup failed ({resolved['error']})")
+    if resolved and resolved.get("failed_years"):
+        reasons.append(f"Cellar did not answer for C-numbers of {', '.join(resolved['failed_years'])}")
     if resolved and resolved.get("held_twice"):
         reasons.append(f"{len(resolved['held_twice'])} act(s) held twice, to merge")
     if reasons:
