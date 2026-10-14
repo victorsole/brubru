@@ -183,3 +183,27 @@ def test_an_adoption_date_is_corrected_only_where_the_act_names_the_registers_da
     assert job.adoption_to_store(date(2022, 5, 23), date(2022, 3, 24), title) == date(2022, 5, 23)
     assert job.adoption_to_store(None, date(2022, 3, 24), title) == date(2022, 3, 24)
     assert job.adoption_to_store(date(2022, 5, 23), None, title) == date(2022, 5, 23)
+
+
+def test_a_dropped_connection_is_tried_again_and_an_http_error_is_not(monkeypatch):
+    import http.client
+    import urllib.error
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    calls = []
+
+    def flaky():
+        calls.append(1)
+        if len(calls) < 3:
+            raise http.client.RemoteDisconnected("Remote end closed connection without response")
+        return b"ok"
+    assert job.with_retries(flaky, "test") == b"ok" and len(calls) == 3
+
+    def refused():
+        calls.append(1)
+        raise urllib.error.HTTPError("u", 403, "Forbidden", {}, None)
+    calls.clear()
+    try:
+        job.with_retries(refused, "test")
+    except urllib.error.HTTPError:
+        pass
+    assert len(calls) == 1

@@ -73,13 +73,38 @@ def get_env(k: str) -> str:
     return ""
 
 
+def with_retries(call, what: str, waits=(20, 60)):
+    """`call()`, tried again after each wait when the register drops the connection.
+
+    The register's server closes connections without a response at times (14 Oct 2026:
+    RemoteDisconnected on the first request, a 10-second answer a minute later). One
+    dropped connection failed the whole job, and a failed job turns the hourly cron run
+    red. An HTTP error status is an answer and is raised at once.
+    """
+    import time
+    import urllib.error
+    for attempt, wait in enumerate((*waits, None), 1):
+        try:
+            return call()
+        except urllib.error.HTTPError:
+            raise
+        except (OSError, ConnectionError) as exc:  # URLError, timeouts, RemoteDisconnected
+            if wait is None:
+                raise
+            print(f"[WARN] {what}: {exc.__class__.__name__} on attempt {attempt}; again in {wait}s")
+            time.sleep(wait)
+
+
 def fetch_excel(act_type: str) -> bytes:
     """Download the Excel export. act_type ∈ {'delegated', 'implementing'}."""
     path = "delegatedActs" if act_type == "delegated" else "implementingActs"
     url = f"{REGDEL_BASE}/{path}/excel?lang=en&filter={EXPORT_FILTER}"
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read()
+
+    def call():
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.read()
+    return with_retries(call, f"RegDel {act_type} export")
 
 
 # ---------------------------------------------------------------------------
@@ -114,7 +139,7 @@ class Register:
         jar = http.cookiejar.CookieJar()
         self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
         self.opener.addheaders = [("User-Agent", USER_AGENT)]
-        self.opener.open(REGDEL_HOME, timeout=60).read()
+        with_retries(lambda: self.opener.open(REGDEL_HOME, timeout=60).read(), "register home page")
         self.token = next((c.value for c in jar if "xsrf" in c.name.lower()), None)
         if not self.token:
             raise RuntimeError("the register set no XSRF-TOKEN cookie")
@@ -129,8 +154,12 @@ class Register:
             data = json.dumps(body).encode()
         req = urllib.request.Request(f"{REGDEL_BASE}/{path}", data=data, headers=headers,
                                      method="POST" if body is not None else "GET")
-        with self.opener.open(req, timeout=timeout) as r:
-            return json.loads(r.read())
+
+        def call():
+            with self.opener.open(req, timeout=timeout) as r:
+                return json.loads(r.read())
+        # Short waits per call: an events read is one of hundreds, under a time budget.
+        return with_retries(call, f"register {path}", waits=(5,) if body is None else (20, 60))
 
     def records(self, act_type: str) -> List[dict]:
         path = "delegatedActs" if act_type == "delegated" else "implementingActs"
