@@ -50,16 +50,29 @@ TYPE_LABELS = {
     ("3", "R"): "Regulation", ("3", "S"): "ECSC decision of general interest",
     ("3", "X"): "Other document published in OJ L", ("3", "Y"): "Other document published in OJ C",
     ("5", "XG"): "Other document of the Council or the Member States",
+    ("2", "A"): "Agreement with a non-member State or international organisation",
+    ("2", "D"): "Act of a body created by an international agreement",
+    ("2", "P"): "Act of a parliamentary body created by an international agreement",
+    ("2", "X"): "Other act (international agreements)",
 }
 ELI_PREFIX = {"R": ("reg", "reg_impl", "reg_del"), "L": ("dir", "dir_impl", "dir_del"),
               "D": ("dec", "dec_impl", "dec_del")}
-SUFFIX_RE = re.compile(r"(?:\(\d{2}\))*(?:R\(\d{2}\))*$")
+SUFFIX_RE = re.compile(r"(?:\(\d{2}\))*(?:R\(\d{2}\))*$")  # used by pick_eli only
+CORR_RE = re.compile(r"(?:R\(\d{2}\))+$")
+
+
+def base_of(c):
+    """CELEX without a corrigendum suffix R(NN); a plain (NN) is a different act and stays; a
+    consolidated text (sector 0, -YYYYMMDD) maps to its sector-3 act."""
+    if c.startswith("0"):
+        c = "3" + c[1:]
+    return CORR_RE.sub("", re.sub(r"-\d{8}$", "", c))
 CELEX_RE = re.compile(r"^(?P<s>[0-9CE])(?P<y>\d{4})(?P<t>[A-Z]{1,3})(?P<n>\d{4,6})")
 
 TABLE_HEADERS = ["CELEX", "Sector", "Year", "Type of document", "Number of document", "Title of document",
                  "Alias of document", "Acronym of the alias"]
 EXTRA_HEADERS = ["base_celex", "date_document", "in_force", "eli", "author", "eurovoc_count",
-                 "eurovoc_domains", "title_source", "kind_sheet", "eurovoc_microthesauri", "eurovoc_concepts"]
+                 "eurovoc_domains", "title_source", "kind_sheet", "eurovoc_microthesauri", "eurovoc_concepts", "has_text", "title_other_language"]
 EV_HEADERS = ["celex", "concept_id", "concept_uri", "label_en", "microthesaurus", "domain"]
 
 
@@ -76,15 +89,21 @@ def parse_folder(args):
         return sorted({e.get(RDF + "resource") for e in root.iter(CDM + tag) if e.get(RDF + "resource")})
 
     title = None
+    title_other = ""
     for d in root.findall(RDF + "Description"):
         lang = d.find(CDM + "expression_uses_language")
-        if lang is not None and lang.get(RDF + "resource", "").endswith("/ENG"):
-            t = d.find(CDM + "expression_title")
-            if t is not None and t.text and t.text.strip():
-                title = " ".join(t.text.split())
+        t = d.find(CDM + "expression_title")
+        if lang is None or t is None or not (t.text and t.text.strip()):
+            continue
+        code = lang.get(RDF + "resource", "").rsplit("/", 1)[-1]
+        if code == "ENG":
+            title = " ".join(t.text.split())
+        elif not title_other:
+            title_other = f"{code}: " + " ".join(t.text.split())
     source = "rdf" if title else ""
     title_formex = ""
-    if not title:  # last resort when neither the RDF nor Cellar has it: the TITLE of the first Formex part that has one
+    has_text = (base / "fmx4").is_dir()
+    if not title and has_text:  # last resort when neither the RDF nor Cellar has it: the TITLE of the first Formex part that has one
         fmx = base / "fmx4"
         for p in sorted(fmx.glob("*.xml")):
             if p.name.endswith(WRAPPERS):
@@ -105,7 +124,7 @@ def parse_folder(args):
         "author": "|".join(u.rsplit("/", 1)[-1] for u in res("work_created_by_agent")),
         "eurovoc": [u.rsplit("/", 1)[-1] for u in res("work_is_about_concept_eurovoc")],
         "eli_all": sorted(set(re.findall(r"http://data\.europa\.eu/eli/[A-Za-z0-9_/\-.]+", raw))),
-        "title": title or "", "title_source": source, "title_formex": title_formex,
+        "title": title or "", "title_source": source, "title_formex": title_formex, "has_text": has_text, "title_other": title_other,
     }
 
 
@@ -234,7 +253,7 @@ KIND_SHEETS = [
     ("Budget (B)", "CELEX type B: discharge decisions and amending budgets."),
     ("Council resolutions (G)", "CELEX type G."),
     ("Other OJ L documents (X,S)", "CELEX type X (other documents published in OJ L: agreements, addenda) and S (ECSC decision of general interest)."),
-    ("Corrigenda", "Every corrigendum, whatever the type of the act it corrects (title starts 'Corrigendum')."),
+    ("Corrigenda", "Every corrigendum, whatever the type of the act it corrects (title starts 'Corrigendum' in any case, or the CELEX ends in R(NN))."),
 ]
 KIND_NAMES = [k for k, _ in KIND_SHEETS]
 assert all(len(k) <= 31 for k in KIND_NAMES) and len(set(KIND_NAMES)) == len(KIND_NAMES)
@@ -256,10 +275,14 @@ def issuer_of(title):
     return "not stated"
 
 
-def kind_of(letter, title):
-    """The ONE sheet an act belongs to, from its CELEX descriptor and the start of its title."""
-    if title.startswith("Corrigendum"):
+def kind_of(letter, title, celex=""):
+    """The ONE sheet an act belongs to, from its CELEX descriptor and the start of its title.
+    A corrigendum is recognised by its title ("Corrigendum to ...") or by the R(NN) suffix of its CELEX,
+    because many corrigenda have no English title."""
+    if title.lower().startswith("corrigendum") or CORR_RE.search(celex):
         return "Corrigenda"
+    if not title:
+        return "Other decisions and regulations"
     t = re.sub(r"^[\d/]+[A-Z,/ .]*?:\s*", "", title)  # old "2004/741/EC:" prefix
     low, iss = t.lower(), issuer_of(t)
     if letter == "R":
@@ -336,10 +359,11 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     py_sector = Counter(t[1] for t in table)
     rows = [
         ("LEG_2026-10: summary table by CELEX and EuroVoc", None, None, None, None, "title"),
-        (f"Built on {built_on} by backend/scripts/build_leg_table.py. Source: docs/LEG_2026-10, the Publications Office bulk export of 11 Oct 2026 (legislation in force, Formex 4 + metadata). One row = one OJ publication (one UUID folder, one CELEX).", None, None, None, None, "text"),
+        (f"Built on {built_on} by backend/scripts/build_leg_table.py. Source: docs/LEG_2026-10, the Publications Office bulk export of 11 Oct 2026 (legislation in force, Formex 4 + metadata). One row = one OJ publication (one UUID folder, one CELEX). has_text = yes when the folder holds Formex text; the others (older acts, corrigenda) are described by metadata only.", None, None, None, None, "text"),
         ("", None, None, None, None, "text"),
         ("Method check", "Formula", "Independent count", "Check", "How the independent count was made", "header"),
-        ("Rows in Table", f"=COUNTA({T('A')})", qa["folders_with_fmx4"], "chk", "Folders holding an fmx4 directory, counted on disk before parsing", "row"),
+        ("Rows in Table", f"=COUNTA({T('A')})", qa["folders_in_export"], "chk", "Folders of the export, counted on disk before parsing (each holds a metadata file)", "row"),
+        ("Rows with text (has_text = yes)", f"=COUNTIF({T('T')},\"yes\")", qa["folders_with_text"], "chk", "Folders holding an fmx4 directory (Formex text), counted on disk", "row"),
         ("Sector 3 rows", f"=COUNTIF({T('B')},3)", py_sector.get(3, 0), "chk", "Counter over the parsed sector values", "row"),
         ("Regulations (R)", f"=COUNTIF({T('D')},\"R = Regulation\")", py_type.get("R = Regulation", 0), "chk", "Counter over the parsed type letters", "row"),
         ("Directives (L)", f"=COUNTIF({T('D')},\"L = Directive\")", py_type.get("L = Directive", 0), "chk", "Counter over the parsed type letters", "row"),
@@ -366,7 +390,9 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
         ("Number of document", "resource_legal_number_natural_celex", None, None, "Natural number of the act, without leading zeros (CELEX 32016R0679 gives 679).", "row"),
         ("Title of document", "expression_title (ENG)", None, None, f"Official English title. {qa['title_from_cellar'] + qa['title_from_formex']} acts have none in the RDF: {qa['title_from_cellar']} were read from Cellar (title_source = cellar), {qa['title_from_formex']} from the Formex TITLE (title_source = formex).", "row"),
         ("Alias of document / Acronym of the alias", "aliases.csv", None, None, f"Not in the dump. Filled only from aliases.csv ({qa['rows_with_alias']} acts, seeded from the curated full_name entries of legislation_acronyms.json). Empty = unknown, never derived. Add rows to aliases.csv and rebuild.", "row"),
-        ("base_celex", "derived from CELEX", None, None, "CELEX without (nn) and R(nn) suffixes: groups corrigenda and further publications with their act.", "row"),
+        ("base_celex", "derived from CELEX", None, None, "CELEX without a corrigendum suffix R(NN), so a corrigendum is grouped with its act. A plain (NN) suffix is a different act and is kept; a consolidated text maps to its sector-3 act.", "row"),
+        ("title_other_language", "expression_title (not ENG)", None, None, "When an act has no English title in the metadata (mostly corrigenda, issued in one language), the title in the language that exists, prefixed with its code (DEU: ...). The Title column stays English-only.", "row"),
+        ("has_text", "folder content", None, None, "yes = the export holds the Formex text of the act; no = metadata only (older acts and corrigenda, whose scans were not extracted).", "row"),
         ("date_document / in_force", "work_date_document / resource_legal_in-force", None, None, "in_force is 'unknown' when the metadata carries no flag (not the same as false).", "row"),
         ("eli", "ELI URI in the RDF", None, None, "Only the URI whose type, year and number match the act; empty when none or several match.", "row"),
         ("eurovoc_count / eurovoc_domains", "work_is_about_concept_eurovoc", None, None, "Number of EuroVoc concepts of the act and the EuroVoc domains of their microthesauri (code and name). Concept labels and microthesauri: EuroVoc 4.24 on Cellar. Detail in the EuroVoc sheet.", "row"),
@@ -418,7 +444,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     heads = TABLE_HEADERS + EXTRA_HEADERS
     for j, h in enumerate(heads):
         tb.write(0, j, h, head)
-    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12, 30, 60, 90]
+    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12, 30, 60, 90, 10, 70]
     for j, w in enumerate(widths):
         tb.set_column(j, j, w)
     for i, row in enumerate(table, start=1):
@@ -503,12 +529,13 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     r += 1
     block("In force (metadata flag)", ["true", "false", "unknown"], lambda lab, rr: f"=COUNTIF({T('K')},A{rr + 1})")
     block("Title source", ["rdf", "cellar", "formex"], lambda lab, rr: f"=COUNTIF({T('P')},A{rr + 1})")
+    block("Has text (Formex text in the export)", ["yes", "no"], lambda lab, rr: f"=COUNTIF({T('T')},A{rr + 1})")
     for name in ("Regulations", "Directives"):
         rows_ = kinds[name]
         st.write(r, 0, f"{name} sheet: who the title says adopted the act", head); st.write(r, 1, "Rows", head); st.write(r, 2, "Share", head); r += 1
         for iss in sorted({x[-1] for x in rows_}):
             st.write(r, 0, iss)
-            st.write_formula(r, 1, f"=COUNTIF({rng(name, 'T', len(rows_) + 1)},A{r + 1})", num)
+            st.write_formula(r, 1, f"=COUNTIF({rng(name, 'V', len(rows_) + 1)},A{r + 1})", num)
             st.write_formula(r, 2, f"=B{r + 1}/{len(rows_)}", f(num_format="0.0%")); r += 1
         r += 1
     st.write(r, 0, "EuroVoc", head); st.write(r, 1, "Value", head); r += 1
@@ -533,13 +560,16 @@ def main():
     out = pathlib.Path(a.out) if pathlib.Path(a.out).is_absolute() else pathlib.Path(_REPO_ROOT) / a.out
     out.mkdir(parents=True, exist_ok=True)
 
-    folders = sorted(p.name for p in dump.iterdir() if (p / "fmx4").is_dir())
+    all_dirs = sorted(p.name for p in dump.iterdir() if p.is_dir())
+    folders = [f for f in all_dirs if (dump / f / "tree_non_inferred.rdf").exists()]
     with mp.Pool(8) as pool:
         recs = list(pool.imap_unordered(parse_folder, [(str(dump), f) for f in folders], chunksize=40))
     print(f"{len(recs)} folders parsed")
 
     # ---- QA before anything is written
-    qa = {"folders_with_fmx4": len(folders), "rows": len(recs),
+    qa = {"folders_in_export": len(all_dirs), "folders_with_metadata": len(folders),
+          "folders_with_text": sum(1 for r in recs if r["has_text"]), "folders_metadata_only": sum(1 for r in recs if not r["has_text"]),
+          "rows": len(recs),
           "folders_without_exactly_one_distinct_celex": sum(1 for r in recs if r["n_celex_literals"] != 1),
           "distinct_celex": len({r["celex"] for r in recs})}
     assert qa["folders_without_exactly_one_distinct_celex"] == 0 and qa["distinct_celex"] == len(recs), qa
@@ -579,7 +609,7 @@ def main():
         m = CELEX_RE.match(r["celex"])
         return (m["s"], int(m["y"]), m["t"], int(m["n"]), r["celex"])
 
-    missing = [r["celex"] for r in recs if not r["title"]]
+    missing = [r["celex"] for r in recs if not r["title"] and not CORR_RE.search(r["celex"])]  # corrigenda have no English title in Cellar either
     ct = cellar_titles(missing, out / "cellar_titles_cache.json") if missing else {}
     for r in recs:
         if not r["title"]:
@@ -596,14 +626,19 @@ def main():
         alias, acro = aliases.get(r["celex"], ("", ""))
         domains = sorted({d for i in r["eurovoc"] for d in (mt_domain(i)[1].split(" | ") if mt_domain(i)[1] else [])})
         table.append([r["celex"], int(m["s"]) if m["s"].isdigit() else m["s"], int(m["y"]), type_cell, int(m["n"]), r["title"], alias, acro,
-                      SUFFIX_RE.sub("", r["celex"]), r["date"], r["in_force"] or "unknown", pick_eli(r, r["celex"]), r["author"],
-                      len(r["eurovoc"]), " | ".join(domains), r["title_source"], kind_of(m["t"], r["title"]),
+                      base_of(r["celex"]), r["date"], r["in_force"] or "unknown", pick_eli(r, r["celex"]), r["author"],
+                      len(r["eurovoc"]), " | ".join(domains), r["title_source"], kind_of(m["t"], r["title"], r["celex"]),
                       " | ".join(sorted({x for i in r["eurovoc"] for x in meta["mts"].get(i, [])})),
-                      " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"]))])
+                      " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"])),
+                      "yes" if r["has_text"] else "no", r["title_other"]])
         for i in sorted(r["eurovoc"], key=lambda x: (meta["concept"].get(x, "~"), x)):
             mt, dom = mt_domain(i)
             ev_rows.append([r["celex"], i, f"http://eurovoc.europa.eu/{i}", meta["concept"].get(i, ""), mt, dom])
     qa["rows_without_title"] = sum(1 for t in table if not t[5])
+    qa["rows_without_english_title_but_with_another_language"] = sum(1 for t in table if not t[5] and t[20])
+    qa["corrigenda_by_title"] = sum(1 for t in table if t[5].lower().startswith("corrigendum"))
+    qa["corrigenda_by_celex_suffix"] = sum(1 for t in table if CORR_RE.search(t[0]))
+    qa["corrigenda_title_and_suffix_disagree"] = sum(1 for t in table if t[5].lower().startswith("corrigendum") != bool(CORR_RE.search(t[0])) and t[5])
     qa["title_from_cellar"] = sum(1 for t in table if t[15] == "cellar")
     qa["title_from_formex"] = sum(1 for t in table if t[15] == "formex")
     qa["rows_with_alias"] = sum(1 for t in table if t[6])
