@@ -452,6 +452,22 @@ _UA = "Brubru/1.0 (+https://brubru.beresol.eu)"
 _TEXT_TIMEOUT = 30
 
 
+def letter_spaced(text: str) -> bool:
+    """True when most 'words' are single characters: a page whose letters are set apart."""
+    words = (text or "")[:6000].split()
+    return len(words) >= 20 and sum(len(w) == 1 for w in words) > 0.4 * len(words)
+
+
+def _page_text(page) -> str:
+    """A PDF page's text. Some working documents set every letter of a page apart
+    ("B r u s s e l s"): 21 of 615 stored texts read like that on 14 Oct 2026. pypdf's
+    layout mode places the glyphs by position and gives the words back."""
+    text = page.extract_text() or ""
+    if letter_spaced(text):
+        text = page.extract_text(extraction_mode="layout") or text
+    return text
+
+
 def fetch_document_text(doc: "CouncilDoc", max_chars: int = 200_000) -> Optional[str]:
     """Plain-text body of a register document, or None if it cannot be read.
 
@@ -504,7 +520,7 @@ def fetch_document_text(doc: "CouncilDoc", max_chars: int = 200_000) -> Optional
             import io
             from pypdf import PdfReader
             reader = PdfReader(io.BytesIO(r.content))
-            text = "\n".join((p.extract_text() or "") for p in reader.pages)
+            text = "\n".join(_page_text(p) for p in reader.pages)
         else:
             from bs4 import BeautifulSoup
             text = BeautifulSoup(r.text, "html.parser").get_text(" ", strip=True)

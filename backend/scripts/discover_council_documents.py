@@ -76,10 +76,25 @@ VERSION_KINDS = ("REV", "ADD", "COR")
 MAX_TEXT = 2_000_000
 _UA = {"User-Agent": "Mozilla/5.0 (compatible; BrubruIngest/1.0)"}
 _MONTH = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-# "Brussels, 23 September 2026" and the "Brussels , 19 July 2024" spacing of older PDFs.
-_DATE_RE = re.compile(r"(?:Brussels|Luxembourg|Strasbourg)\s*,\s*(\d{1,2})\s+" + _MONTH + r"\s+(\d{4})")
+
+
+def _spaced(word: str) -> str:
+    """A word whose letters a PDF may have set apart: 'Brus sels', 'Jul y'."""
+    return r"\s?".join(re.escape(c) for c in word)
+
+
+_MONTH_SPACED = "(" + "|".join(_spaced(m) for m in _MONTH[1:-1].split("|")) + ")"
+# "Brussels, 23 September 2026", and what older PDFs give: "Brussels , 19 July 2024",
+# "Brus sels , 2 2 July 2 024" (26 of the first 2024 documents read back undated).
+_DATE_RE = re.compile("(?:" + "|".join(_spaced(c) for c in ("Brussels", "Luxembourg", "Strasbourg")) + ")"
+                      + r"\s*,\s*(\d\s?\d?)\s+" + _MONTH_SPACED + r"\s+(\d\s?\d\s?\d\s?\d)")
 _MEETING_RE = re.compile(r"Date\s*:\s*(\d{1,2})\s+" + _MONTH + r"\s+(\d{4})")
-_SUBJECT_RE = re.compile(r"Subject\s*:\s*(.+?)(?=\s+(?:Date|Time|Venue|Format)\s*:|\n\s*\n|$)", re.S)
+# A subject line ends at the meeting details, at the page footer ("5003/25 2 JAI.1"), at
+# "Delegations will find" or at the first numbered paragraph: the text is one line once
+# collapsed, and on 14 Oct 2026 titles ran on into "5003/25 2 JAI.1 LIMITE EN 1. Introduction".
+_SUBJECT_RE = re.compile(
+    r"Subject\s*:\s*(.+?)(?=\s+(?:Date|Time|Venue|Format)\s*:|\s+\d{3,5}\s?/\s?\d{2}\s+\d+\s"
+    r"|\s+Delegations\s+will\s+find|\s+(?:1|I)\.\s+[A-Z]|\n\s*\n|$)", re.S)
 # Agendas, lists of 'A' items and summary records carry no "Subject:" line: the document
 # names its kind and the body it serves in a heading. "COUNCIL OF THE EUROPEAN UNION1
 # (Economic and Financial Affairs)" (footnote digit included), "PERMANENT REPRESENTATIVES
@@ -88,10 +103,11 @@ _KINDS = {"PROVISIONAL AGENDA": "Provisional agenda",
           "PROVISIONAL LIST OF 'A' ITEMS": "Provisional list of 'A' items",
           "LIST OF ADOPTED 'A' ITEMS": "List of adopted 'A' items",
           "LIST OF 'A' ITEMS": "List of 'A' items",
-          "SUMMARY RECORD": "Summary record"}
+          "SUMMARY RECORD": "Summary record",
+          "DRAFT MINUTES": "Draft minutes"}
 _HEADING_RE = re.compile(
     r"(PROVISIONAL AGENDA|PROVISIONAL LIST OF 'A' ITEMS|LIST OF ADOPTED 'A' ITEMS|LIST OF 'A' ITEMS"
-    r"|SUMMARY RECORD)\s+"
+    r"|SUMMARY RECORD|DRAFT MINUTES)\s+"
     r"(?:(COUNCIL OF THE EUROPEAN UNION)\d?\s*\(((?:[^()]|\([^()]*\))*)\)"
     r"|(PERMANENT REPRESENTATIVES COMMITTEE)\s*\((Part \d)\)"
     r"|((?:[A-Z][A-Z'\-]+\b\s*){2,}))")
@@ -107,7 +123,9 @@ def _ymd(day, month, year) -> date | None:
 
 
 def _d(m) -> date | None:
-    return _ymd(m.group(1), m.group(2), m.group(3)) if m else None
+    if not m:
+        return None
+    return _ymd(*(re.sub(r"\s", "", m.group(i)) for i in (1, 2, 3)))
 
 
 def _tidy(name: str) -> str:

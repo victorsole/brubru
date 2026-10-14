@@ -147,3 +147,19 @@ def test_a_source_that_answers_nothing_fails_the_run(run, capsys):
 def test_404s_are_answers_not_failures(run, capsys):
     rc, stored, asked = run(["WK-10-2026-INIT"], set(), ["--series", "WK", "--year", "2026", "--slot", "0"])
     assert rc == 0 and "degraded" not in capsys.readouterr().out
+
+
+def test_a_date_whose_letters_the_pdf_split_is_still_read():
+    for text, want in (("Council of the European Union Brus sels , 22 July 2024 (OR. en )", date(2024, 7, 22)),
+                       ("Council of the European Union Brussels , 23 July 20 24 (OR. en )", date(2024, 7, 23)),
+                       ("Council of the European Union Brussels , 22 Jul y 2024 (OR. en )", date(2024, 7, 22)),
+                       ("Council of the European Union Brussels , 2 2 July 2024 (OR. en )", date(2024, 7, 22))):
+        assert job.parse("ST-1-2024-INIT", text)["published"] == want, text
+
+
+def test_draft_minutes_are_named_from_their_heading():
+    m = job.parse("ST-12520-2024-INIT", "12520/24 1 GIP EN Council of the European Union Brussels , 3 September "
+                  "2024 (OR. en ) 12520 / 24 PV CONS 44 RELEX 1031 DRAFT MINUTES COUNCIL OF THE EUROPEAN UNION "
+                  "(Foreign Affairs) 22 July 2024 12520/24 2 GIP EN 1. Adoption of the agenda")
+    assert m["title"] == "Draft minutes: Council (Foreign Affairs), 22 July 2024"
+    assert m["published"] == date(2024, 9, 3) and m["meeting_date"] == date(2024, 7, 22)
