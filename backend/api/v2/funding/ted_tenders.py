@@ -38,7 +38,7 @@ Returns public-procurement tender notices from TED (Tenders Electronic Daily) �
 For consultancies / SMEs looking for EU funding opportunities — filter by `cpv_main` for your sector, set `min_value` / `max_value` for relevant contract sizes, and use `deadline_from` / `deadline_to` to scope to bidding-feasible windows. The `sme_suitability_score` (0-1) is Brubru's heuristic on how SME-friendly a tender is based on value + lots + complexity.
 
 **Input**
-- `q` — substring search on title + description + summary.
+- `q` — substring search on title + description + summary + `official_name`, so a buyer name such as `European High Performance Computing Joint Undertaking` matches.
 - `buyer_country` — ISO-2.
 - `procedure_type` — TED procedure type code.
 - `contract_nature` — `works` / `supplies` / `services`.
@@ -64,7 +64,7 @@ Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publish
 )
 async def list_tenders(
     request: Request,
-    q: Optional[str] = Query(None, description="Substring on title + description + summary"),
+    q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
     buyer_country: Optional[str] = Query(None, description="ISO 3166-1 alpha-2"),
     procedure_type: Optional[str] = Query(None),
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),

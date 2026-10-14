@@ -792,8 +792,14 @@ def main() -> int:
                   -- The export serves one record's title as the draft ("(EU) …/...") on
                   -- one day and the final one the next. A draft never replaces a final
                   -- title: the swap moved 185-973 rows' change date per run (14 Oct 2026).
-                  title        = CASE WHEN EXCLUDED.title ~ '(…|\.\.\.)\s*/\s*(…|\.\.\.)'
-                                       AND secondary_acts.title !~ '(…|\.\.\.)\s*/\s*(…|\.\.\.)'
+                  -- "…/.." is a draft too (C(2025)7055 would have gone back to one). A
+                  -- title that differs only in spacing, the register's no-break spaces
+                  -- included, is the same title and not a change.
+                  title        = CASE WHEN EXCLUDED.title ~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
+                                       AND secondary_acts.title !~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
+                                      THEN secondary_acts.title
+                                      WHEN btrim(regexp_replace(translate(EXCLUDED.title, chr(160), ' '), '\s+', ' ', 'g'))
+                                         = btrim(regexp_replace(translate(secondary_acts.title, chr(160), ' '), '\s+', ' ', 'g'))
                                       THEN secondary_acts.title
                                       ELSE COALESCE(EXCLUDED.title, secondary_acts.title) END,
                   parent_celex = CASE WHEN %(parent_from_register)s

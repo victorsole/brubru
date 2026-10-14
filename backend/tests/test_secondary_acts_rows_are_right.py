@@ -87,3 +87,12 @@ def test_an_act_held_twice_is_merged_only_into_the_register_row_from_a_row_outsi
     assert "[left for a person]" in src
     # The C-number to CELEX link is Cellar's own, and only one-to-one links are used.
     assert "cdm:resource_legal_manuscript_ref" in src and "if len(celexes) != 1 or len(ids) != 1:" in src
+
+
+def test_a_title_that_differs_only_in_spacing_or_is_a_draft_does_not_replace_a_final_one():
+    # "…/.." is a draft (C(2025)7055, C(2022)7110 would have regressed); no-break spaces
+    # from the register are not a change (36 titles would have moved for nothing).
+    assert "EXCLUDED.title ~ '(…|\\.{2,})\\s*/\\s*(…|\\.{2,})'" in FEED
+    assert "translate(EXCLUDED.title, chr(160), ' ')" in FEED
+    assert re.search(repair.DRAFT, "COMMISSION DELEGATED REGULATION (EU) No …/..")
+    assert not re.search(repair.DRAFT, "Commission Delegated Regulation (EU) 2026/1753 of 13 July 2026")

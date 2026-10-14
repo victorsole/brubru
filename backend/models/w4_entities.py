@@ -279,6 +279,10 @@ class SecondaryAct(Base):
     # citizen URL instead of a generic search URL (migration 071).
     regdel_id = Column(Integer, nullable=True)
 
+    # Rows merged into this one (they held the same act): a JSON array of {id, reference,
+    # first_seen, source}. The column existed since 25 Sep 2026 without a mapping, so the
+    # item route's fallback to it raised AttributeError (Auditor, 14 Oct 2026).
+    merged_from = Column(JSONB, nullable=True)
     policy_areas = Column(ARRAY(String), default=list)
 
     scraped_at = Column(DateTime, default=datetime.now)

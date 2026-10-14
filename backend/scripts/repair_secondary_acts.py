@@ -58,7 +58,7 @@ sys.path.insert(0, str(BACKEND))
 from sqlalchemy import create_engine, text  # noqa: E402
 
 SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
-DRAFT = r"(…|\.\.\.)\s*/\s*(…|\.\.\.)"
+DRAFT = r"(…|\.{2,})\s*/\s*(…|\.{2,})"   # "…/.." too
 DELEGATED_TYPES = {"REG_DEL", "DIR_DEL", "DEC_DEL"}
 IMPLEMENTING_TYPES = {"REG_IMPL", "DIR_IMPL", "DEC_IMPL"}
 

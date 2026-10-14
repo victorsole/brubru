@@ -1069,10 +1069,11 @@ def _secondary_act_detail(
             "resource": expected_type,
             "id": reference,
         }
-        if other is not None:
-            kind = _type_value(other.act_type)
+        kind = _type_value(other.act_type) if other is not None else None
+        if kind in ("delegated", "implementing"):
+            from urllib.parse import quote
             detail["error"] = f"{reference} is a{'n' if kind == 'implementing' else ''} {kind} act"
-            detail["see"] = f"/api/v2/legislative/{kind}-acts/{other.reference}"
+            detail["see"] = f"/api/v2/legislative/{kind}-acts/{quote(other.reference, safe='()')}"
         raise HTTPException(status_code=404, detail=detail)
     return _secondary_act_to_item(r, body_threshold=body_threshold)
 
@@ -1188,6 +1189,7 @@ async def list_implementing_acts(
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
