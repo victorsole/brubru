@@ -169,7 +169,7 @@ PostgreSQL via Supabase. Key tables:
 
 ## Canonical Numbers of the EU Legal Corpus
 
-LEG_2026-10 (11 Oct 2026 Publications Office bulk export, replaces LEG_2025-11): **26,834 distinct laws (binding acts, CELEX `3YYYY[RLD]NNNN`) / 30,246 OJ publications (UUID folders) / 64,844 translatable XML files** (counted from the dump's own metadata; one CELEX per folder). One law can span multiple files (AI Act=14). Always cite the triple; the Nov 2025 triple (26,834 / 30,246 / 64,844) and `26,834` are deprecated, and 26,834 is not comparable (its definition was never written down).
+LEG_2026-10 (11 Oct 2026 Publications Office bulk export, replaces LEG_2025-11): **34,309 distinct laws described (binding acts: CELEX `3YYYY` + R, L or D + 4 to 6 digits, no suffix), 27,103 of them with text / 59,010 OJ publications described (UUID folders), 30,246 of them with Formex text / 64,844 translatable text files** (counted from the dump's own metadata; one CELEX per folder). The 28,764 publications without text are older acts, merger-control decisions (type M) and corrigenda, whose scans were not extracted: the summary tables describe them, but this export did not load them into the database. One law can span multiple files (AI Act=14). What Brubru serves, searches or translates is the with-text part: say "27,103 laws / 30,246 publications with full text". Always cite the full set; the Nov 2025 triple (8,710 / 28,513 / 61,219) and `8,710` are deprecated, and 8,710 is not comparable (its definition was never written down).
 
 ## Testing
 
