@@ -1,0 +1,171 @@
+{
+ "_about": "14 Oct 2026 news implementation: 6 languages per topic, natural phrasing; negatives must not reach the new guides.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "ai_act_en_18286_2026_first_harmonised_standard#first": [
+   "Has the first harmonised standard under the AI Act been published?",
+   "La première norme harmonisée pour le règlement sur l'IA a-t-elle été publiée ?",
+   "Is de eerste geharmoniseerde norm voor de AI-verordening gepubliceerd?",
+   "¿Se ha publicado la primera norma armonizada de la Ley de IA?",
+   "S'ha publicat la primera norma harmonitzada del Reglament d'IA?",
+   "È stata pubblicata la prima norma armonizzata per l'AI Act?"
+  ],
+  "ai_act_en_18286_2026_first_harmonised_standard#en18286": [
+   "What is EN 18286:2026 and what does it cover?",
+   "Que couvre la norme EN 18286:2026 sur le système de gestion de la qualité pour l'IA ?",
+   "Wat dekt EN 18286:2026 over het kwaliteitsmanagementsysteem voor AI?",
+   "¿Qué cubre la norma EN 18286:2026 sobre el sistema de gestión de la calidad para la IA?",
+   "Què cobreix la norma EN 18286:2026 sobre el sistema de gestió de la qualitat per a la IA?",
+   "Che cosa copre la norma EN 18286:2026 sul sistema di gestione della qualità per l'IA?"
+  ],
+  "eu_driving_licences_directive_2025_2205#directive": [
+   "What changes with the new EU driving licence directive, for example accompanied driving at 17?",
+   "Que prévoit la nouvelle directive sur les permis de conduire, notamment la conduite accompagnée à 17 ans ?",
+   "Wat verandert er met de nieuwe rijbewijsrichtlijn van de EU, bijvoorbeeld begeleid rijden vanaf 17?",
+   "¿Qué cambia con la nueva directiva del permiso de conducir de la UE y la conducción acompañada a los 17?",
+   "Què canvia amb la nova directiva del permís de conduir de la UE i la conducció acompanyada als 17 anys?",
+   "Cosa cambia con la nuova direttiva sulle patenti di guida e la guida accompagnata a 17 anni?"
+  ],
+  "mobile_driving_licence_implementing_regulation_2026_2266#mdl": [
+   "What does the new Commission regulation on the mobile driving licence in the digital identity wallet say?",
+   "Que prévoit le règlement d'exécution sur le permis de conduire mobile dans le portefeuille d'identité numérique ?",
+   "Wat zegt de uitvoeringsverordening over het mobiele rijbewijs in de digitale identiteitswallet?",
+   "¿Qué dice el reglamento de ejecución sobre el permiso de conducir móvil en la cartera de identidad digital?",
+   "Què diu el reglament d'execució sobre el permís de conduir mòbil a la cartera d'identitat digital?",
+   "Cosa prevede il regolamento di esecuzione sulla patente di guida mobile nel portafoglio di identità digitale?"
+  ],
+  "merger_kimberly_clark_kenvue_m12330#approval": [
+   "Did the Commission approve Kimberly-Clark's acquisition of Kenvue?",
+   "La Commission a-t-elle approuvé le rachat de Kenvue par Kimberly-Clark ?",
+   "Heeft de Commissie de overname van Kenvue door Kimberly-Clark goedgekeurd?",
+   "¿Aprobó la Comisión la adquisición de Kenvue por Kimberly-Clark?",
+   "Va aprovar la Comissió l'adquisició de Kenvue per Kimberly-Clark?",
+   "La Commissione ha approvato l'acquisizione di Kenvue da parte di Kimberly-Clark?"
+  ],
+  "eu_mauritius_sustainable_fisheries_partnership_2026_2030#sfpa": [
+   "What is in the new EU fisheries agreement with Mauritius?",
+   "Que contient le nouvel accord de pêche de l'UE avec Maurice ?",
+   "Wat staat er in het nieuwe visserijpartnerschap van de EU met Mauritius?",
+   "¿Qué incluye el nuevo acuerdo de pesca de la UE con Mauricio?",
+   "Què inclou el nou acord de pesca de la UE amb Maurici?",
+   "Cosa prevede il nuovo accordo di pesca dell'UE con Mauritius?"
+  ],
+  "unece_wp29_200th_session_eu_position_november_2026#wp29": [
+   "What position will the EU take at the UNECE WP.29 session in November 2026?",
+   "Quelle position l'UE adoptera-t-elle au Forum mondial de l'harmonisation des règlements concernant les véhicules en novembre 2026 ?",
+   "Welk standpunt neemt de EU in op het Wereldforum voor de harmonisatie van voertuigreglementen in november 2026?",
+   "¿Qué posición adoptará la UE en el Foro Mundial para la Armonización de Reglamentos sobre Vehículos en noviembre de 2026?",
+   "Quina posició adoptarà la UE al Fòrum Mundial per a l'Harmonització de la Reglamentació sobre Vehicles el novembre de 2026?",
+   "Quale posizione assumerà l'UE al Forum mondiale per l'armonizzazione dei regolamenti sui veicoli a novembre 2026?"
+  ],
+  "ehds_stakeholder_forum_call_for_members_2026#apply": [
+   "How can I apply to join the EHDS Stakeholder Forum?",
+   "Comment postuler au forum des parties prenantes de l'espace européen des données de santé ?",
+   "Hoe kan ik me aanmelden voor het EHDS-stakeholderforum?",
+   "¿Cómo puedo presentarme al foro de partes interesadas del Espacio Europeo de Datos de Salud?",
+   "Com puc presentar-me al fòrum de les parts interessades de l'Espai Europeu de Dades Sanitàries?",
+   "Come posso candidarmi al forum delle parti interessate dello spazio europeo dei dati sanitari?"
+  ],
+  "edpb_statement_smart_glasses_october_2026#glasses": [
+   "What did the EDPB say about smart glasses?",
+   "Que dit le CEPD sur les lunettes connectées ?",
+   "Wat zegt de EDPB over slimme brillen?",
+   "¿Qué dice el CEPD sobre las gafas inteligentes?",
+   "Què diu el CEPD sobre les ulleres intel·ligents?",
+   "Cosa dice l'EDPB sugli occhiali intelligenti?"
+  ],
+  "eca_annual_report_2025_eu_budget_and_rrf#errorrate": [
+   "What error rate did the European Court of Auditors find for the 2025 EU budget?",
+   "Quel taux d'erreur la Cour des comptes européenne a-t-elle relevé pour le budget de l'UE en 2025 ?",
+   "Welk foutenpercentage vond de Europese Rekenkamer voor de EU-begroting van 2025?",
+   "¿Qué tasa de error estimó el Tribunal de Cuentas Europeo para el presupuesto de la UE en 2025?",
+   "Quina taxa d'error va estimar el Tribunal de Comptes Europeu per al pressupost de la UE el 2025?",
+   "Quale tasso di errore ha stimato la Corte dei conti europea per il bilancio UE del 2025?"
+  ],
+  "cjeu_c_57_25_commission_v_estonia_visa_refusal_remedy#visa": [
+   "Can a short-stay visa refusal be challenged in court in the EU after the Commission v Estonia judgment?",
+   "Peut-on contester en justice un refus de visa de court séjour après l'arrêt Commission contre Estonie ?",
+   "Kan een visumweigering voor kort verblijf bij de rechter worden aangevochten volgens het Hof?",
+   "¿Se puede recurrir ante un juez la denegación de un visado de corta duración según el Tribunal de Justicia?",
+   "Es pot recórrer davant d'un tribunal la denegació d'un visat de curta durada segons el Tribunal de Justícia?",
+   "Si può impugnare in tribunale il rifiuto di un visto per soggiorno di breve durata secondo la Corte di giustizia?"
+  ],
+  "cjeu_c_872_24_unfair_terms_electronic_communications_contracts#telecom": [
+   "Can a telecom operator charge the remaining instalments on early termination, given the unfair terms ruling?",
+   "Un opérateur télécom peut-il facturer les mensualités restantes en cas de résiliation anticipée, au regard des clauses abusives ?",
+   "Mag een telecomaanbieder de resterende termijnen aanrekenen bij vroegtijdige beëindiging, gezien de oneerlijke bedingen?",
+   "¿Puede un operador de telecomunicaciones cobrar las cuotas restantes por resolución anticipada, según las cláusulas abusivas?",
+   "Pot un operador de telecomunicacions cobrar les quotes restants per resolució anticipada segons les clàusules abusives?",
+   "Un operatore telefonico può far pagare le rate residue in caso di recesso anticipato secondo le clausole abusive?"
+  ],
+  "cjeu_c_571_24_family_reunification_parents_former_unaccompanied_minor#family": [
+   "How long do parents have to apply for family reunification with a refugee who was an unaccompanied minor?",
+   "De combien de temps disposent les parents pour demander le regroupement familial avec un réfugié arrivé comme mineur non accompagné ?",
+   "Hoeveel tijd hebben ouders voor gezinshereniging met een vluchteling die alleenstaande minderjarige was?",
+   "¿De cuánto tiempo disponen los padres para solicitar la reagrupación familiar con un refugiado que llegó como menor no acompañado?",
+   "De quant de temps disposen els pares per sol·licitar la reagrupació familiar amb un refugiat que va arribar com a menor no acompanyat?",
+   "Di quanto tempo dispongono i genitori per chiedere il ricongiungimento familiare con un rifugiato arrivato come minore non accompagnato?"
+  ],
+  "eu_turkiye_high_level_dialogue_on_trade_october_2026#hldt": [
+   "What did the EU and Türkiye agree at the High-Level Dialogue on Trade?",
+   "Qu'ont convenu l'UE et la Turquie lors du dialogue de haut niveau sur le commerce ?",
+   "Wat hebben de EU en Turkije afgesproken tijdens de handelsdialoog op hoog niveau?",
+   "¿Qué acordaron la UE y Turquía en el diálogo de alto nivel sobre comercio?",
+   "Què van acordar la UE i Turquia al diàleg d'alt nivell sobre comerç?",
+   "Cosa hanno concordato l'UE e la Turchia nel dialogo ad alto livello sul commercio?"
+  ],
+  "eu_borrowing_syndicated_transactions_h2_2026#bonds": [
+   "How much did the EU raise in its latest EU-Bond syndication?",
+   "Combien l'UE a-t-elle levé lors de sa dernière émission obligataire syndiquée ?",
+   "Hoeveel heeft de EU opgehaald met de laatste syndicatie van EU-obligaties?",
+   "¿Cuánto captó la UE en su última emisión sindicada de bonos de la UE?",
+   "Quant va captar la UE en la seva darrera emissió sindicada de bons de la UE?",
+   "Quanto ha raccolto l'UE nella sua ultima emissione sindacata di obbligazioni UE?"
+  ],
+  "jrc_research_digest_12_14_oct_2026#shrinking": [
+   "Which share of the EU population will live in shrinking regions by 2045 according to the JRC?",
+   "Quelle part de la population de l'UE vivra dans des régions en déclin démographique d'ici 2045 selon le JRC ?",
+   "Welk aandeel van de EU-bevolking woont in 2045 in krimpende regio's volgens het JRC?",
+   "¿Qué parte de la población de la UE vivirá en regiones en declive demográfico en 2045 según el JRC?",
+   "Quina part de la població de la UE viurà en regions en declivi demogràfic el 2045 segons el JRC?",
+   "Quale quota della popolazione dell'UE vivrà in regioni in declino demografico nel 2045 secondo il JRC?"
+  ],
+  "hungary_election_2026_magyar#conditionality": [
+   "Did the Council lift the conditionality measures on Hungary?",
+   "Le Conseil a-t-il levé les mesures de conditionnalité contre la Hongrie ?",
+   "Heeft de Raad de conditionaliteitsmaatregelen tegen Hongarije opgeheven?",
+   "¿Levantó el Consejo las medidas de condicionalidad contra Hungría?",
+   "Va aixecar el Consell les mesures de condicionalitat contra Hongria?",
+   "Il Consiglio ha revocato le misure di condizionalità contro l'Ungheria?"
+  ],
+  "eu_accession_negotiations_state_of_play_october_2026#13oct": [
+   "What happened at the accession conferences with Albania, Moldova and Ukraine on 13 October?",
+   "Que s'est-il passé aux conférences d'adhésion avec l'Albanie, la Moldavie et l'Ukraine le 13 octobre ?",
+   "Wat gebeurde er op de toetredingsconferenties met Albanië, Moldavië en Oekraïne op 13 oktober?",
+   "¿Qué pasó en las conferencias de adhesión con Albania, Moldavia y Ucrania el 13 de octubre?",
+   "Què va passar a les conferències d'adhesió amb Albània, Moldàvia i Ucraïna el 13 d'octubre?",
+   "Cosa è successo alle conferenze di adesione con Albania, Moldova e Ucraina il 13 ottobre?"
+  ]
+ },
+ "negatives": [
+  "What is the AI Act?",
+  "How does the GDPR apply to CCTV cameras in shops?",
+  "What are the EU rules on driving hours and rest periods for lorry drivers?",
+  "Which fishing quotas did the Council set for the Baltic Sea?",
+  "What is the Cyber Resilience Act?",
+  "What are the rules on novel foods and insects in the EU?",
+  "How do I apply for a Schengen visa as a tourist?",
+  "What is the Horizon Europe budget for 2028-2034?",
+  "What does the Digital Euro regulation say?",
+  "What are the EU sanctions on Russia's shadow fleet?",
+  "How do I register in the EU Transparency Register?",
+  "What is the European Health Insurance Card?"
+ ]
+}

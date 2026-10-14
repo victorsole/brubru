@@ -1,0 +1,19 @@
+# JRC research papers, 12 to 14 October 2026: shrinking regions, rural innovation, bio-based chemicals, outsourcing and wages, El Niño
+
+## QUICK FACTS
+- **What this is:** a dated digest of new science-for-policy papers from the **Joint Research Centre (JRC)**, read from its publications repository on 14 October 2026. These are research papers, **NOT Commission positions**. The European Parliament's STOA published nothing new (newest item 28 September) and the Council's ART listing was unchanged (data centre expansion; conspiracy theories and disinformation; Forward Look 2026; Prospects for 2026).
+- **JRC148534 "Shrinking populations become the norm"** (policy brief, demography and migration; Dijkstra, Casati and others): the share of the EU population living in **shrinking regions is projected to rise from 36% in 2025 to 55% by 2045**. Growth is sustained mainly by migration, declines mainly reflect natural change; urban regions have the largest migration gains and smallest natural losses, rural and remote regions the smallest gains and largest natural losses.
+- **JRC147353, 12 Oct 2026, EUR 40851, "The state of rural innovation in the European Union"** (technical report, doi 10.2760/9601402): **64% of rural firms are innovative against 70% in urban areas**; only **5% of rural firms report access to EU funds against 6.5% of urban firms**; local university partnerships are the strongest predictor of innovation intensity among rural firms. It presents the first results of a new Eurobarometer survey on rural innovation and feeds the Long-Term Vision for Rural Areas.
+- **JRC144266, 12 Oct 2026, "Upscaling bio-based chemicals and plastics in the EU"** (policy brief, exploratory modelling to 2040): a scenario with bio-based output at **15% of total production** gives jobs up by **230,000 to about 360,000** in the two bio-based sectors; each sector reaches **22.1 billion** (currency not stated in the abstract) against 9.8 billion (chemicals) and 4.4 billion (plastics) in the baseline; emissions in the two sectors rise slightly but are offset by a fall across the whole chemicals and plastics industries; the **land footprint rises** (scenario results, not forecasts).
+- **JRC148468, 13 Oct 2026, doi 10.2760/7661755, "Outsourcing, wage disparities, and labour-market segmentation in Europe: new evidence from 2024 EWCS"** (policy insight): **operational outsourcing-related activities are associated with lower monthly earnings, professional ones with higher**; much of the gap is explained by occupational composition.
+- **JRC148570, "The effects of El Niño on Global Food Security and Nutrition, Issue 2, October 2026"** (brief; Carfagna, Vittis, Rembold and others): an updated, consolidated monitoring picture; some food-security and nutrition effects of failed harvests **may only materialise in early-to-mid 2027** (OCHA, 2026), so monitoring and preparedness should extend beyond the immediate climate-anomaly and agricultural-season window.
+- **Also on the repository front page, not summarised:** OpenStreetMap in times of turmoil (JRC148259), acquisition performance of LEO-PNT constellations (JRC148124), morality and climate policy attitudes (JRC148078).
+
+## Related guides
+`eu_demographic_change`, `european_employment_and_social_outlook_2026_job_quality`, `bioeconomy_food_systems`, `jrc_and_art_research_digest_oct_2026`.
+
+## Search words (other languages)
+régions en déclin démographique, innovation rurale, bioplastiques, externalisation et salaires (FR); krimpende regio's, plattelandsinnovatie, biogebaseerde chemie (NL); regiones en declive demográfico, innovación rural, bioplásticos (ES); regions en declivi demogràfic, innovació rural, bioplàstics (CA); regioni in declino demografico, innovazione rurale, bioplastiche (IT).
+
+## Source (read on 14 October 2026)
+JRC Publications repository: https://publications.jrc.ec.europa.eu/repository/home

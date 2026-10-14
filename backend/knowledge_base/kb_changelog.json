@@ -2,6 +2,230 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "pre_enlargement_policy_reviews_2026",
+      "title": "Pre-enlargement policy reviews",
+      "summary": "13 Oct accession conference outcomes at headline level.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "european_council_15_16_october_2026",
+      "title": "European Council 15-16 October 2026",
+      "summary": "Published results of the 13 Oct General Affairs Council and accession conferences at headline level.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "european_court_of_auditors",
+      "title": "European Court of Auditors",
+      "summary": "Pointer to the 2025 annual reports (published 8 Oct 2026).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "eu_demographic_change",
+      "title": "EU demographic change",
+      "summary": "JRC brief: share of the EU population in shrinking regions 36% (2025) to 55% (2045).",
+      "refs": [
+        "JRC148534"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "hungary_election_2026_magyar",
+      "title": "Hungary 2026: Magyar and Brussels",
+      "summary": "13 Oct: von der Leyen welcomed a Council decision to adopt the Commission's proposal; likely COM(2026) 516 (conditionality lifting), not confirmed.",
+      "refs": [
+        "COM(2026)516"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "ai_agents_compliance_architecture_eu",
+      "title": "AI agents compliance architecture",
+      "summary": "Note that the QMS standard is now published as EN 18286:2026.",
+      "refs": [
+        "2026/2274"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "ai_act_harmonised_standards_m613",
+      "title": "AI Act harmonised standards (M/613)",
+      "summary": "prEN 18286 is now EN 18286:2026, cited in the OJ on 14 Oct 2026; other drafts not cited yet.",
+      "refs": [
+        "2026/2274"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "updated",
+      "guide": "eu_accession_negotiations_state_of_play_october_2026",
+      "title": "EU accession negotiations, October 2026",
+      "summary": "13 Oct outcomes at headline level: Albania chapter 20 provisionally closed; Ukraine and Moldova opened internal-market negotiations; GAC conclusions approved.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "jrc_research_digest_12_14_oct_2026",
+      "title": "JRC research digest, 12 to 14 October 2026",
+      "summary": "Shrinking regions (36% to 55% by 2045), rural innovation, bio-based chemicals, outsourcing and wages, El Niño food security.",
+      "refs": [
+        "JRC148534",
+        "JRC147353",
+        "JRC144266",
+        "JRC148468",
+        "JRC148570"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "eu_borrowing_syndicated_transactions_h2_2026",
+      "title": "EU borrowing: 9th syndicated transaction of 2026",
+      "summary": "13 Oct 2026: EUR 10 billion in two EUR 5 billion tranches; EUR 80 billion H2 2026 funding target.",
+      "refs": [
+        "IP/26/2142"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "eu_turkiye_high_level_dialogue_on_trade_october_2026",
+      "title": "Third EU-Türkiye High-Level Dialogue on Trade",
+      "summary": "13 Oct 2026: TAREKS import-control barrier removed; Machinery Regulation alignment; open leather, textile, EPREL and CPNP issues.",
+      "refs": [
+        "STATEMENT/26/2135"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "cjeu_c_571_24_family_reunification_parents_former_unaccompanied_minor",
+      "title": "Case C-571/24: parents' family reunification after a refugee minor turns 18",
+      "summary": "8 Oct 2026: reasonable period from recognition, judged case by case, for refugees recognised before 12 April 2018.",
+      "refs": [
+        "62024CJ0571"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "cjeu_c_872_24_unfair_terms_electronic_communications_contracts",
+      "title": "Cases C-872/24 and C-909/24: unfair terms in telecom contracts",
+      "summary": "8 Oct 2026: late-payment penalties and early-termination payments can be assessed as unfair; courts disapply, not reduce.",
+      "refs": [
+        "62024CJ0872"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "cjeu_c_57_25_commission_v_estonia_visa_refusal_remedy",
+      "title": "Case C-57/25 Commission v Estonia: remedy against visa refusals",
+      "summary": "8 Oct 2026: Estonia failed to provide a court remedy against short-stay visa refusals, annulments and revocations.",
+      "refs": [
+        "62025CJ0057"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "eca_annual_report_2025_eu_budget_and_rrf",
+      "title": "ECA annual reports on the 2025 financial year",
+      "summary": "Error rate 3.8%, payments EUR 216.4 billion, EU debt EUR 738.9 billion at end-2025, separate opinions on the budget and the RRF.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "edpb_statement_smart_glasses_october_2026",
+      "title": "EDPB statement on smart glasses",
+      "summary": "Initial statement and report of 13 Oct 2026: user and producer responsibilities, transparency of recording.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "ehds_stakeholder_forum_call_for_members_2026",
+      "title": "EHDS Stakeholder Forum: call for members",
+      "summary": "Commission call of 13 Oct 2026: about 80 members, applications by 10 Dec 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "unece_wp29_200th_session_eu_position_november_2026",
+      "title": "UNECE WP.29 200th session: proposed EU position",
+      "summary": "COM(2026) 548: Council Decision under Article 218(9) TFEU for the 17-20 Nov 2026 session; UN Regulations, GTRs and resolutions on the agenda.",
+      "refs": [
+        "COM(2026)548"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "eu_mauritius_sustainable_fisheries_partnership_2026_2030",
+      "title": "EU-Mauritius fisheries agreement and Protocol 2026-2030",
+      "summary": "Commission proposals of 13 Oct 2026: 25 purse seiners and 25 longliners, EUR 700,000 a year, allocation among Spain, France, Italy and Portugal.",
+      "refs": [
+        "COM(2026)544",
+        "COM(2026)545",
+        "COM(2026)547"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "merger_kimberly_clark_kenvue_m12330",
+      "title": "Kimberly-Clark / Kenvue cleared with conditions (M.12330)",
+      "summary": "Phase I approval on 13 Oct 2026 subject to divesting Kotex, Camelia and Record in the EEA to Dilek.",
+      "refs": [
+        "M.12330",
+        "IP/26/2137"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "mobile_driving_licence_implementing_regulation_2026_2266",
+      "title": "Mobile driving licences: Implementing Regulation (EU) 2026/2266",
+      "summary": "ISO mdoc format, issuance as attestations to EU Digital Identity Wallets, revocation, confiscation and exchange rules; in force 3 Nov 2026.",
+      "refs": [
+        "2026/2266"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "eu_driving_licences_directive_2025_2205",
+      "title": "Driving Licences Directive (EU) 2025/2205",
+      "summary": "Mobile licence in the EU Digital Identity Wallet, accompanied driving at 17, two-year probation; transposition 26 Nov 2028, application 26 Nov 2029.",
+      "refs": [
+        "32025L2205"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "action": "added",
+      "guide": "ai_act_en_18286_2026_first_harmonised_standard",
+      "title": "AI Act: EN 18286:2026, the first harmonised standard cited in the OJ",
+      "summary": "Implementing Decision (EU) 2026/2274 cites EN 18286:2026 (quality management systems), in force 14 Oct 2026; presumption covers only that standard's scope.",
+      "refs": [
+        "2026/2274",
+        "EN18286"
+      ]
+    },
+    {
       "date": "2026-10-13",
       "action": "added",
       "guide": "eu_agri_2040_conference_nine_breakout_sessions",

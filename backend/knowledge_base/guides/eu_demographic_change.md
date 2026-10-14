@@ -1,6 +1,7 @@
 # EU Demographic Change and Population Projections
 
 ## QUICK FACTS
+- **JRC policy brief JRC148534 "Shrinking populations become the norm" (October 2026):** the share of the EU population living in **shrinking regions is projected to rise from 36% in 2025 to 55% by 2045**; growth is sustained mainly by migration, declines mainly reflect natural change (urban regions: largest migration gains, smallest natural losses; rural and remote regions: the reverse). A research paper, not a Commission position. See `jrc_research_digest_12_14_oct_2026`.
 - **LATEST (Thursday 21 May 2026 — EUROSTAT DEMOGRAPHY OF EUROPE 2026 EDITION PUBLISHED)**: Eurostat released its annual flagship publication **"Demography of Europe — 2026 edition"** — the authoritative single-source compendium on EU population structure, fertility, mortality, migration, ageing, household composition, and urban-rural split. Source: Eurostat news release (21 May 2026, ec.europa.eu/eurostat). The publication is the canonical reference for Member State policy authorities, demography researchers, social-policy stakeholders, and pension reform negotiators. It feeds directly into:
   - The Commission's **Demographic Toolbox** (COM(2023) 577)
   - The **Long-Term Vision for Rural Areas** + Right to Stay strategy (`eu_demographic_right_to_stay_strategy`)

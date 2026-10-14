@@ -1,12 +1,13 @@
 # AI Act Harmonised Standards — M/613 + M/606 Programme
 
 ## QUICK FACTS
+- **UPDATE (14 October 2026): the first AI Act harmonised standard is cited in the Official Journal.** Commission Implementing Decision (EU) 2026/2274 (adopted 12 October, published 14 October, in force on publication) publishes the reference of **EN 18286:2026, "Artificial intelligence - Quality management system for EU AI Act regulatory purposes"** (formerly prEN 18286). The presumption of conformity under Article 40 covers only what that standard covers (provider quality management systems, including post-market monitoring), **not** risk management, data governance, cybersecurity or bias: those drafts are not cited yet. Detail: `ai_act_en_18286_2026_first_harmonised_standard`.
 - **STANDARDISATION REFORM PROPOSED (6 October 2026):** the Commission proposed a new Regulation on European standardisation (COM(2026) 780) to replace Regulation (EU) No 1025/2012, with delivery deadlines for requested standards, harmonised standardisation deliverables, other standards bodies and common specifications as fallback, and free access to referenced standards. It is only a proposal (application six months after entry into force, expected around 2028) and the text does NOT amend this act or add a transition for standards already requested under it. Detail: guide `standardisation_regulation_revision_2026`.
 - **LATEST (Friday 22 May 2026 — TRANSPARENCY CODE OF PRACTICE, 3rd WG ROUND)**: DG CNECT held the **third round of working-group meetings** on the **AI Act transparency Code of Practice** (the Article 50 instrument on labelling AI-generated/manipulated content — deepfakes, synthetic media — distinct from the M/613 harmonised standards tracked in this guide). It is a separate soft-law deliverable accompanying the Article 50 transparency obligations that apply from **August 2026**. Source: digital-strategy.ec.europa.eu (22 May 2026). Cross-link: `ai_act_regulation.md` for the Article 50 timeline; this guide tracks the M/613 + M/606 harmonised-standards stream.
 - Topic: EU Commission Standardisation Requests that operationalise the AI Act's and Cyber Resilience Act's essential requirements
 - Standardisation Requests: **M/613** (AI Act) to CEN/CENELEC JTC 21, and **M/606** (CRA) to CEN/CENELEC
 - Legal function: harmonised standards create a **presumption of conformity** with AI Act essential requirements (Chapters III + V) for high-risk systems and GPAI models
-- Status (April 2026): working drafts under M/613 circulating. Draft adoption + OJ publication expected 2026-2027.
+- Status (14 October 2026): one standard adopted and cited (EN 18286:2026, QMS); the other working drafts under M/613 are not cited yet.
 - Canonical source: Nannini et al. April 2026 "AI Agents Under EU Law" (arXiv 2604.04604v1) -- see dedicated guide `ai_agents_compliance_architecture_eu.md`
 - Responsible committee: CEN/CENELEC JTC 21 (Artificial Intelligence)
 - Parallel work: ISO/IEC JTC 1/SC 42 (international) -- convergence/divergence risk
@@ -16,7 +17,7 @@
 
 | Draft | Topic | Role in dependency graph |
 |---|---|---|
-| **prEN 18286** | Quality Management System (QMS) for AI systems | **Coordinating framework.** Other standards plug into its QMS processes. |
+| **EN 18286:2026** (was prEN 18286) | Quality Management System (QMS) for AI systems | **Adopted; reference cited in the OJ on 14 October 2026.** Coordinating framework: other standards plug into its QMS processes. |
 | **prEN 18228** | Risk management for AI systems | Operationalises AI Act Articles 9 (risk management system for high-risk) |
 | **prEN 18229-1** | Trustworthiness — Part 1 | Fundamental concepts, trustworthiness properties |
 | **prEN 18229-2** | Trustworthiness — Part 2 | Specific operational requirements |
@@ -24,7 +25,7 @@
 | **prEN 18284** | Data governance | Article 10; interacts with GDPR Data Protection Impact Assessments |
 | **prEN 18283** | Bias + fundamental rights | Article 10(5); integration with non-discrimination and equality law |
 
-All are working drafts -- NOT adopted. Numbers and scopes may change before OJ publication. After publication, the standards become "harmonised" only when referenced in the OJ L-series under Article 41 AI Act.
+Except EN 18286:2026 (adopted), all are working drafts -- NOT adopted. Numbers and scopes may change before OJ publication. After publication, the standards become "harmonised" only when referenced in the OJ L-series under Article 41 AI Act.
 
 ## Standards as a Dependency Graph (Not a Checklist)
 
@@ -56,7 +57,8 @@ In practice this means:
 | 2 August 2025 | GPAI obligations applied + Code of Practice for GPAI Models (July 2025) |
 | 2 August 2026 | High-risk AI systems obligations (Annex III) apply |
 | 11 December 2027 | Cyber Resilience Act core obligations apply |
-| 2028 (expected) | M/613 harmonised standards published in OJ, presumption-of-conformity available |
+| 14 October 2026 | First M/613 harmonised standard (EN 18286:2026, QMS) cited in the OJ: presumption of conformity for what it covers |
+| Later (date not published) | Remaining M/613 harmonised standards cited in the OJ |
 
 ## Brubru's Role
 

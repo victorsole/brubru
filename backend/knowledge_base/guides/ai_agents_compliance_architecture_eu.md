@@ -8,7 +8,8 @@
 - Core AI Act regulation: Regulation (EU) 2024/1689 (CELEX 32024R1689)
 - Harmonised standards programme: Commission Standardisation Request M/613 (to CEN/CENELEC JTC 21)
 - CRA standardisation programme: Commission Standardisation Request M/606
-- January 2026 working drafts (not yet published): prEN 18286 (QMS), 18228 (risk management), 18229-1/2 (trustworthiness), 18282 (cybersecurity), 18284 (data governance), 18283 (bias)
+- **Update 14 October 2026: the QMS standard is now published as EN 18286:2026 and its reference is cited in the OJ (Implementing Decision (EU) 2026/2274); the other drafts are not cited yet** (`ai_act_en_18286_2026_first_harmonised_standard`)
+- January 2026 working drafts: prEN 18286 (QMS, now adopted), 18228 (risk management), 18229-1/2 (trustworthiness), 18282 (cybersecurity), 18284 (data governance), 18283 (bias)
 - Also binding: EU Code of Practice for GPAI Models (July 2025)
 - Digital Omnibus proposals (November 2025) introduce further simplifications/clarifications
 - Institutional sources cited: EDPS, JRC, ENISA, ACM Europe
