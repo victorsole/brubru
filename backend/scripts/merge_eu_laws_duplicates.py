@@ -6,19 +6,23 @@ Measured 14 Oct 2026 (after steps 1 and 2):
      backfill, 7 EU Canon rows, 3 rows of the deleted 2025 copy, 5 later daily-sync rows). The holders carry every
      reference (EU Law Comply: 14 cluster links, 209 requirements); the empty rows carry none. So the holder stays
      and the empty duplicate goes: nothing cascades.
-  B. But the empty row is the only link to the act's text file in the export: 214 holders point at Cellar only
-     (cellar://) and 3 at a file of the deleted 2025 copy. Before the empty row goes, those 217 holders take the
-     act's main file in docs/LEG_2026-10 (the importer's own main-file choice, hash and structure counts; 17 empty
-     rows point at an annex or wrapper, so the path is re-resolved, never copied) and corpus_version LEG_2026-10.
-     They keep their id, uuid, CELEX, title, text, EuroVoc tags and links. The 7 EU Canon holders keep their canon
-     path (the canon register reads it). Victor's choice, 14 Oct 2026: merge, then delete.
+  B. But the empty row is the only link to the act's text file in the export (214 holders point at Cellar only,
+     3 at a file of the deleted 2025 copy, 7 at a canon: label no code reads), and the importer finds a row by
+     uuid = folder. So before the empty row goes, each of the 224 holders takes, in one go: its folder as uuid
+     (nothing stores the holders' old uuids: 226 uuid-like columns scanned, 0 hits), the act's main file in
+     docs/LEG_2026-10 (the importer's own choice, re-resolved: some empty rows point at an annex or wrapper),
+     its hash, corpus_version LEG_2026-10, the structure counts under the holder's own metadata keys, and every
+     field the holder lacks (legal basis, citations, policy area) from the parsed file. The holder keeps its id,
+     CELEX, title, date, text, EuroVoc tags and links. Without the uuid, the next import would add the folder
+     again as a new row without CELEX. Victor's choice, 14 Oct 2026: merge, then delete; audited before the run.
   C. 232 LEG_2025-11 rows have no CELEX, no text on disk and are absent from the 2026 export: 152 annex or appendix
      fragments and 51 Official Journal wrappers imported as if they were acts (deleted here), plus 15 corrigenda and
      14 real documents such as Council appointment decisions (listed, left for a person; one is linked in EU Law Comply).
 
 Deleting is for a person to run: the automatic safeguard blocks bulk deletes in production. Dry run by default.
---apply writes a JSON backup of every row it deletes or changes, checks again that no table points at a row
-before deleting it, does everything in one transaction and re-measures afterwards.
+--apply writes a JSON backup of every row it deletes or changes (all columns; a restore must leave out the
+generated search_vector), checks again that no table points at a row before deleting it, asserts that the EU Law
+Comply link counts did not move, does everything in one transaction and re-measures afterwards.
 
 Usage (repo root):  PYTHONPATH=.:backend python3.12 -m backend.scripts.merge_eu_laws_duplicates [--apply]
 """
@@ -70,9 +74,7 @@ def plan(db):
         if cx in held:
             dup_ids.append(i)
             h = held[cx]
-            xp_h = h[3] or ""
-            if xp_h.startswith("cellar://") or (xp_h.startswith("docs/LEG_2025-11/") and not (ROOT / xp_h).exists()):
-                repoint.append({"id": h[1], "celex": cx, "folder": folder_of[cx]})
+            repoint.append({"id": h[1], "celex": cx, "folder": folder_of[cx]})
     old = db.execute(text("SELECT id, coalesce(title, '') FROM eu_laws WHERE (celex IS NULL OR celex = '') AND corpus_version = 'LEG_2025-11'")).fetchall()
     frag = [i for i, t in old if FRAGMENT.match(t)]
     documents = sorted(i for i, t in old if not FRAGMENT.match(t))  # corrigenda and real documents: a person decides
@@ -89,8 +91,7 @@ def main() -> int:
         dup_ids, repoint, frag_del, frag_kept, n_empty = plan(db)
         dup_ref = referenced(db, dup_ids)
         print(f"[INFO] A. empty LEG_2026-10 duplicates: {len(dup_ids)} of {n_empty} rows without CELEX | referenced by anything: {len(dup_ref)}")
-        print(f"[INFO] B. holders that take the act's export file before the duplicate goes: {len(repoint)} "
-              f"(left on their canon path: {len(dup_ids) - len(repoint)})")
+        print(f"[INFO] B. holders that take their folder (uuid, main file, hash, counts, missing fields) before the duplicate goes: {len(repoint)}")
         print(f"[INFO] C. 2025 fragment rows (annex, appendix, OJ wrapper) to delete: {len(frag_del)} | left for a person (corrigenda, real documents, anything referenced): {len(frag_kept)} {frag_kept}")
         assert not dup_ref, f"an empty duplicate is referenced: {sorted(dup_ref)}"
         if not a.apply:
@@ -105,6 +106,8 @@ def main() -> int:
         backup.write_text(json.dumps({"deleted_duplicates": dup_ids, "deleted_fragments": frag_del, "repointed": repoint, "rows_before": before}, default=str, indent=1))
         print(f"[OK] backup of {len(before)} rows -> {backup.relative_to(ROOT)}")
 
+        links = "SELECT (SELECT count(*) FROM cluster_laws), (SELECT count(*) FROM law_requirements)"
+        links_before = tuple(db.execute(text(links)).one())
         assert not referenced(db, dup_ids + frag_del), "a row to delete became referenced: stopped"
         n = db.execute(text("DELETE FROM eu_laws WHERE id = ANY(:i)"), {"i": dup_ids + frag_del}).rowcount
         mains, parser = dict(find_main_xml_files(CORPUS)), FormexParser()
@@ -114,18 +117,25 @@ def main() -> int:
             parsed = parser.parse_file(path)
             assert parsed.title and not parsed.title.lower().startswith(("annex", "official journal")), f"{r['celex']}: {parsed.title!r}"
             assert not getattr(parsed, "celex", None) or parsed.celex == r["celex"], f"{r['celex']}: file says {parsed.celex}"
-            counts = parsed_fields(parsed, stored_path(path), compute_file_hash(path), "LEG_2026-10")["extra_metadata"]
-            law.xml_path, law.content_hash, law.corpus_version = stored_path(path), compute_file_hash(path), "LEG_2026-10"
-            law.extra_metadata = {**counts, **(law.extra_metadata or {})}  # the holder's own keys win
+            fields = parsed_fields(parsed, stored_path(path), compute_file_hash(path), "LEG_2026-10")
+            for k, v in fields.items():  # fill only what the holder lacks: its Cellar values stay
+                if k not in ("xml_path", "content_hash", "corpus_version", "extra_metadata") and getattr(law, k) in (None, "", [], {}):
+                    setattr(law, k, v)
+            law.uuid = r["folder"]  # the importer finds a row by uuid = folder; the duplicate holding it is deleted above
+            law.xml_path, law.content_hash, law.corpus_version = fields["xml_path"], fields["content_hash"], "LEG_2026-10"
+            law.extra_metadata = {**fields["extra_metadata"], **(law.extra_metadata or {})}  # the holder's own keys win
+        db.flush()
+        assert tuple(db.execute(text(links)).one()) == links_before, "EU Law Comply link counts moved: rolled back"
         assert n == len(dup_ids) + len(frag_del), f"deleted {n}, expected {len(dup_ids) + len(frag_del)}: rolled back"
         db.commit()
         print(f"[OK] committed: {len(dup_ids)} duplicates and {len(frag_del)} fragments deleted, {len(repoint)} holders took their export file")
         after = plan(db)
-        held = db.execute(text("SELECT xml_path FROM eu_laws WHERE id = ANY(:i)"), {"i": [r["id"] for r in repoint]}).fetchall()
-        no_file = [x for (x,) in held if not (x or "").startswith("docs/LEG_2026-10/") or not (ROOT / x).exists()]
+        held = db.execute(text("SELECT xml_path, uuid::text FROM eu_laws WHERE id = ANY(:i)"), {"i": [r["id"] for r in repoint]}).fetchall()
+        no_file = [x for x, _ in held if not (x or "").startswith("docs/LEG_2026-10/") or not (ROOT / x).exists()]
+        not_folder = [u for x, u in held if (x or "").split("/")[2:3] != [u]]
         print(f"[VERIFY] after: duplicates {len(after[0])}, fragments without reference {len(after[2])}, referenced fragments kept {after[3]} "
-              f"| holders without their export file: {len(no_file)} of {len(held)}")
-        return 0 if not after[0] and not after[2] and not no_file else 1
+              f"| holders without their export file: {len(no_file)}, uuid not their folder: {len(not_folder)}, of {len(held)}")
+        return 0 if not after[0] and not after[2] and not no_file and not not_folder else 1
     except Exception:
         db.rollback()
         raise
