@@ -261,16 +261,24 @@ def scrutiny_from_events(events: List[dict], period: Optional[str], status: str)
                     scrutiny[who]["extension_months"] = int(float(raw)) if raw not in (None, "") else None
                 except (TypeError, ValueError):
                     scrutiny[who]["extension_months"] = None
-    months = shortest_period(period)
-    # An extension of unknown length counts as none: the floor stays a floor.
-    extension = max((s["extension_months"] or 0) for s in scrutiny.values())
-    closed_early = all(s["early_non_objection"] for s in scrutiny.values())
-    earliest = None
-    if adoption and months and not closed_early and status not in ("withdrawn", "cancelled"):
-        earliest = add_months(adoption, months + extension)
     return {"adoption_date": adoption, "publication_date": publication, "urgent": urgent,
             "ep_scrutiny": scrutiny["ep"], "council_scrutiny": scrutiny["council"],
-            "objection_deadline_earliest": earliest}
+            "objection_deadline_earliest": objection_floor(adoption, period, scrutiny, status)}
+
+
+def objection_floor(adoption, period: Optional[str], scrutiny: Dict[str, dict], status: str):
+    """Adoption + shortest period + extension: the objection period cannot end earlier.
+
+    None when the period or adoption date is unknown, when both institutions said early
+    that they will not object, and for a withdrawn or cancelled act.
+    """
+    months = shortest_period(period)
+    # An extension of unknown length counts as none: the floor stays a floor.
+    extension = max((s.get("extension_months") or 0) for s in scrutiny.values())
+    closed_early = all(s.get("early_non_objection") for s in scrutiny.values())
+    if adoption and months and not closed_early and status not in ("withdrawn", "cancelled"):
+        return add_months(adoption, months + extension)
+    return None
 
 
 # Regex helpers for parsing the "Basic legislative act" free-text column
@@ -431,11 +439,18 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
     celex = celex.strip() if isinstance(celex, str) else None
     if _blank(celex):
         celex = None
+    # The register exports some acts under a corrigendum's CELEX (C(2014)5033 ->
+    # 32014R1014R(03)); the act's own is the part before the suffix.
+    if celex and re.fullmatch(r"3\d{4}[A-Z]\d{4}R\(\d{2}\)", celex):
+        celex = celex[:10]
 
     policy = row.get("Policy area")
     policy_areas = []
     if isinstance(policy, str) and policy.strip():
-        policy_areas = [p.strip() for p in policy.split(",") if p.strip()]
+        # One name, not a list: the column holds the lead department's full name, and
+        # "Financial Stability, Financial Services and Capital Markets Union" split at its
+        # comma became two invented areas on 539 delegated acts (14 Oct 2026).
+        policy_areas = [policy.strip()]
 
     dg = row.get("Leading Service Commission")
     dg = dg.strip() if isinstance(dg, str) and dg.strip() else None
@@ -647,7 +662,10 @@ def read_scrutiny(conn, register: "Register", max_seconds: float,
             "adopt": adoption, "pub": s["publication_date"],
             "urgent": s["urgent"] or regdel_id in urgent_by_status,
             "ep": json.dumps(s["ep_scrutiny"]), "council": json.dumps(s["council_scrutiny"]),
-            "earliest": s["objection_deadline_earliest"],
+            # From the adoption date the row keeps: where the register's own is not kept
+            # (it gives 2014 for C(2020)5758), a floor from it would be wrong too.
+            "earliest": objection_floor(adoption, period, {"ep": s["ep_scrutiny"],
+                                                           "council": s["council_scrutiny"]}, status),
             "version": version, "id": row_id})
         out["read"] += 1
         out["adoption_filled"] += int(bool(s["adoption_date"] and not held_adoption))
@@ -781,7 +799,14 @@ def main() -> int:
                   parent_celex = CASE WHEN %(parent_from_register)s
                                       THEN COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex)
                                       ELSE COALESCE(secondary_acts.parent_celex, EXCLUDED.parent_celex) END,
-                  status       = EXCLUDED.status,
+                  -- The Official Journal outranks a register that has not caught up: an
+                  -- act we hold with a CELEX and as published is not sent back to an
+                  -- earlier stage (C(2025)885 is Regulation 2025/1190, published 18 Jun
+                  -- 2025, and still 'Scrutiny finished' in the register on 14 Oct 2026).
+                  status       = CASE WHEN secondary_acts.status = 'published'
+                                       AND coalesce(secondary_acts.celex, '') <> ''
+                                       AND EXCLUDED.status IN ('adopted', 'scrutiny_finished', 'notified')
+                                      THEN secondary_acts.status ELSE EXCLUDED.status END,
                   proposing_dg = COALESCE(EXCLUDED.proposing_dg, secondary_acts.proposing_dg),
                   source_url   = COALESCE(EXCLUDED.source_url, secondary_acts.source_url),
                   policy_areas = COALESCE(EXCLUDED.policy_areas, secondary_acts.policy_areas),
@@ -816,11 +841,22 @@ def main() -> int:
     # Keeping both, one in `reference` and the other in merged_from, leaves the evidence
     # for a human instead of silently picking. The @> guard stops the same alternative
     # being appended on every daily run.
+    # A row whose reference is only its own CELEX (91 delegated acts, 87 of which the
+    # register numbers) takes the register's C-number, the label the field documents,
+    # unless another row already holds that number. The CELEX stays in `celex`, and the
+    # item route answers to either.
+    TAKES_C_NUMBER = """secondary_acts.reference = secondary_acts.celex
+                     AND EXCLUDED.reference ~ '^C\\(\\d{4}\\)\\d+$'
+                     AND NOT EXISTS (SELECT 1 FROM secondary_acts o WHERE o.reference = EXCLUDED.reference)"""
+
     SQL_BY_CELEX = INSERT_HEAD + """
                 ON CONFLICT (celex) WHERE celex IS NOT NULL AND celex <> ''
                 DO UPDATE SET
     """ + SET_CLAUSE + """,
+                  reference = CASE WHEN """ + TAKES_C_NUMBER + """
+                                   THEN EXCLUDED.reference ELSE secondary_acts.reference END,
                   merged_from = CASE
+                    WHEN """ + TAKES_C_NUMBER + """ THEN secondary_acts.merged_from
                     WHEN secondary_acts.reference IS DISTINCT FROM EXCLUDED.reference
                      AND NOT (COALESCE(secondary_acts.merged_from, '[]'::jsonb)
                               @> jsonb_build_array(jsonb_build_object(
@@ -901,7 +937,36 @@ def main() -> int:
         if n % 200 == 0:
             conn.commit()
     conn.commit()
+
+    # Announced acts the register no longer announces. A planned row is keyed on its
+    # title, so when the act is adopted (under a C-number, often retitled) or dropped,
+    # the planned row stayed for ever: 11 on 14 Oct 2026, one of them the same act as
+    # C(2026)6808, served twice as 'planned' and 'adopted'. Retired only after a full read
+    # of the export, and only while the export lists at least 90% as many announced acts
+    # as we hold, so a short or broken export cannot empty the pipeline.
+    retired = []
+    pipeline_refs = [r["reference"] for r in all_rows if r["is_pipeline"]]
+    cur.execute("SELECT count(*) FROM secondary_acts WHERE reference LIKE 'PLANNED:%%' "
+                "AND act_type::text = ANY(%s)", (list(targets),))
+    held_planned = cur.fetchone()[0]
+    if args.limit:
+        pass
+    elif len(pipeline_refs) >= 0.9 * held_planned:
+        cur.execute("""
+            DELETE FROM secondary_acts
+             WHERE reference LIKE 'PLANNED:%%' AND act_type::text = ANY(%s)
+               AND NOT (reference = ANY(%s))
+         RETURNING reference, act_type::text, status::text, left(title, 90)""",
+                    (list(targets), pipeline_refs))
+        retired = cur.fetchall()
+        conn.commit()
+    else:
+        degraded.append(f"export lists {len(pipeline_refs)} announced acts against {held_planned} "
+                        f"held; none retired")
     conn.close()
+    if retired:
+        print(f"[INFO] {len(retired)} announced act(s) the register no longer announces, retired: "
+              + "; ".join(f"{t} {st} {title!r}" for _, t, st, title in retired[:15]))
 
     print(f"[DONE] inserted={inserted} updated={updated} errors={errors} "
           f"of {len(all_rows)} record(s)")
