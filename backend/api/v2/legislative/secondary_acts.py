@@ -35,33 +35,43 @@ implementing_router = APIRouter(prefix="/implementing-acts", tags=["v2-legislati
 @delegated_router.get(
     "",
     response_model=PaginatedResponse[SecondaryActItem],
-    summary="Commission delegated acts — secondary legislation under Article 290 TFEU",
+    summary="EU delegated acts: Commission acts that supplement or amend a law, with their scrutiny and full text",
     description="""**What it does**
-Returns Commission delegated acts — secondary legislation adopted by the Commission under powers delegated by a basic legislative act (Article 290 TFEU). Each row carries the act reference (e.g. `C(2026)1234`), the parent CELEX (the basic act granting the delegation), the parent procedure reference, the status, the proposing DG, the publication date, the EP/Council objection deadline (typically 2-3 months), the EP scrutiny status, the Council scrutiny status, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.
+Returns the Commission's delegated acts: acts that supplement or amend an EU law under a power that law gives the Commission (Article 290 TFEU). Every act the Interinstitutional Register of Delegated Acts (RegDel) lists is here, at every stage: announced (`planned`), `adopted`, `published` in the Official Journal, `objected` to by Parliament or the Council, `withdrawn` or `cancelled`. Each act carries the law it comes from, the scrutiny Parliament and the Council exercised over it, and its full text.
 
 **When to use it**
-To monitor secondary legislation flowing from a flagship regulation (e.g. all delegated acts under the AI Act), track the EP/Council objection window for delegated acts you might want to scrutinise, or audit which DGs are most active in delegated-act production. The `parent_celex` filter scopes to a specific parent act.
+To follow what the Commission adopts under a law you track (`parent_celex`), to catch acts whose objection period may still be running (`status=adopted`, then `objection_deadline_earliest`), or to keep a copy in sync (`updated_from` / `updated_to`).
 
 **Input**
-- `parent_celex` — CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).
-- `proposing_dg` — DG code.
-- `status` — one of `draft`, `planned`, `adopted`, `published`, `objected`, `rejected`, `withdrawn`, `cancelled`, `on_hold`, `notified`, `scrutiny_finished`, `unknown`. Mirrors the Commission RegDel register vocabulary; `unknown` means the register used a value we do not yet map.
-- `q` — substring search on title + description.
-- `published_from`, `published_to` — date filter on `publication_date`.
-- `updated_from` — incremental sync.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `parent_celex`: CELEX of the law that grants the power, e.g. `32018R0858` (motor vehicle type-approval).
+- `celex`: the act's own CELEX.
+- `proposing_dg`: the lead Commission department, e.g. `FISMA`.
+- `status`: `planned`, `adopted`, `published`, `objected`, `scrutiny_finished`, `notified`, `withdrawn`, `cancelled`, `on_hold`, `rejected`, `draft` or `unknown`. Any other value is a 422.
+- `q`: words in the title or summary.
+- `published_from`, `published_to`: the Official Journal date (`publication_date`).
+- `updated_from`, `updated_to`: incremental sync on `updated_date`, which moves only when something served changes. A bare date in `updated_to` covers the whole day.
+- `limit` (default 50, max 100), `page`.
 
 **Try it**
 ```
-GET /api/v2/legislative/delegated-acts?parent_celex=32024R1689&limit=20
-GET /api/v2/legislative/delegated-acts?proposing_dg=CNECT&status=scrutiny
+GET /api/v2/legislative/delegated-acts?status=adopted
+GET /api/v2/legislative/delegated-acts?parent_celex=32018R0858
+GET /api/v2/legislative/delegated-acts?proposing_dg=FISMA&published_from=2026-01-01
+GET /api/v2/legislative/delegated-acts?q=battery
 ```
 
 **You get back**
-A `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `objection_deadline`, `ep_scrutiny` (dict with EP rapporteur / motion status), `council_scrutiny` (dict), `celex` (if adopted), `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.
+A paginated envelope. Each act carries:
+- `reference` (the Commission number, `C(2026)3147`), `celex` once published, `title`, `description` (the register's summary, where it has one), `status`, `urgency_procedure`, `proposing_dg`, `policy_areas` (the lead department's area).
+- `parent_celex` and `parent_procedure_ref` (`2016/0014(COD)`), as the register records them.
+- `adoption_date`, `publication_date`, and `planned_adoption_period` for an announced act (`Q3 2026`).
+- `scrutiny_period` (`2 months`, `3 months`, or `1 or 3 months`), `ep_scrutiny` and `council_scrutiny`: the dates of each extension, objection, early non-objection and rejected motion, null where the register records none.
+- `objection_deadline_earliest`: adoption date + scrutiny period + extension, the earliest the objection period can end. No source publishes the day the period starts (the notification to Parliament and the Council), so the deadline itself, `objection_deadline`, is null.
+- `body_txt` and `body_html`: the full text. `body_source` says which: `official_journal` for a published act, `commission_document` for one adopted but not in the Official Journal (from the Commission's document register). An announced or cancelled act has no text.
+- `public_url`, `document_date`, `creation_date`, `updated_date`, `self`.
 
-**Data freshness**
-Synced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex C-series. New delegated acts appear on a steady drumbeat; daily sync catches them. Backed by `backend/scripts/backfill_eu_comitology.py`.""",
+**Coverage and freshness**
+Every delegated act in RegDel, about 2,160 adopted or announced since September 2010, with the register's gaps filled from the Publications Office: an act the register still shows without a CELEX takes the one the Publications Office records for its Commission number. Checked on 14 October 2026: every delegated act published in the Official Journal since 15 July 2024 is held (Regulation 2025/1511 under its republication, 2025/2273). Updated three times a day, at about 08:00, 14:00 and 20:00 UTC; an act's text arrives in the same run.""",
 )
 async def list_delegated_acts(
     request: Request,
@@ -90,26 +100,27 @@ async def list_delegated_acts(
 @delegated_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="Look up one delegated act by its Commission reference (e.g. C(2026)1234)",
+    summary="One delegated act, by its Commission number, CELEX or id",
     description="""**What it does**
-Fetches a single delegated act by its Commission reference. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.
+Returns one delegated act, with everything the list gives: its scrutiny, its dates and its full text.
 
 **When to use it**
-After locating a delegated act via the list endpoint, use this to fetch the full record (including body text + scrutiny details) in a deeper-link context.
+To follow an item's `self` link, or to check one act's scrutiny before its objection period ends.
 
 **Input**
-- `reference` (path) — the Commission reference, format `C(YYYY)NNNN`. The `:path` matcher means the parentheses are accepted verbatim — no URL-encoding needed.
+- `reference` (path): the Commission number, with its parentheses as they are (`C(2026)3147`), the CELEX (`32026R1753`) or the `id`. The id or number of a row merged into this one still resolves. An implementing act's number is a 404 that names the implementing-acts route.
 
 **Try it**
 ```
-GET /api/v2/legislative/delegated-acts/C(2026)1234
+GET /api/v2/legislative/delegated-acts/C(2026)3147
+GET /api/v2/legislative/delegated-acts/32026R1753
 ```
 
 **You get back**
-A single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+One act in the list's shape, or a 404 with `reason_code: not_found`.
 
 **Data freshness**
-Same as the list endpoint — daily 04:00 UTC sync from the RegDel register + EUR-Lex C-series.""",
+As the list: three times a day.""",
 )
 async def get_delegated_detail(
     reference: str,
@@ -123,33 +134,35 @@ async def get_delegated_detail(
 @implementing_router.get(
     "",
     response_model=PaginatedResponse[SecondaryActItem],
-    summary="Commission implementing acts — uniform implementation of EU law (Article 291 TFEU)",
+    summary="EU implementing acts: Commission acts that set uniform rules for applying a law, with their full text",
     description="""**What it does**
-Returns Commission implementing acts — secondary legislation adopted by the Commission under Article 291 TFEU to ensure uniform conditions for implementation of EU law (typically with a comitology committee opinion). Each row carries the act reference (e.g. `C(2026)0234`), the parent CELEX, the parent procedure reference, the status, the proposing DG, the publication date, the comitology examination/advisory procedure outcome, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.
+Returns the Commission's implementing acts: acts that lay down uniform conditions for applying an EU law (Article 291 TFEU), usually after a vote in a committee of Member State experts. It holds every act the Register of Delegated Acts lists as an implementing act, at every stage (`planned`, `adopted`, `published`, `cancelled`, `on_hold`), and published implementing acts found in the Publications Office.
 
 **When to use it**
-To monitor secondary legislation flowing from a flagship regulation (e.g. all implementing acts under MDR, REACH, CRR), track comitology committee outcomes (e.g. SCoPAFF votes on pesticides), or audit which DGs are most active in implementing-act production. The `parent_celex` filter scopes to a specific parent act.
+To follow the implementing acts under a law you track (`parent_celex`), for example the approvals of active substances under the plant protection products regulation, or to keep a copy in sync (`updated_from` / `updated_to`).
 
 **Input**
-- `parent_celex` — CELEX of the parent (basic) act (e.g. `32016R0679` for GDPR).
-- `proposing_dg` — DG code.
-- `status` — implementing-act status enum.
-- `q` — substring search on title + description.
-- `published_from`, `published_to` — date filter on `publication_date`.
-- `updated_from` — incremental sync.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `parent_celex`: CELEX of the law being implemented, e.g. `32009R1107` (plant protection products) or `32016R0679` (GDPR).
+- `celex`: the act's own CELEX.
+- `proposing_dg`: the lead Commission department, e.g. `SANTE`.
+- `status`: `planned`, `adopted`, `published`, `cancelled` or `on_hold` (the other delegated-act values are accepted and match nothing). Any value outside the list is a 422.
+- `q`: words in the title or summary.
+- `published_from`, `published_to`: the Official Journal date (`publication_date`).
+- `updated_from`, `updated_to`: incremental sync on `updated_date`. A bare date in `updated_to` covers the whole day.
+- `limit` (default 50, max 100), `page`.
 
 **Try it**
 ```
-GET /api/v2/legislative/implementing-acts?proposing_dg=SANTE&q=glyphosate
-GET /api/v2/legislative/implementing-acts?parent_celex=32016R0679&limit=20
+GET /api/v2/legislative/implementing-acts?parent_celex=32009R1107
+GET /api/v2/legislative/implementing-acts?parent_celex=32016R0679
+GET /api/v2/legislative/implementing-acts?q=residue
 ```
 
 **You get back**
-A `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `ep_scrutiny`, `council_scrutiny`, `celex`, `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.
+A paginated envelope of acts in the same shape as `/delegated-acts`. The scrutiny fields (`scrutiny_period`, `ep_scrutiny`, `council_scrutiny`, `objection_deadline_earliest`) are empty: Parliament and the Council do not scrutinise implementing acts the way they scrutinise delegated ones. `body_source` says where the text comes from (`official_journal` or `commission_document`); an announced or cancelled act has none.
 
-**Data freshness**
-Synced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR-Lex C-series.""",
+**Coverage and freshness**
+Every implementing act in the register, about 5,600 since 2009, plus about 600 published ones the Publications Office lists. Updated three times a day, at about 08:00, 14:00 and 20:00 UTC; an act's text arrives in the same run.""",
 )
 async def list_implementing_acts(
     request: Request,
@@ -178,26 +191,27 @@ async def list_implementing_acts(
 @implementing_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="Look up one implementing act by its Commission reference (e.g. C(2026)0234)",
+    summary="One implementing act, by its Commission number, CELEX or id",
     description="""**What it does**
-Fetches a single Commission implementing act by its reference. Implementing acts (Article 291 TFEU) lay down uniform conditions for the implementation of EU legislation across Member States. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.
+Returns one implementing act, with its dates and its full text.
 
 **When to use it**
-After locating an implementing act via the list endpoint, use this to fetch the full record in a deeper-link context. Note: the difference between delegated acts (Art. 290, modify or supplement the basic act) and implementing acts (Art. 291, uniform implementation) is constitutionally significant for legal-affairs work.
+To follow an item's `self` link.
 
 **Input**
-- `reference` (path) — the Commission reference, format `C(YYYY)NNNN`. Path-matching accepts parentheses verbatim.
+- `reference` (path): the Commission number, with its parentheses as they are (`C(2026)6950`), the CELEX (`32026R2212`) or the `id`. The id or number of a row merged into this one still resolves. A delegated act's number is a 404 that names the delegated-acts route.
 
 **Try it**
 ```
-GET /api/v2/legislative/implementing-acts/C(2026)0234
+GET /api/v2/legislative/implementing-acts/C(2026)6950
+GET /api/v2/legislative/implementing-acts/32026R2212
 ```
 
 **You get back**
-A single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+One act in the list's shape, or a 404 with `reason_code: not_found`.
 
 **Data freshness**
-Same as the list endpoint — daily 04:00 UTC sync from the Comitology Register + EUR-Lex C-series.""",
+As the list: three times a day.""",
 )
 async def get_implementing_detail(
     reference: str,
