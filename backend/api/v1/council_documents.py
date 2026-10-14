@@ -1,17 +1,12 @@
 """
-/api/v1/council-documents — Council of the EU document register.
+/api/v1/council-documents — Council of the EU documents.
 
-W2 P1 deliverable from Marcadors B.2 (consilium.europa.eu/en/documents/).
-Council documents are a critical signal for trilogue + Council position tracking.
-
-Implementation note: this endpoint UNIONs three sources today:
-  1) institutional_publications rows whose institution_slug matches Council
-  2) eu_calendar_events with institution in (COUNCIL, EUROPEAN_COUNCIL)
-     (Council meetings are first-class "Council documents" via their agendas)
-
-A dedicated council_documents table with COREPER + working-party + Council
-configuration linkage is queued for week 4. Until then this surface returns
-the Council data we already have ingested.
+Two sources:
+  1) institutional_publications rows of the Council: register documents found by
+     reference on data.consilium (scripts/discover_council_documents.py, three times a
+     day) and press releases from the Council's RSS feed
+     (scripts/sync_council_press_releases.py, every three hours);
+  2) with source=meetings or all, eu_calendar_events for COUNCIL / EUROPEAN_COUNCIL.
 """
 
 import logging
@@ -313,37 +308,40 @@ def _cal_to_item(r) -> CouncilDocumentItem:
 @router.get(
     "",
     response_model=PaginatedResponse[CouncilDocumentItem],
-    summary="Council of the EU documents — press releases, conclusions, meeting agendas, summits",
+    summary="Council of the EU documents: the public register and press releases (meetings on request)",
     description="""**What it does**
-Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council register documents (notes, working documents, presidency discussion notes), meeting agendas and summit outcomes. It unions Council-tagged `institutional_publications` with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL.
+Returns Council of the EU documents: the documents of the Council's public register (CM meeting notices and provisional agendas of the Council's working parties, ST standard documents, WK working documents, with their revisions, addenda and corrigenda) and the Council's press releases. With `source=meetings` it returns Council and European Council meetings from the calendar instead; `source=all` returns both.
 
 **What the corpus covers, and what it does not**
-Read `coverage_note`, `coverage_from` and `coverage_to` on every response before concluding that an empty result means the Council said nothing. The register's SEARCH is behind a Cloudflare challenge (re-checked 24 September 2026 against plain HTTP, a stealth browser and three Scrape.do modes), so documents reach Brubru through the register's own unwalled listings (latest documents, provisional agendas) and the full press-release feed. That is a broad slice, not the complete Council corpus. Until 27 August 2026 the document half held **zero rows** and this endpoint returned only meetings, so a query like `?q=minors` came back empty and read as Council silence — while 25 Member States had in fact signed the Jutland Declaration on protecting minors online.
+- Register documents: every document data.consilium.europa.eu serves by its reference, from 15 July 2024 (the start of the 10th Parliament) onwards, plus about 130 older ones. A document the Council has not released is not served there and is not here. Each carries its whole text, read from the PDF, and the date printed on it.
+- Press releases: read from the Council's RSS feed since 14 October 2026, plus 57 read between 14 August and 28 September 2026; releases published between 29 September and 8 October 2026 are not held. A release carries its title, date, topic and the feed's one-paragraph summary: the full text sits behind a browser check on the Council's website, which Brubru does not get past, so `body_txt` is that summary.
+- Read `coverage_note`, `coverage_from` and `coverage_to` before concluding that an empty result means the Council said nothing.
 
 **When to use it**
-For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.
+For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), the agendas and outcomes of Council and Coreper meetings, working-party work in progress, and what the Council announces. The register shows a file moving weeks before a press release does.
 
 **Input**
-- `source` — `documents` (default): the register and press corpus. `meetings`: Council meetings from the calendar. `all`: both. Until 24 September 2026 there was no such parameter and the answer was always both, ordered by date; because meetings are FUTURE-dated, an endpoint called council-documents opened with next month's summits and read as a calendar.
-- `q` — substring search.
-- `document_type` — `press_release` / `conclusions` / `meeting_agenda` / etc.
-- `policy_area` — single policy area tag.
-- `published_from`, `published_to` (and `published_end` alias).
-- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `source` — `documents` (default): register documents and press releases. `meetings`: Council and European Council meetings from the calendar. `all`: both.
+- `q` — words searched in the title, the summary and the whole text.
+- `document_type` — `document` (a register document) or `press_release`; `meeting_agenda` with `source=meetings`.
+- `policy_area` — the register's subject code printed on a document read before 28 September 2026 (for example `AGRI`, `ENER`), or a press release's topic (for example `Social policy`). Most register documents carry none: search with `q`.
+- `published_from`, `published_to` (and `published_end` alias) — the document's own date.
+- `updated_from`, `updated_to` (and `updated_end` alias) — when the row's content last changed in Brubru, which each item carries as `updated_date`: use them for incremental sync.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
 ```
-GET /api/v1/council-documents?document_type=conclusions&published_from=2026-01-01
-GET /api/v1/council-documents?policy_area=energy
+GET /api/v1/council-documents?q=conclusions&published_from=2026-01-01
+GET /api/v1/council-documents?document_type=press_release
+GET /api/v1/council-documents?q=minors
 GET /api/v1/council-documents?source=meetings
 ```
 
 **You get back**
-A `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries reference, title, document_type, policy_area, dates, source URL, and the 5 envelope-level datapoints.
+A `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries `id`, `self`, `title`, `document_type`, `url` and `public_url` (the PDF on data.consilium for a register document, the release page for a press release), `document_date` (the date printed on the document), the whole text in `body_txt` and `body_html`, `creation_date` (when Brubru first stored it) and `updated_date` (when its content last changed).
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC, warm tier) for now — will move to dedicated 6h scraper once the Council document register scraper ships. Meanwhile, this surface unions data from the publications sync (every 6h) and the calendar sync (every 6h).""",
+Register documents three times a day (about 07:00, 13:00 and 19:00 UTC): each run asks for the new reference numbers and again for those of the last three weeks, so a document released late is found within a day. Press releases every three hours from the RSS feed. Meetings with the calendar sync.""",
 )
 async def list_council_documents(
     request: Request,
@@ -493,11 +491,14 @@ async def list_council_documents(
     # no listing API), so documents are pulled per policy term.
     cov = db.execute(_COVERAGE_SQL).fetchone()
     coverage_note = (
-        "Council press releases in full, plus register documents matching Brubru's "
-        "35 canonical policy areas (the register is queryable, not enumerable, so "
-        "this is a policy-driven slice rather than the complete Council corpus), "
-        "plus Council and European Council meetings from the calendar. An empty "
-        "result means nothing matched THIS corpus, not that the Council was silent."
+        "Council register documents (CM, ST, WK, with revisions, addenda and corrigenda) "
+        "as data.consilium serves them by reference, from 15 July 2024, each with its "
+        "whole text; Council press releases from the Council's RSS feed since 14 October "
+        "2026 (title, date, topic and summary: the full text is behind a browser check), "
+        "plus 57 from 14 August to 28 September 2026; Council and European Council "
+        "meetings with source=meetings or all. A document the Council has not released "
+        "is not here. An empty result means nothing matched THIS corpus, not that the "
+        "Council was silent."
     )
 
     return build_envelope(
@@ -518,10 +519,10 @@ async def list_council_documents(
     response_model=CouncilDocumentItem,
     summary="One Council document or meeting by id — full body (text + HTML)",
     description="""**What it does**
-Fetches a single Council of the EU item by its Brubru-internal UUID — either a Council institutional publication (press release, conclusions) or a Council / European Council meeting from the calendar. Returns the same shape as the list endpoint with the 5 datapoints filled: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.
+Fetches a single Council of the EU item by its Brubru-internal UUID: a register document, a press release, or a Council / European Council meeting from the calendar. Returns the same shape as the list endpoint: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`, `updated_date`.
 
 **When to use it**
-After locating an item via the list endpoint, use this to fetch the full record. For publications the body is the stored HTML content (or summary); for meetings the body is composed from the meeting facts (configuration, date, the legislative files on the agenda).
+After locating an item via the list endpoint, use this to fetch the full record. A register document carries its whole text; a press release the feed's summary; a meeting a body composed from the meeting facts (configuration, date, the legislative files on the agenda).
 
 **Input**
 - `doc_id` (path) — the Brubru-internal UUID from the list endpoint's `id`.
@@ -542,7 +543,12 @@ async def get_council_document_detail(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> CouncilDocumentItem:
-    pub = db.query(InstitutionalPublication).filter(InstitutionalPublication.id == doc_id).first()
+    pub = db.query(InstitutionalPublication).filter(
+        InstitutionalPublication.id == doc_id,
+        # Only a Council publication: the table holds every institution's, and until 14 Oct
+        # 2026 this route answered an ECB or EMA publication's id as a Council document.
+        or_(*[InstitutionalPublication.institution_slug.ilike(f"%{slug}%") for slug in COUNCIL_INSTITUTION_SLUGS]),
+    ).first()
     if pub is not None:
         return _pub_to_item(pub)
     event = (
