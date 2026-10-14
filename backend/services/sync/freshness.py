@@ -19,6 +19,12 @@ from services.sync.source_registry import MEUB_SOURCES, get_source
 
 logger = logging.getLogger(__name__)
 
+# How a job that stopped itself at its time budget opens its `degraded` reason (14 Oct
+# 2026). It kept what it had stored, so it is not a failure; but the cron verdict counts
+# it as a problem, and two in a row of the same source turn the run red: a source that
+# never finishes inside its budget must not sit quietly in `degraded` for ever.
+BUDGET_STOP = "time budget reached"
+
 
 def current_runner() -> str:
     """Where this process runs. sync_runs is shared, so a laptop run used to be

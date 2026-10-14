@@ -43,6 +43,16 @@ an AUDIT source (SourceSpec.is_audit), which exits non-zero to report gaps it
 found -- that is the auditor working. Counting it would paint every run red for
 ever and the signal would die again, the other way round.
 
+A source's SINGLE failure does not make the run red either (14 October 2026). In the
+7 days to 14 Oct the run went red in 35 hours, and 16 of those were one failure that the
+same source's next run did not repeat: a page that hung once (EIT, EEAS, EU GovTech), an
+EU site briefly down (EP Open Data, eMeeting, the RegDel and COM registers). Red now means the
+same source failed twice in a row, or failed with no good run for NO_GOOD_RUN_HOURS (a
+weekly source, whose next try is days away). A first failure is printed on its own line
+and stays in sync_runs and /api/sync/health. The facts come from the backend
+(`previous_problem`, `last_good_at` on each ledger row); a row without them (an older
+backend) is judged the old way, so a deploy order can never hide a failure.
+
 Usage:
     BACKEND_URL=https://brubru-production.up.railway.app \\
     CRON_SECRET=... \\
@@ -108,6 +118,12 @@ LEDGER_MINUTES = 360
 FIRST_LOOKBACK_MINUTES = 70
 JUDGED_KEY = "cron_judged"
 OK_STATUSES = ("success", "ok", "skipped", "degraded")
+# A failed source with no good run for this long is red on its first failure. A day and
+# a half: every source that runs at least daily has had its retry by then, and a weekly
+# or monthly one would otherwise wait days for its second failure. Not the registry's
+# `stale_after_hours`: the news feeds' 7 hours is shorter than the 8-hour gap between
+# their own runs, so it would make every single failure red again.
+NO_GOOD_RUN_HOURS = 36
 
 
 def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
@@ -206,32 +222,79 @@ def _ts(value):
     return d if d.tzinfo else d.replace(tzinfo=datetime.timezone.utc)
 
 
-def _judge_ledger(status: dict | None) -> tuple[list[str], str | None]:
-    """Failures among the sources that finished since the previous run's verdict, plus the
-    instant (the database's clock) to record as this run's verdict. Pure: unit-tested."""
-    if status is None:
-        return ["runs-since=unreadable"], None
+def _judged_rows(status: dict | None) -> list[dict]:
+    """The ledger rows that finished since the previous run's verdict (the cursor) and
+    before this read. Pure: unit-tested."""
+    if not status:
+        return []
     runs = status.get("runs") or []
-    now_s = status.get("now")
-    now = _ts(now_s)
+    now = _ts(status.get("now"))
     marks = [m for m in (_ts(r.get("finished_at")) for r in runs if r.get("source_key") == JUDGED_KEY) if m]
     if marks:
         cursor = max(marks)
     else:  # first run with this rule, or no mark within LEDGER_MINUTES
         cursor = (now or datetime.datetime.now(datetime.timezone.utc)) - datetime.timedelta(minutes=FIRST_LOOKBACK_MINUTES)
-    failures = []
+    out = []
     for r in runs:
         if r.get("source_key") in (JUDGED_KEY, "cron_dispatch"):
             continue
         fin = _ts(r.get("finished_at"))
         if fin is None or fin <= cursor or (now is not None and fin > now):
             continue
-        if r.get("status") not in OK_STATUSES:
-            failures.append(f"{r.get('source_key')}={r.get('status')}")
+        out.append(r)
+    return out
+
+
+def _judge_row(r: dict, now: datetime.datetime | None) -> tuple[str, str] | None:
+    """(verdict, label) for one ledger row: verdict 'red' or 'first', None when fine.
+
+    A row carrying the backend's facts (`previous_problem`, `last_good_at`) is red only
+    when the same source's previous run was also a problem, or it failed with no good run
+    for NO_GOOD_RUN_HOURS. `problem` is a failure, or a run stopped at its time budget
+    (a `degraded` that is not fine twice). A row without the facts is red when it failed:
+    the rule before 14 Oct 2026."""
+    label = f"{r.get('source_key')}={r.get('status')}"
+    if "previous_problem" not in r:
+        return ("red", label) if r.get("status") not in OK_STATUSES else None
+    if not r.get("problem"):
+        return None
+    if r.get("previous_problem"):
+        return "red", f"{label} (twice in a row)"
+    if r.get("status") not in OK_STATUSES:
+        good = _ts(r.get("last_good_at"))
+        if good is None:
+            return "red", f"{label} (no good run on record)"
+        hours = ((now or datetime.datetime.now(datetime.timezone.utc)) - good).total_seconds() / 3600
+        if hours > NO_GOOD_RUN_HOURS:
+            return "red", f"{label} (no good run for {hours:.0f}h)"
+    return "first", label
+
+
+def _judge_ledger(status: dict | None, first: list[str] | None = None) -> tuple[list[str], str | None]:
+    """Failures among the sources that finished since the previous run's verdict, plus the
+    instant (the database's clock) to record as this run's verdict. A source's first
+    failure is not among them: it goes into `first` when a list is given. Pure: unit-tested."""
+    if status is None:
+        return ["runs-since=unreadable"], None
+    now_s = status.get("now")
+    now = _ts(now_s)
+    failures = []
+    for r in _judged_rows(status):
+        verdict = _judge_row(r, now)
+        if verdict and verdict[0] == "red":
+            failures.append(verdict[1])
+        elif verdict and first is not None:
+            first.append(verdict[1])
     for path, age in sorted((status.get("in_flight_seconds") or {}).items()):
         if float(age) > HUNG_SECONDS:
             failures.append(f"{path}=in flight for {float(age) / 3600:.1f}h (hung)")
     return failures, now_s
+
+
+def _print_first_failures(first: list[str]) -> None:
+    if first:
+        print(f"[CRON-DISPATCH] FIRST FAILURES (recorded, not red; red if the source's next run "
+              f"fails too): {', '.join(first[:40])}", flush=True)
 
 
 def _mark_judged(at: str | None) -> None:
@@ -468,10 +531,12 @@ def main():
     if not fires:
         # Nothing to fire, but a tier fired earlier may have finished since the last
         # verdict: judge it now, or a failure in its tail would never be reported.
-        failures, at = _judge_ledger(_status_since(LEDGER_MINUTES))
+        first: list[str] = []
+        failures, at = _judge_ledger(_status_since(LEDGER_MINUTES), first)
         _mark_judged(at)
         print(f"[CRON-DISPATCH] No tiers due at hour {now.hour:02d} UTC. "
               f"Ledger since the last verdict: {len(failures)} failed.", flush=True)
+        _print_first_failures(first)
         if failures:
             print(f"[CRON-DISPATCH] FAILED JOBS: {', '.join(failures[:40])}", flush=True)
             sys.exit(1)
@@ -513,6 +578,13 @@ def main():
             job_failures.append(f"{','.join(detached)}=no runs recorded")
         else:
             print(f"[CRON-DISPATCH] Ledger: {len(runs)} run(s) recorded by this run's tiers so far", flush=True)
+    # Every source that finished since the previous verdict, this run's and the tail of
+    # earlier ones alike. Read before the payloads: a job the ledger judges with its
+    # history is left to that verdict, or its first failure would be red here anyway.
+    ledger = _status_since(LEDGER_MINUTES)
+    first: list[str] = []
+    ledger_failures, at = _judge_ledger(ledger, first)
+    judged = {r.get("source_key") for r in _judged_rows(ledger) if "previous_problem" in r}
     for label, payload in results.items():
         for job, status in _iter_job_statuses(payload):
             # "degraded" = an AUDIT source found gaps (it exits non-zero to say
@@ -521,13 +593,14 @@ def main():
             # is how a red build stops meaning anything. It stays visible in
             # sync_runs and /api/sync/health.
             if status not in ("success", "ok", "skipped", "degraded"):
+                if job in judged or f"economy_{job}" in judged:
+                    continue
                 job_failures.append(f"{label}/{job}={status}")
 
-    # Every source that finished since the previous verdict, this run's and the tail of
-    # earlier ones alike, then the mark the next run starts from.
-    ledger_failures, at = _judge_ledger(_status_since(LEDGER_MINUTES))
     job_failures.extend(ledger_failures)
+    # The mark the next run starts from.
     _mark_judged(at)
+    _print_first_failures(first)
 
     print(
         f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed} "

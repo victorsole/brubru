@@ -16,9 +16,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as _dt
 from functools import partial
+import os
+import signal
 import sys
+import time
 from pathlib import Path
 
 import psycopg2  # noqa: E402
@@ -817,6 +821,75 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
     return n
 
 
+class _OutOfTime(BaseException):
+    """The run's time budget ran out. A BaseException, so a scraper's own `except
+    Exception` around a page cannot swallow it and carry on."""
+
+
+# Below this many seconds left, the next resource is not started at all.
+_MIN_START_SECONDS = 20
+
+
+@contextlib.contextmanager
+def _deadline(seconds: float):
+    """Raise _OutOfTime in this (the main) thread after `seconds`, and every 10 s after
+    that until the block is left, so a clean-up that hangs in turn (asyncio cancelling a
+    Playwright page) is cut as well. No-op when `seconds` is None."""
+    if seconds is None:
+        yield
+        return
+
+    def _ring(signum, frame):
+        raise _OutOfTime()
+
+    old = signal.signal(signal.SIGALRM, _ring)
+    signal.setitimer(signal.ITIMER_REAL, max(seconds, 0.01), 10)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
+def _end_children() -> None:
+    """After a stop at the budget, end what this run started (Chromium, the Playwright
+    driver): an orphan holding our stdout keeps the cron runner waiting until its kill.
+    Only as the leader of our own session, which the cron runner gives every script
+    (start_new_session=True); from a terminal the group is the shell's job."""
+    try:
+        if os.getsid(0) != os.getpid():
+            return
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)  # the group includes this process
+        os.killpg(os.getpgrp(), signal.SIGTERM)
+    except OSError:
+        pass
+
+
+def _run_targets(db, targets, run_one, max_seconds: float | None) -> tuple[int, str | None, list[str]]:
+    """Run each (body, item_type) in turn: (items stored, the resource stopped at the
+    budget or None, the resources not started). One resource failing never stops the
+    rest; the budget does, after keeping everything already stored."""
+    deadline = time.monotonic() + max_seconds if max_seconds else None
+    total, stopped, not_started = 0, None, []
+    for body, itype in targets:
+        left = None if deadline is None else deadline - time.monotonic()
+        if stopped or (left is not None and left < _MIN_START_SECONDS):
+            not_started.append(f"{body}/{itype}")
+            continue
+        try:
+            with _deadline(left):
+                total += run_one(body, itype)
+        except _OutOfTime:
+            signal.setitimer(signal.ITIMER_REAL, 0)  # a ring can land before _deadline's own reset
+            db.rollback()
+            stopped = f"{body}/{itype}"
+            print(f"[WARN] {stopped}: stopped at the time budget of {max_seconds:.0f}s", flush=True)
+        except Exception as exc:  # one resource failing must not abort the rest
+            db.rollback()
+            print(f"[ERROR] {body}/{itype}: {exc}", flush=True)
+    return total, stopped, not_started
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["dpp", "ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
@@ -828,6 +901,9 @@ def main() -> None:
     ap.add_argument("--refetch-all", action="store_true",
                     help="fetch every listed item's page again, including the ones stored complete")
     ap.add_argument("--legal-limit", type=int, default=200)
+    ap.add_argument("--max-seconds", type=float, default=0,
+                    help="stop at this many seconds, keep what is stored and report the run "
+                         "degraded (0 = no limit; the cron passes one below its kill)")
     args = ap.parse_args()
 
     if args.all_ecb:
@@ -843,16 +919,21 @@ def main() -> None:
         ap.error("pass --body or --all-ecb")
 
     db = ChunkedDb(autocommit=False)
-    total = 0
     try:
-        for body, itype in targets:
-            try:
-                total += _run_one(db, body, itype, fetch_bodies=not args.no_bodies,
-                                  legal_limit=args.legal_limit, refetch_all=args.refetch_all)
-            except Exception as exc:  # one resource failing must not abort the rest
-                db.rollback()
-                print(f"[ERROR] {body}/{itype}: {exc}", flush=True)
+        total, stopped, not_started = _run_targets(
+            db, targets,
+            lambda body, itype: _run_one(db, body, itype, fetch_bodies=not args.no_bodies,
+                                         legal_limit=args.legal_limit, refetch_all=args.refetch_all),
+            args.max_seconds or None)
         print(f"[DONE] total upserted: {total}", flush=True)
+        if stopped or not_started:
+            # Before 14 Oct 2026 the cron killed this run at 600 s: recorded `failed`, with
+            # no word on which page it was on. Now it says, and keeps what it stored.
+            _end_children()
+            from services.sync.freshness import BUDGET_STOP
+            print(f"[SYNC_STATUS] degraded: {BUDGET_STOP} ({args.max_seconds:.0f}s) during "
+                  f"{stopped or 'none'}; not started: {', '.join(not_started) or 'none'}; "
+                  f"{total} item(s) stored", flush=True)
 
         # New news items nobody could date were NOT upserted. Record them in the
         # ledger (never the exit code; see services/news/write_guard.py).

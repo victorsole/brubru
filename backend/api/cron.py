@@ -1040,6 +1040,14 @@ _ECONOMY_BATCHES: list[list[str]] = [
 # offending body to a local/manual refresh (drop it from this list).
 
 
+# Each body's sync_economy.py run stops itself at this many seconds and keeps what it
+# stored (14 Oct 2026). It was killed at 600 s instead, 17 times in the week to 13 Oct
+# (ESMA 8, EIT 3, EU GovTech 2, EEAS 2, EMA 2), and recorded `failed` with no word on
+# which page it was on. The longest clean run measured is 583 s (EBA), so the budget sits
+# above it and the kill, kept as the backstop for a run that cannot stop, a minute later.
+ECONOMY_BODY_SECONDS = 590
+
+
 # Strong references to in-flight economy background tasks. Without this the
 # event loop can garbage-collect a bare create_task() coroutine mid-run.
 _economy_tasks: set = set()
@@ -1070,7 +1078,8 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
             body_started = datetime.now(timezone.utc)
             res = await _run_script_async(
                 f"economy_{body}", "scripts/sync_economy.py",
-                ["--body", body, "--type", "all"], timeout=600,
+                ["--body", body, "--type", "all", "--max-seconds", str(ECONOMY_BODY_SECONDS)],
+                timeout=ECONOMY_BODY_SECONDS + 60,
             )
             status = res.get("status")
             results[body] = status
@@ -1080,7 +1089,7 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
             else:
                 detail = str(res.get("stderr_tail") or res.get("error")
                              or res.get("reason") or f"rc={res.get('returncode')}")[:400]
-                failures.append(f"{body}: {detail}")
+                failures.append(f"{body}{' (degraded)' if status == 'degraded' else ''}: {detail}")
 
             # Record a run PER BODY, not only per batch.
             #
@@ -1096,9 +1105,11 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
             # dashboard, which is the only way the next one gets noticed.
             _db = SessionLocal()
             try:
+                # `degraded` passes through: a body that stopped at its time budget
+                # stored what it had, and was recorded `failed` here before 14 Oct 2026.
                 record_run(
                     _db, source_key=f"economy_{body}", tier=f"economy_b{batch}",
-                    status=("success" if status == "success" else "failed"),
+                    status=(status if status in ("success", "degraded") else "failed"),
                     error=detail, started_at=body_started,
                     finished_at=datetime.now(timezone.utc),
                 )
@@ -1605,6 +1616,34 @@ def _send_staleness_email(stale: list[dict]) -> None:
         logger.warning("[CRON] Staleness email failed: %s", exc)
 
 
+# A run that is a problem for the cron verdict: it failed, or it stopped itself at its
+# time budget (freshness.BUDGET_STOP). `previous_problem` is the same source's run before
+# it (skipped runs and laptop runs aside), `last_good_at` its latest run that delivered.
+_PROBLEM = ("({t}.status NOT IN ('success', 'ok', 'skipped', 'degraded') "
+            "OR ({t}.status = 'degraded' AND {t}.error LIKE (:budget || '%')))")
+_RUNS_SINCE_SQL = f"""
+    SELECT r.source_key, r.tier, r.status, r.started_at, r.finished_at,
+           {_PROBLEM.format(t='r')} AS problem,
+           p.problem AS previous_problem,
+           g.last_good_at
+      FROM sync_runs r
+      LEFT JOIN LATERAL (
+            SELECT {_PROBLEM.format(t='q')} AS problem
+              FROM sync_runs q
+             WHERE q.source_key = r.source_key AND q.runner IS DISTINCT FROM 'local'
+               AND q.status <> 'skipped' AND q.started_at < r.started_at
+             ORDER BY q.started_at DESC LIMIT 1) p ON true
+      LEFT JOIN LATERAL (
+            SELECT max(q.finished_at) AS last_good_at
+              FROM sync_runs q
+             WHERE q.source_key = r.source_key AND q.runner IS DISTINCT FROM 'local'
+               AND q.status IN ('success', 'ok', 'degraded') AND q.finished_at <= r.finished_at) g ON true
+     WHERE r.started_at > now() - (:m || ' minutes')::interval
+       AND r.runner IS DISTINCT FROM 'local'
+     ORDER BY r.started_at
+"""
+
+
 @router.get("/runs-since")
 async def cron_runs_since(
     minutes: int = 120,
@@ -1622,19 +1661,18 @@ async def cron_runs_since(
 
     Local rows (a developer's laptop writes to the same table) are excluded, as in the tier
     health verdict.
+
+    Each row also says whether the same source's previous run was a problem and when it
+    last delivered (14 Oct 2026): the dispatcher calls a source's first failure a first
+    failure, not a red run.
     """
     _verify_cron_secret(authorization)
     from sqlalchemy import text
+    from services.sync.freshness import BUDGET_STOP
     minutes = max(1, min(int(minutes), 720))
     db = SessionLocal()
     try:
-        rows = db.execute(text("""
-            SELECT source_key, tier, status, started_at, finished_at
-              FROM sync_runs
-             WHERE started_at > now() - (:m || ' minutes')::interval
-               AND runner IS DISTINCT FROM 'local'
-             ORDER BY started_at
-        """), {"m": minutes}).mappings().all()
+        rows = db.execute(text(_RUNS_SINCE_SQL), {"m": minutes, "budget": BUDGET_STOP}).mappings().all()
         server_now = db.execute(text("SELECT now()")).scalar()
     finally:
         db.close()
@@ -1658,7 +1696,10 @@ async def cron_runs_since(
                       for p, v in _COMPLETED.items()},
         "runs": [{"source_key": r["source_key"], "tier": r["tier"], "status": r["status"],
                   "started_at": r["started_at"].isoformat() if r["started_at"] else None,
-                  "finished_at": r["finished_at"].isoformat() if r["finished_at"] else None}
+                  "finished_at": r["finished_at"].isoformat() if r["finished_at"] else None,
+                  "problem": bool(r["problem"]),
+                  "previous_problem": r["previous_problem"],
+                  "last_good_at": r["last_good_at"].isoformat() if r["last_good_at"] else None}
                  for r in rows],
     }
 
