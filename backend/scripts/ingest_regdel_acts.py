@@ -82,6 +82,168 @@ def fetch_excel(act_type: str) -> bytes:
         return r.read()
 
 
+# ---------------------------------------------------------------------------
+# The register's own API: what the Excel export leaves out (14 Oct 2026)
+# ---------------------------------------------------------------------------
+# The export has ten columns and no scrutiny: objection_deadline, ep_scrutiny,
+# council_scrutiny and parent_procedure_ref were empty on all 2,162 delegated acts, 43 of
+# the 49 adopted acts had no adoption date, and parent_celex came from a regex over the
+# basic act's title, which took an act NAMED in that title (Directive 2009/39 for
+# Regulation 609/2013) on 47 acts and found nothing on 142. The register's web page reads
+# a JSON API that carries the basic act's CELEX, procedure and scrutiny period, and per
+# act the adoption, extension, objection and early non-objection events. It is the page's
+# own API: a session cookie and the XSRF token the page sets, nothing else.
+#
+# What it does NOT publish is the day the scrutiny period starts (the notification to
+# Parliament and Council). The document register's "date of transmission" is not it:
+# tested on 58 published acts, 30 would have been published before their deadline, and
+# acts from 2012-2017 carry 2021 dates. So no deadline is computed. What is certain is a
+# floor: notification never precedes adoption, so the period cannot end before adoption +
+# period + extension. On 150 published acts, 143 of the 146 without an early
+# non-objection appeared in the Official Journal on or after that floor; the other 3 the
+# day after adoption, the urgency procedure. Served as objection_deadline_earliest.
+
+REGDEL_HOME = "https://webgate.ec.europa.eu/regdel/"
+
+
+class Register:
+    """A session on the RegDel API: the cookie and XSRF token its own page sets."""
+
+    def __init__(self, pace: float = 0.15):
+        import http.cookiejar
+        jar = http.cookiejar.CookieJar()
+        self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+        self.opener.addheaders = [("User-Agent", USER_AGENT)]
+        self.opener.open(REGDEL_HOME, timeout=60).read()
+        self.token = next((c.value for c in jar if "xsrf" in c.name.lower()), None)
+        if not self.token:
+            raise RuntimeError("the register set no XSRF-TOKEN cookie")
+        self.pace = pace
+
+    def _call(self, path: str, body: Optional[dict] = None, timeout: int = 60):
+        import json
+        headers = {"Accept": "application/json", "X-XSRF-TOKEN": self.token}
+        data = None
+        if body is not None:
+            headers["Content-Type"] = "application/json"
+            data = json.dumps(body).encode()
+        req = urllib.request.Request(f"{REGDEL_BASE}/{path}", data=data, headers=headers,
+                                     method="POST" if body is not None else "GET")
+        with self.opener.open(req, timeout=timeout) as r:
+            return json.loads(r.read())
+
+    def records(self, act_type: str) -> List[dict]:
+        path = "delegatedActs" if act_type == "delegated" else "implementingActs"
+        # 120 s: these run before the upsert, and a slow register must not cost the rows.
+        return self._call(path, {"language": "en"}, timeout=120).get("list") or []
+
+    def events(self, regdel_id: int) -> List[dict]:
+        import time
+        time.sleep(self.pace)
+        return self._call(f"delegatedActs/{int(regdel_id)}/events") or []
+
+
+_PROCEDURE_RE = re.compile(r"\s*(\d{4})/(\d{4})/([A-Z]{3})\s*")
+_PERIOD_RE = re.compile(r"\d{1,2}(?:/\d{1,2})?")
+
+
+def register_fields(item: dict, act_type: str) -> Dict[str, Any]:
+    """The columns one register record fills, None where it says nothing."""
+    from datetime import datetime, timezone
+    basic = item.get("basicAct") or {}
+    parent = str(basic.get("celexNumber") or "").strip().upper()
+    proc = _PROCEDURE_RE.fullmatch(str(basic.get("procedureCode") or ""))
+    period = str(basic.get("deadlineRaw") or "").strip()
+    status = str(item.get("delegatedActStatus") or "")
+    updated = item.get("updateDate")
+    return {
+        "regdel_id": item.get("id"),
+        "register_parent_celex": parent if re.fullmatch(r"3\d{4}[A-Z]\d{4}", parent) else None,
+        # The register writes 2011/0296/COD; OEIL and every other Brubru field 2011/0296(COD).
+        "parent_procedure_ref": f"{proc.group(1)}/{proc.group(2)}({proc.group(3)})" if proc else None,
+        "description": (str(item.get("summary") or "").strip() or None),
+        # Delegated acts only: an implementing act has no Article 290 scrutiny period.
+        "scrutiny_period": period if act_type == "delegated" and _PERIOD_RE.fullmatch(period) else None,
+        # Carried to the events phase, the urgency column's one writer: a status alone
+        # misses acts whose events say urgent while their status says PUBLISHED.
+        "status_urgent": act_type == "delegated" and "URGENCY" in status,
+        "regdel_updated_at": datetime.fromtimestamp(updated / 1000, tz=timezone.utc) if updated else None,
+    }
+
+
+def shortest_period(period: Optional[str]) -> Optional[int]:
+    """'1/3' -> 1 (one month when the Commission adopts an authority's draft unchanged)."""
+    if not period or not _PERIOD_RE.fullmatch(period):
+        return None
+    return min(int(p) for p in period.split("/"))
+
+
+def add_months(d, months: int):
+    import calendar
+    from datetime import date
+    y, m = divmod(d.month - 1 + months, 12)
+    y, m = d.year + y, m + 1
+    return date(y, m, min(d.day, calendar.monthrange(y, m)[1]))
+
+
+def event_day(ms):
+    """A register event time is midnight in Brussels: 22:00 or 23:00 UTC the day before."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.fromtimestamp(ms / 1000, tz=ZoneInfo("Europe/Brussels")).date() if ms else None
+
+
+SCRUTINY_EVENTS = {
+    "DA_EXTENSION": "extension_requested",
+    "DA_OBJECTION": "objection",
+    "DA_OBJECTION_NOT_APPROVED": "objection_rejected",
+    "DA_EARLY_NON_OBJECTION": "early_non_objection",
+    "DA_EARLY_NON_OBJECTION_NOT_APPROVED": "early_non_objection_rejected",
+}
+INSTITUTIONS = {"INSTITUTION_PARLIAMENT": "ep", "INSTITUTION_COUNCIL": "council"}
+
+
+def scrutiny_from_events(events: List[dict], period: Optional[str], status: str) -> Dict[str, Any]:
+    """What one act's register events say: its dates, each institution's scrutiny, and the floor.
+
+    Each institution gets every key, null where nothing happened, so a read act ({...})
+    can be told from an unread one ({}). Dates are the latest event of each kind.
+    """
+    blank = dict.fromkeys(SCRUTINY_EVENTS.values()) | {"extension_months": None}
+    scrutiny = {"ep": dict(blank), "council": dict(blank)}
+    adoption = publication = None
+    urgent = False
+    for e in sorted(events, key=lambda e: e.get("eventDate") or 0):
+        kind, day = e.get("eventType"), event_day(e.get("eventDate"))
+        if not day:
+            continue
+        if kind in ("DA_ADOPTION", "DA_URGENT_ADOPTION"):
+            adoption = day
+        if kind in ("DA_PUBLICATION", "DA_URGENT_PUB") and publication is None:
+            publication = day
+        if kind in ("DA_URGENT_ADOPTION", "DA_URGENT_PUB"):
+            urgent = True
+        who = INSTITUTIONS.get(e.get("eventInstitution"))
+        if who and kind in SCRUTINY_EVENTS:
+            scrutiny[who][SCRUTINY_EVENTS[kind]] = day.isoformat()
+            if kind == "DA_EXTENSION":
+                raw = (e.get("deadline") or {}).get("deadlineRaw")
+                try:
+                    scrutiny[who]["extension_months"] = int(float(raw)) if raw not in (None, "") else None
+                except (TypeError, ValueError):
+                    scrutiny[who]["extension_months"] = None
+    months = shortest_period(period)
+    # An extension of unknown length counts as none: the floor stays a floor.
+    extension = max((s["extension_months"] or 0) for s in scrutiny.values())
+    closed_early = all(s["early_non_objection"] for s in scrutiny.values())
+    earliest = None
+    if adoption and months and not closed_early and status not in ("withdrawn", "cancelled"):
+        earliest = add_months(adoption, months + extension)
+    return {"adoption_date": adoption, "publication_date": publication, "urgent": urgent,
+            "ep_scrutiny": scrutiny["ep"], "council_scrutiny": scrutiny["council"],
+            "objection_deadline_earliest": earliest}
+
+
 # Regex helpers for parsing the "Basic legislative act" free-text column
 # into a CELEX number.
 _BASIC_REGULATION_RE = re.compile(r"Regulation\s*\(EU\)\s*(\d{4})/(\d{1,4})", re.IGNORECASE)
@@ -295,7 +457,175 @@ def normalise_row(row: Dict[str, Any], act_type: str) -> Optional[Dict[str, Any]
         "planned_adoption_period": planned_period,
         "is_pipeline": is_pipeline,
         "norm_title": _normalised_title(title),
+        # Filled from the register's API by enrich(); None keeps what the row holds.
+        "regdel_id": None, "parent_procedure_ref": None, "description": None,
+        "scrutiny_period": None, "regdel_updated_at": None, "status_urgent": False,
+        # True only when the parent CELEX came from the register; a regex parent may fill
+        # an empty cell but never replace one (an unreachable register must not flip it).
+        "parent_from_register": False,
     }
+
+
+def enrich(records: List[Dict[str, Any]], register_items: Dict[str, List[dict]]) -> int:
+    """Fill each record from its register record, matched by C-number, else by title.
+
+    An announced act has no C-number, so it is matched on the same normalised title its
+    synthetic key is built from. The register's parent CELEX replaces the regex's.
+    """
+    by_code, by_title = {}, {}
+    for act_type, items in register_items.items():
+        for it in items:
+            code = str(it.get("cCode") or "").strip()
+            if code:
+                by_code[(act_type, code)] = it
+            elif it.get("completeTitle"):
+                by_title.setdefault((act_type, _normalised_title(it["completeTitle"])), it)
+    matched = 0
+    for r in records:
+        it = (by_title.get((r["act_type"], r["norm_title"])) if r["is_pipeline"]
+              else by_code.get((r["act_type"], r["reference"])))
+        if not it:
+            continue
+        matched += 1
+        f = register_fields(it, r["act_type"])
+        parent = f.pop("register_parent_celex")
+        if parent:
+            r["parent_celex"], r["parent_from_register"] = parent, True
+        r.update(f)
+    return matched
+
+
+def _held_first(r: Dict[str, Any], held: Dict[str, str]):
+    """Sort key: the record matching what the row already holds, then the lowest register id."""
+    return (r["reference"] != held.get(r.get("celex") or ""), r.get("regdel_id") is None,
+            r.get("regdel_id") or 0, r["reference"])
+
+
+def dedupe(records: List[Dict[str, Any]], held: Dict[str, str]):
+    """One record per CELEX and per C-number, chosen the same way every run.
+
+    The register lists some acts twice: 32017R0867 under both C(2016)1372 and C(2017)597,
+    and 12 implementing C-numbers twice. Both records were upserted into the one row,
+    the second overwriting the first, so the row's fields alternated and its change date
+    moved every run for nothing. `held` maps a CELEX to the reference the row holds.
+    """
+    dropped: List[Dict[str, Any]] = []
+    for key in ("celex", "reference"):
+        groups: Dict[Any, List[Dict[str, Any]]] = {}
+        for r in records:
+            # By C-number only among acts without a CELEX: two CELEX holders sharing a
+            # C-number are two rows, upserted on their own CELEX, and do not collide.
+            # Keyed on the value alone: the table's unique indexes are on celex and on
+            # reference, whatever the act type.
+            k = r[key] if r.get(key) and (key == "celex" or not r.get("celex")) else None
+            groups.setdefault(k, []).append(r)
+        records = []
+        for k, group in groups.items():
+            if k is None or len(group) == 1:
+                records.extend(group)
+                continue
+            group = sorted(group, key=lambda r: _held_first(r, held))
+            records.append(group[0])
+            dropped.extend(group[1:])
+    return records, dropped
+
+
+# Acts whose events are read on every run whatever the register's change time says:
+# the ones whose objection period may still be running.
+# coalesce: a NULL here would sort AHEAD of true in the DESC order below.
+_OPEN_WINDOW = """coalesce(status = 'adopted'
+                           OR objection_deadline_earliest >= current_date - 31, false)"""
+
+
+_TITLE_DATE = re.compile(r"\bof (\d{1,2})\s+(January|February|March|April|May|June|July|August|"
+                         r"September|October|November|December)\s+(\d{4})\b")
+_MONTHS = {m: i for i, m in enumerate(("January February March April May June July August "
+                                       "September October November December").split(), 1)}
+
+
+def title_date(title: Optional[str]):
+    """The date an adopted act's own title states ('... of 13 July 2026 amending ...')."""
+    from datetime import date
+    m = _TITLE_DATE.search(title or "")
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), _MONTHS[m.group(2)], int(m.group(1)))
+    except ValueError:
+        return None
+
+
+def adoption_to_store(held, register_day, title):
+    """The adoption date to keep: the register's where the row has none, or where the
+    act's own title agrees with the register against the held date. Otherwise the held
+    date stays (and the run lists it)."""
+    if not register_day:
+        return held
+    if not held:
+        return register_day
+    if held != register_day and title_date(title) == register_day:
+        return register_day
+    return held
+
+
+def read_scrutiny(conn, register: "Register", max_seconds: float,
+                  urgent_by_status: set = frozenset()) -> Dict[str, Any]:
+    """Read the events of each delegated act the register changed since we last read it.
+
+    Fills a publication date only where the row has none. Corrects an adoption date only
+    where the act's own title agrees with the register (12 rows held a date neither
+    states); any other disagreement is listed, not written. Writes the scrutiny columns
+    and urgency_procedure outright: this job is their only writer.
+    """
+    import json
+    import time
+    cur = conn.cursor()
+    cur.execute(f"""
+        SELECT id, regdel_id, status::text, scrutiny_period, adoption_date, regdel_updated_at,
+               title, reference
+          FROM secondary_acts
+         WHERE act_type = 'delegated' AND regdel_id IS NOT NULL
+           AND (regdel_events_read_for IS DISTINCT FROM regdel_updated_at OR {_OPEN_WINDOW})
+         ORDER BY ({_OPEN_WINDOW}) DESC, regdel_updated_at DESC NULLS LAST""")
+    todo = cur.fetchall()
+    out = {"due": len(todo), "read": 0, "failed": 0, "adoption_filled": 0,
+           "adoption_corrected": 0, "adoption_differs": []}
+    start = time.monotonic()
+    for row_id, regdel_id, status, period, held_adoption, version, title, reference in todo:
+        if time.monotonic() - start > max_seconds:
+            break
+        try:
+            events = register.events(regdel_id)
+        except Exception as exc:  # one act's events: counted, the run goes on
+            out["failed"] += 1
+            print(f"  [ERR] events of register record {regdel_id}: {exc}")
+            continue
+        s = scrutiny_from_events(events, period, status)
+        adoption = adoption_to_store(held_adoption, s["adoption_date"], title)
+        if held_adoption and adoption != held_adoption:
+            out["adoption_corrected"] += 1
+        elif s["adoption_date"] and held_adoption and s["adoption_date"] != held_adoption:
+            out["adoption_differs"].append(f"{reference} (held {held_adoption}, register {s['adoption_date']})")
+        cur.execute("""
+            UPDATE secondary_acts
+               SET adoption_date = %(adopt)s,
+                   publication_date = coalesce(publication_date, %(pub)s),
+                   ep_scrutiny = %(ep)s::jsonb, council_scrutiny = %(council)s::jsonb,
+                   objection_deadline_earliest = %(earliest)s,
+                   urgency_procedure = %(urgent)s,
+                   regdel_events_read_for = %(version)s
+             WHERE id = %(id)s""", {
+            "adopt": adoption, "pub": s["publication_date"],
+            "urgent": s["urgent"] or regdel_id in urgent_by_status,
+            "ep": json.dumps(s["ep_scrutiny"]), "council": json.dumps(s["council_scrutiny"]),
+            "earliest": s["objection_deadline_earliest"],
+            "version": version, "id": row_id})
+        out["read"] += 1
+        out["adoption_filled"] += int(bool(s["adoption_date"] and not held_adoption))
+        if out["read"] % 100 == 0:
+            conn.commit()
+    conn.commit()
+    return out
 
 
 def main() -> int:
@@ -307,6 +637,8 @@ def main() -> int:
         default="both",
     )
     ap.add_argument("--limit", type=int, default=None, help="Truncate after N rows (debug)")
+    ap.add_argument("--events-seconds", type=float, default=120,
+                    help="Time for reading delegated acts' scrutiny events; the rest waits for the next run")
     args = ap.parse_args()
 
     db_url = get_env("DATABASE_URL")
@@ -353,6 +685,24 @@ def main() -> int:
         print(f"[INFO] {len(_WEAK_TITLES)} announced act(s) skipped: title too thin to "
               f"identify, e.g. {_WEAK_TITLES[0]!r}")
 
+    # The register's API. If it cannot be read, the export's rows are still stored and
+    # the run says it is degraded: losing the scrutiny fields for one run must not cost
+    # the acts themselves.
+    degraded: List[str] = []
+    register = None
+    try:
+        register = Register()
+        items = {t: register.records(t) for t in targets}
+        matched = enrich(all_rows, items)
+        print(f"[INFO] register API: {sum(map(len, items.values()))} record(s), "
+              f"{matched} of {len(all_rows)} export rows matched")
+        if matched < 0.9 * len(all_rows):
+            degraded.append(f"register API matched only {matched} of {len(all_rows)} rows")
+    except Exception as exc:
+        register = None
+        degraded.append(f"register API unreadable ({exc.__class__.__name__}: {exc})")
+        print(f"[WARN] {degraded[-1]}")
+
     if not args.apply:
         for r in all_rows[:5]:
             print(f"  {r['act_type']:13s} {r['reference']:14s} celex={(r['celex'] or '-'):12s} dg={(r['proposing_dg'] or '-'):8s} parent={(r['parent_celex'] or '-'):12s} status={r['status']:10s} policy={r['policy_areas'][:1]}")
@@ -391,14 +741,27 @@ def main() -> int:
     # Every updated column is wrapped in COALESCE(EXCLUDED.x, secondary_acts.x): a later
     # export with an empty cell must not blank a value we already hold. The old statement
     # assigned EXCLUDED.celex directly, so one empty cell would have erased a good CELEX.
-    SET_CLAUSE = """
-                  title        = COALESCE(EXCLUDED.title, secondary_acts.title),
-                  parent_celex = COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex),
+    SET_CLAUSE = r"""
+                  -- The export serves one record's title as the draft ("(EU) …/...") on
+                  -- one day and the final one the next. A draft never replaces a final
+                  -- title: the swap moved 185-973 rows' change date per run (14 Oct 2026).
+                  title        = CASE WHEN EXCLUDED.title ~ '(…|\.\.\.)\s*/\s*(…|\.\.\.)'
+                                       AND secondary_acts.title !~ '(…|\.\.\.)\s*/\s*(…|\.\.\.)'
+                                      THEN secondary_acts.title
+                                      ELSE COALESCE(EXCLUDED.title, secondary_acts.title) END,
+                  parent_celex = CASE WHEN %(parent_from_register)s
+                                      THEN COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex)
+                                      ELSE COALESCE(secondary_acts.parent_celex, EXCLUDED.parent_celex) END,
                   status       = EXCLUDED.status,
                   proposing_dg = COALESCE(EXCLUDED.proposing_dg, secondary_acts.proposing_dg),
                   source_url   = COALESCE(EXCLUDED.source_url, secondary_acts.source_url),
                   policy_areas = COALESCE(EXCLUDED.policy_areas, secondary_acts.policy_areas),
                   planned_adoption_period = EXCLUDED.planned_adoption_period,
+                  regdel_id    = COALESCE(EXCLUDED.regdel_id, secondary_acts.regdel_id),
+                  parent_procedure_ref = COALESCE(EXCLUDED.parent_procedure_ref, secondary_acts.parent_procedure_ref),
+                  description  = COALESCE(EXCLUDED.description, secondary_acts.description),
+                  scrutiny_period = COALESCE(EXCLUDED.scrutiny_period, secondary_acts.scrutiny_period),
+                  regdel_updated_at = COALESCE(EXCLUDED.regdel_updated_at, secondary_acts.regdel_updated_at),
                   last_updated = NOW()
     """
 
@@ -406,11 +769,15 @@ def main() -> int:
                 INSERT INTO secondary_acts
                   (id, act_type, reference, title, parent_celex, celex, status,
                    proposing_dg, source_url, policy_areas, planned_adoption_period,
+                   regdel_id, parent_procedure_ref, description, scrutiny_period,
+                   regdel_updated_at,
                    scraped_at, first_seen, last_updated)
                 VALUES
                   (%(id)s, %(act_type)s, %(reference)s, %(title)s, %(parent_celex)s,
                    %(celex)s, %(status)s, %(proposing_dg)s, %(source_url)s, %(policy_areas)s,
-                   %(planned_adoption_period)s, NOW(), NOW(), NOW())
+                   %(planned_adoption_period)s, %(regdel_id)s, %(parent_procedure_ref)s,
+                   %(description)s, %(scrutiny_period)s,
+                   %(regdel_updated_at)s, NOW(), NOW(), NOW())
     """
 
     # On the CELEX path `reference` is deliberately NOT overwritten. When RegDel hands us
@@ -458,6 +825,15 @@ def main() -> int:
     # Counted from what the database RETURNS, not from how many statements were sent.
     # The old loop incremented `inserted` once per attempt, so an update and an insert
     # were indistinguishable and the total was really "rows tried".
+    # One record per CELEX and per C-number, preferring the one the row already holds.
+    celexes = sorted({r["celex"] for r in all_rows if r.get("celex")})
+    cur.execute("SELECT celex, reference FROM secondary_acts WHERE celex = ANY(%s)", (celexes,))
+    held = dict(cur.fetchall())
+    all_rows, dropped = dedupe(all_rows, held)
+    if dropped:
+        print(f"[INFO] {len(dropped)} register record(s) duplicate an act already listed and "
+              f"were not stored over it: " + ", ".join(sorted(r["reference"] for r in dropped)[:20]))
+
     inserted = updated = errors = celex_kept = 0
     for n, r in enumerate(all_rows, 1):
         # SAVEPOINT per row. conn.rollback() discards every uncommitted row in the
@@ -500,6 +876,29 @@ def main() -> int:
 
     print(f"[DONE] inserted={inserted} updated={updated} errors={errors} "
           f"of {len(all_rows)} record(s)")
+
+    # Scrutiny events, on a fresh connection: the upserts above hold theirs for minutes.
+    if register is not None and "delegated" in targets and not args.limit:
+        conn = psycopg2.connect(db_url)
+        try:
+            ev = read_scrutiny(conn, register, args.events_seconds,
+                               {r["regdel_id"] for r in all_rows
+                                if r["act_type"] == "delegated" and r["status_urgent"] and r["regdel_id"]})
+        finally:
+            conn.close()
+        print(f"[SCRUTINY] {ev['read']} of {ev['due']} act(s) read, {ev['failed']} failed; "
+              f"adoption date filled on {ev['adoption_filled']}, corrected on "
+              f"{ev['adoption_corrected']} (the act's title agrees with the register)")
+        if ev["adoption_differs"]:
+            print(f"[INFO] {len(ev['adoption_differs'])} act(s) whose held adoption date the "
+                  f"register contradicts, left as held: " + "; ".join(ev["adoption_differs"][:20]))
+        if ev["read"] + ev["failed"] < ev["due"]:
+            degraded.append(f"scrutiny events read for {ev['read']} of {ev['due']} act(s); "
+                            f"the rest resume next run")
+        if ev["failed"] and ev["failed"] >= max(5, ev["read"] // 10):
+            degraded.append(f"{ev['failed']} act(s) whose events could not be read")
+    if degraded:
+        print(f"[SYNC_STATUS] degraded: {'; '.join(degraded)}")
     if celex_kept:
         print(f"[INFO] {celex_kept} act(s) kept the CELEX we hold over the one the "
               f"register exports (ours is the one verified against Cellar)")

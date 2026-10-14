@@ -712,9 +712,49 @@ class SecondaryActItem(BaseModel):
                     "date, which is why it is a string and never populates adoption_date. "
                     "Null once the act is adopted.",
     )
-    objection_deadline: Optional[date] = None
-    ep_scrutiny: dict = Field(default_factory=dict)
-    council_scrutiny: dict = Field(default_factory=dict)
+    objection_deadline: Optional[date] = Field(
+        None,
+        description="Always null for now: the RegDel register does not publish the day the "
+                    "scrutiny period starts (the notification to Parliament and Council), so "
+                    "the deadline cannot be read. See objection_deadline_earliest.",
+    )
+    objection_deadline_earliest: Optional[date] = Field(
+        None,
+        description="The earliest the objection period can end: adoption date + the basic "
+                    "act's scrutiny period (the shorter one where it is '1/3') + any "
+                    "extension. Notification never precedes adoption, so the real deadline "
+                    "is this date or later. Null when the period or "
+                    "adoption date is unknown, when both Parliament and Council said early "
+                    "that they will not object, and for withdrawn or cancelled acts. "
+                    "Delegated acts only.",
+    )
+    scrutiny_period: Optional[str] = Field(
+        None,
+        description="The basic act's scrutiny period as the register states it: '1 month', "
+                    "'2 months', '3 months', or '1 or 3 months' (1 when the Commission adopts "
+                    "a supervisory authority's draft unchanged, 3 otherwise). Delegated acts only.",
+    )
+    urgency_procedure: Optional[bool] = Field(
+        None,
+        description="True when the register records the urgency procedure (in the act's "
+                    "status or in an urgent adoption or publication event): the act applies "
+                    "at once and Parliament or Council can still object. False when the "
+                    "register records neither, which does not prove the act was not urgent. "
+                    "Null until the act's events are read, and for implementing acts.",
+    )
+    ep_scrutiny: dict = Field(
+        default_factory=dict,
+        description="Parliament's scrutiny from the register's events: extension_requested, "
+                    "extension_months, objection, objection_rejected (a motion to object "
+                    "was voted down), early_non_objection, early_non_objection_rejected. "
+                    "Each a date, null where the register records no such event (its record "
+                    "can be incomplete). {} until the act's events "
+                    "have been read. Delegated acts only.",
+    )
+    council_scrutiny: dict = Field(
+        default_factory=dict,
+        description="The Council's scrutiny, same keys as ep_scrutiny.",
+    )
     celex: Optional[str] = None
     source_url: str
     pdf_url: Optional[str] = None
@@ -742,6 +782,19 @@ class SecondaryActItem(BaseModel):
     body_txt: Optional[str] = None
     # Deprecated alias kept one release.
     body: Optional[str] = None
+
+
+def _type_value(v) -> str:
+    return v.value if hasattr(v, "value") else str(v)
+
+
+def _scrutiny_period_label(raw: Optional[str]) -> Optional[str]:
+    """'2' -> '2 months', '1' -> '1 month', '1/3' -> '1 or 3 months'."""
+    if not raw:
+        return None
+    parts = raw.split("/")
+    unit = "month" if parts == ["1"] else "months"
+    return f"{' or '.join(parts)} {unit}"
 
 
 def _secondary_act_to_item(
@@ -803,7 +856,9 @@ def _secondary_act_to_item(
     if r.celex:
         public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex}"
     elif getattr(r, "regdel_id", None):
-        public_url = f"https://webgate.ec.europa.eu/regdel/#/delegatedActs/{r.regdel_id}?lang=en"
+        # The register numbers delegated and implementing acts separately.
+        kind = "implementingActs" if _type_value(r.act_type) == "implementing" else "delegatedActs"
+        public_url = f"https://webgate.ec.europa.eu/regdel/#/{kind}/{r.regdel_id}?lang=en"
     elif r.pdf_url and not _is_dead_celex_url(r.pdf_url):
         public_url = r.pdf_url
     elif r.source_url and not _is_dead_celex_url(r.source_url):
@@ -827,6 +882,9 @@ def _secondary_act_to_item(
         adoption_date=r.adoption_date,
         planned_adoption_period=getattr(r, "planned_adoption_period", None),
         objection_deadline=r.objection_deadline,
+        objection_deadline_earliest=getattr(r, "objection_deadline_earliest", None),
+        scrutiny_period=_scrutiny_period_label(getattr(r, "scrutiny_period", None)),
+        urgency_procedure=getattr(r, "urgency_procedure", None),
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),
         celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,

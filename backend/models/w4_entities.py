@@ -248,9 +248,19 @@ class SecondaryAct(Base):
     # '06/2019' or '18/10/2013', and the precision is itself information. String on
     # purpose so it can never be coerced into adoption_date.
     planned_adoption_period = Column(String(16), nullable=True)
+    # Null: the register publishes no start date for the scrutiny period, so no deadline
+    # can be read (migration 291). objection_deadline_earliest is the floor that can.
     objection_deadline = Column(Date, nullable=True)
-    ep_scrutiny = Column(JSONB, default=dict)  # { result, date, vote_for, vote_against, ... }
+    # {extension_requested, extension_months, objection, objection_rejected,
+    #  early_non_objection, early_non_objection_rejected}: dates of the register's events,
+    # null where it records none; {} until the act's events are read (migration 291).
+    ep_scrutiny = Column(JSONB, default=dict)
     council_scrutiny = Column(JSONB, default=dict)
+    scrutiny_period = Column(String(16), nullable=True)       # '2', '3', '1' or '1/3' months
+    objection_deadline_earliest = Column(Date, nullable=True)  # adoption + period + extension
+    urgency_procedure = Column(Boolean, nullable=True)
+    regdel_updated_at = Column(DateTime(timezone=True), nullable=True)
+    regdel_events_read_for = Column(DateTime(timezone=True), nullable=True)
 
     celex = Column(String(30), nullable=True)
     source_url = Column(Text, nullable=False)
