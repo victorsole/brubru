@@ -3,7 +3,7 @@
 
 That fix gave 35 rows their own folder's CELEX M instead of the CELEX X they held, but it moved only the
 identifier. Everything fetched BY CELEX X stayed on the old row: the act's text (body_*) and EuroVoc tags
-(eurovoc*), so 33 corrigenda served the full text of the act they correct. And the 26 rows that received X
+(eurovoc*), so 33 rows (30 corrigenda, an addendum, a consolidated version, a directive) served another act's text. And the 26 rows that received X
 were junk rows of X's folder (an annex or an Official Journal wrapper, never re-read). Measured 14 Oct 2026:
 
   1. 26 acts (X has its own row): the act's row O is re-read from its folder's main file (the importer's own
@@ -11,7 +11,7 @@ were junk rows of X's folder (an annex or an Official Journal wrapper, never re-
      before-image of the old row R. If a job already fetched them for O, O keeps its own.
   2. 7 acts whose folder has no text in the export (metadata only, all in force): they had been served from
      row R before the fix (text from Cellar), and two Catalan translations point at them. Each gets its own
-     row again, the way the daily sync writes a Cellar row: uuid = its folder, title and date from the export
+     row again as a Cellar row (cellar:// path, fewer metadata keys than the daily sync writes): uuid = its folder, title and date from the export
      table, xml_path cellar://..., with X's text and EuroVoc tags from R's before-image.
   3. The 35 rows R: X's text and EuroVoc tags are cleared (the daily jobs refetch them for M); the keys the
      fix dropped that describe R's own file (page_first, page_last, eea_relevant) come back; 9 corrigenda of
@@ -21,6 +21,9 @@ were junk rows of X's folder (an annex or an Official Journal wrapper, never re-
 
 Dry run by default; --apply writes a JSON backup of every touched row, does everything in one transaction,
 asserts the counts and re-checks afterwards.
+
+Applied 14 Oct 2026 20:38; its gaps (JSON null, 22 lost document types, corpus_version of the 7 rows) were
+closed by fix_eu_laws_step2_followups.py.
 
 Usage (repo root):  PYTHONPATH=.:backend python3.12 -m backend.scripts.repair_eu_laws_celex_vs_folder [--apply]
 """
@@ -36,7 +39,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from sqlalchemy import text  # noqa: E402
+from sqlalchemy import null, text  # noqa: E402
 
 from backend.core.database import SessionLocal  # noqa: E402
 from backend.models.eu_law import EULaw  # noqa: E402
@@ -162,8 +165,8 @@ def main() -> int:
             law.doc_type_normalized = normalized(law.doc_type)
 
             r = db.query(EULaw).filter(EULaw.uuid == p["r"]).one()  # 3. the row that held X
-            for k in BODY + EUROVOC:
-                setattr(r, k, None)
+            for k in BODY + EUROVOC:  # null(): None on a JSONB column writes the JSON value null, not SQL NULL
+                setattr(r, k, null() if k == "eurovoc" else None)
             r.extra_metadata = {**(r.extra_metadata or {}), **{k: b["extra_metadata"][k] for k in FILE_KEYS if k in (b["extra_metadata"] or {})}}
             if p in retitle:
                 r.title = table[p["m"]]["Title of document"]
