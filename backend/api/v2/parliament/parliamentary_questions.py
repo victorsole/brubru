@@ -42,7 +42,7 @@ To track what MEPs are asking on a given policy area, find the official Commissi
 - `question_type` — `written` / `oral` / `priority` / `question_time`.
 - `parliamentary_term` — integer (current: 10).
 - `asking_mep_id` — filter to questions asked by a specific MEP.
-- `answering_institution` — `COMMISSION` / `COUNCIL` / `ECB`.
+- `answering_institution` — `COMMISSION` / `COUNCIL` / `ECB`: the institution that answered, read from the answer; empty while a question is unanswered.
 - `procedure_ref` — OEIL reference (e.g. `2026/0419(COD)`).
 - `committee` — 4-letter committee code (e.g. `ENVI`).
 - `published_from`, `published_to` — date filter on `submitted_date`.

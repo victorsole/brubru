@@ -207,6 +207,30 @@ def extract_pdf_text(pdf_bytes: bytes) -> Optional[str]:
         return None
 
 
+_ON_BEHALF = (
+    ("european central bank", "ECB"),
+    ("council", "COUNCIL"),
+    ("european commission", "COMMISSION"),
+)
+
+
+def answering_institution_from_text(text: str | None) -> str | None:
+    """'Answer given by Mr Brunner on behalf of the European Commission' -> 'COMMISSION'.
+
+    The answer's own first lines name the institution; the High Representative answers
+    "on behalf of the European Commission" too. None when the text names none.
+    """
+    head = " ".join((text or "")[:600].split()).lower()
+    i = head.find("on behalf of the ")
+    if i < 0:
+        return None
+    rest = head[i + len("on behalf of the "):i + 60]
+    for name, code in _ON_BEHALF:
+        if rest.startswith(name):
+            return code
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -315,15 +339,20 @@ def main():
             continue
         # Map answering commissioner from creator (e.g. ['org/EU_COMMISSION'])
         commissioner = None
+        institution = None
         creators = ans.get("creator") or []
         if creators:
             c = creators[0] if isinstance(creators, list) else creators
             if "EU_COMMISSION" in str(c):
-                commissioner = "European Commission"
+                commissioner, institution = "European Commission", "COMMISSION"
             elif "EU_COUNCIL" in str(c):
-                commissioner = "Council of the EU"
+                commissioner, institution = "Council of the EU", "COUNCIL"
             elif "ECB" in str(c):
-                commissioner = "European Central Bank"
+                commissioner, institution = "European Central Bank", "ECB"
+        # The institution that answered also goes where the API reads it: until 15 Oct 2026
+        # it was written only into answering_commissioner, and answering_institution stayed
+        # empty on 2,520 questions (1,713 of them answered).
+        institution = institution or answering_institution_from_text(text)
         # Map answered_date
         answered_date = None
         if ans.get("document_date"):
@@ -342,10 +371,11 @@ def main():
                         answer_url = COALESCE(%s, answer_url),
                         answered_date = COALESCE(%s, answered_date),
                         answering_commissioner = COALESCE(%s, answering_commissioner),
+                        answering_institution = COALESCE(answering_institution, %s),
                         last_updated = NOW()
                     WHERE id = %s
                     """,
-                    (text[:1_000_000], ans["url"], answered_date, commissioner, row["id"]),
+                    (text[:1_000_000], ans["url"], answered_date, commissioner, institution, row["id"]),
                 )
                 conn.commit()
                 ok += 1
