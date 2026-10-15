@@ -1,9 +1,12 @@
 """
 EPSO — European Personnel Selection Office (api_ec.md L3983-4072). /api/v2/epso.
 
-EPSO's public site is eu-careers.europa.eu, a Drupal build (not the standard ECL
-card layout), server-rendered and reachable with plain requests. Source map
-(verified 25 Jun 2026):
+EPSO's selection site is selection.eu-careers.europa.eu, a Drupal build (not the
+standard ECL card layout), server-rendered and reachable with plain requests. Until
+October 2026 it was eu-careers.europa.eu; that host became a Europa-platform careers
+site, its /en/news listing answers 404 and the job ran six times storing nothing, while
+the old item and topic paths redirect to the same path on the selection host (checked
+15 Oct 2026). Source map (verified 25 Jun 2026, host moved 15 Oct 2026):
   - news  : /en/news — Drupal Views .views-row rows: .views-field-title a (title +
             /en/news/<slug>/<id> link), an EPSO reference number and a <time
             datetime> created date. Detail = HTML.
@@ -28,7 +31,7 @@ from services.scrapers.economy_common import (
     Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
 )
 
-_BASE = "https://eu-careers.europa.eu"
+_BASE = "https://selection.eu-careers.europa.eu"
 NEWS_PAGES = [f"{_BASE}/en/news"]
 
 _CAST = [
