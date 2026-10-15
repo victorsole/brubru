@@ -775,7 +775,12 @@ class SecondaryActItem(BaseModel):
                     "Null when the act has no text: a planned or cancelled act has none.",
     )
     source_url: str
-    pdf_url: Optional[str] = None
+    pdf_url: Optional[str] = Field(
+        None,
+        description="The act as a PDF a browser opens: EUR-Lex's for an act in the Official "
+                    "Journal; the Commission document register's for an adopted act not "
+                    "published there. Null when the act has no text.",
+    )
     policy_areas: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints
@@ -871,6 +876,17 @@ def _secondary_act_to_item(
             or "publications.europa.eu/resource/celex/" in u
         )
 
+    # The PDF a browser opens (15 Oct 2026). 1,684 delegated acts carried
+    # publications.europa.eu/resource/celex/<CELEX> and 345 none: that address is Cellar's
+    # content negotiation for machines and answers a browser, or a request for a PDF, with
+    # 404. EUR-Lex serves the act's PDF by its CELEX; an act outside the Official Journal
+    # keeps the Commission document register's file.
+    if r.celex:
+        pdf_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
+    elif r.pdf_url and "publications.europa.eu/resource/celex/" not in r.pdf_url:
+        pdf_url = r.pdf_url
+    else:
+        pdf_url = None
     if r.celex:
         public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex}"
     elif getattr(r, "regdel_id", None):
@@ -905,7 +921,7 @@ def _secondary_act_to_item(
         urgency_procedure=getattr(r, "urgency_procedure", None),
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),
-        celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
+        celex=r.celex, source_url=r.source_url, pdf_url=pdf_url,
         body_source=getattr(r, "body_source", None) if r.text_body else None,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
