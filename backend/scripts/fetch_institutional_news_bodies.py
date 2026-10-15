@@ -212,6 +212,50 @@ def presscorner_pdf(url: str) -> str | None:
             f"{slug}/{slug.upper()}_EN.pdf")
 
 
+def presscorner_document(url: str, timeout: int = 40) -> tuple[str | None, str | None]:
+    """(body_txt, body_html) from the press corner's documents API, or (None, None).
+
+    When the print PDF is missing (272 of 4,867 items on 15 Oct 2026: factsheets, some
+    press releases and speeches), /api/documents?reference=IP/26/2133 still serves the item:
+    htmlContent for a press release (6,248 characters for ip_26_2133), and for a factsheet
+    its PDF as an attachment at /api/files/attachment/<ky>/<file name>.
+    """
+    import io
+    import json as _json
+
+    from bs4 import BeautifulSoup
+    from pypdf import PdfReader
+
+    m = _PRESSCORNER.match(url or "")
+    if not m:
+        return None, None
+    ref = "/".join(m.group(1).upper().split("_"))
+    base = "https://ec.europa.eu/commission/presscorner/api"
+    try:
+        d = _json.loads(_read(f"{base}/documents?reference={urllib.parse.quote(ref)}&language=en",
+                              timeout, accept="application/json"))
+    except Exception:  # noqa: BLE001
+        return None, None
+    r = d.get("docuLanguageResource") or {}
+    html = (r.get("htmlContent") or "").strip()
+    if html:
+        txt = " ".join(BeautifulSoup(html, "html.parser").get_text(" ").split())
+        if len(txt) >= 200:
+            return txt, html
+    for a in r.get("attachmentResources") or []:
+        name = a.get("title") or ""
+        if not a.get("ky") or not name.lower().endswith(".pdf"):
+            continue
+        try:
+            raw = _read(f"{base}/files/attachment/{a['ky']}/{urllib.parse.quote(name)}", timeout)
+            txt = "\n".join((pg.extract_text() or "") for pg in PdfReader(io.BytesIO(raw)).pages).strip()
+        except Exception:  # noqa: BLE001
+            continue
+        if len(txt) >= 200:
+            return txt, None
+    return None, None
+
+
 # A 429 is a statement about our request RATE, not about the document. Recording one as a
 # failure leaves the row permanently empty and reads later as "this body has no text" --
 # the euda slice failed 240 of 400 rows this way. So: every thread shares one backoff
@@ -738,6 +782,9 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         except Exception as exc:  # noqa: BLE001
             pdf_problem = f"presscorner {type(exc).__name__}"
 
+        txt, html = presscorner_document(url, timeout)
+        if txt:
+            return txt, html, None
         if not render:
             return None, None, pdf_problem
         # The detail page is an Angular app; rendered it carries the article (3,483
