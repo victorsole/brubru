@@ -50,3 +50,34 @@ def test_a_new_pick_replaces_the_earlier_plenary_vote_on_the_same_text():
     from scripts import sync_ep_votes
     src = inspect.getsource(sync_ep_votes._upsert_vote)
     assert 'EpVote.ta_reference == ta' in src and "EpVote.vote_key != vote_key" in src
+
+
+class _OeilDb:
+    def __init__(self, events):
+        self.events = events
+
+    def execute(self, stmt, params):
+        events = self.events
+        return type("R", (), {"fetchone": lambda _s: (events,)})()
+
+
+def test_a_committee_vote_takes_oeils_vote_date_before_its_report_is_tabled():
+    from datetime import date
+    from scripts.sync_ep_votes import _oeil_committee_vote_date
+    events = [
+        {"date": "2024-02-13", "event_type": "Vote in committee, 1st reading"},
+        {"date": "2024-02-19", "event_type": "Committee report tabled for plenary, 1st reading", "description": "A9-0042/2024"},
+        {"date": "2025-12-03", "event_type": "Vote in committee, 2nd reading"},
+        {"date": "2025-12-04", "event_type": "Committee recommendation tabled for plenary, 2nd reading", "description": "A10-0246/2025"},
+    ]
+    db = _OeilDb(events)
+    assert _oeil_committee_vote_date(db, "2023/0129(COD)", "A10-0246/2025") == date(2025, 12, 3)
+    assert _oeil_committee_vote_date(db, "2023/0129(COD)", "A9-0042/2024") == date(2024, 2, 13)
+    assert _oeil_committee_vote_date(db, "2023/0129(COD)", "A10-9999/2025") is None
+
+
+def test_an_undated_vote_is_neither_written_nor_served():
+    from scripts import sync_ep_votes
+    from api.v1 import ep_entities
+    assert 'counts["committee_undated"]' in inspect.getsource(sync_ep_votes)
+    assert "RollCallVote.vote_date.isnot(None), RollCallVote.sitting_date.isnot(None)" in inspect.getsource(ep_entities)

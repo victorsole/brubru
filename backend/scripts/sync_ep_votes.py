@@ -81,6 +81,33 @@ def _committee_adopted_date(text: str):
         return None
 
 
+def _oeil_committee_vote_date(db, procedure_ref, report_ref):
+    """OEIL's 'Vote in committee' date for the report: the last one before the report is tabled.
+
+    A10-0246/2025 (a 2nd-reading recommendation) printed no 'Date adopted' line the parser
+    reads; OEIL lists 'Vote in committee, 2nd reading' on 3 Dec 2025 and the recommendation
+    tabled on 4 Dec. None when OEIL does not list the report.
+    """
+    if not procedure_ref or not report_ref:
+        return None
+    row = db.execute(sqla_text(
+        "SELECT oeil_key_events FROM legislative_carriages WHERE oeil_procedure_ref = :p LIMIT 1"),
+        {"p": procedure_ref}).fetchone()
+    events = (row[0] if row else None) or []
+    tabled = [e for e in events if isinstance(e, dict)
+              and str(e.get("description") or "").strip() == report_ref]
+    if not tabled:
+        return None
+    cutoff = min(str(e.get("date") or "") for e in tabled)
+    votes = sorted(str(e.get("date") or "") for e in events if isinstance(e, dict)
+                   and str(e.get("event_type") or "").lower().startswith("vote in committee")
+                   and str(e.get("date") or "") <= cutoff)
+    try:
+        return date.fromisoformat(votes[-1][:10]) if votes else None
+    except ValueError:
+        return None
+
+
 # ---- target selection -----------------------------------------------------
 
 def _select_targets(db, committees, since, ta, limit):
@@ -302,14 +329,20 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                             ctext = fetcher.fetch(curl).text if curl else ""
                             cpv = parse_committee_report(ctext) if ctext else None
                             committee_cache[rep] = (cpv, ctext)
-                        if cpv:
+                        committee_day = (_committee_adopted_date(ctext)
+                                         or _oeil_committee_vote_date(db, t["procedure_ref"], rep))
+                        if cpv and not committee_day:
+                            # Every served vote needs its date; a committee vote nobody dates
+                            # is not written rather than served undated.
+                            counts["committee_undated"] = counts.get("committee_undated", 0) + 1
+                        elif cpv:
                             cst = _upsert_vote(
                                 db, vote_key=f"committee|{rep}",
                                 level="committee", pv=cpv, apply=apply,
                                 procedure_ref=t["procedure_ref"], carriage_id=cid,
                                 report_ref=rep, ta_reference=t["ta_reference"],
                                 title=t["title"], subject="Committee final vote",
-                                committee_code=lead, vote_date=_committee_adopted_date(ctext),
+                                committee_code=lead, vote_date=committee_day,
                                 source_url=committee_report_url(rep),
                             )
                             counts[f"committee_{cst}"] = counts.get(f"committee_{cst}", 0) + 1

@@ -664,6 +664,10 @@ async def list_votes(
     # to the Parliament. They need their own route under /council, which does not exist
     # yet and is filed rather than bolted on here.
     query = db.query(RollCallVote).filter(RollCallVote.level.in_(("plenary", "committee")))
+    # A row with neither a vote date nor a sitting date cannot fill the required `timestamp`:
+    # one such committee vote turned every page into a 500 on 15 Oct 2026 (17:20-17:45 UTC).
+    # The sync no longer writes one; this keeps a stray row from breaking the endpoint.
+    query = query.filter(or_(RollCallVote.vote_date.isnot(None), RollCallVote.sitting_date.isnot(None)))
     filters = []
     if procedure_reference:
         filters.append(RollCallVote.procedure_ref == procedure_reference)
