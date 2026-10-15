@@ -57,7 +57,7 @@ GET /api/v2/parliament/plenary-adopted-texts?procedure_ref=2024/0079(COD)
 ```
 
 **You get back**
-A `PaginatedResponse[TextItem]` envelope. Each item carries `ta_reference`, `title`, `text_type`, `procedure_ref`, `parliamentary_term`, `committees`, `rapporteur_mep_id`, `rapporteur_name`, `adoption_date`, vote tallies, `full_text_url`, plus the 5 envelope-level datapoints.
+A `PaginatedResponse[TextItem]` envelope. Each item carries `ta_reference`, `title`, `text_type`, `procedure_ref`, `parliamentary_term`, `committees`, `rapporteur_mep_id`, `rapporteur_name`, `adoption_date`, vote tallies, `full_text_url`, plus the 5 envelope-level datapoints. `rapporteur_name` is empty for a resolution on a motion tabled by political groups (RSP and similar: 146 of the 177 without one on 15 Oct 2026), which has no rapporteur.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) via RSS from europarl.europa.eu/plenary/en/texts-adopted.html. Texts appear within hours of plenary adoption.""",
