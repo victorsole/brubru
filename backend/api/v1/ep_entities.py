@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import String, and_, cast, false as sa_false, func, or_
+from sqlalchemy import String, and_, cast, false as sa_false, func, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -72,6 +72,35 @@ def _referral_date(lc) -> "Optional[date]":
             except ValueError:
                 continue
     return min(days) if days else None
+
+
+def _oeil_procedure_dates(db: Session, refs: List[Optional[str]]) -> Dict[str, date]:
+    """Per procedure in `oeil_procedures`: its committee referral, else the first key event.
+
+    A work item whose carriage holds no referral (immunity cases, objections: 123 on
+    15 Oct 2026) is dated from the OEIL procedure file itself. OEIL lists no event at all
+    for a procedure still awaiting its committee, which then stays undated.
+    """
+    clean = sorted({r for r in refs if r})
+    if not clean:
+        return {}
+    out: Dict[str, date] = {}
+    rows = db.execute(text(
+        "SELECT procedure_ref, key_events FROM oeil_procedures WHERE procedure_ref = ANY(:refs)"),
+        {"refs": clean}).fetchall()
+    for ref, events in rows:
+        referral, first = [], []
+        for e in events if isinstance(events, list) else []:
+            try:
+                d = date.fromisoformat(str((e or {}).get("date"))[:10])
+            except ValueError:
+                continue
+            first.append(d)
+            if "committee referral" in str((e or {}).get("event") or "").lower():
+                referral.append(d)
+        if referral or first:
+            out[ref] = min(referral or first)
+    return out
 
 
 def _enrich_doc_title(
@@ -1104,6 +1133,8 @@ async def list_ep_documents(
     # 575 served document_date null. The merge below still orders on vote_date, so pages
     # keep their boundaries; only the served date changes.
     lc_work = _build_lc_lookup(db, [r.procedure_ref for r in c_rows])
+    oeil_dates = _oeil_procedure_dates(db, [r.procedure_ref for r in c_rows if not r.vote_date
+                                            and not _referral_date(lc_work.get(r.procedure_ref))])
     for r in c_rows:
         lc = lc_work.get(r.procedure_ref)
         sort_date[str(r.id)] = r.vote_date.date() if r.vote_date else None
@@ -1115,7 +1146,8 @@ async def list_ep_documents(
             procedure_reference=r.procedure_ref,
             title=(lc.title if lc and lc.title and (r.title or "").startswith("Procedure File:") else (r.title or "")),
             rapporteur_name=r.rapporteur_name or (getattr(lc, "rapporteur_name", None) if lc else None),
-            document_date=(r.vote_date.date() if r.vote_date else _referral_date(lc)),
+            document_date=(r.vote_date.date() if r.vote_date
+                           else _referral_date(lc) or oeil_dates.get(r.procedure_ref)),
             document_url=r.ep_page_url or r.source_url or r.eurlex_url,
             last_updated=r.last_updated,
             public_url=r.ep_page_url or r.source_url or r.eurlex_url,

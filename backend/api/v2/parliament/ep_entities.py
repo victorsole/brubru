@@ -288,7 +288,7 @@ GET /api/v2/parliament/ep-documents?procedure_reference=2025/0419(COD)
 ```
 
 **You get back**
-A `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.
+A `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints. A committee work item is dated by its committee vote; before the vote, by the committee referral its OEIL procedure file records, and where OEIL lists no referral, by the first event it lists. A procedure OEIL has not dated yet (still awaiting its committee, or not yet published: 78 work items on 15 Oct 2026) has `document_date` null.
 
 **Data freshness**
 Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences.""",
