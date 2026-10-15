@@ -7,8 +7,12 @@ directory, and checks laws missing from the corpus against Cellar before
 marking any of them repealed.
 
 Rules learned on the LEG_2026-10 update (13 Oct 2026):
-- An existing row keeps its current main file when that file still exists in the
-  folder; the *.doc.xml wrapper has no CELEX, so re-picking it wiped CELEX.
+- The main file is chosen by what it contains (15 Oct 2026): only a file whose root element is
+  the act (ACT, CORR, GENERAL, AGR) qualifies, never an ANNEX page, the DOC cover page or the
+  PUBLICATION contents; with several, the one whose title matches the folder's metadata title.
+  Keeping a row's earlier file on every import had left 7,352 rows on an annex page and 2,849
+  filled from the cover page. Title from the metadata; type from the CELEX letter; an existing
+  policy_area (the EuroVoc job's) and other writers' extra_metadata keys are kept.
 - Only rows from a LEG_* dump are touched; OJ_*, DPP_* and canon rows are other writers'.
 - A CELEX already held by another row is never inserted again: the Cellar sync's OJ_* rows hold
   the same acts under different uuids (1,738 duplicates on 13 Oct 2026, removed by hand).
@@ -38,6 +42,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -76,6 +81,18 @@ RDF_IN_FORCE = re.compile(r"in-force[^>]*>\s*(true|false)\s*<", re.I)
 RDF_CELEX = re.compile(r"<[\w.-]+:resource_legal_id_celex\b[^>]*>\s*([^<\s]+)\s*<")
 # sector, year, type, number, then any suffix: all 59,010 LEG_2026-10 values match (32010D0646, 32019D0038R(01), ...P0001)
 CELEX_SHAPE = re.compile(r"^[0-9CE][0-9]{4}[A-Z]{1,2}[0-9]{1,6}[0-9A-Z()-]*$")
+# Formex root elements, counted over every LEG_2026-10 file (15 Oct 2026): the act is ACT 29,039, CORR 1,541,
+# GENERAL 1,065 or AGR 354; ANNEX 32,834 are annex pages; DOC 30,261 and PUBLICATION 7,349 are the cover page
+# and the contents list. Picking an ANNEX or a cover page as the main file gave 10,203 rows the wrong title.
+MAIN_ROOTS = ("ACT", "CORR", "GENERAL", "AGR")
+WRAPPERS = (".doc.fmx.xml", ".toc.fmx.xml", ".doc.xml", ".toc.xml")
+FMX_ROOT = re.compile(rb"<(?![?!])([A-Za-z][\w.:-]*)[\s>/]")
+RDF_NS = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
+CDM_NS = "{http://publications.europa.eu/ontology/cdm#}"
+TITLE_STOP = set("the of and to in on for a an by with from as at or be is which its this that european union "
+                 "council commission parliament regulation decision directive no eu ec eec".split())
+TYPE_OF_LETTER = {"R": "Regulation", "L": "Directive", "D": "Decision", "H": "Recommendation", "A": "Opinion"}
+WRONG_FILE_TYPES = ("Annex", "Table of Contents")
 
 
 def compute_file_hash(file_path: Path) -> str:
@@ -103,13 +120,67 @@ def stored_path(xml_path: Path) -> str:
         return str(xml_path)
 
 
-def choose_main(default_path: Path, old_xml_path: Optional[str]) -> Path:
-    """Keep the row's current main file when it still exists in the folder."""
-    if old_xml_path:
-        old = default_path.parent / Path(old_xml_path).name
-        if old.exists():
-            return old
-    return default_path
+def file_root(path: Path) -> str:
+    """The root element of a Formex file (ACT, CORR, ANNEX, DOC...), read from its first 4 KB; 'TIFF' for a scan."""
+    head = path.open("rb").read(4000)
+    if head[:4] in (b"II*\x00", b"MM\x00*"):
+        return "TIFF"
+    m = FMX_ROOT.search(head)
+    return m.group(1).decode() if m else "?"
+
+
+def rdf_title(corpus_path: Path, uuid: str) -> Optional[str]:
+    """The English title the folder's own metadata states (expression_title of the ENG expression), or None."""
+    rdf = corpus_path / uuid / "tree_non_inferred.rdf"
+    if not rdf.exists():
+        return None
+    root = ET.fromstring(rdf.read_bytes())
+    for d in root.findall(RDF_NS + "Description"):
+        lang, t = d.find(CDM_NS + "expression_uses_language"), d.find(CDM_NS + "expression_title")
+        if lang is not None and t is not None and (t.text or "").strip() \
+                and lang.get(RDF_NS + "resource", "").endswith("/ENG"):
+            return " ".join(t.text.split())
+    return None
+
+
+def title_match(a: Optional[str], b: Optional[str]) -> float:
+    """Share of distinctive title words two titles have in common (0..1); robust to number prefixes and spacing."""
+    wa, wb = ({w for w in re.findall(r"[a-z]{3,}", (s or "").lower()) if w not in TITLE_STOP} for s in (a, b))
+    return len(wa & wb) / len(wa | wb) if wa | wb else 0.0
+
+
+def main_file(corpus_path: Path, uuid: str, celex: Optional[str], title_of, parser) -> tuple:
+    """(the act's own file in the folder, title match or None), chosen by what each file contains.
+
+    Only a file whose root is the act (MAIN_ROOTS) can be the main file, never an ANNEX page, the DOC cover page or
+    the PUBLICATION contents; a corrigendum takes its CORR file. Several candidates: the one whose own title best
+    matches the folder's title (title_of() is called only then). (None, None) when the folder holds no act file
+    (32015D1735 holds two TIFF scans).
+    """
+    fmx = corpus_path / uuid / "fmx4"
+    files = sorted(p for p in fmx.iterdir() if p.is_file() and not p.name.endswith(WRAPPERS)) if fmx.is_dir() else []
+    roots = {p: file_root(p) for p in files}
+    cands = [p for p in files if roots[p] in MAIN_ROOTS]
+    if celex and "R(" in celex and any(roots[p] == "CORR" for p in cands):
+        cands = [p for p in cands if roots[p] == "CORR"]
+    if len(cands) < 2:
+        return (cands[0] if cands else None), None
+    title = title_of()
+    if not title:
+        return cands[0], None
+    scored = [(title_match(parser.parse_file(p).title, title), -i, p) for i, p in enumerate(cands)]
+    best = max(scored)
+    return best[2], best[0]
+
+
+def type_label(celex: Optional[str], current: Optional[str]) -> Optional[str]:
+    """doc_type_normalized from the CELEX type letter, the rule the table already follows (18,294 rows read from
+    their act's file, 15 Oct 2026: D Decision, R Regulation, L Directive, H Recommendation, A Opinion; a corrigendum
+    takes its act's letter). Other letters keep the current value unless it names the wrong file."""
+    m = re.match(r"^[0-9CE][0-9]{4}([A-Z]{1,2})", celex or "")
+    if m and m.group(1) in TYPE_OF_LETTER:
+        return TYPE_OF_LETTER[m.group(1)]
+    return "Other" if current in WRONG_FILE_TYPES or not current else current
 
 
 def rdf_in_force(corpus_path: Path, uuid: str) -> Optional[bool]:
@@ -359,7 +430,11 @@ def process_corpus(
                 continue
 
             try:
-                xml_path = choose_main(default_path, row.xml_path if row else None)
+                cx = folder_celex(corpus_path, uuid)
+                # the act's own file, by content: a row that points at an annex or cover page gets a new hash and is re-read
+                picked, _ = main_file(corpus_path, uuid, cx or (row.celex if row else None),
+                                      lambda: rdf_title(corpus_path, uuid), formex_parser)
+                xml_path = picked or default_path
                 xml_rel = stored_path(xml_path)
                 content_hash = compute_file_hash(xml_path)
 
@@ -367,7 +442,7 @@ def process_corpus(
                     stats["unchanged"] += 1
                     if row.xml_path != xml_rel or row.corpus_version != corpus_version:
                         refresh.append({"u": uuid, "p": xml_rel, "v": corpus_version})
-                    check_existing(uuid, folder_celex(corpus_path, uuid), row.celex)
+                    check_existing(uuid, cx, row.celex)
                     continue
 
                 parsed = formex_parser.parse_file(xml_path)
@@ -375,8 +450,9 @@ def process_corpus(
                     stats["errors"] += 1
                     logger.warning(f"[WARN] No title after parse: {uuid}")
                     continue
+                fields = parsed_fields(parsed, xml_rel, content_hash, corpus_version)
+                fields["title"] = rdf_title(corpus_path, uuid) or fields["title"]  # the metadata's title, like the CELEX
 
-                cx = folder_celex(corpus_path, uuid)
                 if parsed.celex and cx and parsed.celex != cx:
                     # usually the act the text amends or implements: the metadata is the folder's own
                     stats["celex_text_disagrees"] += 1
@@ -389,8 +465,13 @@ def process_corpus(
                     if not dry_run:
                         law = db.query(EULaw).filter(EULaw.uuid == uuid).first()
                         if law:
-                            for k, v in parsed_fields(parsed, xml_rel, content_hash, corpus_version).items():
+                            for k, v in fields.items():
+                                if k == "policy_area" and law.policy_area:
+                                    continue  # the EuroVoc job owns it once set (policy_area = EuroVoc domain)
+                                if k == "extra_metadata":
+                                    v = {**(law.extra_metadata or {}), **v}  # other writers' keys stay
                                 setattr(law, k, v)
+                            law.doc_type_normalized = type_label(law.celex, law.doc_type_normalized)
                             law.corpus_status = law.corpus_status or "active"
                             pending_count += 1
                     stats["updated"] += 1
@@ -415,7 +496,7 @@ def process_corpus(
                     if not dry_run:
                         db.add(EULaw(
                             uuid=uuid, celex=celex, corpus_status=status,
-                            **parsed_fields(parsed, xml_rel, content_hash, corpus_version),
+                            doc_type_normalized=type_label(celex, None), **fields,
                         ))
                         pending_count += 1
                     stats["new"] += 1
