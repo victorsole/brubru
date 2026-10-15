@@ -454,33 +454,35 @@ async def list_council_documents(
     # from 3 onwards came back EMPTY while `total` still advertised more.
     # Found 27 Aug 2026 while filling branch 1 (D1).
     depth = page * limit
-    pub_rows = (pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast())
-                .limit(depth).all()) if want_pubs else []
-    cal_rows = (cal_q.order_by(EUCalendarEvent.start_date.desc())
-                .limit(depth).all()) if want_cal else []
-
-    data: list = [_pub_to_item(r) for r in pub_rows]
-    data.extend(_cal_to_item(r) for r in cal_rows)
-
-    # Sort the union by published_date desc.
-    #
-    # The key must normalise tzinfo. `institutional_publications.published_date`
-    # is timestamptz (AWARE) while calendar rows and the `datetime.min` fallback
-    # are NAIVE, and Python refuses to compare the two. This raised a TypeError
-    # the moment branch 1 stopped being empty on 27 Aug 2026 -- so the endpoint
-    # could never have worked with real documents in it, and nobody could tell
-    # while it was serving only meetings.
+    # The merge runs on (id, date) only, and only the page's rows are then read in full
+    # (15 Oct 2026). Reading page*limit WHOLE rows meant page 150 of GovClipping's backfill
+    # read 15,000 documents with their text (21 s) and page 300 died at the 120 s limit.
     _FLOOR = datetime.min.replace(tzinfo=timezone.utc)
 
-    def _sort_key(item):
-        d = item.published_date
+    def _aware(d):
         if d is None:
             return _FLOOR
+        if not isinstance(d, datetime):
+            d = datetime.combine(d, datetime.min.time())
         return d if d.tzinfo is not None else d.replace(tzinfo=timezone.utc)
 
-    data.sort(key=_sort_key, reverse=True)
-    # Apply page slice
-    page_data = data[(page - 1) * limit : page * limit]
+    pub_keys = (pub_q.with_entities(InstitutionalPublication.id, InstitutionalPublication.published_date)
+                .order_by(InstitutionalPublication.published_date.desc().nullslast(), InstitutionalPublication.id)
+                .limit(depth).all()) if want_pubs else []
+    cal_keys = (cal_q.with_entities(EUCalendarEvent.id, EUCalendarEvent.start_date)
+                .order_by(EUCalendarEvent.start_date.desc(), EUCalendarEvent.id)
+                .limit(depth).all()) if want_cal else []
+    keys = [("p", k[0], _aware(k[1])) for k in pub_keys] + [("c", k[0], _aware(k[1])) for k in cal_keys]
+    # Newest first, as before; the key normalises tzinfo (published_date is timestamptz,
+    # calendar dates are naive), which raised a TypeError when this branch first held rows.
+    keys.sort(key=lambda k: k[2], reverse=True)
+    window = keys[(page - 1) * limit: page * limit]
+    pub_ids = [k[1] for k in window if k[0] == "p"]
+    cal_ids = [k[1] for k in window if k[0] == "c"]
+    pub_rows = {r.id: r for r in pub_q.filter(InstitutionalPublication.id.in_(pub_ids)).all()} if pub_ids else {}
+    cal_rows = {r.id: r for r in cal_q.filter(EUCalendarEvent.id.in_(cal_ids)).all()} if cal_ids else {}
+    page_data = [(_pub_to_item(pub_rows[i]) if kind == "p" else _cal_to_item(cal_rows[i]))
+                 for kind, i, _ in window if (pub_rows if kind == "p" else cal_rows).get(i) is not None]
 
     # State what the corpus IS, so an empty result is readable. Until 27 Aug 2026
     # branch 1 held zero rows and this endpoint returned only Council MEETINGS,

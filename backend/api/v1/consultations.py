@@ -282,7 +282,7 @@ class ConsultationItem(BaseModel):
     portal_url: Optional[str] = None
     feedback_url: Optional[str] = None
     com_references: list = Field(default_factory=list)
-    celex_numbers: list = Field(default_factory=list)
+    celex_numbers: list = Field(default_factory=list, description="Not filled: always empty for consultations (15 Oct 2026). com_references carries the Commission documents an initiative names.")
     last_updated: Optional[datetime] = None
     # Body fields — Stage 1 composer. Wraps description / full_description /
     # objectives / target_group / outcome_summary as semantic HTML <article>.
