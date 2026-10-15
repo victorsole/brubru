@@ -102,3 +102,14 @@ def test_rdf_meta_reads_title_and_date(tmp_path):
         '<j.0:expression_title>Council  Decision\nof 2022</j.0:expression_title></rdf:Description>'
         '<rdf:Description><j.0:work_date_document>2022-11-25</j.0:work_date_document></rdf:Description></rdf:RDF>')
     assert rdf_meta(tmp_path, U) == {"title": "Council Decision of 2022", "date": "2022-11-25"}
+
+
+def test_an_act_kept_in_a_nested_folder_is_found(tmp_path):
+    # 8 LEG_2026-10 folders keep the act in fmx4/NNNN/NN/DOC_n/ (32010D0646): the old top-level glob never read them
+    c = _folder(tmp_path, {})
+    for sub, name, root in (("0005/04/DOC_1", "L_2010281EN.01009801.xml", "ACT"), ("0005/04/DOC_2", "L_2010281EN.01009801.doc.xml", "DOC")):
+        d = c / U / "fmx4" / sub
+        d.mkdir(parents=True)
+        (d / name).write_text(_x(root))
+    picked, _ = main_file(c, U, "32010D0646", lambda: None, TitleParser())
+    assert picked.relative_to(c / U / "fmx4").as_posix() == "0005/04/DOC_1/L_2010281EN.01009801.xml"

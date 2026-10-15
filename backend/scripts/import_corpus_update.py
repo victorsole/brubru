@@ -60,7 +60,6 @@ from backend.services.parsers.formex_parser import FormexParser
 from backend.scripts.import_leg_archive import (
     determine_policy_area,
     is_primary_legislation,
-    find_main_xml_files,
 )
 
 # Configure logging
@@ -93,6 +92,7 @@ RDF_NS = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
 CDM_NS = "{http://publications.europa.eu/ontology/cdm#}"
 TITLE_STOP = set("the of and to in on for a an by with from as at or be is which its this that european union "
                  "council commission parliament regulation decision directive no eu ec eec".split())
+MATCH_MIN = 0.4  # title_match of rows read from their act's file: 1% below 0.45 (15 Oct 2026, 18,294 rows)
 TYPE_OF_LETTER = {"R": "Regulation", "L": "Directive", "D": "Decision", "H": "Recommendation", "A": "Opinion"}
 WRONG_FILE_TYPES = ("Annex", "Table of Contents")
 # extra_metadata keys written from the file, and keys other code computes from the file and caches (rebuilt on
@@ -193,7 +193,8 @@ def main_file(corpus_path: Path, uuid: str, celex: Optional[str], title_of, pars
     current file stays. (None, None) when the folder holds no act file (32015D1735 holds two TIFF scans).
     """
     fmx = corpus_path / uuid / "fmx4"
-    files = sorted(p for p in fmx.iterdir() if p.is_file() and not p.name.endswith(WRAPPERS)) if fmx.is_dir() else []
+    files = sorted((p for p in fmx.rglob("*") if p.is_file() and not p.name.endswith(WRAPPERS + (".log",))),
+                   key=lambda p: p.name) if fmx.is_dir() else []
     roots = {p: file_root(p) for p in files}
     cands = [p for p in files if roots[p] in MAIN_ROOTS]
     if celex and "R(" in celex:
@@ -209,6 +210,26 @@ def main_file(corpus_path: Path, uuid: str, celex: Optional[str], title_of, pars
     scored = [(title_match(parser.parse_file(p).title, title), p == current, -i, p) for i, p in enumerate(cands)]
     best = max(scored)
     return best[3], best[0]
+
+
+def number_in_title(celex: Optional[str], title: Optional[str]) -> bool:
+    """The act's number, as titles write it (2025/395, 395/2025, 87/369, No 1305/2013), appears in the title."""
+    m = re.match(r"^3(\d{4})[A-Z]{1,2}0*(\d+)", celex or "")
+    if not m:
+        return False
+    y, n = m.groups()
+    forms = (f"{y}/{n}", f"{n}/{y}", f"{y[2:]}/{n}", f"{n}/{y[2:]}")
+    return any(re.search(rf"(?<![\d/]){re.escape(f)}(?![\d/])", title or "") for f in forms)
+
+
+def act_confirmed(celex: Optional[str], parsed, meta_title: Optional[str]) -> Optional[str]:
+    """None when the parsed file is that act in English, else why not. Its title must match the metadata title
+    (title_match >= MATCH_MIN) or carry the act's number; with no metadata title, English is enough."""
+    if not (parsed.language or "EN").upper().startswith("EN"):
+        return "not English"
+    if meta_title and title_match(parsed.title, meta_title) < MATCH_MIN and not number_in_title(celex, parsed.title):
+        return "neither title nor number match"
+    return None
 
 
 def type_label(celex: Optional[str], current: Optional[str]) -> Optional[str]:
@@ -376,6 +397,7 @@ def process_corpus(
         "absent_in_force": 0,
         "absent_unverified": 0,
         "no_act_file": 0,
+        "not_confirmed": 0,
         "errors": 0,
     }
 
@@ -387,7 +409,9 @@ def process_corpus(
 
         # Find all main XML files in new corpus
         logger.info(f"[INFO] Scanning corpus: {corpus_path}")
-        xml_files = find_main_xml_files(corpus_path)
+        # every folder with Formex text; main_file picks the act's file, at any depth (8 folders keep it in
+        # fmx4/NNNN/NN/DOC_n/, which the old top-level glob never read: 30,238 found of 30,246)
+        xml_files = [d.name for d in sorted(corpus_path.iterdir()) if (d / "fmx4").is_dir()]
         total_files = len(xml_files)
         logger.info(f"[INFO] Found {total_files} documents in new corpus")
 
@@ -447,7 +471,7 @@ def process_corpus(
                 celex_report.append((uuid, outcome, row_celex or "", "", ""))
             return outcome
 
-        for i, (uuid, default_path) in enumerate(xml_files):
+        for i, uuid in enumerate(xml_files):
             new_corpus_uuids.add(uuid)
 
             if (i + 1) % PROGRESS_INTERVAL == 0:
@@ -500,6 +524,13 @@ def process_corpus(
                     continue
                 fields = parsed_fields(parsed, xml_rel, content_hash, corpus_version)
                 m = meta.setdefault("m", rdf_meta(corpus_path, uuid))  # title and date from the metadata, like the CELEX
+                why_not = act_confirmed(cx or (row.celex if row is not None else None), parsed, usable_title(m["title"]))
+                if why_not:  # the same gate as repair_eu_laws_wrong_file: never write a file that may not be the act
+                    stats["not_confirmed"] += 1
+                    celex_report.append((uuid, "file_not_confirmed: " + why_not, row.celex if row is not None else "", cx or "", ""))
+                    if verbose:
+                        logger.info(f"[WARN] {uuid}: {xml_rel} not written ({why_not})")
+                    continue
                 fields["title"] = usable_title(m["title"]) or fields["title"]
                 fields["date"] = m["date"] or fields["date"]
 
@@ -707,6 +738,7 @@ def main():
     logger.info(f"[INFO] Unchanged: {stats['unchanged']} (repointed at {corpus_version}: {stats['refreshed']})")
     logger.info(f"[INFO] Skipped, owned by another source: {stats['skipped_other_source']}")
     logger.info(f"[WARN] Not read, the folder holds no act file (annexes, cover page or scans only): {stats['no_act_file']}")
+    logger.info(f"[WARN] Not written, the file is not confirmed as the act in English (listed for a person): {stats['not_confirmed']}")
     logger.info(f"[INFO] New folders skipped, their CELEX is held by another row: {stats['skipped_celex_held']}")
     logger.info(f"[WARN] New folders not imported, their metadata states no single CELEX: {stats['skipped_no_celex']}")
     logger.info(f"[INFO] Rows without CELEX that took their folder's: {stats['celex_filled']}" + (" (would)" if args.dry_run else ""))

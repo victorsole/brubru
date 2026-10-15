@@ -52,7 +52,8 @@ from sqlalchemy import text  # noqa: E402
 
 from backend.core.database import SessionLocal  # noqa: E402
 from backend.scripts.fix_eu_laws_2025_leftovers import check  # noqa: E402
-from backend.scripts.import_corpus_update import (DERIVED_FROM_FILE, FILE_KEYS, MAIN_ROOTS, WRONG_FILE_TYPES,  # noqa: E402
+from backend.scripts.import_corpus_update import (DERIVED_FROM_FILE, FILE_KEYS, MAIN_ROOTS, MATCH_MIN,  # noqa: E402
+                                                  WRONG_FILE_TYPES, act_confirmed, number_in_title,
                                                   compute_file_hash, file_root, main_file,
                                                   parsed_fields, stored_path, title_match, usable_title,
                                                   type_label)
@@ -63,19 +64,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "docs/LEG_2026-10"
 TABLE = ROOT / "backend/data/leg_2026-10_table/leg_2026-10_table.csv"
 VERSION = "LEG_2026-10"
-MATCH_MIN = 0.4  # title_match of rows read from their act's file: 1% below 0.45 (15 Oct 2026, 18,294 rows)
 WRITES = ("xml_path", "content_hash", "title", "doc_type", "doc_type_normalized", "date", "oj_reference",
           "legal_basis", "citations", "is_primary_legislation", "policy_area", "subject_matter", "extra_metadata")
-
-
-def number_in_title(celex: str, title: str) -> bool:
-    """The act's number, as titles write it (2025/395, 395/2025, 87/369, No 1305/2013), appears in the title."""
-    m = re.match(r"^3(\d{4})[A-Z]{1,2}0*(\d+)", celex or "")
-    if not m:
-        return False
-    y, n = m.groups()
-    forms = (f"{y}/{n}", f"{n}/{y}", f"{y[2:]}/{n}", f"{n}/{y[2:]}")
-    return any(re.search(rf"(?<![\d/]){re.escape(f)}(?![\d/])", title or "") for f in forms)
 
 
 def plan(db, parser):
@@ -105,13 +95,12 @@ def plan(db, parser):
             continue
         p = parser.parse_file(picked)
         score = title_match(p.title, t_title)
-        english = (p.language or "EN").upper().startswith("EN")
+        why_not = act_confirmed(celex, p, t_title) or (None if t_title else "no metadata title")
         if multi_score is not None:
             review.append((i, celex, cur.name, picked.name, f"{score:.2f}", "picked among several act files"))
-        if not t_title or not english or not (score >= MATCH_MIN or number_in_title(celex, p.title)):
+        if why_not:
             why["not English, or not the act by title or number: left for a person"] += 1
-            review.append((i, celex, cur.name, picked.name, f"{score:.2f}",
-                           "not written: " + ("not English" if not english else "neither title nor number match")))
+            review.append((i, celex, cur.name, picked.name, f"{score:.2f}", "not written: " + why_not))
             continue
         why[" + ".join(reasons)] += 1
         fix.append({"id": i, "celex": celex, "path": picked, "parsed": p, "title": t_title,
