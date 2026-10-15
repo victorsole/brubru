@@ -153,14 +153,14 @@ PORTALS = [
      "source": "HaDEA", "category": "agency", "priority": 5},
     {"url": "https://eismea.ec.europa.eu/news_en",
      "source": "EISMEA", "category": "agency", "priority": 5},
-    # EPSO moved to the Commission's web platform (30 September 2026): /en/news
-    # now answers 404 and news lives at /news_en, whose items load by script.
-    # The page's own RSS feed is the machine-readable route. On 30 Sep it
-    # answered 200 with ZERO items (the new site had published no news yet),
-    # so an empty run here means "nothing published", not "nothing fetched".
-    # History: /en/about-epso (no articles) until 11 Sep, then /en/news.
-    {"url": "https://eu-careers.europa.eu/node/2/rss_en",
-     "source": "EPSO", "category": "agency", "priority": 5, "type": "rss"},
+    # EPSO's news is on its selection site (15 Oct 2026). eu-careers.europa.eu became a
+    # careers site on the Commission's web platform on 30 September: /en/news answers 404
+    # and the RSS this entry read (node/2/rss_en) has stayed empty, so /news showed no
+    # EPSO item while EPSO published on 12, 13 and 14 October. The selection site's RSS
+    # lags (newest 29 Sep that day); its listing is current and parses with dates.
+    # History: /en/about-epso until 11 Sep, /en/news until 30 Sep, node/2/rss_en until 15 Oct.
+    {"url": "https://selection.eu-careers.europa.eu/en/news",
+     "source": "EPSO", "category": "agency", "priority": 5},
     {"url": "https://rea.ec.europa.eu/news_en",
      "source": "REA", "category": "agency", "priority": 5},
     {"url": "https://ec.europa.eu/eurostat/en/web/main/news/news-articles",
@@ -198,8 +198,10 @@ PORTALS = [
     # investigations and EEAS statements all reached /api/v2/news/all and never
     # reached these 47 portals. The reverse direction was clean, so the portal
     # list -- not the store -- was the narrow end.
-    {"url": "https://www.eba.europa.eu/rss.xml",
-     "source": "EBA", "category": "agency", "priority": 3, "type": "rss"},
+    # EBA's site answers 403 Forbidden to this scrape and to a headless browser (checked
+    # 15 Oct 2026), an enforced block that is not worked around. EBA's news, publications
+    # and consultations reach /news through Brubru's own store instead (Step 1j,
+    # /api/v2/news/all: economy_items, refreshed daily, newest item 14 Oct that day).
     # Added 23 Sep 2026: EDPB reached /api/v2/news/all but never this scrape,
     # so its items (national DPA fines among them) were missing from the daily
     # ledger. Not added, deliberately: ENISA publishes no RSS (three candidate
