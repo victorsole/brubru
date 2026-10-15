@@ -60,6 +60,20 @@ def _build_lc_lookup(db: Session, refs: List[Optional[str]]) -> Dict[str, "Legis
     return {row.oeil_procedure_ref: row for row in rows}
 
 
+def _referral_date(lc) -> "Optional[date]":
+    """The date OEIL records the committee referral, or None."""
+    events = getattr(lc, "oeil_key_events", None) or []
+    days = []
+    for e in events if isinstance(events, list) else []:
+        kind = str((e or {}).get("event_type") or "").lower()
+        if "committee referral" in kind:
+            try:
+                days.append(date.fromisoformat(str(e.get("date"))[:10]))
+            except ValueError:
+                continue
+    return min(days) if days else None
+
+
 def _enrich_doc_title(
     raw_title_template: str,
     procedure_ref: Optional[str],
@@ -1056,6 +1070,7 @@ async def list_ep_documents(
         ))
 
     # Branch 2: committee_work items
+    sort_date: dict = {}
     cq = db.query(CommitteeWorkItem)
     if committee:
         cq = cq.filter(CommitteeWorkItem.committee_code == committee.upper())
@@ -1084,16 +1099,23 @@ async def list_ep_documents(
     # vote_date, so they all tie at the bottom of the merge key below and last_updated is
     # the only order that makes the page deterministic.
     c_rows = cq.order_by(CommitteeWorkItem.vote_date.desc().nullslast(), CommitteeWorkItem.id).limit(depth).all()
+    # Victor's decision (2 Oct 2026), built 15 Oct: a work item with no committee vote is
+    # dated by the procedure's committee referral, read from its OEIL key events; 574 of
+    # 575 served document_date null. The merge below still orders on vote_date, so pages
+    # keep their boundaries; only the served date changes.
+    lc_work = _build_lc_lookup(db, [r.procedure_ref for r in c_rows])
     for r in c_rows:
+        lc = lc_work.get(r.procedure_ref)
+        sort_date[str(r.id)] = r.vote_date.date() if r.vote_date else None
         items.append(EPDocumentItem(
             id=str(r.id),
             source="committee_work",
             document_type=(r.stage or r.status or "work_item") if isinstance(r.stage, str) else "work_item",
             committee_code=r.committee_code,
             procedure_reference=r.procedure_ref,
-            title=r.title or "",
-            rapporteur_name=r.rapporteur_name,
-            document_date=r.vote_date.date() if r.vote_date else None,
+            title=(lc.title if lc and lc.title and (r.title or "").startswith("Procedure File:") else (r.title or "")),
+            rapporteur_name=r.rapporteur_name or (getattr(lc, "rapporteur_name", None) if lc else None),
+            document_date=(r.vote_date.date() if r.vote_date else _referral_date(lc)),
             document_url=r.ep_page_url or r.source_url or r.eurlex_url,
             last_updated=r.last_updated,
             public_url=r.ep_page_url or r.source_url or r.eurlex_url,
@@ -1119,7 +1141,7 @@ async def list_ep_documents(
     # others in BOTH windows, which rules out a concurrent write. The branches above use
     # the same (date desc, id asc) order, so the merged slice and the branch cutoffs agree.
     items.sort(key=lambda x: x.id)
-    items.sort(key=lambda x: x.document_date or date.min, reverse=True)
+    items.sort(key=lambda x: (sort_date[x.id] if x.id in sort_date else x.document_date) or date.min, reverse=True)
     total = a_total + c_total
     page_data = items[(page - 1) * limit : page * limit]
     return build_envelope(
