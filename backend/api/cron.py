@@ -539,6 +539,11 @@ async def cron_sync_hot_6h(
     results["eurlex"] = await _run_async_service("eurlex", _eurlex)
     results["texts_adopted"] = await _run_async_service("texts_adopted", _texts_adopted)
     results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
+    # The register sync takes a procedure only from a title that quotes one: 1,623 of 1,627
+    # documents had none (15 Oct 2026). Cellar files each proposal and its staff working
+    # documents in a dossier that carries the procedure; only empty values are written.
+    results["commission_doc_procedures"] = await _run_script_async(
+        "commission_doc_procedures", "scripts/backfill_commission_procedure_refs.py", ["--apply"], timeout=600)
 
     # Script-based syncs (no service wrapper yet)
     # Every report and motion tabled this year, from EP Open Data, with its date and text
