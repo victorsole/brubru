@@ -1,7 +1,7 @@
 # EU Automotive Omnibus (Automotive Industrial Action Plan)
 
 ## QUICK FACTS
-- **LATEST (committee vote, 19 October 2026): TRAN votes its opinion on the CO2 standards amendment for new cars and vans, 2025/0420(COD)** (COM(2025) 995 of 16 December 2025, amending Regulation (EU) 2019/631, repealing Directive 1999/94/EC); lead committee ENVI, rapporteur Massimiliano Salini (EPP); indicative plenary 23 November 2026. The CoR adopted an Automotive Package opinion on 14 October (María Chivite). See `ep_committee_votes_15_19_october_2026`.
+- **LATEST (committee vote, 19 October 2026): TRAN votes its opinion on the CO2 standards amendment for new cars and vans, 2025/0420(COD)** (COM(2025) 995 of 16 December 2025, amending Regulation (EU) 2019/631, repealing Directive 1999/94/EC); lead committee ENVI (rapporteur Massimiliano Salini, EPP) has NOT voted yet; indicative plenary 23 November 2026, so Parliament does NOT vote this file in October. The CoR adopted an Automotive Package opinion on 14 October (María Chivite). See `ep_committee_votes_15_19_october_2026`.
 - Initiative: EU Automotive Omnibus, part of the Automotive Industrial Action Plan (AIAP)
 - Commission Communication: "An Industrial Action Plan for the European Automotive Sector" COM(2025)95, published 5 March 2025
 - Omnibus proposal: published March 2026 (package simplifying existing automotive legislation)

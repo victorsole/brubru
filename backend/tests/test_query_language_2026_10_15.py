@@ -16,6 +16,8 @@ CATALAN = [
     "Què significa R(01) al final d'un número CELEX?",
     "Què és l'acceleradora d'inversions en resiliència hídrica de la UE?",
     "Què va signar la UE sobre el Conveni de Varsòvia i la recuperació d'actius?",
+    "Hi ha un diàleg UE-Mèxic sobre salut?",
+    "Hi han terminis per a les esmenes?",
 ]
 
 NOT_CATALAN = [
@@ -25,6 +27,8 @@ NOT_CATALAN = [
     ("IT", "Che cos'è il regolamento sui rimpatri?"),
     ("IT", "Cos'è il Comitato delle regioni?"),
     ("EN", "What is the Return Regulation?"),
+    ("EN", "Hi, has the AI Act been amended?"),
+    ("FR", "Il y a un dialogue UE-Mexique sur la santé ?"),
 ]
 
 

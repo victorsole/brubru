@@ -1143,6 +1143,11 @@ def _detect_query_language(text: str) -> str:
     # (15 Oct 2026), 0 regressions in the other languages.
     if {w.lower() for w in re.findall(r"\b\w+\b", text)} & {"què", "és"}:
         return "CA"
+    # "hi ha" / "hi han" ("there is / there are") exists only in Catalan (ES "hay",
+    # FR "il y a", IT "c'è"). "Hi ha un diàleg UE-Mèxic sobre salut?" scored no
+    # language at all and fell to the EN default (production probe, 15 Oct 2026).
+    if re.search(r"\bhi\s+(?:ha|han|havia|havien|haurà|haurá|hauria)\b", text, re.IGNORECASE):
+        return "CA"
 
     # Fold diacritics once, so the marker sets below stay pure ASCII and the
     # detector is not defeated by a user typing "perque" for "perqu<e-grave>".
@@ -1188,6 +1193,9 @@ def _detect_query_language(text: str) -> str:
     # decisive tally only, and the bag-of-words pass still counted "il" + "la"
     # for Italian against "la" alone for French (probe, 15 Oct 2026).
     _fr_hits += len(re.findall(r"-\s*t\s*-\s*(?:il|elle|ils|elles|on)\b", text, re.IGNORECASE))
+    # "il y a" ("there is") is French only; "Il y a un dialogue UE-Mexique sur la
+    # santé ?" scored IT on "il" alone (15 Oct 2026).
+    _fr_hits += len(re.findall(r"\bil\s+y\s+a\b", text, re.IGNORECASE))
     # "il" is the Italian article AND the French pronoun. It stops counting for
     # Italian when the sentence carries a French-exclusive token ("Il faut...",
     # "Le Conseil a-t-il..."), or when it is the inverted French pronoun after
