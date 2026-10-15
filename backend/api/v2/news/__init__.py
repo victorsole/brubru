@@ -545,7 +545,7 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
                 "GET /api/v2/news/all?family=finance-economy&order=recent\n"
                 "GET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated "
-                "envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are returned on every item by default**; pass `include_body=false` for a light list of titles and dates only. (Until 1 October 2026 they were null unless `include_body=true` was passed, which broke the five-datapoint contract and was reported by a subscriber who read the list and found the text missing while the source had it.) Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry a body composed from the title, summary, body and source link, which is the fullest text held for them."
+                "envelope. Each item carries the 5 datapoints. `document_date` is the date the publisher states and is **null when it states none**; such items are still found by `from` / `to` / `days` and ordered, by `creation_date` (when Brubru captured them).**`body_txt` / `body_html` are returned on every item by default**; pass `include_body=false` for a light list of titles and dates only. (Until 1 October 2026 they were null unless `include_body=true` was passed, which broke the five-datapoint contract and was reported by a subscriber who read the list and found the text missing while the source had it.) Agency items carry the full scraped article; items from the institutional news store (Commission, Parliament, Council, EEAS and other bodies' own newsrooms) carry the article read from the institution's own page, three times a day; an item whose page could not be read yet (the Council's site challenges automated readers) carries the title, summary and link until it is.\n\n**Coverage**\nThe Commission's press corner is held in full from 15 July 2024 (press releases, statements, speeches, daily news). The other newsrooms are read from their RSS feeds, which carry only recent items: Parliament, Council, EEAS, the Court of Justice and the EIB are held in full from late May 2026 and only in part before. Read `coverage_note` and `coverage_complete` in the envelope. "
                 "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
                 "echo the date window actually applied, so you can confirm your filter took "
                 "effect.\n\n**Data freshness**\nLive. Agency news comes from Brubru's economy store; the Commission, Parliament, Council, EEAS and 44 other bodies' own newsroom items are unioned in from the institutional news store, so this feed covers both; an article held in both stores is served once, from the economy store, which carries the full article. Agency items keep their INTEGER `id`; institutional items carry a UUID STRING `id`. Either way, pass the id you were given through to `/api/v2/news/{id}` unchanged. Note `q` is full-text over the agency half and a substring match over the institutional half."))
@@ -631,11 +631,24 @@ async def list_news(
     # Report the window that was actually applied. These envelope fields existed
     # but were never populated here, so every response claimed a null date range
     # regardless of the filter in force.
+    # What the corpus holds (15 Oct 2026): a window reaching back before the newsrooms'
+    # RSS history is not complete, and the envelope says so instead of claiming it is.
+    complete = from_ is not None and from_ >= _FULL_NEWSROOMS_FROM
     return build_envelope(
         [_to_item(r, names, with_body=include_body) for r in rows], total, page, limit,
         published_from=from_, published_to=to,
         updated_from=updated_from, updated_to=updated_to,
+        coverage_complete=complete,
+        coverage_note=None if complete else _COVERAGE_NOTE,
     )
+
+
+_FULL_NEWSROOMS_FROM = date(2026, 5, 26)
+_COVERAGE_NOTE = (
+    "The Commission's press corner is held in full from 15 July 2024. Parliament, Council, "
+    "EEAS, Court of Justice and EIB newsrooms are read from their RSS feeds and held in full "
+    "from 26 May 2026, only in part before. An empty or thin result before that date is a gap "
+    "in this corpus, not silence from the institution.")
 
 
 @router.get("/latest", response_model=dict, tags=["v2-news"],

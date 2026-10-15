@@ -305,6 +305,18 @@ MEUB_SOURCES: List[SourceSpec] = [
                ("--apply", "--free-only", "--concurrency", "1", "--limit", "400", "--max-seconds", "900"),
                timeout=1200, stale_after_hours=30),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
+    # The text of each new institutional news item (15 Oct 2026). The newsroom scrapers store
+    # a title-and-link placeholder; the job that reads the article ran only by hand, so 160
+    # press releases (EEAS 87, Council 45, Commission 20, Parliament 17) reached GovClipping
+    # as "Published by X on <date>. Source: <url>". Two workers: Consilium challenges bursts.
+    # The Commission's press corner, every item of the last three days (15 Oct 2026): before
+    # it, only items a DG's RSS feed repeated reached the news table (about 190 in all).
+    SourceSpec("presscorner", "News - Commission press corner", "warm",
+               "scripts/sync_presscorner.py", ("--apply",), timeout=300, stale_after_hours=14),
+    SourceSpec("news_bodies", "News - article text", "warm",
+               "scripts/fetch_institutional_news_bodies.py",
+               ("--all-institutions", "--apply", "--limit", "300", "--workers", "2", "--max-seconds", "600"),
+               timeout=780, stale_after_hours=14),
     # Then each new agency consultation's own page, then the dates its page labels (15 Oct
     # 2026). Neither was scheduled: the 2 Oct backfills dated the corpus once, so every agency
     # consultation added since reached the API without text and without dates. Both write

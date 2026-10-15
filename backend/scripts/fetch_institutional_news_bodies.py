@@ -125,6 +125,37 @@ _NOT_FOUND = re.compile(r"couldn.t find the page|^Page not found$|404 Content is
 _HEAD_LABELS = ("\nPress release\n", "\nStatement and remarks\n", "\nMedia advisory\n")
 
 
+# Cookie banners the extractor keeps because the site puts them inside the page's main
+# content (15 Oct 2026: 67 stored bodies, EUIPO 34, Commission 13). Only these exact
+# sentences are removed, wherever they sit; the article around them stays.
+_BANNER_PHRASES = (
+    "An official website of the European Union How do you know?",
+    "This site uses cookies.",
+    "Visit our cookies policy page or click the link in any footer for more information and to "
+    "change your preferences. Accept all cookies Accept only essential cookies",
+    "This site uses cookies to offer you a better browsing experience, including for anonymized "
+    "analytics. Find out more about how we use cookies. No thanks, only essential cookies Accept all cookies",
+    "This form is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    "We use cookies or similar technologies to improve your browsing experience on our website. This "
+    "includes remembering your language choice. You can read more information on our cookie policy by "
+    "clicking on this link: Cookie policy. Refuse Accept",
+    "Our website uses anonymised cookies to give you the best browser experience and to collect "
+    "aggregated statistics. This does not include online advertising cookies. Accept all cookies "
+    "Refuse non essential cookies Manage cookies",
+)
+# Any whitespace between the words: pages break the banner across lines.
+_COOKIE_BANNERS = [re.compile(r"\s*".join(re.escape(w) for w in ph.split()) + r"\s*", re.I)
+                   for ph in _BANNER_PHRASES]
+
+
+def _cut_cookie_banner(txt):
+    if not txt:
+        return txt
+    for pat in _COOKIE_BANNERS:
+        txt = pat.sub(" ", txt)
+    return txt.strip()
+
+
 def _cut_site_footer(body: str | None) -> str | None:
     if not body:
         return body
@@ -901,8 +932,18 @@ def main() -> int:
                     help="Only rows with no body at all (body-code mode). A short body is "
                          "often the source's whole text: Cedefop news fetched shorter than "
                          "stored on 10 of 10 (5 Oct 2026).")
+    ap.add_argument("--all-institutions", action="store_true",
+                    help="Every institution's rows still without their text, newest first. The "
+                         "scheduled form (15 Oct 2026): until then nothing ran this job, so every "
+                         "new Commission, Parliament, Council or EEAS item reached the API with a "
+                         "title-and-link placeholder until someone ran it by hand.")
+    ap.add_argument("--max-seconds", type=float, default=0,
+                    help="Stop starting new batches after this long (0 = no limit).")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
+    if not (args.institution or args.body_code or args.ids_file or args.all_institutions):
+        ap.error("one of --institution, --body-code, --ids-file or --all-institutions is required")
+    deadline = time.monotonic() + args.max_seconds if args.max_seconds else None
 
     db = SessionLocal()
     try:
@@ -937,7 +978,9 @@ def main() -> int:
                 # Skip what is already fetched. Without this the job re-downloads every
                 # article on every run: a restart began COMMISSION again from the top,
                 # 1,051 rows already done, and 47 institutions would have paid that twice.
-                "FROM eu_news_items WHERE institution = :inst "
+                "FROM eu_news_items WHERE (institution = :inst OR CAST(:inst AS text) IS NULL) "
+                # Third-party press (OUTLET) is never fetched; newest first, it filled the limit.
+                "  AND (CAST(:inst AS text) IS NOT NULL OR institution <> 'OUTLET') "
                 # The resume guard must not trust the marker alone. On 1 Oct 2026
                 # all 35 ECA rows carried body_source='fetched:article' while 31
                 # held NO text, so the guard excluded them for good: a row that
@@ -952,8 +995,8 @@ def main() -> int:
                 # either, whatever its marker says.
                 "       OR body_txt LIKE '%About the secretariat%') "
                 "ORDER BY news_date DESC NULLS LAST, id LIMIT :n"),
-                {"inst": args.institution, "n": args.limit}).fetchall()
-            label = args.institution
+                {"inst": None if args.all_institutions else args.institution, "n": args.limit}).fetchall()
+            label = "all institutions" if args.all_institutions else args.institution
         targets = [r for r in rows if is_institutional(r.source_url)]
         skipped = len(rows) - len(targets)
         print(f"[INFO] {len(rows)} {label} row(s); {len(targets)} on institutional "
@@ -973,6 +1016,9 @@ def main() -> int:
         BATCH = 40
         i = 0
         for start in range(0, len(targets), BATCH):
+            if deadline and time.monotonic() > deadline:
+                print(f"[INFO] time budget reached; {len(targets) - start} row(s) left for the next run")
+                break
             chunk = targets[start:start + BATCH]
             with cf.ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
                 fetched = list(ex.map(lambda row: (row, *fetch(row.source_url, render=args.render)), chunk))
@@ -1017,7 +1063,7 @@ def main() -> int:
                     v = v.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8", "ignore")
                     return v or None
 
-                body_txt = _clean(_cut_site_footer(body_txt))
+                body_txt = _clean(_cut_site_footer(_cut_cookie_banner(body_txt)))
                 # A page links other documents, and following the wrong one stored another
                 # text under this title (a KIDS Act release under a Portugal aid item, a
                 # Dushanbe speech under a Termez one; 21 rows, 5 Oct 2026). Text taken from a
@@ -1108,7 +1154,10 @@ def main() -> int:
         print(f"\n[{'APPLIED' if args.apply else 'DRY-RUN'}] fetched {ok}, failed {failed}; "
               f"average body {avg:,.0f} characters (was {before:,.0f})")
 
-        if args.apply:
+        if args.all_institutions and targets and ok == 0:
+            # Something to read and nothing read: a run like that must not look like success.
+            print(f"[SYNC_STATUS] degraded: {len(targets)} news item(s) without their text, none read this run")
+        if args.apply and not args.all_institutions:
             if args.body_code:
                 n, avg_now, full = db.execute(text(
                     "SELECT count(*), coalesce(round(avg(nullif(length(body_txt),0))),0), "
