@@ -17,9 +17,11 @@ Rules learned on the LEG_2026-10 update (13 Oct 2026):
 - The CELEX comes from the folder's own metadata (tree_non_inferred.rdf), never from the text
   (14 Oct 2026): the parser found none in 224 files, so the act's held CELEX went unchecked and a
   nameless duplicate was inserted; 35 corrigenda took the CELEX their text names (the act they
-  correct). Every LEG_2026-10 folder with text states exactly one. A new folder whose metadata
-  states none is reported, not inserted; a row whose CELEX differs from its folder is reported, not
-  re-keyed (text, EuroVoc and links are keyed on it: a person decides).
+  correct). Every LEG_2026-10 folder with text states exactly one. Every existing row is checked
+  against its folder, changed or not. A new folder whose metadata states none is reported, not
+  inserted; a row whose CELEX differs from its folder is reported, not re-keyed (text, EuroVoc and
+  links are keyed on it: a person decides); each such row goes to celex_report_<version>.csv.
+  eu_laws.celex has no unique index: the held map is the only guard against a second row.
 
 Usage (repo root; the models import `core.database`, so backend/ must be on the path):
     PYTHONPATH=.:backend python3.12 -m backend.scripts.import_corpus_update \
@@ -72,6 +74,8 @@ SPARQL_CONTROL_CELEX = "32016R0679"  # in force; a batch that does not return it
 SPARQL_BATCH = 40
 RDF_IN_FORCE = re.compile(r"in-force[^>]*>\s*(true|false)\s*<", re.I)
 RDF_CELEX = re.compile(r"<[\w.-]+:resource_legal_id_celex\b[^>]*>\s*([^<\s]+)\s*<")
+# sector, year, type, number, then any suffix: all 59,010 LEG_2026-10 values match (32010D0646, 32019D0038R(01), ...P0001)
+CELEX_SHAPE = re.compile(r"^[0-9CE][0-9]{4}[A-Z]{1,2}[0-9]{1,6}[0-9A-Z()-]*$")
 
 
 def compute_file_hash(file_path: Path) -> str:
@@ -123,26 +127,26 @@ def folder_celex(corpus_path: Path, uuid: str) -> Optional[str]:
     if not rdf.exists():
         return None
     found = set(RDF_CELEX.findall(rdf.read_text(errors="ignore")))
-    return found.pop() if len(found) == 1 else None
+    return found.pop() if len(found) == 1 and CELEX_SHAPE.match(next(iter(found))) else None
 
 
 def celex_for(uuid: str, cx: Optional[str], row_celex: Optional[str], held: dict) -> tuple:
     """(CELEX the row gets, outcome) given its folder's CELEX cx and the {celex: uuid} map of rows holding one.
 
-    keep: the row already carries cx | fill: a new row, or a row without CELEX, takes cx |
-    held: another row holds cx, so this folder duplicates an act already in the table: not written |
-    conflict: the row carries another CELEX than its folder states: kept, for a person |
-    none: the metadata states no single CELEX.
+    keep: the row already carries cx | conflict: the row carries another CELEX than its folder states:
+    kept, for a person (checked before held: a mis-keyed row is not a duplicate) | held: the row has no
+    CELEX and another row holds cx, so this folder duplicates an act already in the table: not written |
+    fill: a new row, or a row without CELEX, takes cx | none: the metadata states no single CELEX.
     """
     if not cx:
         return row_celex, "none"
-    if held.get(cx, uuid) != uuid:
-        return row_celex, "held"
     if row_celex == cx:
         return cx, "keep"
-    if not row_celex:
-        return cx, "fill"
-    return row_celex, "conflict"
+    if row_celex:
+        return row_celex, "conflict"
+    if held.get(cx, uuid) != uuid:
+        return None, "held"
+    return cx, "fill"
 
 
 def cellar_in_force(celexes: list) -> dict:
@@ -252,10 +256,12 @@ def process_corpus(
         "skipped_other_source": 0,
         "skipped_celex_held": 0,
         "skipped_no_celex": 0,
+        "duplicates_without_celex": 0,
+        "metadata_without_celex": 0,
         "celex_filled": 0,
         "celex_conflicts": 0,
         "celex_text_disagrees": 0,
-        "no_celex_left": 0,
+        "without_celex_after": 0,
         "repealed": 0,
         "absent_in_force": 0,
         "absent_unverified": 0,
@@ -308,9 +314,27 @@ def process_corpus(
             pending_count = 0
 
         refresh = []  # unchanged rows that only need the new path / version
-        celex_fill = []  # unchanged rows an earlier import left without CELEX
+        celex_fill = []  # existing rows an earlier import left without CELEX, whose act no other row holds
+        celex_report = []  # (uuid, outcome, row or text CELEX, folder CELEX, holder uuid): every row a person should see
         start_time = time.time()
         pending_count = 0
+
+        def check_existing(uuid, cx, row_celex):
+            """Every existing LEG row is checked against its folder's CELEX, changed or not; returns the outcome."""
+            celex, outcome = celex_for(uuid, cx, row_celex, held)
+            if outcome == "fill":
+                held[celex] = uuid
+                celex_fill.append({"u": uuid, "c": celex})
+            elif outcome == "conflict":
+                stats["celex_conflicts"] += 1
+                celex_report.append((uuid, outcome, row_celex, cx, ""))
+            elif outcome == "held":
+                stats["duplicates_without_celex"] += 1
+                celex_report.append((uuid, outcome, "", cx, held[cx]))
+            elif outcome == "none":
+                stats["metadata_without_celex"] += 1
+                celex_report.append((uuid, outcome, row_celex or "", "", ""))
+            return outcome
 
         for i, (uuid, default_path) in enumerate(xml_files):
             new_corpus_uuids.add(uuid)
@@ -343,16 +367,7 @@ def process_corpus(
                     stats["unchanged"] += 1
                     if row.xml_path != xml_rel or row.corpus_version != corpus_version:
                         refresh.append({"u": uuid, "p": xml_rel, "v": corpus_version})
-                    if not row.celex:
-                        celex, outcome = celex_for(uuid, folder_celex(corpus_path, uuid), None, held)
-                        if outcome == "fill":
-                            held[celex] = uuid
-                            celex_fill.append({"u": uuid, "c": celex})
-                            stats["celex_filled"] += 1
-                        else:
-                            stats["no_celex_left"] += 1
-                            if verbose:
-                                logger.info(f"[WARN] {uuid} stays without CELEX ({outcome})")
+                    check_existing(uuid, folder_celex(corpus_path, uuid), row.celex)
                     continue
 
                 parsed = formex_parser.parse_file(xml_path)
@@ -363,42 +378,38 @@ def process_corpus(
 
                 cx = folder_celex(corpus_path, uuid)
                 if parsed.celex and cx and parsed.celex != cx:
+                    # usually the act the text amends or implements: the metadata is the folder's own
                     stats["celex_text_disagrees"] += 1
-                    if verbose:
-                        logger.info(f"[WARN] {uuid}: the text names {parsed.celex}, the metadata {cx}: metadata kept")
-                celex, outcome = celex_for(uuid, cx, row.celex if row else None, held)
-                if outcome == "held":
-                    # Another row (usually an OJ_* row from the Cellar sync) already holds this act
-                    stats["skipped_celex_held"] += 1
-                    if verbose:
-                        logger.info(f"[SKIP] {uuid}: {cx} is held by {held[cx]}")
-                    continue
-                if outcome == "none" and row is None:
-                    stats["skipped_no_celex"] += 1
-                    logger.warning(f"[WARN] Not imported, the folder's metadata states no single CELEX: {uuid}")
-                    continue
-                if outcome == "conflict":
-                    stats["celex_conflicts"] += 1
-                    logger.warning(f"[WARN] {uuid} keeps {row.celex}; its folder states {cx}: left for a person")
-                if outcome == "fill" and row is not None:
-                    stats["celex_filled"] += 1
-                if celex:
-                    held[celex] = uuid
+                    celex_report.append((uuid, "text_names_another", parsed.celex, cx, ""))
 
                 if row is not None:
-                    # Changed: never regress CELEX to NULL, never re-key
+                    if check_existing(uuid, cx, row.celex) == "held":
+                        continue  # a nameless duplicate of an act another row holds: not re-parsed
+                    # Changed: the CELEX column is never written here (no regress to NULL, no re-key)
                     if not dry_run:
                         law = db.query(EULaw).filter(EULaw.uuid == uuid).first()
                         if law:
                             for k, v in parsed_fields(parsed, xml_rel, content_hash, corpus_version).items():
                                 setattr(law, k, v)
-                            law.celex = celex
                             law.corpus_status = law.corpus_status or "active"
                             pending_count += 1
                     stats["updated"] += 1
                     if verbose:
-                        logger.info(f"[UPDATE] {uuid} ({celex or 'no CELEX'})")
+                        logger.info(f"[UPDATE] {uuid} ({row.celex or 'no CELEX'})")
                 else:
+                    celex, outcome = celex_for(uuid, cx, None, held)
+                    if outcome == "held":
+                        # Another row (usually an OJ_* row from the Cellar sync) already holds this act
+                        stats["skipped_celex_held"] += 1
+                        if verbose:
+                            logger.info(f"[SKIP] {uuid}: {cx} is held by {held[cx]}")
+                        continue
+                    if outcome == "none":
+                        stats["skipped_no_celex"] += 1
+                        celex_report.append((uuid, "new_without_celex", "", "", ""))
+                        logger.warning(f"[WARN] Not imported, the folder's metadata states no single CELEX: {uuid}")
+                        continue
+                    held[celex] = uuid
                     # New law: the dump's own in-force flag decides the status
                     status = "repealed" if rdf_in_force(corpus_path, uuid) is False else "active"
                     if not dry_run:
@@ -434,12 +445,29 @@ def process_corpus(
                     refresh[j:j + BATCH_SIZE],
                 )
                 db.commit()
-            for j in range(0, len(celex_fill), BATCH_SIZE):
-                db.execute(
-                    text("UPDATE eu_laws SET celex = :c WHERE uuid = :u AND coalesce(celex, '') = ''"),
-                    celex_fill[j:j + BATCH_SIZE],
-                )
-                db.commit()
+        # Rows left without CELEX take their folder's; counted as persisted. The NOT EXISTS guards against a row
+        # another writer (the daily Cellar sync) gave the same CELEX during the run: the column has no unique index.
+        if dry_run:
+            stats["celex_filled"] = len(celex_fill)
+        else:
+            for f in celex_fill:
+                stats["celex_filled"] += db.execute(
+                    text("UPDATE eu_laws SET celex = :c WHERE uuid = :u AND coalesce(celex, '') = '' "
+                         "AND NOT EXISTS (SELECT 1 FROM eu_laws o WHERE o.celex = :c)"), f,
+                ).rowcount
+            db.commit()
+        stats["without_celex_after"] = db.execute(
+            text("SELECT count(*) FROM eu_laws WHERE corpus_version = :v AND coalesce(celex, '') = ''"),
+            {"v": corpus_version},
+        ).scalar()
+        if celex_report:
+            cr_path = PROJECT_ROOT / "backend" / "data" / "backups" / f"celex_report_{corpus_version}{'_dry_run' if dry_run else ''}.csv"
+            cr_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(cr_path, "w", newline="") as f:
+                w = csv.writer(f)
+                w.writerow(["uuid", "outcome", "row_or_text_celex", "folder_celex", "held_by_uuid"])
+                w.writerows(celex_report)
+            logger.info(f"[INFO] CELEX report ({len(celex_report)} rows for a person): {cr_path}")
 
         # Laws in a LEG_* dump but not in this one: verify at Cellar, never infer from absence
         absent = [
@@ -547,12 +575,14 @@ def main():
     logger.info(f"[UPDATE] Laws re-parsed and updated: {stats['updated']}")
     logger.info(f"[INFO] Unchanged: {stats['unchanged']} (repointed at {corpus_version}: {stats['refreshed']})")
     logger.info(f"[INFO] Skipped, owned by another source: {stats['skipped_other_source']}")
-    logger.info(f"[INFO] Skipped, CELEX already held by another row: {stats['skipped_celex_held']}")
-    logger.info(f"[INFO] CELEX taken from the folder's metadata by a row that had none: {stats['celex_filled']}")
-    logger.info(f"[WARN] Not imported, the folder's metadata states no single CELEX: {stats['skipped_no_celex']}")
-    logger.info(f"[WARN] Rows still without CELEX (their act is held by another row): {stats['no_celex_left']}")
+    logger.info(f"[INFO] New folders skipped, their CELEX is held by another row: {stats['skipped_celex_held']}")
+    logger.info(f"[WARN] New folders not imported, their metadata states no single CELEX: {stats['skipped_no_celex']}")
+    logger.info(f"[INFO] Rows without CELEX that took their folder's: {stats['celex_filled']}" + (" (would)" if args.dry_run else ""))
+    logger.info(f"[WARN] Rows without CELEX whose act another row holds (duplicates, for a person): {stats['duplicates_without_celex']}")
+    logger.info(f"[WARN] Rows whose folder's metadata states no single CELEX: {stats['metadata_without_celex']}")
     logger.info(f"[WARN] Rows whose CELEX differs from their folder's (kept, for a person): {stats['celex_conflicts']}")
     logger.info(f"[INFO] Texts naming another CELEX than their metadata (metadata kept): {stats['celex_text_disagrees']}")
+    logger.info(f"[INFO] {corpus_version} rows without CELEX now: {stats['without_celex_after']}")
     logger.info(f"[REPEAL] Absent and not in force at Cellar, marked repealed: {stats['repealed']}")
     logger.info(f"[INFO] Absent but still in force at Cellar (left active): {stats['absent_in_force']}")
     logger.info(f"[INFO] Absent and unverified (left untouched): {stats['absent_unverified']}")

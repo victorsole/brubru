@@ -45,6 +45,15 @@ def test_celex_for_outcomes():
     assert celex_for(U, None, None, held) == (None, "none")
 
 
+def test_a_mis_keyed_row_is_a_conflict_not_a_duplicate():
+    # its folder's CELEX is held elsewhere, but the row carries another one: a person must see it
+    assert celex_for(U, "32025R0026", "32024R1689", {"32025R0026": OTHER, "32024R1689": U}) == ("32024R1689", "conflict")
+
+
+def test_folder_celex_rejects_a_value_that_is_not_a_celex(tmp_path):
+    assert folder_celex(_rdf(tmp_path, _celex("j.0", "http://example.org/x")), U) is None
+
+
 def test_an_act_held_by_another_row_is_not_inserted_again():
     # the 13 Oct case: the parser finds no CELEX, the Cellar sync's row already holds the act
     assert celex_for(U, "32025R0026", None, {"32025R0026": OTHER}) == (None, "held")
