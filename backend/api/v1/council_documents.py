@@ -313,7 +313,7 @@ def _cal_to_item(r) -> CouncilDocumentItem:
 Returns Council of the EU documents: the documents of the Council's public register (CM meeting notices and provisional agendas of the Council's working parties, ST standard documents, WK working documents, with their revisions, addenda and corrigenda) and the Council's press releases. With `source=meetings` it returns Council and European Council meetings from the calendar instead; `source=all` returns both.
 
 **What the corpus covers, and what it does not**
-- Register documents: every document data.consilium.europa.eu serves by its reference, from 15 July 2024 (the start of the 10th Parliament) onwards, plus about 130 older ones. A document the Council has not released is not served there and is not here. Each carries its whole text, read from the PDF, and the date printed on it.
+- Register documents: every document data.consilium.europa.eu serves by its reference, from 15 July 2024 (the start of the 10th Parliament) onwards, except working documents (WK) dated before 17 September 2024, which are not yet held; plus about 150 older ones. A document the Council has not released is not served there and is not here. Each carries its whole text, read from the PDF, and the date printed on it, except about 250 scanned documents, which have no text to read and are titled by their reference, and about 470 whose date could not be read.
 - Press releases: read from the Council's RSS feed since 14 October 2026, plus 57 read between 14 August and 28 September 2026; releases published between 29 September and 8 October 2026 are not held. A release carries its title, date, topic and the feed's one-paragraph summary: the full text sits behind a browser check on the Council's website, which Brubru does not get past, so `body_txt` is that summary.
 - Read `coverage_note`, `coverage_from` and `coverage_to` before concluding that an empty result means the Council said nothing.
 
@@ -492,9 +492,10 @@ async def list_council_documents(
     cov = db.execute(_COVERAGE_SQL).fetchone()
     coverage_note = (
         "Council register documents (CM, ST, WK, with revisions, addenda and corrigenda) "
-        "as data.consilium serves them by reference, from 15 July 2024, each with its "
-        "whole text; Council press releases from the Council's RSS feed since 14 October "
-        "2026 (title, date, topic and summary: the full text is behind a browser check), "
+        "as data.consilium serves them by reference, from 15 July 2024 (working documents "
+        "from 17 September 2024), each with its whole text unless it is a scan; Council "
+        "press releases from the Council's RSS feed since 14 October 2026 (title, date, "
+        "topic and summary: the full text is behind a browser check), "
         "plus 57 from 14 August to 28 September 2026; Council and European Council "
         "meetings with source=meetings or all. A document the Council has not released "
         "is not here. An empty result means nothing matched THIS corpus, not that the "
