@@ -252,6 +252,10 @@ MEUB_SOURCES: List[SourceSpec] = [
     # scheduled nowhere, which is why new items would never have arrived, and its dates
     # were derived from PDF filenames until 28 Sep 2026 (migration 250).
     SourceSpec("rsb_opinions", "Regulatory Scrutiny Board opinions", "warm", "scripts/ingest_rsb_opinions.py", (), timeout=600, stale_after_hours=48),
+    # The Board's opinions on impact assessments, most of its output, are SEC documents in the
+    # Commission's register (type OPIN_IMPACT_ASSESS, 859 listed on 15 Oct 2026); the page above
+    # never carried them, so the table held nothing after August 2022.
+    SourceSpec("rsb_register_opinions", "Regulatory Scrutiny Board opinions (Commission register)", "warm", "scripts/sync_rsb_register_opinions.py", ("--apply", "--days", "60", "--max-seconds", "480"), timeout=600, stale_after_hours=48),
     # Delegated and implementing acts, from the Commission's RegDel Excel exports.
     # Scheduled nowhere until 28 Sep 2026, so secondary_acts had not been refreshed since
     # 10 August and /legislative/delegated-acts and /legislative/implementing-acts both
