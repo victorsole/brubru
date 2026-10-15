@@ -57,6 +57,29 @@ RE_AMEND_START = re.compile(r'<Amend>')
 RE_AMEND_END = re.compile(r'</Amend>')
 
 # Element reference detection for the <Article> tag content
+# The cover of a draft report (PR): "Rapporteur: Manuela Ripa", "Rapporteurs: Tonino Picula,
+# Karlo Ressler", "Co-rapporteurs: ...", budget reports "Victor Negrescu (Section III - Commission)".
+RE_RAPPORTEURS = re.compile(
+    r'(?:Co-)?Rapporteurs?(?: for the opinion)?\s*:\s*(.+?)(?:\s+TITLE\s|\s+PR_[A-Z]|\n|$)', re.I)
+
+
+def rapporteurs_from_text(text: str) -> List[str]:
+    """The rapporteur(s) a draft report's cover names, in order; [] when it names none.
+
+    A draft report's amendments are its rapporteur's, so the document carries no <Members>
+    tag per amendment: 31,123 of 64,198 stored amendments had no author (15 Oct 2026).
+    """
+    m = RE_RAPPORTEURS.search(text or "")
+    if not m:
+        return []
+    names = []
+    for part in re.split(r'\s*,\s*|\s+and\s+', m.group(1)):
+        name = re.sub(r'\s*\([^)]*\)\s*', ' ', part).strip(" .;")
+        if name and len(name.split()) >= 2 and name not in names:
+            names.append(name)
+    return names
+
+
 RE_ELEMENT_PATTERNS = [
     (re.compile(r'^(Article\s+\d+(?:\s*[a-z])?(?:\s*\(\d+\))?)(.*)$', re.IGNORECASE), 'article'),
     (re.compile(r'^(Recital\s+\d+(?:\s*[a-z])?)(.*)$', re.IGNORECASE), 'recital'),

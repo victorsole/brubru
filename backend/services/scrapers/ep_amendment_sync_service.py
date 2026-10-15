@@ -26,7 +26,9 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from models.mep_amendment import AmendmentDocument, MEPAmendment
 from services.api_clients.oeil_client import OEILClient
-from services.parsers.ep_amendment_parser import EPAmendmentParser, ParsedAmendment, GROUP_ALIASES
+from services.parsers.ep_amendment_parser import (
+    EPAmendmentParser, ParsedAmendment, GROUP_ALIASES, rapporteurs_from_text,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -211,6 +213,21 @@ class EPAmendmentSyncService:
             rapporteur_name=None  # Could be extracted from PR docs
         )
 
+        # A draft report's amendments are its rapporteur's: the document tags no author per
+        # amendment, and its cover names the rapporteur(s).
+        rapporteurs: List[str] = []
+        if doc_type == 'PR':
+            try:
+                import io
+                from docx import Document
+                cover = "\n".join(par.text for par in Document(io.BytesIO(docx_bytes)).paragraphs[:80])
+                rapporteurs = rapporteurs_from_text(cover)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning(f"  Could not read the rapporteur of {pe_reference}: {type(exc).__name__}")
+            for pa in parsed_amendments:
+                if not pa.authors and rapporteurs:
+                    pa.authors = list(rapporteurs)
+
         # Enrich political groups from MEP lookup
         if self._mep_groups:
             enriched = 0
@@ -239,7 +256,8 @@ class EPAmendmentSyncService:
         self._upsert_document_record(
             doc_entry, procedure_ref,
             status='parsed', error_message=None,
-            total_amendments=stored_count
+            total_amendments=stored_count,
+            rapporteur_name=", ".join(rapporteurs) or None,
         )
 
         self.db.commit()
@@ -278,7 +296,7 @@ class EPAmendmentSyncService:
         ).on_conflict_do_update(
             constraint='uq_mep_amendment_pe_num',
             set_={
-                'author_names': pa.authors,
+                **({'author_names': pa.authors} if pa.authors else {}),  # never erase a held author
                 'political_group': pa.political_group,
                 'on_behalf_of_group': pa.on_behalf_of_group,
                 'element_type': pa.element_type,
@@ -300,7 +318,8 @@ class EPAmendmentSyncService:
         procedure_ref: str,
         status: str,
         error_message: Optional[str],
-        total_amendments: int
+        total_amendments: int,
+        rapporteur_name: Optional[str] = None,
     ) -> None:
         """Insert or update a document tracking record."""
         pe_reference = doc_entry.get('pe_reference', '')
@@ -323,9 +342,11 @@ class EPAmendmentSyncService:
             total_amendments=total_amendments,
             status=status,
             error_message=error_message,
+            rapporteur_name=rapporteur_name,
         ).on_conflict_do_update(
             index_elements=['pe_reference'],
             set_={
+                **({'rapporteur_name': rapporteur_name} if rapporteur_name else {}),
                 'total_amendments': total_amendments,
                 'status': status,
                 'error_message': error_message,
