@@ -50,6 +50,44 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
 
 
+def _code(action: str) -> str:
+    """The topic identifier an action string starts with ("X - HORIZON-RIA ..." -> "X")."""
+    return (action or "").split(" - ")[0].strip().upper()
+
+
+def topic_budget(b: dict, topic_id: str) -> tuple[float, int, list[str]]:
+    """(total, entries matched, sibling topics) for one topic in a budgetOverviewJSONItem.
+
+    Each key of budgetTopicActionMap is one budget envelope. A topic can appear under one key
+    several times, once per type of action, each entry repeating the SAME envelope:
+    HORIZON-MSCA-2026-DN-01-01 lists DN, DN-JD and DN-ID under key 113402, each with
+    EUR 628,033,846, and summing them stored EUR 1,884,101,538 (15 Oct 2026). So a key counts
+    once (per year, its largest figure); separate keys are separate money and add up.
+    The match is on the whole identifier: a prefix test let "...-D2-01-1" take "...-D2-01-16".
+    """
+    want = topic_id.strip().upper()
+    total, matched, shared = 0.0, 0, []
+    for entries in (b.get("budgetTopicActionMap") or {}).values():
+        entries = [e for e in (entries or []) if isinstance(e, dict)]
+        mine = [e for e in entries if _code(e.get("action")) == want]
+        if not mine:
+            continue
+        matched += len(mine)
+        for e in entries:
+            other = (e.get("action") or "").split(" - ")[0].strip()
+            if other and other.upper() != want and other not in shared:
+                shared.append(other)
+        by_year: dict[str, float] = {}
+        for e in mine:
+            for year, v in (e.get("budgetYearMap") or {}).items():
+                try:
+                    by_year[year] = max(by_year.get(year, 0.0), float(v))
+                except (TypeError, ValueError):
+                    pass
+        total += sum(by_year.values())
+    return total, matched, shared
+
+
 def fetch_budget(topic_id: str) -> tuple[float | None, str, list[str]]:
     """Total budget for this topic in euro, why not, and the sibling topics
     that share the same envelope.
@@ -87,29 +125,7 @@ def fetch_budget(topic_id: str) -> tuple[float | None, str, list[str]]:
         except Exception:  # noqa: BLE001
             return None, "budget block unparseable", []
 
-    total = 0.0
-    matched = 0
-    shared: list[str] = []
-    for key, entries in (b.get("budgetTopicActionMap") or {}).items():
-        mine = [e for e in (entries or [])
-                if (e.get("action") or "").upper().startswith(topic_id.upper())]
-        if not mine:
-            continue
-        # Everything else under the same key draws on the same envelope.
-        for e in entries or []:
-            other = (e.get("action") or "").split(" - ")[0].strip()
-            if other and other.upper() != topic_id.upper() and other not in shared:
-                shared.append(other)
-        for e in mine:
-            matched += 1
-            # The identifier that starts the action string is the match, never
-            # the position in the list: taking the first entry would have given
-            # the circular economy call its sibling's budget.
-            for v in (e.get("budgetYearMap") or {}).values():
-                try:
-                    total += float(v)
-                except (TypeError, ValueError):
-                    pass
+    total, matched, shared = topic_budget(b, topic_id)
     if not matched:
         return None, "topic not in its own budget map", []
     if total <= 0:
@@ -171,6 +187,8 @@ def main() -> int:
                         "budget_currency = 'EUR', last_updated = now() "
                         "WHERE topic_id = :t AND indicative_budget IS NULL"),
                         {"b": total, "t": r.topic_id})
+            if args.apply and len(found) % 50 == 0:
+                db.commit()
             time.sleep(0.4)
 
         print(f"\n  resolved {len(found)}, unresolved {len(missing)}, "
