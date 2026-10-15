@@ -375,7 +375,8 @@ def _kill_process_group(proc, name: str) -> None:
 
 _TENDERATOR_CHAIN = (
     "tenders_fetch", "tenders", "tenders_country_repair",
-    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_tenders_bridge", "tender_matching",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_call_budgets", "ft_tenders_bridge",
+    "tender_matching",
     "tenderator_translations_ted", "tenderator_translations_ft_tenders",
     "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
 )
@@ -924,6 +925,15 @@ async def cron_sync_daily(
         # call and tender (~30 SEDIA pages at ~10 s each) instead of a 500-row
         # budget that never reached tenders or the English records.
         ["--apply", "--limit", "500", "--write-ft"], timeout=1800,
+    )
+
+    # Budgets of calls for proposals, from the portal's topic file (budgetOverviewJSONItem).
+    # The SEDIA ingest never writes one, and this was run once, for open LIFE calls:
+    # on 15 Oct 2026 2,765 of 2,822 calls served no budget. Only empty budgets are read.
+    results["ft_call_budgets"] = await _run_script_async(
+        "ft_call_budgets",
+        "scripts/backfill_call_budgets.py",
+        ["--pattern", "%", "--status", "any", "--limit", "300", "--apply"], timeout=900,
     )
 
     # Bridge the EU institutions' own contract notices into `tenders`, the only
