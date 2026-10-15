@@ -61,7 +61,7 @@ GET /api/v2/council/council-documents?source=meetings
 ```
 
 **You get back**
-A `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries `id`, `self`, `title`, `document_type`, `url` and `public_url` (the PDF on data.consilium for a register document, the release page for a press release), `document_date` (the date printed on the document), the whole text in `body_txt` and `body_html`, `creation_date` (when Brubru first stored it) and `updated_date` (when its content last changed).
+A `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries `id`, `self`, `title`, `document_type`, `url` and `public_url` (the PDF on data.consilium for a register document, the release page for a press release; a press briefing or media advisory announces a meeting and the Council takes its page down once the meeting is over, so that link then answers 'Page not found': 15 of 84 press items on 15 Oct 2026, whose text is kept in `body_txt` where Brubru read it), `document_date` (the date printed on the document), the whole text in `body_txt` and `body_html`, `creation_date` (when Brubru first stored it) and `updated_date` (when its content last changed).
 
 **Data freshness**
 Register documents three times a day (about 07:00, 13:00 and 19:00 UTC): each run asks for the new reference numbers and again for those of the last three weeks, so a document released late is found within a day. Press releases every three hours from the RSS feed. Meetings with the calendar sync.""",
