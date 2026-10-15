@@ -34,6 +34,7 @@ class EULaw(Base):
     # Identifiers
     uuid = Column(String(36), unique=True, nullable=False, index=True)
     celex = Column(String(30), index=True)  # Nullable because not all docs have CELEX (increased from 20)
+    # One row per CELEX: partial unique index uq_eu_laws_celex (migration 292); NULL and '' are not compared.
 
     # Basic metadata
     doc_type = Column(Text)  # "Commission Implementing Decision", etc. (TEXT - no length limit)
