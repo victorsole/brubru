@@ -33,6 +33,21 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/procedures", tags=["v1-procedures"])
 
 
+def _eurlex_of(celex_numbers) -> "str | None":
+    """The adopted act on EUR-Lex, from the first CELEX OEIL links as its final act."""
+    for c in celex_numbers or []:
+        if c:
+            return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{c}"
+    return None
+
+
+# Fields the item has always declared and that no job fills for an OEIL procedure file
+# (15 Oct 2026: empty on all 2,074 rows GovClipping walked). Said so, rather than left to
+# read as "no events" or "no themes".
+_NOT_FILLED = ("Not filled for OEIL procedure files (a legacy Legislative Train field): "
+               "always empty here. OEIL's own dated events are in oeil_key_events.")
+
+
 class ProcedureItem(BaseModel):
     """LIST-shaped procedure row.
 
@@ -57,7 +72,7 @@ class ProcedureItem(BaseModel):
         ),
     )
     is_blocked: bool = False
-    days_in_current_status: Optional[int] = None
+    days_in_current_status: Optional[int] = Field(None, description=_NOT_FILLED)
     text_type: Optional[str] = None
 
     lead_committee: Optional[str] = None
@@ -65,8 +80,8 @@ class ProcedureItem(BaseModel):
     committees: list = Field(default_factory=list)
     rapporteur_mep_id: Optional[str] = None
 
-    celex_numbers: list = Field(default_factory=list)
-    eprs_briefing_ids: list = Field(default_factory=list)
+    celex_numbers: list = Field(default_factory=list, description="The CELEX of the act the procedure produced, as OEIL links it under Final act; empty until the act is published.")
+    eprs_briefing_ids: list = Field(default_factory=list, description=_NOT_FILLED)
     eprs_matched_briefings: list = Field(default_factory=list)
     policy_areas: list = Field(
         default_factory=list,
@@ -76,21 +91,21 @@ class ProcedureItem(BaseModel):
             "procedure file. Empty for the non-OEIL rows that include_other_sources adds."
         ),
     )
-    related_themes: list = Field(default_factory=list)
-    spotlight_tags: list = Field(default_factory=list)
-    ec_priority_ids: list = Field(default_factory=list)
+    related_themes: list = Field(default_factory=list, description=_NOT_FILLED)
+    spotlight_tags: list = Field(default_factory=list, description=_NOT_FILLED)
+    ec_priority_ids: list = Field(default_factory=list, description=_NOT_FILLED)
 
-    timeline: list = Field(default_factory=list)
-    status_history: list = Field(default_factory=list)
-    oeil_timeline: list = Field(default_factory=list)
+    timeline: list = Field(default_factory=list, description=_NOT_FILLED)
+    status_history: list = Field(default_factory=list, description=_NOT_FILLED)
+    oeil_timeline: list = Field(default_factory=list, description=_NOT_FILLED)
     oeil_key_events: list = Field(default_factory=list)
-    eurlex_documents: list = Field(default_factory=list)
+    eurlex_documents: list = Field(default_factory=list, description=_NOT_FILLED)
 
     ai_summary: Optional[str] = None
-    ai_entities: list = Field(default_factory=list)
-    ai_policy_classifications: list = Field(default_factory=list)
+    ai_entities: list = Field(default_factory=list, description=_NOT_FILLED)
+    ai_policy_classifications: list = Field(default_factory=list, description=_NOT_FILLED)
 
-    legal_text_url: Optional[str] = None
+    legal_text_url: Optional[str] = Field(None, description="The adopted act on EUR-Lex, from its CELEX; empty until the act is published.")
     url: Optional[str] = None
     # Aggregated procedure tracker on law-tracker.europa.eu — combines OEIL,
     # EUR-Lex and Commission events on a single page. Pattern:
@@ -99,7 +114,7 @@ class ProcedureItem(BaseModel):
 
     first_seen: Optional[datetime] = None
     last_updated: Optional[datetime] = None
-    expected_completion: Optional[datetime] = None
+    expected_completion: Optional[datetime] = Field(None, description=_NOT_FILLED)
     enriched_at: Optional[datetime] = None
     enrichment_quality: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints. A procedure is an OEIL file —
@@ -367,7 +382,7 @@ async def list_procedures(
             ai_summary=r.ai_summary,
             ai_entities=_coerce_list(r.ai_entities),
             ai_policy_classifications=_coerce_list(r.ai_policy_classifications),
-            legal_text_url=r.legal_text_url,
+            legal_text_url=r.legal_text_url or _eurlex_of(r.celex_numbers),
             url=r.url,
             law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
             first_seen=r.first_seen,
@@ -418,7 +433,7 @@ class ProcedureDetail(BaseModel):
         ),
     )
     is_blocked: bool = False
-    days_in_current_status: Optional[int] = None
+    days_in_current_status: Optional[int] = Field(None, description=_NOT_FILLED)
     text_type: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints (see ProcedureItem for the contract).
     public_url: Optional[str] = Field(None, description="OEIL procedure-file URL.")
@@ -435,8 +450,8 @@ class ProcedureDetail(BaseModel):
     rapporteur_mep_id: Optional[str] = None
 
     # Cross-references
-    celex_numbers: list = Field(default_factory=list)
-    eprs_briefing_ids: list = Field(default_factory=list)
+    celex_numbers: list = Field(default_factory=list, description="The CELEX of the act the procedure produced, as OEIL links it under Final act; empty until the act is published.")
+    eprs_briefing_ids: list = Field(default_factory=list, description=_NOT_FILLED)
     eprs_matched_briefings: list = Field(default_factory=list)
     policy_areas: list = Field(
         default_factory=list,
@@ -446,24 +461,24 @@ class ProcedureDetail(BaseModel):
             "procedure file. Empty for the non-OEIL rows that include_other_sources adds."
         ),
     )
-    related_themes: list = Field(default_factory=list)
-    spotlight_tags: list = Field(default_factory=list)
-    ec_priority_ids: list = Field(default_factory=list)
+    related_themes: list = Field(default_factory=list, description=_NOT_FILLED)
+    spotlight_tags: list = Field(default_factory=list, description=_NOT_FILLED)
+    ec_priority_ids: list = Field(default_factory=list, description=_NOT_FILLED)
 
     # Timeline & history
-    timeline: list = Field(default_factory=list)
-    status_history: list = Field(default_factory=list)
-    oeil_timeline: list = Field(default_factory=list)
+    timeline: list = Field(default_factory=list, description=_NOT_FILLED)
+    status_history: list = Field(default_factory=list, description=_NOT_FILLED)
+    oeil_timeline: list = Field(default_factory=list, description=_NOT_FILLED)
     oeil_key_events: list = Field(default_factory=list)
-    eurlex_documents: list = Field(default_factory=list)
+    eurlex_documents: list = Field(default_factory=list, description=_NOT_FILLED)
 
     # AI enrichment
     ai_summary: Optional[str] = None
-    ai_entities: list = Field(default_factory=list)
-    ai_policy_classifications: list = Field(default_factory=list)
+    ai_entities: list = Field(default_factory=list, description=_NOT_FILLED)
+    ai_policy_classifications: list = Field(default_factory=list, description=_NOT_FILLED)
 
     # Links
-    legal_text_url: Optional[str] = None
+    legal_text_url: Optional[str] = Field(None, description="The adopted act on EUR-Lex, from its CELEX; empty until the act is published.")
     url: Optional[str] = None
     # https://law-tracker.europa.eu/procedure/{YYYY}_{N}?lang=en
     law_tracker_url: Optional[str] = None
@@ -471,7 +486,7 @@ class ProcedureDetail(BaseModel):
     # Temporal
     first_seen: Optional[datetime] = None
     last_updated: Optional[datetime] = None
-    expected_completion: Optional[datetime] = None
+    expected_completion: Optional[datetime] = Field(None, description=_NOT_FILLED)
     enriched_at: Optional[datetime] = None
     enrichment_quality: Optional[str] = None
 
@@ -529,7 +544,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         ai_summary=r.ai_summary,
         ai_entities=_coerce_list(r.ai_entities),
         ai_policy_classifications=_coerce_list(r.ai_policy_classifications),
-        legal_text_url=r.legal_text_url,
+        legal_text_url=r.legal_text_url or _eurlex_of(r.celex_numbers),
         url=r.url,
         law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
         first_seen=r.first_seen,

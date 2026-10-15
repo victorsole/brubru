@@ -21,6 +21,7 @@ OEIL had moved on.
 """
 
 import argparse
+import re
 import time
 import asyncio
 from sqlalchemy import text
@@ -79,6 +80,25 @@ def log(msg):
 # cannot drift apart. See that docstring for why "Decision by Parliament" no
 # longer means COMPLETED (15 Sep 2026).
 STATUS_RANK = {CarriageStatusEnum(k): v for k, v in _PARSER_STATUS_RANK.items()}
+
+
+_FINAL_ACT_SECTION = "section=FINAL_ACT"
+_FINAL_ACT_CELEX = re.compile(r"CELEXnumdoc&(?:amp;)?lg=EN&(?:amp;)?numdoc=(3\d{4}[A-Z]\d{4})")
+
+
+def final_act_celex(html: str | None) -> list[str]:
+    """The CELEX of each final act the OEIL page links (15 Oct 2026).
+
+    OEIL lists a completed file's final act after its "Final act" section marker as a
+    EUR-Lex link (2023/0008(COD): numdoc=32025R2458, "Regulation 2025/2458"); celex_numbers
+    was empty on 2,056 of 2,074 procedures GovClipping walked, 350 of them with "Final act
+    published in Official Journal" among their events. Only links after the marker count:
+    a CELEX elsewhere on the page names some other act.
+    """
+    if not html or _FINAL_ACT_SECTION not in html:
+        return []
+    tail = html[html.index(_FINAL_ACT_SECTION):]
+    return sorted(set(_FINAL_ACT_CELEX.findall(tail[:6000])))
 
 
 def infer_status_from_events(events, stage=None) -> CarriageStatusEnum | None:
@@ -256,6 +276,13 @@ async def update_statuses():
                     if getattr(carriage, col) != val:
                         setattr(carriage, col, val)
                         changed.append(col)
+
+                # The final act's CELEX, added to what the row holds, never removed: other
+                # writers (the OJ sync) add CELEX numbers to the same column.
+                acts = final_act_celex(page.html)
+                if acts and not set(acts) <= set(carriage.celex_numbers or []):
+                    carriage.celex_numbers = sorted(set(carriage.celex_numbers or []) | set(acts))
+                    changed.append("celex_numbers")
 
                 body = parse_body(page.html)
                 now = datetime.now(timezone.utc)
