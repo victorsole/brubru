@@ -405,6 +405,41 @@ def _to_number(value) -> Optional[float]:
         return None
 
 
+def tender_lots_text(md: Dict[str, Any], description: str) -> str:
+    """Each lot's name and description, where they add to the tender's own description.
+
+    A call for tenders often states one sentence ("Provision of Interim Staff services to
+    the EIT.") and describes its lots in `lots`, a JSON string of eForms procurementProject
+    entries. On 15 Oct 2026 251 tenders published since July 2024 served under 200
+    characters; for 8 of 25 sampled the lots held 100 to 2,476 characters more.
+    """
+    out: List[str] = []
+    seen = {" ".join((description or "").split()).lower()}
+    for raw in md.get("lots") or []:
+        try:
+            data = json.loads(raw) if isinstance(raw, str) else raw
+        except ValueError:
+            continue
+        lots = data if isinstance(data, list) else (data or {}).get("procurementProjectLots") or []
+        for lot in lots:
+            if not isinstance(lot, dict):
+                continue
+            pp = lot.get("procurementProject") or {}
+            if not isinstance(pp, dict):
+                continue
+            parts = []
+            for key in ("name", "description"):
+                v = " ".join(str(pp.get(key) or "").split())
+                if v and v.lower() not in seen and not any(v.lower() in x for x in seen):
+                    seen.add(v.lower())
+                    parts.append(v)
+            if parts:
+                label = lot.get("procurementProjectLotID") or ""
+                head = f"Lot {label[4:].lstrip('0')}" if label.startswith("LOT-") else "Lot"
+                out.append(f"{head}: " + ". ".join(p.rstrip(".") for p in parts) + ".")
+    return "\n".join(out)
+
+
 def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Optional[Dict[str, Any]]:
     today = today or dt.date.today()
     md = result.get("metadata") or {}
@@ -465,6 +500,9 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
     }
     if is_tender:
         ct = str(first_or_none(md.get("contractType")) or "")
+        lot_text = tender_lots_text(md, row["description"])
+        if lot_text:
+            row["description"] = (f"{row['description']}\n\n{lot_text}" if row["description"] else lot_text)[:8000]
         row.update({
             "contracting_authority": _lead_authority(md),
             "contract_type": _CONTRACT_TYPE_LABELS.get(ct) or type_of_action,
