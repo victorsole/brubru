@@ -14,7 +14,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -28,6 +28,19 @@ from ._body import (
     deprecated_body,
 )
 from ._row_dates import row_updated
+
+# What document_date serves (15 Oct 2026): the publication date. A Have Your Say initiative's
+# first publication; an agency consultation, which has no separate one, the day it opened.
+# Filters and the default order use the same value.
+_DOCUMENT_DATE = func.coalesce(PublicConsultation.published_date, PublicConsultation.start_date)
+
+
+def _feedback_period(r):
+    """(opens, closes): the current feedback period, which the nightly sync keeps, or when it
+    has none (a closed initiative) the last one that took feedback. Never one of each."""
+    if r.start_date or r.end_date:
+        return r.start_date, r.end_date
+    return getattr(r, "feedback_start_date", None), getattr(r, "feedback_end_date", None)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -257,8 +270,14 @@ class ConsultationItem(BaseModel):
     status: Optional[str] = None
     dg_responsible: Optional[str] = None
     policy_areas: list = Field(default_factory=list)
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    start_date: Optional[date] = Field(
+        None, description="When feedback opens or opened: the current feedback period or, for a "
+                          "closed initiative, the last period that took feedback.")
+    end_date: Optional[date] = Field(None, description="When that same feedback period closes or closed.")
+    published_date: Optional[date] = Field(
+        None, description="When the initiative was first published on Have your say (its earliest "
+                          "publication at the Commission's own API). Null for an agency consultation "
+                          "and for an initiative not yet published.")
     feedback_count: int = 0
     portal_url: Optional[str] = None
     feedback_url: Optional[str] = None
@@ -280,7 +299,10 @@ class ConsultationItem(BaseModel):
     public_url: Optional[str] = Field(
         None, description="The consultation's page on Have your say (its portal_url).")
     document_date: Optional[date] = Field(
-        None, description="The date the consultation opened (its start_date).")
+        None, description="The date the consultation was published: a Have your say initiative's "
+                          "first publication (published_date); an agency consultation, which has no "
+                          "separate one, the day it opened. Never the date Brubru stored it, which "
+                          "is creation_date.")
     creation_date: Optional[datetime] = Field(
         None, description="When Brubru first captured this consultation.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -334,7 +356,7 @@ async def list_consultations(
     consultation_type: Optional[str] = Query(None, description="public_consultation | call_for_evidence | feedback | roadmap | initiative"),
     dg_responsible: Optional[str] = Query(None, description="DG code, e.g. CNECT, JUST"),
     policy_area: Optional[str] = Query(None, description="Single policy area tag"),
-    published_from: Optional[date] = Query(None, description="start_date >= value"),
+    published_from: Optional[date] = Query(None, description="document_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
     updated_from: Optional[datetime] = Query(None, description="last_updated >= value. Returns rows ordered by last_updated desc when set."),
@@ -377,9 +399,9 @@ async def list_consultations(
     if policy_area:
         filters.append(PublicConsultation.policy_areas.any(policy_area))
     if published_from:
-        filters.append(PublicConsultation.start_date >= published_from)
+        filters.append(_DOCUMENT_DATE >= published_from)
     if published_to:
-        filters.append(PublicConsultation.start_date <= published_to)
+        filters.append(_DOCUMENT_DATE <= published_to)
     if updated_from:
         filters.append(PublicConsultation.last_updated >= updated_from)
     if updated_to:
@@ -394,7 +416,7 @@ async def list_consultations(
     if updated_from or updated_to:
         order_col = PublicConsultation.last_updated.desc().nullslast()
     else:
-        order_col = PublicConsultation.start_date.desc().nullslast()
+        order_col = _DOCUMENT_DATE.desc().nullslast()
     rows = stable(query.order_by(order_col)).offset((page - 1) * limit).limit(limit).all()
 
     data = []
@@ -410,8 +432,9 @@ async def list_consultations(
             status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
             dg_responsible=r.dg_responsible,
             policy_areas=list(r.policy_areas or []),
-            start_date=r.start_date,
-            end_date=r.end_date,
+            start_date=_feedback_period(r)[0],
+            published_date=r.published_date,
+            end_date=_feedback_period(r)[1],
             feedback_count=int(r.feedback_count or 0),
             portal_url=r.portal_url,
             feedback_url=_derive_feedback_url(r.portal_url, r.feedback_url),
@@ -422,7 +445,7 @@ async def list_consultations(
             body_html=body_html,
             body_txt=body_text,
             public_url=r.portal_url,
-            document_date=r.start_date,
+            document_date=r.published_date or r.start_date,
             creation_date=getattr(r, "first_seen", None),
             updated_date=row_updated(r),
         ))
@@ -484,8 +507,9 @@ async def get_consultation_detail(
         status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
         dg_responsible=r.dg_responsible,
         policy_areas=list(r.policy_areas or []),
-        start_date=r.start_date,
-        end_date=r.end_date,
+        start_date=_feedback_period(r)[0],
+        published_date=r.published_date,
+        end_date=_feedback_period(r)[1],
         feedback_count=int(r.feedback_count or 0),
         portal_url=r.portal_url,
         feedback_url=_derive_feedback_url(r.portal_url, r.feedback_url),
@@ -493,7 +517,7 @@ async def get_consultation_detail(
         celex_numbers=list(r.celex_numbers or []),
         last_updated=r.last_updated,
         public_url=r.portal_url,
-        document_date=r.start_date,
+        document_date=r.published_date or r.start_date,
         creation_date=getattr(r, "first_seen", None),
         updated_date=row_updated(r),
         has_body=has_body,

@@ -56,8 +56,21 @@ class ConsultationItem(BaseModel):
     public_url: Optional[str] = None
     body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
-    document_date: Optional[datetime] = Field(None, description="The consultation's closing date.")
-    creation_date: Optional[datetime] = None
+    document_date: Optional[datetime] = Field(
+        None, description="The date the consultation was published: a Have Your Say initiative's first "
+                          "publication; an agency consultation, which has no separate one, the day it "
+                          "opened; another body's, the date on its page. The same value "
+                          "/api/v2/commission/consultations serves. Never the date Brubru stored it, "
+                          "which is creation_date.")
+    published_date: Optional[datetime] = Field(
+        None, description="A Have Your Say initiative's first publication (null elsewhere).")
+    start_date: Optional[datetime] = Field(
+        None, description="When feedback opens or opened: the current feedback period or, for a closed "
+                          "initiative, the last period that took feedback.")
+    end_date: Optional[datetime] = Field(
+        None, description="When that same feedback period closes or closed. `from`/`to` and the "
+                          "default order use it (falling back to document_date where a body gives none).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first stored the consultation.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
@@ -78,6 +91,33 @@ def _resolve_scope(bodies, family):
     return codes or None
 
 
+# The body code of a public_consultations row. The Commission's rows carry source_body
+# 'European Commission' (4,134 on 15 Oct 2026), which this route lower-cased into the code
+# 'european commission': `body=commission` and `institution=commission` matched nothing.
+_HYS_BODY = ("CASE WHEN source_body IS NULL OR lower(source_body) = 'european commission' "
+             "THEN 'commission' ELSE lower(source_body) END")
+
+
+def _hys_body(source_body):
+    return "commission" if not source_body or source_body.lower() == "european commission" else source_body.lower()
+
+
+# The feedback period a row serves: the sync's current one, else the last one that took
+# feedback (migration 293). Never one date of each.
+_HYS_END = ("CASE WHEN start_date IS NOT NULL OR end_date IS NOT NULL THEN end_date "
+            "ELSE feedback_end_date END")
+
+
+def _period(r):
+    if r.start_date or r.end_date:
+        return r.start_date, r.end_date
+    return r.feedback_start_date, r.feedback_end_date
+
+
+def _day(d):
+    return _aware(datetime.combine(d, datetime.min.time())) if d else None
+
+
 def _aware(dt):
     if dt is None:
         return None
@@ -91,27 +131,30 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
     # 1) public_consultations — the rich register (Have Your Say + agency mirror)
     where, params = ["1=1"], {}
     if codes is not None:
-        where.append("lower(coalesce(source_body,'commission')) = ANY(:codes)")
+        where.append(f"{_HYS_BODY} = ANY(:codes)")
         params["codes"] = list(codes)
     if is_comm:
-        where.append("source_body IS NULL")
+        where.append(f"{_HYS_BODY} = 'commission'")
     elif institution:
-        where.append("lower(source_body) = :inst"); params["inst"] = institution.lower()
+        where.append(f"{_HYS_BODY} = :inst"); params["inst"] = institution.lower()
     if specific_status:
         where.append("status = :st"); params["st"] = status
     if since:
-        where.append("end_date >= :since"); params["since"] = since
+        where.append(f"{_HYS_END} >= :since"); params["since"] = since
     if until:
-        where.append("end_date <= :until"); params["until"] = until
+        where.append(f"{_HYS_END} <= :until"); params["until"] = until
     if q:
         where.append("(title ILIKE :q OR short_title ILIKE :q OR description ILIKE :q)"); params["q"] = f"%{q}%"
     cols = ("id, title, short_title, description, consultation_type, status, dg_responsible, "
-            "policy_areas, end_date, first_seen, portal_url, feedback_url, feedback_count, source_body")
+            "policy_areas, start_date, published_date, end_date, feedback_start_date, feedback_end_date, "
+            "first_seen, last_updated, portal_url, feedback_url, feedback_count, source_body")
     if with_body:
         cols += ", objectives, outcome_summary"
-    for r in db.execute(text(f"SELECT {cols} FROM public_consultations WHERE {' AND '.join(where)} LIMIT 4000"), params):
-        body = (r.source_body or "commission").lower()
-        inst = "European Commission" if not r.source_body else (r.source_body or "").upper()
+    # No LIMIT: a cap of 4,000 here dropped 892 of the register's 4,892 rows (15 Oct 2026),
+    # and the total reported 4,015 as if it were the whole corpus.
+    for r in db.execute(text(f"SELECT {cols} FROM public_consultations WHERE {' AND '.join(where)}"), params):
+        body = _hys_body(r.source_body)
+        inst = "European Commission" if body == "commission" else r.source_body.upper()
         body_txt = body_html = None
         if with_body:
             parts = [r.description, getattr(r, "objectives", None), getattr(r, "outcome_summary", None)]
@@ -123,8 +166,10 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
             "consultation_type": r.consultation_type, "status": r.status, "dg": r.dg_responsible,
             "policy_areas": list(r.policy_areas) if r.policy_areas else None,
             "feedback_count": r.feedback_count, "public_url": r.portal_url or r.feedback_url,
-            "document_date": _aware(datetime.combine(r.end_date, datetime.min.time()) if r.end_date else None),
-            "creation_date": _aware(r.first_seen), "body_txt": body_txt, "body_html": body_html,
+            "document_date": _day(r.published_date or r.start_date), "published_date": _day(r.published_date),
+            "start_date": _day(_period(r)[0]), "end_date": _day(_period(r)[1]),
+            "creation_date": _aware(r.first_seen), "last_updated": r.last_updated,
+            "body_txt": body_txt, "body_html": body_html,
         })
 
     # 2) economy_items — only for bodies NOT in the register (e.g. EDPB, ECB-SSM).
@@ -132,7 +177,7 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
     # structured status), so excluding those bodies avoids double-counting and the
     # store-vs-store status drift, independent of any URL-form differences.
     hys_bodies = {r[0] for r in db.execute(text(
-        "SELECT DISTINCT lower(coalesce(source_body,'commission')) FROM public_consultations")).fetchall()}
+        f"SELECT DISTINCT {_HYS_BODY} FROM public_consultations")).fetchall()}
     ew = ["item_type IN ('consultation','public_consultation')", "lower(body_code) <> ALL(:hys)"]
     ep = {"hys": list(hys_bodies)}
     if codes is not None:
@@ -149,13 +194,15 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
         ew.append("1=0")  # economy rows are agency-run, never the Commission
     elif institution:
         ew.append("lower(body_code) = :ibody"); ep["ibody"] = institution.lower()
-    ecols = "id, body_code, title, summary, public_url, document_date, creation_date" + (", body_txt, body_html" if with_body else "")
-    for r in db.execute(text(f"SELECT {ecols} FROM economy_items WHERE {' AND '.join(ew)} LIMIT 4000"), ep):
+    ecols = ("id, body_code, title, summary, public_url, document_date, creation_date, updated_at"
+             + (", body_txt, body_html" if with_body else ""))
+    for r in db.execute(text(f"SELECT {ecols} FROM economy_items WHERE {' AND '.join(ew)}"), ep):
         out.append({
             "id": f"e{r.id}", "body_code": r.body_code, "institution": r.body_code.upper(), "title": r.title,
             "summary": r.summary, "consultation_type": "public_consultation", "status": None, "dg": None,
             "policy_areas": None, "feedback_count": None, "public_url": r.public_url,
-            "document_date": _aware(r.document_date), "creation_date": _aware(r.creation_date),
+            "document_date": _aware(r.document_date), "end_date": None,
+            "creation_date": _aware(r.creation_date), "updated_at": r.updated_at,
             "body_txt": getattr(r, "body_txt", None) if with_body else None,
             "body_html": getattr(r, "body_html", None) if with_body else None,
         })
@@ -168,7 +215,9 @@ def _to_item(it, names, *, with_body):
         families=families_for_body(it["body_code"]), institution=it["institution"], title=it["title"],
         summary=it["summary"], consultation_type=it["consultation_type"], status=it["status"], dg=it["dg"],
         policy_areas=it["policy_areas"], feedback_count=it["feedback_count"], public_url=it["public_url"],
-        document_date=it["document_date"], creation_date=it["creation_date"],
+        document_date=it["document_date"], published_date=it.get("published_date"),
+        start_date=it.get("start_date"), end_date=it.get("end_date"),
+        creation_date=it["creation_date"],
         updated_date=row_updated(it),
         body_txt=(it["body_txt"] if with_body else None), body_html=(it["body_html"] if with_body else None),
     )
@@ -212,7 +261,9 @@ def build_directory(db) -> "ConsultationsDirectory":
                 "GET /api/v2/consultations/all?family=finance-economy&status=open\nGET /api/v2/consultations/all?body=echa,ema\n```\n\n"
                 "**You get back**\nA paginated envelope. Each carries body_code, body_name, policy families, "
                 "institution, consultation_type, status, responsible DG, policy areas, feedback count, the "
-                "closing date and the link (body_txt/html on the detail endpoint).\n\n**Data freshness**\n"
+                "publication date (`document_date`), when feedback opens and closes (`start_date`, "
+                "`end_date`), the change date "
+                "(`updated_date`) and the link (body_txt/html on the detail endpoint).\n\n**Data freshness**\n"
                 "Live union of public_consultations + economy_items."))
 async def consultations_all(
     request: Request,
@@ -256,9 +307,9 @@ async def consultations_all(
     if order == "title":
         items.sort(key=lambda it: (it["title"] or "").lower())
     elif order == "oldest":
-        items.sort(key=lambda it: it["document_date"] or far_future)
+        items.sort(key=lambda it: it.get("end_date") or it["document_date"] or far_future)
     else:
-        items.sort(key=lambda it: it["document_date"] or far_past, reverse=True)
+        items.sort(key=lambda it: it.get("end_date") or it["document_date"] or far_past, reverse=True)
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
     names = _body_names(db)
@@ -307,33 +358,37 @@ async def get_consultation(request: Request,
     if consultation_id.startswith("h"):
         r = db.execute(text(
             "SELECT id, title, short_title, description, consultation_type, status, dg_responsible, "
-            "policy_areas, end_date, first_seen, portal_url, feedback_url, feedback_count, source_body, "
-            "objectives, outcome_summary FROM public_consultations WHERE id = :id"),
+            "policy_areas, start_date, published_date, end_date, feedback_start_date, feedback_end_date, "
+            "first_seen, last_updated, portal_url, "
+            "feedback_url, feedback_count, source_body, objectives, outcome_summary "
+            "FROM public_consultations WHERE id = :id"),
             {"id": consultation_id[1:]}).fetchone()
         if r:
-            body = (r.source_body or "commission").lower()
+            body = _hys_body(r.source_body)
             parts = [r.description, r.objectives, r.outcome_summary]
             it = {"id": consultation_id, "body_code": body,
-                  "institution": "European Commission" if not r.source_body else r.source_body.upper(),
+                  "institution": "European Commission" if body == "commission" else r.source_body.upper(),
                   "title": r.title, "summary": r.short_title or (r.description[:300] if r.description else None),
                   "consultation_type": r.consultation_type, "status": r.status, "dg": r.dg_responsible,
                   "policy_areas": list(r.policy_areas) if r.policy_areas else None,
                   "feedback_count": r.feedback_count, "public_url": r.portal_url or r.feedback_url,
-                  "document_date": _aware(datetime.combine(r.end_date, datetime.min.time()) if r.end_date else None),
-                  "creation_date": _aware(r.first_seen),
+                  "document_date": _day(r.published_date or r.start_date), "published_date": _day(r.published_date),
+                  "start_date": _day(_period(r)[0]), "end_date": _day(_period(r)[1]),
+                  "creation_date": _aware(r.first_seen), "last_updated": r.last_updated,
                   "body_txt": "\n\n".join(p for p in parts if p) or r.title,
                   "body_html": f"<article><h3>{r.title}</h3>" + "".join(f"<p>{p}</p>" for p in parts if p) + "</article>"}
             return _to_item(it, names, with_body=True)
     elif consultation_id.startswith("e") and consultation_id[1:].isdigit():
         r = db.execute(text(
-            "SELECT id, body_code, title, summary, public_url, body_txt, body_html, document_date, creation_date "
-            "FROM economy_items WHERE id = :id AND item_type IN ('consultation','public_consultation')"),
+            "SELECT id, body_code, title, summary, public_url, body_txt, body_html, document_date, creation_date, "
+            "updated_at FROM economy_items WHERE id = :id AND item_type IN ('consultation','public_consultation')"),
             {"id": int(consultation_id[1:])}).fetchone()
         if r:
             it = {"id": consultation_id, "body_code": r.body_code, "institution": r.body_code.upper(),
                   "title": r.title, "summary": r.summary, "consultation_type": "public_consultation",
                   "status": None, "dg": None, "policy_areas": None, "feedback_count": None,
-                  "public_url": r.public_url, "document_date": _aware(r.document_date),
-                  "creation_date": _aware(r.creation_date), "body_txt": r.body_txt, "body_html": r.body_html}
+                  "public_url": r.public_url, "document_date": _aware(r.document_date), "end_date": None,
+                  "creation_date": _aware(r.creation_date), "updated_at": r.updated_at,
+                  "body_txt": r.body_txt, "body_html": r.body_html}
             return _to_item(it, names, with_body=True)
     raise HTTPException(404, f"No consultation with id {consultation_id}")

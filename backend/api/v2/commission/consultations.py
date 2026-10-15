@@ -63,7 +63,7 @@ async def list_consultations(
     consultation_type: Optional[str] = Query(None, description="public_consultation | call_for_evidence | feedback | roadmap | initiative"),
     dg_responsible: Optional[str] = Query(None, description="DG code, e.g. CNECT, JUST"),
     policy_area: Optional[str] = Query(None, description="Single policy area tag"),
-    published_from: Optional[date] = Query(None, description="start_date >= value"),
+    published_from: Optional[date] = Query(None, description="document_date >= value"),
     published_to: Optional[date] = Query(None),
     published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
     updated_from: Optional[datetime] = Query(None, description="last_updated >= value. Returns rows ordered by last_updated desc when set."),

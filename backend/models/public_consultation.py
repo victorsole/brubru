@@ -131,6 +131,12 @@ class PublicConsultation(Base):
     # Timeline
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True, index=True)
+    # First publication on Have Your Say (migration 293). Written only by
+    # scripts/backfill_consultation_dates.py; the nightly sync owns start_date/end_date.
+    published_date = Column(Date, nullable=True)
+    # The last period that took feedback (same writer): served when the sync has no current one.
+    feedback_start_date = Column(Date, nullable=True)
+    feedback_end_date = Column(Date, nullable=True)
 
     # Statistics
     feedback_count = Column(Integer, default=0)

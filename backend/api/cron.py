@@ -386,7 +386,7 @@ _TENDERATOR_CHAIN = (
 # above. A script that starts recording itself must be removed from this list,
 # or it gets two rows per run.
 _DAILY_TIER_RECORDED = (
-    "consultations", "have_your_say", "comitology", "sanctions", "infringements",
+    "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc", "tbt",
     "carriage_status_notifications",
 )
@@ -774,6 +774,14 @@ async def cron_sync_daily(
     # this gives breadth, sync_consultations.py above enriches detail.
     results["have_your_say"] = await _run_script_async(
         "have_your_say", "scripts/sync_have_your_say.py", ["--apply"], timeout=1800)
+    # After it, never before: the first publication date of each initiative stored that
+    # night (15 Oct 2026). Its own column, published_date, which the sync never names: the
+    # 2 Oct backfill wrote these dates into start_date and the sync's run of 3 Oct erased
+    # 2,474 of them. Rows already dated are not asked again; upcoming initiatives with no
+    # publication yet are, each night, until they have one.
+    results["consultation_dates"] = await _run_script_async(
+        "consultation_dates", "scripts/backfill_consultation_dates.py",
+        ["--apply", "--limit", "600", "--pause", "0.2", "--max-seconds", "480"], timeout=600)
     # --max-seconds is what makes this resumable: the job stops on its own BUDGET and writes
     # its cursor, where a 900s timeout kills the process and the cursor is never written. It
     # walked from page 0 every run and died around page 120, so the same ~12,000 documents
