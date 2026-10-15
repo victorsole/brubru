@@ -44,3 +44,9 @@ def test_the_xml_address_and_the_fallback_in_the_sync():
 
 def test_broken_xml_gives_nothing():
     assert parse_plenary_rcv_xml(b"<not xml") == {} and parse_plenary_rcv_xml(b"") == {}
+
+
+def test_a_new_pick_replaces_the_earlier_plenary_vote_on_the_same_text():
+    from scripts import sync_ep_votes
+    src = inspect.getsource(sync_ep_votes._upsert_vote)
+    assert 'EpVote.ta_reference == ta' in src and "EpVote.vote_key != vote_key" in src

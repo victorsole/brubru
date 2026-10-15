@@ -125,6 +125,15 @@ def _upsert_vote(db, *, vote_key, level, pv, apply, **fields):
     if not apply:
         return "added"
 
+    # One decisive plenary vote per adopted text. The key carries the sub-item, so when a
+    # later run picks a different sub-item (the picker improved: "Motion for a resolution
+    # (as a whole)" rather than "Am 2") the earlier pick stayed beside it: 42 texts carried
+    # an amendment vote as a second "final" vote (15 Oct 2026). Records cascade.
+    ta = fields.get("ta_reference")
+    if level == "plenary" and ta:
+        db.query(EpVote).filter(EpVote.level == "plenary", EpVote.ta_reference == ta,
+                                EpVote.vote_key != vote_key).delete(synchronize_session=False)
+
     if existing:
         db.query(EpVoteRecord).filter(EpVoteRecord.vote_id == existing.id).delete()
         vote = existing
