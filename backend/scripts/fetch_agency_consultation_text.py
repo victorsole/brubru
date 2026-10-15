@@ -24,6 +24,7 @@ import argparse
 import html as _html
 import importlib.util
 import io
+import os
 import pathlib
 import re
 import ssl
@@ -50,10 +51,11 @@ CHALLENGE = re.compile(r"just a moment|verify you are human|captcha|access denie
                        r"request unsuccessful|incapsula|enable javascript and cookies", re.I)
 
 PICK = text("""
-    SELECT id, source_body, portal_url FROM public_consultations
+    SELECT id, source_body, portal_url, first_seen > now() - interval '2 days' AS is_new
+      FROM public_consultations
      WHERE source = 'agency' AND coalesce(full_description, '') = ''
        AND coalesce(portal_url, '') <> ''
-     ORDER BY source_body, id
+     ORDER BY first_seen DESC, source_body, id
      LIMIT :lim""")
 STORE = text("UPDATE public_consultations SET full_description = :t, last_updated = now() "
              "WHERE id = :rid AND coalesce(full_description, '') = ''")
@@ -62,7 +64,11 @@ GAP = text("SELECT count(*) FROM public_consultations "
 
 
 def _db_url() -> str:
-    m = re.search(r"^DATABASE_URL=(.*)$", (BACKEND / ".env").read_text(), re.M)
+    # The environment first: Railway has no .env file (scheduled from 15 Oct 2026).
+    if os.environ.get("DATABASE_URL"):
+        return os.environ["DATABASE_URL"]
+    env = BACKEND / ".env"
+    m = re.search(r"^DATABASE_URL=(.*)$", env.read_text(), re.M) if env.exists() else None
     if not m:
         raise SystemExit("[ERROR] DATABASE_URL missing")
     return m.group(1).strip()
@@ -189,8 +195,11 @@ def main() -> int:
     with engine.connect() as c:
         after = c.execute(GAP).scalar_one()
     print(f"[INFO] stored: {n} | no text {before} -> {after}")
-    if rows and n == 0:
-        print("[ERROR] nothing stored; this run proves nothing")
+    # Scheduled nightly from 15 Oct 2026, after the agency sync. A handful of old pages never
+    # yield text (14 that day) and are asked again each run: that alone is not a failure. A
+    # NEW consultation left without its text is.
+    if rows and n == 0 and any(r.is_new for r in rows):
+        print("[ERROR] nothing stored, and new consultations are among those without text")
         return 1
     print("[OK] every stored text is the consultation's own page, past the guards")
     return 0

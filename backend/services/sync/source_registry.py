@@ -305,6 +305,16 @@ MEUB_SOURCES: List[SourceSpec] = [
                ("--apply", "--free-only", "--concurrency", "1", "--limit", "400", "--max-seconds", "900"),
                timeout=1200, stale_after_hours=30),
     SourceSpec("agency_consultations","Consultations - EU agencies","warm","scripts/sync_agency_consultations.py", timeout=600,  stale_after_hours=14),
+    # Then each new agency consultation's own page, then the dates its page labels (15 Oct
+    # 2026). Neither was scheduled: the 2 Oct backfills dated the corpus once, so every agency
+    # consultation added since reached the API without text and without dates. Both write
+    # only empty columns, which the sync above never empties.
+    SourceSpec("agency_consultation_text", "Consultations - EU agency pages", "warm",
+               "scripts/fetch_agency_consultation_text.py", ("--apply", "--limit", "60"),
+               timeout=600, stale_after_hours=14),
+    SourceSpec("agency_consultation_dates", "Consultations - EU agency dates", "warm",
+               "scripts/backfill_agency_consultation_dates.py", ("--apply",),
+               timeout=300, stale_after_hours=14),
     # Names files that arrived without a readable one. Unlike the feeds above
     # this ingests nothing: it fills legislative_carriages.short_title for rows
     # still NULL, so a new act stops being shown as "Council Implementing
