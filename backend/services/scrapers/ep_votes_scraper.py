@@ -335,6 +335,96 @@ def parse_plenary_rcv(html: str) -> Dict[str, dict]:
     return items
 
 
+def rcv_xml_url(sitting: date, term: int = 10) -> str:
+    """The sitting's roll-call results as XML (all languages in one file)."""
+    return f"{DOCEO_BASE}PV-{term}-{sitting.year}-{sitting.month:02d}-{sitting.day:02d}-RCV_EN.xml"
+
+
+_CHOICE_TAGS = (("Result.For", "+"), ("Result.Against", "-"), ("Result.Abstention", "0"))
+
+
+def parse_plenary_rcv_xml(xml: bytes | str) -> Dict[str, dict]:
+    """Parse a sitting's RCV XML into the same shape as :func:`parse_plenary_rcv`.
+
+    From some sittings of July 2025 on, the English RCV page is an interactive page
+    (filters by group and country) that the HTML parser reads as empty: 37 sitting days
+    yielded no vote and the plenary table held nothing between July and December 2025
+    but 12 votes (15 Oct 2026). The XML the same page links holds every vote: each
+    <RollCallVote.Result> carries a DlvId tying it to a <VoteTitle> (the agenda item, the
+    title texts_adopted is matched on), its description ("A10-0192/2025 - rapporteurs -
+    subject") and the members under <Result.For/Against/Abstention>, by political group.
+    Items are keyed by DlvId; a sub-item is numbered "<DlvId>.<Identifier>".
+    """
+    import xml.etree.ElementTree as ET
+
+    if not xml:
+        return {}
+    try:
+        root = ET.fromstring(xml if isinstance(xml, bytes) else xml.encode("utf-8"))
+    except ET.ParseError:
+        return {}
+
+    def local(tag: str) -> str:
+        return tag.rsplit("}", 1)[-1]
+
+    titles: Dict[str, str] = {}
+    for el in root.iter():
+        if local(el.tag) == "VoteTitle" and el.get("DlvId"):
+            titles[el.get("DlvId")] = " ".join("".join(el.itertext()).split())
+
+    items: Dict[str, dict] = {}
+    for res in root.iter():
+        if local(res.tag) != "RollCallVote.Result":
+            continue
+        dlv = res.get("DlvId") or ""
+        label = ""
+        pv = ParsedVote(vote_type="rcv")
+        counts: Dict[str, Optional[int]] = {"+": None, "-": None, "0": None}
+        for child in res:
+            name = local(child.tag)
+            if name == "RollCallVote.Description.Text":
+                label = " ".join("".join(child.itertext()).split())
+                continue
+            choice = next((c for t, c in _CHOICE_TAGS if t == name), None)
+            if choice is None:
+                continue
+            try:
+                counts[choice] = int(child.get("Number"))
+            except (TypeError, ValueError):
+                counts[choice] = None
+            for grp in child:
+                if local(grp.tag) != "Result.PoliticalGroup.List":
+                    continue
+                group = (grp.get("Identifier") or "NI").strip() or "NI"
+                for mep in grp:
+                    nm = " ".join("".join(mep.itertext()).split())
+                    if nm:
+                        pv.records.append(VoteRecord(name=nm, group=group, choice=choice))
+        pv.votes_for = counts["+"] if counts["+"] is not None else sum(1 for r in pv.records if r.choice == "+")
+        pv.votes_against = counts["-"] if counts["-"] is not None else sum(1 for r in pv.records if r.choice == "-")
+        pv.votes_abstention = counts["0"] if counts["0"] is not None else sum(1 for r in pv.records if r.choice == "0")
+        pv.result = _verdict(pv.votes_for, pv.votes_against)
+
+        code_m = _REPORT_CODE_RE.search(label)
+        pv.report_ref = code_m.group(1) if code_m else None
+        parts = [x.strip() for x in re.split(r"\s[–—-]\s", label) if x.strip()]
+        if len(parts) >= 3:
+            pv.rapporteurs = parts[1]
+            pv.subject = parts[-1]
+        elif len(parts) == 2:
+            pv.subject = parts[-1]
+        else:
+            pv.subject = label
+        sub_no = f"{dlv}.{res.get('Identifier') or len(items)}"
+        pv.item_number = sub_no
+        item = items.setdefault(dlv, {"pos": 0, "title": titles.get(dlv, ""), "subitems": []})
+        item["subitems"].append({
+            "subitem_number": sub_no, "label": label, "report_ref": pv.report_ref,
+            "subject": pv.subject, "rapporteurs": pv.rapporteurs, "vote": pv,
+        })
+    return items
+
+
 def pick_final_subitem(subitems: List[dict]) -> Optional[dict]:
     """Choose the decisive vote among an item's sub-items.
 

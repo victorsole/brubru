@@ -36,8 +36,8 @@ from sqlalchemy import text as sqla_text
 from core.database import SessionLocal
 from models.ep_vote import EpVote, EpVoteRecord
 from services.scrapers.ep_votes_scraper import (
-    parse_committee_report, parse_plenary_rcv, pick_final_subitem,
-    committee_report_url, rcv_url,
+    parse_committee_report, parse_plenary_rcv, parse_plenary_rcv_xml, pick_final_subitem,
+    committee_report_url, rcv_url, rcv_xml_url,
 )
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
 
@@ -223,6 +223,12 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                     url = rcv_url(cand)
                     res = fetcher.fetch(url, expand_accordions=True, strip_chrome=False)
                     parsed = parse_plenary_rcv(res.html) if res.html else {}
+                    if not parsed and res.html and "RCV_EN.xml" in res.html:
+                        # The interactive RCV page (some sittings from July 2025 on) parses
+                        # empty; the XML it links holds every vote (15 Oct 2026).
+                        _st, body, _err = fetcher.fetch_bytes(rcv_xml_url(cand), warm_url=url)
+                        if body[:5] == b"<?xml":
+                            parsed = parse_plenary_rcv_xml(body)
                     rcv_cache[cand] = parsed
                     if parsed:
                         items = parsed
