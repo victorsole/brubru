@@ -93,6 +93,10 @@ def main() -> int:
         sql = ("SELECT id, committee_code, meeting_date, multimedia_url "
                "FROM committee_meeting_transcripts "
                "WHERE status = 'PENDING' AND video_url IS NULL "
+               # A meeting not yet held has no stream; newest first, the next week's
+               # meetings filled every run and the resolver reported "nothing resolved". Today's
+               # meetings may still be live: a stream read now is a partial recording.
+               "  AND meeting_date < current_date "
                "  AND multimedia_url IS NOT NULL "
                "ORDER BY meeting_date DESC")
         if args.limit:
