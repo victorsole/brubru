@@ -3,8 +3,9 @@
 
 Why: /api/v2/commission/commission-register-documents served procedure_ref empty on
 1,623 of 1,627 documents. The register sync takes it only from a title that happens to
-quote one. Cellar files every proposal, and the staff working documents and other acts
-of the same file, in a dossier that carries the procedure:
+quote one. Cellar files every proposal, the staff working documents of the same file and
+the act finally adopted in a dossier that carries the procedure (a corrigendum is looked
+up through the act it corrects):
 
     52025PC0100 -> work_part_of_dossier -> procedure_code_interinstitutional_reference_procedure
                    "2025/0052/COD"  (OEIL writes it 2025/0052(COD))
@@ -37,12 +38,14 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 from sqlalchemy import create_engine, text  # noqa: E402
 
 SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
-_CELEX = re.compile(r"^5\d{4}(?:PC|DC|JC|SC)\d{4}$")
+_CELEX = re.compile(r"^(?:5\d{4}(?:PC|DC|JC|SC)|3\d{4}[A-Z])\d{4}$")
+# A corrigendum (32024R1689R(03)) belongs to the procedure of the act it corrects.
+_CORRIGENDUM = re.compile(r"^(3\d{4}[A-Z]\d{4})R\(\d{2}\)$")
 _CELLAR_PROC = re.compile(r"^(\d{4})/(\d{4})/([A-Z]{3})$")
 
 TODO = text("""SELECT id, coalesce(celex, reference) AS celex FROM commission_documents
                 WHERE procedure_ref IS NULL
-                  AND coalesce(celex, reference) ~ '^5[0-9]{4}(PC|DC|JC|SC)[0-9]{4}$'""")
+                  AND coalesce(celex, reference) ~ '^(5[0-9]{4}(PC|DC|JC|SC)|3[0-9]{4}[A-Z])[0-9]{4}(R\\([0-9]{2}\\))?$'""")
 STORE = text("""UPDATE commission_documents SET procedure_ref = :proc, last_updated = now()
                  WHERE id = :id AND procedure_ref IS NULL""")
 
@@ -51,6 +54,12 @@ def oeil_form(cellar_ref: str) -> str | None:
     """'2025/0052/COD' -> '2025/0052(COD)'; None for anything else."""
     m = _CELLAR_PROC.match((cellar_ref or "").strip())
     return f"{m.group(1)}/{m.group(2)}({m.group(3)})" if m else None
+
+
+def lookup_celex(celex: str) -> str:
+    """The CELEX Cellar files in a dossier: a corrigendum's is the act it corrects."""
+    m = _CORRIGENDUM.match(celex or "")
+    return m.group(1) if m else celex
 
 
 def query(celexes: list[str]) -> dict[str, str]:
@@ -100,14 +109,14 @@ def main(argv=None) -> int:
     for i in range(0, len(rows), args.batch):
         chunk = rows[i:i + args.batch]
         try:
-            procs = query([r.celex for r in chunk])
+            procs = query([lookup_celex(r.celex) for r in chunk])
         except Exception as exc:  # noqa: BLE001
             failed_batches += 1
             print(f"[WARN] Cellar did not answer a batch: {type(exc).__name__}")
             continue
         found += len(procs)
         for r in chunk:
-            proc = procs.get(r.celex)
+            proc = procs.get(lookup_celex(r.celex))
             if not proc:
                 continue
             if not args.apply:

@@ -55,7 +55,7 @@ GET /api/v2/commission/commission-register?q=AI%20Act&doc_type=COM
 ```
 
 **You get back**
-A `PaginatedResponse[CommissionRegisterItem]` envelope. Each item carries reference, title, doc_type, register category, DG, procedure_ref, celex, pdf_url, source_url, dates, and the 5 envelope-level datapoints.
+A `PaginatedResponse[CommissionRegisterItem]` envelope. Each item carries reference, title, doc_type, register category, DG, procedure_ref, celex, pdf_url, source_url, dates, and the 5 envelope-level datapoints. `procedure_ref` is the interinstitutional procedure Cellar files the document in (a proposal, the staff working documents of its file, the act finally adopted; a corrigendum through the act it corrects), checked on 15 Oct 2026 against OEIL on 172 documents with no difference. It is empty for a document Cellar files in no procedure (most communications, staff working documents outside a legislative file, implementing and delegated acts).
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from ec.europa.eu/transparency/documents-register/. Critical for College tracking — Secretariat-General updates the tentative agenda continuously, and PV minutes appear within days of each College meeting.""",

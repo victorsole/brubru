@@ -28,3 +28,17 @@ def test_only_an_empty_procedure_is_written():
 def test_the_job_runs_after_the_register_sync():
     cron = (Path(__file__).resolve().parents[1] / "api" / "cron.py").read_text()
     assert cron.index('"commission_docs", _commission_docs') < cron.index("backfill_commission_procedure_refs.py")
+
+
+@pytest.mark.parametrize("celex,looked_up", [
+    ("32024R1689R(03)", "32024R1689"),   # a corrigendum: the act it corrects
+    ("32024R1689", "32024R1689"),
+    ("52025PC0100", "52025PC0100"),
+])
+def test_a_corrigendum_is_looked_up_through_the_act_it_corrects(celex, looked_up):
+    assert job.lookup_celex(celex) == looked_up
+
+
+def test_adopted_acts_and_proposals_are_both_asked():
+    assert job._CELEX.match("32026D0860") and job._CELEX.match("52025PC0100")
+    assert not job._CELEX.match("62024CJ0001")
