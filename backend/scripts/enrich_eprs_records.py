@@ -53,8 +53,11 @@ TODO = text("""
     SELECT id, html_url FROM eprs_publications
      WHERE html_url IS NOT NULL
        AND (html_url LIKE 'https://www.europarl.europa.eu/thinktank/%' OR html_url LIKE 'https://epthinktank.eu/%')
-       AND (coalesce(cardinality(authors), 0) = 0 OR coalesce(cardinality(policy_areas), 0) = 0
-            OR pdf_url IS NULL)
+       AND (pdf_url IS NULL OR coalesce(cardinality(policy_areas), 0) = 0
+            -- A record that names no author (an external study) would be read again every run:
+            -- after its first two weeks only a missing PDF or policy area brings it back.
+            OR (coalesce(cardinality(authors), 0) = 0
+                AND (:everything OR first_seen > now() - interval '14 days')))
      ORDER BY publication_date DESC NULLS LAST""")
 STORE = text("""
     UPDATE eprs_publications SET
@@ -122,12 +125,13 @@ def main(argv=None) -> int:
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--max-seconds", type=float, default=0)
+    ap.add_argument("--all", action="store_true", help="also re-read old records that named no author")
     args = ap.parse_args(argv)
     deadline = time.monotonic() + args.max_seconds if args.max_seconds else None
 
     engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True)
     with engine.connect() as c:
-        rows = c.execute(TODO).fetchall()
+        rows = c.execute(TODO, {"everything": args.all}).fetchall()
     if args.limit:
         rows = rows[:args.limit]
     print(f"[INFO] {len(rows)} EPRS publication(s) missing authors, policy areas or PDF")
