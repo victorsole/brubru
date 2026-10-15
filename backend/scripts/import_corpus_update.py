@@ -11,8 +11,10 @@ Rules learned on the LEG_2026-10 update (13 Oct 2026):
   the act (ACT, CORR, GENERAL, AGR) qualifies, never an ANNEX page, the DOC cover page or the
   PUBLICATION contents; with several, the one whose title matches the folder's metadata title.
   Keeping a row's earlier file on every import had left 7,352 rows on an annex page and 2,849
-  filled from the cover page. Title from the metadata; type from the CELEX letter; an existing
-  policy_area (the EuroVoc job's) and other writers' extra_metadata keys are kept.
+  filled from the cover page. A corrigendum takes the republished act when its folder holds one
+  (Victor, 15 Oct 2026). A folder with no act file is reported, not read. Title (without
+  EUR-Lex's number prefix) and date from the metadata; type from the CELEX letter; the keys the
+  old file put in extra_metadata, and caches computed from it, go; other writers' keys stay.
 - Only rows from a LEG_* dump are touched; OJ_*, DPP_* and canon rows are other writers'.
 - A CELEX already held by another row is never inserted again: the Cellar sync's OJ_* rows hold
   the same acts under different uuids (1,738 duplicates on 13 Oct 2026, removed by hand).
@@ -93,6 +95,16 @@ TITLE_STOP = set("the of and to in on for a an by with from as at or be is which
                  "council commission parliament regulation decision directive no eu ec eec".split())
 TYPE_OF_LETTER = {"R": "Regulation", "L": "Directive", "D": "Decision", "H": "Recommendation", "A": "Opinion"}
 WRONG_FILE_TYPES = ("Annex", "Table of Contents")
+# extra_metadata keys written from the file, and keys other code computes from the file and caches (rebuilt on
+# demand when missing): all go when a row's file changes. Keys from Cellar or written by hand stay.
+FILE_KEYS = ("short_title", "language", "page_count", "eea_relevance", "article_count", "recital_count",
+             "annex_count", "page_first", "page_last", "eea_relevant")
+DERIVED_FROM_FILE = ("defined_terms", "defined_terms_version", "recital_article_map", "recital_article_map_version")
+# EUR-Lex prefixes older titles with the act's number ("2014/866/EU: Council Decision of ..."); the title as printed
+# in the OJ has none (Victor, 15 Oct 2026: drop it, the style of the other rows). Repeated, comma- or dash-joined
+# prefixes and 11 without a separator ("2004/619/ECCouncil Decision") occur; 9,099 of 48,905 export titles change.
+NUMBER_PREFIX = re.compile(r"^\s*\d{2,4}\s*/\s*\d{1,4}\s*/\s*[A-Za-z]*(?:\s*,\s*[A-Za-z]+)*\s*(?::|-|,)\s*#?"
+                           r"|^\s*\d{2,4}/\d{1,4}/(?:EC|EU|EEC|CFSP|ECSC|Euratom|JHA)\s*(?=[A-Z][a-z])")
 
 
 def compute_file_hash(file_path: Path) -> str:
@@ -129,18 +141,40 @@ def file_root(path: Path) -> str:
     return m.group(1).decode() if m else "?"
 
 
-def rdf_title(corpus_path: Path, uuid: str) -> Optional[str]:
-    """The English title the folder's own metadata states (expression_title of the ENG expression), or None."""
+def strip_number_prefix(title: Optional[str]) -> Optional[str]:
+    """The title without EUR-Lex's leading act number(s), whitespace normalised."""
+    if not title:
+        return title
+    t = " ".join(title.split())
+    while True:
+        s = NUMBER_PREFIX.sub("", t, count=1)
+        if s == t:
+            return s
+        t = s
+
+
+def usable_title(title: Optional[str]) -> Optional[str]:
+    """A metadata title without its number prefix, or None when it elides the act's number ("2023/…"; 3 export titles)."""
+    t = strip_number_prefix(title)
+    return None if not t or re.search(r"/\s*(?:…|\.\.\.)", t) else t
+
+
+def rdf_meta(corpus_path: Path, uuid: str) -> dict:
+    """What the folder's own metadata states: {'title': the English expression title, 'date': work_date_document}."""
+    out = {"title": None, "date": None}
     rdf = corpus_path / uuid / "tree_non_inferred.rdf"
     if not rdf.exists():
-        return None
+        return out
     root = ET.fromstring(rdf.read_bytes())
     for d in root.findall(RDF_NS + "Description"):
         lang, t = d.find(CDM_NS + "expression_uses_language"), d.find(CDM_NS + "expression_title")
         if lang is not None and t is not None and (t.text or "").strip() \
                 and lang.get(RDF_NS + "resource", "").endswith("/ENG"):
-            return " ".join(t.text.split())
-    return None
+            out["title"] = " ".join(t.text.split())
+            break
+    dates = {e.text.strip() for e in root.iter(CDM_NS + "work_date_document") if (e.text or "").strip()}
+    out["date"] = dates.pop() if len(dates) == 1 and re.fullmatch(r"\d{4}-\d{2}-\d{2}", next(iter(dates))) else None
+    return out
 
 
 def title_match(a: Optional[str], b: Optional[str]) -> float:
@@ -149,35 +183,40 @@ def title_match(a: Optional[str], b: Optional[str]) -> float:
     return len(wa & wb) / len(wa | wb) if wa | wb else 0.0
 
 
-def main_file(corpus_path: Path, uuid: str, celex: Optional[str], title_of, parser) -> tuple:
+def main_file(corpus_path: Path, uuid: str, celex: Optional[str], title_of, parser, current: Optional[Path] = None) -> tuple:
     """(the act's own file in the folder, title match or None), chosen by what each file contains.
 
     Only a file whose root is the act (MAIN_ROOTS) can be the main file, never an ANNEX page, the DOC cover page or
-    the PUBLICATION contents; a corrigendum takes its CORR file. Several candidates: the one whose own title best
-    matches the folder's title (title_of() is called only then). (None, None) when the folder holds no act file
-    (32015D1735 holds two TIFF scans).
+    the PUBLICATION contents. A corrigendum takes the republished act when its folder holds one (it carries the
+    articles, legal basis and citations; Victor, 14 and 15 Oct 2026), else its CORR notice. Several candidates: the
+    one whose own title best matches the folder's title (title_of() is called only then); on a tie the row's
+    current file stays. (None, None) when the folder holds no act file (32015D1735 holds two TIFF scans).
     """
     fmx = corpus_path / uuid / "fmx4"
     files = sorted(p for p in fmx.iterdir() if p.is_file() and not p.name.endswith(WRAPPERS)) if fmx.is_dir() else []
     roots = {p: file_root(p) for p in files}
     cands = [p for p in files if roots[p] in MAIN_ROOTS]
-    if celex and "R(" in celex and any(roots[p] == "CORR" for p in cands):
-        cands = [p for p in cands if roots[p] == "CORR"]
+    if celex and "R(" in celex:
+        for kind in ("ACT", "CORR"):
+            if any(roots[p] == kind for p in cands):
+                cands = [p for p in cands if roots[p] == kind]
+                break
     if len(cands) < 2:
         return (cands[0] if cands else None), None
     title = title_of()
     if not title:
-        return cands[0], None
-    scored = [(title_match(parser.parse_file(p).title, title), -i, p) for i, p in enumerate(cands)]
+        return (current if current in cands else cands[0]), None
+    scored = [(title_match(parser.parse_file(p).title, title), p == current, -i, p) for i, p in enumerate(cands)]
     best = max(scored)
-    return best[2], best[0]
+    return best[3], best[0]
 
 
 def type_label(celex: Optional[str], current: Optional[str]) -> Optional[str]:
-    """doc_type_normalized from the CELEX type letter, the rule the table already follows (18,294 rows read from
-    their act's file, 15 Oct 2026: D Decision, R Regulation, L Directive, H Recommendation, A Opinion; a corrigendum
-    takes its act's letter). Other letters keep the current value unless it names the wrong file."""
-    m = re.match(r"^[0-9CE][0-9]{4}([A-Z]{1,2})", celex or "")
+    """doc_type_normalized from the CELEX type letter, the rule the table already follows (17,440 of 17,605 typed
+    rows read from their act's file, 15 Oct 2026: D Decision, R Regulation, L Directive, H Recommendation,
+    A Opinion; a corrigendum takes its act's letter). Sector 3 only (in sector 2, A is an agreement). Otherwise the
+    current value stays unless it names the wrong file."""
+    m = re.match(r"^3[0-9]{4}([A-Z]{1,2})", celex or "")
     if m and m.group(1) in TYPE_OF_LETTER:
         return TYPE_OF_LETTER[m.group(1)]
     return "Other" if current in WRONG_FILE_TYPES or not current else current
@@ -336,6 +375,7 @@ def process_corpus(
         "repealed": 0,
         "absent_in_force": 0,
         "absent_unverified": 0,
+        "no_act_file": 0,
         "errors": 0,
     }
 
@@ -432,9 +472,17 @@ def process_corpus(
             try:
                 cx = folder_celex(corpus_path, uuid)
                 # the act's own file, by content: a row that points at an annex or cover page gets a new hash and is re-read
+                meta = {}
                 picked, _ = main_file(corpus_path, uuid, cx or (row.celex if row else None),
-                                      lambda: rdf_title(corpus_path, uuid), formex_parser)
-                xml_path = picked or default_path
+                                      lambda: meta.setdefault("m", rdf_meta(corpus_path, uuid))["title"], formex_parser,
+                                      current=(PROJECT_ROOT / row.xml_path) if row is not None else None)
+                if picked is None:
+                    # no act file (only annexes, a cover page or scans): never read a row from one
+                    stats["no_act_file"] += 1
+                    celex_report.append((uuid, "no_act_file", row.celex if row is not None else "", cx or "", ""))
+                    logger.warning(f"[WARN] Not read, the folder holds no act file: {uuid}")
+                    continue
+                xml_path = picked
                 xml_rel = stored_path(xml_path)
                 content_hash = compute_file_hash(xml_path)
 
@@ -451,7 +499,9 @@ def process_corpus(
                     logger.warning(f"[WARN] No title after parse: {uuid}")
                     continue
                 fields = parsed_fields(parsed, xml_rel, content_hash, corpus_version)
-                fields["title"] = rdf_title(corpus_path, uuid) or fields["title"]  # the metadata's title, like the CELEX
+                m = meta.setdefault("m", rdf_meta(corpus_path, uuid))  # title and date from the metadata, like the CELEX
+                fields["title"] = usable_title(m["title"]) or fields["title"]
+                fields["date"] = m["date"] or fields["date"]
 
                 if parsed.celex and cx and parsed.celex != cx:
                     # usually the act the text amends or implements: the metadata is the folder's own
@@ -466,10 +516,10 @@ def process_corpus(
                         law = db.query(EULaw).filter(EULaw.uuid == uuid).first()
                         if law:
                             for k, v in fields.items():
-                                if k == "policy_area" and law.policy_area:
-                                    continue  # the EuroVoc job owns it once set (policy_area = EuroVoc domain)
-                                if k == "extra_metadata":
-                                    v = {**(law.extra_metadata or {}), **v}  # other writers' keys stay
+                                if k == "extra_metadata":  # a new file: its keys and what was cached from the old one go
+                                    keep = {a: b for a, b in (law.extra_metadata or {}).items()
+                                            if a not in FILE_KEYS + DERIVED_FROM_FILE}
+                                    v = {**keep, **v}
                                 setattr(law, k, v)
                             law.doc_type_normalized = type_label(law.celex, law.doc_type_normalized)
                             law.corpus_status = law.corpus_status or "active"
@@ -656,6 +706,7 @@ def main():
     logger.info(f"[UPDATE] Laws re-parsed and updated: {stats['updated']}")
     logger.info(f"[INFO] Unchanged: {stats['unchanged']} (repointed at {corpus_version}: {stats['refreshed']})")
     logger.info(f"[INFO] Skipped, owned by another source: {stats['skipped_other_source']}")
+    logger.info(f"[WARN] Not read, the folder holds no act file (annexes, cover page or scans only): {stats['no_act_file']}")
     logger.info(f"[INFO] New folders skipped, their CELEX is held by another row: {stats['skipped_celex_held']}")
     logger.info(f"[WARN] New folders not imported, their metadata states no single CELEX: {stats['skipped_no_celex']}")
     logger.info(f"[INFO] Rows without CELEX that took their folder's: {stats['celex_filled']}" + (" (would)" if args.dry_run else ""))
