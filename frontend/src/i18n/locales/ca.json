@@ -959,9 +959,9 @@
     },
     "endpoints": {
       "brusselsLobbies": "Cada organització del Registre de Transparència de la UE amb seu a Brussel·les, classificada, amb les notícies i actualitzacions que cadascuna publica al seu propi web. Filtres per tipus d'organització, interès polític i despesa en lobby; indicadors de disponibilitat de notícies per organització.",
-      "catalanTranslations": "8.710 lleis vinculants de la UE traduïdes al català (MIT). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
+      "catalanTranslations": "Més de 9.200 lleis vinculants de la UE traduïdes al català (MIT). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
       "laws": "Més de 28.500 lleis de la UE. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
-      "procedures": "Més de 1.200 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
+      "procedures": "Més de 2.000 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
       "consultations": "Aportacions d'actors interessats en directe del portal Have Your Say. Paginat amb agregats per país i tipus.",
       "commissioners": "Agendes en directe dels 27 membres del Col·legi. Resolució de nom insensible a accents.",
       "predictions": "Probabilitats de resultat i terminis previstos per IA per a qualsevol procediment legislatiu de la UE en curs (adoptat, rebutjat, retirat o pendent), amb puntuació de confiança i marge d'incertesa.",

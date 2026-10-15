@@ -959,9 +959,9 @@
     },
     "endpoints": {
       "brusselsLobbies": "Elke in Brussel gevestigde organisatie uit het EU-transparantieregister, gerangschikt, met het nieuws en de updates die elk op de eigen website publiceert. Filters op organisatietype, beleidsinteresse en lobby-uitgaven; indicatoren voor nieuwsbeschikbaarheid per organisatie.",
-      "catalanTranslations": "8.710 bindende EU-wetten vertaald naar het Catalaans (MIT). Open data - geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
+      "catalanTranslations": "Ruim 9.200 bindende EU-wetten vertaald naar het Catalaans (MIT). Open data - geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
       "laws": "Ruim 28.500 aangenomen EU-wetten. Filters op CELEX, doctype, beleidsgebied, publicatiedatum, volledige-tekst zoeken.",
-      "procedures": "Ruim 1.200 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
+      "procedures": "Ruim 2.000 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
       "consultations": "Live bijdragen van belanghebbenden via het Have Your Say-portaal. Gepagineerd met aggregaten per land en type.",
       "commissioners": "Live agenda's van alle 27 leden van het College. Naamresolutie ongevoelig voor accenten.",
       "predictions": "Door AI voorspelde uitkomstkansen en tijdlijn voor elke lopende EU-wetgevingsprocedure (aangenomen, verworpen, ingetrokken of in behandeling), met een betrouwbaarheidsscore en een onzekerheidsmarge.",

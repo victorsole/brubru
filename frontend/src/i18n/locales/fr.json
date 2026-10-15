@@ -959,9 +959,9 @@
     },
     "endpoints": {
       "brusselsLobbies": "Chaque organisation du registre de transparence de l'UE basée à Bruxelles, classée, avec les actualités et mises à jour que chacune publie sur son propre site. Filtres par type d'organisation, intérêt politique et dépenses de lobbying ; indicateurs de disponibilité des actualités par organisation.",
-      "catalanTranslations": "8 710 textes contraignants de l'UE traduits en catalan (MIT). Données ouvertes, sans clé d'API. Filtres par type, catégorie, moteur ; recherche plein texte.",
+      "catalanTranslations": "Plus de 9 200 textes contraignants de l'UE traduits en catalan (MIT). Données ouvertes, sans clé d'API. Filtres par type, catégorie, moteur ; recherche plein texte.",
       "laws": "Plus de 28 500 textes de loi UE. Filtres par CELEX, type de document, domaine politique, date de publication, recherche plein-texte.",
-      "procedures": "Plus de 1 200 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
+      "procedures": "Plus de 2 000 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
       "consultations": "Contributions d'acteurs en direct depuis le portail Have Your Say. Paginé avec agrégats par pays et type.",
       "commissioners": "Agendas en direct des 27 membres du Collège. Résolution du nom insensible aux accents.",
       "predictions": "Probabilités de résultat et calendrier prédits par IA pour toute procédure législative de l'UE en cours (adoptée, rejetée, retirée ou en attente), avec un score de confiance et une marge d'incertitude.",

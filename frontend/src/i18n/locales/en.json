@@ -959,9 +959,9 @@
     },
     "endpoints": {
       "brusselsLobbies": "Every Brussels-based EU Transparency Register organisation, ranked, with the news and updates each one publishes on its own website. Filters by organisation type, policy interest and lobbying spend; news-availability flags per org.",
-      "catalanTranslations": "8,710 binding EU laws translated into Catalan (MIT). Open data - no API key required. Filter by doc_type, category, engine; full-text search.",
+      "catalanTranslations": "9,200+ binding EU laws translated into Catalan (MIT). Open data - no API key required. Filter by doc_type, category, engine; full-text search.",
       "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",
-      "procedures": "1,200+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
+      "procedures": "2,000+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
       "consultations": "Live stakeholder contributions from the EC Have Your Say portal. Paginated with country and user-type aggregates.",
       "commissioners": "Live calendar items for all 27 college members. Name resolution is accent-insensitive.",
       "predictions": "AI-predicted outcome probabilities and timeline for any ongoing EU legislative procedure (adopted, rejected, withdrawn or pending), with a confidence score and an uncertainty range.",
