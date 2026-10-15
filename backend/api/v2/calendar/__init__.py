@@ -122,7 +122,9 @@ async def list_calendar_events(
         updated_from=updated_from, updated_to=updated_to, updated_end=updated_end,
         limit=limit, page=page, user=user, db=db)
     items = [_to_v2(it, with_body=include_body) for it in resp.data]
-    return build_envelope(items, resp.total, page, limit)
+    # Echo the window applied, as every other v2 list does.
+    return build_envelope(items, resp.total, page, limit,
+                          updated_from=updated_from, updated_to=updated_to or updated_end)
 
 
 @router.get(
