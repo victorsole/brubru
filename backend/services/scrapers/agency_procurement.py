@@ -62,11 +62,12 @@ def _parse_date(s: str) -> datetime | None:
 
 def _build(*, body_code: str, item_type: str, title: str, url: str, reference: str = "",
            status: str = "", deadline: datetime | None, now: datetime,
-           source_kind: str) -> Item:
+           source_kind: str, published: datetime | None = None) -> Item:
     bits = [b for b in [reference, status, deadline.date().isoformat() if deadline else ""] if b]
     lines = [title,
              f"Reference: {reference}" if reference else "",
              f"Status: {status}" if status else "",
+             f"Published: {published.date()}" if published else "",
              f"Deadline: {deadline.date()}" if deadline else ""]
     lines = [l for l in lines if l]
     return Item(
@@ -74,7 +75,7 @@ def _build(*, body_code: str, item_type: str, title: str, url: str, reference: s
         summary=clean(" · ".join(bits)) or clean(title)[:120],
         body_txt=clean("\n".join(lines)),
         body_html=clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>"),
-        document_date=deadline, creation_date=now, source_kind=source_kind,
+        document_date=published or deadline, creation_date=now, source_kind=source_kind,
         guid=reference or url)
 
 
@@ -2030,6 +2031,11 @@ def ingest_eea_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 # --- EU-OSHA — Drupal Views views-row + per-year archive ------------------ #
 _EU_OSHA = "https://osha.europa.eu"
+_EU_OSHA_TAB_STATUS = {
+    "block_open_calls": "Open",
+    "block_ongoing_calls": "Closed for submissions (ongoing)",
+    "block_archived_calls": "Archived",
+}
 
 
 def _parse_eu_osha_views(html: str, base: str, body_code: str, item_type: str,
@@ -2042,20 +2048,28 @@ def _parse_eu_osha_views(html: str, base: str, body_code: str, item_type: str,
     now = datetime.now(timezone.utc)
     out: list[Item] = []
     seen: set[str] = set()
+    # The title sat in an <h2> until October 2026 and now sits in an <h4>: eleven runs parsed
+    # nothing while six calls were held (scraper-health check, 15 Oct 2026).
     pat = re.compile(
-        r'views-field-title[^>]*>\s*<h2[^>]*>\s*<a[^>]+href="'
+        r'views-field-title[^>]*>\s*<h\d[^>]*>\s*<a[^>]+href="'
         r'(/en/about-eu-osha/procurement/call[^"]+)"[^>]*>(.*?)</a>', re.S)
+    # The page lists calls in tabs, each its own view block: open, ongoing (submission
+    # closed, under evaluation) and archived. Every call used to be stored "Open".
+    blocks = [(b.start(), b.group(1)) for b in re.finditer(r'view-display-id-([a-z_0-9]+)', html)]
     for m in pat.finditer(html):
         href, title = m.group(1), _txt(m.group(2))
         if not title or href in seen:
             continue
         seen.add(href)
+        block = next((name for start, name in reversed(blocks) if start < m.start()), "")
+        status = _EU_OSHA_TAB_STATUS.get(block, "Open")
         pre = html[max(0, m.start() - 500):m.start()]
+        # The <time> before each title is the call's publication date, not its deadline.
         times = re.findall(r'<time[^>]*datetime="([^"]+)"', pre)
-        doc_dt = _parse_date(times[-1][:10]) if times else None
+        published = _parse_date(times[-1][:10]) if times else None
         out.append(_build(
             body_code=body_code, item_type=item_type, title=title, url=base + href,
-            reference="", status="Open", deadline=doc_dt, now=now,
+            reference="", status=status, deadline=None, published=published, now=now,
             source_kind=source_kind,
         ))
     return out
