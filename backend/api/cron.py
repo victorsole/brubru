@@ -593,6 +593,11 @@ async def cron_sync_warm_12h(
 
     results["committee_work"] = await _run_async_service("committee_work", _committee_work)
     results["eprs_publications"] = await _run_script_async("eprs_publications", "scripts/sync_eprs_publications.py", ["--days", "3"], timeout=900)
+    # The sync stores what the RSS carries (title, date, type, summary). The record page
+    # gives authors, policy areas and the English PDF; the PDF gives the text. Neither job
+    # was scheduled, so 870 of 871 publications served no author (15 Oct 2026).
+    results["eprs_records"] = await _run_script_async("eprs_records", "scripts/enrich_eprs_records.py", ["--apply", "--max-seconds", "600"], timeout=900)
+    results["eprs_full_text"] = await _run_script_async("eprs_full_text", "scripts/backfill_eprs_full_text.py", ["--apply", "--limit", "150"], timeout=1200)
     results["eprs_legislation"] = await _run_script_async("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
     results["committee_minutes"] = await _run_script_async("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
     # Committee agendas -> My EU Calendar.
