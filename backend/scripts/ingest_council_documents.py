@@ -120,14 +120,24 @@ def policy_terms() -> list[str]:
     return terms
 
 
+def _clean(t: Optional[str]) -> Optional[str]:
+    """NUL and lone surrogates. PDF extraction emits both; Postgres rejects the first and
+    the second cannot be encoded: WK 15919/2025 carried '\\udd00' 18 times and ended the
+    2025 run of the backfill with about 2,080 numbers still to ask (14 Oct 2026)."""
+    if t is None:
+        return None
+    return t.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8")
+
+
 def _persist(conn, doc: CouncilDoc, source: str, body: Optional[str] = None) -> bool:
+    body = _clean(body) or None
     row = conn.execute(text(_UPSERT), {
         "source": source,
         "inst": INSTITUTION_SLUG,
         "category": doc.category,
         "ext_id": doc.external_id,
         "url": doc.url,
-        "title": doc.title,
+        "title": _clean(doc.title),
         "summary": (body[:900] if body else None),
         "published": doc.published,
         "policy_areas": doc.subject_matters or [],

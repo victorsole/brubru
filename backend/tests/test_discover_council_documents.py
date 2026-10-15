@@ -31,3 +31,42 @@ def test_council_and_coreper_agendas_are_named():
 
 def test_unparseable_falls_back_to_the_reference():
     assert parse("WK-1-2026-INIT", "nothing useful")["title"] == "WK-1-2026-INIT"
+
+
+def test_a_text_with_lone_surrogates_or_nul_is_stored_without_them(monkeypatch):
+    """WK 15919/2025 (970,017 characters) carried '\\udd00' 18 times; the driver could not
+    encode it and the 2025 backfill stopped there (14 Oct 2026). Through the real store():
+    every value written must encode, and the text loses only the bad characters."""
+    import io
+    import sys
+    from contextlib import contextmanager
+
+    import scripts.discover_council_documents as dcd
+    written = []
+
+    class _Conn:
+        def execute(self, sql, params=None):
+            written.append(params or {})
+            for v in (params or {}).values():
+                if isinstance(v, str):
+                    v.encode("utf-8")  # what psycopg2 does before sending
+                    assert "\x00" not in v
+
+            class _R:
+                def fetchone(self):
+                    return type("Row", (), {"inserted": True})()
+            return _R()
+
+    class _Engine:
+        @contextmanager
+        def begin(self):
+            yield _Conn()
+
+    raw = "WK 15919/2025 Subject: Working document \udd00 on fisheries\x00 " + "x" * 300
+    monkeypatch.setattr(dcd, "fetch_document_text", lambda doc, max_chars=0: raw)
+    # A terminal or log file is strict UTF-8; pytest's capture would hide the crash.
+    monkeypatch.setattr(sys, "stdout", io.TextIOWrapper(io.BytesIO(), encoding="utf-8", errors="strict"))
+    assert dcd.store(_Engine(), "WK-15919-2025-INIT", apply=True) is True
+    body = written[0]["body"]
+    assert body == raw.replace("\udd00", "").replace("\x00", "")
+    assert written[0]["summary"] == body[:900]

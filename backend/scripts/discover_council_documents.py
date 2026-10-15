@@ -60,7 +60,7 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 import httpx  # noqa: E402
 from sqlalchemy import text  # noqa: E402
 
-from scripts.ingest_council_documents import SOURCE_REGISTER, _engine, _persist  # noqa: E402
+from scripts.ingest_council_documents import SOURCE_REGISTER, _clean, _engine, _persist  # noqa: E402
 from services.scrapers.council_register import CouncilDoc, fetch_document_text  # noqa: E402
 
 # Consecutive misses after which a series is taken to have reached its end. Lower than
@@ -225,7 +225,9 @@ class Asker:
 def store(engine, ref: str, apply: bool) -> bool:
     doc = CouncilDoc(external_id=ref, title=ref, url=url_of(ref), published=None,
                      subject_matters=[], category="document")
-    body = fetch_document_text(doc, max_chars=MAX_TEXT) or ""
+    # Cleaned before parse: a title holding a lone surrogate would end the run at the
+    # print below, before the write could clean it.
+    body = _clean(fetch_document_text(doc, max_chars=MAX_TEXT)) or ""
     meta = parse(ref, body)
     doc.title, doc.published = meta["title"], meta["published"]
     print(f"  {ref}: {doc.published} {doc.title[:80]}")
