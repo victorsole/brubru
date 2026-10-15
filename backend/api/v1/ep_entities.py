@@ -4,7 +4,7 @@
 W3 P2 — EP entity endpoints not yet exposed in v1.
 
 - /amendments      → mep_amendments (scraped EP committee amendments)
-- /votes           → ep_votes (HowTheyVote roll-call votes)
+- /votes           → ep_roll_call_votes (Parliament's roll-call minutes)
 - /votes/{id}/records → ep_member_votes per-MEP positions
 - /ep-documents    → cross-committee unified view (committee_work + amendment_documents).
                      NOT minutes, texts_adopted or mep_amendments: the module docstring
@@ -14,6 +14,7 @@ W3 P2 — EP entity endpoints not yet exposed in v1.
 """
 
 import logging
+import re
 from datetime import date, datetime, time
 from typing import Any, Dict, List, Optional
 
@@ -422,7 +423,7 @@ class VoteItem(BaseModel):
     # 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(
         None,
-        description="Citizen URL — HowTheyVote vote page (https://howtheyvote.eu/votes/{htv_id}) — real, specific.",
+        description="The sitting's roll-call minutes on europarl.europa.eu (a committee vote: the committee report).",
     )
     body_txt: Optional[str] = Field(
         None,
@@ -523,7 +524,8 @@ def _rollcall_to_item(r) -> "VoteItem":
         reference=r.report_ref,
         description=r.subject,
         procedure_reference=r.procedure_ref,
-        procedure_type=None,
+        # The procedure reference names its type: 2024/0123(COD) -> COD.
+        procedure_type=(re.search(r"\(([A-Z]{3})\)\s*$", r.procedure_ref or "") or [None, None])[1],
         procedure_stage=r.level,
         amendment_number=None,
         is_main=(r.level == "plenary"),
@@ -602,9 +604,9 @@ def _vote_row_to_item(r: "EPVote") -> "VoteItem":
 @votes_router.get(
     "",
     response_model=PaginatedResponse[VoteItem],
-    summary="EP roll-call votes — plenary results with tallies (HowTheyVote)",
+    summary="EP roll-call votes — the decisive plenary and committee votes, with tallies",
     description="""**What it does**
-Roll-call vote results from European Parliament plenary sittings, sourced from HowTheyVote.eu (the open-source civic-tech mirror of the EP's official register of votes). Each row carries the vote title, procedure reference, EP committee report number, FOR/AGAINST/ABSTENTION/DID-NOT-VOTE tallies, ADOPTED/REJECTED result, and the timestamp.
+The decisive roll-call vote on each text Parliament adopted, read from Parliament's own roll-call minutes (the sitting's PV-...-RCV document, its HTML page or, where that page is interactive, its XML), and the committee's final vote on the report where the committee report records one. Each row carries the text's title, the procedure, the report reference, the for / against / abstention counts, ADOPTED or REJECTED, the vote date, and in `body_txt` the breakdown by political group and by country. Plenary votes are held from 17 July 2024, the start of the 10th term. One row per decisive vote: amendment-level votes are not served, so `amendment_number` is null; `count_did_not_vote` is 0 because the minutes list no such count; `htv_id` is null (see the field). `procedure_stage` says whether the vote is `plenary` or `committee`; `procedure_type` is read from the procedure reference.
 
 Filterable by procedure, vote reference, main-vote-only, result, full-text search, and incremental sync.
 
@@ -631,10 +633,10 @@ GET /api/v1/votes?is_main=true&result=ADOPTED&limit=20
 ```
 
 **You get back**
-Paginated `VoteItem` envelope. `public_url` points to the specific HowTheyVote vote page (`https://howtheyvote.eu/votes/{htv_id}`). All 5 mandatory v1 datapoints present per row.
+Paginated `VoteItem` envelope. `public_url` is the sitting's roll-call minutes on europarl.europa.eu (a committee vote: the committee report). All 5 mandatory datapoints present per row.
 
 **Data freshness**
-Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+Synced in the fast tier (01:00, 09:00, 15:00 and 21:00 Brussels time) from Parliament's roll-call minutes, the six newest sittings each run; a sitting's votes appear once its minutes are published.
 """,
 )
 async def list_votes(
@@ -720,7 +722,7 @@ class MemberVoteItem(BaseModel):
     # subview of a single vote; the vote-level URL applies to every row.
     public_url: Optional[str] = Field(
         None,
-        description="The parent vote's HowTheyVote page (so each row links back to the vote context).",
+        description="The parent vote's roll-call minutes on europarl.europa.eu (so each row links back to the vote).",
     )
     body_txt: Optional[str] = Field(
         None,
@@ -754,7 +756,7 @@ Per-MEP vote positions (FOR / AGAINST / ABSTENTION / DID_NOT_VOTE) for one speci
 - Feed group-cohesion analysis or position-prediction models.
 
 **Input**
-- `vote_id` (path) — `ep_votes.id` (UUID).
+- `vote_id` (path) — the vote's `id` (UUID) from the list.
 - `group` — EP group code (e.g. `EPP`, `S&D`, `Renew`).
 - `country` — ISO-2 (e.g. `DE`, `FR`).
 - `position` — `FOR | AGAINST | ABSTENTION | DID_NOT_VOTE`.
@@ -767,10 +769,10 @@ GET /api/v1/votes/{vote_id}/records?country=DE&position=AGAINST
 ```
 
 **You get back**
-Paginated `MemberVoteItem` envelope. `public_url` on each row points to the parent vote's HowTheyVote page. All 5 mandatory v1 datapoints present per row.
+Paginated `MemberVoteItem` envelope. `public_url` on each row is the parent vote's roll-call minutes on europarl.europa.eu. All 5 mandatory datapoints present per row.
 
 **Data freshness**
-Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+Synced in the fast tier (01:00, 09:00, 15:00 and 21:00 Brussels time) from Parliament's roll-call minutes, the six newest sittings each run; a sitting's votes appear once its minutes are published.
 """,
 )
 async def list_member_votes(
@@ -857,15 +859,15 @@ async def list_member_votes(
 @votes_router.get(
     "/{vote_id}",
     response_model=VoteItem,
-    summary="Look up one EP roll-call vote by its internal ID — full tallies + HowTheyVote link",
+    summary="Look up one EP roll-call vote by its id — full tallies and the roll-call minutes",
     description="""**What it does**
-Returns full metadata for one EP roll-call vote, including title, procedure, committee report, tallies, result, and the citizen-facing HowTheyVote URL.
+Returns one EP roll-call vote: title, procedure, report, tallies, result, the breakdown by group and country, and the link to Parliament's roll-call minutes.
 
 **When to use it**
 After locating a vote via the list endpoint, use this to fetch the full record (with all tallies + ADOPTED/REJECTED result) for embedding in an analysis or a chat answer. To get the per-MEP breakdown of the same vote, follow up with `/api/v1/votes/{vote_id}/records`.
 
 **Input**
-- `vote_id` (path) — `ep_votes.id` (UUID).
+- `vote_id` (path) — the vote's `id` (UUID) from the list.
 
 **Try it**
 ```
@@ -873,10 +875,10 @@ GET /api/v1/votes/{vote_id}
 ```
 
 **You get back**
-A `VoteItem` with all 5 mandatory v1 datapoints. `public_url` resolves to `https://howtheyvote.eu/votes/{htv_id}` — the public vote page with per-MEP breakdown, country chart, and group cohesion.
+A `VoteItem` with all 5 mandatory datapoints. `public_url` is the sitting's roll-call minutes on europarl.europa.eu.
 
 **Data freshness**
-Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+Synced in the fast tier (01:00, 09:00, 15:00 and 21:00 Brussels time) from Parliament's roll-call minutes, the six newest sittings each run; a sitting's votes appear once its minutes are published.
 """,
 )
 async def get_vote_detail(
