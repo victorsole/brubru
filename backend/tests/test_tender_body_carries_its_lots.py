@@ -35,3 +35,12 @@ def test_a_lot_repeating_the_tender_adds_nothing():
 
 def test_old_and_malformed_lots_are_skipped():
     assert sedia.tender_lots_text({"lots": ["[]", "not json", json.dumps([1, "x"])]}, "x") == ""
+
+
+def test_cpv_codes_come_from_the_main_code_then_each_lot():
+    md = {"mainCpv": ["79620000"],
+          "lots": [json.dumps({"procurementProjectLots": [
+              {"procurementProject": {"mainCommodityClassification": {"itemClassificationCode": "79620000"}}},
+              {"procurementProject": {"mainCommodityClassification": {"itemClassificationCode": "72000000"}}}]})]}
+    assert sedia.tender_cpv_codes(md) == ["79620000", "72000000"]
+    assert sedia.tender_cpv_codes({"lots": ["[]"]}) == []

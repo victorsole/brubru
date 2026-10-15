@@ -405,6 +405,35 @@ def _to_number(value) -> Optional[float]:
         return None
 
 
+def tender_cpv_codes(md: Dict[str, Any]) -> List[str]:
+    """The tender's CPV codes: its main code, then each lot's, in order and once each.
+
+    ft_calls_for_tenders.cpv_codes was empty on 2,106 of 2,121 tenders (15 Oct 2026): the
+    ingest never wrote it, though SEDIA's record carries `mainCpv` and the eForms lots carry
+    mainCommodityClassification.itemClassificationCode. The Tenderator bridge reads it.
+    """
+    codes: List[str] = []
+    for c in md.get("mainCpv") or []:
+        c = str(c).strip()
+        if c.isdigit() and c not in codes:
+            codes.append(c)
+    for raw in md.get("lots") or []:
+        try:
+            data = json.loads(raw) if isinstance(raw, str) else raw
+        except ValueError:
+            continue
+        lots = data if isinstance(data, list) else (data or {}).get("procurementProjectLots") or []
+        for lot in lots:
+            if not isinstance(lot, dict):
+                continue
+            pp = lot.get("procurementProject") or {}
+            mc = (pp.get("mainCommodityClassification") or {}) if isinstance(pp, dict) else {}
+            c = str(mc.get("itemClassificationCode") or "").strip()
+            if c.isdigit() and c not in codes:
+                codes.append(c)
+    return codes
+
+
 def tender_lots_text(md: Dict[str, Any], description: str) -> str:
     """Each lot's name and description, where they add to the tender's own description.
 
@@ -506,6 +535,7 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
         row.update({
             "contracting_authority": _lead_authority(md),
             "contract_type": _CONTRACT_TYPE_LABELS.get(ct) or type_of_action,
+            "cpv_codes": tender_cpv_codes(md),
             "indicative_budget": _to_number(first_or_none(md.get("cftEstimatedOverallContractAmount"))),
             "budget_currency": first_or_none(md.get("cftEstimatedOverallContractCurrency")) or "EUR",
         })
@@ -613,18 +643,19 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
         "source_url": row.get("source_url") or "",
         "documents_url": row.get("documents_url"),
         "published_at": row.get("published_at"),
+        "cpv_codes": row.get("cpv_codes") or None,
     }
     cur.execute(
         """
         INSERT INTO ft_calls_for_tenders
             (tender_reference, title, description, status, deadline,
              contracting_authority, contract_type, estimated_value,
-             value_currency, source_url, documents_url, published_at,
+             value_currency, source_url, documents_url, published_at, cpv_codes,
              is_test, scraped_at, last_updated)
         VALUES (%(tender_reference)s, %(title)s, %(description)s, %(status)s,
                 %(deadline)s, %(contracting_authority)s, %(contract_type)s,
                 %(estimated_value)s, %(value_currency)s, %(source_url)s,
-                %(documents_url)s, %(published_at)s, FALSE, NOW(), NOW())
+                %(documents_url)s, %(published_at)s, %(cpv_codes)s, FALSE, NOW(), NOW())
         ON CONFLICT (tender_reference) DO UPDATE SET
             title = EXCLUDED.title,
             -- The LONGER value wins. SEDIA's search record carries no description for
@@ -644,6 +675,7 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
             source_url = COALESCE(NULLIF(EXCLUDED.source_url, ''), ft_calls_for_tenders.source_url),
             published_at = COALESCE(EXCLUDED.published_at, ft_calls_for_tenders.published_at),
             documents_url = COALESCE(EXCLUDED.documents_url, ft_calls_for_tenders.documents_url),
+            cpv_codes = COALESCE(EXCLUDED.cpv_codes, ft_calls_for_tenders.cpv_codes),
             scraped_at = NOW(),
             last_updated = NOW()
         """,
