@@ -110,7 +110,7 @@ class ResolutionItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — text_url (the doceo text) when present, else oeil_url.")
     body_txt: Optional[str] = Field(None, description="The adopted text itself; the OEIL procedure page when Parliament has not published it yet; a composition of the row's fields only when neither exists.")
     body_html: Optional[str] = Field(None, description="The same body as HTML.")
-    document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date.")
+    document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date, else the date of the procedure's first OEIL event (its debate or committee referral) for a file with no resolution adopted.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (created_at). Until 8 Oct 2026 this repeated updated_at, so a bulk re-stamp dated every resolution 28 Sep 2026.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Same value as updated_at; updated_date is the name every Brubru item uses.")
 
@@ -316,6 +316,19 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         doc_date = r.adoption_date if isinstance(r.adoption_date, date) else None
     elif r.vote_date:
         doc_date = r.vote_date.date() if hasattr(r.vote_date, "date") else None
+    events = _build_key_events(r, oeil_events, followups)
+    if doc_date is None:
+        # No adoption and no vote (15 Oct 2026: 577 of 958 in GovClipping's walk, 484 of
+        # them debates closed without a resolution): the date of the procedure's first
+        # OEIL event, its debate or committee referral, is the date the file stands on.
+        days = []
+        for e in events or []:
+            d = e.get("date") if isinstance(e, dict) else getattr(e, "date", None)
+            try:
+                days.append(d if isinstance(d, date) else date.fromisoformat(str(d)[:10]))
+            except (TypeError, ValueError):
+                continue
+        doc_date = min(days) if days else None
     return ResolutionItem(
         id=str(r.id),
         procedure_ref=r.procedure_ref,
@@ -335,7 +348,7 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
         vote_against=r.vote_against,
         vote_abstention=r.vote_abstention,
         vote_total=r.vote_total,
-        key_events=_build_key_events(r, oeil_events, followups),
+        key_events=events,
         oeil_url=r.oeil_url,
         text_url=r.text_url,
         has_commission_followup=(bool(r.has_commission_followup)
