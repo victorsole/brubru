@@ -184,6 +184,38 @@ def verdict_of(txt: str) -> str:
     return found[0] if found else "unknown"
 
 
+_STOP = {"impact", "assessment", "evaluation", "the", "and", "for", "of", "on", "in", "to", "a", "an",
+         "eu", "accompanying", "proposal", "version", "resubmitted", "review", "revision"}
+
+
+def _words(title: str) -> set[str]:
+    t = re.sub(r"\((?:resubmitted )?version of [^)]*\)", " ", (title or "").lower())
+    return {w for w in re.findall(r"[a-z0-9]{3,}", t) if w not in _STOP}
+
+
+def subjects_of(titles: list[str]) -> list[str]:
+    """The distinct files among the titles one document prints.
+
+    A resubmission rewords its title ("Fair minimum wages in the EU", then "Adequate
+    minimum wages in the EU"), so equal text cannot be the test: two titles are one file
+    when half their words are shared or one's words are all in the other's.
+    """
+    groups: list[set[str]] = []
+    names: list[str] = []
+    for title in titles:
+        w = _words(title)
+        if not w:
+            continue
+        for g in groups:
+            if len(w & g) / len(w | g) >= 0.5 or len(w & g) / min(len(w), len(g)) >= 0.8:
+                g |= w
+                break
+        else:
+            groups.append(set(w))
+            names.append(title)
+    return names
+
+
 def parse_opinion(txt: str) -> dict:
     """Title, initiative, opinion date, COM reference, verdict and summary from the opinion's text."""
     head = (txt or "")[:600]
@@ -203,12 +235,14 @@ def parse_opinion(txt: str) -> dict:
     issues = _KEY_ISSUES.search(txt or "") or _CONTEXT.search(txt or "")
     found = verdicts_of(txt)
     summary = _one_line(issues.group(1))[:2000] if issues else None
-    subjects = list(dict.fromkeys(_one_line(m.group(1)).lower() for m in _TITLE.finditer(txt or "")))
+    subjects = subjects_of([_one_line(m.group(1)) for m in _TITLE.finditer(txt or "")])
     if len(subjects) > 1:
         # One SEC document can carry the opinions on several impact assessments
         # (SEC(2021)100: ten European Partnerships).
-        note = (f"This document holds the Board's opinions on {len(subjects)} impact assessments; "
-                f"the title, verdict and summary given are those of the first.")
+        # The count is not stated: titles alone cannot always tell two files from one
+        # file renamed on resubmission.
+        note = ("This document holds the Board's opinions on more than one impact assessment; "
+                "the title, verdict and summary given are those of the first.")
     elif len(found) > 1:
         earlier = sorted(set(found[1:]), key=found[1:].index)
         note = (f"Resubmitted: the document also carries the Board's earlier opinion(s) on this file "

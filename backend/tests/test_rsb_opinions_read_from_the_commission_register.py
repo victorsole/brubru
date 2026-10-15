@@ -74,7 +74,15 @@ def test_a_document_bundling_several_assessments_says_so():
     text = OPINION + "\nTitle: Impact assessment / European partnership for clean hydrogen\nOverall opinion: NEGATIVE\n"
     got = job.parse_opinion(text)
     assert got["verdict"] == "positive"
-    assert got["summary"].startswith("This document holds the Board's opinions on 2 impact assessments")
+    assert got["summary"].startswith("This document holds the Board's opinions on more than one impact assessment")
+
+
+def test_a_title_reworded_on_resubmission_is_the_same_file():
+    assert len(job.subjects_of(["Impact assessment / Fair minimum wages in the EU",
+                                "Impact assessment / Adequate minimum wages in the EU"])) == 1
+    assert len(job.subjects_of(["Impact assessment / Revision of the general pharmaceutical legislation",
+                                "Impact assessment / Revision of the EU legislation on medicines for "
+                                "children and rare diseases"])) == 2
 
 
 def test_an_opinion_without_a_verdict_line_keeps_its_title():
