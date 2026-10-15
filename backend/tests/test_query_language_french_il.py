@@ -21,6 +21,9 @@ FRENCH = [
     "Quand la Commission a-t-elle proposé le Customs Code ?",
     "Il faut savoir si le Parlement a voté.",
     "Qu'est-ce que le règlement sur l'IA ?",
+    "Stripchat a-t-il gagné son recours contre la Commission ?",
+    "Sanofi a-t-elle payé une amende ?",
+    "Va-t-on vers un report du règlement méthane ?",
 ]
 
 ITALIAN = [

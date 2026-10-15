@@ -2,6 +2,284 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "cam_network_code_gas_revision_call_for_feedback_2026",
+      "title": "CAM gas network code revision",
+      "summary": "Draft revision of Regulation 2017/459; feedback until 10 November 2026",
+      "refs": [
+        "32017R0459"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "ai_act_enforcement_ai_office_virkkunen_dublin_2026",
+      "title": "AI Act enforcement: first AI Office requests",
+      "summary": "Virkkunen, Dublin 14 Oct: requests for information to GPAI providers",
+      "refs": [
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "ep_committee_votes_15_19_october_2026",
+      "title": "EP committee votes 15 and 19 October 2026",
+      "summary": "CO2 for cars (TRAN opinion), ETS benchmarks, Global Europe, Syria, US drug pricing",
+      "refs": [
+        "32019R0631"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "fdi_screening_sixth_annual_report_2026",
+      "title": "FDI screening: sixth annual report",
+      "summary": "667 notifications in 2025 (+40%); FISR applies from 17 January 2028",
+      "refs": [
+        "32019R0452"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "stripchat_general_court_t134_24_dsa_vlop",
+      "title": "Stripchat v Commission, T-134/24",
+      "summary": "General Court upholds Stripchat's VLOP designation under the DSA",
+      "refs": [
+        "32022R2065"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "methane_regulation_amendment_com_2026_569",
+      "title": "Methane Regulation: proposed one-year delay for importers",
+      "summary": "COM(2026) 569: Articles 28 and 29 deadlines moved to 2029 and 2031",
+      "refs": [
+        "32024R1787"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "return_regulation_2026_2280_entry_into_force",
+      "title": "Return Regulation (EU) 2026/2280 in force",
+      "summary": "Published OJ L 15 Oct 2026; in force 16 Oct; Art. 14 and others apply now, the rest from 17 Oct 2027",
+      "refs": [
+        "32026R2280"
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_asset_recovery_directive",
+      "title": "Asset Recovery and Confiscation Directive (Directive (EU) 2024/1260)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "ai_act_regulation",
+      "title": "EU Artificial Intelligence Act (AI Act)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "efsa_agency_overview",
+      "title": "EFSA: European Food Safety Authority",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_automotive_omnibus",
+      "title": "EU Automotive Omnibus (Automotive Industrial Action Plan)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_social_dialogue",
+      "title": "EU Social Dialogue and Collective Bargaining",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "fp10_ecf_competitiveness",
+      "title": "10th Framework Programme (FP10) and European Competitiveness Fund (ECF)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "european_economic_and_social_committee",
+      "title": "European Economic and Social Committee (EESC)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "committee_of_the_regions",
+      "title": "European Committee of the Regions (CoR)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_accession_negotiations_state_of_play_october_2026",
+      "title": "EU accession negotiations, October 2026: Montenegro closes chapters 17 to 19, accession co",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "hungary_election_2026_magyar",
+      "title": "Hungary 2026 Election: Orban Defeated, Magyar's Grand Bargain with Brussels",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "dsa_enforcement",
+      "title": "Digital Services Act: Enforcement and Cases",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_fdi_screening_regulation",
+      "title": "EU Foreign Direct Investment Screening Regulation",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_solidarity_fund_eusf",
+      "title": "European Union Solidarity Fund (EUSF)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "ukraine_support_loan_recovery_2026",
+      "title": "Ukraine Support Loan (USL) and EU Recovery Financing 2026-2027",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_methane_regulation",
+      "title": "EU Methane Regulation (Regulation (EU) 2024/1787)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "EU Pact on Migration and Asylum",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "updated",
+      "guide": "returns_policy_reform",
+      "title": "EU Returns Policy Reform (Return Regulation)",
+      "summary": "15 Oct 2026 news update (see QUICK FACTS top bullet)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "eu_mexico_high_level_dialogue_on_health_2026",
+      "title": "EU-Mexico High-Level Dialogue on Health",
+      "summary": "First meeting, Mexico City, 14 October 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "warsaw_convention_additional_protocol_asset_recovery_2026",
+      "title": "Warsaw Convention Additional Protocol signed",
+      "summary": "EU signs asset-recovery and AML protocol, 14 Oct 2026; not yet in force",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "cor_plenary_14_october_2026_opinions",
+      "title": "CoR plenary 14 October 2026",
+      "summary": "Eleven opinions incl. EU Agenda for Cities, bioeconomy, IAA, Automotive Package",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "ukraine_accession_clusters_internal_market_competitiveness_2026",
+      "title": "Ukraine opens accession clusters 2 and 3",
+      "summary": "Internal market (9 chapters) and competitiveness (8 chapters) opened 13 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "flash_eurobarometer_ai_algorithmic_management_smes_2026",
+      "title": "Flash Eurobarometer: AI in SMEs and mid-caps",
+      "summary": "42% use AI or algorithmic management; barriers cost, legal uncertainty, expertise",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "edip_ira_energetic_components_awards_2026",
+      "title": "EDIP energetic components awards",
+      "summary": "EUR 168.2 million for eight IRA-EC projects, 17 sites, 14 Member States and Norway",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "water_resilience_investment_accelerator_2026",
+      "title": "Water Resilience Investment Accelerator",
+      "summary": "20 pilot water projects via Green Assist; apply by end October 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-15",
+      "action": "added",
+      "guide": "sanofi_fluad_commitments_at40998",
+      "title": "Sanofi commitments, AT.40998",
+      "summary": "Commitments on disparaging the Fluad flu vaccine made binding, Article 102 TFEU",
+      "refs": []
+    },
+    {
       "date": "2026-10-14",
       "action": "updated",
       "guide": "pre_enlargement_policy_reviews_2026",

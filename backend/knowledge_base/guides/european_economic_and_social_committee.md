@@ -1,6 +1,7 @@
 # European Economic and Social Committee (EESC)
 
 ## QUICK FACTS
+- **Next plenary: 21-22 October 2026** (EESC announcement, 14 October 2026): opinions on the Single Market and on AI and digital sovereignty, among others; the flagship conference "Eradicating Poverty by 2050" runs alongside. The agenda itself was not read.
 - **Full name:** European Economic and Social Committee (EESC; French: CESE; Spanish: CESE; Dutch: EESC; Italian: CESE; Catalan: CESE)
 - **Type:** EU advisory body for organised civil society; one of two EU treaty advisory bodies (alongside the Committee of the Regions)
 - **Treaty basis:** Articles 300, 301-304 TFEU; originally established by the Treaties of Rome, 25 March 1957

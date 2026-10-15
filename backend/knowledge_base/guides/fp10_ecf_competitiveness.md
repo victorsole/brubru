@@ -1,6 +1,7 @@
 # 10th Framework Programme (FP10) and European Competitiveness Fund (ECF)
 
 ## QUICK FACTS
+- **ERC reaction, 14 October 2026:** ERC President **Maria Leptin**: "The proposed cuts to the next Horizon Europe FP10 budget send the wrong signal ... It's not too late to change course!" (ERC's official account). The post does not say whose proposed cuts or how much: give no amount.
 Companion guide: `european_competitiveness_fund` is the dedicated deep-dive on the ECF itself (COM(2025)555, EUR 234 billion, four policy windows, the ~13-14 instruments it consolidates). This guide covers the FP10 research-and-innovation angle plus the FP10+ECF relationship; use the two together and treat both as proposal-stage until the co-legislators agree.
 FP10 proposal: EUR 175 billion standalone programme for research and innovation (2028-2034)
 FP10 legal basis: Successor to Horizon Europe, Regulation (EU) 2021/695 (CELEX: 32021R0695)

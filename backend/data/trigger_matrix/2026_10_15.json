@@ -1,0 +1,163 @@
+{
+ "_about": "15 Oct 2026 news implementation: 6 languages per topic, natural phrasing; negatives must not reach the new guides.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "return_regulation_2026_2280_entry_into_force#inforce": [
+   "Is the new EU return regulation in force?",
+   "Le nouveau règlement sur le retour est-il entré en vigueur ?",
+   "Is de nieuwe terugkeerverordening van de EU al van kracht?",
+   "¿Ha entrado en vigor el nuevo reglamento de retorno de la UE?",
+   "Ha entrat en vigor el nou reglament de retorn de la UE?",
+   "Il nuovo regolamento sui rimpatri è già in vigore?"
+  ],
+  "methane_regulation_amendment_com_2026_569#delay": [
+   "Is the Commission delaying the methane regulation for importers?",
+   "La Commission propose-t-elle un report du règlement méthane pour les importateurs ?",
+   "Stelt de Commissie uitstel van de methaanverordening voor importeurs voor?",
+   "¿La Comisión propone el aplazamiento del reglamento sobre el metano para los importadores?",
+   "La Comissió proposa l'ajornament del reglament sobre el metà per als importadors?",
+   "La Commissione propone il rinvio del regolamento sul metano per gli importatori?"
+  ],
+  "stripchat_general_court_t134_24_dsa_vlop#ruling": [
+   "Did Stripchat win its case against the Commission?",
+   "Stripchat a-t-il gagné son recours contre la Commission ?",
+   "Heeft Stripchat zijn zaak tegen de Commissie gewonnen?",
+   "¿Ganó Stripchat su recurso contra la Comisión?",
+   "Stripchat ha guanyat el recurs contra la Comissió?",
+   "Stripchat ha vinto il ricorso contro la Commissione?"
+  ],
+  "sanofi_fluad_commitments_at40998#case": [
+   "What did the Commission decide about Sanofi and the Fluad flu vaccine?",
+   "Qu'a décidé la Commission sur Sanofi et le vaccin Fluad ?",
+   "Wat besliste de Commissie over Sanofi en het griepvaccin Fluad?",
+   "¿Qué decidió la Comisión sobre Sanofi y la vacuna Fluad?",
+   "Què va decidir la Comissió sobre Sanofi i la vacuna Fluad?",
+   "Cosa ha deciso la Commissione su Sanofi e il vaccino Fluad?"
+  ],
+  "fdi_screening_sixth_annual_report_2026#report": [
+   "How many foreign investments were notified under EU FDI screening in 2025?",
+   "Que dit le rapport annuel sur le filtrage des investissements directs étrangers ?",
+   "Wat zegt het jaarverslag over de screening van buitenlandse directe investeringen?",
+   "¿Qué dice el informe anual sobre el control de las inversiones extranjeras directas?",
+   "Què diu l'informe anual sobre el control de les inversions estrangeres directes?",
+   "Cosa dice la relazione annuale sul controllo degli investimenti esteri diretti?"
+  ],
+  "water_resilience_investment_accelerator_2026#what": [
+   "What is the EU Water Resilience Investment Accelerator?",
+   "Qu'est-ce que l'accélérateur d'investissements pour la résilience de l'eau ?",
+   "Wat is de EU-versneller voor investeringen in waterweerbaarheid?",
+   "¿Qué es el acelerador de inversiones en resiliencia hídrica de la UE?",
+   "Què és l'acceleradora d'inversions en resiliència hídrica de la UE?",
+   "Che cos'è l'acceleratore di investimenti per la resilienza idrica?"
+  ],
+  "edip_ira_energetic_components_awards_2026#awards": [
+   "Which projects did EDIP fund for energetic components?",
+   "Quels projets de composants énergétiques l'EDIP a-t-il financés ?",
+   "Welke projecten voor energetische componenten financiert EDIP?",
+   "¿Qué proyectos de componentes energéticos ha financiado el EDIP?",
+   "Quins projectes de components energètics ha finançat l'EDIP?",
+   "Quali progetti sui componenti energetici ha finanziato l'EDIP?"
+  ],
+  "flash_eurobarometer_ai_algorithmic_management_smes_2026#smes": [
+   "How many SMEs use AI according to the Eurobarometer?",
+   "Combien de PME utilisent l'IA selon l'Eurobaromètre ?",
+   "Hoeveel kmo's gebruiken AI volgens de Eurobarometer?",
+   "¿Cuántas pymes usan la IA según el Eurobarómetro?",
+   "Quantes pimes utilitzen la IA segons l'Eurobaròmetre?",
+   "Quante PMI usano l'IA secondo l'Eurobarometro?"
+  ],
+  "ukraine_accession_clusters_internal_market_competitiveness_2026#clusters": [
+   "Which accession clusters did Ukraine open in October 2026?",
+   "Quels clusters de l'Ukraine ont été ouverts en octobre 2026 ?",
+   "Welke clusters heeft Oekraïne in oktober 2026 geopend?",
+   "¿Qué clústeres de adhesión abrió Ucrania en octubre de 2026?",
+   "Quins clústers d'adhesió ha obert Ucraïna l'octubre de 2026?",
+   "Quali cluster di adesione ha aperto l'Ucraina a ottobre 2026?"
+  ],
+  "ep_committee_votes_15_19_october_2026#co2": [
+   "When does Parliament vote on the CO2 standards for new cars?",
+   "Quand le Parlement vote-t-il sur les normes de CO2 pour les voitures ?",
+   "Wanneer stemt het Parlement over de CO2-normen voor auto's?",
+   "¿Cuándo vota el Parlamento las normas de CO2 para coches?",
+   "Quan vota el Parlament les normes de CO2 per als cotxes?",
+   "Quando vota il Parlamento sulle norme sulle emissioni di CO2 delle auto?"
+  ],
+  "ep_committee_votes_15_19_october_2026#ets": [
+   "What is the ETS heat and fuel benchmark proposal 2026/0211?",
+   "Où en est la proposition 2026/0211 sur les référentiels du SEQE ?",
+   "Wat is voorstel 2026/0211 over ETS-benchmarks?",
+   "¿Qué es la propuesta 2026/0211 sobre los valores de referencia del RCDE?",
+   "Què és la proposta 2026/0211 sobre els valors de referència de l'RCDE?",
+   "Cos'è la proposta 2026/0211 sui parametri di riferimento ETS?"
+  ],
+  "cor_plenary_14_october_2026_opinions#plenary": [
+   "What did the Committee of the Regions plenary adopt in October 2026?",
+   "Qu'a adopté le Comité des régions en plénière en octobre 2026 ?",
+   "Wat heeft de plenaire zitting van het Comité van de Regio's in oktober aangenomen?",
+   "¿Qué aprobó el pleno del Comité de las Regiones en octubre de 2026?",
+   "Què va aprovar el ple del Comitè de les Regions l'octubre de 2026?",
+   "Cosa ha adottato la sessione plenaria del Comitato delle regioni a ottobre 2026?"
+  ],
+  "ai_act_enforcement_ai_office_virkkunen_dublin_2026#enforcement": [
+   "Has the EU started enforcing the AI Act on AI model providers?",
+   "L'UE a-t-elle commencé l'application de l'AI Act aux fournisseurs de modèles ?",
+   "Is de handhaving van de AI-verordening al begonnen?",
+   "¿Ha empezado la aplicación de la Ley de IA a los proveedores de modelos?",
+   "Ha començat l'aplicació del Reglament d'IA als proveïdors de models?",
+   "È iniziata l'applicazione dell'AI Act ai fornitori di modelli?"
+  ],
+  "warsaw_convention_additional_protocol_asset_recovery_2026#protocol": [
+   "What did the EU sign on the Warsaw Convention on asset recovery?",
+   "Qu'a signé l'UE sur la convention de Varsovie et le recouvrement des avoirs ?",
+   "Wat heeft de EU ondertekend over het Verdrag van Warschau?",
+   "¿Qué firmó la UE sobre el Convenio de Varsovia y la recuperación de activos?",
+   "Què va signar la UE sobre el Conveni de Varsòvia i la recuperació d'actius?",
+   "Cosa ha firmato l'UE sulla Convenzione di Varsavia e il recupero dei beni?"
+  ],
+  "cam_network_code_gas_revision_call_for_feedback_2026#feedback": [
+   "When is the deadline for feedback on the gas CAM network code revision?",
+   "Quelle est la date limite pour commenter la révision du code de réseau CAM ?",
+   "Wat is de termijn voor feedback op de netcode capaciteitstoewijzing voor gas?",
+   "¿Cuál es el plazo para opinar sobre los mecanismos de asignación de capacidad de gas?",
+   "Quin és el termini per opinar sobre els mecanismes d'assignació de capacitat de gas?",
+   "Qual è la scadenza per commentare i meccanismi di allocazione della capacità del gas?"
+  ],
+  "eu_mexico_high_level_dialogue_on_health_2026#dialogue": [
+   "Is there an EU-Mexico health dialogue?",
+   "Existe-t-il un dialogue UE-Mexique sur la santé ?",
+   "Is er een dialoog EU-Mexico over gezondheid?",
+   "¿Existe un diálogo UE-México sobre salud?",
+   "Hi ha un diàleg UE-Mèxic sobre salut?",
+   "Esiste un dialogo UE-Messico sulla salute?"
+  ],
+  "hungary_election_2026_magyar#erasmus": [
+   "Can Hungarian students access Erasmus again?",
+   "Les étudiants hongrois ont-ils de nouveau accès à Erasmus ?",
+   "Hebben Hongaarse studenten weer toegang tot Erasmus?",
+   "¿Los estudiantes húngaros pueden volver a participar en Erasmus?",
+   "Els estudiants hongaresos poden tornar a participar en l'Erasmus?",
+   "Gli studenti ungheresi possono di nuovo partecipare all'Erasmus?"
+  ]
+ },
+ "negatives": [
+  "What is the AI Act?",
+  "What is the Digital Services Act?",
+  "How does EU competition law work?",
+  "What is the Committee of the Regions?",
+  "¿Qué es el Comité de las Regiones?",
+  "Cos'è il Comitato delle regioni?",
+  "How does a committee vote work in the European Parliament?",
+  "What is the EU Methane Regulation?",
+  "What are the EU rules on asylum?",
+  "What is the European Defence Fund?",
+  "How does the Common Agricultural Policy work?",
+  "What is the EU water framework directive?"
+ ]
+}

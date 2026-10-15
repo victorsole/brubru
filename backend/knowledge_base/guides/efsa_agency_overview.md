@@ -1,6 +1,7 @@
 # EFSA: European Food Safety Authority
 
 ## QUICK FACTS
+- **14 October 2026: EFSA published seven external scientific reports on ciguatera (ciguatoxins in fish)**, including the **EuroCigua II final report (EN-10305)** and reports on the Canary Islands, the Mediterranean, imported fish and EU epidemiology (EN-10310 to EN-10315). Only the titles were read (the journal blocked automated access): give no findings.
 - **Full name:** European Food Safety Authority (EFSA) -- the EU's independent scientific risk-assessment agency for food and feed safety
 - **Founding act:** Regulation (EC) No 178/2002 of 28 January 2002 (the **General Food Law**), CELEX 32002R0178 -- laid down general principles of EU food law, created the RASFF alert framework, and established EFSA, in the wake of the 1990s BSE crisis
 - **Seat:** **Parma, Italy** -- designated by the Council as EFSA's permanent seat in December 2003; founded 2002, operational from 2003

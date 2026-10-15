@@ -1,6 +1,7 @@
 # Asset Recovery and Confiscation Directive (Directive (EU) 2024/1260)
 
 ## QUICK FACTS
+- **14 October 2026: the EU signed the Additional Protocol to the Council of Europe's Warsaw Convention** (freezing, confiscation, asset management, AML); not in force for the EU until the Council concludes it with Parliament's consent. Detail: `warsaw_convention_additional_protocol_asset_recovery_2026`.
 - Topic: EU-wide minimum rules on tracing, freezing, confiscating and managing criminal assets
 - Legal act: Directive (EU) 2024/1260 of the European Parliament and of the Council of 24 April 2024 on asset recovery and confiscation
 - CELEX: 32024L1260

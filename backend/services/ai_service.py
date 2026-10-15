@@ -1135,6 +1135,15 @@ def _detect_query_language(text: str) -> str:
     if "¿" in text or "¡" in text:
         return "ES"
 
+    # "què" (what) and "és" (is) keep their grave/acute accent only in Catalan:
+    # Spanish writes "qué" and "es", French "que", Italian "che" and "è". The
+    # accent folding below erases that difference, so short Catalan questions
+    # ("Què és l'acceleradora...?", "Què va signar la UE...?") scored ES, FR or
+    # EN: 10 of 16 misdetections over the 702 trigger-matrix questions
+    # (15 Oct 2026), 0 regressions in the other languages.
+    if {w.lower() for w in re.findall(r"\b\w+\b", text)} & {"què", "és"}:
+        return "CA"
+
     # Fold diacritics once, so the marker sets below stay pure ASCII and the
     # detector is not defeated by a user typing "perque" for "perqu<e-grave>".
     folded = "".join(
@@ -1172,6 +1181,13 @@ def _detect_query_language(text: str) -> str:
     _es_hits = sum(1 for w in words if _decisive(w, _ES_DECISIVE))
     _nl_hits = sum(1 for w in words if _decisive(w, _NL_DECISIVE))
     _fr_hits = sum(1 for w in words if _decisive(w, _FR_DECISIVE))
+    # The euphonic "-t-" of a French inverted question ("a-t-il", "a-t-elle",
+    # "va-t-on") exists in no other Brubru language, so each one is a French
+    # decisive hit. Without it "Stripchat a-t-il gagné son recours contre la
+    # Commission ?" scored IT: the "-il" rule below removed "il" from the
+    # decisive tally only, and the bag-of-words pass still counted "il" + "la"
+    # for Italian against "la" alone for French (probe, 15 Oct 2026).
+    _fr_hits += len(re.findall(r"-\s*t\s*-\s*(?:il|elle|ils|elles|on)\b", text, re.IGNORECASE))
     # "il" is the Italian article AND the French pronoun. It stops counting for
     # Italian when the sentence carries a French-exclusive token ("Il faut...",
     # "Le Conseil a-t-il..."), or when it is the inverted French pronoun after
