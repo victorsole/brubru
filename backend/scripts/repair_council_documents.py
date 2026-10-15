@@ -38,7 +38,7 @@ load_dotenv(BACKEND / ".env")
 from sqlalchemy import text  # noqa: E402
 
 from scripts.discover_council_documents import MAX_TEXT, parse, url_of  # noqa: E402
-from scripts.ingest_council_documents import SOURCE_REGISTER, _engine  # noqa: E402
+from scripts.ingest_council_documents import SOURCE_REGISTER, _clean, _engine  # noqa: E402
 from services.scrapers.council_register import CouncilDoc, fetch_document_text  # noqa: E402
 
 OLD_CAP = 200_000
@@ -60,7 +60,9 @@ def spaced_share(body: str) -> float:
 
 
 def needs_new_text(body: str) -> str | None:
-    if len(body or "") >= OLD_CAP:
+    # Exactly the old cap: the old fetcher cut at it. A longer text was read under the new
+    # cap and is whole; `>=` sent 1,623 of them to be read again (15 Oct 2026).
+    if len(body or "") == OLD_CAP:
         return "cut at 200,000 characters"
     if spaced_share(body) > 0.15:
         return "letter-spaced"
@@ -111,12 +113,19 @@ def main(argv=None) -> int:
         time.sleep(0.25)
         doc = CouncilDoc(external_id=ref, title=ref, url=url_of(ref), published=None,
                          subject_matters=[], category="document")
-        return fetch_document_text(doc, max_chars=MAX_TEXT)
+        return _clean(fetch_document_text(doc, max_chars=MAX_TEXT))
 
     engine = _engine()
+    # Streamed: 33,669 rows hold 1.1 GB of text (15 Oct 2026); only the rows to correct are kept.
+    read, plans = 0, []
     with engine.connect() as conn:
-        rows = conn.execute(SELECT, {"s": SOURCE_REGISTER}).fetchall()
-    plans = [p for p in (plan_row(r, fetch) for r in rows) if p]
+        result = conn.execution_options(stream_results=True, max_row_buffer=500).execute(
+            SELECT, {"s": SOURCE_REGISTER})
+        for r in result:
+            read += 1
+            p = plan_row(r, fetch)
+            if p:
+                plans.append(p)
     tally = {}
     for p in plans:
         for k in p["changes"]:
@@ -125,7 +134,7 @@ def main(argv=None) -> int:
             f"{k} {p['old_published']} -> {v}" if k == "published" else
             f"{k}: {p['old_title'][:40]!r} -> {v[:70]!r}" if k == "title" else f"{k} ({v})"
             for k, v in p["changes"].items()))
-    print(f"[repair] {len(rows)} rows read, {len(plans)} to correct: {tally}")
+    print(f"[repair] {read} rows read, {len(plans)} to correct: {tally}")
     if not args.apply:
         print("[repair] rehearsal: nothing written")
         return 0

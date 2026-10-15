@@ -93,3 +93,10 @@ def test_a_subject_that_ran_on_is_cut_back_only_between_two_words():
     long_title = "Council Decision on " + "Germany, Estonia, Ireland, Croatia, " * 12
     body2 = "Brussels, 2 June 2026 Subject: " + long_title
     assert job.plan_row(_row("ST-10119-2026-ADD-2", long_title, date(2026, 6, 2), body2, None), _no_fetch) is None
+
+
+def test_a_text_longer_than_the_old_cap_is_whole_and_not_read_again():
+    """Read under the new cap, it is whole: `>=` sent 1,623 such rows back to the
+    register (15 Oct 2026)."""
+    long = ("Brussels, 2 June 2025 Subject: Annex " + "Annex text " * 30000)[:job.OLD_CAP + 1]
+    assert job.plan_row(_row("ST-9-2025-INIT", "Annex", date(2025, 6, 2), long, None), _no_fetch) is None
