@@ -80,6 +80,16 @@ def parse_feed(xml_bytes: bytes) -> list[tuple[CouncilDoc, str]]:
     return out
 
 
+COPY_ARTICLE = """
+    UPDATE institutional_publications p
+       SET html_content = n.body_txt, summary = coalesce(p.summary, left(n.body_txt, 900))
+      FROM eu_news_items n
+     WHERE p.source_slug = :s
+       AND rtrim(n.source_url, '/') = rtrim(p.url, '/')
+       AND n.body_source = 'fetched:article' AND length(n.body_txt) >= 500
+       AND length(coalesce(p.html_content, '')) < length(n.body_txt)"""
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--apply", action="store_true")
@@ -116,7 +126,12 @@ def main(argv=None) -> int:
             # Never trade a longer stored text for the feed's one paragraph.
             body = desc if desc and len(desc) > stored.get(doc.external_id, 0) else None
             inserted += _persist(conn, doc, SOURCE_PRESS, body)
-    print(f"[press] written {len(releases)}, of which new {inserted}")
+        # The article itself, where the news text job has read it (15 Oct 2026): the same
+        # release, at the same address, reaches eu_news_items, whose job reads Council pages
+        # through a browser, while this feed carries one paragraph or none. 24 of 77 releases
+        # were served with no text; 20 had it there.
+        copied = conn.execute(text(COPY_ARTICLE), {"s": SOURCE_PRESS}).rowcount
+    print(f"[press] written {len(releases)}, of which new {inserted}; article text copied for {copied}")
     return 0
 
 

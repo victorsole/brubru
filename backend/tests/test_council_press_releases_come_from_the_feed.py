@@ -62,7 +62,9 @@ class _Conn:
         return False
 
     def execute(self, stmt, params):
-        return SimpleNamespace(fetchall=lambda: list(self.stored.items()))
+        if "eu_news_items" in str(stmt):
+            self.writes.append(("copy_article", str(stmt)))
+        return SimpleNamespace(fetchall=lambda: list(self.stored.items()), rowcount=0)
 
 
 class _Engine:
@@ -86,3 +88,15 @@ def test_a_longer_stored_text_is_never_replaced_by_the_feed_paragraph(monkeypatc
     assert job.main(["--apply"]) == 0
     assert dict(writes)[held] is None                                  # COALESCE keeps the 4,200 characters
     assert dict(writes)["PR-20261014-media-advisory-tripartite-social-summit-of-14-october-2026"].startswith("Main agenda")
+
+
+def test_the_article_the_news_job_read_is_copied_by_url(monkeypatch):
+    """24 of 77 releases were served with no text while eu_news_items held the article."""
+    writes = []
+    monkeypatch.setattr(job.httpx, "get", lambda *a, **k: SimpleNamespace(content=FEED, raise_for_status=lambda: None))
+    monkeypatch.setattr(job, "_engine", lambda: _Engine({}, writes))
+    monkeypatch.setattr(job, "_persist", lambda conn, doc, source, body: True)
+    assert job.main(["--apply"]) == 0
+    copies = [w[1] for w in writes if w[0] == "copy_article"]
+    assert copies and "rtrim(n.source_url, '/') = rtrim(p.url, '/')" in copies[0]
+    assert "length(coalesce(p.html_content, '')) < length(n.body_txt)" in copies[0]

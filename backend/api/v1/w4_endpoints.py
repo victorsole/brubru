@@ -65,10 +65,10 @@ class ParliamentaryQuestionItem(BaseModel):
     asking_mep_names: list = Field(default_factory=list)
     answering_institution: Optional[str] = None
     answering_commissioner: Optional[str] = None
-    committees: list = Field(default_factory=list)
+    committees: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
     procedure_ref: Optional[str] = None
-    related_celex: list = Field(default_factory=list)
-    policy_areas: list = Field(default_factory=list)
+    related_celex: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
+    policy_areas: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
     source_url: Optional[str] = None
     answer_url: Optional[str] = None
     last_updated: Optional[datetime] = None
@@ -278,12 +278,12 @@ class TransparencyMeetingItem(BaseModel):
     location: Optional[str] = None
     subject: str
     organisation_met: str
-    transparency_register_id: Optional[str] = None
-    organisation_type: Optional[str] = None
+    transparency_register_id: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
+    organisation_type: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
     representatives: Optional[str] = None
     source_url: str
-    policy_areas: list = Field(default_factory=list)
-    related_celex: list = Field(default_factory=list)
+    policy_areas: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
+    related_celex: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
     last_updated: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
@@ -1227,20 +1227,20 @@ class TRISNotificationItem(BaseModel):
     notification_number: str
     notifying_country: str
     title: str
-    short_summary: Optional[str] = None
+    short_summary: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
     full_text_summary: Optional[str] = None
     notification_date: date
     standstill_until: Optional[date] = None
-    sector: Optional[str] = None
+    sector: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
     products_or_services: Optional[str] = None
     main_content: Optional[str] = None
-    commission_observations_url: Optional[str] = None
+    commission_observations_url: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
     member_state_observations: list = Field(default_factory=list)
     detailed_opinions: list = Field(default_factory=list)
     source_url: str
-    pdf_url: Optional[str] = None
-    policy_areas: list = Field(default_factory=list)
-    related_celex: list = Field(default_factory=list)
+    pdf_url: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
+    policy_areas: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
+    related_celex: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
     last_updated: Optional[datetime] = None
     # Body fields composed from main_content + full_text_summary +
     # short_summary (sections of the TRIS notification text). HTML-source
