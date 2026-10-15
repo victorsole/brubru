@@ -7,7 +7,7 @@ Created: February 2026
 """
 
 from sqlalchemy import (
-    Column, String, Integer, Boolean, DateTime, JSON, Text,
+    Column, String, Integer, Boolean, Date, DateTime, JSON, Text,
     ForeignKey, Index, UniqueConstraint
 )
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
@@ -139,6 +139,8 @@ class PlenaryTabledText(Base):
     full_text = Column(Text)
     adoption_date = Column(DateTime, nullable=True)  # a tabled text has not been adopted
     committees = Column(ARRAY(String), default=[])
+    # The date it was tabled, from EP Open Data (migration 294).
+    document_date = Column(Date, nullable=True)
     rapporteur_name = Column(String)
     rapporteur_mep_id = Column(String)
     celex_number = Column(String)

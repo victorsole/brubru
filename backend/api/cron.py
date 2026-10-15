@@ -540,7 +540,11 @@ async def cron_sync_hot_6h(
     results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
 
     # Script-based syncs (no service wrapper yet)
-    results["texts_submitted"] = await _run_script_async("texts_submitted", "scripts/ingest_texts_submitted.py", ["--apply"], timeout=600)
+    # Every report and motion tabled this year, from EP Open Data, with its date and text
+    # (15 Oct 2026). ingest_texts_submitted.py read only the current session's page: 46
+    # texts since July 2024, none dated. Same key, so the run history continues.
+    results["texts_submitted"] = await _run_script_async(
+        "texts_submitted", "scripts/sync_plenary_tabled_texts.py", ["--apply", "--max-seconds", "480"], timeout=600)
     results["college_agendas"] = await _run_script_async("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
     # Tentative agendas are a DIFFERENT document from the published order of the
     # day above: they list what the College is expected to take in the next four

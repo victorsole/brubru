@@ -8,6 +8,7 @@ adopted (no adoption_date) — useful for partners tracking the plenary pipeline
 """
 
 import logging
+import re
 from datetime import date, datetime
 from typing import Optional
 
@@ -46,13 +47,13 @@ class TextItem(BaseModel):
     adoption_date: Optional[datetime] = None
     committees: list = Field(default_factory=list)
     rapporteur_name: Optional[str] = None
-    rapporteur_mep_id: Optional[str] = None
+    rapporteur_mep_id: Optional[str] = Field(None, description="Not filled: Parliament's MEP id is not held for adopted texts yet (15 Oct 2026). The rapporteur is in rapporteur_name.")
     celex_number: Optional[str] = None
     vote_results: Optional[dict] = None
-    related_documents: list = Field(default_factory=list)
+    related_documents: list = Field(default_factory=list, description="Not filled: always empty for adopted texts.")
     source_url: Optional[str] = None
     full_text_url: Optional[str] = None
-    pdf_url: Optional[str] = None
+    pdf_url: Optional[str] = Field(None, description="The adopted text as a PDF on Parliament's document site (TA-<term>-<year>-<number>_EN.pdf).")
     last_updated: Optional[datetime] = None
     # Body fields composed from `full_text` (PDF-extracted plain text from
     # doceo PDF). PDF-sourced rows return body_html=null per the contract.
@@ -65,9 +66,23 @@ class TextItem(BaseModel):
     full_text: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(None, description="Citizen URL — full_text_url / pdf_url / source_url fallback chain.")
-    document_date: Optional[date] = Field(None, description="Adoption date (date-only view of adoption_date).")
+    document_date: Optional[date] = Field(None, description="For an adopted text its adoption date; for a tabled report or motion the date it was tabled (EP Open Data).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+
+
+_TA = re.compile(r"^P(\d+)_TA\((\d{4})\)(\d{4})$")
+
+
+def _ta_pdf(ta_reference) -> "str | None":
+    """The PDF Parliament serves for an adopted text, from its reference (15 Oct 2026: 576
+    of 763 in GovClipping's walk had none; P10_TA(2025)0268 -> TA-10-2025-0268_EN.pdf,
+    opened in Chrome, as the P9 rows already held)."""
+    m = _TA.match((ta_reference or "").strip())
+    if not m:
+        return None
+    term, year, num = m.groups()
+    return f"https://www.europarl.europa.eu/doceo/document/TA-{term}-{year}-{num}_EN.pdf"
 
 
 def _row_to_item(
@@ -127,7 +142,7 @@ def _row_to_item(
         related_documents=list(r.related_documents or []) if r.related_documents else [],
         source_url=r.source_url,
         full_text_url=r.full_text_url,
-        pdf_url=r.pdf_url,
+        pdf_url=r.pdf_url or _ta_pdf(r.ta_reference),
         last_updated=r.last_updated,
         has_body=has_body,
         body_html=body_html,
@@ -137,7 +152,9 @@ def _row_to_item(
         full_text=body_text,
         # 5 mandatory datapoints
         public_url=public_url,
-        document_date=r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None,
+        # A tabled text's own date (migration 294); an adopted text's adoption date.
+        document_date=getattr(r, "document_date", None) or (
+            r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None),
         creation_date=r.last_updated,
         updated_date=row_updated(r),
     )
