@@ -29,6 +29,7 @@ Defaults to dry-run with --limit 5 so the first invocation is safe.
 from __future__ import annotations
 
 import argparse
+import html
 import io
 import os
 import json
@@ -133,7 +134,8 @@ def extract_docx_text(docx_bytes: bytes) -> str:
         return ""
     xml = zf.read("word/document.xml").decode("utf-8", errors="replace")
     runs = re.findall(r"<w:t[^>]*>([^<]+)</w:t>", xml)
-    text = "\n".join(r.strip() for r in runs if r.strip())
+    # XML text keeps its entities: 314 questions read "(S&amp;D)" (16 Oct 2026).
+    text = "\n".join(html.unescape(r).strip() for r in runs if r.strip())
     # Trim doceo header lines so the body is more useful.
     return text.strip()
 
