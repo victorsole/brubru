@@ -24,6 +24,7 @@ from models.w4_entities import (
 )
 
 from ._body import (
+    strip_active_html,
     DEFAULT_HAS_BODY_THRESHOLD,
     body_from_pdf_text,
     body_threshold_param,
@@ -926,9 +927,9 @@ def _secondary_act_to_item(
         creation_date=getattr(r, "first_seen", None),
         updated_date=row_updated(r),
         has_body=has_body,
-        body_html=body_html,
+        body_html=strip_active_html(body_html),
         body_txt=body_text,
-        body=deprecated_body(body_text, body_html),
+        body=deprecated_body(body_text, strip_active_html(body_html)),
     )
 
 

@@ -41,6 +41,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -126,7 +127,22 @@ def _clean(t: Optional[str]) -> Optional[str]:
     2025 run of the backfill with about 2,080 numbers still to ask (14 Oct 2026)."""
     if t is None:
         return None
-    return t.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8")
+    return unmojibake(t.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8"))
+
+
+_MOJIBAKE = re.compile(r"â€|Ã[\x80-\xbf]|Â[\xa0-\xbf]")
+
+
+def unmojibake(t: Optional[str]) -> Optional[str]:
+    """UTF-8 read as Windows-1252, repaired: 'REGULATION (EU) â€¦/...' -> '…/...' (11 Council
+    titles, 16 Oct 2026). Kept only when the repair decodes cleanly and removes the marks."""
+    if not t or not _MOJIBAKE.search(t):
+        return t
+    try:
+        fixed = t.encode("cp1252").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return t
+    return fixed if len(_MOJIBAKE.findall(fixed)) < len(_MOJIBAKE.findall(t)) else t
 
 
 def _persist(conn, doc: CouncilDoc, source: str, body: Optional[str] = None) -> bool:

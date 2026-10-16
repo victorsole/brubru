@@ -252,3 +252,15 @@ def body_threshold_param(
 ) -> int:
     """Reusable FastAPI dependency for the body_threshold query param."""
     return body_threshold
+
+
+_ACTIVE_BLOCK = re.compile(r"(?is)<(script|style|noscript)\b[^>]*>.*?</\1\s*>")
+_ON_HANDLER = re.compile(r"""(?i)\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)""")
+
+
+def strip_active_html(html: Optional[str]) -> Optional[str]:
+    """Body HTML without scripts, styles and on* handlers (16 Oct 2026: 40 delegated and
+    implementing acts served a <script> or onclick from the page they were read from)."""
+    if not html:
+        return html
+    return _ON_HANDLER.sub("", _ACTIVE_BLOCK.sub("", html))
