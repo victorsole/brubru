@@ -1508,10 +1508,18 @@ def _echa_documents(block: str) -> list[dict]:
         title = _txt(inner)
         if title.lower().strip(" .:") in _GENERIC_LINK_TEXT:
             title = name                      # "click here" says nothing about the file
+        # ECHA names its files "<name>_en.pdf": 589 of 625 carried the suffix and none a
+        # language (API audit, 16 Oct 2026). Only an EU language code counts.
+        lm = re.search(r"_([a-z]{2})\.[A-Za-z0-9]{2,5}$", name.lower())
+        lang = lm.group(1) if lm and lm.group(1) in _EU_LANGS else None
         docs.append({"title": title or name, "file_url": url, "file_name": name,
                      "file_format": fm.group(1).lower() if fm else None,
-                     "file_size": None, "language": None, "document_date": None})
+                     "file_size": None, "language": lang, "document_date": None})
     return docs
+
+
+_EU_LANGS = {"bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "hr", "hu", "it",
+             "lt", "lv", "mt", "nl", "pl", "pt", "ro", "sk", "sl", "sv"}
 
 
 _SEDIA_SEARCH = "https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text={text}&pageNumber=1&pageSize=5"
