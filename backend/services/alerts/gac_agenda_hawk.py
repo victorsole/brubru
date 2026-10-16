@@ -102,6 +102,8 @@ def _target_users(cur) -> list[dict]:
         FROM users u
         JOIN user_alert_subscriptions s ON s.user_id = u.id
         WHERE s.is_active = TRUE
+          -- unclaimed pre-provisioned shells receive nothing (16 Oct 2026)
+          AND NOT (u.pre_provisioned_at IS NOT NULL AND u.claimed_at IS NULL AND u.last_login IS NULL)
           AND (
               s.query_phrase ILIKE '%official languages%' OR
               s.query_phrase ILIKE '%linguistic%' OR

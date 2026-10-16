@@ -1096,35 +1096,60 @@ def section_blind_spots(conn, start, end):
     #     Scoped to rows created AFTER the fix: every historic row is an orphan
     #     by construction and cannot be backfilled, so including them would
     #     leave this check failing forever and teach everyone to ignore it.
-    rows = q(
+    # Scoped to the REPORT WINDOW since 16 Oct 2026 (widened to WIDEN_DAYS when the
+    # window is empty). Counted since 11 Sep it could never recover: 22 rows of a
+    # 24 Sep in-process eval harness (no conversation) and one probe chat whose
+    # stream was cut kept it red for weeks. Harness rows are now named, not failed;
+    # an id that does not resolve is still a failure (a generation measured and
+    # never saved), and empty or abandoned chats are counted beside it.
+    def _join(a, b):
+        return q(
+            conn,
+            """
+            SELECT count(*) AS n,
+                   count(*) FILTER (WHERE a.conversation_id IS NULL) AS harness,
+                   count(*) FILTER (WHERE a.conversation_id IS NOT NULL) AS with_conv,
+                   count(*) FILTER (WHERE a.conversation_id IS NOT NULL AND m.id IS NOT NULL) AS resolves
+            FROM chat_analytics a
+            LEFT JOIN chat_messages m ON m.id = a.message_id
+            WHERE a.created_at >= :start AND a.created_at < :end
+            """,
+            start=a, end=b,
+        )
+
+    rows = _join(start, end)
+    widened_join = ""
+    if not errored(rows) and (rows[0]["with_conv"] or 0) == 0:
+        rows = _join(end - timedelta(days=WIDEN_DAYS), end)
+        widened_join = f" (window empty; widened to trailing {WIDEN_DAYS} days)"
+    chats = q(
         conn,
         """
-        SELECT count(*) AS rows_since_fix,
-               count(*) FILTER (WHERE a.message_id IS NOT NULL) AS have_msg_id,
-               count(*) FILTER (WHERE m.id IS NOT NULL) AS msg_resolves,
-               count(*) FILTER (WHERE a.conversation_id IS NOT NULL) AS have_conv_id,
-               count(*) FILTER (WHERE c.id IS NOT NULL) AS conv_resolves
-        FROM chat_analytics a
-        LEFT JOIN chat_messages m ON m.id = a.message_id
-        LEFT JOIN chats c ON c.id = a.conversation_id
-        WHERE a.created_at >= TIMESTAMP '2026-09-11 12:00:00'
+        SELECT count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM chat_messages m WHERE m.chat_id = c.id)) AS empty,
+               count(*) FILTER (WHERE c.chat_metadata ? 'abandoned_streams') AS abandoned
+        FROM chats c WHERE c.created_at >= :start AND c.created_at < :end
         """,
+        start=start, end=end,
     )
     if not errored(rows):
         r = rows[0]
-        n = r["rows_since_fix"] or 0
-        resolves = r["msg_resolves"] or 0
+        with_conv = r["with_conv"] or 0
+        resolves = r["resolves"] or 0
+        extra = ""
+        if not errored(chats):
+            extra = (f"; chats in window with no message: {chats[0]['empty'] or 0}, "
+                     f"with an abandoned stream: {chats[0]['abandoned'] or 0}")
         checks.append(
             {
                 "check": "chat_analytics rows join to the answer they describe",
                 # A row whose message_id does not resolve is not merely untidy:
                 # it marks a generation that was measured and never persisted,
                 # which is the 185-rows-vs-71-messages shape seen on 8 Sept.
-                "ok": n == 0 or resolves == n,
-                "unproven": n == 0,
+                "ok": with_conv == 0 or resolves == with_conv,
+                "unproven": with_conv == 0,
                 "detail": (
-                    f"{n} rows since the fix, {r['have_msg_id']} carry a message_id, "
-                    f"{resolves} resolve to a message, {r['conv_resolves']} resolve to a chat"
+                    f"{with_conv} rows tied to a conversation, {resolves} resolve to their message; "
+                    f"{r['harness'] or 0} harness rows (no conversation, not counted){widened_join}{extra}"
                 ),
                 "means": "A row that cannot be joined to its message cannot be used for "
                 "per-query analysis: provider, latency and citation counts float free of "
@@ -1304,8 +1329,11 @@ def section_blind_spots(conn, start, end):
     rows = q(
         conn,
         """
-        SELECT count(*) AS sent, count(*) FILTER (WHERE is_read) AS read
-        FROM notifications WHERE created_at >= :start AND created_at < :end
+        SELECT count(*) AS sent, count(*) FILTER (WHERE n.is_read) AS read,
+               count(*) FILTER (WHERE GREATEST(u.last_seen_at, u.last_login) > n.created_at) AS seeable,
+               count(*) FILTER (WHERE n.is_read AND GREATEST(u.last_seen_at, u.last_login) > n.created_at) AS read_seeable
+        FROM notifications n LEFT JOIN users u ON u.id = n.user_id
+        WHERE n.created_at >= :start AND n.created_at < :end
         """,
         start=start,
         end=end,
@@ -1315,8 +1343,11 @@ def section_blind_spots(conn, start, end):
         rows = q(
             conn,
             """
-            SELECT count(*) AS sent, count(*) FILTER (WHERE is_read) AS read
-            FROM notifications WHERE created_at >= :start AND created_at < :end
+            SELECT count(*) AS sent, count(*) FILTER (WHERE n.is_read) AS read,
+                   count(*) FILTER (WHERE GREATEST(u.last_seen_at, u.last_login) > n.created_at) AS seeable,
+                   count(*) FILTER (WHERE n.is_read AND GREATEST(u.last_seen_at, u.last_login) > n.created_at) AS read_seeable
+            FROM notifications n LEFT JOIN users u ON u.id = n.user_id
+            WHERE n.created_at >= :start AND n.created_at < :end
             """,
             start=end - timedelta(days=WIDEN_DAYS),
             end=end,
@@ -1326,10 +1357,17 @@ def section_blind_spots(conn, start, end):
         r = rows[0]
         checks.append(
             {
-                "check": "notifications get read",
-                "ok": r["sent"] == 0 or r["read"] > 0,
-                "unproven": r["sent"] == 0,
-                "detail": f"{r['sent']} sent, {r['read']} read{widened_notif}",
+                # Denominator since 16 Oct 2026: notifications whose recipient was
+                # PRESENT after they were created (last_seen_at, else last_login).
+                # 590 sent and 0 read read as a broken bell; 413 of the 590 went to
+                # people who never came back, so no bell could have shown them.
+                "check": "notifications get read (by recipients who came back)",
+                "ok": (r["seeable"] or 0) == 0 or (r["read_seeable"] or 0) > 0,
+                "unproven": (r["seeable"] or 0) == 0,
+                "unproven_means": "No recipient came back after a notification was created, "
+                "so nothing could have been read. That is a traffic fact, not a passing check.",
+                "detail": (f"{r['sent']} sent, {r['seeable'] or 0} to recipients seen afterwards, "
+                           f"{r['read_seeable'] or 0} of those read ({r['read']} read in all){widened_notif}"),
                 "means": "Sent but never read. The WRITING PATH IS INTACT, verified end "
                 "to end on 11 Sep 2026: the bell calls markAsRead, the hook posts "
                 "/notifications/{id}/read, and the model sets is_read AND read_at. A zero "
@@ -1403,6 +1441,24 @@ def section_blind_spots(conn, start, end):
         start=start,
         end=end,
     )
+    widened_anon = ""
+    if not errored(rows) and ((rows[0]["orphaned"] or 0) + (rows[0]["linked"] or 0)) == 0:
+        # Widened like the notifications check (16 Oct 2026): a 2-day window with no
+        # anonymous chat printed UNPROVEN every morning while 30 days showed 0 of 1,533.
+        rows = q(
+            conn,
+            f"""
+            SELECT count(*) FILTER (WHERE c.pre_user_id IS NULL) AS orphaned,
+                   count(*) FILTER (WHERE c.pre_user_id IS NOT NULL) AS linked
+            FROM chats c
+            LEFT JOIN users u ON u.id = c.user_id
+            WHERE u.id IS NULL AND c.created_at >= :start AND c.created_at < :end
+              AND NOT {SYNTHETIC_PRE_USER_SQL}
+            """,
+            start=end - timedelta(days=WIDEN_DAYS),
+            end=end,
+        )
+        widened_anon = f" (window empty; widened to trailing {WIDEN_DAYS} days)"
     if not errored(rows):
         r = rows[0]
         tot = (r["orphaned"] or 0) + (r["linked"] or 0)
@@ -1411,7 +1467,7 @@ def section_blind_spots(conn, start, end):
                 "check": "anonymous chats carry a pre_user_id",
                 "ok": tot == 0 or r["orphaned"] == 0,
                 "unproven": tot == 0,
-                "detail": f"{r['orphaned']}/{tot} anonymous chats have no pre_user_id",
+                "detail": f"{r['orphaned']}/{tot} anonymous chats have no pre_user_id{widened_anon}",
                 "means": "Orphaned anonymous chats cannot be joined to pre_user_events, "
                 "so query_1/2/3 undercount activation and the funnel looks worse "
                 "than reality. Fix at the chat entry point, not in the funnel query.",
@@ -1457,13 +1513,29 @@ def section_blind_spots(conn, start, end):
             detail = f"{r['synthetic']}/{total} chats ({share}%) are our own probes"
             means = ("Above 50%: any unfiltered read of this table describes our "
                      "testing, not our users.")
+        # Split in two on 16 Oct 2026. "100% probes" failed every morning while the
+        # instrument worked perfectly: there were simply no users. The marker check
+        # can fail; the traffic number is a fact about users, shown as UNPROVEN
+        # when there is no real chat, never as a broken instrument.
         checks.append(
             {
-                "check": "synthetic probe share of chat traffic",
-                "ok": (total == 0) or (not unverifiable and share < 50.0),
+                "check": "probe marker in use (probes are told apart from users)",
+                "ok": not unverifiable,
                 "unproven": total == 0,
-                "detail": detail,
+                "detail": detail + (f"; {marked} carry the is_probe marker" if not unverifiable else ""),
                 "means": means,
+            }
+        )
+        real = total - (r["synthetic"] or 0)
+        checks.append(
+            {
+                "check": "real (non-probe) chats in window",
+                "ok": real > 0,
+                "unproven": real == 0,
+                "unproven_means": "No real user chatted in this window: every user-facing chat "
+                "number in this report rests on nothing. A traffic fact, not a broken instrument.",
+                "detail": f"{real} real of {total} chats",
+                "means": "",
             }
         )
 
@@ -1600,8 +1672,8 @@ def render(report):
         out.append(f"  [{label}] {c['check']}")
         out.append(f"         {c['detail']}")
         if c.get("unproven"):
-            out.append("         -> NOT PROVEN: no data in this window. Widen the window "
-                       "before reading this as healthy.")
+            out.append("         -> NOT PROVEN: " + (c.get("unproven_means") or
+                       "no data in this window. Widen the window before reading this as healthy."))
         elif not c["ok"]:
             out.append(f"         -> {c['means']}")
     out.append("")

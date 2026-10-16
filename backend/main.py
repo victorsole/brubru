@@ -87,41 +87,54 @@ async def lifespan(app: FastAPI):
     else:
         print("[INFO] RSS feed scheduler disabled (set ENABLE_RSS_SCHEDULER=true to enable)")
 
+    # In-app schedulers run only where they belong (16 Oct 2026): on Railway, or where
+    # ENABLE_IN_APP_SCHEDULERS=true. A local backend started for probes used to run
+    # them against the production database. See in_app_schedulers_enabled().
+    from services.sync.freshness import in_app_schedulers_enabled
+    _schedulers_on = in_app_schedulers_enabled()
+
+    if not _schedulers_on:
+        print("[INFO] In-app schedulers OFF (not on Railway; set ENABLE_IN_APP_SCHEDULERS=true to run them here)")
+
     # Start email scheduler (weekly re-engagement emails)
-    try:
-        start_email_scheduler()
-        print("[OK] Email scheduler started")
-    except Exception as e:
-        print(f"[WARN] Email scheduler failed to start (non-fatal): {str(e)}")
+    if _schedulers_on:
+        try:
+            start_email_scheduler()
+            print("[OK] Email scheduler started")
+        except Exception as e:
+            print(f"[WARN] Email scheduler failed to start (non-fatal): {str(e)}")
 
     # Start amendment sync scheduler (daily EP Open Data sync)
-    try:
-        start_amendment_sync_scheduler()
-        print("[OK] Amendment sync scheduler started")
-    except Exception as e:
-        print(f"[WARN] Amendment sync scheduler failed to start (non-fatal): {str(e)}")
+    if _schedulers_on:
+        try:
+            start_amendment_sync_scheduler()
+            print("[OK] Amendment sync scheduler started")
+        except Exception as e:
+            print(f"[WARN] Amendment sync scheduler failed to start (non-fatal): {str(e)}")
 
     # Start notification delivery (U3, 10 Sep 2026). Both producers existed,
     # were tested, and had no caller in the running app -- so the notifications
     # table went 84 days without a row while 69 of 70 accounts holding tracked
     # items had never received one. Jobs run off the event loop via
     # asyncio.to_thread, unlike the RSS scheduler above.
-    try:
-        start_notification_scheduler()
-        print("[OK] Notification scheduler started")
-    except Exception as e:
-        print(f"[WARN] Notification scheduler failed to start (non-fatal): {str(e)}")
+    if _schedulers_on:
+        try:
+            start_notification_scheduler()
+            print("[OK] Notification scheduler started")
+        except Exception as e:
+            print(f"[WARN] Notification scheduler failed to start (non-fatal): {str(e)}")
 
     # Tender matching. Same defect as the notifications above, found on
     # 11 September: the matcher works, 29 active profiles were waiting, tenders
     # ingest daily, and the newest match was 81 days old because nothing in the
     # running application ever called it. Runs off the event loop via
     # asyncio.to_thread; a run takes minutes and must never block the worker.
-    try:
-        start_tender_match_scheduler()
-        print("[OK] Tender match scheduler started")
-    except Exception as e:
-        print(f"[WARN] Tender match scheduler failed to start (non-fatal): {str(e)}")
+    if _schedulers_on:
+        try:
+            start_tender_match_scheduler()
+            print("[OK] Tender match scheduler started")
+        except Exception as e:
+            print(f"[WARN] Tender match scheduler failed to start (non-fatal): {str(e)}")
 
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:

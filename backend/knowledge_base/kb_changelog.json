@@ -4,6 +4,25 @@
     {
       "date": "2026-10-16",
       "action": "updated",
+      "guide": "eu_pharmaceutical_legislation_reform",
+      "title": "EU pharmaceutical legislation reform",
+      "summary": "Not on the 19-22 Oct plenary draft agenda (read 16 Oct); indicative vote 23 Nov",
+      "refs": [
+        "2023/0131(COD)",
+        "2023/0132(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "european_council_15_16_october_2026_conclusions",
+      "title": "European Council 15-16 October 2026: conclusions",
+      "summary": "28th regime named as the proposed EU Inc. Regulation",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
       "guide": "facilitation_directive_smuggling",
       "title": "Facilitation Directive",
       "summary": "Adds C-521/25 Commission v Hungary",

@@ -56,7 +56,15 @@ class SecretRedactingFilter(logging.Filter):
 
     def filter(self, record: logging.LogRecord) -> bool:  # noqa: A003
         try:
-            if record.args:
+            if record.args and record.name == "uvicorn.access" and isinstance(record.args, tuple):
+                # uvicorn's AccessFormatter UNPACKS record.args (client, method, path,
+                # http version, status). Collapsing them into the message, as below,
+                # made it raise "not enough values to unpack" on every request from
+                # 9 Aug to 16 Oct 2026: each access line became a "--- Logging error
+                # ---" traceback. Scrub each string argument in place instead; the
+                # query string with any ?key= lives in the path argument.
+                record.args = tuple(scrub(a) if isinstance(a, str) else a for a in record.args)
+            elif record.args:
                 # Format first, then scrub the result. Scrubbing the template
                 # separately can consume the "%s" itself -- "Authorization:
                 # 'Bearer %s'" matches the header pattern placeholder and all

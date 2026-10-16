@@ -170,6 +170,14 @@ class CarriageStatusNotifier:
             q = q.filter(UserCarriageTrack.notify_on_status_change.is_(True))
         if user_id:
             q = q.filter(UserCarriageTrack.user_id == user_id)
+        # Unclaimed pre-provisioned shells receive nothing (16 Oct 2026). Their
+        # baseline is left as it is, so a prospect who claims the profile is told
+        # what changed since it was provisioned.
+        from models.user import User
+        from sqlalchemy import select
+        q = q.filter(UserCarriageTrack.user_id.notin_(
+            select(User.id).where(User.pre_provisioned_at.isnot(None),
+                                  User.claimed_at.is_(None), User.last_login.is_(None))))
 
         rows = q.all()
         run.tracks_examined = len(rows)

@@ -35,6 +35,23 @@ def current_runner() -> str:
         else "local")
 
 
+def in_app_schedulers_enabled() -> bool:
+    """Whether this process may start the in-app schedulers (16 Oct 2026).
+
+    They write to the production database from `.env`, so a laptop backend started
+    for chat probes ran them beside Railway's: on 15 Oct a local tender digest gave
+    5 users a second digest, and the weekly re-engagement email job could mail real
+    users from a laptop. ON on Railway, OFF elsewhere; ENABLE_IN_APP_SCHEDULERS=true
+    or =false overrides either way.
+    """
+    flag = os.environ.get("ENABLE_IN_APP_SCHEDULERS", "").strip().lower()
+    if flag in ("true", "1", "yes"):
+        return True
+    if flag in ("false", "0", "no"):
+        return False
+    return current_runner() == "railway"
+
+
 def record_run(
     db: Session,
     *,

@@ -171,6 +171,13 @@ async def get_current_user(
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
+    # Presence (16 Oct 2026). last_seen_at was NULL for 147 of 147 users: its only
+    # writers were GET /auth/me, which the app never calls (only the admin panel
+    # does), and POST /auth/refresh, which the app calls only after a 401, when the
+    # expired token makes refresh fail too. Every authenticated request passes
+    # here (the notification bell polls one), and touch_last_seen writes at most
+    # once an hour per user and never breaks the request.
+    touch_last_seen(db, user)
     return user
 
 

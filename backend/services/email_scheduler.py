@@ -3,89 +3,128 @@ Email Scheduler
 
 Sends weekly re-engagement emails to inactive users via APScheduler.
 
-Schedule:
-- Every Monday at 09:00 UTC: Welcome-back emails to users inactive 7+ days
-- Every Monday at 09:00 UTC: First-time welcome to users who never logged in
+Schedule (Monday 09:00 UTC):
+- Welcome-back email to a user whose last presence (last_seen_at, else last_login)
+  fell 7 to 14 days ago: one email per lapse, not one every Monday for ever.
+- First-time welcome to a user created in the last 7 days who has never logged in.
+
+Rules added 16 Oct 2026 (the job had no switch, no dedup and no record):
+- REENGAGEMENT_EMAILS_ENABLED=false turns it off (default on).
+- Never mails our own or seeded accounts, nor unclaimed pre-provisioned shells
+  (same rule as scripts/user_activity_report.INTERNAL_USER_SQL): until then it
+  matched 127 accounts every week, prospects we had not contacted included.
+- Every run writes a sync_runs row (source_key reengagement_emails), sent or not.
+- The scheduler itself starts only on Railway (main.py, in_app_schedulers_enabled).
 """
 
 import logging
-from datetime import datetime, timedelta
+import os
+from datetime import datetime, timedelta, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from sqlalchemy import text
 
 from core.database import SessionLocal
-from models.user import User
 
 logger = logging.getLogger(__name__)
+
+SOURCE_KEY = "reengagement_emails"
+LAPSE_DAYS = 7        # a user counts as lapsed after 7 days without presence
+WINDOW_DAYS = 7       # ...and is mailed only during the week after that (once)
+
+
+def reengagement_recipients(db, now: datetime | None = None) -> dict:
+    """The two recipient lists, read from the database. No email is sent here.
+
+    Returns {"welcome_back": [(email, name, days_since)], "first_time": [(email, name)]}.
+    """
+    from scripts.user_activity_report import INTERNAL_USER_SQL
+    from services.notifications.notification_email import is_synthetic
+
+    now = now or datetime.now(timezone.utc)
+    lapse_end = now - timedelta(days=LAPSE_DAYS)
+    lapse_start = lapse_end - timedelta(days=WINDOW_DAYS)
+    seen = "COALESCE(u.last_seen_at, u.last_login)"
+    base = (f"u.is_active IS TRUE AND u.email IS NOT NULL AND u.email <> '' "
+            f"AND NOT {INTERNAL_USER_SQL}")
+    back = db.execute(text(
+        f"SELECT u.email, u.full_name, {seen} AS seen FROM users u "
+        f"WHERE {base} AND {seen} >= :a AND {seen} < :b ORDER BY u.email"),
+        {"a": lapse_start, "b": lapse_end}).fetchall()
+    first = db.execute(text(
+        f"SELECT u.email, u.full_name FROM users u "
+        f"WHERE {base} AND u.last_login IS NULL AND u.last_seen_at IS NULL "
+        f"AND u.created_at >= :a ORDER BY u.email"),
+        {"a": now - timedelta(days=WINDOW_DAYS)}).fetchall()
+
+    def name(email, full_name):
+        return full_name or email.split("@")[0]
+
+    return {
+        "welcome_back": [(r.email, name(r.email, r.full_name), (now - r.seen).days)
+                         for r in back if not is_synthetic(r.email)],
+        "first_time": [(r.email, name(r.email, r.full_name))
+                       for r in first if not is_synthetic(r.email)],
+    }
 
 
 def _send_reengagement_emails():
     """
-    Background job: send re-engagement emails to inactive users.
-    Runs in its own DB session.
+    Background job: send re-engagement emails to lapsed users.
+    Runs in its own DB session and always leaves a sync_runs row.
     """
     from services.email_service import (
         get_email_service,
         build_welcome_back_email,
         build_first_time_welcome_email,
     )
+    from services.sync.freshness import record_run
 
+    started = datetime.now(timezone.utc)
     logger.info("[EMAIL-SCHEDULER] Starting weekly re-engagement run")
-
-    email_service = get_email_service()
-    if not email_service.is_configured:
-        logger.warning("[EMAIL-SCHEDULER] SMTP not configured, skipping")
-        return
-
     db = SessionLocal()
     try:
-        cutoff = datetime.utcnow() - timedelta(days=7)
+        if os.getenv("REENGAGEMENT_EMAILS_ENABLED", "true").strip().lower() in ("false", "0", "no"):
+            record_run(db, source_key=SOURCE_KEY, tier="email", status="skipped", items_added=0,
+                       error="DISABLED (REENGAGEMENT_EMAILS_ENABLED=false)", started_at=started)
+            return
+        email_service = get_email_service()
+        if not email_service.is_configured:
+            logger.warning("[EMAIL-SCHEDULER] SMTP not configured, skipping")
+            record_run(db, source_key=SOURCE_KEY, tier="email", status="skipped", items_added=0,
+                       error="SMTP not configured", started_at=started)
+            return
 
-        # Users who logged in before but not in the last 7 days
-        inactive_users = db.query(User).filter(
-            User.is_active == True,
-            User.last_login != None,
-            User.last_login < cutoff,
-            User.email != None,
-            User.role != 'admin',
-        ).all()
-
-        # Users who registered but never logged in
-        never_logged_in = db.query(User).filter(
-            User.is_active == True,
-            User.last_login == None,
-            User.email != None,
-            User.role != 'admin',
-        ).all()
-
-        sent = 0
-        failed = 0
-
-        for user in inactive_users:
-            days_since = (datetime.utcnow() - user.last_login).days
-            name = user.full_name or user.email.split("@")[0]
-            email_data = build_welcome_back_email(user_name=name, days_since_login=days_since)
-            if email_service.send(to=user.email, **email_data):
+        lists = reengagement_recipients(db)
+        sent = failed = 0
+        for email, name, days_since in lists["welcome_back"]:
+            data = build_welcome_back_email(user_name=name, days_since_login=days_since)
+            if email_service.send(to=email, **data):
+                sent += 1
+            else:
+                failed += 1
+        for email, name in lists["first_time"]:
+            data = build_first_time_welcome_email(user_name=name)
+            if email_service.send(to=email, **data):
                 sent += 1
             else:
                 failed += 1
 
-        for user in never_logged_in:
-            name = user.full_name or user.email.split("@")[0]
-            email_data = build_first_time_welcome_email(user_name=name)
-            if email_service.send(to=user.email, **email_data):
-                sent += 1
-            else:
-                failed += 1
-
-        logger.info(
-            f"[EMAIL-SCHEDULER] Weekly run complete: "
-            f"{sent} sent, {failed} failed "
-            f"({len(inactive_users)} inactive, {len(never_logged_in)} never logged in)"
-        )
+        summary = (f"welcome_back={len(lists['welcome_back'])} first_time={len(lists['first_time'])} "
+                   f"sent={sent} failed={failed}")
+        logger.info(f"[EMAIL-SCHEDULER] Weekly run complete: {summary}")
+        record_run(db, source_key=SOURCE_KEY, tier="email",
+                   status="failed" if failed and not sent else ("degraded" if failed else "success"),
+                   items_added=sent, error=summary, started_at=started)
     except Exception as e:
         logger.error(f"[EMAIL-SCHEDULER] Error during weekly run: {e}")
+        try:
+            db.rollback()
+            record_run(db, source_key=SOURCE_KEY, tier="email", status="failed", items_added=0,
+                       error=f"{type(e).__name__}: {e}"[:500], started_at=started)
+        except Exception:  # noqa: BLE001
+            pass
     finally:
         db.close()
 

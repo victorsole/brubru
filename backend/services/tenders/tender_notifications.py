@@ -46,6 +46,9 @@ class TenderNotificationService:
         """
         self.db = db
         self.notification_service = NotificationService(db)
+        # Unclaimed pre-provisioned shells receive nothing (16 Oct 2026).
+        from services.notifications.recipients import ShellFilter
+        self._unclaimed_shell = ShellFilter(db)
 
     async def notify_new_matches(
         self,
@@ -68,6 +71,8 @@ class TenderNotificationService:
         ).first()
 
         if not profile or not profile.notification_in_app:
+            return 0
+        if self._unclaimed_shell(user_id):
             return 0
 
         # Get unnotified matches
@@ -200,6 +205,9 @@ class TenderNotificationService:
             user = self.db.query(User).filter(User.id == profile.user_id).first()
             if not user:
                 continue
+            if self._unclaimed_shell(profile.user_id):
+                stats["skipped_unclaimed"] = stats.get("skipped_unclaimed", 0) + 1
+                continue
 
             # Build digest
             digest = self._build_weekly_digest(user, profile, matches)
@@ -281,6 +289,9 @@ class TenderNotificationService:
             if existing:
                 continue
 
+            if self._unclaimed_shell(match.user_id):
+                continue
+
             days_left = (tender.submission_deadline - datetime.utcnow()).days
 
             self.notification_service.create_notification(
@@ -332,6 +343,8 @@ class TenderNotificationService:
         ).first()
 
         if not profile or not profile.notification_in_app:
+            return False
+        if self._unclaimed_shell(match.user_id):
             return False
 
         self.notification_service.create_notification(

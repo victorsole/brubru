@@ -369,7 +369,9 @@ def run_all(user_email: Optional[str] = None, dry_run: bool = False) -> dict:
     conn = psycopg2.connect(db_url)
     conn.autocommit = False
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    where = 'WHERE s.is_active = TRUE'
+    # Unclaimed pre-provisioned shells receive nothing (16 Oct 2026): nobody reads them.
+    from services.notifications.recipients import unclaimed_shell_sql
+    where = f'WHERE s.is_active = TRUE AND NOT {unclaimed_shell_sql("u")}'
     params: tuple = ()
     if user_email:
         where += ' AND u.email = %s'
