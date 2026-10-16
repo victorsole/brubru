@@ -12,7 +12,13 @@ Each affected page is re-read and the date recomputed by the writer's own rule; 
 value (a date or NULL) replaces the stored one, one row per transaction. Rows are backed
 up first to backend/data/backups/. Dry run by default; --apply writes.
 
-    python3.12 -m backend.scripts.repair_cedefop_publication_dates [--apply]
+--undated (second pass, Victor's go 16 Oct): every Cedefop row with no publication date,
+plus the rows whose body still states the rejected stamp, is re-read in full and its
+date, body and (when missing) deadline and reference rewritten by the writer. 59 of the
+70 pages dated before 2015 state the Official Journal day in their text, which the
+writer reads but the nightly run never reaches (it re-opens only the newest pages).
+
+    python3.12 -m backend.scripts.repair_cedefop_publication_dates [--undated] [--apply]
 """
 from __future__ import annotations
 
@@ -43,10 +49,74 @@ _SELECT = text("""
      ORDER BY id""")
 
 
+_SELECT_UNDATED = text("""
+    SELECT id, title, public_url, document_date, deadline, item_type, tender_reference, body_txt
+      FROM economy_items
+     WHERE body_code = 'cedefop' AND item_type IN ('tender', 'eoi_call')
+       AND (document_date IS NULL OR body_txt ~ 'Official publication date: 2009-11-27')
+     ORDER BY id""")
+
+
+def _rewrite_undated(apply: bool) -> int:
+    """Re-read each undated page and let the writer build the item again."""
+    with engine.connect() as c:
+        rows = [dict(r._mapping) for r in c.execute(_SELECT_UNDATED)]
+    print(f"[INFO] {len(rows)} Cedefop rows without a publication date or with the stamp in their body")
+    if not rows:
+        return 0
+    BACKUPS.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y_%m_%d_%H%M")
+    backup = BACKUPS / f"cedefop_undated_before_rewrite_{stamp}.json"
+    backup.write_text(json.dumps(rows, default=str, indent=1))
+    print(f"[INFO] backup: {backup}")
+    now = datetime.now(timezone.utc)
+    plan, failed = [], 0
+    for r in rows:
+        try:
+            detail = ap._cedefop_detail(r["public_url"])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[ERROR] {r['id']} {r['public_url']}: {type(exc).__name__}: {exc}")
+            failed += 1
+            continue
+        row = {"title": r["title"], "url": r["public_url"], "reference": r["tender_reference"] or "",
+               "closing": r["deadline"], "status_raw": detail.get("Status", "")}
+        item = ap._cedefop_item(row, detail, now)
+        plan.append((r, item))
+        print(f"  {r['id']:>8} date {str(r['document_date'])[:10]:<10} -> {item.document_date.date().isoformat() if item.document_date else 'NULL':<10} "
+              f"deadline {str(r['deadline'])[:10]:<10} -> {str(item.extras.get('deadline'))[:10]:<10} "
+              f"body {len(r['body_txt'] or '')} -> {len(item.body_txt or '')}  {r['title'][:45]}")
+        time.sleep(0.8)
+    dated = sum(1 for _r, it in plan if it.document_date)
+    print(f"[INFO] planned: {len(plan)} rows re-read, {dated} now dated, {failed} pages unreadable (left as they are)")
+    if not apply:
+        print("[INFO] dry run; re-run with --apply to write")
+        return 1 if failed else 0
+    written = 0
+    for r, it in plan:
+        with engine.begin() as c:   # one row per transaction
+            res = c.execute(text(
+                "UPDATE economy_items SET document_date = :d, body_txt = :bt, body_html = :bh, "
+                "deadline = COALESCE(deadline, :dl), tender_reference = COALESCE(tender_reference, :ref) "
+                "WHERE id = :id"),
+                {"d": it.document_date, "bt": it.body_txt, "bh": it.body_html,
+                 "dl": it.extras.get("deadline"), "ref": it.extras.get("tender_reference"), "id": r["id"]})
+            written += res.rowcount
+    print(f"[OK] {written} of {len(plan)} rows rewritten")
+    with engine.connect() as c:
+        left = c.execute(_SELECT_UNDATED).fetchall()
+        late = c.execute(_SELECT).fetchall()
+    print(f"[INFO] rows still undated or stamped in the body: {len(left)}; published after deadline: {len(late)}")
+    return 0 if written == len(plan) and not failed else 1
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--apply", action="store_true", help="write the repaired dates (default: dry run)")
+    p.add_argument("--undated", action="store_true",
+                   help="second pass: re-read every undated row and rewrite date, body, deadline, reference")
     a = p.parse_args()
+    if a.undated:
+        return _rewrite_undated(a.apply)
     with engine.connect() as c:
         rows = [dict(r._mapping) for r in c.execute(_SELECT)]
     print(f"[INFO] {len(rows)} Cedefop rows published after their deadline")

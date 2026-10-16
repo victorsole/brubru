@@ -42,6 +42,16 @@ OJ = ("This call has been published in the Supplement to the Official Journal of
      ["Official Journal of the European Union 2015/S 1-1 of 27/05/2015."], None),
     ("", None, [OJ], D(2014, 8, 16)),                             # no page date: the OJ day
     ("27/04/2026", None, [], D(2026, 4, 27)),                     # no deadline to check against
+    # Cedefop's other phrasings (the 8 pages the first pattern missed, 16 Oct 2026)
+    ("", D(2013, 9, 10), ["published in the Official Journal of the European Union, ref. 2013/S "
+                          "132-227576 of 10/07/2013"], D(2013, 7, 10)),
+    ("", D(2011, 6, 21), ["Official Journal of the European Union 2011/S 89-144121of 07/05/2011."],
+     D(2011, 5, 7)),
+    ("", D(2010, 10, 18), ["Official Journal of the European Union ref.: Contract notice– 2010/S "
+                           "167-255566 of 28.08.2010. Deadline for submitting tenders: 18/10/2010 "
+                           "(17h00 local time for hand-delivered tenders)."], D(2010, 8, 28)),
+    ("", D(2010, 10, 7), ["Official Journal of the European Union ref.: Contract notice– 2010/S "
+                          "167-255562 of 28.08.2010 of 28/08/2010. Deadline: 07/10/2010."], D(2010, 8, 28)),
 ])
 def test_publication_date_is_never_after_the_deadline(page_date, deadline, description, expected):
     detail = {"Official Publication Date": page_date, "description": description}

@@ -317,9 +317,12 @@ def _cedefop_status(raw: str, deadline: datetime | None, now: datetime) -> str:
 
 
 # "This call has been published in the Supplement to the Official Journal of the European
-# Union 2014/S 156-279480 of 16/08/2014." (also "Communities", "dated", "28.04.2009")
+# Union 2014/S 156-279480 of 16/08/2014." Also seen on Cedefop's pages: "Communities",
+# "ref. 2013/S 132-227576 of 10/07/2013", "ref.: Contract notice– 2010/S 167-255566 of
+# 28.08.2010" and "2011/S 89-144121of 07/05/2011" (no space), so the gaps admit any
+# character but a line break and the day may follow "of" directly.
 _CEDEFOP_OJ_DATE = re.compile(
-    r"Official Journal[^.\n]{0,120}?\b\d{4}/S\s?\d+-\d+\b[^.\n]{0,40}?\b(?:of|dated|on)\s+"
+    r"Official Journal[^\n]{0,120}?\d{4}/S\s?\d+-\d+[^\n]{0,40}?(?:of|dated|on)\s*"
     r"(\d{1,2}[/.]\d{1,2}[/.]\d{4})")
 
 
