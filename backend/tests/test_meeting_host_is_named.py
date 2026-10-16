@@ -22,3 +22,10 @@ def test_a_cabinet_is_named_as_a_cabinet():
         "Cabinet of Executive Vice-President Raffaele Fitto"
     assert cabinet_name("Information on meetings held by Executive Vice-President Stéphane Séjourné's cabinet") == \
         "Cabinet of Executive Vice-President Stéphane Séjourné"
+
+
+def test_the_high_representatives_cabinet_fits_its_column():
+    from scripts.ingest_transparency_meetings import cabinet_name
+    got = cabinet_name("Information on meetings held by High Representative of the Union for Foreign Affairs and "
+                       "Security Policy and Vice-President Kaja Kallas's cabinet")
+    assert got == "Cabinet of High Representative and Vice-President Kaja Kallas" and len(got) <= 100

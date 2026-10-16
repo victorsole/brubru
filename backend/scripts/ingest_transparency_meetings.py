@@ -90,6 +90,9 @@ def cabinet_name(raw_host_name: str) -> Optional[str]:
         return None
     # The link text reads "... Stéphane Séjourné's cabinet".
     core = re.sub(r"[’']s cabinet$", "", core, flags=re.I).strip()
+    # The High Representative's full title would not fit the column (100 characters).
+    core = re.sub(r"^High Representative of the Union for Foreign Affairs and Security Policy and Vice-President",
+                  "High Representative and Vice-President", core, flags=re.I)
     return (core if core.lower().startswith("cabinet") else f"Cabinet of {core}")[:100]
 
 
