@@ -14,6 +14,7 @@ import argparse
 import collections
 import os
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -33,7 +34,10 @@ TABLES = (("eu_news_items", "institution"), ("economy_items", "body_code"))
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--max-seconds", type=int, default=0)
+    ap.add_argument("--sleep", type=float, default=0.3)
     args = ap.parse_args(argv)
+    started = time.monotonic()
     engine = create_engine(os.environ["DATABASE_URL"].replace("postgres://", "postgresql://", 1))
     total = 0
     for table, code in TABLES:
@@ -49,10 +53,17 @@ def main(argv=None) -> int:
         by = collections.Counter(p[1] for p in plan)
         print(f"[INFO] {table}: {len(rows)} candidate(s), {len(plan)} changed: {dict(by.most_common(10))}")
         if args.apply and plan:
-            with engine.begin() as c:
-                c.execute(text("SET LOCAL statement_timeout = 0"))
-                for rid, _, t, h, _ in plan:
+            # One row per transaction, paced: each body write re-builds the row's search
+            # vector, and 4,856 in one transaction loaded the database enough to slow the
+            # API to 40-60 s a page (16 Oct 2026). Resumable: a cleaned row is no longer picked.
+            for n, (rid, _, t, h, _) in enumerate(plan, 1):
+                if args.max_seconds and time.monotonic() - started > args.max_seconds:
+                    print(f"[INFO] time budget reached: {len(plan) - n + 1} row(s) left in {table}")
+                    break
+                with engine.begin() as c:
+                    c.execute(text("SET LOCAL statement_timeout = 0"))
                     c.execute(text(STORE.format(table=table)), {"id": rid, "t": t, "h": h})
+                time.sleep(args.sleep)
         total += len(plan)
     print(("[DONE] cleaned " if args.apply else "[DRY RUN] would clean ") + str(total))
     return 0

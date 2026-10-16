@@ -14,3 +14,11 @@ def test_the_member_is_named_without_the_boilerplate_or_the_role():
 def test_a_department_keeps_its_name():
     assert department_name("Information on meetings held by Directorate-General for Trade") == \
         "Directorate-General for Trade"
+
+
+def test_a_cabinet_is_named_as_a_cabinet():
+    from scripts.ingest_transparency_meetings import cabinet_name
+    assert cabinet_name("Information on meetings held by Executive Vice-President Raffaele Fitto") == \
+        "Cabinet of Executive Vice-President Raffaele Fitto"
+    assert cabinet_name("Information on meetings held by Executive Vice-President Stéphane Séjourné's cabinet") == \
+        "Cabinet of Executive Vice-President Stéphane Séjourné"

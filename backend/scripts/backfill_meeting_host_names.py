@@ -47,7 +47,13 @@ def main(argv=None) -> int:
     with engine.begin() as c:
         for old, new in plan:
             n += c.execute(STORE, {"old": old, "new": new}).rowcount
-    print(f"[DONE] {n} meetings renamed")
+    with engine.begin() as c:
+        cab = c.execute(text(
+            "UPDATE transparency_meetings SET host_cabinet = left('Cabinet of ' || regexp_replace("
+            "regexp_replace(host_cabinet, '^\\s*information on meetings held by\\s+', '', 'i'), "
+            "'[’'']s cabinet$', '', 'i'), 100), "
+            "last_updated = now() WHERE host_cabinet ILIKE 'Information on meetings held by%'")).rowcount
+    print(f"[DONE] {n} meetings renamed, {cab} cabinets named")
     return 0
 
 

@@ -58,3 +58,14 @@ def test_a_slug_title_takes_the_pages_own():
     body = "MFF 2028-2034: Council backs simpler and more efficient rules for cohesion funds\nThe Council today ..."
     assert page_title(slug_title, url, body, None) == "MFF 2028-2034: Council backs simpler and more efficient rules for cohesion funds"
     assert page_title("A title the page gave", url, body, None) is None
+
+
+def test_rows_not_yet_cleaned_are_served_clean():
+    r = SimpleNamespace(body_html='<div><a href="https://www.facebook.com/sharer.php?u=x">Facebook</a>'
+                                  '<script>t()</script><p onclick="x()">Gender equality index 2026.</p></div>',
+                        body_txt="Gender equality index 2026.\nShare\nGmail\nTypepad\nFacebook",
+                        title="Index", summary=None, document_date=None, public_url="https://eige.europa.eu/x")
+    txt, html = _news_body(r, "EIGE")
+    assert txt == "Gender equality index 2026."
+    assert "facebook" not in html.lower() and "<script" not in html and "onclick" not in html
+    assert "Gender equality index 2026." in html

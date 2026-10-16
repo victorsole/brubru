@@ -14,7 +14,8 @@ from __future__ import annotations
 import re
 
 from api.v1._row_dates import row_updated
-from api.v1._body import body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text
+from api.v1._body import body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text, strip_active_html
+from services.news.page_widgets import clean_text
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Union
@@ -461,6 +462,8 @@ def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_t
 # ("<@rel_link@>", 154 stored rows on 5 Oct 2026). Stripped on the way out so a
 # re-scrape cannot bring it back.
 _TEMPLATE_MARKER = re.compile(r"(?:<|&lt;)@[a-z_]+@(?:>|&gt;)")
+_SHARE_LINK = re.compile(r'(?is)<a\b[^>]*href="[^"]*(?:facebook\.com/shar|x\.com/intent|twitter\.com/(?:intent|share)'
+                         r'|linkedin\.com/share|api\.whatsapp\.com/send|bsky\.app/intent|reddit\.com/submit)[^"]*"[^>]*>.*?</a>')
 _FILE_LINK_STUB = re.compile(r'^\s*<p>(?:PDF document|Document): <a href="[^"]*">[^<]*</a></p>\s*$')
 
 
@@ -482,7 +485,10 @@ def _news_body(r, body_name):
         if not html:
             html = body_from_html_or_text(txt)[0]
         body_txt = getattr(r, "body_txt", None) or txt
-        return _TEMPLATE_MARKER.sub("", body_txt), _TEMPLATE_MARKER.sub("", html)
+        # Cheap on the way out (lines and regexes, no parser): share-menu lines and active
+        # markup still stored on some agency rows (16 Oct 2026).
+        return (clean_text(_TEMPLATE_MARKER.sub("", body_txt)),
+                strip_active_html(_SHARE_LINK.sub("", _TEMPLATE_MARKER.sub("", html))))
     d = r.document_date
     html, txt, _ = compose_html_from_sections([
         ("Title", r.title),

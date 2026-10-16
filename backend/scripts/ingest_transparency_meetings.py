@@ -82,6 +82,17 @@ def member_name(raw_host_name: str) -> Optional[str]:
     return _ROLE_PREFIX_RE.sub("", core).strip() or core or None
 
 
+def cabinet_name(raw_host_name: str) -> Optional[str]:
+    """'Information on meetings held by Executive Vice-President Raffaele Fitto' (a cabinet
+    page) -> 'Cabinet of Executive Vice-President Raffaele Fitto'."""
+    core = department_name(raw_host_name) or ""
+    if not core:
+        return None
+    # The link text reads "... Stéphane Séjourné's cabinet".
+    core = re.sub(r"[’']s cabinet$", "", core, flags=re.I).strip()
+    return (core if core.lower().startswith("cabinet") else f"Cabinet of {core}")[:100]
+
+
 def dg_acronym(raw_host_name: str) -> Optional[str]:
     """The DG acronym when the curated map carries this exact name, else None.
 
@@ -255,7 +266,8 @@ def parse_meetings_page(host: Dict[str, str], page: int) -> List[Dict[str, objec
             # ever stored (migration 253).
             "host_dg": dg_acronym(host["name"]) if host["kind"] == "dg" else None,
             "host_department": department_name(host["name"]),
-            "host_cabinet": host["name"][:100] if host["kind"] == "cabinet" else None,
+            # "Cabinet of Executive Vice-President Raffaele Fitto", not the page's link text.
+            "host_cabinet": cabinet_name(host["name"]) if host["kind"] == "cabinet" else None,
             "meeting_date": meeting_date.date(),
             "location": location[:200] if location else None,
             "subject": (subject or organisation)[:1000],
