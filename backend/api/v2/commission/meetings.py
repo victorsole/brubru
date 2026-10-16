@@ -41,7 +41,7 @@ To audit who lobbied which Commissioner on a given topic, build a "meetings on T
 - `host_uuid` — filter to a specific Commissioner/Cabinet host (UUID from commission.europa.eu).
 - `host_dg` — filter to a specific DG (e.g. `COMP`, `CLIMA`).
 - `organisation_met` — substring match on the organisation name (e.g. `Microsoft`).
-- `transparency_register_id` — filter to a specific registered entity.
+- `transparency_register_id` — kept for compatibility; it matches nothing, because the Commission's meetings register names each organisation but does not publish its Transparency Register number, so the field is always empty. Use `organisation_met`.
 - `q` — substring search on the meeting subject.
 - `published_from`, `published_to` — date filter on `meeting_date`.
 - `updated_from`, `updated_to` — incremental sync.
@@ -54,7 +54,7 @@ GET /api/v2/commission/meetings?organisation_met=BusinessEurope&limit=20
 ```
 
 **You get back**
-A `PaginatedResponse[TransparencyMeetingItem]` envelope. Each item carries `host_uuid`, `host_name`, `host_role`, `host_dg`, `host_cabinet`, `meeting_date`, `location`, `subject`, `organisation_met`, `transparency_register_id`, `organisation_type`, `representatives` (array of names), `source_url`, `policy_areas`, `related_celex`, plus a composed `body_txt`/`body_html` (subject + participants + organisation) and the 5 envelope-level datapoints. Each meeting appears ONCE and its `id` is stable across syncs: one row per row of the Commission's register, keyed on that row's content (host, cabinet member, date, organisation, subject, location, representatives). Until 8 Oct 2026 every sync re-inserted each meeting under a new id; the duplicates are gone and their ids map to the surviving one.
+A `PaginatedResponse[TransparencyMeetingItem]` envelope. Each item carries `host_uuid`, `host_name`, `host_role`, `host_dg`, `host_cabinet`, `meeting_date`, `location`, `subject`, `organisation_met`, `transparency_register_id`, `organisation_type`, `representatives` (array of names), `source_url`, `policy_areas`, `related_celex`, plus a composed `body_txt`/`body_html` (subject + participants + organisation) and the 5 envelope-level datapoints. `host_name` is the person who held the meeting (a Commissioner, a cabinet member or a DG official, as the register names them); `host_cabinet` reads `Cabinet of Commissioner Jessika Roswall`. Each meeting appears ONCE and its `id` is stable across syncs: one row per row of the Commission's register, keyed on that row's content (host, cabinet member, date, organisation, subject, location, representatives). Until 8 Oct 2026 every sync re-inserted each meeting under a new id; the duplicates are gone and their ids map to the surviving one.
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/transparencyinitiative/meetings/. Cabinet officials are required to publish meetings within ~2 weeks; daily sync catches them inside that window. Seed host UUIDs: ca175ad3... (President), a2c7c963... (Ribera), 9fd4662a... (Hoekstra).""",

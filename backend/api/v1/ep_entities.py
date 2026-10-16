@@ -628,7 +628,7 @@ def _vote_row_to_item(r: "EPVote") -> "VoteItem":
     response_model=PaginatedResponse[VoteItem],
     summary="EP roll-call votes — the decisive plenary and committee votes, with tallies",
     description="""**What it does**
-The decisive roll-call vote on each text Parliament adopted, read from Parliament's own roll-call minutes (the sitting's PV-...-RCV document, its HTML page or, where that page is interactive, its XML), and the committee's final vote on the report where the committee report records one. Each row carries the text's title, the procedure, the report reference, the for / against / abstention counts, ADOPTED or REJECTED, the vote date, and in `body_txt` the breakdown by political group and by country. Plenary votes are held from 17 July 2024, the start of the 10th term. One row per decisive vote: amendment-level votes are not served, so `amendment_number` is null; `count_did_not_vote` is 0 because the minutes list no such count; `htv_id` is null (see the field). `procedure_stage` says whether the vote is `plenary` or `committee`; `procedure_type` is read from the procedure reference.
+The final plenary vote on each text Parliament adopted, as EP Open Data records it, with each MEP's choice read from Parliament's own roll-call minutes (the sitting's PV-...-RCV document, its HTML page or, where that page is interactive, its XML) when the vote was a roll call, and the committee's final vote on the report where the committee report records one. Each row carries the text's title, the procedure, the report reference, the for / against / abstention counts, ADOPTED or REJECTED, the vote date, and in `body_txt` the breakdown by political group and by country. Plenary votes are held from 17 July 2024, the start of the 10th term. One row per decisive vote, never a vote on an amendment or a paragraph: when Parliament adopted the text by show of hands, no count is taken and the three counts are null (`description` reads `Final vote (show of hands)`); when the final vote was taken on one amendment (a provisional agreement voted as `Am 46`), `description` reads `Final vote (Am 46)`. `amendment_number` is null; `count_did_not_vote` is 0 because the minutes list no such count; `htv_id` is null (see the field). `procedure_stage` says whether the vote is `plenary` or `committee`; `procedure_type` is read from the procedure reference.
 
 Filterable by procedure, vote reference, main-vote-only, result, full-text search, and incremental sync.
 
@@ -1018,7 +1018,7 @@ GET /api/v1/ep-documents?procedure_reference=2025/0419(COD)
 ```
 
 **You get back**
-A `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.
+A `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (the procedure's title where Brubru holds the procedure, else the title on the document's own cover, `Draft report on ...`; a short `draft_report (FEMM)` label only when neither exists), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.
 
 **Data freshness**
 Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences.""",
@@ -1363,7 +1363,7 @@ async def list_press_releases(
 Returns EP committee reports — both `draft_report` (document type PR) and `draft_recommendation` (RD). These are the rapporteur's first written articulation of the EP's position on a legislative file, before amendments are tabled. Each row carries the procedure reference, the lead committee, the PE document reference, the rapporteur's name, the document date, and the doceo URL.
 
 **When to use it**
-Reports are the most quoted EP documents in advocacy work — they set the framing for the committee's negotiation. Use this endpoint to find "the latest report on the AI Act", "all draft reports by rapporteur X", or "all ENVI reports this year". The title is enriched with the procedure's plain-language alias (e.g. "draft_report for 2024/0079(COD) (ENVI)" becomes "draft_report for CBAM Downstream Extension (ENVI)").
+Reports are the most quoted EP documents in advocacy work — they set the framing for the committee's negotiation. Use this endpoint to find "the latest report on the AI Act", "all draft reports by rapporteur X", or "all ENVI reports this year". The title is the procedure's title where Brubru holds the procedure, else the title on the report's own cover ("Draft report on ...").
 
 **Input**
 - `committee` — 4-letter committee code.
