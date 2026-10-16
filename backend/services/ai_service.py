@@ -704,7 +704,7 @@ _LANG_MARKERS = {
     "FR": {"le", "la", "les", "des", "une", "est", "dans", "pour", "avec", "cette"},
     "ES": {"el", "la", "los", "las", "una", "del", "por", "con", "esta", "para"},
     "CA": {"el", "la", "els", "les", "una", "del", "per", "amb", "aquesta", "dels"},
-    "IT": {"il", "la", "le", "dei", "una", "del", "per", "con", "questa", "nella"},
+    "IT": {"il", "la", "le", "dei", "una", "del", "per", "con", "questa", "nella", "di"},
     "NL": {"de", "het", "een", "van", "voor", "met", "die", "dat", "deze", "wordt"},
 }
 
@@ -790,6 +790,10 @@ _CA_DECISIVE = frozenset({
     "interessades", "enquesta", "persones", "respondre", "projectes", "segons",
     "ramaderia", "sanitat", "associacio", "anunciat", "sortir", "financar", "diu",
     "agroalimentaries", "laboratoris", "sistemes", "coneixement", "agraris",
+    # 16 Oct 2026, detector run over the trigger matrices: "encara" (still; ES
+    # "aun", IT "ancora", FR "encore"), "cimera" (summit), "passatgers" and
+    # "reduir" (ES "pasajeros"/"reducir", FR "passagers"/"reduire" after folding).
+    "encara", "cimera", "passatgers", "reduir",
 })
 
 # Catalan plural of the -cio nouns. "-cions" has no counterpart in the other
@@ -849,6 +853,9 @@ _IT_DECISIVE = frozenset({
     "fertilizzanti", "sistemi", "alimentari", "diete", "locali", "spreco", "imballaggi",
     "ambienti", "acquatici", "acquacoltura", "trattano", "progetti", "approccio",
     "inseriscono", "gruppi", "operativi", "nei", "agricoli",
+    # 16 Oct 2026, detector run over the trigger matrices: "sugli" ("Cosa dice
+    # l'EDPB sugli occhiali intelligenti?" scored EN).
+    "sugli",
 })
 
 # Italian "-zione"/"-zioni" nouns: Spanish writes "-cion(es)", Catalan "-cio(ns)",
@@ -903,6 +910,8 @@ _NL_DECISIVE = frozenset({
     # domain nouns and participles
     "werking", "aangewezen", "geldt", "gelden", "bedrijven", "verplicht",
     "regels", "wetgeving",
+    # 16 Oct 2026: "Gaat de top EU-GCC in Riyad nog door?" scored EN.
+    "gaat", "nog",
 })
 
 # French-exclusive tokens, same contract as the four tables above (24 Sep 2026).
@@ -1143,6 +1152,12 @@ def _detect_query_language(text: str) -> str:
     # (15 Oct 2026), 0 regressions in the other languages.
     if {w.lower() for w in re.findall(r"\b\w+\b", text)} & {"què", "és"}:
         return "CA"
+    # A standalone "è" ("is", grave accent) is Italian only: Catalan writes "és",
+    # French and Spanish never use "è" as a word. Folding turns it into "e" ("and"
+    # in four languages), so "È stata pubblicata la prima norma armonizzata per
+    # l'AI Act?" scored CA (16 Oct 2026, detector run over the trigger matrices).
+    if re.search(r"(?<!\w)[èÈ](?!\w)", text):
+        return "IT"
     # "hi ha" / "hi han" ("there is / there are") exists only in Catalan (ES "hay",
     # FR "il y a", IT "c'è"). "Hi ha un diàleg UE-Mèxic sobre salut?" scored no
     # language at all and fell to the EN default (production probe, 15 Oct 2026).

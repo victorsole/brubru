@@ -5,7 +5,7 @@
 - **Who manages it:** REA manages **around half** of the EUR 500 million. The other half is managed elsewhere in the Commission; its topics are **not covered here**.
 - **REA's topics and budgets (REA's figures):**
   - Nature action 1: **EUR 41.45 million**, three topics (incl. effects of PFAS on biodiversity), opens **13 October 2026**.
-  - Nature action 2: **EUR 108 million**, five topics (invertebrate decline, nature-restoration labs, wildlife trafficking, invasive species, biodiversity monitoring), opens **13 October 2026**.
+  - Nature action 2: **EUR 108 million**, five topics (decline of invertebrates, a wider group than insects; nature-restoration labs, wildlife trafficking, invasive species, biodiversity monitoring), opens **13 October 2026**.
   - Bridging, advancing Pillar II results: **EUR 32.5 million**, opens **20 October 2026**; proposals must build on at least one completed multi-beneficiary Horizon Europe Pillar II project (Clusters 1-6).
   - Bridging, valorising results via innovation ecosystems: **EUR 20 million**, opens **20 October 2026**.
   - Research-infrastructure Bridging topics: **EUR 30.5 million**, three topics, opening **9 March** (2027).
