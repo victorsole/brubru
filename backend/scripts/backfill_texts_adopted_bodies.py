@@ -104,7 +104,11 @@ async def _run(args) -> int:
                  "FROM {t} "
                  # ...or a stored header box: doceo's document picker saved as the text
                  # (six adopted resolutions, 12 Oct 2026). Such a row has no body yet.
-                 "WHERE (full_text IS NULL OR full_text ~* '^\\s*Select a document\\s*:') "
+                 "WHERE (full_text IS NULL OR full_text ~* '^\\s*Select a document\\s*:' "
+                 # ...or a text that announces Parliament's position and stops before it:
+                 # only the first part of the page was read (90 texts, 16 Oct 2026).
+                 "       OR (full_text ~ 'hereinafter set out' "
+                 "           AND full_text !~ 'Position of the European Parliament')) "
                  "  AND COALESCE(full_text_url, "
                  "               CASE WHEN source_url LIKE '%.pdf' THEN source_url END) IS NOT NULL ")
         rows = conn.execute(text(

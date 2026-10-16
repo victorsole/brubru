@@ -596,6 +596,15 @@ class TextsAdoptedScraper(BaseScraper):
             _txt = _el.get_text(separator='\n', strip=True)
             if len(_txt) > _best:
                 full_text, _best = _txt, len(_txt)
+        # A TA page is one table per part, each a heading row (tr.doc_title) and a text row
+        # (tr.contents): the legislative resolution, then Parliament's position, the act
+        # itself. select_one('tr.contents') kept the first part only, so 90 texts stopped
+        # before the position (AGILE P10_TA(2026)0320: 1,671 of ~92,000 characters,
+        # 16 Oct 2026). Every part, in page order, with its heading.
+        _parts = [tr.get_text(separator='\n', strip=True) for tr in soup.select('tr.doc_title, tr.contents')]
+        _joined = '\n\n'.join(t for t in _parts if t)
+        if len(_joined) > _best:
+            full_text, _best = _joined, len(_joined)
         if full_text and is_page_furniture(full_text):
             full_text = None
         if not full_text:
